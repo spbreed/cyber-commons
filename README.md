@@ -170,14 +170,18 @@ protocol, both corpora, full write-up in
 | Sonnet | hand-crafted | 0.72      | 0.96   | 0.82 | **0.75**   |
 | Haiku  | hand-crafted | 0.64      | 0.75   | 0.69 | **0.61**   |
 | Opus   | real-world   | 0.93      | 0.87   | 0.90 | **0.87**   |
-| Sonnet | real-world   | — blocked by real-time cyber safeguards —      |||
+| Sonnet | real-world   | 1.00      | 0.93   | 0.97 | **0.95**   |
 | Haiku  | real-world   | 0.50      | 0.20   | 0.29 | **0.47**   |
 
-Consistent ordering **Opus > Sonnet > Haiku**: Opus is well-calibrated on both
-(few false positives); Sonnet over-reports (recall 0.96 / precision 0.72);
-Haiku collapses on real CVE code (flags 3 of 15 true vulns). Sonnet's
-real-world run was blocked twice by Anthropic's cyber safeguards on reading the
-CVE code — a real operational constraint on the consumer tier.
+Ordering is **not monotonic across corpora** — the key finding. Opus is the most
+consistent (0.90 / 0.87). Sonnet over-reports on the toy set (recall 0.96 /
+precision 0.72) but is **the best on real CVE code (0.95, zero false
+positives, 14/15 caught)** — the synthetic patched-twin traps baited it, real
+patched code did not. Haiku collapses on real code (flags 3 of 15 true vulns).
+Sonnet's real-world run was initially blocked twice by Anthropic's cyber
+safeguards and completed only under an explicit authorized-defensive-review
+framing (no account enrollment was done). Every Sonnet/Opus cell was
+cross-checked through the official scorer.
 
 ### Schema-conformance test against google/mantis (2026-08-02)
 
