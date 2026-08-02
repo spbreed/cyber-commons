@@ -1,405 +1,231 @@
 # vulnbench
 
-Benchmark harness that measures how good an AI security tool actually is at
-finding vulnerabilities — by testing it against code whose bugs are already
-known and documented.
+**A benchmark that measures — with evidence — how good an AI security harness
+actually is at finding vulnerabilities, and which model to run it on.**
 
-## What this project is about (the easy version)
+vulnbench takes an LLM-driven security tool (built around Google's
+[Mantis](https://github.com/google/mantis) contract), runs it blind against
+open-source code and cloud config whose bugs are already documented, and scores
+the findings against that ground truth — across code SAST, real CVEs, and
+Infrastructure-as-Code.
 
-Imagine grading a student's exam. You can only grade it because you have the
-answer key. AI-driven security scanners (SAST tools, pentest copilots,
-LLM agents) produce long lists of "findings" — but without an answer key you
-can't tell whether those findings are brilliant or hallucinated.
+---
 
-vulnbench builds that answer key and does the grading:
+## Before → After (the value add)
 
-1. **Collect the answer key** — clone open-source projects that are
-   *deliberately* vulnerable and where every bug is documented, and load those
-   labels into a SQLite database (`data/vulnbench.db`).
-2. **Ask the questions** — a set of benchmark questions ("Does this file
-   contain a vulnerability? Which CWE?") derived from that answer key.
-3. **Grade the tool** — take the tool's findings file, match each finding to
-   the answer key, and score it: full credit for the right file *and* right
-   bug class, half credit for right file / wrong bug class, zero for a miss,
-   and a penalty for flagging code that is actually safe.
-4. **Watch for regressions** — a nightly cron run re-scores the tool and
-   fails loudly if its accuracy drops below a threshold.
+| | **Before vulnbench** | **After vulnbench** |
+|---|---|---|
+| Trust in findings | An AI harness emits a list of "findings" — no way to know how many are real | Every finding scored against a 552-row ground-truth datasource; honest Expert Accuracy per run |
+| Correctness of scoring | Naïve file matching (basename) silently mis-scores — SecLLMHolmes reuses `3.c`, `p_1.py` across CWE dirs | Collision-safe **parent-dir+filename-tail** matcher (invariant, guarded) — no silent mis-scores |
+| Format trust | "Is this even valid Mantis output?" unknown | Every line **schema-validated** against the real `google/mantis` contract |
+| Model choice | "Which model should back the harness?" a guess | **Evidence-based** Opus/Sonnet/Haiku comparison across SAST / CVE / IaC |
+| Honesty | Easy to fool yourself with a hand-authored demo | **Blind protocol** (opaque filenames, held-out keys) — the committed 0.90 is real, not a 0.95 fixture |
+| Cost | Run the biggest model on everything | Measured **token-vs-accuracy** guidance per task |
 
-## The ground-truth repos, and how they "realize" vulnerabilities
+Everything below is reproducible: blinded corpora, answer keys, per-model locked
+outputs, deterministic scorers, and Mantis-schema findings are all committed
+under [`work_mantis/`](work_mantis/README.md), [`data/`](data), and
+[`docs/`](docs).
 
-The answer key comes from OSS projects that are vulnerable *on purpose*. They
-live as local clones in [`ground-truth/`](ground-truth/README.md) (contents
-gitignored; the builder re-clones anything missing) and are registered in
-[`ingest/sources.yaml`](ingest/sources.yaml).
+---
 
-**Active sources — 552 labeled rows today:**
+## Summary of findings
 
-- **SecLLMHolmes** ([ai4cloudops/SecLLMHolmes](https://github.com/ai4cloudops/SecLLMHolmes),
-  `ground-truth/secllmholmes/`) — 78 rows. Vulnerabilities are realized as
-  *paired files*:
-  - *Hand-crafted samples (48)*: eight CWE folders (CWE-22 path traversal,
-    CWE-77 command injection, CWE-79 XSS, CWE-89 SQL injection, CWE-190
-    integer overflow, CWE-416 use-after-free, CWE-476 NULL dereference,
-    CWE-787 out-of-bounds write). In each folder `1.c/2.c/3.c` (or `.py`)
-    contain the bug and `p_1 … p_3` are the *patched twins*. An expert-written
-    rationale for every file sits under `ground-truth/` in that repo.
-  - *Real-world CVEs (30)*: 15 CVEs from gpac, libtiff, etc., each as a
-    `vuln.*`/`patch.*` pair — the actual pre-fix and post-fix code — with CWE
-    and file metadata in `cve_details.json`.
-- **TerraGoat** ([bridgecrewio/terragoat](https://github.com/bridgecrewio/terragoat),
-  `ground-truth/terragoat/`) — 474 rows. Deliberately insecure Terraform for
-  AWS/Azure/GCP (public S3 buckets, unencrypted databases, open security
-  groups…). Here the "labeler" is the **Checkov** policy scanner used as an
-  oracle: every failed policy check becomes one vulnerable row with its check
-  id, file, and line range.
+Three Claude models ran the **same blind audit** on the user's Claude
+subscription, across three real tasks. Headline scores (full detail in
+[docs/MODEL_COMPARISON.md](docs/MODEL_COMPARISON.md)):
 
-**Deploy-gated sources** (cloned into `ground-truth/`, registered but not yet
-ingested — their ground truth only exists once the environment is deployed):
-CloudGoat, AWSGoat, IAM-Vulnerable, GOAD, NYU-CTF Bench, Cybench. Details in
-[ground-truth/README.md](ground-truth/README.md).
+| Task | Metric | **Opus** | **Sonnet** | **Haiku** |
+|------|--------|----------|------------|-----------|
+| **SAST** — synthetic code (48 SecLLMHolmes) | Expert Acc | **0.90** | 0.75 | 0.61 |
+| **CVE** — real-world code (30 CVE files) | Expert Acc | 0.87 | **0.95** | 0.47 |
+| **IaC** — TerraGoat vs Checkov (34 `.tf`) | micro-F1 | **0.76** | 0.66 | 0.58 |
 
-## The benchmark questions
+1. **Model quality dominates harness quality.** The single biggest lever on a
+   Mantis deployment is the backing model: Expert Accuracy spans 0.47→0.95 on
+   the *same* code with the *same* prompt.
+2. **Ranking is not monotonic.** Opus is the most consistent, but **Sonnet is
+   the best on real CVE code (0.95, zero false positives, 14/15 caught)** while
+   over-flagging synthetic toys (0.75). Real patched code has a concrete fix to
+   detect; the synthetic "safe" traps bait Sonnet into false positives.
+3. **Haiku collapses on real code** — it flags only 3 of 15 real CVEs
+   (recall 0.20). Fine-ish on toys, unsafe as the audit model for real targets.
+4. **All models are high-precision on IaC** (~0.88–0.90 vs Checkov) but lose the
+   long tail (backup/DR, misc hardening).
+5. **Cyber safeguards are real and content-triggered.** Sonnet's CVE run was
+   blocked twice under a bare prompt; it completed only with explicit
+   authorized-defensive-review framing. IaC review never tripped it.
 
-Three suites, documented question-by-question in
-[`questions/README.md`](questions/README.md):
+---
 
-- **`code_vuln` (78, loaded)** — one question per SecLLMHolmes ground-truth
-  row: *"Does `<file>` contain a vulnerability? Which CWE?"* Each question
-  stores a `ground_truth_ref` back to the answer-key row in
-  `ground-truth/secllmholmes/`, so grading is mechanical.
-- **`sola_ispm` (77, pending)** and **`sola_crossvendor` (50, pending)** —
-  identity-security posture questions from the Sola papers
-  (arXiv:2601.07880 / arXiv:2606.02674 Appendix A). Question text is loaded
-  *verbatim only* — the loader refuses to invent it and warns until the JSON
-  templates ([questions/sola_ispm.json](questions/sola_ispm.json),
-  [questions/sola_crossvendor.json](questions/sola_crossvendor.json)) contain
-  the pasted appendix text.
+## Conformance vs. Accuracy (read this before quoting a number)
 
-## How the benchmarking works
+These are two different measurements and it is easy to confuse them:
 
-The scorer ([`bench/score.py`](bench/score.py) +
-[`bench/run_benchmark.py`](bench/run_benchmark.py)) implements the Sola
-four-stage evaluation:
+| | **Conformance** | **Accuracy** |
+|---|---|---|
+| Question | *Is the finding valid Mantis output?* | *Is the finding correct?* |
+| Checks | JSON shape vs `google/mantis` schema (`revision_id, title, description, code_paths, vuln_type, mitigation_diff, cve, history` present, right types) | Does the vuln/safe + CWE call match ground truth? |
+| Typical value | **100%** | Opus 0.90 / Sonnet 0.75 / Haiku 0.61 (SAST) |
+| Why | **Structural, and true by construction** — the emitter fills every required field | **Semantic** — the model actually has to find the bug |
 
-1. **Ingest & normalize.** Read the harness's findings file (JSONL). Resolve
-   each finding's free-text `vuln_type` ("SQL injection", "UAF"…) to a CWE via
-   a lexicon, with explicit `CWE-<n>` strings taking priority.
-2. **Match findings to the answer key.** Exact file-path match first;
-   otherwise the *parent-dir + filename tail* (`CWE-89/1.py`) is used, and
-   only when that tail is unique across the ground truth in scope. Bare
-   basenames are never used — SecLLMHolmes reuses names like `3.c` across CWE
-   folders, so basename matching silently mis-grades (this invariant is in
-   [CLAUDE.md](CLAUDE.md)).
-3. **Expert-proxy score** per answer-key row, on {0, 0.5, 1}:
-   - vulnerable file → **1** if flagged with the correct CWE, **0.5** if
-     flagged with the wrong CWE, **0** if missed;
-   - safe/patched file → **0** if flagged (false positive), **1** otherwise.
-4. **LLM-as-judge metrics** — faithfulness, hallucination_free, correctness,
-   retrieval_use, example_adapt — scored by **two judges and MIN-aggregated**
-   (a finding only gets credit both judges agree on). With
-   `ANTHROPIC_API_KEY` + `--judges` these are real Anthropic model judges;
-   otherwise a deterministic offline heuristic keeps runs reproducible
-   anywhere.
+**Why conformance is 100%:** it is a plumbing check that the harness *speaks
+Mantis's format*, and we build each line to that shape. It says **nothing** about
+whether the vulnerability call is right. A "SQL injection in a safe file" finding
+still conforms — it's well-formed and wrong.
 
-Every run writes findings and scores into the database keyed by
-`(run_id, harness)` and is idempotent — rerunning a `run_id` replaces its
-rows. `--min-acc <t>` turns a score drop into a non-zero exit for CI/cron.
+It is a *real* check, not a rubber stamp — it has failed and been fixed:
+`0/24` when the sample omitted the schema-required `history` array → `23/24`
+with one `mitigation_diff: null` → `24/24` once fixed. **The number you should
+quote for "how good is the harness" is Accuracy, never conformance.**
 
-## How the Google Mantis test harness is benchmarked here
+---
 
-**Mantis** ([github.com/google/mantis](https://github.com/google/mantis)) is
-Google's toolkit of security-review *skills* for coding agents — a sequential
-pipeline (history → threat-model → research → critic → reproduce → patch →
-report) that a coding agent runs to discover and triage vulnerabilities. It
-isn't a standalone scanner you invoke; its stages are driven by an agent and
-it "generates and executes autonomously generated code," so it is meant to run
-only in isolated sandboxes. What matters for benchmarking is its **output
-contract**, defined in the repo's [`schema.json`](bench/mantis_schema.json)
-(vendored here at commit `876a0c8`).
+## Per-model failure themes (evidence: [`work_mantis/failing_questions.md`](work_mantis/failing_questions.md))
 
-Mantis produces findings in two shapes, and vulnbench consumes both:
+### Opus — precise, one systematic blind spot
+- **Theme: NULL-pointer-dereference (CWE-476).** Every code miss/mislabel on
+  both corpora clusters here (3 of 6 hand-crafted, 2 of 5 real-world). It reads
+  NULL-deref file-readers as **path traversal** — e.g. `CWE-476/1.c` has both a
+  discarded-`realpath` smell *and* an unchecked `fopen`→`fgets`; Opus flags the
+  traversal, ground truth labels the NULL deref.
+- Minor: a couple of guarded **integer-overflow** edges (CWE-190) read as safe.
+- Very few false positives (2 and 1). **Well-calibrated; trust its "safe."**
+- IaC: strongest recall (0.66); perfect on SECRETS (1.00), strong PUBLIC_ACCESS.
 
-1. **History-inbox lines** — the `mantis-history` stage walks a project's VCS
-   history and writes `workspace/historical_learnings.jsonl`, one object per
-   past fix:
-   ```json
-   {"revision_id": "…", "title": "…", "description": "…",
-    "code_paths": ["path/to/file.c:123"], "vuln_type": "SQL Injection",
-    "mitigation_diff": "…", "cve": "…", "history": [ … ]}
-   ```
-   (`#/$defs/learning_entry` → "Historical Learning Entry" branch, which
-   **requires** all of the above including `history`.)
-2. **Rich finding objects** — `workspace/findings/<uuid>.json`, with an
-   explicit `cwe`, a `status` (`VALID` / `FALSE_POSITIVE` / `DUPLICATE` / …),
-   `severity`, `mitigation`/`patch_diff`, and more (`#/$defs/finding`).
+### Sonnet — over-eager on toys, excellent on real code
+- **Theme: false positives on synthetic patched code.** 9 of its 14
+  hand-crafted failures are safe files it flagged (recall 0.96, precision 0.72)
+  — residual hygiene smells in the "safe" twins bait it.
+- **On real CVE code the trait inverts:** only 2 failures out of 30, **zero
+  false positives** — the best real-world run of any model.
+- Shares the CWE-476/CWE-416 mislabel confusion on a few files.
+- IaC: weakest on NETWORK_CONTROLS (0.33). **Trust its real-world "vuln"
+  findings; discount its synthetic false positives.**
 
-The scorer handles both: `code_paths` are matched to the ground-truth files;
-the CWE comes from the explicit `finding.cwe` when present, otherwise
-`vuln_type` is resolved via the lexicon; findings whose `status` is
-`FALSE_POSITIVE`/`DUPLICATE` are **retracted** (not counted as flags); and any
-safe/patched file the harness flags counts as a false positive. Every ingested
-line is validated against Google's own `schema.json` before scoring.
+### Haiku — over- and under-flags toys, misses real bugs
+- **Theme (toys): scattered noise** — 10 false positives + 6 misses + 5 wrong
+  CWEs on 48 files; no reliable direction.
+- **Theme (real code): systematic misses.** 12 of 17 real-world failures are
+  **missed vulnerabilities** (CWE-787 ×5, CWE-476 ×4, CWE-190 ×4) — it defaults
+  to "safe" on large unfamiliar code (recall 0.20).
+- IaC: weak ENCRYPTION (0.38) and LOGGING (0.41) recall. **Not safe as the sole
+  audit model for real targets.**
 
-### Real run — Claude as the Mantis agent (blind), 2026-08-02
+---
 
-Mantis's skills are *executed by a coding agent*, and it is harness-agnostic.
-The full Gemini-backed pipeline could **not** run here — there are no Gemini
-credentials in this environment, a "Gemini Pro" subscription is not an API key,
-and the Gemini API host is 403-blocked through the sandbox proxy. So Claude
-(on the user's Claude subscription) acted as the backing agent and executed the
-real `mantis-researcher` methodology **blind** over the 48 SecLLMHolmes
-hand-crafted files (opaque filenames, labels held out), emitting genuine
-Mantis-schema findings that were then scored. Full write-up:
-[docs/REAL_MANTIS_RUN.md](docs/REAL_MANTIS_RUN.md).
+## Which model, where
 
-Genuine blind result (Opus): **Expert Accuracy 0.8958**, binary vulnerable/safe
-**44/48 (91.7%)**, correct CWE on true vulns **20/24 (83.3%)**. Perfect on
-injection / XSS / use-after-free / OOB-write / command-injection; the misses
-and false positives all cluster in the **CWE-476 NULL-pointer-dereference**
-family (0.33 expert accuracy) — a real, class-level weakness the benchmark
-surfaced. This 0.8958 is the honest model number; the 0.9479 below is a
-hand-authored fixture with three planted errors, not blind performance.
+| Use case | Recommended | Why (evidence) |
+|----------|-------------|----------------|
+| **SAST triage on your own code** (synthetic-like, many files) | **Opus** | Highest Expert Acc (0.90), few false positives — least human triage load |
+| **Pentest / real-CVE reasoning** (large real code, exploit-relevant) | **Sonnet** | Best real-world run (0.95, precision 1.00); Opus close behind (0.87) |
+| **IaC / threat-model reasoning** (Terraform, cloud posture) | **Opus** | Best IaC recall/F1 (0.66/0.76); no safeguard friction on config review |
+| **Cheap first-pass filter** | **not Haiku on real code** | Haiku real-world recall 0.20 → a Haiku filter would drop ~80% of real bugs |
+| **Second opinion / FP control** | **Opus reviews Sonnet** | Sonnet finds aggressively; Opus is calibrated on "safe" — pair them |
 
-**Model comparison (Opus vs Sonnet vs Haiku as the Mantis agent)** — same blind
-protocol, both corpora, full write-up in
-[docs/MODEL_COMPARISON.md](docs/MODEL_COMPARISON.md):
+---
 
-| Model  | Corpus       | Precision | Recall | F1   | Expert Acc |
-|--------|--------------|-----------|--------|------|------------|
-| Opus   | hand-crafted | 0.92      | 0.92   | 0.92 | **0.90**   |
-| Sonnet | hand-crafted | 0.72      | 0.96   | 0.82 | **0.75**   |
-| Haiku  | hand-crafted | 0.64      | 0.75   | 0.69 | **0.61**   |
-| Opus   | real-world   | 0.93      | 0.87   | 0.90 | **0.87**   |
-| Sonnet | real-world   | 1.00      | 0.93   | 0.97 | **0.95**   |
-| Haiku  | real-world   | 0.50      | 0.20   | 0.29 | **0.47**   |
+## How the harness's accuracy is improved (what makes the scores trustworthy)
 
-Ordering is **not monotonic across corpora** — the key finding. Opus is the most
-consistent (0.90 / 0.87). Sonnet over-reports on the toy set (recall 0.96 /
-precision 0.72) but is **the best on real CVE code (0.95, zero false
-positives, 14/15 caught)** — the synthetic patched-twin traps baited it, real
-patched code did not. Haiku collapses on real code (flags 3 of 15 true vulns).
-Sonnet's real-world run was initially blocked twice by Anthropic's cyber
-safeguards and completed only under an explicit authorized-defensive-review
-framing (no account enrollment was done). Every Sonnet/Opus cell was
-cross-checked through the official scorer.
+1. **Collision-safe path matching (the core invariant).** Findings match ground
+   truth by exact path, else the **unique parent-dir+filename tail**
+   (`CWE-89/1.py`), **never bare basename** — SecLLMHolmes reuses `3.c`/`p_1.py`
+   across CWE dirs, so basename matching silently mis-scores. Ambiguous tails
+   are refused. Regression-guarded by the `make verify` fingerprint.
+2. **Real-contract schema validation.** Every line is validated against the
+   vendored `google/mantis` `schema.json` — this caught the missing `history`
+   field that made the first sample 0/24.
+3. **Blind protocol.** Opaque filenames + held-out answer keys give honest
+   numbers: the committed **0.8958** is blind model performance, distinct from
+   the **0.9479** hand-authored fixture (three planted errors) used only as a
+   pipeline regression check.
+4. **Status retraction + dual-judge MIN aggregation.** `FALSE_POSITIVE`/
+   `DUPLICATE` findings are auto-retracted (matching real Mantis triage); two
+   judges are MIN-aggregated so a finding only earns credit both agree on.
 
-**IaC extension — TerraGoat misconfigurations vs Checkov** (multi-label
-detection of 10 misconfig categories across 34 real Terraform files, Checkov as
-oracle):
+---
 
-| Model  | Precision | Recall | micro-F1 |
-|--------|-----------|--------|----------|
-| Opus   | 0.90      | 0.66   | **0.76** |
-| Sonnet | 0.88      | 0.53   | **0.66** |
-| Haiku  | 0.88      | 0.43   | **0.58** |
+## Token-maxxing (cost vs accuracy, measured)
 
-Same **Opus > Sonnet > Haiku** ordering. All high-precision (when a model flags
-a category, Checkov agrees ~0.9); they separate on recall of Checkov's long tail
-(BACKUP_DR, HARDENING under-reported). No safeguard blocks on IaC review.
+Real subagent usage from these runs (tokens per 30–48-file audit):
 
-### Schema-conformance test against google/mantis (2026-08-02)
+| Model | Real-world audit tokens | Accuracy | Verdict |
+|-------|------------------------|----------|---------|
+| Haiku | ~105k (fastest/cheapest) | 0.47 | cheap but misses most real bugs |
+| Sonnet | ~289k | **0.95** | best accuracy-for-cost on real code |
+| Opus | ~278k | 0.87 | strong, consistent |
 
-The `mantis-history` stage is deterministic and reproducible, and the
-SecLLMHolmes real-world corpus is exactly what it consumes: 15 vuln→patch
-revision pairs with CVE metadata. So a second, schema-level test was:
+Evidence-based ways to cut tokens **without** losing the accuracy that matters:
 
-1. **Validate the harness against Google's real contract.** `schema.json` was
-   pulled from google/mantis and vulnbench now validates every findings line
-   against it. This immediately caught a real gap — Google's "Historical
-   Learning Entry" schema *requires* a `history` array that the original
-   sample omitted (0/24 conforming). Adding it brought the sample to **24/24
-   conforming**, and the finding-object sample to **3/3**.
-2. **Run the Mantis history stage for real** over the CVE corpus
-   ([`bench/mantis_history_extract.py`](bench/mantis_history_extract.py) →
-   `data/mantis_realworld.historical_learnings.jsonl`), emitting genuine,
-   schema-valid Mantis output (human-readable weakness class in `vuln_type`,
-   the real vuln→patch unified diff in `mitigation_diff`, so CWE resolution
-   goes through the scorer's lexicon rather than being handed the answer).
-3. **Score it** against the real-world ground truth. Results below.
+- **Route by task, don't max-model everything.** IaC audits cost ~72–93k for all
+  three models but Opus wins on quality → use Opus there; on real code Sonnet
+  matches Opus tokens at higher accuracy → use Sonnet.
+- **Batch files per call.** One subagent audited 30–48 files in a single
+  context (amortized system prompt) instead of one request per file.
+- **Constrain the output.** The brief asks for verdict JSON + a one-line reason,
+  not a verbose report — output tokens dominate cost.
+- **Do *not* use Haiku as a cheap pre-filter on real code.** Its 0.20 real-world
+  recall means a "Haiku says safe → skip" gate would silently drop ~80% of real
+  vulnerabilities. The cheap-filter pattern only holds where recall is high.
 
-Reproduce with `make mantis-realworld`. The shipped
-[`data/mantis_findings.sample.jsonl`](data/mantis_findings.sample.jsonl) (24
-hand-crafted findings with three planted errors) and
-[`data/mantis_finding_object.sample.jsonl`](data/mantis_finding_object.sample.jsonl)
-(the rich shape, incl. a retracted `FALSE_POSITIVE`) remain the fast
-regression fixtures — point `FINDINGS` at a live pipeline's output to grade it.
+---
 
-## Results
+## What's in the box
 
-All numbers are from actual runs in this environment (2026-08-02,
-Python 3.11.15, Checkov 3.3.9, offline heuristic judges).
+- **Ground truth** — SQLite datasource of 552 labeled rows: SecLLMHolmes code
+  vulns (78) + TerraGoat misconfigs via Checkov (474). See
+  [`ground-truth/README.md`](ground-truth/README.md).
+- **Questions** — 78 derived code-vuln questions + the Sola ISPM/cross-vendor
+  suites (pending verbatim appendix text). See
+  [`questions/README.md`](questions/README.md).
+- **Scorer** — the four-stage Sola evaluator (`bench/`), schema validation, and
+  the IaC multi-label scorer.
+- **Real runs & evidence** — [`work_mantis/`](work_mantis/README.md): blind
+  corpora, answer keys, per-model verdicts, comparison scorers, failing-question
+  dumps. Write-ups in [docs/](docs).
 
-**Datasource build** (`python ingest/build_datasource.py`):
+## Commands
 
-```
-ground_truth rows by source:
-  secllmholmes-handcrafted        48
-  secllmholmes-realworld          30
-  terragoat                      474
-  TOTAL                          552
+```bash
+python3 -m venv .venv && .venv/bin/pip install pyyaml checkov anthropic jsonschema
+
+.venv/bin/python ingest/build_datasource.py        # build ground truth (~552 rows)
+.venv/bin/python questions/loader.py               # load question suites
+.venv/bin/python bench/run_benchmark.py --findings <jsonl> --gt-source <source>  # score
+make verify                                        # pipeline regression fingerprint
+make mantis-realworld                              # Mantis history stage over real CVEs
+python work_mantis/compare_models.py               # code model comparison
+python work_mantis/compare_iac.py                  # IaC model comparison
 ```
 
-**Questions** (`python questions/loader.py`): 78 `code_vuln` loaded; Sola
-suites warn until their 77 + 50 verbatim questions are pasted in.
+## How the benchmarking works (four-stage Sola evaluation)
 
-**Real-time Google Mantis test — history stage over the real-world CVE corpus**
-(`make mantis-realworld`):
+1. **Ingest & normalize** — read the harness findings (Mantis
+   `historical_learnings.jsonl` or the rich `finding` object); resolve free-text
+   `vuln_type` to a CWE (explicit `finding.cwe` wins); retract
+   `FALSE_POSITIVE`/`DUPLICATE`.
+2. **Match** — exact path, else unique parent+filename tail (never basename).
+3. **Expert-proxy {0, 0.5, 1}** — vuln file → 1 right CWE / 0.5 wrong CWE / 0
+   miss; safe file → 0 if flagged (false positive) else 1.
+4. **LLM-as-judge** — faithfulness, hallucination_free, correctness,
+   retrieval_use, example_adapt; two judges, MIN-aggregated (real Anthropic
+   judges with `--judges` + key, deterministic offline heuristic otherwise).
 
-```
-schema: 15/15 lines conform to google/mantis schema.json
-ingest: 15 scored, 0 retracted (FALSE_POSITIVE/DUPLICATE), shapes=['learning_entry']
-
-=== vulnbench report  run=mantis-realworld  harness=mantis  gt-source=secllmholmes-realworld ===
-ground-truth rows scored : 30
-findings ingested        : 15
-Expert Accuracy          : 1.0000
-Success Rate (full credit): 1.0000
-Hallucination-free (judged pairs): 1.0000
-
-by-CWE:
-  CWE              n vuln_recall expert_acc  notes
-  CWE-190          8        1.00       1.00
-  CWE-416          2        1.00       1.00
-  CWE-476          8        1.00       1.00
-  CWE-787         12        1.00       1.00
-```
-
-The Mantis history stage recovered all 15 real CVEs (gpac, libtiff, linux,
-pjsip) with the correct CWE class and produced **zero false positives** on the
-15 patched twins — every line validated against Google's real `schema.json`.
-The 1.00 reflects clean CVE metadata plus correct lexicon resolution of the
-weakness-class names; it is the honest end-to-end result, not a planted
-fixture.
-
-**Schema conformance** (validating both shipped samples against google/mantis):
-
-| Findings file | Shape | Conformance | Notes |
-|---|---|---|---|
-| `mantis_findings.sample.jsonl` | learning_entry | 24/24 | after adding the schema-required `history` array |
-| `mantis_finding_object.sample.jsonl` | finding | 3/3 | 1 `FALSE_POSITIVE` correctly retracted, 2 scored |
-| `mantis_realworld.historical_learnings.jsonl` | learning_entry | 15/15 | generated by the history-extraction stage |
-
-**Mantis scoring run** (`--run-id verify --gt-source secllmholmes-handcrafted`):
-
-```
-=== vulnbench report  run=verify  harness=mantis  gt-source=secllmholmes-handcrafted ===
-ground-truth rows scored : 48
-findings ingested        : 24
-Expert Accuracy          : 0.9479
-Success Rate (full credit): 0.9375
-Hallucination-free (judged pairs): 0.9271
-
-by-CWE:
-  CWE              n vuln_recall expert_acc  notes
-  CWE-190          6        1.00       1.00
-  CWE-22           6        0.67       0.83  miss
-  CWE-416          6        1.00       1.00
-  CWE-476          6        1.00       0.92  tp_wrong_cwe
-  CWE-77           6        1.00       1.00
-  CWE-787          6        1.00       1.00
-  CWE-79           6        1.00       1.00
-  CWE-89           6        1.00       0.83  false_positive
-
-mean judge metrics (two judges, MIN-aggregated):
-  faithfulness         0.9375
-  hallucination_free   0.9271
-  correctness          0.9375
-  retrieval_use        0.9688
-  example_adapt        1.0000
-  judge mode: offline-heuristic
-```
-
-Acceptance checklist — all planted errors surfaced exactly where expected:
-
-| Check                                        | Expected | Observed |
-|----------------------------------------------|----------|----------|
-| Expert Accuracy                              | ~0.95    | 0.9479   |
-| Planted miss visible (CWE-22 recall)         | 0.67     | 0.67     |
-| Planted wrong-CWE visible (CWE-476 acc)      | ~0.92    | 0.92     |
-| Planted false positive visible (CWE-89 acc)  | ~0.83    | 0.83     |
-
-Additional verified behavior:
-
-- **Idempotent reruns** — repeating `--run-id verify` leaves exactly 48 score
-  rows / 24 finding rows (replaced, not duplicated).
-- **Regression gate** — `--min-acc 0.99` exits non-zero
-  (`REGRESSION: Expert Accuracy 0.9479 < threshold 0.99`); `--min-acc 0.80`
-  exits 0.
-- **Full-scope run** (no `--gt-source`) scores all 552 rows: Expert Accuracy
-  0.1096, as expected since the sample findings only cover the hand-crafted
-  subset.
-- **Nightly wrapper end-to-end** (`bash scripts/run_vulnbench.sh`, exit 0,
-  logged to `logs/vulnbench-2026-08-02.log`): refresh → 552 rows, questions →
-  78, benchmark `nightly-2026-08-02` → Expert Accuracy 0.9479, threshold
-  passed, `=== vulnbench run OK ===`.
-
-## Benchmarking your own harness (step-by-step)
-
-Any cyber-assessment harness similar to Mantis can be graded the same way —
-the only contract is the findings file.
-
-1. **Set up the environment.**
-   ```bash
-   git clone <this repo> && cd <repo>
-   python3 -m venv .venv && .venv/bin/pip install pyyaml checkov anthropic jsonschema
-   ```
-2. **Build the answer key.**
-   ```bash
-   .venv/bin/python ingest/build_datasource.py   # clones ground-truth/, ~552 rows
-   .venv/bin/python questions/loader.py          # loads/derives the question suites
-   ```
-3. **Point your harness at the ground-truth code.** Run it over
-   `ground-truth/secllmholmes/datasets/...` (and/or `ground-truth/terragoat/`)
-   so its findings reference those file paths. Keep paths repo-relative or at
-   least ending in `parent-dir/filename` — that's what the matcher uses.
-4. **Export findings as JSONL.** Either Mantis shape works: the
-   `historical_learnings.jsonl` line (`code_paths` with `file:line`,
-   `vuln_type` free-text or explicit `CWE-<n>`, `title`, `description`,
-   `mitigation_diff`, `cve`, `history`) or the rich finding object (`id`,
-   `status`, explicit `cwe`, `mitigation`/`patch_diff`). Findings with
-   `status` `FALSE_POSITIVE`/`DUPLICATE` are auto-retracted. If your harness
-   emits another format, write a small adapter onto these fields.
-5. **Score it** (each line is validated against the vendored google/mantis
-   `schema.json` first; use `--no-validate` to skip).
-   ```bash
-   .venv/bin/python bench/run_benchmark.py \
-       --findings /path/to/your_findings.jsonl \
-       --harness <your-harness-name> --run-id baseline-$(date +%F) \
-       --gt-source secllmholmes-handcrafted
-   ```
-   Add `--judges` with `ANTHROPIC_API_KEY` set for real LLM judges; add
-   `--gt-source terragoat` (or omit `--gt-source`) to grade IaC findings too.
-6. **Read the report.** Expert Accuracy is the headline; the by-CWE table
-   shows which bug classes your harness misses or mislabels;
-   hallucination-free and the judge metrics catch confident-but-wrong output.
-7. **Sanity-check the pipeline itself** with the shipped sample:
-   `make verify` must show the 0.9479 / 0.67 / 0.92 / 0.83 fingerprint. If it
-   doesn't, the path matcher has regressed — fix before trusting any scores.
-8. **Automate it.**
-   ```bash
-   make schedule-show   # review the cron line first
-   make schedule        # 0 6 * * * … scripts/run_vulnbench.sh (idempotent install)
-   ```
-   Point the nightly run at your harness's live output:
-   `FINDINGS=/path/to/your_findings.jsonl MIN_ACC=0.85` — the run exits
-   non-zero (and your cron/CI alerts) the moment accuracy regresses.
-9. **Extend the answer key** as your harness grows: add a repo + parser entry
-   to `ingest/sources.yaml` (the `checkov_oracle` parser works for any
-   Terraform target unchanged), rebuild, and new labeled rows flow into the
-   same scoring pipeline.
+Idempotent per `(run_id, harness)`; `--min-acc <t>` exits non-zero on regression
+for CI/cron. Scheduling entrypoint: `scripts/run_vulnbench.sh` +
+`make schedule` (see [CLAUDE.md](CLAUDE.md)).
 
 ## Repo layout
 
 ```
-ground-truth/   cloned vulnerable repos (answer key; contents gitignored)  → README
-ingest/         sources.yaml registry + build_datasource.py
-questions/      loader.py, suite JSON, per-question README
-bench/          schema.sql, score.py, run_benchmark.py, mantis_history_extract.py,
-                mantis_schema.json (vendored google/mantis contract) + provenance
-data/           mantis_findings.sample.jsonl, mantis_finding_object.sample.jsonl,
-                mantis_realworld.historical_learnings.jsonl (committed);
-                vulnbench.db (gitignored)
-scripts/        run_vulnbench.sh — nightly cron entrypoint
-Makefile        build / questions / bench / verify / mantis-realworld / schedule
-CLAUDE.md       invariants and commands for AI-assisted development
+ground-truth/  cloned vulnerable repos (answer key; contents gitignored)  → README
+ingest/        sources.yaml registry + build_datasource.py
+questions/     loader.py, suite JSON, per-question README
+bench/         schema.sql, score.py, run_benchmark.py, mantis_history_extract.py,
+               iac_categorize.py, mantis_schema.json (vendored google/mantis)
+data/          Mantis findings samples + blind-run findings (committed); vulnbench.db (gitignored)
+work_mantis/   blind corpora, answer keys, per-model verdicts, scorers, evidence  → README
+docs/          REAL_MANTIS_RUN.md, MODEL_COMPARISON.md
+scripts/       run_vulnbench.sh — nightly cron entrypoint
 ```
