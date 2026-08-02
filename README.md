@@ -183,6 +183,20 @@ safeguards and completed only under an explicit authorized-defensive-review
 framing (no account enrollment was done). Every Sonnet/Opus cell was
 cross-checked through the official scorer.
 
+**IaC extension — TerraGoat misconfigurations vs Checkov** (multi-label
+detection of 10 misconfig categories across 34 real Terraform files, Checkov as
+oracle):
+
+| Model  | Precision | Recall | micro-F1 |
+|--------|-----------|--------|----------|
+| Opus   | 0.90      | 0.66   | **0.76** |
+| Sonnet | 0.88      | 0.53   | **0.66** |
+| Haiku  | 0.88      | 0.43   | **0.58** |
+
+Same **Opus > Sonnet > Haiku** ordering. All high-precision (when a model flags
+a category, Checkov agrees ~0.9); they separate on recall of Checkov's long tail
+(BACKUP_DR, HARDENING under-reported). No safeguard blocks on IaC review.
+
 ### Schema-conformance test against google/mantis (2026-08-02)
 
 The `mantis-history` stage is deterministic and reproducible, and the
