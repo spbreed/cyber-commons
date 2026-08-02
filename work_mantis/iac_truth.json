@@ -1,0 +1,211 @@
+{
+ "terraform/alicloud/bucket.tf": [
+  "ENCRYPTION",
+  "HARDENING",
+  "LOGGING_MONITORING",
+  "VERSIONING"
+ ],
+ "terraform/alicloud/rds.tf": [
+  "BACKUP_DR",
+  "HARDENING",
+  "LOGGING_MONITORING",
+  "PUBLIC_ACCESS",
+  "TRANSIT_TLS"
+ ],
+ "terraform/alicloud/trail.tf": [
+  "ENCRYPTION",
+  "HARDENING",
+  "LOGGING_MONITORING",
+  "VERSIONING"
+ ],
+ "terraform/aws/db-app.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "HARDENING",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS",
+  "PUBLIC_ACCESS",
+  "TRANSIT_TLS"
+ ],
+ "terraform/aws/ec2.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "HARDENING",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS",
+  "PUBLIC_ACCESS",
+  "SECRETS",
+  "VERSIONING"
+ ],
+ "terraform/aws/ecr.tf": [
+  "ENCRYPTION",
+  "HARDENING"
+ ],
+ "terraform/aws/eks.tf": [
+  "ENCRYPTION",
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS",
+  "PUBLIC_ACCESS"
+ ],
+ "terraform/aws/elb.tf": [
+  "LOGGING_MONITORING",
+  "TRANSIT_TLS"
+ ],
+ "terraform/aws/es.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "HARDENING",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS",
+  "TRANSIT_TLS"
+ ],
+ "terraform/aws/iam.tf": [
+  "IAM_ACCESS"
+ ],
+ "terraform/aws/kms.tf": [
+  "ENCRYPTION"
+ ],
+ "terraform/aws/lambda.tf": [
+  "ENCRYPTION",
+  "HARDENING",
+  "LOGGING_MONITORING",
+  "SECRETS"
+ ],
+ "terraform/aws/neptune.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING"
+ ],
+ "terraform/aws/providers.tf": [
+  "SECRETS"
+ ],
+ "terraform/aws/rds.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING"
+ ],
+ "terraform/aws/resources/Dockerfile": [
+  "HARDENING"
+ ],
+ "terraform/aws/s3.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "HARDENING",
+  "LOGGING_MONITORING",
+  "PUBLIC_ACCESS",
+  "VERSIONING"
+ ],
+ "terraform/azure/aks.tf": [
+  "ENCRYPTION",
+  "HARDENING",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS"
+ ],
+ "terraform/azure/app_service.tf": [
+  "HARDENING",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING",
+  "TRANSIT_TLS"
+ ],
+ "terraform/azure/application_gateway.tf": [
+  "HARDENING",
+  "TRANSIT_TLS"
+ ],
+ "terraform/azure/instance.tf": [
+  "ENCRYPTION",
+  "HARDENING",
+  "IAM_ACCESS"
+ ],
+ "terraform/azure/key_vault.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "NETWORK_CONTROLS",
+  "PUBLIC_ACCESS",
+  "SECRETS"
+ ],
+ "terraform/azure/logging.tf": [
+  "LOGGING_MONITORING"
+ ],
+ "terraform/azure/mssql.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "HARDENING",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS",
+  "PUBLIC_ACCESS",
+  "TRANSIT_TLS"
+ ],
+ "terraform/azure/networking.tf": [
+  "NETWORK_CONTROLS"
+ ],
+ "terraform/azure/roles.tf": [
+  "IAM_ACCESS"
+ ],
+ "terraform/azure/security_center.tf": [
+  "HARDENING"
+ ],
+ "terraform/azure/sql.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "HARDENING",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS",
+  "PUBLIC_ACCESS",
+  "SECRETS",
+  "TRANSIT_TLS"
+ ],
+ "terraform/azure/storage.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "HARDENING",
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS",
+  "PUBLIC_ACCESS",
+  "TRANSIT_TLS"
+ ],
+ "terraform/gcp/big_data.tf": [
+  "BACKUP_DR",
+  "ENCRYPTION",
+  "HARDENING",
+  "LOGGING_MONITORING",
+  "PUBLIC_ACCESS",
+  "TRANSIT_TLS"
+ ],
+ "terraform/gcp/gcs.tf": [
+  "HARDENING",
+  "LOGGING_MONITORING",
+  "PUBLIC_ACCESS",
+  "VERSIONING"
+ ],
+ "terraform/gcp/gke.tf": [
+  "HARDENING",
+  "IAM_ACCESS",
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS",
+  "PUBLIC_ACCESS"
+ ],
+ "terraform/gcp/instances.tf": [
+  "ENCRYPTION",
+  "HARDENING",
+  "IAM_ACCESS",
+  "PUBLIC_ACCESS"
+ ],
+ "terraform/gcp/networks.tf": [
+  "LOGGING_MONITORING",
+  "NETWORK_CONTROLS"
+ ],
+ "terraform/oracle/bucket.tf": [
+  "ENCRYPTION",
+  "HARDENING",
+  "PUBLIC_ACCESS",
+  "VERSIONING"
+ ]
+}
