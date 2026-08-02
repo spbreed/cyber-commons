@@ -57,7 +57,8 @@ mitigation_diff, cve}`.
 
 Local venv at `.venv/` with `pyyaml`, `checkov`, `anthropic` installed
 (`python3 -m venv .venv && .venv/bin/pip install pyyaml checkov anthropic`).
-Cloned ground-truth repos live in `_repos/` (gitignored), the database in
+Cloned ground-truth repos live in `ground-truth/` (contents gitignored, its
+README is tracked), the database in
 `data/vulnbench.db` (gitignored).
 
 ## Scheduling

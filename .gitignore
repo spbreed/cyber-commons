@@ -1,5 +1,7 @@
 .venv/
-_repos/
+# cloned vulnerable repos live under ground-truth/ but are not committed;
+# the folder's README is tracked
+ground-truth/*/
 logs/
 data/vulnbench.db
 __pycache__/

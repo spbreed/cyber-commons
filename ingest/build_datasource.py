@@ -19,7 +19,7 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
-REPOS_DIR = ROOT / "_repos"
+REPOS_DIR = ROOT / "ground-truth"
 SCHEMA = ROOT / "bench" / "schema.sql"
 
 
