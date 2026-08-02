@@ -7,9 +7,8 @@ data/vulnbench.db
 __pycache__/
 *.pyc
 
-# real Claude-as-Mantis run: transient clone, blind corpus, held-out labels
+# transient Google Mantis clone (schema is vendored at bench/mantis_schema.json)
 _mantis/
-work_mantis/blind/
-work_mantis/.labels.secret.json
-work_mantis/blind_rw/
-work_mantis/.labels_rw.secret.json
+# NOTE: the blind corpora (work_mantis/blind*, copies of public SecLLMHolmes
+# code) and the answer keys (work_mantis/.labels*.json) ARE committed as
+# reproducibility evidence — deliberately not ignored.
