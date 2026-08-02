@@ -1,0 +1,140 @@
+{
+  "model": "haiku",
+  "findings": {
+    "iac_01.tf": [
+      "SECRETS",
+      "HARDENING"
+    ],
+    "iac_02.tf": [
+      "IAM_ACCESS"
+    ],
+    "iac_03.tf": [
+      "PUBLIC_ACCESS",
+      "ENCRYPTION",
+      "VERSIONING",
+      "LOGGING_MONITORING"
+    ],
+    "iac_04.tf": [
+      "NETWORK_CONTROLS",
+      "LOGGING_MONITORING"
+    ],
+    "iac_05.tf": [
+      "TRANSIT_TLS",
+      "PUBLIC_ACCESS",
+      "SECRETS",
+      "LOGGING_MONITORING"
+    ],
+    "iac_06.tf": [
+      "PUBLIC_ACCESS"
+    ],
+    "iac_07.tf": [],
+    "iac_08.tf": [
+      "ENCRYPTION",
+      "LOGGING_MONITORING"
+    ],
+    "iac_09.tf": [
+      "LOGGING_MONITORING",
+      "HARDENING",
+      "NETWORK_CONTROLS"
+    ],
+    "iac_10.tf": [
+      "ENCRYPTION",
+      "PUBLIC_ACCESS",
+      "BACKUP_DR",
+      "IAM_ACCESS",
+      "SECRETS",
+      "LOGGING_MONITORING",
+      "NETWORK_CONTROLS"
+    ],
+    "iac_11.tf": [
+      "HARDENING"
+    ],
+    "iac_12.tf": [
+      "TRANSIT_TLS",
+      "HARDENING"
+    ],
+    "iac_13.tf": [
+      "PUBLIC_ACCESS"
+    ],
+    "iac_14.tf": [
+      "BACKUP_DR"
+    ],
+    "iac_15.tf": [
+      "SECRETS",
+      "LOGGING_MONITORING"
+    ],
+    "iac_16.tf": [
+      "IAM_ACCESS"
+    ],
+    "iac_17.tf": [
+      "SECRETS"
+    ],
+    "iac_18.tf": [
+      "NETWORK_CONTROLS"
+    ],
+    "iac_19.tf": [
+      "ENCRYPTION",
+      "VERSIONING",
+      "LOGGING_MONITORING"
+    ],
+    "iac_20.tf": [
+      "PUBLIC_ACCESS",
+      "VERSIONING",
+      "ENCRYPTION",
+      "LOGGING_MONITORING"
+    ],
+    "iac_21.tf": [
+      "TRANSIT_TLS",
+      "IAM_ACCESS"
+    ],
+    "iac_22.tf": [
+      "IAM_ACCESS",
+      "LOGGING_MONITORING"
+    ],
+    "iac_23.tf": [
+      "PUBLIC_ACCESS",
+      "HARDENING"
+    ],
+    "iac_24.tf": [
+      "ENCRYPTION",
+      "TRANSIT_TLS",
+      "IAM_ACCESS"
+    ],
+    "iac_25.tf": [
+      "LOGGING_MONITORING"
+    ],
+    "iac_26.tf": [
+      "NETWORK_CONTROLS"
+    ],
+    "iac_27.tf": [
+      "SECRETS",
+      "ENCRYPTION",
+      "NETWORK_CONTROLS"
+    ],
+    "iac_28.tf": [
+      "PUBLIC_ACCESS",
+      "BACKUP_DR"
+    ],
+    "iac_29.tf": [
+      "TRANSIT_TLS"
+    ],
+    "iac_30.tf": [
+      "HARDENING"
+    ],
+    "iac_31.tf": [
+      "HARDENING"
+    ],
+    "iac_32.tf": [
+      "ENCRYPTION",
+      "IAM_ACCESS",
+      "BACKUP_DR"
+    ],
+    "iac_33.tf": [
+      "IAM_ACCESS"
+    ],
+    "iac_34.tf": [
+      "LOGGING_MONITORING",
+      "HARDENING"
+    ]
+  }
+}
