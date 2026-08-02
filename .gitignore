@@ -11,3 +11,5 @@ __pycache__/
 _mantis/
 work_mantis/blind/
 work_mantis/.labels.secret.json
+work_mantis/blind_rw/
+work_mantis/.labels_rw.secret.json
