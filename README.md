@@ -152,13 +152,32 @@ hand-crafted files (opaque filenames, labels held out), emitting genuine
 Mantis-schema findings that were then scored. Full write-up:
 [docs/REAL_MANTIS_RUN.md](docs/REAL_MANTIS_RUN.md).
 
-Genuine blind result: **Expert Accuracy 0.8958**, binary vulnerable/safe
+Genuine blind result (Opus): **Expert Accuracy 0.8958**, binary vulnerable/safe
 **44/48 (91.7%)**, correct CWE on true vulns **20/24 (83.3%)**. Perfect on
 injection / XSS / use-after-free / OOB-write / command-injection; the misses
 and false positives all cluster in the **CWE-476 NULL-pointer-dereference**
 family (0.33 expert accuracy) — a real, class-level weakness the benchmark
 surfaced. This 0.8958 is the honest model number; the 0.9479 below is a
 hand-authored fixture with three planted errors, not blind performance.
+
+**Model comparison (Opus vs Sonnet vs Haiku as the Mantis agent)** — same blind
+protocol, both corpora, full write-up in
+[docs/MODEL_COMPARISON.md](docs/MODEL_COMPARISON.md):
+
+| Model  | Corpus       | Precision | Recall | F1   | Expert Acc |
+|--------|--------------|-----------|--------|------|------------|
+| Opus   | hand-crafted | 0.92      | 0.92   | 0.92 | **0.90**   |
+| Sonnet | hand-crafted | 0.72      | 0.96   | 0.82 | **0.75**   |
+| Haiku  | hand-crafted | 0.64      | 0.75   | 0.69 | **0.61**   |
+| Opus   | real-world   | 0.93      | 0.87   | 0.90 | **0.87**   |
+| Sonnet | real-world   | — blocked by real-time cyber safeguards —      |||
+| Haiku  | real-world   | 0.50      | 0.20   | 0.29 | **0.47**   |
+
+Consistent ordering **Opus > Sonnet > Haiku**: Opus is well-calibrated on both
+(few false positives); Sonnet over-reports (recall 0.96 / precision 0.72);
+Haiku collapses on real CVE code (flags 3 of 15 true vulns). Sonnet's
+real-world run was blocked twice by Anthropic's cyber safeguards on reading the
+CVE code — a real operational constraint on the consumer tier.
 
 ### Schema-conformance test against google/mantis (2026-08-02)
 
