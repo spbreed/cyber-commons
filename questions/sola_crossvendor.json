@@ -1,0 +1,7 @@
+{
+  "suite": "sola_crossvendor",
+  "source": "arXiv:2606.02674 Appendix A (Sola cross-vendor benchmark)",
+  "_note": "PASTE the 50 appendix questions into `questions` as {qid, category, text}, where category is the vendor combination (e.g. \"AWS+Okta\"). Question text must be verbatim from the paper — the loader refuses to fabricate it.",
+  "expected_total": 50,
+  "questions": []
+}

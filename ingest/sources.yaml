@@ -1,0 +1,54 @@
+# Registry of OSS ground-truth sources. Each entry names a parser implemented
+# in ingest/build_datasource.py. `active: false` entries are deploy-gated
+# stubs: registered so the schema/CLI already know them, but skipped until a
+# deployed environment (or the target repo) is available to scan.
+sources:
+  - name: secllmholmes
+    repo: https://github.com/ai4cloudops/SecLLMHolmes
+    parser: secllmholmes
+    active: true
+
+  - name: terragoat
+    repo: https://github.com/bridgecrewio/terragoat
+    parser: checkov_oracle
+    scan_dir: terraform
+    active: true
+
+  - name: cloudgoat
+    repo: https://github.com/RhinoSecurityLabs/cloudgoat
+    parser: checkov_oracle
+    scan_dir: .
+    active: false
+    reason: deploy-gated (scenarios are templated; scan after `cloudgoat create`)
+
+  - name: awsgoat
+    repo: https://github.com/ine-labs/AWSGoat
+    parser: checkov_oracle
+    scan_dir: .
+    active: false
+    reason: deploy-gated
+
+  - name: iam-vulnerable
+    repo: https://github.com/BishopFox/iam-vulnerable
+    parser: checkov_oracle
+    scan_dir: .
+    active: false
+    reason: deploy-gated
+
+  - name: goad
+    repo: https://github.com/Orange-Cyberdefense/GOAD
+    parser: stub
+    active: false
+    reason: AD lab; ground truth requires a deployed range
+
+  - name: nyu-ctf
+    repo: https://github.com/NYU-LLM-CTF/NYU_CTF_Bench
+    parser: stub
+    active: false
+    reason: CTF tasks; needs per-challenge runtime environment
+
+  - name: cybench
+    repo: https://github.com/andyzorigin/cybench
+    parser: stub
+    active: false
+    reason: CTF tasks; needs per-challenge runtime environment

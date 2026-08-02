@@ -1,0 +1,12 @@
+{
+  "suite": "sola_ispm",
+  "source": "arXiv:2601.07880 Appendix A (Sola ISPM benchmark)",
+  "_note": "PASTE the 77 appendix questions into `questions` as {qid, category, text}. Question text must be verbatim from the paper — the loader refuses to fabricate it. Expected category counts are below; the loader warns until they match.",
+  "expected_counts": {
+    "Inventory": 14,
+    "AWS Hygiene": 39,
+    "GWS Hygiene": 14,
+    "Okta Hygiene": 10
+  },
+  "questions": []
+}
