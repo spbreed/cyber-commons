@@ -140,12 +140,31 @@ the CWE comes from the explicit `finding.cwe` when present, otherwise
 safe/patched file the harness flags counts as a false positive. Every ingested
 line is validated against Google's own `schema.json` before scoring.
 
-### Real-time test against google/mantis (2026-08-02)
+### Real run — Claude as the Mantis agent (blind), 2026-08-02
 
-The full pipeline can't run here (it needs an agent harness + sandboxes), but
-its **history-extraction stage is deterministic and reproducible**, and the
-SecLLMHolmes real-world corpus is exactly what that stage consumes: 15
-vuln→patch revision pairs with CVE metadata. So the test was:
+Mantis's skills are *executed by a coding agent*, and it is harness-agnostic.
+The full Gemini-backed pipeline could **not** run here — there are no Gemini
+credentials in this environment, a "Gemini Pro" subscription is not an API key,
+and the Gemini API host is 403-blocked through the sandbox proxy. So Claude
+(on the user's Claude subscription) acted as the backing agent and executed the
+real `mantis-researcher` methodology **blind** over the 48 SecLLMHolmes
+hand-crafted files (opaque filenames, labels held out), emitting genuine
+Mantis-schema findings that were then scored. Full write-up:
+[docs/REAL_MANTIS_RUN.md](docs/REAL_MANTIS_RUN.md).
+
+Genuine blind result: **Expert Accuracy 0.8958**, binary vulnerable/safe
+**44/48 (91.7%)**, correct CWE on true vulns **20/24 (83.3%)**. Perfect on
+injection / XSS / use-after-free / OOB-write / command-injection; the misses
+and false positives all cluster in the **CWE-476 NULL-pointer-dereference**
+family (0.33 expert accuracy) — a real, class-level weakness the benchmark
+surfaced. This 0.8958 is the honest model number; the 0.9479 below is a
+hand-authored fixture with three planted errors, not blind performance.
+
+### Schema-conformance test against google/mantis (2026-08-02)
+
+The `mantis-history` stage is deterministic and reproducible, and the
+SecLLMHolmes real-world corpus is exactly what it consumes: 15 vuln→patch
+revision pairs with CVE metadata. So a second, schema-level test was:
 
 1. **Validate the harness against Google's real contract.** `schema.json` was
    pulled from google/mantis and vulnbench now validates every findings line

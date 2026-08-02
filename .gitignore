@@ -6,3 +6,8 @@ logs/
 data/vulnbench.db
 __pycache__/
 *.pyc
+
+# real Claude-as-Mantis run: transient clone, blind corpus, held-out labels
+_mantis/
+work_mantis/blind/
+work_mantis/.labels.secret.json
