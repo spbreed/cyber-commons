@@ -18,33 +18,115 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from score import JUDGE_METRICS, Matcher, expert_score, judge, resolve_cwe, split_path_line
 
 ROOT = Path(__file__).resolve().parent.parent
+MANTIS_SCHEMA = ROOT / "bench" / "mantis_schema.json"
+
+# Mantis finding.status values that mean "not an active positive finding": the
+# harness itself has retracted them, so they must not count as flags/FPs.
+INACTIVE_STATUS = {"FALSE_POSITIVE", "DUPLICATE", "NON_VIABLE"}
 
 
-def ingest_findings(con, path: Path, run_id: str, harness: str) -> list[dict]:
+def _load_validator(kind: str):
+    """Return a callable(obj)->error|None validating against google/mantis
+    schema.json (vendored at bench/mantis_schema.json). `kind` is a $defs key
+    (learning_entry | finding). Returns None if jsonschema/schema unavailable."""
+    if not MANTIS_SCHEMA.exists():
+        return None
+    try:
+        import jsonschema
+    except ImportError:
+        return None
+    root = json.loads(MANTIS_SCHEMA.read_text())
+    sub = {**root, "$ref": f"#/$defs/{kind}"}
+    validator = jsonschema.Draft202012Validator(sub)
+
+    def _check(obj):
+        errs = sorted(validator.iter_errors(obj), key=lambda e: e.path)
+        return errs[0].message if errs else None
+    return _check
+
+
+def ingest_findings(con, path: Path, run_id: str, harness: str, validate: bool = True):
+    """Ingest a Mantis findings file. Accepts both the history-inbox
+    `learning_entry` shape (revision_id/vuln_type/mitigation_diff) and the
+    richer `finding` object (id/cwe/status/mitigation/patch_diff)."""
     # scores reference findings, so clear them first to keep reruns idempotent
     con.execute("DELETE FROM scores WHERE run_id = ? AND harness = ?", (run_id, harness))
     con.execute("DELETE FROM findings WHERE run_id = ? AND harness = ?", (run_id, harness))
     findings = []
+    stats = {"lines": 0, "ingested": 0, "skipped_status": 0, "schema_warnings": 0, "shape": set()}
+
     with open(path) as fh:
         for lineno, line in enumerate(fh, 1):
             line = line.strip()
             if not line:
                 continue
+            stats["lines"] += 1
             raw = json.loads(line)
+
+            # trajectory_insight learning lines carry no finding to score
+            if raw.get("type") == "trajectory_insight":
+                continue
+
+            is_finding_obj = "id" in raw and "status" in raw
+            stats["shape"].add("finding" if is_finding_obj else "learning_entry")
+
+            status = (raw.get("status") or "").upper()
+            if status in INACTIVE_STATUS:
+                stats["skipped_status"] += 1
+                continue
+
             code_paths = raw.get("code_paths") or []
             file_path, line_no = split_path_line(code_paths[0]) if code_paths else (None, None)
-            cwe = resolve_cwe(raw.get("vuln_type"), raw.get("title"), raw.get("description"))
+
+            # explicit finding.cwe wins; else resolve free-text vuln_type/title/desc
+            cwe = raw.get("cwe") or resolve_cwe(raw.get("vuln_type"), raw.get("title"), raw.get("description"))
+            if cwe:
+                m = __import__("re").search(r"CWE[-_ ]?(\d+)", cwe, __import__("re").IGNORECASE)
+                cwe = f"CWE-{int(m.group(1))}" if m else cwe
+            mitigation = raw.get("mitigation_diff") or raw.get("patch_diff") or raw.get("mitigation")
+
             cur = con.execute(
                 """INSERT INTO findings (run_id, harness, revision_id, title, description,
                        file_path, line, code_paths, vuln_type, cwe, mitigation_diff, cve)
                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)""",
-                (run_id, harness, raw.get("revision_id"), raw.get("title"),
+                (run_id, harness, raw.get("revision_id") or raw.get("id"), raw.get("title"),
                  raw.get("description"), file_path, line_no, json.dumps(code_paths),
-                 raw.get("vuln_type"), cwe, raw.get("mitigation_diff"), raw.get("cve")),
+                 raw.get("vuln_type"), cwe, mitigation, raw.get("cve")),
             )
             findings.append({**raw, "id": cur.lastrowid, "file_path": file_path,
-                             "line": line_no, "cwe": cwe})
+                             "line": line_no, "cwe": cwe, "mitigation_diff": mitigation})
+
+    if validate:
+        _run_schema_validation(path, stats)
+    print(f"ingest: {len(findings)} scored, "
+          f"{stats['skipped_status']} retracted (FALSE_POSITIVE/DUPLICATE), "
+          f"shapes={sorted(stats['shape']) or ['(none)']}")
     return findings
+
+
+def _run_schema_validation(path: Path, stats: dict) -> None:
+    """Validate every line against the matching google/mantis $defs sub-schema
+    and report conformance (non-fatal)."""
+    learn_v = _load_validator("learning_entry")
+    find_v = _load_validator("finding")
+    if not learn_v or not find_v:
+        print("schema: jsonschema or bench/mantis_schema.json unavailable; skipped validation")
+        return
+    ok = bad = 0
+    for line in Path(path).read_text().splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        obj = json.loads(line)
+        validator = find_v if ("id" in obj and "status" in obj) else learn_v
+        err = validator(obj)
+        if err:
+            bad += 1
+            if bad <= 3:
+                print(f"schema: line invalid vs google/mantis contract: {err[:120]}")
+        else:
+            ok += 1
+    print(f"schema: {ok}/{ok + bad} lines conform to google/mantis schema.json")
 
 
 def main() -> int:
@@ -58,6 +140,8 @@ def main() -> int:
                     help="use real Anthropic judges (needs ANTHROPIC_API_KEY); offline heuristic otherwise")
     ap.add_argument("--min-acc", type=float, default=None,
                     help="exit non-zero if Expert Accuracy falls below this threshold")
+    ap.add_argument("--no-validate", action="store_true",
+                    help="skip validation of findings against the vendored google/mantis schema.json")
     ap.add_argument("--db", default=str(ROOT / "data" / "vulnbench.db"))
     args = ap.parse_args()
 
@@ -65,7 +149,8 @@ def main() -> int:
     con.row_factory = sqlite3.Row
     con.executescript((ROOT / "bench" / "schema.sql").read_text())
 
-    findings = ingest_findings(con, Path(args.findings), args.run_id, args.harness)
+    findings = ingest_findings(con, Path(args.findings), args.run_id, args.harness,
+                               validate=not args.no_validate)
 
     if args.gt_source:
         gt_rows = con.execute("SELECT * FROM ground_truth WHERE source = ?", (args.gt_source,)).fetchall()

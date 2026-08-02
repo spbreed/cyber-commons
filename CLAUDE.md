@@ -49,14 +49,20 @@ Useful flags for `run_benchmark.py`: `--gt-source <source>` to scope scoring,
 judges (needs `ANTHROPIC_API_KEY`; a deterministic offline heuristic is used
 otherwise), `--min-acc <t>` to exit non-zero on a regression.
 
-Findings input uses Mantis's `historical_learnings.jsonl` schema:
-`{revision_id, title, description, code_paths: ["file:line"], vuln_type,
-mitigation_diff, cve}`.
+Findings input uses Mantis's `historical_learnings.jsonl` schema
+(`{revision_id, title, description, code_paths: ["file:line"], vuln_type,
+mitigation_diff, cve, history}`) or the richer `finding` object
+(`{id, status, cwe, mitigation/patch_diff, …}`); `FALSE_POSITIVE`/`DUPLICATE`
+findings are auto-retracted. Every line is validated against the vendored
+google/mantis contract `bench/mantis_schema.json` (see
+`bench/MANTIS_SCHEMA_PROVENANCE.md`) unless `--no-validate` is passed.
+`bench/mantis_history_extract.py` reproduces Mantis's history-extraction stage
+over the SecLLMHolmes real-world CVE corpus (`make mantis-realworld`).
 
 ## Environment
 
 Local venv at `.venv/` with `pyyaml`, `checkov`, `anthropic` installed
-(`python3 -m venv .venv && .venv/bin/pip install pyyaml checkov anthropic`).
+(`python3 -m venv .venv && .venv/bin/pip install pyyaml checkov anthropic jsonschema`).
 Cloned ground-truth repos live in `ground-truth/` (contents gitignored, its
 README is tracked), the database in
 `data/vulnbench.db` (gitignored).

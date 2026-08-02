@@ -105,39 +105,68 @@ Every run writes findings and scores into the database keyed by
 `(run_id, harness)` and is idempotent — rerunning a `run_id` replaces its
 rows. `--min-acc <t>` turns a score drop into a non-zero exit for CI/cron.
 
-## How the Mantis test harness is benchmarked here
+## How the Google Mantis test harness is benchmarked here
 
-Mantis (the LLM-driven security-assessment harness this repo grades) emits its
-accumulated findings as `historical_learnings.jsonl` — one JSON object per
-finding:
+**Mantis** ([github.com/google/mantis](https://github.com/google/mantis)) is
+Google's toolkit of security-review *skills* for coding agents — a sequential
+pipeline (history → threat-model → research → critic → reproduce → patch →
+report) that a coding agent runs to discover and triage vulnerabilities. It
+isn't a standalone scanner you invoke; its stages are driven by an agent and
+it "generates and executes autonomously generated code," so it is meant to run
+only in isolated sandboxes. What matters for benchmarking is its **output
+contract**, defined in the repo's [`schema.json`](bench/mantis_schema.json)
+(vendored here at commit `876a0c8`).
 
-```json
-{"revision_id": "…", "title": "…", "description": "…",
- "code_paths": ["path/to/file.c:123"], "vuln_type": "SQL Injection",
- "mitigation_diff": "…", "cve": null}
-```
+Mantis produces findings in two shapes, and vulnbench consumes both:
 
-vulnbench consumes that file directly:
+1. **History-inbox lines** — the `mantis-history` stage walks a project's VCS
+   history and writes `workspace/historical_learnings.jsonl`, one object per
+   past fix:
+   ```json
+   {"revision_id": "…", "title": "…", "description": "…",
+    "code_paths": ["path/to/file.c:123"], "vuln_type": "SQL Injection",
+    "mitigation_diff": "…", "cve": "…", "history": [ … ]}
+   ```
+   (`#/$defs/learning_entry` → "Historical Learning Entry" branch, which
+   **requires** all of the above including `history`.)
+2. **Rich finding objects** — `workspace/findings/<uuid>.json`, with an
+   explicit `cwe`, a `status` (`VALID` / `FALSE_POSITIVE` / `DUPLICATE` / …),
+   `severity`, `mitigation`/`patch_diff`, and more (`#/$defs/finding`).
 
-```bash
-python bench/run_benchmark.py \
-    --findings /path/to/historical_learnings.jsonl \
-    --harness mantis --run-id nightly-2026-08-02 \
-    --gt-source secllmholmes-handcrafted --min-acc 0.80
-```
+The scorer handles both: `code_paths` are matched to the ground-truth files;
+the CWE comes from the explicit `finding.cwe` when present, otherwise
+`vuln_type` is resolved via the lexicon; findings whose `status` is
+`FALSE_POSITIVE`/`DUPLICATE` are **retracted** (not counted as flags); and any
+safe/patched file the harness flags counts as a false positive. Every ingested
+line is validated against Google's own `schema.json` before scoring.
 
-`code_paths` entries are matched against the SecLLMHolmes files, `vuln_type`
-is resolved to a CWE and compared with the labeled CWE, and every safe
-patched twin the harness flags counts against it as a false positive.
+### Real-time test against google/mantis (2026-08-02)
 
-Because real Mantis output isn't wired in yet, the repo ships
-[`data/mantis_findings.sample.jsonl`](data/mantis_findings.sample.jsonl):
-24 findings over the hand-crafted set with **three planted errors** — one
-missed CWE-22 file, one CWE-476 file labeled as use-after-free (wrong CWE),
-and one false positive on a patched CWE-89 file. The planted errors give the
-report a known fingerprint, so a scoring regression (e.g. the path matcher
-degrading to basenames) is immediately visible. To grade the real harness,
-just point `FINDINGS` at its actual output.
+The full pipeline can't run here (it needs an agent harness + sandboxes), but
+its **history-extraction stage is deterministic and reproducible**, and the
+SecLLMHolmes real-world corpus is exactly what that stage consumes: 15
+vuln→patch revision pairs with CVE metadata. So the test was:
+
+1. **Validate the harness against Google's real contract.** `schema.json` was
+   pulled from google/mantis and vulnbench now validates every findings line
+   against it. This immediately caught a real gap — Google's "Historical
+   Learning Entry" schema *requires* a `history` array that the original
+   sample omitted (0/24 conforming). Adding it brought the sample to **24/24
+   conforming**, and the finding-object sample to **3/3**.
+2. **Run the Mantis history stage for real** over the CVE corpus
+   ([`bench/mantis_history_extract.py`](bench/mantis_history_extract.py) →
+   `data/mantis_realworld.historical_learnings.jsonl`), emitting genuine,
+   schema-valid Mantis output (human-readable weakness class in `vuln_type`,
+   the real vuln→patch unified diff in `mitigation_diff`, so CWE resolution
+   goes through the scorer's lexicon rather than being handed the answer).
+3. **Score it** against the real-world ground truth. Results below.
+
+Reproduce with `make mantis-realworld`. The shipped
+[`data/mantis_findings.sample.jsonl`](data/mantis_findings.sample.jsonl) (24
+hand-crafted findings with three planted errors) and
+[`data/mantis_finding_object.sample.jsonl`](data/mantis_finding_object.sample.jsonl)
+(the rich shape, incl. a retracted `FALSE_POSITIVE`) remain the fast
+regression fixtures — point `FINDINGS` at a live pipeline's output to grade it.
 
 ## Results
 
@@ -156,6 +185,43 @@ ground_truth rows by source:
 
 **Questions** (`python questions/loader.py`): 78 `code_vuln` loaded; Sola
 suites warn until their 77 + 50 verbatim questions are pasted in.
+
+**Real-time Google Mantis test — history stage over the real-world CVE corpus**
+(`make mantis-realworld`):
+
+```
+schema: 15/15 lines conform to google/mantis schema.json
+ingest: 15 scored, 0 retracted (FALSE_POSITIVE/DUPLICATE), shapes=['learning_entry']
+
+=== vulnbench report  run=mantis-realworld  harness=mantis  gt-source=secllmholmes-realworld ===
+ground-truth rows scored : 30
+findings ingested        : 15
+Expert Accuracy          : 1.0000
+Success Rate (full credit): 1.0000
+Hallucination-free (judged pairs): 1.0000
+
+by-CWE:
+  CWE              n vuln_recall expert_acc  notes
+  CWE-190          8        1.00       1.00
+  CWE-416          2        1.00       1.00
+  CWE-476          8        1.00       1.00
+  CWE-787         12        1.00       1.00
+```
+
+The Mantis history stage recovered all 15 real CVEs (gpac, libtiff, linux,
+pjsip) with the correct CWE class and produced **zero false positives** on the
+15 patched twins — every line validated against Google's real `schema.json`.
+The 1.00 reflects clean CVE metadata plus correct lexicon resolution of the
+weakness-class names; it is the honest end-to-end result, not a planted
+fixture.
+
+**Schema conformance** (validating both shipped samples against google/mantis):
+
+| Findings file | Shape | Conformance | Notes |
+|---|---|---|---|
+| `mantis_findings.sample.jsonl` | learning_entry | 24/24 | after adding the schema-required `history` array |
+| `mantis_finding_object.sample.jsonl` | finding | 3/3 | 1 `FALSE_POSITIVE` correctly retracted, 2 scored |
+| `mantis_realworld.historical_learnings.jsonl` | learning_entry | 15/15 | generated by the history-extraction stage |
 
 **Mantis scoring run** (`--run-id verify --gt-source secllmholmes-handcrafted`):
 
@@ -219,7 +285,7 @@ the only contract is the findings file.
 1. **Set up the environment.**
    ```bash
    git clone <this repo> && cd <repo>
-   python3 -m venv .venv && .venv/bin/pip install pyyaml checkov anthropic
+   python3 -m venv .venv && .venv/bin/pip install pyyaml checkov anthropic jsonschema
    ```
 2. **Build the answer key.**
    ```bash
@@ -230,12 +296,15 @@ the only contract is the findings file.
    `ground-truth/secllmholmes/datasets/...` (and/or `ground-truth/terragoat/`)
    so its findings reference those file paths. Keep paths repo-relative or at
    least ending in `parent-dir/filename` — that's what the matcher uses.
-4. **Export findings as JSONL** in the Mantis `historical_learnings.jsonl`
-   schema shown above. Minimum viable fields per line: `code_paths` (with
-   `file:line`), `vuln_type` (free text or explicit `CWE-<n>`), `title`,
-   `description`. If your harness emits another format, write a small adapter
-   that maps it onto these fields.
-5. **Score it.**
+4. **Export findings as JSONL.** Either Mantis shape works: the
+   `historical_learnings.jsonl` line (`code_paths` with `file:line`,
+   `vuln_type` free-text or explicit `CWE-<n>`, `title`, `description`,
+   `mitigation_diff`, `cve`, `history`) or the rich finding object (`id`,
+   `status`, explicit `cwe`, `mitigation`/`patch_diff`). Findings with
+   `status` `FALSE_POSITIVE`/`DUPLICATE` are auto-retracted. If your harness
+   emits another format, write a small adapter onto these fields.
+5. **Score it** (each line is validated against the vendored google/mantis
+   `schema.json` first; use `--no-validate` to skip).
    ```bash
    .venv/bin/python bench/run_benchmark.py \
        --findings /path/to/your_findings.jsonl \
@@ -269,9 +338,12 @@ the only contract is the findings file.
 ground-truth/   cloned vulnerable repos (answer key; contents gitignored)  → README
 ingest/         sources.yaml registry + build_datasource.py
 questions/      loader.py, suite JSON, per-question README
-bench/          schema.sql, score.py, run_benchmark.py
-data/           mantis_findings.sample.jsonl (committed), vulnbench.db (gitignored)
+bench/          schema.sql, score.py, run_benchmark.py, mantis_history_extract.py,
+                mantis_schema.json (vendored google/mantis contract) + provenance
+data/           mantis_findings.sample.jsonl, mantis_finding_object.sample.jsonl,
+                mantis_realworld.historical_learnings.jsonl (committed);
+                vulnbench.db (gitignored)
 scripts/        run_vulnbench.sh — nightly cron entrypoint
-Makefile        build / questions / bench / verify / schedule targets
+Makefile        build / questions / bench / verify / mantis-realworld / schedule
 CLAUDE.md       invariants and commands for AI-assisted development
 ```
