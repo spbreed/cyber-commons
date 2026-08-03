@@ -1,0 +1,19 @@
+---
+mode: agent
+description: Run the Cyber Harness Eval benchmark on a findings file and report accuracy.
+---
+
+Benchmark an AI security harness with Cyber Harness Eval.
+
+Steps (use the `scripts/vulnbench.sh` entrypoint, run from repo root):
+1. `scripts/vulnbench.sh doctor` — if venv or datasource is missing, run
+   `scripts/vulnbench.sh setup` then `scripts/vulnbench.sh build`.
+2. Score the findings file the user provides (Mantis `historical_learnings.jsonl`
+   or `finding`-object JSONL):
+   `scripts/vulnbench.sh score --findings ${input:findings} --gt-source ${input:gtSource:secllmholmes-handcrafted} --min-acc 0.80`
+3. If no findings file exists yet, run `scripts/vulnbench.sh verify` to prove the
+   pipeline (expect Expert Accuracy 0.9479).
+
+Report the **Expert Accuracy**, the by-CWE breakdown (where it fails), and
+whether it passed `--min-acc`. Do NOT report schema conformance as if it were
+accuracy — conformance is structural (~100%), accuracy is correctness.

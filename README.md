@@ -127,18 +127,23 @@ repos land in `ground-truth/` (contents gitignored); the DB is `data/vulnbench.d
 
 ## Commands
 
+One entrypoint drives everything (this is what the agent skills call):
+
 ```bash
-python ingest/build_datasource.py        # build the ground-truth datasource (~552 rows)
-python questions/loader.py               # load benchmark question suites
-python bench/run_benchmark.py --findings <jsonl> --gt-source <source>   # score a harness
-make verify                              # pipeline regression fingerprint (0.9479)
-make mantis-realworld                    # run Mantis history stage over real CVEs
-python work_mantis/compare_models.py     # code model comparison (Opus/Sonnet/Haiku)
-python work_mantis/compare_iac.py        # IaC model comparison vs Checkov
-make schedule-show                       # print the nightly cron line (review before install)
+scripts/vulnbench.sh doctor              # check prerequisites
+scripts/vulnbench.sh setup               # create .venv + install deps
+scripts/vulnbench.sh build               # build datasource (~552 rows) + load questions
+scripts/vulnbench.sh score --findings <jsonl> --gt-source <source> --min-acc 0.80
+scripts/vulnbench.sh verify              # regression fingerprint (0.9479)
+scripts/vulnbench.sh compare            # model comparison (code + IaC)
 ```
 
-`run_benchmark.py` flags: `--gt-source` (scope), `--run-id` (idempotent named run),
+Underlying tools (called by the entrypoint; usable directly too):
+`ingest/build_datasource.py`, `questions/loader.py`, `bench/run_benchmark.py`,
+`work_mantis/compare_models.py`, `work_mantis/compare_iac.py`,
+`make mantis-realworld`, `make schedule-show`.
+
+`score` flags: `--gt-source` (scope), `--run-id` (idempotent named run),
 `--judges` (real Anthropic judges; needs `ANTHROPIC_API_KEY`), `--min-acc <t>`
 (non-zero exit on regression), `--no-validate` (skip schema check).
 
@@ -146,33 +151,59 @@ make schedule-show                       # print the nightly cron line (review b
 
 ## How to run benchmarks
 
-**1. Score a harness's findings file** (Mantis `historical_learnings.jsonl` or
-`finding` objects):
+The benchmark runs **as an agent skill** — one entrypoint,
+[`scripts/vulnbench.sh`](scripts/vulnbench.sh), wrapped for every agent surface
+so you can just *ask* your coding agent to "run the vulnbench benchmark" and it
+executes the same steps a human would.
+
+### As an agent skill
+
+| Agent | How it's wired | To invoke |
+|-------|----------------|-----------|
+| **Claude Code** | [`.claude/skills/vulnbench-benchmark/`](.claude/skills/vulnbench-benchmark/SKILL.md) and [`vulnbench-blind-audit`](.claude/skills/vulnbench-blind-audit/SKILL.md) (auto-trigger on description) | "run the vulnbench benchmark on `<findings.jsonl>`" or `/vulnbench-benchmark` |
+| **GitHub Copilot** | [`.github/copilot-instructions.md`](.github/copilot-instructions.md) + prompt files in [`.github/prompts/`](.github/prompts) | `/vulnbench-benchmark` in Copilot Chat |
+| **Cursor / other** | [`AGENTS.md`](AGENTS.md) (cross-agent standard) | "benchmark the harness per AGENTS.md" |
+
+All three call the same entrypoint, so results are identical regardless of agent.
+
+### Directly (what the skills run)
 
 ```bash
-python bench/run_benchmark.py \
-    --findings /path/to/historical_learnings.jsonl \
+scripts/vulnbench.sh doctor                    # check prerequisites
+scripts/vulnbench.sh setup                     # create .venv + install deps (first time)
+scripts/vulnbench.sh build                     # build ground truth (~552 rows) + questions
+
+# 1. Score a harness's findings (Mantis historical_learnings.jsonl or finding-object JSONL)
+scripts/vulnbench.sh score --findings <path.jsonl> \
     --harness mantis --run-id nightly-$(date +%F) \
     --gt-source secllmholmes-handcrafted --min-acc 0.80
+
+# 2. Reproduce the model comparison (Opus/Sonnet/Haiku, code + IaC)
+scripts/vulnbench.sh compare
+
+# 3. Pipeline regression fingerprint — must print Expert Accuracy 0.9479
+scripts/vulnbench.sh verify
 ```
 
-Reports Expert Accuracy, by-CWE recall, and mean judge metrics; exits non-zero if
-accuracy drops below `--min-acc`.
+`score` reports Expert Accuracy, by-CWE recall, and mean judge metrics, and exits
+non-zero if accuracy drops below `--min-acc` (that non-zero is the CI/regression
+signal). For a fresh **blind model audit** (running a model *as* the harness
+rather than scoring an existing file), follow the `vulnbench-blind-audit` skill /
+[`work_mantis/README.md`](work_mantis/README.md).
 
-**2. Blind model comparison** (the studies in this repo): copy targets to opaque
-names, hold out labels, run each model, score with
-`work_mantis/compare_models.py` (code) or `compare_iac.py` (IaC). Full protocol
-in [`work_mantis/README.md`](work_mantis/README.md).
-
-**3. Reproduce the fixture fingerprint**: `make verify` must show Expert Accuracy
-0.9479 with the planted miss / wrong-CWE / false-positive — if not, the path
-matcher regressed.
+> **Verified run (through the entrypoint):** `scripts/vulnbench.sh verify` →
+> `Expert Accuracy 0.9479`; `scripts/vulnbench.sh compare` reproduces the full
+> Opus/Sonnet/Haiku table below.
 
 ---
 
 ## Repo layout
 
 ```
+.claude/skills/ Claude Code agent skills (vulnbench-benchmark, vulnbench-blind-audit)
+.github/        Copilot instructions + prompt files (.github/prompts/)
+AGENTS.md       cross-agent instructions (Copilot/Cursor/… standard)
+scripts/        vulnbench.sh (agent-skill entrypoint) + run_vulnbench.sh (cron)
 ground-truth/  cloned vulnerable repos (answer key; contents gitignored)  → README
 ingest/        sources.yaml registry + build_datasource.py
 questions/     loader.py, suite JSON, per-question README
@@ -182,7 +213,6 @@ data/          Mantis findings samples + blind-run findings; vulnbench.db (gitig
 work_mantis/   blind corpora, answer keys, per-model verdicts, scorers, evidence  → README
 docs/          REAL_MANTIS_RUN.md, MODEL_COMPARISON.md
 training/      lightboard course (cyber + AI for newcomers)  → README
-scripts/       run_vulnbench.sh — nightly cron entrypoint
 Makefile       build / questions / bench / verify / mantis-realworld / schedule
 ```
 
