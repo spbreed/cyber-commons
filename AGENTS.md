@@ -26,6 +26,8 @@ scripts/vulnbench.sh <command>
 | `verify` | regression fingerprint (must print Expert Accuracy 0.9479) |
 | `compare` | model comparison scorers (code + IaC) |
 | `all --findings <f.jsonl>` | build + score |
+| `cybergym-preflight` | check whether this host can run CyberGym (Docker + data + py≥3.12) |
+| `cybergym-score --results <verify.jsonl> --benchmark cybergym\|exploitgym\|cybergym-e2e` | score CyberGym-family results |
 
 ## Rules for agents
 - **Always use `scripts/vulnbench.sh`**, never hand-roll the Python calls.
@@ -42,3 +44,7 @@ scripts/vulnbench.sh <command>
   safeguards).
 - Do not read `work_mantis/.labels*.json` (the held-out answer keys) when acting
   as the harness — only the scorer uses them.
+- **CyberGym family is execution-based** (Docker PoC runs). Always run
+  `cybergym-preflight` first; if it says the host cannot run, report that — never
+  simulate a reproduction rate. The adapter scores results produced by the real
+  runner. See `docs/CYBERGYM_INTEGRATION.md`.

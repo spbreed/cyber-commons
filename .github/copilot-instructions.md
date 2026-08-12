@@ -13,6 +13,8 @@ scripts/vulnbench.sh build         # build ground-truth datasource (~552 rows)
 scripts/vulnbench.sh score --findings <f.jsonl> --gt-source <source> --min-acc 0.80
 scripts/vulnbench.sh verify        # regression fingerprint (Expert Accuracy 0.9479)
 scripts/vulnbench.sh compare       # model comparison (code + IaC)
+scripts/vulnbench.sh cybergym-preflight                    # can this host run CyberGym?
+scripts/vulnbench.sh cybergym-score --results <f.jsonl> --benchmark cybergym
 ```
 
 ## Guidance

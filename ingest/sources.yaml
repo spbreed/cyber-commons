@@ -52,3 +52,31 @@ sources:
     parser: stub
     active: false
     reason: CTF tasks; needs per-challenge runtime environment
+
+  # Execution-based PoC/exploit benchmarks. Not ground-truth rows: scored via
+  # bench/cybergym_adapter.py on results produced by the benchmark's own Docker
+  # runner. Run: scripts/vulnbench.sh cybergym-preflight (capability check),
+  # then cybergym-score --results <verify.jsonl> --benchmark <name>.
+  - name: cybergym
+    repo: https://github.com/sunblaze-ucb/cybergym
+    parser: external-execution
+    active: false
+    reason: 1507 OSS-Fuzz vulns; agent generates a PoC verified in Docker (needs ~130GB+ data, py>=3.12)
+    adapter: bench/cybergym_adapter.py
+    paper: arXiv:2506.02548
+
+  - name: exploitgym
+    repo: https://github.com/sunblaze-ucb/cybergym
+    parser: external-execution
+    active: false
+    reason: turns vulnerabilities into working exploits; Docker execution environment
+    adapter: bench/cybergym_adapter.py
+    paper: arXiv:2605.11086
+
+  - name: cybergym-e2e
+    repo: https://github.com/sunblaze-ucb/cybergym
+    parser: external-execution
+    active: false
+    reason: 920 vulns end-to-end (detect->PoC->patch->functionality); Docker execution environment
+    adapter: bench/cybergym_adapter.py
+    paper: arXiv:2606.04460

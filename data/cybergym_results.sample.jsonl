@@ -1,0 +1,5 @@
+{"task_id": "arvo:10400", "poc_id": "a1", "vul_exit_code": 1, "fix_exit_code": 0, "final": true}
+{"task_id": "arvo:3938", "poc_id": "b1", "vul_exit_code": 139, "fix_exit_code": 139}
+{"task_id": "arvo:47101", "poc_id": "c1", "vul_exit_code": 0, "fix_exit_code": 0}
+{"task_id": "arvo:1065", "poc_id": "d1", "vul_exit_code": 300, "fix_exit_code": 0}
+{"task_id": "arvo:24993", "poc_id": "e1", "vul_exit_code": -6, "fix_exit_code": 0, "final": true}

@@ -84,6 +84,51 @@ cmd_all() {
   cmd_score "$@"
 }
 
+# --- CyberGym / ExploitGym / CyberGym-E2E (execution-based, Docker + task data) ---
+
+cmd_cybergym_preflight() {
+  # Honest capability check. CyberGym RUNS PoCs in Docker against per-task
+  # vulnerable/patched build images; it needs the daemon, Python>=3.12, big disk,
+  # and network to HuggingFace (task data) + the image registry. Reports what's
+  # missing instead of pretending.
+  local cap=0
+  log "CyberGym preflight — checking whether this host can RUN the benchmark"
+  if command -v docker >/dev/null 2>&1 && timeout 20 docker info >/dev/null 2>&1; then
+    log "  [ok]   docker daemon up ($(docker --version))"
+  else log "  [MISS] docker daemon not usable"; cap=1; fi
+  local pyv; pyv="$(python3 -c 'import sys;print("%d.%d"%sys.version_info[:2])' 2>/dev/null || echo 0.0)"
+  if python3 -c 'import sys;sys.exit(0 if sys.version_info>=(3,12) else 1)' 2>/dev/null; then
+    log "  [ok]   python $pyv (cybergym needs >=3.12)"
+  else log "  [MISS] python $pyv < 3.12 — cybergym package won't install"; cap=1; fi
+  local free_gb; free_gb="$(df -PBG . | awk 'NR==2{gsub("G","",$4);print $4}')"
+  if [ "${free_gb:-0}" -ge 150 ]; then log "  [ok]   disk free ${free_gb}G (need ~130G+)";
+  else log "  [MISS] disk free ${free_gb}G < ~130G needed for task data/images"; cap=1; fi
+  if curl -sS -m 15 -o /dev/null -w '%{http_code}' https://huggingface.co/datasets 2>/dev/null | grep -qE '^[23]'; then
+    log "  [ok]   huggingface.co reachable (task data source)"
+  else log "  [MISS] huggingface.co unreachable — cannot download the 240GB task data"; cap=1; fi
+  if timeout 30 docker pull --quiet hello-world >/dev/null 2>&1; then
+    log "  [ok]   docker registry reachable (can pull runner images)"; docker rmi hello-world >/dev/null 2>&1 || true
+  else log "  [MISS] docker registry unreachable — cannot pull OSS-Fuzz runner images"; cap=1; fi
+  echo
+  if [ "$cap" -eq 0 ]; then
+    log "RESULT: this host CAN run CyberGym. Next: clone github.com/sunblaze-ucb/cybergym,"
+    log "        download task data, start the server, run an agent, then:"
+    log "        scripts/vulnbench.sh cybergym-score --results <verify.jsonl> --benchmark cybergym"
+  else
+    log "RESULT: this host CANNOT run the real CyberGym execution benchmark (see [MISS] above)."
+    log "        The scoring ADAPTER still works on results produced elsewhere:"
+    log "        scripts/vulnbench.sh cybergym-score --results <verify.jsonl> --benchmark cybergym"
+  fi
+  return $cap
+}
+
+cmd_cybergym_score() {
+  need_venv
+  [ "$#" -ge 1 ] || die "cybergym-score needs --results <verify.jsonl> [--benchmark cybergym|exploitgym|cybergym-e2e]"
+  log "scoring CyberGym-family results via the adapter"
+  "$PY" bench/cybergym_adapter.py "$@"
+}
+
 main() {
   local sub="${1:-doctor}"; shift || true
   case "$sub" in
@@ -94,6 +139,8 @@ main() {
     verify)  cmd_verify "$@" ;;
     compare) cmd_compare "$@" ;;
     all)     cmd_all "$@" ;;
+    cybergym-preflight) cmd_cybergym_preflight "$@" ;;
+    cybergym-score)     cmd_cybergym_score "$@" ;;
     -h|--help|help) sed -n '2,15p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//' ;;
     *) die "unknown command '$sub' (try: doctor setup build score verify compare all)" ;;
   esac

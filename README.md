@@ -53,6 +53,20 @@ They differ in surface (SAST vs. pentest vs. IaC) but share one problem: **their
 output is only as trustworthy as its measured accuracy.** That is what this repo
 provides.
 
+**Execution-based benchmarks** are also integrated — where success means running
+a Proof-of-Concept, not matching a label:
+
+| Benchmark | Agent must… | Paper |
+|-----------|-------------|-------|
+| **CyberGym** ([sunblaze-ucb/cybergym](https://github.com/sunblaze-ucb/cybergym)) | generate a PoC that reproduces a real OSS-Fuzz vuln (verified in Docker) | [arXiv:2506.02548](https://arxiv.org/abs/2506.02548) |
+| **ExploitGym** | turn a vulnerability into a working exploit | [arXiv:2605.11086](https://arxiv.org/abs/2605.11086) |
+| **CyberGym-E2E** | end-to-end: detect → PoC → patch → functionality test | [arXiv:2606.04460](https://arxiv.org/abs/2606.04460) |
+
+These are scored by [`bench/cybergym_adapter.py`](bench/cybergym_adapter.py) onto
+the same Expert-Accuracy scale. They require the CyberGym Docker environment
+(~130GB+ data, Python ≥3.12) — run `scripts/vulnbench.sh cybergym-preflight` to
+check a host, details in [docs/CYBERGYM_INTEGRATION.md](docs/CYBERGYM_INTEGRATION.md).
+
 ---
 
 ## Strategy to eval your cyber harness
@@ -136,6 +150,8 @@ scripts/vulnbench.sh build               # build datasource (~552 rows) + load q
 scripts/vulnbench.sh score --findings <jsonl> --gt-source <source> --min-acc 0.80
 scripts/vulnbench.sh verify              # regression fingerprint (0.9479)
 scripts/vulnbench.sh compare            # model comparison (code + IaC)
+scripts/vulnbench.sh cybergym-preflight  # can this host run CyberGym? (Docker + data)
+scripts/vulnbench.sh cybergym-score --results <verify.jsonl> --benchmark cybergym
 ```
 
 Underlying tools (called by the entrypoint; usable directly too):

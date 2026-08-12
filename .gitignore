@@ -12,3 +12,4 @@ _mantis/
 # NOTE: the blind corpora (work_mantis/blind*, copies of public SecLLMHolmes
 # code) and the answer keys (work_mantis/.labels*.json) ARE committed as
 # reproducibility evidence — deliberately not ignored.
+_cybergym/
