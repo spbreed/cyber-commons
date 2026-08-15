@@ -12,7 +12,7 @@ allowed-tools: Bash, Read, Grep, Glob
 
 # vulnbench — benchmark a cyber harness
 
-All actions go through one entrypoint: `scripts/vulnbench.sh`. Run it from the
+All actions go through one entrypoint: `labs/b2.10-eval-harness/scripts/vulnbench.sh`. Run it from the
 repo root. Do not hand-roll the Python invocations — the entrypoint keeps every
 agent (Claude Code, Copilot, humans) running the identical steps.
 
@@ -20,21 +20,21 @@ agent (Claude Code, Copilot, humans) running the identical steps.
 
 1. **Check prerequisites.**
    ```bash
-   scripts/vulnbench.sh doctor
+   labs/b2.10-eval-harness/scripts/vulnbench.sh doctor
    ```
-   If it reports the venv or checkov missing, run `scripts/vulnbench.sh setup`
+   If it reports the venv or checkov missing, run `labs/b2.10-eval-harness/scripts/vulnbench.sh setup`
    (creates `.venv`, installs `pyyaml checkov anthropic jsonschema`).
 
 2. **Build the ground truth** (only if `doctor` says the datasource is not built
    — this clones the vulnerable repos on first run, ~552 rows):
    ```bash
-   scripts/vulnbench.sh build
+   labs/b2.10-eval-harness/scripts/vulnbench.sh build
    ```
 
 3. **Score the harness's findings.** The findings file is JSONL in Mantis's
    `historical_learnings.jsonl` schema or the richer `finding` object.
    ```bash
-   scripts/vulnbench.sh score --findings <path/to/findings.jsonl> \
+   labs/b2.10-eval-harness/scripts/vulnbench.sh score --findings <path/to/findings.jsonl> \
        --harness <name> --run-id <id> --gt-source secllmholmes-handcrafted --min-acc 0.80
    ```
    - `--gt-source`: `secllmholmes-handcrafted` | `secllmholmes-realworld` | `terragoat` (omit to score all).
@@ -46,7 +46,7 @@ agent (Claude Code, Copilot, humans) running the identical steps.
    Expert Accuracy `0.9479` and the planted CWE-22 miss / CWE-476 wrong-CWE /
    CWE-89 false positive:
    ```bash
-   scripts/vulnbench.sh verify
+   labs/b2.10-eval-harness/scripts/vulnbench.sh verify
    ```
 
 ## Reading the result

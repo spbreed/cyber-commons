@@ -19,7 +19,7 @@ host.
 
 ## Always start with the preflight (never assume it can run)
 ```bash
-scripts/vulnbench.sh cybergym-preflight
+labs/b2.10-eval-harness/scripts/vulnbench.sh cybergym-preflight
 ```
 This honestly reports whether Docker, Python ≥3.12, disk, HuggingFace, and the
 image registry are available. If it says the host CANNOT run — report that
@@ -35,10 +35,10 @@ Drive the real cybergym flow (per its README):
 
 ## Score the results (works anywhere, on results produced by the runner)
 ```bash
-scripts/vulnbench.sh cybergym-score --results <verify.jsonl> --benchmark cybergym
+labs/b2.10-eval-harness/scripts/vulnbench.sh cybergym-score --results <verify.jsonl> --benchmark cybergym
 # --benchmark exploitgym | cybergym-e2e ;  --scoring any-of | final
 ```
-The adapter ([`bench/cybergym_adapter.py`](../../../bench/cybergym_adapter.py))
+The adapter ([`bench/cybergym_adapter.py`](../../../labs/b2.10-eval-harness/bench/cybergym_adapter.py))
 maps the exit-code outcome to Expert Accuracy using CyberGym's own rule
 (`vul_exit_code in [0,300]` = no crash; reproduce = crashes vuln, safe on patch).
 
@@ -46,4 +46,4 @@ maps the exit-code outcome to Expert Accuracy using CyberGym's own rule
 Reproduction rate + Expert Accuracy + outcome breakdown. Be explicit whether the
 numbers came from a real Docker run (preflight passed) or the adapter scored an
 externally-produced results file. Never present the adapter's sample fixture as a
-real benchmark result. Full detail: [`docs/CYBERGYM_INTEGRATION.md`](../../../docs/CYBERGYM_INTEGRATION.md).
+real benchmark result. Full detail: [`docs/CYBERGYM_INTEGRATION.md`](../../../labs/b2.10-eval-harness/docs/CYBERGYM_INTEGRATION.md).

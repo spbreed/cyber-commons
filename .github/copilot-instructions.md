@@ -7,14 +7,14 @@ everything through the single entrypoint — do not hand-roll Python calls.
 ## Entrypoint
 
 ```bash
-scripts/vulnbench.sh doctor        # check prerequisites
-scripts/vulnbench.sh setup         # create .venv + install deps
-scripts/vulnbench.sh build         # build ground-truth datasource (~552 rows)
-scripts/vulnbench.sh score --findings <f.jsonl> --gt-source <source> --min-acc 0.80
-scripts/vulnbench.sh verify        # regression fingerprint (Expert Accuracy 0.9479)
-scripts/vulnbench.sh compare       # model comparison (code + IaC)
-scripts/vulnbench.sh cybergym-preflight                    # can this host run CyberGym?
-scripts/vulnbench.sh cybergym-score --results <f.jsonl> --benchmark cybergym
+labs/b2.10-eval-harness/scripts/vulnbench.sh doctor        # check prerequisites
+labs/b2.10-eval-harness/scripts/vulnbench.sh setup         # create .venv + install deps
+labs/b2.10-eval-harness/scripts/vulnbench.sh build         # build ground-truth datasource (~552 rows)
+labs/b2.10-eval-harness/scripts/vulnbench.sh score --findings <f.jsonl> --gt-source <source> --min-acc 0.80
+labs/b2.10-eval-harness/scripts/vulnbench.sh verify        # regression fingerprint (Expert Accuracy 0.9479)
+labs/b2.10-eval-harness/scripts/vulnbench.sh compare       # model comparison (code + IaC)
+labs/b2.10-eval-harness/scripts/vulnbench.sh cybergym-preflight                    # can this host run CyberGym?
+labs/b2.10-eval-harness/scripts/vulnbench.sh cybergym-score --results <f.jsonl> --benchmark cybergym
 ```
 
 ## Guidance

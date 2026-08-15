@@ -1,20 +1,18 @@
-.venv/
-# cloned vulnerable repos live under ground-truth/ but are not committed;
-# the folder's README is tracked
-ground-truth/*/
-logs/
-data/vulnbench.db
+# ---- training platform ----
+labs/m0-agent-loop/workspace/
+recordings/*.mp4
+recordings/*.mov
 __pycache__/
 *.pyc
 
-# transient Google Mantis clone (schema is vendored at bench/mantis_schema.json)
+# ---- Lab B2.10 (eval harness) — everything scoped under its own folder ----
+labs/b2.10-eval-harness/.venv/
+labs/b2.10-eval-harness/logs/
+labs/b2.10-eval-harness/data/vulnbench.db
+# cloned vulnerable repos: contents ignored, the folder README is tracked
+labs/b2.10-eval-harness/ground-truth/*/
+# transient upstream clones (schemas are vendored in-repo)
 _mantis/
-# NOTE: the blind corpora (work_mantis/blind*, copies of public SecLLMHolmes
-# code) and the answer keys (work_mantis/.labels*.json) ARE committed as
-# reproducibility evidence — deliberately not ignored.
 _cybergym/
-
-# recordings: prefer linking a YouTube id over committing video (see recordings/README.md)
-recordings/*.mp4
-recordings/*.mov
-labs/m0-agent-loop/workspace/
+# NOTE: the blind corpora (labs/b2.10-eval-harness/work_mantis/blind*) and the
+# answer keys (.labels*.json) ARE committed as reproducibility evidence.

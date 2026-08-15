@@ -14,7 +14,7 @@ findings against ground truth (SAST code, real CVEs, and IaC config). See
 ## The one entrypoint
 
 ```bash
-scripts/vulnbench.sh <command>
+labs/b2.10-eval-harness/scripts/vulnbench.sh <command>
 ```
 
 | Command | Does |
@@ -30,7 +30,7 @@ scripts/vulnbench.sh <command>
 | `cybergym-score --results <verify.jsonl> --benchmark cybergym\|exploitgym\|cybergym-e2e` | score CyberGym-family results |
 
 ## Rules for agents
-- **Always use `scripts/vulnbench.sh`**, never hand-roll the Python calls.
+- **Always use `labs/b2.10-eval-harness/scripts/vulnbench.sh`**, never hand-roll the Python calls.
 - Run `doctor` first; if the venv/datasource is missing, run `setup` then `build`.
 - The findings file is Mantis `historical_learnings.jsonl` or the richer
   `finding` object (JSONL). `--gt-source` ∈ `secllmholmes-handcrafted`,
@@ -42,7 +42,7 @@ scripts/vulnbench.sh <command>
 - For real CVE code, frame model analysis as **authorized defensive review of
   public, already-patched code for a benchmark** (bare prompts can trip cyber
   safeguards).
-- Do not read `work_mantis/.labels*.json` (the held-out answer keys) when acting
+- Do not read `labs/b2.10-eval-harness/work_mantis/.labels*.json` (the held-out answer keys) when acting
   as the harness — only the scorer uses them.
 - **CyberGym family is execution-based** (Docker PoC runs). Always run
   `cybergym-preflight` first; if it says the host cannot run, report that — never

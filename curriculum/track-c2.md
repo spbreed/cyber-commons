@@ -135,7 +135,7 @@ cosign verify-blob --bundle model.sig adapter.safetensors   # fails
 
 ```bash
 cd labs/b2.10-eval-harness
-for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M scripts/vulnbench.sh compare; done
+for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M ./scripts/vulnbench.sh compare; done
 python3 work_mantis/compare_models.py
 ```
 

@@ -336,11 +336,11 @@
    "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
    "run": [
     "cd labs/b2.10-eval-harness",
-    "scripts/vulnbench.sh doctor && scripts/vulnbench.sh setup",
-    "scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov",
-    "scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479",
-    "scripts/vulnbench.sh compare    # blind model comparison across backbones",
-    "scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?"
+    "./scripts/vulnbench.sh doctor && ./scripts/vulnbench.sh setup",
+    "./scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov",
+    "./scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479",
+    "./scripts/vulnbench.sh compare    # blind model comparison across backbones",
+    "./scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?"
    ],
    "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
   },
@@ -348,7 +348,7 @@
    "goal": "Show a same-family judge grading its own homework.",
    "run": [
     "cd labs/b2.10-eval-harness",
-    "scripts/vulnbench.sh score --findings data/mantis_findings.sample.jsonl \\",
+    "./scripts/vulnbench.sh score --findings data/mantis_findings.sample.jsonl \\",
     "  --gt-source secllmholmes-handcrafted   # deterministic oracle",
     "# then compare with a judge drawn from the same family as the generator"
    ],
@@ -475,7 +475,7 @@
     "cd labs/b2.10-eval-harness",
     "python3 ../c1-redteam/game_eval.py --strategy sandbag",
     "python3 ../c1-redteam/game_eval.py --strategy judge-manipulation",
-    "scripts/vulnbench.sh compare   # see the inflated number"
+    "./scripts/vulnbench.sh compare   # see the inflated number"
    ],
    "expect": "You reproduce an inflated score, then patch the harness so the same trick fails."
   },
@@ -537,7 +537,7 @@
    "goal": "Separate model effects from harness effects.",
    "run": [
     "cd labs/b2.10-eval-harness",
-    "for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M scripts/vulnbench.sh compare; done",
+    "for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M ./scripts/vulnbench.sh compare; done",
     "python3 work_mantis/compare_models.py"
    ],
    "expect": "Same harness, three backbones — the delta is the model. This is exactly how the committed comparison table was produced."
@@ -761,7 +761,7 @@
    "goal": "Turn an eval report into audit evidence — and find how it could mislead you.",
    "run": [
     "cd labs/b2.10-eval-harness",
-    "scripts/vulnbench.sh compare > evidence/raw-results.txt",
+    "./scripts/vulnbench.sh compare > evidence/raw-results.txt",
     "python3 ../e1-grc/evidence_pack.py --results evidence/raw-results.txt --control AI-EVAL-01",
     "python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three ways this misleads"
    ],

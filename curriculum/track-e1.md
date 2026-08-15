@@ -111,7 +111,7 @@ python3 map_controls.py --new agent-controls.yaml --existing control-library.yam
 
 ```bash
 cd labs/b2.10-eval-harness
-scripts/vulnbench.sh compare > evidence/raw-results.txt
+./scripts/vulnbench.sh compare > evidence/raw-results.txt
 python3 ../e1-grc/evidence_pack.py --results evidence/raw-results.txt --control AI-EVAL-01
 python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three ways this misleads
 ```

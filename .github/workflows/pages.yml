@@ -2,7 +2,11 @@ name: Deploy Cyber Commons site
 
 on:
   push:
-    branches: [main]
+    # main is the normal source; the development branch is included so the site
+    # can be published before the branch is merged.
+    branches:
+      - main
+      - 'claude/**'
     paths:
       - 'site/**'
       - '.github/workflows/pages.yml'

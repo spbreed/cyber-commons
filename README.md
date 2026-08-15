@@ -4,12 +4,12 @@
 secure the AI *itself* — organised the way a CISO org actually is, and provable
 on the laptop you already own.**
 
-Twelve tracks, one shared core, 104 sessions. Every lab runs on **open-source
-tooling (CNCF / Linux Foundation)** and **open-weight models (Llama, Kimi, GLM)**.
-No licence, no vendor, **no frontier-lab account**. Total cost to complete the
-curriculum: **$0**.
+Twelve tracks, one shared core, **104 sessions, every one of them runnable**.
+Every lab runs on **open-source tooling (CNCF / Linux Foundation)** and
+**open-weight models (Llama, Kimi, GLM)**. No licence, no vendor, **no
+frontier-lab account**. Total cost to complete the curriculum: **$0**.
 
-📚 [Curriculum](curriculum/) · 🧪 [Labs](labs/) · 🤖 [Getting the models free](MODELS.md) · 🌐 [Website](site/) · 🎥 [Recording pipeline](#recording-pipeline)
+🌐 **[Live site](https://spbreed.github.io/Cyber-harness-eval/)** · 📚 [Curriculum](curriculum/) · 🧪 [Labs](labs/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
 
 ---
 
@@ -20,21 +20,23 @@ credits and enterprise budgets — at exactly the moment when a two-person NGO
 faces the same attackers as a global bank. A commons is the opposite bet:
 **shared defense is stronger defense.**
 
-Two things make it usable by anyone:
+Two promises make it usable by anyone:
 
-- **Everything executes.** No pseudo-code, no screenshots of a demo. Every
-  session ships commands that run against real targets and print real output.
+- **Everything executes.** No pseudo-code, no screenshots of a demo. Every one of
+  the 104 sessions ships commands that run against real targets and print real
+  output.
 - **Everything is open.** The control plane is CNCF/LF projects you'd actually
   deploy — SPIFFE/SPIRE, OPA, Falco, Kyverno, Cilium, Keycloak, OpenTelemetry,
   Sigstore, kagent, kmcp, agentgateway. The intelligence is open weights you can
   download. Commercial models are named where relevant but **never required**.
 
-## How it's organised
+## The training programme
 
-**Module 0 — the shared core (everyone, 5 sessions, no substitutions).** A
+**Module 0 — the shared core.** Everyone, five sessions, no substitutions. A
 common vocabulary so twelve tracks can hold one conversation: the *three planes*
 (decision / control / action), the *autonomy ladder* (L1 → L2 → L2.5 → L3), and
 prompt injection taught once, properly.
+→ [`curriculum/module-0.md`](curriculum/module-0.md)
 
 **Then twelve tracks across five functions.** Nobody takes all of it. You take
 the track for the chair you sit in, plus two sessions from a neighbouring track
@@ -42,33 +44,37 @@ the track for the chair you sit in, plus two sessions from a neighbouring track
 
 | Function | Tracks |
 |---|---|
-| **A · Architecture & Platform** | [A1](curriculum/track-a1.md) Security Architect · [A2](curriculum/track-a2.md) Identity & NHI Engineer · [A3](curriculum/track-a3.md) Platform & Cloud Security |
-| **B · Product & AppSec** | [B1](curriculum/track-b1.md) AppSec / Code Reviewer · [B2](curriculum/track-b2.md) Security Automation & Harness Engineer |
-| **C · Offensive & Research** | [C1](curriculum/track-c1.md) Pentester / Red Teamer · [C2](curriculum/track-c2.md) Security Researcher |
-| **D · Security Operations** | [D1](curriculum/track-d1.md) SOC Analyst & Detection Engineer · [D2](curriculum/track-d2.md) Incident Responder |
-| **E · GRC & CISO Office** | [E1](curriculum/track-e1.md) GRC Practitioner · [E2](curriculum/track-e2.md) Regulatory & Compliance · [E3](curriculum/track-e3.md) BISO / CISO Office |
+| **A · Architecture & Platform**<br><sub>decide what is structurally possible</sub> | [A1](curriculum/track-a1.md) Security Architect · [A2](curriculum/track-a2.md) Identity & NHI Engineer · [A3](curriculum/track-a3.md) Platform & Cloud Security |
+| **B · Product & AppSec**<br><sub>first to meet agents at scale</sub> | [B1](curriculum/track-b1.md) AppSec / Code Reviewer · [B2](curriculum/track-b2.md) Security Automation & Harness Engineer |
+| **C · Offensive & Research**<br><sub>find out what is actually true</sub> | [C1](curriculum/track-c1.md) Pentester / Red Teamer · [C2](curriculum/track-c2.md) Security Researcher |
+| **D · Security Operations**<br><sub>machine-speed decisions</sub> | [D1](curriculum/track-d1.md) SOC Analyst & Detection Engineer · [D2](curriculum/track-d2.md) Incident Responder |
+| **E · GRC & CISO Office**<br><sub>make it defensible</sub> | [E1](curriculum/track-e1.md) GRC Practitioner · [E2](curriculum/track-e2.md) Regulatory & Compliance · [E3](curriculum/track-e3.md) BISO / CISO Office |
 
-Every session is shaped the same way: **Risk → Control → Lab**. Every track ends
-in a **real artefact** — a delegation-chain trace, a blast-radius measurement, an
-eval report, a risk-tiered register — not a certificate.
+Every session is shaped the same way — **Risk → Control → Lab**. Every track ends
+in a **real artefact**: a delegation-chain trace, a blast-radius measurement, an
+eval report, a risk-tiered register. Not a certificate.
 
 Both directions run through every track: **AI for Security** (agents as your
 instrument) and **Security for AI** (agents as the thing you defend). A track
 that teaches only one produces a practitioner who gets surprised.
 
-## What's in the box
+### Seniority overlay
 
-```
-curriculum/       Module 0 + 12 track chapters (generated from the JSON source of truth)
-labs/             Runnable labs — start with labs/m0-agent-loop
-site/             The website (GitHub Pages) + data/curriculum.json + data/videos.json
-MODELS.md         How to get Llama / Kimi / GLM free, local or hosted
-scripts/          build_curriculum.py · vulnbench.sh · link_video.py · youtube_upload.py
-.github/          Pages deploy + lightboard recording pipeline + agent prompts
-.claude/skills/   Agent skills so Claude Code can run the labs for you
-bench/ ingest/ questions/ ground-truth/ work_mantis/   ← Lab B2.10's implementation
-docs/             Evidence: model comparison, real harness run, CyberGym integration
-```
+The topics don't change with grade; the accountability does.
+
+| Depth | Typical grade | What you do with the material | Assessment |
+|---|---|---|---|
+| **Practitioner** | Analyst, Engineer I–II | Operate loops others built; recognise failure modes; escalate correctly | Run the lab, explain what the trace shows |
+| **Engineer** | Senior Engineer, Lead | Build the harness, control, detection, eval; own a component end to end | Ship the deliverable to production |
+| **Principal** | Principal, Architect, Head of | Decide what is structurally possible; set promotion criteria; hold stop authority | Defend the design in an adversarial review |
+
+## How a session works
+
+1. **Lightboard, not lecture** — the concept is drawn so the mental model lands
+   before any code does.
+2. **Live demo, real execution** — an actual agent against an actual target, on
+   an open-weight model.
+3. **A repo you keep** — every lab is source you clone, break and adapt.
 
 ## Quick start
 
@@ -86,45 +92,50 @@ python3 loop.py --verifier pytest      # deterministic oracle → succeeds hones
 python3 loop.py --verifier llm-judge   # self-grading → declares success on broken code
 ```
 
-The second command is the whole curriculum in miniature: the loop reports
-success, the code is wrong, and the trace looks clean. Measuring that gap is what
-the rest of the commons is for.
+That second command is the whole curriculum in miniature: the loop reports
+success, the code is wrong, and the trace looks clean. Learning to measure that
+gap is what the rest of the commons is for.
 
-Browse the site locally:
+**Then pick your chair:**
 
 ```bash
-python3 -m http.server 8000 --directory site   # → http://localhost:8000
+# A2 — identity, the most genuinely new material. No infra needed.
+cd labs/a2-delegation
+python3 delegate.py chain && python3 delegate.py verify
+python3 delegate.py impersonate   # why your audit trail is already wrong
 ```
 
-## Where evaluation fits
+Browse the site locally: `python3 -m http.server 8000 --directory site`
 
-Evaluation is **one chapter**, not the whole project — [B2.10](curriculum/track-b2.md)
-builds the harness, [E1.5](curriculum/track-e1.md) reads its output as audit
-evidence, and [C1.6](curriculum/track-c1.md) attacks it. That chapter happens to
-be the most fully-built lab here, with committed evidence:
+## Labs
 
-| Task | Metric | Opus | Sonnet | Haiku |
-|---|---|---|---|---|
-| SAST — synthetic code | Expert Acc | **0.90** | 0.75 | 0.61 |
-| CVE — real-world code | Expert Acc | 0.87 | **0.95** | 0.47 |
-| IaC — TerraGoat vs Checkov | micro-F1 | **0.76** | 0.66 | 0.58 |
+| Lab | Chapters | Status |
+|---|---|---|
+| [`labs/m0-agent-loop`](labs/m0-agent-loop) | M0.1–M0.3, B2.1, B2.4 | ✅ runs anywhere (stdlib + pytest) |
+| [`labs/a2-delegation`](labs/a2-delegation) | A2.3, A2.4, A2.5, B2.6, C1.4 | ✅ runs anywhere (stdlib only) |
+| [`labs/b2.10-eval-harness`](labs/b2.10-eval-harness) | B2.10, E1.5, C1.6 | ✅ fully built, with committed evidence |
+| a1-control-plane · a3-sandbox · b1-appsec · c1-redteam · c2-research · d1-soc · d2-ir · e1-grc · e2-compliance · e3-ciso | remaining tracks | 🟡 real commands, need a machine with a container registry |
 
-Same harness, same prompt — the backbone alone swings accuracy from 0.47 to 0.95,
-and the ranking flips between corpora. Details in [`labs/b2.10-eval-harness`](labs/b2.10-eval-harness/README.md)
-and [`docs/MODEL_COMPARISON.md`](docs/MODEL_COMPARISON.md). The harness is
-model-agnostic: point it at Ollama to compare Llama / GLM / Kimi instead.
+**All 104 sessions carry a runnable command block** naming the real tool and the
+exact invocation. The 🟡 labs above are specified and reviewed but have not been
+executed in the build sandbox (its container registry is blocked) — treat them as
+specs until someone runs them and files the output. Where a lesson can be taught
+without infrastructure, we ship a **no-infra variant**; `a2-delegation` is the
+model for that, and adding one to a 🟡 lab is the most valuable contribution you
+can make.
 
-## Contributing to the curriculum
+## Contributing
 
-The syllabus has **one source of truth**: [`site/data/curriculum.json`](site/data/curriculum.json)
-(structure) and [`curriculum/labs.json`](curriculum/labs.json) (the runnable
-command blocks). Edit those, then:
+The syllabus has **one source of truth**:
+[`site/data/curriculum.json`](site/data/curriculum.json) (structure) and
+[`curriculum/labs.json`](curriculum/labs.json) (the runnable command blocks).
+Edit those, then:
 
 ```bash
 python3 scripts/build_curriculum.py    # regenerates curriculum/*.md
 ```
 
-The website reads the same JSON, so docs and site can never drift.
+The website reads the same JSON, so the docs and the site can never drift.
 
 ## Recording pipeline
 
@@ -136,7 +147,7 @@ mint a refresh token (`python3 scripts/youtube_upload.py --auth-setup`), then ad
 repo secrets `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN` and repo
 variable `SITE_URL`.
 
-**Then, per recording — just drop the file in:**
+**Per recording — just drop the file in:**
 
 ```bash
 cp ~/recordings/a2.5-final.mp4 recordings/A2.5.mp4   # filename = session id
@@ -144,48 +155,33 @@ git add recordings/A2.5.mp4 && git commit -m "record A2.5" && git push
 ```
 
 The [publish-video workflow](.github/workflows/publish-video.yml) uploads it with
-a title/description generated from the chapter's own risk/control/lab text,
+a title and description generated from that chapter's own risk/control/lab text,
 registers it in `site/data/videos.json`, and commits — which triggers the
-[Pages deploy](.github/workflows/pages.yml) so a **▶ Watch** link appears on that
+[Pages deploy](.github/workflows/pages.yml) so a **▶ Watch** link appears on the
 chapter. Already uploaded elsewhere? Link it without re-uploading:
 
 ```bash
 python3 scripts/link_video.py --session A2.5 --youtube-id <id>
-python3 scripts/link_video.py --list        # coverage: which chapters still need recording
+python3 scripts/link_video.py --list        # which of the 104 chapters still need recording
 ```
 
-## Publishing the site
+## Repository layout
 
-Settings → Pages → **Source: GitHub Actions**. Push to `main` and
-[`pages.yml`](.github/workflows/pages.yml) validates the curriculum data (it
-fails the build if `videos.json` references a session that doesn't exist) and
-deploys `site/`.
-
-## Status — what's real today
-
-Being honest about coverage, because "everything executes" is a promise:
-
-- ✅ **Built and executed here** — the eval harness (B2.10/E1.5/C1.6) with committed
-  evidence; the [Module 0 loop lab](labs/m0-agent-loop) (all three verifier outcomes
-  reproduced); the [A2.5 delegation chain](labs/a2-delegation) (chain, attenuation
-  proof, refused escalation, impersonation anti-pattern, single-actor revocation —
-  stdlib only, runs anywhere); the site; the curriculum generator; the video pipeline.
-- ✅ **All 104 sessions carry a runnable command block** naming the real tools and
-  the exact invocation.
-- 🟡 **Specified with real commands, not executed in this build sandbox** — the
-  infra-heavy variants (Keycloak/SPIRE clusters, sandbox tiers, SOC stack). The
-  container registry is egress-blocked here, so they have not been run in this
-  environment. Treat them as reviewed specs until someone runs them on a normal
-  machine and files the output. Where possible a **no-infra variant** exists that
-  teaches the same lesson — A2.5 is the model for that, and the pattern other
-  infra labs should follow next.
-
-Contributions that turn a 🟡 into a ✅ — with the output pasted in — or that add a
-no-infra variant to an infra lab, are the most valuable thing you can send.
+```
+curriculum/       Module 0 + 12 track chapters (generated from the JSON source of truth)
+labs/             Runnable labs, one folder per lab — start with m0-agent-loop
+site/             The website (GitHub Pages) + data/curriculum.json + data/videos.json
+MODELS.md         How to get Llama / Kimi / GLM free — local, hosted, or self-hosted
+scripts/          build_curriculum.py · link_video.py · youtube_upload.py
+recordings/       Drop lightboard recordings here (see recordings/README.md)
+.github/          Pages deploy · recording pipeline · Copilot prompts
+.claude/skills/   Agent skills, so Claude Code can run the labs for you
+AGENTS.md         Cross-agent instructions (Copilot, Cursor, any AGENTS.md tool)
+```
 
 ## Licence & credits
 
-Curriculum and site: open, contribute by PR. Tooling referenced throughout
+Curriculum and site are open — contribute by PR. Tooling referenced throughout
 belongs to its respective projects (CNCF, Linux Foundation, OWASP and others).
-Model weights carry their own licences — Kimi K2 (modified MIT), GLM (MIT),
-Llama (Meta Community Licence, read the restrictions). See [MODELS.md](MODELS.md).
+Model weights carry their own licences — Kimi K2 (modified MIT), GLM (MIT), Llama
+(Meta Community Licence, read the restrictions). See [MODELS.md](MODELS.md).

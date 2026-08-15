@@ -52,7 +52,7 @@ MODEL=kimi-k2  python3 loop.py --task fix-tests
 
 ```bash
 cd labs/b2.10-eval-harness
-scripts/vulnbench.sh score --findings data/mantis_findings.sample.jsonl \
+./scripts/vulnbench.sh score --findings data/mantis_findings.sample.jsonl \
   --gt-source secllmholmes-handcrafted   # deterministic oracle
 # then compare with a judge drawn from the same family as the generator
 ```
@@ -229,11 +229,11 @@ python3 replay.py --trace run.json --assert-identical
 
 ```bash
 cd labs/b2.10-eval-harness
-scripts/vulnbench.sh doctor && scripts/vulnbench.sh setup
-scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov
-scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479
-scripts/vulnbench.sh compare    # blind model comparison across backbones
-scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?
+./scripts/vulnbench.sh doctor && ./scripts/vulnbench.sh setup
+./scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov
+./scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479
+./scripts/vulnbench.sh compare    # blind model comparison across backbones
+./scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?
 ```
 
 *Expect:* Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results.

@@ -141,7 +141,7 @@ python3 escape.py --measure-exfil --bytes-out
 cd labs/b2.10-eval-harness
 python3 ../c1-redteam/game_eval.py --strategy sandbag
 python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
-scripts/vulnbench.sh compare   # see the inflated number
+./scripts/vulnbench.sh compare   # see the inflated number
 ```
 
 *Expect:* You reproduce an inflated score, then patch the harness so the same trick fails.
