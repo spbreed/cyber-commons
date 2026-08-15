@@ -44,12 +44,12 @@ jobs:
           print(f"ok: {len(ids)} sessions, {len(vid.get('videos', {}))} with recordings")
           PY
 
+      # ONE-TIME MANUAL STEP: Settings → Pages → Source: "GitHub Actions".
+      # The workflow's GITHUB_TOKEN cannot create the Pages site itself
+      # ("Resource not accessible by integration" — site creation needs repo
+      # admin), and Pages on a PRIVATE repo additionally requires a paid plan.
+      # Once the site exists, every push here deploys it automatically.
       - uses: actions/configure-pages@v5
-        with:
-          # create the Pages site on first run instead of requiring a manual
-          # Settings → Pages step (needs the repo to be eligible for Pages:
-          # public, or private on a paid plan)
-          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

@@ -9,7 +9,7 @@ Every lab runs on **open-source tooling (CNCF / Linux Foundation)** and
 **open-weight models (Llama, Kimi, GLM)**. No licence, no vendor, **no
 frontier-lab account**. Total cost to complete the curriculum: **$0**.
 
-🌐 **[Live site](https://spbreed.github.io/Cyber-harness-eval/)** · 📚 [Curriculum](curriculum/) · 🧪 [Labs](labs/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
+🌐 **[Live site](https://spbreed.github.io/Cyber-harness-eval/)** (needs a one-time Pages enable — see [Publishing](#publishing-the-site)) · 📚 [Curriculum](curriculum/) · 🧪 [Labs](labs/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
 
 ---
 
@@ -164,6 +164,30 @@ chapter. Already uploaded elsewhere? Link it without re-uploading:
 python3 scripts/link_video.py --session A2.5 --youtube-id <id>
 python3 scripts/link_video.py --list        # which of the 104 chapters still need recording
 ```
+
+## Publishing the site
+
+The site deploys automatically from [`site/`](site) on every push — but GitHub
+Pages has to be switched on once, by a repo admin:
+
+**Settings → Pages → Source: `GitHub Actions`**
+
+A workflow cannot do this for you: the built-in `GITHUB_TOKEN` gets
+*"Resource not accessible by integration"* when it tries to create the Pages
+site, because site creation requires repo admin. Note also that **Pages on a
+private repository requires a paid plan** — on GitHub Free, make the repo public
+first (which this project wants to be anyway, being a commons).
+
+Once enabled, the URL is:
+
+```
+https://spbreed.github.io/Cyber-harness-eval/     # current repo name
+https://spbreed.github.io/cybercommons/           # after renaming the repo
+```
+
+The [`pages.yml`](.github/workflows/pages.yml) workflow validates the curriculum
+data first — it fails the build if `videos.json` references a session id that
+doesn't exist — then publishes `site/`.
 
 ## Repository layout
 
