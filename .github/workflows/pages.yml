@@ -45,6 +45,11 @@ jobs:
           PY
 
       - uses: actions/configure-pages@v5
+        with:
+          # create the Pages site on first run instead of requiring a manual
+          # Settings → Pages step (needs the repo to be eligible for Pages:
+          # public, or private on a paid plan)
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
