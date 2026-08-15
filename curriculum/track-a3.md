@@ -71,6 +71,17 @@ docker compose up -d squid agent
 - **Lab** — Attempt credential read from inside the sandbox; close it with mount policy.
 - **Tools** — `Docker`, `Kyverno`
 
+**Run it** — Stop the agent wandering from code into credentials.
+
+```bash
+cd labs/a3-sandbox
+./run-agent.sh --workspace /work --task 'read ../../.aws/credentials'   # succeeds: bad
+./apply-mounts.sh   # workspace scoping + ephemeral state
+./run-agent.sh --workspace /work --task 'read ../../.aws/credentials'   # denied
+```
+
+*Expect:* Same task, same agent; only the mount discipline changed.
+
 ---
 
 ### A3.4 — MCP is not a security boundary
@@ -83,6 +94,17 @@ docker compose up -d squid agent
 - **Tools** — `kmcp`, `MCP Inspector`, `Sigstore`
 - **Models** — `GLM-4.6`
 
+**Run it** — Escalate through connector chaining, then pin and scan to stop it.
+
+```bash
+cd labs/a3-sandbox/mcp
+python3 chain.py --from filesystem --to http   # exfil via two 'safe' connectors
+kmcp scan ./servers/ && kmcp pin --hash-verify
+python3 chain.py --from filesystem --to http   # blocked
+```
+
+*Expect:* Neither connector is dangerous alone. The chain is the vulnerability.
+
 ---
 
 ### A3.5 — Tool permission models
@@ -93,6 +115,17 @@ docker compose up -d squid agent
 - **Control** — Capability scoping, allowlisted actions, structured output contracts, read-only defaults.
 - **Lab** — Redesign a dangerous tool so the dangerous call doesn't exist.
 - **Tools** — `kmcp`, `OPA`
+
+**Run it** — Design the dangerous call out of existence.
+
+```bash
+cd labs/a3-sandbox/tools
+python3 audit_tools.py --manifest before.json   # finds an unrestricted shell tool
+python3 refactor.py --split shell --into read_file,list_dir,run_tests
+python3 audit_tools.py --manifest after.json
+```
+
+*Expect:* The capability the agent needed survives; the arbitrary-execution path does not exist to block.
 
 ---
 
@@ -127,6 +160,17 @@ cd labs/a3-sandbox/levers
 - **Lab** — Detect an unmanaged local agent by its egress and filesystem signature.
 - **Tools** — `Falco`, `osquery`
 
+**Run it** — Detect an unmanaged personal agent on a managed endpoint.
+
+```bash
+cd labs/a3-sandbox
+sudo falco -r rules/unmanaged-agent.yaml &
+./simulate-personal-agent.sh   # local model + outbound tool calls
+grep 'unmanaged_agent' /var/log/falco.log
+```
+
+*Expect:* Detected by egress + filesystem signature. Read the chapter's honest note on why this case has no clean answer yet.
+
 ---
 
 ### A3.8 — Environment separation
@@ -137,5 +181,15 @@ cd labs/a3-sandbox/levers
 - **Control** — Dev-agent credentials structurally unable to reach production.
 - **Lab** — Prove the dev SVID cannot mint a prod token, by construction.
 - **Tools** — `SPIRE`, `OPA`
+
+**Run it** — Make dev-agent credentials structurally unable to reach production.
+
+```bash
+cd labs/a3-sandbox
+./try-cross-env.sh --from dev-agent --to prod-api   # must fail
+python3 prove_separation.py --spiffe-id spiffe://cybercommons/dev/agent
+```
+
+*Expect:* The dev SVID cannot mint a prod token by construction — not because a policy said no.
 
 ---

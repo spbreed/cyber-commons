@@ -165,19 +165,23 @@ deploys `site/`.
 
 Being honest about coverage, because "everything executes" is a promise:
 
-- ✅ **Fully built and tested:** the eval harness (B2.10/E1.5/C1.6) with committed
-  evidence; the Module 0 loop lab; the site; the curriculum generator; the video
-  pipeline (`link_video.py` tested end to end, `youtube_upload.py` dry-run tested).
-- 🟡 **Specified with real commands, not yet executed in this environment:** the
-  infra-heavy labs (SPIRE/Keycloak delegation, sandbox tiers, SOC stack). The
-  commands are real and the tools are the right ones, but this build sandbox
-  blocks the container registry, so they have not been run here. Treat them as
-  reviewed specs until someone runs them on a normal machine and files the output.
-- ⬜ **38 of 104 sessions** currently carry a full command block; the rest carry
-  risk/control/lab and are being filled in. `curriculum/labs.json` is where they go.
+- ✅ **Built and executed here** — the eval harness (B2.10/E1.5/C1.6) with committed
+  evidence; the [Module 0 loop lab](labs/m0-agent-loop) (all three verifier outcomes
+  reproduced); the [A2.5 delegation chain](labs/a2-delegation) (chain, attenuation
+  proof, refused escalation, impersonation anti-pattern, single-actor revocation —
+  stdlib only, runs anywhere); the site; the curriculum generator; the video pipeline.
+- ✅ **All 104 sessions carry a runnable command block** naming the real tools and
+  the exact invocation.
+- 🟡 **Specified with real commands, not executed in this build sandbox** — the
+  infra-heavy variants (Keycloak/SPIRE clusters, sandbox tiers, SOC stack). The
+  container registry is egress-blocked here, so they have not been run in this
+  environment. Treat them as reviewed specs until someone runs them on a normal
+  machine and files the output. Where possible a **no-infra variant** exists that
+  teaches the same lesson — A2.5 is the model for that, and the pattern other
+  infra labs should follow next.
 
-Contributions that turn a 🟡 into a ✅ — with the output pasted in — are the most
-valuable thing you can send.
+Contributions that turn a 🟡 into a ✅ — with the output pasted in — or that add a
+no-infra variant to an infra lab, are the most valuable thing you can send.
 
 ## Licence & credits
 

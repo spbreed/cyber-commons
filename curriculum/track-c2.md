@@ -23,6 +23,15 @@
 - **Control** — Choose problems that end in a deployable control; get funded.
 - **Lab** — Write a one-page research charter with a named consuming track.
 
+**Run it** — Write a charter that ends in a deployable control.
+
+```bash
+cp curriculum/templates/research-charter.md ./charter.md
+$EDITOR charter.md   # problem, control outcome, consuming track, funding ask
+```
+
+*Expect:* If you cannot name the track that will consume the output, it is not yet research for a CISO org.
+
 ---
 
 ### C2.2 — Model-layer research
@@ -57,6 +66,16 @@ python3 compare_reports.py
 - **Tools** — `TransformerLens`, `PyTorch`
 - **Models** — `Llama 3.3`
 
+**Run it** — Attempt targeted unlearning, then try to get the capability back.
+
+```bash
+pip install torch transformers && cd labs/c2-research
+python3 orthogonalise.py --model meta-llama/Llama-3.2-3B --concept <target> --out ./erased
+python3 elicit.py --model ./erased --strategies paraphrase,encoding,few-shot
+```
+
+*Expect:* Elicitation usually recovers some capability. Report what the technique actually guarantees, not what it appears to.
+
 ---
 
 ### C2.4 — Data-layer research
@@ -68,6 +87,16 @@ python3 compare_reports.py
 - **Lab** — Invert embeddings from a local vector store and recover source text.
 - **Tools** — `Qdrant`, `sentence-transformers`
 
+**Run it** — Recover source text from embeddings.
+
+```bash
+docker run -d -p 6333:6333 qdrant/qdrant && cd labs/c2-research
+python3 index.py --corpus sensitive-sample/ --store qdrant
+python3 invert.py --store qdrant --top-k 20 --report inversion.md
+```
+
+*Expect:* A measured reconstruction rate. 'Embeddings are not the data' is a claim you can now test rather than repeat.
+
 ---
 
 ### C2.5 — Supply-chain research
@@ -78,6 +107,17 @@ python3 compare_reports.py
 - **Control** — Verify provenance; sign and attest artefacts.
 - **Lab** — Sign a model artefact with Sigstore and detect a tampered adapter.
 - **Tools** — `Sigstore`, `in-toto`, `OWASP AIBOM`
+
+**Run it** — Detect a tampered adapter through provenance.
+
+```bash
+cd labs/c2-research
+cosign sign-blob --bundle model.sig adapter.safetensors
+python3 tamper.py --file adapter.safetensors --flip-bytes 8
+cosign verify-blob --bundle model.sig adapter.safetensors   # fails
+```
+
+*Expect:* Signature verification catches it; an unsigned registry would not have.
 
 ---
 
@@ -112,6 +152,16 @@ python3 work_mantis/compare_models.py
 - **Lab** — Contamination-check a public benchmark against a model's training window.
 - **Tools** — `Cyber Commons eval harness`
 
+**Run it** — Contamination-check a public benchmark.
+
+```bash
+cd labs/c2-research
+python3 contamination.py --benchmark ../b2.10-eval-harness/ground-truth --model $MODEL --method canary
+python3 contamination.py --report
+```
+
+*Expect:* Overlap evidence between benchmark corpus and plausible training data — the basis for saying 'this score is overstated' defensibly.
+
 ---
 
 ### C2.8 — From finding to control
@@ -123,6 +173,17 @@ python3 work_mantis/compare_models.py
 - **Lab** — Convert one finding into a Kyverno/OPA policy another track adopts.
 - **Tools** — `OPA`, `Kyverno`
 
+**Run it** — Turn a finding into a policy another track deploys.
+
+```bash
+cd labs/c2-research
+python3 finding_to_policy.py --finding findings/F-07.json --target opa --out policy.rego
+opa test policy.rego policy_test.rego
+cp policy.rego ../a3-sandbox/policies/
+```
+
+*Expect:* A tested Rego policy handed to A3 — research output the platform team can actually deploy.
+
 ---
 
 ### C2.9 — Research as institutional capital
@@ -133,5 +194,15 @@ python3 work_mantis/compare_models.py
 - **Control** — Publication, open-source release, a defensible public record.
 - **Lab** — Release one artefact publicly with a reproducibility README.
 - **Tools** — `git`
+
+**Run it** — Release one artefact with a reproducibility README.
+
+```bash
+cd labs/c2-research
+python3 package_artefact.py --finding F-07 --include data,code,traces --out release/
+cd release && ./reproduce.sh   # must work on a clean machine
+```
+
+*Expect:* Someone else can rerun it. That is what makes it institutional capital rather than a claim.
 
 ---

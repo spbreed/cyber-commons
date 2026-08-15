@@ -25,6 +25,18 @@
 - **Tools** — `OWASP Threat Dragon`, `kagent`
 - **Models** — `GLM-4.6`
 
+**Run it** — Make the threat model a living artefact that moves when the tools move.
+
+```bash
+cd labs/a1-control-plane
+python3 tm_from_manifest.py --manifest agent-tools.json --out tm-before.md
+jq '.tools += [{"name":"http_post","scope":"any-host"}]' agent-tools.json > t && mv t agent-tools.json
+python3 tm_from_manifest.py --manifest agent-tools.json --out tm-after.md
+diff tm-before.md tm-after.md
+```
+
+*Expect:* One added tool changes the trust boundaries section. A PDF threat model would not have moved.
+
 ---
 
 ### A1.2 — Designing the agent control plane
@@ -84,6 +96,17 @@ python3 prove_unrepresentable.py   # attempts to write the bad grant
 - **Tools** — `OpenFGA`, `SPIRE`
 - **Models** — `Kimi K2`
 
+**Run it** — Put a blast-radius number in the design review.
+
+```bash
+cd labs/a1-control-plane
+python3 blast_radius.py --model flat-rbac    --scenario injection
+python3 blast_radius.py --model attenuated   --scenario injection
+python3 blast_radius.py --compare flat-rbac attenuated --out blast.md
+```
+
+*Expect:* Reachable-action counts for both models, side by side. The delta is what attenuation bought you.
+
 ---
 
 ### A1.5 — Multi-agent topology
@@ -96,6 +119,16 @@ python3 prove_unrepresentable.py   # attempts to write the bad grant
 - **Tools** — `kagent`
 - **Models** — `GLM-4.6`, `Llama 3.3`
 
+**Run it** — Find where authority actually concentrates in a multi-agent topology.
+
+```bash
+cd labs/a1-control-plane
+kubectl apply -f topology/planner-executor-critic.yaml
+python3 authority_map.py --namespace agents --max-depth 3
+```
+
+*Expect:* A graph showing the node holding the union of all scopes — usually not the one you expected.
+
 ---
 
 ### A1.6 — Build vs buy
@@ -106,6 +139,17 @@ python3 prove_unrepresentable.py   # attempts to write the bad grant
 - **Control** — Buy the commodity, build the boundary, never outsource identity or stop authority.
 - **Lab** — Score three gateway options against a fixed control checklist.
 - **Tools** — `agentgateway`, `Envoy`
+
+**Run it** — Score gateways against a fixed control checklist instead of a feature matrix.
+
+```bash
+cd labs/a1-control-plane
+python3 score_option.py --option agentgateway --checklist controls.yaml
+python3 score_option.py --option envoy-ext-authz --checklist controls.yaml
+python3 score_option.py --report
+```
+
+*Expect:* Each option scored on: identity mapping, per-tool RBAC, output scanning, audit, stop lever. Gaps are explicit.
 
 ---
 
@@ -118,5 +162,16 @@ python3 prove_unrepresentable.py   # attempts to write the bad grant
 - **Lab** — Route across GLM-4.6 / Llama / Kimi with LiteLLM, then force a failure and watch what it falls back to.
 - **Tools** — `LiteLLM`, `vLLM`
 - **Models** — `GLM-4.6`, `Llama 3.3`, `Kimi K2`
+
+**Run it** — Prove the router fails closed, not open.
+
+```bash
+pip install 'litellm[proxy]'
+cd labs/a1-control-plane && litellm --config router.yaml &
+python3 force_failure.py --kill primary   # take the reasoner offline mid-request
+python3 assert_failclosed.py
+```
+
+*Expect:* The router refuses rather than silently downgrading to a weaker model with weaker guardrails.
 
 ---

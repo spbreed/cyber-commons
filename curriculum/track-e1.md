@@ -24,6 +24,17 @@
 - **Lab** — Change a prompt and show the control evidence going stale in real time.
 - **Tools** — `promptfoo`
 
+**Run it** — Watch control evidence go stale without a code change.
+
+```bash
+cd labs/e1-grc
+python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # PASS
+sed -i 's/refuse/consider/' ../m0-agent-loop/system-prompt.txt
+python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # now FAIL
+```
+
+*Expect:* One prompt edit invalidated an annual assessment. That is why point-in-time testing fails for AI.
+
 ---
 
 ### E1.2 — Building the AI and agent inventory
@@ -55,6 +66,16 @@ python3 register.py --out agent-register.csv
 - **Control** — Autonomy level × action class × data sensitivity.
 - **Lab** — Tier ten real workflows and assign approval authority.
 
+**Run it** — Tier by what the thing can do, not by model name.
+
+```bash
+cd labs/e1-grc
+python3 tier.py --workflows workflows.yaml --axes autonomy,action-class,data-sensitivity
+python3 tier.py --show-approvers
+```
+
+*Expect:* Two workflows on the same model land in different tiers — which is the point.
+
 ---
 
 ### E1.4 — Control mapping for agents
@@ -65,6 +86,15 @@ python3 register.py --out agent-register.csv
 - **Control** — Map identity, secrets, sandbox, eval and telemetry onto the existing library.
 - **Lab** — Map the A2/A3 controls onto your control library.
 - **Tools** — `OSCAL`
+
+**Run it** — Map agent controls onto the library you already have.
+
+```bash
+cd labs/e1-grc
+python3 map_controls.py --new agent-controls.yaml --existing control-library.yaml --out gap.md
+```
+
+*Expect:* Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named.
 
 ---
 
@@ -101,6 +131,16 @@ python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three way
 - **Lab** — Classify your own guardrails into the two buckets.
 - **Tools** — `NeMo Guardrails`, `LLM Guard`
 - **Models** — `Llama Guard 4`
+
+**Run it** — Sort your guardrails into operating vs outcome.
+
+```bash
+cd labs/e1-grc
+python3 classify_guardrails.py --config ../m0-agent-loop/guardrails.yaml
+python3 classify_guardrails.py --gap-analysis   # which regulator question is unanswered
+```
+
+*Expect:* Frameworks specify how the system works; regulators ask what it produced. Most orgs are long on the first.
 
 ---
 
@@ -154,6 +194,16 @@ cosign verify-blob --bundle model.sig model.gguf   # provenance where signed
 - **Risk** — Re-indexing treated as maintenance, not change.
 - **Control** — Retraining, fine-tuning and re-indexing as change-management events.
 - **Lab** — Write the gate that a re-index has to pass.
+
+**Run it** — Write the gate a re-index has to pass.
+
+```bash
+cd labs/e1-grc
+python3 lifecycle_gate.py --event reindex --require eval-pass,owner-approval,rollback-plan
+python3 lifecycle_gate.py --simulate reindex --without rollback-plan   # blocked
+```
+
+*Expect:* Re-indexing is a change-management event with a gate, not maintenance.
 
 ---
 

@@ -70,6 +70,17 @@ scripts/vulnbench.sh score --findings data/mantis_findings.sample.jsonl \
 - **Lab** — Refactor a shell tool into three narrow, structured tools.
 - **Tools** — `kmcp`
 
+**Run it** — Refactor a shell tool into three narrow, structured tools.
+
+```bash
+cd labs/m0-agent-loop
+python3 loop.py --tools shell   --task fix-tests   # can do anything
+python3 loop.py --tools narrow  --task fix-tests   # read_file/list_dir/apply_patch only
+python3 tool_audit.py --compare shell narrow
+```
+
+*Expect:* Same task completed; the arbitrary-execution capability is absent rather than blocked.
+
 ---
 
 ### B2.4 — Budgets and stop conditions
@@ -106,6 +117,17 @@ python3 loop.py --task impossible --spend-cap 0.50
 - **Tools** — `LiteLLM`, `vLLM`
 - **Models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
 
+**Run it** — Route cheap executor to escalated reasoner and attribute spend.
+
+```bash
+pip install 'litellm[proxy]' && cd labs/shared
+litellm --config litellm.config.yaml &   # llama executor, glm reasoner, kimi advisor
+cd ../m0-agent-loop && MODEL=router python3 loop.py --task fix-tests --json | jq '.tokens'
+python3 ../shared/spend_report.py --by-run
+```
+
+*Expect:* Per-run, per-tier spend attribution. Escalation happens only at decision points.
+
 ---
 
 ### B2.6 — Sub-agents and delegation depth
@@ -117,6 +139,16 @@ python3 loop.py --task impossible --spend-cap 0.50
 - **Lab** — Cap delegation depth and prove a grandchild agent cannot exceed its parent.
 - **Tools** — `kagent`, `SPIRE`
 
+**Run it** — Prove a grandchild agent cannot exceed its parent.
+
+```bash
+cd labs/a2-delegation
+python3 subagent.py --depth 3 --parent-scope repo:read
+python3 subagent.py --depth 3 --parent-scope repo:read --attempt-escalate
+```
+
+*Expect:* Recursion budget caps depth; the escalation attempt is refused by the token, not by a check.
+
 ---
 
 ### B2.7 — Failure taxonomy
@@ -127,6 +159,16 @@ python3 loop.py --task impossible --spend-cap 0.50
 - **Control** — Recognise each from a trace.
 - **Lab** — Read five real traces and name the failure in each.
 - **Tools** — `OpenTelemetry`
+
+**Run it** — Name the failure from the trace alone.
+
+```bash
+cd labs/m0-agent-loop/traces
+python3 ../classify_failure.py --trace divergence.jsonl
+for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t --quiet; done
+```
+
+*Expect:* Loop divergence, objective drift, reward hacking, silent truncation, tool thrash — one per trace.
 
 ---
 
@@ -140,6 +182,16 @@ python3 loop.py --task impossible --spend-cap 0.50
 - **Tools** — `Python`, `Docker`
 - **Models** — `Kimi K2`
 
+**Run it** — Let a scaffold mutate itself, and keep only measured gains.
+
+```bash
+cd labs/m0-agent-loop
+python3 evolve.py --generations 5 --sandbox docker --fitness pytest-pass-rate
+python3 evolve.py --show-lineage   # what changed, what was kept, what was reverted
+```
+
+*Expect:* Only mutations the deterministic oracle confirms survive. Pin the fitness function — it is now the security control.
+
 ---
 
 ### B2.9 — Idempotency, replay and rollback
@@ -150,6 +202,16 @@ python3 loop.py --task impossible --spend-cap 0.50
 - **Control** — Design requirements, not afterthoughts.
 - **Lab** — Replay a full agent run from the trace and reproduce its decision.
 - **Tools** — `OpenTelemetry`
+
+**Run it** — Replay an agent run from its trace.
+
+```bash
+cd labs/m0-agent-loop
+python3 loop.py --task fix-tests --json > run.json
+python3 replay.py --trace run.json --assert-identical
+```
+
+*Expect:* Either it reproduces, or the tool names the field you failed to log. Anything you cannot replay you cannot investigate.
 
 ---
 

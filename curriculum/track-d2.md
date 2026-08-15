@@ -25,6 +25,17 @@
 - **Tools** — `Velociraptor`, `OpenSearch`
 - **Models** — `GLM-4.6`
 
+**Run it** — Pre-load the agent so it reasons as a partner, not a tool you reach for late.
+
+```bash
+cd labs/d2-ir
+python3 reconstruct.py --case case-01 --preload logs,telemetry,segmentation,playbooks --model $MODEL
+python3 reconstruct.py --case case-01 --preload none --model $MODEL
+diff <(jq -r .timeline[] preloaded.json) <(jq -r .timeline[] cold.json)
+```
+
+*Expect:* The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered.
+
 ---
 
 ### D2.2 — When the actor is an agent
@@ -57,6 +68,16 @@ python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
 - **Lab** — Scope a multi-agent incident end to end.
 - **Tools** — `OpenTelemetry`
 - **Models** — `Kimi K2`
+
+**Run it** — Scope an incident where the initiating agent is not the acting one.
+
+```bash
+cd labs/d2-ir
+./replay-incident.sh case-02   # multi-agent
+python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action
+```
+
+*Expect:* The action-plane actor is a sub-agent two hops from the prompt that started it.
 
 ---
 
@@ -110,6 +131,15 @@ python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
 - **Control** — Choose among model, prompt, tool, policy, sandbox, identity, eval.
 - **Lab** — Pick the right layer for five real incidents.
 
+**Run it** — Pick the right layer to change after an incident.
+
+```bash
+cd labs/d2-ir/postmortem
+for c in case-*/; do echo -n "$c "; python3 ../choose_layer.py --case $c; done
+```
+
+*Expect:* Most land on the control plane — identity, policy, sandbox — not the prompt.
+
 ---
 
 ### D2.7 — Stop authority
@@ -121,6 +151,17 @@ python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
 - **Lab** — Time your own stop authority end to end.
 - **Tools** — `kagent`
 
+**Run it** — Time your stop authority end to end.
+
+```bash
+cd labs/d2-ir
+./misbehave.sh & echo $! > runaway.pid
+time ./stop.sh --workflow patch-agent --authority oncall
+python3 assert_stopped.py --within 60s
+```
+
+*Expect:* A number in seconds, and a named holder. Untested stop authority is a diagram.
+
 ---
 
 ### D2.8 — Regulatory clock
@@ -130,5 +171,15 @@ python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
 - **Risk** — Notification obligations discovered in week two.
 - **Control** — Feed Track E2 in hour one.
 - **Lab** — Run the first-hour checklist in a tabletop.
+
+**Run it** — Run the first-hour regulatory checklist.
+
+```bash
+cd labs/d2-ir
+python3 first_hour.py --case case-01 --checklist ../e2-compliance/notification.yaml
+python3 first_hour.py --case case-01 --materiality
+```
+
+*Expect:* A materiality call and a notification clock started in hour one, feeding Track E2.
 
 ---

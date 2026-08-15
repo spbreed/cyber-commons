@@ -46,6 +46,16 @@ python3 offensive_loop.py --target http://localhost:3000 --model $MODEL --scope 
 - **Lab** — Air-gap the offensive lab and prove no route to anything you don't own.
 - **Tools** — `Firecracker`, `Squid`
 
+**Run it** — Prove the offensive harness cannot reach anything you don't own.
+
+```bash
+cd labs/c1-redteam
+./airgap.sh up   # isolated docker network, no default route
+./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com
+```
+
+*Expect:* In-scope succeeds, out-of-scope fails at the network layer — not at a politeness check in the prompt.
+
 ---
 
 ### C1.3 — Red-teaming agents: the injection surface
@@ -80,6 +90,18 @@ promptfoo eval -c redteam.yaml
 - **Lab** — Attack the A2 delegation chain; prove or disprove attenuation.
 - **Tools** — `Keycloak`, `SPIRE`
 
+**Run it** — Attack the delegation chain and see if attenuation holds.
+
+```bash
+cd labs/c1-redteam
+python3 attack_identity.py --target ../a2-delegation --technique confused-deputy
+python3 attack_identity.py --target ../a2-delegation --technique token-replay
+python3 attack_identity.py --target ../a2-delegation --technique scope-escalation
+python3 attack_identity.py --verify-revocation
+```
+
+*Expect:* A pass/fail per technique against A2's chain — including whether revocation actually revokes.
+
 ---
 
 ### C1.5 — Red-teaming agents: the containment surface
@@ -90,6 +112,16 @@ promptfoo eval -c redteam.yaml
 - **Control** — Prove the stop lever fires under load.
 - **Lab** — Attack the A3 sandbox from inside; measure what leaves.
 - **Tools** — `Falco`, `gVisor`
+
+**Run it** — Attack the sandbox from inside and measure what leaves.
+
+```bash
+cd labs/c1-redteam
+python3 escape.py --target ../a3-sandbox --techniques mount,egress,path-guard,mcp
+python3 escape.py --measure-exfil --bytes-out
+```
+
+*Expect:* Blast radius in bytes and reachable hosts. A3's deliverable is zero outside the sandbox.
 
 ---
 
@@ -124,5 +156,15 @@ scripts/vulnbench.sh compare   # see the inflated number
 - **Control** — Reproducibility requirements for probabilistic systems.
 - **Lab** — Write a finding a CISO can act on, with a replayable trace.
 - **Tools** — `OpenTelemetry`
+
+**Run it** — Write a finding for an emergent behaviour, not a line of code.
+
+```bash
+cd labs/c1-redteam
+python3 report.py --from-trace engagement/trace.jsonl --template agentic-finding.md
+python3 report.py --verify-reproducible --runs 10
+```
+
+*Expect:* A finding with a reproduction rate (e.g. 7/10), not a claim of determinism the system cannot offer.
 
 ---

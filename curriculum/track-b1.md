@@ -49,6 +49,17 @@ python3 score.py --against ground-truth.json
 - **Tools** — `ripgrep`, `tree-sitter`
 - **Models** — `GLM-4.6`
 
+**Run it** — Beat context stuffing with tool-mediated retrieval.
+
+```bash
+cd labs/b1-appsec
+python3 triage.py --strategy stuff  --finding F-102 --model $MODEL
+python3 triage.py --strategy bundle --finding F-102 --model $MODEL   # canonical triage bundle
+python3 compare_strategies.py
+```
+
+*Expect:* The bundle wins on accuracy and costs fewer tokens. Both numbers printed.
+
 ---
 
 ### B1.3 — Patch generation and local validation
@@ -82,6 +93,18 @@ python3 patch.py --finding F-102 --model $MODEL --validate-locally
 - **Lab** — Run the same target through SAST agent and DAST; chart what only one of them found.
 - **Tools** — `OWASP ZAP`, `OpenGrep`
 - **Models** — `Llama 3.3`
+
+**Run it** — Chart honestly what only SAST found, and what only DAST found.
+
+```bash
+cd labs/b1-appsec
+docker compose up -d juice-shop
+python3 triage.py --all > sast.json
+zap-cli quick-scan http://localhost:3000 -o dast.json
+python3 venn.py --sast sast.json --dast dast.json
+```
+
+*Expect:* Three buckets: SAST-only, DAST-only, both. The DAST-only bucket is why pentest is not redundant.
 
 ---
 
@@ -117,6 +140,17 @@ python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   
 - **Lab** — Grep an agent transcript and memory files for live secrets; add a pre-commit gate.
 - **Tools** — `gitleaks`, `TruffleHog`
 
+**Run it** — Find live secrets in your own agent's footprint.
+
+```bash
+pip install detect-secrets && cd labs/b1-appsec
+gitleaks detect --source ~/.claude --no-git --report-path agent-secrets.json || true
+python3 scan_transcripts.py --dir ~/.claude/projects --report
+cp hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit
+```
+
+*Expect:* Secrets in prompts/transcripts/memory files surface, and the pre-commit hook stops the next one.
+
 ---
 
 ### B1.7 — Metrics per SDLC stage
@@ -127,6 +161,16 @@ python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   
 - **Control** — Precision, time-to-triage, patch acceptance rate, escape rate.
 - **Lab** — Publish the four numbers for your own review agent.
 - **Tools** — `Cyber Commons eval harness`
+
+**Run it** — Publish the four numbers that let a review workflow earn its next rung.
+
+```bash
+cd labs/b1-appsec
+python3 metrics.py --precision --time-to-triage --patch-acceptance --escape-rate \
+  --runs runs/ --out metrics.json && cat metrics.json
+```
+
+*Expect:* Four numbers with denominators. Without these, promotion to L2.5 is a vibe.
 
 ---
 

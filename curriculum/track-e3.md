@@ -23,6 +23,16 @@
 - **Control** — What can happen, how fast, who can stop it.
 - **Lab** — Convert one blast-radius measurement into a board paragraph.
 
+**Run it** — Turn a blast-radius measurement into a board paragraph.
+
+```bash
+cd labs/e3-ciso
+python3 translate.py --input ../a1-control-plane/blast.md --audience board
+python3 translate.py --input ../a1-control-plane/blast.md --audience board --check-jargon
+```
+
+*Expect:* What can happen, how fast, who can stop it — with the engineering vocabulary stripped out.
+
 ---
 
 ### E3.2 — Governing autonomy rather than approving tools
@@ -32,6 +42,15 @@
 - **Risk** — A per-tool review queue becomes a bottleneck and then a bypass.
 - **Control** — A policy on delegated authority instead of tool-by-tool approval.
 - **Lab** — Write the delegated-authority policy.
+
+**Run it** — Replace a per-tool review queue with a delegated-authority policy.
+
+```bash
+cp curriculum/templates/autonomy-policy.md labs/e3-ciso/policy.md
+cd labs/e3-ciso && python3 policy_lint.py --policy policy.md --require promotion-criteria,demotion-authority,action-class-limits
+```
+
+*Expect:* The linter rejects aspirational language and demands named authority.
 
 ---
 
@@ -43,6 +62,15 @@
 - **Control** — Use the maturity model to order investment; choose your first hard "no".
 - **Lab** — Sequence your first three workflows and name the no.
 
+**Run it** — Sequence the first three workflows — and name the first hard no.
+
+```bash
+cd labs/e3-ciso
+python3 sequence.py --candidates ../e1-grc/workflows.yaml --maturity agent --out roadmap.md
+```
+
+*Expect:* Ordered by winnability × risk retired, with one explicit refusal. A programme without a 'no' has no policy.
+
 ---
 
 ### E3.4 — Org design and ownership
@@ -52,6 +80,16 @@
 - **Risk** — Harness engineering with no home; research as a hobby.
 - **Control** — Identity owns the control plane; BUs own grants; security owns stop authority.
 - **Lab** — Draw your org's ownership map against the topic matrix.
+
+**Run it** — Draw your org's ownership map against the topic matrix.
+
+```bash
+cd labs/e3-ciso
+python3 ownership.py --matrix ../../curriculum/templates/ownership-map.csv --org my-org.yaml
+python3 ownership.py --find-gaps
+```
+
+*Expect:* Every topic cluster with zero owners or two owners is a finding — usually harness engineering and research.
 
 ---
 
@@ -83,6 +121,16 @@ python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2
 - **Control** — Autonomy promotion as an earned event with named evidence.
 - **Lab** — Write one enforceable conditional approval.
 
+**Run it** — Make a conditional approval enforceable rather than aspirational.
+
+```bash
+cd labs/e3-ciso
+python3 conditional.py --workflow patch-agent --conditions eval-gate>=0.85,hitl-on-merge,90d-review
+python3 conditional.py --verify patch-agent   # checks the conditions are machine-checkable
+```
+
+*Expect:* Any condition that cannot be automatically verified is flagged. 'They'll be careful' does not compile.
+
 ---
 
 ### E3.7 — Building the capability
@@ -93,6 +141,16 @@ python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2
 - **Control** — Interview questions that separate the two; internal transition paths.
 - **Lab** — Write the interview loop for an agentic security engineer.
 
+**Run it** — Write an interview loop that separates familiarity from practice.
+
+```bash
+cd labs/e3-ciso
+python3 interview.py --role agentic-security-engineer --generate-loop
+python3 interview.py --calibrate --against ../b2.10-eval-harness   # ask them to read a real eval report
+```
+
+*Expect:* Questions with artefacts attached. Handing a candidate a real eval report separates the two groups fast.
+
 ---
 
 ### E3.8 — Resilience over perfection
@@ -102,5 +160,15 @@ python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2
 - **Risk** — Trying to enumerate every failure mode of a probabilistic system.
 - **Control** — Maturity measured by containment, detection and recovery — not prevention.
 - **Lab** — Re-score your programme on the resilience axis.
+
+**Run it** — Re-score your programme on containment/detection/recovery.
+
+```bash
+cd labs/e3-ciso
+python3 resilience.py --score --axes containment,detection,recovery --evidence ../
+python3 resilience.py --compare-to prevention-only
+```
+
+*Expect:* Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged.
 
 ---

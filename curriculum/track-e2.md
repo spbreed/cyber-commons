@@ -24,6 +24,16 @@
 - **Lab** — Build the crosswalk for your own sector.
 - **Tools** — `OSCAL`
 
+**Run it** — Build one control set that answers several regimes.
+
+```bash
+cd labs/e2-compliance
+python3 crosswalk.py --regimes horizontal-ai,privacy,sector --controls ../e1-grc/control-library.yaml
+python3 crosswalk.py --show-orphans   # obligations no control answers
+```
+
+*Expect:* One spine, several overlays. Orphans are your programme backlog.
+
 ---
 
 ### E2.2 — Horizontal AI regulation
@@ -33,6 +43,16 @@
 - **Risk** — "We only deployed it, we didn't build it" — sometimes true, often not.
 - **Control** — Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification.
 - **Lab** — Classify three workflows and defend the boundary cases.
+
+**Run it** — Classify three workflows and defend the boundary cases.
+
+```bash
+cd labs/e2-compliance
+python3 classify_risk.py --workflows ../e1-grc/workflows.yaml --explain
+python3 classify_risk.py --deployer-vs-provider
+```
+
+*Expect:* Shows where 'we only deployed it' holds and where agentic deployment pulls you into provider obligations.
 
 ---
 
@@ -45,6 +65,16 @@
 - **Lab** — Hang two regulator mappings off one framework spine.
 - **Tools** — `NIST AI RMF`, `OSCAL`
 
+**Run it** — Hang two regulator mappings off one framework spine.
+
+```bash
+cd labs/e2-compliance
+python3 spine.py --framework nist-ai-rmf --overlay regime-a --overlay regime-b --out oscal/
+oscal-cli validate oscal/system-security-plan.json
+```
+
+*Expect:* Valid OSCAL, one spine, two overlays — instead of two disconnected programmes.
+
 ---
 
 ### E2.4 — Sector overlays
@@ -54,6 +84,15 @@
 - **Risk** — An agent is already a "model" under model-risk rules you already comply with.
 - **Control** — Find the regime you're already in before inventing a new one.
 - **Lab** — Map one agent to existing model-risk obligations.
+
+**Run it** — Find the regime you are already in.
+
+```bash
+cd labs/e2-compliance
+python3 sector_overlay.py --agent patch-agent --sector financial-services --check model-risk
+```
+
+*Expect:* The agent is often already a 'model' under rules you already comply with. Cheaper than inventing a new programme.
 
 ---
 
@@ -87,6 +126,16 @@ curl -s localhost:8088/v1/chat/completions -d @with-pii.json | jq
 - **Control** — Coordinate with D2 in hour one.
 - **Lab** — Draft the notification for an agentic incident.
 
+**Run it** — Draft the notification for an autonomous actor.
+
+```bash
+cd labs/e2-compliance
+python3 notify.py --incident ../d2-ir/case-01 --regime <your-regime> --draft
+python3 notify.py --incident ../d2-ir/case-01 --materiality-worksheet
+```
+
+*Expect:* A draft that names the agent, the authority and the containment — the questions a supervisor asks first.
+
 ---
 
 ### E2.7 — Documentation that survives supervision
@@ -97,6 +146,17 @@ curl -s localhost:8088/v1/chat/completions -d @with-pii.json | jq
 - **Control** — System documentation, data lineage, eval records, oversight evidence, decision logs.
 - **Lab** — Assemble the pack for one high-risk workflow.
 - **Tools** — `OSCAL`, `Model Cards`
+
+**Run it** — Assemble a pack that survives supervision.
+
+```bash
+cd labs/e2-compliance
+python3 evidence_pack.py --workflow patch-agent \
+  --include system-doc,data-lineage,eval-records,oversight,decision-logs --out pack/
+python3 evidence_pack.py --audit-self pack/   # what a supervisor would find missing
+```
+
+*Expect:* A pack with a self-audit attached, including an honest statement of what 'explainability' can mean here.
 
 ---
 
@@ -127,5 +187,14 @@ python3 audit_trail.py --from-keycloak --workflow patch-agent --out trail.json
 - **Risk** — Overclaiming control, or triggering a moratorium.
 - **Control** — Explain bounded autonomy with evidence, and anticipate the real questions.
 - **Lab** — Defend one workflow in a mock supervisory conversation.
+
+**Run it** — Defend one workflow in a mock supervisory conversation.
+
+```bash
+cd labs/e2-compliance
+python3 mock_supervisor.py --workflow patch-agent --pack pack/ --model $MODEL --adversarial
+```
+
+*Expect:* You get asked the real questions. Overclaiming control is scored as harshly as underclaiming.
 
 ---

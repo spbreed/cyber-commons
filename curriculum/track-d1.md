@@ -48,6 +48,17 @@ python3 triage_loop.py --model $MODEL --escalate-on high
 - **Tools** — `Wazuh`
 - **Models** — `GLM-4.6`, `Llama 3.3`
 
+**Run it** — Show a context-loaded triage loop beating a generic one.
+
+```bash
+cd labs/d1-soc
+python3 triage_loop.py --context none     --alerts alerts.jsonl --score
+python3 triage_loop.py --context loaded   --alerts alerts.jsonl --score   # baseline+FPs+crown jewels
+python3 compare.py
+```
+
+*Expect:* The generic loop underperforms your worst analyst; the loaded one does not. Same model both times.
+
 ---
 
 ### D1.3 — Agent-assisted detection engineering
@@ -59,6 +70,17 @@ python3 triage_loop.py --model $MODEL --escalate-on high
 - **Lab** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
 - **Tools** — `Sigma`, `Wazuh`
 - **Models** — `Kimi K2`
+
+**Run it** — Generate, unit-test and tune detections inside CI.
+
+```bash
+pip install sigma-cli && cd labs/d1-soc/detections
+python3 gen_rule.py --technique T1059 --model $MODEL --out rules/t1059.yml
+sigma check rules/t1059.yml && python3 test_rule.py --rule rules/t1059.yml --positives pos/ --negatives neg/
+python3 coverage.py --map-to attack
+```
+
+*Expect:* Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have.
 
 ---
 
@@ -91,6 +113,17 @@ cd labs/d1-soc/detections
 - **Control** — Onboard agent telemetry deliberately; decide retention.
 - **Lab** — Ship OTEL agent traces into OpenSearch and query them.
 - **Tools** — `OpenTelemetry`, `OpenSearch`
+
+**Run it** — Get agent telemetry into the SIEM and query it.
+
+```bash
+cd labs/d1-soc
+docker compose up -d opensearch otel-collector
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 python3 ../m0-agent-loop/loop.py --task fix-tests
+curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply_patch"}}}' | jq '.hits.total'
+```
+
+*Expect:* Prompts, tool calls, decisions and spend queryable alongside your other log sources.
 
 ---
 
@@ -126,6 +159,17 @@ python3 agent_vs_human.py --classify live.jsonl
 - **Tools** — `promptfoo`
 - **Models** — `GLM-4.6`
 
+**Run it** — Catch a detection silently degrading after a model change.
+
+```bash
+cd labs/d1-soc
+promptfoo eval -c detection-regression.yaml --model llama3.3   # baseline
+promptfoo eval -c detection-regression.yaml --model glm-4.6    # after 'upgrade'
+python3 drift_report.py
+```
+
+*Expect:* A rule that passed last month fails now. Nothing in your code changed.
+
 ---
 
 ### D1.8 — Threat intel sub-lane
@@ -137,6 +181,17 @@ python3 agent_vs_human.py --classify live.jsonl
 - **Lab** — Build a synthesis loop that must cite or abstain.
 - **Tools** — `MISP`, `OpenCTI`
 - **Models** — `GLM-4.6`
+
+**Run it** — Build a synthesis loop that must cite or abstain.
+
+```bash
+cd labs/d1-soc/intel
+docker compose up -d opencti
+python3 synthesise.py --topic 'agentic malware' --require-source --model $MODEL
+python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch confidence appear from nowhere
+```
+
+*Expect:* With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.
 
 ---
 
