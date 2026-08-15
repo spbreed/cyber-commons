@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cyber Commons — Democratizing Cyber AI for everyone who defends</title>
-<meta name="description" content="Cyber Commons is a free, open, weekly-updated commons for Cyber AI — the skills to defend with AI and to secure AI itself. Twelve tracks organised the way a CISO org actually is, built entirely on open-source, open-weight and CNCF tools, so anyone can learn the frontier on a laptop.">
+<title>Cyber Commons — Navigating Cyber Singularity</title>
+<meta name="description" content="Cyber Commons — Navigating Cyber Singularity. A free, open commons for Cyber AI: the skills to defend with AI and to secure AI itself. Twelve tracks organised the way a CISO org actually is, built entirely on open-source, open-weight and CNCF tools, so anyone can learn the frontier on a laptop.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<meta property="og:title" content="Cyber Commons — Navigating Cyber Singularity">
+<meta property="og:description" content="Democratizing defensive cyber knowledge while AI capability compounds. Free, open, and runnable on the laptop you already own.">
+<meta property="og:image" content="assets/logo-full.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -62,12 +66,12 @@
   header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
     background:rgba(10,14,25,.72);border-bottom:1px solid var(--line-soft)}
   .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
-  .brand{display:flex;align-items:center;gap:12px;font-family:"Space Grotesk";font-weight:600;font-size:18px;letter-spacing:-.01em;text-decoration:none}
-  .glyph{width:26px;height:26px;flex:none;position:relative}
-  .glyph i{position:absolute;inset:0;border-radius:3px}
-  .glyph i:first-child{background:var(--defend);clip-path:polygon(0 0,100% 0,0 100%)}
-  .glyph i:last-child{background:var(--secure);clip-path:polygon(100% 0,100% 100%,0 100%)}
+  .brand{display:flex;align-items:center;gap:11px;font-family:"Space Grotesk";font-weight:600;font-size:18px;letter-spacing:-.01em;text-decoration:none}
+  .brand img{height:40px;width:auto;flex:none;display:block}
+  .brand .bt{display:flex;flex-direction:column;line-height:1.05}
+  .brand .bt small{font-family:"IBM Plex Mono";font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--text-faint);font-weight:400;margin-top:3px}
   .brand b{color:var(--secure);font-weight:600}
+  @media(max-width:520px){.brand .bt small{display:none}}
   .nav-links{display:flex;gap:30px;align-items:center}
   .nav-links a{font-size:14.5px;color:var(--text-dim);text-decoration:none;transition:color .2s}
   .nav-links a:hover{color:var(--text)}
@@ -76,8 +80,50 @@
   @media(max-width:820px){.nav-links a:not(.nav-cta){display:none}}
 
   /* ---------- HERO ---------- */
-  .hero{padding:56px 0 44px;position:relative}
-  .hero h1{font-size:clamp(34px,6vw,66px);max-width:15ch;margin-top:16px}
+  .hero{padding:44px 0 44px;position:relative}
+  .hero-logo{width:min(258px,54vw);height:auto;display:block;margin:0 0 18px -12px;
+    filter:drop-shadow(0 8px 34px rgba(77,155,255,.18))}
+  @media(max-width:640px){.hero-logo{width:min(230px,62vw);margin-left:-8px}}
+
+  /* ---------- WHAT IT IS / SINGULARITY ---------- */
+  .what-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start;margin-top:36px}
+  @media(max-width:900px){.what-grid{grid-template-columns:1fr;gap:30px}}
+  .what-lead{font-family:"Space Grotesk";font-size:clamp(20px,2.6vw,27px);font-weight:500;
+    line-height:1.3;letter-spacing:-.01em;margin:0 0 20px}
+  .what-lead em{font-style:normal;color:var(--secure)}
+  .what-lead span{color:var(--defend)}
+  .what-body p{color:var(--text-dim);margin:0 0 16px;font-size:15.5px}
+  .what-body p:last-child{margin-bottom:0}
+  .what-body b{color:var(--text);font-weight:600}
+  .defn{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:26px 24px}
+  .defn h4{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--accent);margin:0 0 14px;transition:color .5s var(--ease)}
+  .defn dl{margin:0;display:flex;flex-direction:column;gap:16px}
+  .defn dt{font-family:"Space Grotesk";font-weight:600;font-size:15.5px;margin-bottom:4px}
+  .defn dd{margin:0;font-size:14px;color:var(--text-dim);line-height:1.5}
+  .curve{margin-top:38px;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:linear-gradient(180deg,var(--surface),var(--ink-2))}
+  .curve-head{padding:24px 26px 0}
+  .curve-head h3{font-size:20px;margin-bottom:8px}
+  .curve-head p{color:var(--text-dim);font-size:14.5px;margin:0;max-width:78ch}
+  .gap{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border-top:1px solid var(--line-soft)}
+  @media(max-width:760px){.gap{grid-template-columns:1fr}}
+  .gap > div{padding:24px 26px}
+  .gap .atk{border-right:1px solid var(--line-soft)}
+  @media(max-width:760px){.gap .atk{border-right:0;border-bottom:1px solid var(--line-soft)}}
+  .gap .lab{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+  .gap .atk .lab{color:#ff8a8a}
+  .gap .def .lab{color:var(--defend)}
+  .gap ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+  .gap li{font-size:14.5px;color:var(--text-dim);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+  .gap li::before{content:"▸";flex:none;font-size:11px;padding-top:3px}
+  .gap .atk li::before{color:#ff8a8a}
+  .gap .def li::before{color:var(--defend)}
+  .gap li b{color:var(--text);font-weight:600}
+  .closing{padding:22px 26px;border-top:1px solid var(--line-soft);background:rgba(255,175,92,.05);
+    font-size:15px;color:var(--text)}
+  .closing b{color:var(--secure)}
+  .hero h1{font-size:clamp(32px,5.4vw,60px);max-width:23ch;margin-top:16px}
   .hero h1 .a{color:var(--defend)}
   .hero h1 .b{color:var(--secure)}
   .hero .lede{font-size:clamp(16px,2vw,19px);color:var(--text-dim);max-width:62ch;margin:20px 0 0}
@@ -297,8 +343,9 @@
 
 <header class="nav">
   <div class="wrap nav-in">
-    <a class="brand" href="#top"><span class="glyph"><i></i><i></i></span>Cyber&nbsp;<b>Commons</b></a>
+    <a class="brand" href="#top"><img src="assets/logo-mark.png" alt="Cyber Commons"><span class="bt"><span>Cyber&nbsp;<b>Commons</b></span><small>Navigating Cyber Singularity</small></span></a>
     <nav class="nav-links">
+      <a href="#what">What it is</a>
       <a href="#mission">Mission</a>
       <a href="#how">How it works</a>
       <a href="#curriculum">Curriculum</a>
@@ -312,9 +359,10 @@
 <a id="top"></a>
 <div class="hero">
   <div class="wrap">
+    <img class="hero-logo" src="assets/logo-full.png" alt="Cyber Commons — Navigating Cyber Singularity">
     <span class="eyebrow">A public good · Free forever · Built on open source</span>
-    <h1>Democratizing Cyber AI<br>for the <span class="a">commons</span>.</h1>
-    <p class="lede">One open home for the whole field — the skills to defend <b>with</b> AI, and to secure the AI <b>itself</b> — organised the way a CISO org actually is, kept current within the week, and provable on the laptop you already own. So a two-person NGO and a global bank learn the same frontier, free.</p>
+    <h1>Democratizing defensive cyber knowledge, <span class="a">before</span> the curve <span class="b">outruns us</span>.</h1>
+    <p class="lede">AI capability is compounding, and offense feels that curve first. Cyber Commons is one open home for the whole defensive field — the skills to defend <b>with</b> AI, and to secure the AI <b>itself</b> — organised the way a CISO org actually is and provable on the laptop you already own. So a two-person NGO and a global bank learn the same frontier, free. <a href="#what" style="color:var(--defend);text-decoration:none;border-bottom:1px solid var(--defend-soft)">What is Cyber Commons →</a></p>
 
     <div class="toggle" data-active="defend" role="tablist" aria-label="Choose a track">
       <span class="slider" aria-hidden="true"></span>
@@ -334,6 +382,76 @@
     </div>
   </div>
 </div>
+
+<hr class="divider">
+
+<!-- WHAT IS CYBER COMMONS -->
+<section id="what">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">What is Cyber Commons</span>
+      <h2>A commons for the knowledge that keeps everyone safe.</h2>
+      <p>A <em>commons</em> is a shared resource no one owns and everyone may draw from — a village green, a body of open research. Cyber Commons is that, for the skills of defending in the age of AI.</p>
+    </div>
+
+    <div class="what-grid">
+      <div class="what-body rv">
+        <p class="what-lead">We are the first generation of defenders whose <span>attackers compound</span> — and the knowledge to answer them is <em>still being locked up</em>.</p>
+        <p><b>Cyber Commons is a free, open training programme</b> covering the two halves of the field: using AI to do security work, and securing the AI systems you now depend on. Twelve tracks organised by the job you actually hold, 104 sessions, every one shipping commands that really run.</p>
+        <p>It is built deliberately on <b>open-source infrastructure and open-weight models</b> — CNCF and Linux Foundation projects for the control plane, Llama, Kimi and GLM for the intelligence. Not because open is cheaper, but because <b>a commons that requires a frontier-lab account is not a commons.</b> Everything here runs on the laptop you already own, for $0.</p>
+        <p>No sign-up wall. No sales call. No certificate to buy. You finish a session holding a real artefact — a delegation-chain trace, a blast-radius number, an eval report — the kind of thing that makes your capability legible to your own management.</p>
+      </div>
+
+      <div class="defn rv">
+        <h4>The two halves, never blurred</h4>
+        <dl>
+          <dt>AI <em>for</em> Security</dt>
+          <dd>Pointing agents at the work: triaging alerts, reviewing code, hunting bugs, drafting exploits in a sealed lab, shipping validated patches — and measuring whether any of it is actually reliable.</dd>
+          <dt>Security <em>of</em> AI</dt>
+          <dd>Defending what you just built: the models, agents, tool schemas and non-human identities are a fresh attack surface with failure modes your existing playbook cannot express.</dd>
+          <dt>Why both, always</dt>
+          <dd>A practitioner taught only one half gets surprised. The team that automates triage without governing the agent doing it has simply moved the risk somewhere it can't see.</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="curve rv">
+      <div class="curve-head">
+        <h3>Why now: the defensive knowledge gap is widening</h3>
+        <p>AI capability is compounding — each generation of model makes the next cheaper to build, and agentic systems now act, not just answer. Offense feels that curve first, because attacking needs one working path and defending needs all of them closed.</p>
+      </div>
+      <div class="gap">
+        <div class="atk">
+          <div class="lab">What scales almost freely</div>
+          <ul>
+            <li><b>Autonomous discovery</b> — agents that read code and find real, novel vulnerabilities</li>
+            <li><b>Exploit generation</b> at the speed of a build pipeline</li>
+            <li><b>Campaigns without headcount</b> — no team required to run many at once</li>
+            <li><b>One path is enough</b> — the attacker needs a single opening to succeed</li>
+          </ul>
+        </div>
+        <div class="def">
+          <div class="lab">What does not scale by itself</div>
+          <ul>
+            <li><b>Judgement</b> — knowing which finding is real, and which confident answer is a hallucination</li>
+            <li><b>Trust in your own tools</b> — a probabilistic scanner is worthless unmeasured</li>
+            <li><b>Control-plane design</b> — identity, delegation, containment, stop authority</li>
+            <li><b>Every path must hold</b> — the defender has to close all of them</li>
+          </ul>
+        </div>
+      </div>
+      <div class="closing">
+        That asymmetry is why hoarding defensive knowledge is now actively dangerous. Offensive capability diffuses on its own — it is <b>defensive</b> capability that has to be deliberately spread. If only the best-funded teams learn to direct, doubt and prove these systems, the gap between them and the hospital, the school district, the two-person NGO becomes the softest target in the network we all share.
+      </div>
+    </div>
+
+    <div class="sec-head rv" style="margin-top:44px">
+      <h2 style="font-size:clamp(21px,2.8vw,29px)">Navigating cyber singularity</h2>
+      <p>"Singularity" here is not a prophecy about machines waking up. It is the practical point where <b>systems act faster than the humans nominally supervising them can follow</b> — where an agent's decision-to-action loop closes in milliseconds and your review cycle takes a day. Parts of security are already there.</p>
+      <p style="margin-top:14px">You cannot navigate that by reading about it. You navigate it by building the instincts and the instrumentation while the curve is still climbing: bounded autonomy, attenuated delegation, containment you have actually tested, evaluation you can put in front of a regulator. That is the whole curriculum, and it is free because it has to be.</p>
+    </div>
+  </div>
+</section>
 
 <hr class="divider">
 
@@ -567,17 +685,18 @@
   <div class="wrap">
     <div class="foot">
       <div>
-        <a class="brand" href="#top"><span class="glyph"><i></i><i></i></span>Cyber&nbsp;<b>Commons</b></a>
-        <p class="about">The open home for everything Cyber AI. Free forever, updated every week, built on open source — so anyone who defends can learn the frontier.</p>
+        <a class="brand" href="#top"><img src="assets/logo-mark.png" alt="Cyber Commons"><span class="bt"><span>Cyber&nbsp;<b>Commons</b></span><small>Navigating Cyber Singularity</small></span></a>
+        <p class="about">Navigating cyber singularity together. Free forever, built on open source and open weights — because defensive capability is the half that has to be deliberately spread.</p>
       </div>
       <div class="foot-links">
-        <div class="foot-col"><h5>Learn</h5><a href="#tracks">The two directions</a><a href="#module0">Module 0</a><a href="#curriculum">Curriculum</a><a href="#personas">Functions</a></div>
+        <div class="foot-col"><h5>Learn</h5><a href="#what">What is Cyber Commons</a><a href="#tracks">The two directions</a><a href="#module0">Module 0</a><a href="#curriculum">Curriculum</a><a href="#personas">Functions</a></div>
         <div class="foot-col"><h5>Build</h5><a href="#stack">Open stack</a><a href="#curriculum">Lab repos</a><a href="#curriculum">Eval harness</a></div>
-        <div class="foot-col"><h5>Commons</h5><a href="#mission">Mission</a><a href="#mission">Contribute</a><a href="#mission">Weekly changelog</a></div>
+        <div class="foot-col"><h5>Commons</h5><a href="#what">What it is</a>
+      <a href="#mission">Mission</a><a href="#mission">Contribute</a><a href="#mission">Weekly changelog</a></div>
       </div>
     </div>
     <div class="foot-bottom">
-      <span>Cyber Commons · a public good for Cyber AI</span>
+      <span>Cyber Commons · Navigating Cyber Singularity · a public good</span>
       <span>Frameworks: OWASP · MITRE ATLAS · NIST AI RMF</span>
     </div>
   </div>
