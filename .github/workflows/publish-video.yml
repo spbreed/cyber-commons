@@ -86,13 +86,18 @@ jobs:
             echo "::endgroup::"
           done
 
-      - name: Commit videos.json
+      - name: Rebuild lesson pages with the new embed
         run: |
-          if git diff --quiet -- site/data/videos.json; then
+          pip install --quiet markdown
+          python3 scripts/build_site.py
+
+      - name: Commit videos.json + regenerated pages
+        run: |
+          if git diff --quiet -- site/data/videos.json site/lessons; then
             echo "no registry change"; exit 0
           fi
           git config user.name  "cyber-commons-bot"
           git config user.email "noreply@github.com"
-          git add site/data/videos.json
+          git add site/data/videos.json site/lessons
           git commit -m "chore(video): link recording to curriculum chapter"
           git push

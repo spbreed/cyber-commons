@@ -4,10 +4,10 @@
 secure the AI *itself* — organised the way a CISO org actually is, and provable
 on the laptop you already own.**
 
-Twelve tracks, one shared core, **104 sessions, every one of them runnable**.
+Twelve tracks, one shared core, **104 lessons, each with its own page and a runnable lab**.
 Every lab runs on **open-source tooling (CNCF / Linux Foundation)** and
 **open-weight models (Llama, Kimi, GLM)**. No licence, no vendor, **no
-frontier-lab account**. Total cost to complete the curriculum: **$0**.
+frontier-lab account**. Total cost to complete the curriculum: nothing.
 
 🌐 **[cyber-commons live site](https://spbreed.github.io/cyber-commons/)** · 📚 [Curriculum](curriculum/) · 🧪 [Labs](labs/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
 
@@ -137,33 +137,59 @@ python3 scripts/build_curriculum.py    # regenerates curriculum/*.md
 
 The website reads the same JSON, so the docs and the site can never drift.
 
-## Recording pipeline
+## Updating a lesson (the daily loop)
 
-Lightboard recordings publish themselves to YouTube and attach to the right
-chapter on the site.
+Every lesson has its own page — `site/lessons/<ID>.html` — generated from data.
+**Never edit the generated HTML.** Change the source and rebuild:
 
-**One-time setup:** enable the YouTube Data API, create an OAuth desktop client,
-mint a refresh token (`python3 scripts/youtube_upload.py --auth-setup`), then add
-repo secrets `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN` and repo
-variable `SITE_URL`.
-
-**Per recording — just drop the file in:**
+| To change… | Edit | 
+|---|---|
+| Title, risk, control, tools, models | `site/data/curriculum.json` |
+| The runnable commands + "Expect" line | `curriculum/labs.json` |
+| Long-form notes under the lab | `lessons/<ID>.md` (optional, plain Markdown) |
+| The video | drop `recordings/<ID>.mp4` — see below |
 
 ```bash
-cp ~/recordings/a2.5-final.mp4 recordings/A2.5.mp4   # filename = session id
+python3 scripts/build_site.py     # regenerate all 105 pages (fast, idempotent)
+git add -A && git commit -m "lesson: A2.5 notes" && git push
+```
+
+That's the whole loop. Pushing triggers the Pages deploy, and the workflow
+rebuilds too — so if you forget the build step the site is still correct, and CI
+leaves a warning telling you to commit the regenerated pages next time.
+
+Each page carries a **video slot** (a placeholder until the recording exists),
+the **risk/control cards**, the **runnable commands**, tool/model chips, an
+**↗ Open the exercise on GitHub** button pointing at that lesson's lab folder,
+your notes, and prev/next navigation.
+
+## Recording pipeline
+
+Recordings publish themselves and appear on the right lesson page.
+
+**One-time:** enable the YouTube Data API, create an OAuth desktop client, mint a
+refresh token (`python3 scripts/youtube_upload.py --auth-setup`), then add repo
+secrets `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN`.
+
+**Per recording — name the file after the lesson and push:**
+
+```bash
+cp ~/lightboard/final.mp4 recordings/A2.5.mp4
 git add recordings/A2.5.mp4 && git commit -m "record A2.5" && git push
 ```
 
-The [publish-video workflow](.github/workflows/publish-video.yml) uploads it with
-a title and description generated from that chapter's own risk/control/lab text,
-registers it in `site/data/videos.json`, and commits — which triggers the
-[Pages deploy](.github/workflows/pages.yml) so a **▶ Watch** link appears on the
-chapter. Already uploaded elsewhere? Link it without re-uploading:
+The workflow uploads it with a title and description generated from that
+lesson's own risk/control/lab text, registers it in `site/data/videos.json`,
+**rebuilds the lesson pages so the embed replaces the placeholder**, and commits
+— which deploys. Already uploaded elsewhere? Skip the upload:
 
 ```bash
 python3 scripts/link_video.py --session A2.5 --youtube-id <id>
-python3 scripts/link_video.py --list        # which of the 104 chapters still need recording
+python3 scripts/build_site.py
 ```
+
+`python3 scripts/link_video.py --list` shows which of the 104 lessons still need
+recording.
 
 ## The site
 
@@ -180,10 +206,11 @@ drift apart.
 
 ```
 curriculum/       Module 0 + 12 track chapters (generated from the JSON source of truth)
+lessons/          Optional per-lesson notes — lessons/<ID>.md renders on that page
 labs/             Runnable labs, one folder per lab — start with m0-agent-loop
-site/             The website (GitHub Pages) + data/curriculum.json + data/videos.json
+site/             The website: index.html, lessons/<ID>.html (generated), data/, assets/
 MODELS.md         How to get Llama / Kimi / GLM free — local, hosted, or self-hosted
-scripts/          build_curriculum.py · link_video.py · youtube_upload.py
+scripts/          build_site.py · build_curriculum.py · link_video.py · youtube_upload.py
 recordings/       Drop lightboard recordings here (see recordings/README.md)
 .github/          Pages deploy · recording pipeline · Copilot prompts
 .claude/skills/   Agent skills, so Claude Code can run the labs for you

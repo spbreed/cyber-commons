@@ -80,10 +80,7 @@
   @media(max-width:820px){.nav-links a:not(.nav-cta){display:none}}
 
   /* ---------- HERO ---------- */
-  .hero{padding:44px 0 44px;position:relative}
-  .hero-logo{width:min(258px,54vw);height:auto;display:block;margin:0 0 18px -12px;
-    filter:drop-shadow(0 8px 34px rgba(77,155,255,.18))}
-  @media(max-width:640px){.hero-logo{width:min(230px,62vw);margin-left:-8px}}
+  .hero{padding:56px 0 44px;position:relative}
 
   /* ---------- WHAT IT IS / SINGULARITY ---------- */
   .what-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start;margin-top:36px}
@@ -215,7 +212,9 @@
   .m0 .m0grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:24px}
   @media(max-width:900px){.m0 .m0grid{grid-template-columns:1fr 1fr}}
   @media(max-width:560px){.m0 .m0grid{grid-template-columns:1fr}}
-  .m0s{border:1px solid var(--line-soft);border-radius:10px;padding:16px 15px;background:var(--ink-2)}
+  .m0s{border:1px solid var(--line-soft);border-radius:10px;padding:16px 15px;background:var(--ink-2);
+    display:block;text-decoration:none;color:inherit;transition:border-color .2s}
+  .m0s:hover{border-color:var(--defend)}
   .m0s .id{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint)}
   .m0s h5{font-family:"Space Grotesk";font-size:15px;font-weight:600;margin:7px 0 6px}
   .m0s p{font-size:13px;color:var(--text-dim);margin:0}
@@ -242,13 +241,17 @@
   .ses{border-top:1px solid var(--line-soft);padding:14px 0}
   .ses-h{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
   .ses-h .sid{font-family:"IBM Plex Mono";font-size:12px;color:var(--text-faint);flex:none;width:42px}
-  .ses-h .st{font-family:"Space Grotesk";font-weight:500;font-size:15px}
+  .ses-h a.st{font-family:"Space Grotesk";font-weight:500;font-size:15px;color:var(--text);
+    text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s,color .2s}
+  .ses-h a.st:hover{color:var(--defend);border-bottom-color:var(--defend-soft)}
   .ses-h .badge{font-family:"IBM Plex Mono";font-size:10px;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;padding:2px 7px}
   .ses-h .badge.d{color:var(--defend);border:1px solid var(--defend-soft)}
   .ses-h .badge.s{color:var(--secure);border:1px solid var(--secure-soft)}
   .ses-h .badge.b{color:var(--text-dim);border:1px solid var(--line)}
   .ses-h .watch{margin-left:auto;font-family:"IBM Plex Mono";font-size:11.5px;text-decoration:none;color:#ff6b6b;border:1px solid #5c2b2b;border-radius:5px;padding:3px 9px;transition:background .2s}
   .ses-h .watch:hover{background:rgba(255,107,107,.12)}
+  .ses-h .watch.open{color:var(--text-faint);border-color:var(--line)}
+  .ses-h .watch.open:hover{color:var(--defend);border-color:var(--defend-soft);background:transparent}
   .ses-b{padding-left:54px;margin-top:8px}
   .ses-b .rc{display:block;font-size:13.5px;color:var(--text-dim);margin-bottom:5px}
   .ses-b .rc b{font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;margin-right:8px}
@@ -346,6 +349,7 @@
     <a class="brand" href="#top"><img src="assets/logo-mark.png" alt="Cyber Commons"><span class="bt"><span>Cyber&nbsp;<b>Commons</b></span><small>Navigating Cyber Singularity</small></span></a>
     <nav class="nav-links">
       <a href="#what">What it is</a>
+      <a href="lessons/index.html">Lessons</a>
       <a href="#mission">Mission</a>
       <a href="#how">How it works</a>
       <a href="#curriculum">Curriculum</a>
@@ -359,7 +363,6 @@
 <a id="top"></a>
 <div class="hero">
   <div class="wrap">
-    <img class="hero-logo" src="assets/logo-full.png" alt="Cyber Commons — Navigating Cyber Singularity">
     <span class="eyebrow">A public good · Free forever · Built on open source</span>
     <h1>Democratizing defensive cyber knowledge, <span class="a">before</span> the curve <span class="b">outruns us</span>.</h1>
     <p class="lede">AI capability is compounding, and offense feels that curve first. Cyber Commons is one open home for the whole defensive field — the skills to defend <b>with</b> AI, and to secure the AI <b>itself</b> — organised the way a CISO org actually is and provable on the laptop you already own. So a two-person NGO and a global bank learn the same frontier, free. <a href="#what" style="color:var(--defend);text-decoration:none;border-bottom:1px solid var(--defend-soft)">What is Cyber Commons →</a></p>
@@ -377,7 +380,7 @@
     <div class="hero-stats">
       <div class="stat"><div class="n defend">12</div><div class="l">Tracks, by job role</div></div>
       <div class="stat"><div class="n secure">104</div><div class="l">Sessions, all runnable</div></div>
-      <div class="stat"><div class="n defend">$0</div><div class="l">Cost, laptop-friendly</div></div>
+      <div class="stat"><div class="n defend">Free</div><div class="l">Open, laptop-friendly</div></div>
       <div class="stat"><div class="n secure">Weekly</div><div class="l">Refresh cadence</div></div>
     </div>
   </div>
@@ -398,8 +401,7 @@
       <div class="what-body rv">
         <p class="what-lead">We are the first generation of defenders whose <span>attackers compound</span> — and the knowledge to answer them is <em>still being locked up</em>.</p>
         <p><b>Cyber Commons is a free, open training programme</b> covering the two halves of the field: using AI to do security work, and securing the AI systems you now depend on. Twelve tracks organised by the job you actually hold, 104 sessions, every one shipping commands that really run.</p>
-        <p>It is built deliberately on <b>open-source infrastructure and open-weight models</b> — CNCF and Linux Foundation projects for the control plane, Llama, Kimi and GLM for the intelligence. Not because open is cheaper, but because <b>a commons that requires a frontier-lab account is not a commons.</b> Everything here runs on the laptop you already own, for $0.</p>
-        <p>No sign-up wall. No sales call. No certificate to buy. You finish a session holding a real artefact — a delegation-chain trace, a blast-radius number, an eval report — the kind of thing that makes your capability legible to your own management.</p>
+        <p>It is built deliberately on <b>open-source infrastructure and open-weight models</b> — CNCF and Linux Foundation projects for the control plane, Llama, Kimi and GLM for the intelligence. Not because open is cheaper, but because <b>a commons that requires a frontier-lab account is not a commons.</b> Everything here runs on the laptop you already own.</p>
       </div>
 
       <div class="defn rv">
@@ -467,19 +469,17 @@
       <div class="mcol rv">
         <h3>Why it stays free</h3>
         <ul>
-          <li><span><b>Hoarded security knowledge makes everyone less safe.</b> The commons is the opposite bet — shared defense is stronger defense.</span></li>
-          <li><span><b>The under-resourced can't wait for budget.</b> NGOs, students and small teams face the same attackers as banks and deserve the same frontier.</span></li>
-          <li><span><b>No frontier-lab account required.</b> Every lab runs on open-weight models — Llama, Kimi, GLM — locally or on a free tier. Nothing here needs a credit card.</span></li>
-          <li><span><b>A paid course couldn't keep this pace anyway.</b> The moment knowledge this fast-moving gets locked up, it's already going stale.</span></li>
+          <li><span><b>Hoarded security knowledge makes everyone less safe.</b> Shared defense is stronger defense.</span></li>
+          <li><span><b>The under-resourced can't wait for budget.</b> NGOs, students and small teams face the same attackers as banks.</span></li>
+          <li><span><b>No frontier-lab account required.</b> Every lab runs on open-weight models — Llama, Kimi, GLM — locally or on a free tier.</span></li>
         </ul>
       </div>
       <div class="mcol rv">
         <h3>How it stays current</h3>
         <ul>
-          <li><span><b>Tracked against living sources</b> — OWASP LLM &amp; Agentic Top 10, MITRE ATLAS, NIST AI RMF, CNCF releases and the incident feed — reviewed every week.</span></li>
-          <li><span><b>Open like the tools it teaches.</b> Practitioners add and correct chapters and labs by pull request; the curriculum is versioned in the open.</span></li>
-          <li><span><b>Every lab actually executes.</b> No pseudo-code, no screenshots of a demo — each session ships commands that run, against real targets, with real output.</span></li>
-          <li><span><b>A public weekly changelog.</b> Every chapter is dated and every change is visible, so you always know what's fresh and what moved.</span></li>
+          <li><span><b>Tracked against living sources</b> — OWASP LLM &amp; Agentic Top 10, MITRE ATLAS, NIST AI RMF and CNCF releases.</span></li>
+          <li><span><b>Open like the tools it teaches.</b> Chapters and labs are corrected by pull request; the curriculum is versioned in the open.</span></li>
+          <li><span><b>Every lab actually executes</b> — commands that run against real targets, with real output.</span></li>
         </ul>
       </div>
     </div>
@@ -544,12 +544,6 @@
       <div class="mcard rv"><div class="num">METHOD / 03</div><h4>A repo you keep</h4><p>Every lab ships as source in an open GitHub repo. Clone it, break it, adapt it to your own stack. The commons hands you the tools, not just the knowledge.</p></div>
     </div>
 
-    <div class="rcc rv">
-      <div class="rcc-row"><div class="lab">Sorted by</div><div class="val">Every session sits inside the <b>track of the person who does that job</b> — you always know which muscle you're building and who owns the control at work.</div></div>
-      <div class="rcc-row"><div class="lab">Risk</div><div class="val">First, the concrete thing that goes wrong — grounded in OWASP LLM &amp; Agentic Top 10, MITRE ATLAS, and real incidents, not hypotheticals.</div></div>
-      <div class="rcc-row"><div class="lab">Control</div><div class="val">Then the control that answers it — the specific, testable mitigation a real team would put in place.</div></div>
-      <div class="rcc-row"><div class="lab">Lab</div><div class="val">Then the hands-on: the exact open tools, the commands, the repo. You finish a session having <b>executed</b> the thing, not read about it.</div></div>
-    </div>
   </div>
 </section>
 
@@ -620,12 +614,12 @@
     </div>
 
     <div class="freebox rv">
-      <div class="fr"><div class="k">Local · $0</div><div class="v"><b>Ollama or llama.cpp</b> — pull a quantised Llama 3.3, GLM or Kimi variant and run it on a laptop. No account, no egress, works offline. The default for every lab.</div></div>
+      <div class="fr"><div class="k">Local</div><div class="v"><b>Ollama or llama.cpp</b> — pull a quantised Llama 3.3, GLM or Kimi variant and run it on a laptop. No account, no egress, works offline. The default for every lab.</div></div>
       <div class="fr"><div class="k">Free tiers</div><div class="v"><b>Open-weight models are hosted free</b> by several providers on rate-limited tiers (and on Hugging Face). Good when your laptop can't hold the bigger model. Limits change — check current terms before you rely on one.</div></div>
       <div class="fr"><div class="k">Self-host</div><div class="v"><b>vLLM</b> on one borrowed GPU serves a whole class. <b>LiteLLM</b> puts one OpenAI-compatible endpoint in front of whatever you chose, so labs never hard-code a provider.</div></div>
       <div class="fr"><div class="k">Never required</div><div class="v">Commercial frontier models are <b>named where relevant but never required</b>. Every lab's acceptance criteria are reachable on open weights.</div></div>
     </div>
-    <p class="zero rv">Total cost to complete the entire curriculum: <b>$0</b>. Minimum hardware: a laptop.</p>
+    <p class="zero rv">Minimum hardware: <b>a laptop</b>. Nothing here needs a credit card or a frontier-lab account.</p>
   </div>
 </section>
 
@@ -638,29 +632,6 @@
       <span class="eyebrow">Why it matters</span>
       <h2>Agents don't just change the tools. They change the engineer.</h2>
       <p>The instinct that made a great cyber engineer for twenty years is quietly becoming the wrong one. The job isn't doing the work by hand anymore — it's directing work you have to be able to trust, doubt, and prove.</p>
-    </div>
-    <div class="shift">
-      <div class="was rv">
-        <div class="lab">The reflex we're leaving</div>
-        <h4>The manual gatekeeper</h4>
-        <ul>
-          <li>Reviews every line by hand, and is the bottleneck</li>
-          <li>Trusts what runs on the terminal</li>
-          <li>Measures work in hours spent</li>
-          <li>Guards knowledge as leverage</li>
-        </ul>
-      </div>
-      <div class="to rv" aria-hidden="true">→</div>
-      <div class="now rv">
-        <div class="lab">The instinct we're building</div>
-        <h4>The agent orchestrator</h4>
-        <ul>
-          <li>Directs a fleet of agents, and owns the outcome</li>
-          <li>Assumes the agent can be wrong — and tests for it</li>
-          <li>Measures work in risk retired and reliability proven</li>
-          <li>Shares knowledge as a commons, because the frontier moves too fast to hoard</li>
-        </ul>
-      </div>
     </div>
     <blockquote>Retrain the reflex, not just the résumé. That's the <span>whole point of the commons.</span></blockquote>
   </div>
@@ -676,7 +647,7 @@
     <p class="rv">No sign-up wall, no sales call, no frontier-lab account. Choose the track for the job you actually do, and the commons meets you there — free, current, and running on the machine in front of you.</p>
     <div class="btns rv">
       <a class="btn p" href="#module0">Start with Module 0</a>
-      <a class="btn g" href="#curriculum">Find your track</a>
+      <a class="btn g" href="lessons/index.html">Browse all 104 lessons</a>
     </div>
   </div>
 </section>
@@ -689,9 +660,10 @@
         <p class="about">Navigating cyber singularity together. Free forever, built on open source and open weights — because defensive capability is the half that has to be deliberately spread.</p>
       </div>
       <div class="foot-links">
-        <div class="foot-col"><h5>Learn</h5><a href="#what">What is Cyber Commons</a><a href="#tracks">The two directions</a><a href="#module0">Module 0</a><a href="#curriculum">Curriculum</a><a href="#personas">Functions</a></div>
+        <div class="foot-col"><h5>Learn</h5><a href="lessons/index.html">All lessons</a><a href="#what">What is Cyber Commons</a><a href="#tracks">The two directions</a><a href="#module0">Module 0</a><a href="#curriculum">Curriculum</a><a href="#personas">Functions</a></div>
         <div class="foot-col"><h5>Build</h5><a href="#stack">Open stack</a><a href="#curriculum">Lab repos</a><a href="#curriculum">Eval harness</a></div>
         <div class="foot-col"><h5>Commons</h5><a href="#what">What it is</a>
+      <a href="lessons/index.html">Lessons</a>
       <a href="#mission">Mission</a><a href="#mission">Contribute</a><a href="#mission">Weekly changelog</a></div>
       </div>
     </div>
@@ -741,10 +713,10 @@
 
   function watchLink(id, videos){
     const v = videos[id];
-    if(!v) return '';
-    const url = v.url || (v.youtube_id ? `https://www.youtube.com/watch?v=${encodeURIComponent(v.youtube_id)}` : '');
-    if(!url) return '';
-    return `<a class="watch" href="${esc(url)}" target="_blank" rel="noopener">▶ Watch</a>`;
+    if(v && (v.url || v.youtube_id)){
+      return `<a class="watch" href="lessons/${esc(id)}.html">▶ Watch</a>`;
+    }
+    return `<a class="watch open" href="lessons/${esc(id)}.html">Open →</a>`;
   }
 
   function sessionHTML(s, videos){
@@ -753,7 +725,7 @@
     return `<div class="ses${s.featured ? ' feat':''}">
       <div class="ses-h">
         <span class="sid">${esc(s.id)}</span>
-        <span class="st">${esc(s.title)}</span>
+        <a class="st" href="lessons/${esc(s.id)}.html">${esc(s.title)}</a>
         <span class="badge ${badgeClass(s.track)}">${badgeText(s.track)}</span>
         ${watchLink(s.id, videos)}
       </div>
@@ -785,11 +757,11 @@
     const m0 = document.getElementById('m0grid');
     if(m0 && data.module0){
       m0.innerHTML = data.module0.sessions.map(s=>`
-        <div class="m0s">
-          <div class="id">${esc(s.id)} ${watchLink(s.id, videos)}</div>
+        <a class="m0s" href="lessons/${esc(s.id)}.html">
+          <div class="id">${esc(s.id)}${videos[s.id] ? ' ▶' : ''}</div>
           <h5>${esc(s.title)}</h5>
           <p>${esc(s.control || s.risk || '')}</p>
-        </div>`).join('');
+        </a>`).join('');
     }
 
     host.innerHTML = data.functions.map(fn=>`

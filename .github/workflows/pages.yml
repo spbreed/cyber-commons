@@ -8,7 +8,11 @@ on:
       - main
       - 'claude/**'
     paths:
+      # anything that can change what the site shows
       - 'site/**'
+      - 'lessons/**'
+      - 'curriculum/labs.json'
+      - 'scripts/build_site.py'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -26,6 +30,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build lesson pages
+        run: |
+          pip install --quiet markdown
+          python3 scripts/build_site.py
+          # if the commit did not include the regenerated pages, say so loudly
+          if ! git diff --quiet -- site/lessons; then
+            echo "::warning::site/lessons was out of date and has been rebuilt for this deploy."
+            echo "::warning::Run 'python3 scripts/build_site.py' before committing to keep the repo in sync."
+          fi
 
       - name: Validate curriculum + videos data
         run: |
