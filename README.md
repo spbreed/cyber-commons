@@ -9,7 +9,7 @@ Every lab runs on **open-source tooling (CNCF / Linux Foundation)** and
 **open-weight models (Llama, Kimi, GLM)**. No licence, no vendor, **no
 frontier-lab account**. Total cost to complete the curriculum: **$0**.
 
-🌐 **[Live site](https://spbreed.github.io/Cyber-harness-eval/)** (needs a one-time Pages enable — see [Publishing](#publishing-the-site)) · 📚 [Curriculum](curriculum/) · 🧪 [Labs](labs/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
+🌐 **[cyber-commons live site](https://spbreed.github.io/cyber-commons/)** · 📚 [Curriculum](curriculum/) · 🧪 [Labs](labs/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
 
 ---
 
@@ -79,7 +79,7 @@ The topics don't change with grade; the accountability does.
 ## Quick start
 
 ```bash
-git clone <this repo> && cd cybercommons
+git clone https://github.com/spbreed/cyber-commons && cd cyber-commons
 
 # 1. get a model — local and free (see MODELS.md for hosted/free-tier options)
 curl -fsSL https://ollama.com/install.sh | sh
@@ -165,29 +165,16 @@ python3 scripts/link_video.py --session A2.5 --youtube-id <id>
 python3 scripts/link_video.py --list        # which of the 104 chapters still need recording
 ```
 
-## Publishing the site
+## The site
 
-The site deploys automatically from [`site/`](site) on every push — but GitHub
-Pages has to be switched on once, by a repo admin:
+Live at **<https://spbreed.github.io/cyber-commons/>**, deployed straight from
+[`site/`](site) by [`pages.yml`](.github/workflows/pages.yml) on every push.
 
-**Settings → Pages → Source: `GitHub Actions`**
-
-A workflow cannot do this for you: the built-in `GITHUB_TOKEN` gets
-*"Resource not accessible by integration"* when it tries to create the Pages
-site, because site creation requires repo admin. Note also that **Pages on a
-private repository requires a paid plan** — on GitHub Free, make the repo public
-first (which this project wants to be anyway, being a commons).
-
-Once enabled, the URL is:
-
-```
-https://spbreed.github.io/Cyber-harness-eval/     # current repo name
-https://spbreed.github.io/cybercommons/           # after renaming the repo
-```
-
-The [`pages.yml`](.github/workflows/pages.yml) workflow validates the curriculum
-data first — it fails the build if `videos.json` references a session id that
-doesn't exist — then publishes `site/`.
+The workflow validates the curriculum data before publishing — it fails the build
+if `videos.json` references a session id that doesn't exist in
+`curriculum.json`, so a bad video link can never reach the site. The page renders
+its curriculum from that same JSON, which is why the docs and the site cannot
+drift apart.
 
 ## Repository layout
 

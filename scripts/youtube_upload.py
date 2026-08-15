@@ -31,7 +31,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
-SITE_URL = os.environ.get("SITE_URL", "")
+SITE_URL = os.environ.get("SITE_URL", "https://spbreed.github.io/cyber-commons/")
 
 TOKEN_URL = "https://oauth2.googleapis.com/token"
 UPLOAD_URL = "https://www.googleapis.com/upload/youtube/v3/videos"
