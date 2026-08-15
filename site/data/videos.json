@@ -1,0 +1,5 @@
+{
+ "_note": "Registry of published lightboard recordings. Written by scripts/link_video.py and by the publish-video GitHub Action after a successful YouTube upload. Keys are session ids from curriculum.json (e.g. 'A2.5', 'M0.1'). The website renders a Watch link on any chapter present here.",
+ "playlist": "",
+ "videos": {}
+}

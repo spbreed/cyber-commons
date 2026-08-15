@@ -1,0 +1,98 @@
+name: Publish lightboard recording
+
+# Two ways to publish a chapter recording:
+#
+#  1. Upload the file to the repo under recordings/<SESSION>.mp4 (e.g.
+#     recordings/A2.5.mp4) and push — this workflow uploads it to YouTube and
+#     links it to the chapter automatically.
+#
+#  2. Run it manually (Actions → Publish lightboard recording → Run workflow)
+#     with a session id and either a recording path or an existing YouTube id.
+#
+# Either way it ends by committing site/data/videos.json, which triggers the
+# Pages deploy so the ▶ Watch link appears on the right chapter.
+
+on:
+  push:
+    branches: [main]
+    paths: ['recordings/**']
+  workflow_dispatch:
+    inputs:
+      session:
+        description: 'Curriculum session id (e.g. A2.5, M0.1)'
+        required: true
+      file:
+        description: 'Path to the recording in the repo (leave blank if using youtube_id)'
+        required: false
+      youtube_id:
+        description: 'Existing YouTube video id (skips upload)'
+        required: false
+      privacy:
+        description: 'public | unlisted | private'
+        required: false
+        default: 'unlisted'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # --- manual run with an existing YouTube id: just link it ---------------
+      - name: Link existing video
+        if: github.event_name == 'workflow_dispatch' && inputs.youtube_id != ''
+        run: |
+          python3 scripts/link_video.py --session "${{ inputs.session }}" \
+            --youtube-id "${{ inputs.youtube_id }}"
+
+      # --- manual run with a file: upload then link --------------------------
+      - name: Upload recording (manual)
+        if: github.event_name == 'workflow_dispatch' && inputs.youtube_id == ''
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          python3 scripts/youtube_upload.py \
+            --session "${{ inputs.session }}" \
+            --file "${{ inputs.file }}" \
+            --privacy "${{ inputs.privacy }}"
+
+      # --- push to recordings/: derive the session id from the filename ------
+      - name: Upload new recordings (push)
+        if: github.event_name == 'push'
+        env:
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: |
+          set -euo pipefail
+          # every recording added in this push, named <SESSION>.<ext>
+          FILES=$(git diff --name-only --diff-filter=A ${{ github.event.before }} ${{ github.sha }} -- recordings/ || true)
+          if [ -z "$FILES" ]; then echo "no new recordings"; exit 0; fi
+          for f in $FILES; do
+            base=$(basename "$f"); sid="${base%.*}"
+            echo "::group::publishing $sid from $f"
+            python3 scripts/youtube_upload.py --session "$sid" --file "$f" --privacy unlisted
+            echo "::endgroup::"
+          done
+
+      - name: Commit videos.json
+        run: |
+          if git diff --quiet -- site/data/videos.json; then
+            echo "no registry change"; exit 0
+          fi
+          git config user.name  "cyber-commons-bot"
+          git config user.email "noreply@github.com"
+          git add site/data/videos.json
+          git commit -m "chore(video): link recording to curriculum chapter"
+          git push

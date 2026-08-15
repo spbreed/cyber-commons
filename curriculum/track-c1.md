@@ -1,0 +1,128 @@
+# Track C1 — The Pentester / Red Teamer
+
+**Function C · Offensive Security & Research**  
+*The function that finds out what is actually true, as opposed to what the architecture diagram claims.*
+
+**Job titles:** Penetration Tester, Red Team Operator, Offensive Security Engineer
+
+**What changes:** You become a scenario architect rather than a tool runner. And you acquire an entirely new target class: the agent itself.
+
+**Autonomy focus:** You test at L3 the systems deployed at L2.5, because that's where they'll be next quarter.
+
+**Deliverable:** A full agent red-team engagement report against an internal agentic workflow, with reproducible traces.
+
+> Prerequisite: [Module 0](module-0.md). Every session below ships commands that actually execute — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+
+---
+
+### C1.1 — Agentic offensive workflow
+
+`AI for Security`
+
+- **Risk** — Payload suggestions instead of attack chains.
+- **Control** — Feed the harness full target context before it swings.
+- **Lab** — Drive a planner/executor pair against a local vulnerable target — never the open internet.
+- **Tools** — `CAI`, `Metasploit`, `InterCode-CTF`
+- **Models** — `Kimi K2`, `GLM-4.6`
+
+**Run it** — Drive a planner/executor pair against a local target you own.
+
+```bash
+cd labs/c1-redteam
+docker compose up -d dvwa juice-shop     # local targets only
+python3 offensive_loop.py --target http://localhost:3000 --model $MODEL --scope scope.yaml
+```
+
+*Expect:* Attack chains, not payload suggestions. scope.yaml is enforced by the harness — out-of-scope hosts are refused.
+
+---
+
+### C1.2 — Sandboxing the offensive harness
+
+`Security of AI`
+
+- **Risk** — Your harness is the most dangerous one in the building.
+- **Control** — Exploit isolation, target scoping, authorization and legal guardrails.
+- **Lab** — Air-gap the offensive lab and prove no route to anything you don't own.
+- **Tools** — `Firecracker`, `Squid`
+
+---
+
+### C1.3 — Red-teaming agents: the injection surface
+
+`Security of AI`
+
+- **Risk** — Retrieval poisoning, tool-output poisoning, multi-turn manipulation.
+- **Control** — Systematic injection campaigns with measured success rates.
+- **Lab** — Run garak + promptfoo campaigns against your own production agent.
+- **Tools** — `garak`, `promptfoo`
+- **Models** — `Llama 3.3`
+
+**Run it** — Run a real injection campaign and get a success rate.
+
+```bash
+pip install garak promptfoo
+cd labs/c1-redteam
+garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject,dan,encoding
+promptfoo eval -c redteam.yaml
+```
+
+*Expect:* A measured attack-success-rate per probe family, per model — comparable across Llama / GLM / Kimi.
+
+---
+
+### C1.4 — Red-teaming agents: the identity surface
+
+`Security of AI`
+
+- **Risk** — Confused deputy, token replay, scope escalation through delegation chains.
+- **Control** — Test whether revocation actually revokes.
+- **Lab** — Attack the A2 delegation chain; prove or disprove attenuation.
+- **Tools** — `Keycloak`, `SPIRE`
+
+---
+
+### C1.5 — Red-teaming agents: the containment surface
+
+`Security of AI`
+
+- **Risk** — Sandbox escape, egress bypass, path-guard evasion.
+- **Control** — Prove the stop lever fires under load.
+- **Lab** — Attack the A3 sandbox from inside; measure what leaves.
+- **Tools** — `Falco`, `gVisor`
+
+---
+
+### C1.6 — Attacking evaluation itself
+
+`Security of AI`
+
+- **Risk** — If the eval can be fooled, the assurance is theatre.
+- **Control** — Eval gaming, sandbagging, contamination and judge manipulation as test cases.
+- **Lab** — Game the B2.10 harness deliberately, then close the hole you used.
+- **Tools** — `Cyber Commons eval harness`
+- **Models** — `Kimi K2`
+
+**Run it** — Game the eval deliberately, then close the hole you used.
+
+```bash
+cd labs/b2.10-eval-harness
+python3 ../c1-redteam/game_eval.py --strategy sandbag
+python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
+scripts/vulnbench.sh compare   # see the inflated number
+```
+
+*Expect:* You reproduce an inflated score, then patch the harness so the same trick fails.
+
+---
+
+### C1.7 — Reporting agentic findings
+
+`both directions`
+
+- **Risk** — The vulnerability is emergent behaviour, not a line of code.
+- **Control** — Reproducibility requirements for probabilistic systems.
+- **Lab** — Write a finding a CISO can act on, with a replayable trace.
+- **Tools** — `OpenTelemetry`
+
+---

@@ -1,4 +1,4 @@
-# GitHub Copilot instructions — Cyber Harness Eval
+# GitHub Copilot instructions — Cyber Commons
 
 This repo benchmarks an AI security harness (Mantis-style) against vulnerability
 ground truth. When asked to run, benchmark, or evaluate the harness, drive

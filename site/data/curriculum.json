@@ -1,0 +1,262 @@
+{
+  "version": "2.0",
+  "updated": "2026-08-15",
+  "note": "Single source of truth for the Cyber Commons syllabus. The website renders from this file; curriculum/*.md carry the full lab text. Session ids are stable — videos.json keys off them.",
+  "vocabulary": {
+    "planes": ["decision — the model infers", "control — identity, routing, policy decide what is permitted", "action — tools and APIs change state"],
+    "autonomy": ["L1 human-triggered", "L2 human-in-the-loop", "L2.5 semi-autonomous (bounded self-execution on low-risk actions)", "L3 bounded autonomous"],
+    "maturity": ["Awareness", "Governance", "Engineering", "Navigation", "Trust"]
+  },
+  "module0": {
+    "id": "M0",
+    "title": "The Shared Core",
+    "subtitle": "Everyone. Five sessions. No exceptions, no substitutions.",
+    "blurb": "A common language, so that when the IAM engineer says \"attenuated delegation\" the GRC analyst knows what evidence to ask for.",
+    "exit": "Given a one-paragraph description of an agentic workflow, name its autonomy level, its blast radius, and the one control you would add first.",
+    "sessions": [
+      {"id": "M0.1", "title": "What an agent actually is", "track": "both", "risk": "\"The model did it\" is treated as a root cause, so the real control gap is never found.", "control": "Separate the three planes; locate autonomy in what the model's output is allowed to trigger.", "lab": "Run the same prompt through a bare model, a copilot loop and a tool-enabled harness on local GLM-4.6 — watch which one can actually change state.", "tools": ["Ollama", "llama.cpp"], "models": ["GLM-4.6", "Llama 3.3"]},
+      {"id": "M0.2", "title": "The loop", "track": "both", "risk": "A harness with no verifier converges on plausible-looking garbage.", "control": "Every loop has a context, a toolset, a verifier and a budget — the verifier is the security control.", "lab": "Build a 40-line plan→act→verify→stop loop; break the verifier and watch the loop confidently finish wrong.", "tools": ["Python", "Ollama"], "models": ["Kimi K2", "GLM-4.6"]},
+      {"id": "M0.3", "title": "The autonomy ladder", "track": "both", "risk": "Workflows are promoted to autonomy on vibes, then can't be demoted.", "control": "L1→L2→L2.5→L3 with named promotion evidence and a named demotion authority.", "lab": "Walk one real workflow up all four rungs; write the promotion criteria that gate each step.", "tools": ["kagent"], "models": []},
+      {"id": "M0.4", "title": "Prompt injection, once, properly", "track": "secure", "risk": "Untrusted text in retrieval, tool output and scanner responses hijacks intent — everywhere, not just chat.", "control": "Treat it as a control-plane problem: untrusted-content tagging, output allowlisting, no shell from untrusted context.", "lab": "Poison a retrieved document and a tool response against a local model; then re-run with content tagging and measure the drop.", "tools": ["garak", "promptfoo"], "models": ["Llama 3.3", "Llama Guard 4"]},
+      {"id": "M0.5", "title": "Who owns what", "track": "both", "risk": "Nobody holds stop authority, so nobody exercises it.", "control": "Identity owns the control plane; business units own the grants; security owns stop authority and the evidence.", "lab": "Fill in the ownership map for your own org and find your row.", "tools": [], "models": []}
+    ]
+  },
+  "functions": [
+    {
+      "id": "A",
+      "title": "Security Architecture & Platform",
+      "blurb": "The people who decide what is structurally possible. If they get it wrong, no amount of downstream diligence recovers it.",
+      "tracks": [
+        {
+          "id": "A1", "title": "The Security Architect", "titles": "Security Architect, Principal Security Engineer, Head of Security Architecture",
+          "changes": "You stop reviewing designs and start designing the control plane other people's agents run inside. Your artefact stops being a document and becomes a runtime.",
+          "autonomy": "Designs must be safe at L3 even when deployed at L2.5.",
+          "deliverable": "A reference architecture and a blast-radius measurement for one real business workflow.",
+          "sessions": [
+            {"id": "A1.1", "title": "Architecture review when the system acts", "track": "secure", "risk": "PDF threat models go stale the moment the agent's tools change.", "control": "Living, continuously re-evaluated threat models over the three planes separately.", "lab": "Generate a threat model from a running agent's actual tool manifest, then diff it after adding one tool.", "tools": ["OWASP Threat Dragon", "kagent"], "models": ["GLM-4.6"]},
+            {"id": "A1.2", "title": "Designing the agent control plane", "track": "secure", "risk": "Controls assumed to live 'in the agent' are advisory, not enforced.", "control": "Identity fabric → agentic gateway → policy decision point → sandboxed runtime → audited action plane.", "lab": "Stand the whole reference stack up on kind: SPIRE + agentgateway + OPA + a sandboxed runner.", "tools": ["kind", "SPIRE", "agentgateway", "OPA"], "models": ["Llama 3.3"]},
+            {"id": "A1.3", "title": "Authorization models that make bad grants impossible", "track": "secure", "risk": "RBAC has no unit small enough to express the grant you actually meant.", "control": "ReBAC/ABAC with time-scoped delegation and attenuation by construction.", "lab": "Model the same grant in flat RBAC and in OpenFGA; prove the over-privileged grant is unrepresentable.", "tools": ["OpenFGA", "OPA"], "models": []},
+            {"id": "A1.4", "title": "Blast radius as a design metric", "track": "secure", "risk": "Blast radius is asserted in review, never measured.", "control": "Make it a number that appears in the design review.", "lab": "Measure reachable actions under flat RBAC vs attenuated delegation while an injection fires.", "tools": ["OpenFGA", "SPIRE"], "models": ["Kimi K2"]},
+            {"id": "A1.5", "title": "Multi-agent topology", "track": "secure", "risk": "Fan-out concentrates authority somewhere nobody drew.", "control": "Planner/executor/critic splits with delegation-depth limits.", "lab": "Build a 3-agent topology in kagent and chart where authority actually accumulates.", "tools": ["kagent"], "models": ["GLM-4.6", "Llama 3.3"]},
+            {"id": "A1.6", "title": "Build vs buy", "track": "both", "risk": "Outsourcing the control plane to a vendor you cannot audit.", "control": "Buy the commodity, build the boundary, never outsource identity or stop authority.", "lab": "Score three gateway options against a fixed control checklist.", "tools": ["agentgateway", "Envoy"], "models": []},
+            {"id": "A1.7", "title": "Model routing architecture", "track": "both", "risk": "The router fails open to a weaker model under load — a silent downgrade of every guardrail.", "control": "Treat tier selection as a security decision with explicit fail-closed defaults.", "lab": "Route across GLM-4.6 / Llama / Kimi with LiteLLM, then force a failure and watch what it falls back to.", "tools": ["LiteLLM", "vLLM"], "models": ["GLM-4.6", "Llama 3.3", "Kimi K2"]}
+          ]
+        },
+        {
+          "id": "A2", "title": "The Identity & Non-Human Identity Engineer", "titles": "IAM Engineer, NHI Lead, Identity Architect, Workload Identity Engineer",
+          "changes": "You have a new population of principals that outnumbers your humans, changes hourly, and inherits credentials nobody granted it. The most genuinely new material in the programme.",
+          "autonomy": "Identity is the control that makes L2.5 defensible; without it you are running L3 and calling it L2.",
+          "deliverable": "A working three-hop delegation chain with proven attenuation, and a rollback of one agent's access without collateral.",
+          "sessions": [
+            {"id": "A2.1", "title": "\"Who is calling?\"", "track": "secure", "risk": "You cannot answer the first question of every investigation.", "control": "A taxonomy: user-agent vs workload identity, sandboxed vs not, managed vs personal.", "lab": "Classify every agent in your lab and record what proves each claim.", "tools": ["SPIRE"], "models": []},
+            {"id": "A2.2", "title": "The bootstrap problem", "track": "secure", "risk": "Proving identity before you hold a credential — usually solved with a long-lived secret in a file.", "control": "Workload attestation: SPIFFE SVIDs, instance identity documents, projected SA tokens, re-attestation on rotation.", "lab": "Issue an SVID to a workload with SPIRE and watch it re-attest after rotation — zero static secrets.", "tools": ["SPIFFE/SPIRE", "kind"], "models": []},
+            {"id": "A2.3", "title": "Shadow Autonomy", "track": "secure", "risk": "Agents executing under inherited human credentials — your audit trail is already wrong.", "control": "Detect it first, then separate the principal; revocation is impossible until you can name the actor.", "lab": "Find agent-vs-human credential use in logs by behavioural signature; then split the principal.", "tools": ["Keycloak", "SPIRE"], "models": ["Llama 3.3"]},
+            {"id": "A2.4", "title": "The NHI governance gap", "track": "secure", "risk": "Revoking one misbehaving agent breaks forty others.", "control": "Enrolment, ownership, scope, expiry, attribution — an agent registry with honest enforcement limits.", "lab": "Build the registry, then revoke exactly one agent and prove no collateral.", "tools": ["Keycloak", "SPIRE"], "models": []},
+            {"id": "A2.5", "title": "Delegation that survives audit", "track": "secure", "risk": "On-behalf-of implemented as impersonation — the chain is unprovable afterwards.", "control": "RFC 8693 token exchange with the `act` claim as a real delegation chain.", "lab": "Build a three-hop chain in Keycloak; decode the `act` claims and show attenuation at each hop.", "tools": ["Keycloak", "RFC 8693"], "models": []},
+            {"id": "A2.6", "title": "The agentic gateway", "track": "secure", "risk": "Secrets end up in agent code because there was nowhere else to put them.", "control": "Gateway-side credential exchange: virtual keys, JWKS validation, identity mapping.", "lab": "Put agentgateway in front of an MCP server and move every credential out of the agent.", "tools": ["agentgateway", "kmcp"], "models": ["GLM-4.6"]},
+            {"id": "A2.7", "title": "Systems that don't understand agents", "track": "secure", "risk": "Legacy services see only the human's token and grant everything.", "control": "Token translation plus action-class blocking at the boundary.", "lab": "Allow reads, deny protected-branch merges by token type, at the gateway.", "tools": ["agentgateway", "OPA"], "models": []},
+            {"id": "A2.8", "title": "Just-in-time authority", "track": "secure", "risk": "Standing access means an injection always has something to spend.", "control": "Human-initiated credential release, change-window binding, maker/checker under agent attribution.", "lab": "Cut standing access to zero and issue authority only inside a change window.", "tools": ["Keycloak", "Vault (OSS)"], "models": []},
+            {"id": "A2.9", "title": "The classic failures", "track": "secure", "risk": "Confused deputy, token replay, shared static credentials, over-broad scope.", "control": "Reproduce each one, then close it.", "lab": "Exploit all four in the lab, then re-run against the hardened chain.", "tools": ["SPIRE", "Keycloak"], "models": ["Kimi K2"]}
+          ]
+        },
+        {
+          "id": "A3", "title": "The Platform & Cloud Security Engineer", "titles": "Cloud Security Engineer, Platform Security Engineer, Infrastructure Security",
+          "changes": "The sandbox is your product. Permission prompts inside the agent are somebody else's defence-in-depth; the boundary is yours.",
+          "autonomy": "Containment is what lets you say yes to L2.5 without pretending the agent is trustworthy.",
+          "deliverable": "A hardened runtime that survives a deliberate injected payload with a measured blast radius of zero outside the sandbox.",
+          "sessions": [
+            {"id": "A3.1", "title": "Sandboxing is the perimeter", "track": "secure", "risk": "Tier chosen by convenience, not by action class.", "control": "Process → container → microVM → ephemeral workstation → air-gapped runner, chosen deliberately.", "lab": "Run the same agent in three tiers and measure escape surface in each.", "tools": ["gVisor", "Firecracker", "Docker"], "models": ["Llama 3.3"]},
+            {"id": "A3.2", "title": "Egress control for agents", "track": "secure", "risk": "An agent with unrestricted egress has no other meaningful control.", "control": "Allowlists, inspecting proxies, DNS conditional forwarding, data perimeters.", "lab": "Put a Squid allowlist in front of an agent and watch exfiltration fail.", "tools": ["Squid", "Cilium", "Kyverno"], "models": ["GLM-4.6"]},
+            {"id": "A3.3", "title": "Filesystem and path guards", "track": "secure", "risk": "The agent iterating on code wanders into credentials.", "control": "Workspace scoping, mount discipline, ephemeral state.", "lab": "Attempt credential read from inside the sandbox; close it with mount policy.", "tools": ["Docker", "Kyverno"], "models": []},
+            {"id": "A3.4", "title": "MCP is not a security boundary", "track": "secure", "risk": "Connector chaining as privilege escalation; unpinned servers.", "control": "Server scanning, version pinning with hash verification, self-hosting.", "lab": "Chain two MCP connectors to escalate, then pin and scan to stop it.", "tools": ["kmcp", "MCP Inspector", "Sigstore"], "models": ["GLM-4.6"]},
+            {"id": "A3.5", "title": "Tool permission models", "track": "secure", "risk": "The confused deputy at the tool layer.", "control": "Capability scoping, allowlisted actions, structured output contracts, read-only defaults.", "lab": "Redesign a dangerous tool so the dangerous call doesn't exist.", "tools": ["kmcp", "OPA"], "models": []},
+            {"id": "A3.6", "title": "Runtime containment levers", "track": "secure", "risk": "The stop lever is built during the incident.", "control": "Throttle, scope-reduce, reroute, force HITL, hard stop — built and tested first.", "lab": "Wire all five levers and prove each fires under load.", "tools": ["Falco", "Kyverno", "kagent"], "models": []},
+            {"id": "A3.7", "title": "The unmanaged agent problem", "track": "secure", "risk": "Personal, non-sandboxed agents on managed endpoints.", "control": "Endpoint + secure web gateway, behavioural monitoring — with an honest account of the gap.", "lab": "Detect an unmanaged local agent by its egress and filesystem signature.", "tools": ["Falco", "osquery"], "models": []},
+            {"id": "A3.8", "title": "Environment separation", "track": "secure", "risk": "\"The agent knows not to\" is not separation.", "control": "Dev-agent credentials structurally unable to reach production.", "lab": "Prove the dev SVID cannot mint a prod token, by construction.", "tools": ["SPIRE", "OPA"], "models": []}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "title": "Product & Application Security",
+      "blurb": "Closest to the developers, and therefore first to meet agents at scale — usually before anyone approved it.",
+      "tracks": [
+        {
+          "id": "B1", "title": "The AppSec Engineer / Code Reviewer", "titles": "AppSec Engineer, Product Security Engineer, Secure Code Reviewer",
+          "changes": "Your review moves left of the PR and your throughput stops being the bottleneck. Judgment becomes the bottleneck, which is a better problem.",
+          "autonomy": "Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.",
+          "deliverable": "An agentic review workflow running as a CI gate with published precision and escape metrics.",
+          "sessions": [
+            {"id": "B1.1", "title": "Agentic SAST", "track": "defend", "risk": "Pattern matching floods the queue; the false-positive rate is what actually changed.", "control": "Reachability, exploitability and cross-file reasoning on top of deterministic rules.", "lab": "Run OpenGrep for candidates, then have a local model reason about reachability — measure FP drop.", "tools": ["OpenGrep", "Semgrep OSS", "CodeQL"], "models": ["GLM-4.6", "Kimi K2"]},
+            {"id": "B1.2", "title": "Context engineering for code review", "track": "defend", "risk": "Context stuffing blows the budget and buries the sink.", "control": "Repo maps, prompt caching, tool-mediated retrieval over stuffing.", "lab": "Build the canonical triage bundle and compare accuracy vs a stuffed context.", "tools": ["ripgrep", "tree-sitter"], "models": ["GLM-4.6"]},
+            {"id": "B1.3", "title": "Patch generation and local validation", "track": "defend", "risk": "Unverified agent patches destroy trust faster than missed findings.", "control": "Build and test the fix locally *before* raising the PR.", "lab": "Generate → compile → test → only then open the PR; measure acceptance rate.", "tools": ["Semgrep Autofix", "pytest"], "models": ["Kimi K2"]},
+            {"id": "B1.4", "title": "What frontier SAST makes redundant, and what it doesn't", "track": "defend", "risk": "Over-claiming replacement of pentest and business-logic testing.", "control": "Honest scoping of where static reasoning substitutes and where it cannot.", "lab": "Run the same target through SAST agent and DAST; chart what only one of them found.", "tools": ["OWASP ZAP", "OpenGrep"], "models": ["Llama 3.3"]},
+            {"id": "B1.5", "title": "Injection in your own harness", "track": "secure", "risk": "Your harness ingests untrusted PR code, dependencies and scanner output.", "control": "Untrusted-content tagging, output allowlisting, never shell or write to the target app.", "lab": "Plant an injection in a PR diff and watch your reviewer obey it — then close it.", "tools": ["garak", "Llama Guard 4"], "models": ["Llama Guard 4"]},
+            {"id": "B1.6", "title": "Securing the developers' agents", "track": "secure", "risk": "Secrets in prompts and transcripts; CI credentials reachable from an agent session.", "control": "Scan the agent footprint the way you scan the repo.", "lab": "Grep an agent transcript and memory files for live secrets; add a pre-commit gate.", "tools": ["gitleaks", "TruffleHog"], "models": []},
+            {"id": "B1.7", "title": "Metrics per SDLC stage", "track": "defend", "risk": "A workflow is promoted without numbers to justify it.", "control": "Precision, time-to-triage, patch acceptance rate, escape rate.", "lab": "Publish the four numbers for your own review agent.", "tools": ["Cyber Commons eval harness"], "models": []}
+          ]
+        },
+        {
+          "id": "B2", "title": "The Security Automation / Harness Engineer", "titles": "Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet",
+          "changes": "This is a new job. You build the loops every other track runs. SRE for the security function's agents.",
+          "autonomy": "You are the person who builds the L2.5 boundary everyone else operates inside.",
+          "deliverable": "A reusable harness scaffold adopted by at least two other tracks.",
+          "sessions": [
+            {"id": "B2.1", "title": "Plan–act–verify", "track": "defend", "risk": "Writing the code instead of writing the loop.", "control": "The minimum viable security harness: context, toolset, verifier, budget.", "lab": "Build the scaffold; swap the model underneath without touching the loop.", "tools": ["Python", "LiteLLM"], "models": ["GLM-4.6", "Llama 3.3", "Kimi K2"]},
+            {"id": "B2.2", "title": "Verify signals that don't lie", "track": "defend", "risk": "LLM-as-judge from the same family as the generator — the loop grades its own homework.", "control": "Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists.", "lab": "Score the same findings with a compiler oracle and with a same-family judge; show the gap.", "tools": ["pytest", "Checkov"], "models": ["GLM-4.6"]},
+            {"id": "B2.3", "title": "Tool design", "track": "secure", "risk": "The dangerous call exists and is merely blocked.", "control": "Read-only defaults, structured output contracts, allowlisted actions — design it out.", "lab": "Refactor a shell tool into three narrow, structured tools.", "tools": ["kmcp"], "models": []},
+            {"id": "B2.4", "title": "Budgets and stop conditions", "track": "defend", "risk": "Every loop needs a reason to stop that isn't \"it finished\".", "control": "Step limits, goal timeouts, token ceilings, spend circuit breakers.", "lab": "Make a loop diverge, then bound it four different ways.", "tools": ["Python"], "models": ["Llama 3.3"]},
+            {"id": "B2.5", "title": "Model tiering and routing inside the loop", "track": "defend", "risk": "Paying frontier prices for executor-grade steps.", "control": "Cheap executor, escalated reasoner, advisor at decision points.", "lab": "Route Llama-executor → GLM-reasoner with LiteLLM and attribute spend per run.", "tools": ["LiteLLM", "vLLM"], "models": ["Llama 3.3", "GLM-4.6", "Kimi K2"]},
+            {"id": "B2.6", "title": "Sub-agents and delegation depth", "track": "secure", "risk": "Authority inherited silently from parent to child agent.", "control": "Fan-out control, recursion budgets, explicit authority inheritance.", "lab": "Cap delegation depth and prove a grandchild agent cannot exceed its parent.", "tools": ["kagent", "SPIRE"], "models": []},
+            {"id": "B2.7", "title": "Failure taxonomy", "track": "defend", "risk": "Loop divergence, objective drift, reward hacking, silent truncation, tool thrash.", "control": "Recognise each from a trace.", "lab": "Read five real traces and name the failure in each.", "tools": ["OpenTelemetry"], "models": []},
+            {"id": "B2.8", "title": "Self-improving scaffolds", "track": "secure", "risk": "A harness that rewrites its own config makes the fitness function the security control.", "control": "Sandbox the mutation, keep only measured gains, pin the fitness function.", "lab": "Let a scaffold mutate itself in a sandbox and keep only what the oracle confirms.", "tools": ["Python", "Docker"], "models": ["Kimi K2"]},
+            {"id": "B2.9", "title": "Idempotency, replay and rollback", "track": "defend", "risk": "Any agent action you cannot replay you cannot investigate.", "control": "Design requirements, not afterthoughts.", "lab": "Replay a full agent run from the trace and reproduce its decision.", "tools": ["OpenTelemetry"], "models": []},
+            {"id": "B2.10", "title": "Evaluating a security harness", "track": "defend", "featured": true, "risk": "A single successful run hides how unreliable an agent really is; a hallucinated finding looks exactly like a real one.", "control": "Ground truth + blind protocol + execution-verified scoring; report reliability (pass^k) not just capability (pass@k); never quote schema conformance as accuracy.", "lab": "The full Cyber Commons eval harness: build 552-row ground truth from SecLLMHolmes + TerraGoat/Checkov, run a blind model audit, score with expert-proxy + dual judges, and compare Llama / GLM / Kimi as the backing model.", "tools": ["Cyber Commons eval harness", "Checkov", "CyberGym", "Inspect"], "models": ["Llama 3.3", "GLM-4.6", "Kimi K2"], "repo": "labs/b2.10-eval-harness"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "title": "Offensive Security & Research",
+      "blurb": "The function that finds out what is actually true, as opposed to what the architecture diagram claims.",
+      "tracks": [
+        {
+          "id": "C1", "title": "The Pentester / Red Teamer", "titles": "Penetration Tester, Red Team Operator, Offensive Security Engineer",
+          "changes": "You become a scenario architect rather than a tool runner. And you acquire an entirely new target class: the agent itself.",
+          "autonomy": "You test at L3 the systems deployed at L2.5, because that's where they'll be next quarter.",
+          "deliverable": "A full agent red-team engagement report against an internal agentic workflow, with reproducible traces.",
+          "sessions": [
+            {"id": "C1.1", "title": "Agentic offensive workflow", "track": "defend", "risk": "Payload suggestions instead of attack chains.", "control": "Feed the harness full target context before it swings.", "lab": "Drive a planner/executor pair against a local vulnerable target — never the open internet.", "tools": ["CAI", "Metasploit", "InterCode-CTF"], "models": ["Kimi K2", "GLM-4.6"]},
+            {"id": "C1.2", "title": "Sandboxing the offensive harness", "track": "secure", "risk": "Your harness is the most dangerous one in the building.", "control": "Exploit isolation, target scoping, authorization and legal guardrails.", "lab": "Air-gap the offensive lab and prove no route to anything you don't own.", "tools": ["Firecracker", "Squid"], "models": []},
+            {"id": "C1.3", "title": "Red-teaming agents: the injection surface", "track": "secure", "risk": "Retrieval poisoning, tool-output poisoning, multi-turn manipulation.", "control": "Systematic injection campaigns with measured success rates.", "lab": "Run garak + promptfoo campaigns against your own production agent.", "tools": ["garak", "promptfoo"], "models": ["Llama 3.3"]},
+            {"id": "C1.4", "title": "Red-teaming agents: the identity surface", "track": "secure", "risk": "Confused deputy, token replay, scope escalation through delegation chains.", "control": "Test whether revocation actually revokes.", "lab": "Attack the A2 delegation chain; prove or disprove attenuation.", "tools": ["Keycloak", "SPIRE"], "models": []},
+            {"id": "C1.5", "title": "Red-teaming agents: the containment surface", "track": "secure", "risk": "Sandbox escape, egress bypass, path-guard evasion.", "control": "Prove the stop lever fires under load.", "lab": "Attack the A3 sandbox from inside; measure what leaves.", "tools": ["Falco", "gVisor"], "models": []},
+            {"id": "C1.6", "title": "Attacking evaluation itself", "track": "secure", "risk": "If the eval can be fooled, the assurance is theatre.", "control": "Eval gaming, sandbagging, contamination and judge manipulation as test cases.", "lab": "Game the B2.10 harness deliberately, then close the hole you used.", "tools": ["Cyber Commons eval harness"], "models": ["Kimi K2"]},
+            {"id": "C1.7", "title": "Reporting agentic findings", "track": "both", "risk": "The vulnerability is emergent behaviour, not a line of code.", "control": "Reproducibility requirements for probabilistic systems.", "lab": "Write a finding a CISO can act on, with a replayable trace.", "tools": ["OpenTelemetry"], "models": []}
+          ]
+        },
+        {
+          "id": "C2", "title": "The Security Researcher", "titles": "Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher",
+          "changes": "A research function that used to sit adjacent to the CISO org becomes central to it. This track produces the primitives the other eleven consume.",
+          "autonomy": "You deliberately operate at L3 in isolated environments so the rest of the org never has to.",
+          "deliverable": "One reproducible research artefact with a named control implication, handed to a platform or AppSec track.",
+          "sessions": [
+            {"id": "C2.1", "title": "What research means in a CISO org", "track": "both", "risk": "Research with a publication outcome and no control outcome.", "control": "Choose problems that end in a deployable control; get funded.", "lab": "Write a one-page research charter with a named consuming track.", "tools": [], "models": []},
+            {"id": "C2.2", "title": "Model-layer research", "track": "secure", "risk": "Model cards read credulously.", "control": "Adversarial robustness, jailbreak taxonomy, refusal analysis, capability elicitation.", "lab": "Run a jailbreak taxonomy across Llama, GLM and Kimi and chart where they differ.", "tools": ["garak"], "models": ["Llama 3.3", "GLM-4.6", "Kimi K2"]},
+            {"id": "C2.3", "title": "Weight-level techniques", "track": "secure", "risk": "Claiming a capability was removed when it was only hidden.", "control": "Concept erasure and orthogonalisation on open weights — with honest claims.", "lab": "Attempt targeted unlearning on an open-weight model and try to elicit the capability back.", "tools": ["TransformerLens", "PyTorch"], "models": ["Llama 3.3"]},
+            {"id": "C2.4", "title": "Data-layer research", "track": "secure", "risk": "Memorisation, extraction, embedding inversion, index poisoning.", "control": "Measure extraction rates rather than assert privacy.", "lab": "Invert embeddings from a local vector store and recover source text.", "tools": ["Qdrant", "sentence-transformers"], "models": []},
+            {"id": "C2.5", "title": "Supply-chain research", "track": "secure", "risk": "Adapter and LoRA provenance, registry tampering, dependency confusion in agent ecosystems.", "control": "Verify provenance; sign and attest artefacts.", "lab": "Sign a model artefact with Sigstore and detect a tampered adapter.", "tools": ["Sigstore", "in-toto", "OWASP AIBOM"], "models": []},
+            {"id": "C2.6", "title": "Building the research harness", "track": "defend", "risk": "Model effects and harness effects confounded.", "control": "Multi-backbone benchmarking with statistical honesty.", "lab": "Run one harness across three model families and separate the two effects.", "tools": ["Inspect", "Cyber Commons eval harness"], "models": ["Llama 3.3", "GLM-4.6", "Kimi K2"]},
+            {"id": "C2.7", "title": "Benchmark design and critique", "track": "defend", "risk": "Most published security benchmarks overstate real-world capability.", "control": "Contamination checks; adapt methodology to your own corpus.", "lab": "Contamination-check a public benchmark against a model's training window.", "tools": ["Cyber Commons eval harness"], "models": []},
+            {"id": "C2.8", "title": "From finding to control", "track": "both", "risk": "Research output the platform team cannot deploy.", "control": "Hand over something deployable and evidenceable; handle disclosure.", "lab": "Convert one finding into a Kyverno/OPA policy another track adopts.", "tools": ["OPA", "Kyverno"], "models": []},
+            {"id": "C2.9", "title": "Research as institutional capital", "track": "both", "risk": "Invisible work, uncredited function.", "control": "Publication, open-source release, a defensible public record.", "lab": "Release one artefact publicly with a reproducibility README.", "tools": ["git"], "models": []}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "title": "Security Operations",
+      "blurb": "Machine-speed decisions were already the problem here. Agents make it both worse and tractable.",
+      "tracks": [
+        {
+          "id": "D1", "title": "The SOC Analyst & Detection Engineer", "titles": "SOC Analyst (T1–T3), Detection Engineer, Threat Hunter, Threat Intelligence Analyst",
+          "changes": "You stop reading alerts and start compressing signal. And you acquire a new detection domain: agents behaving badly.",
+          "autonomy": "Triage and enrichment reach L2.5 quickly; containment actions stay L2.",
+          "deliverable": "A triage loop in production plus five detections covering agent misbehaviour.",
+          "sessions": [
+            {"id": "D1.1", "title": "From alert queue to loop operator", "track": "defend", "risk": "Supervising by re-reading everything the loop did.", "control": "Know what the loop must escalate and sample the rest.", "lab": "Run a triage loop over Wazuh alerts and supervise by exception.", "tools": ["Wazuh", "OpenSearch"], "models": ["GLM-4.6"]},
+            {"id": "D1.2", "title": "Context that makes triage work", "track": "defend", "risk": "Generic triage agents underperform your worst analyst.", "control": "Feed the baseline, known FPs, crown-jewel map and prior decisions.", "lab": "A/B a generic prompt vs a context-loaded one on the same alert set.", "tools": ["Wazuh"], "models": ["GLM-4.6", "Llama 3.3"]},
+            {"id": "D1.3", "title": "Agent-assisted detection engineering", "track": "defend", "risk": "Coverage gaps nobody mapped.", "control": "Detection-as-code with agents inside the CI loop.", "lab": "Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.", "tools": ["Sigma", "Wazuh"], "models": ["Kimi K2"]},
+            {"id": "D1.4", "title": "Detection engineering *for* agents", "track": "secure", "risk": "Scope drift, unusual tool sequencing, off-hours autonomous action.", "control": "Detections whose subject is a non-human principal.", "lab": "Write five detections for agent misbehaviour and fire each one.", "tools": ["Falco", "Sigma"], "models": []},
+            {"id": "D1.5", "title": "Agent telemetry as a data source", "track": "secure", "risk": "Prompts, traces, tool calls and approvals never reach the SIEM.", "control": "Onboard agent telemetry deliberately; decide retention.", "lab": "Ship OTEL agent traces into OpenSearch and query them.", "tools": ["OpenTelemetry", "OpenSearch"], "models": []},
+            {"id": "D1.6", "title": "Distinguishing agent from human", "track": "secure", "risk": "Your earliest Shadow Autonomy signal is invisible.", "control": "Behavioural signatures separating agent from inherited human.", "lab": "Build the classifier on timing, sequencing and volume features.", "tools": ["OpenSearch"], "models": ["Llama 3.3"]},
+            {"id": "D1.7", "title": "Drift monitoring", "track": "secure", "risk": "A detection that worked last month is silently degraded.", "control": "Watch model updates, prompt changes, index refreshes, tool versions.", "lab": "Change the model underneath and catch the detection regression.", "tools": ["promptfoo"], "models": ["GLM-4.6"]},
+            {"id": "D1.8", "title": "Threat intel sub-lane", "track": "defend", "risk": "Unsourced confidence in synthesis loops.", "control": "Provenance discipline; refuse claims without a source.", "lab": "Build a synthesis loop that must cite or abstain.", "tools": ["MISP", "OpenCTI"], "models": ["GLM-4.6"]}
+          ]
+        },
+        {
+          "id": "D2", "title": "The Incident Responder", "titles": "Incident Responder, DFIR Analyst, CSIRT Lead",
+          "changes": "You gain a co-investigator that reconstructs timelines faster than you can — and incidents where the actor is an agent, which breaks most of your playbook.",
+          "autonomy": "Response tooling at L2.5; containment authority never leaves human hands.",
+          "deliverable": "A tabletop exercise for an agentic incident, with a replayed trace and a named stop-authority holder.",
+          "sessions": [
+            {"id": "D2.1", "title": "Agent-assisted reconstruction", "track": "defend", "risk": "Reaching for the agent once you're already behind.", "control": "Pre-load logs, telemetry, segmentation model and playbooks.", "lab": "Reconstruct a timeline from raw logs with a context-loaded agent.", "tools": ["Velociraptor", "OpenSearch"], "models": ["GLM-4.6"]},
+            {"id": "D2.2", "title": "When the actor is an agent", "track": "secure", "risk": "\"Which user\" is now the wrong first question.", "control": "Attribute to agent, authority, delegation chain and prompt.", "lab": "Attribute an incident through the A2 `act` chain.", "tools": ["Keycloak", "OpenSearch"], "models": []},
+            {"id": "D2.3", "title": "Scoping an agentic incident", "track": "secure", "risk": "The initiating agent is not the acting one.", "control": "Reconstruct the action chain across all three planes.", "lab": "Scope a multi-agent incident end to end.", "tools": ["OpenTelemetry"], "models": ["Kimi K2"]},
+            {"id": "D2.4", "title": "Containment at machine speed", "track": "secure", "risk": "Mass revocation takes down the business.", "control": "Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.", "lab": "Exercise the ladder against a live misbehaving agent.", "tools": ["agentgateway", "Keycloak"], "models": []},
+            {"id": "D2.5", "title": "Replay and forensics", "track": "secure", "risk": "Non-determinism as an evidentiary problem.", "control": "Log at design time what replay will need.", "lab": "Replay an agent run for a regulator-grade record.", "tools": ["OpenTelemetry"], "models": []},
+            {"id": "D2.6", "title": "Post-incident change surface", "track": "secure", "risk": "Fixing the prompt when the bug is in the control plane.", "control": "Choose among model, prompt, tool, policy, sandbox, identity, eval.", "lab": "Pick the right layer for five real incidents.", "tools": [], "models": []},
+            {"id": "D2.7", "title": "Stop authority", "track": "secure", "risk": "Nobody has rehearsed halting an autonomous workflow.", "control": "Named holder, measured time-to-stop, tested.", "lab": "Time your own stop authority end to end.", "tools": ["kagent"], "models": []},
+            {"id": "D2.8", "title": "Regulatory clock", "track": "secure", "risk": "Notification obligations discovered in week two.", "control": "Feed Track E2 in hour one.", "lab": "Run the first-hour checklist in a tabletop.", "tools": [], "models": []}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E",
+      "title": "Governance, Risk, Compliance & the CISO Office",
+      "blurb": "The function that has to make all of the above defensible to a board, an auditor and a regulator — usually in that order.",
+      "tracks": [
+        {
+          "id": "E1", "title": "The GRC Practitioner (Risk & Control)", "titles": "GRC Analyst, Risk Manager, Control Owner, Third-Party Risk Analyst, Internal Audit liaison",
+          "changes": "Point-in-time assessment stops working entirely. Models change through fine-tuning, prompt updates and index refreshes without a single code change. You move from assessing to continuously evidencing.",
+          "autonomy": "You define the promotion criteria that let a workflow move from L2 to L2.5 — and the conditions that force it back down.",
+          "deliverable": "A risk-tiered agent register with mapped controls and one fully evidenced control assertion.",
+          "sessions": [
+            {"id": "E1.1", "title": "Why point-in-time control testing fails for AI", "track": "secure", "risk": "An annual review certifies nothing about a system that changed on Tuesday.", "control": "Continuous assurance; control effectiveness redefined for probabilistic systems.", "lab": "Change a prompt and show the control evidence going stale in real time.", "tools": ["promptfoo"], "models": []},
+            {"id": "E1.2", "title": "Building the AI and agent inventory", "track": "secure", "risk": "Shadow AI and shadow agents — the inventory is the control most orgs still lack.", "control": "Discovery, registration, ownership, risk tiering.", "lab": "Discover agents from gateway and identity telemetry; build the register.", "tools": ["agentgateway", "SPIRE"], "models": []},
+            {"id": "E1.3", "title": "Risk tiering agentic use cases", "track": "secure", "risk": "Tiering by model name instead of by what the thing can do.", "control": "Autonomy level × action class × data sensitivity.", "lab": "Tier ten real workflows and assign approval authority.", "tools": [], "models": []},
+            {"id": "E1.4", "title": "Control mapping for agents", "track": "secure", "risk": "Inventing new controls where an existing one applied to a new principal type.", "control": "Map identity, secrets, sandbox, eval and telemetry onto the existing library.", "lab": "Map the A2/A3 controls onto your control library.", "tools": ["OSCAL"], "models": []},
+            {"id": "E1.5", "title": "Evaluation output as audit evidence", "track": "secure", "featured": true, "risk": "Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy.", "control": "Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.", "lab": "Take the B2.10 harness output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.", "tools": ["Cyber Commons eval harness", "OSCAL"], "models": [], "repo": "labs/b2.10-eval-harness"},
+            {"id": "E1.6", "title": "Operating vs outcome guardrails", "track": "secure", "risk": "Frameworks specify how the system works; regulators care what it produced.", "control": "Constrain both, and know which evidence answers which question.", "lab": "Classify your own guardrails into the two buckets.", "tools": ["NeMo Guardrails", "LLM Guard"], "models": ["Llama Guard 4"]},
+            {"id": "E1.7", "title": "Continuous control verification", "track": "secure", "risk": "Automating judgment instead of evidence collection.", "control": "Agent-assisted evidence collection, drift detection, exception tracking.", "lab": "Automate one evidence package on a schedule.", "tools": ["OPA", "OSCAL"], "models": ["GLM-4.6"]},
+            {"id": "E1.8", "title": "Third-party and model supply chain risk", "track": "secure", "risk": "Vendor AI features enabled by default; sub-processor chains you never mapped.", "control": "Questions that actually discriminate between vendors.", "lab": "Run a real AIBOM against a vendor model artefact.", "tools": ["OWASP AIBOM", "Sigstore"], "models": []},
+            {"id": "E1.9", "title": "Model and agent lifecycle governance", "track": "secure", "risk": "Re-indexing treated as maintenance, not change.", "control": "Retraining, fine-tuning and re-indexing as change-management events.", "lab": "Write the gate that a re-index has to pass.", "tools": [], "models": []}
+          ]
+        },
+        {
+          "id": "E2", "title": "The Regulatory & Compliance Lead", "titles": "Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead",
+          "changes": "You translate between engineering, legal and supervisory vocabularies at once — on a subject where the regulations are newer than the technology's failure modes.",
+          "autonomy": "You determine which action classes are legally prohibited from ever reaching L2.5, irrespective of measured performance.",
+          "deliverable": "One control set mapped to three regimes, plus an evidence pack for a single high-risk agentic workflow.",
+          "sessions": [
+            {"id": "E2.1", "title": "The regulatory map", "track": "secure", "risk": "One programme per regime; four times the work, none of it joined up.", "control": "One control set that satisfies several regimes. Verify current status before relying on any date.", "lab": "Build the crosswalk for your own sector.", "tools": ["OSCAL"], "models": []},
+            {"id": "E2.2", "title": "Horizontal AI regulation", "track": "secure", "risk": "\"We only deployed it, we didn't build it\" — sometimes true, often not.", "control": "Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification.", "lab": "Classify three workflows and defend the boundary cases.", "tools": [], "models": []},
+            {"id": "E2.3", "title": "Voluntary frameworks as your spine", "track": "secure", "risk": "Regime-specific mappings with nothing to hang off.", "control": "AI RMF / management-system standards as the structure; regulator mappings as overlays.", "lab": "Hang two regulator mappings off one framework spine.", "tools": ["NIST AI RMF", "OSCAL"], "models": []},
+            {"id": "E2.4", "title": "Sector overlays", "track": "secure", "risk": "An agent is already a \"model\" under model-risk rules you already comply with.", "control": "Find the regime you're already in before inventing a new one.", "lab": "Map one agent to existing model-risk obligations.", "tools": [], "models": []},
+            {"id": "E2.5", "title": "Privacy and data protection", "track": "secure", "risk": "Deletion when the data is in weights, not a database.", "control": "Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces.", "lab": "Run PII redaction inside the trust boundary with Presidio before anything crosses out.", "tools": ["Presidio", "GLiNER-PII"], "models": []},
+            {"id": "E2.6", "title": "Incident and disclosure obligations", "track": "secure", "risk": "Materiality assessed for an autonomous actor with a human-actor playbook.", "control": "Coordinate with D2 in hour one.", "lab": "Draft the notification for an agentic incident.", "tools": [], "models": []},
+            {"id": "E2.7", "title": "Documentation that survives supervision", "track": "secure", "risk": "\"Explainability\" for a system with no deterministic reasoning.", "control": "System documentation, data lineage, eval records, oversight evidence, decision logs.", "lab": "Assemble the pack for one high-risk workflow.", "tools": ["OSCAL", "Model Cards"], "models": []},
+            {"id": "E2.8", "title": "Auditability of autonomous action", "track": "secure", "risk": "No trail showing under whose authority the agent acted.", "control": "The delegation chain *is* the audit trail.", "lab": "Produce an audit trail from the A2 chain that names authority at every hop.", "tools": ["Keycloak"], "models": []},
+            {"id": "E2.9", "title": "Regulator and auditor conversations", "track": "secure", "risk": "Overclaiming control, or triggering a moratorium.", "control": "Explain bounded autonomy with evidence, and anticipate the real questions.", "lab": "Defend one workflow in a mock supervisory conversation.", "tools": [], "models": []}
+          ]
+        },
+        {
+          "id": "E3", "title": "The BISO, Risk Communicator & CISO Office", "titles": "BISO, Deputy CISO, Head of Security Strategy, CISO",
+          "changes": "You are being asked to approve a class of system whose failure modes your existing risk language cannot express, on a timeline set by the business.",
+          "autonomy": "You hold the authority to move any workflow down a rung — and the obligation to use it.",
+          "deliverable": "A one-page autonomy governance policy and a board-level narrative for one agentic programme.",
+          "sessions": [
+            {"id": "E3.1", "title": "Translating agentic risk upward", "track": "secure", "risk": "Blast radius explained in engineering terms to a board that needs consequence.", "control": "What can happen, how fast, who can stop it.", "lab": "Convert one blast-radius measurement into a board paragraph.", "tools": [], "models": []},
+            {"id": "E3.2", "title": "Governing autonomy rather than approving tools", "track": "secure", "risk": "A per-tool review queue becomes a bottleneck and then a bypass.", "control": "A policy on delegated authority instead of tool-by-tool approval.", "lab": "Write the delegated-authority policy.", "tools": [], "models": []},
+            {"id": "E3.3", "title": "Sequencing the programme", "track": "secure", "risk": "Starting with the workflow that is most visible rather than most winnable.", "control": "Use the maturity model to order investment; choose your first hard \"no\".", "lab": "Sequence your first three workflows and name the no.", "tools": [], "models": []},
+            {"id": "E3.4", "title": "Org design and ownership", "track": "secure", "risk": "Harness engineering with no home; research as a hobby.", "control": "Identity owns the control plane; BUs own grants; security owns stop authority.", "lab": "Draw your org's ownership map against the topic matrix.", "tools": [], "models": []},
+            {"id": "E3.5", "title": "The metrics that matter at your level", "track": "secure", "risk": "Reporting activity instead of exposure.", "control": "Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.", "lab": "Instrument the six metrics from your lab stack.", "tools": ["OpenSearch"], "models": []},
+            {"id": "E3.6", "title": "Saying no, and saying yes with conditions", "track": "secure", "risk": "Conditional approval that is aspirational rather than enforceable.", "control": "Autonomy promotion as an earned event with named evidence.", "lab": "Write one enforceable conditional approval.", "tools": [], "models": []},
+            {"id": "E3.7", "title": "Building the capability", "track": "secure", "risk": "Hiring for conceptual familiarity instead of practice.", "control": "Interview questions that separate the two; internal transition paths.", "lab": "Write the interview loop for an agentic security engineer.", "tools": [], "models": []},
+            {"id": "E3.8", "title": "Resilience over perfection", "track": "secure", "risk": "Trying to enumerate every failure mode of a probabilistic system.", "control": "Maturity measured by containment, detection and recovery — not prevention.", "lab": "Re-score your programme on the resilience axis.", "tools": [], "models": []}
+          ]
+        }
+      ]
+    }
+  ],
+  "seniority": [
+    {"depth": "Practitioner", "grade": "Analyst, Engineer I–II", "does": "Operate loops others built. Recognise failure modes. Escalate correctly. Produce evidence.", "assessed": "Run the lab, explain what the trace shows"},
+    {"depth": "Engineer", "grade": "Senior Engineer, Lead", "does": "Build the harness, the control, the detection, the eval. Own a component end to end.", "assessed": "Ship the deliverable to production"},
+    {"depth": "Principal", "grade": "Principal, Architect, Head of", "does": "Decide what is structurally possible. Set promotion criteria. Hold stop authority.", "assessed": "Defend the design in an adversarial review"}
+  ],
+  "adjacency": {"B1": "A2.1–A2.2", "A2": "A3.1–A3.2", "E1": "B2.1–B2.2", "D1": "A2.3–A2.4"}
+}

@@ -1,0 +1,134 @@
+# Track D2 — The Incident Responder
+
+**Function D · Security Operations**  
+*Machine-speed decisions were already the problem here. Agents make it both worse and tractable.*
+
+**Job titles:** Incident Responder, DFIR Analyst, CSIRT Lead
+
+**What changes:** You gain a co-investigator that reconstructs timelines faster than you can — and incidents where the actor is an agent, which breaks most of your playbook.
+
+**Autonomy focus:** Response tooling at L2.5; containment authority never leaves human hands.
+
+**Deliverable:** A tabletop exercise for an agentic incident, with a replayed trace and a named stop-authority holder.
+
+> Prerequisite: [Module 0](module-0.md). Every session below ships commands that actually execute — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+
+---
+
+### D2.1 — Agent-assisted reconstruction
+
+`AI for Security`
+
+- **Risk** — Reaching for the agent once you're already behind.
+- **Control** — Pre-load logs, telemetry, segmentation model and playbooks.
+- **Lab** — Reconstruct a timeline from raw logs with a context-loaded agent.
+- **Tools** — `Velociraptor`, `OpenSearch`
+- **Models** — `GLM-4.6`
+
+---
+
+### D2.2 — When the actor is an agent
+
+`Security of AI`
+
+- **Risk** — "Which user" is now the wrong first question.
+- **Control** — Attribute to agent, authority, delegation chain and prompt.
+- **Lab** — Attribute an incident through the A2 `act` chain.
+- **Tools** — `Keycloak`, `OpenSearch`
+
+**Run it** — Attribute an incident to an agent, an authority and a delegation chain.
+
+```bash
+cd labs/d2-ir
+./replay-incident.sh case-01
+python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
+```
+
+*Expect:* Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it.
+
+---
+
+### D2.3 — Scoping an agentic incident
+
+`Security of AI`
+
+- **Risk** — The initiating agent is not the acting one.
+- **Control** — Reconstruct the action chain across all three planes.
+- **Lab** — Scope a multi-agent incident end to end.
+- **Tools** — `OpenTelemetry`
+- **Models** — `Kimi K2`
+
+---
+
+### D2.4 — Containment at machine speed
+
+`Security of AI`
+
+- **Risk** — Mass revocation takes down the business.
+- **Control** — Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.
+- **Lab** — Exercise the ladder against a live misbehaving agent.
+- **Tools** — `agentgateway`, `Keycloak`
+
+**Run it** — Exercise the containment ladder in order, against a live misbehaving agent.
+
+```bash
+cd labs/d2-ir
+./misbehave.sh &                    # start the runaway agent
+./contain.sh --lever throttle && ./contain.sh --lever scope-reduce
+./contain.sh --lever revoke --agent reviewer   # one agent only
+```
+
+*Expect:* Each lever is timed; revocation hits one agent without collateral (the A2.4 deliverable, proven here).
+
+---
+
+### D2.5 — Replay and forensics
+
+`Security of AI`
+
+- **Risk** — Non-determinism as an evidentiary problem.
+- **Control** — Log at design time what replay will need.
+- **Lab** — Replay an agent run for a regulator-grade record.
+- **Tools** — `OpenTelemetry`
+
+**Run it** — Replay an agent run to a regulator-grade standard.
+
+```bash
+cd labs/d2-ir
+python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
+```
+
+*Expect:* The run reproduces, or the tool tells you exactly which field was never logged to make replay possible.
+
+---
+
+### D2.6 — Post-incident change surface
+
+`Security of AI`
+
+- **Risk** — Fixing the prompt when the bug is in the control plane.
+- **Control** — Choose among model, prompt, tool, policy, sandbox, identity, eval.
+- **Lab** — Pick the right layer for five real incidents.
+
+---
+
+### D2.7 — Stop authority
+
+`Security of AI`
+
+- **Risk** — Nobody has rehearsed halting an autonomous workflow.
+- **Control** — Named holder, measured time-to-stop, tested.
+- **Lab** — Time your own stop authority end to end.
+- **Tools** — `kagent`
+
+---
+
+### D2.8 — Regulatory clock
+
+`Security of AI`
+
+- **Risk** — Notification obligations discovered in week two.
+- **Control** — Feed Track E2 in hour one.
+- **Lab** — Run the first-hour checklist in a tabletop.
+
+---

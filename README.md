@@ -1,262 +1,187 @@
-# Cyber Harness Eval
+<h1>Cyber Commons</h1>
 
-**Measure — with evidence — how good an AI security harness actually is at
-finding vulnerabilities, and decide which model to run it on.**
+**A free, open commons for Cyber AI — the skills to defend *with* AI, and to
+secure the AI *itself* — organised the way a CISO org actually is, and provable
+on the laptop you already own.**
 
-Cyber Harness Eval takes an LLM-driven security tool (built around Google
-[Mantis](https://github.com/google/mantis)'s findings contract), runs it **blind**
-against open-source code and cloud config whose bugs are already documented, and
-**scores** the findings against that ground truth — across code SAST, real CVEs,
-and Infrastructure-as-Code.
+Twelve tracks, one shared core, 104 sessions. Every lab runs on **open-source
+tooling (CNCF / Linux Foundation)** and **open-weight models (Llama, Kimi, GLM)**.
+No licence, no vendor, **no frontier-lab account**. Total cost to complete the
+curriculum: **$0**.
 
----
-
-## Why this project
-
-AI security harnesses are **probabilistic**. They emit confident "findings," but
-some are real, some are hallucinated, and some are right-bug/wrong-reason. Ship
-one into a security pipeline without measuring it and you are trusting a black
-box with your risk decisions.
-
-There was no easy way to answer three questions that decide whether such a tool
-is safe to deploy:
-
-1. **Is it correct?** How many findings are true vs. false, and does it get the
-   vulnerability class right?
-2. **Is it valid?** Does it even emit well-formed output your pipeline can consume?
-3. **Which model should back it?** Opus, Sonnet, Haiku — the same harness scores
-   very differently depending on the model inside it.
-
-Cyber Harness Eval answers all three with reproducible, committed evidence. It is
-the **Evaluation & Risk Gate** for "AI for Security" tooling: you do not let a
-probabilistic vulnerability finder into production ungraded.
+📚 [Curriculum](curriculum/) · 🧪 [Labs](labs/) · 🤖 [Getting the models free](MODELS.md) · 🌐 [Website](site/) · 🎥 [Recording pipeline](#recording-pipeline)
 
 ---
 
-## Example cyber harnesses (Mantis and its cousins)
+## Why this exists
 
-A "cyber harness" is an LLM/agent-driven tool that autonomously reviews code or
-systems for security issues. This eval framework scores any of them — natively
-for anything that emits the Mantis `historical_learnings.jsonl` / `finding`
-schema, or via a thin adapter for the rest.
+Security knowledge about AI is being locked behind vendor training, frontier-lab
+credits and enterprise budgets — at exactly the moment when a two-person NGO
+faces the same attackers as a global bank. A commons is the opposite bet:
+**shared defense is stronger defense.**
 
-| Harness | What it is |
-|---------|-----------|
-| **Google Mantis** ([google/mantis](https://github.com/google/mantis)) | Model-agnostic *skills* pipeline (history → threat-model → research → critic → reproduce → patch → report) run by a coding agent. The reference contract for this repo. |
-| **Google Big Sleep** | DeepMind/Project-Zero agent that finds real memory-safety bugs in production software. |
-| **OpenAI Aardvark** | Agentic "security researcher" that scans repos, validates exploitability, proposes patches. |
-| **XBOW** | Autonomous offensive-security (pentest) agent that solves web-app benchmarks. |
-| **PentestGPT / CAI** | Open-source LLM-driven penetration-testing assistants. |
-| **ZeroPath / Corgea / Almanax** | Commercial LLM-based SAST that triages and fixes findings. |
+Two things make it usable by anyone:
 
-They differ in surface (SAST vs. pentest vs. IaC) but share one problem: **their
-output is only as trustworthy as its measured accuracy.** That is what this repo
-provides.
+- **Everything executes.** No pseudo-code, no screenshots of a demo. Every
+  session ships commands that run against real targets and print real output.
+- **Everything is open.** The control plane is CNCF/LF projects you'd actually
+  deploy — SPIFFE/SPIRE, OPA, Falco, Kyverno, Cilium, Keycloak, OpenTelemetry,
+  Sigstore, kagent, kmcp, agentgateway. The intelligence is open weights you can
+  download. Commercial models are named where relevant but **never required**.
 
-**Execution-based benchmarks** are also integrated — where success means running
-a Proof-of-Concept, not matching a label:
+## How it's organised
 
-| Benchmark | Agent must… | Paper |
-|-----------|-------------|-------|
-| **CyberGym** ([sunblaze-ucb/cybergym](https://github.com/sunblaze-ucb/cybergym)) | generate a PoC that reproduces a real OSS-Fuzz vuln (verified in Docker) | [arXiv:2506.02548](https://arxiv.org/abs/2506.02548) |
-| **ExploitGym** | turn a vulnerability into a working exploit | [arXiv:2605.11086](https://arxiv.org/abs/2605.11086) |
-| **CyberGym-E2E** | end-to-end: detect → PoC → patch → functionality test | [arXiv:2606.04460](https://arxiv.org/abs/2606.04460) |
+**Module 0 — the shared core (everyone, 5 sessions, no substitutions).** A
+common vocabulary so twelve tracks can hold one conversation: the *three planes*
+(decision / control / action), the *autonomy ladder* (L1 → L2 → L2.5 → L3), and
+prompt injection taught once, properly.
 
-These are scored by [`bench/cybergym_adapter.py`](bench/cybergym_adapter.py) onto
-the same Expert-Accuracy scale. They require the CyberGym Docker environment
-(~130GB+ data, Python ≥3.12) — run `scripts/vulnbench.sh cybergym-preflight` to
-check a host, details in [docs/CYBERGYM_INTEGRATION.md](docs/CYBERGYM_INTEGRATION.md).
+**Then twelve tracks across five functions.** Nobody takes all of it. You take
+the track for the chair you sit in, plus two sessions from a neighbouring track
+— because the failures happen in the seams.
 
----
+| Function | Tracks |
+|---|---|
+| **A · Architecture & Platform** | [A1](curriculum/track-a1.md) Security Architect · [A2](curriculum/track-a2.md) Identity & NHI Engineer · [A3](curriculum/track-a3.md) Platform & Cloud Security |
+| **B · Product & AppSec** | [B1](curriculum/track-b1.md) AppSec / Code Reviewer · [B2](curriculum/track-b2.md) Security Automation & Harness Engineer |
+| **C · Offensive & Research** | [C1](curriculum/track-c1.md) Pentester / Red Teamer · [C2](curriculum/track-c2.md) Security Researcher |
+| **D · Security Operations** | [D1](curriculum/track-d1.md) SOC Analyst & Detection Engineer · [D2](curriculum/track-d2.md) Incident Responder |
+| **E · GRC & CISO Office** | [E1](curriculum/track-e1.md) GRC Practitioner · [E2](curriculum/track-e2.md) Regulatory & Compliance · [E3](curriculum/track-e3.md) BISO / CISO Office |
 
-## Strategy to eval your cyber harness
+Every session is shaped the same way: **Risk → Control → Lab**. Every track ends
+in a **real artefact** — a delegation-chain trace, a blast-radius measurement, an
+eval report, a risk-tiered register — not a certificate.
 
-Five moves, each of which this repo implements and evidences:
+Both directions run through every track: **AI for Security** (agents as your
+instrument) and **Security for AI** (agents as the thing you defend). A track
+that teaches only one produces a practitioner who gets surprised.
 
-1. **Build an answer key.** Collect code/config whose vulnerabilities are already
-   labeled — SecLLMHolmes (hand-labeled CWEs + real CVEs) and TerraGoat scanned
-   by Checkov — into a 552-row SQLite ground truth.
-2. **Run the harness blind.** Feed it the targets under **opaque filenames** with
-   the labels **held out**, so it cannot pattern-match the answer. Honest numbers,
-   not a demo.
-3. **Validate the format (conformance).** Check every finding against the real
-   `google/mantis` JSON schema — separately from whether it's *correct*.
-4. **Score correctness (accuracy).** Match findings to ground truth with a
-   **collision-safe path matcher**, then apply the Sola four-stage score
-   (expert-proxy {0, 0.5, 1} + dual LLM judges, MIN-aggregated).
-5. **Compare models & decide.** Run the same blind audit on Opus/Sonnet/Haiku,
-   read per-model failure themes, and route each task to the right model.
+## What's in the box
 
-> **Conformance ≠ Accuracy.** Conformance asks *"is it valid Mantis output?"* —
-> ~100%, true by construction, says nothing about correctness. Accuracy asks
-> *"is it right?"* — the real score (0.47–0.95 here). **Always quote accuracy.**
+```
+curriculum/       Module 0 + 12 track chapters (generated from the JSON source of truth)
+labs/             Runnable labs — start with labs/m0-agent-loop
+site/             The website (GitHub Pages) + data/curriculum.json + data/videos.json
+MODELS.md         How to get Llama / Kimi / GLM free, local or hosted
+scripts/          build_curriculum.py · vulnbench.sh · link_video.py · youtube_upload.py
+.github/          Pages deploy + lightboard recording pipeline + agent prompts
+.claude/skills/   Agent skills so Claude Code can run the labs for you
+bench/ ingest/ questions/ ground-truth/ work_mantis/   ← Lab B2.10's implementation
+docs/             Evidence: model comparison, real harness run, CyberGym integration
+```
 
----
-
-## Before & After
-
-| | **Before** | **After (Cyber Harness Eval)** |
-|---|---|---|
-| Trust in findings | a list, no idea how many are real | every finding scored vs. 552-row ground truth |
-| Scoring correctness | naïve basename matching silently mis-scores | collision-safe parent-dir+filename-tail matcher |
-| Format trust | "is this valid Mantis output?" unknown | schema-validated against the real google/mantis contract |
-| Model choice | a guess | evidence-based Opus/Sonnet/Haiku comparison (SAST/CVE/IaC) |
-| Honesty | fooled by a hand-authored demo | blind protocol — committed 0.90 is real, not a 0.95 fixture |
-| Cost | biggest model on everything | measured token-vs-accuracy routing |
-
----
-
-## What is in the box
-
-- **Ground truth** — SQLite datasource, 552 labeled rows: SecLLMHolmes code vulns
-  (78) + TerraGoat IaC misconfigs via Checkov (474). → [`ground-truth/`](ground-truth/README.md)
-- **Questions** — 78 derived code-vuln questions + Sola ISPM/cross-vendor suites.
-  → [`questions/`](questions/README.md)
-- **Scorer** — four-stage Sola evaluator, `google/mantis` schema validation, IaC
-  multi-label scorer. → [`bench/`](bench)
-- **Real runs & evidence** — blind corpora, held-out answer keys, per-model locked
-  verdicts, deterministic scorers, failing-question dumps. → [`work_mantis/`](work_mantis/README.md)
-- **Write-ups** — [`docs/REAL_MANTIS_RUN.md`](docs/REAL_MANTIS_RUN.md),
-  [`docs/MODEL_COMPARISON.md`](docs/MODEL_COMPARISON.md)
-- **Training** — a lightboard course for newcomers to cyber + AI.
-  → [`training/`](training/README.md)
-
----
-
-## How to set it up
+## Quick start
 
 ```bash
-git clone <this repo> && cd Cyber-harness-eval
-python3 -m venv .venv
-.venv/bin/pip install pyyaml checkov anthropic jsonschema
+git clone <this repo> && cd cybercommons
 
-.venv/bin/python ingest/build_datasource.py     # clones ground-truth/, builds ~552 rows
-.venv/bin/python questions/loader.py             # loads/derives the question suites
+# 1. get a model — local and free (see MODELS.md for hosted/free-tier options)
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull llama3.3            # or glm-4.6 / a smaller variant on a light laptop
+export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=llama3.3
+
+# 2. Module 0 — the loop, and why the verifier is the security control
+cd labs/m0-agent-loop && pip install pytest
+python3 loop.py --verifier pytest      # deterministic oracle → succeeds honestly
+python3 loop.py --verifier llm-judge   # self-grading → declares success on broken code
 ```
 
-Requires `git`, `python3`, and `checkov` (installed above). Cloned vulnerable
-repos land in `ground-truth/` (contents gitignored); the DB is `data/vulnbench.db`.
+The second command is the whole curriculum in miniature: the loop reports
+success, the code is wrong, and the trace looks clean. Measuring that gap is what
+the rest of the commons is for.
 
----
-
-## Commands
-
-One entrypoint drives everything (this is what the agent skills call):
+Browse the site locally:
 
 ```bash
-scripts/vulnbench.sh doctor              # check prerequisites
-scripts/vulnbench.sh setup               # create .venv + install deps
-scripts/vulnbench.sh build               # build datasource (~552 rows) + load questions
-scripts/vulnbench.sh score --findings <jsonl> --gt-source <source> --min-acc 0.80
-scripts/vulnbench.sh verify              # regression fingerprint (0.9479)
-scripts/vulnbench.sh compare            # model comparison (code + IaC)
-scripts/vulnbench.sh cybergym-preflight  # can this host run CyberGym? (Docker + data)
-scripts/vulnbench.sh cybergym-score --results <verify.jsonl> --benchmark cybergym
+python3 -m http.server 8000 --directory site   # → http://localhost:8000
 ```
 
-Underlying tools (called by the entrypoint; usable directly too):
-`ingest/build_datasource.py`, `questions/loader.py`, `bench/run_benchmark.py`,
-`work_mantis/compare_models.py`, `work_mantis/compare_iac.py`,
-`make mantis-realworld`, `make schedule-show`.
+## Where evaluation fits
 
-`score` flags: `--gt-source` (scope), `--run-id` (idempotent named run),
-`--judges` (real Anthropic judges; needs `ANTHROPIC_API_KEY`), `--min-acc <t>`
-(non-zero exit on regression), `--no-validate` (skip schema check).
+Evaluation is **one chapter**, not the whole project — [B2.10](curriculum/track-b2.md)
+builds the harness, [E1.5](curriculum/track-e1.md) reads its output as audit
+evidence, and [C1.6](curriculum/track-c1.md) attacks it. That chapter happens to
+be the most fully-built lab here, with committed evidence:
 
----
+| Task | Metric | Opus | Sonnet | Haiku |
+|---|---|---|---|---|
+| SAST — synthetic code | Expert Acc | **0.90** | 0.75 | 0.61 |
+| CVE — real-world code | Expert Acc | 0.87 | **0.95** | 0.47 |
+| IaC — TerraGoat vs Checkov | micro-F1 | **0.76** | 0.66 | 0.58 |
 
-## How to run benchmarks
+Same harness, same prompt — the backbone alone swings accuracy from 0.47 to 0.95,
+and the ranking flips between corpora. Details in [`labs/b2.10-eval-harness`](labs/b2.10-eval-harness/README.md)
+and [`docs/MODEL_COMPARISON.md`](docs/MODEL_COMPARISON.md). The harness is
+model-agnostic: point it at Ollama to compare Llama / GLM / Kimi instead.
 
-The benchmark runs **as an agent skill** — one entrypoint,
-[`scripts/vulnbench.sh`](scripts/vulnbench.sh), wrapped for every agent surface
-so you can just *ask* your coding agent to "run the vulnbench benchmark" and it
-executes the same steps a human would.
+## Contributing to the curriculum
 
-### As an agent skill
-
-| Agent | How it's wired | To invoke |
-|-------|----------------|-----------|
-| **Claude Code** | [`.claude/skills/vulnbench-benchmark/`](.claude/skills/vulnbench-benchmark/SKILL.md) and [`vulnbench-blind-audit`](.claude/skills/vulnbench-blind-audit/SKILL.md) (auto-trigger on description) | "run the vulnbench benchmark on `<findings.jsonl>`" or `/vulnbench-benchmark` |
-| **GitHub Copilot** | [`.github/copilot-instructions.md`](.github/copilot-instructions.md) + prompt files in [`.github/prompts/`](.github/prompts) | `/vulnbench-benchmark` in Copilot Chat |
-| **Cursor / other** | [`AGENTS.md`](AGENTS.md) (cross-agent standard) | "benchmark the harness per AGENTS.md" |
-
-All three call the same entrypoint, so results are identical regardless of agent.
-
-### Directly (what the skills run)
+The syllabus has **one source of truth**: [`site/data/curriculum.json`](site/data/curriculum.json)
+(structure) and [`curriculum/labs.json`](curriculum/labs.json) (the runnable
+command blocks). Edit those, then:
 
 ```bash
-scripts/vulnbench.sh doctor                    # check prerequisites
-scripts/vulnbench.sh setup                     # create .venv + install deps (first time)
-scripts/vulnbench.sh build                     # build ground truth (~552 rows) + questions
-
-# 1. Score a harness's findings (Mantis historical_learnings.jsonl or finding-object JSONL)
-scripts/vulnbench.sh score --findings <path.jsonl> \
-    --harness mantis --run-id nightly-$(date +%F) \
-    --gt-source secllmholmes-handcrafted --min-acc 0.80
-
-# 2. Reproduce the model comparison (Opus/Sonnet/Haiku, code + IaC)
-scripts/vulnbench.sh compare
-
-# 3. Pipeline regression fingerprint — must print Expert Accuracy 0.9479
-scripts/vulnbench.sh verify
+python3 scripts/build_curriculum.py    # regenerates curriculum/*.md
 ```
 
-`score` reports Expert Accuracy, by-CWE recall, and mean judge metrics, and exits
-non-zero if accuracy drops below `--min-acc` (that non-zero is the CI/regression
-signal). For a fresh **blind model audit** (running a model *as* the harness
-rather than scoring an existing file), follow the `vulnbench-blind-audit` skill /
-[`work_mantis/README.md`](work_mantis/README.md).
+The website reads the same JSON, so docs and site can never drift.
 
-> **Verified run (through the entrypoint):** `scripts/vulnbench.sh verify` →
-> `Expert Accuracy 0.9479`; `scripts/vulnbench.sh compare` reproduces the full
-> Opus/Sonnet/Haiku table below.
+## Recording pipeline
 
----
+Lightboard recordings publish themselves to YouTube and attach to the right
+chapter on the site.
 
-## Repo layout
+**One-time setup:** enable the YouTube Data API, create an OAuth desktop client,
+mint a refresh token (`python3 scripts/youtube_upload.py --auth-setup`), then add
+repo secrets `YT_CLIENT_ID`, `YT_CLIENT_SECRET`, `YT_REFRESH_TOKEN` and repo
+variable `SITE_URL`.
 
-```
-.claude/skills/ Claude Code agent skills (vulnbench-benchmark, vulnbench-blind-audit)
-.github/        Copilot instructions + prompt files (.github/prompts/)
-AGENTS.md       cross-agent instructions (Copilot/Cursor/… standard)
-scripts/        vulnbench.sh (agent-skill entrypoint) + run_vulnbench.sh (cron)
-ground-truth/  cloned vulnerable repos (answer key; contents gitignored)  → README
-ingest/        sources.yaml registry + build_datasource.py
-questions/     loader.py, suite JSON, per-question README
-bench/         schema.sql, score.py, run_benchmark.py, mantis_history_extract.py,
-               iac_categorize.py, mantis_schema.json (vendored google/mantis)
-data/          Mantis findings samples + blind-run findings; vulnbench.db (gitignored)
-work_mantis/   blind corpora, answer keys, per-model verdicts, scorers, evidence  → README
-docs/          REAL_MANTIS_RUN.md, MODEL_COMPARISON.md
-training/      lightboard course (cyber + AI for newcomers)  → README
-Makefile       build / questions / bench / verify / mantis-realworld / schedule
+**Then, per recording — just drop the file in:**
+
+```bash
+cp ~/recordings/a2.5-final.mp4 recordings/A2.5.mp4   # filename = session id
+git add recordings/A2.5.mp4 && git commit -m "record A2.5" && git push
 ```
 
----
+The [publish-video workflow](.github/workflows/publish-video.yml) uploads it with
+a title/description generated from the chapter's own risk/control/lab text,
+registers it in `site/data/videos.json`, and commits — which triggers the
+[Pages deploy](.github/workflows/pages.yml) so a **▶ Watch** link appears on that
+chapter. Already uploaded elsewhere? Link it without re-uploading:
 
-## Summary of findings
+```bash
+python3 scripts/link_video.py --session A2.5 --youtube-id <id>
+python3 scripts/link_video.py --list        # coverage: which chapters still need recording
+```
 
-Three Claude models ran the **same blind audit** across three real tasks
-(full detail in [docs/MODEL_COMPARISON.md](docs/MODEL_COMPARISON.md)):
+## Publishing the site
 
-| Task | Metric | **Opus** | **Sonnet** | **Haiku** |
-|------|--------|----------|------------|-----------|
-| **SAST** — synthetic code (48 files) | Expert Acc | **0.90** | 0.75 | 0.61 |
-| **CVE** — real-world code (30 files) | Expert Acc | 0.87 | **0.95** | 0.47 |
-| **IaC** — TerraGoat vs Checkov (34 files) | micro-F1 | **0.76** | 0.66 | 0.58 |
+Settings → Pages → **Source: GitHub Actions**. Push to `main` and
+[`pages.yml`](.github/workflows/pages.yml) validates the curriculum data (it
+fails the build if `videos.json` references a session that doesn't exist) and
+deploys `site/`.
 
-- **Model quality is the biggest lever.** Same code, same prompt, Expert Accuracy
-  spans 0.47 → 0.95 across models.
-- **Ranking is not monotonic.** Opus is most consistent; **Sonnet is best on real
-  CVE code (0.95, zero false positives, 14/15 caught)** but over-flags synthetic
-  toys; **Haiku collapses on real code** (flags 3 of 15 real CVEs).
-- **Failure themes** ([`work_mantis/failing_questions.md`](work_mantis/failing_questions.md)):
-  Opus → misses/mislabels **NULL-pointer-deref (CWE-476)**; Sonnet → **false
-  positives on patched synthetic code**; Haiku → **systematic misses on real bugs**.
-- **Which model where:** SAST triage → **Opus**; pentest / real-CVE reasoning →
-  **Sonnet**; IaC / threat-model reasoning → **Opus**. Do **not** use Haiku as a
-  cheap pre-filter on real code (0.20 recall drops ~80% of real bugs).
-- **Conformance was 100%; accuracy was not** — the harness always emits valid
-  Mantis output, but correctness is where models pass or fail.
-- **Cyber safeguards are real** — Sonnet's CVE run was blocked twice under a bare
-  prompt; it completed only with explicit authorized-defensive-review framing.
+## Status — what's real today
+
+Being honest about coverage, because "everything executes" is a promise:
+
+- ✅ **Fully built and tested:** the eval harness (B2.10/E1.5/C1.6) with committed
+  evidence; the Module 0 loop lab; the site; the curriculum generator; the video
+  pipeline (`link_video.py` tested end to end, `youtube_upload.py` dry-run tested).
+- 🟡 **Specified with real commands, not yet executed in this environment:** the
+  infra-heavy labs (SPIRE/Keycloak delegation, sandbox tiers, SOC stack). The
+  commands are real and the tools are the right ones, but this build sandbox
+  blocks the container registry, so they have not been run here. Treat them as
+  reviewed specs until someone runs them on a normal machine and files the output.
+- ⬜ **38 of 104 sessions** currently carry a full command block; the rest carry
+  risk/control/lab and are being filled in. `curriculum/labs.json` is where they go.
+
+Contributions that turn a 🟡 into a ✅ — with the output pasted in — are the most
+valuable thing you can send.
+
+## Licence & credits
+
+Curriculum and site: open, contribute by PR. Tooling referenced throughout
+belongs to its respective projects (CNCF, Linux Foundation, OWASP and others).
+Model weights carry their own licences — Kimi K2 (modified MIT), GLM (MIT),
+Llama (Meta Community Licence, read the restrictions). See [MODELS.md](MODELS.md).

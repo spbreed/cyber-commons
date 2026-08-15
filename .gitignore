@@ -13,3 +13,8 @@ _mantis/
 # code) and the answer keys (work_mantis/.labels*.json) ARE committed as
 # reproducibility evidence — deliberately not ignored.
 _cybergym/
+
+# recordings: prefer linking a YouTube id over committing video (see recordings/README.md)
+recordings/*.mp4
+recordings/*.mov
+labs/m0-agent-loop/workspace/

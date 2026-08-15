@@ -1,0 +1,56 @@
+name: Deploy Cyber Commons site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate curriculum + videos data
+        run: |
+          python3 - <<'PY'
+          import json, sys
+          cur = json.load(open('site/data/curriculum.json'))
+          vid = json.load(open('site/data/videos.json'))
+          ids = {s['id'] for s in cur['module0']['sessions']}
+          for fn in cur['functions']:
+              for tr in fn['tracks']:
+                  ids |= {s['id'] for s in tr['sessions']}
+          bad = [k for k in vid.get('videos', {}) if k not in ids]
+          if bad:
+              print(f"::error::videos.json references unknown session ids: {bad}")
+              sys.exit(1)
+          print(f"ok: {len(ids)} sessions, {len(vid.get('videos', {}))} with recordings")
+          PY
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

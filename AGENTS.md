@@ -1,4 +1,4 @@
-# AGENTS.md — Cyber Harness Eval
+# AGENTS.md — Cyber Commons
 
 Cross-agent instructions (Claude Code, GitHub Copilot coding agent, Cursor, and
 any AGENTS.md-aware tool). Claude Code also has richer, auto-triggering skills in

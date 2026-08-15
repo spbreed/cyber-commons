@@ -1,0 +1,199 @@
+{
+  "_note": "Runnable command blocks per session id, merged into curriculum/*.md by scripts/build_curriculum.py. Every block is real: it executes against open-weight models (via Ollama/LiteLLM) or open-source CNCF tooling. Nothing here is pseudo-code.",
+  "_conventions": {
+    "model_endpoint": "All model calls go through an OpenAI-compatible base URL so no lab hard-codes a provider. Default is local Ollama at http://localhost:11434/v1 (see MODELS.md).",
+    "env": "export OPENAI_BASE_URL=http://localhost:11434/v1; export OPENAI_API_KEY=ollama; export MODEL=glm-4.6"
+  },
+  "labs": {
+    "M0.1": {
+      "goal": "Show that autonomy lives in the action plane, not the model.",
+      "run": ["ollama pull llama3.3 && ollama pull nomic-embed-text", "cd labs/m0-agent-loop && python3 planes_demo.py --model llama3.3", "# same prompt, three configurations: bare model / read-only tools / write tools"],
+      "expect": "Identical model output; only configuration 3 changes state on disk. Prints a PASS/FAIL table."
+    },
+    "M0.2": {
+      "goal": "Build the minimum loop and prove the verifier is the security control.",
+      "run": ["cd labs/m0-agent-loop", "python3 loop.py --task fix-tests --verifier pytest      # honest oracle", "python3 loop.py --task fix-tests --verifier llm-judge   # self-grading", "python3 loop.py --task fix-tests --verifier none        # no stop signal"],
+      "expect": "pytest verifier converges or stops; llm-judge declares success on broken code; none diverges until the budget kills it."
+    },
+    "M0.3": {
+      "goal": "Walk one workflow up the autonomy ladder with named promotion evidence.",
+      "run": ["cd labs/m0-agent-loop", "python3 ladder.py --workflow dependency-bump --rung L1", "python3 ladder.py --workflow dependency-bump --rung L2.5 --require-evidence"],
+      "expect": "L2.5 refuses to run until the promotion evidence file exists — autonomy as an earned event."
+    },
+    "M0.4": {
+      "goal": "Reproduce direct and indirect injection, then measure a real defense.",
+      "run": ["pip install garak promptfoo", "cd labs/m0-injection && python3 poison.py --target rag   # plant in a retrieved doc", "garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject", "python3 poison.py --target rag --defense tagging   # re-run with untrusted-content tagging"],
+      "expect": "Attack success rate drops measurably with tagging; the number, not the vibe, is the deliverable."
+    },
+    "M0.5": {
+      "goal": "Locate yourself on the ownership map.",
+      "run": ["cp curriculum/templates/ownership-map.csv ./my-org-ownership.csv", "$EDITOR my-org-ownership.csv   # fill Owns / Builds / Uses for your function"],
+      "expect": "Every topic cluster has exactly one owner. Any row with zero or two owners is your first finding."
+    },
+    "A1.2": {
+      "goal": "Stand up the whole reference control plane locally.",
+      "run": ["cd labs/a1-control-plane", "kind create cluster --config kind.yaml", "kubectl apply -k spire/     # identity fabric", "kubectl apply -k gateway/   # agentgateway", "kubectl apply -k opa/       # policy decision point", "./verify.sh                 # asserts each layer actually enforces"],
+      "expect": "verify.sh fails loudly if any layer is advisory rather than enforcing."
+    },
+    "A1.3": {
+      "goal": "Make the over-privileged grant structurally unrepresentable.",
+      "run": ["docker run -d -p 8080:8080 openfga/openfga run", "cd labs/a1-control-plane/authz", "fga model write --file model.fga", "python3 prove_unrepresentable.py   # attempts to write the bad grant"],
+      "expect": "The bad grant is rejected by the schema, not by a policy check that could be skipped."
+    },
+    "A2.2": {
+      "goal": "Issue a workload identity with zero static secrets.",
+      "run": ["cd labs/a2-delegation", "kind create cluster --name a2", "kubectl apply -f spire/", "kubectl exec -n spire spire-server-0 -- /opt/spire/bin/spire-server entry create \\", "  -spiffeID spiffe://cybercommons/agent/reviewer \\", "  -parentID spiffe://cybercommons/node -selector k8s:pod-label:app:reviewer", "./show-svid.sh   # fetch and decode the SVID from inside the workload"],
+      "expect": "A short-lived SVID appears with no secret ever written to disk; re-attests automatically after rotation."
+    },
+    "A2.5": {
+      "goal": "A three-hop delegation chain that survives audit.",
+      "run": ["cd labs/a2-delegation", "docker compose up -d keycloak", "./setup-realm.sh                 # clients: user-app -> reviewer-agent -> patch-agent", "./delegate.sh                    # RFC 8693 token exchange, 3 hops", "python3 decode_chain.py token.jwt  # prints the nested act claim chain"],
+      "expect": "Each hop shows a nested `act` claim and a strictly smaller scope. Attenuation is visible in the token, not asserted in a doc."
+    },
+    "A2.8": {
+      "goal": "Cut standing access to zero so an injection has nothing to spend.",
+      "run": ["cd labs/a2-delegation", "./jit.sh --request deploy --window 15m --approver alice", "./jit.sh --status    # authority exists only inside the window", "sleep 900 && ./jit.sh --status"],
+      "expect": "Authority is absent before and after the window; the agent literally cannot spend what it does not hold."
+    },
+    "A3.1": {
+      "goal": "Measure escape surface across three sandbox tiers.",
+      "run": ["cd labs/a3-sandbox", "./run-tier.sh docker      && ./measure-escape.sh", "./run-tier.sh gvisor      && ./measure-escape.sh", "./run-tier.sh firecracker && ./measure-escape.sh"],
+      "expect": "A table of syscall surface and reachable host resources per tier — a number you can put in a design review."
+    },
+    "A3.2": {
+      "goal": "Prove an agent with no egress control has no other meaningful control.",
+      "run": ["cd labs/a3-sandbox", "docker compose up -d squid agent", "./exfil.sh            # baseline: data leaves", "./apply-allowlist.sh  # squid allowlist + DNS conditional forwarding", "./exfil.sh            # same payload, now blocked"],
+      "expect": "Identical agent, identical payload; the only variable is egress policy."
+    },
+    "A3.6": {
+      "goal": "Build the five containment levers before you need them.",
+      "run": ["cd labs/a3-sandbox/levers", "./arm.sh              # throttle, scope-reduce, reroute, force-HITL, hard-stop", "./fire.sh --lever all --under-load", "./assert-fired.sh"],
+      "expect": "Each lever fires under load and is timed. A lever that only works when idle is not a lever."
+    },
+    "B1.1": {
+      "goal": "Cut the false-positive rate with reachability reasoning, and measure it.",
+      "run": ["pip install semgrep", "cd labs/b1-appsec", "opengrep --config auto --json target/ > candidates.json", "python3 triage.py --candidates candidates.json --model $MODEL", "python3 score.py --against ground-truth.json"],
+      "expect": "Prints precision before/after triage. The FP rate — not the detection rate — is the number that moved."
+    },
+    "B1.3": {
+      "goal": "Never raise a PR for a patch you did not build and test.",
+      "run": ["cd labs/b1-appsec", "python3 patch.py --finding F-102 --model $MODEL --validate-locally", "# generates -> compiles -> runs tests -> only then writes patch.diff"],
+      "expect": "Patches failing the local build are discarded before a human ever sees them; acceptance rate is printed."
+    },
+    "B1.5": {
+      "goal": "Watch your own review harness obey an injected instruction, then close it.",
+      "run": ["cd labs/b1-appsec", "git apply injected-pr.diff       # a PR containing an instruction to the reviewer", "python3 triage.py --candidates candidates.json --model $MODEL   # obeys it", "python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   # ignores it"],
+      "expect": "The unprotected run emits the attacker's verdict; the tagged run does not."
+    },
+    "B2.1": {
+      "goal": "One scaffold, swappable model, unchanged loop.",
+      "run": ["cd labs/m0-agent-loop", "MODEL=llama3.3 python3 loop.py --task fix-tests", "MODEL=glm-4.6  python3 loop.py --task fix-tests", "MODEL=kimi-k2  python3 loop.py --task fix-tests"],
+      "expect": "Identical loop code, three backbones, comparable traces — the prerequisite for C2.6 multi-backbone benchmarking."
+    },
+    "B2.2": {
+      "goal": "Show a same-family judge grading its own homework.",
+      "run": ["cd labs/b2.10-eval-harness", "scripts/vulnbench.sh score --findings data/mantis_findings.sample.jsonl \\", "  --gt-source secllmholmes-handcrafted   # deterministic oracle", "# then compare with a judge drawn from the same family as the generator"],
+      "expect": "The oracle and the same-family judge disagree in a specific, reproducible direction."
+    },
+    "B2.4": {
+      "goal": "Bound a divergent loop four different ways.",
+      "run": ["cd labs/m0-agent-loop", "python3 loop.py --task impossible --max-steps 5", "python3 loop.py --task impossible --timeout 60", "python3 loop.py --task impossible --token-ceiling 20000", "python3 loop.py --task impossible --spend-cap 0.50"],
+      "expect": "Four different stop reasons, all recorded in the trace. 'It finished' is never one of them."
+    },
+    "B2.10": {
+      "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
+      "run": ["cd labs/b2.10-eval-harness", "scripts/vulnbench.sh doctor && scripts/vulnbench.sh setup", "scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov", "scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479", "scripts/vulnbench.sh compare    # blind model comparison across backbones", "scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?"],
+      "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
+    },
+    "C1.1": {
+      "goal": "Drive a planner/executor pair against a local target you own.",
+      "run": ["cd labs/c1-redteam", "docker compose up -d dvwa juice-shop     # local targets only", "python3 offensive_loop.py --target http://localhost:3000 --model $MODEL --scope scope.yaml"],
+      "expect": "Attack chains, not payload suggestions. scope.yaml is enforced by the harness — out-of-scope hosts are refused."
+    },
+    "C1.3": {
+      "goal": "Run a real injection campaign and get a success rate.",
+      "run": ["pip install garak promptfoo", "cd labs/c1-redteam", "garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject,dan,encoding", "promptfoo eval -c redteam.yaml"],
+      "expect": "A measured attack-success-rate per probe family, per model — comparable across Llama / GLM / Kimi."
+    },
+    "C1.6": {
+      "goal": "Game the eval deliberately, then close the hole you used.",
+      "run": ["cd labs/b2.10-eval-harness", "python3 ../c1-redteam/game_eval.py --strategy sandbag", "python3 ../c1-redteam/game_eval.py --strategy judge-manipulation", "scripts/vulnbench.sh compare   # see the inflated number"],
+      "expect": "You reproduce an inflated score, then patch the harness so the same trick fails."
+    },
+    "C2.2": {
+      "goal": "Chart jailbreak taxonomy differences across three open-weight families.",
+      "run": ["cd labs/c2-research", "for M in llama3.3 glm-4.6 kimi-k2; do garak --model_type openai.OpenAICompatible --model_name $M --probes dan,encoding,malwaregen --report_prefix $M; done", "python3 compare_reports.py"],
+      "expect": "Per-family refusal and elicitation profiles. Model effects separated from harness effects."
+    },
+    "C2.6": {
+      "goal": "Separate model effects from harness effects.",
+      "run": ["cd labs/b2.10-eval-harness", "for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M scripts/vulnbench.sh compare; done", "python3 work_mantis/compare_models.py"],
+      "expect": "Same harness, three backbones — the delta is the model. This is exactly how the committed comparison table was produced."
+    },
+    "D1.1": {
+      "goal": "Supervise a triage loop by exception rather than by re-reading.",
+      "run": ["cd labs/d1-soc", "docker compose up -d wazuh opensearch", "./seed-alerts.sh                       # replayable alert corpus", "python3 triage_loop.py --model $MODEL --escalate-on high"],
+      "expect": "The loop clears the known-benign and escalates the rest with its reasoning attached."
+    },
+    "D1.4": {
+      "goal": "Five detections whose subject is a non-human principal.",
+      "run": ["cd labs/d1-soc/detections", "./install-sigma.sh   # scope drift, tool-sequence anomaly, off-hours autonomy, retrieval anomaly, NHI-at-human-time", "./fire-each.sh       # deliberately trigger all five"],
+      "expect": "All five fire on synthetic-but-real agent telemetry from the A3/B2 labs."
+    },
+    "D1.6": {
+      "goal": "Tell an agent apart from the human whose credential it inherited.",
+      "run": ["cd labs/d1-soc", "python3 agent_vs_human.py --features timing,sequencing,volume --train baseline.jsonl", "python3 agent_vs_human.py --classify live.jsonl"],
+      "expect": "A working classifier — your earliest Shadow Autonomy signal."
+    },
+    "D2.2": {
+      "goal": "Attribute an incident to an agent, an authority and a delegation chain.",
+      "run": ["cd labs/d2-ir", "./replay-incident.sh case-01", "python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak"],
+      "expect": "Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it."
+    },
+    "D2.4": {
+      "goal": "Exercise the containment ladder in order, against a live misbehaving agent.",
+      "run": ["cd labs/d2-ir", "./misbehave.sh &                    # start the runaway agent", "./contain.sh --lever throttle && ./contain.sh --lever scope-reduce", "./contain.sh --lever revoke --agent reviewer   # one agent only"],
+      "expect": "Each lever is timed; revocation hits one agent without collateral (the A2.4 deliverable, proven here)."
+    },
+    "D2.5": {
+      "goal": "Replay an agent run to a regulator-grade standard.",
+      "run": ["cd labs/d2-ir", "python3 replay.py --trace case-01/trace.jsonl --assert-deterministic"],
+      "expect": "The run reproduces, or the tool tells you exactly which field was never logged to make replay possible."
+    },
+    "E1.2": {
+      "goal": "Discover agents you did not know you had.",
+      "run": ["cd labs/e1-grc", "python3 discover.py --from-gateway http://localhost:15000/stats --from-spire", "python3 register.py --out agent-register.csv"],
+      "expect": "A register built from telemetry rather than from a survey nobody answered."
+    },
+    "E1.5": {
+      "goal": "Turn an eval report into audit evidence — and find how it could mislead you.",
+      "run": ["cd labs/b2.10-eval-harness", "scripts/vulnbench.sh compare > evidence/raw-results.txt", "python3 ../e1-grc/evidence_pack.py --results evidence/raw-results.txt --control AI-EVAL-01", "python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three ways this misleads"],
+      "expect": "An OSCAL-shaped evidence pack, plus a written challenge: best-of-k reporting, conformance-as-accuracy, and judge dependence."
+    },
+    "E1.7": {
+      "goal": "Automate the evidence package, not the judgment.",
+      "run": ["cd labs/e1-grc", "python3 collect_evidence.py --control-set controls.yaml --schedule daily", "python3 drift.py --baseline evidence/2026-08-01 --current evidence/today"],
+      "expect": "Control drift surfaces as a diff; a human still decides what it means."
+    },
+    "E1.8": {
+      "goal": "Run a real AIBOM against a model artefact.",
+      "run": ["cd labs/e1-grc", "python3 aibom.py --model-dir ~/.ollama/models --out aibom.json", "cosign verify-blob --bundle model.sig model.gguf   # provenance where signed"],
+      "expect": "An artefact inventory with provenance status per component — and an honest 'unsigned' where that is the truth."
+    },
+    "E2.5": {
+      "goal": "Redact inside the trust boundary before anything crosses out.",
+      "run": ["pip install presidio-analyzer presidio-anonymizer", "cd labs/e2-compliance", "python3 redact_gateway.py --listen 8088 --upstream $OPENAI_BASE_URL", "curl -s localhost:8088/v1/chat/completions -d @with-pii.json | jq"],
+      "expect": "PII is removed before egress; the redaction decision is logged as evidence for E2.7."
+    },
+    "E2.8": {
+      "goal": "Build the audit trail out of the delegation chain itself.",
+      "run": ["cd labs/e2-compliance", "python3 audit_trail.py --from-keycloak --workflow patch-agent --out trail.json"],
+      "expect": "Which agent, under whose authority, in what scope, verified by which control, reviewable by whom — all from the `act` chain."
+    },
+    "E3.5": {
+      "goal": "Instrument the six board-level metrics from your own lab stack.",
+      "run": ["cd labs/e3-ciso", "python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2.10-eval-harness/work_mantis/comparison_results.json"],
+      "expect": "Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate."
+    }
+  }
+}
