@@ -139,7 +139,21 @@ Browse the site locally: `python3 -m http.server 8000 --directory site`
 ## Labs
 
 **Every one of the 108 sessions has a notebook, every notebook is
-self-contained, and every notebook runs.**
+self-contained, every notebook runs — and every notebook has been run a second
+time on Kaggle, on a different machine, where all 108 printed exactly what they
+print here.**
+
+That second run is the claim worth making. A kernel that finishes reports
+`complete` even if it printed nothing at all, so
+[`scripts/kaggle_verify.py`](scripts/kaggle_verify.py) compares each kernel's
+remote stdout line-for-line against a fresh local run
+([`_kaggle_verified.json`](labs/notebooks/_kaggle_verified.json), with the raw
+remote output in [`_kaggle_output/`](labs/notebooks/_kaggle_output)). It found
+two lessons that printed different things on the two machines because their
+output depended on `PYTHONHASHSEED`; both are fixed, and
+[`scripts/check_determinism.py`](scripts/check_determinism.py) now gates CI on
+running every notebook under several hash seeds so the next one is caught in
+nine seconds instead of after 108 remote pushes.
 
 | | |
 |---|---|
@@ -216,7 +230,7 @@ python3 scripts/build_site.py        # regenerate all 109 pages (fast, idempoten
 git add -A && git commit -m "lesson: A2.5 notes" && git push
 ```
 
-CI runs the secret scan, all 108 notebooks, and both `--check` modes, so the notebook you read on the site is always the notebook
+CI runs the secret scan, all 108 notebooks, the determinism gate, and both `--check` modes, so the notebook you read on the site is always the notebook
 that ran.
 
 That's the whole loop. Pushing triggers the Pages deploy, and the workflow

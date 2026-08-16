@@ -49,6 +49,16 @@ try:
 except (OSError, KeyError, json.JSONDecodeError):
     RESULTS = {}
 
+# Remote confirmation, written by scripts/kaggle_verify.py: the same notebook
+# run on Kaggle's machines printed the same thing. Also absent on a fresh
+# checkout — the badge then claims only what _results.json can support.
+try:
+    KAGGLE = {r["session"]: r for r in
+              json.loads((NB_DIR / "_kaggle_verified.json").read_text())["results"]
+              if r.get("identical")}
+except (OSError, KeyError, json.JSONDecodeError):
+    KAGGLE = {}
+
 DIRECTION = {"defend": ("d", "AI for Security"), "secure": ("s", "Security of AI"),
              "both": ("b", "Both directions")}
 
@@ -166,10 +176,23 @@ def verified_badge(sid: str) -> str:
     r = RESULTS.get(sid)
     if not r or not r.get("ok"):
         return ""
-    return (f'<div class="verified">✓ <b>Executed</b> — this notebook runs top to '
-            f'bottom on Python {"3.11+"}, producing {r["stdout_lines"]} lines of '
-            f'output in {r["seconds"]:.2f}s. No network, no API key, no installs. '
-            f'<span>Evidence: <code>labs/notebooks/_results.json</code></span></div>')
+    # Two separate claims, and the second is only made when it was earned.
+    # "It ran here" is weaker than "it printed the same thing somewhere else",
+    # so the badge never merges them into one vague assurance.
+    k = KAGGLE.get(sid)
+    # Deliberately no second line count here: the local figure counts blank
+    # lines and the remote one is normalised, so printing both side by side
+    # reads as a contradiction rather than as the agreement it actually is.
+    remote = (' It was run again on Kaggle, on a different machine, and printed '
+              'exactly the same output — so what you see below is reproducible, '
+              'not a recording.' if k else '')
+    evidence = ('labs/notebooks/_results.json'
+                + (' · labs/notebooks/_kaggle_verified.json' if k else ''))
+    return (f'<div class="verified">✓ <b>Executed{" and reproduced" if k else ""}</b> '
+            f'— this notebook runs top to bottom on Python {"3.11+"}, producing '
+            f'{r["stdout_lines"]} lines of output in {r["seconds"]:.2f}s. No network, '
+            f'no API key, no installs.{remote} '
+            f'<span>Evidence: <code>{evidence}</code></span></div>')
 
 
 def video_block(sid: str, title: str) -> str:
