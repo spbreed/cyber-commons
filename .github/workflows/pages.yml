@@ -48,6 +48,13 @@ jobs:
       - name: Execute every notebook
         run: python3 scripts/run_notebooks.py --quiet
 
+      # The skills are lesson material and real agent configuration at once.
+      # A skill whose frontmatter will not parse cannot be loaded, and two
+      # skills whose descriptions collide route by sort order rather than by
+      # meaning.
+      - name: Validate agent skills
+        run: python3 scripts/check_skills.py --check
+
       # Running clean is not enough — a lesson is only evidence if the
       # reader's run matches the one on the page. Two notebooks once printed
       # different things on Kaggle than they did locally because their output

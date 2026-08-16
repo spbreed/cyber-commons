@@ -136,6 +136,27 @@ the rest of the commons is for.
 
 Browse the site locally: `python3 -m http.server 8000 --directory site`
 
+## Agent skills
+
+The procedures the curriculum teaches exist as real agent skills — `SKILL.md`
+files with frontmatter, the format a coding agent loads — in
+[`skills/`](skills). Eleven of them, and the first five compose into the
+fifteen-stage AppSec pipeline the B1 track builds.
+
+Each declares an **output contract**, which is what makes a skill checkable
+rather than aspirational. Eleven lessons end by building that shape from the
+data they just produced and validating it — and then showing what the contract
+*cannot* see: an empty result conforms perfectly. Conformance is a statement
+about the serialiser; accuracy is the expensive part.
+
+```bash
+python3 scripts/check_skills.py --check   # parses, names, contracts, routing
+cp -r skills/appsec/appsec-vuln-audit ~/.claude/skills/
+```
+
+Skills are embedded into the notebooks verbatim at build time, so a lesson can
+never drift from the skill it teaches.
+
 ## Labs
 
 **Every one of the 108 sessions has a notebook, every notebook is
