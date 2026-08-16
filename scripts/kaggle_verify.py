@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -35,15 +36,30 @@ API = "https://www.kaggle.com/api/v1"
 from kaggle_push import credentials  # noqa: E402  — same credential rules
 
 
-def fetch_output(user: str, session: str, timeout: int = 90) -> str:
-    """The kernel's stdout, joined. Empty string if Kaggle returned none."""
+def fetch_output(user: str, session: str, timeout: int = 90, attempts: int = 5) -> str:
+    """The kernel's stdout, joined. Empty string if Kaggle returned none.
+
+    Kaggle rate-limits a fast sweep of 108 kernels with HTTP 429. That is a
+    "come back later", not a verification failure, so back off and retry rather
+    than recording the session as unverified.
+    """
     slug = f"cyber-commons-{session.lower().replace('.', '-')}"
     _, key = credentials()
     req = urllib.request.Request(
         f"{API}/kernels/output?userName={user}&kernelSlug={slug}",
         headers={"Authorization": f"Bearer {key}", "User-Agent": "cyber-commons-verify"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        body = json.loads(r.read().decode())
+    for attempt in range(attempts):
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                body = json.loads(r.read().decode())
+            break
+        except urllib.error.HTTPError as e:
+            if e.code not in (429, 500, 502, 503) or attempt == attempts - 1:
+                raise
+            # Respect Retry-After when Kaggle sends one; otherwise 4s, 8s, 16s…
+            wait = int(e.headers.get("Retry-After") or 0) or 4 * 2 ** attempt
+            print(f"  .... {session:8s} HTTP {e.code}, retrying in {wait}s")
+            time.sleep(wait)
 
     log = body.get("log") or ""
     if not log:

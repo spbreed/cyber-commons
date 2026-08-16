@@ -188,7 +188,14 @@ def main() -> int:
     todo = sessions(a.session, a.all)
     print(f"pushing {len(todo)} notebook(s) in batches of {a.concurrency} "
           f"(Kaggle allows 5 concurrent batch CPU sessions)")
+    # Start from whatever is already on record. A single-session push must
+    # amend the ledger, not replace it: overwriting it with one row silently
+    # discards the evidence that the other 107 kernels ran.
     results: dict[str, str] = {}
+    try:
+        results = json.loads((NB_DIR / "_kaggle_push.json").read_text())["results"]
+    except (OSError, KeyError, json.JSONDecodeError):
+        pass
 
     def push_one(sid: str) -> str:
         """Push with backoff. Returns a URL, or a string starting with ERROR."""

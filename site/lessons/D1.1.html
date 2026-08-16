@@ -129,8 +129,11 @@ for threshold in (0.5, 0.7, 0.9, 0.99):
 for k, v in RULES.items(): print(f&quot;{k}\n     {v}&quot;)
 
 def safe_triage(alert, verdict, confidence, sample_rate=0.1, seed=0):
-    import random
-    rng = random.Random(hash(alert.aid) % 1000 + seed)
+    import random, zlib
+    # NOT hash(): Python randomises str hashing per process (PYTHONHASHSEED),
+    # so hash(alert.aid) picks a different sample on every run and on every
+    # machine. crc32 is stable, which is what a sampling rule needs.
+    rng = random.Random(zlib.crc32(alert.aid.encode()) % 1000 + seed)
     if verdict == &quot;close&quot; and alert.severity in (&quot;critical&quot;, &quot;high&quot;):
         return &quot;escalate&quot;, &quot;rule 1: severity floor — never auto-close high/critical&quot;
     if verdict == &quot;close&quot; and rng.random() &lt; sample_rate:

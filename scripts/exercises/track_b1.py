@@ -533,7 +533,8 @@ def threat_model(arch):
                     "cwe": cwe, "vector": name, "score": score,
                     "path": f"{ep['unit']} → … → {sink['unit']}",
                     "data_at_risk": list(asset["data"])})
-    return sorted(threats, key=lambda t: -t["score"])
+    # deterministic on every machine: score first, then a stable tiebreak
+    return sorted(threats, key=lambda t: (-t["score"], t["cwe"], t["entry"], t["sink"]))
 
 TM = threat_model(ARCH)
 print(f"{'entry':13s}{'sink':13s}{'cwe':9s}{'vector':22s}{'score':>6}  data at risk")
@@ -558,8 +559,11 @@ def diff(before, after):
     key = lambda t: (t["entry"], t["sink"], t["cwe"])
     b = {key(t): t for t in before}
     a = {key(t): t for t in after}
-    return {"new": [a[k] for k in a.keys() - b.keys()],
-            "removed": [b[k] for k in b.keys() - a.keys()],
+    # sorted() over a set difference is NOT deterministic across processes:
+    # set iteration order depends on PYTHONHASHSEED, and a stable sort then
+    # preserves that order for equal scores. Sort the keys first.
+    return {"new": [a[k] for k in sorted(a.keys() - b.keys())],
+            "removed": [b[k] for k in sorted(b.keys() - a.keys())],
             "max_before": max(t["score"] for t in before),
             "max_after": max(t["score"] for t in after)}
 
@@ -567,7 +571,8 @@ d = diff(TM, TM2)
 print(f"threats before {len(TM)} → after {len(TM2)}")
 print(f"max severity   {d['max_before']} → {d['max_after']}")
 print("\\nNEW THREATS:")
-for t in sorted(d["new"], key=lambda t: -t["score"]):
+# full tiebreak, so equal scores order the same way on every machine
+for t in sorted(d["new"], key=lambda t: (-t["score"], t["cwe"], t["entry"], t["sink"])):
     print(f"   [{t['score']:>2}] {t['cwe']:9s}{t['path']:34s}auth={t['auth']}")
 print("\\nOne unauthenticated handler introduced 3 new threats, two of them")
 print("higher-scoring than anything in the original model.")
