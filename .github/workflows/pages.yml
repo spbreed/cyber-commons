@@ -69,7 +69,7 @@ jobs:
           import json, sys
           cur = json.load(open('site/data/curriculum.json'))
           vid = json.load(open('site/data/videos.json'))
-          ids = {s['id'] for s in cur['module0']['sessions']}
+          ids = set()
           for fn in cur['functions']:
               for tr in fn['tracks']:
                   ids |= {s['id'] for s in tr['sessions']}

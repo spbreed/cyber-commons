@@ -38,9 +38,6 @@ UPLOAD_URL = "https://www.googleapis.com/upload/youtube/v3/videos"
 
 
 def find_session(sid: str):
-    for s in CUR["module0"]["sessions"]:
-        if s["id"] == sid:
-            return s, CUR["module0"]["title"], "Module 0"
     for fn in CUR["functions"]:
         for tr in fn["tracks"]:
             for s in tr["sessions"]:

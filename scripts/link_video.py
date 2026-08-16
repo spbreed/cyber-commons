@@ -25,7 +25,7 @@ VID = ROOT / "site" / "data" / "videos.json"
 
 def all_sessions() -> dict[str, str]:
     c = json.loads(CUR.read_text())
-    out = {s["id"]: s["title"] for s in c["module0"]["sessions"]}
+    out: dict[str, str] = {}
     for fn in c["functions"]:
         for tr in fn["tracks"]:
             for s in tr["sessions"]:
