@@ -106,6 +106,32 @@ Kernels are created **private**. Kaggle rejects a public push with HTTP 403
 account has a verified phone number — an account setting, not something the
 script should route around. Pass `--public` once it is verified.
 
+## Verifying they actually produced the right output
+
+A kernel status of `complete` only means Kaggle finished running it. **A
+notebook that prints nothing also completes.** `scripts/kaggle_verify.py`
+closes that gap: it pulls each kernel's remote stdout and compares it, line for
+line, against a fresh local run of the same notebook.
+
+```bash
+python3 scripts/kaggle_verify.py --save     # writes _kaggle_verified.json
+```
+
+Because the notebooks are deterministic by design, byte-identical output from
+two independent machines is the real evidence a lesson runs — and any
+difference is a finding, not noise. It has already caught two:
+
+- **B1.3** iterated a set difference into a stable sort. With tied threat
+  scores the sort preserved set-iteration order, which Python randomises per
+  process via `PYTHONHASHSEED`.
+- **D1.1** seeded its sampling RNG from `hash(alert.aid)`. Python randomises
+  string hashing per process, so the sampled subset changed on every run.
+
+Neither showed up locally, where a single process runs every notebook with one
+hash seed. If you write a lesson that samples, ranks, or iterates a set, seed
+it from something stable (`zlib.crc32`, not `hash`) and give any sort a full
+tiebreak.
+
 Credentials come from `$KAGGLE_USERNAME`/`$KAGGLE_KEY` or
 `~/.kaggle/kaggle.json` — **never from this repository**. The script refuses to
 read a credential file located inside the repo, `.gitignore` excludes

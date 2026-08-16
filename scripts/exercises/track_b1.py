@@ -414,7 +414,10 @@ def walk(start, seen=None):
     out = {start}
     for n in adj[start]: out |= walk(n, seen)
     return out
-for e in entry_names:
+# sorted(), not the set itself: a reachability report that lists the same
+# entry points in a different order on every machine cannot be diffed between
+# two scans, and diffing scans is the whole point of mapping the architecture.
+for e in sorted(entry_names):
     for s in MAP["sinks"]:
         if s["unit"] in walk(e):
             reachable_sinks.append((e, s["unit"], s["resource"]))

@@ -275,7 +275,13 @@ class SuffixPolicy:
     def check(self, url):
         host = (urlparse(url).hostname or "").lower()
         if not host: return False, "unparseable"
-        for suf in self.allow_suffixes:
+        # Iterating the set directly would report whichever suffix Python
+        # happened to visit first — and set order depends on PYTHONHASHSEED,
+        # so the audit line would name a different rule on a different
+        # machine. Report the most specific match, the way a router reports
+        # the longest matching prefix: the answer to "which rule let this
+        # through" has to be reproducible or it is not evidence.
+        for suf in sorted(self.allow_suffixes, key=len, reverse=True):
             if host.endswith(suf):
                 return True, f"matches suffix {suf}"
         return False, "no suffix match"

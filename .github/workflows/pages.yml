@@ -48,6 +48,13 @@ jobs:
       - name: Execute every notebook
         run: python3 scripts/run_notebooks.py --quiet
 
+      # Running clean is not enough — a lesson is only evidence if the
+      # reader's run matches the one on the page. Two notebooks once printed
+      # different things on Kaggle than they did locally because their output
+      # depended on PYTHONHASHSEED, which a single local pass cannot reveal.
+      - name: Check every notebook is deterministic
+        run: python3 scripts/check_determinism.py --seeds 4 --quiet
+
       - name: Check notebooks and lab blocks are in sync
         run: |
           python3 scripts/build_notebooks.py --check
