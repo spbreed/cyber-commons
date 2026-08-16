@@ -49,6 +49,35 @@ SITE = "https://spbreed.github.io/cyber-commons"
 
 from exercises import EXERCISES  # noqa: E402
 
+SKILLS = ROOT / "skills"
+
+
+def skill_source(ref: str) -> str:
+    """Embed a real SKILL.md as a Python string, verbatim.
+
+    The file in `skills/` is the single source of truth. Embedding it at build
+    time keeps the notebook self-contained *and* makes drift impossible: change
+    the skill and the notebook is stale until it is rebuilt, which CI checks.
+    """
+    path = SKILLS / ref / "SKILL.md"
+    if not path.is_file():
+        raise FileNotFoundError(f"no such skill: skills/{ref}/SKILL.md")
+    text = path.read_text()
+    # r"""…""" keeps the markdown readable in the notebook, but only if the
+    # content cannot terminate the literal or escape it.
+    if '"""' in text:
+        raise ValueError(f"skills/{ref}/SKILL.md contains a triple quote")
+    if text.rstrip().endswith("\\"):
+        raise ValueError(f"skills/{ref}/SKILL.md ends with a backslash")
+    return (f'# skills/{ref}/SKILL.md — embedded verbatim from the repository.\n'
+            f'# This is the file itself, not a paraphrase of it.\n'
+            f'SKILL_MD = r"""{text}"""\n\n'
+            f'meta, body = parse_skill(SKILL_MD)\n'
+            f'print(f"loaded skill: {{meta[\'name\']}}")\n'
+            f'print(f"  tools it may use: {{\', \'.join(meta.get(\'allowed-tools\', [])) or \'—\'}}")\n'
+            f'print(f"  routing description: {{len(meta[\'description\'].split())}} words")\n'
+            f'print(f"  procedure: {{len(body.splitlines())}} lines")')
+
 DIRECTION = {"defend": "AI for Security", "secure": "Security of AI",
              "both": "Both directions"}
 
@@ -116,7 +145,10 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
 
     # ---- 2..n the built arc ----------------------------------------------
     for kind, source in ex["steps"]:
-        cells.append(md(source) if kind == "md" else code(source))
+        if kind == "skill":
+            cells.append(code(skill_source(source)))
+        else:
+            cells.append(md(source) if kind == "md" else code(source))
 
     # ---- close ------------------------------------------------------------
     expect = ex.get("expect") or lab.get("expect", "")

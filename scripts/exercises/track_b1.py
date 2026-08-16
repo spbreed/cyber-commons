@@ -22,6 +22,8 @@ Mantis as a bonus: a real implementation of this pipeline, mapped stage by stage
 onto what you built.
 """
 
+from .skills import SKILL_RUNTIME
+
 PIPELINE_NOTE = """
 > **Where you are in the pipeline.**
 >
@@ -320,7 +322,10 @@ def units_of(src, path):
                          else getattr(c.func, "attr", ""))
                         for c in ast.walk(fn) if isinstance(c, ast.Call)} - {""})
         doc = ast.get_docstring(fn) or ""
-        out.append({"name": fn.name, "file": path, "params": [a.arg for a in fn.args.args],
+        # file + line, never a bare name: two `handler` functions in different
+        # files are two different units, and merging them loses a finding
+        out.append({"name": fn.name, "file": path, "line": fn.lineno,
+                    "params": [a.arg for a in fn.args.args],
                     "calls": calls, "doc": doc})
     return out
 
@@ -449,6 +454,149 @@ print(f"flows before {len(MAP['flows'])} → after {len(map_v2['flows'])}")
 print("\\nOne function added. A new untrusted entry point now reaches both the")
 print("database and the filesystem. That delta is what B1.3 threat-models.")
 assert after - before
+'''),
+
+  ("md", """## 6 · Write the procedure down as an agent skill
+
+You have just run four stages by hand. The next repository needs the same four,
+and so does the next agent. An **agent skill** is how that procedure stops
+living in your head.
+
+A skill is a markdown file with a small header:
+
+```
+---
+name: appsec-repo-recon
+description: >-
+  Build the structural and historical map of a codebase before any security
+  analysis. Use at the start of an application security review, when asked to
+  find entry points, sinks, trust boundaries or attack surface ...
+allowed-tools: Read, Grep, Glob, Bash
+---
+
+# the procedure, written for whoever runs it next
+```
+
+Three fields, three different jobs:
+
+- **`name`** identifies it.
+- **`description`** is the **routing key**, not documentation. An agent decides
+  whether to load a skill by reading this sentence and nothing else. A
+  description that says "helps with security stuff" never fires, and two
+  descriptions that overlap fire the wrong one.
+- **`allowed-tools`** bounds it. This skill reads a repository; it never writes
+  to one, and that is enforceable rather than merely stated.
+
+The body carries the procedure and — the part that matters here — an **output
+contract**: the exact JSON shape Phase 2 will join against. A skill with a
+contract is testable. A skill without one is a wish."""),
+
+  ("py", SKILL_RUNTIME),
+  ("skill", "appsec/appsec-repo-recon"),
+
+  ("md", "## 7 · The contract is executable — check the map you just built\n\n"
+         "The skill promised a shape. You built a map. Those two claims can be "
+         "checked against each other mechanically, which is the whole reason to "
+         "write the contract down."),
+  ("py", '''# Express the map this lesson built in the shape the skill promises.
+contract = contract_of(body)
+at = {u["name"]: u for u in ALL_UNITS}
+EXPOSURE = {"src/web": "public", "src/util": "internal", "src/data": "internal"}
+
+recon = {"architecture_map": {
+  "entry_points": [
+      {"unit": e["unit"], "file": at[e["unit"]]["file"], "line": at[e["unit"]]["line"],
+       "exposure": EXPOSURE.get("/".join(at[e["unit"]]["file"].split("/")[:-1]), "internal")}
+      for e in MAP["entry_points"]],
+  "sinks": [
+      {"unit": s["unit"], "file": at[s["unit"]]["file"], "resource": s["resource"]}
+      for s in MAP["sinks"]],
+  "flows": [[a, b] for a, b in MAP["flows"]],
+  "boundaries": [
+      {"edge": b["edge"], "from_trust": TRUST[b["from"]], "to_trust": TRUST[b["to"]]}
+      for b in B],
+  "reachable": [
+      {"entry": e, "sink": u, "path": [e, u]} for e, u, _ in reachable_sinks],
+  # carried forward from stage 1 in B1.1 — each notebook stands alone, so the
+  # result of the previous stage arrives as a literal rather than an import
+  "hotspots": [{"file": "src/auth.py", "fix_count": 3},
+               {"file": "src/data/reports.py", "fix_count": 1}],
+  "caveats": ["single language; vendored trees not indexed"],
+}}
+
+problems = check(recon, contract)
+print(f"conformance check: {len(problems)} problem(s)")
+for p in problems:
+    print("   ", p)
+assert not problems, problems
+print("\\nThe map satisfies the contract, so Phase 2 can consume it without")
+print("negotiating a format.")
+'''),
+
+  ("md", "## 8 · Where it breaks — conformance is not accuracy\n\n"
+         "A contract check is cheap to pass and easy to over-read. Watch what "
+         "else satisfies it."),
+  ("py", '''# An empty map. Every required key present, every type correct.
+hollow = {"architecture_map": {
+    "entry_points": [], "sinks": [], "flows": [], "boundaries": [],
+    "reachable": [], "hotspots": [], "caveats": [],
+}}
+print(f"hollow map, conformance problems: {len(check(hollow, contract))}")
+print(f"real map,   conformance problems: {len(check(recon, contract))}")
+print()
+print("Both conform. One of them found nothing at all.")
+print()
+print("Conformance is a statement about the serialiser: it is close to free by")
+print("construction, and an empty result scores perfectly. Accuracy is the")
+print("expensive part and the contract cannot measure it. Any pipeline that")
+print("reports '100% schema-valid' as a quality metric is reporting this number.")
+print()
+print(f"what the contract can tell you : shape is right ({len(check(recon, contract))} problems)")
+print(f"what only the map can tell you : {len(recon['architecture_map']['reachable'])} "
+      f"reachable entry->sink pairs, {len(recon['architecture_map']['boundaries'])} "
+      f"boundary crossings")
+assert not check(hollow, contract), "the hollow map conforms - that is the point"
+'''),
+
+  ("md", "## 9 · The control — route by description, and refuse a tie\n\n"
+         "An agent picks a skill by reading descriptions. That makes the "
+         "description a piece of security-relevant configuration: route wrong "
+         "and you run the wrong procedure with the wrong tools."),
+  ("py", '''# Four skills from this repository, by description alone.
+CATALOGUE = {
+ "appsec-repo-recon": {"description":
+   "Build the structural and historical map of a codebase before any security "
+   "analysis. Use at the start of an application security review, when asked to "
+   "find entry points, sinks, trust boundaries or attack surface."},
+ "appsec-threat-model": {"description":
+   "Turn an architecture map into a ranked, testable threat model and an audit "
+   "plan. Use after repository reconnaissance, when asked what could go wrong."},
+ "appsec-vuln-audit": {"description":
+   "Audit code for vulnerabilities against a threat model, then deduplicate, "
+   "verify in context, and filter to what is actually reachable. Use when asked "
+   "to review code for security bugs or check whether a finding is a false positive."},
+ "detection-triage": {"description":
+   "Triage security alerts with the context needed to reach a defensible verdict. "
+   "Use when working an alert queue or deciding whether an alert is a true positive."},
+}
+
+for task in ["map the attack surface of this repo before we review it",
+             "what could go wrong with this architecture",
+             "is this alert a false positive"]:
+    pick, scores, margin = route(task, CATALOGUE)
+    verdict = f"-> {pick}" if margin > 0 else f"-> AMBIGUOUS (tie at {scores[pick]})"
+    print(f"{task[:44]:46s} {verdict}  margin={margin}")
+
+print()
+print("The third routes with margin 0. 'false positive' appears in the audit")
+print("skill's description and 'alert' in the triage skill's, so both score the")
+print("same and the winner is whichever sorted first alphabetically - an")
+print("arbitrary answer wearing a confident face.")
+print()
+print("That is why route() returns the margin. A tie is a configuration bug in")
+print("the descriptions, and the fix is to make them disjoint, not to let the")
+print("sort decide which procedure runs.")
+assert route("is this alert a false positive", CATALOGUE)[2] == 0
 '''),
  ],
  "expect": "Three components summarise with their entry points, outbound calls "
@@ -749,6 +897,78 @@ print(f"   threat-weighted coverage {r['threat_weighted_coverage']:.0%} → "
 print(f"   uncovered high-threat targets: {r2['uncovered_high_threat'] or 'none'}")
 print("\\nAllocation is what stops repository growth from silently degrading")
 print("the analysis of the parts that matter.")
+'''),
+
+  ("md", "## 6 · The skill that carries Phase 2\n\n"
+         "Stages 5 and 6 are now a procedure rather than a one-off. The skill "
+         "below is the version an agent runs, and its contract is the reason "
+         "the plan can be handed to Phase 3 without a conversation.\n\n"
+         "Note what the contract insists on: `score_inputs` alongside every "
+         "score. A severity you cannot decompose is a severity nobody can "
+         "argue with — and an unarguable severity is one nobody fixes."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "appsec/appsec-threat-model"),
+
+  ("py", '''contract = contract_of(body)
+
+# The weakness class each target would be, named rather than implied — the
+# contract needs it and "distinct CWEs covered" is meaningless without it.
+CWE_OF = {"load_report → execute": "CWE-89", "store → open": "CWE-22",
+          "render": "CWE-79", "health": "CWE-200",
+          "upload_doc": "CWE-434", "get_report": "CWE-22"}
+
+def cost_of(target, analyser):
+    return ANALYSERS[analyser][0] * target.loc / 100
+
+# The plan this lesson produced, in the shape the skill promises.
+# threat_index points into `threat_model` below, which is TARGETS order.
+# a["plan"] is in *ranked* order, so enumerating it would number the threats
+# by rank and every index in the contract would point at the wrong threat.
+IDX = {t.name: i for i, t in enumerate(TARGETS)}
+sel = [{"threat_index": IDX[t.name], "cost": cost_of(t, analyser),
+        "why": analyser}
+       for t, analyser in a["plan"]]
+chosen = {t.name for t, _ in a["plan"]}
+plan = {
+ "threat_model": [
+   {"cwe": CWE_OF[t.name], "entry": t.name.split(" ")[0], "sink": t.name.split(" ")[-1],
+    "path": t.name.split(" → "), "crosses_boundary": t.threat_score >= 6,
+    "auth": "none" if t.threat_score >= 8 else "user",
+    "score": t.threat_score,
+    "score_inputs": {"exposure": t.threat_score,
+                     "resource": round(t.historical_risk, 2),
+                     "boundary": 2 if t.threat_score >= 6 else 1}}
+   for t in TARGETS],
+ # What the budget deferred is *depth*, not targets: everything gets some
+ # analyser, but the ones that wanted model review and got taint rules are
+ # exactly the gap the report must disclose.
+ "plan": {"budget": float(BUDGET), "selected": sel,
+          "deferred": [{"threat_index": IDX[t.name],
+                        "why": f"wanted model review, budget allowed {analyser}"}
+                       for t, analyser in a["plan"]
+                       if (t.threat_score + t.historical_risk * 3) >= 9
+                       and analyser != "model review"],
+          "coverage": {"threat_weighted": float(r2["threat_weighted_coverage"]),
+                       "distinct_cwes": len({CWE_OF[t.name] for t, _ in a["plan"]})}},
+}
+problems = check(plan, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+print(f"\\nselected {len(sel)} of {len(TARGETS)} threats; "
+      f"{len(plan['plan']['deferred'])} of them wanted deep review and did not get it")
+print(f"distinct CWEs covered: {plan['plan']['coverage']['distinct_cwes']}")
+print()
+for d in plan["plan"]["deferred"]:
+    print(f"   deferred: {TARGETS[d['threat_index']].name:22s} {d['why']}")
+print()
+print("`deferred` is not bookkeeping. Every target got *an* analyser, so a")
+print("coverage number counting targets would read 100%. What the budget")
+print("actually cut was depth, on three of the four highest-threat targets.")
+print("That distinction travels to the report as the scope statement, and a")
+print("plan that drops it produces a report that overclaims.")
+assert plan["plan"]["deferred"], "a budget that defers nothing proves nothing"
 '''),
  ],
  "expect": "On a tight budget the uniform model-review sweep covers only 2 of 6 "
@@ -1296,6 +1516,107 @@ def queue_load(buckets, routing):
 print(f"\\n{queue_load(buckets, ROUTING)}")
 print("\\nThe unknown bucket is not a failure of the analysis. It is the handover")
 print("to Phase 4, which answers reachability by running the thing.")
+'''),
+
+  ("md", "## 6 · Phase 3 as a skill — and the counts that police it\n\n"
+         "Stages 7 to 10 only ever *shrink* the list. That is a property worth "
+         "enforcing rather than trusting, so the skill's contract carries a "
+         "`counts` object and the rule that it must never increase.\n\n"
+         "A pipeline whose `verified` count exceeds its `deduped` count has "
+         "invented findings somewhere after the audit stage — and that is far "
+         "easier to do by accident than it sounds, because a verification step "
+         "that expands one finding per code path looks perfectly reasonable "
+         "from the inside."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "appsec/appsec-vuln-audit"),
+
+  ("py", '''contract = contract_of(body)
+
+FILE_OF = {"load_report": "src/data/reports.py", "legacy_export": "src/data/legacy.py",
+           "debug_dump": "src/util/debug.py"}
+MISSING = {"CWE-89": "parameterised query", "CWE-22": "path normalisation"}
+
+findings = []
+for unit, (cwe, sink) in sorted(SINKS.items()):
+    verdict, why = feasibility(unit)
+    findings.append({
+        "id": f"F-{unit}", "cwe": cwe, "file": FILE_OF[unit], "line": 1,
+        "unit": unit, "evidence": f"{sink} reached with caller-supplied input",
+        "missing_control": MISSING[cwe], "occurrences": 1,
+        # a finding we cannot prove reachable is not "confirmed" - it is the
+        # one honest use of needs_human in the whole pipeline
+        "verdict": "confirmed" if verdict == "reachable" else "needs_human",
+        "verdict_reason": why,
+        "feasible": verdict == "reachable",
+        "confidence": 0.9 if verdict == "reachable" else 0.4})
+
+audit = {
+ "findings": findings,
+ "dropped": [{"id": f"F-{u}", "stage": 10, "why": "no path from any entry point"}
+             for u in sorted(buckets.get("unreachable", []))],
+ # three analysers each reported every defect, so the raw count is 3x the
+ # number of real defects. That is the normal case, not a bad day.
+ "counts": {"raw": len(SINKS) * 3, "deduped": len(SINKS),
+            "verified": len(findings),
+            "feasible": sum(1 for f in findings if f["feasible"])},
+}
+
+problems = check(audit, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+c = audit["counts"]
+seq = [c["raw"], c["deduped"], c["verified"], c["feasible"]]
+print(f"\\ncounts raw->deduped->verified->feasible : {seq}")
+print(f"monotonically non-increasing            : {all(x >= y for x, y in zip(seq, seq[1:]))}")
+assert all(x >= y for x, y in zip(seq, seq[1:])), seq
+'''),
+
+  ("md", "## 7 · Where it breaks — deduplicating on the wrong key\n\n"
+         "The skill says to collapse on the **defect identity**, "
+         "`(cwe, file, unit, sink_expression)`, and never on the message text. "
+         "Here is why that sentence is in the procedure."),
+  ("py", '''# The same three defects, as three analysers actually report them.
+ANALYSER_WORDING = {
+ "grep rules":  "possible {cwe} near {unit}",
+ "taint rules": "tainted input reaches {unit} ({cwe})",
+ "model review":"{unit} appears to pass user input to a dangerous sink; likely {cwe}",
+}
+raw = [dict(f, id=f"{f['id']}/{tool}",
+            message=w.format(cwe=f["cwe"], unit=f["unit"]))
+       for f in findings for tool, w in sorted(ANALYSER_WORDING.items())]
+print(f"raw findings from three analysers: {len(raw)}")
+
+def dedup(rows, key):
+    seen = {}
+    for r in rows:
+        seen.setdefault(key(r), r)
+    return sorted(seen.values(), key=lambda r: r["id"])
+
+by_identity = dedup(raw, lambda r: (r["cwe"], r["file"], r["unit"], r["evidence"]))
+by_message  = dedup(raw, lambda r: r["message"])
+print(f"deduped on defect identity : {len(by_identity)}")
+print(f"deduped on message text    : {len(by_message)}")
+
+bad = dict(audit, findings=by_message,
+           counts=dict(audit["counts"], deduped=len(by_message),
+                       verified=len(by_message),
+                       feasible=sum(1 for f in by_message if f["feasible"])))
+print(f"\\nconformance problems: {len(check(bad, contract))}   <- still zero")
+seq2 = [bad["counts"][k] for k in ("raw", "deduped", "verified", "feasible")]
+print(f"counts               : {seq2}")
+print()
+print(f"Three defects became {len(by_message)} findings, and every one of them is")
+print("schema-valid. Each analyser words the same defect differently, so the")
+print("message is a unique key by construction - it deduplicates nothing while")
+print("looking like it deduplicates everything.")
+print()
+print("The queue triples. Nobody reads the third page. The defect that gets")
+print("fixed is whichever one happened to sort first.")
+assert not check(bad, contract), "the broken pipeline still conforms - that is the point"
+assert len(by_message) > len(by_identity), "message-keyed dedup must inflate the list"
+assert len(by_identity) == len(SINKS)
 '''),
  ],
  "expect": "The call graph identifies three entry points, one of which uses "
