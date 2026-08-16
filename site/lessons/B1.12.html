@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.12 — Severity calibration and reporting | Cyber Commons</title><meta name="description" content="Stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.12</div><h1>Severity calibration and reporting</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.12.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.12.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.12.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 60 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.12 · Severity calibration and reporting</h1>
+<p><strong>Function B — Product &amp; Application Security → The AppSec Engineer / Code Reviewer</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.11.html">B1.11 · Remediation engineering</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>OpenGrep</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>GLM-4.6</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p><strong>Stage 15 — Severity calibration and reporting.</strong> The pipeline's output, and
+the stage where its credibility is won or lost.</p>
+<p>Most severity is a label copied from the rule that fired: this is a CWE-89, so
+it is high. That number predicts nothing, because it ignores everything the
+pipeline has just learned:</p>
+<ul>
+<li>did stage 12 <strong>confirm it by execution</strong>?</li>
+<li>is it <strong>reachable</strong> from an untrusted entry point (stage 10)?</li>
+<li>what does it <strong>chain into</strong> (stage 13)?</li>
+<li>does it sit in a <strong>historical risk zone</strong> (stage 1)?</li>
+</ul>
+<p>Calibrated severity uses all four. A confirmed, reachable finding that chains
+into account takeover is not the same as an unvalidated finding in dead code,
+even when both are CWE-89.</p>
+<p>The second half of this stage is the report, and the useful report is not a
+finding count. It is <strong>per-stage economics</strong>: where bugs are caught, where they
+escape, and what each escape costs — because that is what decides next
+quarter's budget.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote></div><div class="nbmd"><h2>2 · Stage 15 — calibrate severity from what the pipeline learned</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass
+
+@dataclass
+class Finding:
+    fid: str; cwe: str; rule_severity: str
+    confirmed: bool; reachable: str        # reachable | unknown | unreachable
+    chains_into: str                       # &quot;&quot; if none
+    historical_risk: float
+
+RULE_SEV = {&quot;low&quot;:1,&quot;medium&quot;:2,&quot;high&quot;:3,&quot;critical&quot;:4}
+INV = {v:k for k,v in RULE_SEV.items()}
+CHAIN_SEV = {&quot;&quot;: 0, &quot;data_exposure&quot;: 3, &quot;account_takeover&quot;: 4, &quot;admin_actions&quot;: 4}
+
+FINDINGS = [
+ Finding(&quot;F-01&quot;,&quot;CWE-89&quot;,&quot;high&quot;,  True,  &quot;reachable&quot;,   &quot;account_takeover&quot;, 0.82),
+ Finding(&quot;F-02&quot;,&quot;CWE-89&quot;,&quot;high&quot;,  False, &quot;unreachable&quot;, &quot;&quot;, 0.10),
+ Finding(&quot;F-03&quot;,&quot;CWE-22&quot;,&quot;medium&quot;,True,  &quot;reachable&quot;,   &quot;data_exposure&quot;, 0.91),
+ Finding(&quot;F-04&quot;,&quot;CWE-798&quot;,&quot;high&quot;, False, &quot;unknown&quot;,     &quot;&quot;, 0.05),
+ Finding(&quot;F-05&quot;,&quot;CWE-352&quot;,&quot;medium&quot;,True, &quot;reachable&quot;,   &quot;account_takeover&quot;, 0.30),
+ Finding(&quot;F-06&quot;,&quot;CWE-89&quot;,&quot;high&quot;,  False, &quot;unknown&quot;,     &quot;&quot;, 0.40),
+]
+
+def calibrate(f):
+    base = RULE_SEV[f.rule_severity]
+    score = base
+    why = [f&quot;rule severity {f.rule_severity} ({base})&quot;]
+    if f.confirmed:            score += 2; why.append(&quot;confirmed by execution (+2)&quot;)
+    else:                      score -= 1; why.append(&quot;not confirmed (-1)&quot;)
+    if f.reachable == &quot;reachable&quot;:     score += 1; why.append(&quot;reachable from an entry point (+1)&quot;)
+    elif f.reachable == &quot;unreachable&quot;: score -= 2; why.append(&quot;unreachable (-2)&quot;)
+    else:                              why.append(&quot;reachability unknown (0)&quot;)
+    if f.chains_into:
+        score = max(score, CHAIN_SEV[f.chains_into] + 2)
+        why.append(f&quot;chains into {f.chains_into} (floor raised)&quot;)
+    if f.historical_risk &gt; 0.6: score += 1; why.append(&quot;in a historical risk zone (+1)&quot;)
+    band = (&quot;critical&quot; if score &gt;= 6 else &quot;high&quot; if score &gt;= 4
+            else &quot;medium&quot; if score &gt;= 2 else &quot;low&quot;)
+    return {&quot;fid&quot;: f.fid, &quot;rule&quot;: f.rule_severity, &quot;calibrated&quot;: band,
+            &quot;score&quot;: score, &quot;why&quot;: why}
+
+rows = [calibrate(f) for f in FINDINGS]
+print(f&quot;{&#x27;id&#x27;:7s}{&#x27;rule sev&#x27;:10s}{&#x27;calibrated&#x27;:12s}{&#x27;score&#x27;:&gt;6}&quot;)
+print(&quot;-&quot; * 40)
+for r in rows:
+    moved = &quot;&quot; if r[&quot;rule&quot;] == r[&quot;calibrated&quot;] else &quot;   ← moved&quot;
+    print(f&quot;{r[&#x27;fid&#x27;]:7s}{r[&#x27;rule&#x27;]:10s}{r[&#x27;calibrated&#x27;]:12s}{r[&#x27;score&#x27;]:&gt;6}{moved}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — rule severity as the queue order</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>by_rule = sorted(FINDINGS, key=lambda f: -RULE_SEV[f.rule_severity])
+by_cal  = sorted(rows, key=lambda r: -r[&quot;score&quot;])
+
+print(f&quot;{&#x27;rank&#x27;:6s}{&#x27;by rule severity&#x27;:22s}{&#x27;by calibrated severity&#x27;:24s}&quot;)
+print(&quot;-&quot; * 56)
+for i, (a, b) in enumerate(zip(by_rule, by_cal), 1):
+    print(f&quot;{i:&lt;6}{a.fid + &#x27; (&#x27; + a.rule_severity + &#x27;)&#x27;:22s}&quot;
+          f&quot;{b[&#x27;fid&#x27;] + &#x27; (&#x27; + b[&#x27;calibrated&#x27;] + &#x27;)&#x27;:24s}&quot;)
+
+top_rule = {f.fid for f in by_rule[:3]}
+top_cal  = {r[&quot;fid&quot;] for r in by_cal[:3]}
+print(f&quot;\ntop-3 by rule       : {sorted(top_rule)}&quot;)
+print(f&quot;top-3 by calibration: {sorted(top_cal)}&quot;)
+print(f&quot;disagreement        : {sorted(top_rule ^ top_cal)}&quot;)
+for r in rows:
+    f = next(x for x in FINDINGS if x.fid == r[&quot;fid&quot;])
+    if r[&quot;fid&quot;] in top_rule - top_cal:
+        print(f&quot;\n{r[&#x27;fid&#x27;]} is high by rule and {r[&#x27;calibrated&#x27;]} calibrated because:&quot;)
+        for w in r[&quot;why&quot;]: print(f&quot;   · {w}&quot;)
+assert top_rule != top_cal</code></pre></div><div class="nbmd"><h2>4 · The report — per-stage economics, not a finding count</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass as dc
+
+@dc
+class Stage:
+    name: str; found: int; escaped: int; false_positives: int; minutes: float
+
+PIPELINE_STAGES = [
+ Stage(&quot;design&quot;,   2,  9,  1,  40),
+ Stage(&quot;code&quot;,    14,  6,  9,  70),
+ Stage(&quot;review&quot;,   9,  4, 22, 110),
+ Stage(&quot;test&quot;,     4,  2,  3,  50),
+ Stage(&quot;deploy&quot;,   1,  1,  1,  20),
+ Stage(&quot;runtime&quot;,  1,  0,  0, 180),
+]
+ESCAPE_MULTIPLIER = 6.0
+
+print(f&quot;{&#x27;stage&#x27;:9s}{&#x27;found&#x27;:&gt;6}{&#x27;escaped&#x27;:&gt;9}{&#x27;FP&#x27;:&gt;5}{&#x27;precision&#x27;:&gt;11}{&#x27;min/find&#x27;:&gt;10}&quot;)
+print(&quot;-&quot; * 51)
+for s in PIPELINE_STAGES:
+    total = s.found + s.false_positives
+    prec = s.found/total if total else 0
+    per = s.minutes/s.found if s.found else 0
+    print(f&quot;{s.name:9s}{s.found:&gt;6}{s.escaped:&gt;9}{s.false_positives:&gt;5}{prec:&gt;11.2f}{per:&gt;10.1f}&quot;)
+
+def escape_cost(stages, m=ESCAPE_MULTIPLIER):
+    n = len(stages)
+    return {s.name: round(s.escaped * (m ** (n-i-1)) / 1000, 2)
+            for i, s in enumerate(stages)}
+
+costs = escape_cost(PIPELINE_STAGES)
+print(f&quot;\n{&#x27;stage&#x27;:9s}{&#x27;escaped&#x27;:&gt;9}{&#x27;relative escape cost&#x27;:&gt;22}&quot;)
+print(&quot;-&quot; * 42)
+for s in PIPELINE_STAGES:
+    bar = &quot;█&quot; * min(int(costs[s.name] * 2), 34)
+    print(f&quot;{s.name:9s}{s.escaped:&gt;9}{costs[s.name]:&gt;14}  {bar}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># The one-page report the pipeline actually emits.
+def report(findings, calibrated, stages, costs):
+    crit = [r for r in calibrated if r[&quot;calibrated&quot;] == &quot;critical&quot;]
+    confirmed = [f for f in findings if f.confirmed]
+    unvalidated = [f for f in findings if not f.confirmed and f.reachable == &quot;unknown&quot;]
+    worst_stage = max(costs, key=costs.get)
+    return f&quot;&quot;&quot;APPSEC PIPELINE REPORT
+
+  findings emitted            {len(findings)}
+  confirmed by execution      {len(confirmed)}   (stage 12)
+  unvalidated + unknown reach {len(unvalidated)}   ← a gap in probe generation, not a pass
+  calibrated critical         {len(crit)}   {[r[&#x27;fid&#x27;] for r in crit]}
+
+  severity is calibrated from: confirmation, reachability, chaining and
+  historical risk — not from the rule that fired.
+
+  highest escape cost at stage: {worst_stage} ({costs[worst_stage]})
+  → that is where the next analyser should be pointed, not where the
+    most findings currently are.&quot;&quot;&quot;
+
+print(report(FINDINGS, rows, PIPELINE_STAGES, costs))
+assert max(costs, key=costs.get) == &quot;design&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Calibration moves several findings off their rule severity: the confirmed reachable CWE-89 that chains into account takeover becomes critical, while the unreachable and unvalidated ones fall. The top-3 by rule severity and by calibration disagree. The stage table shows review with the worst precision and highest minutes per finding, and design carrying the highest escape cost despite only two findings.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Recalculate severity for your current open findings using confirmation and reachability alone — you do not need chaining to see the effect. The queue reorders, and the items that fall are usually the ones people have been arguing about.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.13.html">B1.13 · Context engineering for the pipeline</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.12.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.12.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Calibration moves several findings off their rule severity: the confirmed reachable CWE-89 that chains into account takeover becomes critical, while the unreachable and unvalidated ones fall. The top-3 by rule severity and by calibration disagree. The stage table shows review with the worst precision and highest minutes per finding, and design carrying the highest escape cost despite only two findings.</div><div class="chips"><span>OpenGrep</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.12.ipynb</code></p></div><div class="pager"><a href="B1.11.html"><span class="k">← Previous</span><span class="t">B1.11 · Remediation engineering</span></a><a class="next" href="B1.13.html"><span class="k">Next →</span><span class="t">B1.13 · Context engineering for the pipeline</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

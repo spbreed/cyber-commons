@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.5 — Delegation that survives audit | Cyber Commons</title><meta name="description" content="RFC 8693 token exchange with the `act` claim as a real delegation chain."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.5</div><h1>Delegation that survives audit</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>On-behalf-of implemented as impersonation — the chain is unprovable afterwards.</p></div><div class="ctrl"><div class="lab">Control</div><p>RFC 8693 token exchange with the `act` claim as a real delegation chain.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">A three-hop delegation chain that survives audit.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 20 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.5 · Delegation that survives audit</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.5 — Delegation that survives audit | Cyber Commons</title><meta name="description" content="RFC 8693 token exchange with the `act` claim as a real delegation chain."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.5</div><h1>Delegation that survives audit</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>On-behalf-of implemented as impersonation — the chain is unprovable afterwards.</p></div><div class="ctrl"><div class="lab">Control</div><p>RFC 8693 token exchange with the `act` claim as a real delegation chain.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">A three-hop delegation chain that survives audit.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 28 lines of output in 0.07s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.5 · Delegation that survives audit</h1>
 <p><strong>Function A — Security Architecture &amp; Platform → The Identity &amp; Non-Human Identity Engineer</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> On-behalf-of implemented as impersonation — the chain is unprovable afterwards.</p>
-<p><strong>Control.</strong> RFC 8693 token exchange with the <code>act</code> claim as a real delegation chain.</p>
-<p><strong>This lab.</strong> A three-hop delegation chain that survives audit.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.4.html">A2.4 · The NHI governance gap</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,54 +20,169 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Now we build the thing A2.1 pointed at and A2.3 proved we need:
+<strong>on-behalf-of delegation</strong>, standardised as <a href="https://datatracker.ietf.org/doc/html/rfc8693">RFC 8693 OAuth 2.0 Token
+Exchange</a>.</p>
+<p>The idea is small. An actor presents a token it holds and asks for a new one for
+a different actor. The issuer returns a token with:</p>
+<ul>
+<li><strong><code>sub</code></strong> — unchanged. The action is still <em>for</em> the original principal.</li>
+<li><strong><code>actor</code></strong> — the new holder.</li>
+<li><strong><code>act</code></strong> — a nested claim recording who presented the token, and who
+  presented it to <em>them</em>, all the way back.</li>
+</ul>
+<p>Two rules make the result auditable, and both must hold:</p>
+<ol>
+<li><strong>Subset of what was presented.</strong> You cannot hand on authority you were not
+   given.</li>
+<li><strong>Within the new actor's own ceiling.</strong> You cannot hand on authority the
+   recipient may never hold, even if the caller offered it. (This is A1.3's
+   ceiling, doing its second job.)</li>
+</ol>
+<p>Drop either rule and the chain still <em>looks</em> correct — every token parses, every
+call succeeds — which is precisely why this needs a test rather than a review.</p></div><div class="nbmd"><h2>2 · Demo — a three-hop chain that narrows at every step</h2>
+<p>Dana asks for a fix. The orchestrator delegates to a patch agent, which delegates to a deploy agent. Watch the scopes shrink.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import hashlib, json, time
+from dataclasses import dataclass, field
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+# A1.3&#x27;s ceilings: what each actor may EVER hold.
+CEILINGS = {
+    &quot;dana@corp&quot;:    {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;deploy:prod&quot;, &quot;secrets:read&quot;},
+    &quot;orchestrator&quot;: {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;deploy:prod&quot;},
+    &quot;patch-agent&quot;:  {&quot;repo:read&quot;, &quot;repo:write&quot;},
+    &quot;deploy-agent&quot;: {&quot;repo:read&quot;, &quot;deploy:prod&quot;},
+    &quot;triage-agent&quot;: {&quot;repo:read&quot;},
+}
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;A2.5&quot;))</code></pre></div><div class="nbmd"><p>This is the flagship identity lab. A three-hop delegation chain that survives audit — and the four ways it usually doesn't.</p></div><div class="nbmd"><p><strong>1 — the chain.</strong> Each hop narrows, and each hop is recorded.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import identity
+class DelegationError(Exception):
+    &quot;&quot;&quot;Refusing to widen is the feature.&quot;&quot;&quot;
 
-alice = identity.mint(&quot;alice&quot;)
-rev   = identity.exchange(alice, &quot;reviewer-agent&quot;, {&quot;repo:read&quot;})
-patch = identity.exchange(alice, &quot;patch-agent&quot;,    {&quot;repo:read&quot;, &quot;repo:write&quot;})
-dep   = identity.exchange(patch, &quot;deploy-agent&quot;,   {&quot;repo:read&quot;})
+@dataclass
+class Token:
+    sub: str
+    actor: str
+    scopes: set
+    act: dict = None
+    issued: float = field(default_factory=time.time)
+    ttl: float = 300
 
-for t in (alice, rev, patch, dep):
-    print(t.describe())</code></pre></div><div class="nbmd"><p><strong>2 — widening is refused, twice over.</strong> Once against the token that was presented, once against the actor's own ceiling.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>for presented, actor, want, why in [
-    (patch, &quot;deploy-agent&quot;,   {&quot;deploy:prod&quot;},  &quot;not in the presented token&quot;),
-    (alice, &quot;reviewer-agent&quot;, {&quot;secrets:read&quot;}, &quot;above the actor&#x27;s ceiling&quot;),
-]:
+    @property
+    def expired(self): return time.time() - self.issued &gt; self.ttl
+
+    def chain(self):
+        out, node = [], self.act
+        while node:
+            out.append(node[&quot;actor&quot;]); node = node.get(&quot;act&quot;)
+        c = list(reversed(out)) + [self.actor]
+        if c[0] != self.sub:
+            c.insert(0, self.sub)
+        return c
+
+    def fingerprint(self):
+        blob = json.dumps({&quot;sub&quot;: self.sub, &quot;actor&quot;: self.actor,
+                           &quot;scopes&quot;: sorted(self.scopes), &quot;act&quot;: self.act},
+                          sort_keys=True)
+        return hashlib.sha256(blob.encode()).hexdigest()[:12]
+
+    def describe(self):
+        return (f&quot;{&#x27; → &#x27;.join(self.chain()):48s}\n&quot;
+                f&quot;      scopes {sorted(self.scopes)}   fp={self.fingerprint()}&quot;)
+
+def mint(principal, scopes=None):
+    ceiling = CEILINGS[principal]
+    want = set(scopes) if scopes else set(ceiling)
+    if not want &lt;= ceiling:
+        raise DelegationError(f&quot;{principal} cannot hold {sorted(want - ceiling)}&quot;)
+    return Token(sub=principal, actor=principal, scopes=want)
+
+def exchange(presented, new_actor, scopes):
+    &quot;&quot;&quot;One RFC 8693 hop. Both narrowing rules live here and nowhere else.&quot;&quot;&quot;
+    if presented.expired:
+        raise DelegationError(&quot;presented token has expired&quot;)
+    scopes = set(scopes)
+    if not scopes &lt;= presented.scopes:                       # rule 1
+        raise DelegationError(
+            f&quot;widening refused: {sorted(scopes - presented.scopes)} is not in the &quot;
+            f&quot;presented token {sorted(presented.scopes)}&quot;)
+    ceiling = CEILINGS.get(new_actor, set())
+    if not scopes &lt;= ceiling:                                # rule 2
+        raise DelegationError(
+            f&quot;widening refused: {new_actor} may never hold &quot;
+            f&quot;{sorted(scopes - ceiling)} (ceiling {sorted(ceiling)})&quot;)
+    return Token(sub=presented.sub, actor=new_actor, scopes=scopes,
+                 act={&quot;actor&quot;: presented.actor, &quot;act&quot;: presented.act},
+                 ttl=min(presented.ttl, 300))
+
+dana  = mint(&quot;dana@corp&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;deploy:prod&quot;})
+orch  = exchange(dana, &quot;orchestrator&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;deploy:prod&quot;})
+patch = exchange(orch, &quot;patch-agent&quot;,  {&quot;repo:read&quot;, &quot;repo:write&quot;})
+ship  = exchange(patch, &quot;deploy-agent&quot;, {&quot;repo:read&quot;})
+
+for t in (dana, orch, patch, ship):
+    print(t.describe())</code></pre></div><div class="nbmd"><h2>3 · Demo — the resource server can finally answer the question</h2>
+<p>This is the payoff. GitHub (or any downstream) receives the last token and can record a truthful, complete line.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def resource_server(token, required_scope):
+    if token.expired:
+        return {&quot;allowed&quot;: False, &quot;why&quot;: &quot;token expired&quot;}
+    if required_scope not in token.scopes:
+        return {&quot;allowed&quot;: False,
+                &quot;why&quot;: f&quot;needs {required_scope}, holds {sorted(token.scopes)}&quot;}
+    return {&quot;allowed&quot;: True,
+            &quot;audit&quot;: f&quot;{token.actor} performed {required_scope} on behalf of &quot;
+                     f&quot;{token.sub} via {&#x27; → &#x27;.join(token.chain()[1:-1]) or &#x27;direct&#x27;}&quot;,
+            &quot;chain&quot;: token.chain()}
+
+for tok, scope in ((patch, &quot;repo:write&quot;), (ship, &quot;repo:write&quot;), (ship, &quot;repo:read&quot;)):
+    r = resource_server(tok, scope)
+    print(f&quot;{tok.actor:14s} wants {scope:12s} → {&#x27;ALLOW&#x27; if r[&#x27;allowed&#x27;] else &#x27;DENY &#x27;}&quot;)
+    print(f&quot;   {r.get(&#x27;audit&#x27;) or r[&#x27;why&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — three ways, all refused</h2>
+<p>Now the attacks. Each of these is something a real integration will attempt, usually by accident.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>attacks = [
+ (&quot;widen beyond the presented token&quot;,
+  lambda: exchange(ship, &quot;deploy-agent&quot;, {&quot;deploy:prod&quot;})),
+ (&quot;widen beyond the actor&#x27;s own ceiling&quot;,
+  lambda: exchange(dana, &quot;triage-agent&quot;, {&quot;repo:write&quot;})),
+ (&quot;replay an expired token&quot;,
+  lambda: exchange(Token(&quot;dana@corp&quot;, &quot;patch-agent&quot;, {&quot;repo:write&quot;}, ttl=-1),
+                   &quot;deploy-agent&quot;, {&quot;repo:write&quot;})),
+]
+for name, fn in attacks:
     try:
-        identity.exchange(presented, actor, want)
-        print(f&quot;GRANTED — this should not happen ({why})&quot;)
-    except identity.DelegationError as e:
-        print(f&quot;refused ({why}):\n    {e}&quot;)</code></pre></div><div class="nbmd"><p><strong>3 — the anti-pattern.</strong> Impersonation produces a token that works perfectly and destroys the audit trail.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>bad = identity.impersonate(&quot;alice&quot;, &quot;patch-agent&quot;, {&quot;repo:write&quot;})
+        fn()
+        print(f&quot;GRANTED  {name}   ← this must not happen&quot;)
+    except DelegationError as e:
+        print(f&quot;REFUSED  {name}\n         {e}&quot;)</code></pre></div><div class="nbmd"><h2>5 · The anti-pattern, for contrast</h2>
+<p>Impersonation produces a token that works perfectly and destroys the audit trail — the A2.3 failure, now visible next to the correct version.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def impersonate(principal, actor, scopes):
+    &quot;&quot;&quot;No act claim. The agent simply becomes the human.&quot;&quot;&quot;
+    return Token(sub=principal, actor=principal, scopes=set(scopes), act=None)
+
+bad = impersonate(&quot;dana@corp&quot;, &quot;patch-agent&quot;, {&quot;repo:write&quot;})
 print(&quot;delegated    :&quot;, &quot; → &quot;.join(patch.chain()))
-print(&quot;impersonated :&quot;, &quot; → &quot;.join(bad.chain()), &quot;  ← the agent is invisible&quot;)</code></pre></div><div class="nbmd"><p><strong>4 — revocation is per-actor.</strong> One identity dies; the rest live.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>reg = identity.Registry()
-for t in (alice, rev, patch, dep):
-    reg.record(t)
-print(f&quot;revoking reviewer-agent → {reg.revoke(&#x27;reviewer-agent&#x27;)} token(s) hit\n&quot;)
-for t in (rev, patch, dep):
-    ok, why = reg.valid(t)
-    print(f&quot;  {&#x27; → &#x27;.join(t.chain()):46s} valid={str(ok):5s} {why}&quot;)</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>Four tokens print with strictly narrowing scopes and readable chains (<code>alice → patch-agent → deploy-agent</code>). Both widening attempts raise <code>DelegationError</code> naming which rule refused. The impersonated token's chain contains only <code>alice</code>. Revoking <code>reviewer-agent</code> invalidates one token and leaves the patch and deploy chains valid.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Run the same four scenarios against real Keycloak with RFC 8693 token exchange (<code>labs/a2-delegation</code> has the compose file). The properties should hold identically — if they don't, your realm configuration is the finding.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.5.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+print(&quot;impersonated :&quot;, &quot; → &quot;.join(bad.chain()), &quot;  ← the agent is invisible&quot;)
+print(&quot;\nresource server sees:&quot;)
+print(&quot;   delegated    :&quot;, resource_server(patch, &quot;repo:write&quot;)[&quot;audit&quot;])
+print(&quot;   impersonated :&quot;, resource_server(bad, &quot;repo:write&quot;)[&quot;audit&quot;])</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: property-test the invariant over random chains.
+import random
+random.seed(11)
+actors = [a for a in CEILINGS if a != &quot;dana@corp&quot;]
+violations, built = 0, 0
+for _ in range(1500):
+    tok = mint(&quot;dana@corp&quot;)
+    for _ in range(random.randint(1, 4)):
+        nxt = random.choice(actors)
+        want = set(random.sample(sorted(tok.scopes),
+                                 k=random.randint(0, len(tok.scopes))))
+        try:
+            new = exchange(tok, nxt, want)
+        except DelegationError:
+            continue
+        if not new.scopes &lt;= tok.scopes or not new.scopes &lt;= CEILINGS[nxt]:
+            violations += 1
+        tok = new; built += 1
+print(f&quot;{built} successful hops across 1500 random chains — widening violations: {violations}&quot;)
+assert violations == 0
+print(&quot;Invariant holds: authority can only shrink, on every path.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Four tokens print with strictly narrowing scopes and readable chains ending in <code>dana@corp → orchestrator → patch-agent → deploy-agent</code>. The resource server allows <code>patch-agent</code> a write, denies <code>deploy-agent</code> the same write, and produces a truthful audit line naming both the actor and the principal. All three attacks are refused with the rule that refused them. The impersonated token's chain contains only <code>dana@corp</code>. The property test reports zero widening violations.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Run these same four scenarios against real Keycloak with token exchange enabled. The properties should hold identically — and if your realm allows the second one (widening past the actor's ceiling), that is a live finding, because Keycloak will happily issue it if the client is configured permissively.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.6.html">A2.6 · The agentic gateway</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.5.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Each hop shows a nested `act` claim and a strictly smaller scope; escalation is refused by the token, not by an app check. Attenuation is visible in the token, not asserted in a doc.</div><div class="chips"><span>Keycloak</span><span>RFC 8693</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.5.ipynb</code></p></div><div class="pager"><a href="A2.4.html"><span class="k">← Previous</span><span class="t">A2.4 · The NHI governance gap</span></a><a class="next" href="A2.6.html"><span class="k">Next →</span><span class="t">A2.6 · The agentic gateway</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

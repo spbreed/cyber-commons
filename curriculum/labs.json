@@ -476,6 +476,87 @@
    ],
    "expect": "Four numbers with denominators. Without these, promotion to L2.5 is a vibe."
   },
+  "B1.8": {
+   "goal": "Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.8   # run it headless and check it"
+   ],
+   "expect": "The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state."
+  },
+  "B1.9": {
+   "goal": "Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.9   # run it headless and check it"
+   ],
+   "expect": "The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe."
+  },
+  "B1.10": {
+   "goal": "Chain individually-medium findings into a critical path and show the severity the chain earns.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.10.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.10   # run it headless and check it"
+   ],
+   "expect": "Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains."
+  },
+  "B1.11": {
+   "goal": "Validate four candidate patches on three axes and show which of them only made the scanner green.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.11.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.11   # run it headless and check it"
+   ],
+   "expect": "The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new."
+  },
+  "B1.12": {
+   "goal": "Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.12.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.12   # run it headless and check it"
+   ],
+   "expect": "Calibration moves several findings off their rule severity: the confirmed reachable CWE-89 that chains into account takeover becomes critical, while the unreachable and unvalidated ones fall. The top-3 by rule severity and by calibration disagree. The stage table shows review with the worst precision and highest minutes per finding, and design carrying the highest escape cost despite only two findings."
+  },
+  "B1.13": {
+   "goal": "Compare four context strategies against one bug and measure which are decidable and at what size.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it"
+   ],
+   "expect": "The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file."
+  },
+  "B1.14": {
+   "goal": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it"
+   ],
+   "expect": "The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked."
+  },
+  "B1.15": {
+   "goal": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.15.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.15   # run it headless and check it"
+   ],
+   "expect": "The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop."
+  },
+  "B1.16": {
+   "goal": "Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.16.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.16   # run it headless and check it"
+   ],
+   "expect": "The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones."
+  },
   "B2.1": {
    "goal": "One scaffold, swappable model, unchanged loop.",
    "run": [
@@ -490,23 +571,6 @@
     "MODEL=kimi-k2  python3 loop.py --task fix-tests"
    ],
    "expect": "Identical loop code, three backbones, comparable traces — the prerequisite for C2.6 multi-backbone benchmarking."
-  },
-  "B2.10": {
-   "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b2.10-eval-harness",
-    "./scripts/vulnbench.sh doctor && ./scripts/vulnbench.sh setup",
-    "./scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov",
-    "./scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479",
-    "./scripts/vulnbench.sh compare    # blind model comparison across backbones",
-    "./scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?"
-   ],
-   "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
   },
   "B2.2": {
    "goal": "Show a same-family judge grading its own homework.",
@@ -624,6 +688,23 @@
     "python3 replay.py --trace run.json --assert-identical"
    ],
    "expect": "Either it reproduces, or the tool names the field you failed to log. Anything you cannot replay you cannot investigate."
+  },
+  "B2.10": {
+   "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "cd labs/b2.10-eval-harness",
+    "./scripts/vulnbench.sh doctor && ./scripts/vulnbench.sh setup",
+    "./scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov",
+    "./scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479",
+    "./scripts/vulnbench.sh compare    # blind model comparison across backbones",
+    "./scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?"
+   ],
+   "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
   },
   "C1.1": {
    "goal": "Drive a planner/executor pair against a local target you own.",
@@ -1445,77 +1526,6 @@
     "python3 resilience.py --compare-to prevention-only"
    ],
    "expect": "Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged."
-  },
-  "M0.1": {
-   "goal": "Show that autonomy lives in the action plane, not the model.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/M0.1.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session M0.1   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "ollama pull llama3.3 && ollama pull nomic-embed-text",
-    "cd labs/m0-agent-loop && python3 planes_demo.py --model llama3.3",
-    "# same prompt, three configurations: bare model / read-only tools / write tools"
-   ],
-   "expect": "Identical model output; only configuration 3 changes state on disk. Prints a PASS/FAIL table."
-  },
-  "M0.2": {
-   "goal": "Build the minimum loop and prove the verifier is the security control.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/M0.2.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session M0.2   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/m0-agent-loop",
-    "python3 loop.py --task fix-tests --verifier pytest      # honest oracle",
-    "python3 loop.py --task fix-tests --verifier llm-judge   # self-grading",
-    "python3 loop.py --task fix-tests --verifier none        # no stop signal"
-   ],
-   "expect": "pytest verifier converges or stops; llm-judge declares success on broken code; none diverges until the budget kills it."
-  },
-  "M0.3": {
-   "goal": "Walk one workflow up the autonomy ladder with named promotion evidence.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/M0.3.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session M0.3   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/m0-agent-loop",
-    "python3 ladder.py --workflow dependency-bump --rung L1",
-    "python3 ladder.py --workflow dependency-bump --rung L2.5 --require-evidence"
-   ],
-   "expect": "L2.5 refuses to run until the promotion evidence file exists — autonomy as an earned event."
-  },
-  "M0.4": {
-   "goal": "Reproduce direct and indirect injection, then measure a real defense.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/M0.4.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session M0.4   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "pip install garak promptfoo",
-    "cd labs/m0-injection && python3 poison.py --target rag   # plant in a retrieved doc",
-    "garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject",
-    "python3 poison.py --target rag --defense tagging   # re-run with untrusted-content tagging"
-   ],
-   "expect": "Attack success rate drops measurably with tagging; the number, not the vibe, is the deliverable."
-  },
-  "M0.5": {
-   "goal": "Locate yourself on the ownership map.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/M0.5.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session M0.5   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cp curriculum/templates/ownership-map.csv ./my-org-ownership.csv",
-    "$EDITOR my-org-ownership.csv   # fill Owns / Builds / Uses for your function"
-   ],
-   "expect": "Every topic cluster has exactly one owner. Any row with zero or two owners is your first finding."
   }
  }
 }

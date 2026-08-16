@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.2 — Model-layer research | Cyber Commons</title><meta name="description" content="Adversarial robustness, jailbreak taxonomy, refusal analysis, capability elicitation."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Security Researcher</div><div class="sid">C2.2</div><h1>Model-layer research</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model cards read credulously.</p></div><div class="ctrl"><div class="lab">Control</div><p>Adversarial robustness, jailbreak taxonomy, refusal analysis, capability elicitation.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Chart jailbreak taxonomy differences across three open-weight families.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 8 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.2 · Model-layer research</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.2 — Model-layer research | Cyber Commons</title><meta name="description" content="Adversarial robustness, jailbreak taxonomy, refusal analysis, capability elicitation."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Security Researcher</div><div class="sid">C2.2</div><h1>Model-layer research</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model cards read credulously.</p></div><div class="ctrl"><div class="lab">Control</div><p>Adversarial robustness, jailbreak taxonomy, refusal analysis, capability elicitation.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Chart jailbreak taxonomy differences across three open-weight families.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 35 lines of output in 0.02s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.2 · Model-layer research</h1>
 <p><strong>Function C — Offensive Security &amp; Research → The Security Researcher</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> Model cards read credulously.</p>
-<p><strong>Control.</strong> Adversarial robustness, jailbreak taxonomy, refusal analysis, capability elicitation.</p>
-<p><strong>This lab.</strong> Chart jailbreak taxonomy differences across three open-weight families.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.1.html">C2.1 · What research means in a CISO org</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,42 +20,83 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Model-layer research means treating the model as an object of study rather than
+a demo subject. The discipline is one rule: <strong>report rates, not anecdotes.</strong></p>
+<p>"I got it to do X" is not a result. Language models are stochastic; with enough
+attempts you can get almost anything once. The result is the <em>rate</em>, with an
+interval, because the rate is what changes when a mitigation lands and the
+interval is what tells you whether the change was real.</p>
+<p>This matters practically. A mitigation that moves a technique from 62% to 48%
+sounds like progress. With n=20 the confidence intervals overlap so heavily that
+you have demonstrated nothing, and you are about to tell a board you reduced
+risk by 23%.</p></div><div class="nbmd"><h2>2 · Demo — three techniques, measured properly</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import random
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+def trial(effect, n=200, seed=7):
+    &quot;&quot;&quot;Run a stochastic effect n times; report the rate with a 95% interval.&quot;&quot;&quot;
+    rng = random.Random(seed)
+    hits = sum(effect(rng) for _ in range(n))
+    rate = hits / n
+    half = 1.96 * ((rate * (1 - rate) / n) ** 0.5) if n else 0.0
+    lo, hi = round(max(rate - half, 0), 3), round(min(rate + half, 1), 3)
+    verdict = (&quot;reproducible&quot; if lo &gt; 0.5 else
+               &quot;flaky&quot; if hi &gt; 0.05 else &quot;not reproduced&quot;)
+    return {&quot;n&quot;: n, &quot;hits&quot;: hits, &quot;rate&quot;: round(rate, 3), &quot;ci95&quot;: (lo, hi),
+            &quot;verdict&quot;: verdict}
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;C2.2&quot;))</code></pre></div><div class="nbmd"><p>Model-layer research means treating the model as the object of study with a rate, not a demo with a screenshot.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import research
-
-# Three techniques, each modelled as a probability of landing on a given attempt.
+# ground-truth landing probabilities for three injection techniques
 TECHNIQUES = {&quot;direct override&quot;: 0.05, &quot;context reframe&quot;: 0.35, &quot;task nesting&quot;: 0.62}
+
+print(f&quot;{&#x27;technique&#x27;:20s}{&#x27;rate&#x27;:&gt;7}{&#x27;ci95&#x27;:&gt;18}  verdict&quot;)
+print(&quot;-&quot; * 60)
 for name, p in TECHNIQUES.items():
-    r = research.trial(lambda rng, p=p: rng.random() &lt; p, n=200, seed=11)
-    print(f&quot;{name:18s} rate {r[&#x27;rate&#x27;]:.3f}  ci95 {r[&#x27;ci95&#x27;]}  → {r[&#x27;verdict&#x27;]}&quot;)</code></pre></div><div class="nbmd"><p>Note what the middle row does to a naive claim. 'It worked' is true for all three; only one is reproducible, and the interval tells you how much of a mitigation's improvement would be noise.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>before = research.trial(lambda rng: rng.random() &lt; 0.62, n=200, seed=11)
-after  = research.trial(lambda rng: rng.random() &lt; 0.48, n=200, seed=11)
-print(&quot;before:&quot;, before[&quot;rate&quot;], before[&quot;ci95&quot;])
-print(&quot;after :&quot;, after[&quot;rate&quot;],  after[&quot;ci95&quot;])
-overlap = after[&quot;ci95&quot;][1] &gt;= before[&quot;ci95&quot;][0]
-print(&quot;\nintervals overlap?&quot;, overlap,
-      &quot;→&quot;, &quot;not a demonstrated improvement&quot; if overlap else &quot;improvement holds&quot;)</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>Direct override is not reproduced, context reframe is flaky, task nesting is reproducible. The before/after comparison shows whether the confidence intervals overlap.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Run 20 trials instead of 200 and watch the interval widen until the comparison says nothing. That width is why single-run jailbreak claims are unfalsifiable.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.2.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+    r = trial(lambda rng, p=p: rng.random() &lt; p, n=200)
+    print(f&quot;{name:20s}{r[&#x27;rate&#x27;]:&gt;7.3f}{str(r[&#x27;ci95&#x27;]):&gt;18}  {r[&#x27;verdict&#x27;]}&quot;)
+print(&quot;\n&#x27;It worked&#x27; is true for all three. Only one is reproducible.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the underpowered before/after</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def compare(before_p, after_p, n, seed=11):
+    b = trial(lambda rng: rng.random() &lt; before_p, n=n, seed=seed)
+    a = trial(lambda rng: rng.random() &lt; after_p,  n=n, seed=seed + 1)
+    overlap = a[&quot;ci95&quot;][1] &gt;= b[&quot;ci95&quot;][0]
+    return b, a, overlap
+
+print(f&quot;{&#x27;n&#x27;:&gt;6}{&#x27;before&#x27;:&gt;18}{&#x27;after&#x27;:&gt;18}  conclusion&quot;)
+print(&quot;-&quot; * 68)
+for n in (20, 100, 1000):
+    b, a, overlap = compare(0.62, 0.48, n)
+    concl = &quot;NOT demonstrated&quot; if overlap else &quot;improvement holds&quot;
+    print(f&quot;{n:&gt;6}{str(b[&#x27;ci95&#x27;]):&gt;18}{str(a[&#x27;ci95&#x27;]):&gt;18}  {concl}&quot;)
+print(&quot;\nThe true effect is identical in all three rows. Only sample size changed.&quot;)
+print(&quot;At n=20 you would report a 23% reduction you cannot support.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — compute the sample size before you run</h2>
+<p>The question is not "how many attempts should I do?" It is: <strong>how small an effect do I need to be able to detect?</strong></p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def required_n(p_before, p_after, power_z=1.96):
+    &quot;&quot;&quot;Rough two-proportion sample size for a 95% interval that separates.&quot;&quot;&quot;
+    p = (p_before + p_after) / 2
+    diff = abs(p_before - p_after)
+    if diff == 0: return float(&quot;inf&quot;)
+    return int((2 * power_z ** 2 * p * (1 - p)) / (diff ** 2)) + 1
+
+print(f&quot;{&#x27;effect you want to detect&#x27;:34s}{&#x27;n required&#x27;:&gt;11}&quot;)
+print(&quot;-&quot; * 47)
+for before, after in ((0.62, 0.10), (0.62, 0.31), (0.62, 0.48), (0.62, 0.58)):
+    print(f&quot;{f&#x27;{before:.0%} → {after:.0%}&#x27;:34s}{required_n(before, after):&gt;11}&quot;)
+print(&quot;\nDetecting a halving is cheap. Detecting a 14-point move is not, and&quot;)
+print(&quot;detecting a 4-point move is a research project in itself.&quot;)
+
+n_needed = required_n(0.62, 0.48)
+b, a, overlap = compare(0.62, 0.48, n_needed)
+print(f&quot;\nre-run at the computed n={n_needed}: &quot;
+      f&quot;before {b[&#x27;ci95&#x27;]}, after {a[&#x27;ci95&#x27;]}, overlap={overlap}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: the honest reporting template.
+def report(technique, before, after, n):
+    b, a, overlap = compare(before, after, n)
+    return (f&quot;{technique}\n&quot;
+            f&quot;   before  {b[&#x27;rate&#x27;]:.2f} (95% CI {b[&#x27;ci95&#x27;]}, n={n})\n&quot;
+            f&quot;   after   {a[&#x27;rate&#x27;]:.2f} (95% CI {a[&#x27;ci95&#x27;]}, n={n})\n&quot;
+            f&quot;   verdict {&#x27;no demonstrated change — intervals overlap&#x27; if overlap else &#x27;reduction demonstrated&#x27;}&quot;)
+
+print(report(&quot;task nesting, after provenance mitigation&quot;, 0.62, 0.48, 20))
+print()
+print(report(&quot;task nesting, after provenance mitigation&quot;, 0.62, 0.48, 1000))</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Direct override is not reproduced, context reframe is flaky, task nesting is reproducible. The before/after comparison shows overlapping intervals at n=20 and n=100 and separation at n=1000, for an identical true effect. Sample-size calculation shows detecting 62%→48% needs roughly 200 trials while 62%→58% needs thousands.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take the last jailbreak or injection result your team reported. Ask for n. If the answer is a single-digit number or 'we tried it a few times', the finding is real but the number attached to it is not.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.3.html">C2.3 · Weight-level techniques</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.2.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Per-family refusal and elicitation profiles. Model effects separated from harness effects.</div><div class="chips"><span>garak</span><span class="m">Llama 3.3</span><span class="m">GLM-4.6</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C2.2.ipynb</code></p></div><div class="pager"><a href="C2.1.html"><span class="k">← Previous</span><span class="t">C2.1 · What research means in a CISO org</span></a><a class="next" href="C2.3.html"><span class="k">Next →</span><span class="t">C2.3 · Weight-level techniques</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

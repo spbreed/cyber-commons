@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.3 — Agent-assisted detection engineering | Cyber Commons</title><meta name="description" content="Detection-as-code with agents inside the CI loop."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.3</div><h1>Agent-assisted detection engineering</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Coverage gaps nobody mapped.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detection-as-code with agents inside the CI loop.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Generate, unit-test and tune detections inside CI.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 4 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.3 · Agent-assisted detection engineering</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.3 — Agent-assisted detection engineering | Cyber Commons</title><meta name="description" content="Detection-as-code with agents inside the CI loop."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.3</div><h1>Agent-assisted detection engineering</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Coverage gaps nobody mapped.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detection-as-code with agents inside the CI loop.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Generate, unit-test and tune detections inside CI.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 26 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.3 · Agent-assisted detection engineering</h1>
 <p><strong>Function D — Security Operations → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>AI for Security</em></p>
-<hr />
-<p><strong>Risk.</strong> Coverage gaps nobody mapped.</p>
-<p><strong>Control.</strong> Detection-as-code with agents inside the CI loop.</p>
-<p><strong>This lab.</strong> Generate, unit-test and tune detections inside CI.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">D1.2 · Context that makes triage work</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,55 +20,109 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Using an agent to write detections is genuinely effective: it produces candidate
+rules quickly, across more log sources than a human would attempt.</p>
+<p>What it cannot supply is the judgement that decides whether a rule ships, because
+that judgement depends on a cost the telemetry does not contain: <strong>analyst
+trust</strong>. A rule with 5% precision is not 5% useful — it is negatively useful,
+because it spends attention that the good rules need.</p>
+<p>So the workflow is: the agent generates candidates, and a scoring step against
+real historical telemetry decides which survive. The scoring step is the job, and
+it is the part teams skip.</p></div><div class="nbmd"><blockquote>
+<p><strong>About the model in this notebook.</strong> It runs offline against a deterministic
+replay so the lesson executes on a Kaggle kernel with no network. To run the
+same triage against a real open-weight model:</p>
+<p><code>bash
+ollama pull glm-4.6            # or kimi-k2, llama3.3
+export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6</code></p>
+</blockquote></div><div class="nbmd"><h2>2 · Demo — five candidate rules for one concern</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
+from dataclasses import dataclass
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+@dataclass
+class Event:
+    ts: float; actor: str; action: str; target: str = &quot;&quot;; ok: bool = True
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;D1.3&quot;))</code></pre></div><div class="nbmd"><p>Agent-assisted detection engineering: the agent writes candidate rules, and you keep the thing that decides whether they are any good.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import soc
-import time
-
-# three candidate rules an agent might propose for the same concern
 now = time.time()
-events  = [soc.Event(now + i, &quot;patch-agent&quot;, &quot;http_get&quot;, &quot;https://api.github.com/x&quot;)
-           for i in range(20)]
-events += [soc.Event(now + 21, &quot;patch-agent&quot;, &quot;http_get&quot;,
-                     &quot;http://169.254.169.254/latest/meta-data/&quot;)]
+HISTORY  = [Event(now+i, &quot;patch-agent&quot;, &quot;http_get&quot;, &quot;https://api.github.com/x&quot;)
+            for i in range(300)]
+HISTORY += [Event(now+i, &quot;triage-agent&quot;, &quot;read_file&quot;, f&quot;/work/repo/src/{i}.py&quot;)
+            for i in range(200)]
+HISTORY += [Event(now+400, &quot;patch-agent&quot;, &quot;http_get&quot;,
+                  &quot;http://169.254.169.254/latest/meta-data/iam/&quot;)]
+HISTORY += [Event(now+401, &quot;patch-agent&quot;, &quot;read_file&quot;, &quot;/home/app/.aws/credentials&quot;)]
+HISTORY += [Event(now+i, &quot;svc-etl&quot;, &quot;read_file&quot;, &quot;/data/export.csv&quot;, ok=False)
+            for i in range(20)]
 
-candidates = {
- &quot;any http_get&quot;:        soc.Rule(&quot;any http_get&quot;, &quot;low&quot;,
-                                 lambda e: e.action == &quot;http_get&quot;, &quot;review&quot;),
- &quot;non-allowlisted host&quot;: soc.Rule(&quot;non-allowlisted host&quot;, &quot;high&quot;,
-                                  lambda e: &quot;api.github.com&quot; not in (e.target or &quot;&quot;),
-                                  &quot;block egress and rotate&quot;),
- &quot;metadata service&quot;:     soc.Rule(&quot;metadata service&quot;, &quot;critical&quot;,
-                                  lambda e: &quot;169.254.169.254&quot; in (e.target or &quot;&quot;),
-                                  &quot;kill session, rotate instance role&quot;),
+TRUE_POSITIVES = {(now+400, &quot;patch-agent&quot;), (now+401, &quot;patch-agent&quot;)}
+
+CANDIDATES = {
+ &quot;R1 any http_get by an agent&quot;:
+    lambda e: e.action == &quot;http_get&quot;,
+ &quot;R2 http_get to a non-github host&quot;:
+    lambda e: e.action == &quot;http_get&quot; and &quot;api.github.com&quot; not in e.target,
+ &quot;R3 link-local address&quot;:
+    lambda e: &quot;169.254.&quot; in e.target,
+ &quot;R4 any failed action&quot;:
+    lambda e: not e.ok,
+ &quot;R5 credential path OR link-local&quot;:
+    lambda e: &quot;169.254.&quot; in e.target or &quot;/.aws/&quot; in e.target,
 }
-truth = {&quot;patch-agent:http_get&quot;}     # only the metadata call is genuinely bad
-for name, rule in candidates.items():
-    alerts = soc.run_rules(events, [rule])
-    q = soc.triage_quality(alerts, truth)
-    print(f&quot;{name:22s} alerts={q[&#x27;alerts&#x27;]:3d} precision={q[&#x27;precision&#x27;]:.3f} &quot;
-          f&quot;per-TP={q[&#x27;alerts_per_true_positive&#x27;]}&quot;)</code></pre></div><div class="nbmd"><p>All three rules 'work'. Only one is deployable. The engineering judgment the agent cannot supply is the cost of the false positives — because that cost is measured in analyst trust, which is not in the telemetry.</p></div><div class="nbmd"><h3>Expect</h3>
-<p>The broad rule fires 21 times, the host rule once, the metadata rule once — with precision rising and alerts-per-true-positive falling across the three.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Have an agent generate five rules for one concern in your environment, then score them against a week of real telemetry before deploying any. The scoring step is the job.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+print(f&quot;history: {len(HISTORY)} events, {len(TRUE_POSITIVES)} true positives&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def score(rule, history, truth):
+    fired = [e for e in history if rule(e)]
+    tp = sum(1 for e in fired if (e.ts, e.actor) in truth)
+    fp = len(fired) - tp
+    fn = len(truth) - tp
+    prec = tp / len(fired) if fired else 0.0
+    rec  = tp / len(truth) if truth else 0.0
+    return {&quot;alerts&quot;: len(fired), &quot;tp&quot;: tp, &quot;fp&quot;: fp, &quot;fn&quot;: fn,
+            &quot;precision&quot;: round(prec, 3), &quot;recall&quot;: round(rec, 3),
+            &quot;alerts_per_tp&quot;: round(len(fired)/tp, 1) if tp else float(&quot;inf&quot;)}
+
+print(f&quot;{&#x27;rule&#x27;:36s}{&#x27;alerts&#x27;:&gt;7}{&#x27;prec&#x27;:&gt;7}{&#x27;recall&#x27;:&gt;8}{&#x27;alerts/TP&#x27;:&gt;11}&quot;)
+print(&quot;-&quot; * 70)
+scored = {}
+for name, rule in CANDIDATES.items():
+    s = score(rule, HISTORY, TRUE_POSITIVES)
+    scored[name] = s
+    print(f&quot;{name:36s}{s[&#x27;alerts&#x27;]:&gt;7}{s[&#x27;precision&#x27;]:&gt;7.3f}{s[&#x27;recall&#x27;]:&gt;8.3f}&quot;
+          f&quot;{str(s[&#x27;alerts_per_tp&#x27;]):&gt;11}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — every rule 'works'</h2>
+<p>All five detect something. R1 has perfect recall on http traffic and would put 301 alerts a day in the queue. R4 has 100% precision on nothing useful. The deployable set is decided by a threshold nobody writes down.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>MAX_ALERTS_PER_TP = 5          # the analyst-trust budget, made explicit
+MIN_RECALL = 0.5
+
+def deployable(s):
+    reasons = []
+    if s[&quot;tp&quot;] == 0:                       reasons.append(&quot;no true positives&quot;)
+    if s[&quot;alerts_per_tp&quot;] &gt; MAX_ALERTS_PER_TP:
+        reasons.append(f&quot;{s[&#x27;alerts_per_tp&#x27;]} alerts per true positive &quot;
+                       f&quot;(budget {MAX_ALERTS_PER_TP})&quot;)
+    if s[&quot;recall&quot;] &lt; MIN_RECALL:           reasons.append(f&quot;recall {s[&#x27;recall&#x27;]} below {MIN_RECALL}&quot;)
+    return (not reasons), reasons
+
+for name, s in scored.items():
+    ok, reasons = deployable(s)
+    print(f&quot;{&#x27;DEPLOY&#x27; if ok else &#x27;REJECT&#x27;:7s} {name}&quot;)
+    for r in reasons: print(f&quot;          · {r}&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — generate many, score against history, ship few</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def workflow(candidates, history, truth):
+    scored = {n: score(r, history, truth) for n, r in candidates.items()}
+    shipped = {n: s for n, s in scored.items() if deployable(s)[0]}
+    return {
+      &quot;generated&quot;: len(candidates),
+      &quot;shipped&quot;: len(shipped),
+      &quot;shipped_rules&quot;: sorted(shipped),
+      &quot;queue_impact_per_day&quot;: sum(s[&quot;alerts&quot;] for s in shipped.values()),
+      &quot;coverage&quot;: round(max((s[&quot;recall&quot;] for s in shipped.values()), default=0), 3),
+    }
+w = workflow(CANDIDATES, HISTORY, TRUE_POSITIVES)
+for k, v in w.items(): print(f&quot;{k:24s}{v}&quot;)
+
+print(&quot;\nThe agent generated 5 rules in seconds. Scoring them against 521 real&quot;)
+print(&quot;events took milliseconds and rejected 3. That scoring step is the job —&quot;)
+print(&quot;without it, R1 ships and the SOC stops reading agent alerts within a week.&quot;)
+assert w[&quot;shipped&quot;] &lt; w[&quot;generated&quot;]
+assert &quot;R5 credential path OR link-local&quot; in w[&quot;shipped_rules&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>All five rules detect something. R1 fires 301 times for 1 true positive; R5 fires twice for 2 true positives with perfect precision and recall. The deployability check rejects the broad rules and the failed-action rule, shipping only the precise ones with a small daily queue impact.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Set your own alerts-per-true-positive budget and apply it to the rules already in production. Most SOCs discover that several long-standing rules would not pass the bar they would set today.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.4.html">D1.4 · Detection engineering <em>for</em> agents</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.3.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have.</div><div class="chips"><span>Sigma</span><span>Wazuh</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.3.ipynb</code></p></div><div class="pager"><a href="D1.2.html"><span class="k">← Previous</span><span class="t">D1.2 · Context that makes triage work</span></a><a class="next" href="D1.4.html"><span class="k">Next →</span><span class="t">D1.4 · Detection engineering *for* agents</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.2 — Verify signals that don&#x27;t lie | Cyber Commons</title><meta name="description" content="Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.2</div><h1>Verify signals that don&#x27;t lie</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>LLM-as-judge from the same family as the generator — the loop grades its own homework.</p></div><div class="ctrl"><div class="lab">Control</div><p>Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Show a same-family judge grading its own homework.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 11 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.2 · Verify signals that don't lie</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.2 — Verify signals that don&#x27;t lie | Cyber Commons</title><meta name="description" content="Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.2</div><h1>Verify signals that don&#x27;t lie</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>LLM-as-judge from the same family as the generator — the loop grades its own homework.</p></div><div class="ctrl"><div class="lab">Control</div><p>Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Show a same-family judge grading its own homework.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 37 lines of output in 0.14s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.2 · Verify signals that don't lie</h1>
 <p><strong>Function B — Product &amp; Application Security → The Security Automation / Harness Engineer</strong>  ·  <em>AI for Security</em></p>
-<hr />
-<p><strong>Risk.</strong> LLM-as-judge from the same family as the generator — the loop grades its own homework.</p>
-<p><strong>Control.</strong> Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists.</p>
-<p><strong>This lab.</strong> Show a same-family judge grading its own homework.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.1.html">B2.1 · Plan–act–verify</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,53 +20,175 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>This is the highest-value lesson in the track, because every other control
+assumes the verifier is honest.</p>
+<p>Verifiers form a hierarchy, ordered by <strong>what it takes to fool them</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Verifier</th>
+<th>Fooled by</th>
+<th>Available when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Behavioural test</strong></td>
+<td>changing real behaviour</td>
+<td>you can execute the thing</td>
+</tr>
+<tr>
+<td><strong>Exact-match oracle</strong></td>
+<td>nothing, but needs the answer up front</td>
+<td>rarely</td>
+</tr>
+<tr>
+<td><strong>Shape check</strong></td>
+<td>any well-formed output</td>
+<td>always</td>
+</tr>
+<tr>
+<td><strong>LLM judge</strong></td>
+<td>confident prose</td>
+<td>always</td>
+</tr>
+</tbody>
+</table>
+<p>The trap is that the two available-everywhere options are the two weakest, and
+they fail in the worst possible direction: they do not error, they <strong>approve</strong>.</p>
+<p>There is also a subtler failure that is worth seeing rather than reading about:
+a verifier that is <em>correct</em> but reads stale state. A test runner that imports
+cached bytecode reports on code that is no longer on disk. A lying oracle is
+worse than no oracle, because you stop looking.</p></div><div class="nbmd"><h2>2 · Demo — four verifiers, one broken input</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>BROKEN  = &quot;def parse_port(s): return int(s)&quot;          # accepts 0, 99999, -1
+CORRECT = (&quot;def parse_port(s):\n&quot;
+           &quot;    p = int(s)\n&quot;
+           &quot;    if not (1 &lt;= p &lt;= 65535): raise ValueError(&#x27;port out of range&#x27;)\n&quot;
+           &quot;    return p&quot;)
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+def behavioural(src):
+    ns = {}
+    try:
+        exec(compile(src, &quot;&lt;p&gt;&quot;, &quot;exec&quot;), ns); fn = ns[&quot;parse_port&quot;]
+    except Exception as e:
+        return False, f&quot;compile failed: {e}&quot;
+    for bad in (&quot;0&quot;, &quot;70000&quot;, &quot;-1&quot;):
+        try:
+            fn(bad)
+            return False, f&quot;accepted out-of-range port {bad!r}&quot;
+        except ValueError:
+            pass
+    try:
+        if fn(&quot;443&quot;) != 443:
+            return False, &quot;rejected a valid port&quot;
+    except Exception as e:
+        return False, f&quot;valid port raised {e}&quot;
+    return True, &quot;rejects out-of-range, accepts valid&quot;
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;B2.2&quot;))</code></pre></div><div class="nbmd"><p>Verify signals that don't lie. This is the highest-value hour in the whole track, because every other control assumes the verifier is honest.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import loop
+def exact_match(expected):
+    return lambda src: (src.strip() == expected.strip(),
+                        &quot;exact match&quot; if src.strip() == expected.strip()
+                        else &quot;differs from the reference implementation&quot;)
 
-BROKEN = &quot;def add(a, b): return a - b&quot;
+def shape_check(src):
+    ok = src.strip().startswith(&quot;def parse_port&quot;)
+    return ok, &quot;defines parse_port&quot; if ok else &quot;wrong shape&quot;
 
-signals = {
-    &quot;exact-match oracle&quot;:   loop.oracle(&quot;def add(a, b): return a + b&quot;),
-    &quot;property test&quot;:        loop.unit_test(lambda s: eval(
-                                compile(s + &quot;\nresult = add(2, 2) == 4&quot;,
-                                        &quot;&lt;s&gt;&quot;, &quot;exec&quot;), g := {}) or g[&quot;result&quot;],
-                                &quot;add(2,2) == 4&quot;),
-    &quot;shape check (weak)&quot;:   loop.unit_test(lambda s: s.startswith(&quot;def add&quot;),
-                                           &quot;looks like a function&quot;),
-    &quot;llm judge (weakest)&quot;:  loop.llm_judge(),
-}
-for name, v in signals.items():
-    ok, detail = v(BROKEN)
-    print(f&quot;{name:22s} verdict={str(ok):5s}  {detail}&quot;)</code></pre></div><div class="nbmd"><p>The property test is the interesting row: it does not need the expected source, only a fact that must hold. That is the signal you can actually obtain in a real repository, and it does not lie.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>print(&quot;\nRanking, by what it takes to fool each one:&quot;)
-for rank, (name, why) in enumerate([
-    (&quot;property / behavioural test&quot;, &quot;must change observable behaviour — hard to fake&quot;),
-    (&quot;exact-match oracle&quot;,          &quot;needs the answer in advance — honest but rarely available&quot;),
-    (&quot;shape check&quot;,                 &quot;any well-formed output passes&quot;),
-    (&quot;llm judge&quot;,                   &quot;confident prose passes&quot;),
-], 1):
-    print(f&quot;  {rank}. {name:28s} {why}&quot;)</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>The oracle and the property test both reject the broken code (the property test by executing it). The shape check and the judge both accept it.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Find a real check in your pipeline that is a shape check wearing an oracle's name — 'the build passed', 'the JSON validated', 'no errors logged'. There is usually at least one.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+def llm_judge(src):
+    ok = bool(src.strip()) and not src.lower().startswith(&quot;i cannot&quot;)
+    return ok, &quot;judge: this looks like a correct implementation&quot;
+
+VERIFIERS = {&quot;behavioural (executes it)&quot;: behavioural,
+             &quot;exact-match oracle&quot;:        exact_match(CORRECT),
+             &quot;shape check&quot;:               shape_check,
+             &quot;llm judge&quot;:                 llm_judge}
+
+print(f&quot;{&#x27;verifier&#x27;:28s}{&#x27;on BROKEN&#x27;:12s}{&#x27;on CORRECT&#x27;:12s}detail (broken)&quot;)
+print(&quot;-&quot; * 84)
+for name, v in VERIFIERS.items():
+    b_ok, b_why = v(BROKEN)
+    c_ok, _     = v(CORRECT)
+    print(f&quot;{name:28s}{str(b_ok):12s}{str(c_ok):12s}{b_why[:32]}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the exact-match oracle is also wrong</h2>
+<p>Look at the <code>on CORRECT</code> column. The behavioural verifier is the only one that gets <em>both</em> right. The exact-match oracle rejects a correct implementation that differs from its reference — which is why nobody uses it, and why teams fall back to the two weak options.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ALTERNATIVE = (&quot;def parse_port(s):\n&quot;
+               &quot;    p = int(s)\n&quot;
+               &quot;    if p &lt; 1 or p &gt; 65535:\n&quot;
+               &quot;        raise ValueError(&#x27;bad port&#x27;)\n&quot;
+               &quot;    return p&quot;)
+print(&quot;a correct implementation, written differently:&quot;)
+for name, v in VERIFIERS.items():
+    ok, why = v(ALTERNATIVE)
+    print(f&quot;   {name:28s}{str(ok):7s}{why[:44]}&quot;)
+print(&quot;\nThe oracle says no. Behavioural says yes. Only one of those is useful&quot;)
+print(&quot;on code you did not write in advance.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The subtler failure — a correct verifier reading stale state</h2>
+<p>This one is not about weak checks. The check is right; the <em>input</em> to it is stale. Python's bytecode cache reproduces it faithfully.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import os, sys, tempfile, subprocess, textwrap, shutil, pathlib
+
+work = pathlib.Path(tempfile.mkdtemp())
+(work / &quot;mod.py&quot;).write_text(&quot;def check(x):\n    return True   # broken: always passes\n&quot;)
+(work / &quot;test_mod.py&quot;).write_text(textwrap.dedent(&quot;&quot;&quot;
+    from mod import check
+    def test_rejects_bad():
+        assert check(-1) is False
+&quot;&quot;&quot;))
+
+def run_check(workdir, clear_cache):
+    if clear_cache:
+        shutil.rmtree(workdir / &quot;__pycache__&quot;, ignore_errors=True)
+    env = {**os.environ, &quot;PYTHONPATH&quot;: str(workdir)}
+    if clear_cache:
+        env[&quot;PYTHONDONTWRITEBYTECODE&quot;] = &quot;1&quot;
+    r = subprocess.run([sys.executable, &quot;-c&quot;,
+                        &quot;import mod; print(&#x27;PASS&#x27; if mod.check(-1) is False else &#x27;FAIL&#x27;)&quot;],
+                       cwd=workdir, env=env, capture_output=True, text=True)
+    return r.stdout.strip()
+
+print(&quot;1. verifier on the broken code:      &quot;, run_check(work, clear_cache=True))
+# the agent &quot;fixes&quot; it
+(work / &quot;mod.py&quot;).write_text(&quot;def check(x):\n    return x &gt;= 0\n&quot;)
+print(&quot;2. after a real fix, cache cleared:  &quot;, run_check(work, clear_cache=True))
+# now put the broken version back, but leave a stale cache in place
+import py_compile
+(work / &quot;mod.py&quot;).write_text(&quot;def check(x):\n    return True   # broken again\n&quot;)
+py_compile.compile(str(work / &quot;mod.py&quot;), doraise=True)
+(work / &quot;mod.py&quot;).write_text(&quot;def check(x):\n    return x &gt;= 0\n&quot;)
+os.utime(work / &quot;mod.py&quot;, (0, 0))          # make the source look older than the cache
+print(&quot;3. source fixed, STALE cache honoured:&quot;, run_check(work, clear_cache=False),
+      &quot; ← the verifier is reading code that is not on disk&quot;)
+shutil.rmtree(work, ignore_errors=True)</code></pre></div><div class="nbmd"><h2>5 · The control — rank verifiers and always clear derived state</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>RANKING = [
+ (1, &quot;behavioural / property test&quot;, &quot;must change observable behaviour&quot;,
+     &quot;execute the artefact against facts that must hold&quot;),
+ (2, &quot;differential test&quot;,           &quot;must match a trusted second implementation&quot;,
+     &quot;run old and new against the same inputs&quot;),
+ (3, &quot;exact-match oracle&quot;,          &quot;nothing — but needs the answer in advance&quot;,
+     &quot;only usable on a fixed corpus&quot;),
+ (4, &quot;shape / schema check&quot;,        &quot;any well-formed output&quot;,
+     &quot;use for conformance ONLY, never for quality — see B2.10&quot;),
+ (5, &quot;llm judge&quot;,                   &quot;confident prose&quot;,
+     &quot;acceptable only as a filter before a real check, never as the last word&quot;),
+]
+print(f&quot;{&#x27;rank&#x27;:5s}{&#x27;verifier&#x27;:30s}{&#x27;fooled by&#x27;:44s}&quot;)
+print(&quot;-&quot; * 80)
+for r, name, fooled, use in RANKING:
+    print(f&quot;{r:&lt;5}{name:30s}{fooled:44s}&quot;)
+    print(f&quot;{&#x27;&#x27;:35s}{use}&quot;)
+
+CHECKLIST = [
+ &quot;does it EXECUTE the artefact, or only inspect it?&quot;,
+ &quot;would it fail if the artefact were subtly wrong?&quot;,
+ &quot;does it clear caches / derived state before reading?&quot;,
+ &quot;is its own correctness tested (does it fail on known-bad input)?&quot;,
+]
+print(&quot;\nverifier review checklist:&quot;)
+for c in CHECKLIST:
+    print(&quot;   ·&quot;, c)
+
+# the fourth item, applied to our own verifier
+assert behavioural(BROKEN)[0] is False, &quot;verifier must fail on known-bad&quot;
+assert behavioural(CORRECT)[0] is True, &quot;verifier must pass on known-good&quot;
+assert behavioural(ALTERNATIVE)[0] is True, &quot;verifier must accept alternatives&quot;
+print(&quot;\nour behavioural verifier passes its own test: fails broken, accepts both correct forms.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Only the behavioural verifier gets both the broken and correct inputs right; the shape check and judge accept the broken port parser, and the exact-match oracle rejects a correct alternative implementation. The stale-cache demo shows the verifier reporting PASS while reading bytecode for code no longer on disk. The verifier's own test confirms it fails on known-bad and accepts both correct forms.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Find one check in your pipeline that is a shape check wearing an oracle's name — "the build passed", "the JSON validated", "no errors in the log". Then ask the fourth checklist question about it: has anyone ever confirmed it fails on known-bad input?</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">B2.3 · Tool design</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The oracle and the same-family judge disagree in a specific, reproducible direction.</div><div class="chips"><span>pytest</span><span>Checkov</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.2.ipynb</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · Plan–act–verify</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · Tool design</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

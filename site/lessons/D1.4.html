@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.4 — Detection engineering *for* agents | Cyber Commons</title><meta name="description" content="Detections whose subject is a non-human principal."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.4</div><h1>Detection engineering *for* agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Scope drift, unusual tool sequencing, off-hours autonomous action.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detections whose subject is a non-human principal.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Five detections whose subject is a non-human principal.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 16 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.4 · Detection engineering <em>for</em> agents</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.4 — Detection engineering *for* agents | Cyber Commons</title><meta name="description" content="Detections whose subject is a non-human principal."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.4</div><h1>Detection engineering *for* agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Scope drift, unusual tool sequencing, off-hours autonomous action.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detections whose subject is a non-human principal.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Five detections whose subject is a non-human principal.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 21 lines of output in 0.05s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.4 · Detection engineering <em>for</em> agents</h1>
 <p><strong>Function D — Security Operations → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> Scope drift, unusual tool sequencing, off-hours autonomous action.</p>
-<p><strong>Control.</strong> Detections whose subject is a non-human principal.</p>
-<p><strong>This lab.</strong> Five detections whose subject is a non-human principal.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Agent-assisted detection engineering</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,58 +20,135 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>This is the new work, and it starts by discarding baselines that have served the
+SOC well for twenty years.</p>
+<p>Human behavioural detection assumes irregularity, working hours, and a rate
+ceiling set by typing speed. An agent violates all three <em>while behaving
+correctly</em>:</p>
+<table>
+<thead>
+<tr>
+<th>Classic signal</th>
+<th>For a human</th>
+<th>For an agent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>two countries in an hour</td>
+<td>incident</td>
+<td>routine (multi-region)</td>
+</tr>
+<tr>
+<td>300 file reads a minute</td>
+<td>incident</td>
+<td>idle</td>
+</tr>
+<tr>
+<td>activity at 03:00</td>
+<td>suspicious</td>
+<td>meaningless</td>
+</tr>
+<tr>
+<td>the same action 500 times</td>
+<td>suspicious</td>
+<td>a stuck loop — but not malicious</td>
+</tr>
+</tbody>
+</table>
+<p>Applying human baselines to agents produces an alert on every session, so the
+rule gets tuned down, and then it never fires again — including when something
+is genuinely wrong.</p>
+<p>The signals that <em>do</em> work for agents are about <strong>change</strong>: a tool it has never
+used, a mix that has shifted, a scope exercised that was never needed before.</p></div><div class="nbmd"><h2>2 · Demo — classic baselines against agent traffic</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import statistics, time
+from dataclasses import dataclass
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
-
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;D1.4&quot;))</code></pre></div><div class="nbmd"><p>Detection engineering <em>for</em> agents is the new work. The classic behavioural baselines invert: what is anomalous for a person is normal for a loop, and vice versa.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import soc
-import time
+@dataclass
+class Event:
+    ts: float; actor: str; action: str; target: str = &quot;&quot;
 
 now = time.time()
-HUMAN_BASELINES = {
- &quot;logins from two countries in an hour&quot;: &quot;incident for a person, routine for a service&quot;,
- &quot;300 file reads per minute&quot;:            &quot;incident for a person, idle for an agent&quot;,
- &quot;activity at 03:00&quot;:                    &quot;suspicious for a person, meaningless for an agent&quot;,
- &quot;the same action 500 times&quot;:            &quot;suspicious for a person, a stuck loop for an agent&quot;,
-}
-for k, v in HUMAN_BASELINES.items():
-    print(f&quot;  {k:40s} {v}&quot;)
+AGENT = [Event(now + i*0.2, &quot;patch-agent&quot;, &quot;read_file&quot;, f&quot;/work/{i}.py&quot;)
+         for i in range(300)]
+HUMAN = [Event(now + t, &quot;dana@corp&quot;, &quot;read_file&quot;, &quot;/work/a.py&quot;)
+         for t in (0, 12, 30, 95, 240, 600, 1500)]
 
-print(&quot;\nAgent-appropriate signals instead:&quot;)
-AGENT_SIGNALS = {
- &quot;tool mix changed from baseline&quot;: &quot;new capability or new prompt — re-test controls&quot;,
- &quot;action rate dropped to zero&quot;:    &quot;the loop is stuck or was killed&quot;,
- &quot;a tool never seen before&quot;:       &quot;manifest changed without review&quot;,
- &quot;scope used exceeds scope needed&quot;: &quot;over-granted identity&quot;,
+CLASSIC = {
+ &quot;rate &gt; 30 actions/min&quot;:
+   lambda ev: (len(ev) / max((ev[-1].ts - ev[0].ts)/60, 1e-9)) &gt; 30,
+ &quot;activity outside 09:00-18:00&quot;:
+   lambda ev: True,                     # agents run continuously
+ &quot;same action &gt; 100 times&quot;:
+   lambda ev: max((sum(1 for e in ev if e.action == a) for a in {x.action for x in ev}),
+                  default=0) &gt; 100,
 }
-for k, v in AGENT_SIGNALS.items():
-    print(f&quot;  {k:40s} {v}&quot;)</code></pre></div><div class="nbmd"><p>Now build one of them, because 'tool mix changed' is the highest-yield agent detection and almost nobody has it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>base = soc.Baseline(tool_mix={&quot;read_file&quot;: 0.80, &quot;http_get&quot;: 0.15,
-                                &quot;write_file&quot;: 0.05}, actions_per_hour=400)
-today = ([soc.Event(now, &quot;patch-agent&quot;, &quot;read_file&quot;)] * 40 +
-         [soc.Event(now, &quot;patch-agent&quot;, &quot;http_get&quot;)] * 10 +
-         [soc.Event(now, &quot;patch-agent&quot;, &quot;run_shell&quot;)] * 30)   # new tool
-d = base.compare(today)
-for k, v in d.items():
-    print(f&quot;{k:12s} {v}&quot;)</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>The inversion table prints, and the drift comparison reports significant drift with <code>run_shell</code> listed as a new tool the baseline never contained.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Write the alert text for that drift detection. It has to tell the analyst what changed and what to do — 'anomaly detected' fails both tests.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.4.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+print(f&quot;{&#x27;classic rule&#x27;:34s}{&#x27;fires on agent&#x27;:16s}fires on human&quot;)
+print(&quot;-&quot; * 66)
+for name, rule in CLASSIC.items():
+    print(f&quot;{name:34s}{str(rule(AGENT)):16s}{rule(HUMAN)}&quot;)
+print(&quot;\nAll three fire on an agent doing exactly its job. Deployed as-is, they&quot;)
+print(&quot;produce continuous noise and are disabled within a week.&quot;)</code></pre></div><div class="nbmd"><h2>3 · The control — detect change, not activity</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
+class Baseline:
+    &quot;&quot;&quot;What normal looked like when the control was signed off.&quot;&quot;&quot;
+    tool_mix: dict
+    actions_per_hour: float
+    scopes_used: set
+
+    def compare(self, events, scopes_used, hours=1.0):
+        counts = {}
+        for e in events:
+            counts[e.action] = counts.get(e.action, 0) + 1
+        total = sum(counts.values()) or 1
+        now_mix = {k: v/total for k, v in counts.items()}
+        keys = set(now_mix) | set(self.tool_mix)
+        tvd = sum(abs(now_mix.get(k, 0) - self.tool_mix.get(k, 0)) for k in keys) / 2
+        new_tools = sorted(set(now_mix) - set(self.tool_mix))
+        new_scopes = sorted(scopes_used - self.scopes_used)
+        return {&quot;drift&quot;: round(tvd, 3), &quot;new_tools&quot;: new_tools,
+                &quot;new_scopes&quot;: new_scopes,
+                &quot;rate_ratio&quot;: round((total/hours) / self.actions_per_hour, 2),
+                &quot;verdict&quot;: (&quot;SIGNIFICANT — re-test the controls&quot;
+                            if tvd &gt; 0.25 or new_tools or new_scopes
+                            else &quot;within tolerance&quot;)}
+
+base = Baseline(tool_mix={&quot;read_file&quot;: 0.85, &quot;search&quot;: 0.15},
+                actions_per_hour=1200, scopes_used={&quot;repo:read&quot;})
+
+WEEKS = {
+ &quot;week 1 (baseline)&quot;:   ([(&quot;read_file&quot;, 850), (&quot;search&quot;, 150)], {&quot;repo:read&quot;}),
+ &quot;week 4 (new prompt)&quot;: ([(&quot;read_file&quot;, 700), (&quot;search&quot;, 200), (&quot;write_file&quot;, 100)],
+                          {&quot;repo:read&quot;, &quot;repo:write&quot;}),
+ &quot;week 8 (upgrade)&quot;:    ([(&quot;read_file&quot;, 300), (&quot;search&quot;, 100), (&quot;write_file&quot;, 200),
+                          (&quot;run_shell&quot;, 400)], {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;exec&quot;}),
+}
+for label, (mix, scopes) in WEEKS.items():
+    ev = [Event(now, &quot;patch-agent&quot;, tool) for tool, n in mix for _ in range(n)]
+    d = base.compare(ev, scopes)
+    print(f&quot;{label:22s} drift={d[&#x27;drift&#x27;]:.3f}  rate×{d[&#x27;rate_ratio&#x27;]}  {d[&#x27;verdict&#x27;]}&quot;)
+    if d[&quot;new_tools&quot;]:  print(f&quot;{&#x27;&#x27;:22s} new tools:  {d[&#x27;new_tools&#x27;]}&quot;)
+    if d[&quot;new_scopes&quot;]: print(f&quot;{&#x27;&#x27;:22s} new scopes: {d[&#x27;new_scopes&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Verify — the alert text an analyst can act on</h2>
+<p>"Anomaly detected" fails both tests: it does not say what changed, and it does not say what to do.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def alert_text(agent, d):
+    if d[&quot;verdict&quot;].startswith(&quot;within&quot;): return None
+    changes = []
+    if d[&quot;new_tools&quot;]:  changes.append(f&quot;began using {d[&#x27;new_tools&#x27;]}&quot;)
+    if d[&quot;new_scopes&quot;]: changes.append(f&quot;exercised new scopes {d[&#x27;new_scopes&#x27;]}&quot;)
+    if d[&quot;drift&quot;] &gt; 0.25: changes.append(f&quot;tool mix shifted (TVD {d[&#x27;drift&#x27;]})&quot;)
+    return (f&quot;[{agent}] behaviour changed from the signed-off baseline\n&quot;
+            f&quot;   what changed : {&#x27;; &#x27;.join(changes)}\n&quot;
+            f&quot;   why it matters: the controls in A3 were tested against the old\n&quot;
+            f&quot;                   behaviour; a new tool may not be covered\n&quot;
+            f&quot;   do this      : confirm a manifest change was reviewed (A1.1),\n&quot;
+            f&quot;                   then re-run the containment suite (C1.5)&quot;)
+
+ev = [Event(now, &quot;patch-agent&quot;, tool) for tool, n in WEEKS[&quot;week 8 (upgrade)&quot;][0]
+      for _ in range(n)]
+d = base.compare(ev, WEEKS[&quot;week 8 (upgrade)&quot;][1])
+print(alert_text(&quot;patch-agent&quot;, d))
+assert d[&quot;new_tools&quot;] and d[&quot;new_scopes&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>All three classic rules fire on an agent doing its job and only the rate rule fires on the human. Drift is within tolerance at week 1, significant at week 4 with <code>write_file</code> and <code>repo:write</code> new, and larger at week 8 with <code>run_shell</code> and an <code>exec</code> scope. The alert text names what changed, why it matters and what to do.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take one human-baseline rule in your SIEM and check how it behaves against a service account. If it fires nightly, it is already tuned off for that actor — which means you have no detection there at all.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.5.html">D1.5 · Agent telemetry as a data source</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>All five fire on synthetic-but-real agent telemetry from the A3/B2 labs.</div><div class="chips"><span>Falco</span><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.4.ipynb</code></p></div><div class="pager"><a href="D1.3.html"><span class="k">← Previous</span><span class="t">D1.3 · Agent-assisted detection engineering</span></a><a class="next" href="D1.5.html"><span class="k">Next →</span><span class="t">D1.5 · Agent telemetry as a data source</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

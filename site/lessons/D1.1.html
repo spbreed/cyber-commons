@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.1 — From alert queue to loop operator | Cyber Commons</title><meta name="description" content="Know what the loop must escalate and sample the rest."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.1</div><h1>From alert queue to loop operator</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Supervising by re-reading everything the loop did.</p></div><div class="ctrl"><div class="lab">Control</div><p>Know what the loop must escalate and sample the rest.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Supervise a triage loop by exception rather than by re-reading.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 14 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.1 · From alert queue to loop operator</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.1 — From alert queue to loop operator | Cyber Commons</title><meta name="description" content="Know what the loop must escalate and sample the rest."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.1</div><h1>From alert queue to loop operator</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Supervising by re-reading everything the loop did.</p></div><div class="ctrl"><div class="lab">Control</div><p>Know what the loop must escalate and sample the rest.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Supervise a triage loop by exception rather than by re-reading.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 49 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.1 · From alert queue to loop operator</h1>
 <p><strong>Function D — Security Operations → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>AI for Security</em></p>
-<hr />
-<p><strong>Risk.</strong> Supervising by re-reading everything the loop did.</p>
-<p><strong>Control.</strong> Know what the loop must escalate and sample the rest.</p>
-<p><strong>This lab.</strong> Supervise a triage loop by exception rather than by re-reading.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.9.html">C2.9 · Research as institutional capital</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,46 +20,137 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>The classic SOC job is a queue: alerts arrive, an analyst reads each one,
+decides, and moves on. The constraint is human attention, and it does not scale
+— which is why tier-1 burnout and alert fatigue are structural rather than
+cultural problems.</p>
+<p>The agentic version replaces "read every alert" with "operate a loop that reads
+every alert". The analyst's job becomes:</p>
+<ul>
+<li>deciding <strong>what the loop is allowed to conclude</strong> (the verifier, B2.2),</li>
+<li>deciding <strong>what it may do about it</strong> (the tool policy, A3.5),</li>
+<li>and handling the cases it escalates.</li>
+</ul>
+<p>The skill that transfers is not triage speed. It is knowing which signals the
+loop may believe — because a triage loop with a weak verifier closes true
+positives at machine speed, and closing a true positive is silent.</p></div><div class="nbmd"><blockquote>
+<p><strong>About the model in this notebook.</strong> It runs offline against a deterministic
+replay so the lesson executes on a Kaggle kernel with no network. To run the
+same triage against a real open-weight model:</p>
+<p><code>bash
+ollama pull glm-4.6            # or kimi-k2, llama3.3
+export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6</code></p>
+</blockquote></div><div class="nbmd"><h2>2 · Demo — the queue, and the loop that reads it</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
+from dataclasses import dataclass, field
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+@dataclass
+class Alert:
+    aid: str; rule: str; actor: str; target: str; severity: str
+    truth: str          # held out from the loop: &quot;tp&quot; or &quot;fp&quot;
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;D1.1&quot;))</code></pre></div><div class="nbmd"><p>The alert queue becomes a loop you operate rather than a list you work. The skill that transfers is not triage speed — it is knowing which signal the loop is allowed to believe.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import soc
-import time
-
-now = time.time()
-events = [
-    soc.Event(now,      &quot;patch-agent&quot;, &quot;http_get&quot;, &quot;http://169.254.169.254/latest/meta-data/&quot;),
-    soc.Event(now + 1,  &quot;patch-agent&quot;, &quot;read_file&quot;, &quot;/work/.env&quot;),
-    soc.Event(now + 2,  &quot;dana&quot;,        &quot;read_file&quot;, &quot;/work/src/app.py&quot;),
-    soc.Event(now + 3,  &quot;patch-agent&quot;, &quot;run_shell&quot;, &quot;&quot;, ok=False),
-    soc.Event(now + 4,  &quot;ci-runner&quot;,   &quot;delete_repo&quot;, &quot;repo/legacy&quot;),
+QUEUE = [
+ Alert(&quot;A-01&quot;,&quot;impossible travel&quot;,&quot;dana@corp&quot;,&quot;vpn-eu&quot;,&quot;medium&quot;,&quot;fp&quot;),
+ Alert(&quot;A-02&quot;,&quot;metadata service access&quot;,&quot;patch-agent&quot;,&quot;169.254.169.254&quot;,&quot;critical&quot;,&quot;tp&quot;),
+ Alert(&quot;A-03&quot;,&quot;failed logins x40&quot;,&quot;svc-etl&quot;,&quot;auth&quot;,&quot;medium&quot;,&quot;fp&quot;),
+ Alert(&quot;A-04&quot;,&quot;secret path read&quot;,&quot;patch-agent&quot;,&quot;/home/app/.aws/credentials&quot;,&quot;high&quot;,&quot;tp&quot;),
+ Alert(&quot;A-05&quot;,&quot;new admin group member&quot;,&quot;sam@corp&quot;,&quot;group:admins&quot;,&quot;high&quot;,&quot;tp&quot;),
+ Alert(&quot;A-06&quot;,&quot;port scan detected&quot;,&quot;scanner-01&quot;,&quot;10.0.0.0/24&quot;,&quot;low&quot;,&quot;fp&quot;),
+ Alert(&quot;A-07&quot;,&quot;egress to unlisted host&quot;,&quot;triage-agent&quot;,&quot;collect.example.com&quot;,&quot;high&quot;,&quot;tp&quot;),
+ Alert(&quot;A-08&quot;,&quot;expired certificate&quot;,&quot;www&quot;,&quot;tls&quot;,&quot;low&quot;,&quot;fp&quot;),
 ]
-alerts = soc.run_rules(events, soc.default_rules())
-for a in alerts:
-    print(f&quot;[{a.severity:8s}] {a.rule}&quot;)
-    print(f&quot;             actor={a.event.actor} target={a.event.target}&quot;)
-    print(f&quot;             → {a.response}&quot;)</code></pre></div><div class="nbmd"><p>Every alert carries a response. That is not documentation hygiene — an alert whose response is 'investigate' is an alert that will be closed without one.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>truth = {&quot;patch-agent:http_get&quot;, &quot;patch-agent:read_file&quot;, &quot;ci-runner:delete_repo&quot;}
-print(soc.triage_quality(alerts, truth))</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>Four alerts fire across three actors, each with a concrete response. Triage quality reports precision and recall plus alerts-per-true-positive.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Which of the four would you automate a response for today? The answer depends on precision, not severity — and that is the inversion this session is about.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+print(f&quot;queue: {len(QUEUE)} alerts, &quot;
+      f&quot;{sum(a.truth==&#x27;tp&#x27; for a in QUEUE)} true positives&quot;)
+for a in QUEUE:
+    print(f&quot;   {a.aid} {a.severity:8s} {a.rule:24s} {a.actor}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>class ReplayTriage:
+    &quot;&quot;&quot;DETERMINISTIC REPLAY — not a language model. Stands in for a triage model.&quot;&quot;&quot;
+    VERDICTS = {
+     &quot;A-01&quot;: (&quot;close&quot;, 0.88, &quot;corporate VPN egress in Frankfurt; matches this user&#x27;s pattern&quot;),
+     &quot;A-02&quot;: (&quot;escalate&quot;, 0.97, &quot;link-local metadata endpoint from a non-human identity&quot;),
+     &quot;A-03&quot;: (&quot;close&quot;, 0.71, &quot;service account retry storm after a credential rotation&quot;),
+     &quot;A-04&quot;: (&quot;escalate&quot;, 0.93, &quot;agent read a cloud credential path outside its workspace&quot;),
+     &quot;A-05&quot;: (&quot;escalate&quot;, 0.64, &quot;privileged group change; needs the change ticket checked&quot;),
+     &quot;A-06&quot;: (&quot;close&quot;, 0.90, &quot;authorised internal scanner, scheduled window&quot;),
+     &quot;A-07&quot;: (&quot;escalate&quot;, 0.95, &quot;egress to a host not on the allowlist&quot;),
+     &quot;A-08&quot;: (&quot;close&quot;, 0.99, &quot;hygiene finding, not a security event&quot;),
+    }
+    def triage(self, alert):
+        verdict, conf, why = self.VERDICTS[alert.aid]
+        return {&quot;aid&quot;: alert.aid, &quot;verdict&quot;: verdict, &quot;confidence&quot;: conf, &quot;why&quot;: why}
+
+model = ReplayTriage()
+results = [model.triage(a) for a in QUEUE]
+truth = {a.aid: a.truth for a in QUEUE}
+
+print(f&quot;{&#x27;alert&#x27;:7s}{&#x27;verdict&#x27;:10s}{&#x27;conf&#x27;:&gt;6}{&#x27;truth&#x27;:&gt;7}  reasoning&quot;)
+print(&quot;-&quot; * 92)
+for r in results:
+    t = truth[r[&quot;aid&quot;]]
+    correct = (r[&quot;verdict&quot;] == &quot;escalate&quot;) == (t == &quot;tp&quot;)
+    flag = &quot;&quot; if correct else &quot;   ← WRONG&quot;
+    print(f&quot;{r[&#x27;aid&#x27;]:7s}{r[&#x27;verdict&#x27;]:10s}{r[&#x27;confidence&#x27;]:&gt;6.2f}{t:&gt;7}{flag}  {r[&#x27;why&#x27;][:44]}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — closing a true positive is silent</h2>
+<p>Every triage decision has two error directions and they are not symmetric. Escalating a false positive costs an analyst ten minutes. <strong>Closing a true positive costs you the incident</strong>, and nothing tells you it happened.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def confusion(results, truth):
+    tp = fp = tn = fn = 0
+    missed = []
+    for r in results:
+        esc = r[&quot;verdict&quot;] == &quot;escalate&quot;
+        real = truth[r[&quot;aid&quot;]] == &quot;tp&quot;
+        if esc and real:      tp += 1
+        elif esc and not real: fp += 1
+        elif not esc and real: fn += 1; missed.append(r[&quot;aid&quot;])
+        else:                  tn += 1
+    return {&quot;escalated_correctly&quot;: tp, &quot;false_escalations&quot;: fp,
+            &quot;closed_correctly&quot;: tn, &quot;CLOSED_TRUE_POSITIVES&quot;: fn,
+            &quot;missed&quot;: missed,
+            &quot;analyst_minutes_saved&quot;: tn * 10,
+            &quot;incidents_missed&quot;: fn}
+
+c = confusion(results, truth)
+for k, v in c.items(): print(f&quot;{k:26s}{v}&quot;)
+
+print(&quot;\nNow lower the escalation bar and watch the trade:&quot;)
+for threshold in (0.5, 0.7, 0.9, 0.99):
+    esc = [r for r in results if r[&quot;verdict&quot;] == &quot;escalate&quot; or r[&quot;confidence&quot;] &lt; threshold]
+    adj = [{**r, &quot;verdict&quot;: &quot;escalate&quot; if (r[&quot;verdict&quot;] == &quot;escalate&quot; or
+            r[&quot;confidence&quot;] &lt; threshold) else &quot;close&quot;} for r in results]
+    cc = confusion(adj, truth)
+    print(f&quot;   close only above conf {threshold:.2f} → &quot;
+          f&quot;missed {cc[&#x27;incidents_missed&#x27;]}, analyst minutes saved &quot;
+          f&quot;{cc[&#x27;analyst_minutes_saved&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — the loop may close, but not silently</h2>
+<p>Three rules make an agentic triage loop safe to run, and none of them is about model quality.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>RULES = {
+ &quot;1. never close above a severity threshold&quot;:
+   &quot;critical and high alerts may be enriched and ranked, never auto-closed&quot;,
+ &quot;2. sample the closures&quot;:
+   &quot;a fixed fraction of auto-closed alerts go to a human, always&quot;,
+ &quot;3. measure closures against ground truth&quot;:
+   &quot;when an incident is found later, check whether the loop closed a related alert&quot;,
+}
+for k, v in RULES.items(): print(f&quot;{k}\n     {v}&quot;)
+
+def safe_triage(alert, verdict, confidence, sample_rate=0.1, seed=0):
+    import random
+    rng = random.Random(hash(alert.aid) % 1000 + seed)
+    if verdict == &quot;close&quot; and alert.severity in (&quot;critical&quot;, &quot;high&quot;):
+        return &quot;escalate&quot;, &quot;rule 1: severity floor — never auto-close high/critical&quot;
+    if verdict == &quot;close&quot; and rng.random() &lt; sample_rate:
+        return &quot;sample&quot;, &quot;rule 2: routine closure sample for quality measurement&quot;
+    return verdict, &quot;&quot;
+
+print()
+adjusted = []
+for a in QUEUE:
+    r = model.triage(a)
+    v, why = safe_triage(a, r[&quot;verdict&quot;], r[&quot;confidence&quot;])
+    adjusted.append({**r, &quot;verdict&quot;: &quot;escalate&quot; if v == &quot;escalate&quot; else
+                     (&quot;close&quot; if v == &quot;close&quot; else &quot;close&quot;)})
+    print(f&quot;   {a.aid} {a.severity:8s} {r[&#x27;verdict&#x27;]:9s} → {v:9s} {why}&quot;)
+
+c2 = confusion(adjusted, truth)
+print(f&quot;\nbefore: missed {c[&#x27;incidents_missed&#x27;]}   after: missed {c2[&#x27;incidents_missed&#x27;]}&quot;)
+assert c2[&quot;incidents_missed&quot;] &lt;= c[&quot;incidents_missed&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The triage loop escalates 4 alerts and closes 4, matching ground truth on all 8. Lowering the confidence bar trades analyst minutes against missed incidents. The severity floor converts any high or critical closure into an escalation, and the closure sampling routes a fraction of routine closures to a human for quality measurement.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Ask your SOC one question: when an incident is confirmed, does anyone check whether an earlier alert about it was closed? If nobody does, you have no measurement of your false-negative rate — with or without an agent.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">D1.2 · Context that makes triage work</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The loop clears the known-benign and escalates the rest with its reasoning attached.</div><div class="chips"><span>Wazuh</span><span>OpenSearch</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.1.ipynb</code></p></div><div class="pager"><a href="C2.9.html"><span class="k">← Previous</span><span class="t">C2.9 · Research as institutional capital</span></a><a class="next" href="D1.2.html"><span class="k">Next →</span><span class="t">D1.2 · Context that makes triage work</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

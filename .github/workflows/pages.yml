@@ -41,14 +41,11 @@ jobs:
       - name: Secret scan
         run: python3 scripts/check_secrets.py
 
-      # The library the 104 notebooks import. If these fail, the labs teach
-      # something that is not true, and nothing below is worth deploying.
-      - name: Lab library self-test
-        run: python3 labs/cybercommons/selftest.py
-
-      # Every notebook actually runs. This is the evidence behind the
-      # "✓ Executed" badge on each lesson page.
-      - name: Execute all 104 notebooks
+      # Every notebook actually runs, top to bottom, self-contained. This is
+      # the evidence behind the "✓ Executed" badge on each lesson page, and it
+      # is the only correctness gate the labs need now that each notebook
+      # carries its own code.
+      - name: Execute every notebook
         run: python3 scripts/run_notebooks.py --quiet
 
       - name: Check notebooks and lab blocks are in sync

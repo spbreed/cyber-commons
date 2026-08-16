@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.2 — Context that makes triage work | Cyber Commons</title><meta name="description" content="Feed the baseline, known FPs, crown-jewel map and prior decisions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.2</div><h1>Context that makes triage work</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Generic triage agents underperform your worst analyst.</p></div><div class="ctrl"><div class="lab">Control</div><p>Feed the baseline, known FPs, crown-jewel map and prior decisions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Show a context-loaded triage loop beating a generic one.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 12 lines of output in 0.05s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.2 · Context that makes triage work</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.2 — Context that makes triage work | Cyber Commons</title><meta name="description" content="Feed the baseline, known FPs, crown-jewel map and prior decisions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.2</div><h1>Context that makes triage work</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Generic triage agents underperform your worst analyst.</p></div><div class="ctrl"><div class="lab">Control</div><p>Feed the baseline, known FPs, crown-jewel map and prior decisions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Show a context-loaded triage loop beating a generic one.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 36 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.2 · Context that makes triage work</h1>
 <p><strong>Function D — Security Operations → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>AI for Security</em></p>
-<hr />
-<p><strong>Risk.</strong> Generic triage agents underperform your worst analyst.</p>
-<p><strong>Control.</strong> Feed the baseline, known FPs, crown-jewel map and prior decisions.</p>
-<p><strong>This lab.</strong> Show a context-loaded triage loop beating a generic one.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · From alert queue to loop operator</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,46 +20,102 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>An alert about a human is triageable with three facts: who, what, when. An alert
+about an agent needs three more, and without them every analyst has to guess.</p>
+<ul>
+<li><strong>The acting identity</strong> and the principal it acted for (A2.1).</li>
+<li><strong>The scopes it held</strong> at the time. This is the decisive field: reading
+  <code>.env</code> is alarming for an agent scoped <code>repo:read</code> and routine for a
+  secrets-rotation agent.</li>
+<li><strong>The delegation chain</strong>, so the analyst can see who caused the task.</li>
+</ul>
+<p>Without scope in the alert, the analyst's only options are to escalate
+everything or to develop a habit of closing agent alerts. Both happen, and the
+second one happens quietly.</p></div><div class="nbmd"><h2>2 · Demo — the same alert, with and without context</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
+from dataclasses import dataclass, field
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+@dataclass
+class Token:
+    sub: str; actor: str; scopes: set; act: dict = None
+    def chain(self):
+        out, node = [], self.act
+        while node: out.append(node[&quot;actor&quot;]); node = node.get(&quot;act&quot;)
+        c = list(reversed(out)) + [self.actor]
+        if c[0] != self.sub: c.insert(0, self.sub)
+        return c
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;D1.2&quot;))</code></pre></div><div class="nbmd"><p>Context is what makes triage work, and for agent alerts the context that matters is identity: who acted, through whom, holding what.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import identity, soc
-import time
+AGENTS = {
+ &quot;patch-agent&quot;:   Token(&quot;dana@corp&quot;, &quot;patch-agent&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;},
+                        {&quot;actor&quot;: &quot;orchestrator&quot;, &quot;act&quot;: None}),
+ &quot;rotator-agent&quot;: Token(&quot;ops@corp&quot;, &quot;rotator-agent&quot;, {&quot;secrets:read&quot;, &quot;secrets:write&quot;},
+                        {&quot;actor&quot;: &quot;scheduler&quot;, &quot;act&quot;: None}),
+}
+EVENT = {&quot;action&quot;: &quot;read_file&quot;, &quot;target&quot;: &quot;/vault/.env&quot;, &quot;ts&quot;: time.time()}
 
-alice = identity.mint(&quot;alice&quot;)
-patch = identity.exchange(alice, &quot;patch-agent&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;})
+print(&quot;BARE ALERT (what most SOCs receive):&quot;)
+for actor in AGENTS:
+    print(f&quot;   {actor} read {EVENT[&#x27;target&#x27;]}&quot;)
+print(&quot;   → identical. An analyst cannot tell these apart.\n&quot;)
 
-alert_event = soc.Event(time.time(), &quot;patch-agent&quot;, &quot;read_file&quot;, &quot;/work/.env&quot;)
+print(&quot;ENRICHED ALERT:&quot;)
+for actor, tok in AGENTS.items():
+    expected = &quot;secrets:read&quot; in tok.scopes
+    print(f&quot;   actor        {tok.actor}&quot;)
+    print(f&quot;   on behalf of {tok.sub}&quot;)
+    print(f&quot;   chain        {&#x27; → &#x27;.join(tok.chain())}&quot;)
+    print(f&quot;   scopes held  {sorted(tok.scopes)}&quot;)
+    print(f&quot;   verdict      {&#x27;EXPECTED — this agent rotates secrets&#x27; if expected else &#x27;ANOMALY — no secrets scope&#x27;}&quot;)
+    print()</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — measure the analyst's decision quality</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def triage_without_context(event):
+    &quot;&quot;&quot;All the analyst has is the action and the target.&quot;&quot;&quot;
+    return &quot;escalate&quot; if &quot;/.env&quot; in event[&quot;target&quot;] or &quot;secret&quot; in event[&quot;target&quot;] else &quot;close&quot;
 
-print(&quot;alert without context:&quot;)
-print(f&quot;   {alert_event.actor} read {alert_event.target}&quot;)
-print(&quot;\nalert with identity context:&quot;)
-print(f&quot;   actor        {patch.actor}&quot;)
-print(f&quot;   on behalf of {patch.sub}&quot;)
-print(f&quot;   chain        {&#x27; → &#x27;.join(patch.chain())}&quot;)
-print(f&quot;   scopes       {sorted(patch.scopes)}&quot;)
-print(f&quot;   token fp     {patch.fingerprint()}&quot;)
-print(&quot;\nThe second version answers &#x27;is this expected?&#x27; — the first cannot.&quot;)</code></pre></div><div class="nbmd"><p>The scope list is the decisive field. Reading <code>.env</code> is alarming for an agent scoped to <code>repo:read</code>; for a secrets-rotation agent it is Tuesday. Without scope in the alert, every analyst has to guess.</p></div><div class="nbmd"><h3>Expect</h3>
-<p>The bare alert shows actor and target only. The enriched version adds the principal, the full delegation chain, the held scopes and a token fingerprint.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>List the five fields your agent alerts would need to be triageable without a second lookup. Then check how many your telemetry actually carries.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+def triage_with_context(event, token):
+    needed = &quot;secrets:read&quot;
+    if &quot;/.env&quot; in event[&quot;target&quot;] or &quot;vault&quot; in event[&quot;target&quot;]:
+        return &quot;close&quot; if needed in token.scopes else &quot;escalate&quot;
+    return &quot;close&quot;
+
+TRUTH = {&quot;patch-agent&quot;: &quot;tp&quot;, &quot;rotator-agent&quot;: &quot;fp&quot;}
+print(f&quot;{&#x27;agent&#x27;:16s}{&#x27;no context&#x27;:14s}{&#x27;with context&#x27;:16s}{&#x27;truth&#x27;:&gt;7}&quot;)
+print(&quot;-&quot; * 56)
+for actor, tok in AGENTS.items():
+    a = triage_without_context(EVENT)
+    b = triage_with_context(EVENT, tok)
+    print(f&quot;{actor:16s}{a:14s}{b:16s}{TRUTH[actor]:&gt;7}&quot;)
+
+print(&quot;\nWithout scopes, both escalate → the rotator generates a false positive&quot;)
+print(&quot;every single night, and within a month the rule is tuned off.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — the six fields, and what each one decides</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>FIELDS = {
+ &quot;acting identity&quot;:  &quot;which agent — not the human whose token it borrowed&quot;,
+ &quot;principal&quot;:        &quot;who the action was for&quot;,
+ &quot;delegation chain&quot;: &quot;who caused the task; where to look for the trigger&quot;,
+ &quot;scopes held&quot;:      &quot;THE decisive field — is this action within its remit?&quot;,
+ &quot;tool + target&quot;:    &quot;what it did&quot;,
+ &quot;session/trace id&quot;: &quot;so the analyst can pull the whole run (D1.5)&quot;,
+}
+for k, v in FIELDS.items(): print(f&quot;{k:20s}{v}&quot;)
+
+def enrich(event, token, trace_id):
+    return {&quot;acting_identity&quot;: token.actor, &quot;principal&quot;: token.sub,
+            &quot;chain&quot;: &quot; → &quot;.join(token.chain()), &quot;scopes&quot;: sorted(token.scopes),
+            &quot;tool&quot;: event[&quot;action&quot;], &quot;target&quot;: event[&quot;target&quot;],
+            &quot;trace_id&quot;: trace_id,
+            &quot;within_remit&quot;: any(s.startswith(&quot;secrets&quot;) for s in token.scopes)
+                            if &quot;vault&quot; in event[&quot;target&quot;] or &quot;/.env&quot; in event[&quot;target&quot;]
+                            else True}
+
+print()
+for actor, tok in AGENTS.items():
+    e = enrich(EVENT, tok, trace_id=f&quot;tr-{actor[:4]}-8812&quot;)
+    verdict = &quot;close (within remit)&quot; if e[&quot;within_remit&quot;] else &quot;ESCALATE (outside remit)&quot;
+    print(f&quot;{actor:16s}{verdict}&quot;)
+    print(f&quot;{&#x27;&#x27;:16s}{e[&#x27;chain&#x27;]}  scopes={e[&#x27;scopes&#x27;]}&quot;)
+
+assert enrich(EVENT, AGENTS[&quot;patch-agent&quot;], &quot;x&quot;)[&quot;within_remit&quot;] is False
+assert enrich(EVENT, AGENTS[&quot;rotator-agent&quot;], &quot;x&quot;)[&quot;within_remit&quot;] is True</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The bare alert is identical for both agents. Enriched, the secrets-rotation agent is within remit and the patch agent is not. Context-free triage escalates both — generating a nightly false positive — while scope-aware triage matches ground truth on both.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Check which of the six fields your agent telemetry carries today. Scopes-held is the one almost nobody logs, and it is the one that decides the alert.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Agent-assisted detection engineering</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The generic loop underperforms your worst analyst; the loaded one does not. Same model both times.</div><div class="chips"><span>Wazuh</span><span class="m">GLM-4.6</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.2.ipynb</code></p></div><div class="pager"><a href="D1.1.html"><span class="k">← Previous</span><span class="t">D1.1 · From alert queue to loop operator</span></a><a class="next" href="D1.3.html"><span class="k">Next →</span><span class="t">D1.3 · Agent-assisted detection engineering</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

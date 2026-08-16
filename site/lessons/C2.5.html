@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.5 — Supply-chain research | Cyber Commons</title><meta name="description" content="Verify provenance; sign and attest artefacts."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Security Researcher</div><div class="sid">C2.5</div><h1>Supply-chain research</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Adapter and LoRA provenance, registry tampering, dependency confusion in agent ecosystems.</p></div><div class="ctrl"><div class="lab">Control</div><p>Verify provenance; sign and attest artefacts.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Detect a tampered adapter through provenance.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 17 lines of output in 0.06s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.5 · Supply-chain research</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.5 — Supply-chain research | Cyber Commons</title><meta name="description" content="Verify provenance; sign and attest artefacts."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Security Researcher</div><div class="sid">C2.5</div><h1>Supply-chain research</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Adapter and LoRA provenance, registry tampering, dependency confusion in agent ecosystems.</p></div><div class="ctrl"><div class="lab">Control</div><p>Verify provenance; sign and attest artefacts.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Detect a tampered adapter through provenance.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 47 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.5 · Supply-chain research</h1>
 <p><strong>Function C — Offensive Security &amp; Research → The Security Researcher</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> Adapter and LoRA provenance, registry tampering, dependency confusion in agent ecosystems.</p>
-<p><strong>Control.</strong> Verify provenance; sign and attest artefacts.</p>
-<p><strong>This lab.</strong> Detect a tampered adapter through provenance.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.4.html">C2.4 · Data-layer research</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,44 +20,126 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Supply-chain research for AI systems is the ordinary software problem plus two
+artefacts that have no mature process at all.</p>
+<p>The ordinary part transfers directly: typosquatting, unsigned packages, new
+packages with no soak time. The signals that predict a bad dependency have not
+changed.</p>
+<p>The two new artefacts:</p>
+<ul>
+<li><strong>Model weights.</strong> Sigstore and in-toto attestation are technically possible
+  and rare in practice. There is no download-count equivalent — "popular
+  checkpoint" is not provenance, and a fine-tune of a fine-tune has a lineage
+  nobody records.</li>
+<li><strong>Prompt and tool packages.</strong> MCP servers, agent skill bundles, prompt
+  libraries. These run <em>inside</em> your agent with your agent's authority, and
+  there is no signing convention for them at all.</li>
+</ul>
+<p>The honest output of this lesson includes stating where no answer currently
+exists, because a risk assessment that invents one is worse than a gap.</p></div><div class="nbmd"><h2>2 · Demo — the ordinary signals still work</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+@dataclass(frozen=True)
+class Package:
+    name: str; version: str; signed: bool = False
+    downloads: int = 0; age_days: int = 999
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;C2.5&quot;))</code></pre></div><div class="nbmd"><p>Supply-chain research for AI systems has the same shape as for software, plus two new artefacts nobody has a process for: model weights and prompt/tool packages.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import research
-P = research.Package
+KNOWN_GOOD = {&quot;requests&quot;, &quot;urllib3&quot;, &quot;numpy&quot;, &quot;pandas&quot;, &quot;cryptography&quot;,
+              &quot;pytest&quot;, &quot;flask&quot;, &quot;colorama&quot;, &quot;langchain&quot;}
 
-candidates = [
-    P(&quot;requests&quot;,  &quot;2.31.0&quot;, signed=True,  downloads=900_000, age_days=400),
-    P(&quot;requsts&quot;,   &quot;2.31.0&quot;, signed=False, downloads=12,      age_days=3),
-    P(&quot;colorama&quot;,  &quot;0.4.6&quot;,  signed=True,  downloads=500_000, age_days=900),
-    P(&quot;colourama&quot;, &quot;0.4.6&quot;,  signed=False, downloads=40,      age_days=9),
-    P(&quot;mcp-github-tools&quot;, &quot;0.1.0&quot;, signed=False, downloads=200, age_days=11),
-]
-for p in candidates:
-    r = research.provenance(p)
-    print(f&quot;{r[&#x27;package&#x27;]:26s} {r[&#x27;verdict&#x27;]:7s}&quot;)
-    for f in r[&quot;flags&quot;]:
-        print(f&quot;      · {f}&quot;)</code></pre></div><div class="nbmd"><p>The last entry is the new shape: an MCP tool package, unsigned and days old, that would run inside your agent with its authority. It trips the same signals — which is good news, because it means the existing process extends rather than needing invention.</p></div><div class="nbmd"><h3>Expect</h3>
-<p>The two legitimate packages are allowed. Both typosquats are blocked with the distance and the popular name they imitate. The MCP package lands on review or block for being unsigned, new and unscrutinised.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Add the model-weight case: what are the equivalents of 'signed' and 'downloads' for a checkpoint? Sigstore covers the first. The second has no good answer yet — say so in your report.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.5.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+def levenshtein(a, b):
+    if len(a) &lt; len(b): a, b = b, a
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+def typosquat(pkg, known=KNOWN_GOOD):
+    if pkg.name in known:
+        return None
+    near = sorted((levenshtein(pkg.name, k), k) for k in known)[:1]
+    if near and near[0][0] &lt;= 2:
+        return f&quot;distance {near[0][0]} from popular package {near[0][1]!r}&quot;
+    return None
+
+def assess(pkg):
+    flags = []
+    if not pkg.signed:        flags.append(&quot;unsigned — no attestation to source&quot;)
+    if pkg.age_days &lt; 30:     flags.append(f&quot;published {pkg.age_days}d ago — no soak time&quot;)
+    if pkg.downloads &lt; 1000:  flags.append(f&quot;only {pkg.downloads} downloads&quot;)
+    if (t := typosquat(pkg)): flags.append(t)
+    verdict = &quot;block&quot; if len(flags) &gt;= 3 else &quot;review&quot; if flags else &quot;allow&quot;
+    return verdict, flags
+
+for p in [Package(&quot;requests&quot;, &quot;2.31.0&quot;, True, 900_000, 400),
+          Package(&quot;requsts&quot;, &quot;2.31.0&quot;, False, 12, 3),
+          Package(&quot;colourama&quot;, &quot;0.4.6&quot;, False, 40, 9),
+          Package(&quot;langchain&quot;, &quot;0.2.1&quot;, False, 400_000, 200)]:
+    v, flags = assess(p)
+    print(f&quot;{p.name+&#x27;==&#x27;+p.version:24s}{v}&quot;)
+    for f in flags: print(f&quot;      · {f}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the two artefacts with no process</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>NEW_ARTEFACTS = {
+ &quot;model weights&quot;: {
+   &quot;signing&quot;: &quot;Sigstore/in-toto possible, rarely used&quot;,
+   &quot;popularity signal&quot;: &quot;NONE — &#x27;popular checkpoint&#x27; is not provenance&quot;,
+   &quot;lineage&quot;: &quot;a fine-tune of a fine-tune; base model often unrecorded&quot;,
+   &quot;runs with&quot;: &quot;no authority of its own — but shapes every decision&quot;,
+   &quot;honest verdict&quot;: &quot;assess the PUBLISHER, because you cannot assess the artefact&quot;},
+ &quot;prompt / tool packages (MCP, skills)&quot;: {
+   &quot;signing&quot;: &quot;NO convention exists&quot;,
+   &quot;popularity signal&quot;: &quot;star counts, which are trivially gamed&quot;,
+   &quot;lineage&quot;: &quot;none recorded&quot;,
+   &quot;runs with&quot;: &quot;YOUR AGENT&#x27;S AUTHORITY — this is the dangerous one&quot;,
+   &quot;honest verdict&quot;: &quot;treat as executable code, because it is&quot;},
+}
+for artefact, props in NEW_ARTEFACTS.items():
+    print(f&quot;=== {artefact} ===&quot;)
+    for k, v in props.items():
+        print(f&quot;   {k:20s} {v}&quot;)
+    print()</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># An MCP tool package assessed with the ordinary signals — they still fire.
+mcp_pkg = Package(&quot;mcp-jira-connector&quot;, &quot;0.0.3&quot;, signed=False,
+                  downloads=180, age_days=6)
+v, flags = assess(mcp_pkg)
+print(f&quot;{mcp_pkg.name}: {v}&quot;)
+for f in flags: print(f&quot;   · {f}&quot;)
+print(&quot;\nGood news: the existing process EXTENDS to it rather than needing&quot;)
+print(&quot;invention. Bad news: nothing in that process accounts for the fact that&quot;)
+print(&quot;this package will run with your agent&#x27;s tools.&quot;)
+
+def authority_weighted(pkg, runs_with_agent_authority, agent_blast):
+    v, flags = assess(pkg)
+    if runs_with_agent_authority and v != &quot;allow&quot;:
+        return &quot;block&quot;, flags + [f&quot;runs with agent authority (blast {agent_blast})&quot;]
+    return v, flags
+
+v2, flags2 = authority_weighted(mcp_pkg, True, agent_blast=43)
+print(f&quot;\nauthority-weighted verdict: {v2}&quot;)
+for f in flags2: print(f&quot;   · {f}&quot;)
+assert v2 == &quot;block&quot;</code></pre></div><div class="nbmd"><h2>4 · The control — state the gap rather than inventing a number</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def risk_assessment(artefact, signals_available):
+    known = [s for s, ok in signals_available.items() if ok]
+    unknown = [s for s, ok in signals_available.items() if not ok]
+    return {
+      &quot;artefact&quot;: artefact,
+      &quot;assessed_on&quot;: known,
+      &quot;cannot_assess&quot;: unknown,
+      &quot;statement&quot;: (f&quot;assessed on {len(known)}/{len(signals_available)} signals; &quot;
+                    f&quot;{&#x27;, &#x27;.join(unknown)} not available for this artefact class&quot;),
+    }
+
+for artefact, sig in (
+  (&quot;python package&quot;, {&quot;signature&quot;: True, &quot;downloads&quot;: True, &quot;age&quot;: True, &quot;lineage&quot;: True}),
+  (&quot;model weights&quot;,  {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;age&quot;: True, &quot;lineage&quot;: False}),
+  (&quot;MCP tool pack&quot;,  {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;age&quot;: True, &quot;lineage&quot;: False}),
+):
+    r = risk_assessment(artefact, sig)
+    print(f&quot;{r[&#x27;artefact&#x27;]:18s}{r[&#x27;statement&#x27;]}&quot;)
+print(&quot;\nThat last sentence is the deliverable. A risk rating that hides which&quot;)
+print(&quot;signals were unavailable is a number someone will later rely on.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The two legitimate packages are allowed or reviewed; both typosquats are blocked with the distance and the package they imitate. The MCP connector trips three ordinary signals and is escalated to block once agent authority is weighted in. The final assessments state explicitly which signals are unavailable for model weights and tool packages.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Add one question to your third-party assessment: "does this artefact execute with our agent's authority?" Anything answering yes should not be assessed on the same scale as a library.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.6.html">C2.6 · Building the research harness</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.5.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Signature verification catches it; an unsigned registry would not have.</div><div class="chips"><span>Sigstore</span><span>in-toto</span><span>OWASP AIBOM</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C2.5.ipynb</code></p></div><div class="pager"><a href="C2.4.html"><span class="k">← Previous</span><span class="t">C2.4 · Data-layer research</span></a><a class="next" href="C2.6.html"><span class="k">Next →</span><span class="t">C2.6 · Building the research harness</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

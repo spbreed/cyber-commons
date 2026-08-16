@@ -11,7 +11,7 @@
 
 **Deliverable:** A working three-hop delegation chain with proven attenuation, and a rollback of one agent's access without collateral.
 
-> Prerequisite: [Module 0](module-0.md). Every session below ships commands that actually execute — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+> Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 

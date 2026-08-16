@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.3 — Patch generation and local validation | Cyber Commons</title><meta name="description" content="Build and test the fix locally *before* raising the PR."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.3</div><h1>Patch generation and local validation</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Unverified agent patches destroy trust faster than missed findings.</p></div><div class="ctrl"><div class="lab">Control</div><p>Build and test the fix locally *before* raising the PR.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Never raise a PR for a patch you did not build and test.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 10 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.3 · Patch generation and local validation</h1>
-<p><strong>Function B — Product &amp; Application Security → The AppSec Engineer / Code Reviewer</strong>  ·  <em>AI for Security</em></p>
-<hr />
-<p><strong>Risk.</strong> Unverified agent patches destroy trust faster than missed findings.</p>
-<p><strong>Control.</strong> Build and test the fix locally <em>before</em> raising the PR.</p>
-<p><strong>This lab.</strong> Never raise a PR for a patch you did not build and test.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.3 — Threat modelling from the architecture map | Cyber Commons</title><meta name="description" content="Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.3</div><h1>Threat modelling from the architecture map</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Threat models are written once, by hand, against a system that has since changed.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Never raise a PR for a patch you did not build and test.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 27 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.3 · Threat modelling from the architecture map</h1>
+<p><strong>Function B — Product &amp; Application Security → The AppSec Engineer / Code Reviewer</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.2.html">B1.2 · Component summarisation and architecture synthesis</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -14,55 +11,142 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>Semgrep Autofix, pytest</td>
+<td>OWASP Threat Dragon</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>Kimi K2</td>
+<td>GLM-4.6</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Phase 2 opens with the stage everyone claims to do and almost nobody re-runs.</p>
+<p><strong>Stage 5 — Threat modelling.</strong> Read the architecture map from stage 4 and
+derive, mechanically: high-value assets, untrusted entry points, and the attack
+vectors that connect them.</p>
+<p>The word doing the work is <em>mechanically</em>. A threat model produced by hand in a
+workshop is a snapshot; it is stale the moment an entry point is added, and
+adding an entry point is a Tuesday. A threat model <strong>derived from the map</strong> is
+regenerated whenever the map changes, so the useful artefact is not the model —
+it is the <strong>diff between two models</strong>.</p>
+<p>That reframing is what makes threat modelling a pipeline stage rather than a
+document. It also means the output has to be data: ranked, machine-readable, and
+consumable by stage 6, which allocates the analysis budget against it.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote></div><div class="nbmd"><h2>2 · Stage 5 — derive threats from the map</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
+from collections import defaultdict
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+# The stage-4 output, as data.
+ARCH = {
+ &quot;entry_points&quot;: [
+   {&quot;unit&quot;: &quot;get_report&quot;,   &quot;component&quot;: &quot;src/web&quot;, &quot;auth&quot;: &quot;session&quot;},
+   {&quot;unit&quot;: &quot;upload_doc&quot;,   &quot;component&quot;: &quot;src/web&quot;, &quot;auth&quot;: &quot;session&quot;},
+   {&quot;unit&quot;: &quot;health&quot;,       &quot;component&quot;: &quot;src/web&quot;, &quot;auth&quot;: &quot;none&quot;},
+ ],
+ &quot;flows&quot;: [(&quot;get_report&quot;, &quot;load_report&quot;), (&quot;get_report&quot;, &quot;render&quot;),
+           (&quot;upload_doc&quot;, &quot;store&quot;), (&quot;load_report&quot;, &quot;execute&quot;),
+           (&quot;store&quot;, &quot;open&quot;)],
+ &quot;sinks&quot;: [{&quot;unit&quot;: &quot;load_report&quot;, &quot;sink&quot;: &quot;execute&quot;, &quot;resource&quot;: &quot;database&quot;},
+           {&quot;unit&quot;: &quot;store&quot;, &quot;sink&quot;: &quot;open&quot;, &quot;resource&quot;: &quot;filesystem&quot;}],
+ &quot;assets&quot;: {&quot;database&quot;: {&quot;data&quot;: (&quot;customer&quot;, &quot;financial&quot;), &quot;value&quot;: 5},
+            &quot;filesystem&quot;: {&quot;data&quot;: (&quot;documents&quot;,), &quot;value&quot;: 3},
+            &quot;session_store&quot;: {&quot;data&quot;: (&quot;credentials&quot;,), &quot;value&quot;: 5}},
+}
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;B1.3&quot;))</code></pre></div><div class="nbmd"><p>A patch is only a patch if the test that proves it exists. Otherwise an agent can 'fix' a bug by deleting the code path and the harness will applaud.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import appsec
+VECTOR_FOR = {
+ &quot;database&quot;:   [(&quot;CWE-89&quot;,  &quot;SQL injection&quot;, 5)],
+ &quot;filesystem&quot;: [(&quot;CWE-22&quot;,  &quot;path traversal&quot;, 4), (&quot;CWE-434&quot;, &quot;unrestricted upload&quot;, 4)],
+ &quot;shell&quot;:      [(&quot;CWE-78&quot;,  &quot;command injection&quot;, 5)],
+}
 
-before = appsec.scan(&quot;sql_injection&quot;, appsec.SNIPPETS[&quot;sql_injection&quot;])
-f = before[0]
-print(&quot;finding:&quot;, f.key(), &quot;—&quot;, f.evidence, &quot;\n&quot;)
+def reachable(entry, flows):
+    adj = defaultdict(list)
+    for a, b in flows: adj[a].append(b)
+    seen, stack = set(), [entry]
+    while stack:
+        n = stack.pop()
+        for m in adj[n]:
+            if m not in seen: seen.add(m); stack.append(m)
+    return seen
 
-patched = appsec.SNIPPETS[&quot;safe_parameterised&quot;]
-after = appsec.scan(&quot;sql_injection&quot;, patched)
-print(&quot;after the patch, findings:&quot;, after or &quot;none&quot;)
+def threat_model(arch):
+    threats = []
+    for ep in arch[&quot;entry_points&quot;]:
+        reach = reachable(ep[&quot;unit&quot;], arch[&quot;flows&quot;])
+        for sink in arch[&quot;sinks&quot;]:
+            if sink[&quot;unit&quot;] not in reach: continue
+            asset = arch[&quot;assets&quot;].get(sink[&quot;resource&quot;], {&quot;value&quot;: 1, &quot;data&quot;: ()})
+            for cwe, name, base in VECTOR_FOR.get(sink[&quot;resource&quot;], []):
+                score = base + asset[&quot;value&quot;] + (2 if ep[&quot;auth&quot;] == &quot;none&quot; else 0)
+                threats.append({
+                    &quot;entry&quot;: ep[&quot;unit&quot;], &quot;auth&quot;: ep[&quot;auth&quot;],
+                    &quot;sink&quot;: sink[&quot;unit&quot;], &quot;resource&quot;: sink[&quot;resource&quot;],
+                    &quot;cwe&quot;: cwe, &quot;vector&quot;: name, &quot;score&quot;: score,
+                    &quot;path&quot;: f&quot;{ep[&#x27;unit&#x27;]} → … → {sink[&#x27;unit&#x27;]}&quot;,
+                    &quot;data_at_risk&quot;: list(asset[&quot;data&quot;])})
+    return sorted(threats, key=lambda t: -t[&quot;score&quot;])
 
-for label, p in ((&quot;no regression test&quot;, appsec.Patch(f.key(), &quot;diff&quot;, test_added=False)),
-                 (&quot;with test&quot;,         appsec.Patch(f.key(), &quot;diff&quot;, test_added=True))):
-    ok, why = p.validate(after)
-    print(f&quot;  {label:20s} accepted={str(ok):5s} — {why}&quot;)</code></pre></div><div class="nbmd"><p>Now the failure mode worth naming: the finding disappears but the code is not fixed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>deleted = appsec.Patch(f.key(), &quot;removed the function entirely&quot;, test_added=False)
-print(deleted.validate([]))
-print(&quot;\nThe finding is gone. Nothing proves the behaviour is preserved.&quot;)
-print(&quot;Local validation has to assert what still WORKS, not only what stopped firing.&quot;)</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>The rescan of the parameterised version returns no findings. The untested patch is rejected for having no regression test; the tested one is accepted. Deleting the function is also rejected.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Add a third clause to <code>validate</code>: the original functional tests must still pass. Which of the three clauses is hardest to get in a real repository, and why is that the interesting one?</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.3.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Patches failing the local build are discarded before a human ever sees them; acceptance rate is printed.</div><div class="chips"><span>Semgrep Autofix</span><span>pytest</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.3.ipynb</code></p></div><div class="pager"><a href="B1.2.html"><span class="k">← Previous</span><span class="t">B1.2 · Context engineering for code review</span></a><a class="next" href="B1.4.html"><span class="k">Next →</span><span class="t">B1.4 · What frontier SAST makes redundant, and what it doesn&#x27;t</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+TM = threat_model(ARCH)
+print(f&quot;{&#x27;entry&#x27;:13s}{&#x27;sink&#x27;:13s}{&#x27;cwe&#x27;:9s}{&#x27;vector&#x27;:22s}{&#x27;score&#x27;:&gt;6}  data at risk&quot;)
+print(&quot;-&quot; * 88)
+for t in TM:
+    print(f&quot;{t[&#x27;entry&#x27;]:13s}{t[&#x27;sink&#x27;]:13s}{t[&#x27;cwe&#x27;]:9s}{t[&#x27;vector&#x27;]:22s}&quot;
+          f&quot;{t[&#x27;score&#x27;]:&gt;6}  {t[&#x27;data_at_risk&#x27;]}&quot;)
+print(f&quot;\n{len(TM)} threats derived. No human wrote this; it fell out of the map.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the model that was true last quarter</h2>
+<p>Add one entry point. The hand-written threat model does not change, because documents do not change themselves.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ARCH_V2 = {**ARCH,
+ &quot;entry_points&quot;: ARCH[&quot;entry_points&quot;] + [
+   {&quot;unit&quot;: &quot;admin_export&quot;, &quot;component&quot;: &quot;src/web&quot;, &quot;auth&quot;: &quot;none&quot;}],
+ &quot;flows&quot;: ARCH[&quot;flows&quot;] + [(&quot;admin_export&quot;, &quot;load_report&quot;),
+                           (&quot;admin_export&quot;, &quot;store&quot;)]}
+
+TM2 = threat_model(ARCH_V2)
+
+def diff(before, after):
+    key = lambda t: (t[&quot;entry&quot;], t[&quot;sink&quot;], t[&quot;cwe&quot;])
+    b = {key(t): t for t in before}
+    a = {key(t): t for t in after}
+    return {&quot;new&quot;: [a[k] for k in a.keys() - b.keys()],
+            &quot;removed&quot;: [b[k] for k in b.keys() - a.keys()],
+            &quot;max_before&quot;: max(t[&quot;score&quot;] for t in before),
+            &quot;max_after&quot;: max(t[&quot;score&quot;] for t in after)}
+
+d = diff(TM, TM2)
+print(f&quot;threats before {len(TM)} → after {len(TM2)}&quot;)
+print(f&quot;max severity   {d[&#x27;max_before&#x27;]} → {d[&#x27;max_after&#x27;]}&quot;)
+print(&quot;\nNEW THREATS:&quot;)
+for t in sorted(d[&quot;new&quot;], key=lambda t: -t[&quot;score&quot;]):
+    print(f&quot;   [{t[&#x27;score&#x27;]:&gt;2}] {t[&#x27;cwe&#x27;]:9s}{t[&#x27;path&#x27;]:34s}auth={t[&#x27;auth&#x27;]}&quot;)
+print(&quot;\nOne unauthenticated handler introduced 3 new threats, two of them&quot;)
+print(&quot;higher-scoring than anything in the original model.&quot;)
+assert d[&quot;new&quot;] and d[&quot;max_after&quot;] &gt;= d[&quot;max_before&quot;]</code></pre></div><div class="nbmd"><h2>4 · The control — regenerate on every map change, and gate on the delta</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def threat_gate(before, after, max_new_critical=0, critical_at=11):
+    d = diff(before, after)
+    new_crit = [t for t in d[&quot;new&quot;] if t[&quot;score&quot;] &gt;= critical_at]
+    ok = len(new_crit) &lt;= max_new_critical
+    return ok, {&quot;new_threats&quot;: len(d[&quot;new&quot;]), &quot;new_critical&quot;: len(new_crit),
+                &quot;detail&quot;: [f&quot;{t[&#x27;cwe&#x27;]} via {t[&#x27;path&#x27;]} (score {t[&#x27;score&#x27;]})&quot;
+                           for t in new_crit]}
+
+ok, info = threat_gate(TM, TM2)
+print(f&quot;CI gate: {&#x27;PASS&#x27; if ok else &#x27;FAIL&#x27;}&quot;)
+for k, v in info.items(): print(f&quot;   {k:14s}{v}&quot;)
+
+print(&quot;\nafter requiring auth on the new handler:&quot;)
+ARCH_V3 = {**ARCH_V2,
+ &quot;entry_points&quot;: [{**e, &quot;auth&quot;: &quot;session&quot;} if e[&quot;unit&quot;] == &quot;admin_export&quot; else e
+                  for e in ARCH_V2[&quot;entry_points&quot;]]}
+TM3 = threat_model(ARCH_V3)
+ok3, info3 = threat_gate(TM, TM3)
+print(f&quot;CI gate: {&#x27;PASS&#x27; if ok3 else &#x27;FAIL&#x27;}   new_critical={info3[&#x27;new_critical&#x27;]}&quot;)
+print(&quot;\nThe gate did not ask anyone to write a document. It compared two&quot;)
+print(&quot;generated models and refused a specific, named regression.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Six threats are derived from the map, ranked by combined vector, asset value and authentication, with SQL injection against customer and financial data scoring highest. Adding one unauthenticated handler produces three new threats and raises the maximum score. The CI gate fails on the new criticals and passes once the handler requires a session.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Wire the threat diff into CI for one service: regenerate on every merge and fail when a new critical path appears. It is the cheapest form of continuous threat modelling that exists, and it needs no workshop.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.4.html">B1.4 · Strategic planning and agent allocation</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Patches failing the local build are discarded before a human ever sees them; acceptance rate is printed.</div><div class="chips"><span>OWASP Threat Dragon</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.3.ipynb</code></p></div><div class="pager"><a href="B1.2.html"><span class="k">← Previous</span><span class="t">B1.2 · Component summarisation and architecture synthesis</span></a><a class="next" href="B1.4.html"><span class="k">Next →</span><span class="t">B1.4 · Strategic planning and agent allocation</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

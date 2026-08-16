@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.5 — Agent telemetry as a data source | Cyber Commons</title><meta name="description" content="Onboard agent telemetry deliberately; decide retention."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.5</div><h1>Agent telemetry as a data source</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Prompts, traces, tool calls and approvals never reach the SIEM.</p></div><div class="ctrl"><div class="lab">Control</div><p>Onboard agent telemetry deliberately; decide retention.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Get agent telemetry into the SIEM and query it.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 13 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.5 · Agent telemetry as a data source</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.5 — Agent telemetry as a data source | Cyber Commons</title><meta name="description" content="Onboard agent telemetry deliberately; decide retention."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.5</div><h1>Agent telemetry as a data source</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Prompts, traces, tool calls and approvals never reach the SIEM.</p></div><div class="ctrl"><div class="lab">Control</div><p>Onboard agent telemetry deliberately; decide retention.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Get agent telemetry into the SIEM and query it.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 33 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.5 · Agent telemetry as a data source</h1>
 <p><strong>Function D — Security Operations → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> Prompts, traces, tool calls and approvals never reach the SIEM.</p>
-<p><strong>Control.</strong> Onboard agent telemetry deliberately; decide retention.</p>
-<p><strong>This lab.</strong> Get agent telemetry into the SIEM and query it.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.4.html">D1.4 · Detection engineering <em>for</em> agents</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,40 +20,147 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Agent telemetry has a property no other log source has: it contains the
+<strong>reasoning</strong>, not just the action. The trace records what the agent was trying
+to do, what it considered, and what the verifier said.</p>
+<p>That is enormously useful for investigation and it is a retention and privacy
+problem, because reasoning traces contain whatever was in the context window —
+which routinely includes customer data, source code and secrets that were read
+legitimately.</p>
+<p>So retention has to be decided <strong>per field</strong>, not per record:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Forensic value</th>
+<th>Sensitivity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>timestamps, tool, target</td>
+<td>high</td>
+<td>low</td>
+</tr>
+<tr>
+<td>verifier detail</td>
+<td>high</td>
+<td>low</td>
+</tr>
+<tr>
+<td>acting identity + chain</td>
+<td>high</td>
+<td>low</td>
+</tr>
+<tr>
+<td>model prompts</td>
+<td>medium</td>
+<td><strong>high</strong></td>
+</tr>
+<tr>
+<td>tool results</td>
+<td>high</td>
+<td><strong>high</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The first three are cheap and should be kept long. The last two are where the
+retention conversation actually is.</p></div><div class="nbmd"><h2>2 · Demo — one agent run, as a telemetry record</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time, hashlib
+from dataclasses import dataclass, field
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+@dataclass
+class Step:
+    n: int; tool: str; target: str; verifier: str; ok: bool
+    prompt: str = &quot;&quot;; result: str = &quot;&quot;
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;D1.5&quot;))</code></pre></div><div class="nbmd"><p>Agent telemetry is a data source with a property no other source has: it contains the <em>reasoning</em>, not just the action. That is useful and it is a retention problem.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import loop, ir
+RUN = [
+ Step(1, &quot;read_file&quot;, &quot;/work/repo/billing.py&quot;, &quot;n/a&quot;, True,
+      prompt=&quot;Investigate finding SEC-4471 in billing.py&quot;,
+      result=&quot;def charge(card_number, amount):  # card_number = 4111111111111111&quot;),
+ Step(2, &quot;search_code&quot;, &quot;charge(&quot;, &quot;n/a&quot;, True,
+      prompt=&quot;find callers of charge()&quot;,
+      result=&quot;api/checkout.py:88 charge(user.card, total)&quot;),
+ Step(3, &quot;write_file&quot;, &quot;/work/repo/billing.py&quot;, &quot;tests pass&quot;, True,
+      prompt=&quot;apply the fix&quot;, result=&quot;patch applied&quot;),
+]
+def render(steps, fields):
+    out = []
+    for s in steps:
+        row = {k: getattr(s, k) for k in fields}
+        out.append(row)
+    return out
 
-trace = loop.run(loop.FakeModel([&quot;read the config&quot;, &quot;read the config&quot;, &quot;patch line 12&quot;]),
-                 loop.unit_test(lambda s: s.startswith(&quot;patch&quot;), &quot;reached a patch&quot;),
-                 goal=&quot;fix the misconfiguration&quot;, max_steps=5)
-print(trace.table())
-print(&quot;\nas a telemetry record:&quot;)
-print(trace.as_dict())</code></pre></div><div class="nbmd"><p>Three fields make this forensically useful and each has a cost: the proposals (may contain customer data), the verifier details (cheap and high value), and timing (cheap). Decide retention per field, not per record.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>for name, r in ((&quot;full&quot;, ir.Replay([&quot;p&quot;], [&quot;result&quot;], &quot;glm-4.6&quot;, 0)),
-                (&quot;actions only&quot;, ir.Replay([], [], &quot;glm-4.6&quot;, 0))):
-    ok, missing = r.replayable()
-    print(f&quot;{name:14s} replayable={ok}  missing={missing}&quot;)</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>The trace prints three steps ending in success, the dict form shows per-step verifier detail and timings, and the actions-only record is reported as not replayable.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>What is your retention period for agent reasoning traces? If it is the same as for firewall logs, one of the two numbers is wrong.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.5.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+print(&quot;full record (everything the harness saw):&quot;)
+for r in render(RUN, [&quot;n&quot;, &quot;tool&quot;, &quot;target&quot;, &quot;verifier&quot;, &quot;ok&quot;, &quot;prompt&quot;, &quot;result&quot;]):
+    print(&quot;   &quot;, r)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — what is actually in there</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import re
+SENSITIVE = {
+ &quot;payment card&quot;: re.compile(r&quot;\b4[0-9]{12}(?:[0-9]{3})?\b&quot;),
+ &quot;email&quot;:        re.compile(r&quot;[\w.+-]+@[\w-]+\.[\w.]+&quot;),
+ &quot;aws key&quot;:      re.compile(r&quot;\bAKIA[0-9A-Z]{16}\b&quot;),
+}
+def scan_record(steps):
+    hits = []
+    for s in steps:
+        for field in (&quot;prompt&quot;, &quot;result&quot;):
+            text = getattr(s, field)
+            for name, pat in SENSITIVE.items():
+                if pat.search(text):
+                    hits.append((s.n, field, name))
+    return hits
+
+hits = scan_record(RUN)
+print(&quot;sensitive content found in the trace:&quot;)
+for n, field, kind in hits:
+    print(f&quot;   step {n}  {field:8s} {kind}&quot;)
+print(&quot;\nNobody put a card number in the trace deliberately. The agent read a&quot;)
+print(&quot;source file, and the file contained a test fixture with a real-shaped PAN.&quot;)
+print(&quot;The trace is now in scope for PCI, and it is in your SIEM for 400 days.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — retention per field, and a hash for the rest</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>RETENTION = {
+ &quot;n&quot;:        (400, &quot;low&quot;,  &quot;cheap, high forensic value&quot;),
+ &quot;tool&quot;:     (400, &quot;low&quot;,  &quot;cheap, high forensic value&quot;),
+ &quot;target&quot;:   (400, &quot;low&quot;,  &quot;path only, no contents&quot;),
+ &quot;verifier&quot;: (400, &quot;low&quot;,  &quot;what the harness believed — the key forensic field&quot;),
+ &quot;ok&quot;:       (400, &quot;low&quot;,  &quot;&quot;),
+ &quot;prompt&quot;:   (30,  &quot;high&quot;, &quot;may contain anything the task included&quot;),
+ &quot;result&quot;:   (7,   &quot;high&quot;, &quot;tool output — the highest-risk field&quot;),
+}
+print(f&quot;{&#x27;field&#x27;:10s}{&#x27;days&#x27;:&gt;6}{&#x27;sensitivity&#x27;:&gt;13}  rationale&quot;)
+print(&quot;-&quot; * 74)
+for f, (days, sens, why) in RETENTION.items():
+    print(f&quot;{f:10s}{days:&gt;6}{sens:&gt;13}  {why}&quot;)
+
+def age_record(steps, age_days):
+    &quot;&quot;&quot;What survives after N days.&quot;&quot;&quot;
+    keep = [f for f, (d, _, _) in RETENTION.items() if d &gt;= age_days]
+    out = []
+    for s in steps:
+        row = {k: getattr(s, k) for k in keep}
+        for f in (&quot;prompt&quot;, &quot;result&quot;):
+            if f not in keep and getattr(s, f):
+                row[f + &quot;_sha256&quot;] = hashlib.sha256(
+                    getattr(s, f).encode()).hexdigest()[:16]
+        out.append(row)
+    return out
+
+for age in (1, 14, 90):
+    aged = age_record(RUN, age)
+    print(f&quot;\nafter {age} days — step 1 record:&quot;)
+    print(&quot;   &quot;, aged[0])</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: the aged record is still forensically useful and no longer sensitive.
+aged = age_record(RUN, 90)
+class Fake:
+    def __init__(self, d): self.__dict__.update(d); self.prompt = d.get(&quot;prompt&quot;,&quot;&quot;); self.result = d.get(&quot;result&quot;,&quot;&quot;)
+remaining = scan_record([Fake(r) for r in aged])
+print(f&quot;sensitive content after 90 days: {remaining or &#x27;none&#x27;}&quot;)
+assert not remaining
+
+can_answer = all(&quot;verifier&quot; in r and &quot;tool&quot; in r and &quot;target&quot; in r for r in aged)
+print(f&quot;can still answer &#x27;what did it do and what did the harness believe?&#x27;: {can_answer}&quot;)
+assert can_answer
+print(&quot;\nThe hash is retained, so if the original is recovered from a backup you&quot;)
+print(&quot;can still prove it is the same content the agent saw.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The full record contains a payment-card pattern found in a source file the agent read legitimately. Per-field retention keeps timestamps, tool, target and verifier for 400 days while dropping prompts at 30 days and tool results at 7, replacing them with hashes. After 90 days no sensitive content remains and the record can still answer what the agent did and what the harness believed.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Check the retention period on your agent traces. If it is the same as your firewall logs, one of those two numbers was chosen without anyone looking at what the traces contain.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.6.html">D1.6 · Distinguishing agent from human</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.5.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Prompts, tool calls, decisions and spend queryable alongside your other log sources.</div><div class="chips"><span>OpenTelemetry</span><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.5.ipynb</code></p></div><div class="pager"><a href="D1.4.html"><span class="k">← Previous</span><span class="t">D1.4 · Detection engineering *for* agents</span></a><a class="next" href="D1.6.html"><span class="k">Next →</span><span class="t">D1.6 · Distinguishing agent from human</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

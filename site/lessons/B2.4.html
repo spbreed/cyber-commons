@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.4 — Budgets and stop conditions | Cyber Commons</title><meta name="description" content="Step limits, goal timeouts, token ceilings, spend circuit breakers."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.4</div><h1>Budgets and stop conditions</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Every loop needs a reason to stop that isn&#x27;t &quot;it finished&quot;.</p></div><div class="ctrl"><div class="lab">Control</div><p>Step limits, goal timeouts, token ceilings, spend circuit breakers.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Bound a divergent loop four different ways.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 7 lines of output in 0.06s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.4 · Budgets and stop conditions</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.4 — Budgets and stop conditions | Cyber Commons</title><meta name="description" content="Step limits, goal timeouts, token ceilings, spend circuit breakers."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.4</div><h1>Budgets and stop conditions</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Every loop needs a reason to stop that isn&#x27;t &quot;it finished&quot;.</p></div><div class="ctrl"><div class="lab">Control</div><p>Step limits, goal timeouts, token ceilings, spend circuit breakers.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Bound a divergent loop four different ways.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 26 lines of output in 0.09s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.4 · Budgets and stop conditions</h1>
 <p><strong>Function B — Product &amp; Application Security → The Security Automation / Harness Engineer</strong>  ·  <em>AI for Security</em></p>
-<hr />
-<p><strong>Risk.</strong> Every loop needs a reason to stop that isn't "it finished".</p>
-<p><strong>Control.</strong> Step limits, goal timeouts, token ceilings, spend circuit breakers.</p>
-<p><strong>This lab.</strong> Bound a divergent loop four different ways.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">B2.3 · Tool design</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,41 +20,137 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Budgets are the only control that still works when everything else has failed —
+including the verifier.</p>
+<p>Two budgets, bounding different things:</p>
+<ul>
+<li><strong>Step budget</strong> bounds <em>cost</em>. It caps how many times the loop can iterate.</li>
+<li><strong>Time budget</strong> bounds <em>damage</em>. A loop calling a fast tool can complete
+  thousands of actions in the seconds a step budget still permits.</li>
+</ul>
+<p>You need both, and you need to decide what happens when one fires. There are
+three options and they are not equivalent:</p>
+<ol>
+<li><strong>Halt</strong> — stop and leave the world as it is. Safe when actions are additive.</li>
+<li><strong>Roll back</strong> — undo the partial work. Requires every action to be undoable.</li>
+<li><strong>Escalate</strong> — hand to a human with the trace. The only right answer when
+   the work is half-done and not undoable.</li>
+</ol>
+<p>A harness that halts mid-way through a multi-step change and cannot say which
+steps completed has not been contained; it has been abandoned.</p></div><div class="nbmd"><h2>2 · Demo — a loop that never converges</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
+from dataclasses import dataclass, field
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+class ReplayModel:
+    &quot;&quot;&quot;DETERMINISTIC REPLAY — not a language model.&quot;&quot;&quot;
+    def __init__(self, proposals): self.proposals, self.calls = list(proposals), 0
+    def propose(self, _):
+        p = self.proposals[min(self.calls, len(self.proposals)-1)]; self.calls += 1
+        return p
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;B2.4&quot;))</code></pre></div><div class="nbmd"><p>Budgets and stop conditions are the only controls that work when everything else has failed, including the verifier.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import loop
+def never_satisfied(_): return False, &quot;still not right&quot;
 
-# a model that never converges — the normal failure, not an exotic one
-spinner = lambda: loop.FakeModel([&quot;still working on it&quot;])
+def run(model, verifier, max_steps=5, max_seconds=10.0):
+    steps, started = [], time.monotonic()
+    for n in range(1, max_steps+1):
+        p = model.propose(&quot;&quot;)
+        ok, why = verifier(p)
+        steps.append((n, p, ok, why))
+        if ok:   return steps, &quot;verifier satisfied&quot;
+        if time.monotonic() - started &gt; max_seconds:
+            return steps, f&quot;time budget ({max_seconds}s)&quot;
+    return steps, f&quot;step budget ({max_steps} steps)&quot;
 
-for steps in (1, 3, 10):
-    tr = loop.run(spinner(), loop.no_verifier(), max_steps=steps)
-    print(f&quot;max_steps={steps:2d} → {len(tr.steps):2d} steps, stopped by {tr.stopped_by}&quot;)
+spinner = lambda: ReplayModel([&quot;retrying the same approach&quot;])
+for limit in (1, 3, 10):
+    steps, why = run(spinner(), never_satisfied, max_steps=limit)
+    print(f&quot;max_steps={limit:&gt;3} → {len(steps):&gt;3} steps, stopped by {why}&quot;)
 
-tr = loop.run(spinner(), loop.no_verifier(), max_steps=10_000, max_seconds=0.05)
-print(f&quot;\ntime budget → {len(tr.steps)} steps, stopped by {tr.stopped_by}&quot;)</code></pre></div><div class="nbmd"><p>Both budgets are real stop conditions and they bound different things. Step budgets bound <em>cost</em>; time budgets bound <em>damage</em>, because a loop calling a fast tool can do a lot of steps in a second.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import ir
-print(ir.containment_race(agent_actions_per_min=600, human_approval_minutes=5))</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>Each step budget is respected exactly. The time budget stops the loop well short of 10,000 steps. The containment race shows ~3000 actions during a five-minute human approval.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>What should happen at the stop — halt, or roll back? Those are different budgets. Write the rollback condition for one tool in your harness (B2.9 is the follow-through).</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.4.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+steps, why = run(spinner(), never_satisfied, max_steps=10_000, max_seconds=0.05)
+print(f&quot;\ntime budget      → {len(steps):&gt;3} steps, stopped by {why}&quot;)
+print(&quot;The step budget alone would have permitted 10,000 iterations.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the loop stops half-way through a change</h2>
+<p>Budgets that only halt leave the system in a state nobody chose. Here is a three-step remediation that gets cut off after step two.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
+class World:
+    firewall_rule_added: bool = False
+    service_restarted: bool = False
+    monitoring_updated: bool = False
+    def state(self):
+        return {k: v for k, v in vars(self).items()}
+
+PLAN = [(&quot;add firewall rule&quot;,  &quot;firewall_rule_added&quot;),
+        (&quot;restart service&quot;,    &quot;service_restarted&quot;),
+        (&quot;update monitoring&quot;,  &quot;monitoring_updated&quot;)]
+
+def apply_plan(world, budget):
+    done = []
+    for i, (label, attr) in enumerate(PLAN, 1):
+        if i &gt; budget:
+            return done, f&quot;budget exhausted after step {i-1}&quot;
+        setattr(world, attr, True)
+        done.append(label)
+    return done, &quot;complete&quot;
+
+w = World()
+done, why = apply_plan(w, budget=2)
+print(&quot;plan:&quot;, [p[0] for p in PLAN])
+print(&quot;done:&quot;, done)
+print(&quot;why :&quot;, why)
+print(&quot;world state:&quot;, w.state())
+print(&quot;\nThe firewall now blocks traffic the service needs, the service has been&quot;)
+print(&quot;restarted into that condition, and monitoring does not know to alert.&quot;)
+print(&quot;Halting was worse than either finishing or never starting.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — choose the stop behaviour per action class</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ACTIONS = {
+ # action                 undoable?  safe to leave half-done?
+ &quot;add firewall rule&quot;:     (True,     False),
+ &quot;restart service&quot;:       (False,    False),
+ &quot;update monitoring&quot;:     (True,     True),
+ &quot;post a comment&quot;:        (False,    True),
+ &quot;open a pull request&quot;:   (True,     True),
+ &quot;merge a pull request&quot;:  (False,    False),
+}
+def stop_behaviour(action):
+    undoable, safe_partial = ACTIONS[action]
+    if safe_partial:            return &quot;HALT — additive, safe to leave&quot;
+    if undoable:                return &quot;ROLL BACK — undo what completed&quot;
+    return &quot;ESCALATE — half-done and not undoable; hand the trace to a human&quot;
+
+for a in ACTIONS:
+    print(f&quot;{a:24s}{stop_behaviour(a)}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: a budgeted run that rolls back or escalates correctly.
+@dataclass
+class Runner:
+    world: World = field(default_factory=World)
+    applied: list = field(default_factory=list)
+
+    def apply(self, label, attr):
+        setattr(self.world, attr, True); self.applied.append((label, attr))
+
+    def rollback(self):
+        undone = []
+        for label, attr in reversed(self.applied):
+            if ACTIONS[label][0]:                       # undoable
+                setattr(self.world, attr, False); undone.append(label)
+            else:
+                return undone, f&quot;cannot undo {label!r} — escalating&quot;
+        return undone, &quot;fully rolled back&quot;
+
+    def run(self, plan, budget):
+        for i, (label, attr) in enumerate(plan, 1):
+            if i &gt; budget:
+                worst = [l for l, _ in self.applied if not ACTIONS[l][1]]
+                if not worst:
+                    return &quot;HALT&quot;, &quot;all completed actions are safe to leave&quot;
+                undone, detail = self.rollback()
+                return (&quot;ESCALATE&quot; if &quot;escalat&quot; in detail else &quot;ROLLBACK&quot;), detail
+            self.apply(label, attr)
+        return &quot;COMPLETE&quot;, &quot;plan finished&quot;
+
+for budget in (1, 2, 3):
+    r = Runner()
+    verdict, detail = r.run(PLAN, budget)
+    print(f&quot;budget={budget}  {verdict:9s} {detail}&quot;)
+    print(f&quot;          world: {r.world.state()}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Each step budget is honoured exactly; the time budget stops the loop far short of 10,000 steps. The half-applied plan leaves a firewall rule blocking a service that was then restarted. The per-action table assigns HALT, ROLL BACK and ESCALATE correctly, and the budgeted runner rolls back at budget 1 and escalates at budget 2 because the service restart cannot be undone.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Classify every action your harness can take into the three columns. The ones that are neither undoable nor safe to leave half-done are the ones that need a human in the escalation path — and they are usually the ones nobody has thought about.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.5.html">B2.5 · Model tiering and routing inside the loop</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.4.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Four different stop reasons, all recorded in the trace. &#x27;It finished&#x27; is never one of them.</div><div class="chips"><span>Python</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.4.ipynb</code></p></div><div class="pager"><a href="B2.3.html"><span class="k">← Previous</span><span class="t">B2.3 · Tool design</span></a><a class="next" href="B2.5.html"><span class="k">Next →</span><span class="t">B2.5 · Model tiering and routing inside the loop</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

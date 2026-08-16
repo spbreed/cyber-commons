@@ -207,22 +207,7 @@
   @media(max-width:640px){.rcc-row{grid-template-columns:1fr}.rcc-row .lab{border-bottom:1px solid var(--line-soft)}}
 
   /* ---------- MODULE 0 ---------- */
-  .m0{margin-top:34px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--surface),var(--ink-2));padding:32px 30px}
-  .m0 .m0h{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-  .m0 .m0h h3{font-size:23px}
-  .m0 .m0h .req{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--secure);border:1px solid var(--secure-soft);border-radius:5px;padding:3px 9px}
-  .m0 > p{color:var(--text-dim);font-size:15px;margin:12px 0 0;max-width:70ch}
-  .m0 .m0grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:24px}
-  @media(max-width:900px){.m0 .m0grid{grid-template-columns:1fr 1fr}}
-  @media(max-width:560px){.m0 .m0grid{grid-template-columns:1fr}}
-  .m0s{border:1px solid var(--line-soft);border-radius:10px;padding:16px 15px;background:var(--ink-2);
     display:block;text-decoration:none;color:inherit;transition:border-color .2s}
-  .m0s:hover{border-color:var(--defend)}
-  .m0s .id{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint)}
-  .m0s h5{font-family:"Space Grotesk";font-size:15px;font-weight:600;margin:7px 0 6px}
-  .m0s p{font-size:13px;color:var(--text-dim);margin:0}
-  .m0 .exit{margin-top:22px;padding-top:18px;border-top:1px solid var(--line-soft);font-size:14px;color:var(--text-dim)}
-  .m0 .exit b{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--secure);margin-right:10px}
 
   /* ---------- CURRICULUM (data-driven) ---------- */
   .fn{margin-top:34px}
@@ -563,7 +548,7 @@
     <div class="sec-head rv">
       <span class="eyebrow">Curriculum · who it's for</span>
       <h2>Five functions, twelve chairs — and the one module everybody takes.</h2>
-      <p>This isn't a ladder you climb from analyst to CISO. It's the org chart you already work in: you stay a pentester, you stay a GRC analyst, and what changes is what the work is made of. Find your function below, take Module 0, then take the track for the chair you sit in — plus two sessions from a neighbouring track, because the failures happen in the seams.</p>
+      <p>This isn't a ladder you climb from analyst to CISO. It's the org chart you already work in: you stay a pentester, you stay a GRC analyst, and what changes is what the work is made of. Find your function below, then take the track for the chair you sit in — plus two sessions from a neighbouring track, because the failures happen in the seams.</p>
     </div>
 
     <!-- FIVE FUNCTIONS — the chair you sit in -->
@@ -573,17 +558,6 @@
       <div class="rung grow rv"><div class="step">FUNCTION C</div><span class="role-tag">Offensive</span><h4>Find what's true</h4><p>Pentesters and researchers. You get a whole new target class — the agent itself — and you test at L3.</p></div>
       <div class="rung grow rv"><div class="step">FUNCTION D</div><span class="role-tag">SecOps</span><h4>Run at machine speed</h4><p>SOC, detection and IR. You stop reading alerts and start compressing signal — and investigate agents as actors.</p></div>
       <div class="rung own rv"><div class="step">FUNCTION E</div><span class="role-tag">GRC / CISO</span><h4>Make it defensible</h4><p>GRC, regulatory and the CISO office. You hold promotion criteria, stop authority, and the board narrative.</p></div>
-    </div>
-
-    <!-- MODULE 0 -->
-    <div class="m0 rv" id="module0">
-      <div class="m0h">
-        <h3>Module 0 — The Shared Core</h3>
-        <span class="req">Everyone · 5 sessions · no substitutions</span>
-      </div>
-      <p>A common language, so that when the IAM engineer says "attenuated delegation" the GRC analyst knows what evidence to ask for.</p>
-      <div class="m0grid" id="m0grid"></div>
-      <div class="exit"><b>Exit test</b>Given a one-paragraph description of an agentic workflow, name its autonomy level, its blast radius, and the one control you would add first.</div>
     </div>
 
     <!-- FUNCTIONS + TRACKS (rendered from data/curriculum.json) -->
@@ -640,10 +614,10 @@
 <section id="start" class="cta">
   <div class="wrap">
     <span class="eyebrow rv" style="justify-content:center">Start learning</span>
-    <h2 class="rv">Take Module 0. Pick your chair. Retire a risk by the weekend.</h2>
+    <h2 class="rv">Pick your chair. Retire a risk by the weekend.</h2>
     <p class="rv">No sign-up wall, no sales call, no frontier-lab account. Choose the track for the job you actually do, and the commons meets you there — free, current, and running on the machine in front of you.</p>
     <div class="btns rv">
-      <a class="btn p" href="#module0">Start with Module 0</a>
+      <a class="btn p" href="#curriculum">Find your track</a>
       <a class="btn g" href="lessons/index.html">Browse all 104 lessons</a>
     </div>
   </div>
@@ -657,7 +631,7 @@
         <p class="about">Navigating cyber singularity together. Free forever, built on open source and open weights — because defensive capability is the half that has to be deliberately spread.</p>
       </div>
       <div class="foot-links">
-        <div class="foot-col"><h5>Learn</h5><a href="lessons/index.html">All lessons</a><a href="#what">What is Cyber Commons</a><a href="#tracks">The two directions</a><a href="#module0">Module 0</a><a href="#curriculum">Curriculum</a><a href="#personas">Functions</a></div>
+        <div class="foot-col"><h5>Learn</h5><a href="lessons/index.html">All lessons</a><a href="#what">What is Cyber Commons</a><a href="#tracks">The two directions</a><a href="#curriculum">Curriculum</a><a href="#personas">Functions</a></div>
         <div class="foot-col"><h5>Build</h5><a href="#stack">Open stack</a><a href="#curriculum">Lab repos</a><a href="#curriculum">Eval harness</a></div>
         <div class="foot-col"><h5>Commons</h5><a href="#what">What it is</a>
       <a href="lessons/index.html">Lessons</a>
@@ -749,17 +723,6 @@
       return;
     }
     if(data.updated){ const el=document.getElementById('cl-date'); if(el) el.textContent = data.updated; }
-
-    // Module 0 cards
-    const m0 = document.getElementById('m0grid');
-    if(m0 && data.module0){
-      m0.innerHTML = data.module0.sessions.map(s=>`
-        <a class="m0s" href="lessons/${esc(s.id)}.html">
-          <div class="id">${esc(s.id)}${videos[s.id] ? ' ▶' : ''}</div>
-          <h5>${esc(s.title)}</h5>
-          <p>${esc(s.control || s.risk || '')}</p>
-        </a>`).join('');
-    }
 
     host.innerHTML = data.functions.map(fn=>`
       <div class="fn rv in">

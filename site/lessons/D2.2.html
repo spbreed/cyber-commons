@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.2 — When the actor is an agent | Cyber Commons</title><meta name="description" content="Attribute to agent, authority, delegation chain and prompt."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The Incident Responder</div><div class="sid">D2.2</div><h1>When the actor is an agent</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;Which user&quot; is now the wrong first question.</p></div><div class="ctrl"><div class="lab">Control</div><p>Attribute to agent, authority, delegation chain and prompt.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attribute an incident to an agent, an authority and a delegation chain.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 9 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.2 · When the actor is an agent</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.2 — When the actor is an agent | Cyber Commons</title><meta name="description" content="Attribute to agent, authority, delegation chain and prompt."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The Incident Responder</div><div class="sid">D2.2</div><h1>When the actor is an agent</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;Which user&quot; is now the wrong first question.</p></div><div class="ctrl"><div class="lab">Control</div><p>Attribute to agent, authority, delegation chain and prompt.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attribute an incident to an agent, an authority and a delegation chain.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 43 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.2 · When the actor is an agent</h1>
 <p><strong>Function D — Security Operations → The Incident Responder</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> "Which user" is now the wrong first question.</p>
-<p><strong>Control.</strong> Attribute to agent, authority, delegation chain and prompt.</p>
-<p><strong>This lab.</strong> Attribute an incident to an agent, an authority and a delegation chain.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.1.html">D2.1 · Agent-assisted reconstruction</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,49 +20,101 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Three responder instincts are correct for human incidents and misfire when the
+actor is an agent.</p>
+<ol>
+<li><strong>Disable the account.</strong> For a human this stops them. For an agent holding an
+   already-issued bearer token, it may not — the token remains valid until it
+   expires.</li>
+<li><strong>Interview the user.</strong> They were asleep. They authorised a task; a model
+   chose the actions. They cannot tell you what happened.</li>
+<li><strong>Assume one actor.</strong> There were three, in a chain, and only the last one
+   touched the resource.</li>
+</ol>
+<p>The correct first action is to <strong>revoke the agent identity</strong>, which is only
+possible if A2 was done. This lesson is where the identity track's value becomes
+operational rather than architectural.</p></div><div class="nbmd"><h2>2 · Demo — the three instincts, tested</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
+from dataclasses import dataclass, field
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+@dataclass
+class Session:
+    actor: str; token_issued: float; token_ttl: float; account_enabled: bool = True
+    identity_revoked: bool = False
+    def can_act(self, at):
+        if self.identity_revoked: return False, &quot;identity revoked&quot;
+        if at - self.token_issued &gt; self.token_ttl: return False, &quot;token expired&quot;
+        if not self.account_enabled:
+            return True, &quot;account disabled, but the issued token is still valid&quot;
+        return True, &quot;active&quot;
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;D2.2&quot;))</code></pre></div><div class="nbmd"><p>When the actor is an agent, three responder instincts misfire: disable the account, interview the user, and assume one actor.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import ir, identity
-import time
+now = time.time()
+SESSIONS = {
+ &quot;dana@corp (human)&quot;:  Session(&quot;dana@corp&quot;, now-60, 3600),
+ &quot;patch-agent&quot;:        Session(&quot;patch-agent&quot;, now-60, 3600),
+ &quot;deploy-agent&quot;:       Session(&quot;deploy-agent&quot;, now-60, 3600),
+}
+print(&quot;INSTINCT 1 — disable dana@corp&#x27;s account&quot;)
+for s in SESSIONS.values(): s.account_enabled = (s.actor != &quot;dana@corp&quot;)
+for name, s in SESSIONS.items():
+    ok, why = s.can_act(now)
+    print(f&quot;   {name:22s} can act: {str(ok):5s}  {why}&quot;)
+print(&quot;   → the agents were never using her account interactively; they hold&quot;)
+print(&quot;     their own issued tokens, and one of them is acting AS her.&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>print(&quot;\nINSTINCT 2 — interview the user&quot;)
+INTERVIEW = {
+ &quot;did you read the AWS credentials?&quot;:       &quot;No. I opened a ticket and went to lunch.&quot;,
+ &quot;what did you ask the agent to do?&quot;:       &quot;Fix the finding in billing.py.&quot;,
+ &quot;did you approve the external POST?&quot;:      &quot;I didn&#x27;t know it made external calls.&quot;,
+}
+for q, a in INTERVIEW.items():
+    print(f&quot;   Q: {q}\n   A: {a}&quot;)
+print(&quot;   → she authorised a TASK. The actions were chosen by a model. She is&quot;)
+print(&quot;     not withholding information; she does not have it.&quot;)
 
-t0 = time.time()
-tl = ir.Timeline()
-tl.add(t0,      &quot;alice&quot;, &quot;alice&quot;,        &quot;login&quot;)
-tl.add(t0 + 10, &quot;alice&quot;, &quot;patch-agent&quot;,  &quot;write_file&quot;, &quot;/etc/app.conf&quot;)
-tl.add(t0 + 11, &quot;alice&quot;, &quot;deploy-agent&quot;, &quot;deploy&quot;,     &quot;prod&quot;)
-r = ir.reconstruct(tl)
+print(&quot;\nINSTINCT 3 — assume one actor&quot;)
+CHAIN = [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;]
+print(f&quot;   actual chain: {&#x27; → &#x27;.join(CHAIN)}&quot;)
+print(f&quot;   actors involved: {len(CHAIN)}; actors in the logs: 1&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — revoke the agent identity first</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>class Registry:
+    def __init__(self):
+        self.revoked = set()
+    def revoke(self, actor):
+        self.revoked.add(actor); return actor
+    def valid(self, session):
+        return session.actor not in self.revoked
 
-print(&quot;instinct 1 — disable alice&#x27;s account&quot;)
-print(f&quot;   agents still running: {r[&#x27;hidden_actors&#x27;]}&quot;)
-print(&quot;instinct 2 — interview the user&quot;)
-print(&quot;   alice was asleep. She authorised a task; the agents chose the actions.&quot;)
-print(&quot;instinct 3 — assume one actor&quot;)
-print(f&quot;   actors in reality: {r[&#x27;actors_in_reality&#x27;]}&quot;)</code></pre></div><div class="nbmd"><p>The correct first action is revoking the <em>agent</em> identity, which is only possible if agents have identities distinct from principals — the A2 control, arriving late.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>reg = identity.Registry()
-alice = reg.record(identity.mint(&quot;alice&quot;))
-patch = reg.record(identity.exchange(alice, &quot;patch-agent&quot;, {&quot;repo:write&quot;}))
-print(f&quot;revoke patch-agent → {reg.revoke(&#x27;patch-agent&#x27;)} token(s) invalidated&quot;)
-print(&quot;alice&#x27;s own token still valid:&quot;, reg.valid(alice))</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>All three instincts are shown to misfire, with <code>patch-agent</code> and <code>deploy-agent</code> named as hidden actors. Revoking the agent identity invalidates its token while alice's remains valid.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Write the first three steps of your agentic incident runbook. If step one is 'disable the user account', rewrite it.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.2.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+reg = Registry()
+for s in SESSIONS.values(): s.account_enabled = True   # undo instinct 1
+
+print(&quot;correct first action — revoke patch-agent&#x27;s identity:&quot;)
+reg.revoke(&quot;patch-agent&quot;)
+SESSIONS[&quot;patch-agent&quot;].identity_revoked = True
+for name, s in SESSIONS.items():
+    ok, why = s.can_act(now)
+    print(f&quot;   {name:22s} can act: {str(ok):5s}  {why}&quot;)
+print(&quot;\n   dana keeps working. deploy-agent keeps working. The actor stopped.&quot;)
+
+print(&quot;\nTIME TO EFFECT, measured:&quot;)
+LEVERS = {&quot;disable the human&#x27;s account&quot;: (5,  &quot;agent unaffected&quot;),
+          &quot;kill the agent process&quot;:      (2,  &quot;supervisor restarts it; token still valid&quot;),
+          &quot;revoke the agent identity&quot;:   (12, &quot;agent cannot act, even after restart&quot;),
+          &quot;rotate the shared credential&quot;:(420,&quot;works, and breaks every other consumer&quot;)}
+for lever, (secs, note) in LEVERS.items():
+    print(f&quot;   {lever:32s}{secs:&gt;5}s  {note}&quot;)
+assert not SESSIONS[&quot;patch-agent&quot;].can_act(now)[0]
+assert SESSIONS[&quot;deploy-agent&quot;].can_act(now)[0]</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: the runbook, rewritten.
+OLD = [&quot;1. disable the user account&quot;,
+       &quot;2. interview the user&quot;,
+       &quot;3. review the user&#x27;s recent activity&quot;]
+NEW = [&quot;1. identify the ACTING identity from the act chain (A2.5)&quot;,
+       &quot;2. revoke that identity — no approval needed for a non-human (A3.6)&quot;,
+       &quot;3. scope by walking the delegation chain, not the host list (D2.3)&quot;,
+       &quot;4. preserve the run trace before anything restarts (D2.5)&quot;,
+       &quot;5. only then consider the human&#x27;s account, and say why&quot;]
+print(&quot;OLD RUNBOOK&quot;);  [print(&quot;   &quot; + s) for s in OLD]
+print(&quot;\nNEW RUNBOOK&quot;); [print(&quot;   &quot; + s) for s in NEW]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Disabling the human's account leaves both agents able to act on already-issued tokens. The interview establishes the user authorised a task, not the actions. The chain shows three actors where the logs show one. Revoking <code>patch-agent</code>'s identity stops it in 12 seconds while dana and <code>deploy-agent</code> continue working.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Write your agentic incident runbook's first three steps. If step one is "disable the user account", rewrite it — and check whether you can currently revoke a single agent identity at all.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Scoping an agentic incident</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it.</div><div class="chips"><span>Keycloak</span><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.2.ipynb</code></p></div><div class="pager"><a href="D2.1.html"><span class="k">← Previous</span><span class="t">D2.1 · Agent-assisted reconstruction</span></a><a class="next" href="D2.3.html"><span class="k">Next →</span><span class="t">D2.3 · Scoping an agentic incident</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

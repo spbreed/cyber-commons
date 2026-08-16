@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.4 — What frontier SAST makes redundant, and what it doesn&#x27;t | Cyber Commons</title><meta name="description" content="Honest scoping of where static reasoning substitutes and where it cannot."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.4</div><h1>What frontier SAST makes redundant, and what it doesn&#x27;t</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Over-claiming replacement of pentest and business-logic testing.</p></div><div class="ctrl"><div class="lab">Control</div><p>Honest scoping of where static reasoning substitutes and where it cannot.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Chart honestly what only SAST found, and what only DAST found.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 21 lines of output in 0.07s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.4 · What frontier SAST makes redundant, and what it doesn't</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.4 — Strategic planning and agent allocation | Cyber Commons</title><meta name="description" content="Stage 6: allocate specialised agents and tools to specific trust boundaries, budgeted by threat rank."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.4</div><h1>Strategic planning and agent allocation</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Every scanner is pointed at every file, so cost scales with the repo instead of with the risk.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 6: allocate specialised agents and tools to specific trust boundaries, budgeted by threat rank.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Chart honestly what only SAST found, and what only DAST found.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 32 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.4 · Strategic planning and agent allocation</h1>
 <p><strong>Function B — Product &amp; Application Security → The AppSec Engineer / Code Reviewer</strong>  ·  <em>AI for Security</em></p>
-<hr />
-<p><strong>Risk.</strong> Over-claiming replacement of pentest and business-logic testing.</p>
-<p><strong>Control.</strong> Honest scoping of where static reasoning substitutes and where it cannot.</p>
-<p><strong>This lab.</strong> Chart honestly what only SAST found, and what only DAST found.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.3.html">B1.3 · Threat modelling from the architecture map</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -14,58 +11,142 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>OWASP ZAP, OpenGrep</td>
+<td>Semgrep OSS, CodeQL</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>Llama 3.3</td>
+<td>GLM-4.6, Llama 3.3</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p><strong>Stage 6 — Strategic planning.</strong> You now have a ranked threat model. This stage
+decides <em>where to spend the analysis budget</em> and <em>which tool or agent to point at
+each target</em>.</p>
+<p>The default is a uniform sweep: run every rule over every file. It is simple,
+and it scales cost with repository size rather than with risk — so on a large
+monorepo the deep, expensive analysis gets turned off for everything, including
+the parts that needed it.</p>
+<p>Allocation makes the trade explicit. Three inputs:</p>
+<ul>
+<li><strong>threat rank</strong> from stage 5,</li>
+<li><strong>historical risk</strong> from stage 1,</li>
+<li><strong>tool fit</strong> — rules are cheap and precise on known patterns; model review is
+  expensive and finds what rules cannot express (B1.5 measures both).</li>
+</ul>
+<p>The output is an assignment: which analyser runs against which boundary, with
+what budget. And the honest measure of a good allocation is not coverage — it is
+<strong>threat-weighted coverage</strong>, because covering the health endpoint thoroughly is
+not an achievement.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote></div><div class="nbmd"><h2>2 · Stage 6 — the budget, and two ways to spend it</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+@dataclass(frozen=True)
+class Target:
+    name: str; file: str; threat_score: int; historical_risk: float; loc: int
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;B1.4&quot;))</code></pre></div><div class="nbmd"><p>Frontier SAST genuinely makes some work redundant. Being precise about <em>which</em> work is how you avoid both complacency and denial.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import appsec
+TARGETS = [
+ Target(&quot;load_report → execute&quot;, &quot;src/data/reports.py&quot;, 12, 0.82, 40),
+ Target(&quot;store → open&quot;,          &quot;src/data/docs.py&quot;,     9, 0.91, 30),
+ Target(&quot;render&quot;,                &quot;src/util/render.py&quot;,   2, 0.05, 15),
+ Target(&quot;health&quot;,                &quot;src/web/health.py&quot;,    1, 0.00, 10),
+ Target(&quot;upload_doc&quot;,            &quot;src/web/handlers.py&quot;,  9, 0.30, 60),
+ Target(&quot;get_report&quot;,            &quot;src/web/handlers.py&quot;, 11, 0.30, 60),
+]
 
-CATEGORIES = {
- &quot;single-file pattern bugs (SQLi, command injection)&quot;:
-    (&quot;largely redundant&quot;, &quot;high recall, and the pattern is local&quot;),
- &quot;cross-file taint through a framework&quot;:
-    (&quot;partly&quot;, &quot;needs the call graph the model may not be given&quot;),
- &quot;business-logic authorization flaws&quot;:
-    (&quot;not redundant&quot;, &quot;requires knowing what SHOULD be allowed&quot;),
- &quot;second-order and stored injection&quot;:
-    (&quot;not redundant&quot;, &quot;source and sink are separated in time&quot;),
- &quot;secrets in source&quot;:
-    (&quot;fully redundant&quot;, &quot;a regex was always enough — see scripts/check_secrets.py&quot;),
- &quot;design flaws (missing control entirely)&quot;:
-    (&quot;not redundant&quot;, &quot;there is no code to point at&quot;),
+ANALYSERS = {
+ # name          cost/100 LOC   finds                         precision
+ &quot;grep rules&quot;:   (1,   {&quot;CWE-798&quot;},                          0.50),
+ &quot;taint rules&quot;:  (4,   {&quot;CWE-89&quot;, &quot;CWE-78&quot;, &quot;CWE-22&quot;},       1.00),
+ &quot;model review&quot;: (40,  {&quot;CWE-89&quot;,&quot;CWE-78&quot;,&quot;CWE-22&quot;,&quot;CWE-863&quot;,&quot;CWE-434&quot;}, 0.85),
 }
-for cat, (verdict, why) in CATEGORIES.items():
-    print(f&quot;{verdict:20s} {cat}\n{&#x27;&#x27;:20s} {why}\n&quot;)</code></pre></div><div class="nbmd"><p>Test the claim rather than accepting it: the scanner below finds the local bugs and is structurally unable to find the last category.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>found = appsec.scan_all()
-print(&quot;local pattern bugs found:&quot;, sorted({f.cwe for f in found}))
-print(&quot;missing-control findings:&quot;, &quot;none — there is no line of code to match&quot;)</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>The categorisation prints, and the scanner confirms it finds the local pattern classes while producing nothing for design-level gaps.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Take your last three real incidents. Which category was each? If most were 'not redundant', your SAST budget and your risk are pointed in different directions.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.4.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Three buckets: SAST-only, DAST-only, both. The DAST-only bucket is why pentest is not redundant.</div><div class="chips"><span>OWASP ZAP</span><span>OpenGrep</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.4.ipynb</code></p></div><div class="pager"><a href="B1.3.html"><span class="k">← Previous</span><span class="t">B1.3 · Patch generation and local validation</span></a><a class="next" href="B1.5.html"><span class="k">Next →</span><span class="t">B1.5 · Injection in your own harness</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+BUDGET = 30         # arbitrary units for one CI run — deliberately tight,
+                    # because an unconstrained budget hides the whole problem
+
+def uniform(targets, analyser, budget):
+    cost_per = ANALYSERS[analyser][0]
+    spend, covered = 0, []
+    for t in sorted(targets, key=lambda t: t.name):
+        c = cost_per * t.loc / 100
+        if spend + c &gt; budget: break
+        spend += c; covered.append(t)
+    return {&quot;strategy&quot;: f&quot;uniform · {analyser}&quot;, &quot;spend&quot;: round(spend, 1),
+            &quot;covered&quot;: covered}
+
+def allocated(targets, budget):
+    &quot;&quot;&quot;Deep analysis on high-threat targets, cheap rules everywhere else.&quot;&quot;&quot;
+    ranked = sorted(targets, key=lambda t: -(t.threat_score + t.historical_risk * 3))
+    spend, plan = 0.0, []
+    for t in ranked:
+        for analyser in (&quot;model review&quot;, &quot;taint rules&quot;, &quot;grep rules&quot;):
+            c = ANALYSERS[analyser][0] * t.loc / 100
+            wants_deep = (t.threat_score + t.historical_risk * 3) &gt;= 9
+            if analyser == &quot;model review&quot; and not wants_deep: continue
+            if spend + c &lt;= budget:
+                spend += c; plan.append((t, analyser)); break
+    return {&quot;strategy&quot;: &quot;allocated by threat rank&quot;, &quot;spend&quot;: round(spend, 1),
+            &quot;plan&quot;: plan}
+
+u = uniform(TARGETS, &quot;model review&quot;, BUDGET)
+a = allocated(TARGETS, BUDGET)
+print(f&quot;{u[&#x27;strategy&#x27;]:34s}spend {u[&#x27;spend&#x27;]:&gt;6}  covered {len(u[&#x27;covered&#x27;])}/{len(TARGETS)}&quot;)
+for t in u[&quot;covered&quot;]: print(f&quot;      {t.name}&quot;)
+print(f&quot;\n{a[&#x27;strategy&#x27;]:34s}spend {a[&#x27;spend&#x27;]:&gt;6}  covered {len(a[&#x27;plan&#x27;])}/{len(TARGETS)}&quot;)
+for t, an in a[&quot;plan&quot;]: print(f&quot;      {t.name:24s}{an}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — coverage is the wrong metric</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def coverage(plan_targets, targets):
+    return len(plan_targets) / len(targets)
+
+def threat_weighted_coverage(plan_targets, targets):
+    total = sum(t.threat_score for t in targets)
+    got = sum(t.threat_score for t in plan_targets)
+    return got / total
+
+u_targets = u[&quot;covered&quot;]
+a_targets = [t for t, _ in a[&quot;plan&quot;]]
+
+print(f&quot;{&#x27;strategy&#x27;:34s}{&#x27;coverage&#x27;:&gt;10}{&#x27;threat-weighted&#x27;:&gt;18}&quot;)
+print(&quot;-&quot; * 64)
+for label, ts in ((&quot;uniform · model review&quot;, u_targets),
+                  (&quot;allocated by threat rank&quot;, a_targets)):
+    print(f&quot;{label:34s}{coverage(ts, TARGETS):&gt;10.0%}{threat_weighted_coverage(ts, TARGETS):&gt;18.0%}&quot;)
+
+print(&quot;\nThe uniform sweep spent its whole budget alphabetically and covered&quot;)
+print(&quot;the health endpoint before it reached the SQL sink.&quot;)
+missed = [t.name for t in TARGETS if t not in u_targets and t.threat_score &gt;= 9]
+print(f&quot;high-threat targets the uniform sweep never reached: {missed}&quot;)
+assert missed</code></pre></div><div class="nbmd"><h2>4 · The control — allocate, then prove the allocation was right</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def plan_report(plan, targets, budget):
+    spend = sum(ANALYSERS[an][0] * t.loc / 100 for t, an in plan)
+    covered = [t for t, _ in plan]
+    deep = [t.name for t, an in plan if an == &quot;model review&quot;]
+    uncovered_high = [t.name for t in targets
+                      if t not in covered and t.threat_score &gt;= 9]
+    return {&quot;budget&quot;: budget, &quot;spend&quot;: round(spend, 1),
+            &quot;threat_weighted_coverage&quot;: round(threat_weighted_coverage(covered, targets), 3),
+            &quot;deep_analysis_on&quot;: deep,
+            &quot;uncovered_high_threat&quot;: uncovered_high,
+            &quot;acceptable&quot;: not uncovered_high}
+
+r = plan_report(a[&quot;plan&quot;], TARGETS, BUDGET)
+for k, v in r.items(): print(f&quot;{k:26s}{v}&quot;)
+assert r[&quot;acceptable&quot;]
+
+print(&quot;\nsame budget, if someone doubles the repo with low-risk code:&quot;)
+BLOAT = TARGETS + [Target(f&quot;vendor_{i}&quot;, f&quot;vendor/{i}.py&quot;, 1, 0.0, 200)
+                   for i in range(1, 9)]
+a2 = allocated(BLOAT, BUDGET)
+r2 = plan_report(a2[&quot;plan&quot;], BLOAT, BUDGET)
+print(f&quot;   threat-weighted coverage {r[&#x27;threat_weighted_coverage&#x27;]:.0%} → &quot;
+      f&quot;{r2[&#x27;threat_weighted_coverage&#x27;]:.0%}&quot;)
+print(f&quot;   uncovered high-threat targets: {r2[&#x27;uncovered_high_threat&#x27;] or &#x27;none&#x27;}&quot;)
+print(&quot;\nAllocation is what stops repository growth from silently degrading&quot;)
+print(&quot;the analysis of the parts that matter.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>On a tight budget the uniform model-review sweep covers only 2 of 6 targets — alphabetically, so it reaches the health endpoint before the SQL sink — giving 33% coverage but only 27% threat-weighted coverage, and missing all three high-threat targets. The allocated plan covers all six within the same budget at 100% threat-weighted coverage, puts deep model review on the SQL sink, and still holds 90% when the repository doubles in size with low-risk code.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Compute threat-weighted coverage for your current scanning setup. If you scan everything uniformly, the number equals your raw coverage — which means you have no allocation strategy, only a budget that will eventually be cut.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.5.html">B1.5 · Vulnerability auditing: three generations of SAST</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Three buckets: SAST-only, DAST-only, both. The DAST-only bucket is why pentest is not redundant.</div><div class="chips"><span>Semgrep OSS</span><span>CodeQL</span><span class="m">GLM-4.6</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.4.ipynb</code></p></div><div class="pager"><a href="B1.3.html"><span class="k">← Previous</span><span class="t">B1.3 · Threat modelling from the architecture map</span></a><a class="next" href="B1.5.html"><span class="k">Next →</span><span class="t">B1.5 · Vulnerability auditing: three generations of SAST</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

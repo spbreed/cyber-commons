@@ -4,14 +4,15 @@
 secure the AI *itself* — organised the way a CISO org actually is, and provable
 on the laptop you already own.**
 
-Twelve tracks, one shared core, **104 lessons — each with its own page and its own
-runnable Python notebook**. Every notebook opens in your browser in one click,
-runs on the **standard library alone**, and is **executed in CI before it ships**.
+Twelve tracks, **108 lessons — each with its own page and its own self-contained
+Python notebook**. Every notebook opens in your browser in one click, carries
+every line of code it runs, works on the **standard library alone**, and is
+**executed in CI before it ships**.
 Every lab is built on **open-source tooling (CNCF / Linux Foundation)** and
 **open-weight models (Llama, Kimi, GLM)**. No licence, no vendor, **no
 frontier-lab account**. Total cost to complete the curriculum: nothing.
 
-🌐 **[cyber-commons live site](https://spbreed.github.io/cyber-commons/)** · 📓 [The 104 notebooks](labs/notebooks/) · 🧰 [Lab library](labs/cybercommons/) · 📚 [Curriculum](curriculum/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
+🌐 **[cyber-commons live site](https://spbreed.github.io/cyber-commons/)** · 📓 [The 108 notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
 
 ---
 
@@ -25,10 +26,13 @@ faces the same attackers as a global bank. A commons is the opposite bet:
 Two promises make it usable by anyone:
 
 - **Everything executes.** No pseudo-code, no screenshots of a demo. Every one of
-  the 104 sessions ships a Python notebook that runs top to bottom and prints
-  real output — and CI runs all 104 on every push, committing the result to
+  the 108 sessions ships a Python notebook that runs top to bottom and prints
+  real output — and CI runs all 108 on every push, committing the result to
   [`labs/notebooks/_results.json`](labs/notebooks/_results.json). A lesson that
   claims an output has actually produced it.
+- **Concept first, then the risk.** Each lesson introduces the idea and
+  demonstrates it *working* before it raises what goes wrong. The build enforces
+  this: a lesson without a `concept` section fails to generate.
 - **Everything is open.** The control plane is CNCF/LF projects you'd actually
   deploy — SPIFFE/SPIRE, OPA, Falco, Kyverno, Cilium, Keycloak, OpenTelemetry,
   Sigstore, kagent, kmcp, agentgateway. The intelligence is open weights you can
@@ -36,26 +40,22 @@ Two promises make it usable by anyone:
 
 ## The training programme
 
-**Module 0 — the shared core.** Everyone, five sessions, no substitutions. A
-common vocabulary so twelve tracks can hold one conversation: the *three planes*
-(decision / control / action), the *autonomy ladder* (L1 → L2 → L2.5 → L3), and
-prompt injection taught once, properly.
-→ [`curriculum/module-0.md`](curriculum/module-0.md)
-
-**Then twelve tracks across five functions.** Nobody takes all of it. You take
-the track for the chair you sit in, plus two sessions from a neighbouring track
-— because the failures happen in the seams.
+**Twelve tracks across five functions.** Nobody takes all of it. You take the
+track for the chair you sit in, plus two sessions from a neighbouring track —
+because the failures happen in the seams. Each track builds in order: A1.1
+starts from what an agent actually is, and every later lesson names what it
+builds on.
 
 | Function | Tracks |
 |---|---|
 | **A · Architecture & Platform**<br><sub>decide what is structurally possible</sub> | [A1](curriculum/track-a1.md) Security Architect · [A2](curriculum/track-a2.md) Identity & NHI Engineer · [A3](curriculum/track-a3.md) Platform & Cloud Security |
-| **B · Product & AppSec**<br><sub>first to meet agents at scale</sub> | [B1](curriculum/track-b1.md) AppSec / Code Reviewer · [B2](curriculum/track-b2.md) Security Automation & Harness Engineer |
+| **B · Product & AppSec**<br><sub>first to meet agents at scale</sub> | [B1](curriculum/track-b1.md) AppSec / Code Reviewer — the **15-stage pipeline** · [B2](curriculum/track-b2.md) Security Automation & Harness Engineer |
 | **C · Offensive & Research**<br><sub>find out what is actually true</sub> | [C1](curriculum/track-c1.md) Pentester / Red Teamer · [C2](curriculum/track-c2.md) Security Researcher |
 | **D · Security Operations**<br><sub>machine-speed decisions</sub> | [D1](curriculum/track-d1.md) SOC Analyst & Detection Engineer · [D2](curriculum/track-d2.md) Incident Responder |
 | **E · GRC & CISO Office**<br><sub>make it defensible</sub> | [E1](curriculum/track-e1.md) GRC Practitioner · [E2](curriculum/track-e2.md) Regulatory & Compliance · [E3](curriculum/track-e3.md) BISO / CISO Office |
 
-Every session is shaped the same way — **Risk → Control → Lab**. Every track ends
-in a **real artefact**: a delegation-chain trace, a blast-radius measurement, an
+Every session is shaped the same way — **concept → demo → where it breaks →
+control → verify**. Every track ends in a **real artefact**: a delegation-chain trace, a blast-radius measurement, an
 eval report, a risk-tiered register. Not a certificate.
 
 Both directions run through every track: **AI for Security** (agents as your
@@ -90,52 +90,48 @@ curl -fsSL https://ollama.com/install.sh | sh
 ollama pull llama3.3            # or glm-4.6 / a smaller variant on a light laptop
 export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=llama3.3
 
-# 2. Module 0 — the loop, and why the verifier is the security control
-cd labs/m0-agent-loop && pip install pytest
-python3 loop.py --verifier pytest      # deterministic oracle → succeeds honestly
-python3 loop.py --verifier llm-judge   # self-grading → declares success on broken code
+# 2. lesson one — what an agent actually is, and where the risk lives
+python3 scripts/run_notebooks.py --session A1.1
+
+# 3. the one that shows why a harness lies to you
+python3 scripts/run_notebooks.py --session B2.2
 ```
 
-That second command is the whole curriculum in miniature: the loop reports
-success, the code is wrong, and the trace looks clean. Learning to measure that
-gap is what the rest of the commons is for.
-
-**Then pick your chair:**
-
-```bash
-# A2 — identity, the most genuinely new material. No infra needed.
-cd labs/a2-delegation
-python3 delegate.py chain && python3 delegate.py verify
-python3 delegate.py impersonate   # why your audit trail is already wrong
-```
+Or open either notebook in Jupyter, or press **▶ Run on Kaggle** on its lesson
+page. B2.2 is the whole curriculum in miniature: the loop reports success, the
+code is wrong, and the trace looks clean. Learning to measure that gap is what
+the rest of the commons is for.
 
 Browse the site locally: `python3 -m http.server 8000 --directory site`
 
 ## Labs
 
-**Every one of the 104 sessions has a notebook, and every notebook runs.**
+**Every one of the 108 sessions has a notebook, every notebook is
+self-contained, and every notebook runs.**
 
 | | |
 |---|---|
-| [`labs/notebooks/`](labs/notebooks) | 104 notebooks, one per session — generated, executed in CI, and rendered on the lesson pages |
-| [`labs/cybercommons/`](labs/cybercommons) | The shared lab library the notebooks import. **Standard library only** — 12 modules, 32 self-tests |
+| [`labs/notebooks/`](labs/notebooks) | 108 notebooks, one per session — generated, executed in CI, rendered on the lesson pages |
 | [`labs/b2.10-eval-harness`](labs/b2.10-eval-harness) | The full eval harness with real corpora and committed evidence (B2.10, E1.5, C1.6) |
-| [`labs/m0-agent-loop`](labs/m0-agent-loop) · [`labs/a2-delegation`](labs/a2-delegation) | The original standalone labs, kept as the deeper versions of M0.1–M0.3 and A2.3–A2.5 |
+| [`labs/a2-delegation`](labs/a2-delegation) | The deeper standalone version of the A2 delegation lab, with a real Keycloak variant |
 
 Open any lesson page and press **▶ Run on Kaggle** — the notebook is created in
-*your own* Kaggle account, clones this repo and runs. Or locally:
+*your own* Kaggle account and runs there. Or locally:
 
 ```bash
 jupyter notebook labs/notebooks/A2.5.ipynb
-python3 scripts/run_notebooks.py            # all 104, headless, refreshes the evidence
-python3 labs/cybercommons/selftest.py       # 32 checks on the library itself
+python3 scripts/run_notebooks.py            # all 108, headless, refreshes the evidence
 ```
 
-The stdlib-only constraint is deliberate: the notebooks have to run on a Kaggle
-kernel with the internet switched off, on an air-gapped laptop, and in CI,
-without anyone first negotiating a package mirror. Where a lesson names a real
-tool you would actually deploy — SPIRE, OPA, Falco, Keycloak, garak — the
-notebook models the *decision* that tool makes, and
+**Self-contained is the load-bearing property.** A notebook carries every line
+of code it runs — no shared library, nothing to clone, no `pip install`. That is
+what lets it execute on a Kaggle kernel with the internet switched off, on an
+air-gapped laptop, and in CI, and it means you can lift one cell into your own
+repository without inheriting a dependency. The build refuses any notebook that
+imports something outside the standard library.
+
+Where a lesson names a real tool you would actually deploy — SPIRE, OPA, Falco,
+Keycloak, garak — the notebook models the *decision* that tool makes, and
 [`curriculum/labs.json`](curriculum/labs.json) keeps the real invocation
 underneath as the full-infrastructure variant. Those variants have **not** been
 executed in the build sandbox (its container registry is blocked), and they are
@@ -176,21 +172,19 @@ Every lesson has its own page — `site/lessons/<ID>.html` — generated from da
 | To change… | Edit |
 |---|---|
 | Title, risk, control, tools, models | `site/data/curriculum.json` |
-| The exercise: prose, code cells, "Your turn" | `scripts/exercises/<track>.py` |
+| The exercise: concept, code cells, "Your turn" | `scripts/exercises/track_<id>.py` |
 | The goal + "Expect" line | `curriculum/labs.json` |
-| The library the exercises call | `labs/cybercommons/*.py` |
 | Long-form notes under the lab | `lessons/<ID>.md` (optional, plain Markdown) |
 | The video | drop `recordings/<ID>.mp4` — see below |
 
 ```bash
-python3 scripts/build_notebooks.py   # regenerate all 104 notebooks
+python3 scripts/build_notebooks.py   # regenerate all 108 notebooks
 python3 scripts/run_notebooks.py     # prove they run; refreshes _results.json
-python3 scripts/build_site.py        # regenerate all 105 pages (fast, idempotent)
+python3 scripts/build_site.py        # regenerate all 109 pages (fast, idempotent)
 git add -A && git commit -m "lesson: A2.5 notes" && git push
 ```
 
-CI runs the secret scan, the library self-test, all 104 notebooks, and both
-`--check` modes, so the notebook you read on the site is always the notebook
+CI runs the secret scan, all 108 notebooks, and both `--check` modes, so the notebook you read on the site is always the notebook
 that ran.
 
 That's the whole loop. Pushing triggers the Pages deploy, and the workflow
@@ -228,7 +222,7 @@ python3 scripts/link_video.py --session A2.5 --youtube-id <id>
 python3 scripts/build_site.py
 ```
 
-`python3 scripts/link_video.py --list` shows which of the 104 lessons still need
+`python3 scripts/link_video.py --list` shows which of the 108 lessons still need
 recording.
 
 ## The site
@@ -247,12 +241,11 @@ drift apart.
 ```
 curriculum/          Module 0 + 12 track chapters (generated) + labs.json
 lessons/             Optional per-lesson notes — lessons/<ID>.md renders on that page
-labs/notebooks/      The 104 lesson notebooks (generated) + _results.json evidence
-labs/cybercommons/   The stdlib-only lab library the notebooks import + selftest.py
-labs/                b2.10-eval-harness · m0-agent-loop · a2-delegation (standalone labs)
+labs/notebooks/      The 108 lesson notebooks (generated, self-contained) + evidence
+labs/                b2.10-eval-harness · a2-delegation (deeper standalone labs)
 site/                The website: index.html, lessons/<ID>.html (generated), data/, assets/
 MODELS.md            How to get Llama / Kimi / GLM free — local, hosted, or self-hosted
-scripts/exercises/   Per-session notebook exercises, one module per track
+scripts/exercises/   Per-session notebook exercises, one module per track (track_a1 … track_e3)
 scripts/             build_notebooks · run_notebooks · build_site · kaggle_push ·
                      check_secrets · relink_labs · link_video · youtube_upload
 recordings/          Drop lightboard recordings here (see recordings/README.md)

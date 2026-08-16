@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.7 — Metrics per SDLC stage | Cyber Commons</title><meta name="description" content="Precision, time-to-triage, patch acceptance rate, escape rate."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.7</div><h1>Metrics per SDLC stage</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A workflow is promoted without numbers to justify it.</p></div><div class="ctrl"><div class="lab">Control</div><p>Precision, time-to-triage, patch acceptance rate, escape rate.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Publish the four numbers that let a review workflow earn its next rung.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 17 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.7 · Metrics per SDLC stage</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.7 — Feasibility filtering and reachability | Cyber Commons</title><meta name="description" content="Stage 10: decide whether an external caller can actually reach the sink before anyone is paged."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.7</div><h1>Feasibility filtering and reachability</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A finding in dead code costs the same to triage as one on the login path.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 10: decide whether an external caller can actually reach the sink before anyone is paged.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Publish the four numbers that let a review workflow earn its next rung.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 37 lines of output in 0.03s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.7 · Feasibility filtering and reachability</h1>
 <p><strong>Function B — Product &amp; Application Security → The AppSec Engineer / Code Reviewer</strong>  ·  <em>AI for Security</em></p>
-<hr />
-<p><strong>Risk.</strong> A workflow is promoted without numbers to justify it.</p>
-<p><strong>Control.</strong> Precision, time-to-triage, patch acceptance rate, escape rate.</p>
-<p><strong>This lab.</strong> Publish the four numbers that let a review workflow earn its next rung.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.6.html">B1.6 · Deduplication and contextual verification</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -14,51 +11,154 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>Cyber Commons eval harness</td>
+<td>CodeQL, tree-sitter</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>—</td>
+<td>GLM-4.6</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p><strong>Stage 10 — Feasibility filtering.</strong> The last stage of Phase 3, and the one
+that decides whether anyone gets paged.</p>
+<p>A verified finding is a real bug in the code. It is not necessarily a real risk,
+because the code may be unreachable: dead code, a test fixture, an internal
+function no external caller can drive, a branch behind a feature flag that has
+been off for two years.</p>
+<p>Triaging an unreachable finding costs exactly as much as triaging one on the
+login path, and there are usually far more of them. So this stage partitions
+findings into three buckets — and the third bucket is the honest one:</p>
+<ul>
+<li><strong>reachable</strong> — a path exists from an untrusted entry point to the sink,</li>
+<li><strong>unreachable</strong> — no path exists,</li>
+<li><strong>unknown</strong> — the analysis cannot decide, usually because of dynamic dispatch,
+  reflection, or a framework that wires callers at runtime.</li>
+</ul>
+<p>Reporting <code>unknown</code> as <code>unreachable</code> is how a pipeline quietly drops real bugs.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote></div><div class="nbmd"><h2>2 · Stage 10 — build the call graph from entry points</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import ast
+from collections import defaultdict
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+SOURCE = &#x27;&#x27;&#x27;
+import handlers_registry
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;B1.7&quot;))</code></pre></div><div class="nbmd"><p>Per-stage metrics answer the only question your funding depends on: where in the pipeline does the agent actually create value?</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import appsec
+def http_get_report(request):
+    &quot;&quot;&quot;ENTRY: GET /reports&quot;&quot;&quot;
+    return load_report(request.args[&quot;id&quot;])
 
-s = appsec.SDLC()
-s.add(&quot;design&quot;,  found=2,  escaped=6,  false_positives=1,  minutes=40)
-s.add(&quot;code&quot;,    found=14, escaped=5,  false_positives=9,  minutes=70)
-s.add(&quot;review&quot;,  found=9,  escaped=3,  false_positives=22, minutes=110)
-s.add(&quot;test&quot;,    found=4,  escaped=2,  false_positives=3,  minutes=50)
-s.add(&quot;deploy&quot;,  found=1,  escaped=1,  false_positives=1,  minutes=20)
-s.add(&quot;runtime&quot;, found=1,  escaped=0,  false_positives=0,  minutes=180)
-print(s.table())
-print(&quot;\nrelative cost of what escaped each stage:&quot;)
-for stage, cost in s.cost_of_escape().items():
-    print(f&quot;  {stage:8s} {cost}&quot;)</code></pre></div><div class="nbmd"><p>Review has the worst precision and the highest minutes — it is where agentic help is most often deployed and least often measured. Design has the best economics and almost never gets an agent pointed at it.</p></div><div class="nbmd"><h3>Expect</h3>
-<p>The table shows review with precision around 0.29 and the highest minutes-per-find, while the escape costs grow sharply toward the earlier stages.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Fill the table with your own numbers for one quarter. If you cannot, that is the finding — and instrumenting <code>found</code> and <code>escaped</code> per stage is a week of work, not a programme.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.7.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Four numbers with denominators. Without these, promotion to L2.5 is a vibe.</div><div class="chips"><span>Cyber Commons eval harness</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.7.ipynb</code></p></div><div class="pager"><a href="B1.6.html"><span class="k">← Previous</span><span class="t">B1.6 · Securing the developers&#x27; agents</span></a><a class="next" href="B2.1.html"><span class="k">Next →</span><span class="t">B2.1 · Plan–act–verify</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+def http_health(request):
+    &quot;&quot;&quot;ENTRY: GET /health&quot;&quot;&quot;
+    return &quot;ok&quot;
+
+def load_report(report_id):
+    return DB.execute(&quot;SELECT * FROM reports WHERE id=&quot; + report_id)
+
+def legacy_export(report_id):
+    # nothing calls this any more; kept for a migration that finished in 2023
+    return DB.execute(&quot;SELECT * FROM reports WHERE id=&quot; + report_id)
+
+def debug_dump(name):
+    return open(&quot;/tmp/&quot; + name).read()
+
+def dispatch(request):
+    &quot;&quot;&quot;ENTRY: dynamic dispatch — the framework resolves the handler at runtime&quot;&quot;&quot;
+    handler = handlers_registry.lookup(request.path)
+    return handler(request)
+&#x27;&#x27;&#x27;
+
+tree = ast.parse(SOURCE)
+FUNCS = {fn.name: fn for fn in ast.walk(tree) if isinstance(fn, ast.FunctionDef)}
+
+def calls_in(fn):
+    return {(c.func.id if isinstance(c.func, ast.Name) else getattr(c.func, &quot;attr&quot;, &quot;&quot;))
+            for c in ast.walk(fn) if isinstance(c, ast.Call)} - {&quot;&quot;}
+
+GRAPH = {name: sorted(calls_in(fn) &amp; set(FUNCS)) for name, fn in FUNCS.items()}
+ENTRY = [n for n, fn in FUNCS.items() if (ast.get_docstring(fn) or &quot;&quot;).startswith(&quot;ENTRY&quot;)]
+DYNAMIC = [n for n, fn in FUNCS.items()
+           if &quot;dynamic dispatch&quot; in (ast.get_docstring(fn) or &quot;&quot;)]
+
+print(&quot;call graph:&quot;)
+for n, cs in GRAPH.items(): print(f&quot;   {n:18s}→ {cs or &#x27;—&#x27;}&quot;)
+print(f&quot;\nentry points: {ENTRY}&quot;)
+print(f&quot;dynamic dispatch present in: {DYNAMIC}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SINKS = {&quot;load_report&quot;: (&quot;CWE-89&quot;, &quot;DB.execute&quot;),
+         &quot;legacy_export&quot;: (&quot;CWE-89&quot;, &quot;DB.execute&quot;),
+         &quot;debug_dump&quot;:   (&quot;CWE-22&quot;, &quot;open&quot;)}
+
+def reachable_from(entry, graph):
+    seen, stack = set(), [entry]
+    while stack:
+        n = stack.pop()
+        for m in graph.get(n, []):
+            if m not in seen: seen.add(m); stack.append(m)
+    return seen
+
+REACHED = set()
+for e in ENTRY: REACHED |= reachable_from(e, GRAPH) | {e}
+
+def feasibility(unit):
+    if unit in REACHED:
+        return &quot;reachable&quot;, f&quot;path exists from {[e for e in ENTRY if unit in reachable_from(e, GRAPH) | {e}]}&quot;
+    if DYNAMIC:
+        return &quot;unknown&quot;, (f&quot;no static path, but {DYNAMIC[0]}() resolves handlers at &quot;
+                           f&quot;runtime — cannot prove unreachable&quot;)
+    return &quot;unreachable&quot;, &quot;no path from any entry point&quot;
+
+print(f&quot;{&#x27;finding&#x27;:16s}{&#x27;cwe&#x27;:9s}{&#x27;verdict&#x27;:13s}why&quot;)
+print(&quot;-&quot; * 92)
+buckets = defaultdict(list)
+for unit, (cwe, sink) in SINKS.items():
+    verdict, why = feasibility(unit)
+    buckets[verdict].append(unit)
+    print(f&quot;{unit:16s}{cwe:9s}{verdict:13s}{why[:52]}&quot;)
+print(f&quot;\n{ {k: v for k, v in buckets.items()} }&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — collapsing <code>unknown</code> into <code>unreachable</code></h2>
+<p>The tempting simplification. It makes the queue shorter and it is how real bugs get dropped, because dynamic dispatch is exactly where framework-wired handlers live.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def naive_filter(sinks, reached):
+    &quot;&quot;&quot;Two buckets. Anything not statically reached is discarded.&quot;&quot;&quot;
+    return {u: (&quot;reachable&quot; if u in reached else &quot;unreachable&quot;) for u in sinks}
+
+naive = naive_filter(SINKS, REACHED)
+print(f&quot;{&#x27;finding&#x27;:16s}{&#x27;3-bucket&#x27;:13s}{&#x27;2-bucket (naive)&#x27;:18s}&quot;)
+print(&quot;-&quot; * 52)
+for u in SINKS:
+    v, _ = feasibility(u)
+    print(f&quot;{u:16s}{v:13s}{naive[u]:18s}&quot;
+          f&quot;{&#x27;   ← DROPPED&#x27; if v == &#x27;unknown&#x27; and naive[u] == &#x27;unreachable&#x27; else &#x27;&#x27;}&quot;)
+
+dropped = [u for u in SINKS if feasibility(u)[0] == &quot;unknown&quot;
+           and naive[u] == &quot;unreachable&quot;]
+print(f&quot;\nfindings silently dropped by two-bucket filtering: {dropped}&quot;)
+print(&quot;legacy_export is reachable through the runtime handler registry in this&quot;)
+print(&quot;application. Static analysis cannot see that, and &#x27;unreachable&#x27; is a lie.&quot;)
+assert dropped</code></pre></div><div class="nbmd"><h2>4 · The control — route each bucket to a different place</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ROUTING = {
+ &quot;reachable&quot;:   (&quot;page / block the merge&quot;, &quot;confirmed exploit path — goes to Phase 4&quot;),
+ &quot;unknown&quot;:     (&quot;queue for dynamic validation&quot;, &quot;Phase 4 decides it empirically&quot;),
+ &quot;unreachable&quot;: (&quot;record, do not page&quot;, &quot;revisit only if an entry point is added&quot;),
+}
+for bucket, (action, why) in ROUTING.items():
+    items = buckets.get(bucket, [])
+    print(f&quot;{bucket:13s}{len(items):&gt;2} finding(s) → {action:28s}{why}&quot;)
+    for i in items: print(f&quot;{&#x27;&#x27;:15s}{i}&quot;)
+
+def queue_load(buckets, routing):
+    paged = len(buckets.get(&quot;reachable&quot;, []))
+    validated = len(buckets.get(&quot;unknown&quot;, []))
+    silent = len(buckets.get(&quot;unreachable&quot;, []))
+    return {&quot;pages_a_human&quot;: paged, &quot;sent_to_phase_4&quot;: paged + validated,
+            &quot;recorded_only&quot;: silent,
+            &quot;human_load_reduction&quot;: round(1 - paged / max(sum(map(len, buckets.values())), 1), 2)}
+
+print(f&quot;\n{queue_load(buckets, ROUTING)}&quot;)
+print(&quot;\nThe unknown bucket is not a failure of the analysis. It is the handover&quot;)
+print(&quot;to Phase 4, which answers reachability by running the thing.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The call graph identifies three entry points, one of which uses dynamic dispatch. <code>load_report</code> is reachable, <code>debug_dump</code> and <code>legacy_export</code> are unknown rather than unreachable because runtime handler resolution cannot be ruled out. Two-bucket filtering silently drops both, and the three-bucket routing sends the unknowns to Phase 4 instead of paging or discarding them.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Count how many <code>unknown</code> cases your own reachability analysis produces, and find out what your tooling does with them. If it reports them as clean, the number of real bugs you are dropping is the size of that bucket.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.8.html">B1.8 · Sandbox replication</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.7.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Four numbers with denominators. Without these, promotion to L2.5 is a vibe.</div><div class="chips"><span>CodeQL</span><span>tree-sitter</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.7.ipynb</code></p></div><div class="pager"><a href="B1.6.html"><span class="k">← Previous</span><span class="t">B1.6 · Deduplication and contextual verification</span></a><a class="next" href="B1.8.html"><span class="k">Next →</span><span class="t">B1.8 · Sandbox replication</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

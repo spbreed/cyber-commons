@@ -1,18 +1,31 @@
 #!/usr/bin/env python3
-"""Generate one runnable Jupyter notebook per lesson.
+"""Generate one self-contained Jupyter notebook per lesson.
 
-    labs/notebooks/<ID>.ipynb      one per session, 104 of them
+    labs/notebooks/<ID>.ipynb      one per session, 99 of them
 
 Inputs (the same single source of truth the site builds from):
     site/data/curriculum.json     structure, risk, control, tools, models
     curriculum/labs.json          the goal and expected-output line
     scripts/exercises/            the per-session exercise body (code + prose)
 
-Every notebook is self-contained and runs top to bottom with **no network and no
-pip install** — standard library plus `labs/cybercommons`, which the bootstrap
-cell locates whether the notebook is opened from a clone, from the repository
-root, or from a Kaggle kernel (where the bootstrap clones the repo if the kernel
-has internet enabled, and otherwise falls back to the vendored copy).
+**Self-contained by design.** A notebook carries every line of code it runs —
+there is no shared library to import and nothing to clone. That is what makes
+it work on a Kaggle kernel with the internet switched off, and it means a
+reader can copy one cell into their own repository without inheriting a
+dependency. Standard library only.
+
+**Concept before risk.** Each lesson is built in one order and only one:
+
+    1. The concept        what the thing is, from first principles
+    2. Demo               that concept working, so it is concrete
+    3. Where it breaks    the risk, now that you have seen the mechanism
+    4. Demo               the failure, reproduced
+    5. The control        the fix, and the demo that it holds
+    6. Your turn
+
+Leading with the risk teaches people to fear a mechanism they cannot yet
+describe. The order above is enforced structurally: `concept` is a required
+field, and the build fails without it.
 
     python3 scripts/build_notebooks.py           # write them all
     python3 scripts/build_notebooks.py --check   # CI: fail if any is stale
@@ -32,6 +45,7 @@ LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text())["labs"]
 OUT = ROOT / "labs" / "notebooks"
 REPO = "https://github.com/spbreed/cyber-commons"
 BRANCH = "claude/vulnbench-setup-scheduling-81aqov"
+SITE = "https://spbreed.github.io/cyber-commons"
 
 from exercises import EXERCISES  # noqa: E402
 
@@ -52,46 +66,13 @@ def code(source: str) -> dict:
 def _lines(text: str) -> list[str]:
     """nbformat stores source as a list of lines, each keeping its newline."""
     text = text.strip("\n")
-    return [ln + "\n" for ln in text.split("\n")[:-1]] + [text.split("\n")[-1]]
-
-
-BOOTSTRAP = '''\
-# --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
-
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / "labs" / "cybercommons" / "__init__.py").is_file():
-            return base / "labs"
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path("/kaggle/working/cyber-commons")
-    if not dest.exists():
-        subprocess.run(["git", "clone", "--depth", "1", "--branch", "%(branch)s",
-                        "%(repo)s", str(dest)], check=True)
-    return dest / "labs"
-
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner("%(sid)s"))
-'''
-
-
-def bootstrap_cell(sid: str) -> dict:
-    return code(BOOTSTRAP % {"sid": sid, "repo": REPO, "branch": BRANCH})
+    parts = text.split("\n")
+    return [ln + "\n" for ln in parts[:-1]] + [parts[-1]]
 
 
 # ------------------------------------------------------------------ assembly
 def flatten() -> list[dict]:
     seq = []
-    m0 = CUR["module0"]
-    for s in m0["sessions"]:
-        seq.append({"s": s, "track_id": "M0", "track": m0["title"],
-                    "fn": "Module 0 — the shared core"})
     for fn in CUR["functions"]:
         for tr in fn["tracks"]:
             for s in tr["sessions"]:
@@ -100,52 +81,59 @@ def flatten() -> list[dict]:
     return seq
 
 
-def notebook(entry: dict) -> dict:
+def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     s = entry["s"]
     sid = s["id"]
     lab = LABS.get(sid, {})
     ex = EXERCISES.get(sid)
     if ex is None:
         raise KeyError(f"no exercise defined for {sid} — add it to scripts/exercises/")
+    if not ex.get("concept"):
+        raise KeyError(f"{sid} has no 'concept' — every lesson introduces the idea "
+                       f"before it raises the risk")
 
-    goal = ex.get("goal") or lab.get("goal") or s.get("lab", "")
-    expect = ex.get("expect") or lab.get("expect", "")
     tools = ", ".join(s.get("tools", [])) or "—"
     models = ", ".join(s.get("models", [])) or "—"
 
+    # ---- header ----------------------------------------------------------
+    where = f"**{entry['fn']} → {entry['track']}**  ·  " \
+            f"*{DIRECTION.get(s.get('track', 'both'), 'Both directions')}*"
+    if prev:
+        where += (f"\n\nBuilds on **[{prev['s']['id']} · {prev['s']['title']}]"
+                  f"({SITE}/lessons/{prev['s']['id']}.html)**.")
     cells = [md(
-        f"# {sid} · {s['title']}\n\n"
-        f"**{entry['fn']} → {entry['track']}**  ·  "
-        f"*{DIRECTION.get(s.get('track', 'both'), 'Both directions')}*\n\n"
-        f"---\n\n"
-        f"**Risk.** {s.get('risk', '')}\n\n"
-        f"**Control.** {s.get('control', '')}\n\n"
-        f"**This lab.** {goal}\n\n"
+        f"# {sid} · {s['title']}\n\n{where}\n\n"
         f"| | |\n|---|---|\n"
         f"| Open-source tooling | {tools} |\n"
         f"| Open-weight models | {models} |\n\n"
-        f"> Runs anywhere: standard library only, no network, no API key. "
-        f"Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, "
-        f"Keycloak), the notebook models the *decision* that tool makes, so the "
-        f"lesson still lands on a machine that cannot pull containers."
-    ), bootstrap_cell(sid)]
+        f"> **Runs anywhere.** Every line of code is in this notebook — nothing to "
+        f"install, nothing to clone, no API key, no network. Standard library only, "
+        f"so it works on a Kaggle kernel with the internet switched off."
+    )]
 
-    if intro := ex.get("intro"):
-        cells.append(md(intro))
+    # ---- 1. the concept ---------------------------------------------------
+    cells.append(md(f"## 1 · The concept\n\n{ex['concept']}"))
 
+    # ---- 2..n the built arc ----------------------------------------------
     for kind, source in ex["steps"]:
         cells.append(md(source) if kind == "md" else code(source))
 
+    # ---- close ------------------------------------------------------------
+    expect = ex.get("expect") or lab.get("expect", "")
     if expect:
-        cells.append(md(f"### Expect\n\n{expect}"))
+        cells.append(md(f"## What you just proved\n\n{expect}"))
     if challenge := ex.get("challenge"):
-        cells.append(md(f"### Your turn\n\n{challenge}"))
+        cells.append(md(f"## Your turn\n\n{challenge}"))
 
+    foot = ""
+    if nxt:
+        foot = (f"**Next → [{nxt['s']['id']} · {nxt['s']['title']}]"
+                f"({SITE}/lessons/{nxt['s']['id']}.html)**\n\n")
     cells.append(md(
-        f"---\n\n"
-        f"[All lessons]({REPO}/tree/{BRANCH}/labs/notebooks) · "
-        f"[Lesson page](https://spbreed.github.io/cyber-commons/lessons/{sid}.html) · "
-        f"[Lab library]({REPO}/tree/{BRANCH}/labs/cybercommons)\n\n"
+        f"---\n\n{foot}"
+        f"[All lessons]({SITE}/lessons/) · "
+        f"[This lesson's page]({SITE}/lessons/{sid}.html) · "
+        f"[Source]({REPO}/blob/{BRANCH}/labs/notebooks/{sid}.ipynb)\n\n"
         f"*Cyber Commons — a free, open commons for Cyber AI.*"))
 
     return {
@@ -154,7 +142,6 @@ def notebook(entry: dict) -> dict:
             "kernelspec": {"display_name": "Python 3", "language": "python",
                            "name": "python3"},
             "language_info": {"name": "python", "version": "3.11"},
-            # Kaggle reads these when the notebook is pushed as a kernel
             "kaggle": {"accelerator": "none", "dataSources": [],
                        "isInternetEnabled": False, "language": "python",
                        "sourceType": "notebook"},
@@ -178,11 +165,22 @@ def main() -> int:
         print(f"::error::{len(missing)} sessions have no exercise: {missing}", file=sys.stderr)
         return 1
 
+    # A notebook that imports anything outside the standard library cannot run
+    # on an offline Kaggle kernel. Catch it here rather than in a reader's browser.
+    banned = ("import cybercommons", "from cybercommons", "git clone", "pip install")
+
     OUT.mkdir(parents=True, exist_ok=True)
     stale = []
-    for e in seq:
+    for i, e in enumerate(seq):
         sid = e["s"]["id"]
-        text = json.dumps(notebook(e), indent=1, ensure_ascii=False) + "\n"
+        nb = notebook(e, seq[i - 1] if i else None,
+                      seq[i + 1] if i + 1 < len(seq) else None)
+        body = "\n".join("".join(c["source"]) for c in nb["cells"] if c["cell_type"] == "code")
+        for bad in banned:
+            if bad in body:
+                print(f"::error::{sid} is not self-contained: found {bad!r}", file=sys.stderr)
+                return 1
+        text = json.dumps(nb, indent=1, ensure_ascii=False) + "\n"
         f = OUT / f"{sid}.ipynb"
         if not f.exists() or f.read_text() != text:
             stale.append(sid)
@@ -204,8 +202,8 @@ def main() -> int:
         print(f"ok: {len(seq)} notebooks up to date")
         return 0
 
-    print(f"wrote {len(seq)} notebooks to labs/notebooks"
-          f" ({len(stale)} changed)")
+    print(f"wrote {len(seq)} self-contained notebooks to labs/notebooks "
+          f"({len(stale)} changed)")
     return 0
 
 

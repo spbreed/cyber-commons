@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.3 — Authorization models that make bad grants impossible | Cyber Commons</title><meta name="description" content="ReBAC/ABAC with time-scoped delegation and attenuation by construction."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.3</div><h1>Authorization models that make bad grants impossible</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>RBAC has no unit small enough to express the grant you actually meant.</p></div><div class="ctrl"><div class="lab">Control</div><p>ReBAC/ABAC with time-scoped delegation and attenuation by construction.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Make the over-privileged grant structurally unrepresentable.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 11 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.3 · Authorization models that make bad grants impossible</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.3 — Authorization models that make bad grants impossible | Cyber Commons</title><meta name="description" content="ReBAC/ABAC with time-scoped delegation and attenuation by construction."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.3</div><h1>Authorization models that make bad grants impossible</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>RBAC has no unit small enough to express the grant you actually meant.</p></div><div class="ctrl"><div class="lab">Control</div><p>ReBAC/ABAC with time-scoped delegation and attenuation by construction.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Make the over-privileged grant structurally unrepresentable.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 22 lines of output in 0.03s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.3 · Authorization models that make bad grants impossible</h1>
 <p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> RBAC has no unit small enough to express the grant you actually meant.</p>
-<p><strong>Control.</strong> ReBAC/ABAC with time-scoped delegation and attenuation by construction.</p>
-<p><strong>This lab.</strong> Make the over-privileged grant structurally unrepresentable.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.2.html">A1.2 · Designing the agent control plane</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,47 +20,106 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>There are three ways to stop a bad permission grant, and they are not equally
+good.</p>
+<ol>
+<li><strong>Review it.</strong> A human reads the request and says no. Works until Friday
+   afternoon, or until the requester is persuasive, or until the reviewer is on
+   holiday.</li>
+<li><strong>Detect it.</strong> You find the bad grant afterwards, in an access review. Better
+   than nothing; the window between grant and detection is your exposure.</li>
+<li><strong>Make it unrepresentable.</strong> The system cannot express the grant at all. The
+   request fails at the point of issue, with no human in the loop.</li>
+</ol>
+<p>Only the third one scales, and the mechanism is a <strong>ceiling</strong>: a declared upper
+bound on what each identity may <em>ever</em> hold, enforced by the thing that issues
+credentials rather than by the thing that reviews them.</p>
+<p>This matters more for agents than for people because agents get their
+permissions programmatically, at machine speed, often from other agents. A
+review step in that path is not a control; it is a bottleneck that will be
+removed.</p></div><div class="nbmd"><h2>2 · Demo — ceilings, and what they refuse</h2>
+<p>Real scopes from a real deployment: a CI/CD estate with a human engineer and three service identities.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># The ceiling: what each identity may hold AT MOST, whoever asks, forever.
+CEILINGS = {
+    &quot;dana@corp&quot;:       {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;deploy:staging&quot;, &quot;deploy:prod&quot;,
+                        &quot;secrets:read&quot;},
+    &quot;ci-builder&quot;:      {&quot;repo:read&quot;, &quot;artifact:write&quot;},
+    &quot;deploy-bot&quot;:      {&quot;artifact:read&quot;, &quot;deploy:staging&quot;},
+    &quot;triage-agent&quot;:    {&quot;repo:read&quot;, &quot;finding:comment&quot;},
+}
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+class GrantRefused(Exception):
+    &quot;&quot;&quot;Refusing is the feature, not an error path.&quot;&quot;&quot;
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;A1.3&quot;))</code></pre></div><div class="nbmd"><p>Most authorization models can express a bad grant. The question for an architect is whether yours can be <em>made</em> not to.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import identity
+def grant(identity, scopes):
+    ceiling = CEILINGS.get(identity, set())
+    excess = set(scopes) - ceiling
+    if excess:
+        raise GrantRefused(
+            f&quot;{identity} may never hold {sorted(excess)} &quot;
+            f&quot;(ceiling: {sorted(ceiling)})&quot;)
+    return set(scopes)
 
-print(&quot;ceilings — what each actor may hold at most, whoever asks:&quot;)
-for actor, scopes in identity.GRANTS.items():
-    print(f&quot;  {actor:16s} {sorted(scopes)}&quot;)
-
-alice = identity.mint(&quot;alice&quot;)
-print(&quot;\nalice holds:&quot;, sorted(alice.scopes))
-
-# the grant a ticket would ask for, and the system refuses to express
-for actor, want in [(&quot;reviewer-agent&quot;, {&quot;repo:write&quot;}),
-                    (&quot;reviewer-agent&quot;, {&quot;secrets:read&quot;}),
-                    (&quot;patch-agent&quot;,    {&quot;repo:write&quot;})]:
+requests = [
+    (&quot;ci-builder&quot;,   {&quot;repo:read&quot;, &quot;artifact:write&quot;},  &quot;the normal build grant&quot;),
+    (&quot;deploy-bot&quot;,   {&quot;deploy:staging&quot;},               &quot;staging deploy&quot;),
+    (&quot;deploy-bot&quot;,   {&quot;deploy:prod&quot;},                  &quot;&#x27;just for the hotfix&#x27;&quot;),
+    (&quot;triage-agent&quot;, {&quot;repo:write&quot;},                   &quot;&#x27;so it can fix what it finds&#x27;&quot;),
+    (&quot;ci-builder&quot;,   {&quot;secrets:read&quot;},                 &quot;&#x27;the build needs a token&#x27;&quot;),
+]
+for identity, scopes, why in requests:
     try:
-        t = identity.exchange(alice, actor, want)
-        print(f&quot;  GRANTED  {actor} ← {sorted(want)}&quot;)
-    except identity.DelegationError as e:
-        print(f&quot;  REFUSED  {actor} ← {sorted(want)}: {e}&quot;)</code></pre></div><div class="nbmd"><p>The refusal does not depend on anyone reviewing the request. The ceiling makes the bad grant <em>unrepresentable</em>, which is the only kind of control that survives a busy quarter.</p></div><div class="nbmd"><h3>Expect</h3>
-<p><code>patch-agent</code> receives <code>repo:write</code>. Both requests for <code>reviewer-agent</code> are refused, and the error names the ceiling that refused them — not a policy document, the token exchange itself.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Add a <code>break-glass</code> actor with every scope. Now decide what makes it safe: a ceiling cannot, so the control has to be time and audit. Model it with <code>identity.JITGrant</code>.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.3.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+        grant(identity, scopes)
+        print(f&quot;GRANTED  {identity:14s} {sorted(scopes)}   — {why}&quot;)
+    except GrantRefused as e:
+        print(f&quot;REFUSED  {identity:14s} {sorted(scopes)}   — {why}&quot;)
+        print(f&quot;         {e}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks</h2>
+<p>Three of those five requests are ones a real engineer would file with a straight face, and a reviewer would probably approve at least two. "Just for the hotfix" is how <code>deploy-bot</code> ends up with permanent production rights.</p>
+<p>But a ceiling has a hole in it, and it is worth seeing rather than being told about: <strong>the ceiling constrains a single identity, not a chain of them.</strong> If <code>triage-agent</code> cannot hold <code>repo:write</code>, but it can ask <code>ci-builder</code> to act for it, the ceiling has been walked around without ever being violated.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Each individual grant is legal. The composition is not.
+def call_chain(chain):
+    print(&quot; → &quot;.join(chain))
+    held = set()
+    for identity in chain:
+        held |= CEILINGS.get(identity, set())
+    return held
+
+reachable = call_chain([&quot;triage-agent&quot;, &quot;ci-builder&quot;, &quot;deploy-bot&quot;])
+print(&quot;scopes reachable through the chain:&quot;, sorted(reachable))
+print(&quot;triage-agent&#x27;s own ceiling:        &quot;, sorted(CEILINGS[&quot;triage-agent&quot;]))
+print(&quot;\nNo ceiling was broken. The agent still reached artifact:write and&quot;)
+print(&quot;deploy:staging, because it can ask something else to do the work.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control</h2>
+<p>The fix has two halves and you need both:</p>
+<p><strong>Narrowing on delegation.</strong> When one identity acts for another, the resulting authority must be the <em>intersection</em> of what was presented and what the new actor may hold — never the union. This is the mechanism A2.5 builds properly as RFC 8693 token exchange.</p>
+<p><strong>Recording the chain.</strong> The resource server must be able to see that the call arrived through <code>triage-agent</code>, so a policy can refuse it even when the immediate caller is allowed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def delegate(presented_scopes, presenting, new_actor):
+    &quot;&quot;&quot;Intersection, not union. This one line is the whole control.&quot;&quot;&quot;
+    ceiling = CEILINGS.get(new_actor, set())
+    return set(presented_scopes) &amp; ceiling
+
+start = grant(&quot;triage-agent&quot;, {&quot;repo:read&quot;, &quot;finding:comment&quot;})
+print(&quot;triage-agent holds:      &quot;, sorted(start))
+hop1 = delegate(start, &quot;triage-agent&quot;, &quot;ci-builder&quot;)
+print(&quot;→ delegated to ci-builder:&quot;, sorted(hop1) or &quot;∅ — nothing survives&quot;)
+hop2 = delegate(hop1, &quot;ci-builder&quot;, &quot;deploy-bot&quot;)
+print(&quot;→ delegated to deploy-bot:&quot;, sorted(hop2) or &quot;∅ — nothing survives&quot;)
+
+print(&quot;\nAuthority can only shrink along a chain. The walk-around is closed,&quot;)
+print(&quot;and no reviewer had to notice anything.&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: property-test it. Delegation must NEVER widen, for any input.
+import itertools, random
+random.seed(7)
+ids = list(CEILINGS)
+violations = 0
+for _ in range(2000):
+    a, b = random.sample(ids, 2)
+    held = set(random.sample(sorted(CEILINGS[a]), k=random.randint(0, len(CEILINGS[a]))))
+    out = delegate(held, a, b)
+    if not out &lt;= held or not out &lt;= CEILINGS[b]:
+        violations += 1
+print(f&quot;2000 random delegations, widening violations: {violations}&quot;)
+assert violations == 0
+print(&quot;Property holds: result ⊆ presented AND result ⊆ new actor&#x27;s ceiling.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Two grants succeed; three are refused with the ceiling that refused them. The chain demo shows <code>triage-agent</code> reaching <code>artifact:write</code> and <code>deploy:staging</code> without breaking any ceiling. Intersection-based delegation reduces the chain to the empty set, and the 2000-case property test reports zero widening violations.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Find one identity in your estate whose ceiling is effectively "everything" — a break-glass role, a CI admin token. A ceiling cannot constrain it, so its controls have to be time and audit instead. A2.8 builds that.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.4.html">A1.4 · Blast radius as a design metric</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The bad grant is rejected by the schema, not by a policy check that could be skipped.</div><div class="chips"><span>OpenFGA</span><span>OPA</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.3.ipynb</code></p></div><div class="pager"><a href="A1.2.html"><span class="k">← Previous</span><span class="t">A1.2 · Designing the agent control plane</span></a><a class="next" href="A1.4.html"><span class="k">Next →</span><span class="t">A1.4 · Blast radius as a design metric</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

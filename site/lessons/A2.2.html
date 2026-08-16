@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.2 — The bootstrap problem | Cyber Commons</title><meta name="description" content="Workload attestation: SPIFFE SVIDs, instance identity documents, projected SA tokens, re-attestation on rotation."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.2</div><h1>The bootstrap problem</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Proving identity before you hold a credential — usually solved with a long-lived secret in a file.</p></div><div class="ctrl"><div class="lab">Control</div><p>Workload attestation: SPIFFE SVIDs, instance identity documents, projected SA tokens, re-attestation on rotation.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Issue a workload identity with zero static secrets.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 9 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.2 · The bootstrap problem</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.2 — The bootstrap problem | Cyber Commons</title><meta name="description" content="Workload attestation: SPIFFE SVIDs, instance identity documents, projected SA tokens, re-attestation on rotation."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.2</div><h1>The bootstrap problem</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Proving identity before you hold a credential — usually solved with a long-lived secret in a file.</p></div><div class="ctrl"><div class="lab">Control</div><p>Workload attestation: SPIFFE SVIDs, instance identity documents, projected SA tokens, re-attestation on rotation.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Issue a workload identity with zero static secrets.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 19 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.2 · The bootstrap problem</h1>
 <p><strong>Function A — Security Architecture &amp; Platform → The Identity &amp; Non-Human Identity Engineer</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> Proving identity before you hold a credential — usually solved with a long-lived secret in a file.</p>
-<p><strong>Control.</strong> Workload attestation: SPIFFE SVIDs, instance identity documents, projected SA tokens, re-attestation on rotation.</p>
-<p><strong>This lab.</strong> Issue a workload identity with zero static secrets.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.1.html">A2.1 · "Who is calling?"</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,44 +20,130 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Every identity system has a bootstrap problem: to prove who you are, you need a
+credential; to get a credential, you need to prove who you are.</p>
+<p>For humans we solve it out of band — someone checks a passport on the first day.
+For workloads, the answer has historically been <strong>secret zero</strong>: a long-lived
+API key placed in an environment variable, a config file, or a Kubernetes
+Secret. Everything else hangs off it.</p>
+<p>Secret zero has three properties that make it the root of most cloud breaches:</p>
+<ul>
+<li><strong>It never expires.</strong> The median rotation interval for a service-account key
+  in the wild is "never".</li>
+<li><strong>Anything that can read it becomes the workload.</strong> A file read, a log line,
+  a core dump, a compromised sidecar. It is a bearer credential with no context.</li>
+<li><strong>Revoking it breaks everything at once</strong>, because it is shared, so nobody
+  revokes it.</li>
+</ul>
+<p>The modern answer is <strong>attestation</strong>. SPIFFE/SPIRE (and cloud equivalents like
+IRSA or managed identities) issue an identity based on <em>properties of where the
+workload is running</em> — this node, this pod, this container image — verified by
+a platform component. No secret is planted, because none is needed. The
+credential is short-lived and reissued continuously.</p>
+<p>For agents this matters more than for ordinary services, because agents are
+spawned dynamically, often per task, and a static secret handed to a fleet of
+ephemeral workers is the worst version of secret zero.</p></div><div class="nbmd"><h2>2 · Demo — secret zero, working exactly as designed</h2>
+<p>First, the thing that works. This is a normal service-account bootstrap; there is nothing broken about it yet.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import hashlib, time
+from dataclasses import dataclass, field
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+ENVIRONMENT = {                       # what the process can read
+    &quot;AGENT_API_KEY&quot;: &quot;sk-live-7f3c9a2b8e1d4f6a0c5b3e9d&quot;,
+    &quot;PATH&quot;: &quot;/usr/bin&quot;,
+}
+ISSUED_AT = time.time() - 400 * 86400   # planted 400 days ago, as is typical
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;A2.2&quot;))</code></pre></div><div class="nbmd"><p>The bootstrap problem: an agent needs an identity before it can prove anything, and whatever you use to hand it that first credential is your real trust root.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import identity, sandbox
+@dataclass
+class StaticCredential:
+    value: str
+    issued: float
+    def authenticate(self):
+        return {&quot;identity&quot;: &quot;triage-agent&quot;, &quot;method&quot;: &quot;bearer secret&quot;,
+                &quot;age_days&quot;: round((time.time() - self.issued) / 86400),
+                &quot;ok&quot;: True}
 
-# The anti-pattern: a long-lived secret in the environment. Anything that can
-# read the process environment is now the agent.
-print(&quot;bootstrap A — static secret in env&quot;)
-print(&quot;  lifetime: until someone rotates it (median: never)&quot;)
-print(&quot;  theft:    any file read, any log line, any core dump&quot;)
-guard = sandbox.PathGuard(workspace=&quot;/work&quot;)
-print(&quot;  &quot;, guard.check(&quot;/work/.env&quot;))
+cred = StaticCredential(ENVIRONMENT[&quot;AGENT_API_KEY&quot;], ISSUED_AT)
+print(&quot;bootstrap via secret zero:&quot;, cred.authenticate())
+print(&quot;→ it works. Every service in your estate does this today.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — three ways, all ordinary</h2>
+<p>None of these require a sophisticated attacker. They require a log statement, a debug endpoint, or a curious process on the same host.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import re
 
-print(&quot;\nbootstrap B — short-lived, attested, narrowed at issue&quot;)
-t = identity.mint(&quot;alice&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;})
-agent = identity.exchange(t, &quot;patch-agent&quot;, {&quot;repo:write&quot;})
-print(f&quot;  ttl {agent.ttl:.0f}s, scopes {sorted(agent.scopes)}, chain {agent.chain()}&quot;)
-print(&quot;  theft window is the ttl, and the stolen token names its own thief&quot;)</code></pre></div><div class="nbmd"><p>SPIFFE/SPIRE solves this properly by attesting the <em>workload</em> — the node and process identity become the evidence, so no secret has to be planted anywhere. The modelled version above captures the property that matters: the credential is short-lived and already narrowed when it arrives.</p></div><div class="nbmd"><h3>Expect</h3>
-<p>The <code>.env</code> read is denied by the path guard, and the delegated token prints a 300-second TTL with a single narrowed scope and a readable chain.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>For one agent you run, measure the actual lifetime of its bootstrap credential. If the answer is 'since we deployed it', that is a standing grant, not a bootstrap.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+def leaks(env):
+    found = []
+    # 1. anything that can read the process environment
+    found.append((&quot;process env read&quot;, env.get(&quot;AGENT_API_KEY&quot;)))
+    # 2. a well-meaning debug log
+    log_line = f&quot;starting agent with config {env}&quot;
+    m = re.search(r&quot;sk-live-[a-z0-9]+&quot;, log_line)
+    found.append((&quot;debug log line&quot;, m.group(0) if m else None))
+    # 3. a crash dump / error report
+    crash = {&quot;env&quot;: env, &quot;stack&quot;: &quot;...&quot;}
+    found.append((&quot;crash report&quot;, crash[&quot;env&quot;].get(&quot;AGENT_API_KEY&quot;)))
+    return found
+
+for how, value in leaks(ENVIRONMENT):
+    print(f&quot;{how:22s} → {&#x27;LEAKED &#x27; + value[:14] + &#x27;…&#x27; if value else &#x27;safe&#x27;}&quot;)
+
+print(f&quot;\ncredential age: {cred.authenticate()[&#x27;age_days&#x27;]} days&quot;)
+print(&quot;exposure window for every one of those leaks: the whole 400 days,&quot;)
+print(&quot;because nothing about a static secret expires on its own.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — attestation instead of a planted secret</h2>
+<p>SPIRE issues an SVID (an X.509 or JWT identity document) to a workload after verifying <em>node attestation</em> (this is really node-7, confirmed by the cloud provider's instance identity document) and <em>workload attestation</em> (this really is the process running image X, confirmed by reading the kernel's view of the process).</p>
+<p>The agent never holds a secret. It asks a local socket for an identity, and gets a short-lived one it did not have to keep.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
+class Attestor:
+    &quot;&quot;&quot;Stands in for the SPIRE agent&#x27;s node + workload attestation.&quot;&quot;&quot;
+    node_id: str
+    trusted_images: set
+
+    def attest(self, claimed_sa, image, pid_namespace):
+        # These facts come from the platform, not from the workload&#x27;s own claims.
+        if image not in self.trusted_images:
+            return None, f&quot;image {image!r} is not an attested workload image&quot;
+        if pid_namespace != self.node_id:
+            return None, f&quot;process is not running on {self.node_id}&quot;
+        return (f&quot;spiffe://corp/ns/prod/sa/{claimed_sa}&quot;, &quot;attested&quot;)
+
+@dataclass
+class SVID:
+    spiffe_id: str
+    issued: float = field(default_factory=time.time)
+    ttl: float = 300                         # SPIRE default is minutes, not months
+    @property
+    def age_days(self): return (time.time() - self.issued) / 86400
+    @property
+    def expired(self): return time.time() - self.issued &gt; self.ttl
+
+spire = Attestor(&quot;node-7&quot;, {&quot;ghcr.io/corp/triage-agent@sha256:9f2c…&quot;})
+
+for sa, image, node in [
+    (&quot;triage-agent&quot;, &quot;ghcr.io/corp/triage-agent@sha256:9f2c…&quot;, &quot;node-7&quot;),
+    (&quot;triage-agent&quot;, &quot;ghcr.io/attacker/evil@sha256:dead…&quot;,     &quot;node-7&quot;),
+    (&quot;triage-agent&quot;, &quot;ghcr.io/corp/triage-agent@sha256:9f2c…&quot;, &quot;laptop-of-contractor&quot;),
+]:
+    sid, why = spire.attest(sa, image, node)
+    if sid:
+        svid = SVID(sid)
+        print(f&quot;ISSUED   {sid}  ttl={svid.ttl:.0f}s&quot;)
+    else:
+        print(f&quot;REFUSED  sa={sa} image={image[:34]}… — {why}&quot;)</code></pre></div><div class="nbmd"><h2>5 · Verify — compare the exposure windows</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def exposure(cred_kind, ttl_seconds, leaked_at_day):
+    &quot;&quot;&quot;How long a leaked credential stays useful.&quot;&quot;&quot;
+    if ttl_seconds is None:
+        return {&quot;kind&quot;: cred_kind, &quot;useful_for&quot;: &quot;until someone rotates it&quot;,
+                &quot;typical&quot;: &quot;never rotated&quot;, &quot;window_seconds&quot;: float(&quot;inf&quot;)}
+    return {&quot;kind&quot;: cred_kind, &quot;useful_for&quot;: f&quot;{ttl_seconds:.0f}s&quot;,
+            &quot;typical&quot;: &quot;auto-reissued continuously&quot;, &quot;window_seconds&quot;: ttl_seconds}
+
+for row in (exposure(&quot;secret zero (env var)&quot;, None, 12),
+            exposure(&quot;SPIFFE SVID&quot;, 300, 12)):
+    print(f&quot;{row[&#x27;kind&#x27;]:26s} useful for {row[&#x27;useful_for&#x27;]:32s} ({row[&#x27;typical&#x27;]})&quot;)
+
+static_window = 400 * 86400
+svid_window = 300
+print(f&quot;\nratio: a leaked static key is useful &quot;
+      f&quot;{static_window / svid_window:,.0f}× longer than a leaked SVID&quot;)
+print(&quot;\nAnd the SVID names its own holder — a stolen one identifies the thief&#x27;s&quot;)
+print(&quot;workload, which a shared bearer secret can never do.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The static credential authenticates successfully and is 400 days old. All three leak paths expose it. SPIRE issues an SVID only for the attested image on the attested node, refusing the wrong image and the contractor's laptop. The final comparison shows a leaked static key is useful roughly 115,200× longer than a leaked 300-second SVID.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Find the oldest non-human credential in one production account and compute its age in days. Then ask what would break if you rotated it this afternoon. If nobody knows, that is the finding — and it is the same finding at every organisation that has not done this yet.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.3.html">A2.3 · Shadow Autonomy</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.2.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A short-lived SVID appears with no secret ever written to disk; re-attests automatically after rotation.</div><div class="chips"><span>SPIFFE/SPIRE</span><span>kind</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.2.ipynb</code></p></div><div class="pager"><a href="A2.1.html"><span class="k">← Previous</span><span class="t">A2.1 · &quot;Who is calling?&quot;</span></a><a class="next" href="A2.3.html"><span class="k">Next →</span><span class="t">A2.3 · Shadow Autonomy</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

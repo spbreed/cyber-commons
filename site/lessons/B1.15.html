@@ -1,0 +1,125 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.15 — Securing the developers&#x27; coding agents | Cyber Commons</title><meta name="description" content="The strongest containment a developer does not notice: credential deny-lists and workspace confinement first."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.15</div><h1>Securing the developers&#x27; coding agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.15.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment.</p></div><div class="ctrl"><div class="lab">Control</div><p>The strongest containment a developer does not notice: credential deny-lists and workspace confinement first.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Measure the default agent&#x27;s blast radius and reachable credentials, then rank controls by friction.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.15.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.15.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 41 lines of output in 0.02s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.15 · Securing the developers' coding agents</h1>
+<p><strong>Function B — Product &amp; Application Security → The AppSec Engineer / Code Reviewer</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.14.html">B1.14 · Injection in your own pipeline</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>Docker, Cilium</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>GLM-4.6</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>The coding agent in a developer's IDE is the most privileged agent in most
+organisations and the least governed. It sits upstream of everything this track
+has built: it writes the code the pipeline later analyses.</p>
+<p>What it holds by default:</p>
+<ul>
+<li>the developer's <strong>git credentials</strong> — push access to everything they can push to,</li>
+<li>the <strong>whole monorepo</strong> on disk, including files they never open,</li>
+<li>a <strong>shell</strong>, usually unrestricted,</li>
+<li>their <strong>cloud credentials</strong> in <code>~/.aws</code> or <code>~/.config/gcloud</code>,</li>
+<li>whatever <strong>MCP servers</strong> they connected, each with its own authority.</li>
+</ul>
+<p>That is a production identity in an unmanaged environment, driven by a model
+reading code from the internet.</p>
+<p>The binding constraint here is not technical feasibility — it is <strong>developer
+tolerance</strong>. A containment scheme that adds friction to the inner loop is
+disabled within a week, and a disabled control protects nothing. So the design
+goal is the strongest containment a developer does not notice.</p></div><div class="nbmd"><h2>2 · Demo — measure the default configuration</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SCOPE_WEIGHT = {&quot;self&quot;:1,&quot;project&quot;:3,&quot;tenant&quot;:8,&quot;org&quot;:20}
+DEV_TOOLS = [
+ # (name, writes, scope, reversible, needed in the inner loop)
+ (&quot;read_file&quot;,  False,&quot;self&quot;,   True,  True),
+ (&quot;write_file&quot;, True, &quot;project&quot;,True,  True),
+ (&quot;run_tests&quot;,  True, &quot;self&quot;,   True,  True),
+ (&quot;run_shell&quot;,  True, &quot;tenant&quot;, False, True),
+ (&quot;git_commit&quot;, True, &quot;project&quot;,True,  True),
+ (&quot;git_push&quot;,   True, &quot;project&quot;,False, False),
+ (&quot;read_env&quot;,   False,&quot;org&quot;,    True,  False),
+ (&quot;http_get&quot;,   False,&quot;self&quot;,   True,  True),
+]
+def blast(tools, gated=frozenset()):
+    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2)
+               for n,w,s,rev,_ in tools if w and n not in gated)
+
+print(f&quot;{&#x27;tool&#x27;:14s}{&#x27;writes&#x27;:8s}{&#x27;scope&#x27;:9s}{&#x27;reversible&#x27;:12s}inner loop?&quot;)
+print(&quot;-&quot; * 58)
+for n,w,s,rev,need in DEV_TOOLS:
+    print(f&quot;{n:14s}{str(w):8s}{s:9s}{str(rev):12s}{need}&quot;)
+print(f&quot;\ndefault blast radius: {blast(DEV_TOOLS)}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import fnmatch
+HOME = [
+ &quot;/home/dana/work/monorepo/src/app.py&quot;,
+ &quot;/home/dana/work/monorepo/.env&quot;,
+ &quot;/home/dana/work/other-team-repo/secrets.yaml&quot;,
+ &quot;/home/dana/.aws/credentials&quot;,
+ &quot;/home/dana/.ssh/id_ed25519&quot;,
+ &quot;/home/dana/.config/gcloud/application_default_credentials.json&quot;,
+ &quot;/home/dana/Downloads/customer-export-2026.csv&quot;,
+]
+def normalise(p):
+    parts = []
+    for seg in p.split(&quot;/&quot;):
+        if seg in (&quot;&quot;, &quot;.&quot;): continue
+        if seg == &quot;..&quot;:
+            if parts: parts.pop()
+            continue
+        parts.append(seg)
+    return &quot;/&quot; + &quot;/&quot;.join(parts)
+
+DENY = (&quot;*/.ssh/*&quot;,&quot;*/.aws/*&quot;,&quot;*/.config/gcloud/*&quot;,&quot;*.pem&quot;,&quot;*/.env&quot;,&quot;*/Downloads/*&quot;)
+def contained(p, workspace=&quot;/home/dana/work/monorepo&quot;):
+    real = normalise(p)
+    if any(fnmatch.fnmatch(real, g) for g in DENY): return False
+    return real.startswith(workspace + &quot;/&quot;)
+
+print(f&quot;{&#x27;path&#x27;:64s}{&#x27;default&#x27;:9s}contained&quot;)
+print(&quot;-&quot; * 84)
+for p in HOME:
+    print(f&quot;{p:64s}{&#x27;True&#x27;:9s}{contained(p)}&quot;)
+creds = [p for p in HOME if any(k in p for k in (&quot;.aws&quot;,&quot;.ssh&quot;,&quot;gcloud&quot;,&quot;.env&quot;))]
+print(f&quot;\ncredential files reachable by default: {len(creds)}&quot;)
+print(f&quot;credential files reachable when contained: &quot;
+      f&quot;{sum(1 for p in creds if contained(p))}&quot;)</code></pre></div><div class="nbmd"><h2>3 · The control — rank by friction, ship the invisible ones first</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CONTROLS = [
+ (&quot;deny-list credential paths&quot;, 0.0,
+  &quot;agent cannot read ~/.aws, ~/.ssh, ~/.env. Developers never noticed.&quot;),
+ (&quot;workspace confinement&quot;,      0.1,
+  &quot;agent sees the open repo only. Occasionally annoying for monorepo hops.&quot;),
+ (&quot;egress allowlist&quot;,           0.2,
+  &quot;package registries + your VCS. Breaks the odd curl in a generated script.&quot;),
+ (&quot;gate git_push&quot;,              0.4,
+  &quot;one confirmation before code leaves the machine. Noticed, usually accepted.&quot;),
+ (&quot;gate every write&quot;,           0.9,
+  &quot;confirmation per file write. Abandoned within a week, every time.&quot;),
+ (&quot;no shell at all&quot;,            1.0,
+  &quot;removes the inner loop. Nobody will use the agent.&quot;),
+]
+print(f&quot;{&#x27;control&#x27;:30s}{&#x27;friction&#x27;:&gt;9}  effect&quot;)
+print(&quot;-&quot; * 96)
+for name, fr, note in CONTROLS:
+    print(f&quot;{name:30s}{fr:&gt;9.1f}  {&#x27;█&#x27;*int(fr*10):10s} {note}&quot;)
+shippable = [c[0] for c in CONTROLS if c[1] &lt;= 0.4]
+print(f&quot;\nship now (friction ≤ 0.4): {shippable}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>gated = {&quot;git_push&quot;}
+print(f&quot;blast radius     {blast(DEV_TOOLS):&gt;3} → {blast(DEV_TOOLS, gated):&gt;3}&quot;)
+print(f&quot;reachable files  {len(HOME):&gt;3} → {sum(1 for p in HOME if contained(p)):&gt;3}&quot;)
+print(f&quot;credentials      {len(creds):&gt;3} → {sum(1 for p in creds if contained(p)):&gt;3}&quot;)
+print(f&quot;friction added   0.4 of 1.0 — one confirmation before a push&quot;)
+assert not any(contained(p) for p in creds)
+print(&quot;\nNo cloud or SSH credential is reachable, the inner loop is unchanged,&quot;)
+print(&quot;and the only thing a developer notices is a prompt before pushing.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating <code>git_push</code> drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Ship the credential deny-list first — it is a config file, it takes an afternoon, and no developer will notice. Then find out how many agents in your organisation could read <code>~/.aws/credentials</code> yesterday.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.16.html">B1.16 · Bonus — Google Mantis, the pipeline in production</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.15.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.15.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.</div><div class="chips"><span>Docker</span><span>Cilium</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.15.ipynb</code></p></div><div class="pager"><a href="B1.14.html"><span class="k">← Previous</span><span class="t">B1.14 · Injection in your own pipeline</span></a><a class="next" href="B1.16.html"><span class="k">Next →</span><span class="t">B1.16 · Bonus — Google Mantis, the pipeline in production</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

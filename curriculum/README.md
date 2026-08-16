@@ -2,14 +2,14 @@
 
 Generated from [`site/data/curriculum.json`](../site/data/curriculum.json) — the same source the website renders. Edit the JSON (and [`labs.json`](labs.json)), then run `python3 scripts/build_curriculum.py`.
 
-Everyone takes [Module 0](module-0.md). Then you take the track for the chair you sit in, plus two sessions from a neighbouring track.
+You take the track for the chair you sit in, plus two sessions from a neighbouring track.
 
 | Track | Role | Sessions | Function |
 |---|---|---|---|
 | [A1](track-a1.md) | The Security Architect | 7 | A — Security Architecture & Platform |
 | [A2](track-a2.md) | The Identity & Non-Human Identity Engineer | 9 | A — Security Architecture & Platform |
 | [A3](track-a3.md) | The Platform & Cloud Security Engineer | 8 | A — Security Architecture & Platform |
-| [B1](track-b1.md) | The AppSec Engineer / Code Reviewer | 7 | B — Product & Application Security |
+| [B1](track-b1.md) | The AppSec Engineer / Code Reviewer | 16 | B — Product & Application Security |
 | [B2](track-b2.md) | The Security Automation / Harness Engineer | 10 | B — Product & Application Security |
 | [C1](track-c1.md) | The Pentester / Red Teamer | 7 | C — Offensive Security & Research |
 | [C2](track-c2.md) | The Security Researcher | 9 | C — Offensive Security & Research |

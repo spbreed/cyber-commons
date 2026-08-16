@@ -105,10 +105,6 @@ def md_to_html(text: str) -> str:
 def flatten():
     """Every session in course order, with its track/function context."""
     seq = []
-    m0 = CUR["module0"]
-    for s in m0["sessions"]:
-        seq.append({"s": s, "track_id": "M0", "track": m0["title"],
-                    "fn": "Module 0 — the shared core", "fn_id": "M0"})
     for fn in CUR["functions"]:
         for tr in fn["tracks"]:
             for s in tr["sessions"]:

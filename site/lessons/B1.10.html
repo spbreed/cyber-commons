@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.10 — Exploit chaining | Cyber Commons</title><meta name="description" content="Stage 13: combine validated findings into multi-step sequences and score the chain, not the links."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.10</div><h1>Exploit chaining</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Three medium findings are triaged as three mediums, and nobody notices they compose.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 13: combine validated findings into multi-step sequences and score the chain, not the links.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Chain individually-medium findings into a critical path and show the severity the chain earns.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.10.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.10.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 45 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.10 · Exploit chaining</h1>
+<p><strong>Function B — Product &amp; Application Security → The AppSec Engineer / Code Reviewer</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.9.html">B1.9 · Dynamic exploitation (DAST)</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>OWASP ZAP</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>Kimi K2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p><strong>Stage 13 — Exploit chaining.</strong> Individual findings are triaged individually,
+and that is how three mediums become a critical nobody noticed.</p>
+<p>The arithmetic of severity is not additive. A read-only information disclosure
+is a medium. A CSRF is a medium. An unauthenticated internal endpoint is a
+medium. Chained — leak an ID, forge a request using it, hit the internal
+endpoint with the forged session — the outcome is account takeover, which is
+not a medium.</p>
+<p>The pipeline can find these mechanically because Phase 4 already produced
+confirmed findings with known <strong>preconditions</strong> and <strong>effects</strong>. If one
+finding's effect satisfies another's precondition, they compose, and the chain's
+severity is the severity of its final effect.</p>
+<p>This is the stage that most often changes what gets fixed first.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote></div><div class="nbmd"><h2>2 · Stage 13 — findings as preconditions and effects</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
+from itertools import permutations
+
+@dataclass(frozen=True)
+class Confirmed:
+    fid: str; cwe: str; name: str
+    requires: frozenset       # preconditions
+    grants: frozenset         # effects
+    severity: str
+
+FINDINGS = [
+ Confirmed(&quot;F-01&quot;,&quot;CWE-200&quot;,&quot;report id disclosed in an error message&quot;,
+           frozenset({&quot;unauthenticated&quot;}), frozenset({&quot;valid_report_id&quot;}), &quot;low&quot;),
+ Confirmed(&quot;F-02&quot;,&quot;CWE-639&quot;,&quot;report fetch does not check ownership (IDOR)&quot;,
+           frozenset({&quot;valid_report_id&quot;,&quot;authenticated&quot;}),
+           frozenset({&quot;other_users_report_data&quot;}), &quot;medium&quot;),
+ Confirmed(&quot;F-03&quot;,&quot;CWE-352&quot;,&quot;password change endpoint lacks CSRF protection&quot;,
+           frozenset({&quot;authenticated&quot;}), frozenset({&quot;password_reset_for_victim&quot;}), &quot;medium&quot;),
+ Confirmed(&quot;F-04&quot;,&quot;CWE-89&quot;,&quot;SQL injection in the report filter&quot;,
+           frozenset({&quot;authenticated&quot;}), frozenset({&quot;database_read&quot;}), &quot;high&quot;),
+ Confirmed(&quot;F-05&quot;,&quot;CWE-306&quot;,&quot;internal admin endpoint has no authentication&quot;,
+           frozenset({&quot;internal_network&quot;}), frozenset({&quot;admin_actions&quot;}), &quot;medium&quot;),
+ Confirmed(&quot;F-06&quot;,&quot;CWE-918&quot;,&quot;report export fetches a user-supplied URL (SSRF)&quot;,
+           frozenset({&quot;authenticated&quot;}), frozenset({&quot;internal_network&quot;}), &quot;medium&quot;),
+]
+SEV_RANK = {&quot;low&quot;:1,&quot;medium&quot;:2,&quot;high&quot;:3,&quot;critical&quot;:4}
+START = frozenset({&quot;unauthenticated&quot;,&quot;authenticated&quot;})
+
+print(f&quot;{&#x27;id&#x27;:7s}{&#x27;cwe&#x27;:10s}{&#x27;sev&#x27;:9s}{&#x27;requires&#x27;:38s}grants&quot;)
+print(&quot;-&quot; * 96)
+for f in FINDINGS:
+    print(f&quot;{f.fid:7s}{f.cwe:10s}{f.severity:9s}{str(sorted(f.requires)):38s}&quot;
+          f&quot;{sorted(f.grants)}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Compose them — an effect that satisfies the next precondition</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>EFFECT_SEVERITY = {
+ &quot;other_users_report_data&quot;: &quot;high&quot;,
+ &quot;password_reset_for_victim&quot;: &quot;critical&quot;,
+ &quot;admin_actions&quot;: &quot;critical&quot;,
+ &quot;database_read&quot;: &quot;high&quot;,
+ &quot;internal_network&quot;: &quot;medium&quot;,
+ &quot;valid_report_id&quot;: &quot;low&quot;,
+}
+
+def chains(findings, start, max_len=4):
+    found = []
+    def walk(path, state):
+        if len(path) &gt;= max_len: return
+        for f in findings:
+            if f in path: continue
+            if not f.requires &lt;= state: continue
+            new_state = state | f.grants
+            new_path = path + [f]
+            if len(new_path) &gt; 1:
+                worst = max((EFFECT_SEVERITY.get(g, &quot;low&quot;) for g in f.grants),
+                            key=lambda s: SEV_RANK[s])
+                found.append({&quot;chain&quot;: new_path, &quot;final_effect&quot;: sorted(f.grants),
+                              &quot;severity&quot;: worst})
+            walk(new_path, new_state)
+    walk([], start)
+    return found
+
+ALL = chains(FINDINGS, START)
+best = {}
+for c in ALL:
+    key = tuple(f.fid for f in c[&quot;chain&quot;])
+    best[key] = c
+ranked = sorted(best.values(), key=lambda c: (-SEV_RANK[c[&quot;severity&quot;]], len(c[&quot;chain&quot;])))
+
+print(f&quot;{len(ranked)} composable chains found\n&quot;)
+for c in ranked[:6]:
+    ids = &quot; → &quot;.join(f.fid for f in c[&quot;chain&quot;])
+    links = &quot;, &quot;.join(f&quot;{f.severity}&quot; for f in c[&quot;chain&quot;])
+    print(f&quot;[{c[&#x27;severity&#x27;]:8s}] {ids:26s} links: {links}&quot;)
+    print(f&quot;{&#x27;&#x27;:11s} final effect: {c[&#x27;final_effect&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — triage the links, miss the chain</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>individual = max(SEV_RANK[f.severity] for f in FINDINGS)
+chained = max(SEV_RANK[c[&quot;severity&quot;]] for c in ranked)
+inv = {v: k for k, v in SEV_RANK.items()}
+print(f&quot;highest individual finding severity : {inv[individual]}&quot;)
+print(f&quot;highest chained severity            : {inv[chained]}&quot;)
+
+critical_chains = [c for c in ranked if c[&quot;severity&quot;] == &quot;critical&quot;]
+print(f&quot;\ncritical chains built entirely from non-critical findings:&quot;)
+for c in critical_chains[:3]:
+    ids = &quot; → &quot;.join(f&quot;{f.fid}({f.severity})&quot; for f in c[&quot;chain&quot;])
+    print(f&quot;   {ids}&quot;)
+    print(f&quot;      → {c[&#x27;final_effect&#x27;]}&quot;)
+
+all_links_medium_or_below = [c for c in critical_chains
+                             if all(SEV_RANK[f.severity] &lt;= 2 for f in c[&quot;chain&quot;])]
+print(f&quot;\n{len(all_links_medium_or_below)} critical chain(s) whose every link is &quot;
+      f&quot;medium or lower.&quot;)
+print(&quot;Triaged individually, none of those findings would be worked this sprint.&quot;)
+assert all_links_medium_or_below</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># The control: rank by chain severity, and report the chain, not the link.
+def remediation_order(findings, chains_):
+    &quot;&quot;&quot;Fixing one link breaks every chain through it. Rank by chains broken.&quot;&quot;&quot;
+    impact = {}
+    for f in findings:
+        broken = [c for c in chains_ if f in c[&quot;chain&quot;]]
+        worst = max((SEV_RANK[c[&quot;severity&quot;]] for c in broken), default=0)
+        impact[f.fid] = {&quot;chains_broken&quot;: len(broken), &quot;worst_chain&quot;: inv.get(worst, &quot;—&quot;),
+                         &quot;own_severity&quot;: f.severity}
+    return sorted(impact.items(),
+                  key=lambda kv: (-SEV_RANK.get(kv[1][&quot;worst_chain&quot;], 0),
+                                  -kv[1][&quot;chains_broken&quot;]))
+
+print(f&quot;{&#x27;finding&#x27;:9s}{&#x27;own sev&#x27;:10s}{&#x27;chains broken&#x27;:&gt;15}{&#x27;worst chain&#x27;:&gt;14}&quot;)
+print(&quot;-&quot; * 50)
+for fid, i in remediation_order(FINDINGS, ranked):
+    print(f&quot;{fid:9s}{i[&#x27;own_severity&#x27;]:10s}{i[&#x27;chains_broken&#x27;]:&gt;15}{i[&#x27;worst_chain&#x27;]:&gt;14}&quot;)
+top = remediation_order(FINDINGS, ranked)[0]
+print(f&quot;\nfix first: {top[0]} — own severity {top[1][&#x27;own_severity&#x27;]}, but it &quot;
+      f&quot;breaks {top[1][&#x27;chains_broken&#x27;]} chains including a {top[1][&#x27;worst_chain&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take your current open findings and write down each one's preconditions and effects. The chaining falls out mechanically, and the finding you should fix first is usually not the one at the top of the severity-sorted queue.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.11.html">B1.11 · Remediation engineering</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.10.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.10.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains.</div><div class="chips"><span>OWASP ZAP</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.10.ipynb</code></p></div><div class="pager"><a href="B1.9.html"><span class="k">← Previous</span><span class="t">B1.9 · Dynamic exploitation (DAST)</span></a><a class="next" href="B1.11.html"><span class="k">Next →</span><span class="t">B1.11 · Remediation engineering</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

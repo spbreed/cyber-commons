@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.7 — Drift monitoring | Cyber Commons</title><meta name="description" content="Watch model updates, prompt changes, index refreshes, tool versions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.7</div><h1>Drift monitoring</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection that worked last month is silently degraded.</p></div><div class="ctrl"><div class="lab">Control</div><p>Watch model updates, prompt changes, index refreshes, tool versions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Catch a detection silently degrading after a model change.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 6 lines of output in 0.05s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.7 · Drift monitoring</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.7 — Drift monitoring | Cyber Commons</title><meta name="description" content="Watch model updates, prompt changes, index refreshes, tool versions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.7</div><h1>Drift monitoring</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection that worked last month is silently degraded.</p></div><div class="ctrl"><div class="lab">Control</div><p>Watch model updates, prompt changes, index refreshes, tool versions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Catch a detection silently degrading after a model change.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 27 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.7 · Drift monitoring</h1>
 <p><strong>Function D — Security Operations → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> A detection that worked last month is silently degraded.</p>
-<p><strong>Control.</strong> Watch model updates, prompt changes, index refreshes, tool versions.</p>
-<p><strong>This lab.</strong> Catch a detection silently degrading after a model change.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.6.html">D1.6 · Distinguishing agent from human</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,50 +20,102 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Drift monitoring exists because an agent's behaviour changes <strong>without a code
+change</strong>. A new model version, an edited prompt, an added tool — none of these
+pass through the change management process built for code, and all of them
+invalidate the testing your controls were signed off against.</p>
+<p>That is the precise claim: the control was tested against a behaviour that no
+longer exists. It has not failed; it is <em>unevidenced</em>, which is a different and
+more honest state.</p>
+<p>Two things are needed:</p>
+<ol>
+<li>A <strong>signed-off baseline</strong> — what normal looked like when the control passed.</li>
+<li>A <strong>freshness window</strong> on the control test, derived from how fast the thing
+   it tests actually drifts.</li>
+</ol>
+<p>E1.7 turns the second into a compliance posture. This lesson produces the signal.</p></div><div class="nbmd"><h2>2 · Demo — drift across a quarter</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
+from dataclasses import dataclass, field
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+now = time.time(); DAY = 86400
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;D1.7&quot;))</code></pre></div><div class="nbmd"><p>Drift monitoring exists because an agent's behaviour changes without a code change. The control you signed off was tested against a behaviour that no longer exists.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import soc, grc
-import time
+@dataclass
+class Baseline:
+    signed_off: float
+    tool_mix: dict
+    def compare(self, mix):
+        total = sum(mix.values()) or 1
+        cur = {k: v/total for k, v in mix.items()}
+        keys = set(cur) | set(self.tool_mix)
+        tvd = sum(abs(cur.get(k,0) - self.tool_mix.get(k,0)) for k in keys)/2
+        return {&quot;drift&quot;: round(tvd, 3),
+                &quot;new_tools&quot;: sorted(set(cur) - set(self.tool_mix)),
+                &quot;gone&quot;: sorted(set(self.tool_mix) - set(cur))}
 
-now = time.time()
-base = soc.Baseline(tool_mix={&quot;read_file&quot;: 0.7, &quot;search_code&quot;: 0.2, &quot;write_file&quot;: 0.1},
-                    actions_per_hour=300)
+base = Baseline(signed_off=now - 90*DAY,
+                tool_mix={&quot;read_file&quot;: 0.80, &quot;search&quot;: 0.15, &quot;write_file&quot;: 0.05})
 
-WEEKS = {
- &quot;week 1 (baseline)&quot;:  {&quot;read_file&quot;: 70, &quot;search_code&quot;: 20, &quot;write_file&quot;: 10},
- &quot;week 4 (new prompt)&quot;: {&quot;read_file&quot;: 55, &quot;search_code&quot;: 20, &quot;write_file&quot;: 25},
- &quot;week 8 (model upgrade)&quot;: {&quot;read_file&quot;: 30, &quot;search_code&quot;: 10, &quot;write_file&quot;: 25,
-                            &quot;run_shell&quot;: 35},
+TIMELINE = [
+ (now - 90*DAY, &quot;control signed off&quot;,     {&quot;read_file&quot;: 800, &quot;search&quot;: 150, &quot;write_file&quot;: 50}),
+ (now - 60*DAY, &quot;prompt edited&quot;,          {&quot;read_file&quot;: 700, &quot;search&quot;: 150, &quot;write_file&quot;: 150}),
+ (now - 30*DAY, &quot;tool added (no PR)&quot;,     {&quot;read_file&quot;: 500, &quot;search&quot;: 120, &quot;write_file&quot;: 180,
+                                           &quot;run_shell&quot;: 200}),
+ (now -  5*DAY, &quot;model upgraded by vendor&quot;,{&quot;read_file&quot;: 300, &quot;search&quot;: 100, &quot;write_file&quot;: 250,
+                                            &quot;run_shell&quot;: 350}),
+]
+print(f&quot;{&#x27;when&#x27;:&gt;8}  {&#x27;event&#x27;:26s}{&#x27;drift&#x27;:&gt;7}  new tools&quot;)
+print(&quot;-&quot; * 66)
+for ts, event, mix in TIMELINE:
+    d = base.compare(mix)
+    print(f&quot;{(now-ts)/DAY:&gt;6.0f}d  {event:26s}{d[&#x27;drift&#x27;]:&gt;7.3f}  {d[&#x27;new_tools&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — none of these was a code change</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CHANGE_SURFACES = {
+ &quot;application code&quot;:  (&quot;yes&quot;, &quot;PR, review, CI&quot;),
+ &quot;agent prompt&quot;:      (&quot;no&quot;,  &quot;edited in a console&quot;),
+ &quot;tool manifest&quot;:     (&quot;no&quot;,  &quot;config change, no threat-model diff&quot;),
+ &quot;model version&quot;:     (&quot;no&quot;,  &quot;provider-side; you may not be told&quot;),
+ &quot;policy (in git)&quot;:   (&quot;yes&quot;, &quot;if it is in git&quot;),
+ &quot;approval settings&quot;: (&quot;no&quot;,  &quot;a toggle in an admin UI&quot;),
 }
-for label, mix in WEEKS.items():
-    ev = [soc.Event(now, &quot;agent&quot;, tool) for tool, n in mix.items() for _ in range(n)]
-    d = base.compare(ev)
-    print(f&quot;{label:26s} drift={d[&#x27;drift&#x27;]:.3f}  {d[&#x27;verdict&#x27;]}&quot;)
-    if d[&quot;new_tools&quot;]:
-        print(f&quot;{&#x27;&#x27;:26s} new tools: {d[&#x27;new_tools&#x27;]}&quot;)</code></pre></div><div class="nbmd"><p>Now connect it to the control that was signed off against week 1.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>tests = [grc.ControlTest(&quot;SB-1&quot;, True, &quot;week-1 egress test&quot;,
-                         tested_at=now - 56 * 86400)]
-print(grc.verify_continuously(tests, [&quot;SB-1&quot;, &quot;DR-1&quot;], now=now))</code></pre></div><div class="nbmd"><p>The control passed — eight weeks ago, against a tool mix that has since changed by more than half. <code>STALE</code> is the honest state, and it is the one point-in-time testing cannot report.</p></div><div class="nbmd"><h3>Expect</h3>
-<p>Drift rises across the three weeks, week 8 flags <code>run_shell</code> as a new tool and reports significant drift, and the eight-week-old control test is reported STALE with coverage 0.0.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Set the freshness window for one of your agent controls. Justify the number from your observed drift rate rather than from the audit calendar.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.7.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+print(f&quot;{&#x27;surface&#x27;:20s}{&#x27;in change mgmt?&#x27;:18s}what happens today&quot;)
+print(&quot;-&quot; * 68)
+for k, (managed, how) in CHANGE_SURFACES.items():
+    print(f&quot;{k:20s}{managed:18s}{how}&quot;)
+unmanaged = [k for k, (m, _) in CHANGE_SURFACES.items() if m == &quot;no&quot;]
+print(f&quot;\n{len(unmanaged)}/{len(CHANGE_SURFACES)} surfaces bypass change management: {unmanaged}&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — freshness derived from the observed drift rate</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def drift_rate(baseline, timeline):
+    &quot;&quot;&quot;How fast does this agent actually drift? Set the window from the answer.&quot;&quot;&quot;
+    pts = [(ts, baseline.compare(mix)[&quot;drift&quot;]) for ts, _, mix in timeline]
+    pts.sort()
+    span_days = (pts[-1][0] - pts[0][0]) / 86400
+    return (pts[-1][1] - pts[0][1]) / max(span_days, 1)
+
+rate = drift_rate(base, TIMELINE)
+TOLERANCE = 0.25
+window = int(TOLERANCE / rate) if rate &gt; 0 else 365
+print(f&quot;observed drift rate  {rate:.5f} TVD/day&quot;)
+print(f&quot;tolerance            {TOLERANCE}&quot;)
+print(f&quot;→ freshness window   {window} days &quot;
+      f&quot;(a control test older than this is unevidenced, not passing)&quot;)
+
+@dataclass
+class ControlTest:
+    cid: str; passed: bool; tested_at: float; valid_for_days: float
+    def state(self, at):
+        age = (at - self.tested_at) / 86400
+        if age &gt; self.valid_for_days: return &quot;STALE&quot;
+        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
+
+tests = [ControlTest(&quot;SB-1&quot;, True, now - 90*DAY, window),
+         ControlTest(&quot;SB-2&quot;, True, now - 10*DAY, window),
+         ControlTest(&quot;DR-1&quot;, False, now, window)]
+print(f&quot;\n{&#x27;control&#x27;:10s}{&#x27;age (d)&#x27;:&gt;9}{&#x27;state&#x27;:&gt;10}&quot;)
+print(&quot;-&quot; * 30)
+for t in tests:
+    print(f&quot;{t.cid:10s}{(now-t.tested_at)/DAY:&gt;9.0f}{t.state(now):&gt;10}&quot;)
+evidenced = sum(t.state(now) == &quot;PASS&quot; for t in tests)
+print(f&quot;\ncurrently evidenced: {evidenced}/{len(tests)}&quot;)
+assert any(t.state(now) == &quot;STALE&quot; for t in tests)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Drift rises across the quarter from 0.0 at sign-off to roughly 0.35 after the model upgrade, with <code>run_shell</code> appearing as a new tool. Four of six change surfaces bypass change management. The observed drift rate yields a freshness window, and the 90-day-old control test is reported STALE rather than passing.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Compute the drift rate for one production agent from three months of telemetry, and set its control freshness window from that number rather than from the audit calendar.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.8.html">D1.8 · Threat intel sub-lane</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.7.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A rule that passed last month fails now. Nothing in your code changed.</div><div class="chips"><span>promptfoo</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.7.ipynb</code></p></div><div class="pager"><a href="D1.6.html"><span class="k">← Previous</span><span class="t">D1.6 · Distinguishing agent from human</span></a><a class="next" href="D1.8.html"><span class="k">Next →</span><span class="t">D1.8 · Threat intel sub-lane</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

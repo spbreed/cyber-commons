@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.7 — Benchmark design and critique | Cyber Commons</title><meta name="description" content="Contamination checks; adapt methodology to your own corpus."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Security Researcher</div><div class="sid">C2.7</div><h1>Benchmark design and critique</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Most published security benchmarks overstate real-world capability.</p></div><div class="ctrl"><div class="lab">Control</div><p>Contamination checks; adapt methodology to your own corpus.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Contamination-check a public benchmark.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 13 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.7 · Benchmark design and critique</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.7 — Benchmark design and critique | Cyber Commons</title><meta name="description" content="Contamination checks; adapt methodology to your own corpus."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Security Researcher</div><div class="sid">C2.7</div><h1>Benchmark design and critique</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Most published security benchmarks overstate real-world capability.</p></div><div class="ctrl"><div class="lab">Control</div><p>Contamination checks; adapt methodology to your own corpus.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Contamination-check a public benchmark.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 35 lines of output in 0.05s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.7 · Benchmark design and critique</h1>
 <p><strong>Function C — Offensive Security &amp; Research → The Security Researcher</strong>  ·  <em>AI for Security</em></p>
-<hr />
-<p><strong>Risk.</strong> Most published security benchmarks overstate real-world capability.</p>
-<p><strong>Control.</strong> Contamination checks; adapt methodology to your own corpus.</p>
-<p><strong>This lab.</strong> Contamination-check a public benchmark.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.6.html">C2.6 · Building the research harness</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -23,45 +20,118 @@
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Benchmark critique is a research skill, and the three questions that decide
+whether a security-harness number means anything are always the same:</p>
+<ol>
+<li><strong>What is the class balance?</strong> If one class dominates, a constant answer
+   scores well. Always compute what always-guessing-the-majority scores, and
+   report the <em>lift over that baseline</em> rather than the raw number.</li>
+<li><strong>Is the key held out?</strong> If the harness has seen the answers — through
+   training, through prompt examples, or through its own logs — the number is a
+   training metric.</li>
+<li><strong>How are files matched?</strong> Bare-basename matching on corpora that reuse
+   filenames turns accuracy into a partly random variable.</li>
+</ol>
+<p>C1.6 attacked a benchmark. This lesson designs one that survives the attack.</p></div><div class="nbmd"><h2>2 · Demo — the three checks, applied</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json
+from collections import Counter
+from dataclasses import dataclass
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+@dataclass
+class Truth:
+    qid: str; cwe: str; file: str
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;C2.7&quot;))</code></pre></div><div class="nbmd"><p>Benchmark design and critique. Most security benchmarks fail on one of three things: class balance, held-out keys, or file matching.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import evalkit
+def make(n, classes, files_collide=False):
+    t = {}
+    for i in range(1, n + 1):
+        cwe = classes[i % len(classes)]
+        fname = f&quot;{i}.py&quot; if files_collide else f&quot;{cwe}/{i}.py&quot;
+        t[f&quot;q{i}&quot;] = Truth(f&quot;q{i}&quot;, cwe, fname if files_collide else f&quot;{cwe}/{i}.py&quot;)
+    return t
 
-# failure 1 — class imbalance rewards guessing
-skewed = {f&quot;q{i}&quot;: evalkit.Truth(f&quot;q{i}&quot;, &quot;CWE-89&quot;, f&quot;CWE-89/{i}.py&quot;) for i in range(1, 19)}
-skewed.update({f&quot;q{i}&quot;: evalkit.Truth(f&quot;q{i}&quot;, &quot;CWE-78&quot;, f&quot;CWE-78/{i}.py&quot;) for i in (19, 20)})
-lazy = {q: &#x27;{&quot;qid&quot;:&quot;%s&quot;,&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;file&quot;:&quot;%s&quot;,&quot;rationale&quot;:&quot;concatenated&quot;}&#x27;
-             % (q, t.file) for q, t in skewed.items()}
-print(&quot;skewed benchmark, &#x27;always guess CWE-89&#x27;:&quot;)
-print(evalkit.evaluate(lazy, skewed).render())</code></pre></div><div class="nbmd"><p>90% expert accuracy from a constant. Now balance the classes and re-run the identical strategy.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>balanced = {}
-for i in range(1, 21):
-    cwe = [&quot;CWE-89&quot;, &quot;CWE-78&quot;, &quot;CWE-22&quot;, &quot;CWE-798&quot;][i % 4]
-    balanced[f&quot;q{i}&quot;] = evalkit.Truth(f&quot;q{i}&quot;, cwe, f&quot;{cwe}/{i}.py&quot;)
-lazy2 = {q: &#x27;{&quot;qid&quot;:&quot;%s&quot;,&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;file&quot;:&quot;%s&quot;,&quot;rationale&quot;:&quot;concatenated&quot;}&#x27;
-              % (q, t.file) for q, t in balanced.items()}
-print(&quot;balanced benchmark, same strategy:&quot;)
-print(evalkit.evaluate(lazy2, balanced).render())</code></pre></div><div class="nbmd"><p>The third failure is the file-matching bug from B2.10. A benchmark with all three problems can report any number its author prefers.</p></div><div class="nbmd"><h3>Expect</h3>
-<p>The skewed benchmark gives the constant-guess strategy roughly 0.9 expert accuracy. The balanced one drops it to about 0.25 — with conformance at 1.0 in both cases.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>Critique one public agentic-security benchmark against these three criteria. Write the critique as a repro card so someone can check your claim.</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.7.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+def path_key(p):
+    parts = [x for x in p.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;) if x not in (&quot;&quot;, &quot;.&quot;)]
+    return &quot;/&quot;.join(parts[-2:]) if len(parts) &gt; 1 else (parts[-1] if parts else &quot;&quot;)
+def basename(p): return p.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;)[-1]
+
+def score(answers, truths, matcher=path_key):
+    conf = expert = 0
+    for q, t in truths.items():
+        try: d = json.loads(answers[q])
+        except (json.JSONDecodeError, KeyError): continue
+        conf += 1
+        if matcher(d[&quot;file&quot;]) != matcher(t.file): continue
+        expert += 1.0 if d[&quot;cwe&quot;].upper() == t.cwe else 0.5
+    return {&quot;conformance&quot;: round(conf/len(truths), 3),
+            &quot;expert&quot;: round(expert/len(truths), 3)}
+
+def majority_baseline(truths, matcher=path_key):
+    maj = Counter(t.cwe for t in truths.values()).most_common(1)[0][0]
+    ans = {q: json.dumps({&quot;qid&quot;: q, &quot;cwe&quot;: maj, &quot;file&quot;: t.file, &quot;rationale&quot;: &quot;x&quot;})
+           for q, t in truths.items()}
+    return score(ans, truths, matcher)[&quot;expert&quot;], maj
+
+SKEWED   = make(40, [&quot;CWE-89&quot;]*7 + [&quot;CWE-78&quot;])
+BALANCED = make(40, [&quot;CWE-89&quot;, &quot;CWE-78&quot;, &quot;CWE-22&quot;, &quot;CWE-798&quot;])
+for name, t in ((&quot;skewed&quot;, SKEWED), (&quot;balanced&quot;, BALANCED)):
+    counts = Counter(x.cwe for x in t.values())
+    floor, maj = majority_baseline(t)
+    print(f&quot;{name:10s} balance={dict(counts)}&quot;)
+    print(f&quot;{&#x27;&#x27;:10s} always-guess-{maj} scores {floor:.3f}  ← the floor to beat&quot;)</code></pre></div><div class="nbmd"><h2>3 · Check 2 and 3 — held-out keys and file matching</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># a harness that has seen the key vs one that has not
+def harness(truths, seen_key, skill=0.6, seed=3):
+    import random
+    rng = random.Random(seed)
+    ans = {}
+    for q, t in truths.items():
+        if seen_key or rng.random() &lt; skill:
+            cwe, f = t.cwe, t.file
+        else:
+            cwe, f = &quot;CWE-89&quot;, t.file
+        ans[q] = json.dumps({&quot;qid&quot;: q, &quot;cwe&quot;: cwe, &quot;file&quot;: f, &quot;rationale&quot;: &quot;untrusted input&quot;})
+    return ans
+
+for label, seen in ((&quot;key held out&quot;, False), (&quot;key leaked into the harness&quot;, True)):
+    s = score(harness(BALANCED, seen), BALANCED)
+    floor, _ = majority_baseline(BALANCED)
+    print(f&quot;{label:30s} expert={s[&#x27;expert&#x27;]:.3f}  lift over floor={s[&#x27;expert&#x27;]-floor:+.3f}&quot;)
+
+# file matching
+WRONG_DIR = {q: json.dumps({&quot;qid&quot;: q, &quot;cwe&quot;: t.cwe, &quot;file&quot;: f&quot;CWE-89/{q[1:]}.py&quot;,
+                            &quot;rationale&quot;: &quot;x&quot;})
+             for q, t in BALANCED.items()}
+print()
+for m, name in ((path_key, &quot;path_key&quot;), (basename, &quot;basename only&quot;)):
+    print(f&quot;answers naming the wrong directory, matched by {name:14s}: &quot;
+          f&quot;expert={score(WRONG_DIR, BALANCED, m)[&#x27;expert&#x27;]:.3f}&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — a benchmark spec that survives critique</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def benchmark_spec(truths, answers, matcher=path_key, key_held_out=True):
+    counts = Counter(t.cwe for t in truths.values())
+    floor, maj = majority_baseline(truths, matcher)
+    s = score(answers, truths, matcher)
+    collisions = len(truths) - len({matcher(t.file) for t in truths.values()})
+    return {
+      &quot;n&quot;: len(truths),
+      &quot;class_balance&quot;: dict(counts),
+      &quot;majority_class&quot;: maj,
+      &quot;trivial_baseline&quot;: floor,
+      &quot;conformance&quot;: s[&quot;conformance&quot;],
+      &quot;expert_accuracy&quot;: s[&quot;expert&quot;],
+      &quot;LIFT_over_baseline&quot;: round(s[&quot;expert&quot;] - floor, 3),
+      &quot;key_held_out&quot;: key_held_out,
+      &quot;matcher&quot;: matcher.__name__,
+      &quot;matcher_collisions&quot;: collisions,
+      &quot;publishable&quot;: (key_held_out and collisions == 0
+                      and s[&quot;expert&quot;] - floor &gt; 0.1),
+    }
+
+good = benchmark_spec(BALANCED, harness(BALANCED, False), path_key, True)
+bad  = benchmark_spec(SKEWED,   harness(SKEWED, True),    basename, False)
+for label, spec in ((&quot;designed properly&quot;, good), (&quot;as usually published&quot;, bad)):
+    print(f&quot;=== {label} ===&quot;)
+    for k, v in spec.items(): print(f&quot;   {k:22s} {v}&quot;)
+    print()
+assert good[&quot;publishable&quot;] and not bad[&quot;publishable&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The skewed corpus gives always-guessing-the-majority about 0.88; the balanced one about 0.31. A harness with a leaked key scores near 1.0 while the held-out one lands near its true skill. Wrong-directory answers score near 0 under <code>path_key</code> and near 1.0 under basename matching. The properly designed spec is marked publishable and the usual one is not.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Apply the three checks to one published agentic-security benchmark you rely on. Write the critique as a repro card so someone can check your claim rather than taking it on trust.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.8.html">C2.8 · From finding to control</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.7.ipynb">Source</a></p>
 <p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Overlap evidence between benchmark corpus and plausible training data — the basis for saying &#x27;this score is overstated&#x27; defensibly.</div><div class="chips"><span>Cyber Commons eval harness</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C2.7.ipynb</code></p></div><div class="pager"><a href="C2.6.html"><span class="k">← Previous</span><span class="t">C2.6 · Building the research harness</span></a><a class="next" href="C2.8.html"><span class="k">Next →</span><span class="t">C2.8 · From finding to control</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

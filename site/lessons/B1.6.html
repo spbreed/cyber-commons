@@ -1,9 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.6 — Securing the developers&#x27; agents | Cyber Commons</title><meta name="description" content="Scan the agent footprint the way you scan the repo."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.6</div><h1>Securing the developers&#x27; agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Secrets in prompts and transcripts; CI credentials reachable from an agent session.</p></div><div class="ctrl"><div class="lab">Control</div><p>Scan the agent footprint the way you scan the repo.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Find live secrets in your own agent&#x27;s footprint.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 7 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.6 · Securing the developers' agents</h1>
-<p><strong>Function B — Product &amp; Application Security → The AppSec Engineer / Code Reviewer</strong>  ·  <em>Security of AI</em></p>
-<hr />
-<p><strong>Risk.</strong> Secrets in prompts and transcripts; CI credentials reachable from an agent session.</p>
-<p><strong>Control.</strong> Scan the agent footprint the way you scan the repo.</p>
-<p><strong>This lab.</strong> Find live secrets in your own agent's footprint.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.6 — Deduplication and contextual verification | Cyber Commons</title><meta name="description" content="Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.6</div><h1>Deduplication and contextual verification</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Find live secrets in your own agent&#x27;s footprint.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 32 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.6 · Deduplication and contextual verification</h1>
+<p><strong>Function B — Product &amp; Application Security → The AppSec Engineer / Code Reviewer</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.5.html">B1.5 · Vulnerability auditing: three generations of SAST</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -14,61 +11,167 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>gitleaks, TruffleHog</td>
+<td>OpenGrep, tree-sitter</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>—</td>
+<td>GLM-4.6</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
-<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
-</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
-# Puts the lab library on the path. Works from a clone, from the repo root, and
-# on Kaggle. Standard library only — nothing to install, no network required.
-import sys, os, subprocess
-from pathlib import Path
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Stage 7 ran several analysers in parallel. That produces two problems this stage
+exists to solve, and they are different problems.</p>
+<p><strong>Stage 8 — Deduplication.</strong> Three analysers find the same bug and report it
+three times. Worse, they report it at slightly different line numbers with
+different CWE labels, so naive matching does not collapse them. An engineer who
+sees the same bug three times stops trusting the count.</p>
+<p><strong>Stage 9 — Contextual verification.</strong> Cross-reference each finding against the
+actual syntax and imports to weed out hallucinations. This is the cheapest,
+highest-yield filter in the whole pipeline, because a model finding that
+references a function that does not exist, or a module that was never imported,
+is <em>provably</em> wrong — no judgement required.</p>
+<p>The order matters: deduplicate first, then verify, or you spend verification
+effort on three copies of the same claim.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote></div><div class="nbmd"><h2>2 · The raw output of three parallel tracks</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
 
-def _find_labs():
-    for base in [Path.cwd(), *Path.cwd().parents]:
-        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
-            return base / &quot;labs&quot;
-    # Kaggle kernels start in /kaggle/working with the repo absent. If the
-    # kernel has internet enabled we clone it; if not, this raises and the
-    # message tells you to attach the repo as a dataset instead.
-    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
-    if not dest.exists():
-        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
-                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
-    return dest / &quot;labs&quot;
+SOURCE = {
+&quot;billing.py&quot;: &#x27;&#x27;&#x27;
+import sqlite3
 
-sys.path.insert(0, str(_find_labs()))
-import cybercommons
-print(cybercommons.banner(&quot;B1.6&quot;))</code></pre></div><div class="nbmd"><p>Developers' coding agents run with the developer's credentials, on the developer's machine, against the whole monorepo. That is a production identity in an unmanaged environment.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import planes, sandbox
-W = planes.Tool
+def build_filter(owner):
+    return &quot;WHERE owner = &#x27;&quot; + owner + &quot;&#x27;&quot;
 
-dev_agent = planes.Manifest(&quot;ide-coding-agent&quot;, [
-    W(&quot;read_file&quot;),
-    W(&quot;write_file&quot;, writes=True, scope=&quot;project&quot;),
-    W(&quot;run_shell&quot;,  writes=True, scope=&quot;tenant&quot;, reversible=False),
-    W(&quot;git_push&quot;,   writes=True, scope=&quot;project&quot;, reversible=False),
-], rung=&quot;L2.5&quot;)
+def list_reports(conn, owner):
+    return conn.execute(&quot;SELECT * FROM reports &quot; + build_filter(owner))
 
-b = dev_agent.blast_radius()
-print(&quot;blast radius:&quot;, b[&quot;total&quot;], b[&quot;per_tool&quot;])
-for p in dev_agent.rung_check():
-    print(&quot;⚠&quot;, p)</code></pre></div><div class="nbmd"><p>Now the containment that is actually deployable on a laptop, without asking developers to accept a slower loop.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>box = sandbox.Sandbox(
-    egress=sandbox.EgressPolicy(allow_hosts={&quot;api.github.com&quot;, &quot;registry.npmjs.org&quot;}),
-    paths=sandbox.PathGuard(workspace=&quot;/work/repo&quot;),
-    tools=sandbox.ToolPolicy(allow={&quot;read_file&quot;, &quot;write_file&quot;},
-                             require_approval={&quot;run_shell&quot;, &quot;git_push&quot;}))
-for tool, target in [(&quot;read_file&quot;, &quot;/work/repo/src/a.py&quot;),
-                     (&quot;read_file&quot;, &quot;/work/repo/../../.aws/credentials&quot;),
-                     (&quot;http_get&quot;,  &quot;https://exfil.example.com/x&quot;),
-                     (&quot;git_push&quot;,  &quot;&quot;)]:
-    print(box.call(tool, target))</code></pre></div><div class="nbmd"><h3>Expect</h3>
-<p>The unconstrained dev agent scores a high blast radius and flags irreversible ungated tools. The sandboxed version still allows normal editing while refusing the credential read, the unlisted host and the ungated push.</p></div><div class="nbmd"><h3>Your turn</h3>
-<p>The honest constraint here is developer tolerance. Which single control would you ship first if you were only allowed one, and what is your evidence that it would survive a week?</p></div><div class="nbmd"><hr />
-<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.6.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Secrets in prompts/transcripts/memory files surface, and the pre-commit hook stops the next one.</div><div class="chips"><span>gitleaks</span><span>TruffleHog</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.6.ipynb</code></p></div><div class="pager"><a href="B1.5.html"><span class="k">← Previous</span><span class="t">B1.5 · Injection in your own harness</span></a><a class="next" href="B1.7.html"><span class="k">Next →</span><span class="t">B1.7 · Metrics per SDLC stage</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+def total(conn):
+    return conn.execute(&quot;SELECT SUM(amount) FROM reports&quot;).fetchone()
+&#x27;&#x27;&#x27;
+}
+
+@dataclass
+class Finding:
+    src: str; cwe: str; file: str; line: int; symbol: str
+    rationale: str; confidence: float = 1.0
+
+RAW = [
+ Finding(&quot;grep&quot;,   &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
+         &quot;execute() with string concatenation&quot;, 0.5),
+ Finding(&quot;taint&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
+         &quot;owner flows into the query via build_filter&quot;, 1.0),
+ Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 8,  &quot;execute&quot;,
+         &quot;user-controlled owner is interpolated into SQL&quot;, 0.93),
+ Finding(&quot;model&quot;,  &quot;CWE-943&quot;,&quot;billing.py&quot;, 7,  &quot;execute&quot;,
+         &quot;query language injection&quot;, 0.71),
+ Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 11, &quot;execute&quot;,
+         &quot;total() builds a query from input&quot;, 0.44),
+ Finding(&quot;model&quot;,  &quot;CWE-798&quot;,&quot;billing.py&quot;, 3,  &quot;DB_PASSWORD&quot;,
+         &quot;hardcoded database password in DB_PASSWORD&quot;, 0.88),
+ Finding(&quot;model&quot;,  &quot;CWE-78&quot;, &quot;billing.py&quot;, 6,  &quot;os.system&quot;,
+         &quot;shell invocation with user data&quot;, 0.67),
+]
+print(f&quot;{len(RAW)} raw findings from 3 tracks&quot;)
+for f in RAW:
+    print(f&quot;   {f.src:6s}{f.cwe:9s}{f.file}:{f.line:&lt;3}{f.symbol:14s}conf={f.confidence:.2f}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Stage 8 — deduplicate on the defect, not the report</h2>
+<p>Two findings are the same defect if they name the same sink in the same function, even at different lines and under different CWE labels. Cluster on that, and keep the <em>best-evidenced</em> member.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import ast
+
+def enclosing_function(src, line):
+    tree = ast.parse(src)
+    best = None
+    for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
+        end = max((getattr(n, &quot;lineno&quot;, fn.lineno) for n in ast.walk(fn)),
+                  default=fn.lineno)
+        if fn.lineno &lt;= line &lt;= end + 1:
+            if best is None or fn.lineno &gt; best.lineno: best = fn
+    return best.name if best else None
+
+CWE_ALIASES = {&quot;CWE-943&quot;: &quot;CWE-89&quot;, &quot;CWE-89&quot;: &quot;CWE-89&quot;}
+
+def defect_key(f, src):
+    fn = enclosing_function(src, f.line)
+    cwe = CWE_ALIASES.get(f.cwe, f.cwe)
+    return (f.file, fn, f.symbol, cwe)
+
+SRC = SOURCE[&quot;billing.py&quot;]
+clusters = {}
+for f in RAW:
+    clusters.setdefault(defect_key(f, SRC), []).append(f)
+
+RANK = {&quot;taint&quot;: 3, &quot;grep&quot;: 1, &quot;model&quot;: 2}
+deduped = []
+for key, group in clusters.items():
+    best = max(group, key=lambda f: (RANK[f.src], f.confidence))
+    deduped.append({&quot;key&quot;: key, &quot;keep&quot;: best, &quot;merged&quot;: len(group),
+                    &quot;sources&quot;: sorted({g.src for g in group})})
+
+print(f&quot;{len(RAW)} findings → {len(deduped)} distinct defects\n&quot;)
+for d in deduped:
+    file, fn, sym, cwe = d[&quot;key&quot;]
+    print(f&quot;   {cwe:8s}{str(fn):14s}{sym:14s}merged {d[&#x27;merged&#x27;]} &quot;
+          f&quot;from {d[&#x27;sources&#x27;]}  (kept {d[&#x27;keep&#x27;].src})&quot;)</code></pre></div><div class="nbmd"><h2>4 · Stage 9 — contextual verification against the real syntax</h2>
+<p>Now check each surviving claim against the code. Three checks, all mechanical, none requiring judgement.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def verify(finding, src):
+    tree = ast.parse(src)
+    problems = []
+
+    # check 1 — does the referenced symbol exist at all?
+    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+    names |= {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+    names |= {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+    root = finding.symbol.split(&quot;.&quot;)[0]
+    if finding.symbol not in names and root not in names:
+        problems.append(f&quot;symbol {finding.symbol!r} does not appear in the file&quot;)
+
+    # check 2 — is the module it implies actually imported?
+    imports = {a.name.split(&quot;.&quot;)[0] for n in ast.walk(tree)
+               if isinstance(n, ast.Import) for a in n.names}
+    imports |= {n.module.split(&quot;.&quot;)[0] for n in ast.walk(tree)
+                if isinstance(n, ast.ImportFrom) and n.module}
+    if &quot;.&quot; in finding.symbol and root not in imports:
+        problems.append(f&quot;module {root!r} is never imported&quot;)
+
+    # check 3 — is the line inside a function at all?
+    if enclosing_function(src, finding.line) is None:
+        problems.append(f&quot;line {finding.line} is not inside any function&quot;)
+
+    return (not problems), problems
+
+print(f&quot;{&#x27;cwe&#x27;:9s}{&#x27;symbol&#x27;:14s}{&#x27;line&#x27;:&gt;5}  verdict&quot;)
+print(&quot;-&quot; * 74)
+verified, rejected = [], []
+for d in deduped:
+    f = d[&quot;keep&quot;]
+    ok, problems = verify(f, SRC)
+    (verified if ok else rejected).append((f, problems))
+    print(f&quot;{f.cwe:9s}{f.symbol:14s}{f.line:&gt;5}  &quot;
+          f&quot;{&#x27;verified&#x27; if ok else &#x27;REJECTED — &#x27; + problems[0]}&quot;)
+print(f&quot;\n{len(verified)} verified, {len(rejected)} rejected as hallucinations&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify the stage pays for itself.
+STAGE7_COUNT = len(RAW)
+after8 = len(deduped)
+after9 = len(verified)
+print(f&quot;stage 7 emitted        {STAGE7_COUNT}&quot;)
+print(f&quot;after stage 8 (dedup)  {after8}   ({1-after8/STAGE7_COUNT:.0%} removed)&quot;)
+print(f&quot;after stage 9 (verify) {after9}   ({1-after9/STAGE7_COUNT:.0%} removed overall)&quot;)
+
+TRUE_DEFECTS = {(&quot;billing.py&quot;, &quot;list_reports&quot;, &quot;execute&quot;, &quot;CWE-89&quot;)}
+found = {d[&quot;key&quot;] for d in deduped if any(d[&quot;keep&quot;] is f for f, _ in verified)}
+tp = len(found &amp; TRUE_DEFECTS); fp = len(found - TRUE_DEFECTS)
+print(f&quot;\nsurviving: tp={tp} fp={fp}&quot;)
+for f, _ in rejected:
+    print(f&quot;   rejected {f.cwe} on {f.symbol!r} — provably not in the code&quot;)
+assert any(&quot;DB_PASSWORD&quot; in f.symbol for f, _ in rejected)
+assert any(&quot;os.system&quot; in f.symbol for f, _ in rejected)
+print(&quot;\nBoth hallucinations named things that are not in the file. No model,&quot;)
+print(&quot;no judgement, no cost — just the AST disagreeing with the claim.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Seven raw findings collapse to four distinct defects, with the CWE-943 alias merging into CWE-89 and the taint result kept over grep and model duplicates. Contextual verification then rejects the hallucinated <code>DB_PASSWORD</code> and <code>os.system</code> findings because neither symbol appears in the file and <code>os</code> is never imported, leaving the real SQL injection.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Add a fourth verification check: does the CWE class match the sink type? A CWE-22 finding on a <code>conn.execute</code> call is provably mislabelled, and that check costs nothing to run.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.7.html">B1.7 · Feasibility filtering and reachability</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Secrets in prompts/transcripts/memory files surface, and the pre-commit hook stops the next one.</div><div class="chips"><span>OpenGrep</span><span>tree-sitter</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.6.ipynb</code></p></div><div class="pager"><a href="B1.5.html"><span class="k">← Previous</span><span class="t">B1.5 · Vulnerability auditing: three generations of SAST</span></a><a class="next" href="B1.7.html"><span class="k">Next →</span><span class="t">B1.7 · Feasibility filtering and reachability</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
