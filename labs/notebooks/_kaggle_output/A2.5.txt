@@ -1,0 +1,28 @@
+dana@corp                                       
+      scopes ['deploy:prod', 'repo:read', 'repo:write']   fp=cd084cfbe5bc
+dana@corp → orchestrator                        
+      scopes ['deploy:prod', 'repo:read', 'repo:write']   fp=a54b4bb7c0f7
+dana@corp → orchestrator → patch-agent          
+      scopes ['repo:read', 'repo:write']   fp=1ffd75cca7d9
+dana@corp → orchestrator → patch-agent → deploy-agent
+      scopes ['repo:read']   fp=91bac953dbbe
+patch-agent    wants repo:write   → ALLOW
+   patch-agent performed repo:write on behalf of dana@corp via orchestrator
+deploy-agent   wants repo:write   → DENY 
+   needs repo:write, holds ['repo:read']
+deploy-agent   wants repo:read    → ALLOW
+   deploy-agent performed repo:read on behalf of dana@corp via orchestrator → patch-agent
+REFUSED  widen beyond the presented token
+         widening refused: ['deploy:prod'] is not in the presented token ['repo:read']
+REFUSED  widen beyond the actor's own ceiling
+         widening refused: triage-agent may never hold ['repo:write'] (ceiling ['repo:read'])
+REFUSED  replay an expired token
+         presented token has expired
+delegated    : dana@corp → orchestrator → patch-agent
+impersonated : dana@corp   ← the agent is invisible
+
+resource server sees:
+   delegated    : patch-agent performed repo:write on behalf of dana@corp via orchestrator
+   impersonated : dana@corp performed repo:write on behalf of dana@corp via direct
+2014 successful hops across 1500 random chains — widening violations: 0
+Invariant holds: authority can only shrink, on every path.

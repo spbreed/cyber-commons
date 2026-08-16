@@ -1,0 +1,28 @@
+control  state           age (days)
+------------------------------------
+AC-1     PASS                   2.0
+AC-2     PASS                   9.0
+SB-1     STALE                 31.0
+SB-2     STALE                120.0
+EV-1     PASS                   5.0
+EV-2     PASS                  12.0
+DR-1     FAIL                   0.0
+ST-1     NO EVIDENCE           None
+
+currently evidenced 4/8 = 50%
+point-in-time  : 6/8 = 75%
+continuous     : 4/8 = 50%
+
+the gap: STALE ['SB-1', 'SB-2']  NO EVIDENCE ['ST-1']  FAIL ['DR-1']
+Nobody did anything wrong to produce the STALE rows. Time passed.
+after automating SB-1: 5/8 = 62%
+   SB-1 is now PASS and will stay fresh without anyone remembering
+
+prioritise automation by how often a control goes stale:
+   SB-2  window  27d → 13.5 manual re-tests per year
+   AC-1  window  30d → 12.2 manual re-tests per year
+   AC-2  window  30d → 12.2 manual re-tests per year
+   SB-1  window  30d → 12.2 manual re-tests per year
+   EV-2  window  30d → 12.2 manual re-tests per year
+   DR-1  window  30d → 12.2 manual re-tests per year
+   EV-1  window  60d →  6.1 manual re-tests per year

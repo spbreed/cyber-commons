@@ -1,0 +1,30 @@
+lifecycle event               ticketed?   why it matters
+--------------------------------------------------------------------------------------
+new agent deployed            usually     existing change process catches it
+tool added to the manifest    no          changes blast radius; no PR raised
+prompt edited in a console    no          changes behaviour, not code
+provider upgrades the model   no          you may not be told at all
+scope widened in IAM          sometimes   depends on your access review cadence
+agent decommissioned          rarely      the IDENTITY usually outlives the agent
+
+4/6 events generate no reliable record.
+identity            last auth (d)   service running       owner  finding
+--------------------------------------------------------------------------------------------
+triage-agent                    0              True      appsec  
+patch-agent                     1              True    platform  
+legacy-scanner                400             False           —  orphan — decommissioning never finished
+poc-agent-2025                300             False           —  orphan — decommissioning never finished
+sunset-agent                    2             False           —  ACTIVE CREDENTIAL FOR A RETIRED SERVICE
+
+Read the sunset-agent row twice. The service was retired. The identity
+authenticated two days ago. Somebody or something is still using it.
+[medium  ] legacy-scanner     no authentication in 400d — decommission it
+[medium  ] poc-agent-2025     no authentication in 300d — decommission it
+[critical] sunset-agent       identity active for a decommissioned service
+
+and the manifest-diff check, for the events that change behaviour:
+   manifest changed: blast 1 → 41 (+40)
+   → requires re-tiering (E1.3) and a fresh SB-2 test (E1.7)
+
+1 critical lifecycle finding(s) — each is a standing credential
+for something everyone believes is switched off.

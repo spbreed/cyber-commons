@@ -1,0 +1,28 @@
+request                                       free-form                   enumerated
+--------------------------------------------------------------------------------------------
+runbook                                       {'error': 'not a path'}     {'content': 'contents of runbook'}
+/srv/docs/runbook.md                          {'content': 'contents of r  {'error': "unknown doc_id; valid: 
+/srv/docs/../../home/app/.aws/credentials     {'error': 'denied by path   {'error': "unknown doc_id; valid: 
+/etc/shadow                                   {'error': 'denied by path   {'error': "unknown doc_id; valid: 
+with a buggy path guard:
+   free-form  : {'content': 'AKIA…SECRET'}
+   enumerated : {'error': "unknown doc_id; valid: ['oncall', 'policy', 'runbook']"}
+
+The enumerated tool is unaffected by a filesystem bug it never touches.
+It cannot express the request, so the guard's correctness stops mattering.
+wide tool returns  : ['email', 'id', 'mfa_secret', 'name', 'role', 'salary', 'ssn']
+narrow, legitimate : {'name': 'Dana', 'role': 'engineer'}
+narrow, overreach  : {'error': "fields not exposed by this tool: ['mfa_secret', 'ssn']"}
+
+sensitive fields placed in the model's context by the wide tool: ['mfa_secret', 'salary', 'ssn']
+1/3  read_file(path: str)
+        ⚠ accepts free text where an enumeration would do
+        ⚠ unbounded types — parse errors become the guard's problem
+3/3  read_file(doc_id: Literal[...])
+2/3  get_user(user_id: int)
+        ⚠ returns more than the caller needs
+3/3  get_user(user_id: int, fields: list)
+0/3  run_shell(cmd: str)
+        ⚠ accepts free text where an enumeration would do
+        ⚠ unbounded types — parse errors become the guard's problem
+        ⚠ returns more than the caller needs

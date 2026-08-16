@@ -1,0 +1,22 @@
+GRANTED  ci-builder     ['artifact:write', 'repo:read']   — the normal build grant
+GRANTED  deploy-bot     ['deploy:staging']   — staging deploy
+REFUSED  deploy-bot     ['deploy:prod']   — 'just for the hotfix'
+         deploy-bot may never hold ['deploy:prod'] (ceiling: ['artifact:read', 'deploy:staging'])
+REFUSED  triage-agent   ['repo:write']   — 'so it can fix what it finds'
+         triage-agent may never hold ['repo:write'] (ceiling: ['finding:comment', 'repo:read'])
+REFUSED  ci-builder     ['secrets:read']   — 'the build needs a token'
+         ci-builder may never hold ['secrets:read'] (ceiling: ['artifact:write', 'repo:read'])
+triage-agent → ci-builder → deploy-bot
+scopes reachable through the chain: ['artifact:read', 'artifact:write', 'deploy:staging', 'finding:comment', 'repo:read']
+triage-agent's own ceiling:         ['finding:comment', 'repo:read']
+
+No ceiling was broken. The agent still reached artifact:write and
+deploy:staging, because it can ask something else to do the work.
+triage-agent holds:       ['finding:comment', 'repo:read']
+→ delegated to ci-builder: ['repo:read']
+→ delegated to deploy-bot: ∅ — nothing survives
+
+Authority can only shrink along a chain. The walk-around is closed,
+and no reviewer had to notice anything.
+2000 random delegations, widening violations: 0
+Property holds: result ⊆ presented AND result ⊆ new actor's ceiling.

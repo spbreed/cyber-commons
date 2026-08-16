@@ -1,0 +1,35 @@
+technique              rate              ci95  verdict
+------------------------------------------------------------
+direct override       0.055    (0.023, 0.087)  flaky
+context reframe       0.395    (0.327, 0.463)  flaky
+task nesting          0.660    (0.594, 0.726)  reproducible
+
+'It worked' is true for all three. Only one is reproducible.
+     n            before             after  conclusion
+--------------------------------------------------------------------
+    20    (0.385, 0.815)    (0.281, 0.719)  NOT demonstrated
+   100    (0.557, 0.743)    (0.463, 0.657)  NOT demonstrated
+  1000    (0.579, 0.639)     (0.45, 0.512)  improvement holds
+
+The true effect is identical in all three rows. Only sample size changed.
+At n=20 you would report a 23% reduction you cannot support.
+effect you want to detect          n required
+-----------------------------------------------
+62% → 10%                                   7
+62% → 31%                                  20
+62% → 48%                                  98
+62% → 58%                                1153
+
+Detecting a halving is cheap. Detecting a 14-point move is not, and
+detecting a 4-point move is a research project in itself.
+
+re-run at the computed n=98: before (0.548, 0.738), after (0.473, 0.669), overlap=True
+task nesting, after provenance mitigation
+   before  0.60 (95% CI (0.385, 0.815), n=20)
+   after   0.50 (95% CI (0.281, 0.719), n=20)
+   verdict no demonstrated change — intervals overlap
+
+task nesting, after provenance mitigation
+   before  0.61 (95% CI (0.579, 0.639), n=1000)
+   after   0.48 (95% CI (0.45, 0.512), n=1000)
+   verdict reduction demonstrated

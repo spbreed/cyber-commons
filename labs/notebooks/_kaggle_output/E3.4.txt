@@ -1,0 +1,42 @@
+seam                        owner                           lesson
+------------------------------------------------------------------------------
+AppSec ↔ Platform           platform-security               A3.1
+Identity ↔ SecOps           on-call SRE, pre-authorised     A3.6
+GRC ↔ Engineering           ⚠ NOBODY                        E3.2
+SOC ↔ Data                  ⚠ NOBODY                        D1.5
+CISO office ↔ Legal         legal, on IR notification       E2.6
+AppSec ↔ SOC                detection engineering           D1.4
+
+2/6 seams have no named owner:
+   who decides an autonomy rung?
+   who retains agent traces, and for how long?
+step                                  seam                  owned   hours
+----------------------------------------------------------------------------
+detection fires                       SOC                    True     0.2
+agent identified as the actor         SOC                    True     1.0
+decision to revoke the identity       Identity ↔ SecOps      True     0.3
+decide trace retention for evidence   SOC ↔ Data            False    14.0   ← stalls
+re-tier the agent post-incident       GRC ↔ Engineering     False    21.0   ← stalls
+
+total elapsed: 36.5 hours
+if every seam were owned: 1.5 hours (24× faster)
+
+The two unowned steps account for 96% of the elapsed time, and both are
+decisions rather than work.
+role                  track    unblocks  owns
+------------------------------------------------------------------------------------
+identity engineer     A2              3  owns agent identity and delegation
+                                       delivers: revocation, attribution, act chains
+detection engineer    D1              2  owns agent telemetry and drift
+                                       delivers: drift alerts, agent detections
+GRC practitioner      E1              2  owns tiering, evidence, continuous verification
+                                       delivers: inventory, control coverage
+harness engineer      B2              1  owns the loop, the verifier, the eval
+                                       delivers: evaluation, stop conditions
+
+most commonly hired first : harness engineer
+unblocks the most others  : identity engineer
+
+The identity engineer is the one who makes revocation, attribution and
+act chains possible — which E3.3 showed are prerequisites for evidence,
+evaluation and continuous verification. Hiring them second costs a quarter.

@@ -1,0 +1,39 @@
+=== WEAK — 0/3 sentences checkable ===
+   [---] Our AI systems are subject to appropriate oversight and 
+   [---] Access is
+granted on a least-privilege basis and reviewe
+   [---] Agents are
+monitored for anomalous behaviour and we main
+
+=== STRONG — 0/6 sentences checkable ===
+   [C--] Agent identities are distinct from human identities (AC-
+   [-AD] Evidence: gateway
+logs containing an act chain for every
+   [C--] Delegated authority narrows at every hop (AC-2)
+   [-AD] Evidence: the token exchange
+refuses widening; regressio
+   [C--] Autonomy above L2 requires approval for privileged tools
+   [-AD] Evidence: tool
+policy in git; 90-day denial log attached
+
+C = names a control · A = names an artefact · D = carries a date
+follow-up question                                               answerable?
+------------------------------------------------------------------------------
+'appropriate oversight' — show me the last time it operated.              NO
+'reviewed periodically' — what period, and when was the last one?          NO
+'comprehensive logging' — produce one action's full record.               NO
+'act chain for every action' — produce the August sample.                yes
+
+Three of four cannot be answered from the document, and the person
+asking now doubts the fourth as well.
+controls cited in the document: ['AC-1', 'AC-2', 'SB-2']
+
+control  state now     document claim still true?
+----------------------------------------------------
+AC-1     PASS                                True
+AC-2     PASS                                True
+SB-2     STALE                              False
+
+1 cited control(s) no longer evidenced: ['SB-2']
+A document that cites controls can be CHECKED against live state.
+A document of intent cannot go stale, because it never said anything.

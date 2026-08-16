@@ -1,0 +1,40 @@
+indicator                                     kind         conf  verdict
+----------------------------------------------------------------------------------------
+collect.example.com                           host         0.95  RULE — convertible to a rule
+169.254.169.254                               host         0.99  RULE — convertible to a rule
+a1b2c3d4e5f6                                  hash         0.72  RULE — convertible to a rule
+pastebin.example                              host         0.55  drop — confidence 0.55 below floor 0.7
+adversaries increasingly use agentic tooling  narrative    0.40  drop — narrative is not matchable in telemetry
+agents reading ~/.aws/credentials             technique    0.88  RULE — convertible to a rule
+threat actor GOLDEN-OTTER is targeting finte  narrative    0.60  drop — narrative is not matchable in telemetry
+7 indicators → 4 deployable rules (57% conversion)
+
+   [critical] intel:host:collect.example.com
+   [critical] intel:host:169.254.169.254
+   [high    ] intel:hash:a1b2c3d4e5f6
+   [high    ] intel:technique:agents reading ~/.aws/cred
+alerts generated from the feed:
+   [critical] intel:host:collect.example.com
+        actor=patch-agent  → block egress, revoke the agent's token, hunt back 30d (vendor-a)
+   [high] intel:hash:a1b2c3d4e5f6
+        actor=build-agent  → quarantine the artefact, check the supply chain (vendor-b)
+   [high] intel:technique:agents reading ~/.aws/cred
+        actor=patch-agent  → revoke, rotate the cloud role, audit reads (internal-ir)
+
+the three numbers that matter:
+   indicators received : 7
+   rules deployed      : 4  (57% of the feed)
+   alerts fired        : 3
+   alerts actioned     : 2  (67%)
+
+The third number is the one that decides whether the subscription renews.
+source                  conversion  note
+----------------------------------------------------------------------------
+your own incidents            100%  the technique that worked against YOU
+your red team (C1)             90%  attack suite results become detections directly
+your drift monitor             80%  D1.7 baseline changes are leading indicators
+vendor advisories              50%  useful for supply chain (C2.5)
+commercial feed                30%  generic IOCs; little agent-specific content yet
+
+The highest-converting sources are all internal. For agentic threats the
+intel programme is mostly a feedback loop from C1 and D1.7, not a purchase.

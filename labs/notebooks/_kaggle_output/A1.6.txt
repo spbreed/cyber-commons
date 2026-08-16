@@ -1,0 +1,39 @@
+vendor agent platform
+   covers 4/7   unfixable-later gaps: ['AC-2', 'EV-1', 'ST-1']
+   ✗✗ AC-2  delegated authority narrows at every hop, recorded in an act chain
+   ✗✗ EV-1  every action logged with the ACTING identity, not the principal
+   ✗✗ ST-1  a tested stop mechanism you own, timed
+
+CNCF stack (SPIRE+OPA+gateway+OTel)
+   covers 7/7   unfixable-later gaps: none
+
+roll your own from scratch
+   covers 4/7   unfixable-later gaps: ['ST-1']
+   ✗  SB-1  egress deny-by-default with an allowlist
+   ✗  EV-2  harness accuracy evaluated against a held-out key per release
+   ✗✗ ST-1  a tested stop mechanism you own, timed
+
+vendor agent platform
+   {'action': 'merge_pr #4471', 'acting_identity': 'dana@corp', 'on_behalf_of': 'dana@corp', 'chain': 'not recorded', 'answerable': False}
+   → cannot answer 'who caused this?'. Logs name the human who never saw it.
+
+CNCF stack (SPIRE+OPA+gateway+OTel)
+   {'action': 'merge_pr #4471', 'acting_identity': 'fixer-agent', 'on_behalf_of': 'dana@corp', 'chain': ['dana@corp', 'orchestrator', 'fixer-agent'], 'answerable': True}
+
+roll your own from scratch
+   {'action': 'merge_pr #4471', 'acting_identity': 'fixer-agent', 'on_behalf_of': 'dana@corp', 'chain': ['dana@corp', 'orchestrator', 'fixer-agent'], 'answerable': True}
+
+Q: Can you produce, for a single action, the full chain of identities that caused it — not just the last one?
+   → AC-2 + EV-1
+
+Q: Can we halt every agent without your assistance, and what is the measured time from decision to the agent's next call failing?
+   → ST-1
+
+Q: Is the agent's identity distinct from the human's, and separately revocable?
+   → AC-1
+
+Q: Can we export the policy and the traces in a form we still own if we leave?
+   → exit strategy — see E2.4 (DORA)
+
+scored: {'vendor agent platform': 4, 'CNCF stack (SPIRE+OPA+gateway+OTel)': 7, 'roll your own from scratch': 4}
+recommended spine: CNCF stack (SPIRE+OPA+gateway+OTel)

@@ -1,0 +1,27 @@
+    when  event                       drift  new tools
+------------------------------------------------------------------
+    90d  control signed off          0.000  []
+    60d  prompt edited               0.100  []
+    30d  tool added (no PR)          0.330  ['run_shell']
+     5d  model upgraded by vendor    0.550  ['run_shell']
+surface             in change mgmt?   what happens today
+--------------------------------------------------------------------
+application code    yes               PR, review, CI
+agent prompt        no                edited in a console
+tool manifest       no                config change, no threat-model diff
+model version       no                provider-side; you may not be told
+policy (in git)     yes               if it is in git
+approval settings   no                a toggle in an admin UI
+
+4/6 surfaces bypass change management: ['agent prompt', 'tool manifest', 'model version', 'approval settings']
+observed drift rate  0.00647 TVD/day
+tolerance            0.25
+→ freshness window   38 days (a control test older than this is unevidenced, not passing)
+
+control     age (d)     state
+------------------------------
+SB-1             90     STALE
+SB-2             10      PASS
+DR-1              0      FAIL
+
+currently evidenced: 1/3

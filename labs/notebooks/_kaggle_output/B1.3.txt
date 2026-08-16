@@ -1,0 +1,27 @@
+entry        sink         cwe      vector                 score  data at risk
+----------------------------------------------------------------------------------------
+get_report   load_report  CWE-89   SQL injection             10  ['customer', 'financial']
+upload_doc   store        CWE-22   path traversal             7  ['documents']
+upload_doc   store        CWE-434  unrestricted upload        7  ['documents']
+
+3 threats derived. No human wrote this; it fell out of the map.
+threats before 3 → after 6
+max severity   10 → 12
+
+NEW THREATS:
+   [12] CWE-89   admin_export → … → load_report    auth=none
+   [ 9] CWE-22   admin_export → … → store          auth=none
+   [ 9] CWE-434  admin_export → … → store          auth=none
+
+One unauthenticated handler introduced 3 new threats, two of them
+higher-scoring than anything in the original model.
+CI gate: FAIL
+   new_threats   3
+   new_critical  1
+   detail        ['CWE-89 via admin_export → … → load_report (score 12)']
+
+after requiring auth on the new handler:
+CI gate: PASS   new_critical=0
+
+The gate did not ask anyone to write a document. It compared two
+generated models and refused a specific, named regression.

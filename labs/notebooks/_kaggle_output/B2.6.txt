@@ -1,0 +1,18 @@
+depth 1  dana@corp                                            ['deploy:prod', 'repo:read', 'repo:write']
+depth 2  dana@corp → orchestrator                             ['deploy:prod', 'repo:read', 'repo:write']
+depth 3  dana@corp → orchestrator → coder                     ['repo:read', 'repo:write']
+depth 4  dana@corp → orchestrator → coder → reviewer          ['repo:read']
+honest orchestrator:
+   refused: depth 5 > 3
+
+compromised orchestrator (simply does not run its own check):
+   granted: depth 5  dana@corp → orchestrator → coder → reviewer → shipper
+   The limit was a line of code inside the component we no longer trust.
+issuer enforcement:
+    issuer refuses: depth 5 > 3
+
+resource server enforcement (even if a deep token somehow exists):
+   depth 5: (False, 'resource server refuses: depth 5 > 3')
+   depth 4: (False, 'resource server refuses: depth 4 > 3')
+3000 chains built without any orchestrator-side limit — over-deep chains honoured by the resource server: 0
+The limit holds because it is enforced where the orchestrator cannot reach.

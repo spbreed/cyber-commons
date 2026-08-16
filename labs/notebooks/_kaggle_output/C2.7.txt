@@ -1,0 +1,35 @@
+skewed     balance={'CWE-89': 35, 'CWE-78': 5}
+           always-guess-CWE-89 scores 0.938  ← the floor to beat
+balanced   balance={'CWE-78': 10, 'CWE-22': 10, 'CWE-798': 10, 'CWE-89': 10}
+           always-guess-CWE-78 scores 0.625  ← the floor to beat
+key held out                   expert=0.825  lift over floor=+0.200
+key leaked into the harness    expert=1.000  lift over floor=+0.375
+
+answers naming the wrong directory, matched by path_key      : expert=0.250
+answers naming the wrong directory, matched by basename only : expert=1.000
+=== designed properly ===
+   n                      40
+   class_balance          {'CWE-78': 10, 'CWE-22': 10, 'CWE-798': 10, 'CWE-89': 10}
+   majority_class         CWE-78
+   trivial_baseline       0.625
+   conformance            1.0
+   expert_accuracy        0.825
+   LIFT_over_baseline     0.2
+   key_held_out           True
+   matcher                path_key
+   matcher_collisions     0
+   publishable            True
+
+=== as usually published ===
+   n                      40
+   class_balance          {'CWE-89': 35, 'CWE-78': 5}
+   majority_class         CWE-89
+   trivial_baseline       0.938
+   conformance            1.0
+   expert_accuracy        1.0
+   LIFT_over_baseline     0.062
+   key_held_out           False
+   matcher                basename
+   matcher_collisions     0
+   publishable            False
+

@@ -1,0 +1,47 @@
+requests==2.31.0        allow
+requsts==2.31.0         block
+      · unsigned — no attestation to source
+      · published 3d ago — no soak time
+      · only 12 downloads
+      · distance 1 from popular package 'requests'
+colourama==0.4.6        block
+      · unsigned — no attestation to source
+      · published 9d ago — no soak time
+      · only 40 downloads
+      · distance 1 from popular package 'colorama'
+langchain==0.2.1        review
+      · unsigned — no attestation to source
+=== model weights ===
+   signing              Sigstore/in-toto possible, rarely used
+   popularity signal    NONE — 'popular checkpoint' is not provenance
+   lineage              a fine-tune of a fine-tune; base model often unrecorded
+   runs with            no authority of its own — but shapes every decision
+   honest verdict       assess the PUBLISHER, because you cannot assess the artefact
+
+=== prompt / tool packages (MCP, skills) ===
+   signing              NO convention exists
+   popularity signal    star counts, which are trivially gamed
+   lineage              none recorded
+   runs with            YOUR AGENT'S AUTHORITY — this is the dangerous one
+   honest verdict       treat as executable code, because it is
+
+mcp-jira-connector: block
+   · unsigned — no attestation to source
+   · published 6d ago — no soak time
+   · only 180 downloads
+
+Good news: the existing process EXTENDS to it rather than needing
+invention. Bad news: nothing in that process accounts for the fact that
+this package will run with your agent's tools.
+
+authority-weighted verdict: block
+   · unsigned — no attestation to source
+   · published 6d ago — no soak time
+   · only 180 downloads
+   · runs with agent authority (blast 43)
+python package    assessed on 4/4 signals;  not available for this artefact class
+model weights     assessed on 1/4 signals; signature, downloads, lineage not available for this artefact class
+MCP tool pack     assessed on 1/4 signals; signature, downloads, lineage not available for this artefact class
+
+That last sentence is the deliverable. A risk rating that hides which
+signals were unavailable is a number someone will later rely on.

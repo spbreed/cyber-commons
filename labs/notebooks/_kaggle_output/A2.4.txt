@@ -1,0 +1,35 @@
+identity              in registry  seen in logs  owner     status
+--------------------------------------------------------------------------
+agent-worker-7f3c     False        True          —         SHADOW — unregistered but active
+agent-worker-a91b     False        True          —         SHADOW — unregistered but active
+backup-runner         True         False         —         ORPHAN — registered, never authenticates
+ci-builder            True         True          platform  governed
+deploy-bot            True         True          platform  governed
+svc-legacy-etl        False        True          —         SHADOW — unregistered but active
+triage-agent          True         True          appsec    governed
+agent-worker-7f3c
+   ⚠ unregistered: in use but never requested or approved
+   ⚠ created by another agent — no human requester exists
+agent-worker-a91b
+   ⚠ unregistered: in use but never requested or approved
+   ⚠ created by another agent — no human requester exists
+backup-runner
+   ⚠ no named owner — nobody can accept the risk or recertify it
+   ⚠ no authentication in 90d — decommissioning never finished (identity is 1400d old)
+svc-legacy-etl
+   ⚠ unregistered: in use but never requested or approved
+revoking one dynamically-spawned worker:
+   invalidated 1 token(s)
+
+   ci-builder             valid=True
+   deploy-bot             valid=True
+   agent-worker-7f3c      valid=False
+   agent-worker-a91b      valid=True
+
+Now the shared-secret world, for contrast:
+   revoking the shared key stops: ['ci-builder', 'deploy-bot', 'agent-worker-7f3c', 'agent-worker-a91b']
+   → which is why, in practice, nobody ever revokes it.
+identities: 7   unowned: 4   shadow: 3   stale: 1
+   unowned ['agent-worker-7f3c', 'agent-worker-a91b', 'backup-runner', 'svc-legacy-etl']
+   shadow  ['agent-worker-7f3c', 'agent-worker-a91b', 'svc-legacy-etl']
+   stale   ['backup-runner']

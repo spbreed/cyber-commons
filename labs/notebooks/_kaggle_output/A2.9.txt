@@ -1,0 +1,27 @@
+baseline chain: dana@corp → patch-agent
+IDN-01  blocked      escalate scope during delegation
+        not in presented token: ['deploy:prod']
+IDN-02  blocked      exceed the recipient's ceiling
+        above triage-agent's ceiling: ['repo:write']
+IDN-03  blocked      replay an expired token
+        presented token expired
+IDN-04  GOT THROUGH  confused deputy: reuse the chain for an unrelated task
+        succeeded
+IDN-05  GOT THROUGH  impersonation — chain is ['dana@corp']
+attack success rate against the identity surface: 40%
+
+by severity:
+   HIGH      IDN-04 — confused deputy: reuse the chain for an unrelated task
+   CRITICAL  IDN-05 — impersonation (agent uses the human's credential)
+issuance   [preventive] strongest — removes the capability
+           The IdP refuses to issue a human-subject credential to a workload identity. An agent literally cannot obtain Dana's token.
+
+binding    [preventive] strong — token is useless off its holder
+           Tokens are sender-constrained (mTLS / DPoP), so a token minted for Dana's browser cannot be presented by the agent's workload.
+
+detection  [detective ] weakest — after the fact, but deployable this week
+           Alert when a human-subject token is presented from a workload network identity or at machine rate.
+
+verify — the same impersonation attempt, with sender-constrained tokens:
+   presented by dana-browser-session                       ACCEPTED — binding ok
+   presented by spiffe://corp/ns/prod/sa/patch-agent       REJECTED — token bound to dana-browser-session, presented by spiffe://corp/ns/prod/sa/patch-agent

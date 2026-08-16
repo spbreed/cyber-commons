@@ -1,0 +1,41 @@
+capability                hosted API  local weights
+----------------------------------------------------
+unlimited probing              False           True
+no abuse signal                False           True
+can remove refusals            False           True
+controls own version           False           True
+activation access              False           True
+
+an attacker gains: ['unlimited probing', 'no abuse signal', 'can remove refusals', 'controls own version', 'activation access']
+a defender gains exactly the same list — which is why the commons works.
+setting                              attempts in 24h
+------------------------------------------------------
+hosted API, 20 req/min                        28,800
+hosted API, 20 req/min, 5 keys               144,000
+local open weights, 1 GPU                    691,200
+local open weights, 8 GPUs                 5,529,600
+
+ratio: 192× more attempts, with no abuse signal reaching anyone.
+A 0.5%-success technique becomes reliable when you can try it 5 million times.
+   technique landing 0.5% of the time → 144 successes hosted, 27,648 local
+   technique landing 5.0% of the time → 1,440 successes hosted, 276,480 local
+provider control lost     your replacement                            
+------------------------------------------------------------------------------------------------
+rate limiting             A2.7 choke point / A3.6 runtime levers      bound attempts per identity per window
+abuse monitoring          D1.4 detection for agents                   your telemetry is the only signal now
+refusal behaviour         A3.5 tool policy + C1.3 provenance          do not rely on the model refusing; refuse at the tool
+immutable logging         A2.5 act chains + D2.5 replay               you own retention and integrity
+model version stability   D1.7 drift monitoring                       you now own upgrades AND their behavioural changes
+
+typical first local deployment: 20% covered
+   ✗ abuse monitoring
+   ✗ refusal behaviour
+   ✗ immutable logging
+   ✗ model version stability
+
+after this curriculum: 100% covered
+local open-weight agent, no replacements: 20
+with tool policy + gating (A3.5):         4
+
+The model has no refusal training you can rely on. The tool policy
+does not care what the model was persuaded to want.

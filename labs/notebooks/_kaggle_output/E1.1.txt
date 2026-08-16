@@ -1,0 +1,31 @@
+control    age (days)   point-in-time   continuous
+----------------------------------------------------
+AC-1                3            PASS         PASS
+AC-2                9            PASS         PASS
+SB-1               45            PASS        STALE
+SB-2              210            PASS        STALE
+EV-1                5            PASS         PASS
+DR-1                0            FAIL         FAIL
+EV-2                —    (not tested)  NO EVIDENCE
+ST-1                —    (not tested)  NO EVIDENCE
+point-in-time    5/8 controls passing = 62%
+continuous       3/8 controls passing = 38%
+
+The difference is entirely SB-1 and SB-2, which nobody did anything
+wrong to. Time simply passed, and the agent they were tested against
+has had two model upgrades since.
+control     drift/day  window (days)  current age    state
+------------------------------------------------------------
+AC-1           0.0005            500            3     PASS
+AC-2           0.0005            500            9     PASS
+SB-1           0.0020            125           45     PASS
+SB-2           0.0090             27          210    STALE
+EV-1           0.0010            250            5     PASS
+DR-1           0.0090             27            0     FAIL
+EV-2                —             90            —NO EVIDENCE
+ST-1                —             90            —NO EVIDENCE
+
+with drift-derived windows: 4/8 = 50% currently evidenced
+
+SB-2 tests a tool manifest that changes weekly; a 210-day-old screenshot
+cannot evidence it. Saying so is the control, not a criticism of anyone.

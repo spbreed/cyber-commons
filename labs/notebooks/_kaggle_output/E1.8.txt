@@ -1,0 +1,39 @@
+component                               kind          tier    flags
+------------------------------------------------------------------------------------------------
+cryptography==42.0.5                    library       low     —
+langchain==0.2.1                        library       medium  unsigned
+hosted GLM-4.6 endpoint                 hosted model  high    unsigned, not version-pinned, CAN CHANGE WITHOUT NOTICE
+local glm-4.6 weights (pinned digest)   weights       low     —
+mcp-jira-connector==0.0.3               tool package  high    unsigned, runs with agent authority
+your controls were tested against a model that changed 5 days ago:
+   SB-2  tested 20d ago  INVALIDATED by the model change
+   EV-2  tested 20d ago  INVALIDATED by the model change
+   DR-1  tested 20d ago  INVALIDATED by the model change
+
+3/3 control tests invalidated by a change you did not make and were not told about.
+Q: Can this component change without notifying us?
+   → if yes, every control test has an implicit expiry tied to the vendor
+
+Q: Does it execute with our agent's authority?
+   → if yes, assess it as code, not as a dependency
+
+Q: Can we pin a digest, and do we?
+   → the difference between a supply chain and a subscription
+
+Q: What is our exit if we stop using it?
+   → DORA Art.11 asks this directly; most AI contracts have no answer
+
+artefact class     signals available  unavailable
+--------------------------------------------------------------------------
+library                          4/4  —
+hosted model                     0/4  ['signature', 'downloads', 'pinning', 'lineage']
+weights                          2/4  ['downloads', 'lineage']
+tool package                     1/4  ['signature', 'downloads', 'lineage']
+
+  library: assessed on 4/4 signals. none unavailable for this artefact class.
+  hosted model: assessed on 0/4 signals. signature, downloads, pinning, lineage unavailable for this artefact class.
+  weights: assessed on 2/4 signals. downloads, lineage unavailable for this artefact class.
+  tool package: assessed on 1/4 signals. signature, downloads, lineage unavailable for this artefact class.
+
+That last sentence is the deliverable. A rating that hides which signals
+were unavailable is a number someone will later rely on.

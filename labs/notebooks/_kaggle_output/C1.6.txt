@@ -1,0 +1,35 @@
+class balance: Counter({'CWE-89': 32, 'CWE-78': 3, 'CWE-22': 3, 'CWE-798': 2})
+the null harness, scored on the skewed corpus:
+   conformance      1.00   ← quotable as '100%'
+   expert accuracy  0.90
+
+Zero capability. Both numbers look like a working product.
+same null harness:
+   skewed corpus (80% CWE-89)   conformance 1.00  expert accuracy 0.90
+   balanced corpus              conformance 1.00  expert accuracy 0.62
+
+Balancing the corpus removed most of the fake score. Nothing about the
+harness changed.
+path_key (parent + filename)       expert accuracy 0.25
+basename only (the bug)            expert accuracy 1.00
+
+Every answer names the wrong file. The basename matcher scores them
+as correct, because the corpus reuses numeric filenames across directories.
+audit of the skewed benchmark with a basename matcher:
+   majority_class_share                   0.8
+   score_of_always_guessing_majority      0.9
+   reported_expert_accuracy               0.9
+   lift_over_trivial_baseline             0.0
+   matcher_collisions                     0
+   conformance_reported_as_quality        False
+
+audit of the balanced benchmark with path_key:
+   majority_class_share                   0.25
+   score_of_always_guessing_majority      0.62
+   reported_expert_accuracy               0.62
+   lift_over_trivial_baseline             0.0
+   matcher_collisions                     0
+   conformance_reported_as_quality        True
+
+The null harness has ~zero lift over the trivial baseline, which is the
+only honest way to describe it.

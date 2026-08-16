@@ -1,0 +1,31 @@
+human   sub=dana@corp      scopes=['deploy:prod', 'repo:read', 'repo:write'] amr=['pwd', 'mfa'] ttl=3600s
+workload id=spiffe://corp/ns/prod/sa/triage-agent  scopes=['repo:read'] ttl=300s
+
+Both answer 'who is calling?' — for different questions:
+  human    → who INTENDED this
+  workload → which CODE is running
+PATTERN 1 — hand the agent Dana's token ('it just needs her permissions')
+   actor          dana@corp
+   on_behalf_of   dana@corp
+   audit_line     dana@corp pushed a commit
+   lost           that an agent acted, and which one
+
+PATTERN 2 — give the agent its own service account
+   actor          triage-agent
+   on_behalf_of   unknown
+   audit_line     triage-agent pushed a commit
+   lost           who asked for it, and whether they were allowed to
+
+Both are complete, consistent records. Both are missing half the answer.
+sub=dana@corp  actor=triage-agent
+   chain  dana@corp → triage-agent
+   scopes ['repo:read']
+
+what GitHub can now record:
+   'triage-agent pushed a commit on behalf of dana@corp'
+   → both questions answered, one log line, nothing reconstructed later.
+agent uses Dana's token      answerable=False acted=dana@corp      for=dana@corp   not recorded
+agent uses service acct      answerable=False acted=triage-agent   for=?           not recorded
+on-behalf-of (RFC 8693)      answerable=True  acted=triage-agent   for=dana@corp   dana@corp → triage-agent
+
+Only the third can answer an incident question without guesswork.

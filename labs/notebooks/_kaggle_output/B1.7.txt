@@ -1,0 +1,37 @@
+call graph:
+   http_get_report   → ['load_report']
+   http_health       → —
+   load_report       → —
+   legacy_export     → —
+   debug_dump        → —
+   dispatch          → —
+
+entry points: ['http_get_report', 'http_health', 'dispatch']
+dynamic dispatch present in: ['dispatch']
+finding         cwe      verdict      why
+--------------------------------------------------------------------------------------------
+load_report     CWE-89   reachable    path exists from ['http_get_report']
+legacy_export   CWE-89   unknown      no static path, but dispatch() resolves handlers at 
+debug_dump      CWE-22   unknown      no static path, but dispatch() resolves handlers at 
+
+{'reachable': ['load_report'], 'unknown': ['legacy_export', 'debug_dump']}
+finding         3-bucket     2-bucket (naive)  
+----------------------------------------------------
+load_report     reachable    reachable         
+legacy_export   unknown      unreachable          ← DROPPED
+debug_dump      unknown      unreachable          ← DROPPED
+
+findings silently dropped by two-bucket filtering: ['legacy_export', 'debug_dump']
+legacy_export is reachable through the runtime handler registry in this
+application. Static analysis cannot see that, and 'unreachable' is a lie.
+reachable     1 finding(s) → page / block the merge      confirmed exploit path — goes to Phase 4
+               load_report
+unknown       2 finding(s) → queue for dynamic validationPhase 4 decides it empirically
+               legacy_export
+               debug_dump
+unreachable   0 finding(s) → record, do not page         revisit only if an entry point is added
+
+{'pages_a_human': 1, 'sent_to_phase_4': 3, 'recorded_only': 0, 'human_load_reduction': 0.67}
+
+The unknown bucket is not a failure of the analysis. It is the handover
+to Phase 4, which answers reachability by running the thing.

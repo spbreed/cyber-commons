@@ -1,0 +1,40 @@
+artefact                   durability  what it buys
+------------------------------------------------------------------------------
+chat thread                         0  gone at the next retention sweep
+slide deck                          1  survives; nobody re-runs it
+written repro card                  2  someone else can reproduce it
+detection rule                      3  fires if the precondition recurs
+regression case in CI               4  fails the build when the finding returns
+control + eval case                 5  prevents it AND proves it stays prevented
+finding                           landed as                  score
+--------------------------------------------------------------------
+diff-borne approval               control + eval case            5
+token widening at hop 3           control + eval case            5
+metadata reachable in staging     regression case in CI          4
+prompt leak via error text        detection rule                 3
+model drift after upgrade         slide deck                     1
+odd retry storm                   chat thread                    0
+MCP package with no signature     written repro card             2
+agent scored as human             chat thread                    0
+eval corpus imbalance             slide deck                     1
+SSRF via allowlisted host         written repro card             2
+
+findings: 10   durability 23/50 = 46%
+survives staff turnover: 6/10
+survives a refactor:     3/10
+
+Ten findings. Three of them will still protect you in two years.
+finding                         severity  must land as              
+------------------------------------------------------------------------
+diff-borne approval             critical  control + eval case       
+model drift after upgrade       medium    regression case in CI     
+odd retry storm                 low       written repro card        
+SSRF via allowlisted host       high      control + eval case       
+
+closure check against what actually happened:
+   diff-borne approval              landed=control + eval case      CLOSE
+   model drift after upgrade        landed=slide deck               REOPEN
+   odd retry storm                  landed=chat thread              REOPEN
+   SSRF via allowlisted host        landed=written repro card       REOPEN
+
+must reopen: ['model drift after upgrade', 'odd retry storm', 'SSRF via allowlisted host']

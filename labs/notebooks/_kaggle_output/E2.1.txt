@@ -1,0 +1,41 @@
+1 · horizontal AI regulation
+   EU AI Act, national AI acts in progress
+   triggered by : the system being AI, and its risk classification
+   lead time    : months to years of transition periods
+
+2 · sector overlays
+   DORA (financial), HIPAA (health), PCI DSS (cards), NIS2 (CNI)
+   triggered by : what your organisation does — already in force
+   lead time    : none: already applies
+
+3 · cross-cutting
+   GDPR / privacy law, consumer protection, incident reporting
+   triggered by : the data processed and the outcome produced
+   lead time    : none: already applies
+
+claims-triage-agent — autonomy L2.5, data ['customer', 'health', 'regulated']
+
+instrument             layer  obligation
+--------------------------------------------------------------------------------------------
+EU AI Act                  1  automated decision affecting individuals; human oversight and record-keeping obligations
+DORA                       2  ICT third-party risk, incident reporting, resilience testing, exit strategy
+HIPAA-equivalent           2  minimum necessary; audit controls
+GDPR                       3  lawful basis, erasure, automated decision-making
+obligation                            deadline (h)  notify
+------------------------------------------------------------------------------
+DORA (major ICT incident)                        4  initial notification to the regulator
+contractual (major client)                      12  client security contact
+GDPR (personal data breach)                     72  supervisory authority
+EU AI Act (serious incident)                    72  market surveillance authority
+
+BINDING DEADLINE: DORA (major ICT incident) at 4h
+Every runbook, every escalation path and every out-of-hours rota is
+designed against that number, not against the 72-hour one people quote.
+obligations by layer: {1: 1, 2: 2, 3: 1}
+
+   layer 1 (horizontal AI regulation  ) 1 obligation(s)
+   layer 2 (sector overlay            ) 2 obligation(s)
+   layer 3 (cross-cutting             ) 1 obligation(s)
+
+Layers 2 and 3 produce more obligations than layer 1, and they were
+already in force before anyone deployed an agent. That is the finding.

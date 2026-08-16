@@ -1,0 +1,41 @@
+tool          writes  scope    reversible  inner loop?
+----------------------------------------------------------
+read_file     False   self     True        True
+write_file    True    project  True        True
+run_tests     True    self     True        True
+run_shell     True    tenant   False       True
+git_commit    True    project  True        True
+git_push      True    project  False       False
+read_env      False   org      True        False
+http_get      False   self     True        True
+
+default blast radius: 29
+path                                                            default  contained
+------------------------------------------------------------------------------------
+/home/dana/work/monorepo/src/app.py                             True     True
+/home/dana/work/monorepo/.env                                   True     False
+/home/dana/work/other-team-repo/secrets.yaml                    True     False
+/home/dana/.aws/credentials                                     True     False
+/home/dana/.ssh/id_ed25519                                      True     False
+/home/dana/.config/gcloud/application_default_credentials.json  True     False
+/home/dana/Downloads/customer-export-2026.csv                   True     False
+
+credential files reachable by default: 4
+credential files reachable when contained: 0
+control                        friction  effect
+------------------------------------------------------------------------------------------------
+deny-list credential paths          0.0             agent cannot read ~/.aws, ~/.ssh, ~/.env. Developers never noticed.
+workspace confinement               0.1  █          agent sees the open repo only. Occasionally annoying for monorepo hops.
+egress allowlist                    0.2  ██         package registries + your VCS. Breaks the odd curl in a generated script.
+gate git_push                       0.4  ████       one confirmation before code leaves the machine. Noticed, usually accepted.
+gate every write                    0.9  █████████  confirmation per file write. Abandoned within a week, every time.
+no shell at all                     1.0  ██████████ removes the inner loop. Nobody will use the agent.
+
+ship now (friction ≤ 0.4): ['deny-list credential paths', 'workspace confinement', 'egress allowlist', 'gate git_push']
+blast radius      29 →  23
+reachable files    7 →   1
+credentials        4 →   0
+friction added   0.4 of 1.0 — one confirmation before a push
+
+No cloud or SSH credential is reachable, the inner loop is unchanged,
+and the only thing a developer notices is a prompt before pushing.

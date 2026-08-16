@@ -1,0 +1,37 @@
+verifier                    on BROKEN   on CORRECT  detail (broken)
+------------------------------------------------------------------------------------
+behavioural (executes it)   False       True        accepted out-of-range port '0'
+exact-match oracle          False       True        differs from the reference imple
+shape check                 True        True        defines parse_port
+llm judge                   True        True        judge: this looks like a correct
+a correct implementation, written differently:
+   behavioural (executes it)   True   rejects out-of-range, accepts valid
+   exact-match oracle          False  differs from the reference implementation
+   shape check                 True   defines parse_port
+   llm judge                   True   judge: this looks like a correct implementat
+
+The oracle says no. Behavioural says yes. Only one of those is useful
+on code you did not write in advance.
+1. verifier on the broken code:       FAIL
+2. after a real fix, cache cleared:   PASS
+3. source fixed, STALE cache honoured: PASS  ← the verifier is reading code that is not on disk
+rank verifier                      fooled by                                   
+--------------------------------------------------------------------------------
+1    behavioural / property test   must change observable behaviour            
+                                   execute the artefact against facts that must hold
+2    differential test             must match a trusted second implementation  
+                                   run old and new against the same inputs
+3    exact-match oracle            nothing — but needs the answer in advance   
+                                   only usable on a fixed corpus
+4    shape / schema check          any well-formed output                      
+                                   use for conformance ONLY, never for quality — see B2.10
+5    llm judge                     confident prose                             
+                                   acceptable only as a filter before a real check, never as the last word
+
+verifier review checklist:
+   · does it EXECUTE the artefact, or only inspect it?
+   · would it fail if the artefact were subtly wrong?
+   · does it clear caches / derived state before reading?
+   · is its own correctness tested (does it fail on known-bad input)?
+
+our behavioural verifier passes its own test: fails broken, accepts both correct forms.

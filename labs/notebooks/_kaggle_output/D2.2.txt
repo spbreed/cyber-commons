@@ -1,0 +1,43 @@
+INSTINCT 1 — disable dana@corp's account
+   dana@corp (human)      can act: True   account disabled, but the issued token is still valid
+   patch-agent            can act: True   active
+   deploy-agent           can act: True   active
+   → the agents were never using her account interactively; they hold
+     their own issued tokens, and one of them is acting AS her.
+
+INSTINCT 2 — interview the user
+   Q: did you read the AWS credentials?
+   A: No. I opened a ticket and went to lunch.
+   Q: what did you ask the agent to do?
+   A: Fix the finding in billing.py.
+   Q: did you approve the external POST?
+   A: I didn't know it made external calls.
+   → she authorised a TASK. The actions were chosen by a model. She is
+     not withholding information; she does not have it.
+
+INSTINCT 3 — assume one actor
+   actual chain: dana@corp → orchestrator → patch-agent
+   actors involved: 3; actors in the logs: 1
+correct first action — revoke patch-agent's identity:
+   dana@corp (human)      can act: True   active
+   patch-agent            can act: False  identity revoked
+   deploy-agent           can act: True   active
+
+   dana keeps working. deploy-agent keeps working. The actor stopped.
+
+TIME TO EFFECT, measured:
+   disable the human's account         5s  agent unaffected
+   kill the agent process              2s  supervisor restarts it; token still valid
+   revoke the agent identity          12s  agent cannot act, even after restart
+   rotate the shared credential      420s  works, and breaks every other consumer
+OLD RUNBOOK
+   1. disable the user account
+   2. interview the user
+   3. review the user's recent activity
+
+NEW RUNBOOK
+   1. identify the ACTING identity from the act chain (A2.5)
+   2. revoke that identity — no approval needed for a non-human (A3.6)
+   3. scope by walking the delegation chain, not the host list (D2.3)
+   4. preserve the run trace before anything restarts (D2.5)
+   5. only then consider the human's account, and say why

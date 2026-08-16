@@ -1,0 +1,22 @@
+path                                            want  correct  buggy  
+--------------------------------------------------------------------------
+/work/repo/src/main.py                          True  True     True   
+/work/repo/./src/../src/main.py                 True  True     True   
+/work/repo/../../root/.ssh/id_rsa               False False    True     ← BUGGY GUARD IS WRONG
+/work/repo/../../home/app/.aws/credentials      False False    True     ← BUGGY GUARD IS WRONG
+/work/repo/.env                                 False False    True     ← BUGGY GUARD IS WRONG
+/work/repo/deploy.pem                           False False    True     ← BUGGY GUARD IS WRONG
+/etc/shadow                                     False False    False  
+/work/repo/sub/../../repo/src/a.py              True  True     True   
+
+correct guard: 0 wrong    buggy guard: 4 wrong
+path:                /work/repo/vendor/cache/id_rsa
+normalise() says:    inside workspace → True
+with link resolution: DENY  — deny rule */.ssh/* (resolved to /root/.ssh/id_rsa)
+
+Text normalisation was not enough. The link had to be followed.
+20000 random paths · 71 allowed · violations: 0
+
+Property holds: every allowed path resolves inside the workspace
+and matches no deny rule — including through symlinks.
+buggy prefix-check guard: 8 paths allowed that escape the workspace

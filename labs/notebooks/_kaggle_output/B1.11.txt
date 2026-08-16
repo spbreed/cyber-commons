@@ -1,0 +1,31 @@
+behaviour of the vulnerable build:
+   get_user('dana'    ) → [(1, 'dana')]      ok
+   get_user('sam'     ) → [(2, 'sam')]       ok
+   get_user('nobody'  ) → []                 ok
+   get_user("o'brien" ) → raised OperationalError FAILS
+
+exploit works: True — probe returned 3 rows
+scanner fires: False
+candidate                           scanner green
+--------------------------------------------------
+A · parameterise (the real fix)              True
+B · delete the feature                       True
+C · evade the scanner                        True
+D · escape by hand                           True
+
+Three of four are green. Only one of those is a fix.
+candidate                         scan  behaviour  exploitable  verdict
+------------------------------------------------------------------------------------
+A · parameterise (the real fix)   True  True       False        ACCEPT
+B · delete the feature            True  False      False        REJECT — behaviour changed
+C · evade the scanner             True  False      True         REJECT — behaviour changed, STILL EXPLOITABLE (stage-12 probe passes)
+D · escape by hand                True  True       False        ACCEPT
+
+accepted: ['A · parameterise (the real fix)', 'D · escape by hand']
+A · parameterise (the real fix)    proof of fix: True  (exploit on old=True, on new=False)
+D · escape by hand                 proof of fix: True  (exploit on old=True, on new=False)
+
+Candidate D passes every automated check and is still the wrong answer:
+it reimplements the driver's escaping and will be wrong for the next
+input class or the next database. Nothing except a rule about MECHANISM
+catches that — which is the part of remediation that does not automate.

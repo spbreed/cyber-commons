@@ -1,0 +1,25 @@
+step  ok    proposal                                    detail
+----  ------------------------------------------------------------------------------
+   1  False def is_expired(cert): return cert.days_left is_expired(days_left=0) → Fa
+   2  True  def is_expired(cert): return cert.days_left all 4 cases pass
+
+stopped by: verifier satisfied    succeeded: True
+step  ok    proposal                                    detail
+----  ------------------------------------------------------------------------------
+   1  True  def is_expired(cert): return cert.days_left judge: looks like a valid fi
+
+stopped by: verifier satisfied    succeeded: True
+
+the accepted code says a cert with 0 days left is expired: False
+It is not. A certificate expiring today is still valid today, and this
+harness just shipped that. The trace above is clean and reports success.
+verifier                          succeeded  steps  stopped by
+----------------------------------------------------------------------------
+behavioural (executes the code)   True       2      verifier satisfied
+self-grading (asks the model)     True       1      verifier satisfied
+none                              False      4      step budget (4 steps)
+
+what each one accepted:
+   behavioural (executes the code)   def is_expired(cert): return cert.days_left <= 0
+   self-grading (asks the model)     def is_expired(cert): return cert.days_left < 0
+   none                              —

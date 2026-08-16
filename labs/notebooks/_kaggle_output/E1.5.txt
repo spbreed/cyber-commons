@@ -1,0 +1,23 @@
+n                24
+conformance      1.0000   ← structural. NOT a quality claim.
+expert accuracy  0.8750   ← the number that evidences EV-2
+claim                                                              defensible?
+--------------------------------------------------------------------------------
+Our AI security harness scores 100%.                                     False
+Our harness achieves 100% schema conformance.                             True
+Our harness scores 0.81 expert accuracy on a 24-question held-out set.        True
+Our harness passes all automated checks.                                 False
+
+Claim 1 is TRUE and misleading — conformance really is 100%.
+Claim 4 is the most common and evidences nothing at all.
+EV-2  PASS
+      expert accuracy 0.8750 over 24 held-out questions; conformance 1.0000 reported separately; key never exposed to the harness
+      at +10d → PASS
+      at +45d → STALE
+
+auditability checklist:
+   PASS  key held out
+   PASS  accuracy not conformance reported
+   PASS  sample size stated
+   PASS  expires
+   PASS  threshold stated up front

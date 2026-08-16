@@ -1,0 +1,57 @@
+10 commits, 4 security-relevant
+
+   a1b2c3d   420d  fix(auth): reject empty session tokens (CVE-2025-0091)
+              touched ['src/auth.py', 'src/session.py']
+   c3d4e5f   300d  fix(billing): SQL injection in report filter (CVE-2025-1
+              touched ['src/billing.py']
+   e5f6a7b   210d  security: patch path traversal in doc fetch
+              touched ['src/docs.py']
+   a7b8c9d   150d  fix(auth): timing leak in token compare
+              touched ['src/auth.py']
+file                    commits  sec fixes    risk
+----------------------------------------------------
+src/auth.py                   2          2   0.532
+src/docs.py                   2          1   0.311
+src/billing.py                3          1   0.189
+src/session.py                1          1   0.097
+src/render.py                 2          0     0.0
+src/export.py                 2          0     0.0
+requirements.txt              1          0     0.0
+
+src/auth.py and src/docs.py are the repeat zones. Nothing has been
+scanned yet — this ordering comes entirely from history.
+unit            file             line  params → calls
+--------------------------------------------------------------------------
+compare_token   src/auth.py         2  ['supplied', 'stored'] → []
+login           src/auth.py         5  ['request'] → ['compare_token', 'lookup', 'make_session']
+build_filter    src/billing.py      2  ['owner'] → []
+list_reports    src/billing.py      5  ['conn', 'owner'] → ['build_filter', 'execute']
+safe_join       src/docs.py         2  ['base', 'name'] → []
+fetch           src/docs.py         5  ['base', 'name'] → ['open', 'read', 'safe_join']
+who reaches safe_join(), and with what?
+   line-based index : cannot answer — 'safe_join' appears in 2 places
+   file-based index : 'it is in src/docs.py'
+   semantic index   : callers = ['fetch'], reached from fetch(base, name)
+
+reverse call index:
+   compare_token   ← ['login']
+   login           ← (entry point)
+   build_filter    ← ['list_reports']
+   list_reports    ← (entry point)
+   safe_join       ← ['fetch']
+   fetch           ← (entry point)
+
+entry points (nothing calls them): ['login', 'list_reports', 'fetch']
+unit            file              hist risk
+--------------------------------------------
+compare_token   src/auth.py           0.532
+login           src/auth.py           0.532
+safe_join       src/docs.py           0.311
+fetch           src/docs.py           0.311
+build_filter    src/billing.py        0.189
+list_reports    src/billing.py        0.189
+
+Analysis budget goes to src/auth.py first — decided before a single rule ran.
+Note why docs.py ranks below it: the recent 'harden docs path join' commit
+does not match the security markers, so it scores nothing. Marker quality
+is the whole accuracy of stage 1, and it is worth tuning on your own history.

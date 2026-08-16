@@ -1,0 +1,34 @@
+exposure   fleet blast radius             46   units of unreviewed action
+likelihood red-team ASR                  25%   measured, containment surface
+assurance  controls evidenced            50%   4/8
+coverage   agents in inventory           34%   41 of ~120 est.
+speed      measured time-to-stop         12s   game day 41 days ago
+metrics that look like governance and are not:
+   findings closed this quarter      goes up with activity; says nothing about posture
+   training completion %             reaches 98% and stays there forever
+   number of AI policies             monotonically increasing by construction
+   tools evaluated                   measures procurement, not risk
+
+metric                        degrades if ignored?
+----------------------------------------------------
+exposure                                      True
+likelihood                                    True
+assurance                                     True
+coverage                                      True
+speed                                         True
+findings closed                              False
+training completion                          False
+number of policies                           False
+
+The first five fall on their own. That is what makes them worth
+reporting monthly — the report itself creates the pressure.
+ month  exposure    ASR  assurance  coverage  stop test age
+------------------------------------------------------------
+     0        46    25%        50%       34%             41
+     3       118    34%        14%       22%            131
+     6       190    43%         0%       10%            221
+    12       334    61%         0%        0%            401
+
+After a year of no investment: exposure 46→334, assurance 50%→0%.
+Nobody made a bad decision. This is the default trajectory, and the
+monthly report is what makes it visible before it is a board topic.

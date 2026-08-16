@@ -1,0 +1,42 @@
+fully instrumented     replayable=True
+typical production     replayable=False
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+prompts only           replayable=False
+      ✗ tool results — the agent saw a world you cannot rebuild
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+actions only           replayable=False
+      ✗ prompts — cannot reconstruct what it was asked
+      ✗ tool results — the agent saw a world you cannot rebuild
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+reproduce the incident under the ORIGINAL model version:
+   → read_source
+
+reproduce it AFTER the provider upgraded (same prompts, same tool results):
+   glm-4.6@2026-08-01     → read_source        reproduces
+   glm-4.7@2026-08-01     → read_source        reproduces
+
+Without a pinned version you cannot tell 'the agent did not do this'
+from 'the model that did it no longer exists'.
+field             cost  what it costs                         why it matters
+----------------------------------------------------------------------------------------------------
+model version        1  one string per run                    invalidates everything else if missing
+seed                 1  one integer per run                   makes the run repeatable
+prompts              3  storage + privacy review (D1.5)       what it was asked
+tool results         5  largest volume, highest sensitivity   what it saw
+
+recording order, by value per unit cost:
+   1. model version
+   2. seed
+   3. prompts
+   4. tool results
+
+after adding model version    replayable=False  still missing=1
+
+after adding seed             replayable=True  still missing=0
+
+after adding prompts          replayable=True  still missing=0
+
+after adding tool results     replayable=True  still missing=0

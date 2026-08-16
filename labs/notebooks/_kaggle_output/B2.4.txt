@@ -1,0 +1,26 @@
+max_steps=  1 →   1 steps, stopped by step budget (1 steps)
+max_steps=  3 →   3 steps, stopped by step budget (3 steps)
+max_steps= 10 →  10 steps, stopped by step budget (10 steps)
+
+time budget      → 10000 steps, stopped by step budget (10000 steps)
+The step budget alone would have permitted 10,000 iterations.
+plan: ['add firewall rule', 'restart service', 'update monitoring']
+done: ['add firewall rule', 'restart service']
+why : budget exhausted after step 2
+world state: {'firewall_rule_added': True, 'service_restarted': True, 'monitoring_updated': False}
+
+The firewall now blocks traffic the service needs, the service has been
+restarted into that condition, and monitoring does not know to alert.
+Halting was worse than either finishing or never starting.
+add firewall rule       ROLL BACK — undo what completed
+restart service         ESCALATE — half-done and not undoable; hand the trace to a human
+update monitoring       HALT — additive, safe to leave
+post a comment          HALT — additive, safe to leave
+open a pull request     HALT — additive, safe to leave
+merge a pull request    ESCALATE — half-done and not undoable; hand the trace to a human
+budget=1  ROLLBACK  fully rolled back
+          world: {'firewall_rule_added': False, 'service_restarted': False, 'monitoring_updated': False}
+budget=2  ESCALATE  cannot undo 'restart service' — escalating
+          world: {'firewall_rule_added': True, 'service_restarted': True, 'monitoring_updated': False}
+budget=3  COMPLETE  plan finished
+          world: {'firewall_rule_added': True, 'service_restarted': True, 'monitoring_updated': True}

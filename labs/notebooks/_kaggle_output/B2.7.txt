@@ -1,0 +1,32 @@
+capability    agent's patch did not compile; the loop retried and fixed it
+              → better model / better context
+verification  agent's patch passed CI and introduced a SQL injection
+              → harness engineer — B2.2
+authority     agent deleted a production table it should never have had access to
+              → identity — A2
+containment   agent posted the contents of .env to a public issue
+              → platform — A3
+injection     agent approved a PR because a code comment told it to
+              → provenance — C1.3
+budget        agent looped for 6 hours re-running the same failing test
+              → harness engineer — B2.4
+idempotency   agent opened the same pull request 14 times
+              → harness engineer — B2.9
+capability    agent could not solve the task and correctly reported failure
+              → better model / better context
+patch did not compile, loop retried    → capability — the harness caught it, the loop worked
+patch passed CI, shipped SQLi          → VERIFICATION — the harness shipped wrong work
+patch wrong, accepted, never merged    → verification (contained) — accepted but nothing acted on it
+patch correct                          → not a model failure
+
+The model was equally wrong in the first three. Only one is YOUR defect.
+budget         harness engineer — B2.4          {'verifier_passed': False, 'outcome_wrong': True, 'stopped_by': 'step budget (5 steps)'}
+verification   harness engineer — B2.2          {'verifier_passed': True, 'outcome_wrong': True}
+authority      identity — A2                    {'denied_by_policy': True}
+containment    platform — A3                    {'denied_by_sandbox': True}
+injection      provenance — C1.3                {'instruction_source': 'pull-request-diff'}
+budget         harness engineer — B2.4          {'stopped_by': 'time budget (300s)'}
+idempotency    harness engineer — B2.9          {'duplicate_effect': True}
+success        —                                {'verifier_passed': True, 'outcome_wrong': False}
+
+distribution: {'budget': 2, 'verification': 1, 'authority': 1, 'containment': 1, 'injection': 1, 'idempotency': 1, 'success': 1}

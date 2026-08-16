@@ -1,0 +1,46 @@
+claims-triage-agent: autonomy L2.5, data ['customer', 'health'], external model True
+
+DORA (financial)
+   ICT third-party risk    your model provider is an ICT third party
+   exit strategy           can you stop using this provider and keep operating?
+   resilience testing      your stop mechanism is in scope for testing
+   incident reporting      clocks measured in hours
+
+HIPAA (health)
+   minimum necessary       the context window is a disclosure
+   audit controls          the ACTING identity must be recorded
+
+PCI DSS (cards)
+   access control          non-human identities need the same rigour
+
+7 pre-existing clauses apply. None of them mentions AI.
+provider                      exit strategy
+------------------------------------------------
+hosted frontier API          NOT DEFENSIBLE
+      ⚠ cannot pin a version — behaviour changes without notice
+      ⚠ cannot retain the artefact — no continuity if withdrawn
+      ⚠ 45d to switch — outside most RTOs
+hosted open-weight API       NOT DEFENSIBLE
+      ⚠ cannot retain the artefact — no continuity if withdrawn
+self-hosted open weights         defensible
+
+DORA Art.11 asks this directly. It is the clause most AI procurement
+cannot answer, and it was written years before anyone deployed an agent.
+'ICT third-party risk' (DORA) already applies to us and is owned by third-party risk management.
+   The agent fact that engages it: the model provider is an ICT third party
+   Ask: extend the existing control, not create an AI policy.
+
+'audit controls' (HIPAA) already applies to us and is owned by the security team.
+   The agent fact that engages it: the acting identity is not currently recorded
+   Ask: extend the existing control, not create an AI policy.
+
+'access control' (PCI DSS) already applies to us and is owned by identity and access management.
+   The agent fact that engages it: non-human identities have no recertification
+   Ask: extend the existing control, not create an AI policy.
+
+Compare with the alternative ask:
+   'We need a new AI governance policy and a new committee.'
+   → new owner, new process, new budget line, six months.
+versus
+   'Extend third-party risk to cover model providers.'
+   → existing owner, existing process, next review cycle.

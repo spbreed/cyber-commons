@@ -1,0 +1,47 @@
+src/data
+   units       ['load_report', 'store']
+   entry pts   —
+   talks to    —
+   touches     ['database', 'filesystem']
+
+src/util
+   units       ['render']
+   entry pts   —
+   talks to    —
+   touches     —
+
+src/web
+   units       ['get_report', 'upload_doc']
+   entry pts   ['get_report', 'upload_doc']
+   talks to    ['load_report', 'render', 'store']
+   touches     —
+
+ENTRY POINTS (untrusted input arrives here)
+   get_report     src/web                HTTP request (untrusted)
+   upload_doc     src/web                HTTP request (untrusted)
+
+DATA FLOWS
+   get_report → load_report
+   get_report → render
+   upload_doc → store
+
+SINKS (state changes / external resources)
+   load_report    execute    database
+   store          open       filesystem
+   store          write      filesystem
+TRUST BOUNDARY CROSSINGS
+   get_report → load_report    src/web    → src/data   (trust 0 → 2)
+   get_report → render         src/web    → src/util   (trust 0 → 1)
+   upload_doc → store          src/web    → src/data   (trust 0 → 2)
+
+SINKS REACHABLE FROM AN ENTRY POINT
+   get_report     → load_report    touches database
+   upload_doc     → store          touches filesystem
+   upload_doc     → store          touches filesystem
+entry points before: ['get_report', 'upload_doc']
+entry points after : ['admin_export', 'get_report', 'upload_doc']
+NEW ENTRY POINT    : ['admin_export']
+flows before 3 → after 5
+
+One function added. A new untrusted entry point now reaches both the
+database and the filesystem. That delta is what B1.3 threat-models.

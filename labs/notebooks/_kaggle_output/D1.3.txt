@@ -1,0 +1,26 @@
+history: 522 events, 2 true positives
+rule                                 alerts   prec  recall  alerts/TP
+----------------------------------------------------------------------
+R1 any http_get by an agent             301  0.003   0.500      301.0
+R2 http_get to a non-github host          1  1.000   0.500        1.0
+R3 link-local address                     1  1.000   0.500        1.0
+R4 any failed action                     20  0.000   0.000        inf
+R5 credential path OR link-local          2  1.000   1.000        1.0
+REJECT  R1 any http_get by an agent
+          · 301.0 alerts per true positive (budget 5)
+DEPLOY  R2 http_get to a non-github host
+DEPLOY  R3 link-local address
+REJECT  R4 any failed action
+          · no true positives
+          · inf alerts per true positive (budget 5)
+          · recall 0.0 below 0.5
+DEPLOY  R5 credential path OR link-local
+generated               5
+shipped                 3
+shipped_rules           ['R2 http_get to a non-github host', 'R3 link-local address', 'R5 credential path OR link-local']
+queue_impact_per_day    4
+coverage                1.0
+
+The agent generated 5 rules in seconds. Scoring them against 521 real
+events took milliseconds and rejected 3. That scoring step is the job —
+without it, R1 ships and the SOC stops reading agent alerts within a week.

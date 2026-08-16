@@ -1,0 +1,32 @@
+uniform · model review            spend   28.0  covered 2/6
+      get_report
+      health
+
+allocated by threat rank          spend   23.0  covered 6/6
+      load_report → execute   model review
+      get_report              taint rules
+      store → open            taint rules
+      upload_doc              taint rules
+      render                  taint rules
+      health                  taint rules
+strategy                            coverage   threat-weighted
+----------------------------------------------------------------
+uniform · model review                   33%               27%
+allocated by threat rank                100%              100%
+
+The uniform sweep spent its whole budget alphabetically and covered
+the health endpoint before it reached the SQL sink.
+high-threat targets the uniform sweep never reached: ['load_report → execute', 'store → open', 'upload_doc']
+budget                    30
+spend                     23.0
+threat_weighted_coverage  1.0
+deep_analysis_on          ['load_report → execute']
+uncovered_high_threat     []
+acceptable                True
+
+same budget, if someone doubles the repo with low-risk code:
+   threat-weighted coverage 100% → 90%
+   uncovered high-threat targets: none
+
+Allocation is what stops repository growth from silently degrading
+the analysis of the parts that matter.

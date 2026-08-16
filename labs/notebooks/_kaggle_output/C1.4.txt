@@ -1,0 +1,40 @@
+target built. baseline chain: dana@corp → patch-agent
+id      severity  through  attack
+--------------------------------------------------------------------------
+IDN-01  critical  False    widen scope during delegation
+                           widening: ['deploy:prod'] not in the presented token
+IDN-02  high      False    exceed the recipient's ceiling
+                           above triage-agent's ceiling: ['repo:write']
+IDN-03  high      False    replay an expired token
+                           presented token has expired
+IDN-04  critical  True     impersonate the principal
+                           chain is ['dana@corp'] — the agent is absent
+
+identity-surface ASR: 0.25
+
+Title: Missing act claim validation
+Severity: High
+Detail: By omitting the `act` claim from the token, an agent can present a
+        credential indistinguishable from the principal's.
+Recommendation: Validate that the act claim is present on all agent requests.
+
+Why this gets closed and recurs:
+   · it describes the payload, not the missing control
+   · 'validate the act claim' is implementable and does not fix anything —
+   ·   the agent still HOLDS a principal credential; it just also sends a claim
+   · no reproduction a defender can run on their own build
+   · no statement of what would prove the fix worked
+[IDN-04] CRITICAL — impersonate the principal
+
+  Reproduction   present a token as patch-agent requesting the scopes above
+  Observed       chain is ['dana@corp'] — the agent is absent
+  Missing control
+                 the IdP must refuse to issue a human-subject credential to a workload identity
+  NOT a fix      blocking this specific request shape. The next one differs.
+  Proof of fix   the same reproduction must raise at the issuer, and a regression
+                 case must fail on the current build and pass on the fixed one.
+
+current behaviour                ISSUED — impersonation possible
+with the recommended control     IdP refuses: human-subject credential to a workload identity
+
+The reproduction now fails at the issuer, which is what 'fixed' means.

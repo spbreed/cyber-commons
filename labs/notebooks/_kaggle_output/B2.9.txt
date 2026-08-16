@@ -1,0 +1,39 @@
+APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
+SKIP  issue_refund (key 722b4a84 already applied)
+SKIP  issue_refund (key 722b4a84 already applied)
+APPLY issue_refund {'order': 'ORD-4472', 'amount': 90}
+
+4 calls → 2 effects
+key includes a timestamp — every retry is a new operation:
+APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
+APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
+APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
+→ refunded 750 instead of 250
+
+key includes only the op — different refunds collide:
+APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
+SKIP  issue_refund (key f324acea already applied)
+→ the second customer never got their money
+action          nature                needs a key
+----------------------------------------------------
+set_config      naturally idempotent  False
+add_label       naturally idempotent  False
+post_comment    accumulating          True
+send_email      accumulating          True
+issue_refund    dangerous             True
+rotate_secret   dangerous             True
+scale_cluster   dangerous             True
+
+APPLY set_config {'key': 'tls_min', 'value': '1.2'} (idempotent by nature)
+APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
+APPLY set_config {'key': 'tls_min', 'value': '1.2'} (idempotent by nature)
+SKIP  issue_refund (key 722b4a84 already applied)
+fully instrumented     replayable=True
+typical production     replayable=False
+      ✗ model version not pinned — a silent upgrade changes the output
+      ✗ no seed — sampling makes it unrepeatable
+actions only           replayable=False
+      ✗ prompts not recorded
+      ✗ tool results not recorded — the agent saw a world you cannot rebuild
+      ✗ model version not pinned — a silent upgrade changes the output
+      ✗ no seed — sampling makes it unrepeatable

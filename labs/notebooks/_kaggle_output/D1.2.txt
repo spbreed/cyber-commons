@@ -1,0 +1,36 @@
+BARE ALERT (what most SOCs receive):
+   patch-agent read /vault/.env
+   rotator-agent read /vault/.env
+   → identical. An analyst cannot tell these apart.
+
+ENRICHED ALERT:
+   actor        patch-agent
+   on behalf of dana@corp
+   chain        dana@corp → orchestrator → patch-agent
+   scopes held  ['repo:read', 'repo:write']
+   verdict      ANOMALY — no secrets scope
+
+   actor        rotator-agent
+   on behalf of ops@corp
+   chain        ops@corp → scheduler → rotator-agent
+   scopes held  ['secrets:read', 'secrets:write']
+   verdict      EXPECTED — this agent rotates secrets
+
+agent           no context    with context      truth
+--------------------------------------------------------
+patch-agent     escalate      escalate             tp
+rotator-agent   escalate      close                fp
+
+Without scopes, both escalate → the rotator generates a false positive
+every single night, and within a month the rule is tuned off.
+acting identity     which agent — not the human whose token it borrowed
+principal           who the action was for
+delegation chain    who caused the task; where to look for the trigger
+scopes held         THE decisive field — is this action within its remit?
+tool + target       what it did
+session/trace id    so the analyst can pull the whole run (D1.5)
+
+patch-agent     ESCALATE (outside remit)
+                dana@corp → orchestrator → patch-agent  scopes=['repo:read', 'repo:write']
+rotator-agent   close (within remit)
+                ops@corp → scheduler → rotator-agent  scopes=['secrets:read', 'secrets:write']

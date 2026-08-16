@@ -1,0 +1,20 @@
+A · one agent, everything            blast =  52
+B · one agent, gate the shipping     blast =   6
+C · two agents (fixer / shipper)     blast =   6
+D · two agents + gated shipper       blast =   6
+
+Design D's shipper agent, measured separately:
+    shipper (gated)                  blast =   0
+    shipper (ungated)                blast =  46   ← the honest number
+monolith                   system blast =  52
+split, shipper ungated     system blast =  52
+split, shipper gated       system blast =   6
+
+Splitting alone bought nothing. Splitting AND gating bought everything.
+Reporting only the fixer's number would have hidden that.
+PASS  split + gated shipper      system blast 6 ≤ budget 20 for rung L2.5
+FAIL  split, ungated shipper     system blast 52 > budget 20 for rung L2.5
+FAIL  monolith                   system blast 52 > budget 20 for rung L2.5
+
+Wired into CI, adding a tool now fails the build unless someone either
+gates it or raises the budget deliberately — which is a decision with a name on it.
