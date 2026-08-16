@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.5 — Evaluation output as audit evidence | Cyber Commons</title><meta name="description" content="Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — Governance, Risk, Compliance &amp; the CISO Office › The GRC Practitioner (Risk &amp; Control)</div><div class="sid">E1.5</div><h1>Evaluation output as audit evidence</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge s">Flagship lab</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Accepting a vendor&#x27;s best-of-k demo as assurance; mistaking schema conformance for accuracy.</p></div><div class="ctrl"><div class="lab">Control</div><p>Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Turn an eval report into audit evidence — and find how it could mislead you.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 23 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.5 · Evaluation output as audit evidence</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.5 — Evaluation output as audit evidence | Cyber Commons</title><meta name="description" content="Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — Governance, Risk, Compliance &amp; the CISO Office › The GRC Practitioner (Risk &amp; Control)</div><div class="sid">E1.5</div><h1>Evaluation output as audit evidence</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge s">Flagship lab</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Accepting a vendor&#x27;s best-of-k demo as assurance; mistaking schema conformance for accuracy.</p></div><div class="ctrl"><div class="lab">Control</div><p>Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Turn an eval report into audit evidence — and find how it could mislead you.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 48 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.5 · Evaluation output as audit evidence</h1>
 <p><strong>Function E — Governance, Risk, Compliance &amp; the CISO Office → The GRC Practitioner (Risk &amp; Control)</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.4.html">E1.4 · Control mapping for agents</a></strong>.</p>
 <table>
@@ -128,7 +128,268 @@ print(&quot;\nauditability checklist:&quot;)
 for k, v in CHECKLIST.items():
     print(f&quot;   {&#x27;PASS&#x27; if v else &#x27;FAIL&#x27;}  {k}&quot;)
 assert all(CHECKLIST.values())
-assert test.state(now + 45*DAY) == &quot;STALE&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+assert test.state(now + 45*DAY) == &quot;STALE&quot;</code></pre></div><div class="nbmd"><h2>6 · The evidence pack, as a skill</h2>
+<p>An evaluation result becomes evidence only when it tested the control that is claimed, ran on the system that is <strong>deployed</strong>, and states its failure mode. Most evidence fails the second.</p>
+<p>The contract carries a field most packs would rather not have: <code>conformance_reported</code>. Setting it true should be read as a defect in the evidence, not a feature of it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/control-evidence/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: control-evidence
+description: &gt;-
+  Turn evaluation and monitoring output into audit evidence that survives
+  challenge, and say plainly what it does not prove. Use when asked to evidence
+  a control, prepare for an audit, map evals to a control framework, justify
+  continuous control verification, or interpret a passing test as assurance.
+allowed-tools: Read, Bash
+---
+
+# Evaluation output as audit evidence
+
+An evaluation result is not evidence until three things are true: it tested the
+control that is claimed, it ran on the system that is deployed, and its failure
+mode is stated. Most &quot;evidence&quot; fails the second.
+
+Point-in-time control testing fails for AI systems specifically because the
+thing under test changes between tests — the model, the prompt, the tool set,
+and the data all move independently of any release.
+
+## When to use this
+
+Preparing audit evidence, mapping evals to controls, or reviewing whether a
+green dashboard supports the assurance being claimed from it.
+
+## Procedure
+
+**1 — State the control claim precisely.** &quot;The agent cannot exfiltrate
+customer data&quot; is not testable. &quot;Egress from the agent workload is denied to
+all destinations outside the allowlist, enforced at the gateway&quot; is. Evidence
+is only as good as the sentence it supports.
+
+**2 — Bind evidence to the deployed artefact.** Record the model version, the
+prompt/config hash, the tool allowlist, and the commit — for the system **as
+deployed**, not as tested in a branch. Evidence that cannot be bound to a
+deployed artefact proves something about a different system.
+
+**3 — State the population and the sample.** How many cases exist, how many
+were tested, how they were chosen. A sample chosen by the team that built the
+control is not independent, and that has to be written down rather than
+implied.
+
+**4 — Separate operating effectiveness from outcome.** &quot;The gate ran on every
+request&quot; (operating) is different from &quot;no harmful action got through&quot;
+(outcome). Auditors ask for the first; incidents are caused by the second. Give
+both, labelled.
+
+**5 — Report accuracy, never conformance.** A pipeline whose output is
+schema-valid 100% of the time has demonstrated that its serialiser works.
+Conformance is near-free by construction; accuracy is the expensive,
+interesting number. Any evidence pack leading with a conformance percentage is
+overstating itself, and an auditor who notices will discount everything else in
+it.
+
+**6 — State the blind spots.** What the eval cannot see: cases not in the
+corpus, failure modes not modelled, drift since the run. A control with stated
+limits is stronger evidence than one claiming none.
+
+**7 — Set the re-verification interval from the change rate.** If the model can
+be updated weekly, annual testing evidences a system that no longer exists. Tie
+re-verification to the artefact&#x27;s change events, not the calendar.
+
+## Output contract
+
+```json
+{
+  &quot;control&quot;: {&quot;id&quot;: &quot;str&quot;, &quot;claim&quot;: &quot;str&quot;, &quot;testable&quot;: true},
+  &quot;binding&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;config_hash&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;],
+              &quot;commit&quot;: &quot;str&quot;, &quot;matches_deployed&quot;: true},
+  &quot;sample&quot;: {&quot;population&quot;: 0, &quot;tested&quot;: 0, &quot;selection&quot;: &quot;random|risk_based|convenience&quot;,
+             &quot;independent&quot;: false},
+  &quot;results&quot;: {&quot;operating_effectiveness&quot;: 0.0, &quot;outcome_effectiveness&quot;: 0.0,
+              &quot;accuracy&quot;: 0.0, &quot;conformance_reported&quot;: false},
+  &quot;blind_spots&quot;: [&quot;str&quot;],
+  &quot;reverification&quot;: {&quot;trigger&quot;: &quot;on_model_change|on_config_change|periodic&quot;,
+                     &quot;interval_days&quot;: 0},
+  &quot;conclusion&quot;: {&quot;supports_claim&quot;: true, &quot;limits&quot;: &quot;str&quot;}
+}
+```
+
+`conformance_reported: true` should be treated as a defect in the evidence
+pack, not a feature of it.
+
+## Failure modes
+
+- **Evidence from a branch.** Bind to what is deployed or say you cannot.
+- **A green dashboard as assurance.** Ask what turns it red, and test that.
+- **Convenience sampling presented as coverage.**
+- **Annual re-verification of a weekly-changing artefact.**
+- **Leading with conformance.** The single most common overstatement in
+  automated assurance.
+&quot;&quot;&quot;
+
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>contract = contract_of(body)
+
+pack = {
+ &quot;control&quot;: {&quot;id&quot;: &quot;AI-07&quot;, &quot;claim&quot;: &quot;Egress from the agent workload is denied &quot;
+                                     &quot;to destinations outside the allowlist, &quot;
+                                     &quot;enforced at the gateway&quot;,
+             &quot;testable&quot;: True},
+ &quot;binding&quot;: {&quot;model&quot;: &quot;glm-4.6&quot;, &quot;config_hash&quot;: &quot;sha256:7f3a1c&quot;,
+             &quot;tools&quot;: [&quot;read_file&quot;, &quot;http_get&quot;], &quot;commit&quot;: &quot;6a14d8b&quot;,
+             &quot;matches_deployed&quot;: True},
+ &quot;sample&quot;: {&quot;population&quot;: len(TRUTHS), &quot;tested&quot;: len(TRUTHS),
+            &quot;selection&quot;: &quot;risk_based&quot;, &quot;independent&quot;: False},
+ # r came from evaluate() above: conformance and expert accuracy on the same
+ # run. Only one of them belongs in an evidence pack as a quality number.
+ &quot;results&quot;: {&quot;operating_effectiveness&quot;: 1.0,
+             &quot;outcome_effectiveness&quot;: r[&quot;expert_accuracy&quot;],
+             &quot;accuracy&quot;: r[&quot;expert_accuracy&quot;],
+             # the honest default, and the one line an auditor looks for
+             &quot;conformance_reported&quot;: False},
+ &quot;blind_spots&quot;: [&quot;cases not in the corpus&quot;,
+                 &quot;drift since the run&quot;,
+                 &quot;the sample was chosen by the team that built the control&quot;],
+ &quot;reverification&quot;: {&quot;trigger&quot;: &quot;on_model_change&quot;, &quot;interval_days&quot;: 0},
+ &quot;conclusion&quot;: {&quot;supports_claim&quot;: True,
+                &quot;limits&quot;: &quot;evidences the gateway control only, at this commit&quot;},
+}
+problems = check(pack, contract)
+print(f&quot;conformance: {len(problems)} problem(s)&quot;)
+for p in problems: print(&quot;   &quot;, p)
+assert not problems, problems
+
+print(f&quot;\ncontrol      : {pack[&#x27;control&#x27;][&#x27;id&#x27;]} (testable={pack[&#x27;control&#x27;][&#x27;testable&#x27;]})&quot;)
+print(f&quot;bound to     : {pack[&#x27;binding&#x27;][&#x27;model&#x27;]} @ {pack[&#x27;binding&#x27;][&#x27;commit&#x27;]}, &quot;
+      f&quot;matches deployed={pack[&#x27;binding&#x27;][&#x27;matches_deployed&#x27;]}&quot;)
+print(f&quot;operating    : {pack[&#x27;results&#x27;][&#x27;operating_effectiveness&#x27;]:.0%}   &quot;
+      f&quot;outcome: {pack[&#x27;results&#x27;][&#x27;outcome_effectiveness&#x27;]:.0%}&quot;)
+print(f&quot;sample       : {pack[&#x27;sample&#x27;][&#x27;tested&#x27;]}/{pack[&#x27;sample&#x27;][&#x27;population&#x27;]}, &quot;
+      f&quot;independent={pack[&#x27;sample&#x27;][&#x27;independent&#x27;]}&quot;)
+print(f&quot;re-verify on : {pack[&#x27;reverification&#x27;][&#x27;trigger&#x27;]}&quot;)
+print()
+print(&quot;Operating effectiveness says the gate ran on every request. Outcome&quot;)
+print(&quot;effectiveness says whether anything harmful still got through. Auditors&quot;)
+print(&quot;ask for the first; incidents are caused by the second. Give both,&quot;)
+print(&quot;labelled, or the pack answers a question nobody asked.&quot;)
+assert pack[&quot;results&quot;][&quot;conformance_reported&quot;] is False
+assert pack[&quot;sample&quot;][&quot;independent&quot;] is False   # stated, not hidden</code></pre></div><div class="nbmd"><h2>7 · Where it breaks — the pack that leads with conformance</h2>
+<p>The most common overstatement in automated assurance, and it is usually made in good faith.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>flattering = dict(pack, results=dict(pack[&quot;results&quot;],
+                     accuracy=r[&quot;conformance&quot;], conformance_reported=True))
+print(f&quot;conformance problems: {len(check(flattering, contract))}   &lt;- still zero&quot;)
+print()
+print(f&quot;claimed    : {r[&#x27;conformance&#x27;]:.0%} schema-valid output&quot;)
+print(f&quot;measured   : accuracy {pack[&#x27;results&#x27;][&#x27;accuracy&#x27;]:.0%} on &quot;
+      f&quot;{pack[&#x27;sample&#x27;][&#x27;tested&#x27;]} cases&quot;)
+print()
+print(&quot;Schema validity is near-free by construction: an empty result scores&quot;)
+print(&quot;100%. It is a statement about the serialiser, not about whether the&quot;)
+print(&quot;control works. An auditor who notices the substitution discounts every&quot;)
+print(&quot;other number in the pack, which is the expensive part.&quot;)
+assert not check(flattering, contract), &quot;the flattering pack conforms - that is the point&quot;
+assert flattering[&quot;results&quot;][&quot;conformance_reported&quot;] is True</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Conformance is 1.0000 while expert accuracy lands around 0.81 on 24 held-out questions. Two of four sample claims are defensible. The EV-2 control test passes against a stated 0.80 threshold, is valid for 30 days, and reads STALE at 45 days. All five auditability checks pass.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find an eval number your organisation has quoted, internally or externally, and determine which of the two it was. Then check whether it has an expiry. Most do not, and are still being cited.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.6.html">E1.6 · Operating vs outcome guardrails</a></strong></p>

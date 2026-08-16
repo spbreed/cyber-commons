@@ -15,6 +15,8 @@ and none of the changes that break it are code changes.
     E1.9  model and agent lifecycle governance
 """
 
+from .skills import SKILL_RUNTIME
+
 EXERCISES: dict[str, dict] = {
 
 "E1.1": {
@@ -642,6 +644,83 @@ for k, v in CHECKLIST.items():
     print(f"   {'PASS' if v else 'FAIL'}  {k}")
 assert all(CHECKLIST.values())
 assert test.state(now + 45*DAY) == "STALE"
+'''),
+
+  ("md", "## 6 · The evidence pack, as a skill\n\n"
+         "An evaluation result becomes evidence only when it tested the control "
+         "that is claimed, ran on the system that is **deployed**, and states "
+         "its failure mode. Most evidence fails the second.\n\n"
+         "The contract carries a field most packs would rather not have: "
+         "`conformance_reported`. Setting it true should be read as a defect in "
+         "the evidence, not a feature of it."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "grc/control-evidence"),
+
+  ("py", '''contract = contract_of(body)
+
+pack = {
+ "control": {"id": "AI-07", "claim": "Egress from the agent workload is denied "
+                                     "to destinations outside the allowlist, "
+                                     "enforced at the gateway",
+             "testable": True},
+ "binding": {"model": "glm-4.6", "config_hash": "sha256:7f3a1c",
+             "tools": ["read_file", "http_get"], "commit": "6a14d8b",
+             "matches_deployed": True},
+ "sample": {"population": len(TRUTHS), "tested": len(TRUTHS),
+            "selection": "risk_based", "independent": False},
+ # r came from evaluate() above: conformance and expert accuracy on the same
+ # run. Only one of them belongs in an evidence pack as a quality number.
+ "results": {"operating_effectiveness": 1.0,
+             "outcome_effectiveness": r["expert_accuracy"],
+             "accuracy": r["expert_accuracy"],
+             # the honest default, and the one line an auditor looks for
+             "conformance_reported": False},
+ "blind_spots": ["cases not in the corpus",
+                 "drift since the run",
+                 "the sample was chosen by the team that built the control"],
+ "reverification": {"trigger": "on_model_change", "interval_days": 0},
+ "conclusion": {"supports_claim": True,
+                "limits": "evidences the gateway control only, at this commit"},
+}
+problems = check(pack, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+print(f"\\ncontrol      : {pack['control']['id']} (testable={pack['control']['testable']})")
+print(f"bound to     : {pack['binding']['model']} @ {pack['binding']['commit']}, "
+      f"matches deployed={pack['binding']['matches_deployed']}")
+print(f"operating    : {pack['results']['operating_effectiveness']:.0%}   "
+      f"outcome: {pack['results']['outcome_effectiveness']:.0%}")
+print(f"sample       : {pack['sample']['tested']}/{pack['sample']['population']}, "
+      f"independent={pack['sample']['independent']}")
+print(f"re-verify on : {pack['reverification']['trigger']}")
+print()
+print("Operating effectiveness says the gate ran on every request. Outcome")
+print("effectiveness says whether anything harmful still got through. Auditors")
+print("ask for the first; incidents are caused by the second. Give both,")
+print("labelled, or the pack answers a question nobody asked.")
+assert pack["results"]["conformance_reported"] is False
+assert pack["sample"]["independent"] is False   # stated, not hidden
+'''),
+
+  ("md", "## 7 · Where it breaks — the pack that leads with conformance\n\n"
+         "The most common overstatement in automated assurance, and it is "
+         "usually made in good faith."),
+  ("py", '''flattering = dict(pack, results=dict(pack["results"],
+                     accuracy=r["conformance"], conformance_reported=True))
+print(f"conformance problems: {len(check(flattering, contract))}   <- still zero")
+print()
+print(f"claimed    : {r['conformance']:.0%} schema-valid output")
+print(f"measured   : accuracy {pack['results']['accuracy']:.0%} on "
+      f"{pack['sample']['tested']} cases")
+print()
+print("Schema validity is near-free by construction: an empty result scores")
+print("100%. It is a statement about the serialiser, not about whether the")
+print("control works. An auditor who notices the substitution discounts every")
+print("other number in the pack, which is the expensive part.")
+assert not check(flattering, contract), "the flattering pack conforms - that is the point"
+assert flattering["results"]["conformance_reported"] is True
 '''),
  ],
  "expect": "Conformance is 1.0000 while expert accuracy lands around 0.81 on 24 "

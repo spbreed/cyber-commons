@@ -40,6 +40,8 @@ MODEL_NOTE = """
 > ```
 """
 
+from .skills import SKILL_RUNTIME
+
 EXERCISES: dict[str, dict] = {
 
 "B1.8": {
@@ -482,6 +484,85 @@ top = remediation_order(FINDINGS, ranked)[0]
 print(f"\\nfix first: {top[0]} — own severity {top[1]['own_severity']}, but it "
       f"breaks {top[1]['chains_broken']} chains including a {top[1]['worst_chain']}")
 '''),
+
+  ("md", "## 6 · Phase 4 as a skill — and the preconditions that gate it\n\n"
+         "Dynamic validation is the one phase that *acts*. Everything before it "
+         "reads; this one sends input to a running system. The skill therefore "
+         "opens with safety preconditions rather than a procedure, and a "
+         "refusal is a first-class output.\n\n"
+         "The contract also insists that `reproduced: false` be reported rather "
+         "than dropped. A finding that survived Phase 3 and then failed to "
+         "reproduce is the most useful signal the pipeline produces about its "
+         "own false-positive rate — and it is the one a tidy report deletes."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "appsec/appsec-exploit-validate"),
+
+  ("py", '''contract = contract_of(body)
+
+def validation_of(f):
+    """One confirmed finding, expressed as the skill's validation record."""
+    return {
+      "finding_id": f.fid, "reproduced": True,
+      "sandbox": {"commit": "a1fcf68", "fixture": f"minimal app exposing {f.fid}",
+                  "isolated": True},
+      "input": f"crafted request exercising {f.cwe}",
+      # the observable is the claim; an exit code is not
+      "observable": f.name,
+      "chain": [{"primitive": f.name, "leads_to": g,
+                 "stopped_because": "next step needs a real credential"}
+                for g in sorted(f.grants)],
+      "remediation": {"layer": "query" if f.cwe == "CWE-89" else "api",
+                      "change": f"eliminate the class behind {f.cwe}",
+                      "cost": "low", "retested": True, "still_reproduces": False},
+    }
+
+phase4 = {
+ "validations": [validation_of(f) for f in FINDINGS],
+ # the safety gate, exercised rather than described
+ "refused": [{"finding_id": "F-99", "precondition_failed": 1,
+              "why": "target is a production host, not a sandbox"}],
+}
+problems = check(phase4, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+print(f"\\nvalidated {len(phase4['validations'])} findings, "
+      f"refused {len(phase4['refused'])}")
+for v in phase4["validations"][:3]:
+    print(f"   {v['finding_id']}  chains to: "
+          f"{', '.join(c['leads_to'] for c in v['chain']) or '—'}")
+print()
+print("Refusing is an output, not an error. A validation harness that quietly")
+print("skips the production target reports the same thing as one that never")
+print("saw it, and those are very different states to be in.")
+assert phase4["refused"], "the safety gate must be visible in the output"
+'''),
+
+  ("md", "## 7 · Where it breaks — the tidy report\n\n"
+         "Now suppose two of these findings do not reproduce, and the pipeline "
+         "does the natural thing with them."),
+  ("py", '''mixed = [dict(validation_of(f), reproduced=(i % 3 != 0))
+         for i, f in enumerate(FINDINGS)]
+failed = [v for v in mixed if not v["reproduced"]]
+
+tidy = {"validations": [v for v in mixed if v["reproduced"]], "refused": []}
+honest = {"validations": mixed, "refused": phase4["refused"]}
+
+print(f"conformance, tidy report  : {len(check(tidy, contract))}")
+print(f"conformance, honest report: {len(check(honest, contract))}")
+print(f"\\nvalidations attempted : {len(mixed)}")
+print(f"reproduced            : {len(mixed) - len(failed)}")
+print(f"failed to reproduce   : {len(failed)}  ({', '.join(v['finding_id'] for v in failed)})")
+fpr = len(failed) / len(mixed)
+print(f"measured false-positive rate of Phase 3: {fpr:.0%}")
+print()
+print("Both conform. The tidy one drops the non-reproductions, and with them")
+print("the only number that says how good the earlier phases actually are.")
+print("Its reader sees a pipeline that is right every time.")
+assert not check(tidy, contract), "dropping the failures is schema-valid - that is the point"
+assert failed, "the demo needs at least one non-reproduction"
+'''),
  ],
  "expect": "Six confirmed findings compose into multiple chains. The highest "
            "individual severity is high while the highest chained severity is "
@@ -802,6 +883,91 @@ def report(findings, calibrated, stages, costs):
 
 print(report(FINDINGS, rows, PIPELINE_STAGES, costs))
 assert max(costs, key=costs.get) == "design"
+'''),
+
+  ("md", "## 6 · Stage 15 as a skill — severity you can argue with\n\n"
+         "The reporting skill carries one rule that decides most of the "
+         "credibility of a security report: **a finding that did not reproduce "
+         "may not be Critical.** Cap it at Medium and say so in the same "
+         "sentence, so the reader never has to cross-reference an appendix to "
+         "learn that the headline finding is theoretical.\n\n"
+         "The contract enforces the habit by requiring `severity_inputs` next "
+         "to every severity. One overclaimed Critical costs more trust than ten "
+         "honest Lows."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "appsec/appsec-triage-report"),
+
+  ("py", '''contract = contract_of(body)
+RANK = ["informational", "low", "medium", "high", "critical"]
+
+def calibrated(f):
+    """Severity from evidence, capped when nothing was reproduced."""
+    base = f.rule_severity
+    if not f.confirmed and RANK.index(base) > RANK.index("medium"):
+        return "medium", f"capped from {base}: not reproduced"
+    return base, "as assessed"
+
+demonstrated, asserted = [], []
+for f in FINDINGS:
+    sev, why = calibrated(f)
+    if f.confirmed:
+        demonstrated.append({
+          "finding_id": f.fid, "severity": sev,
+          "severity_inputs": {"reproduced": f.confirmed,
+                              "auth": "user", "sink": f.cwe},
+          "title": f"{f.cwe} in {f.fid}", "impact": f.chains_into or "no demonstrated impact",
+          "observable": f"{f.reachable} path exercised in the sandbox",
+          "fix": f"remove the {f.cwe} class at the query layer",
+          "fix_cost": "low"})
+    else:
+        asserted.append({"finding_id": f.fid, "severity": sev,
+                         "why_not_demonstrated": f"{f.reachable}; {why}"})
+
+summary = {k: 0 for k in RANK}
+for d in demonstrated: summary[d["severity"]] += 1
+for a_ in asserted:    summary[a_["severity"]] += 1
+
+rep = {"report": {
+  "summary": summary,
+  "demonstrated": demonstrated,
+  "asserted": asserted,
+  "scope": {"analysed": [f.fid for f in FINDINGS],
+            "deferred": ["dependencies not in scope"],
+            "blind_spots": ["dynamic dispatch not resolved statically"]},
+  "quality": {"validated": len(demonstrated),
+              "failed_to_reproduce": len(asserted),
+              "false_positive_rate": round(len(asserted) / len(FINDINGS), 2)},
+}}
+problems = check(rep, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+print(f"\\ndemonstrated {len(demonstrated)} · asserted {len(asserted)}")
+for a_ in asserted:
+    print(f"   {a_['finding_id']}  {a_['severity']:8s} {a_['why_not_demonstrated']}")
+print(f"\\nmeasured false-positive rate: {rep['report']['quality']['false_positive_rate']:.0%}")
+'''),
+
+  ("md", "## 7 · Where it breaks — the uncalibrated headline\n\n"
+         "Now report the same findings without the cap."),
+  ("py", '''raw_summary = {k: 0 for k in RANK}
+for f in FINDINGS: raw_summary[f.rule_severity] += 1
+
+print(f"{'severity':14s}{'uncalibrated':>14s}{'calibrated':>12s}")
+for k in reversed(RANK):
+    print(f"{k:14s}{raw_summary[k]:>14d}{summary[k]:>12d}")
+
+inflated = [f.fid for f in FINDINGS
+            if not f.confirmed and RANK.index(f.rule_severity) > RANK.index("medium")]
+print(f"\\nfindings reported above Medium on no evidence: {inflated}")
+print()
+print("Both versions are schema-valid; only one of them is defensible. The")
+print("uncalibrated table leads with Highs that were never reproduced, and the")
+print("reader cannot tell which. The first time one of them turns out to be a")
+print("false positive, every other number in the report is discounted too.")
+assert inflated, "the demo needs at least one finding the cap catches"
+assert summary["high"] < raw_summary["high"]
 '''),
  ],
  "expect": "Calibration moves several findings off their rule severity: the "
@@ -1175,6 +1341,72 @@ print(f"friction added   0.4 of 1.0 — one confirmation before a push")
 assert not any(contained(p) for p in creds)
 print("\\nNo cloud or SSH credential is reachable, the inner loop is unchanged,")
 print("and the only thing a developer notices is a prompt before pushing.")
+'''),
+
+  ("md", "## 6 · The audit, as a skill an agent runs on itself\n\n"
+         "Everything in this lesson is a review someone has to remember to do. "
+         "Written as a skill, it is a review that fires whenever an agent opens "
+         "a repository — including this one.\n\n"
+         "The skill's central instruction is easy to miss and decides the "
+         "outcome: **rate an injection finding by what the allowlist permits, "
+         "not by the text of the injection.** The payload is the attacker's "
+         "choice and costs nothing to change; the allowlist is yours."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "appsec/coding-agent-hardening"),
+
+  ("py", '''contract = contract_of(body)
+
+# What actually reaches a coding agent's context in a normal repository.
+SURFACE = [
+ ("AGENTS.md",             "operator", True),
+ (".claude/settings.json", "operator", True),
+ ("README.md",             "content",  True),
+ ("docs/CONTRIBUTING.md",  "content",  True),
+ ("package.json",          "content",  True),   # a hook may execute its scripts
+ ("vendor/lib/README.md",  "content",  False),
+]
+
+worst = max(DEV_TOOLS, key=lambda t: SCOPE_WEIGHT[t[2]] * (1 if t[3] else 2))
+audit = {
+ "surface": [{"path": p, "control": c, "auto_loaded": a} for p, c, a in SURFACE],
+ "findings": [
+   {"kind": "prompt_injection", "path": "README.md", "grade": "directive",
+    # severity is whatever the most powerful pre-approved tool can do
+    "worst_case": f"content-controlled text triggers {worst[0]} at {worst[2]} scope",
+    "severity": "critical" if not worst[3] else "high",
+    "fix": "quote repository content as data; never as instruction"},
+   {"kind": "unsafe_hook", "path": "package.json", "grade": "directive",
+    "worst_case": "a hook runs a repo-supplied script the moment the repo opens",
+    "severity": "critical",
+    "fix": "pin the hook command; never take it from repository content"},
+   {"kind": "overbroad_tool", "path": ".claude/settings.json", "grade": "advisory",
+    "worst_case": f"{worst[0]} pre-approved with unrestricted arguments",
+    "severity": "high", "fix": "split into narrow tools, or require approval"},
+ ],
+ "allowlist_review": [
+   {"tool": name, "worst_single_call": f"{scope} scope, "
+                                       f"{'reversible' if rev else 'IRREVERSIBLE'}",
+    "bounded": scope in ("self", "project") and rev}
+   for name, writes, scope, rev, _ in DEV_TOOLS if writes],
+}
+problems = check(audit, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+print(f"\\nauto-loaded, content-controlled inputs: "
+      f"{[s['path'] for s in audit['surface'] if s['control']=='content' and s['auto_loaded']]}")
+print(f"most powerful pre-approved tool      : {worst[0]} ({worst[2]} scope)")
+print("\\nallowlist:")
+for r in audit["allowlist_review"]:
+    print(f"   {r['tool']:12s}{r['worst_single_call']:34s}bounded={r['bounded']}")
+unbounded = [r["tool"] for r in audit["allowlist_review"] if not r["bounded"]]
+print(f"\\nunbounded pre-approved tools: {unbounded}")
+print()
+print("The injection finding is Critical not because the README says anything")
+print("clever, but because a directive path exists to a tool that cannot be")
+print("undone. Rewrite the payload and the severity does not move.")
+assert unbounded, "an unbounded pre-approved tool should be visible here"
 '''),
  ],
  "expect": "The default developer agent scores a blast radius of 43 and can reach "

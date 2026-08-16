@@ -16,6 +16,8 @@ Three things change when the actor is an agent, and each has a lesson:
     D2.8  the regulatory clock
 """
 
+from .skills import SKILL_RUNTIME
+
 EXERCISES: dict[str, dict] = {
 
 "D2.1": {
@@ -364,6 +366,67 @@ def scope_statement(chain, reached, shared):
             f"  in scope, not confirmed (shared a resource):\\n"
             f"                     {t['second_order_actors']}")
 print(scope_statement(CHAIN, REACHED, SHARED))
+'''),
+
+  ("md", "## 6 · Scoping as a skill\n\n"
+         "Scoping a human incident asks where someone logged in. Scoping this "
+         "one asks what the agent **decided** — every action was individually "
+         "authorised, so nothing looks wrong at the authentication layer.\n\n"
+         "Two fields in the contract carry most of the weight. `reach` and "
+         "`confirmed_exfiltration` are separate numbers, because reach is the "
+         "scope until proven otherwise and the smaller number must never stand "
+         "in for the larger in a notification decision. And `does_not_stop` "
+         "makes containment state its own limits."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "secops/incident-scoping"),
+
+  ("py", '''contract = contract_of(body)
+t = scope_transitive(CHAIN, REACHED, SHARED)
+reach = sorted({r for a in CHAIN for r in REACHED.get(a, [])})
+
+incident = {
+ "window": {"first_suspicious_action": f"{CHAIN[1]} accepted an external instruction",
+            "detected_at": "the deploy that followed",
+            # the trigger precedes the detection by about one task loop
+            "gap_seconds": 42 * 60},
+ "chain": [{"action": f"{a} acted", "motivating_input": "issue comment"
+                      if a == CHAIN[1] else f"instruction from {CHAIN[i]}",
+            "input_origin": "external_untrusted" if a == CHAIN[1] else "internal",
+            "within_authority": True}
+           for i, a in enumerate(CHAIN[1:])],
+ "root_cause": {"input": "issue comment on a public tracker",
+                "origin": "external_untrusted",
+                "why_trusted": "repository content was read as instruction, not data"},
+ # every action was permitted; that is what makes this hard
+ "authority": {"authorised_but_wrong": len(CHAIN) - 1, "exceeded_authority": 0},
+ "data": {"reach": reach, "confirmed_exfiltration": [],
+          "egress_bounded_by": "agent network policy"},
+ "containment": {"cut": "credential",
+                 "does_not_stop": sorted(t["second_order_actors"]),
+                 "evidence_snapshotted_first": True},
+ "clock": {"regulatory_trigger": False,
+           "basis": "no confirmed exfiltration of personal data yet"},
+}
+problems = check(incident, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+print(f"\\nauthorised but wrong : {incident['authority']['authorised_but_wrong']}")
+print(f"exceeded authority   : {incident['authority']['exceeded_authority']}")
+print(f"reach                : {len(reach)} resources")
+print(f"confirmed exfil      : {len(incident['data']['confirmed_exfiltration'])}")
+print(f"revoking one credential does NOT stop: "
+      f"{incident['containment']['does_not_stop'] or 'nothing else'}")
+print()
+print("Zero actions exceeded authority, and the incident still happened. That")
+print("combination says the grant was too broad - a different fix from a")
+print("control that failed, which is why the contract counts them separately.")
+print()
+print("Reach is 4 resources; confirmed exfiltration is 0. Reporting the second")
+print("as the scope is how a notification decision gets made on the wrong number.")
+assert incident["authority"]["exceeded_authority"] == 0
+assert len(reach) > len(incident["data"]["confirmed_exfiltration"])
 '''),
  ],
  "expect": "Scoping the last actor finds `cluster-prod` alone; the whole chain "

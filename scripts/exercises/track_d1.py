@@ -19,6 +19,8 @@ MODEL_NOTE = """
 > ```
 """
 
+from .skills import SKILL_RUNTIME
+
 EXERCISES: dict[str, dict] = {
 
 "D1.1": {
@@ -281,6 +283,72 @@ for actor, tok in AGENTS.items():
 
 assert enrich(EVENT, AGENTS["patch-agent"], "x")["within_remit"] is False
 assert enrich(EVENT, AGENTS["rotator-agent"], "x")["within_remit"] is True
+'''),
+
+  ("md", "## 6 · Triage as a skill — and the sample that keeps it honest\n\n"
+         "Context turns a guess into a verdict. Automating the verdict without "
+         "automating the audit of it is how a closing rule quietly starts "
+         "closing real incidents.\n\n"
+         "The skill therefore requires a sampling rule over anything "
+         "auto-closed, and requires its seed to come from something **stable**. "
+         "Sampling seeded from `hash()` picks a different subset on every run, "
+         "so you can never tell whether a change in findings came from the rule "
+         "or from the dice."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "secops/detection-triage"),
+
+  ("py", '''contract = contract_of(body)
+import zlib
+
+ALERTS = [("A-1", "patch-agent"), ("A-2", "rotator-agent"), ("A-3", "patch-agent"),
+          ("A-4", "rotator-agent"), ("A-5", "patch-agent"), ("A-6", "rotator-agent")]
+SAMPLE_RATE = 0.34
+
+def sampled(alert_id):
+    # crc32, never hash(): Python randomises string hashing per process, so a
+    # hash()-seeded sampler is unauditable by construction
+    return (zlib.crc32(alert_id.encode()) % 100) < SAMPLE_RATE * 100
+
+triaged = []
+for aid, agent in ALERTS:
+    ctx = enrich(EVENT, AGENTS[agent], aid)
+    within = ctx["within_remit"]
+    triaged.append({
+      "alert_id": aid,
+      # reading /vault/.env is real either way; whether it is *fine* is decided
+      # by the acting identity's remit, which is the context field that matters
+      "verdict": "benign_true_positive" if within else "true_positive",
+      "deciding_context": "identity",
+      "reason": f"{ctx['acting_identity']} scopes {ctx['scopes']}",
+      "confidence": 0.9 if within else 0.95,
+      "auto_closed": within,
+      "sampled_for_review": within and sampled(aid)})
+
+reviewed = [t for t in triaged if t["sampled_for_review"]]
+triage = {
+ "triaged": triaged,
+ "sampling": {"rate": SAMPLE_RATE, "seed_source": "zlib.crc32(alert_id)",
+              "reviewed": len(reviewed), "disagreements": 0},
+ "tuning": [{"rule": "vault-file-read", "fp_rate": 0.0,
+             "volume": len(ALERTS), "priority": 0.0}],
+}
+problems = check(triage, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+for t in triaged:
+    print(f"   {t['alert_id']}  {t['verdict']:20s} auto_closed={str(t['auto_closed']):5s} "
+          f"sampled={t['sampled_for_review']}")
+print(f"\\nauto-closed {sum(t['auto_closed'] for t in triaged)}, "
+      f"of which {len(reviewed)} sampled back for human review")
+print()
+print("`benign_true_positive` is its own verdict. Folding it into false-positive")
+print("would teach the tuner to suppress a detection that is working exactly as")
+print("designed - the read really happened, it was simply within remit.")
+assert any(t["verdict"] == "benign_true_positive" for t in triaged)
+assert any(t["verdict"] == "true_positive" for t in triaged)
+assert reviewed, "auto-closing with no sample is a rule with no error bar"
 '''),
  ],
  "expect": "The bare alert is identical for both agents. Enriched, the "

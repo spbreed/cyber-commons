@@ -13,6 +13,8 @@ Narrative arc, deliberately built from the familiar to the new:
     A2.9  the classic failures, now at machine speed
 """
 
+from .skills import SKILL_RUNTIME
+
 EXERCISES: dict[str, dict] = {
 
 "A2.1": {
@@ -848,6 +850,88 @@ for _ in range(1500):
 print(f"{built} successful hops across 1500 random chains — widening violations: {violations}")
 assert violations == 0
 print("Invariant holds: authority can only shrink, on every path.")
+'''),
+
+  ("md", "## 6 · The review, as a skill\n\n"
+         "Two narrowing rules decide whether a delegation is safe, and the "
+         "common failure is checking one of them. **Subset-of-presented** alone "
+         "lets a highly privileged user hand an agent authority the agent should "
+         "never hold. **Within-actor-ceiling** alone lets an agent exceed the "
+         "user who asked. Neither is sufficient; the skill requires both, and "
+         "its contract has a field for each so a review cannot quietly skip one."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "identity/agent-identity-review"),
+
+  ("py", '''contract = contract_of(body)
+
+user  = mint("dana@corp", {"repo:read", "repo:write", "deploy:prod"})
+agent = exchange(user,  "orchestrator", {"repo:read", "repo:write", "deploy:prod"})
+leaf  = exchange(agent, "patch-agent",  {"repo:read", "repo:write"})
+
+presented = set(agent.scopes)
+review = {
+ "identities": {"user": leaf.sub, "workload": leaf.actor,
+                "assertion": "RFC 8693 token exchange"},
+ "delegation": {
+   "mechanism": "obo",
+   "subset_of_presented": leaf.scopes <= presented,
+   "within_actor_ceiling": leaf.scopes <= CEILINGS[leaf.actor],
+   "chain": leaf.chain(),
+   # the head must appear once: alice -> alice -> agent breaks every audit
+   # query that counts hops
+   "chain_wellformed": len(leaf.chain()) == len(set(leaf.chain())),
+   "ttl_seconds": leaf.ttl, "revocable": True},
+ "chokepoints": [
+   {"downstream": "legacy reporting DB", "reason": "cannot consume a delegated token",
+    "enforced_at": "gateway", "credential_reachable_by_agent": False}],
+ "audit": {"question": "which user caused this row to be deleted?",
+           "answerable_from_logs": True},
+ "findings": [],
+}
+if not review["delegation"]["within_actor_ceiling"]:
+    review["findings"].append({"issue": "issued scope exceeds the actor ceiling",
+                               "severity": "critical", "fix": "intersect with the ceiling"})
+
+problems = check(review, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+d = review["delegation"]
+print(f"\\nchain            : {' -> '.join(d['chain'])}")
+print(f"subset of presented : {d['subset_of_presented']}")
+print(f"within ceiling      : {d['within_actor_ceiling']}")
+print(f"chain well-formed   : {d['chain_wellformed']}")
+assert d["subset_of_presented"] and d["within_actor_ceiling"]
+assert d["chain_wellformed"]
+'''),
+
+  ("md", "## 7 · Where it breaks — checking only one rule\n\n"
+         "A privileged user asks a limited agent to do something."),
+  ("py", '''privileged = mint("dana@corp", CEILINGS["dana@corp"])   # includes secrets:read
+requested  = {"repo:read", "secrets:read"}
+
+# A gateway that only checks "is this a subset of what the user presented?" --
+# the check exchange() does first, in isolation from the one it does second.
+subset_only = requested <= privileged.scopes
+# The rule it skipped.
+ceiling_ok  = requested <= CEILINGS["patch-agent"]
+
+print(f"user presents        : {sorted(privileged.scopes)}")
+print(f"requested for agent  : {sorted(requested)}")
+print(f"patch-agent ceiling  : {sorted(CEILINGS['patch-agent'])}")
+print(f"\\nsubset-of-presented  : {subset_only}")
+print(f"within-actor-ceiling : {ceiling_ok}")
+print()
+print("Subset-only says yes. The agent would hold secrets:read because the")
+print("*user* could have read secrets - authority the agent is never allowed")
+print("to hold, delegated legitimately, and it will look correct in the log.")
+print()
+print("Both rules, every time. The intersection is the only safe issue.")
+safe = requested & CEILINGS["patch-agent"]
+print(f"correct issued scope : {sorted(safe)}")
+assert subset_only and not ceiling_ok, "this is the exact gap the second rule closes"
+assert safe < requested
 '''),
  ],
  "expect": "Four tokens print with strictly narrowing scopes and readable chains "

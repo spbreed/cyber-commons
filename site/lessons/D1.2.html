@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.2 — Context that makes triage work | Cyber Commons</title><meta name="description" content="Feed the baseline, known FPs, crown-jewel map and prior decisions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.2</div><h1>Context that makes triage work</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Generic triage agents underperform your worst analyst.</p></div><div class="ctrl"><div class="lab">Control</div><p>Feed the baseline, known FPs, crown-jewel map and prior decisions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Show a context-loaded triage loop beating a generic one.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 36 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.2 · Context that makes triage work</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.2 — Context that makes triage work | Cyber Commons</title><meta name="description" content="Feed the baseline, known FPs, crown-jewel map and prior decisions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.2</div><h1>Context that makes triage work</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Generic triage agents underperform your worst analyst.</p></div><div class="ctrl"><div class="lab">Control</div><p>Feed the baseline, known FPs, crown-jewel map and prior decisions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Show a context-loaded triage loop beating a generic one.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 53 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.2 · Context that makes triage work</h1>
 <p><strong>Function D — Security Operations → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · From alert queue to loop operator</a></strong>.</p>
 <table>
@@ -113,7 +113,254 @@ for actor, tok in AGENTS.items():
     print(f&quot;{&#x27;&#x27;:16s}{e[&#x27;chain&#x27;]}  scopes={e[&#x27;scopes&#x27;]}&quot;)
 
 assert enrich(EVENT, AGENTS[&quot;patch-agent&quot;], &quot;x&quot;)[&quot;within_remit&quot;] is False
-assert enrich(EVENT, AGENTS[&quot;rotator-agent&quot;], &quot;x&quot;)[&quot;within_remit&quot;] is True</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+assert enrich(EVENT, AGENTS[&quot;rotator-agent&quot;], &quot;x&quot;)[&quot;within_remit&quot;] is True</code></pre></div><div class="nbmd"><h2>6 · Triage as a skill — and the sample that keeps it honest</h2>
+<p>Context turns a guess into a verdict. Automating the verdict without automating the audit of it is how a closing rule quietly starts closing real incidents.</p>
+<p>The skill therefore requires a sampling rule over anything auto-closed, and requires its seed to come from something <strong>stable</strong>. Sampling seeded from <code>hash()</code> picks a different subset on every run, so you can never tell whether a change in findings came from the rule or from the dice.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/secops/detection-triage/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: detection-triage
+description: &gt;-
+  Triage security alerts with the context needed to reach a defensible verdict,
+  and sample what is auto-closed so the closing rule stays honest. Use when
+  working an alert queue, deciding whether an alert is a true positive, tuning
+  a noisy detection, or designing automated alert handling.
+allowed-tools: Read, Grep, Bash
+---
+
+# Alert triage with context
+
+An analyst reading an alert in isolation is guessing. The verdict comes from
+the alert **plus** the context that makes it normal or abnormal, and most
+triage automation fails because it automated the guess instead of the context.
+
+## When to use this
+
+Working an alert queue, building an auto-close rule, or reviewing why a
+detection produces verdicts nobody trusts.
+
+## Procedure
+
+**1 — Gather the context before judging.** For every alert, assemble:
+
+- **asset** — what it is, who owns it, how exposed it is
+- **identity** — human or workload, and its normal behaviour
+- **history** — has this fired before on this asset, and how was it resolved
+- **change** — was there a deploy, a migration, a new agent, in the window
+- **peers** — did the same thing fire elsewhere at the same time
+
+A verdict issued without `history` will re-litigate a decision the team already
+made, which is the most common way triage automation loses trust.
+
+**2 — Reach a verdict, with the reason.** One of `true_positive`,
+`false_positive`, `benign_true_positive` (it really happened and it is fine),
+or `needs_human`. Record which context field decided it. &quot;Benign true positive&quot;
+is a distinct category and collapsing it into false-positive corrupts every
+tuning decision made from the data afterwards.
+
+**3 — Attach confidence, and let it gate automation.** Only high-confidence
+verdicts may auto-close. Everything else queues.
+
+**4 — Sample the auto-closed.** Automation that closes alerts must be audited
+by re-opening a fraction of them for human review. This is the control that
+catches a closing rule that has quietly started closing real incidents.
+
+Seed the sampler from something **stable** — a checksum of the alert id, never
+`hash()`, which Python randomises per process. A sampling rule that picks a
+different subset every run cannot be audited, because you cannot tell whether a
+change in findings came from the rule or from the dice.
+
+**5 — Feed tuning from verdicts, not volume.** A detection is noisy if its
+false-positive rate is high, not if it fires often. Rank tuning candidates by
+`false_positive_rate × volume`, with a full tiebreak so the list is stable
+between runs.
+
+## Output contract
+
+```json
+{
+  &quot;triaged&quot;: [
+    {&quot;alert_id&quot;: &quot;str&quot;, &quot;verdict&quot;: &quot;true_positive|false_positive|benign_true_positive|needs_human&quot;,
+     &quot;deciding_context&quot;: &quot;asset|identity|history|change|peers&quot;,
+     &quot;reason&quot;: &quot;str&quot;, &quot;confidence&quot;: 0.0,
+     &quot;auto_closed&quot;: false, &quot;sampled_for_review&quot;: false}
+  ],
+  &quot;sampling&quot;: {&quot;rate&quot;: 0.0, &quot;seed_source&quot;: &quot;str&quot;, &quot;reviewed&quot;: 0, &quot;disagreements&quot;: 0},
+  &quot;tuning&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;fp_rate&quot;: 0.0, &quot;volume&quot;: 0, &quot;priority&quot;: 0.0}]
+}
+```
+
+`disagreements` is the number that matters: it is the measured error rate of
+the automation, and it belongs in every report about it.
+
+## Failure modes
+
+- **Auto-closing without sampling.** The rule then has no error bar and no way
+  to acquire one.
+- **Seeding the sampler from `hash()`.** Non-reproducible sampling is not a
+  control.
+- **Folding benign-true-positive into false-positive.** It teaches the tuner to
+  suppress a working detection.
+- **Removing `needs_human`.** Forced verdicts under uncertainty are how a queue
+  becomes an incident.
+&quot;&quot;&quot;
+
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>contract = contract_of(body)
+import zlib
+
+ALERTS = [(&quot;A-1&quot;, &quot;patch-agent&quot;), (&quot;A-2&quot;, &quot;rotator-agent&quot;), (&quot;A-3&quot;, &quot;patch-agent&quot;),
+          (&quot;A-4&quot;, &quot;rotator-agent&quot;), (&quot;A-5&quot;, &quot;patch-agent&quot;), (&quot;A-6&quot;, &quot;rotator-agent&quot;)]
+SAMPLE_RATE = 0.34
+
+def sampled(alert_id):
+    # crc32, never hash(): Python randomises string hashing per process, so a
+    # hash()-seeded sampler is unauditable by construction
+    return (zlib.crc32(alert_id.encode()) % 100) &lt; SAMPLE_RATE * 100
+
+triaged = []
+for aid, agent in ALERTS:
+    ctx = enrich(EVENT, AGENTS[agent], aid)
+    within = ctx[&quot;within_remit&quot;]
+    triaged.append({
+      &quot;alert_id&quot;: aid,
+      # reading /vault/.env is real either way; whether it is *fine* is decided
+      # by the acting identity&#x27;s remit, which is the context field that matters
+      &quot;verdict&quot;: &quot;benign_true_positive&quot; if within else &quot;true_positive&quot;,
+      &quot;deciding_context&quot;: &quot;identity&quot;,
+      &quot;reason&quot;: f&quot;{ctx[&#x27;acting_identity&#x27;]} scopes {ctx[&#x27;scopes&#x27;]}&quot;,
+      &quot;confidence&quot;: 0.9 if within else 0.95,
+      &quot;auto_closed&quot;: within,
+      &quot;sampled_for_review&quot;: within and sampled(aid)})
+
+reviewed = [t for t in triaged if t[&quot;sampled_for_review&quot;]]
+triage = {
+ &quot;triaged&quot;: triaged,
+ &quot;sampling&quot;: {&quot;rate&quot;: SAMPLE_RATE, &quot;seed_source&quot;: &quot;zlib.crc32(alert_id)&quot;,
+              &quot;reviewed&quot;: len(reviewed), &quot;disagreements&quot;: 0},
+ &quot;tuning&quot;: [{&quot;rule&quot;: &quot;vault-file-read&quot;, &quot;fp_rate&quot;: 0.0,
+             &quot;volume&quot;: len(ALERTS), &quot;priority&quot;: 0.0}],
+}
+problems = check(triage, contract)
+print(f&quot;conformance: {len(problems)} problem(s)&quot;)
+for p in problems: print(&quot;   &quot;, p)
+assert not problems, problems
+
+for t in triaged:
+    print(f&quot;   {t[&#x27;alert_id&#x27;]}  {t[&#x27;verdict&#x27;]:20s} auto_closed={str(t[&#x27;auto_closed&#x27;]):5s} &quot;
+          f&quot;sampled={t[&#x27;sampled_for_review&#x27;]}&quot;)
+print(f&quot;\nauto-closed {sum(t[&#x27;auto_closed&#x27;] for t in triaged)}, &quot;
+      f&quot;of which {len(reviewed)} sampled back for human review&quot;)
+print()
+print(&quot;`benign_true_positive` is its own verdict. Folding it into false-positive&quot;)
+print(&quot;would teach the tuner to suppress a detection that is working exactly as&quot;)
+print(&quot;designed - the read really happened, it was simply within remit.&quot;)
+assert any(t[&quot;verdict&quot;] == &quot;benign_true_positive&quot; for t in triaged)
+assert any(t[&quot;verdict&quot;] == &quot;true_positive&quot; for t in triaged)
+assert reviewed, &quot;auto-closing with no sample is a rule with no error bar&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The bare alert is identical for both agents. Enriched, the secrets-rotation agent is within remit and the patch agent is not. Context-free triage escalates both — generating a nightly false positive — while scope-aware triage matches ground truth on both.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check which of the six fields your agent telemetry carries today. Scopes-held is the one almost nobody logs, and it is the one that decides the alert.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Agent-assisted detection engineering</a></strong></p>

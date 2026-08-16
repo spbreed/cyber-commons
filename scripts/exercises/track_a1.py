@@ -13,6 +13,8 @@ autonomy ladder) that the other 98 lessons reuse. From there:
     A1.7  model routing         why the cheap model must not hold the tools
 """
 
+from .skills import SKILL_RUNTIME
+
 EXERCISES: dict[str, dict] = {
 
 "A1.1": {
@@ -644,6 +646,69 @@ ok, _ = check_budget(split_gated, "L2.5")
 assert ok, "the intended design must pass its own budget"
 print("\\nWired into CI, adding a tool now fails the build unless someone either")
 print("gates it or raises the budget deliberately — which is a decision with a name on it.")
+'''),
+
+  ("md", "## 6 · The review, written down as a skill\n\n"
+         "A number computed once is a fact about today. The skill below is the "
+         "same computation as a procedure someone else can run, and its "
+         "contract requires `blast_radius.inputs` beside the score.\n\n"
+         "That requirement is the point: a metric nobody can decompose is a "
+         "metric nobody can challenge, and an unchallengeable metric quietly "
+         "stops being used."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "architecture/blast-radius-review"),
+
+  ("py", '''contract = contract_of(body)
+TOOLS = READ + FIX + SHIP
+
+def irreversibility(t):
+    if not t.writes:      return 0                      # read-only
+    if t.reversible:      return 1 if t.scope in ("self", "project") else 2
+    return 3                                            # irreversible
+
+# An agent that runs unattended overnight has a much longer path to a human
+# than one that prompts. This term is usually the cheapest of the three to fix.
+TIME_TO_STOP = 8 * 60 * 60
+
+review = {
+ "resources": [{"tool": t.name, "reachable": [t.scope],
+                "unbounded": t.scope in ("org", "internet")} for t in TOOLS],
+ "actions": [{"action": t.name, "irreversibility": irreversibility(t),
+              "why": ("read-only" if not t.writes else
+                      f"writes at {t.scope} scope, "
+                      f"{'reversible' if t.reversible else 'irreversible'}")}
+             for t in TOOLS],
+ "time_to_human_stop_seconds": TIME_TO_STOP,
+ "blast_radius": {"score": blast(TOOLS),
+                  "inputs": {"resources": len(TOOLS),
+                             "max_irreversibility": max(irreversibility(t) for t in TOOLS),
+                             "seconds": TIME_TO_STOP}},
+ "autonomy": {"current": "L3", "supported": "L2.5", "mismatch": True},
+ "reductions": [{"change": f"gate {t.name} behind approval",
+                 "new_score": blast(TOOLS, gated=frozenset({t.name})),
+                 "friction": "low"}
+                for t in TOOLS if irreversibility(t) == 3],
+}
+problems = check(review, contract)
+print(f"conformance: {len(problems)} problem(s)")
+for p in problems: print("   ", p)
+assert not problems, problems
+
+print(f"\\nblast radius {review['blast_radius']['score']} from "
+      f"{review['blast_radius']['inputs']['resources']} tools, worst action grade "
+      f"{review['blast_radius']['inputs']['max_irreversibility']}")
+print(f"autonomy claimed {review['autonomy']['current']}, "
+      f"supported {review['autonomy']['supported']} -> mismatch "
+      f"{review['autonomy']['mismatch']}")
+print("\\ncheapest reductions:")
+for r in sorted(review["reductions"], key=lambda r: (r["new_score"], r["change"])):
+    print(f"   {r['change']:38s} {review['blast_radius']['score']} -> {r['new_score']}")
+print()
+print("The mismatch is the finding. Grade-3 actions are why approval gates")
+print("exist, and an agent running unattended with one is at L3 by deployment")
+print("and L2.5 by design - misclassified, not brave.")
+assert review["autonomy"]["mismatch"]
+assert any(a["irreversibility"] == 3 for a in review["actions"])
 '''),
  ],
  "expect": "Design A scores 92, B scores 6, C scores 6. Measured across the whole "

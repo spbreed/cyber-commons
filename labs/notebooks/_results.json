@@ -5,8 +5,8 @@
  "notebooks": 108,
  "passed": 108,
  "failed": 0,
- "total_seconds": 5.92,
- "total_output_lines": 3955,
+ "total_seconds": 5.9,
+ "total_output_lines": 4125,
  "results": [
   {
    "session": "A1.1",
@@ -46,11 +46,11 @@
    "ok": true,
    "returncode": 0,
    "seconds": 0.03,
-   "stdout_lines": 20,
-   "stdout_chars": 1013,
+   "stdout_lines": 36,
+   "stdout_chars": 1580,
    "error": "",
-   "code_cells": 3,
-   "markdown_cells": 8
+   "code_cells": 6,
+   "markdown_cells": 9
   },
   {
    "session": "A1.5",
@@ -134,11 +134,11 @@
    "ok": true,
    "returncode": 0,
    "seconds": 0.05,
-   "stdout_lines": 28,
-   "stdout_chars": 1559,
+   "stdout_lines": 51,
+   "stdout_chars": 2410,
    "error": "",
-   "code_cells": 5,
-   "markdown_cells": 9
+   "code_cells": 9,
+   "markdown_cells": 11
   },
   {
    "session": "A2.6",
@@ -254,7 +254,7 @@
    "session": "A3.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.03,
    "stdout_lines": 17,
    "stdout_chars": 988,
    "error": "",
@@ -265,7 +265,7 @@
    "session": "A3.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.85,
+   "seconds": 0.84,
    "stdout_lines": 33,
    "stdout_chars": 2196,
    "error": "",
@@ -288,17 +288,17 @@
    "ok": true,
    "returncode": 0,
    "seconds": 0.03,
-   "stdout_lines": 45,
-   "stdout_chars": 2365,
+   "stdout_lines": 70,
+   "stdout_chars": 3271,
    "error": "",
-   "code_cells": 4,
-   "markdown_cells": 9
+   "code_cells": 8,
+   "markdown_cells": 11
   },
   {
    "session": "B1.11",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.02,
    "stdout_lines": 31,
    "stdout_chars": 1717,
    "error": "",
@@ -310,11 +310,11 @@
    "ok": true,
    "returncode": 0,
    "seconds": 0.03,
-   "stdout_lines": 60,
-   "stdout_chars": 2451,
+   "stdout_lines": 85,
+   "stdout_chars": 3445,
    "error": "",
-   "code_cells": 4,
-   "markdown_cells": 9
+   "code_cells": 8,
+   "markdown_cells": 11
   },
   {
    "session": "B1.13",
@@ -343,11 +343,11 @@
    "ok": true,
    "returncode": 0,
    "seconds": 0.02,
-   "stdout_lines": 41,
-   "stdout_chars": 2598,
+   "stdout_lines": 62,
+   "stdout_chars": 3489,
    "error": "",
-   "code_cells": 4,
-   "markdown_cells": 7
+   "code_cells": 7,
+   "markdown_cells": 8
   },
   {
    "session": "B1.16",
@@ -750,11 +750,11 @@
    "ok": true,
    "returncode": 0,
    "seconds": 0.03,
-   "stdout_lines": 36,
-   "stdout_chars": 1557,
+   "stdout_lines": 53,
+   "stdout_chars": 2339,
    "error": "",
-   "code_cells": 3,
-   "markdown_cells": 8
+   "code_cells": 6,
+   "markdown_cells": 9
   },
   {
    "session": "D1.3",
@@ -848,12 +848,12 @@
    "session": "D2.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.01,
-   "stdout_lines": 32,
-   "stdout_chars": 1996,
+   "seconds": 0.02,
+   "stdout_lines": 50,
+   "stdout_chars": 2715,
    "error": "",
-   "code_cells": 4,
-   "markdown_cells": 8
+   "code_cells": 7,
+   "markdown_cells": 9
   },
   {
    "session": "D2.4",
@@ -959,11 +959,11 @@
    "ok": true,
    "returncode": 0,
    "seconds": 0.03,
-   "stdout_lines": 23,
-   "stdout_chars": 1093,
+   "stdout_lines": 48,
+   "stdout_chars": 2078,
    "error": "",
-   "code_cells": 3,
-   "markdown_cells": 8
+   "code_cells": 7,
+   "markdown_cells": 10
   },
   {
    "session": "E1.6",
