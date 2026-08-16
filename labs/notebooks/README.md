@@ -1,19 +1,24 @@
 # Lesson notebooks
 
-One Python notebook per curriculum session — **104 of them**, generated from the
+One Python notebook per curriculum session — **108 of them**, generated from the
 single source of truth and executed in CI before they ship.
 
+Each notebook is **self-contained**: it carries every line of code it runs. No
+shared library, nothing to clone, no `pip install`. That is what lets it execute
+on a Kaggle kernel with the internet switched off, and it means you can lift one
+cell into your own repository without inheriting a dependency. The build refuses
+any notebook that imports outside the standard library.
+
 ```
-labs/notebooks/<SESSION>.ipynb     e.g. A2.5.ipynb, M0.4.ipynb, B2.10.ipynb
+labs/notebooks/<SESSION>.ipynb     e.g. A2.5.ipynb, B1.16.ipynb, B2.10.ipynb
 labs/notebooks/_results.json       execution evidence, written by run_notebooks.py
 ```
 
 ## Running one
 
 **In your browser, no setup —** open the lesson page and press **▶ Run on
-Kaggle**. It creates the notebook as a new kernel in *your own* Kaggle account;
-the first cell clones this repository so the lab library is available. Nothing
-is written back here.
+Kaggle**. It creates the notebook as a new kernel in *your own* Kaggle account
+and runs it there. Nothing is written back here.
 
 **Locally —**
 
@@ -26,25 +31,27 @@ jupyter notebook labs/notebooks/A2.5.ipynb
 
 ```bash
 python3 scripts/run_notebooks.py --session A2.5
-python3 scripts/run_notebooks.py              # all 104, writes _results.json
+python3 scripts/run_notebooks.py              # all 108, writes _results.json
 ```
 
 ## What they run against
 
-Every notebook imports [`labs/cybercommons`](../cybercommons), the shared lab
-library. It is **standard library only** — a deliberate constraint, so the
-notebooks run on a Kaggle kernel with the internet switched off, on an
-air-gapped laptop, and in CI, with nothing to install and no API key.
+Nothing but the Python standard library.
 
-Where a lesson names a real tool you would actually deploy — Falco, OPA, SPIRE,
-Keycloak, garak — the notebook models the *decision* that tool makes. The
-`run` block in [`curriculum/labs.json`](../../curriculum/labs.json) keeps the
-real invocation underneath, labelled as the full-infrastructure variant.
+Where a lesson names a real tool you would actually deploy — SPIRE, OPA, Falco,
+Keycloak, garak — the notebook models the *decision* that tool makes, so the
+lesson still lands on a machine that cannot pull containers. The `run` block in
+[`curriculum/labs.json`](../../curriculum/labs.json) keeps the real invocation
+underneath, labelled as the full-infrastructure variant.
 
-Check the library itself with:
+Where a lesson involves a model, it runs against a **deterministic stand-in**
+that is labelled as a stand-in everywhere it appears — never presented as a
+model's output. Each of those notebooks prints the exact command to point the
+same code at a real open-weight model:
 
 ```bash
-python3 labs/cybercommons/selftest.py    # 32 checks, each one a claim a lesson makes
+ollama pull glm-4.6            # or kimi-k2, llama3.3
+export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6
 ```
 
 ## Editing a lesson
@@ -55,12 +62,14 @@ overwritten. Change the source and rebuild:
 | To change… | Edit |
 |---|---|
 | Title, risk, control, tools, models | `site/data/curriculum.json` |
-| The exercise: prose, code cells, "Your turn" | `scripts/exercises/<track>.py` |
+| The exercise: concept, code cells, "Your turn" | `scripts/exercises/track_<id>.py` |
 | The goal and the "Expect" line | `curriculum/labs.json` |
-| The library the exercises call | `labs/cybercommons/*.py` |
+
+Every exercise needs a `concept` field. The build fails without one — a lesson
+that opens with a risk teaches people to fear a mechanism they cannot describe.
 
 ```bash
-python3 scripts/build_notebooks.py   # regenerate all 104
+python3 scripts/build_notebooks.py   # regenerate all 108
 python3 scripts/run_notebooks.py     # prove they still run, refresh the evidence
 python3 scripts/build_site.py        # re-render the lesson pages
 ```
@@ -74,9 +83,28 @@ the site is always the notebook that ran.
 their status, so "did it execute remotely" has an evidenced answer.
 
 ```bash
-python3 scripts/kaggle_push.py --check          # verify auth + reachability
-python3 scripts/kaggle_push.py --all --wait     # push all 104, poll until done
+python3 scripts/kaggle_push.py --check                        # auth + reachability
+python3 scripts/kaggle_push.py --all --wait --concurrency 4   # push, poll until done
 ```
+
+Three Kaggle behaviours the script handles, each found by testing rather than by
+reading documentation:
+
+- **`KGAT_` tokens are Bearer tokens.** The older username+key Basic scheme
+  returns `401 Unauthenticated` for them, which reads like a bad credential
+  rather than a wrong scheme.
+- **`/kernels/push` returns HTTP 200 with `hasError: true`** when it rejects a
+  push. Checking only the status code reports every failed push as a success, so
+  the client inspects the body.
+- **Kaggle allows 5 concurrent batch CPU sessions**, and a kernel runs on push.
+  Pushing all 108 at once fails 94 of them with *"Maximum batch CPU session
+  count of 5 reached"* plus HTTP 429s, so the client pushes in batches and waits
+  for each to finish.
+
+Kernels are created **private**. Kaggle rejects a public push with HTTP 403
+*"Phone verification is required to make a notebook public"* unless the owning
+account has a verified phone number — an account setting, not something the
+script should route around. Pass `--public` once it is verified.
 
 Credentials come from `$KAGGLE_USERNAME`/`$KAGGLE_KEY` or
 `~/.kaggle/kaggle.json` — **never from this repository**. The script refuses to

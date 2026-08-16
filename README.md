@@ -62,6 +62,34 @@ Both directions run through every track: **AI for Security** (agents as your
 instrument) and **Security for AI** (agents as the thing you defend). A track
 that teaches only one produces a practitioner who gets surprised.
 
+### The AppSec pipeline (track B1)
+
+B1 is one artefact built over sixteen sessions: a five-phase, fifteen-stage
+automated application-security pipeline.
+
+```
+[Ingestion & Mapping] ──> [Threat Modelling] ──> [Discovery]
+     └─ stages 1-4              └─ stages 5-6       └─ stages 7-10
+               ──> [Dynamic Validation] ──> [Reporting]
+                        └─ stages 11-14         └─ stage 15
+```
+
+| Phase | Stages | Sessions |
+|---|---|---|
+| **1 · Ingestion & structural mapping** | historical parsing · structural indexing · component summarisation · architecture synthesis | B1.1–B1.2 |
+| **2 · Threat modelling & strategy** | threat modelling · strategic planning | B1.3–B1.4 |
+| **3 · Analysis & filtering** | vulnerability auditing · deduplication · contextual verification · feasibility filtering | B1.5–B1.7 |
+| **4 · Dynamic validation & remediation** | sandbox replication · dynamic exploitation · exploit chaining · remediation engineering | B1.8–B1.11 |
+| **5 · Governance & reporting** | severity calibration and reporting | B1.12 |
+
+Three cross-cutting sessions cover context engineering, injection in your own
+pipeline, and securing developers' coding agents. The track closes with
+**[B1.16 — Google Mantis as a bonus](labs/notebooks/B1.16.ipynb)**: a real
+implementation mapped stage by stage onto the pipeline you just built, its two
+output shapes parsed, and its findings scored against a held-out key *before*
+you adopt it. A reference implementation is a starting point you evaluate, not a
+product you trust.
+
 ### Seniority overlay
 
 The topics don't change with grade; the accountability does.
@@ -74,11 +102,15 @@ The topics don't change with grade; the accountability does.
 
 ## How a session works
 
-1. **Lightboard, not lecture** — the concept is drawn so the mental model lands
-   before any code does.
-2. **Live demo, real execution** — an actual agent against an actual target, on
-   an open-weight model.
-3. **A repo you keep** — every lab is source you clone, break and adapt.
+1. **Concept first** — the idea is introduced and *demonstrated working* before
+   any risk is raised. Leading with the threat teaches people to fear a
+   mechanism they cannot yet describe.
+2. **Then where it breaks** — the failure is reproduced, in code, from the
+   mechanism you just saw.
+3. **Then the control, and a check that it holds** — usually a property test, so
+   the fix is proven rather than asserted.
+4. **A notebook you keep** — self-contained, so you can lift any cell into your
+   own repository without inheriting a dependency.
 
 ## Quick start
 
@@ -239,7 +271,7 @@ drift apart.
 ## Repository layout
 
 ```
-curriculum/          Module 0 + 12 track chapters (generated) + labs.json
+curriculum/          12 track chapters (generated from the JSON source of truth) + labs.json
 lessons/             Optional per-lesson notes — lessons/<ID>.md renders on that page
 labs/notebooks/      The 108 lesson notebooks (generated, self-contained) + evidence
 labs/                b2.10-eval-harness · a2-delegation (deeper standalone labs)
