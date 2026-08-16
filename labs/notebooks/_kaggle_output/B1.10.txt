@@ -43,3 +43,28 @@ F-02     medium                 52      critical
 F-05     medium                 52      critical
 
 fix first: F-01 — own severity low, but it breaks 127 chains including a critical
+loaded skill: appsec-exploit-validate
+  tools it may use: Bash, Read, Write, Grep
+  routing description: 47 words
+  procedure: 87 lines
+conformance: 0 problem(s)
+
+validated 6 findings, refused 1
+   F-01  chains to: valid_report_id
+   F-02  chains to: other_users_report_data
+   F-03  chains to: password_reset_for_victim
+
+Refusing is an output, not an error. A validation harness that quietly
+skips the production target reports the same thing as one that never
+saw it, and those are very different states to be in.
+conformance, tidy report  : 0
+conformance, honest report: 0
+
+validations attempted : 6
+reproduced            : 4
+failed to reproduce   : 2  (F-01, F-04)
+measured false-positive rate of Phase 3: 33%
+
+Both conform. The tidy one drops the non-reproductions, and with them
+the only number that says how good the earlier phases actually are.
+Its reader sees a pipeline that is right every time.

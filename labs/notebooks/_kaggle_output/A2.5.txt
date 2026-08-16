@@ -26,3 +26,26 @@ resource server sees:
    impersonated : dana@corp performed repo:write on behalf of dana@corp via direct
 2014 successful hops across 1500 random chains — widening violations: 0
 Invariant holds: authority can only shrink, on every path.
+loaded skill: agent-identity-review
+  tools it may use: Read, Grep, Glob
+  routing description: 53 words
+  procedure: 79 lines
+conformance: 0 problem(s)
+
+chain            : dana@corp -> orchestrator -> patch-agent
+subset of presented : True
+within ceiling      : True
+chain well-formed   : True
+user presents        : ['deploy:prod', 'repo:read', 'repo:write', 'secrets:read']
+requested for agent  : ['repo:read', 'secrets:read']
+patch-agent ceiling  : ['repo:read', 'repo:write']
+
+subset-of-presented  : True
+within-actor-ceiling : False
+
+Subset-only says yes. The agent would hold secrets:read because the
+*user* could have read secrets - authority the agent is never allowed
+to hold, delegated legitimately, and it will look correct in the log.
+
+Both rules, every time. The intersection is the only safe issue.
+correct issued scope : ['repo:read']

@@ -35,3 +35,25 @@ unreachable   0 finding(s) → record, do not page         revisit only if an en
 
 The unknown bucket is not a failure of the analysis. It is the handover
 to Phase 4, which answers reachability by running the thing.
+loaded skill: appsec-vuln-audit
+  tools it may use: Read, Grep, Glob, Bash
+  routing description: 54 words
+  procedure: 94 lines
+conformance: 0 problem(s)
+
+counts raw->deduped->verified->feasible : [9, 3, 3, 1]
+monotonically non-increasing            : True
+raw findings from three analysers: 9
+deduped on defect identity : 3
+deduped on message text    : 9
+
+conformance problems: 0   <- still zero
+counts               : [9, 9, 9, 3]
+
+Three defects became 9 findings, and every one of them is
+schema-valid. Each analyser words the same defect differently, so the
+message is a unique key by construction - it deduplicates nothing while
+looking like it deduplicates everything.
+
+The queue triples. Nobody reads the third page. The defect that gets
+fixed is whichever one happened to sort first.

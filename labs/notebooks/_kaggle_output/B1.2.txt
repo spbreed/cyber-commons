@@ -45,3 +45,35 @@ flows before 3 → after 5
 
 One function added. A new untrusted entry point now reaches both the
 database and the filesystem. That delta is what B1.3 threat-models.
+loaded skill: appsec-repo-recon
+  tools it may use: Read, Grep, Glob, Bash
+  routing description: 53 words
+  procedure: 88 lines
+conformance check: 0 problem(s)
+
+The map satisfies the contract, so Phase 2 can consume it without
+negotiating a format.
+hollow map, conformance problems: 0
+real map,   conformance problems: 0
+
+Both conform. One of them found nothing at all.
+
+Conformance is a statement about the serialiser: it is close to free by
+construction, and an empty result scores perfectly. Accuracy is the
+expensive part and the contract cannot measure it. Any pipeline that
+reports '100% schema-valid' as a quality metric is reporting this number.
+
+what the contract can tell you : shape is right (0 problems)
+what only the map can tell you : 3 reachable entry->sink pairs, 3 boundary crossings
+map the attack surface of this repo before w   -> appsec-repo-recon  margin=3
+what could go wrong with this architecture     -> appsec-threat-model  margin=3
+is this alert a false positive                 -> AMBIGUOUS (tie at 2)  margin=0
+
+The third routes with margin 0. 'false positive' appears in the audit
+skill's description and 'alert' in the triage skill's, so both score the
+same and the winner is whichever sorted first alphabetically - an
+arbitrary answer wearing a confident face.
+
+That is why route() returns the margin. A tie is a configuration bug in
+the descriptions, and the fix is to make them disjoint, not to let the
+sort decide which procedure runs.

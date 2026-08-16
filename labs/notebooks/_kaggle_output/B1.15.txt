@@ -39,3 +39,24 @@ friction added   0.4 of 1.0 — one confirmation before a push
 
 No cloud or SSH credential is reachable, the inner loop is unchanged,
 and the only thing a developer notices is a prompt before pushing.
+loaded skill: coding-agent-hardening
+  tools it may use: Read, Grep, Glob
+  routing description: 53 words
+  procedure: 79 lines
+conformance: 0 problem(s)
+
+auto-loaded, content-controlled inputs: ['README.md', 'docs/CONTRIBUTING.md', 'package.json']
+most powerful pre-approved tool      : read_env (org scope)
+
+allowlist:
+   write_file  project scope, reversible         bounded=True
+   run_tests   self scope, reversible            bounded=True
+   run_shell   tenant scope, IRREVERSIBLE        bounded=False
+   git_commit  project scope, reversible         bounded=True
+   git_push    project scope, IRREVERSIBLE       bounded=False
+
+unbounded pre-approved tools: ['run_shell', 'git_push']
+
+The injection finding is Critical not because the README says anything
+clever, but because a directive path exists to a tool that cannot be
+undone. Rewrite the payload and the severity does not move.

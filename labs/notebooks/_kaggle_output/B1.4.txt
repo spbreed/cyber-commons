@@ -30,3 +30,21 @@ same budget, if someone doubles the repo with low-risk code:
 
 Allocation is what stops repository growth from silently degrading
 the analysis of the parts that matter.
+loaded skill: appsec-threat-model
+  tools it may use: Read, Grep, Glob
+  routing description: 46 words
+  procedure: 91 lines
+conformance: 0 problem(s)
+
+selected 6 of 6 threats; 3 of them wanted deep review and did not get it
+distinct CWEs covered: 5
+
+   deferred: get_report             wanted model review, budget allowed taint rules
+   deferred: store → open           wanted model review, budget allowed taint rules
+   deferred: upload_doc             wanted model review, budget allowed taint rules
+
+`deferred` is not bookkeeping. Every target got *an* analyser, so a
+coverage number counting targets would read 100%. What the budget
+actually cut was depth, on three of the four highest-threat targets.
+That distinction travels to the report as the scope statement, and a
+plan that drops it produces a report that overclaims.

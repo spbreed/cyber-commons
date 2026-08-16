@@ -34,3 +34,20 @@ patch-agent     ESCALATE (outside remit)
                 dana@corp → orchestrator → patch-agent  scopes=['repo:read', 'repo:write']
 rotator-agent   close (within remit)
                 ops@corp → scheduler → rotator-agent  scopes=['secrets:read', 'secrets:write']
+loaded skill: detection-triage
+  tools it may use: Read, Grep, Bash
+  routing description: 46 words
+  procedure: 75 lines
+conformance: 0 problem(s)
+   A-1  true_positive        auto_closed=False sampled=False
+   A-2  benign_true_positive auto_closed=True  sampled=False
+   A-3  true_positive        auto_closed=False sampled=False
+   A-4  benign_true_positive auto_closed=True  sampled=True
+   A-5  true_positive        auto_closed=False sampled=False
+   A-6  benign_true_positive auto_closed=True  sampled=True
+
+auto-closed 3, of which 2 sampled back for human review
+
+`benign_true_positive` is its own verdict. Folding it into false-positive
+would teach the tuner to suppress a detection that is working exactly as
+designed - the read really happened, it was simply within remit.

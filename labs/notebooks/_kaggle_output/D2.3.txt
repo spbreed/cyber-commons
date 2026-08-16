@@ -30,3 +30,21 @@ SCOPE
   undercount factor  6.0×
   in scope, not confirmed (shared a resource):
                      ['build-agent', 'finance-agent', 'monitor-agent', 'test-agent']
+loaded skill: incident-scoping
+  tools it may use: Read, Grep, Bash
+  routing description: 48 words
+  procedure: 72 lines
+conformance: 0 problem(s)
+
+authorised but wrong : 3
+exceeded authority   : 0
+reach                : 6 resources
+confirmed exfil      : 0
+revoking one credential does NOT stop: ['build-agent', 'finance-agent', 'monitor-agent', 'test-agent']
+
+Zero actions exceeded authority, and the incident still happened. That
+combination says the grant was too broad - a different fix from a
+control that failed, which is why the contract counts them separately.
+
+Reach is 4 resources; confirmed exfiltration is 0. Reporting the second
+as the scope is how a notification decision gets made on the wrong number.

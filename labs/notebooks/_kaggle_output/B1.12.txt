@@ -58,3 +58,28 @@ APPSEC PIPELINE REPORT
   highest escape cost at stage: design (69.98)
   → that is where the next analyser should be pointed, not where the
     most findings currently are.
+loaded skill: appsec-triage-report
+  tools it may use: Read, Write
+  routing description: 42 words
+  procedure: 85 lines
+conformance: 0 problem(s)
+
+demonstrated 3 · asserted 3
+   F-02  medium   unreachable; capped from high: not reproduced
+   F-04  medium   unknown; capped from high: not reproduced
+   F-06  medium   unknown; capped from high: not reproduced
+
+measured false-positive rate: 50%
+severity        uncalibrated  calibrated
+critical                   0           0
+high                       4           1
+medium                     2           5
+low                        0           0
+informational              0           0
+
+findings reported above Medium on no evidence: ['F-02', 'F-04', 'F-06']
+
+Both versions are schema-valid; only one of them is defensible. The
+uncalibrated table leads with Highs that were never reproduced, and the
+reader cannot tell which. The first time one of them turns out to be a
+false positive, every other number in the report is discounted too.
