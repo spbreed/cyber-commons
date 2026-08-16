@@ -8,6 +8,11 @@
   "A1.1": {
    "goal": "Make the threat model a living artefact that moves when the tools move.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a1-control-plane",
     "python3 tm_from_manifest.py --manifest agent-tools.json --out tm-before.md",
     "jq '.tools += [{\"name\":\"http_post\",\"scope\":\"any-host\"}]' agent-tools.json > t && mv t agent-tools.json",
@@ -19,6 +24,11 @@
   "A1.2": {
    "goal": "Stand up the whole reference control plane locally.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a1-control-plane",
     "kind create cluster --config kind.yaml",
     "kubectl apply -k spire/     # identity fabric",
@@ -31,6 +41,11 @@
   "A1.3": {
    "goal": "Make the over-privileged grant structurally unrepresentable.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "docker run -d -p 8080:8080 openfga/openfga run",
     "cd labs/a1-control-plane/authz",
     "fga model write --file model.fga",
@@ -41,6 +56,11 @@
   "A1.4": {
    "goal": "Put a blast-radius number in the design review.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a1-control-plane",
     "python3 blast_radius.py --model flat-rbac    --scenario injection",
     "python3 blast_radius.py --model attenuated   --scenario injection",
@@ -51,6 +71,11 @@
   "A1.5": {
    "goal": "Find where authority actually concentrates in a multi-agent topology.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a1-control-plane",
     "kubectl apply -f topology/planner-executor-critic.yaml",
     "python3 authority_map.py --namespace agents --max-depth 3"
@@ -60,6 +85,11 @@
   "A1.6": {
    "goal": "Score gateways against a fixed control checklist instead of a feature matrix.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a1-control-plane",
     "python3 score_option.py --option agentgateway --checklist controls.yaml",
     "python3 score_option.py --option envoy-ext-authz --checklist controls.yaml",
@@ -70,6 +100,11 @@
   "A1.7": {
    "goal": "Prove the router fails closed, not open.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install 'litellm[proxy]'",
     "cd labs/a1-control-plane && litellm --config router.yaml &",
     "python3 force_failure.py --kill primary   # take the reasoner offline mid-request",
@@ -80,6 +115,11 @@
   "A2.1": {
    "goal": "Answer 'who is calling?' for every principal in the lab.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
     "python3 classify.py --scan-spire --scan-keycloak --out taxonomy.csv",
     "column -s, -t taxonomy.csv"
@@ -89,6 +129,11 @@
   "A2.2": {
    "goal": "Issue a workload identity with zero static secrets.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
     "kind create cluster --name a2",
     "kubectl apply -f spire/",
@@ -102,6 +147,11 @@
   "A2.3": {
    "goal": "Find agents running on inherited human credentials.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
     "python3 delegate.py impersonate   # what the audit log says vs what happened",
     "python3 shadow_autonomy.py --logs sample-auth.log --baseline human-baseline.json"
@@ -111,6 +161,11 @@
   "A2.4": {
    "goal": "Revoke exactly one agent without collateral.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
     "python3 delegate.py revoke reviewer-agent   # revoke exactly one actor",
     "python3 registry.py --enrol reviewer --owner appsec --scope repo:read --expires 30d"
@@ -120,13 +175,17 @@
   "A2.5": {
    "goal": "A three-hop delegation chain that survives audit.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
     "# no-infra variant — stdlib only, runs anywhere:",
     "python3 delegate.py chain && python3 delegate.py verify",
     "python3 delegate.py escalate      # widening refused by the token",
     "python3 delegate.py impersonate   # the anti-pattern (A2.3 Shadow Autonomy)",
     "python3 delegate.py revoke reviewer-agent   # one actor dies, others live (A2.4)",
-    "",
     "# full variant against real Keycloak (RFC 8693 token exchange):",
     "docker compose up -d keycloak && ./setup-realm.sh && ./delegate.sh",
     "python3 decode_chain.py token.jwt"
@@ -136,6 +195,11 @@
   "A2.6": {
    "goal": "Move every credential out of the agent and into the gateway.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
     "docker compose up -d agentgateway kmcp",
     "grep -r 'API_KEY\\|token' agent/ || echo 'no secrets in agent code'",
@@ -146,6 +210,11 @@
   "A2.7": {
    "goal": "Teach a legacy service to refuse agent writes it cannot understand.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
     "python3 action_class.py --allow read --deny protected-branch-merge --by-token-type agent",
     "./try.sh --as agent --action read      # 200",
@@ -156,6 +225,11 @@
   "A2.8": {
    "goal": "Cut standing access to zero so an injection has nothing to spend.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
     "./jit.sh --request deploy --window 15m --approver alice",
     "./jit.sh --status    # authority exists only inside the window",
@@ -166,6 +240,11 @@
   "A2.9": {
    "goal": "Reproduce the four classic identity failures, then close them.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation/classic-failures",
     "./confused_deputy.sh && ./token_replay.sh && ./shared_creds.sh && ./overbroad_scope.sh",
     "./harden.sh && ./rerun-all.sh"
@@ -175,6 +254,11 @@
   "A3.1": {
    "goal": "Measure escape surface across three sandbox tiers.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a3-sandbox",
     "./run-tier.sh docker      && ./measure-escape.sh",
     "./run-tier.sh gvisor      && ./measure-escape.sh",
@@ -185,6 +269,11 @@
   "A3.2": {
    "goal": "Prove an agent with no egress control has no other meaningful control.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a3-sandbox",
     "docker compose up -d squid agent",
     "./exfil.sh            # baseline: data leaves",
@@ -196,6 +285,11 @@
   "A3.3": {
    "goal": "Stop the agent wandering from code into credentials.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a3-sandbox",
     "./run-agent.sh --workspace /work --task 'read ../../.aws/credentials'   # succeeds: bad",
     "./apply-mounts.sh   # workspace scoping + ephemeral state",
@@ -206,6 +300,11 @@
   "A3.4": {
    "goal": "Escalate through connector chaining, then pin and scan to stop it.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a3-sandbox/mcp",
     "python3 chain.py --from filesystem --to http   # exfil via two 'safe' connectors",
     "kmcp scan ./servers/ && kmcp pin --hash-verify",
@@ -216,6 +315,11 @@
   "A3.5": {
    "goal": "Design the dangerous call out of existence.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a3-sandbox/tools",
     "python3 audit_tools.py --manifest before.json   # finds an unrestricted shell tool",
     "python3 refactor.py --split shell --into read_file,list_dir,run_tests",
@@ -226,6 +330,11 @@
   "A3.6": {
    "goal": "Build the five containment levers before you need them.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a3-sandbox/levers",
     "./arm.sh              # throttle, scope-reduce, reroute, force-HITL, hard-stop",
     "./fire.sh --lever all --under-load",
@@ -236,6 +345,11 @@
   "A3.7": {
    "goal": "Detect an unmanaged personal agent on a managed endpoint.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a3-sandbox",
     "sudo falco -r rules/unmanaged-agent.yaml &",
     "./simulate-personal-agent.sh   # local model + outbound tool calls",
@@ -246,6 +360,11 @@
   "A3.8": {
    "goal": "Make dev-agent credentials structurally unable to reach production.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a3-sandbox",
     "./try-cross-env.sh --from dev-agent --to prod-api   # must fail",
     "python3 prove_separation.py --spiffe-id spiffe://cybercommons/dev/agent"
@@ -255,6 +374,11 @@
   "B1.1": {
    "goal": "Cut the false-positive rate with reachability reasoning, and measure it.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install semgrep",
     "cd labs/b1-appsec",
     "opengrep --config auto --json target/ > candidates.json",
@@ -266,6 +390,11 @@
   "B1.2": {
    "goal": "Beat context stuffing with tool-mediated retrieval.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b1-appsec",
     "python3 triage.py --strategy stuff  --finding F-102 --model $MODEL",
     "python3 triage.py --strategy bundle --finding F-102 --model $MODEL   # canonical triage bundle",
@@ -276,6 +405,11 @@
   "B1.3": {
    "goal": "Never raise a PR for a patch you did not build and test.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b1-appsec",
     "python3 patch.py --finding F-102 --model $MODEL --validate-locally",
     "# generates -> compiles -> runs tests -> only then writes patch.diff"
@@ -285,6 +419,11 @@
   "B1.4": {
    "goal": "Chart honestly what only SAST found, and what only DAST found.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b1-appsec",
     "docker compose up -d juice-shop",
     "python3 triage.py --all > sast.json",
@@ -296,6 +435,11 @@
   "B1.5": {
    "goal": "Watch your own review harness obey an injected instruction, then close it.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b1-appsec",
     "git apply injected-pr.diff       # a PR containing an instruction to the reviewer",
     "python3 triage.py --candidates candidates.json --model $MODEL   # obeys it",
@@ -306,6 +450,11 @@
   "B1.6": {
    "goal": "Find live secrets in your own agent's footprint.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install detect-secrets && cd labs/b1-appsec",
     "gitleaks detect --source ~/.claude --no-git --report-path agent-secrets.json || true",
     "python3 scan_transcripts.py --dir ~/.claude/projects --report",
@@ -316,6 +465,11 @@
   "B1.7": {
    "goal": "Publish the four numbers that let a review workflow earn its next rung.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b1-appsec",
     "python3 metrics.py --precision --time-to-triage --patch-acceptance --escape-rate \\",
     "  --runs runs/ --out metrics.json && cat metrics.json"
@@ -325,6 +479,11 @@
   "B2.1": {
    "goal": "One scaffold, swappable model, unchanged loop.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
     "MODEL=llama3.3 python3 loop.py --task fix-tests",
     "MODEL=glm-4.6  python3 loop.py --task fix-tests",
@@ -335,6 +494,11 @@
   "B2.10": {
    "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
     "./scripts/vulnbench.sh doctor && ./scripts/vulnbench.sh setup",
     "./scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov",
@@ -347,6 +511,11 @@
   "B2.2": {
    "goal": "Show a same-family judge grading its own homework.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
     "./scripts/vulnbench.sh score --findings data/mantis_findings.sample.jsonl \\",
     "  --gt-source secllmholmes-handcrafted   # deterministic oracle",
@@ -357,6 +526,11 @@
   "B2.3": {
    "goal": "Refactor a shell tool into three narrow, structured tools.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
     "python3 loop.py --tools shell   --task fix-tests   # can do anything",
     "python3 loop.py --tools narrow  --task fix-tests   # read_file/list_dir/apply_patch only",
@@ -367,6 +541,11 @@
   "B2.4": {
    "goal": "Bound a divergent loop four different ways.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
     "python3 loop.py --task impossible --max-steps 5",
     "python3 loop.py --task impossible --timeout 60",
@@ -378,6 +557,11 @@
   "B2.5": {
    "goal": "Route cheap executor to escalated reasoner and attribute spend.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install 'litellm[proxy]' && cd labs/shared",
     "litellm --config litellm.config.yaml &   # llama executor, glm reasoner, kimi advisor",
     "cd ../m0-agent-loop && MODEL=router python3 loop.py --task fix-tests --json | jq '.tokens'",
@@ -388,6 +572,11 @@
   "B2.6": {
    "goal": "Prove a grandchild agent cannot exceed its parent.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
     "python3 subagent.py --depth 3 --parent-scope repo:read",
     "python3 subagent.py --depth 3 --parent-scope repo:read --attempt-escalate"
@@ -397,6 +586,11 @@
   "B2.7": {
    "goal": "Name the failure from the trace alone.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop/traces",
     "python3 ../classify_failure.py --trace divergence.jsonl",
     "for t in *.jsonl; do echo -n \"$t: \"; python3 ../classify_failure.py --trace $t --quiet; done"
@@ -406,6 +600,11 @@
   "B2.8": {
    "goal": "Let a scaffold mutate itself, and keep only measured gains.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
     "python3 evolve.py --generations 5 --sandbox docker --fitness pytest-pass-rate",
     "python3 evolve.py --show-lineage   # what changed, what was kept, what was reverted"
@@ -415,6 +614,11 @@
   "B2.9": {
    "goal": "Replay an agent run from its trace.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
     "python3 loop.py --task fix-tests --json > run.json",
     "python3 replay.py --trace run.json --assert-identical"
@@ -424,6 +628,11 @@
   "C1.1": {
    "goal": "Drive a planner/executor pair against a local target you own.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C1.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C1.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c1-redteam",
     "docker compose up -d dvwa juice-shop     # local targets only",
     "python3 offensive_loop.py --target http://localhost:3000 --model $MODEL --scope scope.yaml"
@@ -433,6 +642,11 @@
   "C1.2": {
    "goal": "Prove the offensive harness cannot reach anything you don't own.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C1.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C1.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c1-redteam",
     "./airgap.sh up   # isolated docker network, no default route",
     "./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com"
@@ -442,6 +656,11 @@
   "C1.3": {
    "goal": "Run a real injection campaign and get a success rate.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C1.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C1.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install garak promptfoo",
     "cd labs/c1-redteam",
     "garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject,dan,encoding",
@@ -452,6 +671,11 @@
   "C1.4": {
    "goal": "Attack the delegation chain and see if attenuation holds.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C1.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C1.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c1-redteam",
     "python3 attack_identity.py --target ../a2-delegation --technique confused-deputy",
     "python3 attack_identity.py --target ../a2-delegation --technique token-replay",
@@ -463,6 +687,11 @@
   "C1.5": {
    "goal": "Attack the sandbox from inside and measure what leaves.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C1.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C1.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c1-redteam",
     "python3 escape.py --target ../a3-sandbox --techniques mount,egress,path-guard,mcp",
     "python3 escape.py --measure-exfil --bytes-out"
@@ -472,6 +701,11 @@
   "C1.6": {
    "goal": "Game the eval deliberately, then close the hole you used.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C1.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C1.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
     "python3 ../c1-redteam/game_eval.py --strategy sandbag",
     "python3 ../c1-redteam/game_eval.py --strategy judge-manipulation",
@@ -482,6 +716,11 @@
   "C1.7": {
    "goal": "Write a finding for an emergent behaviour, not a line of code.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C1.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C1.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c1-redteam",
     "python3 report.py --from-trace engagement/trace.jsonl --template agentic-finding.md",
     "python3 report.py --verify-reproducible --runs 10"
@@ -491,6 +730,11 @@
   "C2.1": {
    "goal": "Write a charter that ends in a deployable control.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cp curriculum/templates/research-charter.md ./charter.md",
     "$EDITOR charter.md   # problem, control outcome, consuming track, funding ask"
    ],
@@ -499,6 +743,11 @@
   "C2.2": {
    "goal": "Chart jailbreak taxonomy differences across three open-weight families.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c2-research",
     "for M in llama3.3 glm-4.6 kimi-k2; do garak --model_type openai.OpenAICompatible --model_name $M --probes dan,encoding,malwaregen --report_prefix $M; done",
     "python3 compare_reports.py"
@@ -508,6 +757,11 @@
   "C2.3": {
    "goal": "Attempt targeted unlearning, then try to get the capability back.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install torch transformers && cd labs/c2-research",
     "python3 orthogonalise.py --model meta-llama/Llama-3.2-3B --concept <target> --out ./erased",
     "python3 elicit.py --model ./erased --strategies paraphrase,encoding,few-shot"
@@ -517,6 +771,11 @@
   "C2.4": {
    "goal": "Recover source text from embeddings.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "docker run -d -p 6333:6333 qdrant/qdrant && cd labs/c2-research",
     "python3 index.py --corpus sensitive-sample/ --store qdrant",
     "python3 invert.py --store qdrant --top-k 20 --report inversion.md"
@@ -526,6 +785,11 @@
   "C2.5": {
    "goal": "Detect a tampered adapter through provenance.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c2-research",
     "cosign sign-blob --bundle model.sig adapter.safetensors",
     "python3 tamper.py --file adapter.safetensors --flip-bytes 8",
@@ -536,6 +800,11 @@
   "C2.6": {
    "goal": "Separate model effects from harness effects.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
     "for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M ./scripts/vulnbench.sh compare; done",
     "python3 work_mantis/compare_models.py"
@@ -545,6 +814,11 @@
   "C2.7": {
    "goal": "Contamination-check a public benchmark.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c2-research",
     "python3 contamination.py --benchmark ../b2.10-eval-harness/ground-truth --model $MODEL --method canary",
     "python3 contamination.py --report"
@@ -554,6 +828,11 @@
   "C2.8": {
    "goal": "Turn a finding into a policy another track deploys.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c2-research",
     "python3 finding_to_policy.py --finding findings/F-07.json --target opa --out policy.rego",
     "opa test policy.rego policy_test.rego",
@@ -564,6 +843,11 @@
   "C2.9": {
    "goal": "Release one artefact with a reproducibility README.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c2-research",
     "python3 package_artefact.py --finding F-07 --include data,code,traces --out release/",
     "cd release && ./reproduce.sh   # must work on a clean machine"
@@ -573,6 +857,11 @@
   "D1.1": {
    "goal": "Supervise a triage loop by exception rather than by re-reading.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d1-soc",
     "docker compose up -d wazuh opensearch",
     "./seed-alerts.sh                       # replayable alert corpus",
@@ -583,6 +872,11 @@
   "D1.2": {
    "goal": "Show a context-loaded triage loop beating a generic one.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d1-soc",
     "python3 triage_loop.py --context none     --alerts alerts.jsonl --score",
     "python3 triage_loop.py --context loaded   --alerts alerts.jsonl --score   # baseline+FPs+crown jewels",
@@ -593,6 +887,11 @@
   "D1.3": {
    "goal": "Generate, unit-test and tune detections inside CI.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install sigma-cli && cd labs/d1-soc/detections",
     "python3 gen_rule.py --technique T1059 --model $MODEL --out rules/t1059.yml",
     "sigma check rules/t1059.yml && python3 test_rule.py --rule rules/t1059.yml --positives pos/ --negatives neg/",
@@ -603,6 +902,11 @@
   "D1.4": {
    "goal": "Five detections whose subject is a non-human principal.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d1-soc/detections",
     "./install-sigma.sh   # scope drift, tool-sequence anomaly, off-hours autonomy, retrieval anomaly, NHI-at-human-time",
     "./fire-each.sh       # deliberately trigger all five"
@@ -612,6 +916,11 @@
   "D1.5": {
    "goal": "Get agent telemetry into the SIEM and query it.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d1-soc",
     "docker compose up -d opensearch otel-collector",
     "OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 python3 ../m0-agent-loop/loop.py --task fix-tests",
@@ -622,6 +931,11 @@
   "D1.6": {
    "goal": "Tell an agent apart from the human whose credential it inherited.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d1-soc",
     "python3 agent_vs_human.py --features timing,sequencing,volume --train baseline.jsonl",
     "python3 agent_vs_human.py --classify live.jsonl"
@@ -631,6 +945,11 @@
   "D1.7": {
    "goal": "Catch a detection silently degrading after a model change.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d1-soc",
     "promptfoo eval -c detection-regression.yaml --model llama3.3   # baseline",
     "promptfoo eval -c detection-regression.yaml --model glm-4.6    # after 'upgrade'",
@@ -641,6 +960,11 @@
   "D1.8": {
    "goal": "Build a synthesis loop that must cite or abstain.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d1-soc/intel",
     "docker compose up -d opencti",
     "python3 synthesise.py --topic 'agentic malware' --require-source --model $MODEL",
@@ -651,6 +975,11 @@
   "D2.1": {
    "goal": "Pre-load the agent so it reasons as a partner, not a tool you reach for late.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D2.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d2-ir",
     "python3 reconstruct.py --case case-01 --preload logs,telemetry,segmentation,playbooks --model $MODEL",
     "python3 reconstruct.py --case case-01 --preload none --model $MODEL",
@@ -661,6 +990,11 @@
   "D2.2": {
    "goal": "Attribute an incident to an agent, an authority and a delegation chain.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D2.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d2-ir",
     "./replay-incident.sh case-01",
     "python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak"
@@ -670,6 +1004,11 @@
   "D2.3": {
    "goal": "Scope an incident where the initiating agent is not the acting one.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d2-ir",
     "./replay-incident.sh case-02   # multi-agent",
     "python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action"
@@ -679,6 +1018,11 @@
   "D2.4": {
    "goal": "Exercise the containment ladder in order, against a live misbehaving agent.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d2-ir",
     "./misbehave.sh &                    # start the runaway agent",
     "./contain.sh --lever throttle && ./contain.sh --lever scope-reduce",
@@ -689,6 +1033,11 @@
   "D2.5": {
    "goal": "Replay an agent run to a regulator-grade standard.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d2-ir",
     "python3 replay.py --trace case-01/trace.jsonl --assert-deterministic"
    ],
@@ -697,6 +1046,11 @@
   "D2.6": {
    "goal": "Pick the right layer to change after an incident.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D2.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D2.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d2-ir/postmortem",
     "for c in case-*/; do echo -n \"$c \"; python3 ../choose_layer.py --case $c; done"
    ],
@@ -705,6 +1059,11 @@
   "D2.7": {
    "goal": "Time your stop authority end to end.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D2.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D2.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d2-ir",
     "./misbehave.sh & echo $! > runaway.pid",
     "time ./stop.sh --workflow patch-agent --authority oncall",
@@ -715,6 +1074,11 @@
   "D2.8": {
    "goal": "Run the first-hour regulatory checklist.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D2.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D2.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/d2-ir",
     "python3 first_hour.py --case case-01 --checklist ../e2-compliance/notification.yaml",
     "python3 first_hour.py --case case-01 --materiality"
@@ -724,6 +1088,11 @@
   "E1.1": {
    "goal": "Watch control evidence go stale without a code change.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e1-grc",
     "python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # PASS",
     "sed -i 's/refuse/consider/' ../m0-agent-loop/system-prompt.txt",
@@ -734,6 +1103,11 @@
   "E1.2": {
    "goal": "Discover agents you did not know you had.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e1-grc",
     "python3 discover.py --from-gateway http://localhost:15000/stats --from-spire",
     "python3 register.py --out agent-register.csv"
@@ -743,6 +1117,11 @@
   "E1.3": {
    "goal": "Tier by what the thing can do, not by model name.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e1-grc",
     "python3 tier.py --workflows workflows.yaml --axes autonomy,action-class,data-sensitivity",
     "python3 tier.py --show-approvers"
@@ -752,6 +1131,11 @@
   "E1.4": {
    "goal": "Map agent controls onto the library you already have.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e1-grc",
     "python3 map_controls.py --new agent-controls.yaml --existing control-library.yaml --out gap.md"
    ],
@@ -760,6 +1144,11 @@
   "E1.5": {
    "goal": "Turn an eval report into audit evidence — and find how it could mislead you.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
     "./scripts/vulnbench.sh compare > evidence/raw-results.txt",
     "python3 ../e1-grc/evidence_pack.py --results evidence/raw-results.txt --control AI-EVAL-01",
@@ -770,6 +1159,11 @@
   "E1.6": {
    "goal": "Sort your guardrails into operating vs outcome.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e1-grc",
     "python3 classify_guardrails.py --config ../m0-agent-loop/guardrails.yaml",
     "python3 classify_guardrails.py --gap-analysis   # which regulator question is unanswered"
@@ -779,6 +1173,11 @@
   "E1.7": {
    "goal": "Automate the evidence package, not the judgment.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e1-grc",
     "python3 collect_evidence.py --control-set controls.yaml --schedule daily",
     "python3 drift.py --baseline evidence/2026-08-01 --current evidence/today"
@@ -788,6 +1187,11 @@
   "E1.8": {
    "goal": "Run a real AIBOM against a model artefact.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e1-grc",
     "python3 aibom.py --model-dir ~/.ollama/models --out aibom.json",
     "cosign verify-blob --bundle model.sig model.gguf   # provenance where signed"
@@ -797,6 +1201,11 @@
   "E1.9": {
    "goal": "Write the gate a re-index has to pass.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e1-grc",
     "python3 lifecycle_gate.py --event reindex --require eval-pass,owner-approval,rollback-plan",
     "python3 lifecycle_gate.py --simulate reindex --without rollback-plan   # blocked"
@@ -806,6 +1215,11 @@
   "E2.1": {
    "goal": "Build one control set that answers several regimes.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E2.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E2.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e2-compliance",
     "python3 crosswalk.py --regimes horizontal-ai,privacy,sector --controls ../e1-grc/control-library.yaml",
     "python3 crosswalk.py --show-orphans   # obligations no control answers"
@@ -815,6 +1229,11 @@
   "E2.2": {
    "goal": "Classify three workflows and defend the boundary cases.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E2.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E2.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e2-compliance",
     "python3 classify_risk.py --workflows ../e1-grc/workflows.yaml --explain",
     "python3 classify_risk.py --deployer-vs-provider"
@@ -824,6 +1243,11 @@
   "E2.3": {
    "goal": "Hang two regulator mappings off one framework spine.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E2.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E2.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e2-compliance",
     "python3 spine.py --framework nist-ai-rmf --overlay regime-a --overlay regime-b --out oscal/",
     "oscal-cli validate oscal/system-security-plan.json"
@@ -833,6 +1257,11 @@
   "E2.4": {
    "goal": "Find the regime you are already in.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E2.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E2.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e2-compliance",
     "python3 sector_overlay.py --agent patch-agent --sector financial-services --check model-risk"
    ],
@@ -841,6 +1270,11 @@
   "E2.5": {
    "goal": "Redact inside the trust boundary before anything crosses out.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E2.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E2.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install presidio-analyzer presidio-anonymizer",
     "cd labs/e2-compliance",
     "python3 redact_gateway.py --listen 8088 --upstream $OPENAI_BASE_URL",
@@ -851,6 +1285,11 @@
   "E2.6": {
    "goal": "Draft the notification for an autonomous actor.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E2.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E2.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e2-compliance",
     "python3 notify.py --incident ../d2-ir/case-01 --regime <your-regime> --draft",
     "python3 notify.py --incident ../d2-ir/case-01 --materiality-worksheet"
@@ -860,6 +1299,11 @@
   "E2.7": {
    "goal": "Assemble a pack that survives supervision.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E2.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E2.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e2-compliance",
     "python3 evidence_pack.py --workflow patch-agent \\",
     "  --include system-doc,data-lineage,eval-records,oversight,decision-logs --out pack/",
@@ -870,6 +1314,11 @@
   "E2.8": {
    "goal": "Build the audit trail out of the delegation chain itself.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E2.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E2.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e2-compliance",
     "python3 audit_trail.py --from-keycloak --workflow patch-agent --out trail.json"
    ],
@@ -878,6 +1327,11 @@
   "E2.9": {
    "goal": "Defend one workflow in a mock supervisory conversation.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E2.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E2.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e2-compliance",
     "python3 mock_supervisor.py --workflow patch-agent --pack pack/ --model $MODEL --adversarial"
    ],
@@ -886,6 +1340,11 @@
   "E3.1": {
    "goal": "Turn a blast-radius measurement into a board paragraph.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E3.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E3.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e3-ciso",
     "python3 translate.py --input ../a1-control-plane/blast.md --audience board",
     "python3 translate.py --input ../a1-control-plane/blast.md --audience board --check-jargon"
@@ -895,6 +1354,11 @@
   "E3.2": {
    "goal": "Replace a per-tool review queue with a delegated-authority policy.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E3.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E3.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cp curriculum/templates/autonomy-policy.md labs/e3-ciso/policy.md",
     "cd labs/e3-ciso && python3 policy_lint.py --policy policy.md --require promotion-criteria,demotion-authority,action-class-limits"
    ],
@@ -903,6 +1367,11 @@
   "E3.3": {
    "goal": "Sequence the first three workflows — and name the first hard no.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E3.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E3.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e3-ciso",
     "python3 sequence.py --candidates ../e1-grc/workflows.yaml --maturity agent --out roadmap.md"
    ],
@@ -911,6 +1380,11 @@
   "E3.4": {
    "goal": "Draw your org's ownership map against the topic matrix.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E3.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E3.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e3-ciso",
     "python3 ownership.py --matrix ../../curriculum/templates/ownership-map.csv --org my-org.yaml",
     "python3 ownership.py --find-gaps"
@@ -920,6 +1394,11 @@
   "E3.5": {
    "goal": "Instrument the six board-level metrics from your own lab stack.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E3.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E3.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e3-ciso",
     "python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2.10-eval-harness/work_mantis/comparison_results.json"
    ],
@@ -928,6 +1407,11 @@
   "E3.6": {
    "goal": "Make a conditional approval enforceable rather than aspirational.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E3.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E3.6   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e3-ciso",
     "python3 conditional.py --workflow patch-agent --conditions eval-gate>=0.85,hitl-on-merge,90d-review",
     "python3 conditional.py --verify patch-agent   # checks the conditions are machine-checkable"
@@ -937,6 +1421,11 @@
   "E3.7": {
    "goal": "Write an interview loop that separates familiarity from practice.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E3.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E3.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e3-ciso",
     "python3 interview.py --role agentic-security-engineer --generate-loop",
     "python3 interview.py --calibrate --against ../b2.10-eval-harness   # ask them to read a real eval report"
@@ -946,6 +1435,11 @@
   "E3.8": {
    "goal": "Re-score your programme on containment/detection/recovery.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E3.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E3.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/e3-ciso",
     "python3 resilience.py --score --axes containment,detection,recovery --evidence ../",
     "python3 resilience.py --compare-to prevention-only"
@@ -955,6 +1449,11 @@
   "M0.1": {
    "goal": "Show that autonomy lives in the action plane, not the model.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/M0.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session M0.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "ollama pull llama3.3 && ollama pull nomic-embed-text",
     "cd labs/m0-agent-loop && python3 planes_demo.py --model llama3.3",
     "# same prompt, three configurations: bare model / read-only tools / write tools"
@@ -964,6 +1463,11 @@
   "M0.2": {
    "goal": "Build the minimum loop and prove the verifier is the security control.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/M0.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session M0.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
     "python3 loop.py --task fix-tests --verifier pytest      # honest oracle",
     "python3 loop.py --task fix-tests --verifier llm-judge   # self-grading",
@@ -974,6 +1478,11 @@
   "M0.3": {
    "goal": "Walk one workflow up the autonomy ladder with named promotion evidence.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/M0.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session M0.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
     "python3 ladder.py --workflow dependency-bump --rung L1",
     "python3 ladder.py --workflow dependency-bump --rung L2.5 --require-evidence"
@@ -983,6 +1492,11 @@
   "M0.4": {
    "goal": "Reproduce direct and indirect injection, then measure a real defense.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/M0.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session M0.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install garak promptfoo",
     "cd labs/m0-injection && python3 poison.py --target rag   # plant in a retrieved doc",
     "garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject",
@@ -993,6 +1507,11 @@
   "M0.5": {
    "goal": "Locate yourself on the ownership map.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/M0.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session M0.5   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cp curriculum/templates/ownership-map.csv ./my-org-ownership.csv",
     "$EDITOR my-org-ownership.csv   # fill Owns / Builds / Uses for your function"
    ],

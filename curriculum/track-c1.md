@@ -28,6 +28,11 @@
 **Run it** — Drive a planner/executor pair against a local target you own.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C1.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c1-redteam
 docker compose up -d dvwa juice-shop     # local targets only
 python3 offensive_loop.py --target http://localhost:3000 --model $MODEL --scope scope.yaml
@@ -49,6 +54,11 @@ python3 offensive_loop.py --target http://localhost:3000 --model $MODEL --scope 
 **Run it** — Prove the offensive harness cannot reach anything you don't own.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c1-redteam
 ./airgap.sh up   # isolated docker network, no default route
 ./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com
@@ -71,6 +81,11 @@ cd labs/c1-redteam
 **Run it** — Run a real injection campaign and get a success rate.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 pip install garak promptfoo
 cd labs/c1-redteam
 garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject,dan,encoding
@@ -93,6 +108,11 @@ promptfoo eval -c redteam.yaml
 **Run it** — Attack the delegation chain and see if attenuation holds.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c1-redteam
 python3 attack_identity.py --target ../a2-delegation --technique confused-deputy
 python3 attack_identity.py --target ../a2-delegation --technique token-replay
@@ -116,6 +136,11 @@ python3 attack_identity.py --verify-revocation
 **Run it** — Attack the sandbox from inside and measure what leaves.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C1.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c1-redteam
 python3 escape.py --target ../a3-sandbox --techniques mount,egress,path-guard,mcp
 python3 escape.py --measure-exfil --bytes-out
@@ -138,6 +163,11 @@ python3 escape.py --measure-exfil --bytes-out
 **Run it** — Game the eval deliberately, then close the hole you used.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C1.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b2.10-eval-harness
 python3 ../c1-redteam/game_eval.py --strategy sandbag
 python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
@@ -160,6 +190,11 @@ python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
 **Run it** — Write a finding for an emergent behaviour, not a line of code.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C1.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c1-redteam
 python3 report.py --from-trace engagement/trace.jsonl --template agentic-finding.md
 python3 report.py --verify-reproducible --runs 10

@@ -26,6 +26,11 @@
 **Run it** — Write a charter that ends in a deployable control.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cp curriculum/templates/research-charter.md ./charter.md
 $EDITOR charter.md   # problem, control outcome, consuming track, funding ask
 ```
@@ -47,6 +52,11 @@ $EDITOR charter.md   # problem, control outcome, consuming track, funding ask
 **Run it** — Chart jailbreak taxonomy differences across three open-weight families.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c2-research
 for M in llama3.3 glm-4.6 kimi-k2; do garak --model_type openai.OpenAICompatible --model_name $M --probes dan,encoding,malwaregen --report_prefix $M; done
 python3 compare_reports.py
@@ -69,6 +79,11 @@ python3 compare_reports.py
 **Run it** — Attempt targeted unlearning, then try to get the capability back.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 pip install torch transformers && cd labs/c2-research
 python3 orthogonalise.py --model meta-llama/Llama-3.2-3B --concept <target> --out ./erased
 python3 elicit.py --model ./erased --strategies paraphrase,encoding,few-shot
@@ -90,6 +105,11 @@ python3 elicit.py --model ./erased --strategies paraphrase,encoding,few-shot
 **Run it** — Recover source text from embeddings.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 docker run -d -p 6333:6333 qdrant/qdrant && cd labs/c2-research
 python3 index.py --corpus sensitive-sample/ --store qdrant
 python3 invert.py --store qdrant --top-k 20 --report inversion.md
@@ -111,6 +131,11 @@ python3 invert.py --store qdrant --top-k 20 --report inversion.md
 **Run it** — Detect a tampered adapter through provenance.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c2-research
 cosign sign-blob --bundle model.sig adapter.safetensors
 python3 tamper.py --file adapter.safetensors --flip-bytes 8
@@ -134,6 +159,11 @@ cosign verify-blob --bundle model.sig adapter.safetensors   # fails
 **Run it** — Separate model effects from harness effects.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b2.10-eval-harness
 for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M ./scripts/vulnbench.sh compare; done
 python3 work_mantis/compare_models.py
@@ -155,6 +185,11 @@ python3 work_mantis/compare_models.py
 **Run it** — Contamination-check a public benchmark.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c2-research
 python3 contamination.py --benchmark ../b2.10-eval-harness/ground-truth --model $MODEL --method canary
 python3 contamination.py --report
@@ -176,6 +211,11 @@ python3 contamination.py --report
 **Run it** — Turn a finding into a policy another track deploys.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c2-research
 python3 finding_to_policy.py --finding findings/F-07.json --target opa --out policy.rego
 opa test policy.rego policy_test.rego
@@ -198,6 +238,11 @@ cp policy.rego ../a3-sandbox/policies/
 **Run it** — Release one artefact with a reproducibility README.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.9   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c2-research
 python3 package_artefact.py --finding F-07 --include data,code,traces --out release/
 cd release && ./reproduce.sh   # must work on a clean machine

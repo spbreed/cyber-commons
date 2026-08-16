@@ -1,3 +1,70 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.6 — Distinguishing agent from human | Cyber Commons</title><meta name="description" content="Behavioural signatures separating agent from inherited human."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.6</div><h1>Distinguishing agent from human</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Your earliest Shadow Autonomy signal is invisible.</p></div><div class="ctrl"><div class="lab">Control</div><p>Behavioural signatures separating agent from inherited human.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Tell an agent apart from the human whose credential it inherited.</p><pre><code>cd labs/d1-soc
-python3 agent_vs_human.py --features timing,sequencing,volume --train baseline.jsonl
-python3 agent_vs_human.py --classify live.jsonl</code></pre><div class="expect"><b>Expect</b>A working classifier — your earliest Shadow Autonomy signal.</div><div class="chips"><span>OpenSearch</span><span class="m">Llama 3.3</span></div><div class="cta-row"><a class="btn p" href="https://github.com/spbreed/cyber-commons/tree/main/labs/d1-soc" target="_blank" rel="noopener">↗ Open the exercise on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/main/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub" style="margin-top:10px">Exercise source: <code>labs/d1-soc</code></p></div><div class="pager"><a href="D1.5.html"><span class="k">← Previous</span><span class="t">D1.5 · Agent telemetry as a data source</span></a><a class="next" href="D1.7.html"><span class="k">Next →</span><span class="t">D1.7 · Drift monitoring</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.6 — Distinguishing agent from human | Cyber Commons</title><meta name="description" content="Behavioural signatures separating agent from inherited human."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.6</div><h1>Distinguishing agent from human</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Your earliest Shadow Autonomy signal is invisible.</p></div><div class="ctrl"><div class="lab">Control</div><p>Behavioural signatures separating agent from inherited human.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Tell an agent apart from the human whose credential it inherited.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 6 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.6 · Distinguishing agent from human</h1>
+<p><strong>Function D — Security Operations → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>Security of AI</em></p>
+<hr />
+<p><strong>Risk.</strong> Your earliest Shadow Autonomy signal is invisible.</p>
+<p><strong>Control.</strong> Behavioural signatures separating agent from inherited human.</p>
+<p><strong>This lab.</strong> Tell an agent apart from the human whose credential it inherited.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>OpenSearch</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>Llama 3.3</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
+# Puts the lab library on the path. Works from a clone, from the repo root, and
+# on Kaggle. Standard library only — nothing to install, no network required.
+import sys, os, subprocess
+from pathlib import Path
+
+def _find_labs():
+    for base in [Path.cwd(), *Path.cwd().parents]:
+        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
+            return base / &quot;labs&quot;
+    # Kaggle kernels start in /kaggle/working with the repo absent. If the
+    # kernel has internet enabled we clone it; if not, this raises and the
+    # message tells you to attach the repo as a dataset instead.
+    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
+    if not dest.exists():
+        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
+                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
+    return dest / &quot;labs&quot;
+
+sys.path.insert(0, str(_find_labs()))
+import cybercommons
+print(cybercommons.banner(&quot;D1.6&quot;))</code></pre></div><div class="nbmd"><p>Distinguishing agent from human in telemetry, without a registry — because the ones you most need to find are the ones not in it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import soc
+import time
+
+now = time.time()
+events  = [soc.Event(now + i * 0.05, &quot;svc-indexer&quot;, &quot;read_file&quot;) for i in range(120)]
+events += [soc.Event(now + t, &quot;dana&quot;, &quot;read_file&quot;)
+           for t in (0, 4, 11, 12, 60, 130, 133, 400, 900)]
+events += [soc.Event(now + i * 1.2, &quot;shared-account&quot;, &quot;http_get&quot;) for i in range(30)]
+
+for actor in (&quot;svc-indexer&quot;, &quot;dana&quot;, &quot;shared-account&quot;):
+    r = soc.agent_score(events, actor)
+    print(f&quot;{actor:16s} score={r[&#x27;score&#x27;]:.3f} {r[&#x27;verdict&#x27;]:8s} {r[&#x27;signals&#x27;]}&quot;)</code></pre></div><div class="nbmd"><p>Now the honest part: where the heuristic is wrong.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># a human using an IDE with autosave looks metronomic
+ide = [soc.Event(now + i * 2.0, &quot;sam&quot;, &quot;write_file&quot;) for i in range(40)]
+print(soc.agent_score(ide, &quot;sam&quot;), &quot;  ← a person, scored as software&quot;)
+
+# an agent with human-paced backoff looks human
+polite = [soc.Event(now + t, &quot;slow-agent&quot;, &quot;http_get&quot;)
+          for t in (0, 7, 19, 44, 90, 210, 480)]
+print(soc.agent_score(polite, &quot;slow-agent&quot;), &quot;  ← software, scored as a person&quot;)</code></pre></div><div class="nbmd"><h3>Expect</h3>
+<p>The service and shared accounts score as agents while <code>dana</code> scores human. The two adversarial cases misclassify in both directions.</p></div><div class="nbmd"><h3>Your turn</h3>
+<p>Both errors matter differently: a misclassified human triggers an investigation, a misclassified agent hides. Which error would you tune toward, and what does that say about the threshold?</p></div><div class="nbmd"><hr />
+<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.6.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A working classifier — your earliest Shadow Autonomy signal.</div><div class="chips"><span>OpenSearch</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.6.ipynb</code></p></div><div class="pager"><a href="D1.5.html"><span class="k">← Previous</span><span class="t">D1.5 · Agent telemetry as a data source</span></a><a class="next" href="D1.7.html"><span class="k">Next →</span><span class="t">D1.7 · Drift monitoring</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

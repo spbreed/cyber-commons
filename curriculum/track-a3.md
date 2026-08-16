@@ -28,6 +28,11 @@
 **Run it** — Measure escape surface across three sandbox tiers.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a3-sandbox
 ./run-tier.sh docker      && ./measure-escape.sh
 ./run-tier.sh gvisor      && ./measure-escape.sh
@@ -51,6 +56,11 @@ cd labs/a3-sandbox
 **Run it** — Prove an agent with no egress control has no other meaningful control.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a3-sandbox
 docker compose up -d squid agent
 ./exfil.sh            # baseline: data leaves
@@ -74,6 +84,11 @@ docker compose up -d squid agent
 **Run it** — Stop the agent wandering from code into credentials.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a3-sandbox
 ./run-agent.sh --workspace /work --task 'read ../../.aws/credentials'   # succeeds: bad
 ./apply-mounts.sh   # workspace scoping + ephemeral state
@@ -97,6 +112,11 @@ cd labs/a3-sandbox
 **Run it** — Escalate through connector chaining, then pin and scan to stop it.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a3-sandbox/mcp
 python3 chain.py --from filesystem --to http   # exfil via two 'safe' connectors
 kmcp scan ./servers/ && kmcp pin --hash-verify
@@ -119,6 +139,11 @@ python3 chain.py --from filesystem --to http   # blocked
 **Run it** — Design the dangerous call out of existence.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a3-sandbox/tools
 python3 audit_tools.py --manifest before.json   # finds an unrestricted shell tool
 python3 refactor.py --split shell --into read_file,list_dir,run_tests
@@ -141,6 +166,11 @@ python3 audit_tools.py --manifest after.json
 **Run it** — Build the five containment levers before you need them.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a3-sandbox/levers
 ./arm.sh              # throttle, scope-reduce, reroute, force-HITL, hard-stop
 ./fire.sh --lever all --under-load
@@ -163,6 +193,11 @@ cd labs/a3-sandbox/levers
 **Run it** — Detect an unmanaged personal agent on a managed endpoint.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a3-sandbox
 sudo falco -r rules/unmanaged-agent.yaml &
 ./simulate-personal-agent.sh   # local model + outbound tool calls
@@ -185,6 +220,11 @@ grep 'unmanaged_agent' /var/log/falco.log
 **Run it** — Make dev-agent credentials structurally unable to reach production.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a3-sandbox
 ./try-cross-env.sh --from dev-agent --to prod-api   # must fail
 python3 prove_separation.py --spiffe-id spiffe://cybercommons/dev/agent

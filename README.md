@@ -4,12 +4,14 @@
 secure the AI *itself* — organised the way a CISO org actually is, and provable
 on the laptop you already own.**
 
-Twelve tracks, one shared core, **104 lessons, each with its own page and a runnable lab**.
-Every lab runs on **open-source tooling (CNCF / Linux Foundation)** and
+Twelve tracks, one shared core, **104 lessons — each with its own page and its own
+runnable Python notebook**. Every notebook opens in your browser in one click,
+runs on the **standard library alone**, and is **executed in CI before it ships**.
+Every lab is built on **open-source tooling (CNCF / Linux Foundation)** and
 **open-weight models (Llama, Kimi, GLM)**. No licence, no vendor, **no
 frontier-lab account**. Total cost to complete the curriculum: nothing.
 
-🌐 **[cyber-commons live site](https://spbreed.github.io/cyber-commons/)** · 📚 [Curriculum](curriculum/) · 🧪 [Labs](labs/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
+🌐 **[cyber-commons live site](https://spbreed.github.io/cyber-commons/)** · 📓 [The 104 notebooks](labs/notebooks/) · 🧰 [Lab library](labs/cybercommons/) · 📚 [Curriculum](curriculum/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
 
 ---
 
@@ -23,8 +25,10 @@ faces the same attackers as a global bank. A commons is the opposite bet:
 Two promises make it usable by anyone:
 
 - **Everything executes.** No pseudo-code, no screenshots of a demo. Every one of
-  the 104 sessions ships commands that run against real targets and print real
-  output.
+  the 104 sessions ships a Python notebook that runs top to bottom and prints
+  real output — and CI runs all 104 on every push, committing the result to
+  [`labs/notebooks/_results.json`](labs/notebooks/_results.json). A lesson that
+  claims an output has actually produced it.
 - **Everything is open.** The control plane is CNCF/LF projects you'd actually
   deploy — SPIFFE/SPIRE, OPA, Falco, Kyverno, Cilium, Keycloak, OpenTelemetry,
   Sigstore, kagent, kmcp, agentgateway. The intelligence is open weights you can
@@ -109,20 +113,47 @@ Browse the site locally: `python3 -m http.server 8000 --directory site`
 
 ## Labs
 
-| Lab | Chapters | Status |
-|---|---|---|
-| [`labs/m0-agent-loop`](labs/m0-agent-loop) | M0.1–M0.3, B2.1, B2.4 | ✅ runs anywhere (stdlib + pytest) |
-| [`labs/a2-delegation`](labs/a2-delegation) | A2.3, A2.4, A2.5, B2.6, C1.4 | ✅ runs anywhere (stdlib only) |
-| [`labs/b2.10-eval-harness`](labs/b2.10-eval-harness) | B2.10, E1.5, C1.6 | ✅ fully built, with committed evidence |
-| a1-control-plane · a3-sandbox · b1-appsec · c1-redteam · c2-research · d1-soc · d2-ir · e1-grc · e2-compliance · e3-ciso | remaining tracks | 🟡 real commands, need a machine with a container registry |
+**Every one of the 104 sessions has a notebook, and every notebook runs.**
 
-**All 104 sessions carry a runnable command block** naming the real tool and the
-exact invocation. The 🟡 labs above are specified and reviewed but have not been
-executed in the build sandbox (its container registry is blocked) — treat them as
-specs until someone runs them and files the output. Where a lesson can be taught
-without infrastructure, we ship a **no-infra variant**; `a2-delegation` is the
-model for that, and adding one to a 🟡 lab is the most valuable contribution you
-can make.
+| | |
+|---|---|
+| [`labs/notebooks/`](labs/notebooks) | 104 notebooks, one per session — generated, executed in CI, and rendered on the lesson pages |
+| [`labs/cybercommons/`](labs/cybercommons) | The shared lab library the notebooks import. **Standard library only** — 12 modules, 32 self-tests |
+| [`labs/b2.10-eval-harness`](labs/b2.10-eval-harness) | The full eval harness with real corpora and committed evidence (B2.10, E1.5, C1.6) |
+| [`labs/m0-agent-loop`](labs/m0-agent-loop) · [`labs/a2-delegation`](labs/a2-delegation) | The original standalone labs, kept as the deeper versions of M0.1–M0.3 and A2.3–A2.5 |
+
+Open any lesson page and press **▶ Run on Kaggle** — the notebook is created in
+*your own* Kaggle account, clones this repo and runs. Or locally:
+
+```bash
+jupyter notebook labs/notebooks/A2.5.ipynb
+python3 scripts/run_notebooks.py            # all 104, headless, refreshes the evidence
+python3 labs/cybercommons/selftest.py       # 32 checks on the library itself
+```
+
+The stdlib-only constraint is deliberate: the notebooks have to run on a Kaggle
+kernel with the internet switched off, on an air-gapped laptop, and in CI,
+without anyone first negotiating a package mirror. Where a lesson names a real
+tool you would actually deploy — SPIRE, OPA, Falco, Keycloak, garak — the
+notebook models the *decision* that tool makes, and
+[`curriculum/labs.json`](curriculum/labs.json) keeps the real invocation
+underneath as the full-infrastructure variant. Those variants have **not** been
+executed in the build sandbox (its container registry is blocked), and they are
+labelled as such rather than presented as results.
+
+## Credentials
+
+Nothing credential-shaped goes in this repository, ever. Kaggle tokens live in
+`~/.kaggle/kaggle.json` or in `$KAGGLE_USERNAME`/`$KAGGLE_KEY`;
+`scripts/kaggle_push.py` refuses to read a credential file located inside the
+repo. Three layers enforce it:
+
+```bash
+./scripts/install-hooks.sh      # pre-commit hook — blocks the commit
+python3 scripts/check_secrets.py  # same scan, runnable any time; also runs in CI
+```
+
+plus `.gitignore` entries for `kaggle.json`, `*.pem`, `*.key` and `.env`.
 
 ## Contributing
 
@@ -142,26 +173,35 @@ The website reads the same JSON, so the docs and the site can never drift.
 Every lesson has its own page — `site/lessons/<ID>.html` — generated from data.
 **Never edit the generated HTML.** Change the source and rebuild:
 
-| To change… | Edit | 
+| To change… | Edit |
 |---|---|
 | Title, risk, control, tools, models | `site/data/curriculum.json` |
-| The runnable commands + "Expect" line | `curriculum/labs.json` |
+| The exercise: prose, code cells, "Your turn" | `scripts/exercises/<track>.py` |
+| The goal + "Expect" line | `curriculum/labs.json` |
+| The library the exercises call | `labs/cybercommons/*.py` |
 | Long-form notes under the lab | `lessons/<ID>.md` (optional, plain Markdown) |
 | The video | drop `recordings/<ID>.mp4` — see below |
 
 ```bash
-python3 scripts/build_site.py     # regenerate all 105 pages (fast, idempotent)
+python3 scripts/build_notebooks.py   # regenerate all 104 notebooks
+python3 scripts/run_notebooks.py     # prove they run; refreshes _results.json
+python3 scripts/build_site.py        # regenerate all 105 pages (fast, idempotent)
 git add -A && git commit -m "lesson: A2.5 notes" && git push
 ```
+
+CI runs the secret scan, the library self-test, all 104 notebooks, and both
+`--check` modes, so the notebook you read on the site is always the notebook
+that ran.
 
 That's the whole loop. Pushing triggers the Pages deploy, and the workflow
 rebuilds too — so if you forget the build step the site is still correct, and CI
 leaves a warning telling you to commit the regenerated pages next time.
 
 Each page carries a **video slot** (a placeholder until the recording exists),
-the **risk/control cards**, the **runnable commands**, tool/model chips, an
-**↗ Open the exercise on GitHub** button pointing at that lesson's lab folder,
-your notes, and prev/next navigation.
+the **risk/control cards**, a **▶ Run on Kaggle** button, the lesson's **full
+notebook rendered inline** (the same `.ipynb` that Kaggle opens, so the page and
+the exercise cannot drift apart), an **✓ Executed** badge citing the real run,
+tool/model chips, your notes, and prev/next navigation.
 
 ## Recording pipeline
 
@@ -205,16 +245,20 @@ drift apart.
 ## Repository layout
 
 ```
-curriculum/       Module 0 + 12 track chapters (generated from the JSON source of truth)
-lessons/          Optional per-lesson notes — lessons/<ID>.md renders on that page
-labs/             Runnable labs, one folder per lab — start with m0-agent-loop
-site/             The website: index.html, lessons/<ID>.html (generated), data/, assets/
-MODELS.md         How to get Llama / Kimi / GLM free — local, hosted, or self-hosted
-scripts/          build_site.py · build_curriculum.py · link_video.py · youtube_upload.py
-recordings/       Drop lightboard recordings here (see recordings/README.md)
-.github/          Pages deploy · recording pipeline · Copilot prompts
-.claude/skills/   Agent skills, so Claude Code can run the labs for you
-AGENTS.md         Cross-agent instructions (Copilot, Cursor, any AGENTS.md tool)
+curriculum/          Module 0 + 12 track chapters (generated) + labs.json
+lessons/             Optional per-lesson notes — lessons/<ID>.md renders on that page
+labs/notebooks/      The 104 lesson notebooks (generated) + _results.json evidence
+labs/cybercommons/   The stdlib-only lab library the notebooks import + selftest.py
+labs/                b2.10-eval-harness · m0-agent-loop · a2-delegation (standalone labs)
+site/                The website: index.html, lessons/<ID>.html (generated), data/, assets/
+MODELS.md            How to get Llama / Kimi / GLM free — local, hosted, or self-hosted
+scripts/exercises/   Per-session notebook exercises, one module per track
+scripts/             build_notebooks · run_notebooks · build_site · kaggle_push ·
+                     check_secrets · relink_labs · link_video · youtube_upload
+recordings/          Drop lightboard recordings here (see recordings/README.md)
+.github/             Pages deploy · recording pipeline · Copilot prompts
+.claude/skills/      Agent skills, so Claude Code can run the labs for you
+AGENTS.md            Cross-agent instructions (Copilot, Cursor, any AGENTS.md tool)
 ```
 
 ## Licence & credits

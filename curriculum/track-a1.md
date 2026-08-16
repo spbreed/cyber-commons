@@ -28,6 +28,11 @@
 **Run it** — Make the threat model a living artefact that moves when the tools move.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a1-control-plane
 python3 tm_from_manifest.py --manifest agent-tools.json --out tm-before.md
 jq '.tools += [{"name":"http_post","scope":"any-host"}]' agent-tools.json > t && mv t agent-tools.json
@@ -52,6 +57,11 @@ diff tm-before.md tm-after.md
 **Run it** — Stand up the whole reference control plane locally.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a1-control-plane
 kind create cluster --config kind.yaml
 kubectl apply -k spire/     # identity fabric
@@ -76,6 +86,11 @@ kubectl apply -k opa/       # policy decision point
 **Run it** — Make the over-privileged grant structurally unrepresentable.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 docker run -d -p 8080:8080 openfga/openfga run
 cd labs/a1-control-plane/authz
 fga model write --file model.fga
@@ -99,6 +114,11 @@ python3 prove_unrepresentable.py   # attempts to write the bad grant
 **Run it** — Put a blast-radius number in the design review.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a1-control-plane
 python3 blast_radius.py --model flat-rbac    --scenario injection
 python3 blast_radius.py --model attenuated   --scenario injection
@@ -122,6 +142,11 @@ python3 blast_radius.py --compare flat-rbac attenuated --out blast.md
 **Run it** — Find where authority actually concentrates in a multi-agent topology.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a1-control-plane
 kubectl apply -f topology/planner-executor-critic.yaml
 python3 authority_map.py --namespace agents --max-depth 3
@@ -143,6 +168,11 @@ python3 authority_map.py --namespace agents --max-depth 3
 **Run it** — Score gateways against a fixed control checklist instead of a feature matrix.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a1-control-plane
 python3 score_option.py --option agentgateway --checklist controls.yaml
 python3 score_option.py --option envoy-ext-authz --checklist controls.yaml
@@ -166,6 +196,11 @@ python3 score_option.py --report
 **Run it** — Prove the router fails closed, not open.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 pip install 'litellm[proxy]'
 cd labs/a1-control-plane && litellm --config router.yaml &
 python3 force_failure.py --kill primary   # take the reasoner offline mid-request

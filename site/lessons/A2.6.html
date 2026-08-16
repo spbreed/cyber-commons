@@ -1,4 +1,76 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.6 — The agentic gateway | Cyber Commons</title><meta name="description" content="Gateway-side credential exchange: virtual keys, JWKS validation, identity mapping."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.6</div><h1>The agentic gateway</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Secrets end up in agent code because there was nowhere else to put them.</p></div><div class="ctrl"><div class="lab">Control</div><p>Gateway-side credential exchange: virtual keys, JWKS validation, identity mapping.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Move every credential out of the agent and into the gateway.</p><pre><code>cd labs/a2-delegation
-docker compose up -d agentgateway kmcp
-grep -r &#x27;API_KEY\|token&#x27; agent/ || echo &#x27;no secrets in agent code&#x27;
-curl -s localhost:8080/mcp/tools -H &quot;Authorization: Bearer $(cat svid.jwt)&quot; | jq &#x27;.tools[].name&#x27;</code></pre><div class="expect"><b>Expect</b>The agent holds only its SVID; the gateway exchanges it for the downstream credential.</div><div class="chips"><span>agentgateway</span><span>kmcp</span><span class="m">GLM-4.6</span></div><div class="cta-row"><a class="btn p" href="https://github.com/spbreed/cyber-commons/tree/main/labs/a2-delegation" target="_blank" rel="noopener">↗ Open the exercise on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/main/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub" style="margin-top:10px">Exercise source: <code>labs/a2-delegation</code></p></div><div class="pager"><a href="A2.5.html"><span class="k">← Previous</span><span class="t">A2.5 · Delegation that survives audit</span></a><a class="next" href="A2.7.html"><span class="k">Next →</span><span class="t">A2.7 · Systems that don&#x27;t understand agents</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.6 — The agentic gateway | Cyber Commons</title><meta name="description" content="Gateway-side credential exchange: virtual keys, JWKS validation, identity mapping."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.6</div><h1>The agentic gateway</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Secrets end up in agent code because there was nowhere else to put them.</p></div><div class="ctrl"><div class="lab">Control</div><p>Gateway-side credential exchange: virtual keys, JWKS validation, identity mapping.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Move every credential out of the agent and into the gateway.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 6 lines of output in 0.05s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.6 · The agentic gateway</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → The Identity &amp; Non-Human Identity Engineer</strong>  ·  <em>Security of AI</em></p>
+<hr />
+<p><strong>Risk.</strong> Secrets end up in agent code because there was nowhere else to put them.</p>
+<p><strong>Control.</strong> Gateway-side credential exchange: virtual keys, JWKS validation, identity mapping.</p>
+<p><strong>This lab.</strong> Move every credential out of the agent and into the gateway.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>agentgateway, kmcp</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>GLM-4.6</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
+# Puts the lab library on the path. Works from a clone, from the repo root, and
+# on Kaggle. Standard library only — nothing to install, no network required.
+import sys, os, subprocess
+from pathlib import Path
+
+def _find_labs():
+    for base in [Path.cwd(), *Path.cwd().parents]:
+        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
+            return base / &quot;labs&quot;
+    # Kaggle kernels start in /kaggle/working with the repo absent. If the
+    # kernel has internet enabled we clone it; if not, this raises and the
+    # message tells you to attach the repo as a dataset instead.
+    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
+    if not dest.exists():
+        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
+                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
+    return dest / &quot;labs&quot;
+
+sys.path.insert(0, str(_find_labs()))
+import cybercommons
+print(cybercommons.banner(&quot;A2.6&quot;))</code></pre></div><div class="nbmd"><p>An agent gateway is where identity, policy and egress meet. It is the one component that can enforce all three at once, which is exactly why it is worth building deliberately rather than accreting.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import identity, sandbox
+
+box = sandbox.default_sandbox()
+
+def gateway(token, tool, target=&quot;&quot;):
+    &quot;&quot;&quot;Every call: authenticate, authorise by scope, then contain.&quot;&quot;&quot;
+    if token.expired:
+        return &quot;DENY  expired token&quot;
+    need = {&quot;read_file&quot;: &quot;repo:read&quot;, &quot;write_file&quot;: &quot;repo:write&quot;,
+            &quot;http_get&quot;: &quot;repo:read&quot;}.get(tool)
+    if need and need not in token.scopes:
+        return f&quot;DENY  scope {need} not in {sorted(token.scopes)}&quot;
+    d = box.call(tool, target, approved=(tool in box.tools.require_approval))
+    return f&quot;{&#x27;ALLOW&#x27; if d.allowed else &#x27;DENY &#x27;} {d.reason}&quot;
+
+alice = identity.mint(&quot;alice&quot;)
+rev   = identity.exchange(alice, &quot;reviewer-agent&quot;, {&quot;repo:read&quot;})
+patch = identity.exchange(alice, &quot;patch-agent&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;})
+
+for tok, tool, target in [(rev, &quot;read_file&quot;, &quot;/work/a.py&quot;),
+                          (rev, &quot;write_file&quot;, &quot;/work/a.py&quot;),
+                          (patch, &quot;write_file&quot;, &quot;/work/a.py&quot;),
+                          (patch, &quot;http_get&quot;, &quot;http://169.254.169.254/&quot;),
+                          (patch, &quot;read_file&quot;, &quot;/work/../../root/.ssh/id_rsa&quot;)]:
+    print(f&quot;{tok.actor:16s} {tool:11s} → {gateway(tok, tool, target)}&quot;)</code></pre></div><div class="nbmd"><p>Note the last two: <code>patch-agent</code> holds every scope it needs and is still refused, because scope is not containment. A gateway that checks only authorisation is half a gateway.</p></div><div class="nbmd"><h3>Expect</h3>
+<p><code>reviewer-agent</code> is refused <code>write_file</code> on scope. <code>patch-agent</code> passes the scope check for the same call and succeeds, then is refused the metadata address and the traversal on containment grounds.</p></div><div class="nbmd"><h3>Your turn</h3>
+<p>The open-source path here is <code>agentgateway</code> plus OPA for policy. Which of the three checks above would you put in the gateway, and which in the tool itself? Defend the split.</p></div><div class="nbmd"><hr />
+<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.6.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The agent holds only its SVID; the gateway exchanges it for the downstream credential.</div><div class="chips"><span>agentgateway</span><span>kmcp</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.6.ipynb</code></p></div><div class="pager"><a href="A2.5.html"><span class="k">← Previous</span><span class="t">A2.5 · Delegation that survives audit</span></a><a class="next" href="A2.7.html"><span class="k">Next →</span><span class="t">A2.7 · Systems that don&#x27;t understand agents</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

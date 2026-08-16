@@ -1,4 +1,72 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.4 — Blast radius as a design metric | Cyber Commons</title><meta name="description" content="Make it a number that appears in the design review."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.4</div><h1>Blast radius as a design metric</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Blast radius is asserted in review, never measured.</p></div><div class="ctrl"><div class="lab">Control</div><p>Make it a number that appears in the design review.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Put a blast-radius number in the design review.</p><pre><code>cd labs/a1-control-plane
-python3 blast_radius.py --model flat-rbac    --scenario injection
-python3 blast_radius.py --model attenuated   --scenario injection
-python3 blast_radius.py --compare flat-rbac attenuated --out blast.md</code></pre><div class="expect"><b>Expect</b>Reachable-action counts for both models, side by side. The delta is what attenuation bought you.</div><div class="chips"><span>OpenFGA</span><span>SPIRE</span><span class="m">Kimi K2</span></div><div class="cta-row"><a class="btn p" href="https://github.com/spbreed/cyber-commons/tree/main/labs/a1-control-plane" target="_blank" rel="noopener">↗ Open the exercise on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/main/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub" style="margin-top:10px">Exercise source: <code>labs/a1-control-plane</code></p></div><div class="pager"><a href="A1.3.html"><span class="k">← Previous</span><span class="t">A1.3 · Authorization models that make bad grants impossible</span></a><a class="next" href="A1.5.html"><span class="k">Next →</span><span class="t">A1.5 · Multi-agent topology</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.4 — Blast radius as a design metric | Cyber Commons</title><meta name="description" content="Make it a number that appears in the design review."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.4</div><h1>Blast radius as a design metric</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Blast radius is asserted in review, never measured.</p></div><div class="ctrl"><div class="lab">Control</div><p>Make it a number that appears in the design review.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Put a blast-radius number in the design review.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 4 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.4 · Blast radius as a design metric</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Security of AI</em></p>
+<hr />
+<p><strong>Risk.</strong> Blast radius is asserted in review, never measured.</p>
+<p><strong>Control.</strong> Make it a number that appears in the design review.</p>
+<p><strong>This lab.</strong> Put a blast-radius number in the design review.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>OpenFGA, SPIRE</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>Kimi K2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
+# Puts the lab library on the path. Works from a clone, from the repo root, and
+# on Kaggle. Standard library only — nothing to install, no network required.
+import sys, os, subprocess
+from pathlib import Path
+
+def _find_labs():
+    for base in [Path.cwd(), *Path.cwd().parents]:
+        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
+            return base / &quot;labs&quot;
+    # Kaggle kernels start in /kaggle/working with the repo absent. If the
+    # kernel has internet enabled we clone it; if not, this raises and the
+    # message tells you to attach the repo as a dataset instead.
+    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
+    if not dest.exists():
+        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
+                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
+    return dest / &quot;labs&quot;
+
+sys.path.insert(0, str(_find_labs()))
+import cybercommons
+print(cybercommons.banner(&quot;A1.4&quot;))</code></pre></div><div class="nbmd"><p>"Reduce blast radius" is advice. A number is a design metric — it moves when you change the design, and you can put it in a review.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import planes
+W = planes.Tool
+
+designs = {
+ &quot;one agent, all tools&quot;: planes.Manifest(&quot;mono&quot;, [
+     W(&quot;read_file&quot;),
+     W(&quot;write_file&quot;,  writes=True, scope=&quot;project&quot;),
+     W(&quot;deploy_prod&quot;, writes=True, scope=&quot;org&quot;, reversible=False),
+     W(&quot;rotate_secrets&quot;, writes=True, scope=&quot;org&quot;, reversible=False)], rung=&quot;L2.5&quot;),
+ &quot;split by scope&quot;: planes.Manifest(&quot;reader+writer&quot;, [
+     W(&quot;read_file&quot;), W(&quot;write_file&quot;, writes=True, scope=&quot;project&quot;)], rung=&quot;L2.5&quot;),
+ &quot;split + gate the org-wide tools&quot;: planes.Manifest(&quot;gated&quot;, [
+     W(&quot;read_file&quot;),
+     W(&quot;write_file&quot;,  writes=True, scope=&quot;project&quot;),
+     W(&quot;deploy_prod&quot;, writes=True, scope=&quot;org&quot;, reversible=False),
+     W(&quot;rotate_secrets&quot;, writes=True, scope=&quot;org&quot;, reversible=False)],
+     approval_required={&quot;deploy_prod&quot;, &quot;rotate_secrets&quot;}, rung=&quot;L2.5&quot;),
+}
+for name, m in designs.items():
+    b = m.blast_radius()
+    print(f&quot;{name:34s} blast={b[&#x27;total&#x27;]:4d}  {b[&#x27;per_tool&#x27;]}&quot;)</code></pre></div><div class="nbmd"><p>Splitting the agent and gating the wide tools reach a similar number by different means — and they fail differently. Splitting survives a compromised agent; gating survives a compromised <em>tool list</em> but not a compromised approver. Architecture is choosing which failure you prefer.</p></div><div class="nbmd"><h3>Expect</h3>
+<p>The monolithic design scores far highest (two irreversible org-wide tools at double weight). Splitting drops it by an order of magnitude; gating drops the same two tools to zero.</p></div><div class="nbmd"><h3>Your turn</h3>
+<p>Compute the blast radius of your largest production agent. If the number is over 40, name which single tool contributes most and what it would cost to gate it.</p></div><div class="nbmd"><hr />
+<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.4.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Reachable-action counts for both models, side by side. The delta is what attenuation bought you.</div><div class="chips"><span>OpenFGA</span><span>SPIRE</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.4.ipynb</code></p></div><div class="pager"><a href="A1.3.html"><span class="k">← Previous</span><span class="t">A1.3 · Authorization models that make bad grants impossible</span></a><a class="next" href="A1.5.html"><span class="k">Next →</span><span class="t">A1.5 · Multi-agent topology</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

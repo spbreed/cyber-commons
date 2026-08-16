@@ -16,3 +16,14 @@ _mantis/
 _cybergym/
 # NOTE: the blind corpora (labs/b2.10-eval-harness/work_mantis/blind*) and the
 # answer keys (.labels*.json) ARE committed as reproducibility evidence.
+
+# ---- credentials: NEVER commit ----
+# Kaggle tokens live in ~/.kaggle/kaggle.json (outside this repo) or in the
+# environment. Nothing credential-shaped may enter git.
+kaggle.json
+.kaggle/
+*.pem
+*.key
+.env
+.env.*
+!.env.example

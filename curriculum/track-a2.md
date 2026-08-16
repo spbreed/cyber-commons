@@ -27,6 +27,11 @@
 **Run it** — Answer 'who is calling?' for every principal in the lab.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation
 python3 classify.py --scan-spire --scan-keycloak --out taxonomy.csv
 column -s, -t taxonomy.csv
@@ -48,6 +53,11 @@ column -s, -t taxonomy.csv
 **Run it** — Issue a workload identity with zero static secrets.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation
 kind create cluster --name a2
 kubectl apply -f spire/
@@ -74,6 +84,11 @@ kubectl exec -n spire spire-server-0 -- /opt/spire/bin/spire-server entry create
 **Run it** — Find agents running on inherited human credentials.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation
 python3 delegate.py impersonate   # what the audit log says vs what happened
 python3 shadow_autonomy.py --logs sample-auth.log --baseline human-baseline.json
@@ -95,6 +110,11 @@ python3 shadow_autonomy.py --logs sample-auth.log --baseline human-baseline.json
 **Run it** — Revoke exactly one agent without collateral.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation
 python3 delegate.py revoke reviewer-agent   # revoke exactly one actor
 python3 registry.py --enrol reviewer --owner appsec --scope repo:read --expires 30d
@@ -116,13 +136,17 @@ python3 registry.py --enrol reviewer --owner appsec --scope repo:read --expires 
 **Run it** — A three-hop delegation chain that survives audit.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation
 # no-infra variant — stdlib only, runs anywhere:
 python3 delegate.py chain && python3 delegate.py verify
 python3 delegate.py escalate      # widening refused by the token
 python3 delegate.py impersonate   # the anti-pattern (A2.3 Shadow Autonomy)
 python3 delegate.py revoke reviewer-agent   # one actor dies, others live (A2.4)
-
 # full variant against real Keycloak (RFC 8693 token exchange):
 docker compose up -d keycloak && ./setup-realm.sh && ./delegate.sh
 python3 decode_chain.py token.jwt
@@ -145,6 +169,11 @@ python3 decode_chain.py token.jwt
 **Run it** — Move every credential out of the agent and into the gateway.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation
 docker compose up -d agentgateway kmcp
 grep -r 'API_KEY\|token' agent/ || echo 'no secrets in agent code'
@@ -167,6 +196,11 @@ curl -s localhost:8080/mcp/tools -H "Authorization: Bearer $(cat svid.jwt)" | jq
 **Run it** — Teach a legacy service to refuse agent writes it cannot understand.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation
 python3 action_class.py --allow read --deny protected-branch-merge --by-token-type agent
 ./try.sh --as agent --action read      # 200
@@ -189,6 +223,11 @@ python3 action_class.py --allow read --deny protected-branch-merge --by-token-ty
 **Run it** — Cut standing access to zero so an injection has nothing to spend.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation
 ./jit.sh --request deploy --window 15m --approver alice
 ./jit.sh --status    # authority exists only inside the window
@@ -212,6 +251,11 @@ sleep 900 && ./jit.sh --status
 **Run it** — Reproduce the four classic identity failures, then close them.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.9   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation/classic-failures
 ./confused_deputy.sh && ./token_replay.sh && ./shared_creds.sh && ./overbroad_scope.sh
 ./harden.sh && ./rerun-all.sh

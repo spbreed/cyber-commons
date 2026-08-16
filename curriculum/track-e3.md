@@ -26,6 +26,11 @@
 **Run it** — Turn a blast-radius measurement into a board paragraph.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E3.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E3.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e3-ciso
 python3 translate.py --input ../a1-control-plane/blast.md --audience board
 python3 translate.py --input ../a1-control-plane/blast.md --audience board --check-jargon
@@ -46,6 +51,11 @@ python3 translate.py --input ../a1-control-plane/blast.md --audience board --che
 **Run it** — Replace a per-tool review queue with a delegated-authority policy.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E3.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E3.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cp curriculum/templates/autonomy-policy.md labs/e3-ciso/policy.md
 cd labs/e3-ciso && python3 policy_lint.py --policy policy.md --require promotion-criteria,demotion-authority,action-class-limits
 ```
@@ -65,6 +75,11 @@ cd labs/e3-ciso && python3 policy_lint.py --policy policy.md --require promotion
 **Run it** — Sequence the first three workflows — and name the first hard no.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E3.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E3.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e3-ciso
 python3 sequence.py --candidates ../e1-grc/workflows.yaml --maturity agent --out roadmap.md
 ```
@@ -84,6 +99,11 @@ python3 sequence.py --candidates ../e1-grc/workflows.yaml --maturity agent --out
 **Run it** — Draw your org's ownership map against the topic matrix.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E3.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E3.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e3-ciso
 python3 ownership.py --matrix ../../curriculum/templates/ownership-map.csv --org my-org.yaml
 python3 ownership.py --find-gaps
@@ -105,6 +125,11 @@ python3 ownership.py --find-gaps
 **Run it** — Instrument the six board-level metrics from your own lab stack.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E3.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E3.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e3-ciso
 python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2.10-eval-harness/work_mantis/comparison_results.json
 ```
@@ -124,6 +149,11 @@ python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2
 **Run it** — Make a conditional approval enforceable rather than aspirational.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E3.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E3.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e3-ciso
 python3 conditional.py --workflow patch-agent --conditions eval-gate>=0.85,hitl-on-merge,90d-review
 python3 conditional.py --verify patch-agent   # checks the conditions are machine-checkable
@@ -144,6 +174,11 @@ python3 conditional.py --verify patch-agent   # checks the conditions are machin
 **Run it** — Write an interview loop that separates familiarity from practice.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E3.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E3.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e3-ciso
 python3 interview.py --role agentic-security-engineer --generate-loop
 python3 interview.py --calibrate --against ../b2.10-eval-harness   # ask them to read a real eval report
@@ -164,6 +199,11 @@ python3 interview.py --calibrate --against ../b2.10-eval-harness   # ask them to
 **Run it** — Re-score your programme on containment/detection/recovery.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E3.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E3.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e3-ciso
 python3 resilience.py --score --axes containment,detection,recovery --evidence ../
 python3 resilience.py --compare-to prevention-only

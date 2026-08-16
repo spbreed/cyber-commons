@@ -25,6 +25,11 @@ A common language, so that when the IAM engineer says "attenuated delegation" th
 **Run it** — Show that autonomy lives in the action plane, not the model.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/M0.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session M0.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 ollama pull llama3.3 && ollama pull nomic-embed-text
 cd labs/m0-agent-loop && python3 planes_demo.py --model llama3.3
 # same prompt, three configurations: bare model / read-only tools / write tools
@@ -47,6 +52,11 @@ cd labs/m0-agent-loop && python3 planes_demo.py --model llama3.3
 **Run it** — Build the minimum loop and prove the verifier is the security control.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/M0.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session M0.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/m0-agent-loop
 python3 loop.py --task fix-tests --verifier pytest      # honest oracle
 python3 loop.py --task fix-tests --verifier llm-judge   # self-grading
@@ -69,6 +79,11 @@ python3 loop.py --task fix-tests --verifier none        # no stop signal
 **Run it** — Walk one workflow up the autonomy ladder with named promotion evidence.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/M0.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session M0.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/m0-agent-loop
 python3 ladder.py --workflow dependency-bump --rung L1
 python3 ladder.py --workflow dependency-bump --rung L2.5 --require-evidence
@@ -91,6 +106,11 @@ python3 ladder.py --workflow dependency-bump --rung L2.5 --require-evidence
 **Run it** — Reproduce direct and indirect injection, then measure a real defense.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/M0.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session M0.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 pip install garak promptfoo
 cd labs/m0-injection && python3 poison.py --target rag   # plant in a retrieved doc
 garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject
@@ -112,6 +132,11 @@ python3 poison.py --target rag --defense tagging   # re-run with untrusted-conte
 **Run it** — Locate yourself on the ownership map.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/M0.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session M0.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cp curriculum/templates/ownership-map.csv ./my-org-ownership.csv
 $EDITOR my-org-ownership.csv   # fill Owns / Builds / Uses for your function
 ```

@@ -33,8 +33,21 @@ CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text())["labs"]
 VIDEOS = json.loads((ROOT / "site" / "data" / "videos.json").read_text()).get("videos", {})
 NOTES_DIR = ROOT / "lessons"
+NB_DIR = ROOT / "labs" / "notebooks"
 OUT = ROOT / "site" / "lessons"
 REPO = "https://github.com/spbreed/cyber-commons"
+# The branch the content actually lives on. Links built against a branch that
+# has no such path are the bug this constant exists to prevent — CI checks it.
+BRANCH = "claude/vulnbench-setup-scheduling-81aqov"
+RAW = f"https://raw.githubusercontent.com/spbreed/cyber-commons/{BRANCH}"
+
+# Execution evidence, written by scripts/run_notebooks.py. Absent on a fresh
+# checkout, in which case the page simply omits the badge rather than lying.
+try:
+    RESULTS = {r["session"]: r for r in
+               json.loads((NB_DIR / "_results.json").read_text())["results"]}
+except (OSError, KeyError, json.JSONDecodeError):
+    RESULTS = {}
 
 DIRECTION = {"defend": ("d", "AI for Security"), "secure": ("s", "Security of AI"),
              "both": ("b", "Both directions")}
@@ -104,18 +117,63 @@ def flatten():
     return seq
 
 
-def exercise_link(sid: str, sess: dict) -> tuple[str, str]:
-    """(url, label) for the GitHub exercise behind a lesson."""
-    if sess.get("repo"):
-        return f"{REPO}/tree/main/{sess['repo']}", sess["repo"]
-    lab = LABS.get(sid, {})
-    for line in lab.get("run", []):
-        if m := re.search(r"cd\s+(labs/[\w.\-/]+)", line):
-            return f"{REPO}/tree/main/{m.group(1)}", m.group(1)
-    track = sid.split(".")[0].lower()
-    if track.startswith("m0"):
-        return f"{REPO}/blob/main/curriculum/module-0.md", "curriculum/module-0.md"
-    return f"{REPO}/blob/main/curriculum/track-{track}.md", f"curriculum/track-{track}.md"
+def exercise_link(sid: str) -> tuple[str, str]:
+    """(url, label) for the exercise behind a lesson.
+
+    Every session has a notebook — `build_notebooks.py` fails the build if one
+    is missing — so this always resolves to a path that exists. The previous
+    version guessed a lab directory out of the command block and pointed at
+    `main`, which produced 404s on two counts: most of those directories were
+    never created, and the content lives on a branch.
+    """
+    rel = f"labs/notebooks/{sid}.ipynb"
+    return f"{REPO}/blob/{BRANCH}/{rel}", rel
+
+
+def kaggle_url(sid: str) -> str:
+    """Kaggle's import-from-URL entry point.
+
+    Opening this signs the reader into their own Kaggle account and creates a
+    new kernel in it from the raw notebook — so the exercise lands in *their*
+    workspace, not ours. The notebook's own bootstrap cell then clones the
+    repository for the lab library.
+    """
+    return f"https://www.kaggle.com/kernels/welcome?src={RAW}/labs/notebooks/{sid}.ipynb"
+
+
+def notebook_block(sid: str) -> str:
+    """Render the lesson's notebook inline — the same cells, in order.
+
+    The page shows the notebook rather than a separate prose copy of it, so the
+    thing you read and the thing you run cannot drift apart.
+    """
+    f = NB_DIR / f"{sid}.ipynb"
+    if not f.is_file():
+        return ""
+    nb = json.loads(f.read_text())
+    parts = ['<div class="nb">']
+    for cell in nb.get("cells", []):
+        src = "".join(cell.get("source", []))
+        if not src.strip():
+            continue
+        if cell["cell_type"] == "markdown":
+            parts.append(f'<div class="nbmd">{md_to_html(src)}</div>')
+        else:
+            parts.append(f'<div class="nbcode"><span class="nbtag">In</span>'
+                         f'<pre><code>{html.escape(src)}</code></pre></div>')
+    parts.append("</div>")
+    return "".join(parts)
+
+
+def verified_badge(sid: str) -> str:
+    """State the execution evidence, or say nothing at all."""
+    r = RESULTS.get(sid)
+    if not r or not r.get("ok"):
+        return ""
+    return (f'<div class="verified">✓ <b>Executed</b> — this notebook runs top to '
+            f'bottom on Python {"3.11+"}, producing {r["stdout_lines"]} lines of '
+            f'output in {r["seconds"]:.2f}s. No network, no API key, no installs. '
+            f'<span>Evidence: <code>labs/notebooks/_results.json</code></span></div>')
 
 
 def video_block(sid: str, title: str) -> str:
@@ -170,7 +228,7 @@ def lesson_page(entry, prev, nxt) -> str:
     s, sid = entry["s"], entry["s"]["id"]
     lab = LABS.get(sid, {})
     dcls, dlabel = DIRECTION.get(s.get("track", "both"), DIRECTION["both"])
-    ex_url, ex_label = exercise_link(sid, s)
+    ex_url, ex_label = exercise_link(sid)
     title = f"{sid} — {s['title']} | Cyber Commons"
 
     parts = [HEAD.format(title=html.escape(title),
@@ -201,9 +259,29 @@ def lesson_page(entry, prev, nxt) -> str:
         parts.append(f'<p class="sub">{html.escape(lab["goal"])}</p>')
     elif s.get("lab"):
         parts.append(f'<p class="sub">{html.escape(s["lab"])}</p>')
-    if lab.get("run"):
-        cmds = "\n".join(lab["run"])
-        parts.append(f'<pre><code>{html.escape(cmds)}</code></pre>')
+
+    # The buttons come first: the point of the page is that you can run it.
+    parts.append('<div class="cta-row">'
+                 f'<a class="btn k" href="{kaggle_url(sid)}" target="_blank" rel="noopener">'
+                 f'▶ Run on Kaggle</a>'
+                 f'<a class="btn p" href="{ex_url}" target="_blank" rel="noopener">'
+                 f'↗ Open the notebook on GitHub</a>'
+                 f'<a class="btn" href="{REPO}/blob/{BRANCH}/MODELS.md" target="_blank" '
+                 f'rel="noopener">Get a model free</a>'
+                 '</div>')
+    parts.append('<p class="sub kagnote">“Run on Kaggle” opens the notebook in '
+                 '<b>your own</b> Kaggle account as a new kernel. Its first cell '
+                 'clones this repository for the lab library, so the exercise is '
+                 'yours to edit and re-run. Nothing is written back here.</p>')
+    parts.append(verified_badge(sid))
+
+    nb = notebook_block(sid)
+    if nb:
+        parts.append('<h3 class="nbh">The notebook</h3>')
+        parts.append(nb)
+    elif lab.get("run"):                       # fallback if a notebook is missing
+        parts.append(f'<pre><code>{html.escape(chr(10).join(lab["run"]))}</code></pre>')
+
     if lab.get("expect"):
         parts.append(f'<div class="expect"><b>Expect</b>{html.escape(lab["expect"])}</div>')
 
@@ -212,11 +290,8 @@ def lesson_page(entry, prev, nxt) -> str:
     if chips:
         parts.append(f'<div class="chips">{chips}</div>')
 
-    parts.append('<div class="cta-row">'
-                 f'<a class="btn p" href="{ex_url}" target="_blank" rel="noopener">↗ Open the exercise on GitHub</a>'
-                 f'<a class="btn" href="{REPO}/blob/main/MODELS.md" target="_blank" rel="noopener">Get a model free</a>'
-                 '</div>'
-                 f'<p class="sub" style="margin-top:10px">Exercise source: <code>{html.escape(ex_label)}</code></p>'
+    parts.append(f'<p class="sub" style="margin-top:10px">Notebook source: '
+                 f'<code>{html.escape(ex_label)}</code></p>'
                  '</div>')
 
     note = NOTES_DIR / f"{sid}.md"
@@ -269,6 +344,18 @@ def main() -> int:
     a = ap.parse_args()
 
     seq = flatten()
+
+    # Link integrity. Every "Open the exercise" button points at a path inside
+    # this repository, so a 404 is detectable here rather than by a reader.
+    # This is the check that was missing when those links shipped broken.
+    broken = [e["s"]["id"] for e in seq
+              if not (NB_DIR / f"{e['s']['id']}.ipynb").is_file()]
+    if broken:
+        print(f"::error::{len(broken)} lesson(s) link to a notebook that does not "
+              f"exist: {broken[:8]}\nRun: python3 scripts/build_notebooks.py",
+              file=sys.stderr)
+        return 1
+
     OUT.mkdir(parents=True, exist_ok=True)
     pages = {f"{e['s']['id']}.html": lesson_page(e, seq[i - 1] if i else None,
                                                  seq[i + 1] if i + 1 < len(seq) else None)

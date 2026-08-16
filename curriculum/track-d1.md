@@ -28,6 +28,11 @@
 **Run it** — Supervise a triage loop by exception rather than by re-reading.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
 docker compose up -d wazuh opensearch
 ./seed-alerts.sh                       # replayable alert corpus
@@ -51,6 +56,11 @@ python3 triage_loop.py --model $MODEL --escalate-on high
 **Run it** — Show a context-loaded triage loop beating a generic one.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
 python3 triage_loop.py --context none     --alerts alerts.jsonl --score
 python3 triage_loop.py --context loaded   --alerts alerts.jsonl --score   # baseline+FPs+crown jewels
@@ -74,6 +84,11 @@ python3 compare.py
 **Run it** — Generate, unit-test and tune detections inside CI.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 pip install sigma-cli && cd labs/d1-soc/detections
 python3 gen_rule.py --technique T1059 --model $MODEL --out rules/t1059.yml
 sigma check rules/t1059.yml && python3 test_rule.py --rule rules/t1059.yml --positives pos/ --negatives neg/
@@ -96,6 +111,11 @@ python3 coverage.py --map-to attack
 **Run it** — Five detections whose subject is a non-human principal.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc/detections
 ./install-sigma.sh   # scope drift, tool-sequence anomaly, off-hours autonomy, retrieval anomaly, NHI-at-human-time
 ./fire-each.sh       # deliberately trigger all five
@@ -117,6 +137,11 @@ cd labs/d1-soc/detections
 **Run it** — Get agent telemetry into the SIEM and query it.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
 docker compose up -d opensearch otel-collector
 OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 python3 ../m0-agent-loop/loop.py --task fix-tests
@@ -140,6 +165,11 @@ curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply
 **Run it** — Tell an agent apart from the human whose credential it inherited.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
 python3 agent_vs_human.py --features timing,sequencing,volume --train baseline.jsonl
 python3 agent_vs_human.py --classify live.jsonl
@@ -162,6 +192,11 @@ python3 agent_vs_human.py --classify live.jsonl
 **Run it** — Catch a detection silently degrading after a model change.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
 promptfoo eval -c detection-regression.yaml --model llama3.3   # baseline
 promptfoo eval -c detection-regression.yaml --model glm-4.6    # after 'upgrade'
@@ -185,6 +220,11 @@ python3 drift_report.py
 **Run it** — Build a synthesis loop that must cite or abstain.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc/intel
 docker compose up -d opencti
 python3 synthesise.py --topic 'agentic malware' --require-source --model $MODEL

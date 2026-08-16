@@ -149,3 +149,50 @@ footer .fin{max-width:var(--maxw);margin:0 auto;padding:0 24px;display:flex;just
   gap:14px;flex-wrap:wrap;font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint)}
 footer a{color:var(--text-dim);text-decoration:none}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+
+/* ---------------------------------------------------------------- notebook
+   The lesson renders the same .ipynb that runs on Kaggle, cell by cell, so the
+   page and the exercise cannot drift apart. */
+.btn.k{background:var(--defend);color:#04101f;border-color:var(--defend);font-weight:600}
+.btn.k:hover{color:#04101f;filter:brightness(1.08)}
+.kagnote{margin-top:10px;font-size:13.5px;line-height:1.55}
+.kagnote b{color:var(--text)}
+
+.verified{margin-top:16px;border:1px solid var(--secure-soft);border-radius:10px;
+  background:rgba(255,175,92,.06);padding:11px 14px;font-size:13.5px;color:var(--text-dim)}
+.verified b{color:var(--secure)}
+.verified span{display:block;margin-top:4px;font-size:12px;color:var(--text-faint)}
+
+.nbh{font-size:15px;margin:34px 0 12px;font-family:"IBM Plex Mono";font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint)}
+.nb{border:1px solid var(--line-soft);border-radius:12px;overflow:hidden;
+  background:var(--ink-2)}
+.nb>div+div{border-top:1px solid var(--line-soft)}
+
+.nbmd{padding:18px 20px}
+.nbmd>*:first-child{margin-top:0}
+.nbmd>*:last-child{margin-bottom:0}
+.nbmd h1{font-size:23px;margin:0 0 12px}
+.nbmd h2{font-size:19px;margin:20px 0 9px}
+.nbmd h3{font-size:16px;margin:18px 0 8px}
+.nbmd p{color:var(--text-dim);margin:0 0 12px}
+.nbmd strong{color:var(--text)}
+.nbmd ul,.nbmd ol{color:var(--text-dim);padding-left:22px;margin:0 0 12px}
+.nbmd li{margin-bottom:6px}
+.nbmd blockquote{border-left:2px solid var(--secure-soft);margin:14px 0;padding:2px 0 2px 15px;
+  color:var(--text-faint);font-size:14px}
+.nbmd table{width:100%;border-collapse:collapse;margin:0 0 12px;font-size:14px}
+.nbmd th,.nbmd td{border:1px solid var(--line-soft);padding:7px 11px;text-align:left}
+.nbmd th{background:var(--surface);font-family:"Space Grotesk";font-weight:600}
+.nbmd hr{border:0;border-top:1px solid var(--line-soft);margin:16px 0}
+.nbmd code{font-size:13px}
+
+.nbcode{position:relative;background:#080C16}
+.nbcode pre{margin:0;border:0;border-radius:0;background:transparent;
+  padding:16px 20px 16px 54px;overflow-x:auto}
+.nbtag{position:absolute;top:16px;left:14px;font-family:"IBM Plex Mono";font-size:10.5px;
+  letter-spacing:.06em;color:var(--defend);opacity:.65;user-select:none}
+@media(max-width:640px){
+  .nbcode pre{padding:34px 16px 16px}
+  .nbtag{top:10px;left:16px}
+}

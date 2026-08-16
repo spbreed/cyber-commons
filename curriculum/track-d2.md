@@ -28,6 +28,11 @@
 **Run it** — Pre-load the agent so it reasons as a partner, not a tool you reach for late.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
 python3 reconstruct.py --case case-01 --preload logs,telemetry,segmentation,playbooks --model $MODEL
 python3 reconstruct.py --case case-01 --preload none --model $MODEL
@@ -50,6 +55,11 @@ diff <(jq -r .timeline[] preloaded.json) <(jq -r .timeline[] cold.json)
 **Run it** — Attribute an incident to an agent, an authority and a delegation chain.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
 ./replay-incident.sh case-01
 python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
@@ -72,6 +82,11 @@ python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
 **Run it** — Scope an incident where the initiating agent is not the acting one.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
 ./replay-incident.sh case-02   # multi-agent
 python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action
@@ -93,6 +108,11 @@ python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action
 **Run it** — Exercise the containment ladder in order, against a live misbehaving agent.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
 ./misbehave.sh &                    # start the runaway agent
 ./contain.sh --lever throttle && ./contain.sh --lever scope-reduce
@@ -115,6 +135,11 @@ cd labs/d2-ir
 **Run it** — Replay an agent run to a regulator-grade standard.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
 python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
 ```
@@ -134,6 +159,11 @@ python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
 **Run it** — Pick the right layer to change after an incident.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D2.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir/postmortem
 for c in case-*/; do echo -n "$c "; python3 ../choose_layer.py --case $c; done
 ```
@@ -154,6 +184,11 @@ for c in case-*/; do echo -n "$c "; python3 ../choose_layer.py --case $c; done
 **Run it** — Time your stop authority end to end.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D2.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
 ./misbehave.sh & echo $! > runaway.pid
 time ./stop.sh --workflow patch-agent --authority oncall
@@ -175,6 +210,11 @@ python3 assert_stopped.py --within 60s
 **Run it** — Run the first-hour regulatory checklist.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D2.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
 python3 first_hour.py --case case-01 --checklist ../e2-compliance/notification.yaml
 python3 first_hour.py --case case-01 --materiality

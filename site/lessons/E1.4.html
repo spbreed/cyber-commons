@@ -1,2 +1,64 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.4 — Control mapping for agents | Cyber Commons</title><meta name="description" content="Map identity, secrets, sandbox, eval and telemetry onto the existing library."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — Governance, Risk, Compliance &amp; the CISO Office › The GRC Practitioner (Risk &amp; Control)</div><div class="sid">E1.4</div><h1>Control mapping for agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Inventing new controls where an existing one applied to a new principal type.</p></div><div class="ctrl"><div class="lab">Control</div><p>Map identity, secrets, sandbox, eval and telemetry onto the existing library.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Map agent controls onto the library you already have.</p><pre><code>cd labs/e1-grc
-python3 map_controls.py --new agent-controls.yaml --existing control-library.yaml --out gap.md</code></pre><div class="expect"><b>Expect</b>Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named.</div><div class="chips"><span>OSCAL</span></div><div class="cta-row"><a class="btn p" href="https://github.com/spbreed/cyber-commons/tree/main/labs/e1-grc" target="_blank" rel="noopener">↗ Open the exercise on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/main/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub" style="margin-top:10px">Exercise source: <code>labs/e1-grc</code></p></div><div class="pager"><a href="E1.3.html"><span class="k">← Previous</span><span class="t">E1.3 · Risk tiering agentic use cases</span></a><a class="next" href="E1.5.html"><span class="k">Next →</span><span class="t">E1.5 · Evaluation output as audit evidence</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.4 — Control mapping for agents | Cyber Commons</title><meta name="description" content="Map identity, secrets, sandbox, eval and telemetry onto the existing library."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — Governance, Risk, Compliance &amp; the CISO Office › The GRC Practitioner (Risk &amp; Control)</div><div class="sid">E1.4</div><h1>Control mapping for agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Inventing new controls where an existing one applied to a new principal type.</p></div><div class="ctrl"><div class="lab">Control</div><p>Map identity, secrets, sandbox, eval and telemetry onto the existing library.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Map agent controls onto the library you already have.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 26 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.4 · Control mapping for agents</h1>
+<p><strong>Function E — Governance, Risk, Compliance &amp; the CISO Office → The GRC Practitioner (Risk &amp; Control)</strong>  ·  <em>Security of AI</em></p>
+<hr />
+<p><strong>Risk.</strong> Inventing new controls where an existing one applied to a new principal type.</p>
+<p><strong>Control.</strong> Map identity, secrets, sandbox, eval and telemetry onto the existing library.</p>
+<p><strong>This lab.</strong> Map agent controls onto the library you already have.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>OSCAL</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
+# Puts the lab library on the path. Works from a clone, from the repo root, and
+# on Kaggle. Standard library only — nothing to install, no network required.
+import sys, os, subprocess
+from pathlib import Path
+
+def _find_labs():
+    for base in [Path.cwd(), *Path.cwd().parents]:
+        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
+            return base / &quot;labs&quot;
+    # Kaggle kernels start in /kaggle/working with the repo absent. If the
+    # kernel has internet enabled we clone it; if not, this raises and the
+    # message tells you to attach the repo as a dataset instead.
+    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
+    if not dest.exists():
+        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
+                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
+    return dest / &quot;labs&quot;
+
+sys.path.insert(0, str(_find_labs()))
+import cybercommons
+print(cybercommons.banner(&quot;E1.4&quot;))</code></pre></div><div class="nbmd"><p>Control mapping runs one way: control → framework. Starting from the framework produces a checklist that is complete and defends nothing.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import grc
+
+asset = grc.AIAsset(&quot;remediation-agent&quot;, &quot;agent&quot;, owner=&quot;platform-sec&quot;,
+                    autonomy=&quot;L3&quot;, data=(&quot;customer&quot;, &quot;regulated&quot;), external=True)
+m = grc.map_controls(asset)
+print(f&quot;{asset.name} — tier {m[&#x27;tier&#x27;]}\n&quot;)
+catalogue = {c.cid: c for c in grc.CATALOGUE}
+for cid in m[&quot;controls&quot;]:
+    c = catalogue[cid]
+    print(f&quot;  {cid}  [{c.kind:10s}] {c.text}&quot;)
+print(&quot;\nframeworks satisfied as a by-product:&quot;)
+for f in m[&quot;frameworks_satisfied&quot;]:
+    print(f&quot;  · {f}&quot;)</code></pre></div><div class="nbmd"><p>The framework list is an output, not an input. Every entry is there because a control you decided to operate happens to satisfy it — which is the only mapping that survives a supervisor asking 'show me'.</p></div><div class="nbmd"><h3>Expect</h3>
+<p>The critical-tier asset requires all eight catalogue controls, and the framework list derives from them — NIST AI RMF, ISO 42001, EU AI Act and others.</p></div><div class="nbmd"><h3>Your turn</h3>
+<p>Try it the other way: start from a framework clause and derive controls. Notice how quickly you produce controls nobody operates and that evidence nothing.</p></div><div class="nbmd"><hr />
+<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.4.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named.</div><div class="chips"><span>OSCAL</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.4.ipynb</code></p></div><div class="pager"><a href="E1.3.html"><span class="k">← Previous</span><span class="t">E1.3 · Risk tiering agentic use cases</span></a><a class="next" href="E1.5.html"><span class="k">Next →</span><span class="t">E1.5 · Evaluation output as audit evidence</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

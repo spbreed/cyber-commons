@@ -27,6 +27,11 @@
 **Run it** — Build one control set that answers several regimes.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E2.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E2.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e2-compliance
 python3 crosswalk.py --regimes horizontal-ai,privacy,sector --controls ../e1-grc/control-library.yaml
 python3 crosswalk.py --show-orphans   # obligations no control answers
@@ -47,6 +52,11 @@ python3 crosswalk.py --show-orphans   # obligations no control answers
 **Run it** — Classify three workflows and defend the boundary cases.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E2.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E2.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e2-compliance
 python3 classify_risk.py --workflows ../e1-grc/workflows.yaml --explain
 python3 classify_risk.py --deployer-vs-provider
@@ -68,6 +78,11 @@ python3 classify_risk.py --deployer-vs-provider
 **Run it** — Hang two regulator mappings off one framework spine.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E2.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E2.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e2-compliance
 python3 spine.py --framework nist-ai-rmf --overlay regime-a --overlay regime-b --out oscal/
 oscal-cli validate oscal/system-security-plan.json
@@ -88,6 +103,11 @@ oscal-cli validate oscal/system-security-plan.json
 **Run it** — Find the regime you are already in.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E2.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E2.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e2-compliance
 python3 sector_overlay.py --agent patch-agent --sector financial-services --check model-risk
 ```
@@ -108,6 +128,11 @@ python3 sector_overlay.py --agent patch-agent --sector financial-services --chec
 **Run it** — Redact inside the trust boundary before anything crosses out.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E2.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E2.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 pip install presidio-analyzer presidio-anonymizer
 cd labs/e2-compliance
 python3 redact_gateway.py --listen 8088 --upstream $OPENAI_BASE_URL
@@ -129,6 +154,11 @@ curl -s localhost:8088/v1/chat/completions -d @with-pii.json | jq
 **Run it** — Draft the notification for an autonomous actor.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E2.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E2.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e2-compliance
 python3 notify.py --incident ../d2-ir/case-01 --regime <your-regime> --draft
 python3 notify.py --incident ../d2-ir/case-01 --materiality-worksheet
@@ -150,6 +180,11 @@ python3 notify.py --incident ../d2-ir/case-01 --materiality-worksheet
 **Run it** — Assemble a pack that survives supervision.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E2.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E2.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e2-compliance
 python3 evidence_pack.py --workflow patch-agent \
   --include system-doc,data-lineage,eval-records,oversight,decision-logs --out pack/
@@ -172,6 +207,11 @@ python3 evidence_pack.py --audit-self pack/   # what a supervisor would find mis
 **Run it** — Build the audit trail out of the delegation chain itself.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E2.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E2.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e2-compliance
 python3 audit_trail.py --from-keycloak --workflow patch-agent --out trail.json
 ```
@@ -191,6 +231,11 @@ python3 audit_trail.py --from-keycloak --workflow patch-agent --out trail.json
 **Run it** — Defend one workflow in a mock supervisory conversation.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E2.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E2.9   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e2-compliance
 python3 mock_supervisor.py --workflow patch-agent --pack pack/ --model $MODEL --adversarial
 ```

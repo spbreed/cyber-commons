@@ -1,3 +1,67 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.6 — Building the research harness | Cyber Commons</title><meta name="description" content="Multi-backbone benchmarking with statistical honesty."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Security Researcher</div><div class="sid">C2.6</div><h1>Building the research harness</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model effects and harness effects confounded.</p></div><div class="ctrl"><div class="lab">Control</div><p>Multi-backbone benchmarking with statistical honesty.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Separate model effects from harness effects.</p><pre><code>cd labs/b2.10-eval-harness
-for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M ./scripts/vulnbench.sh compare; done
-python3 work_mantis/compare_models.py</code></pre><div class="expect"><b>Expect</b>Same harness, three backbones — the delta is the model. This is exactly how the committed comparison table was produced.</div><div class="chips"><span>Inspect</span><span>Cyber Commons eval harness</span><span class="m">Llama 3.3</span><span class="m">GLM-4.6</span><span class="m">Kimi K2</span></div><div class="cta-row"><a class="btn p" href="https://github.com/spbreed/cyber-commons/tree/main/labs/b2.10-eval-harness" target="_blank" rel="noopener">↗ Open the exercise on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/main/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub" style="margin-top:10px">Exercise source: <code>labs/b2.10-eval-harness</code></p></div><div class="pager"><a href="C2.5.html"><span class="k">← Previous</span><span class="t">C2.5 · Supply-chain research</span></a><a class="next" href="C2.7.html"><span class="k">Next →</span><span class="t">C2.7 · Benchmark design and critique</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.6 — Building the research harness | Cyber Commons</title><meta name="description" content="Multi-backbone benchmarking with statistical honesty."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Security Researcher</div><div class="sid">C2.6</div><h1>Building the research harness</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model effects and harness effects confounded.</p></div><div class="ctrl"><div class="lab">Control</div><p>Multi-backbone benchmarking with statistical honesty.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Separate model effects from harness effects.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 13 lines of output in 0.05s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.6 · Building the research harness</h1>
+<p><strong>Function C — Offensive Security &amp; Research → The Security Researcher</strong>  ·  <em>AI for Security</em></p>
+<hr />
+<p><strong>Risk.</strong> Model effects and harness effects confounded.</p>
+<p><strong>Control.</strong> Multi-backbone benchmarking with statistical honesty.</p>
+<p><strong>This lab.</strong> Separate model effects from harness effects.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>Inspect, Cyber Commons eval harness</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>Llama 3.3, GLM-4.6, Kimi K2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
+# Puts the lab library on the path. Works from a clone, from the repo root, and
+# on Kaggle. Standard library only — nothing to install, no network required.
+import sys, os, subprocess
+from pathlib import Path
+
+def _find_labs():
+    for base in [Path.cwd(), *Path.cwd().parents]:
+        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
+            return base / &quot;labs&quot;
+    # Kaggle kernels start in /kaggle/working with the repo absent. If the
+    # kernel has internet enabled we clone it; if not, this raises and the
+    # message tells you to attach the repo as a dataset instead.
+    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
+    if not dest.exists():
+        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
+                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
+    return dest / &quot;labs&quot;
+
+sys.path.insert(0, str(_find_labs()))
+import cybercommons
+print(cybercommons.banner(&quot;C2.6&quot;))</code></pre></div><div class="nbmd"><p>The research harness is the difference between a person who finds things and a capability that keeps finding them.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import research, redteam
+
+# a harness = a suite + a target adapter + a recorded rate
+def sweep(technique_rate, n=200, seed=3):
+    return research.trial(lambda rng: rng.random() &lt; technique_rate, n=n, seed=seed)
+
+BASELINE = {&quot;INJ-01&quot;: 0.05, &quot;INJ-02&quot;: 0.40, &quot;INJ-03&quot;: 0.55, &quot;INJ-04&quot;: 0.70}
+print(f&quot;{&#x27;attack&#x27;:8s}{&#x27;rate&#x27;:&gt;8}{&#x27;ci95&#x27;:&gt;18}  verdict&quot;)
+for aid, p in BASELINE.items():
+    r = sweep(p)
+    print(f&quot;{aid:8s}{r[&#x27;rate&#x27;]:&gt;8.3f}{str(r[&#x27;ci95&#x27;]):&gt;18}  {r[&#x27;verdict&#x27;]}&quot;)</code></pre></div><div class="nbmd"><p>Now the property that makes it a harness rather than a script: the same suite re-runs after a change and the deltas are comparable.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>MITIGATED = {&quot;INJ-01&quot;: 0.00, &quot;INJ-02&quot;: 0.02, &quot;INJ-03&quot;: 0.03, &quot;INJ-04&quot;: 0.05}
+print(f&quot;{&#x27;attack&#x27;:8s}{&#x27;before&#x27;:&gt;9}{&#x27;after&#x27;:&gt;9}{&#x27;delta&#x27;:&gt;9}&quot;)
+for aid in BASELINE:
+    b, a = sweep(BASELINE[aid])[&quot;rate&quot;], sweep(MITIGATED[aid])[&quot;rate&quot;]
+    print(f&quot;{aid:8s}{b:&gt;9.3f}{a:&gt;9.3f}{a - b:&gt;+9.3f}&quot;)
+print(&quot;\ncoverage:&quot;, redteam.coverage())</code></pre></div><div class="nbmd"><h3>Expect</h3>
+<p>Four baseline rates print with intervals and verdicts, then a before/after table showing large negative deltas, plus the suite's surface coverage.</p></div><div class="nbmd"><h3>Your turn</h3>
+<p>The harness above measures only the injection surface. Extend the sweep to identity and containment, then state honestly which surface you have the least evidence about.</p></div><div class="nbmd"><hr />
+<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.6.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Same harness, three backbones — the delta is the model. This is exactly how the committed comparison table was produced.</div><div class="chips"><span>Inspect</span><span>Cyber Commons eval harness</span><span class="m">Llama 3.3</span><span class="m">GLM-4.6</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C2.6.ipynb</code></p></div><div class="pager"><a href="C2.5.html"><span class="k">← Previous</span><span class="t">C2.5 · Supply-chain research</span></a><a class="next" href="C2.7.html"><span class="k">Next →</span><span class="t">C2.7 · Benchmark design and critique</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

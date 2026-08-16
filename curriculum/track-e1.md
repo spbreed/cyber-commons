@@ -27,6 +27,11 @@
 **Run it** — Watch control evidence go stale without a code change.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e1-grc
 python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # PASS
 sed -i 's/refuse/consider/' ../m0-agent-loop/system-prompt.txt
@@ -49,6 +54,11 @@ python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # now FA
 **Run it** — Discover agents you did not know you had.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e1-grc
 python3 discover.py --from-gateway http://localhost:15000/stats --from-spire
 python3 register.py --out agent-register.csv
@@ -69,6 +79,11 @@ python3 register.py --out agent-register.csv
 **Run it** — Tier by what the thing can do, not by model name.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e1-grc
 python3 tier.py --workflows workflows.yaml --axes autonomy,action-class,data-sensitivity
 python3 tier.py --show-approvers
@@ -90,6 +105,11 @@ python3 tier.py --show-approvers
 **Run it** — Map agent controls onto the library you already have.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e1-grc
 python3 map_controls.py --new agent-controls.yaml --existing control-library.yaml --out gap.md
 ```
@@ -110,6 +130,11 @@ python3 map_controls.py --new agent-controls.yaml --existing control-library.yam
 **Run it** — Turn an eval report into audit evidence — and find how it could mislead you.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b2.10-eval-harness
 ./scripts/vulnbench.sh compare > evidence/raw-results.txt
 python3 ../e1-grc/evidence_pack.py --results evidence/raw-results.txt --control AI-EVAL-01
@@ -135,6 +160,11 @@ python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three way
 **Run it** — Sort your guardrails into operating vs outcome.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e1-grc
 python3 classify_guardrails.py --config ../m0-agent-loop/guardrails.yaml
 python3 classify_guardrails.py --gap-analysis   # which regulator question is unanswered
@@ -157,6 +187,11 @@ python3 classify_guardrails.py --gap-analysis   # which regulator question is un
 **Run it** — Automate the evidence package, not the judgment.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e1-grc
 python3 collect_evidence.py --control-set controls.yaml --schedule daily
 python3 drift.py --baseline evidence/2026-08-01 --current evidence/today
@@ -178,6 +213,11 @@ python3 drift.py --baseline evidence/2026-08-01 --current evidence/today
 **Run it** — Run a real AIBOM against a model artefact.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e1-grc
 python3 aibom.py --model-dir ~/.ollama/models --out aibom.json
 cosign verify-blob --bundle model.sig model.gguf   # provenance where signed
@@ -198,6 +238,11 @@ cosign verify-blob --bundle model.sig model.gguf   # provenance where signed
 **Run it** — Write the gate a re-index has to pass.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.9   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/e1-grc
 python3 lifecycle_gate.py --event reindex --require eval-pass,owner-approval,rollback-plan
 python3 lifecycle_gate.py --simulate reindex --without rollback-plan   # blocked

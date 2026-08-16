@@ -11,8 +11,10 @@ on:
       # anything that can change what the site shows
       - 'site/**'
       - 'lessons/**'
+      - 'labs/notebooks/**'
+      - 'labs/cybercommons/**'
       - 'curriculum/labs.json'
-      - 'scripts/build_site.py'
+      - 'scripts/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -34,6 +36,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+
+      # No credential may reach the tree. Runs first so a leak fails fast.
+      - name: Secret scan
+        run: python3 scripts/check_secrets.py
+
+      # The library the 104 notebooks import. If these fail, the labs teach
+      # something that is not true, and nothing below is worth deploying.
+      - name: Lab library self-test
+        run: python3 labs/cybercommons/selftest.py
+
+      # Every notebook actually runs. This is the evidence behind the
+      # "✓ Executed" badge on each lesson page.
+      - name: Execute all 104 notebooks
+        run: python3 scripts/run_notebooks.py --quiet
+
+      - name: Check notebooks and lab blocks are in sync
+        run: |
+          python3 scripts/build_notebooks.py --check
+          python3 scripts/relink_labs.py --check
 
       - name: Build lesson pages
         run: |

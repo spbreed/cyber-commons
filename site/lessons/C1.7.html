@@ -1,3 +1,67 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C1.7 — Reporting agentic findings | Cyber Commons</title><meta name="description" content="Reproducibility requirements for probabilistic systems."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Pentester / Red Teamer</div><div class="sid">C1.7</div><h1>Reporting agentic findings</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The vulnerability is emergent behaviour, not a line of code.</p></div><div class="ctrl"><div class="lab">Control</div><p>Reproducibility requirements for probabilistic systems.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Write a finding for an emergent behaviour, not a line of code.</p><pre><code>cd labs/c1-redteam
-python3 report.py --from-trace engagement/trace.jsonl --template agentic-finding.md
-python3 report.py --verify-reproducible --runs 10</code></pre><div class="expect"><b>Expect</b>A finding with a reproduction rate (e.g. 7/10), not a claim of determinism the system cannot offer.</div><div class="chips"><span>OpenTelemetry</span></div><div class="cta-row"><a class="btn p" href="https://github.com/spbreed/cyber-commons/tree/main/labs/c1-redteam" target="_blank" rel="noopener">↗ Open the exercise on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/main/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub" style="margin-top:10px">Exercise source: <code>labs/c1-redteam</code></p></div><div class="pager"><a href="C1.6.html"><span class="k">← Previous</span><span class="t">C1.6 · Attacking evaluation itself</span></a><a class="next" href="C2.1.html"><span class="k">Next →</span><span class="t">C2.1 · What research means in a CISO org</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C1.7 — Reporting agentic findings | Cyber Commons</title><meta name="description" content="Reproducibility requirements for probabilistic systems."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Offensive Security &amp; Research › The Pentester / Red Teamer</div><div class="sid">C1.7</div><h1>Reporting agentic findings</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The vulnerability is emergent behaviour, not a line of code.</p></div><div class="ctrl"><div class="lab">Control</div><p>Reproducibility requirements for probabilistic systems.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Write a finding for an emergent behaviour, not a line of code.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 18 lines of output in 0.04s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C1.7 · Reporting agentic findings</h1>
+<p><strong>Function C — Offensive Security &amp; Research → The Pentester / Red Teamer</strong>  ·  <em>Both directions</em></p>
+<hr />
+<p><strong>Risk.</strong> The vulnerability is emergent behaviour, not a line of code.</p>
+<p><strong>Control.</strong> Reproducibility requirements for probabilistic systems.</p>
+<p><strong>This lab.</strong> Write a finding for an emergent behaviour, not a line of code.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>OpenTelemetry</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Runs anywhere: standard library only, no network, no API key. Where a lesson names a real tool you would deploy (Falco, OPA, SPIRE, Keycloak), the notebook models the <em>decision</em> that tool makes, so the lesson still lands on a machine that cannot pull containers.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- Cyber Commons bootstrap -------------------------------------------------
+# Puts the lab library on the path. Works from a clone, from the repo root, and
+# on Kaggle. Standard library only — nothing to install, no network required.
+import sys, os, subprocess
+from pathlib import Path
+
+def _find_labs():
+    for base in [Path.cwd(), *Path.cwd().parents]:
+        if (base / &quot;labs&quot; / &quot;cybercommons&quot; / &quot;__init__.py&quot;).is_file():
+            return base / &quot;labs&quot;
+    # Kaggle kernels start in /kaggle/working with the repo absent. If the
+    # kernel has internet enabled we clone it; if not, this raises and the
+    # message tells you to attach the repo as a dataset instead.
+    dest = Path(&quot;/kaggle/working/cyber-commons&quot;)
+    if not dest.exists():
+        subprocess.run([&quot;git&quot;, &quot;clone&quot;, &quot;--depth&quot;, &quot;1&quot;, &quot;--branch&quot;, &quot;claude/vulnbench-setup-scheduling-81aqov&quot;,
+                        &quot;https://github.com/spbreed/cyber-commons&quot;, str(dest)], check=True)
+    return dest / &quot;labs&quot;
+
+sys.path.insert(0, str(_find_labs()))
+import cybercommons
+print(cybercommons.banner(&quot;C1.7&quot;))</code></pre></div><div class="nbmd"><p>Agentic findings fail in review for a predictable reason: they describe a clever prompt instead of a broken control, so the fix becomes 'add another filter' and the finding recurs next quarter.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from cybercommons import redteam
+
+results = [
+    redteam.Result(next(a for a in redteam.SUITE if a.aid == &quot;INJ-04&quot;), True,
+                   &quot;reached http_post with an attacker-supplied URL&quot;),
+    redteam.Result(next(a for a in redteam.SUITE if a.aid == &quot;IDN-03&quot;), True,
+                   &quot;impersonation token accepted; act chain absent&quot;),
+    redteam.Result(next(a for a in redteam.SUITE if a.aid == &quot;CNT-01&quot;), False,
+                   &quot;private/link-local address blocked (cloud metadata service)&quot;),
+]
+for r in results:
+    if r.succeeded:
+        print(redteam.finding_report(r, &quot;review-agent&quot;))
+        print()</code></pre></div><div class="nbmd"><p>Two structural elements make these actionable: <strong>Missing control</strong> names the thing that should have existed, and <strong>Not a fix</strong> pre-empts the reviewer's first instinct. Then the coverage statement, so nobody reads silence as safety.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>cov = redteam.coverage()
+print(&quot;suite coverage:&quot;, cov)
+print(&quot;\nUntested surfaces are not passes. State them in the report.&quot;)</code></pre></div><div class="nbmd"><h3>Expect</h3>
+<p>Two findings print with reproduction, observed behaviour, the missing control and an explicit 'not a fix' line. Coverage reports four attacks per surface and no untested surfaces.</p></div><div class="nbmd"><h3>Your turn</h3>
+<p>Rewrite your last agentic finding in this shape. If the 'missing control' line is hard to write, the finding was about a payload.</p></div><div class="nbmd"><hr />
+<p><a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C1.7.html">Lesson page</a> · <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/cybercommons">Lab library</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A finding with a reproduction rate (e.g. 7/10), not a claim of determinism the system cannot offer.</div><div class="chips"><span>OpenTelemetry</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.7.ipynb</code></p></div><div class="pager"><a href="C1.6.html"><span class="k">← Previous</span><span class="t">C1.6 · Attacking evaluation itself</span></a><a class="next" href="C2.1.html"><span class="k">Next →</span><span class="t">C2.1 · What research means in a CISO org</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

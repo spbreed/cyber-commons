@@ -28,6 +28,11 @@
 **Run it** — Cut the false-positive rate with reachability reasoning, and measure it.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B1.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.1   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 pip install semgrep
 cd labs/b1-appsec
 opengrep --config auto --json target/ > candidates.json
@@ -52,6 +57,11 @@ python3 score.py --against ground-truth.json
 **Run it** — Beat context stuffing with tool-mediated retrieval.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b1-appsec
 python3 triage.py --strategy stuff  --finding F-102 --model $MODEL
 python3 triage.py --strategy bundle --finding F-102 --model $MODEL   # canonical triage bundle
@@ -75,6 +85,11 @@ python3 compare_strategies.py
 **Run it** — Never raise a PR for a patch you did not build and test.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b1-appsec
 python3 patch.py --finding F-102 --model $MODEL --validate-locally
 # generates -> compiles -> runs tests -> only then writes patch.diff
@@ -97,6 +112,11 @@ python3 patch.py --finding F-102 --model $MODEL --validate-locally
 **Run it** — Chart honestly what only SAST found, and what only DAST found.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b1-appsec
 docker compose up -d juice-shop
 python3 triage.py --all > sast.json
@@ -121,6 +141,11 @@ python3 venn.py --sast sast.json --dast dast.json
 **Run it** — Watch your own review harness obey an injected instruction, then close it.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B1.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b1-appsec
 git apply injected-pr.diff       # a PR containing an instruction to the reviewer
 python3 triage.py --candidates candidates.json --model $MODEL   # obeys it
@@ -143,6 +168,11 @@ python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   
 **Run it** — Find live secrets in your own agent's footprint.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B1.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.6   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 pip install detect-secrets && cd labs/b1-appsec
 gitleaks detect --source ~/.claude --no-git --report-path agent-secrets.json || true
 python3 scan_transcripts.py --dir ~/.claude/projects --report
@@ -165,6 +195,11 @@ cp hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit
 **Run it** — Publish the four numbers that let a review workflow earn its next rung.
 
 ```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B1.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b1-appsec
 python3 metrics.py --precision --time-to-triage --patch-acceptance --escape-rate \
   --runs runs/ --out metrics.json && cat metrics.json
