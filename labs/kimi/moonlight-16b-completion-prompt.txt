@@ -1,0 +1,17 @@
+=== Moonlight-16B-A3B (Moonshot AI, the Kimi team) — completion-style ===
+model loaded in 112s
+prompt tokens: 305
+
+=== GENERATED 200 tokens in 1274s (0.157 tok/s) ===
+{"findings": [{"id": "F-01", "cwe": "CWE-89", "file": "report_api.py", "line": 22, "unit": "get_report", "evidence": "open('/var/reports/' + request.args['name'])", "missing_control": "str", "occurrences": 1, "verdict": "confirmed", "verdict_reason": "str", "feasible": true, "confidence": 0.0}], "dropped": [], "counts": {"raw": 0, "deduped": 0, "verified": 0, "feasible": 0}}
+
+# Audit result:
+{"findings": [{"id": "F-02", "cwe": "CWE-89", "file": "report_api.py", "line": 25, "unit": "run_export", "evidence": "os.system('exporter --format ' + request.args['fmt'])", "missing_control": "str", "occ
+
+=== CONTRACT CHECK ===
+parsed JSON: yes
+findings: 1
+  finding[0] cwe=CWE-89 file=report_api.py verdict=confirmed missing=[]
+
+TOTAL 1413s
+KIMI COMPLETION TEST COMPLETE

@@ -6,10 +6,13 @@ from a run; nothing is estimated.
 
 ## The short version
 
-**A Kimi-family model runs on a Kaggle CPU kernel, and it did not follow the
-skill.** Not because the skill is wrong — because the only Kimi-family model
-reachable from this account is a **base** model, and base models complete text
-rather than obey instructions.
+**A Kimi-family model runs on a Kaggle CPU kernel.** Prompted as a chat model
+it ignored the skill entirely, because the only Kimi-family model reachable
+from this account is a **base** model and base models complete text rather than
+obey instructions. Prompted as a base model — priming the output shape — it
+produced **contract-conforming output that is substantively wrong**: the right
+JSON, the wrong CWE, and the contract's own type placeholders copied in as
+values. That second result is now teaching material in B1.7.
 
 ## What is reachable, and what is not
 
@@ -82,17 +85,59 @@ Moonlight-16B-A3B-Instruct"* — but only the base weights are in the instance
 
 Full output: [`moonlight-16b-chat-prompt.txt`](moonlight-16b-chat-prompt.txt).
 
+## Second run: prompted the way a base model is meant to be used
+
+A base model completes; it does not obey. So the fair test primes the shape and
+lets it continue — the contract, the two vulnerable functions, and an opening
+`{"findings": [{"id": "F-01", "cwe": "`.
+
+**It worked, and the result is the most useful thing in this whole exercise.**
+
+```json
+{"findings": [{"id": "F-01", "cwe": "CWE-89", "file": "report_api.py",
+"line": 22, "unit": "get_report",
+"evidence": "open('/var/reports/' + request.args['name'])",
+"missing_control": "str", "occurrences": 1, "verdict": "confirmed",
+"verdict_reason": "str", "feasible": true, "confidence": 0.0}],
+"dropped": [], "counts": {"raw": 0, "deduped": 0, "verified": 0, "feasible": 0}}
+```
+
+Checked against `appsec-vuln-audit`'s output contract: **zero problems.** Every
+required field present, every type correct.
+
+Now read it:
+
+1. **The CWE is wrong.** `open()` on a caller-supplied path is **CWE-22**, path
+   traversal — not CWE-89, SQL injection. There is no query here. It gave the
+   second sink, `os.system()`, CWE-89 as well; that one is **CWE-78**.
+2. **`missing_control` and `verdict_reason` are the literal string `"str"`.**
+   The model copied the contract's *type placeholder* into the value. A schema
+   requiring a string is perfectly satisfied by the word `str`.
+3. **`counts` says zero findings** while the findings array holds one.
+
+Three defects, zero schema violations. This is **conformance ≠ accuracy** —
+the thesis the curriculum keeps asserting — demonstrated by a real open-weight
+model on real hardware rather than by a constructed example. It is now the
+closing section of [B1.7](../notebooks/B1.7.ipynb), quoted verbatim.
+
+Worth noting which invariant catches it. Monotonicity passes: `[0,0,0,0]` is
+non-increasing. The check that fires is `counts.verified == len(findings)`, and
+it costs one comparison.
+
+Full output:
+[`moonlight-16b-completion-prompt.txt`](moonlight-16b-completion-prompt.txt).
+
 ## Speed, and what it costs
 
 ```
-prompt tokens: 831
-GENERATED 256 tokens in 4269s (0.06 tok/s)
-TOTAL 4383s
+GENERATED 256 tokens in 4269s (0.06  tok/s)    # chat-style, 831-token prompt
+GENERATED 200 tokens in 1274s (0.157 tok/s)    # completion-style, 305-token prompt
 ```
 
-**0.06 tokens per second.** Roughly one token every seventeen seconds. A short
-answer takes an hour, so a Kaggle CPU kernel is a place to prove a model
-*loads and runs*, not a place to evaluate one. Any real evaluation of these
+**0.06 to 0.16 tokens per second**, depending on how much context it carries —
+between six and seventeen seconds per token. Either way a short answer takes
+20 to 70 minutes, so a Kaggle CPU kernel is a place to prove a model *loads and
+runs*, not a place to evaluate one. Any real evaluation of these
 skills against Kimi needs either a GPU (a phone-verified Kaggle account, or
 anywhere else) or a hosted endpoint.
 

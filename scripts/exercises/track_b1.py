@@ -1618,6 +1618,71 @@ assert not check(bad, contract), "the broken pipeline still conforms - that is t
 assert len(by_message) > len(by_identity), "message-keyed dedup must inflate the list"
 assert len(by_identity) == len(SINKS)
 '''),
+
+  ("md", "## 8 · The same failure, from a real model\n\n"
+         "Everything above is constructed. Here is the identical failure "
+         "produced by an actual open-weight model — **Moonlight-16B-A3B**, "
+         "Moonshot AI's MoE from the Kimi team — run on a Kaggle CPU kernel "
+         "against this skill's output contract.\n\n"
+         "It was given the contract and two vulnerable functions: an `open()` "
+         "on a caller-supplied path, and an `os.system()` on a caller-supplied "
+         "argument. Its answer is reproduced verbatim below "
+         "([full run](https://github.com/spbreed/cyber-commons/blob/"
+         "claude/vulnbench-setup-scheduling-81aqov/labs/kimi/"
+         "moonlight-16b-completion-prompt.txt))."),
+  ("py", '''# Verbatim output from Moonlight-16B-A3B on Kaggle, 2026-08-17.
+# Not a paraphrase and not a stand-in: this is what the model emitted.
+MODEL_OUTPUT = \'\'\'{"findings": [{"id": "F-01", "cwe": "CWE-89", "file": "report_api.py",
+"line": 22, "unit": "get_report",
+"evidence": "open(\'/var/reports/\' + request.args[\'name\'])",
+"missing_control": "str", "occurrences": 1, "verdict": "confirmed",
+"verdict_reason": "str", "feasible": true, "confidence": 0.0}],
+"dropped": [], "counts": {"raw": 0, "deduped": 0, "verified": 0, "feasible": 0}}\'\'\'
+
+model = json.loads(MODEL_OUTPUT)
+problems = check(model, contract)
+print(f"conformance problems: {len(problems)}")
+print()
+f = model["findings"][0]
+print(f"evidence it cited : {f[\'evidence\']}")
+print(f"CWE it assigned   : {f[\'cwe\']}  (SQL injection)")
+print(f"CWE it actually is: CWE-22  (path traversal - it is open(), not a query)")
+print(f"missing_control   : {f[\'missing_control\']!r}")
+print(f"verdict_reason    : {f[\'verdict_reason\']!r}")
+print(f"counts            : {model[\'counts\']}  while findings has {len(model[\'findings\'])}")
+assert not problems, "the real model's output conforms - that is the point"
+'''),
+
+  ("md", "## 9 · Read that output again\n\n"
+         "It passes the contract with zero problems, and almost nothing in it "
+         "is true."),
+  ("py", '''print("What a schema check can see:")
+print(f"   every required field present, every type correct -> {len(check(model, contract))} problems")
+print()
+print("What it cannot see:")
+print("   1. the CWE is wrong. open() on a caller-supplied path is CWE-22,")
+print("      not CWE-89. The second sink, os.system(), is CWE-78 - and the")
+print("      model gave that one CWE-89 as well.")
+print("   2. `missing_control` and `verdict_reason` are the literal string")
+print("      'str' - the model copied the contract's TYPE PLACEHOLDER into")
+print("      the value. A schema saying a field must be a string is")
+print("      perfectly satisfied by the word 'str'.")
+print("   3. counts says 0 findings. The findings array has 1.")
+print()
+# monotonicity alone passes here: [0,0,0,0] is non-increasing. The invariant
+# that catches this one is different, and cheap.
+seq = [model["counts"][k] for k in ("raw", "deduped", "verified", "feasible")]
+print(f"counts non-increasing?      {all(x >= y for x, y in zip(seq, seq[1:]))}  <- passes")
+print(f"counts.verified == len(findings)?  "
+      f"{model[\'counts\'][\'verified\'] == len(model[\'findings\'])}  <- catches it")
+print()
+print("Three defects, zero schema violations. That is what a headline of")
+print("'100% schema-valid' actually means as a quality metric, and it is why")
+print("accuracy has to be measured against a key the model never sees.")
+assert model["counts"]["verified"] != len(model["findings"])
+assert f["cwe"] != "CWE-22", "the model got the weakness class wrong"
+assert f["missing_control"] == "str", "the model copied the type placeholder"
+'''),
  ],
  "expect": "The call graph identifies three entry points, one of which uses "
            "dynamic dispatch. `load_report` is reachable, `debug_dump` and "

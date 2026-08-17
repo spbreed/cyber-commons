@@ -5,8 +5,8 @@
  "notebooks": 108,
  "passed": 108,
  "failed": 0,
- "total_seconds": 5.9,
- "total_output_lines": 4125,
+ "total_seconds": 5.91,
+ "total_output_lines": 4152,
  "results": [
   {
    "session": "A1.1",
@@ -420,11 +420,11 @@
    "ok": true,
    "returncode": 0,
    "seconds": 0.03,
-   "stdout_lines": 59,
-   "stdout_chars": 2633,
+   "stdout_lines": 86,
+   "stdout_chars": 3883,
    "error": "",
-   "code_cells": 8,
-   "markdown_cells": 11
+   "code_cells": 10,
+   "markdown_cells": 13
   },
   {
    "session": "B1.8",
@@ -1024,7 +1024,7 @@
    "session": "E2.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 45,
    "stdout_chars": 2069,
    "error": "",
