@@ -57,3 +57,30 @@ looking like it deduplicates everything.
 
 The queue triples. Nobody reads the third page. The defect that gets
 fixed is whichever one happened to sort first.
+conformance problems: 0
+
+evidence it cited : open('/var/reports/' + request.args['name'])
+CWE it assigned   : CWE-89  (SQL injection)
+CWE it actually is: CWE-22  (path traversal - it is open(), not a query)
+missing_control   : 'str'
+verdict_reason    : 'str'
+counts            : {'raw': 0, 'deduped': 0, 'verified': 0, 'feasible': 0}  while findings has 1
+What a schema check can see:
+   every required field present, every type correct -> 0 problems
+
+What it cannot see:
+   1. the CWE is wrong. open() on a caller-supplied path is CWE-22,
+      not CWE-89. The second sink, os.system(), is CWE-78 - and the
+      model gave that one CWE-89 as well.
+   2. `missing_control` and `verdict_reason` are the literal string
+      'str' - the model copied the contract's TYPE PLACEHOLDER into
+      the value. A schema saying a field must be a string is
+      perfectly satisfied by the word 'str'.
+   3. counts says 0 findings. The findings array has 1.
+
+counts non-increasing?      True  <- passes
+counts.verified == len(findings)?  False  <- catches it
+
+Three defects, zero schema violations. That is what a headline of
+'100% schema-valid' actually means as a quality metric, and it is why
+accuracy has to be measured against a key the model never sees.
