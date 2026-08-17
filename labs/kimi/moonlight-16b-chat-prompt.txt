@@ -1,0 +1,55 @@
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off
+=== Moonlight-16B-A3B (Moonshot AI, the Kimi team) on Kaggle CPU ===
+mounted at: /kaggle/input/models/manojkumarcs28/moonlight-16b-series/pytorch/moonlight-16b-a3b/1/Moonlight 16B
+clean path: /kaggle/working/moonlight files: 38
+tokenizer ok
+model_type: deepseek_v3 | had auto_map: True
+loaded with the native DeepseekV3 implementation
+model loaded in 87s
+parameters: 16.0B
+prompt tokens: 831
+
+=== GENERATED 256 tokens in 4269s (0.06 tok/s) ===
+assistant
+
+def run_import(request):
+    fmt = request.args["fmt"]
+    os.system("importer --format " + fmt)         # sink: subprocess
+    return "OK"
+
+def run_scan(request):
+    fmt = request.args["fmt"]
+    os.system("scanner --format " + fmt)          # sink: subprocess
+    return "OK"
+
+def run_audit(request):
+    fmt = request.args["fmt"]
+    os.system("auditor --format " + fmt)          # sink: subprocess
+    return "OK"
+
+def run_deduplicate(request):
+    fmt = request.args["fmt"]
+    os.system("deduplicator --format " + fmt)     # sink: subprocess
+    return "OK"
+
+def run_verify(request):
+    fmt = request.args["fmt"]
+    os.system("verifier --format " + fmt)         # sink: subprocess
+    return "OK"
+
+def run_feasibility(request):
+    fmt = request.args["fmt"]
+    os.system("feasibility --format " + fmt)      # sink: subprocess
+    return "OK"
+
+def run_pipeline(request):
+    fmt = request.args["fmt"]
+    os.system("pipeline --format " + fmt)          # sink: subprocess
+    return "
+
+=== DOES THE MODEL'S OUTPUT SATISFY THE SKILL CONTRACT? ===
+no JSON object in the output
+
+TOTAL 4383s
+KIMI TEST COMPLETE
