@@ -5,7 +5,7 @@
 
 **Job titles:** Security Architect, Principal Security Engineer, Head of Security Architecture
 
-**What changes:** You stop reviewing designs and start designing the control plane other people's agents run inside. Your artefact stops being a document and becomes a runtime.
+**What changes:** Starts from zero: what an agentic system is made of, then the map of every control that holds it. Only then the architect's own work — living threat models, the control plane, blast radius, topology, build-vs-buy, routing.
 
 **Autonomy focus:** Designs must be safe at L3 even when deployed at L2.5.
 
@@ -15,7 +15,51 @@
 
 ---
 
-### A1.1 — Architecture review when the system acts
+### A1.1 — What an agentic system is actually made of
+
+`both directions`
+
+- **Risk** — "Secure the agent" has no referent until you can name the parts. Every control in this curriculum attaches to one specific component or one boundary between two.
+- **Control** — Draw the system as it really runs: app, model, agent loop, tools and APIs, MCP servers, retrieval, memory — and mark which boundaries untrusted data crosses.
+- **Lab** — Build the component graph for a working agent, then trace one user request through every hop and mark where trust changes.
+- **Tools** — `kagent`, `OpenTelemetry`
+- **Models** — `Llama 3.3`, `GLM-4.6`
+
+**Run it** — Name the seven parts of an agentic system, then find the two boundaries every later control binds to.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it
+```
+
+*Expect:* The component graph prints with trust levels, one request traces to a tool call, and a poisoned document steers the naive loop 134 times in 400 while the provenance-aware loop fires zero times.
+
+---
+
+### A1.2 — The controls, and where each one binds
+
+`Security of AI`
+
+- **Risk** — Controls chosen as a checklist land in the wrong layer — a prompt rule where an authorization rule was needed, and nothing to point at when asked what stops it.
+- **Control** — One map: identity, default-deny authorization, sandboxed execution, tool and MCP trust, egress, containment, audit — each bound to the component it constrains.
+- **Lab** — Place seven controls on the component graph from A1.1, then remove one at a time and count which attacks stop being stopped.
+- **Tools** — `OPA`, `SPIFFE/SPIRE`, `Falco`, `agentgateway`
+- **Models** — `GLM-4.6`
+
+**Run it** — Map seven controls onto the components they bind to, then measure what each one alone is holding up.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it
+```
+
+*Expect:* Removing each control in turn shows which attacks it alone was stopping; audit newly unstops nothing, because audit explains rather than prevents.
+
+---
+
+### A1.3 — Architecture review when the system acts
 
 `Security of AI`
 
@@ -44,7 +88,7 @@ diff tm-before.md tm-after.md
 
 ---
 
-### A1.2 — Designing the agent control plane
+### A1.4 — Designing the agent control plane
 
 `Security of AI`
 
@@ -74,34 +118,7 @@ kubectl apply -k opa/       # policy decision point
 
 ---
 
-### A1.3 — Authorization models that make bad grants impossible
-
-`Security of AI`
-
-- **Risk** — RBAC has no unit small enough to express the grant you actually meant.
-- **Control** — ReBAC/ABAC with time-scoped delegation and attenuation by construction.
-- **Lab** — Model the same grant in flat RBAC and in OpenFGA; prove the over-privileged grant is unrepresentable.
-- **Tools** — `OpenFGA`, `OPA`
-
-**Run it** — Make the over-privileged grant structurally unrepresentable.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-docker run -d -p 8080:8080 openfga/openfga run
-cd labs/a1-control-plane/authz
-fga model write --file model.fga
-python3 prove_unrepresentable.py   # attempts to write the bad grant
-```
-
-*Expect:* The bad grant is rejected by the schema, not by a policy check that could be skipped.
-
----
-
-### A1.4 — Blast radius as a design metric
+### A1.5 — Blast radius as a design metric
 
 `Security of AI`
 
@@ -129,7 +146,7 @@ python3 blast_radius.py --compare flat-rbac attenuated --out blast.md
 
 ---
 
-### A1.5 — Multi-agent topology
+### A1.6 — Multi-agent topology
 
 `Security of AI`
 
@@ -156,7 +173,7 @@ python3 authority_map.py --namespace agents --max-depth 3
 
 ---
 
-### A1.6 — Build vs buy
+### A1.7 — Build vs buy
 
 `both directions`
 
@@ -183,7 +200,7 @@ python3 score_option.py --report
 
 ---
 
-### A1.7 — Model routing architecture
+### A1.8 — Model routing architecture
 
 `both directions`
 

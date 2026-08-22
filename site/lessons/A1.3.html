@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.3 — Authorization models that make bad grants impossible | Cyber Commons</title><meta name="description" content="ReBAC/ABAC with time-scoped delegation and attenuation by construction."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.3</div><h1>Authorization models that make bad grants impossible</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>RBAC has no unit small enough to express the grant you actually meant.</p></div><div class="ctrl"><div class="lab">Control</div><p>ReBAC/ABAC with time-scoped delegation and attenuation by construction.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Make the over-privileged grant structurally unrepresentable.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 22 lines of output in 0.02s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.3 · Authorization models that make bad grants impossible</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.3 — Architecture review when the system acts | Cyber Commons</title><meta name="description" content="Living, continuously re-evaluated threat models over the three planes separately."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.3</div><h1>Architecture review when the system acts</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>PDF threat models go stale the moment the agent&#x27;s tools change.</p></div><div class="ctrl"><div class="lab">Control</div><p>Living, continuously re-evaluated threat models over the three planes separately.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Make the threat model a living artefact that moves when the tools move.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 39 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.3 · Architecture review when the system acts</h1>
 <p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.2.html">A1.2 · Designing the agent control plane</a></strong>.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.2.html">A1.2 · The controls, and where each one binds</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,115 +11,206 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>OpenFGA, OPA</td>
+<td>OWASP Threat Dragon, kagent</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>—</td>
+<td>GLM-4.6</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>There are three ways to stop a bad permission grant, and they are not equally
-good.</p>
-<ol>
-<li><strong>Review it.</strong> A human reads the request and says no. Works until Friday
-   afternoon, or until the requester is persuasive, or until the reviewer is on
-   holiday.</li>
-<li><strong>Detect it.</strong> You find the bad grant afterwards, in an access review. Better
-   than nothing; the window between grant and detection is your exposure.</li>
-<li><strong>Make it unrepresentable.</strong> The system cannot express the grant at all. The
-   request fails at the point of issue, with no human in the loop.</li>
-</ol>
-<p>Only the third one scales, and the mechanism is a <strong>ceiling</strong>: a declared upper
-bound on what each identity may <em>ever</em> hold, enforced by the thing that issues
-credentials rather than by the thing that reviews them.</p>
-<p>This matters more for agents than for people because agents get their
-permissions programmatically, at machine speed, often from other agents. A
-review step in that path is not a control; it is a bottleneck that will be
-removed.</p></div><div class="nbmd"><h2>2 · Demo — ceilings, and what they refuse</h2>
-<p>Real scopes from a real deployment: a CI/CD estate with a human engineer and three service identities.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># The ceiling: what each identity may hold AT MOST, whoever asks, forever.
-CEILINGS = {
-    &quot;dana@corp&quot;:       {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;deploy:staging&quot;, &quot;deploy:prod&quot;,
-                        &quot;secrets:read&quot;},
-    &quot;ci-builder&quot;:      {&quot;repo:read&quot;, &quot;artifact:write&quot;},
-    &quot;deploy-bot&quot;:      {&quot;artifact:read&quot;, &quot;deploy:staging&quot;},
-    &quot;triage-agent&quot;:    {&quot;repo:read&quot;, &quot;finding:comment&quot;},
-}
+<p>Start with something that is not an agent.</p>
+<p>A <strong>model</strong> takes text and returns text. Ask GPT-4 or Llama 3.3 to delete your
+production database and it will produce a convincing paragraph about deleting
+your production database. Nothing happens. The output is a string.</p>
+<p>A model becomes an <strong>agent</strong> when something reads that string and <em>acts on it</em> —
+a program that sees <code>{"tool": "run_sql", "args": {...}}</code> and actually connects
+to the database. That program is the agent. The model is a component inside it.</p>
+<p>This gives us three layers, and the whole curriculum uses these names:</p>
+<table>
+<thead>
+<tr>
+<th>Plane</th>
+<th>What lives here</th>
+<th>Can it change the world?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Decision</strong></td>
+<td>the model. Proposals, plans, text.</td>
+<td>No. Never.</td>
+</tr>
+<tr>
+<td><strong>Control</strong></td>
+<td>policy, scopes, approval gates, the gateway.</td>
+<td>It decides what passes.</td>
+</tr>
+<tr>
+<td><strong>Action</strong></td>
+<td>the tools. SQL, HTTP, the filesystem, the cloud API.</td>
+<td>Yes. Only here.</td>
+</tr>
+</tbody>
+</table>
+<p>The consequence is the point of this lesson. When something goes wrong, "the
+model did it" cannot be the root cause — the model only ever wrote on the
+decision plane. Something on the <strong>control plane</strong> let a proposal through. That
+is where your architecture review has to look.</p>
+<p>Traditional architecture review assumed the system's behaviour was fixed at
+design time: you read the code, you drew the trust boundaries, you signed the
+document. An agent's behaviour is determined by a <em>tool manifest</em> that changes
+when someone edits a config file. So we need a review that runs against the
+manifest, continuously — which means the manifest has to be something a program
+can read.</p></div><div class="nbmd"><h2>2 · Demo — classify a real tool manifest</h2>
+<p>Here is the manifest of a plausible internal agent: a bot that triages security findings. Every entry is a capability someone actually grants in real deployments. The question the code answers is which plane each one sits on — and note that the answer comes from what a tool <em>can do</em>, never from what it is called.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
 
-class GrantRefused(Exception):
-    &quot;&quot;&quot;Refusing is the feature, not an error path.&quot;&quot;&quot;
+# How far a single call can reach. These weights are the crude, useful kind:
+# the absolute number means nothing, the *ratio* between designs means a lot.
+SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20, &quot;internet&quot;: 50}
 
-def grant(identity, scopes):
-    ceiling = CEILINGS.get(identity, set())
-    excess = set(scopes) - ceiling
-    if excess:
-        raise GrantRefused(
-            f&quot;{identity} may never hold {sorted(excess)} &quot;
-            f&quot;(ceiling: {sorted(ceiling)})&quot;)
-    return set(scopes)
+@dataclass(frozen=True)
+class Tool:
+    name: str
+    writes: bool = False        # can it change state anywhere?
+    reversible: bool = True     # can the change be undone cheaply?
+    scope: str = &quot;self&quot;         # self | project | tenant | org | internet
 
-requests = [
-    (&quot;ci-builder&quot;,   {&quot;repo:read&quot;, &quot;artifact:write&quot;},  &quot;the normal build grant&quot;),
-    (&quot;deploy-bot&quot;,   {&quot;deploy:staging&quot;},               &quot;staging deploy&quot;),
-    (&quot;deploy-bot&quot;,   {&quot;deploy:prod&quot;},                  &quot;&#x27;just for the hotfix&#x27;&quot;),
-    (&quot;triage-agent&quot;, {&quot;repo:write&quot;},                   &quot;&#x27;so it can fix what it finds&#x27;&quot;),
-    (&quot;ci-builder&quot;,   {&quot;secrets:read&quot;},                 &quot;&#x27;the build needs a token&#x27;&quot;),
+    @property
+    def plane(self) -&gt; str:
+        # A tool that cannot write is a read tool no matter what it is called.
+        return &quot;action&quot; if self.writes else &quot;decision&quot;
+
+# A security finding-triage agent, as actually deployed in a lot of places.
+manifest = [
+    Tool(&quot;search_findings&quot;),
+    Tool(&quot;read_source&quot;),
+    Tool(&quot;post_jira_comment&quot;, writes=True, scope=&quot;project&quot;),
+    Tool(&quot;close_finding&quot;,     writes=True, scope=&quot;project&quot;),
+    Tool(&quot;open_pr&quot;,           writes=True, scope=&quot;project&quot;),
+    Tool(&quot;merge_pr&quot;,          writes=True, scope=&quot;project&quot;, reversible=False),
+    Tool(&quot;rotate_credential&quot;, writes=True, scope=&quot;org&quot;, reversible=False),
 ]
-for identity, scopes, why in requests:
-    try:
-        grant(identity, scopes)
-        print(f&quot;GRANTED  {identity:14s} {sorted(scopes)}   — {why}&quot;)
-    except GrantRefused as e:
-        print(f&quot;REFUSED  {identity:14s} {sorted(scopes)}   — {why}&quot;)
-        print(f&quot;         {e}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks</h2>
-<p>Three of those five requests are ones a real engineer would file with a straight face, and a reviewer would probably approve at least two. "Just for the hotfix" is how <code>deploy-bot</code> ends up with permanent production rights.</p>
-<p>But a ceiling has a hole in it, and it is worth seeing rather than being told about: <strong>the ceiling constrains a single identity, not a chain of them.</strong> If <code>triage-agent</code> cannot hold <code>repo:write</code>, but it can ask <code>ci-builder</code> to act for it, the ceiling has been walked around without ever being violated.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Each individual grant is legal. The composition is not.
-def call_chain(chain):
-    print(&quot; → &quot;.join(chain))
-    held = set()
-    for identity in chain:
-        held |= CEILINGS.get(identity, set())
-    return held
 
-reachable = call_chain([&quot;triage-agent&quot;, &quot;ci-builder&quot;, &quot;deploy-bot&quot;])
-print(&quot;scopes reachable through the chain:&quot;, sorted(reachable))
-print(&quot;triage-agent&#x27;s own ceiling:        &quot;, sorted(CEILINGS[&quot;triage-agent&quot;]))
-print(&quot;\nNo ceiling was broken. The agent still reached artifact:write and&quot;)
-print(&quot;deploy:staging, because it can ask something else to do the work.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control</h2>
-<p>The fix has two halves and you need both:</p>
-<p><strong>Narrowing on delegation.</strong> When one identity acts for another, the resulting authority must be the <em>intersection</em> of what was presented and what the new actor may hold — never the union. This is the mechanism A2.5 builds properly as RFC 8693 token exchange.</p>
-<p><strong>Recording the chain.</strong> The resource server must be able to see that the call arrived through <code>triage-agent</code>, so a policy can refuse it even when the immediate caller is allowed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def delegate(presented_scopes, presenting, new_actor):
-    &quot;&quot;&quot;Intersection, not union. This one line is the whole control.&quot;&quot;&quot;
-    ceiling = CEILINGS.get(new_actor, set())
-    return set(presented_scopes) &amp; ceiling
+print(f&quot;{&#x27;tool&#x27;:22s}{&#x27;plane&#x27;:10s}{&#x27;scope&#x27;:10s}reversible&quot;)
+print(&quot;-&quot; * 56)
+for t in manifest:
+    print(f&quot;{t.name:22s}{t.plane:10s}{t.scope:10s}{t.reversible}&quot;)
 
-start = grant(&quot;triage-agent&quot;, {&quot;repo:read&quot;, &quot;finding:comment&quot;})
-print(&quot;triage-agent holds:      &quot;, sorted(start))
-hop1 = delegate(start, &quot;triage-agent&quot;, &quot;ci-builder&quot;)
-print(&quot;→ delegated to ci-builder:&quot;, sorted(hop1) or &quot;∅ — nothing survives&quot;)
-hop2 = delegate(hop1, &quot;ci-builder&quot;, &quot;deploy-bot&quot;)
-print(&quot;→ delegated to deploy-bot:&quot;, sorted(hop2) or &quot;∅ — nothing survives&quot;)
+reads  = [t.name for t in manifest if not t.writes]
+writes = [t.name for t in manifest if t.writes]
+print(f&quot;\ndecision plane ({len(reads)}): {reads}&quot;)
+print(f&quot;action plane   ({len(writes)}): {writes}&quot;)
+print(&quot;\nThe model can propose all seven. Only the five on the action plane&quot;)
+print(&quot;can change anything, and only if the control plane lets them through.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks</h2>
+<p>Look at that manifest again. There is <strong>no control plane in it at all</strong> — nothing between the model's proposal and the tool call. Whatever the model emits, happens.</p>
+<p>That is not a hypothetical configuration. It is the default: you give a framework a list of tools, and it calls them. The trust boundary that used to exist between "a human decided" and "the system executed" is gone, and nothing in the code review shows it missing, because <em>no code was written to remove it</em>.</p>
+<p>So the first architecture question for an agent is not "is the code safe?" It is: <strong>what is the worst single call this manifest permits, and who reviewed that?</strong></p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def blast_radius(tools, gated=frozenset()):
+    &quot;&quot;&quot;What one unreviewed action can cost. Gated calls score zero — they are
+    reviewed by definition.&quot;&quot;&quot;
+    per, total = {}, 0
+    for t in tools:
+        if not t.writes:
+            continue
+        score = SCOPE_WEIGHT[t.scope]
+        if not t.reversible:
+            score *= 2          # you cannot review an action after undoing it
+        if t.name in gated:
+            score = 0
+        per[t.name] = score
+        total += score
+    return total, dict(sorted(per.items(), key=lambda kv: -kv[1]))
 
-print(&quot;\nAuthority can only shrink along a chain. The walk-around is closed,&quot;)
-print(&quot;and no reviewer had to notice anything.&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: property-test it. Delegation must NEVER widen, for any input.
-import itertools, random
-random.seed(7)
-ids = list(CEILINGS)
-violations = 0
-for _ in range(2000):
-    a, b = random.sample(ids, 2)
-    held = set(random.sample(sorted(CEILINGS[a]), k=random.randint(0, len(CEILINGS[a]))))
-    out = delegate(held, a, b)
-    if not out &lt;= held or not out &lt;= CEILINGS[b]:
-        violations += 1
-print(f&quot;2000 random delegations, widening violations: {violations}&quot;)
-assert violations == 0
-print(&quot;Property holds: result ⊆ presented AND result ⊆ new actor&#x27;s ceiling.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Two grants succeed; three are refused with the ceiling that refused them. The chain demo shows <code>triage-agent</code> reaching <code>artifact:write</code> and <code>deploy:staging</code> without breaking any ceiling. Intersection-based delegation reduces the chain to the empty set, and the 2000-case property test reports zero widening violations.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Find one identity in your estate whose ceiling is effectively "everything" — a break-glass role, a CI admin token. A ceiling cannot constrain it, so its controls have to be time and audit instead. A2.8 builds that.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.4.html">A1.4 · Blast radius as a design metric</a></strong></p>
+total, per = blast_radius(manifest)
+print(&quot;ungoverned manifest — blast radius:&quot;, total)
+for name, score in per.items():
+    print(f&quot;   {name:22s}{score:4d}&quot;)
+print(&quot;\nThe worst single call is rotate_credential: org-wide and irreversible.&quot;)
+print(&quot;An agent that can close a finding can also rotate the credential that&quot;)
+print(&quot;finding was about. Nobody decided that; it fell out of the tool list.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control</h2>
+<p>The fix is not to remove tools — the agent needs them to be useful. It is to put a <strong>control plane</strong> in the path, and the cheapest one that works is an approval gate on the calls that are wide or irreversible.</p>
+<p>This is the first appearance of the <strong>autonomy ladder</strong>, which the rest of the curriculum uses constantly:</p>
+<table>
+<thead>
+<tr>
+<th>Rung</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L1</strong></td>
+<td>Model proposes, a human performs every action.</td>
+</tr>
+<tr>
+<td><strong>L2</strong></td>
+<td>Model calls tools, a human approves each call.</td>
+</tr>
+<tr>
+<td><strong>L2.5</strong></td>
+<td>Pre-approved tool set, bounded scope, humans review after the fact.</td>
+</tr>
+<tr>
+<td><strong>L3</strong></td>
+<td>Model acts and self-verifies; humans see aggregates.</td>
+</tr>
+</tbody>
+</table>
+<p>The rung is <strong>not</strong> about how clever the model is. It is about what the model's output is allowed to trigger without a human in the path. A small local model at L3 is more dangerous than a frontier model at L1.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>LADDER = {&quot;L1&quot;: 0, &quot;L2&quot;: 1, &quot;L2.5&quot;: 3, &quot;L3&quot;: 5}
+
+def review(tools, gated, claimed_rung):
+    &quot;&quot;&quot;The architecture review, as a function. This is the deliverable.&quot;&quot;&quot;
+    problems = []
+    writers = [t for t in tools if t.writes]
+    ungated = [t.name for t in writers if t.name not in gated]
+    if claimed_rung == &quot;L1&quot; and writers:
+        problems.append(f&quot;claims L1 but holds {len(writers)} state-changing tools&quot;)
+    if claimed_rung == &quot;L2&quot; and ungated:
+        problems.append(f&quot;claims L2 (approve every call) but ungated: {ungated}&quot;)
+    if claimed_rung == &quot;L2.5&quot;:
+        wide = [t.name for t in writers
+                if SCOPE_WEIGHT[t.scope] &gt;= SCOPE_WEIGHT[&quot;org&quot;] and t.name not in gated]
+        if wide:
+            problems.append(f&quot;claims L2.5 (bounded) but reaches org-wide ungated: {wide}&quot;)
+    irrev = [t.name for t in writers if not t.reversible and t.name not in gated]
+    if irrev and claimed_rung != &quot;L3&quot;:
+        problems.append(f&quot;irreversible and ungated (no after-the-fact review possible): {irrev}&quot;)
+    return problems
+
+for label, gated, rung in [
+    (&quot;as deployed&quot;,                set(),                                      &quot;L2.5&quot;),
+    (&quot;gate the irreversible ones&quot;, {&quot;merge_pr&quot;, &quot;rotate_credential&quot;},          &quot;L2.5&quot;),
+    (&quot;gate every writer&quot;,          {t.name for t in manifest if t.writes},     &quot;L2&quot;),
+]:
+    total, _ = blast_radius(manifest, gated)
+    problems = review(manifest, gated, rung)
+    print(f&quot;{label:30s} rung={rung:5s} blast={total:3d}  &quot;
+          f&quot;{&#x27;CLEAN&#x27; if not problems else &#x27;FINDINGS&#x27;}&quot;)
+    for p in problems:
+        print(f&quot;{&#x27;&#x27;:32s}⚠ {p}&quot;)</code></pre></div><div class="nbmd"><h2>5 · Verify — the review that runs itself</h2>
+<p>A threat model written in a document is stale the moment someone adds a tool, and adding a tool is a config change that no code review sees. So the artefact that actually protects you is not the model — it is the <strong>diff</strong>, run automatically whenever the manifest changes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def diff(before, after, gated=frozenset()):
+    b, a = {t.name for t in before}, {t.name for t in after}
+    tb, _ = blast_radius(before, gated)
+    ta, _ = blast_radius(after, gated)
+    return {&quot;added&quot;: sorted(a - b), &quot;removed&quot;: sorted(b - a),
+            &quot;blast&quot;: f&quot;{tb} → {ta}&quot;, &quot;delta&quot;: ta - tb,
+            &quot;new_findings&quot;: [p for p in review(after, gated, &quot;L2.5&quot;)
+                             if p not in review(before, gated, &quot;L2.5&quot;)]}
+
+gated = {&quot;merge_pr&quot;, &quot;rotate_credential&quot;}
+v1 = [t for t in manifest if t.name != &quot;rotate_credential&quot;]
+v2 = manifest                               # someone adds credential rotation
+
+print(&quot;someone edits the manifest on a Tuesday:&quot;)
+for k, v in diff(v1, v2, gated={&quot;merge_pr&quot;}).items():
+    print(f&quot;   {k:14s} {v}&quot;)
+print(&quot;\nNo pull request touched the agent&#x27;s code. The blast radius doubled.&quot;)
+print(&quot;This diff, wired into CI, IS the living architecture review.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The manifest splits into 2 decision-plane and 5 action-plane tools. Ungoverned it scores a blast radius of 55, with <code>rotate_credential</code> (40) dominating. Gating the two irreversible tools cuts it to 9 and clears every finding. The manifest diff shows <code>rotate_credential</code> being added, the blast radius going 15 → 55, and a new finding for an irreversible ungated tool.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Write out the manifest of one agent that is running in your organisation right now — every tool, honestly, including the ones added after launch. Run <code>review()</code> against the rung your team claims. The usual result is that the claimed rung is one or two above what the controls support.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.4.html">A1.4 · Designing the agent control plane</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.3.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The bad grant is rejected by the schema, not by a policy check that could be skipped.</div><div class="chips"><span>OpenFGA</span><span>OPA</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.3.ipynb</code></p></div><div class="pager"><a href="A1.2.html"><span class="k">← Previous</span><span class="t">A1.2 · Designing the agent control plane</span></a><a class="next" href="A1.4.html"><span class="k">Next →</span><span class="t">A1.4 · Blast radius as a design metric</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>One added tool changes the trust boundaries section. A PDF threat model would not have moved.</div><div class="chips"><span>OWASP Threat Dragon</span><span>kagent</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.3.ipynb</code></p></div><div class="pager"><a href="A1.2.html"><span class="k">← Previous</span><span class="t">A1.2 · The controls, and where each one binds</span></a><a class="next" href="A1.4.html"><span class="k">Next →</span><span class="t">A1.4 · Designing the agent control plane</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

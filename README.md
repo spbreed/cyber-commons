@@ -4,7 +4,7 @@
 secure the AI *itself* — organised the way a CISO org actually is, and provable
 on the laptop you already own.**
 
-Twelve tracks, **108 lessons — each with its own page and its own self-contained
+Twelve tracks, **110 lessons — each with its own page and its own self-contained
 Python notebook**. Every notebook opens in your browser in one click, carries
 every line of code it runs, works on the **standard library alone**, and is
 **executed in CI before it ships**.
@@ -12,7 +12,7 @@ Every lab is built on **open-source tooling (CNCF / Linux Foundation)** and
 **open-weight models (Llama, Kimi, GLM)**. No licence, no vendor, **no
 frontier-lab account**. Total cost to complete the curriculum: nothing.
 
-🌐 **[cyber-commons live site](https://spbreed.github.io/cyber-commons/)** · 📓 [The 108 notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
+🌐 **[cyber-commons live site](https://spbreed.github.io/cyber-commons/)** · 📓 [The 110 notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🤖 [Get the models free](MODELS.md) · 🎥 [Recording pipeline](#recording-pipeline)
 
 ---
 
@@ -26,8 +26,8 @@ faces the same attackers as a global bank. A commons is the opposite bet:
 Two promises make it usable by anyone:
 
 - **Everything executes.** No pseudo-code, no screenshots of a demo. Every one of
-  the 108 sessions ships a Python notebook that runs top to bottom and prints
-  real output — and CI runs all 108 on every push, committing the result to
+  the 110 sessions ships a Python notebook that runs top to bottom and prints
+  real output — and CI runs all 110 on every push, committing the result to
   [`labs/notebooks/_results.json`](labs/notebooks/_results.json). A lesson that
   claims an output has actually produced it.
 - **Concept first, then the risk.** Each lesson introduces the idea and
@@ -114,27 +114,52 @@ The topics don't change with grade; the accountability does.
 
 ## Quick start
 
+**Nothing to install. Nothing to pay for. Start in a browser.**
+
+1. Open a lesson page — [A1.1](https://spbreed.github.io/cyber-commons/lessons/A1.1.html)
+   is the first one.
+2. Press **▶ Run on Kaggle**. The notebook opens in *your* Kaggle account.
+3. Press **Run All**.
+
+That is the whole setup. Every one of the 110 notebooks is self-contained and
+standard-library only, so it runs on a free Kaggle CPU kernel **with the
+internet switched off** — no model to download, no API key, no GPU, no quota to
+burn. A lesson takes seconds, not minutes.
+
+Two worth starting with:
+
+| | |
+|---|---|
+| [**A1.1**](https://spbreed.github.io/cyber-commons/lessons/A1.1.html) | What an agent actually is, and where the risk lives |
+| [**B2.2**](https://spbreed.github.io/cyber-commons/lessons/B2.2.html) | The whole curriculum in miniature — the loop reports success, the code is wrong, and the trace looks clean. Learning to measure that gap is what the rest of the commons is for. |
+
+### Running them anywhere else
+
+The same notebooks run unchanged in Jupyter, or headless:
+
 ```bash
 git clone https://github.com/spbreed/cyber-commons && cd cyber-commons
-
-# 1. get a model — local and free (see MODELS.md for hosted/free-tier options)
-curl -fsSL https://ollama.com/install.sh | sh
-ollama pull llama3.3            # or glm-4.6 / a smaller variant on a light laptop
-export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=llama3.3
-
-# 2. lesson one — what an agent actually is, and where the risk lives
 python3 scripts/run_notebooks.py --session A1.1
-
-# 3. the one that shows why a harness lies to you
-python3 scripts/run_notebooks.py --session B2.2
+python3 scripts/run_notebooks.py              # all 110, refreshes the evidence
 ```
 
-Or open either notebook in Jupyter, or press **▶ Run on Kaggle** on its lesson
-page. B2.2 is the whole curriculum in miniature: the loop reports success, the
-code is wrong, and the trace looks clean. Learning to measure that gap is what
-the rest of the commons is for.
-
 Browse the site locally: `python3 -m http.server 8000 --directory site`
+
+### Pointing a lesson at a real model
+
+You do not need one — every lesson runs against a deterministic stand-in that
+is labelled as a stand-in wherever it appears, never presented as a model's
+output. When you *want* real inference, each of those notebooks prints the
+exact command:
+
+```bash
+ollama pull glm-4.6            # or kimi-k2, llama3.3
+export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6
+```
+
+See [MODELS.md](MODELS.md) for hosted and free-tier options, and
+[labs/kimi/](labs/kimi) for what actually happened when these skills were run
+against a Kimi-family model on Kaggle — including the parts that did not work.
 
 ## Agent skills
 
@@ -159,9 +184,9 @@ never drift from the skill it teaches.
 
 ## Labs
 
-**Every one of the 108 sessions has a notebook, every notebook is
+**Every one of the 110 sessions has a notebook, every notebook is
 self-contained, every notebook runs — and every notebook has been run a second
-time on Kaggle, on a different machine, where all 108 printed exactly what they
+time on Kaggle, on a different machine, where all 110 printed exactly what they
 print here.**
 
 That second run is the claim worth making. A kernel that finishes reports
@@ -174,11 +199,11 @@ two lessons that printed different things on the two machines because their
 output depended on `PYTHONHASHSEED`; both are fixed, and
 [`scripts/check_determinism.py`](scripts/check_determinism.py) now gates CI on
 running every notebook under several hash seeds so the next one is caught in
-nine seconds instead of after 108 remote pushes.
+nine seconds instead of after 110 remote pushes.
 
 | | |
 |---|---|
-| [`labs/notebooks/`](labs/notebooks) | 108 notebooks, one per session — generated, executed in CI, rendered on the lesson pages |
+| [`labs/notebooks/`](labs/notebooks) | 110 notebooks, one per session — generated, executed in CI, rendered on the lesson pages |
 | [`labs/b2.10-eval-harness`](labs/b2.10-eval-harness) | The full eval harness with real corpora and committed evidence (B2.10, E1.5, C1.6) |
 | [`labs/a2-delegation`](labs/a2-delegation) | The deeper standalone version of the A2 delegation lab, with a real Keycloak variant |
 
@@ -187,7 +212,7 @@ Open any lesson page and press **▶ Run on Kaggle** — the notebook is created
 
 ```bash
 jupyter notebook labs/notebooks/A2.5.ipynb
-python3 scripts/run_notebooks.py            # all 108, headless, refreshes the evidence
+python3 scripts/run_notebooks.py            # all 110, headless, refreshes the evidence
 ```
 
 **Self-contained is the load-bearing property.** A notebook carries every line
@@ -245,13 +270,13 @@ Every lesson has its own page — `site/lessons/<ID>.html` — generated from da
 | The video | drop `recordings/<ID>.mp4` — see below |
 
 ```bash
-python3 scripts/build_notebooks.py   # regenerate all 108 notebooks
+python3 scripts/build_notebooks.py   # regenerate all 110 notebooks
 python3 scripts/run_notebooks.py     # prove they run; refreshes _results.json
 python3 scripts/build_site.py        # regenerate all 109 pages (fast, idempotent)
 git add -A && git commit -m "lesson: A2.5 notes" && git push
 ```
 
-CI runs the secret scan, all 108 notebooks, the determinism gate, and both `--check` modes, so the notebook you read on the site is always the notebook
+CI runs the secret scan, all 110 notebooks, the determinism gate, and both `--check` modes, so the notebook you read on the site is always the notebook
 that ran.
 
 That's the whole loop. Pushing triggers the Pages deploy, and the workflow
@@ -289,7 +314,7 @@ python3 scripts/link_video.py --session A2.5 --youtube-id <id>
 python3 scripts/build_site.py
 ```
 
-`python3 scripts/link_video.py --list` shows which of the 108 lessons still need
+`python3 scripts/link_video.py --list` shows which of the 110 lessons still need
 recording.
 
 ## The site
@@ -308,7 +333,7 @@ drift apart.
 ```
 curriculum/          12 track chapters (generated from the JSON source of truth) + labs.json
 lessons/             Optional per-lesson notes — lessons/<ID>.md renders on that page
-labs/notebooks/      The 108 lesson notebooks (generated, self-contained) + evidence
+labs/notebooks/      The 110 lesson notebooks (generated, self-contained) + evidence
 labs/                b2.10-eval-harness · a2-delegation (deeper standalone labs)
 site/                The website: index.html, lessons/<ID>.html (generated), data/, assets/
 MODELS.md            How to get Llama / Kimi / GLM free — local, hosted, or self-hosted

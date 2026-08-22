@@ -6,6 +6,24 @@
  },
  "labs": {
   "A1.1": {
+   "goal": "Name the seven parts of an agentic system, then find the two boundaries every later control binds to.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it"
+   ],
+   "expect": "The component graph prints with trust levels, one request traces to a tool call, and a poisoned document steers the naive loop 134 times in 400 while the provenance-aware loop fires zero times."
+  },
+  "A1.2": {
+   "goal": "Map seven controls onto the components they bind to, then measure what each one alone is holding up.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it"
+   ],
+   "expect": "Removing each control in turn shows which attacks it alone was stopping; audit newly unstops nothing, because audit explains rather than prevents."
+  },
+  "A1.3": {
    "goal": "Make the threat model a living artefact that moves when the tools move.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -21,7 +39,7 @@
    ],
    "expect": "One added tool changes the trust boundaries section. A PDF threat model would not have moved."
   },
-  "A1.2": {
+  "A1.4": {
    "goal": "Stand up the whole reference control plane locally.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -38,22 +56,7 @@
    ],
    "expect": "verify.sh fails loudly if any layer is advisory rather than enforcing."
   },
-  "A1.3": {
-   "goal": "Make the over-privileged grant structurally unrepresentable.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "docker run -d -p 8080:8080 openfga/openfga run",
-    "cd labs/a1-control-plane/authz",
-    "fga model write --file model.fga",
-    "python3 prove_unrepresentable.py   # attempts to write the bad grant"
-   ],
-   "expect": "The bad grant is rejected by the schema, not by a policy check that could be skipped."
-  },
-  "A1.4": {
+  "A1.5": {
    "goal": "Put a blast-radius number in the design review.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -68,7 +71,7 @@
    ],
    "expect": "Reachable-action counts for both models, side by side. The delta is what attenuation bought you."
   },
-  "A1.5": {
+  "A1.6": {
    "goal": "Find where authority actually concentrates in a multi-agent topology.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -82,7 +85,7 @@
    ],
    "expect": "A graph showing the node holding the union of all scopes — usually not the one you expected."
   },
-  "A1.6": {
+  "A1.7": {
    "goal": "Score gateways against a fixed control checklist instead of a feature matrix.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -97,7 +100,7 @@
    ],
    "expect": "Each option scored on: identity mapping, per-tool RBAC, output scanning, audit, stop lever. Gaps are explicit."
   },
-  "A1.7": {
+  "A1.8": {
    "goal": "Prove the router fails closed, not open.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -252,6 +255,21 @@
    "expect": "All four succeed pre-hardening and fail after. The diff between the runs is your control set."
   },
   "A3.1": {
+   "goal": "Make the over-privileged grant structurally unrepresentable.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "docker run -d -p 8080:8080 openfga/openfga run",
+    "cd labs/a1-control-plane/authz",
+    "fga model write --file model.fga",
+    "python3 prove_unrepresentable.py   # attempts to write the bad grant"
+   ],
+   "expect": "The bad grant is rejected by the schema, not by a policy check that could be skipped."
+  },
+  "A3.2": {
    "goal": "Measure escape surface across three sandbox tiers.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -265,22 +283,6 @@
     "./run-tier.sh firecracker && ./measure-escape.sh"
    ],
    "expect": "A table of syscall surface and reachable host resources per tier — a number you can put in a design review."
-  },
-  "A3.2": {
-   "goal": "Prove an agent with no egress control has no other meaningful control.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A3.2.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A3.2   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/a3-sandbox",
-    "docker compose up -d squid agent",
-    "./exfil.sh            # baseline: data leaves",
-    "./apply-allowlist.sh  # squid allowlist + DNS conditional forwarding",
-    "./exfil.sh            # same payload, now blocked"
-   ],
-   "expect": "Identical agent, identical payload; the only variable is egress policy."
   },
   "A3.3": {
    "goal": "Stop the agent wandering from code into credentials.",
@@ -298,21 +300,6 @@
    "expect": "Same task, same agent; only the mount discipline changed."
   },
   "A3.4": {
-   "goal": "Escalate through connector chaining, then pin and scan to stop it.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/a3-sandbox/mcp",
-    "python3 chain.py --from filesystem --to http   # exfil via two 'safe' connectors",
-    "kmcp scan ./servers/ && kmcp pin --hash-verify",
-    "python3 chain.py --from filesystem --to http   # blocked"
-   ],
-   "expect": "Neither connector is dangerous alone. The chain is the vulnerability."
-  },
-  "A3.5": {
    "goal": "Design the dangerous call out of existence.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -327,7 +314,38 @@
    ],
    "expect": "The capability the agent needed survives; the arbitrary-execution path does not exist to block."
   },
+  "A3.5": {
+   "goal": "Escalate through connector chaining, then pin and scan to stop it.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "cd labs/a3-sandbox/mcp",
+    "python3 chain.py --from filesystem --to http   # exfil via two 'safe' connectors",
+    "kmcp scan ./servers/ && kmcp pin --hash-verify",
+    "python3 chain.py --from filesystem --to http   # blocked"
+   ],
+   "expect": "Neither connector is dangerous alone. The chain is the vulnerability."
+  },
   "A3.6": {
+   "goal": "Prove an agent with no egress control has no other meaningful control.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.2   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "cd labs/a3-sandbox",
+    "docker compose up -d squid agent",
+    "./exfil.sh            # baseline: data leaves",
+    "./apply-allowlist.sh  # squid allowlist + DNS conditional forwarding",
+    "./exfil.sh            # same payload, now blocked"
+   ],
+   "expect": "Identical agent, identical payload; the only variable is egress policy."
+  },
+  "A3.7": {
    "goal": "Build the five containment levers before you need them.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -342,21 +360,6 @@
    ],
    "expect": "Each lever fires under load and is timed. A lever that only works when idle is not a lever."
   },
-  "A3.7": {
-   "goal": "Detect an unmanaged personal agent on a managed endpoint.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A3.7.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/a3-sandbox",
-    "sudo falco -r rules/unmanaged-agent.yaml &",
-    "./simulate-personal-agent.sh   # local model + outbound tool calls",
-    "grep 'unmanaged_agent' /var/log/falco.log"
-   ],
-   "expect": "Detected by egress + filesystem signature. Read the chapter's honest note on why this case has no clean answer yet."
-  },
   "A3.8": {
    "goal": "Make dev-agent credentials structurally unable to reach production.",
    "run": [
@@ -370,6 +373,21 @@
     "python3 prove_separation.py --spiffe-id spiffe://cybercommons/dev/agent"
    ],
    "expect": "The dev SVID cannot mint a prod token by construction — not because a policy said no."
+  },
+  "A3.9": {
+   "goal": "Detect an unmanaged personal agent on a managed endpoint.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "cd labs/a3-sandbox",
+    "sudo falco -r rules/unmanaged-agent.yaml &",
+    "./simulate-personal-agent.sh   # local model + outbound tool calls",
+    "grep 'unmanaged_agent' /var/log/falco.log"
+   ],
+   "expect": "Detected by egress + filesystem signature. Read the chapter's honest note on why this case has no clean answer yet."
   },
   "B1.1": {
    "goal": "Cut the false-positive rate with reachability reasoning, and measure it.",

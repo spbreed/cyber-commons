@@ -1,21 +1,161 @@
-"""A3 — The Platform & Cloud Security Engineer. Eight sessions.
+"""A3 — The Platform & Cloud Security Engineer. Nine sessions.
 
-A2 established identity: who is calling, and on whose behalf. A3 assumes the
-identity layer has been fully defeated and asks what still holds.
+A1 named the components and mapped the controls. A2 answered "who is calling".
+A3 is every control that takes a caller as its argument, in the order it takes
+effect — and it assumes, throughout, that the identity layer has already been
+defeated.
 
-    A3.1  sandboxing as the perimeter   what survives a compromised prompt
-    A3.2  egress control                exfiltration and the metadata service
-    A3.3  filesystem and path guards    the normalisation bug, seen not described
-    A3.4  MCP is not a boundary         a transport is not a control
-    A3.5  tool permission models        L2 and L2.5 as configuration
-    A3.6  runtime containment levers    what you have left when it fails
-    A3.7  the unmanaged agent problem   discovery from behaviour, not registry
-    A3.8  environment separation        binding to identity, not to network
+    A3.1  default-deny authz        making a bad grant unrepresentable
+    A3.2  sandboxing                what survives a compromised prompt
+    A3.3  filesystem and path guards the normalisation bug, seen not described
+    A3.4  tool permission models    the confused deputy at the tool layer
+    A3.5  MCP is not a boundary     a transport is not a control
+    A3.6  egress control            exfiltration and the metadata service
+    A3.7  runtime containment       the stop lever, built before the incident
+    A3.8  environment separation    knowing not to is not separation
+    A3.9  the unmanaged agent       the one nobody provisioned
 """
 
 EXERCISES: dict[str, dict] = {
-
 "A3.1": {
+ "concept": """
+There are three ways to stop a bad permission grant, and they are not equally
+good.
+
+1. **Review it.** A human reads the request and says no. Works until Friday
+   afternoon, or until the requester is persuasive, or until the reviewer is on
+   holiday.
+2. **Detect it.** You find the bad grant afterwards, in an access review. Better
+   than nothing; the window between grant and detection is your exposure.
+3. **Make it unrepresentable.** The system cannot express the grant at all. The
+   request fails at the point of issue, with no human in the loop.
+
+Only the third one scales, and the mechanism is a **ceiling**: a declared upper
+bound on what each identity may *ever* hold, enforced by the thing that issues
+credentials rather than by the thing that reviews them.
+
+This matters more for agents than for people because agents get their
+permissions programmatically, at machine speed, often from other agents. A
+review step in that path is not a control; it is a bottleneck that will be
+removed.
+""",
+ "steps": [
+  ("md", "## 2 · Demo — ceilings, and what they refuse\n\n"
+         "Real scopes from a real deployment: a CI/CD estate with a human "
+         "engineer and three service identities."),
+  ("py", '''# The ceiling: what each identity may hold AT MOST, whoever asks, forever.
+CEILINGS = {
+    "dana@corp":       {"repo:read", "repo:write", "deploy:staging", "deploy:prod",
+                        "secrets:read"},
+    "ci-builder":      {"repo:read", "artifact:write"},
+    "deploy-bot":      {"artifact:read", "deploy:staging"},
+    "triage-agent":    {"repo:read", "finding:comment"},
+}
+
+class GrantRefused(Exception):
+    """Refusing is the feature, not an error path."""
+
+def grant(identity, scopes):
+    ceiling = CEILINGS.get(identity, set())
+    excess = set(scopes) - ceiling
+    if excess:
+        raise GrantRefused(
+            f"{identity} may never hold {sorted(excess)} "
+            f"(ceiling: {sorted(ceiling)})")
+    return set(scopes)
+
+requests = [
+    ("ci-builder",   {"repo:read", "artifact:write"},  "the normal build grant"),
+    ("deploy-bot",   {"deploy:staging"},               "staging deploy"),
+    ("deploy-bot",   {"deploy:prod"},                  "'just for the hotfix'"),
+    ("triage-agent", {"repo:write"},                   "'so it can fix what it finds'"),
+    ("ci-builder",   {"secrets:read"},                 "'the build needs a token'"),
+]
+for identity, scopes, why in requests:
+    try:
+        grant(identity, scopes)
+        print(f"GRANTED  {identity:14s} {sorted(scopes)}   — {why}")
+    except GrantRefused as e:
+        print(f"REFUSED  {identity:14s} {sorted(scopes)}   — {why}")
+        print(f"         {e}")
+'''),
+  ("md", "## 3 · Where it breaks\n\n"
+         "Three of those five requests are ones a real engineer would file with a "
+         "straight face, and a reviewer would probably approve at least two. "
+         "\"Just for the hotfix\" is how `deploy-bot` ends up with permanent "
+         "production rights.\n\n"
+         "But a ceiling has a hole in it, and it is worth seeing rather than being "
+         "told about: **the ceiling constrains a single identity, not a chain of "
+         "them.** If `triage-agent` cannot hold `repo:write`, but it can ask "
+         "`ci-builder` to act for it, the ceiling has been walked around without "
+         "ever being violated."),
+  ("py", '''# Each individual grant is legal. The composition is not.
+def call_chain(chain):
+    print(" → ".join(chain))
+    held = set()
+    for identity in chain:
+        held |= CEILINGS.get(identity, set())
+    return held
+
+reachable = call_chain(["triage-agent", "ci-builder", "deploy-bot"])
+print("scopes reachable through the chain:", sorted(reachable))
+print("triage-agent's own ceiling:        ", sorted(CEILINGS["triage-agent"]))
+print("\\nNo ceiling was broken. The agent still reached artifact:write and")
+print("deploy:staging, because it can ask something else to do the work.")
+'''),
+  ("md", "## 4 · The control\n\n"
+         "The fix has two halves and you need both:\n\n"
+         "**Narrowing on delegation.** When one identity acts for another, the "
+         "resulting authority must be the *intersection* of what was presented "
+         "and what the new actor may hold — never the union. This is the "
+         "mechanism A2.5 builds properly as RFC 8693 token exchange.\n\n"
+         "**Recording the chain.** The resource server must be able to see that "
+         "the call arrived through `triage-agent`, so a policy can refuse it even "
+         "when the immediate caller is allowed."),
+  ("py", '''def delegate(presented_scopes, presenting, new_actor):
+    """Intersection, not union. This one line is the whole control."""
+    ceiling = CEILINGS.get(new_actor, set())
+    return set(presented_scopes) & ceiling
+
+start = grant("triage-agent", {"repo:read", "finding:comment"})
+print("triage-agent holds:      ", sorted(start))
+hop1 = delegate(start, "triage-agent", "ci-builder")
+print("→ delegated to ci-builder:", sorted(hop1) or "∅ — nothing survives")
+hop2 = delegate(hop1, "ci-builder", "deploy-bot")
+print("→ delegated to deploy-bot:", sorted(hop2) or "∅ — nothing survives")
+
+print("\\nAuthority can only shrink along a chain. The walk-around is closed,")
+print("and no reviewer had to notice anything.")
+'''),
+  ("py", '''# Verify: property-test it. Delegation must NEVER widen, for any input.
+import itertools, random
+random.seed(7)
+ids = list(CEILINGS)
+violations = 0
+for _ in range(2000):
+    a, b = random.sample(ids, 2)
+    held = set(random.sample(sorted(CEILINGS[a]), k=random.randint(0, len(CEILINGS[a]))))
+    out = delegate(held, a, b)
+    if not out <= held or not out <= CEILINGS[b]:
+        violations += 1
+print(f"2000 random delegations, widening violations: {violations}")
+assert violations == 0
+print("Property holds: result ⊆ presented AND result ⊆ new actor's ceiling.")
+'''),
+ ],
+ "expect": "Two grants succeed; three are refused with the ceiling that refused "
+           "them. The chain demo shows `triage-agent` reaching `artifact:write` "
+           "and `deploy:staging` without breaking any ceiling. Intersection-based "
+           "delegation reduces the chain to the empty set, and the 2000-case "
+           "property test reports zero widening violations.",
+ "challenge": "Find one identity in your estate whose ceiling is effectively "
+              "\"everything\" — a break-glass role, a CI admin token. A ceiling "
+              "cannot constrain it, so its controls have to be time and audit "
+              "instead. A2.8 builds that.",
+},
+
+
+"A3.2": {
  "concept": """
 For ordinary software, the perimeter is the network and the control is the code:
 the program does what it was written to do, so review the code and you know the
@@ -191,7 +331,7 @@ print("Every other A3 lesson tightens one of these levers; B2 handles correctnes
               "everything else is a hope about model behaviour.",
 },
 
-"A3.2": {
+"A3.6": {
  "concept": """
 Egress control is the difference between a compromised agent and a data breach.
 
@@ -539,7 +679,7 @@ assert viol_buggy > 0
               "result is not usually zero.",
 },
 
-"A3.4": {
+"A3.5": {
  "concept": """
 MCP (the Model Context Protocol) is a good thing: a standard way for an agent to
 discover and call tools, so every integration is not bespoke.
@@ -710,7 +850,7 @@ print("the attack, provenance depends only on where the text came from.")
               "the set of people with access to the agent.",
 },
 
-"A3.5": {
+"A3.4": {
  "concept": """
 A3.1 used a tool policy without examining it. This lesson is about the policy
 itself, because it is where the autonomy ladder stops being vocabulary and
@@ -856,7 +996,7 @@ print("Invariant holds: deny is absolute, and nothing unlisted is ever permitted
               "separate narrower agent owning them.",
 },
 
-"A3.6": {
+"A3.7": {
  "concept": """
 Every control before this one is preventive. This lesson is about what you have
 left when prevention has failed and an agent is actively doing damage.
@@ -1002,7 +1142,7 @@ print("This only works because A2 gave each agent its own revocable identity.")
               "revocation itself.",
 },
 
-"A3.7": {
+"A3.9": {
  "concept": """
 A2.4 built an inventory of the identities you know about. This lesson is about
 the ones you do not.

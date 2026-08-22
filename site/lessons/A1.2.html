@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.2 — Designing the agent control plane | Cyber Commons</title><meta name="description" content="Identity fabric → agentic gateway → policy decision point → sandboxed runtime → audited action plane."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.2</div><h1>Designing the agent control plane</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Controls assumed to live &#x27;in the agent&#x27; are advisory, not enforced.</p></div><div class="ctrl"><div class="lab">Control</div><p>Identity fabric → agentic gateway → policy decision point → sandboxed runtime → audited action plane.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Stand up the whole reference control plane locally.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 18 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.2 · Designing the agent control plane</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.2 — The controls, and where each one binds | Cyber Commons</title><meta name="description" content="One map: identity, default-deny authorization, sandboxed execution, tool and MCP trust, egress, containment, audit — each bound to the component it constrains."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.2</div><h1>The controls, and where each one binds</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Controls chosen as a checklist land in the wrong layer — a prompt rule where an authorization rule was needed, and nothing to point at when asked what stops it.</p></div><div class="ctrl"><div class="lab">Control</div><p>One map: identity, default-deny authorization, sandboxed execution, tool and MCP trust, egress, containment, audit — each bound to the component it constrains.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Map seven controls onto the components they bind to, then measure what each one alone is holding up.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 85 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.2 · The controls, and where each one binds</h1>
 <p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.1.html">A1.1 · Architecture review when the system acts</a></strong>.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.1.html">A1.1 · What an agentic system is actually made of</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,183 +11,197 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>kind, SPIRE, agentgateway, OPA</td>
+<td>OPA, SPIFFE/SPIRE, Falco, agentgateway</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>Llama 3.3</td>
+<td>GLM-4.6</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>A1.1 established that the control plane is where a design decision can actually
-bind. This lesson builds it.</p>
-<p>A control plane for an agent has exactly three levers, and they map onto
-questions an attacker asks:</p>
+<p>You now have the parts. This lesson is the map: <strong>seven controls, and the
+component each one binds to.</strong> Read it once here and the rest of Function A is
+just detail.</p>
 <table>
 <thead>
 <tr>
-<th>Lever</th>
-<th>The attacker's question</th>
-<th>Real-world equivalent</th>
+<th>Control</th>
+<th>Binds to</th>
+<th>Answers</th>
+<th>Taught in</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Tool policy</strong></td>
-<td>what can I invoke?</td>
-<td>OPA / Kyverno admission policy</td>
+<td><strong>Identity</strong></td>
+<td>the agent→tool edge</td>
+<td>who is calling, and for whom</td>
+<td>A2</td>
 </tr>
 <tr>
-<td><strong>Egress policy</strong></td>
-<td>who can I talk to?</td>
-<td>Cilium network policy, a proxy allowlist</td>
+<td><strong>Default-deny authorization</strong></td>
+<td>the tool call</td>
+<td>may <em>this</em> caller do <em>this</em></td>
+<td>A3.1</td>
 </tr>
 <tr>
-<td><strong>Path policy</strong></td>
-<td>what can I read or write?</td>
-<td>container mounts, seccomp, AppArmor</td>
+<td><strong>Sandboxed execution</strong></td>
+<td>the loop's runtime</td>
+<td>where model-written code runs</td>
+<td>A3.2–A3.3</td>
+</tr>
+<tr>
+<td><strong>Tool and MCP trust</strong></td>
+<td>tool descriptions and results</td>
+<td>what a third party may say</td>
+<td>A3.4–A3.5</td>
+</tr>
+<tr>
+<td><strong>Egress control</strong></td>
+<td>the network edge</td>
+<td>where data may go</td>
+<td>A3.6</td>
+</tr>
+<tr>
+<td><strong>Containment</strong></td>
+<td>the loop itself</td>
+<td>how it stops</td>
+<td>A3.7</td>
+</tr>
+<tr>
+<td><strong>Audit</strong></td>
+<td>every edge</td>
+<td>what you can reconstruct afterwards</td>
+<td>D2, E1</td>
 </tr>
 </tbody>
 </table>
-<p>Each one must be <strong>deny-by-default</strong>. That is not paranoia — it is the only
-setting that survives someone adding a capability and forgetting to update the
-policy, which is the normal case, not the exception.</p>
-<p>And every decision must return a <strong>reason</strong>. A control you cannot explain is a
-control you cannot tune, and an untunable control gets switched off the first
-time it blocks something legitimate. That is how security controls actually die
-— not overridden, just quietly disabled by a tired engineer at 6pm.</p></div><div class="nbmd"><h2>2 · Demo — the three levers, deny-by-default</h2>
-<p>This is a working control plane in about sixty lines. In production the same three decisions come from OPA, Cilium and your container runtime; the logic is what matters here.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import fnmatch, re
-from dataclasses import dataclass, field
-from urllib.parse import urlparse
+<p>Two things about this table are worth more than the table.</p>
+<p><strong>Controls are not interchangeable.</strong> A control placed in the wrong layer looks
+like a control and holds nothing. A prompt that says "never email customer data"
+is not egress control; it is a suggestion to a component that holds no authority
+in the first place.</p>
+<p><strong>Audit prevents nothing.</strong> It is in the list because after an incident it is
+the only thing that can answer <em>which user caused this</em> — and a system that
+cannot answer that is not defensible even when nothing has gone wrong. Prevention
+and reconstruction are different jobs, and confusing them is how teams end up
+with neither.</p>
+<p>Below, each control is removed one at a time to see which attacks stop being
+stopped. The result is not the one most people expect.</p></div><div class="nbmd"><h2>2 · The controls, and the attacks they stop\n\nTen attacks that actually happen, and for each one the set of controls that would stop it. Any single control in the set is enough — which is what makes the counting interesting.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CONTROLS = {
+ &quot;identity&quot;:    (&quot;who is calling, and on whose behalf&quot;,        &quot;A2&quot;),
+ &quot;authz&quot;:       (&quot;default-deny: may this caller do this&quot;,      &quot;A3.1&quot;),
+ &quot;sandbox&quot;:     (&quot;where model-written code is allowed to run&quot;, &quot;A3.2-A3.3&quot;),
+ &quot;tool_trust&quot;:  (&quot;what a tool description may cause&quot;,          &quot;A3.4-A3.5&quot;),
+ &quot;egress&quot;:      (&quot;where data is allowed to go&quot;,                &quot;A3.6&quot;),
+ &quot;containment&quot;: (&quot;how the loop is stopped&quot;,                    &quot;A3.7&quot;),
+ &quot;audit&quot;:       (&quot;what can be reconstructed afterwards&quot;,       &quot;D2, E1&quot;),
+}
 
-@dataclass
-class Decision:
-    allowed: bool
-    reason: str
-    subject: str = &quot;&quot;
-    def __str__(self):
-        return f&quot;{&#x27;ALLOW&#x27; if self.allowed else &#x27;DENY &#x27;:5s} {self.subject:42s} {self.reason}&quot;
+# attack -&gt; the controls that would stop it. Any one of them suffices.
+ATTACKS = {
+ &quot;retrieved document tells the agent to email data out&quot;: {&quot;egress&quot;, &quot;authz&quot;},
+ &quot;read-only user&#x27;s agent deletes production rows&quot;:       {&quot;identity&quot;, &quot;authz&quot;},
+ &quot;model-written code shells out to curl&quot;:                {&quot;sandbox&quot;, &quot;egress&quot;},
+ &quot;MCP tool description carries an instruction&quot;:          {&quot;tool_trust&quot;},
+ &quot;every agent shares one service account&quot;:               {&quot;identity&quot;},
+ &quot;runaway loop burns the budget overnight&quot;:              {&quot;containment&quot;},
+ &quot;agent writes outside its workspace&quot;:                   {&quot;sandbox&quot;},
+ &quot;token replayed after the user logged out&quot;:             {&quot;identity&quot;},
+ &quot;third-party MCP server exfiltrates over its own socket&quot;:{&quot;egress&quot;, &quot;tool_trust&quot;},
+ &quot;nobody can tell which user caused a deletion&quot;:         set(),
+}
 
-PRIVATE = [re.compile(p) for p in (
-    r&quot;^127\.&quot;, r&quot;^10\.&quot;, r&quot;^192\.168\.&quot;, r&quot;^169\.254\.&quot;,
-    r&quot;^172\.(1[6-9]|2\d|3[01])\.&quot;, r&quot;^localhost$&quot;)]
+print(f&quot;{&#x27;control&#x27;:13s}{&#x27;taught in&#x27;:12s}what it answers&quot;)
+for name in sorted(CONTROLS):
+    what, where = CONTROLS[name]
+    print(f&quot;{name:13s}{where:12s}{what}&quot;)
 
-@dataclass
-class EgressPolicy:
-    allow_hosts: set = field(default_factory=set)
-    def check(self, url):
-        host = (urlparse(url).hostname or &quot;&quot;).lower()
-        if not host:
-            return Decision(False, &quot;unparseable destination&quot;, url)
-        if any(p.match(host) for p in PRIVATE):
-            extra = &quot; — cloud metadata service&quot; if host.startswith(&quot;169.254&quot;) else &quot;&quot;
-            return Decision(False, f&quot;private/link-local address blocked{extra}&quot;, url)
-        if host in self.allow_hosts:
-            return Decision(True, &quot;host on the allowlist&quot;, url)
-        return Decision(False, &quot;not on the egress allowlist (deny by default)&quot;, url)
+print(f&quot;\n{len(ATTACKS)} attacks, and what stops each&quot;)
+for attack in sorted(ATTACKS):
+    stops = ATTACKS[attack]
+    print(f&quot;   {attack:56s}{&#x27;, &#x27;.join(sorted(stops)) or &#x27;NOTHING PREVENTS IT&#x27;}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Remove one control at a time\n\nAn attack is stopped while <em>any</em> of its controls is present. Take one control away and count what walks through.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def unstopped(present):
+    &quot;&quot;&quot;Attacks nothing in `present` can stop.&quot;&quot;&quot;
+    return sorted(a for a, stops in ATTACKS.items() if not (stops &amp; present))
 
-@dataclass
-class PathGuard:
-    workspace: str = &quot;/work&quot;
-    deny_globs: tuple = (&quot;*/.ssh/*&quot;, &quot;*/.aws/*&quot;, &quot;*.pem&quot;, &quot;*/.env&quot;, &quot;*/etc/shadow&quot;)
-    @staticmethod
-    def normalise(path):
-        parts = []
-        for seg in path.split(&quot;/&quot;):
-            if seg in (&quot;&quot;, &quot;.&quot;):      continue
-            if seg == &quot;..&quot;:
-                if parts: parts.pop()
-                continue
-            parts.append(seg)
-        return &quot;/&quot; + &quot;/&quot;.join(parts)
-    def check(self, path):
-        real = self.normalise(path)          # normalise BEFORE checking — see A3.3
-        for g in self.deny_globs:
-            if fnmatch.fnmatch(real, g):
-                return Decision(False, f&quot;matches deny rule {g}&quot;, path)
-        ws = self.normalise(self.workspace)
-        if real == ws or real.startswith(ws + &quot;/&quot;):
-            return Decision(True, f&quot;inside workspace ({real})&quot;, path)
-        return Decision(False, f&quot;outside workspace; resolves to {real}&quot;, path)
+ALL = set(CONTROLS)
+baseline = unstopped(ALL)
+print(f&quot;with every control in place, unstopped: {len(baseline)}&quot;)
+for a in baseline:
+    print(f&quot;   {a}&quot;)
 
-@dataclass
-class ToolPolicy:
-    allow: set = field(default_factory=set)
-    require_approval: set = field(default_factory=set)
-    deny: set = field(default_factory=set)
-    def check(self, tool, approved=False):
-        if tool in self.deny:
-            return Decision(False, &quot;tool explicitly denied&quot;, tool)
-        if tool in self.require_approval and not approved:
-            return Decision(False, &quot;requires human approval, none presented&quot;, tool)
-        if tool in self.allow or tool in self.require_approval:
-            return Decision(True, &quot;approved call&quot; if approved else &quot;on the allowlist&quot;, tool)
-        return Decision(False, &quot;not on the tool allowlist (deny by default)&quot;, tool)
+print(&quot;\nremove one control:&quot;)
+print(f&quot;{&#x27;removed&#x27;:13s}{&#x27;newly unstopped&#x27;:&gt;17s}  which&quot;)
+rows = []
+for c in sorted(CONTROLS):
+    now = unstopped(ALL - {c})
+    new = [a for a in now if a not in baseline]
+    rows.append((c, new))
+    print(f&quot;{c:13s}{len(new):&gt;17d}  {&#x27;; &#x27;.join(a[:44] for a in new) or &#x27;-&#x27;}&quot;)
 
-print(&quot;three policies, defined. Nothing is permitted that was not named.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Demo — run a real agent session through it</h2>
-<p>These are the calls a code-review agent actually makes during one task, plus the three an attacker would make if the prompt were compromised. The control plane cannot tell the difference — and does not need to.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
-class ControlPlane:
-    egress: EgressPolicy
-    paths: PathGuard
-    tools: ToolPolicy
-    log: list = field(default_factory=list)
+assert all(a in unstopped(set()) for a in ATTACKS), &quot;removing everything stops nothing&quot;</code></pre></div><div class="nbmd"><h2>4 · Read the result carefully\n\nThree things fall out of that table, and none of them is 'install more controls'.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>load_bearing = sorted(((len(new), c) for c, new in rows), reverse=True)
+print(&quot;controls ranked by what they alone stop:&quot;)
+for n, c in load_bearing:
+    print(f&quot;   {c:13s}{n}&quot;)
 
-    def call(self, tool, target=&quot;&quot;, approved=False):
-        d = self.tools.check(tool, approved)
-        if d.allowed:
-            if target.startswith((&quot;http://&quot;, &quot;https://&quot;)):
-                d = self.egress.check(target)
-            elif target.startswith(&quot;/&quot;):
-                d = self.paths.check(target)
-        self.log.append(d)
-        return d
+single = {a for a, s in ATTACKS.items() if len(s) == 1}
+doubled = {a for a, s in ATTACKS.items() if len(s) &gt;= 2}
+print(f&quot;\nattacks stopped by exactly one control : {len(single)}&quot;)
+print(f&quot;attacks stopped by two or more          : {len(doubled)}&quot;)
+print(f&quot;attacks no control prevents             : {len([a for a,s in ATTACKS.items() if not s])}&quot;)
 
-cp = ControlPlane(
-    egress=EgressPolicy(allow_hosts={&quot;api.github.com&quot;}),
-    paths=PathGuard(workspace=&quot;/work/repo&quot;),
-    tools=ToolPolicy(allow={&quot;read_file&quot;, &quot;search_code&quot;, &quot;http_get&quot;},
-                     require_approval={&quot;post_comment&quot;, &quot;open_pr&quot;},
-                     deny={&quot;merge_pr&quot;, &quot;rotate_credential&quot;}))
+print()
+best = max(CONTROLS, key=lambda c: (len([a for a, s in ATTACKS.items() if c in s]), c))
+covered = len([a for a, s in ATTACKS.items() if best in s])
+print(f&quot;1. No control stops everything. The best single one is {best}, and it&quot;)
+print(f&quot;   stops {covered} of {len(ATTACKS)} - the rest walk straight past it.&quot;)
+print(&quot;2. The attacks stopped by two controls survive losing either one. That&quot;)
+print(&quot;   is what defence in depth actually buys - not more stopping, but&quot;)
+print(&quot;   stopping that tolerates one control being wrong.&quot;)
+print(&quot;3. Removing `audit` newly unstops nothing at all, and the attack it&quot;)
+print(&quot;   answers is unstopped either way. Audit does not prevent; it explains.&quot;)
+print(&quot;   A system that cannot say which user caused a deletion is undefensible&quot;)
+print(&quot;   even on a day when nothing went wrong.&quot;)
+assert dict(rows)[&quot;audit&quot;] == [], &quot;audit prevents nothing - that is the point&quot;
+assert len(single) &gt;= 4</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — the control in the wrong layer\n\nThe most common failure is not a missing control. It is a control placed where it has no authority.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>MISPLACED = {
+ &quot;a system prompt saying &#x27;never email customer data&#x27;&quot;: &quot;egress&quot;,
+ &quot;a tool description saying &#x27;only for admins&#x27;&quot;:        &quot;authz&quot;,
+ &quot;asking the model to refuse unsafe code&quot;:             &quot;sandbox&quot;,
+ &quot;logging the tool call inside the agent&#x27;s own store&quot;: &quot;audit&quot;,
+}
+print(f&quot;{&#x27;what a team ships&#x27;:52s}{&#x27;believed to be&#x27;:16s}holds?&quot;)
+for shipped, believed in sorted(MISPLACED.items()):
+    print(f&quot;{shipped:52s}{believed:16s}NO&quot;)
+print()
+print(&quot;Each of these binds to the model or to the agent&#x27;s own process - the&quot;)
+print(&quot;components with no authority and no independence. The model cannot&quot;)
+print(&quot;enforce egress because it never opens the socket; the agent cannot be&quot;)
+print(&quot;its own audit log because it can write to it.&quot;)
+print()
+print(&quot;A control is only a control if the component it binds to is one the&quot;)
+print(&quot;attacker does not already own by the time it matters.&quot;)
 
-session = [
-    # --- what the agent legitimately does ---
-    (&quot;read_file&quot;,   &quot;/work/repo/src/auth.py&quot;,              False),
-    (&quot;search_code&quot;, &quot;&quot;,                                     False),
-    (&quot;http_get&quot;,    &quot;https://api.github.com/repos/x/y/pulls&quot;, False),
-    (&quot;post_comment&quot;, &quot;&quot;,                                    False),   # ungated attempt
-    (&quot;post_comment&quot;, &quot;&quot;,                                    True),    # with approval
-    # --- what a compromised prompt would try ---
-    (&quot;read_file&quot;,   &quot;/work/repo/../../root/.aws/credentials&quot;, False),
-    (&quot;http_get&quot;,    &quot;http://169.254.169.254/latest/meta-data/iam/&quot;, False),
-    (&quot;http_get&quot;,    &quot;https://exfil.example.com/collect&quot;,   False),
-    (&quot;rotate_credential&quot;, &quot;&quot;,                               True),
-]
-for tool, target, approved in session:
-    print(cp.call(tool, target, approved))
-
-denied = [d for d in cp.log if not d.allowed]
-print(f&quot;\n{len(cp.log)} calls · {len(cp.log)-len(denied)} allowed · {len(denied)} denied&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks</h2>
-<p>Notice the last line: <code>rotate_credential</code> was refused <strong>even though approval was presented</strong>. That is deliberate, and it is the design decision this lesson exists to make.</p>
-<p>An approval gate is only as good as the approver. Approve-every-call (L2) sounds strong until you measure the median approval latency — when it drops under two seconds, nobody is reading them, and the gate has become a click-through. For actions that are org-wide and irreversible, the right control is not a gate but a <strong>denial</strong>: that tool does not belong to this agent at all, and a different, narrower agent owns it.</p>
-<p>This is why <code>deny</code> exists as a separate lever from <code>require_approval</code>.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Model the approval gate honestly: an approver under load.
-def gate_effectiveness(calls_per_hour, seconds_per_real_review=45):
-    seconds_available = 3600
-    reviewable = seconds_available / seconds_per_real_review
-    return {&quot;calls&quot;: calls_per_hour, &quot;can_truly_review&quot;: int(reviewable),
-            &quot;rubber_stamped&quot;: max(0, calls_per_hour - int(reviewable)),
-            &quot;fraction_real&quot;: round(min(reviewable / calls_per_hour, 1.0), 3)}
-
-for rate in (10, 80, 400):
-    r = gate_effectiveness(rate)
-    print(f&quot;{r[&#x27;calls&#x27;]:&gt;4} approvals/hour → {r[&#x27;fraction_real&#x27;]:.0%} genuinely &quot;
-          f&quot;reviewed, {r[&#x27;rubber_stamped&#x27;]:&gt;3} rubber-stamped&quot;)
-print(&quot;\nAt 400/hour the gate is theatre. Deny the irreversible tools instead,&quot;)
-print(&quot;and give them to a separate agent with its own, much narrower manifest.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The legitimate calls succeed; <code>post_comment</code> is refused until approval is presented. The traversal, the metadata address and the exfiltration host are all denied with distinct reasons, and <code>rotate_credential</code> is denied despite approval. The gate model shows review quality collapsing to 20% at 400 approvals per hour.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Take the three levers and decide where each belongs in your stack: in the agent process, in a sidecar, or in the network. Only one of those placements still works when the agent process itself is the compromised component.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.3.html">A1.3 · Authorization models that make bad grants impossible</a></strong></p>
+effective = {c: (c in CONTROLS) for c in MISPLACED.values()}
+print(f&quot;\nnamed correctly as categories: {sorted(effective)}&quot;)
+print(&quot;placed correctly in these examples: none&quot;)
+assert all(effective.values()), &quot;every category here is real - the placement is not&quot;</code></pre></div><div class="nbmd"><h2>6 · Verify — the map is the reading order\n\nWhere each control is taught, in the order the rest of Function A takes them.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ORDER = [&quot;identity&quot;, &quot;authz&quot;, &quot;sandbox&quot;, &quot;tool_trust&quot;, &quot;egress&quot;,
+         &quot;containment&quot;, &quot;audit&quot;]
+print(f&quot;{&#x27;#&#x27;:&gt;2}  {&#x27;control&#x27;:13s}{&#x27;taught in&#x27;:12s}stops on its own&quot;)
+for i, c in enumerate(ORDER, 1):
+    alone = [a for a, s in ATTACKS.items() if s == {c}]
+    print(f&quot;{i:&gt;2}  {c:13s}{CONTROLS[c][1]:12s}{len(alone)}&quot;)
+assert ORDER[0] == &quot;identity&quot;, &quot;identity comes first: the rest are predicates on it&quot;
+print()
+print(&quot;Identity is first because every control after it is a predicate that&quot;)
+print(&quot;takes a caller as its argument. &#x27;May this caller do this&#x27; is unanswerable&quot;)
+print(&quot;while the answer to &#x27;who is calling&#x27; is a shared service account.&quot;)
+print()
+print(&quot;Next: A2 answers that question properly - human identity, then workload&quot;)
+print(&quot;identity, then why agents need their own.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Seven controls print with the component each binds to and the lesson that teaches it. Removing one control at a time shows identity alone stopping two attacks nothing else covers, four attacks resting on a single control, and <code>audit</code> newly unstopping nothing — because audit does not prevent, it explains. Four commonly shipped 'controls' are shown binding to components that hold no authority.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take the seven rows and mark, for one system you run, which control is actually enforced and by which component. The rows you cannot name a component for are the ones a review will find.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.3.html">A1.3 · Architecture review when the system acts</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.2.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>verify.sh fails loudly if any layer is advisory rather than enforcing.</div><div class="chips"><span>kind</span><span>SPIRE</span><span>agentgateway</span><span>OPA</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.2.ipynb</code></p></div><div class="pager"><a href="A1.1.html"><span class="k">← Previous</span><span class="t">A1.1 · Architecture review when the system acts</span></a><a class="next" href="A1.3.html"><span class="k">Next →</span><span class="t">A1.3 · Authorization models that make bad grants impossible</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Removing each control in turn shows which attacks it alone was stopping; audit newly unstops nothing, because audit explains rather than prevents.</div><div class="chips"><span>OPA</span><span>SPIFFE/SPIRE</span><span>Falco</span><span>agentgateway</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.2.ipynb</code></p></div><div class="pager"><a href="A1.1.html"><span class="k">← Previous</span><span class="t">A1.1 · What an agentic system is actually made of</span></a><a class="next" href="A1.3.html"><span class="k">Next →</span><span class="t">A1.3 · Architecture review when the system acts</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

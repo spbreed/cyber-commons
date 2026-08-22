@@ -1,6 +1,6 @@
 # Lesson notebooks
 
-One Python notebook per curriculum session — **108 of them**, generated from the
+One Python notebook per curriculum session — **110 of them**, generated from the
 single source of truth and executed in CI before they ship.
 
 Each notebook is **self-contained**: it carries every line of code it runs. No
@@ -31,7 +31,7 @@ jupyter notebook labs/notebooks/A2.5.ipynb
 
 ```bash
 python3 scripts/run_notebooks.py --session A2.5
-python3 scripts/run_notebooks.py              # all 108, writes _results.json
+python3 scripts/run_notebooks.py              # all 110, writes _results.json
 ```
 
 ## What they run against
@@ -69,7 +69,7 @@ Every exercise needs a `concept` field. The build fails without one — a lesson
 that opens with a risk teaches people to fear a mechanism they cannot describe.
 
 ```bash
-python3 scripts/build_notebooks.py   # regenerate all 108
+python3 scripts/build_notebooks.py   # regenerate all 110
 python3 scripts/run_notebooks.py     # prove they still run, refresh the evidence
 python3 scripts/build_site.py        # re-render the lesson pages
 ```
@@ -97,7 +97,7 @@ reading documentation:
   push. Checking only the status code reports every failed push as a success, so
   the client inspects the body.
 - **Kaggle allows 5 concurrent batch CPU sessions**, and a kernel runs on push.
-  Pushing all 108 at once fails 94 of them with *"Maximum batch CPU session
+  Pushing them all at once fails most of them with *"Maximum batch CPU session
   count of 5 reached"* plus HTTP 429s, so the client pushes in batches and waits
   for each to finish.
 

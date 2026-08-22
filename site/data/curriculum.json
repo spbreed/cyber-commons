@@ -32,12 +32,45 @@
      "id": "A1",
      "title": "The Security Architect",
      "titles": "Security Architect, Principal Security Engineer, Head of Security Architecture",
-     "changes": "You stop reviewing designs and start designing the control plane other people's agents run inside. Your artefact stops being a document and becomes a runtime.",
+     "changes": "Starts from zero: what an agentic system is made of, then the map of every control that holds it. Only then the architect's own work — living threat models, the control plane, blast radius, topology, build-vs-buy, routing.",
      "autonomy": "Designs must be safe at L3 even when deployed at L2.5.",
      "deliverable": "A reference architecture and a blast-radius measurement for one real business workflow.",
      "sessions": [
       {
        "id": "A1.1",
+       "title": "What an agentic system is actually made of",
+       "track": "both",
+       "risk": "\"Secure the agent\" has no referent until you can name the parts. Every control in this curriculum attaches to one specific component or one boundary between two.",
+       "control": "Draw the system as it really runs: app, model, agent loop, tools and APIs, MCP servers, retrieval, memory — and mark which boundaries untrusted data crosses.",
+       "lab": "Build the component graph for a working agent, then trace one user request through every hop and mark where trust changes.",
+       "tools": [
+        "kagent",
+        "OpenTelemetry"
+       ],
+       "models": [
+        "Llama 3.3",
+        "GLM-4.6"
+       ]
+      },
+      {
+       "id": "A1.2",
+       "title": "The controls, and where each one binds",
+       "track": "secure",
+       "risk": "Controls chosen as a checklist land in the wrong layer — a prompt rule where an authorization rule was needed, and nothing to point at when asked what stops it.",
+       "control": "One map: identity, default-deny authorization, sandboxed execution, tool and MCP trust, egress, containment, audit — each bound to the component it constrains.",
+       "lab": "Place seven controls on the component graph from A1.1, then remove one at a time and count which attacks stop being stopped.",
+       "tools": [
+        "OPA",
+        "SPIFFE/SPIRE",
+        "Falco",
+        "agentgateway"
+       ],
+       "models": [
+        "GLM-4.6"
+       ]
+      },
+      {
+       "id": "A1.3",
        "title": "Architecture review when the system acts",
        "track": "secure",
        "risk": "PDF threat models go stale the moment the agent's tools change.",
@@ -52,7 +85,7 @@
        ]
       },
       {
-       "id": "A1.2",
+       "id": "A1.4",
        "title": "Designing the agent control plane",
        "track": "secure",
        "risk": "Controls assumed to live 'in the agent' are advisory, not enforced.",
@@ -69,20 +102,7 @@
        ]
       },
       {
-       "id": "A1.3",
-       "title": "Authorization models that make bad grants impossible",
-       "track": "secure",
-       "risk": "RBAC has no unit small enough to express the grant you actually meant.",
-       "control": "ReBAC/ABAC with time-scoped delegation and attenuation by construction.",
-       "lab": "Model the same grant in flat RBAC and in OpenFGA; prove the over-privileged grant is unrepresentable.",
-       "tools": [
-        "OpenFGA",
-        "OPA"
-       ],
-       "models": []
-      },
-      {
-       "id": "A1.4",
+       "id": "A1.5",
        "title": "Blast radius as a design metric",
        "track": "secure",
        "risk": "Blast radius is asserted in review, never measured.",
@@ -97,7 +117,7 @@
        ]
       },
       {
-       "id": "A1.5",
+       "id": "A1.6",
        "title": "Multi-agent topology",
        "track": "secure",
        "risk": "Fan-out concentrates authority somewhere nobody drew.",
@@ -112,7 +132,7 @@
        ]
       },
       {
-       "id": "A1.6",
+       "id": "A1.7",
        "title": "Build vs buy",
        "track": "both",
        "risk": "Outsourcing the control plane to a vendor you cannot audit.",
@@ -125,7 +145,7 @@
        "models": []
       },
       {
-       "id": "A1.7",
+       "id": "A1.8",
        "title": "Model routing architecture",
        "track": "both",
        "risk": "The router fails open to a weaker model under load — a silent downgrade of every guardrail.",
@@ -279,12 +299,25 @@
      "id": "A3",
      "title": "The Platform & Cloud Security Engineer",
      "titles": "Cloud Security Engineer, Platform Security Engineer, Infrastructure Security",
-     "changes": "The sandbox is your product. Permission prompts inside the agent are somebody else's defence-in-depth; the boundary is yours.",
+     "changes": "The controls themselves, in the order they take effect: default-deny authorization, then sandboxed execution, then the filesystem and tool boundaries, then MCP, then egress — and finally the levers you pull when one of them fails.",
      "autonomy": "Containment is what lets you say yes to L2.5 without pretending the agent is trustworthy.",
      "deliverable": "A hardened runtime that survives a deliberate injected payload with a measured blast radius of zero outside the sandbox.",
      "sessions": [
       {
        "id": "A3.1",
+       "title": "Authorization models that make bad grants impossible",
+       "track": "secure",
+       "risk": "RBAC has no unit small enough to express the grant you actually meant.",
+       "control": "ReBAC/ABAC with time-scoped delegation and attenuation by construction.",
+       "lab": "Model the same grant in flat RBAC and in OpenFGA; prove the over-privileged grant is unrepresentable.",
+       "tools": [
+        "OpenFGA",
+        "OPA"
+       ],
+       "models": []
+      },
+      {
+       "id": "A3.2",
        "title": "Sandboxing is the perimeter",
        "track": "secure",
        "risk": "Tier chosen by convenience, not by action class.",
@@ -297,22 +330,6 @@
        ],
        "models": [
         "Llama 3.3"
-       ]
-      },
-      {
-       "id": "A3.2",
-       "title": "Egress control for agents",
-       "track": "secure",
-       "risk": "An agent with unrestricted egress has no other meaningful control.",
-       "control": "Allowlists, inspecting proxies, DNS conditional forwarding, data perimeters.",
-       "lab": "Put a Squid allowlist in front of an agent and watch exfiltration fail.",
-       "tools": [
-        "Squid",
-        "Cilium",
-        "Kyverno"
-       ],
-       "models": [
-        "GLM-4.6"
        ]
       },
       {
@@ -330,6 +347,19 @@
       },
       {
        "id": "A3.4",
+       "title": "Tool permission models",
+       "track": "secure",
+       "risk": "The confused deputy at the tool layer.",
+       "control": "Capability scoping, allowlisted actions, structured output contracts, read-only defaults.",
+       "lab": "Redesign a dangerous tool so the dangerous call doesn't exist.",
+       "tools": [
+        "kmcp",
+        "OPA"
+       ],
+       "models": []
+      },
+      {
+       "id": "A3.5",
        "title": "MCP is not a security boundary",
        "track": "secure",
        "risk": "Connector chaining as privilege escalation; unpinned servers.",
@@ -345,20 +375,23 @@
        ]
       },
       {
-       "id": "A3.5",
-       "title": "Tool permission models",
+       "id": "A3.6",
+       "title": "Egress control for agents",
        "track": "secure",
-       "risk": "The confused deputy at the tool layer.",
-       "control": "Capability scoping, allowlisted actions, structured output contracts, read-only defaults.",
-       "lab": "Redesign a dangerous tool so the dangerous call doesn't exist.",
+       "risk": "An agent with unrestricted egress has no other meaningful control.",
+       "control": "Allowlists, inspecting proxies, DNS conditional forwarding, data perimeters.",
+       "lab": "Put a Squid allowlist in front of an agent and watch exfiltration fail.",
        "tools": [
-        "kmcp",
-        "OPA"
+        "Squid",
+        "Cilium",
+        "Kyverno"
        ],
-       "models": []
+       "models": [
+        "GLM-4.6"
+       ]
       },
       {
-       "id": "A3.6",
+       "id": "A3.7",
        "title": "Runtime containment levers",
        "track": "secure",
        "risk": "The stop lever is built during the incident.",
@@ -372,19 +405,6 @@
        "models": []
       },
       {
-       "id": "A3.7",
-       "title": "The unmanaged agent problem",
-       "track": "secure",
-       "risk": "Personal, non-sandboxed agents on managed endpoints.",
-       "control": "Endpoint + secure web gateway, behavioural monitoring — with an honest account of the gap.",
-       "lab": "Detect an unmanaged local agent by its egress and filesystem signature.",
-       "tools": [
-        "Falco",
-        "osquery"
-       ],
-       "models": []
-      },
-      {
        "id": "A3.8",
        "title": "Environment separation",
        "track": "secure",
@@ -394,6 +414,19 @@
        "tools": [
         "SPIRE",
         "OPA"
+       ],
+       "models": []
+      },
+      {
+       "id": "A3.9",
+       "title": "The unmanaged agent problem",
+       "track": "secure",
+       "risk": "Personal, non-sandboxed agents on managed endpoints.",
+       "control": "Endpoint + secure web gateway, behavioural monitoring — with an honest account of the gap.",
+       "lab": "Detect an unmanaged local agent by its egress and filesystem signature.",
+       "tools": [
+        "Falco",
+        "osquery"
        ],
        "models": []
       }

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.4 — Blast radius as a design metric | Cyber Commons</title><meta name="description" content="Make it a number that appears in the design review."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.4</div><h1>Blast radius as a design metric</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Blast radius is asserted in review, never measured.</p></div><div class="ctrl"><div class="lab">Control</div><p>Make it a number that appears in the design review.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Put a blast-radius number in the design review.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 36 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.4 · Blast radius as a design metric</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.4 — Designing the agent control plane | Cyber Commons</title><meta name="description" content="Identity fabric → agentic gateway → policy decision point → sandboxed runtime → audited action plane."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.4</div><h1>Designing the agent control plane</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Controls assumed to live &#x27;in the agent&#x27; are advisory, not enforced.</p></div><div class="ctrl"><div class="lab">Control</div><p>Identity fabric → agentic gateway → policy decision point → sandboxed runtime → audited action plane.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Stand up the whole reference control plane locally.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 18 lines of output in 0.04s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.4 · Designing the agent control plane</h1>
 <p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.3.html">A1.3 · Authorization models that make bad grants impossible</a></strong>.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.3.html">A1.3 · Architecture review when the system acts</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,358 +11,183 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>OpenFGA, SPIRE</td>
+<td>kind, SPIRE, agentgateway, OPA</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>Kimi K2</td>
+<td>Llama 3.3</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>"Reduce the blast radius" is advice. Advice does not survive a roadmap
-discussion, because it cannot be traded off against a delivery date.</p>
-<p>A <strong>number</strong> survives. It moves when you change the design, you can put it in a
-review, and — most usefully — it can go into CI and fail a build.</p>
-<p>The metric used throughout this curriculum is deliberately crude:</p>
-<pre><code>blast radius = Σ over state-changing tools of
-                 scope_weight × (2 if irreversible) × (0 if gated)
-</code></pre>
-<p>The absolute value means nothing. The <strong>ratio between two designs</strong> means a
-great deal, and that is all a design metric has to do. Anyone who demands a
-calibrated number before measuring anything ends up measuring nothing.</p></div><div class="nbmd"><h2>2 · Demo — four ways to build the same capability</h2>
-<p>The requirement: an agent that can triage security findings, fix simple ones, and deploy the fix. Four architectures, all of which deliver it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass
+<p>A1.3 established that the control plane is where a design decision can actually
+bind. This lesson builds it.</p>
+<p>A control plane for an agent has exactly three levers, and they map onto
+questions an attacker asks:</p>
+<table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>The attacker's question</th>
+<th>Real-world equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tool policy</strong></td>
+<td>what can I invoke?</td>
+<td>OPA / Kyverno admission policy</td>
+</tr>
+<tr>
+<td><strong>Egress policy</strong></td>
+<td>who can I talk to?</td>
+<td>Cilium network policy, a proxy allowlist</td>
+</tr>
+<tr>
+<td><strong>Path policy</strong></td>
+<td>what can I read or write?</td>
+<td>container mounts, seccomp, AppArmor</td>
+</tr>
+</tbody>
+</table>
+<p>Each one must be <strong>deny-by-default</strong>. That is not paranoia — it is the only
+setting that survives someone adding a capability and forgetting to update the
+policy, which is the normal case, not the exception.</p>
+<p>And every decision must return a <strong>reason</strong>. A control you cannot explain is a
+control you cannot tune, and an untunable control gets switched off the first
+time it blocks something legitimate. That is how security controls actually die
+— not overridden, just quietly disabled by a tired engineer at 6pm.</p></div><div class="nbmd"><h2>2 · Demo — the three levers, deny-by-default</h2>
+<p>This is a working control plane in about sixty lines. In production the same three decisions come from OPA, Cilium and your container runtime; the logic is what matters here.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import fnmatch, re
+from dataclasses import dataclass, field
+from urllib.parse import urlparse
 
-SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20, &quot;internet&quot;: 50}
+@dataclass
+class Decision:
+    allowed: bool
+    reason: str
+    subject: str = &quot;&quot;
+    def __str__(self):
+        return f&quot;{&#x27;ALLOW&#x27; if self.allowed else &#x27;DENY &#x27;:5s} {self.subject:42s} {self.reason}&quot;
 
-@dataclass(frozen=True)
-class Tool:
-    name: str; writes: bool = False; reversible: bool = True; scope: str = &quot;self&quot;
+PRIVATE = [re.compile(p) for p in (
+    r&quot;^127\.&quot;, r&quot;^10\.&quot;, r&quot;^192\.168\.&quot;, r&quot;^169\.254\.&quot;,
+    r&quot;^172\.(1[6-9]|2\d|3[01])\.&quot;, r&quot;^localhost$&quot;)]
 
-def blast(tools, gated=frozenset()):
-    total = 0
-    for t in tools:
-        if not t.writes or t.name in gated:
-            continue
-        total += SCOPE_WEIGHT[t.scope] * (1 if t.reversible else 2)
-    return total
+@dataclass
+class EgressPolicy:
+    allow_hosts: set = field(default_factory=set)
+    def check(self, url):
+        host = (urlparse(url).hostname or &quot;&quot;).lower()
+        if not host:
+            return Decision(False, &quot;unparseable destination&quot;, url)
+        if any(p.match(host) for p in PRIVATE):
+            extra = &quot; — cloud metadata service&quot; if host.startswith(&quot;169.254&quot;) else &quot;&quot;
+            return Decision(False, f&quot;private/link-local address blocked{extra}&quot;, url)
+        if host in self.allow_hosts:
+            return Decision(True, &quot;host on the allowlist&quot;, url)
+        return Decision(False, &quot;not on the egress allowlist (deny by default)&quot;, url)
 
-READ   = [Tool(&quot;read_findings&quot;), Tool(&quot;read_source&quot;)]
-FIX    = [Tool(&quot;write_file&quot;, writes=True, scope=&quot;project&quot;),
-          Tool(&quot;open_pr&quot;,    writes=True, scope=&quot;project&quot;)]
-SHIP   = [Tool(&quot;merge_pr&quot;, writes=True, scope=&quot;project&quot;, reversible=False),
-          Tool(&quot;deploy&quot;,   writes=True, scope=&quot;org&quot;,     reversible=False)]
+@dataclass
+class PathGuard:
+    workspace: str = &quot;/work&quot;
+    deny_globs: tuple = (&quot;*/.ssh/*&quot;, &quot;*/.aws/*&quot;, &quot;*.pem&quot;, &quot;*/.env&quot;, &quot;*/etc/shadow&quot;)
+    @staticmethod
+    def normalise(path):
+        parts = []
+        for seg in path.split(&quot;/&quot;):
+            if seg in (&quot;&quot;, &quot;.&quot;):      continue
+            if seg == &quot;..&quot;:
+                if parts: parts.pop()
+                continue
+            parts.append(seg)
+        return &quot;/&quot; + &quot;/&quot;.join(parts)
+    def check(self, path):
+        real = self.normalise(path)          # normalise BEFORE checking — see A3.3
+        for g in self.deny_globs:
+            if fnmatch.fnmatch(real, g):
+                return Decision(False, f&quot;matches deny rule {g}&quot;, path)
+        ws = self.normalise(self.workspace)
+        if real == ws or real.startswith(ws + &quot;/&quot;):
+            return Decision(True, f&quot;inside workspace ({real})&quot;, path)
+        return Decision(False, f&quot;outside workspace; resolves to {real}&quot;, path)
 
-designs = {
-    &quot;A · one agent, everything&quot;:        (READ + FIX + SHIP, set()),
-    &quot;B · one agent, gate the shipping&quot;: (READ + FIX + SHIP, {&quot;merge_pr&quot;, &quot;deploy&quot;}),
-    &quot;C · two agents (fixer / shipper)&quot;: (READ + FIX,        set()),
-    &quot;D · two agents + gated shipper&quot;:   (READ + FIX,        set()),
-}
-for name, (tools, gated) in designs.items():
-    print(f&quot;{name:36s} blast = {blast(tools, gated):3d}&quot;)
+@dataclass
+class ToolPolicy:
+    allow: set = field(default_factory=set)
+    require_approval: set = field(default_factory=set)
+    deny: set = field(default_factory=set)
+    def check(self, tool, approved=False):
+        if tool in self.deny:
+            return Decision(False, &quot;tool explicitly denied&quot;, tool)
+        if tool in self.require_approval and not approved:
+            return Decision(False, &quot;requires human approval, none presented&quot;, tool)
+        if tool in self.allow or tool in self.require_approval:
+            return Decision(True, &quot;approved call&quot; if approved else &quot;on the allowlist&quot;, tool)
+        return Decision(False, &quot;not on the tool allowlist (deny by default)&quot;, tool)
 
-print(&quot;\nDesign D&#x27;s shipper agent, measured separately:&quot;)
-print(f&quot;{&#x27;    shipper (gated)&#x27;:36s} blast = {blast(SHIP, {&#x27;merge_pr&#x27;,&#x27;deploy&#x27;}):3d}&quot;)
-print(f&quot;{&#x27;    shipper (ungated)&#x27;:36s} blast = {blast(SHIP):3d}   ← the honest number&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the number can lie</h2>
-<p>Design C looks best: blast 6. But it achieved that by <em>moving</em> the dangerous tools to another agent, not by removing them. If you measure each agent separately and report the lowest, you have optimised the metric rather than the risk. This is Goodhart's law arriving on schedule.</p>
-<p>The metric is only honest when it is computed <strong>over the whole system</strong>, including every agent that can be reached from the first one.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def system_blast(agents):
-    &quot;&quot;&quot;Sum across every agent in the system, not the one you are reviewing.&quot;&quot;&quot;
-    return sum(blast(tools, gated) for tools, gated in agents.values())
+print(&quot;three policies, defined. Nothing is permitted that was not named.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Demo — run a real agent session through it</h2>
+<p>These are the calls a code-review agent actually makes during one task, plus the three an attacker would make if the prompt were compromised. The control plane cannot tell the difference — and does not need to.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
+class ControlPlane:
+    egress: EgressPolicy
+    paths: PathGuard
+    tools: ToolPolicy
+    log: list = field(default_factory=list)
 
-split_honest = {
-    &quot;fixer&quot;:   (READ + FIX, set()),
-    &quot;shipper&quot;: (SHIP,       set()),          # someone still runs this
-}
-split_gated = {
-    &quot;fixer&quot;:   (READ + FIX, set()),
-    &quot;shipper&quot;: (SHIP,       {&quot;merge_pr&quot;, &quot;deploy&quot;}),
-}
-mono = {&quot;one-agent&quot;: (READ + FIX + SHIP, set())}
+    def call(self, tool, target=&quot;&quot;, approved=False):
+        d = self.tools.check(tool, approved)
+        if d.allowed:
+            if target.startswith((&quot;http://&quot;, &quot;https://&quot;)):
+                d = self.egress.check(target)
+            elif target.startswith(&quot;/&quot;):
+                d = self.paths.check(target)
+        self.log.append(d)
+        return d
 
-for name, agents in ((&quot;monolith&quot;, mono), (&quot;split, shipper ungated&quot;, split_honest),
-                     (&quot;split, shipper gated&quot;, split_gated)):
-    print(f&quot;{name:26s} system blast = {system_blast(agents):3d}&quot;)
-print(&quot;\nSplitting alone bought nothing. Splitting AND gating bought everything.&quot;)
-print(&quot;Reporting only the fixer&#x27;s number would have hidden that.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — put it in CI</h2>
-<p>A metric nobody computes is a metric nobody has. The version that works is a budget, enforced by the build.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>BUDGETS = {&quot;L1&quot;: 0, &quot;L2&quot;: 0, &quot;L2.5&quot;: 20, &quot;L3&quot;: 60}
+cp = ControlPlane(
+    egress=EgressPolicy(allow_hosts={&quot;api.github.com&quot;}),
+    paths=PathGuard(workspace=&quot;/work/repo&quot;),
+    tools=ToolPolicy(allow={&quot;read_file&quot;, &quot;search_code&quot;, &quot;http_get&quot;},
+                     require_approval={&quot;post_comment&quot;, &quot;open_pr&quot;},
+                     deny={&quot;merge_pr&quot;, &quot;rotate_credential&quot;}))
 
-def check_budget(system, rung):
-    total = system_blast(system)
-    budget = BUDGETS[rung]
-    ok = total &lt;= budget
-    return ok, (f&quot;system blast {total} {&#x27;≤&#x27; if ok else &#x27;&gt;&#x27;} budget {budget} &quot;
-                f&quot;for rung {rung}&quot;)
+session = [
+    # --- what the agent legitimately does ---
+    (&quot;read_file&quot;,   &quot;/work/repo/src/auth.py&quot;,              False),
+    (&quot;search_code&quot;, &quot;&quot;,                                     False),
+    (&quot;http_get&quot;,    &quot;https://api.github.com/repos/x/y/pulls&quot;, False),
+    (&quot;post_comment&quot;, &quot;&quot;,                                    False),   # ungated attempt
+    (&quot;post_comment&quot;, &quot;&quot;,                                    True),    # with approval
+    # --- what a compromised prompt would try ---
+    (&quot;read_file&quot;,   &quot;/work/repo/../../root/.aws/credentials&quot;, False),
+    (&quot;http_get&quot;,    &quot;http://169.254.169.254/latest/meta-data/iam/&quot;, False),
+    (&quot;http_get&quot;,    &quot;https://exfil.example.com/collect&quot;,   False),
+    (&quot;rotate_credential&quot;, &quot;&quot;,                               True),
+]
+for tool, target, approved in session:
+    print(cp.call(tool, target, approved))
 
-for name, system, rung in [
-    (&quot;split + gated shipper&quot;, split_gated,  &quot;L2.5&quot;),
-    (&quot;split, ungated shipper&quot;, split_honest, &quot;L2.5&quot;),
-    (&quot;monolith&quot;,              mono,         &quot;L2.5&quot;),
-]:
-    ok, msg = check_budget(system, rung)
-    print(f&quot;{&#x27;PASS&#x27; if ok else &#x27;FAIL&#x27;}  {name:26s} {msg}&quot;)
+denied = [d for d in cp.log if not d.allowed]
+print(f&quot;\n{len(cp.log)} calls · {len(cp.log)-len(denied)} allowed · {len(denied)} denied&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks</h2>
+<p>Notice the last line: <code>rotate_credential</code> was refused <strong>even though approval was presented</strong>. That is deliberate, and it is the design decision this lesson exists to make.</p>
+<p>An approval gate is only as good as the approver. Approve-every-call (L2) sounds strong until you measure the median approval latency — when it drops under two seconds, nobody is reading them, and the gate has become a click-through. For actions that are org-wide and irreversible, the right control is not a gate but a <strong>denial</strong>: that tool does not belong to this agent at all, and a different, narrower agent owns it.</p>
+<p>This is why <code>deny</code> exists as a separate lever from <code>require_approval</code>.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Model the approval gate honestly: an approver under load.
+def gate_effectiveness(calls_per_hour, seconds_per_real_review=45):
+    seconds_available = 3600
+    reviewable = seconds_available / seconds_per_real_review
+    return {&quot;calls&quot;: calls_per_hour, &quot;can_truly_review&quot;: int(reviewable),
+            &quot;rubber_stamped&quot;: max(0, calls_per_hour - int(reviewable)),
+            &quot;fraction_real&quot;: round(min(reviewable / calls_per_hour, 1.0), 3)}
 
-ok, _ = check_budget(split_gated, &quot;L2.5&quot;)
-assert ok, &quot;the intended design must pass its own budget&quot;
-print(&quot;\nWired into CI, adding a tool now fails the build unless someone either&quot;)
-print(&quot;gates it or raises the budget deliberately — which is a decision with a name on it.&quot;)</code></pre></div><div class="nbmd"><h2>6 · The review, written down as a skill</h2>
-<p>A number computed once is a fact about today. The skill below is the same computation as a procedure someone else can run, and its contract requires <code>blast_radius.inputs</code> beside the score.</p>
-<p>That requirement is the point: a metric nobody can decompose is a metric nobody can challenge, and an unchallengeable metric quietly stops being used.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
-
-def parse_skill(md):
-    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
-
-    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
-    scalars (`description: &gt;-`) whose continuation lines are indented. That is
-    all a skill needs, and parsing it directly means no dependency.
-    &quot;&quot;&quot;
-    if not md.startswith(&quot;---&quot;):
-        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
-    _, front, body = md.split(&quot;---&quot;, 2)
-    meta, key = {}, None
-    for line in front.strip().splitlines():
-        if not line.strip():
-            continue
-        if not line[0].isspace() and &quot;:&quot; in line:
-            key, val = line.split(&quot;:&quot;, 1)
-            key, val = key.strip(), val.strip()
-            # `&gt;-` and `|` open a folded block; the value is on the next lines
-            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
-        elif key is not None:
-            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
-    if &quot;allowed-tools&quot; in meta:
-        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
-                                 if t.strip()]
-    for required in (&quot;name&quot;, &quot;description&quot;):
-        if not meta.get(required):
-            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
-    return meta, body.strip()
-
-_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
-
-def route(task, skills):
-    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
-
-    The description is not documentation — it is the routing key. An agent
-    decides whether to load a skill by reading it, so a vague description means
-    the skill never fires when it should, and two overlapping descriptions mean
-    the wrong one fires.
-
-    Returns (pick, scores, margin). A margin of 0 means the top two scored the
-    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
-    wearing a confident face. Callers should refuse to auto-route on margin 0
-    rather than pretend the tiebreak meant something.
-    &quot;&quot;&quot;
-    want = set(_WORD.findall(task.lower()))
-    def score(meta):
-        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
-    scores = {n: score(skills[n]) for n in sorted(skills)}
-    # sort names first, then by score: ties must break identically on every
-    # machine or the same task routes differently on two runs
-    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
-    top = scores[ranked[0]]
-    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
-    return ranked[0], scores, margin
-
-def contract_of(body):
-    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
-    # non-greedy across any prose between the heading and the fence
-    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
-    if not m:
-        raise ValueError(&quot;skill declares no output contract&quot;)
-    return json.loads(m.group(1))
-
-def check(instance, contract, path=&quot;$&quot;):
-    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
-
-    Returns the list of problems. An empty list means the shape is right — and
-    that is *all* it means. Conformance is not accuracy: an empty findings list
-    conforms perfectly and tells you nothing.
-    &quot;&quot;&quot;
-    problems = []
-    if isinstance(contract, dict):
-        if not isinstance(instance, dict):
-            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
-        for k, v in sorted(contract.items()):
-            if k not in instance:
-                problems.append(f&quot;{path}.{k}: missing&quot;)
-            else:
-                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
-    elif isinstance(contract, list):
-        if not isinstance(instance, list):
-            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
-        for i, item in enumerate(instance):          # every element, same template
-            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
-    elif isinstance(contract, str) and &quot;|&quot; in contract:
-        if instance not in contract.split(&quot;|&quot;):
-            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
-    elif isinstance(contract, bool):                  # before the numeric case:
-        if not isinstance(instance, bool):            # bool is a subclass of int
-            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
-    elif isinstance(contract, (int, float)):
-        # JSON has one number type. A contract written `0` must accept 0.4, or
-        # every cost and rate in the pipeline has to be rounded to satisfy a
-        # checker rather than to be correct.
-        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
-            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
-    elif not isinstance(instance, type(contract)):
-        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
-                        f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/architecture/blast-radius-review/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: blast-radius-review
-description: &gt;-
-  Compute what an agent can reach and damage in a single run, and decide the
-  autonomy level its blast radius can support. Use when reviewing an agent
-  design or deployment, deciding whether an action needs human approval, sizing
-  a sandbox, or answering how bad it would be if an agent were fully
-  compromised.
-allowed-tools: Read, Grep, Glob
----
-
-# Blast radius as a design metric
-
-Blast radius is not an adjective. It is the set of resources an agent can
-change before anyone can stop it, and it is **computed** from three inputs:
-
-```
-blast_radius = reachable_resources × action_irreversibility × time_to_human_stop
-```
-
-Treating it as a number is what lets it be a design constraint instead of a
-discussion.
-
-## When to use this
-
-At design review, before raising an agent&#x27;s autonomy, and after any change that
-adds a tool, a credential, or a scheduled trigger.
-
-## Procedure
-
-**1 — Enumerate reachable resources.** For each tool the agent can call, list
-what it can touch with attacker-chosen arguments — not what it touches in the
-happy path. A `Bash` tool with unrestricted arguments reaches everything the
-process can reach; record it that way rather than as one row.
-
-**2 — Grade irreversibility.** Per action:
-
-| Grade | Meaning | Example |
-|---|---|---|
-| 0 | read-only | query, list |
-| 1 | reversible with effort | write a file, open a PR |
-| 2 | reversible only with a backup | delete a row, force-push |
-| 3 | irreversible or externally visible | send an email, pay, publish, rotate a key |
-
-Grade 3 actions are the whole reason approval gates exist. An agent whose
-worst action is grade 0 does not need one.
-
-**3 — Measure time-to-human-stop.** How long between the agent deciding and a
-human being able to intervene? Interactive with a prompt is seconds. A
-scheduled run at 03:00 with notifications off is hours. This term dominates the
-product more often than people expect, and it is usually the cheapest to fix.
-
-**4 — Place it on the autonomy ladder.**
-
-| Level | Meaning | Requires |
-|---|---|---|
-| L1 | suggests; human executes | nothing |
-| L2 | acts within a bounded sandbox | reversible actions only |
-| L2.5 | acts, but grade-3 actions need approval | a working approval path |
-| L3 | acts unattended | demonstrated containment + audit + stop authority |
-
-An agent at L3 whose grade-3 actions are unbounded is misclassified, not brave.
-
-**5 — Find the cheapest reduction.** Usually one of: remove a credential from
-the environment, split one broad tool into two narrow ones, add a choke point
-in front of the irreversible action, or shorten time-to-stop with a
-notification. Recommend the one with the best radius reduction per unit of
-friction, and say what it costs.
-
-## Output contract
-
-```json
-{
-  &quot;resources&quot;: [{&quot;tool&quot;: &quot;str&quot;, &quot;reachable&quot;: [&quot;str&quot;], &quot;unbounded&quot;: false}],
-  &quot;actions&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;irreversibility&quot;: 0, &quot;why&quot;: &quot;str&quot;}],
-  &quot;time_to_human_stop_seconds&quot;: 0,
-  &quot;blast_radius&quot;: {&quot;score&quot;: 0, &quot;inputs&quot;: {&quot;resources&quot;: 0, &quot;max_irreversibility&quot;: 0, &quot;seconds&quot;: 0}},
-  &quot;autonomy&quot;: {&quot;current&quot;: &quot;L1|L2|L2.5|L3&quot;, &quot;supported&quot;: &quot;L1|L2|L2.5|L3&quot;, &quot;mismatch&quot;: false},
-  &quot;reductions&quot;: [{&quot;change&quot;: &quot;str&quot;, &quot;new_score&quot;: 0, &quot;friction&quot;: &quot;low|medium|high&quot;}]
-}
-```
-
-Show `inputs`. A blast-radius score without its terms cannot be challenged, and
-an unchallengeable metric stops being used.
-
-## Failure modes
-
-- **Counting the happy path.** Enumerate with attacker-chosen arguments.
-- **Ignoring time-to-stop** because it is not about permissions. It is the term
-  that separates an incident from a near miss.
-- **Raising autonomy because the agent has been reliable.** Reliability is not
-  containment; it is the absence of an adversary so far.
-&quot;&quot;&quot;
-
-meta, body = parse_skill(SKILL_MD)
-print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
-print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
-print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>contract = contract_of(body)
-TOOLS = READ + FIX + SHIP
-
-def irreversibility(t):
-    if not t.writes:      return 0                      # read-only
-    if t.reversible:      return 1 if t.scope in (&quot;self&quot;, &quot;project&quot;) else 2
-    return 3                                            # irreversible
-
-# An agent that runs unattended overnight has a much longer path to a human
-# than one that prompts. This term is usually the cheapest of the three to fix.
-TIME_TO_STOP = 8 * 60 * 60
-
-review = {
- &quot;resources&quot;: [{&quot;tool&quot;: t.name, &quot;reachable&quot;: [t.scope],
-                &quot;unbounded&quot;: t.scope in (&quot;org&quot;, &quot;internet&quot;)} for t in TOOLS],
- &quot;actions&quot;: [{&quot;action&quot;: t.name, &quot;irreversibility&quot;: irreversibility(t),
-              &quot;why&quot;: (&quot;read-only&quot; if not t.writes else
-                      f&quot;writes at {t.scope} scope, &quot;
-                      f&quot;{&#x27;reversible&#x27; if t.reversible else &#x27;irreversible&#x27;}&quot;)}
-             for t in TOOLS],
- &quot;time_to_human_stop_seconds&quot;: TIME_TO_STOP,
- &quot;blast_radius&quot;: {&quot;score&quot;: blast(TOOLS),
-                  &quot;inputs&quot;: {&quot;resources&quot;: len(TOOLS),
-                             &quot;max_irreversibility&quot;: max(irreversibility(t) for t in TOOLS),
-                             &quot;seconds&quot;: TIME_TO_STOP}},
- &quot;autonomy&quot;: {&quot;current&quot;: &quot;L3&quot;, &quot;supported&quot;: &quot;L2.5&quot;, &quot;mismatch&quot;: True},
- &quot;reductions&quot;: [{&quot;change&quot;: f&quot;gate {t.name} behind approval&quot;,
-                 &quot;new_score&quot;: blast(TOOLS, gated=frozenset({t.name})),
-                 &quot;friction&quot;: &quot;low&quot;}
-                for t in TOOLS if irreversibility(t) == 3],
-}
-problems = check(review, contract)
-print(f&quot;conformance: {len(problems)} problem(s)&quot;)
-for p in problems: print(&quot;   &quot;, p)
-assert not problems, problems
-
-print(f&quot;\nblast radius {review[&#x27;blast_radius&#x27;][&#x27;score&#x27;]} from &quot;
-      f&quot;{review[&#x27;blast_radius&#x27;][&#x27;inputs&#x27;][&#x27;resources&#x27;]} tools, worst action grade &quot;
-      f&quot;{review[&#x27;blast_radius&#x27;][&#x27;inputs&#x27;][&#x27;max_irreversibility&#x27;]}&quot;)
-print(f&quot;autonomy claimed {review[&#x27;autonomy&#x27;][&#x27;current&#x27;]}, &quot;
-      f&quot;supported {review[&#x27;autonomy&#x27;][&#x27;supported&#x27;]} -&gt; mismatch &quot;
-      f&quot;{review[&#x27;autonomy&#x27;][&#x27;mismatch&#x27;]}&quot;)
-print(&quot;\ncheapest reductions:&quot;)
-for r in sorted(review[&quot;reductions&quot;], key=lambda r: (r[&quot;new_score&quot;], r[&quot;change&quot;])):
-    print(f&quot;   {r[&#x27;change&#x27;]:38s} {review[&#x27;blast_radius&#x27;][&#x27;score&#x27;]} -&gt; {r[&#x27;new_score&#x27;]}&quot;)
-print()
-print(&quot;The mismatch is the finding. Grade-3 actions are why approval gates&quot;)
-print(&quot;exist, and an agent running unattended with one is at L3 by deployment&quot;)
-print(&quot;and L2.5 by design - misclassified, not brave.&quot;)
-assert review[&quot;autonomy&quot;][&quot;mismatch&quot;]
-assert any(a[&quot;irreversibility&quot;] == 3 for a in review[&quot;actions&quot;])</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Design A scores 92, B scores 6, C scores 6. Measured across the whole system, the ungated split still scores 92 while the gated split scores 6 — showing that splitting alone bought nothing. The budget check passes only the gated design.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Compute the system blast radius for your largest agent deployment, counting every agent it can invoke. Then pick a budget and see how many of your current designs would fail it. Set the budget at today's number and ratchet down; a budget nothing passes is ignored by lunchtime.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.5.html">A1.5 · Multi-agent topology</a></strong></p>
+for rate in (10, 80, 400):
+    r = gate_effectiveness(rate)
+    print(f&quot;{r[&#x27;calls&#x27;]:&gt;4} approvals/hour → {r[&#x27;fraction_real&#x27;]:.0%} genuinely &quot;
+          f&quot;reviewed, {r[&#x27;rubber_stamped&#x27;]:&gt;3} rubber-stamped&quot;)
+print(&quot;\nAt 400/hour the gate is theatre. Deny the irreversible tools instead,&quot;)
+print(&quot;and give them to a separate agent with its own, much narrower manifest.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The legitimate calls succeed; <code>post_comment</code> is refused until approval is presented. The traversal, the metadata address and the exfiltration host are all denied with distinct reasons, and <code>rotate_credential</code> is denied despite approval. The gate model shows review quality collapsing to 20% at 400 approvals per hour.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take the three levers and decide where each belongs in your stack: in the agent process, in a sidecar, or in the network. Only one of those placements still works when the agent process itself is the compromised component.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.5.html">A1.5 · Blast radius as a design metric</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.4.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Reachable-action counts for both models, side by side. The delta is what attenuation bought you.</div><div class="chips"><span>OpenFGA</span><span>SPIRE</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.4.ipynb</code></p></div><div class="pager"><a href="A1.3.html"><span class="k">← Previous</span><span class="t">A1.3 · Authorization models that make bad grants impossible</span></a><a class="next" href="A1.5.html"><span class="k">Next →</span><span class="t">A1.5 · Multi-agent topology</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>verify.sh fails loudly if any layer is advisory rather than enforcing.</div><div class="chips"><span>kind</span><span>SPIRE</span><span>agentgateway</span><span>OPA</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.4.ipynb</code></p></div><div class="pager"><a href="A1.3.html"><span class="k">← Previous</span><span class="t">A1.3 · Architecture review when the system acts</span></a><a class="next" href="A1.5.html"><span class="k">Next →</span><span class="t">A1.5 · Blast radius as a design metric</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

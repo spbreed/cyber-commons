@@ -5,7 +5,7 @@
 
 **Job titles:** Cloud Security Engineer, Platform Security Engineer, Infrastructure Security
 
-**What changes:** The sandbox is your product. Permission prompts inside the agent are somebody else's defence-in-depth; the boundary is yours.
+**What changes:** The controls themselves, in the order they take effect: default-deny authorization, then sandboxed execution, then the filesystem and tool boundaries, then MCP, then egress — and finally the levers you pull when one of them fails.
 
 **Autonomy focus:** Containment is what lets you say yes to L2.5 without pretending the agent is trustworthy.
 
@@ -15,7 +15,34 @@
 
 ---
 
-### A3.1 — Sandboxing is the perimeter
+### A3.1 — Authorization models that make bad grants impossible
+
+`Security of AI`
+
+- **Risk** — RBAC has no unit small enough to express the grant you actually meant.
+- **Control** — ReBAC/ABAC with time-scoped delegation and attenuation by construction.
+- **Lab** — Model the same grant in flat RBAC and in OpenFGA; prove the over-privileged grant is unrepresentable.
+- **Tools** — `OpenFGA`, `OPA`
+
+**Run it** — Make the over-privileged grant structurally unrepresentable.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+docker run -d -p 8080:8080 openfga/openfga run
+cd labs/a1-control-plane/authz
+fga model write --file model.fga
+python3 prove_unrepresentable.py   # attempts to write the bad grant
+```
+
+*Expect:* The bad grant is rejected by the schema, not by a policy check that could be skipped.
+
+---
+
+### A3.2 — Sandboxing is the perimeter
 
 `Security of AI`
 
@@ -40,35 +67,6 @@ cd labs/a3-sandbox
 ```
 
 *Expect:* A table of syscall surface and reachable host resources per tier — a number you can put in a design review.
-
----
-
-### A3.2 — Egress control for agents
-
-`Security of AI`
-
-- **Risk** — An agent with unrestricted egress has no other meaningful control.
-- **Control** — Allowlists, inspecting proxies, DNS conditional forwarding, data perimeters.
-- **Lab** — Put a Squid allowlist in front of an agent and watch exfiltration fail.
-- **Tools** — `Squid`, `Cilium`, `Kyverno`
-- **Models** — `GLM-4.6`
-
-**Run it** — Prove an agent with no egress control has no other meaningful control.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox
-docker compose up -d squid agent
-./exfil.sh            # baseline: data leaves
-./apply-allowlist.sh  # squid allowlist + DNS conditional forwarding
-./exfil.sh            # same payload, now blocked
-```
-
-*Expect:* Identical agent, identical payload; the only variable is egress policy.
 
 ---
 
@@ -99,7 +97,34 @@ cd labs/a3-sandbox
 
 ---
 
-### A3.4 — MCP is not a security boundary
+### A3.4 — Tool permission models
+
+`Security of AI`
+
+- **Risk** — The confused deputy at the tool layer.
+- **Control** — Capability scoping, allowlisted actions, structured output contracts, read-only defaults.
+- **Lab** — Redesign a dangerous tool so the dangerous call doesn't exist.
+- **Tools** — `kmcp`, `OPA`
+
+**Run it** — Design the dangerous call out of existence.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.5   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/a3-sandbox/tools
+python3 audit_tools.py --manifest before.json   # finds an unrestricted shell tool
+python3 refactor.py --split shell --into read_file,list_dir,run_tests
+python3 audit_tools.py --manifest after.json
+```
+
+*Expect:* The capability the agent needed survives; the arbitrary-execution path does not exist to block.
+
+---
+
+### A3.5 — MCP is not a security boundary
 
 `Security of AI`
 
@@ -127,34 +152,36 @@ python3 chain.py --from filesystem --to http   # blocked
 
 ---
 
-### A3.5 — Tool permission models
+### A3.6 — Egress control for agents
 
 `Security of AI`
 
-- **Risk** — The confused deputy at the tool layer.
-- **Control** — Capability scoping, allowlisted actions, structured output contracts, read-only defaults.
-- **Lab** — Redesign a dangerous tool so the dangerous call doesn't exist.
-- **Tools** — `kmcp`, `OPA`
+- **Risk** — An agent with unrestricted egress has no other meaningful control.
+- **Control** — Allowlists, inspecting proxies, DNS conditional forwarding, data perimeters.
+- **Lab** — Put a Squid allowlist in front of an agent and watch exfiltration fail.
+- **Tools** — `Squid`, `Cilium`, `Kyverno`
+- **Models** — `GLM-4.6`
 
-**Run it** — Design the dangerous call out of existence.
+**Run it** — Prove an agent with no egress control has no other meaningful control.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.5   # run it headless and check it
+jupyter notebook labs/notebooks/A3.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.2   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox/tools
-python3 audit_tools.py --manifest before.json   # finds an unrestricted shell tool
-python3 refactor.py --split shell --into read_file,list_dir,run_tests
-python3 audit_tools.py --manifest after.json
+cd labs/a3-sandbox
+docker compose up -d squid agent
+./exfil.sh            # baseline: data leaves
+./apply-allowlist.sh  # squid allowlist + DNS conditional forwarding
+./exfil.sh            # same payload, now blocked
 ```
 
-*Expect:* The capability the agent needed survives; the arbitrary-execution path does not exist to block.
+*Expect:* Identical agent, identical payload; the only variable is egress policy.
 
 ---
 
-### A3.6 — Runtime containment levers
+### A3.7 — Runtime containment levers
 
 `Security of AI`
 
@@ -181,33 +208,6 @@ cd labs/a3-sandbox/levers
 
 ---
 
-### A3.7 — The unmanaged agent problem
-
-`Security of AI`
-
-- **Risk** — Personal, non-sandboxed agents on managed endpoints.
-- **Control** — Endpoint + secure web gateway, behavioural monitoring — with an honest account of the gap.
-- **Lab** — Detect an unmanaged local agent by its egress and filesystem signature.
-- **Tools** — `Falco`, `osquery`
-
-**Run it** — Detect an unmanaged personal agent on a managed endpoint.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox
-sudo falco -r rules/unmanaged-agent.yaml &
-./simulate-personal-agent.sh   # local model + outbound tool calls
-grep 'unmanaged_agent' /var/log/falco.log
-```
-
-*Expect:* Detected by egress + filesystem signature. Read the chapter's honest note on why this case has no clean answer yet.
-
----
-
 ### A3.8 — Environment separation
 
 `Security of AI`
@@ -231,5 +231,32 @@ python3 prove_separation.py --spiffe-id spiffe://cybercommons/dev/agent
 ```
 
 *Expect:* The dev SVID cannot mint a prod token by construction — not because a policy said no.
+
+---
+
+### A3.9 — The unmanaged agent problem
+
+`Security of AI`
+
+- **Risk** — Personal, non-sandboxed agents on managed endpoints.
+- **Control** — Endpoint + secure web gateway, behavioural monitoring — with an honest account of the gap.
+- **Lab** — Detect an unmanaged local agent by its egress and filesystem signature.
+- **Tools** — `Falco`, `osquery`
+
+**Run it** — Detect an unmanaged personal agent on a managed endpoint.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/a3-sandbox
+sudo falco -r rules/unmanaged-agent.yaml &
+./simulate-personal-agent.sh   # local model + outbound tool calls
+grep 'unmanaged_agent' /var/log/falco.log
+```
+
+*Expect:* Detected by egress + filesystem signature. Read the chapter's honest note on why this case has no clean answer yet.
 
 ---

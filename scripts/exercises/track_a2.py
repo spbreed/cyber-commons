@@ -688,7 +688,7 @@ Two rules make the result auditable, and both must hold:
 1. **Subset of what was presented.** You cannot hand on authority you were not
    given.
 2. **Within the new actor's own ceiling.** You cannot hand on authority the
-   recipient may never hold, even if the caller offered it. (This is A1.3's
+   recipient may never hold, even if the caller offered it. (This is A3.1's
    ceiling, doing its second job.)
 
 Drop either rule and the chain still *looks* correct — every token parses, every
@@ -701,7 +701,7 @@ call succeeds — which is precisely why this needs a test rather than a review.
   ("py", '''import hashlib, json, time
 from dataclasses import dataclass, field
 
-# A1.3's ceilings: what each actor may EVER hold.
+# A3.1's ceilings: what each actor may EVER hold.
 CEILINGS = {
     "dana@corp":    {"repo:read", "repo:write", "deploy:prod", "secrets:read"},
     "orchestrator": {"repo:read", "repo:write", "deploy:prod"},

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.7 — Model routing architecture | Cyber Commons</title><meta name="description" content="Treat tier selection as a security decision with explicit fail-closed defaults."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.7</div><h1>Model routing architecture</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The router fails open to a weaker model under load — a silent downgrade of every guardrail.</p></div><div class="ctrl"><div class="lab">Control</div><p>Treat tier selection as a security decision with explicit fail-closed defaults.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Prove the router fails closed, not open.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 27 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.7 · Model routing architecture</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.7 — Build vs buy | Cyber Commons</title><meta name="description" content="Buy the commodity, build the boundary, never outsource identity or stop authority."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.7</div><h1>Build vs buy</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Outsourcing the control plane to a vendor you cannot audit.</p></div><div class="ctrl"><div class="lab">Control</div><p>Buy the commodity, build the boundary, never outsource identity or stop authority.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Score gateways against a fixed control checklist instead of a feature matrix.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 39 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.7 · Build vs buy</h1>
 <p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Both directions</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.6.html">A1.6 · Build vs buy</a></strong>.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.6.html">A1.6 · Multi-agent topology</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,109 +11,107 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>LiteLLM, vLLM</td>
+<td>agentgateway, Envoy</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>GLM-4.6, Llama 3.3, Kimi K2</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>Routing between models is presented as a cost decision: use the big model where
-it matters, the small one everywhere else. Real deployments do exactly that, and
-the saving is genuine.</p>
-<p>The security content is in <em>which stage gets which model</em>, because the stages
-have very different relationships to authority:</p>
+<p>The build-vs-buy conversation for agent infrastructure usually runs on features:
+which platform supports more models, more connectors, more dashboards.</p>
+<p>That is the wrong axis. Features can be added later. The question that cannot be
+retrofitted is: <strong>which controls can you still evidence in eighteen months, when
+an auditor or a regulator asks?</strong></p>
+<p>Two capabilities decide it, and both are effectively impossible to bolt on
+afterwards because they have to be present at the moment an action happens:</p>
 <ul>
-<li><strong>Plan</strong> — reads context, produces a strategy. Touches nothing.</li>
-<li><strong>Act</strong> — chooses and invokes tools. This is where authority lives.</li>
-<li><strong>Verify</strong> — decides whether the result is acceptable. This is where <em>trust</em>
-  lives.</li>
+<li><strong>Delegation chains.</strong> Can you show, for one action, who caused it and through
+  which intermediaries? If the platform authenticates every agent as a service
+  account, that information was never recorded and cannot be reconstructed.</li>
+<li><strong>An independent stop mechanism.</strong> Can you halt the fleet without the vendor's
+  cooperation, and have you timed it?</li>
 </ul>
-<p>The common optimisation puts the large model on planning (it looks impressive in
-demos) and a small fast model on acting, so the loop stays responsive. That
-places the weakest reasoning next to the highest authority.</p>
-<p>The second common optimisation puts the cheapest model on verification, because
-verification "is just a check". That is worse: a weak verifier does not fail
-loudly, it <em>approves</em>. B2.2 is an entire lesson on why.</p></div><div class="nbmd"><h2>2 · Demo — the routing table as a security artefact</h2>
-<p>Open-weight models, since this curriculum assumes no frontier account: Kimi K2 and GLM for heavy reasoning, Llama 3.3 in its smaller sizes for the fast paths. The table below is the deliverable — it says which model may trigger what.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20}
-
-ROUTES = {
- #  stage      model                  tools it may invoke               gated
- &quot;plan&quot;:   (&quot;Kimi K2 (large, open)&quot;,  [],                                set()),
- &quot;act&quot;:    (&quot;GLM-4.6 (mid, open)&quot;,    [(&quot;write_file&quot;, &quot;project&quot;, True),
-                                       (&quot;open_pr&quot;,    &quot;project&quot;, True)], {&quot;open_pr&quot;}),
- &quot;verify&quot;: (&quot;GLM-4.6 (mid, open)&quot;,    [],                                set()),
- &quot;summarise&quot;: (&quot;Llama 3.3 8B (small)&quot;, [],                               set()),
+<p>Everything else — routing, observability, prompt management — is genuinely
+easier to buy.</p></div><div class="nbmd"><h2>2 · Demo — score the options on evidenceability</h2>
+<p>Three realistic options. The CNCF column is the open-source stack this curriculum uses throughout: SPIFFE/SPIRE for workload identity, OPA for policy, an agent gateway for mediation, OpenTelemetry for traces.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CONTROLS = {
+ &quot;AC-1&quot;: &quot;agent identities distinct from human, separately revocable&quot;,
+ &quot;AC-2&quot;: &quot;delegated authority narrows at every hop, recorded in an act chain&quot;,
+ &quot;SB-1&quot;: &quot;egress deny-by-default with an allowlist&quot;,
+ &quot;SB-2&quot;: &quot;privileged tools require approval below L3&quot;,
+ &quot;EV-1&quot;: &quot;every action logged with the ACTING identity, not the principal&quot;,
+ &quot;EV-2&quot;: &quot;harness accuracy evaluated against a held-out key per release&quot;,
+ &quot;ST-1&quot;: &quot;a tested stop mechanism you own, timed&quot;,
 }
-def stage_blast(tools, gated):
-    return sum(SCOPE_WEIGHT[s] * (1 if rev else 2)
-               for n, s, rev in tools if n not in gated)
+RETROFITTABLE = {&quot;AC-1&quot;: False, &quot;AC-2&quot;: False, &quot;SB-1&quot;: True, &quot;SB-2&quot;: True,
+                 &quot;EV-1&quot;: False, &quot;EV-2&quot;: True, &quot;ST-1&quot;: False}
 
-print(f&quot;{&#x27;stage&#x27;:11s}{&#x27;model&#x27;:26s}{&#x27;tools&#x27;:&gt;6}{&#x27;blast&#x27;:&gt;7}&quot;)
-print(&quot;-&quot; * 52)
-for stage, (model, tools, gated) in ROUTES.items():
-    print(f&quot;{stage:11s}{model:26s}{len(tools):&gt;6}{stage_blast(tools, gated):&gt;7}&quot;)
-print(&quot;\nOnly one stage holds tools at all, and its one risky tool is gated.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the two cheap optimisations</h2>
-<p>Both of these get proposed in every performance review of an agent system, and both are reasonable-sounding.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def evaluate(routes, label):
-    total = sum(stage_blast(t, g) for _, t, g in routes.values())
-    actor = [(s, m) for s, (m, t, g) in routes.items() if t]
-    verifier = routes[&quot;verify&quot;][0]
-    print(f&quot;{label}&quot;)
-    print(f&quot;   system blast {total:3d}   tools held by: {actor}&quot;)
-    print(f&quot;   verifier model: {verifier}&quot;)
-    return total
+OPTIONS = {
+ &quot;vendor agent platform&quot;:
+    {&quot;AC-1&quot;: True, &quot;AC-2&quot;: False, &quot;SB-1&quot;: True,  &quot;SB-2&quot;: True,
+     &quot;EV-1&quot;: False, &quot;EV-2&quot;: True, &quot;ST-1&quot;: False},
+ &quot;CNCF stack (SPIRE+OPA+gateway+OTel)&quot;:
+    {&quot;AC-1&quot;: True, &quot;AC-2&quot;: True,  &quot;SB-1&quot;: True,  &quot;SB-2&quot;: True,
+     &quot;EV-1&quot;: True,  &quot;EV-2&quot;: True, &quot;ST-1&quot;: True},
+ &quot;roll your own from scratch&quot;:
+    {&quot;AC-1&quot;: True, &quot;AC-2&quot;: True,  &quot;SB-1&quot;: False, &quot;SB-2&quot;: True,
+     &quot;EV-1&quot;: True,  &quot;EV-2&quot;: False, &quot;ST-1&quot;: False},
+}
+for name, support in OPTIONS.items():
+    missing = [c for c in CONTROLS if not support[c]]
+    hard = [c for c in missing if not RETROFITTABLE[c]]
+    print(f&quot;{name}&quot;)
+    print(f&quot;   covers {len(CONTROLS)-len(missing)}/{len(CONTROLS)}   &quot;
+          f&quot;unfixable-later gaps: {hard or &#x27;none&#x27;}&quot;)
+    for c in missing:
+        flag = &quot;✗✗&quot; if not RETROFITTABLE[c] else &quot;✗ &quot;
+        print(f&quot;   {flag} {c}  {CONTROLS[c]}&quot;)
+    print()</code></pre></div><div class="nbmd"><h2>3 · Where it breaks</h2>
+<p>The vendor platform scores 5/7, which reads fine in a comparison table. But both of its gaps are marked <code>✗✗</code> — not retrofittable. In eighteen months you will be asked to produce an act chain for one action and you will not be able to, because the data was never captured.</p>
+<p>Let's make that concrete rather than rhetorical.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def audit_record(platform, action, principal, agent, chain):
+    &quot;&quot;&quot;What the platform can actually produce when asked about one action.&quot;&quot;&quot;
+    if platform[&quot;EV-1&quot;] and platform[&quot;AC-2&quot;]:
+        return {&quot;action&quot;: action, &quot;acting_identity&quot;: agent,
+                &quot;on_behalf_of&quot;: principal, &quot;chain&quot;: chain, &quot;answerable&quot;: True}
+    if platform[&quot;EV-1&quot;]:
+        return {&quot;action&quot;: action, &quot;acting_identity&quot;: agent,
+                &quot;on_behalf_of&quot;: &quot;?&quot;, &quot;chain&quot;: &quot;not recorded&quot;, &quot;answerable&quot;: False}
+    return {&quot;action&quot;: action, &quot;acting_identity&quot;: principal,   # the human takes the blame
+            &quot;on_behalf_of&quot;: principal, &quot;chain&quot;: &quot;not recorded&quot;, &quot;answerable&quot;: False}
 
-good = evaluate(ROUTES, &quot;as designed&quot;)
+for name, support in OPTIONS.items():
+    r = audit_record(support, &quot;merge_pr #4471&quot;, &quot;dana@corp&quot;, &quot;fixer-agent&quot;,
+                     [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;fixer-agent&quot;])
+    print(f&quot;{name}&quot;)
+    print(f&quot;   {r}&quot;)
+    if not r[&quot;answerable&quot;]:
+        print(f&quot;   → cannot answer &#x27;who caused this?&#x27;. &quot;
+              f&quot;{&#x27;Logs name the human who never saw it.&#x27; if r[&#x27;acting_identity&#x27;]==&#x27;dana@corp&#x27; else &#x27;&#x27;}&quot;)
+    print()</code></pre></div><div class="nbmd"><h2>4 · The control — buy, but specify the two hard things</h2>
+<p>This is not an argument for building everything. It is an argument for making two requirements non-negotiable in procurement, where they are cheap, instead of discovering them in an audit, where they are not.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PROCUREMENT_QUESTIONS = [
+ (&quot;Can you produce, for a single action, the full chain of identities that &quot;
+  &quot;caused it — not just the last one?&quot;, &quot;AC-2 + EV-1&quot;),
+ (&quot;Can we halt every agent without your assistance, and what is the measured &quot;
+  &quot;time from decision to the agent&#x27;s next call failing?&quot;, &quot;ST-1&quot;),
+ (&quot;Is the agent&#x27;s identity distinct from the human&#x27;s, and separately &quot;
+  &quot;revocable?&quot;, &quot;AC-1&quot;),
+ (&quot;Can we export the policy and the traces in a form we still own if we &quot;
+  &quot;leave?&quot;, &quot;exit strategy — see E2.4 (DORA)&quot;),
+]
+for q, maps_to in PROCUREMENT_QUESTIONS:
+    print(f&quot;Q: {q}\n   → {maps_to}\n&quot;)
 
-# optimisation 1: move tools to the fast small model so the loop feels snappy
-opt1 = dict(ROUTES)
-opt1[&quot;act&quot;] = (&quot;Llama 3.3 8B (small)&quot;,
-               [(&quot;write_file&quot;, &quot;project&quot;, True), (&quot;open_pr&quot;, &quot;project&quot;, True),
-                (&quot;deploy&quot;, &quot;org&quot;, False)], set())
-bad1 = evaluate(opt1, &quot;\n&#x27;speed up the act stage&#x27; — small model, ungated, +deploy&quot;)
-
-# optimisation 2: verify with the cheapest thing available
-opt2 = dict(ROUTES)
-opt2[&quot;verify&quot;] = (&quot;Llama 3.2 1B (tiny)&quot;, [], set())
-evaluate(opt2, &quot;\n&#x27;verification is just a check&#x27; — tiny model verifies&quot;)
-print(&quot;   blast unchanged — and that is exactly why this one is dangerous:&quot;)
-print(&quot;   the metric does not move, but every result is now trusted on the&quot;)
-print(&quot;   word of the weakest model in the system. See B2.2.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — two routing rules</h2>
-<p>State them as rules a policy engine can enforce, not as guidance:</p>
-<ol>
-<li><strong>Capability decides who plans. Blast radius decides who acts.</strong> A model may only hold tools whose combined blast radius is within the budget for its tier.</li>
-<li><strong>The verifier is never below the actor.</strong> If the model that acts is stronger than the model that checks it, the check is decorative.</li>
-</ol></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TIER = {&quot;Llama 3.2 1B (tiny)&quot;: 0, &quot;Llama 3.3 8B (small)&quot;: 1,
-        &quot;GLM-4.6 (mid, open)&quot;: 2, &quot;Kimi K2 (large, open)&quot;: 3}
-TIER_BUDGET = {0: 0, 1: 3, 2: 20, 3: 60}
-
-def routing_review(routes):
-    problems = []
-    for stage, (model, tools, gated) in routes.items():
-        b = stage_blast(tools, gated)
-        tier = TIER[model]
-        if b &gt; TIER_BUDGET[tier]:
-            problems.append(f&quot;{stage}: {model} (tier {tier}) holds blast {b} &gt; &quot;
-                            f&quot;budget {TIER_BUDGET[tier]}&quot;)
-    actor_tier = max((TIER[m] for _, (m, t, g) in routes.items() if t), default=0)
-    verifier_tier = TIER[routes[&quot;verify&quot;][0]]
-    if verifier_tier &lt; actor_tier:
-        problems.append(f&quot;verifier tier {verifier_tier} &lt; actor tier {actor_tier} &quot;
-                        f&quot;— the check is weaker than the thing it checks&quot;)
-    return problems
-
-for label, r in ((&quot;as designed&quot;, ROUTES), (&quot;fast-actor&quot;, opt1), (&quot;cheap-verifier&quot;, opt2)):
-    p = routing_review(r)
-    print(f&quot;{label:16s} {&#x27;PASS&#x27; if not p else &#x27;FAIL&#x27;}&quot;)
-    for x in p:
-        print(f&quot;                 ⚠ {x}&quot;)
-assert not routing_review(ROUTES)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The designed routing holds tools in one stage only, with a system blast of 3, and passes both rules. The fast-actor variant jumps to 43 and fails the tier budget. The cheap-verifier variant leaves the blast radius unchanged and fails the second rule — the point being that the metric alone would not have caught it.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Write your own routing table with the tier budgets your risk appetite implies, then check it against a real deployment. The verifier rule catches the most systems, and it is the one that never shows up in a cost review.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.1.html">A2.1 · "Who is calling?"</a></strong></p>
+decision = {n: sum(s.values()) for n, s in OPTIONS.items()}
+best = max(decision, key=decision.get)
+print(&quot;scored:&quot;, decision)
+print(&quot;recommended spine:&quot;, best)
+assert best.startswith(&quot;CNCF&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The vendor platform covers 5/7 with two unfixable-later gaps (AC-2, ST-1, EV-1); the CNCF stack covers 7/7; rolling your own covers 5/7 with two hard gaps. The audit demo shows the vendor platform attributing the merge to the human who never saw it.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Send the four procurement questions to whichever platform you are currently evaluating. The answer to question 2 — a measured number, not 'yes we support that' — tells you most of what you need.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.8.html">A1.8 · Model routing architecture</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The router refuses rather than silently downgrading to a weaker model with weaker guardrails.</div><div class="chips"><span>LiteLLM</span><span>vLLM</span><span class="m">GLM-4.6</span><span class="m">Llama 3.3</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.7.ipynb</code></p></div><div class="pager"><a href="A1.6.html"><span class="k">← Previous</span><span class="t">A1.6 · Build vs buy</span></a><a class="next" href="A2.1.html"><span class="k">Next →</span><span class="t">A2.1 · &quot;Who is calling?&quot;</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Each option scored on: identity mapping, per-tool RBAC, output scanning, audit, stop lever. Gaps are explicit.</div><div class="chips"><span>agentgateway</span><span>Envoy</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.7.ipynb</code></p></div><div class="pager"><a href="A1.6.html"><span class="k">← Previous</span><span class="t">A1.6 · Multi-agent topology</span></a><a class="next" href="A1.8.html"><span class="k">Next →</span><span class="t">A1.8 · Model routing architecture</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
