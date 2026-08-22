@@ -1,21 +1,36 @@
-topology    depth     reachable from orchestrator   blast
-------------------------------------------------------------
-star            2         4 agents                      49
-chain           5         4 agents                      49
-mesh            5         5 agents                      50
-topology  compromised     reaches  blast   worst case
-----------------------------------------------------------------
-star      fixer                 0      3
-star      orchestrator          4     50  ← worst
+A · one agent, everything            blast =  52
+B · one agent, gate the shipping     blast =   6
+C · two agents (fixer / shipper)     blast =   6
+D · two agents + gated shipper       blast =   6
 
-chain     fixer                 2     46
-chain     orchestrator          4     50  ← worst
+Design D's shipper agent, measured separately:
+    shipper (gated)                  blast =   0
+    shipper (ungated)                blast =  46   ← the honest number
+monolith                   system blast =  52
+split, shipper ungated     system blast =  52
+split, shipper gated       system blast =   6
 
-mesh      fixer                 5     53
-mesh      shipper               5     90  ← worst
+Splitting alone bought nothing. Splitting AND gating bought everything.
+Reporting only the fixer's number would have hidden that.
+PASS  split + gated shipper      system blast 6 ≤ budget 20 for rung L2.5
+FAIL  split, ungated shipper     system blast 52 > budget 20 for rung L2.5
+FAIL  monolith                   system blast 52 > budget 20 for rung L2.5
 
-In the mesh, compromising the LOWEST-privilege agent reaches everything.
-In the star, only the orchestrator does. That is the whole argument.
-star   OK      orchestrator → shipper
-chain  REFUSED depth 4 > limit 3: orchestrator → triager → fixer → reviewer
-mesh   REFUSED cycle: orchestrator → fixer → orchestrator
+Wired into CI, adding a tool now fails the build unless someone either
+gates it or raises the budget deliberately — which is a decision with a name on it.
+loaded skill: blast-radius-review
+  tools it may use: Read, Grep, Glob
+  routing description: 53 words
+  procedure: 81 lines
+conformance: 0 problem(s)
+
+blast radius 52 from 6 tools, worst action grade 3
+autonomy claimed L3, supported L2.5 -> mismatch True
+
+cheapest reductions:
+   gate deploy behind approval            52 -> 12
+   gate merge_pr behind approval          52 -> 46
+
+The mismatch is the finding. Grade-3 actions are why approval gates
+exist, and an agent running unattended with one is at L3 by deployment
+and L2.5 by design - misclassified, not brave.

@@ -1,31 +1,32 @@
-kill_process                  2s  target still acts: True   others up: ['deploy-agent', 'triage-agent']
-                                 process killed; supervisor restarted it — identity still valid
-quarantine                    5s  target still acts: True   others up: ['deploy-agent', 'triage-agent']
-                                 egress blocked; local filesystem actions continue
-revoke_identity              12s  target still acts: False  others up: ['deploy-agent', 'triage-agent']
-                                 identity revoked; agent cannot act even after restart
-rotate_shared_credential    420s  target still acts: False  others up: []
-                                 credential rotated; EVERY consumer is now broken
-    agent rate   human 8min   automated 12s   ratio
-----------------------------------------------------
-        60/min          480              12    40.0×
-       300/min         2400              60    40.0×
-      1200/min         9600             240    40.0×
+ALLOW https://api.github.com/repos/x/y                             host allowlisted
+ALLOW https://pypi.org/simple/requests/                            host allowlisted
+DENY  http://169.254.169.254/latest/meta-data/iam/security-crede   blocked: link-local / cloud metadata (169.254.0.0/16)
+DENY  http://127.0.0.1:8080/admin                                  blocked: loopback (127.0.0.0/8)
+DENY  http://10.0.3.14:9200/_search                                blocked: RFC1918 private (10.0.0.0/8)
+DENY  https://collect.example.com/upload                           not on the egress allowlist (deny by default)
+DENY  https://pastebin.com/api/api_post.php                        not on the egress allowlist (deny by default)
+suffix allowlist — looks tidy, permits the internet:
+ALLOW https://api.github.com/repos/x/y                             matches suffix .com
+DENY  https://pypi.org/simple/requests/                            no suffix match
+DENY  http://169.254.169.254/latest/meta-data/iam/security-crede   no suffix match
+DENY  http://127.0.0.1:8080/admin                                  no suffix match
+DENY  http://10.0.3.14:9200/_search                                no suffix match
+ALLOW https://collect.example.com/upload                           matches suffix .com  ← EXFILTRATION PATH
+ALLOW https://pastebin.com/api/api_post.php                        matches suffix .com  ← EXFILTRATION PATH
 
-At 300 actions/min an 8-minute approval costs 2,400 further actions
-against 60 for automated revocation. That ratio is the funding argument.
-reached the cloud metadata service     NHI: AUTO-REVOKE (confidence 0.99)               
-read a path matching */.ssh/*          NHI: AUTO-REVOKE (confidence 0.97)               
-egress to an unlisted host             NHI: AUTO-REVOKE (confidence 0.90)               
-tool-call rate 20× baseline            NHI: AUTO-REVOKE (confidence 0.75)               
-unusual working hours                  NHI: alert only (confidence 0.30 < 0.7)          
+ALLOW https://attacker-controlled.s3.amazonaws.com/loot  matches suffix .amazonaws.com
+An attacker's own S3 bucket matches '.amazonaws.com'. The suffix that
+was added to reduce toil is now the exfiltration channel.
+URL-level check:      ALLOW host allowlisted
+but it resolves to:   169.254.169.254 (link-local / cloud metadata (169.254.0.0/16))
 
-same signal, human subject                 page on-call — human lockout needs a person to confirm
-before: {'deploy-agent': True, 'patch-agent': True, 'triage-agent': True}
-
-signal: reached the cloud metadata service
-action: AUTO-REVOKE (confidence 0.99)
-after 12s: {'deploy-agent': True, 'patch-agent': False, 'triage-agent': True}
-
-Contained agent stopped. Two other agents unaffected. No human waited.
-This only works because A2 gave each agent its own revocable identity.
+same URLs, checked after resolution:
+   ALLOW https://api.github.com/x                       allowlisted and resolves to public 140.82.121.5
+   DENY  https://metrics.partner.example/collect        resolved address is link-local / cloud metadata (169.254.0.0/16) — refusing (metrics.partner.example → 169.254.169.254)
+suffix allowlist                   incorrect decisions: 3
+      https://collect.example.com/upload
+      https://pastebin.com/api/api_post.php
+      https://pypi.org/simple/requests/
+host allowlist (URL only)          incorrect decisions: 1
+      https://metrics.partner.example/c
+host allowlist + resolution        incorrect decisions: 0

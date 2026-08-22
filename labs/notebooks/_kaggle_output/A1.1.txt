@@ -1,39 +1,46 @@
-tool                  plane     scope     reversible
---------------------------------------------------------
-search_findings       decision  self      True
-read_source           decision  self      True
-post_jira_comment     action    project   True
-close_finding         action    project   True
-open_pr               action    project   True
-merge_pr              action    project   False
-rotate_credential     action    org       False
+component     trust  role
+agent_loop        2  turns model output into tool calls, then asks again
+app               2  the surface a person talks to
+mcp_server        0  somebody else's process, exposing tools
+memory            1  carries state between turns
+model             1  predicts tokens; holds no credential and opens no socket
+retrieval         0  pulls documents into the context window at query time
+tools             2  the only components that change anything
 
-decision plane (2): ['search_findings', 'read_source']
-action plane   (5): ['post_jira_comment', 'close_finding', 'open_pr', 'merge_pr', 'rotate_credential']
+edges
+   app          -> agent_loop   the user's request
+   agent_loop   -> model        the context window
+   model        -> agent_loop   a request to call a tool
+   agent_loop   -> tools        THE TOOL CALL - text becomes consequence
+   retrieval    -> agent_loop   documents, pasted into the context
+   mcp_server   -> agent_loop   tool descriptions and tool results
+   memory       -> agent_loop   state from earlier turns
+component    trust  floor  what happened
+app              2      2  user asks: summarise the incident from ticket 4471
+retrieval        0      0  document pulled in: INC-4471: database timeouts after the 
+agent_loop       2      0  context window assembled
+model            1      0  predicts: call a tool
+agent_loop       2      0  TOOL CALL  <-- text becomes consequence
 
-The model can propose all seven. Only the five on the action plane
-can change anything, and only if the control plane lets them through.
-ungoverned manifest — blast radius: 55
-   rotate_credential       40
-   merge_pr                 6
-   post_jira_comment        3
-   close_finding            3
-   open_pr                  3
+By the time the tool is called, content of trust 0 is in the context.
+The tool call itself carries the user's authority - trust 2 - and nothing
+in the request records that a trust-0 document helped choose it.
+clean corpus  -> ('summarise', None)
+poisoned doc  -> ('send_email', 'audit@evil.example')
 
-The worst single call is rotate_credential: org-wide and irreversible.
-An agent that can close a finding can also rotate the credential that
-finding was about. Nobody decided that; it fell out of the tool list.
-as deployed                    rung=L2.5  blast= 55  FINDINGS
-                                ⚠ claims L2.5 (bounded) but reaches org-wide ungated: ['rotate_credential']
-                                ⚠ irreversible and ungated (no after-the-fact review possible): ['merge_pr', 'rotate_credential']
-gate the irreversible ones     rung=L2.5  blast=  9  CLEAN
-gate every writer              rung=L2    blast=  0  CLEAN
-someone edits the manifest on a Tuesday:
-   added          ['rotate_credential']
-   removed        []
-   blast          9 → 49
-   delta          40
-   new_findings   ["claims L2.5 (bounded) but reaches org-wide ungated: ['rotate_credential']", "irreversible and ungated (no after-the-fact review possible): ['rotate_credential']"]
+Nobody was compromised. The wiki page was edited - which is what wiki
+pages are for. The document entered the same string as the operator's
+instructions, and the loop could not tell them apart, because by then
+there was nothing left to tell apart with.
+clean corpus  -> ('summarise', None)
+poisoned doc  -> ('refused', 'instruction came from retrieval (trust 0)')
 
-No pull request touched the agent's code. The blast radius doubled.
-This diff, wired into CI, IS the living architecture review.
+The document is still read, still summarised, still useful. What it can
+no longer do is choose a tool.
+documents            : 400
+of which poisoned    : 134
+naive loop  fired    : 134
+guarded loop fired   : 0
+
+Seven components, two boundaries. Every control in Function A binds to
+one of them, and the next lesson is the map of which control binds where.

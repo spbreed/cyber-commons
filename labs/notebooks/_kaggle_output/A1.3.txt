@@ -1,22 +1,39 @@
-GRANTED  ci-builder     ['artifact:write', 'repo:read']   — the normal build grant
-GRANTED  deploy-bot     ['deploy:staging']   — staging deploy
-REFUSED  deploy-bot     ['deploy:prod']   — 'just for the hotfix'
-         deploy-bot may never hold ['deploy:prod'] (ceiling: ['artifact:read', 'deploy:staging'])
-REFUSED  triage-agent   ['repo:write']   — 'so it can fix what it finds'
-         triage-agent may never hold ['repo:write'] (ceiling: ['finding:comment', 'repo:read'])
-REFUSED  ci-builder     ['secrets:read']   — 'the build needs a token'
-         ci-builder may never hold ['secrets:read'] (ceiling: ['artifact:write', 'repo:read'])
-triage-agent → ci-builder → deploy-bot
-scopes reachable through the chain: ['artifact:read', 'artifact:write', 'deploy:staging', 'finding:comment', 'repo:read']
-triage-agent's own ceiling:         ['finding:comment', 'repo:read']
+tool                  plane     scope     reversible
+--------------------------------------------------------
+search_findings       decision  self      True
+read_source           decision  self      True
+post_jira_comment     action    project   True
+close_finding         action    project   True
+open_pr               action    project   True
+merge_pr              action    project   False
+rotate_credential     action    org       False
 
-No ceiling was broken. The agent still reached artifact:write and
-deploy:staging, because it can ask something else to do the work.
-triage-agent holds:       ['finding:comment', 'repo:read']
-→ delegated to ci-builder: ['repo:read']
-→ delegated to deploy-bot: ∅ — nothing survives
+decision plane (2): ['search_findings', 'read_source']
+action plane   (5): ['post_jira_comment', 'close_finding', 'open_pr', 'merge_pr', 'rotate_credential']
 
-Authority can only shrink along a chain. The walk-around is closed,
-and no reviewer had to notice anything.
-2000 random delegations, widening violations: 0
-Property holds: result ⊆ presented AND result ⊆ new actor's ceiling.
+The model can propose all seven. Only the five on the action plane
+can change anything, and only if the control plane lets them through.
+ungoverned manifest — blast radius: 55
+   rotate_credential       40
+   merge_pr                 6
+   post_jira_comment        3
+   close_finding            3
+   open_pr                  3
+
+The worst single call is rotate_credential: org-wide and irreversible.
+An agent that can close a finding can also rotate the credential that
+finding was about. Nobody decided that; it fell out of the tool list.
+as deployed                    rung=L2.5  blast= 55  FINDINGS
+                                ⚠ claims L2.5 (bounded) but reaches org-wide ungated: ['rotate_credential']
+                                ⚠ irreversible and ungated (no after-the-fact review possible): ['merge_pr', 'rotate_credential']
+gate the irreversible ones     rung=L2.5  blast=  9  CLEAN
+gate every writer              rung=L2    blast=  0  CLEAN
+someone edits the manifest on a Tuesday:
+   added          ['rotate_credential']
+   removed        []
+   blast          9 → 49
+   delta          40
+   new_findings   ["claims L2.5 (bounded) but reaches org-wide ungated: ['rotate_credential']", "irreversible and ungated (no after-the-fact review possible): ['rotate_credential']"]
+
+No pull request touched the agent's code. The blast radius doubled.
+This diff, wired into CI, IS the living architecture review.

@@ -1,17 +1,31 @@
-svc-indexer            score=0.800  agent     cv=0.0  rate=12.53/s  span=0.01h
-dana@corp              score=0.021  human     cv=1.51  rate=0.0/s  span=0.83h
-unknown-token-7f3c     score=0.562  unclear   cv=0.0  rate=1.0/s  span=0.08h
-sam@corp       truth=human  scored=unclear   (0.533)
-slow-agent     truth=agent  scored=human     (0.035)   ← MISCLASSIFIED
+kill_process                  2s  target still acts: True   others up: ['deploy-agent', 'triage-agent']
+                                 process killed; supervisor restarted it — identity still valid
+quarantine                    5s  target still acts: True   others up: ['deploy-agent', 'triage-agent']
+                                 egress blocked; local filesystem actions continue
+revoke_identity              12s  target still acts: False  others up: ['deploy-agent', 'triage-agent']
+                                 identity revoked; agent cannot act even after restart
+rotate_shared_credential    420s  target still acts: False  others up: []
+                                 credential rotated; EVERY consumer is now broken
+    agent rate   human 8min   automated 12s   ratio
+----------------------------------------------------
+        60/min          480              12    40.0×
+       300/min         2400              60    40.0×
+      1200/min         9600             240    40.0×
 
-The two errors are not symmetric:
-  false 'agent' on a human → an investigation, mild cost, self-correcting
-  false 'human' on an agent → it stays invisible, which is the whole risk
-So tune the threshold DOWN, and accept the investigations.
-svc-indexer            score=0.800  registered to data-platform
-unknown-token-7f3c     score=0.562  SHADOW AGENT — behaves like software, not in the inventory
+At 300 actions/min an 8-minute approval costs 2,400 further actions
+against 60 for automated revocation. That ratio is the funding argument.
+reached the cloud metadata service     NHI: AUTO-REVOKE (confidence 0.99)               
+read a path matching */.ssh/*          NHI: AUTO-REVOKE (confidence 0.97)               
+egress to an unlisted host             NHI: AUTO-REVOKE (confidence 0.90)               
+tool-call rate 20× baseline            NHI: AUTO-REVOKE (confidence 0.75)               
+unusual working hours                  NHI: alert only (confidence 0.30 < 0.7)          
 
-1 shadow agent(s) to triage.
-Each one gets an owner and an entry, or it gets revoked. There is no
-third option — an unowned identity that behaves like software is either
-someone's load-bearing script or someone else's foothold.
+same signal, human subject                 page on-call — human lockout needs a person to confirm
+before: {'deploy-agent': True, 'patch-agent': True, 'triage-agent': True}
+
+signal: reached the cloud metadata service
+action: AUTO-REVOKE (confidence 0.99)
+after 12s: {'deploy-agent': True, 'patch-agent': False, 'triage-agent': True}
+
+Contained agent stopped. Two other agents unaffected. No human waited.
+This only works because A2 gave each agent its own revocable identity.
