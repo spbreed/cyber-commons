@@ -3,12 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cyber Commons — Navigating Cyber Singularity</title>
-<meta name="description" content="Cyber Commons — Navigating Cyber Singularity. A free, open commons for Cyber AI: the skills to defend with AI and to secure AI itself. Twelve tracks organised the way a CISO org actually is, built entirely on open-source, open-weight and CNCF tools, so anyone can learn the frontier on a laptop.">
+<title>Cyber Commons — Free, open training for Cyber AI</title>
+<meta name="description" content="Free, open training for the age of agentic security: defend with AI, and secure AI itself. Breakout time is down to 29 minutes — build the capability to test yourself at that speed. Organised by the five functions of a CISO org, by role. Runs on the laptop you already own.">
 <link rel="icon" type="image/png" href="assets/favicon.png">
+<meta property="og:type" content="website">
 <meta property="og:title" content="Cyber Commons — Navigating Cyber Singularity">
-<meta property="og:description" content="Democratizing defensive cyber knowledge while AI capability compounds. Free, open, and runnable on the laptop you already own.">
+<meta property="og:description" content="Offense scales on its own. Defense has to be deliberately spread. Free, open Cyber AI training — organised by the five functions of a CISO org.">
 <meta property="og:image" content="assets/logo-full.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cyber Commons — Navigating Cyber Singularity">
+<meta name="twitter:description" content="Offense scales on its own. Defense has to be deliberately spread. Free, open Cyber AI training.">
+<meta name="twitter:image" content="assets/logo-full.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -17,98 +22,120 @@
     --ink:#0A0E19;
     --ink-2:#0E1424;
     --surface:#131B2E;
-    --surface-2:#182238;
     --line:#26314b;
     --line-soft:#1c2740;
     --text:#E9EDF6;
     --text-dim:#96A0B8;
     --text-faint:#606B85;
-    /* Track duotone — the whole brand rides on this split */
-    --defend:#4D9BFF;   /* AI FOR security  — the blue-team signal */
+    --defend:#4D9BFF;        /* AI FOR security */
     --defend-soft:#2b4a7a;
-    --secure:#FFAF5C;   /* security OF AI   — the amber we protect/attack */
+    --secure:#FFAF5C;        /* security OF AI  */
     --secure-soft:#7a5730;
-    /* active accent, swapped by the hero toggle */
     --accent:var(--defend);
     --accent-soft:var(--defend-soft);
     --maxw:1180px;
     --ease:cubic-bezier(.2,.7,.2,1);
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;scroll-padding-top:80px}
   @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  body{
-    margin:0;background:var(--ink);color:var(--text);
-    font-family:"IBM Plex Sans",system-ui,sans-serif;
-    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-  }
-  body::before{
-    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  body{margin:0;background:var(--ink);color:var(--text);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
     background-image:linear-gradient(var(--line-soft) 1px,transparent 1px),
                      linear-gradient(90deg,var(--line-soft) 1px,transparent 1px);
     background-size:64px 64px;opacity:.22;
     -webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000 20%,transparent 75%);
-            mask-image:radial-gradient(120% 80% at 50% 0%,#000 20%,transparent 75%);
-  }
+            mask-image:radial-gradient(120% 80% at 50% 0%,#000 20%,transparent 75%)}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:1}
   a{color:inherit}
   h1,h2,h3{font-family:"Space Grotesk",sans-serif;font-weight:600;line-height:1.05;letter-spacing:-.02em;margin:0}
-  .mono{font-family:"IBM Plex Mono",monospace}
-  .eyebrow{
-    font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;
     letter-spacing:.22em;text-transform:uppercase;color:var(--accent);
-    transition:color .5s var(--ease);display:inline-flex;align-items:center;gap:10px;
-  }
+    transition:color .5s var(--ease);display:inline-flex;align-items:center;gap:10px}
   .eyebrow::before{content:"";width:26px;height:1px;background:var(--accent);transition:background .5s var(--ease)}
+  section{padding:56px 0;position:relative}
+  .sec-head{max-width:62ch}
+  .sec-head h2{font-size:clamp(25px,3.6vw,38px);margin-top:12px}
+  .sec-head p{color:var(--text-dim);font-size:16.5px;margin:14px 0 0}
+  .divider{height:1px;background:linear-gradient(90deg,var(--line),transparent);border:0;margin:0}
 
   /* ---------- NAV ---------- */
   header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
-    background:rgba(10,14,25,.72);border-bottom:1px solid var(--line-soft)}
-  .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px}
-  .brand{display:flex;align-items:center;gap:11px;font-family:"Space Grotesk";font-weight:600;font-size:18px;letter-spacing:-.01em;text-decoration:none}
+    background:rgba(10,14,25,.78);border-bottom:1px solid var(--line-soft)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:"Space Grotesk";font-weight:600;
+    font-size:18px;letter-spacing:-.01em;text-decoration:none;flex:none}
   .brand img{height:40px;width:auto;flex:none;display:block}
   .brand .bt{display:flex;flex-direction:column;line-height:1.05}
-  .brand .bt small{font-family:"IBM Plex Mono";font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--text-faint);font-weight:400;margin-top:3px}
+  .brand .bt small{font-family:"IBM Plex Mono";font-size:9.5px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--text-faint);font-weight:400;margin-top:3px}
   .brand b{color:var(--secure);font-weight:600}
-  @media(max-width:520px){.brand .bt small{display:none}}
-  .nav-links{display:flex;gap:30px;align-items:center}
-  .nav-links a{font-size:14.5px;color:var(--text-dim);text-decoration:none;transition:color .2s}
+  @media(max-width:560px){.brand .bt small{display:none}}
+  .nav-links{display:flex;gap:26px;align-items:center}
+  .nav-links a{font-size:14.5px;color:var(--text-dim);text-decoration:none;transition:color .2s;white-space:nowrap}
   .nav-links a:hover{color:var(--text)}
-  .nav-cta{border:1px solid var(--line);border-radius:8px;padding:9px 16px !important;color:var(--text) !important;font-family:"IBM Plex Mono";font-size:13px}
-  .nav-cta:hover{border-color:var(--accent);color:var(--accent) !important}
+  .nav-cta{border:1px solid var(--line);border-radius:8px;padding:9px 16px !important;
+    color:var(--text) !important;font-family:"IBM Plex Mono";font-size:13px}
+  .nav-cta:hover{border-color:var(--secure);color:var(--secure) !important}
   @media(max-width:820px){.nav-links a:not(.nav-cta){display:none}}
+  .share-btn{appearance:none;background:transparent;border:1px solid var(--line);border-radius:8px;
+    color:var(--text-dim);font-family:"IBM Plex Mono";font-size:13px;padding:9px 14px;cursor:pointer;
+    transition:border-color .2s,color .2s;display:inline-flex;align-items:center;gap:7px}
+  .share-btn:hover{border-color:var(--defend);color:var(--defend)}
+  .share-btn svg{width:13px;height:13px;flex:none}
 
   /* ---------- HERO ---------- */
-  .hero{padding:56px 0 44px;position:relative}
+  .hero{padding:60px 0 46px}
+  .hero h1{font-size:clamp(33px,5.6vw,62px);max-width:22ch;margin-top:16px}
+  .hero h1 .a{color:var(--defend)}
+  .hero h1 .b{color:var(--secure)}
+  .hero .lede{font-size:clamp(16px,2vw,19px);color:var(--text-dim);max-width:58ch;margin:20px 0 0}
+  .hero .lede b{color:var(--text);font-weight:600}
+  .toggle{display:inline-flex;margin-top:28px;border:1px solid var(--line);border-radius:12px;
+    padding:5px;background:var(--ink-2);gap:4px;position:relative}
+  .toggle button{appearance:none;border:0;background:transparent;color:var(--text-dim);
+    font-family:"IBM Plex Mono";font-size:13.5px;padding:12px 20px;border-radius:8px;
+    cursor:pointer;transition:color .35s var(--ease);position:relative;z-index:2}
+  .toggle button .k{opacity:.5;margin-right:8px}
+  .toggle .slider{position:absolute;top:5px;bottom:5px;border-radius:8px;z-index:1;
+    transition:transform .45s var(--ease),background .45s var(--ease),box-shadow .45s var(--ease)}
+  .toggle[data-active="defend"] .slider{background:linear-gradient(180deg,rgba(77,155,255,.22),rgba(77,155,255,.10));box-shadow:inset 0 0 0 1px var(--defend)}
+  .toggle[data-active="secure"] .slider{background:linear-gradient(180deg,rgba(255,175,92,.22),rgba(255,175,92,.10));box-shadow:inset 0 0 0 1px var(--secure)}
+  .toggle[data-active="defend"] button[data-t="defend"],
+  .toggle[data-active="secure"] button[data-t="secure"]{color:var(--text)}
+  .hero-explain{margin-top:18px;min-height:52px}
+  .hero-explain p{margin:0;color:var(--text-dim);max-width:56ch;font-size:16px}
+  .hero-explain b{color:var(--text);font-weight:600}
+  .hero-stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+  .stat{border:1px solid var(--line-soft);background:var(--ink-2);border-radius:10px;
+    padding:14px 18px;flex:1;min-width:150px}
+  .stat .n{font-family:"Space Grotesk";font-size:26px;font-weight:600;letter-spacing:-.02em}
+  .stat .n.defend{color:var(--defend)}
+  .stat .n.secure{color:var(--secure)}
+  .stat .l{font-family:"IBM Plex Mono";font-size:11.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--text-faint);margin-top:3px}
 
-  /* ---------- WHAT IT IS / SINGULARITY ---------- */
-  .what-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:44px;align-items:start;margin-top:36px}
-  @media(max-width:900px){.what-grid{grid-template-columns:1fr;gap:30px}}
-  .what-lead{font-family:"Space Grotesk";font-size:clamp(20px,2.6vw,27px);font-weight:500;
-    line-height:1.3;letter-spacing:-.01em;margin:0 0 20px}
-  .what-lead em{font-style:normal;color:var(--secure)}
-  .what-lead span{color:var(--defend)}
-  .what-body p{color:var(--text-dim);margin:0 0 16px;font-size:15.5px}
-  .what-body p:last-child{margin-bottom:0}
-  .what-body b{color:var(--text);font-weight:600}
-  .defn{border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:26px 24px}
-  .defn h4{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--accent);margin:0 0 14px;transition:color .5s var(--ease)}
-  .defn dl{margin:0;display:flex;flex-direction:column;gap:16px}
-  .defn dt{font-family:"Space Grotesk";font-weight:600;font-size:15.5px;margin-bottom:4px}
-  .defn dd{margin:0;font-size:14px;color:var(--text-dim);line-height:1.5}
-  .curve{margin-top:38px;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  /* ---------- BUTTONS ---------- */
+  .btns{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+  .btn{font-family:"IBM Plex Mono";font-size:14px;text-decoration:none;padding:15px 26px;
+    border-radius:10px;transition:transform .15s var(--ease),box-shadow .25s,border-color .2s,color .2s;
+    display:inline-block}
+  .btn.p{background:var(--secure);color:#231402;font-weight:600}
+  .btn.p:hover{transform:translateY(-2px);box-shadow:0 12px 30px -12px var(--secure)}
+  .btn.g{border:1px solid var(--line);color:var(--text)}
+  .btn.g:hover{border-color:var(--defend);color:var(--defend)}
+
+  /* ---------- LEDGER (signature card) ---------- */
+  .ledger{margin-top:34px;border:1px solid var(--line);border-radius:16px;overflow:hidden;
     background:linear-gradient(180deg,var(--surface),var(--ink-2))}
-  .curve-head{padding:24px 26px 0}
-  .curve-head h3{font-size:20px;margin-bottom:8px}
-  .curve-head p{color:var(--text-dim);font-size:14.5px;margin:0;max-width:78ch}
-  .gap{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border-top:1px solid var(--line-soft)}
+  .gap{display:grid;grid-template-columns:1fr 1fr}
   @media(max-width:760px){.gap{grid-template-columns:1fr}}
-  .gap > div{padding:24px 26px}
+  .gap > div{padding:26px}
   .gap .atk{border-right:1px solid var(--line-soft)}
   @media(max-width:760px){.gap .atk{border-right:0;border-bottom:1px solid var(--line-soft)}}
-  .gap .lab{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+  .gap .lab{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
   .gap .atk .lab{color:#ff8a8a}
   .gap .def .lab{color:var(--defend)}
   .gap ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
@@ -118,214 +145,208 @@
   .gap .def li::before{color:var(--defend)}
   .gap li b{color:var(--text);font-weight:600}
   .closing{padding:22px 26px;border-top:1px solid var(--line-soft);background:rgba(255,175,92,.05);
-    font-size:15px;color:var(--text)}
+    font-size:15px;color:var(--text);display:flex;justify-content:space-between;
+    align-items:center;gap:20px;flex-wrap:wrap}
   .closing b{color:var(--secure)}
-  .hero h1{font-size:clamp(32px,5.4vw,60px);max-width:23ch;margin-top:16px}
-  .hero h1 .a{color:var(--defend)}
-  .hero h1 .b{color:var(--secure)}
-  .hero .lede{font-size:clamp(16px,2vw,19px);color:var(--text-dim);max-width:62ch;margin:20px 0 0}
-  .hero .lede b{color:var(--text);font-weight:600}
-  .toggle{display:inline-flex;margin-top:26px;border:1px solid var(--line);border-radius:12px;padding:5px;background:var(--ink-2);gap:4px;position:relative}
-  .toggle button{appearance:none;border:0;background:transparent;color:var(--text-dim);
-    font-family:"IBM Plex Mono";font-size:13.5px;letter-spacing:.02em;padding:12px 20px;border-radius:8px;
-    cursor:pointer;transition:color .35s var(--ease);position:relative;z-index:2}
-  .toggle button .k{opacity:.5;margin-right:8px}
-  .toggle .slider{position:absolute;top:5px;bottom:5px;border-radius:8px;z-index:1;
-    transition:transform .45s var(--ease),background .45s var(--ease),box-shadow .45s var(--ease)}
-  .toggle[data-active="defend"] .slider{background:linear-gradient(180deg,rgba(77,155,255,.22),rgba(77,155,255,.10));box-shadow:inset 0 0 0 1px var(--defend)}
-  .toggle[data-active="secure"] .slider{background:linear-gradient(180deg,rgba(255,175,92,.22),rgba(255,175,92,.10));box-shadow:inset 0 0 0 1px var(--secure)}
-  .toggle[data-active="defend"] button[data-t="defend"],
-  .toggle[data-active="secure"] button[data-t="secure"]{color:var(--text)}
-  .hero-explain{margin-top:20px;min-height:50px}
-  .hero-explain p{margin:0;color:var(--text-dim);max-width:58ch;font-size:16px;
-    transition:opacity .3s var(--ease)}
-  .hero-explain b{color:var(--text);font-weight:600}
-  .hero-stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-  .stat{border:1px solid var(--line-soft);background:var(--ink-2);border-radius:10px;padding:14px 18px;flex:1;min-width:150px}
-  .stat .n{font-family:"Space Grotesk";font-size:26px;font-weight:600;letter-spacing:-.02em}
-  .stat .n.defend{color:var(--defend)}
-  .stat .n.secure{color:var(--secure)}
-  .stat .l{font-family:"IBM Plex Mono";font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);margin-top:3px}
+  .closing span{max-width:70ch}
 
-  /* ---------- SECTION SHELL ---------- */
-  section{padding:54px 0;position:relative}
-  .sec-head{max-width:64ch}
-  .sec-head h2{font-size:clamp(25px,3.6vw,38px);margin-top:12px}
-  .sec-head p{color:var(--text-dim);font-size:16.5px;margin:14px 0 0}
-  .divider{height:1px;background:linear-gradient(90deg,var(--line),transparent);border:0;margin:0}
+  /* ---------- SINGULARITY CLOCK ---------- */
+  .clock{margin-top:32px;display:grid;grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  @media(max-width:760px){.clock{grid-template-columns:1fr 1fr}}
+  .clock > div{padding:24px 20px;border-right:1px solid var(--line-soft);
+    background:var(--ink-2);position:relative}
+  .clock > div:last-child{border-right:0}
+  @media(max-width:760px){.clock > div:nth-child(2n){border-right:0}
+    .clock > div:nth-child(-n+2){border-bottom:1px solid var(--line-soft)}}
+  .clock .yr{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--text-faint)}
+  .clock .t{font-family:"Space Grotesk";font-size:clamp(28px,4vw,40px);font-weight:600;
+    letter-spacing:-.03em;margin:8px 0 4px;color:var(--text-dim)}
+  .clock .d{font-size:13px;color:var(--text-faint);margin:0}
+  .clock .now .t{color:var(--secure)}
+  .clock .rec{background:linear-gradient(180deg,rgba(255,138,138,.07),var(--ink-2))}
+  .clock .rec .t{color:#ff8a8a}
+  .clock .rec .yr{color:#ff8a8a}
+  .src{margin-top:14px;font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint)}
+  .src a{color:var(--text-dim)}
 
-  /* ---------- MISSION ---------- */
-  .mission-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:start;margin-top:52px}
-  @media(max-width:860px){.mission-grid{grid-template-columns:1fr;gap:36px}}
-  .model{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:30px}
-  @media(max-width:820px){.model{grid-template-columns:1fr}}
-  .mcol{border:1px solid var(--line-soft);border-radius:14px;padding:26px 24px;background:var(--ink-2)}
-  .mcol h3{font-family:"Space Grotesk";font-size:18px;font-weight:600;margin:0 0 16px;display:flex;align-items:center;gap:10px}
-  .mcol h3::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--accent);transition:background .5s var(--ease)}
-  .mcol ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:12px}
-  .mcol li{display:flex;gap:11px;font-size:14.5px;color:var(--text-dim);align-items:flex-start;line-height:1.5}
-  .mcol li b{color:var(--text);font-weight:600}
-  .mcol li::before{content:"—";color:var(--accent);flex:none;transition:color .5s var(--ease)}
-  .changelog{margin-top:20px;font-family:"IBM Plex Mono";font-size:12.5px;color:var(--text-faint);letter-spacing:.03em;text-align:center}
-  .changelog b{color:var(--secure)}
+  .split{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.split{grid-template-columns:1fr}}
+  .split > div{border:1px solid var(--line-soft);border-radius:12px;padding:22px;background:var(--ink-2)}
+  .split .k{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;margin-bottom:10px}
+  .split .them .k{color:#ff8a8a}
+  .split .you .k{color:var(--defend)}
+  .split p{margin:0;font-size:15px;color:var(--text-dim)}
+  .split p b{color:var(--text)}
 
-  /* ---------- TWO TRACKS ---------- */
-  .tracks{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:34px}
-  @media(max-width:820px){.tracks{grid-template-columns:1fr}}
-  .track{border:1px solid var(--line);border-radius:16px;padding:34px 30px;background:linear-gradient(180deg,var(--surface),var(--ink-2));position:relative;overflow:hidden}
-  .track::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px}
-  .track.d::before{background:var(--defend)}
-  .track.s::before{background:var(--secure)}
-  .track .tag{font-family:"IBM Plex Mono";font-size:12px;letter-spacing:.16em;text-transform:uppercase}
-  .track.d .tag{color:var(--defend)}
-  .track.s .tag{color:var(--secure)}
-  .track h3{font-size:25px;margin:14px 0 12px}
-  .track>p{color:var(--text-dim);font-size:15.5px;margin:0 0 22px}
-  .track ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:11px}
-  .track li{display:flex;gap:11px;font-size:14.5px;color:var(--text);align-items:flex-start}
-  .track li::before{content:"▸";flex:none;font-size:12px;padding-top:2px}
-  .track.d li::before{color:var(--defend)}
-  .track.s li::before{color:var(--secure)}
-  .track li span{color:var(--text-dim)}
+  .answer{margin-top:26px;border:1px solid var(--secure-soft);border-radius:14px;
+    background:rgba(255,175,92,.06);padding:26px}
+  .answer h3{font-size:21px;margin-bottom:12px}
+  .answer > p{color:var(--text-dim);font-size:15.5px;margin:0 0 20px;max-width:76ch}
+  .answer > p b{color:var(--text);font-weight:600}
+  .answer ul{list-style:none;padding:0;margin:0;display:grid;
+    grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:760px){.answer ul{grid-template-columns:1fr;gap:14px}}
+  .answer li{font-size:14px;color:var(--text-dim);border-left:2px solid var(--secure-soft);padding-left:14px}
+  .answer li b{display:block;color:var(--text);font-weight:600;margin-bottom:4px}
+  .answer .note{margin:20px 0 0;font-size:13.5px;color:var(--text-faint);
+    padding-top:16px;border-top:1px solid var(--line-soft)}
 
-  /* ---------- HOW / MECHANISM ---------- */
+  /* ---------- CHAIR PICKER ---------- */
+  .chairs{margin-top:32px;display:grid;grid-template-columns:repeat(5,1fr);gap:0;
+    border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  @media(max-width:900px){.chairs{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.chairs{grid-template-columns:1fr}}
+  .chair{appearance:none;text-align:left;font:inherit;cursor:pointer;
+    background:var(--ink-2);border:0;border-right:1px solid var(--line-soft);
+    padding:22px 20px;transition:background .2s;color:var(--text);position:relative}
+  .chair:last-child{border-right:0}
+  @media(max-width:900px){.chair{border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}}
+  .chair:hover{background:var(--surface)}
+  .chair .fid{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;color:var(--text-faint)}
+  .chair h4{font-family:"Space Grotesk";font-size:17px;font-weight:600;margin:9px 0 6px}
+  .chair p{font-size:13px;color:var(--text-dim);margin:0}
+  .chair[aria-pressed="true"]{background:var(--surface)}
+  .chair[aria-pressed="true"]::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent)}
+  .chair[aria-pressed="true"] .fid{color:var(--accent)}
+
+  .panel{margin-top:18px;border:1px solid var(--line);border-radius:14px;
+    background:var(--ink-2);padding:28px 26px}
+  .panel .ph{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+  .panel .ph h3{font-size:22px}
+  .panel .ph .who{font-family:"IBM Plex Mono";font-size:12px;color:var(--text-faint)}
+  .panel .lead{color:var(--text-dim);font-size:15.5px;margin:10px 0 22px;max-width:74ch}
+  .panel .lead b{color:var(--text);font-weight:600}
+  .pgrid{display:grid;grid-template-columns:1.3fr 1fr;gap:26px}
+  @media(max-width:760px){.pgrid{grid-template-columns:1fr;gap:20px}}
+  .plab{font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);margin-bottom:12px}
+  .starts{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+  .starts a{display:flex;gap:12px;align-items:baseline;text-decoration:none;font-size:14.5px;
+    color:var(--text);border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
+  .starts a:hover{color:var(--defend);border-bottom-color:var(--defend-soft)}
+  .starts .sid{font-family:"IBM Plex Mono";font-size:12px;color:var(--text-faint);flex:none;width:44px}
+  .finish{border-left:2px solid var(--secure-soft);padding-left:16px;font-size:14.5px;color:var(--text-dim)}
+  .finish b{color:var(--secure);font-weight:600;display:block;font-family:"IBM Plex Mono";
+    font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}
+  .pact{margin-top:24px;padding-top:20px;border-top:1px solid var(--line-soft);
+    display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .pact .btn{padding:12px 22px;margin:0}
+
+  /* ---------- SPINE ---------- */
+  .spine{margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--ink-2);padding:24px}
+  .spine ol{list-style:none;counter-reset:s;padding:0;margin:0;display:grid;
+    grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:900px){.spine ol{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.spine ol{grid-template-columns:1fr}}
+  .spine li{counter-increment:s;font-size:13.5px}
+  .spine a{display:flex;gap:9px;align-items:baseline;text-decoration:none;color:var(--text-dim);
+    border:1px solid var(--line-soft);border-radius:8px;padding:9px 11px;transition:border-color .2s,color .2s}
+  .spine a:hover{border-color:var(--defend);color:var(--text)}
+  .spine a .sid{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint);flex:none;width:38px}
+  .spine li.key a{border-color:var(--secure-soft);background:rgba(255,175,92,.06)}
+  .spine li.key a .sid{color:var(--secure)}
+  .spine .keynote{margin:18px 0 0;font-size:13.5px;color:var(--text-faint);
+    padding-top:14px;border-top:1px solid var(--line-soft)}
+  .spine .keynote b{color:var(--secure)}
+
+  /* ---------- SYLLABUS ---------- */
+  .fn{margin-top:26px}
+  .fn-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+  .fn-head .fid{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;color:var(--accent)}
+  .fn-head h3{font-size:19px}
+  .fn-head .cnt{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint)}
+  details.trk{border:1px solid var(--line-soft);border-radius:11px;background:var(--ink-2);margin-bottom:9px}
+  details.trk summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:15px 18px}
+  details.trk summary::-webkit-details-marker{display:none}
+  details.trk .ch{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.1em;
+    color:var(--text-faint);flex:none;width:76px}
+  details.trk .tt{font-family:"Space Grotesk";font-size:15.5px;font-weight:600;flex:1}
+  details.trk .tt em{display:block;font-family:"IBM Plex Sans";font-style:normal;
+    font-weight:400;font-size:12.5px;color:var(--text-faint);margin-top:3px}
+  details.trk .cnt{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint);flex:none}
+  details.trk .plus{color:var(--text-faint);flex:none;font-size:17px;transition:transform .2s}
+  details.trk[open] .plus{transform:rotate(45deg)}
+  .tbody{padding:2px 18px 16px;border-top:1px solid var(--line-soft)}
+  .les{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-soft);align-items:baseline}
+  .les:last-child{border-bottom:0}
+  .les .sid{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint);flex:none;width:52px}
+  .les .lt{flex:1}
+  .les .lt a{text-decoration:none;color:var(--text);font-size:14.5px;border-bottom:1px solid transparent}
+  .les .lt a:hover{color:var(--defend);border-bottom-color:var(--defend-soft)}
+  .les .lt p{margin:4px 0 0;font-size:13px;color:var(--text-dim);line-height:1.5}
+
+  /* ---------- HOW ---------- */
   .mech{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:34px}
   @media(max-width:820px){.mech{grid-template-columns:1fr}}
-  .nbnote{margin-top:22px;border:1px solid var(--secure-soft);border-radius:12px;
-    background:rgba(255,175,92,.06);padding:16px 20px;color:var(--text-dim);font-size:15px}
-  .nbnote b{color:var(--secure)}
   .mcard{border:1px solid var(--line-soft);border-radius:14px;padding:26px 24px;background:var(--ink-2)}
   .mcard .num{font-family:"IBM Plex Mono";font-size:12px;color:var(--text-faint);letter-spacing:.1em}
   .mcard h4{font-family:"Space Grotesk";font-size:18px;font-weight:600;margin:12px 0 8px}
   .mcard p{font-size:14.5px;color:var(--text-dim);margin:0}
-  .rcc{margin-top:34px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .rcc-row{display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid var(--line-soft)}
-  .rcc-row:last-child{border-bottom:0}
-  .rcc-row .lab{background:var(--surface);padding:20px 22px;font-family:"IBM Plex Mono";font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center}
-  .rcc-row .val{padding:20px 24px;color:var(--text-dim);font-size:15px}
-  .rcc-row .val b{color:var(--text)}
-  @media(max-width:640px){.rcc-row{grid-template-columns:1fr}.rcc-row .lab{border-bottom:1px solid var(--line-soft)}}
-
-  /* ---------- MODULE 0 ---------- */
-    display:block;text-decoration:none;color:inherit;transition:border-color .2s}
-
-  /* ---------- CURRICULUM (data-driven) ---------- */
-  .fn{margin-top:34px}
-  .fn-head{display:flex;align-items:baseline;gap:14px;padding-bottom:12px;border-bottom:1px solid var(--line);flex-wrap:wrap}
-  .fn-head .fid{font-family:"IBM Plex Mono";font-size:12px;letter-spacing:.16em;color:var(--accent);border:1px solid var(--line);border-radius:5px;padding:3px 9px}
-  .fn-head h3{font-size:21px}
-  .fn-head p{margin:0;color:var(--text-faint);font-size:14px;flex-basis:100%}
-  .trk{border:1px solid var(--line-soft);border-radius:12px;margin-top:14px;background:var(--ink-2);overflow:hidden}
-  .trk>summary{list-style:none;cursor:pointer;padding:18px 20px;display:flex;gap:14px;align-items:center}
-  .trk>summary::-webkit-details-marker{display:none}
-  .trk .tid{font-family:"IBM Plex Mono";font-size:12.5px;color:var(--accent);flex:none;width:30px}
-  .trk .tt{font-family:"Space Grotesk";font-weight:600;font-size:17px;flex:1}
-  .trk .tt em{display:block;font-style:normal;font-family:"IBM Plex Sans";font-weight:400;font-size:12.5px;color:var(--text-faint);margin-top:3px}
-  .trk .cnt{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint)}
-  .trk .plus{font-family:"IBM Plex Mono";color:var(--text-faint);transition:transform .2s;flex:none}
-  .trk[open] .plus{transform:rotate(45deg)}
-  .trk .tbody{padding:0 20px 20px}
-  .trk .chg{font-size:14px;color:var(--text-dim);border-left:2px solid var(--accent);padding-left:14px;margin:0 0 16px}
-  .ses{border-top:1px solid var(--line-soft);padding:14px 0}
-  .ses-h{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
-  .ses-h .sid{font-family:"IBM Plex Mono";font-size:12px;color:var(--text-faint);flex:none;width:42px}
-  .ses-h a.st{font-family:"Space Grotesk";font-weight:500;font-size:15px;color:var(--text);
-    text-decoration:none;border-bottom:1px solid transparent;transition:border-color .2s,color .2s}
-  .ses-h a.st:hover{color:var(--defend);border-bottom-color:var(--defend-soft)}
-  .ses-h .badge{font-family:"IBM Plex Mono";font-size:10px;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;padding:2px 7px}
-  .ses-h .badge.d{color:var(--defend);border:1px solid var(--defend-soft)}
-  .ses-h .badge.s{color:var(--secure);border:1px solid var(--secure-soft)}
-  .ses-h .badge.b{color:var(--text-dim);border:1px solid var(--line)}
-  .ses-h .watch{margin-left:auto;font-family:"IBM Plex Mono";font-size:11.5px;text-decoration:none;color:#ff6b6b;border:1px solid #5c2b2b;border-radius:5px;padding:3px 9px;transition:background .2s}
-  .ses-h .watch:hover{background:rgba(255,107,107,.12)}
-  .ses-h .watch.open{color:var(--text-faint);border-color:var(--line)}
-  .ses-h .watch.open:hover{color:var(--defend);border-color:var(--defend-soft);background:transparent}
-  .ses-b{padding-left:54px;margin-top:8px}
-  .ses-b .rc{display:block;font-size:13.5px;color:var(--text-dim);margin-bottom:5px}
-  .ses-b .rc b{font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;margin-right:8px}
-  .ses-b .rc.r b{color:#ff8a8a}
-  .ses-b .rc.c b{color:var(--defend)}
-  .ses-b .rc.l b{color:var(--secure)}
-  .ses-b .tools{margin-top:9px;display:flex;flex-wrap:wrap;gap:6px}
-  .ses-b .tools span{font-family:"IBM Plex Mono";font-size:11px;color:var(--text-dim);border:1px solid var(--line-soft);border-radius:5px;padding:2px 7px}
-  .ses-b .tools span.m{color:var(--secure);border-color:var(--secure-soft)}
-  .ses.feat{background:rgba(255,175,92,.05);border-radius:8px;padding:14px 10px;margin:6px -10px}
-  .deliv{margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft);font-size:13.5px;color:var(--text-dim)}
-  .deliv b{font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--secure);margin-right:8px}
-
-  /* ---------- PERSONAS / FUNCTIONS ---------- */
-  .ladder{margin-top:34px;display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--line);border-radius:16px;overflow:hidden}
-  @media(max-width:900px){.ladder{grid-template-columns:1fr}}
-  .rung{padding:28px 22px;border-right:1px solid var(--line-soft);position:relative;background:var(--ink-2);transition:background .25s}
-  .rung:last-child{border-right:0}
-  .rung:hover{background:var(--surface)}
-  @media(max-width:900px){.rung{border-right:0;border-bottom:1px solid var(--line-soft)}.rung:last-child{border-bottom:0}}
-  .rung .step{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;color:var(--text-faint)}
-  .rung h4{font-family:"Space Grotesk";font-size:18px;font-weight:600;margin:10px 0 6px}
-  .rung .role-tag{display:inline-block;font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:5px;margin-bottom:12px}
-  .rung.grow .role-tag{color:var(--defend);border:1px solid var(--defend-soft)}
-  .rung.own .role-tag{color:var(--secure);border:1px solid var(--secure-soft)}
-  .rung p{font-size:13.5px;color:var(--text-dim);margin:0}
+  .mcard b{color:var(--text)}
+  .nbnote{margin-top:22px;border:1px solid var(--secure-soft);border-radius:12px;
+    background:rgba(255,175,92,.06);padding:16px 20px;color:var(--text-dim);font-size:15px}
+  .nbnote b{color:var(--secure)}
 
   /* ---------- STACK ---------- */
-  .stack-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px}
-  .stack-grid{margin-top:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .stack-grid{margin-top:34px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
   @media(max-width:900px){.stack-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:520px){.stack-grid{grid-template-columns:1fr}}
   .scat{border:1px solid var(--line-soft);border-radius:12px;padding:20px;background:var(--ink-2)}
-  .scat h4{font-family:"IBM Plex Mono";font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin:0 0 14px}
+  .scat h4{font-family:"IBM Plex Mono";font-size:11.5px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 14px}
   .scat .chips{display:flex;flex-wrap:wrap;gap:7px}
-  .scat .chips span{font-family:"IBM Plex Mono";font-size:12px;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:4px 9px;background:var(--surface)}
-  .zero{margin-top:30px;font-family:"IBM Plex Mono";font-size:13px;color:var(--text-faint);text-align:center;letter-spacing:.04em}
-  .zero b{color:var(--secure)}
-  .freebox{margin-top:26px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .freebox .fr{display:grid;grid-template-columns:150px 1fr;border-bottom:1px solid var(--line-soft)}
-  .freebox .fr:last-child{border-bottom:0}
-  .freebox .fr .k{background:var(--surface);padding:16px 20px;font-family:"IBM Plex Mono";font-size:12px;color:var(--secure);display:flex;align-items:center}
-  .freebox .fr .v{padding:16px 20px;color:var(--text-dim);font-size:14.5px}
-  .freebox .fr .v b{color:var(--text)}
-  @media(max-width:640px){.freebox .fr{grid-template-columns:1fr}}
-
-  /* ---------- MANIFESTO ---------- */
-  .manifesto{background:linear-gradient(180deg,var(--ink-2),var(--ink));border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
-  .shift{display:grid;grid-template-columns:1fr auto 1fr;gap:28px;align-items:center;margin-top:32px}
-  @media(max-width:760px){.shift{grid-template-columns:1fr;gap:18px}}
-  .shift .was,.shift .now{border:1px solid var(--line-soft);border-radius:14px;padding:28px;background:var(--ink-2)}
-  .shift .was{opacity:.7}
-  .shift .lab{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-faint);margin-bottom:14px}
-  .shift .now .lab{color:var(--secure)}
-  .shift h4{font-family:"Space Grotesk";font-size:20px;font-weight:600;margin:0 0 12px}
-  .shift ul{margin:0;padding-left:18px;color:var(--text-dim);font-size:14px;display:flex;flex-direction:column;gap:8px}
-  .shift .to{font-family:"IBM Plex Mono";color:var(--accent);font-size:22px;text-align:center}
-  @media(max-width:760px){.shift .to{transform:rotate(90deg)}}
-  .manifesto blockquote{font-family:"Space Grotesk";font-weight:500;font-size:clamp(21px,3.2vw,30px);line-height:1.3;letter-spacing:-.01em;max-width:22ch;margin:40px auto 0;text-align:center}
-  .manifesto blockquote span{color:var(--secure)}
+  .scat .chips span{font-family:"IBM Plex Mono";font-size:12px;color:var(--text);
+    border:1px solid var(--line);border-radius:6px;padding:4px 9px;background:var(--surface)}
+  .rules{margin-top:22px;display:grid;grid-template-columns:repeat(3,1fr);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  @media(max-width:760px){.rules{grid-template-columns:1fr}}
+  .rules > div{padding:20px 22px;border-right:1px solid var(--line-soft);background:var(--ink-2)}
+  .rules > div:last-child{border-right:0}
+  @media(max-width:760px){.rules > div{border-right:0;border-bottom:1px solid var(--line-soft)}
+    .rules > div:last-child{border-bottom:0}}
+  .rules .k{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--secure);margin-bottom:9px}
+  .rules p{margin:0;font-size:14px;color:var(--text-dim)}
+  .rules p b{color:var(--text)}
 
   /* ---------- CTA ---------- */
-  .cta{text-align:center}
-  .cta h2{font-size:clamp(30px,5vw,50px);max-width:20ch;margin:22px auto 0}
-  .cta p{color:var(--text-dim);max-width:52ch;margin:22px auto 0;font-size:18px}
-  .btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:38px}
-  .btn{font-family:"IBM Plex Mono";font-size:14px;text-decoration:none;padding:15px 28px;border-radius:10px;transition:transform .15s var(--ease),box-shadow .25s}
-  .btn.p{background:var(--secure);color:#231402;font-weight:600}
-  .btn.p:hover{transform:translateY(-2px);box-shadow:0 12px 30px -12px var(--secure)}
-  .btn.g{border:1px solid var(--line);color:var(--text)}
-  .btn.g:hover{border-color:var(--defend);color:var(--defend)}
+  .cta{text-align:center;background:linear-gradient(180deg,var(--ink-2),var(--ink));
+    border-top:1px solid var(--line-soft)}
+  .cta blockquote{font-family:"Space Grotesk";font-weight:500;font-size:clamp(21px,3.4vw,32px);
+    line-height:1.28;letter-spacing:-.01em;max-width:21ch;margin:0 auto 34px;text-align:center}
+  .cta blockquote span{color:var(--secure)}
+  .cta h2{font-size:clamp(27px,4.4vw,42px);max-width:20ch;margin:0 auto}
+  .cta p{color:var(--text-dim);max-width:50ch;margin:20px auto 0;font-size:17px}
+  .cta .btns{justify-content:center}
+  .cta .share-btn{margin-top:26px}
 
   /* ---------- FOOTER ---------- */
-  footer{border-top:1px solid var(--line-soft);padding:50px 0 40px}
+  footer{border-top:1px solid var(--line-soft);padding:48px 0 38px}
   .foot{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-start}
-  .foot .about{max-width:36ch;color:var(--text-dim);font-size:14px;margin:14px 0 0}
+  .foot .about{max-width:38ch;color:var(--text-dim);font-size:14px;margin:14px 0 0}
   .foot-links{display:flex;gap:56px;flex-wrap:wrap}
-  .foot-col h5{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-faint);margin:0 0 14px}
-  .foot-col a{display:block;color:var(--text-dim);text-decoration:none;font-size:14px;margin-bottom:9px;transition:color .2s}
+  .foot-col h5{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--text-faint);margin:0 0 14px}
+  .foot-col a{display:block;color:var(--text-dim);text-decoration:none;font-size:14px;
+    margin-bottom:9px;transition:color .2s}
   .foot-col a:hover{color:var(--text)}
-  .foot-bottom{margin-top:44px;padding-top:22px;border-top:1px solid var(--line-soft);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--text-faint);font-family:"IBM Plex Mono";font-size:12px}
+  .foot-bottom{margin-top:40px;padding-top:22px;border-top:1px solid var(--line-soft);
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    color:var(--text-faint);font-family:"IBM Plex Mono";font-size:12px}
 
-  /* reveal */
+  /* ---------- TOAST + REVEAL ---------- */
+  .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);z-index:99;
+    background:var(--surface);border:1px solid var(--defend-soft);color:var(--text);
+    font-family:"IBM Plex Mono";font-size:13px;padding:12px 20px;border-radius:10px;
+    opacity:0;pointer-events:none;transition:opacity .25s var(--ease),transform .25s var(--ease)}
+  .toast.on{opacity:1;transform:translate(-50%,0)}
   .rv{opacity:0;transform:translateY(20px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
   .rv.in{opacity:1;transform:none}
-  @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}
+  @media (prefers-reduced-motion:reduce){
+    .rv{opacity:1;transform:none;transition:none}
     .toggle .slider,.toggle button,.eyebrow,.eyebrow::before{transition:none}}
   :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
 </style>
@@ -336,80 +357,65 @@
   <div class="wrap nav-in">
     <a class="brand" href="#top"><img src="assets/logo-mark.png" alt="Cyber Commons"><span class="bt"><span>Cyber&nbsp;<b>Commons</b></span><small>Navigating Cyber Singularity</small></span></a>
     <nav class="nav-links">
-      <a href="#what">What it is</a>
-      <a href="lessons/index.html">Lessons</a>
-      <a href="#mission">Mission</a>
-      <a href="#how">How it works</a>
-      <a href="#curriculum">Curriculum</a>
-      <a href="#personas">Functions</a>
+      <a href="#why">Why now</a>
+      <a href="#singularity">Singularity</a>
+      <a href="#spine">Start here</a>
+      <a href="#chairs">Find your track</a>
+      <a href="#syllabus">Syllabus</a>
       <a href="#stack">Open stack</a>
-      <a class="nav-cta" href="#start">Start learning</a>
+      <button class="share-btn" data-share aria-label="Share Cyber Commons">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+        Share
+      </button>
+      <a class="nav-cta" href="#chairs">Start free</a>
     </nav>
   </div>
 </header>
 
 <a id="top"></a>
+
+<!-- ================= HERO ================= -->
 <div class="hero">
   <div class="wrap">
-    <span class="eyebrow">A public good · Free forever · Built on open source</span>
+    <span class="eyebrow">Free forever · Open source · No account needed</span>
     <h1>Democratizing defensive cyber knowledge, <span class="a">before</span> the curve <span class="b">outruns us</span>.</h1>
-    <p class="lede">AI capability is compounding, and offense feels that curve first. Cyber Commons is one open home for the whole defensive field — the skills to defend <b>with</b> AI, and to secure the AI <b>itself</b> — organised the way a CISO org actually is and provable on the laptop you already own. So a two-person NGO and a global bank learn the same frontier, free. <a href="#what" style="color:var(--defend);text-decoration:none;border-bottom:1px solid var(--defend-soft)">What is Cyber Commons →</a></p>
+    <p class="lede">One open home for the whole defensive field — the skills to defend <b>with</b> AI, and to secure the AI <b>itself</b> — organised the way a CISO org actually is, and provable on the laptop you already own.</p>
 
-    <div class="toggle" data-active="defend" role="tablist" aria-label="Choose a track">
+    <div class="toggle" data-active="defend" role="tablist" aria-label="Choose a direction">
       <span class="slider" aria-hidden="true"></span>
       <button data-t="defend" role="tab" aria-selected="true"><span class="k">01</span>AI for Security</button>
       <button data-t="secure" role="tab" aria-selected="false"><span class="k">02</span>Security of AI</button>
     </div>
     <div class="hero-explain" aria-live="polite">
-      <p data-track-copy="defend"><b>Using AI to do the security work.</b> Point agents at the jobs that used to eat your week — triaging alerts, reviewing code, scanning dependencies, drafting exploits, shipping validated patches — and learn to measure whether they're actually reliable.</p>
-      <p data-track-copy="secure" hidden><b>Securing the AI you now depend on.</b> The models, agents, MCP tools, and non-human identities you deploy are a fresh attack surface. Learn to govern, gate, and defend them before an autonomous agent finds the gap first.</p>
+      <p data-track-copy="defend"><b>Using AI to do the security work.</b> Point agents at the jobs that used to eat your week — triaging alerts, reviewing code, hunting bugs, shipping validated patches — then measure whether they are actually reliable.</p>
+      <p data-track-copy="secure" hidden><b>Securing the AI you now depend on.</b> Models, agents, tool schemas and non-human identities are a fresh attack surface, with failure modes your existing playbook cannot express.</p>
+    </div>
+
+    <div class="btns">
+      <a class="btn p" href="#chairs">Find your track →</a>
+      <a class="btn g" href="lessons/index.html">Browse all 126 lessons</a>
     </div>
 
     <div class="hero-stats">
-      <div class="stat"><div class="n defend">12</div><div class="l">Tracks, by job role</div></div>
-      <div class="stat"><div class="n secure">110</div><div class="l">Sessions, all runnable</div></div>
-      <div class="stat"><div class="n defend">Free</div><div class="l">Open, laptop-friendly</div></div>
-      <div class="stat"><div class="n secure">Weekly</div><div class="l">Refresh cadence</div></div>
+      <div class="stat"><div class="n secure">12</div><div class="l">Chapters, one per role</div></div>
+      <div class="stat"><div class="n defend">126</div><div class="l">Lessons, all runnable</div></div>
+      <div class="stat"><div class="n secure">$0</div><div class="l">Free, open, browser-only</div></div>
     </div>
   </div>
 </div>
 
 <hr class="divider">
 
-<!-- WHAT IS CYBER COMMONS -->
-<section id="what">
+<!-- ================= WHY NOW ================= -->
+<section id="why">
   <div class="wrap">
     <div class="sec-head rv">
-      <span class="eyebrow">What is Cyber Commons</span>
-      <h2>A commons for the knowledge that keeps everyone safe.</h2>
-      <p>A <em>commons</em> is a shared resource no one owns and everyone may draw from — a village green, a body of open research. Cyber Commons is that, for the skills of defending in the age of AI: <b>twelve tracks, 110 lessons</b>, every one a Python notebook that opens in your browser and runs.</p>
+      <span class="eyebrow">Why now</span>
+      <h2>Offense feels the capability curve first.</h2>
+      <p>Attacking needs one working path. Defending needs all of them closed. That asymmetry is why offensive capability diffuses on its own — and defensive capability has to be deliberately spread.</p>
     </div>
 
-    <div class="what-grid">
-      <div class="what-body rv">
-        <p class="what-lead">We are the first generation of defenders whose <span>attackers compound</span> — and the knowledge to answer them is <em>still being locked up</em>.</p>
-        <p>It is built deliberately on <b>open-source infrastructure and open-weight models</b> — CNCF and Linux Foundation projects for the control plane, Llama, Kimi and GLM for the intelligence. Not because open is cheaper, but because <b>a commons that requires a frontier-lab account is not a commons.</b></p>
-        <p><b>"Cyber singularity"</b> is not a prophecy about machines waking up. It is the practical point where systems act faster than the humans supervising them can follow — an agent's decision-to-action loop closing in milliseconds against a review cycle that takes a day. Parts of security are already there, and you do not navigate it by reading about it.</p>
-      </div>
-
-      <div class="defn rv">
-        <h4>Two halves, never blurred</h4>
-        <dl>
-          <dt>AI <em>for</em> Security</dt>
-          <dd>Pointing agents at the work: triaging alerts, reviewing code, hunting bugs, drafting exploits in a sealed lab, shipping validated patches — and measuring whether any of it is reliable.</dd>
-          <dt>Security <em>of</em> AI</dt>
-          <dd>Defending what you just built: models, agents, tool schemas and non-human identities are a fresh attack surface with failure modes your existing playbook cannot express.</dd>
-          <dt>Why both, always</dt>
-          <dd>A practitioner taught only one half gets surprised. A team that automates triage without governing the agent doing it has moved the risk somewhere it cannot see.</dd>
-        </dl>
-      </div>
-    </div>
-
-    <div class="curve rv">
-      <div class="curve-head">
-        <h3>Why now: the defensive knowledge gap is widening</h3>
-        <p>Offense feels the capability curve first, because attacking needs one working path and defending needs all of them closed.</p>
-      </div>
+    <div class="ledger rv">
       <div class="gap">
         <div class="atk">
           <div class="lab">What scales almost freely</div>
@@ -431,154 +437,184 @@
         </div>
       </div>
       <div class="closing">
-        Offensive capability diffuses on its own — it is <b>defensive</b> capability that has to be deliberately spread. If only the best-funded teams learn to direct, doubt and prove these systems, the gap between them and the hospital, the school district, the two-person NGO becomes the softest target in the network we all share.
+        <span>If only the best-funded teams learn to direct, doubt and prove these systems, the gap between them and the hospital, the school district, the two-person NGO becomes <b>the softest target in the network we all share</b>.</span>
+        <button class="share-btn" data-share data-share-text="Average breakout time is now 29 minutes. The fastest on record is 27 seconds. Offense scales on its own — defense has to be deliberately spread.">Share this</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ================= SINGULARITY ================= -->
+<section id="singularity">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">Cyber singularity</span>
+      <h2>The point where attacks outrun the people supervising them.</h2>
+      <p>Not a prophecy about machines waking up. A practical threshold: an intrusion's decision-to-action loop closing faster than the humans reviewing it can respond. Parts of security are already past it — and the clock is public.</p>
+    </div>
+
+    <div class="clock rv">
+      <div><div class="yr">2021</div><div class="t">98 min</div><p class="d">Average breakout time — initial access to lateral movement</p></div>
+      <div><div class="yr">2024</div><div class="t">48 min</div><p class="d">The window halves in three years</p></div>
+      <div class="now"><div class="yr">2025</div><div class="t">29 min</div><p class="d">First year under thirty minutes</p></div>
+      <div class="rec"><div class="yr">Fastest on record</div><div class="t">27 sec</div><p class="d">In one intrusion, exfiltration began four minutes after access</p></div>
+    </div>
+    <p class="src rv">Source: CrowdStrike 2026 Global Threat Report. AI-enabled adversary operations rose 89% year over year; 82% of detections involved no malware at all.</p>
+
+    <div class="split rv">
+      <div class="them">
+        <div class="k">Their loop</div>
+        <p>Minutes. Recon, foothold, escalation and exfiltration executed by tooling that <b>never sleeps, never tires, and costs almost nothing to run again</b>.</p>
+      </div>
+      <div class="you">
+        <div class="k">Your loop</div>
+        <p>A pentest once a year. A change window measured in days. <b>An on-call engineer who reads the alert at minute twenty</b> — and the attacker is already on the second host.</p>
       </div>
     </div>
 
-    <!-- ================= THE PATH ================= -->
-    <div class="sec-head rv" id="curriculum" style="margin-top:56px">
-      <span class="eyebrow">The curriculum</span>
-      <h2>One path, built in order — from what an agent <em>is</em> to how you prove it safe.</h2>
-      <p>Nothing here assumes you have done this before. The first lesson starts from the components; every lesson after it names what it builds on. Read straight through, or jump to the chair you sit in — but the order below is the one that makes each control land before it is needed.</p>
+    <div class="answer rv">
+      <h3>You cannot close that gap by hand. You close it by testing yourself at the same speed.</h3>
+      <p>The answer to machine-speed offense is <b>agentic offensive capability of your own</b> — authorised, scoped, and pointed only at systems you operate. Not an annual engagement, but a loop that runs continuously against your own estate, so the reachable path is found by your agent before it is found by theirs. That capability is what Function C teaches, and it is deliberately built to run <b>at any size</b>: the same loop that covers a bank's estate runs on one laptop for a clinic, a school district or a two-person NGO.</p>
+      <ul>
+        <li><b>Continuous, not annual</b>A pentest is a photograph. Your attack surface changes every deploy, and so must the testing.</li>
+        <li><b>Every size, same loop</b>Open weights and open tooling mean the capability is not gated behind a six-figure retainer.</li>
+        <li><b>Your estate only</b>Hard scope enforcement, destructive-action gating and a full audit trail are part of the harness, not an afterthought.</li>
+      </ul>
+      <p class="note">Every offensive lesson here runs inside a sealed lab against targets you own or that are published for the purpose. Scope control and containment are taught before exploitation is.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ================= CHAIR PICKER ================= -->
+<section id="chairs">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">Find your track</span>
+      <h2>Five functions of a CISO org, one track per role.</h2>
+      <p>This isn't a ladder from analyst to CISO. It's the org chart you work in today: you stay a pentester, you stay a GRC analyst — what changes is what the work is made of. Pick your chair to see where to start.</p>
     </div>
 
-    <div class="ladder rv">
-      <div class="rung grow"><div class="step">START · A1</div><span class="role-tag">Foundations</span><h4>What the system is made of</h4><p>The seven components — app, model, agent loop, tools, MCP, retrieval, memory — then the map of every control and which component it binds to.</p></div>
-      <div class="rung grow"><div class="step">THEN · A2</div><span class="role-tag">Identity</span><h4>Who is calling?</h4><p>Human identity, then workload identity, then why an agent needs its own — delegation that survives an audit, and the gateway for systems that cannot consume it.</p></div>
-      <div class="rung grow"><div class="step">THEN · A3</div><span class="role-tag">Controls</span><h4>Everything that takes a caller as its argument</h4><p>In the order it takes effect: default-deny authorization → sandboxed execution → filesystem and tool boundaries → MCP → egress → containment.</p></div>
-      <div class="rung grow"><div class="step">THEN · B</div><span class="role-tag">AppSec</span><h4>Build the pipeline</h4><p>A fifteen-stage application-security pipeline, one stage per lesson — and the harness engineering that tells you whether any of it is true.</p></div>
-      <div class="rung own"><div class="step">THEN · C · D · E</div><span class="role-tag">Prove &amp; govern</span><h4>Test it, run it, defend it</h4><p>Offensive work against a new target class, machine-speed detection and response, and the evidence that makes the whole thing defensible to a regulator.</p></div>
+    <div class="chairs rv" role="group" aria-label="Choose your function">
+      <button class="chair" data-chair="A" aria-pressed="false">
+        <span class="fid">FUNCTION A</span><h4>Architecture</h4>
+        <p>Architect · IAM/NHI · platform security</p>
+      </button>
+      <button class="chair" data-chair="B" aria-pressed="false">
+        <span class="fid">FUNCTION B</span><h4>AppSec</h4>
+        <p>Code reviewer · harness engineer</p>
+      </button>
+      <button class="chair" data-chair="C" aria-pressed="false">
+        <span class="fid">FUNCTION C</span><h4>Offensive</h4>
+        <p>Pentester · red team · researcher</p>
+      </button>
+      <button class="chair" data-chair="D" aria-pressed="false">
+        <span class="fid">FUNCTION D</span><h4>SecOps</h4>
+        <p>SOC · detection · incident response</p>
+      </button>
+      <button class="chair" data-chair="E" aria-pressed="false">
+        <span class="fid">FUNCTION E</span><h4>GRC / CISO</h4>
+        <p>Risk · regulatory · CISO office</p>
+      </button>
     </div>
 
-    <!-- ================= FUNCTIONS ================= -->
-    <div class="sec-head rv" style="margin-top:56px">
-      <h2 style="font-size:clamp(21px,2.8vw,29px)">Five functions, twelve chairs</h2>
-      <p>This isn't a ladder you climb from analyst to CISO. It's the org chart you already work in: you stay a pentester, you stay a GRC analyst, and what changes is what the work is made of. Take the track for your chair, plus two sessions from a neighbouring one — because the failures happen in the seams.</p>
-    </div>
+    <div class="panel rv" id="chair-panel" aria-live="polite"></div>
+  </div>
+</section>
 
-    <div class="ladder" id="personas">
-      <div class="rung grow rv"><div class="step">FUNCTION A</div><span class="role-tag">Architecture</span><h4>Decide what's possible</h4><p>Architect, IAM/NHI engineer, platform security. You design the control plane other people's agents run inside.</p></div>
-      <div class="rung grow rv"><div class="step">FUNCTION B</div><span class="role-tag">AppSec</span><h4>Meet agents first</h4><p>AppSec reviewers and the new harness-engineer role. Closest to developers, so first to meet agents at scale.</p></div>
-      <div class="rung grow rv"><div class="step">FUNCTION C</div><span class="role-tag">Offensive</span><h4>Find what's true</h4><p>Pentesters and researchers. You get a whole new target class — the agent itself — and you test at L3.</p></div>
-      <div class="rung grow rv"><div class="step">FUNCTION D</div><span class="role-tag">SecOps</span><h4>Run at machine speed</h4><p>SOC, detection and IR. You stop reading alerts and start compressing signal — and investigate agents as actors.</p></div>
-      <div class="rung own rv"><div class="step">FUNCTION E</div><span class="role-tag">GRC / CISO</span><h4>Make it defensible</h4><p>GRC, regulatory and the CISO office. You hold promotion criteria, stop authority, and the board narrative.</p></div>
-    </div>
+<hr class="divider">
 
+<hr class="divider">
+
+<!-- ================= COMMON SPINE ================= -->
+<section id="spine">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">Stage 0 · start here</span>
+      <h2>The common spine — twenty lessons, in order, whoever you are.</h2>
+      <p>The shared vocabulary and mental model the rest of the curriculum runs on. Skipping it is the single most common reason people bounce off the later material. Take these twenty first, then your chapters.</p>
+    </div>
+    <div class="spine rv">
+      <ol id="spine-list"></ol>
+      <p class="keynote"><b>Highlighted</b> are the ones people most often skip and most often regret skipping: the injection surface, the model-layer attack taxonomy, guardrail layering, what a harness actually is, what trustworthy AI actually means, and who owns which control.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ================= SYLLABUS ================= -->
+<section id="syllabus">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">The full syllabus</span>
+      <h2>Twelve chapters, 126 lessons, five functions.</h2>
+      <p>Chapters are role-shaped; the path above is capability-shaped. Take the path, not the table of contents. Every lesson below is a notebook that opens in your browser and runs.</p>
+    </div>
     <div id="functions"></div>
   </div>
 </section>
 
-<hr class="divider">
-
-<!-- HOW IT WORKS -->
+<!-- ================= HOW IT WORKS ================= -->
 <section id="how">
   <div class="wrap">
     <div class="sec-head rv">
-      <span class="eyebrow">How it works</span>
-      <h2>A new way to learn security — because the old one can't keep up.</h2>
-      <p>Reading about a control doesn't build the instinct to ship it. Every session is the same shape: see it drawn, watch it run, then run it yourself — in a Python notebook that opens in one click.</p>
+      <span class="eyebrow">How a lesson works</span>
+      <h2>See it drawn, watch it run, then run it yourself.</h2>
+      <p>Reading about a control doesn't build the instinct to ship it. Every lesson has the same three-part shape.</p>
     </div>
     <div class="mech">
-      <div class="mcard rv"><div class="num">METHOD / 01</div><h4>Lightboard, not lecture</h4><p>The concept is drawn out on a lightboard so the mental model lands before any code does. You leave understanding the why, not just copying the how.</p></div>
-      <div class="mcard rv"><div class="num">METHOD / 02</div><h4>Live demo, real execution</h4><p>Then we run it — an actual agent against an actual target, open-weight model and all. No slides of screenshots; the thing works on screen, and it works on your machine.</p></div>
-      <div class="mcard rv"><div class="num">METHOD / 03</div><h4>One click, your own copy</h4><p>Every one of the 110 lessons is a Python notebook. Hit <b>Run on Kaggle</b> and it opens in your own account and runs there — standard library only, no install, no API key, no GPU, nothing to pay for.</p></div>
+      <div class="mcard rv"><div class="num">01 / SEE</div><h4>Lightboard, not lecture</h4><p>The concept is drawn out so the mental model lands before any code does. You leave understanding the why, not copying the how.</p></div>
+      <div class="mcard rv"><div class="num">02 / WATCH</div><h4>Live demo, real execution</h4><p>An actual agent against an actual target. No slides of screenshots — the thing works on screen, and it works on your machine.</p></div>
+      <div class="mcard rv"><div class="num">03 / RUN</div><h4>One click, your own copy</h4><p>All 126 lessons are Python notebooks. Hit <b>Run on Kaggle</b> and it opens in your own account — standard library only, no install, no API key, no GPU.</p></div>
     </div>
-
     <div class="nbnote rv">
-      <b>Every notebook is executed before it ships.</b> All 110 run top to bottom in CI
-      and the result is committed to the repository — so a lesson that claims an
-      output has actually produced it. Nothing here is pseudo-code.
+      <b>Every notebook is executed before it ships.</b> All 126 run top to bottom in CI and the output is committed to the repository — so a lesson that claims a result has actually produced it. Nothing here is pseudo-code.
     </div>
   </div>
 </section>
 
 <hr class="divider">
 
-<!-- MISSION -->
-<section id="mission">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">The commons model</span>
-      <h2>Free isn't a promotion. It's the whole point.</h2>
-      <p>A commons is knowledge no one owns and everyone can draw from. Here's why this one stays open — and how it stays current in a field that turns over every week.</p>
-    </div>
-    <div class="model">
-      <div class="mcol rv">
-        <h3>Why it stays free</h3>
-        <ul>
-          <li><span><b>Hoarded security knowledge makes everyone less safe.</b> Shared defense is stronger defense.</span></li>
-          <li><span><b>The under-resourced can't wait for budget.</b> NGOs, students and small teams face the same attackers as banks.</span></li>
-          <li><span><b>No frontier-lab account required.</b> Every lab runs on open-weight models — Llama, Kimi, GLM — locally or on a free tier.</span></li>
-        </ul>
-      </div>
-      <div class="mcol rv">
-        <h3>How it stays current</h3>
-        <ul>
-          <li><span><b>Tracked against living sources</b> — OWASP LLM &amp; Agentic Top 10, MITRE ATLAS, NIST AI RMF and CNCF releases.</span></li>
-          <li><span><b>Open like the tools it teaches.</b> Chapters and labs are corrected by pull request; the curriculum is versioned in the open.</span></li>
-          <li><span><b>Every lab actually executes</b> — commands that run against real targets, with real output.</span></li>
-        </ul>
-      </div>
-    </div>
-    <p class="changelog rv">Last commons-wide refresh: <b id="cl-date">this week</b> · every chapter carries its own date</p>
-  </div>
-</section>
-
-<hr class="divider">
-
-<!-- OPEN STACK -->
+<!-- ================= OPEN STACK ================= -->
 <section id="stack">
   <div class="wrap">
-    <div class="sec-head stack-head">
-      <div class="rv">
-        <span class="eyebrow">Built entirely on open</span>
-        <h2>No licence. No vendor. No frontier-lab account.</h2>
-      </div>
-      <p class="rv" style="max-width:34ch;color:var(--text-dim);font-size:15px">CNCF and Linux Foundation projects for the control plane; open-weight models for the intelligence. Even the fonts on this page are open source.</p>
+    <div class="sec-head rv">
+      <span class="eyebrow">Built entirely on open</span>
+      <h2>No licence. No vendor. No frontier-lab account.</h2>
+      <p>CNCF and Linux Foundation projects for the control plane; open-weight models for the intelligence. Commercial frontier models are named where relevant, but every lab is reachable on open weights.</p>
     </div>
     <div class="stack-grid">
       <div class="scat rv"><h4>CNCF / LF control plane</h4><div class="chips"><span>SPIFFE/SPIRE</span><span>agentgateway</span><span>kagent</span><span>kmcp</span><span>OPA</span><span>Falco</span><span>Kyverno</span><span>Cilium</span><span>Keycloak</span><span>OpenTelemetry</span><span>Sigstore</span><span>in-toto</span></div></div>
-      <div class="scat rv"><h4>Open-weight models</h4><div class="chips"><span>Llama 3.3 / 4</span><span>Kimi K2</span><span>GLM-4.6</span><span>Llama Guard 4</span><span>Ollama</span><span>vLLM</span><span>LiteLLM</span></div></div>
+      <div class="scat rv"><h4>Open-weight models</h4><div class="chips"><span>Llama 4</span><span>Kimi K2.6</span><span>GLM-5.2</span><span>Llama Guard</span><span>Ollama</span><span>vLLM</span><span>LiteLLM</span></div></div>
       <div class="scat rv"><h4>AppSec &amp; offense</h4><div class="chips"><span>OpenGrep</span><span>Trivy</span><span>OSV-Scanner</span><span>Ghidra</span><span>OWASP ZAP</span><span>Metasploit</span><span>CAI</span></div></div>
       <div class="scat rv"><h4>AI security &amp; eval</h4><div class="chips"><span>garak</span><span>promptfoo</span><span>NeMo Guardrails</span><span>LLM Guard</span><span>Presidio</span><span>Inspect</span><span>CyberGym</span></div></div>
     </div>
 
-    <div class="freebox rv">
-      <div class="fr"><div class="k">Local</div><div class="v"><b>Ollama or llama.cpp</b> — pull a quantised Llama 3.3, GLM or Kimi variant and run it on a laptop. No account, no egress, works offline. The default for every lab.</div></div>
-      <div class="fr"><div class="k">Free tiers</div><div class="v"><b>Open-weight models are hosted free</b> by several providers on rate-limited tiers (and on Hugging Face). Good when your laptop can't hold the bigger model. Limits change — check current terms before you rely on one.</div></div>
-      <div class="fr"><div class="k">Self-host</div><div class="v"><b>vLLM</b> on one borrowed GPU serves a whole class. <b>LiteLLM</b> puts one OpenAI-compatible endpoint in front of whatever you chose, so labs never hard-code a provider.</div></div>
-      <div class="fr"><div class="k">Never required</div><div class="v">Commercial frontier models are <b>named where relevant but never required</b>. Every lab's acceptance criteria are reachable on open weights.</div></div>
+    <div class="rules rv">
+      <div><div class="k">Free forever</div><p>Hoarded security knowledge makes everyone less safe. <b>NGOs, students and small teams face the same attackers as banks</b> — and can't wait for budget.</p></div>
+      <div><div class="k">Laptop minimum</div><p>Pull a quantised model with <b>Ollama</b> and run offline, or serve a whole class from one borrowed GPU with <b>vLLM</b>. No credit card at any point.</p></div>
+      <div><div class="k">Corrected in the open</div><p>Tracked against <b>OWASP LLM &amp; Agentic Top 10, MITRE ATLAS, NIST AI RMF</b> and CNCF releases. Lessons are fixed by pull request.</p></div>
     </div>
-    <p class="zero rv">Minimum hardware: <b>a laptop</b>. Nothing here needs a credit card or a frontier-lab account.</p>
   </div>
 </section>
 
 <hr class="divider">
 
-<!-- MANIFESTO -->
-<section class="manifesto">
+<!-- ================= CTA ================= -->
+<section class="cta" id="start">
   <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Why it matters</span>
-      <h2>Agents don't just change the tools. They change the engineer.</h2>
-      <p>The instinct that made a great cyber engineer for twenty years is quietly becoming the wrong one. The job isn't doing the work by hand anymore — it's directing work you have to be able to trust, doubt, and prove.</p>
-    </div>
-    <blockquote>Retrain the reflex, not just the résumé. That's the <span>whole point of the commons.</span></blockquote>
-  </div>
-</section>
-
-<hr class="divider">
-
-<!-- CTA -->
-<section id="start" class="cta">
-  <div class="wrap">
-    <span class="eyebrow rv" style="justify-content:center">Start learning</span>
+    <blockquote class="rv">Retrain the reflex, not just the <span>résumé.</span></blockquote>
     <h2 class="rv">Pick your chair. Retire a risk by the weekend.</h2>
-    <p class="rv">No sign-up wall, no sales call, no frontier-lab account. Choose the track for the job you actually do, and the commons meets you there — free, current, and running on the machine in front of you.</p>
+    <p class="rv">The job isn't doing the work by hand anymore — it's directing work you have to be able to trust, doubt and prove.</p>
     <div class="btns rv">
-      <a class="btn p" href="#curriculum">Find your track</a>
-      <a class="btn g" href="lessons/index.html">Browse all 110 lessons</a>
+      <a class="btn p" href="#chairs">Find your track</a>
+      <a class="btn g" href="lessons/index.html">Browse all 126 lessons</a>
     </div>
+    <div class="rv"><button class="share-btn" data-share>Share the commons</button></div>
   </div>
 </section>
 
@@ -587,14 +623,14 @@
     <div class="foot">
       <div>
         <a class="brand" href="#top"><img src="assets/logo-mark.png" alt="Cyber Commons"><span class="bt"><span>Cyber&nbsp;<b>Commons</b></span><small>Navigating Cyber Singularity</small></span></a>
-        <p class="about">Navigating cyber singularity together. Free forever, built on open source and open weights — because defensive capability is the half that has to be deliberately spread.</p>
+        <p class="about">A commons is a shared resource no one owns and everyone may draw from. This one is for the skills of defending in the age of AI — free forever, because defensive capability is the half that has to be deliberately spread.</p>
       </div>
       <div class="foot-links">
-        <div class="foot-col"><h5>Learn</h5><a href="lessons/index.html">All lessons</a><a href="#what">What is Cyber Commons</a><a href="#what">The two directions</a><a href="#curriculum">Curriculum</a><a href="#personas">Functions</a></div>
-        <div class="foot-col"><h5>Build</h5><a href="#stack">Open stack</a><a href="#curriculum">Lab repos</a><a href="#curriculum">Eval harness</a></div>
-        <div class="foot-col"><h5>Commons</h5><a href="#what">What it is</a>
-      <a href="lessons/index.html">Lessons</a>
-      <a href="#mission">Mission</a><a href="#mission">Contribute</a><a href="#mission">Weekly changelog</a></div>
+        <div class="foot-col"><h5>Learn</h5><a href="lessons/index.html">All lessons</a><a href="#spine">Start here</a>
+      <a href="#chairs">Find your track</a>
+      <a href="#syllabus">Syllabus</a><a href="#how">How a lesson works</a></div>
+        <div class="foot-col"><h5>Build</h5><a href="#stack">Open stack</a><a href="lessons/index.html">Lab repos</a></div>
+        <div class="foot-col"><h5>Commons</h5><a href="#why">Why now</a><a href="#singularity">Cyber singularity</a><a href="#stack">Contribute</a></div>
       </div>
     </div>
     <div class="foot-bottom">
@@ -604,29 +640,57 @@
   </div>
 </footer>
 
+<div class="toast" id="toast" role="status"></div>
+
 <script>
-  // ---- Track toggle: recolors the active accent across the page ----
-  const body = document.body;
+(function(){
+  "use strict";
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  /* ---------- toast ---------- */
+  const toastEl = document.getElementById('toast');
+  let toastTimer;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toastEl.classList.remove('on'), 2200);
+  }
+
+  /* ---------- share ---------- */
+  const DEFAULT_SHARE = 'Cyber Commons — free, open training for Cyber AI. No account needed.';
+  document.addEventListener('click', async (e)=>{
+    const btn = e.target.closest('[data-share]');
+    if(!btn) return;
+    const text = btn.dataset.shareText || DEFAULT_SHARE;
+    const url  = location.origin + location.pathname + (btn.dataset.shareHash || '');
+    if(navigator.share){
+      try{ await navigator.share({title:'Cyber Commons', text, url}); return; }catch(err){ if(err && err.name==='AbortError') return; }
+    }
+    try{ await navigator.clipboard.writeText(text + ' ' + url); toast('Link copied'); }
+    catch(err){ toast('Copy this page URL to share'); }
+  });
+
+  /* ---------- direction toggle ---------- */
   const toggle = document.querySelector('.toggle');
   const slider = toggle.querySelector('.slider');
-  const btns = [...toggle.querySelectorAll('button')];
+  const btns   = [...toggle.querySelectorAll('button')];
   const copies = {
     defend: document.querySelector('[data-track-copy="defend"]'),
     secure: document.querySelector('[data-track-copy="secure"]')
   };
   const accents = {defend:{a:'--defend',s:'--defend-soft'}, secure:{a:'--secure',s:'--secure-soft'}};
-
   function positionSlider(){
     const active = toggle.getAttribute('data-active');
-    const btn = toggle.querySelector(`button[data-t="${active}"]`);
-    slider.style.width = btn.offsetWidth + 'px';
-    slider.style.transform = `translateX(${btn.offsetLeft - 5}px)`;
+    const b = toggle.querySelector('button[data-t="'+active+'"]');
+    slider.style.width = b.offsetWidth + 'px';
+    slider.style.transform = 'translateX(' + (b.offsetLeft - 5) + 'px)';
   }
   function setTrack(t){
     toggle.setAttribute('data-active', t);
-    body.setAttribute('data-track', t);
-    document.documentElement.style.setProperty('--accent', `var(${accents[t].a})`);
-    document.documentElement.style.setProperty('--accent-soft', `var(${accents[t].s})`);
+    document.body.setAttribute('data-track', t);
+    document.documentElement.style.setProperty('--accent', 'var(' + accents[t].a + ')');
+    document.documentElement.style.setProperty('--accent-soft', 'var(' + accents[t].s + ')');
     btns.forEach(b=>b.setAttribute('aria-selected', b.dataset.t===t ? 'true':'false'));
     for(const k in copies){ copies[k].hidden = (k!==t); }
     positionSlider();
@@ -636,87 +700,140 @@
   window.addEventListener('load', positionSlider);
   positionSlider();
 
-  // ---- Curriculum rendering from data/curriculum.json + data/videos.json ----
-  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const badgeClass = t => t === 'defend' ? 'd' : t === 'secure' ? 's' : 'b';
-  const badgeText  = t => t === 'defend' ? 'AI for Sec' : t === 'secure' ? 'Sec of AI' : 'both';
+  /* ---------- chair picker ---------- */
+  const CHAIRS = {
+    A:{ name:'Architecture & Platform', chapters:'Chapters 1-3 · 30 lessons', who:'Security architect · identity & NHI engineer · platform security',
+        lead:'You design the control plane other people\u2019s agents run inside. The shift is that a guardrail only holds if it binds <b>below</b> the model \u2014 at the tool call, the sandbox, the egress path or the identity \u2014 and your job is knowing which layer can enforce what.',
+        starts:[['A1.1','What an agentic system is actually made of'],['A1.9','Direct and indirect prompt injection'],['A2.3','Shadow Autonomy: agents nobody approved']],
+        finish:'A control-plane design and a ten-layer guardrail map for one system you already run.' },
+    B:{ name:'Product & Application Security', chapters:'Chapters 4-5 · 34 lessons', who:'AppSec engineer · code reviewer · harness engineer',
+        lead:'You sit closest to developers, so you meet agents at scale first. The shift is that you now <b>build</b> the security pipeline rather than buy it \u2014 and the model is the easy part; the harness around it is where the capability actually lives.',
+        starts:[['B2.0','What an agentic harness actually is'],['B1.5','Three generations of SAST, compared honestly'],['B2.2','Verify signals that don\u2019t lie']],
+        finish:'A working SAST or DAST harness with a completed pass^k reliability scorecard.' },
+    C:{ name:'Offensive Security & Research', chapters:'Chapters 6-7 · 16 lessons', who:'Pentester · red teamer · security researcher',
+        lead:'You get an entirely new target class: the agent itself. The shift is that it has <b>three</b> attack surfaces, not one \u2014 injection, identity and containment \u2014 and most teams have only ever tested the first.',
+        starts:[['C1.3','Red-teaming agents: the injection surface'],['C1.4','Red-teaming agents: the identity surface'],['C1.5','Red-teaming agents: the containment surface']],
+        finish:'A red-team report that turns somebody\u2019s containment claim into evidence \u2014 or into a finding.' },
+    D:{ name:'Security Operations', chapters:'Chapters 8-9 · 16 lessons', who:'SOC analyst · detection engineer · incident responder',
+        lead:'You stop reading alerts and start supervising loops. The shift is that the actor under investigation may not be a person \u2014 it moved at machine speed, on delegated credentials, and your UEBA baseline has no idea what to do with that.',
+        starts:[['D1.5','Agent telemetry as a data source'],['D1.6','Distinguishing agent from human'],['D2.4','Containment at machine speed']],
+        finish:'A detection pack for non-human actors, plus a pre-built containment path with named stop authority.' },
+    E:{ name:'Governance, Risk & the CISO Office', chapters:'Chapters 10-12 · 30 lessons', who:'GRC practitioner · regulatory lead · BISO · CISO office',
+        lead:'You govern autonomy instead of approving tools \u2014 a list of approved products does not survive a thousand agents. The shift is naming <b>who owns which control</b> across legal, compliance, privacy, cyber and model risk, because the programme fails at the seams between them.',
+        starts:[['E1.0','What \u201Ctrustworthy AI\u201D actually means'],['E1.10','The stakeholder map: who owns what'],['E1.2','Building the AI and agent inventory']],
+        finish:'An audit-ready evidence pack with a named owner behind every control.' }
+  };
 
-  function watchLink(id, videos){
-    const v = videos[id];
-    if(v && (v.url || v.youtube_id)){
-      return `<a class="watch" href="lessons/${esc(id)}.html">▶ Watch</a>`;
-    }
-    return `<a class="watch open" href="lessons/${esc(id)}.html">Open →</a>`;
+  const panel  = document.getElementById('chair-panel');
+  const chairs = [...document.querySelectorAll('.chair')];
+
+  function renderChair(key){
+    const c = CHAIRS[key];
+    if(!c) return;
+    chairs.forEach(b=>b.setAttribute('aria-pressed', b.dataset.chair===key ? 'true':'false'));
+    panel.innerHTML =
+      '<div class="ph"><h3>Function ' + esc(key) + ' \u2014 ' + esc(c.name) + '</h3>' +
+      '<span class="who">' + esc(c.chapters) + ' · ' + esc(c.who) + '</span></div>' +
+      '<p class="lead">' + c.lead + '</p>' +
+      '<div class="pgrid">' +
+        '<div><div class="plab">Start with these three</div><ul class="starts">' +
+          c.starts.map(function(s){
+            return '<li><a href="lessons/' + esc(s[0]) + '.html"><span class="sid">' + esc(s[0]) + '</span><span>' + esc(s[1]) + '</span></a></li>';
+          }).join('') +
+        '</ul></div>' +
+        '<div><div class="finish"><b>You finish with</b>' + esc(c.finish) + '</div></div>' +
+      '</div>' +
+      '<div class="pact">' +
+        '<a class="btn p" href="#syllabus">See Function ' + esc(key) + ' in the syllabus</a>' +
+        '<button class="share-btn" data-share data-share-hash="#chair=' + esc(key) + '" ' +
+          'data-share-text="I\u2019m starting Function ' + esc(key) + ' \u2014 ' + esc(c.name) + ' \u2014 on Cyber Commons. Free, open Cyber AI training.">Share my track</button>' +
+      '</div>';
   }
 
-  function sessionHTML(s, videos){
-    const tools = (s.tools||[]).map(t=>`<span>${esc(t)}</span>`).join('');
-    const models = (s.models||[]).map(m=>`<span class="m">${esc(m)}</span>`).join('');
-    return `<div class="ses${s.featured ? ' feat':''}">
-      <div class="ses-h">
-        <span class="sid">${esc(s.id)}</span>
-        <a class="st" href="lessons/${esc(s.id)}.html">${esc(s.title)}</a>
-        <span class="badge ${badgeClass(s.track)}">${badgeText(s.track)}</span>
-        ${watchLink(s.id, videos)}
-      </div>
-      <div class="ses-b">
-        ${s.risk ? `<span class="rc r"><b>Risk</b>${esc(s.risk)}</span>`:''}
-        ${s.control ? `<span class="rc c"><b>Control</b>${esc(s.control)}</span>`:''}
-        ${s.lab ? `<span class="rc l"><b>Lab</b>${esc(s.lab)}</span>`:''}
-        ${(tools||models) ? `<div class="tools">${tools}${models}</div>`:''}
-      </div>
-    </div>`;
-  }
+  chairs.forEach(function(b){
+    b.addEventListener('click', function(){
+      renderChair(b.dataset.chair);
+      history.replaceState(null, '', '#chair=' + b.dataset.chair);
+    });
+  });
 
-  async function renderCurriculum(){
+  const m = /#chair=([A-E])/.exec(location.hash);
+  renderChair(m ? m[1] : 'A');
+
+
+  /* ---------- the common spine (Stage 0) ---------- */
+  const SPINE = ['A1.1','A1.2','A1.5','A1.9','A1.10','A1.11','A2.1','A2.3','A2.4',
+                 'A3.2','A3.5','A3.6','B2.0','B2.1','B2.2','D1.5','E1.0','E1.2',
+                 'E1.10','E3.2'];
+  // the ones the syllabus bolds: most often skipped, most often regretted
+  const SPINE_KEY = new Set(['A1.9','A1.10','A1.11','B2.0','E1.0','E1.10']);
+
+  /* ---------- syllabus, rendered from the curriculum data ---------- */
+  async function renderSyllabus(){
     const host = document.getElementById('functions');
-    let data, videos = {};
+    const list = document.getElementById('spine-list');
+    let data;
     try{
-      const [c, v] = await Promise.all([
-        fetch('data/curriculum.json').then(r=>r.json()),
-        fetch('data/videos.json').then(r=>r.ok?r.json():{videos:{}}).catch(()=>({videos:{}}))
-      ]);
-      data = c; videos = (v && v.videos) || {};
+      data = await fetch('data/curriculum.json').then(r=>r.json());
     }catch(e){
-      host.innerHTML = `<p style="color:var(--text-faint);font-family:'IBM Plex Mono';font-size:13px">Curriculum data unavailable — see <a href="https://github.com/" style="color:var(--defend)">the repo</a> for the full syllabus.</p>`;
+      if(host) host.innerHTML = '<p style="color:var(--text-faint);font-family:\'IBM Plex Mono\';font-size:13px">'
+        + 'Syllabus data unavailable — <a href="lessons/index.html" style="color:var(--defend)">browse the lessons</a>.</p>';
       return;
     }
-    if(data.updated){ const el=document.getElementById('cl-date'); if(el) el.textContent = data.updated; }
+    const titles = {};
+    data.functions.forEach(fn => fn.tracks.forEach(tr => tr.sessions.forEach(s => {
+      titles[s.id] = s.title;
+    })));
 
-    host.innerHTML = data.functions.map(fn=>`
+    if(list){
+      list.innerHTML = SPINE.map(id => {
+        const cls = SPINE_KEY.has(id) ? ' class="key"' : '';
+        return '<li' + cls + '><a href="lessons/' + esc(id) + '.html">'
+             + '<span class="sid">' + esc(id) + '</span>'
+             + '<span>' + esc(titles[id] || '') + '</span></a></li>';
+      }).join('');
+    }
+
+    if(!host) return;
+    host.innerHTML = data.functions.map(fn => `
       <div class="fn rv in">
         <div class="fn-head">
           <span class="fid">Function ${esc(fn.id)}</span>
           <h3>${esc(fn.title)}</h3>
-          <p>${esc(fn.blurb)}</p>
+          <span class="cnt">${fn.tracks.reduce((n,t)=>n+t.sessions.length,0)} lessons</span>
         </div>
-        ${fn.tracks.map(tr=>`
+        ${fn.tracks.map(tr => `
           <details class="trk">
             <summary>
-              <span class="tid">${esc(tr.id)}</span>
-              <span class="tt">${esc(tr.title)}<em>${esc(tr.titles||'')}</em></span>
-              <span class="cnt">${tr.sessions.length} sessions</span>
+              <span class="ch">Chapter ${esc(tr.chapter)}</span>
+              <span class="tt">${esc(tr.title)}<em>${esc(tr.changes||'')}</em></span>
+              <span class="cnt">${tr.sessions.length}</span>
               <span class="plus">+</span>
             </summary>
             <div class="tbody">
-              ${tr.changes ? `<p class="chg">${esc(tr.changes)}</p>`:''}
-              ${tr.sessions.map(s=>sessionHTML(s, videos)).join('')}
-              ${tr.deliverable ? `<div class="deliv"><b>Deliverable</b>${esc(tr.deliverable)}</div>`:''}
-              ${tr.autonomy ? `<div class="deliv"><b>Autonomy</b>${esc(tr.autonomy)}</div>`:''}
+              ${tr.sessions.map(s => `
+                <div class="les">
+                  <span class="sid">${esc(s.id)}</span>
+                  <span class="lt">
+                    <a href="lessons/${esc(s.id)}.html">${esc(s.title)}</a>
+                    ${s.summary ? `<p>${esc(s.summary)}</p>` : ''}
+                  </span>
+                </div>`).join('')}
             </div>
           </details>`).join('')}
       </div>`).join('');
   }
-  renderCurriculum();
+  renderSyllabus();
 
-  // ---- Scroll reveal ----
-  const io = new IntersectionObserver((entries)=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  /* ---------- scroll reveal ---------- */
+  const io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
-  document.querySelectorAll('.rv').forEach((el,i)=>{
-    el.style.transitionDelay = Math.min(i%4*70,210)+'ms';
+  document.querySelectorAll('.rv').forEach(function(el,i){
+    el.style.transitionDelay = Math.min(i%4*70,210) + 'ms';
     io.observe(el);
   });
+})();
 </script>
 </body>
 </html>
