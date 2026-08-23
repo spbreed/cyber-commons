@@ -1,0 +1,98 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.16 — Attacks that target the humans | Cyber Commons</title><meta name="description" content="Ceiling-bound delegation (A2.3), attribution per hop (A2.7) and marking machine-generated output as such (A3.6)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Agentic Reference Architecture, and Every Risk It Carries</div><div class="sid">A1.16</div><h1>Attacks that target the humans</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.16.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The delegation chain is used as a privilege-laundering path, and the agent&#x27;s output becomes an unusually persuasive channel into a human decision.</p></div><div class="ctrl"><div class="lab">Control</div><p>Ceiling-bound delegation (A2.3), attribution per hop (A2.7) and marking machine-generated output as such (A3.6).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Launder a request through a delegation chain to reach something the requester was denied.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.16.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.16.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 19 lines of output in 0.01s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.16 · Attacks that target the humans</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → The Agentic Reference Architecture, and Every Risk It Carries</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.15.html">A1.15 · Misaligned and deceptive behaviour</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p><strong>OWASP T14 — Human Attacks on Multi-Agent Systems. T15 — Human Manipulation.</strong></p>
+<p>The last two threats route through people rather than components, and they run
+in opposite directions.</p>
+<p><strong>T14 — a human attacking the system.</strong> An insider does not need to defeat
+authorization. They need to find a delegation path where authority is composed.
+Ask the orchestrator for something it will route to an agent that holds a
+credential you do not. Each hop is individually legitimate — you were allowed to
+ask, the orchestrator was allowed to route, the agent was allowed to act — and
+the composition reaches something you were explicitly denied. Privilege
+laundering, using the architecture exactly as designed.</p>
+<p><strong>T15 — the system manipulating a human.</strong> The output of an agent arrives with
+institutional authority. It is formatted like a report, it cites things, it does
+not hedge. A person reading it makes a decision on it, and applies less scrutiny
+than they would to a colleague's opinion — because it looks like a system
+output rather than an argument.</p>
+<p>That is exploitable in both directions: an attacker who lands an injection at
+A1.3 gets their content delivered in your agent's trusted voice, and an agent
+that is merely wrong at A1.11 gets the same credibility for free.</p>
+<p>The uncomfortable version: the more your agent is trusted, the more valuable it
+becomes as a channel into human decisions — so success at deployment increases
+this risk rather than reducing it.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where this lands on the reference architecture.</strong></p>
+<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
+                               |              |
+                         messaging        tools / mcp
+                               |              |
+                      knowledge / memory   egress
+           identity + policy wrap every call · observability records it</code>
+\n## 2 · The risk, realised\n\nA request that is denied directly, and permitted through the architecture.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PERMISSIONS = {&quot;mallory&quot;: {&quot;reports:read&quot;},
+               &quot;finance-agent&quot;: {&quot;reports:read&quot;, &quot;payments:write&quot;},
+               &quot;orchestrator&quot;: {&quot;reports:read&quot;, &quot;route&quot;}}
+
+def direct(user, scope):
+    return scope in PERMISSIONS[user]
+
+CHAIN = []
+def route(user, request):
+    &quot;&quot;&quot;Each hop checks only its own permission. Nothing checks the composition.&quot;&quot;&quot;
+    CHAIN.append((&quot;user asks orchestrator&quot;, user, direct(user, &quot;reports:read&quot;)))
+    CHAIN.append((&quot;orchestrator routes&quot;, &quot;orchestrator&quot;, direct(&quot;orchestrator&quot;, &quot;route&quot;)))
+    needed = &quot;payments:write&quot; if &quot;refund&quot; in request else &quot;reports:read&quot;
+    CHAIN.append((&quot;agent acts&quot;, &quot;finance-agent&quot;, direct(&quot;finance-agent&quot;, needed)))
+    return all(ok for _, _, ok in CHAIN)
+
+print(f&quot;mallory holds        : {sorted(PERMISSIONS[&#x27;mallory&#x27;])}&quot;)
+print(f&quot;mallory asks directly for payments:write -&gt; &quot;
+      f&quot;{&#x27;allowed&#x27; if direct(&#x27;mallory&#x27;, &#x27;payments:write&#x27;) else &#x27;DENIED&#x27;}&quot;)
+print()
+print(&quot;same outcome, requested through the architecture:&quot;)
+ok = route(&quot;mallory&quot;, &quot;please issue a refund for order 4471&quot;)
+for step, who, allowed in CHAIN:
+    print(f&quot;   {step:26s}{who:16s}{&#x27;ok&#x27; if allowed else &#x27;denied&#x27;}&quot;)
+print(f&quot;   -&gt; reached payments:write: {ok}&quot;)
+print()
+print(&quot;Every hop was legitimate. Mallory was allowed to ask, the orchestrator&quot;)
+print(&quot;was allowed to route, the agent was allowed to act. The composition&quot;)
+print(&quot;reached exactly what the direct check refused.&quot;)
+
+# T15: the same output, two framings
+FINDING = &quot;dependency libfoo has no known vulnerabilities&quot;
+print()
+print(&quot;and the other direction - the same claim, two ways:&quot;)
+print(f&quot;   colleague says : &#x27;{FINDING}&#x27;   -&gt; reader asks how they know&quot;)
+print(f&quot;   agent reports  : &#x27;{FINDING}&#x27;   -&gt; reader treats it as checked&quot;)
+print()
+print(&quot;Nothing about the second is more true. It is formatted like a system&quot;)
+print(&quot;output, so it recruits the authority of one.&quot;)
+assert not direct(&quot;mallory&quot;, &quot;payments:write&quot;) and ok</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>A user denied <code>payments:write</code> directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take one permission a user is denied and see whether an agent they can talk to holds it. That pair is a laundering path, and it is invisible to any review that checks permissions one hop at a time.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.1.html">A2.1 · Agent identity: user, workload, agent</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.16.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.16.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A user denied `payments:write` directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.16.ipynb</code></p></div><div class="pager"><a href="A1.15.html"><span class="k">← Previous</span><span class="t">A1.15 · Misaligned and deceptive behaviour</span></a><a class="next" href="A2.1.html"><span class="k">Next →</span><span class="t">A2.1 · Agent identity: user, workload, agent</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

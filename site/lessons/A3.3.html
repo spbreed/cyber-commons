@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.3 — Filesystem and path guards | Cyber Commons</title><meta name="description" content="Workspace scoping, mount discipline, ephemeral state."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Platform &amp; Cloud Security Engineer</div><div class="sid">A3.3</div><h1>Filesystem and path guards</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The agent iterating on code wanders into credentials.</p></div><div class="ctrl"><div class="lab">Control</div><p>Workspace scoping, mount discipline, ephemeral state.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Stop the agent wandering from code into credentials.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 22 lines of output in 0.21s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.3 · Filesystem and path guards</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Platform &amp; Cloud Security Engineer</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.2.html">A3.2 · Sandboxing is the perimeter</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.3 — Egress control | Cyber Commons</title><meta name="description" content="An allow-list at the network boundary, enforced where the agent cannot rewrite it."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › Controls — Runtime and the Gateway</div><div class="sid">A3.3</div><h1>Egress control</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent with unrestricted egress turns any successful injection into data loss.</p></div><div class="ctrl"><div class="lab">Control</div><p>An allow-list at the network boundary, enforced where the agent cannot rewrite it.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attempt exfiltration to several destinations under an allow-list and see which survive.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 16 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.3 · Egress control</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → Controls — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.2.html">A3.2 · Sandboxed execution</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,7 +11,7 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>Docker, Kyverno</td>
+<td>Cilium, agentgateway</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
@@ -22,146 +22,65 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>Path guards fail in one specific, extremely common way: <strong>the check runs before
-normalisation</strong>.</p>
-<pre><code>/work/repo/../../root/.ssh/id_rsa
-</code></pre>
-<p>starts with <code>/work/repo/</code>. A <code>startswith</code> check passes it. The filesystem then
-resolves the <code>..</code> segments and hands over the deploy key.</p>
-<p>This is not an exotic bug. It is the single most reproduced filesystem
-vulnerability in history (CWE-22), and agents make it acute because the path is
-now chosen by a model reading attacker-influenced text, rather than by a
-developer writing a literal.</p>
-<p>There are three layers to get right, and each catches what the previous misses:</p>
-<ol>
-<li><strong>Normalise, then compare.</strong> Resolve <code>.</code> and <code>..</code> before any prefix check.</li>
-<li><strong>Resolve symlinks.</strong> A link inside the workspace pointing outside defeats
-   pure string normalisation entirely.</li>
-<li><strong>Deny-list the crown jewels</strong> independently of location, so a
-   misconfiguration of the workspace does not expose <code>.ssh</code> or <code>.aws</code>.</li>
-</ol></div><div class="nbmd"><h2>2 · Demo — the correct guard, and the buggy one, side by side</h2>
-<p>Both are five lines. Only one is safe, and reading them does not reliably tell you which — which is why the test below matters.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import fnmatch
+<p><strong>Mitigates: T2 Tool Misuse · T6 Intent Breaking · LLM02 Sensitive Information Disclosure.</strong></p>
+<p>Egress is the highest-leverage control in the architecture, for a structural
+reason: <strong>every exfiltration path ends at the network boundary</strong>, no matter how
+the agent was persuaded to take it.</p>
+<p>Injection, tool misuse, a compromised MCP server, model-authored code, a
+poisoned peer message — all of them converge on the same final step. Data leaves.
+A control at that step does not need to understand what happened upstream, which
+is exactly what makes it robust: it is the one place where you do not have to
+predict the attack.</p>
+<p>Two rules that decide whether it works:</p>
+<p><strong>Allow-list, never deny-list.</strong> You cannot enumerate the internet. A deny-list
+blocks the destinations you thought of.</p>
+<p><strong>Specific destinations.</strong> <code>*.googleapis.com</code> or <code>*.s3.amazonaws.com</code> is not an
+egress policy — anyone can create a bucket in those namespaces, and A1.3's
+attacker will. The allow-list holds the destinations this workload actually
+needs, and there are usually fewer than five.</p>
+<p>And one placement rule: enforce it <strong>where the agent cannot rewrite it</strong> — the
+network layer, the sidecar, the gateway. An egress check inside the agent's own
+process is a suggestion to the component being attacked.</p>
+<p>The cost is honest: an agent that needs the open internet cannot have this
+control, and that is a design decision to make deliberately rather than by
+default.</p></div><div class="nbmd"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>The one control that does not need to know how the attack worked, because every exfiltration path ends here.\n\n## 2 · The control</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ALLOW = {&quot;api.corp.example&quot;, &quot;reports-db.corp.example&quot;}
+DENY_SUFFIXES = {&quot;.evil.example&quot;}          # the deny-list, for comparison
 
-DENY_GLOBS = (&quot;*/.ssh/*&quot;, &quot;*/.aws/*&quot;, &quot;*.pem&quot;, &quot;*.key&quot;, &quot;*/.env&quot;, &quot;*/etc/shadow&quot;)
+def by_denylist(host):
+    return not any(host.endswith(s) for s in DENY_SUFFIXES)
 
-def normalise(path):
-    &quot;&quot;&quot;Resolve . and .. textually — the step the buggy version skips.&quot;&quot;&quot;
-    parts = []
-    for seg in path.split(&quot;/&quot;):
-        if seg in (&quot;&quot;, &quot;.&quot;):
-            continue
-        if seg == &quot;..&quot;:
-            if parts: parts.pop()
-            continue
-        parts.append(seg)
-    return &quot;/&quot; + &quot;/&quot;.join(parts)
+def by_allowlist(host):
+    return host in ALLOW                    # exact, not suffix
 
-def guard_buggy(path, workspace=&quot;/work/repo&quot;):
-    &quot;&quot;&quot;The bug: prefix check on the RAW string.&quot;&quot;&quot;
-    return path.startswith(workspace)
-
-def guard_correct(path, workspace=&quot;/work/repo&quot;):
-    real = normalise(path)
-    for g in DENY_GLOBS:
-        if fnmatch.fnmatch(real, g):
-            return False
-    ws = normalise(workspace)
-    return real == ws or real.startswith(ws + &quot;/&quot;)
-
-CASES = [
- (&quot;/work/repo/src/main.py&quot;,                        True,  &quot;ordinary read&quot;),
- (&quot;/work/repo/./src/../src/main.py&quot;,               True,  &quot;redundant but fine&quot;),
- (&quot;/work/repo/../../root/.ssh/id_rsa&quot;,             False, &quot;traversal to the deploy key&quot;),
- (&quot;/work/repo/../../home/app/.aws/credentials&quot;,    False, &quot;traversal to cloud creds&quot;),
- (&quot;/work/repo/.env&quot;,                               False, &quot;secrets inside the workspace&quot;),
- (&quot;/work/repo/deploy.pem&quot;,                         False, &quot;private key inside the workspace&quot;),
- (&quot;/etc/shadow&quot;,                                   False, &quot;absolute, outside&quot;),
- (&quot;/work/repo/sub/../../repo/src/a.py&quot;,            True,  &quot;resolves back inside&quot;),
+DESTINATIONS = [
+ (&quot;api.corp.example&quot;,              &quot;the one it actually needs&quot;),
+ (&quot;archive.evil.example&quot;,          &quot;A1.3&#x27;s exfiltration target&quot;),
+ (&quot;attacker-bucket.s3.amazonaws.com&quot;, &quot;a bucket anyone can create&quot;),
+ (&quot;169.254.169.254&quot;,               &quot;cloud metadata - every credential&quot;),
+ (&quot;pastebin.example&quot;,              &quot;not on anyone&#x27;s deny-list&quot;),
 ]
-print(f&quot;{&#x27;path&#x27;:48s}{&#x27;want&#x27;:6s}{&#x27;correct&#x27;:9s}{&#x27;buggy&#x27;:7s}&quot;)
-print(&quot;-&quot; * 74)
-bad = 0
-for path, want, why in CASES:
-    c, b = guard_correct(path), guard_buggy(path)
-    flag = &quot;&quot;
-    if b != want:
-        bad += 1; flag = &quot;  ← BUGGY GUARD IS WRONG&quot;
-    print(f&quot;{path:48s}{str(want):6s}{str(c):9s}{str(b):7s}{flag}&quot;)
-print(f&quot;\ncorrect guard: 0 wrong    buggy guard: {bad} wrong&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks further — symlinks</h2>
-<p>Normalisation is textual. It cannot see that a directory <em>inside</em> the workspace is a link to somewhere outside it. This is the layer most implementations stop before.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># a link the agent (or a dependency, or a build step) created inside the workspace
-SYMLINKS = {&quot;/work/repo/vendor/cache&quot;: &quot;/root/.ssh&quot;}
 
-def resolve_links(path, links, max_hops=10):
-    &quot;&quot;&quot;Follow links on any prefix of the path — what the kernel actually does.&quot;&quot;&quot;
-    for _ in range(max_hops):
-        changed = False
-        for src, dst in links.items():
-            if path == src or path.startswith(src + &quot;/&quot;):
-                path = dst + path[len(src):]
-                changed = True
-        if not changed:
-            break
-    return normalise(path)
+print(f&quot;{&#x27;destination&#x27;:38s}{&#x27;deny-list&#x27;:12s}{&#x27;allow-list&#x27;:12s}note&quot;)
+for host, note in DESTINATIONS:
+    d, a = by_denylist(host), by_allowlist(host)
+    print(f&quot;{host:38s}{&#x27;allow&#x27; if d else &#x27;block&#x27;:12s}{&#x27;allow&#x27; if a else &#x27;block&#x27;:12s}{note}&quot;)
 
-def guard_with_links(path, workspace=&quot;/work/repo&quot;, links=SYMLINKS):
-    real = resolve_links(normalise(path), links)
-    for g in DENY_GLOBS:
-        if fnmatch.fnmatch(real, g):
-            return False, f&quot;deny rule {g} (resolved to {real})&quot;
-    ws = normalise(workspace)
-    if real == ws or real.startswith(ws + &quot;/&quot;):
-        return True, f&quot;inside workspace ({real})&quot;
-    return False, f&quot;escapes via symlink → {real}&quot;
-
-attack = &quot;/work/repo/vendor/cache/id_rsa&quot;
-print(f&quot;path:                {attack}&quot;)
-print(f&quot;normalise() says:    inside workspace → {guard_correct(attack)}&quot;)
-ok, why = guard_with_links(attack)
-print(f&quot;with link resolution: {&#x27;ALLOW&#x27; if ok else &#x27;DENY &#x27;} — {why}&quot;)
-print(&quot;\nText normalisation was not enough. The link had to be followed.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — all three layers, and a property test</h2>
-<p>A guard you have only tried on examples is a guard you have not tested. The version that earns trust is property-based: for <em>any</em> generated path, the resolved location must be inside the workspace and must not match a deny rule.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import random
-random.seed(3)
-
-SEGMENTS = [&quot;src&quot;, &quot;..&quot;, &quot;.&quot;, &quot;vendor&quot;, &quot;cache&quot;, &quot;repo&quot;, &quot;work&quot;, &quot;root&quot;,
-            &quot;.ssh&quot;, &quot;.aws&quot;, &quot;id_rsa&quot;, &quot;main.py&quot;, &quot;.env&quot;, &quot;etc&quot;, &quot;shadow&quot;]
-
-def random_path():
-    return &quot;/&quot; + &quot;/&quot;.join(random.choice(SEGMENTS)
-                          for _ in range(random.randint(1, 8)))
-
-def final_location(path, links=SYMLINKS):
-    return resolve_links(normalise(path), links)
-
-violations, allowed_n = [], 0
-for _ in range(20000):
-    p = random_path()
-    ok, _ = guard_with_links(p)
-    if not ok:
-        continue
-    allowed_n += 1
-    real = final_location(p)
-    inside = real == &quot;/work/repo&quot; or real.startswith(&quot;/work/repo/&quot;)
-    denied = any(fnmatch.fnmatch(real, g) for g in DENY_GLOBS)
-    if not inside or denied:
-        violations.append((p, real))
-
-print(f&quot;20000 random paths · {allowed_n} allowed · violations: {len(violations)}&quot;)
-for p, real in violations[:5]:
-    print(&quot;   &quot;, p, &quot;→&quot;, real)
-assert not violations
-print(&quot;\nProperty holds: every allowed path resolves inside the workspace&quot;)
-print(&quot;and matches no deny rule — including through symlinks.&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># And the same test against the buggy guard, to size the difference.
-viol_buggy = 0
-for _ in range(20000):
-    p = random_path()
-    if guard_buggy(p):
-        real = final_location(p)
-        if not (real == &quot;/work/repo&quot; or real.startswith(&quot;/work/repo/&quot;)):
-            viol_buggy += 1
-print(f&quot;buggy prefix-check guard: {viol_buggy} paths allowed that escape the workspace&quot;)
-assert viol_buggy &gt; 0</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The correct guard gets all eight cases right; the buggy prefix check wrongly permits both traversals. The symlink attack passes textual normalisation and is only caught once links are resolved. The property test over 20,000 random paths reports zero violations for the three-layer guard and a non-zero count for the buggy one.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Find the path check in your own agent tooling. If it uses <code>startswith</code> or string concatenation without resolving links, run the property test above against it. It takes ten minutes and the result is not usually zero.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.4.html">A3.4 · Tool permission models</a></strong></p>
+leaked = [h for h, _ in DESTINATIONS if by_denylist(h) and h not in ALLOW]
+print(f&quot;\ndeny-list lets through : {len(leaked)}  {leaked}&quot;)
+print(f&quot;allow-list lets through : {sorted(h for h, _ in DESTINATIONS if by_allowlist(h))}&quot;)
+print()
+print(&quot;The deny-list blocked exactly the destination somebody had already&quot;)
+print(&quot;thought of. It cannot be completed, because the internet cannot be&quot;)
+print(&quot;enumerated.&quot;)
+print()
+print(&quot;Placement matters as much: this check belongs in the network path, not&quot;)
+print(&quot;in the agent. A check inside the process being attacked is advice.&quot;)
+assert len(leaked) == 3 and len([h for h, _ in DESTINATIONS if by_allowlist(h)]) == 1</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Write the allow-list for one agent by listing the hosts it genuinely calls. If it is under five, you can ship this control this week; if it is unbounded, that is the finding.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.4.html">A3.4 · Budgets and stop conditions</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Same task, same agent; only the mount discipline changed.</div><div class="chips"><span>Docker</span><span>Kyverno</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.3.ipynb</code></p></div><div class="pager"><a href="A3.2.html"><span class="k">← Previous</span><span class="t">A3.2 · Sandboxing is the perimeter</span></a><a class="next" href="A3.4.html"><span class="k">Next →</span><span class="t">A3.4 · Tool permission models</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs.</div><div class="chips"><span>Cilium</span><span>agentgateway</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.3.ipynb</code></p></div><div class="pager"><a href="A3.2.html"><span class="k">← Previous</span><span class="t">A3.2 · Sandboxed execution</span></a><a class="next" href="A3.4.html"><span class="k">Next →</span><span class="t">A3.4 · Budgets and stop conditions</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

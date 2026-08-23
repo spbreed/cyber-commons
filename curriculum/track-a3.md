@@ -1,262 +1,162 @@
-# Track A3 — The Platform & Cloud Security Engineer
+# Track A3 — Controls — Runtime and the Gateway
 
 **Function A · Security Architecture & Platform**  
-*The people who decide what is structurally possible. If they get it wrong, no amount of downstream diligence recovers it.*
+*One reference architecture, every risk it carries, and the controls that close them. Get this wrong and no amount of downstream diligence recovers it.*
 
-**Job titles:** Cloud Security Engineer, Platform Security Engineer, Infrastructure Security
+**Job titles:** Platform Security Engineer, Cloud Security Architect, SRE
 
-**What changes:** Containment is where theory meets the kernel. 9 lessons.
+**What changes:** What holds when identity has already been defeated — and how the controls collapse into one enforcement point once you run more than a handful of agents. 7 lessons.
 
-**Autonomy focus:** Containment is what lets you say yes to L2.5 without pretending the agent is trustworthy.
+**Autonomy focus:** Every control here binds below the model, where a persuaded agent cannot argue with it.
 
-**Deliverable:** A hardened runtime that survives a deliberate injected payload with a measured blast radius of zero outside the sandbox.
+**Deliverable:** A gateway policy that denies one high-consequence outcome at four independent layers.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### A3.1 — Authorization models that make bad grants impossible
+### A3.1 — Default-deny on the tool call
 
 `Security of AI`
 
-- **Risk** — RBAC has no unit small enough to express the grant you actually meant.
-- **Control** — ReBAC/ABAC with time-scoped delegation and attenuation by construction.
-- **Lab** — Model the same grant in flat RBAC and in OpenFGA; prove the over-privileged grant is unrepresentable.
-- **Tools** — `OpenFGA`, `OPA`
+- **Risk** — Allow-by-default authorization is defeated by any argument the model can be persuaded to produce.
+- **Control** — Policy evaluated per call on (identity, tool, arguments, resource), denying unless a rule permits.
+- **Lab** — Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.
+- **Tools** — `OPA`, `kmcp`
 
-**Run it** — Make the over-privileged grant structurally unrepresentable.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-docker run -d -p 8080:8080 openfga/openfga run
-cd labs/a1-control-plane/authz
-fga model write --file model.fga
-python3 prove_unrepresentable.py   # attempts to write the bad grant
-```
-
-*Expect:* The bad grant is rejected by the schema, not by a policy check that could be skipped.
-
----
-
-### A3.2 — Sandboxing is the perimeter
-
-`Security of AI`
-
-- **Risk** — Tier chosen by convenience, not by action class.
-- **Control** — Process → container → microVM → ephemeral workstation → air-gapped runner, chosen deliberately.
-- **Lab** — Run the same agent in three tiers and measure escape surface in each.
-- **Tools** — `gVisor`, `Firecracker`, `Docker`
-- **Models** — `Llama 3.3`
-
-**Run it** — Measure escape surface across three sandbox tiers.
+**Run it** — Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A3.1.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A3.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox
-./run-tier.sh docker      && ./measure-escape.sh
-./run-tier.sh gvisor      && ./measure-escape.sh
-./run-tier.sh firecracker && ./measure-escape.sh
 ```
 
-*Expect:* A table of syscall surface and reachable host resources per tier — a number you can put in a design review.
+*Expect:* Five tool calls are evaluated twice. Under allow-by-default four succeed, each one a Chapter 1 risk walking through. Under default-deny only the intended call survives — including a refusal on the verb for an otherwise-permitted identity, tool and resource.
 
 ---
 
-### A3.3 — Filesystem and path guards
+### A3.2 — Sandboxed execution
 
 `Security of AI`
 
-- **Risk** — The agent iterating on code wanders into credentials.
-- **Control** — Workspace scoping, mount discipline, ephemeral state.
-- **Lab** — Attempt credential read from inside the sandbox; close it with mount policy.
-- **Tools** — `Docker`, `Kyverno`
+- **Risk** — Model-authored code inherits the runtime's reach, including any credential mounted into the environment.
+- **Control** — Execution in an isolate with no ambient credentials, a bounded filesystem and no default network.
+- **Lab** — Run the same code inside and outside the sandbox and enumerate what each could reach.
+- **Tools** — `gVisor`, `Falco`
 
-**Run it** — Stop the agent wandering from code into credentials.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox
-./run-agent.sh --workspace /work --task 'read ../../.aws/credentials'   # succeeds: bad
-./apply-mounts.sh   # workspace scoping + ephemeral state
-./run-agent.sh --workspace /work --task 'read ../../.aws/credentials'   # denied
-```
-
-*Expect:* Same task, same agent; only the mount discipline changed.
-
----
-
-### A3.4 — Tool permission models
-
-`Security of AI`
-
-- **Risk** — The confused deputy at the tool layer.
-- **Control** — Capability scoping, allowlisted actions, structured output contracts, read-only defaults.
-- **Lab** — Redesign a dangerous tool so the dangerous call doesn't exist.
-- **Tools** — `kmcp`, `OPA`
-
-**Run it** — Design the dangerous call out of existence.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.5   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox/tools
-python3 audit_tools.py --manifest before.json   # finds an unrestricted shell tool
-python3 refactor.py --split shell --into read_file,list_dir,run_tests
-python3 audit_tools.py --manifest after.json
-```
-
-*Expect:* The capability the agent needed survives; the arbitrary-execution path does not exist to block.
-
----
-
-### A3.5 — MCP is not a security boundary
-
-`Security of AI`
-
-- **Risk** — Connector chaining as privilege escalation; unpinned servers.
-- **Control** — Server scanning, version pinning with hash verification, self-hosting.
-- **Lab** — Chain two MCP connectors to escalate, then pin and scan to stop it.
-- **Tools** — `kmcp`, `MCP Inspector`, `Sigstore`
-- **Models** — `GLM-4.6`
-
-**Run it** — Escalate through connector chaining, then pin and scan to stop it.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox/mcp
-python3 chain.py --from filesystem --to http   # exfil via two 'safe' connectors
-kmcp scan ./servers/ && kmcp pin --hash-verify
-python3 chain.py --from filesystem --to http   # blocked
-```
-
-*Expect:* Neither connector is dangerous alone. The chain is the vulnerability.
-
----
-
-### A3.6 — Egress control for agents
-
-`Security of AI`
-
-- **Risk** — An agent with unrestricted egress has no other meaningful control.
-- **Control** — Allowlists, inspecting proxies, DNS conditional forwarding, data perimeters.
-- **Lab** — Put a Squid allowlist in front of an agent and watch exfiltration fail.
-- **Tools** — `Squid`, `Cilium`, `Kyverno`
-- **Models** — `GLM-4.6`
-
-**Run it** — Prove an agent with no egress control has no other meaningful control.
+**Run it** — Run the same code inside and outside the sandbox and enumerate what each could reach.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A3.2.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A3.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox
-docker compose up -d squid agent
-./exfil.sh            # baseline: data leaves
-./apply-allowlist.sh  # squid allowlist + DNS conditional forwarding
-./exfil.sh            # same payload, now blocked
 ```
 
-*Expect:* Identical agent, identical payload; the only variable is egress policy.
+*Expect:* The same code is executed against three environments. Unsandboxed it reaches a private key, two credentials and the whole network. Sandboxed but with production credentials mounted it still reaches both credentials and the production database. Only the third — no ambient credentials — contains it.
 
 ---
 
-### A3.7 — Runtime containment levers
+### A3.3 — Egress control
 
 `Security of AI`
 
-- **Risk** — The stop lever is built during the incident.
-- **Control** — Throttle, scope-reduce, reroute, force HITL, hard stop — built and tested first.
-- **Lab** — Wire all five levers and prove each fires under load.
-- **Tools** — `Falco`, `Kyverno`, `kagent`
+- **Risk** — An agent with unrestricted egress turns any successful injection into data loss.
+- **Control** — An allow-list at the network boundary, enforced where the agent cannot rewrite it.
+- **Lab** — Attempt exfiltration to several destinations under an allow-list and see which survive.
+- **Tools** — `Cilium`, `agentgateway`
 
-**Run it** — Build the five containment levers before you need them.
+**Run it** — Attempt exfiltration to several destinations under an allow-list and see which survive.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.3   # run it headless and check it
+```
+
+*Expect:* Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs.
+
+---
+
+### A3.4 — Budgets and stop conditions
+
+`Security of AI`
+
+- **Risk** — Without a ceiling the loop runs until an external system stops it, and the failure mode is denial of service against yourself.
+- **Control** — Ceilings bound to the loop, with the run terminating rather than degrading when one is hit.
+- **Lab** — Run a looping agent against each ceiling and record which one fires first.
+- **Tools** — `OpenTelemetry`
+
+**Run it** — Run a looping agent against each ceiling and record which one fires first.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it
+```
+
+*Expect:* The impossible task from A1.12 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries `complete: False` rather than reporting what it managed.
+
+---
+
+### A3.5 — Validating what comes back
+
+`Security of AI`
+
+- **Risk** — An unverified claim becomes a shared premise, and a peer message is trusted more than a document it is no safer than.
+- **Control** — Schema validation plus an independent verifier before any claim propagates.
+- **Lab** — Pass a fabricated claim through a schema check and then through a ground-truth verifier.
+- **Tools** — `Inspect`
+
+**Run it** — Pass a fabricated claim through a schema check and then through a ground-truth verifier.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.5   # run it headless and check it
+```
+
+*Expect:* Four messages are checked twice. A schema-perfect, high-confidence claim is refuted by the oracle; a claim with no oracle stops with `unverifiable` rather than silently becoming true; a malformed message is caught by the schema; and only the verified claim propagates.
+
+---
+
+### A3.6 — Human approval that survives volume
+
+`Security of AI`
+
+- **Risk** — An approval queue at volume approves everything, and the risk register still records it as a control.
+- **Control** — Approval reserved for irreversible actions only, with machine-generated content labelled as such.
+- **Lab** — Route actions by reversibility and measure how many reach a human under each policy.
+
+**Run it** — Route actions by reversibility and measure how many reach a human under each policy.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A3.6.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A3.6   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox/levers
-./arm.sh              # throttle, scope-reduce, reroute, force-HITL, hard-stop
-./fire.sh --lever all --under-load
-./assert-fired.sh
 ```
 
-*Expect:* Each lever fires under load and is timed. A lever that only works when idle is not a lever.
+*Expect:* Routing by reversibility sends 12 actions a day to a human instead of 792, which is inside what one reviewer can consider properly — so the gate holds rather than degrading into a click — and machine-generated output is labelled where a person reads it.
 
 ---
 
-### A3.8 — Environment separation
+### A3.7 — The agent gateway: one choke point when you scale
 
 `Security of AI`
 
-- **Risk** — "The agent knows not to" is not separation.
-- **Control** — Dev-agent credentials structurally unable to reach production.
-- **Lab** — Prove the dev SVID cannot mint a prod token, by construction.
-- **Tools** — `SPIRE`, `OPA`
+- **Risk** — Per-agent controls diverge as the fleet grows, and legacy downstreams force a static credential back into agent code.
+- **Control** — A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent.
+- **Lab** — Route every call through one gateway and show the same policy holding for agents that never implemented it.
+- **Tools** — `agentgateway`, `OPA`, `Keycloak`
 
-**Run it** — Make dev-agent credentials structurally unable to reach production.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A3.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A3.8   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox
-./try-cross-env.sh --from dev-agent --to prod-api   # must fail
-python3 prove_separation.py --spiffe-id spiffe://cybercommons/dev/agent
-```
-
-*Expect:* The dev SVID cannot mint a prod token by construction — not because a policy said no.
-
----
-
-### A3.9 — The unmanaged agent problem
-
-`Security of AI`
-
-- **Risk** — Personal, non-sandboxed agents on managed endpoints.
-- **Control** — Endpoint + secure web gateway, behavioural monitoring — with an honest account of the gap.
-- **Lab** — Detect an unmanaged local agent by its egress and filesystem signature.
-- **Tools** — `Falco`, `osquery`
-
-**Run it** — Detect an unmanaged personal agent on a managed endpoint.
+**Run it** — Route every call through one gateway and show the same policy holding for agents that never implemented it.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A3.7.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a3-sandbox
-sudo falco -r rules/unmanaged-agent.yaml &
-./simulate-personal-agent.sh   # local model + outbound tool calls
-grep 'unmanaged_agent' /var/log/falco.log
 ```
 
-*Expect:* Detected by egress + filesystem signature. Read the chapter's honest note on why this case has no clean answer yet.
+*Expect:* Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent.
 
 ---

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.1 — &quot;Who is calling?&quot; | Cyber Commons</title><meta name="description" content="A taxonomy: user-agent vs workload identity, sandboxed vs not, managed vs personal."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.1</div><h1>&quot;Who is calling?&quot;</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>You cannot answer the first question of every investigation.</p></div><div class="ctrl"><div class="lab">Control</div><p>A taxonomy: user-agent vs workload identity, sandboxed vs not, managed vs personal.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Answer &#x27;who is calling?&#x27; for every principal in the lab.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 31 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.1 · "Who is calling?"</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Identity &amp; Non-Human Identity Engineer</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.12.html">A1.12 · Proving guardrails work</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.1 — Agent identity: user, workload, agent | Cyber Commons</title><meta name="description" content="A distinct identity per workload, carrying the human principal alongside it, asserted on every call."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › Controls — Identity and Ingress</div><div class="sid">A2.1</div><h1>Agent identity: user, workload, agent</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A shared service account answers &#x27;what ran&#x27; and destroys &#x27;for whom&#x27; — so no later control can be conditioned on the caller.</p></div><div class="ctrl"><div class="lab">Control</div><p>A distinct identity per workload, carrying the human principal alongside it, asserted on every call.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Separate the three identities and show a downstream service authorising on the agent while attributing to the human.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 13 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.1 · Agent identity: user, workload, agent</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → Controls — Identity and Ingress</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.16.html">A1.16 · Attacks that target the humans</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,7 +11,7 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>SPIRE</td>
+<td>SPIFFE/SPIRE, Keycloak</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
@@ -22,146 +22,75 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>Before agents, "who is calling?" had two well-understood answers.</p>
-<p><strong>Human identity.</strong> A person authenticates — password plus a second factor, or
-SSO through an identity provider. The result is a token that says <em>this is
-dana@corp</em>. It is short-lived, tied to a session, and revocable by disabling one
-account. Crucially it carries an assumption: a human was present and intended
-this.</p>
-<p><strong>Workload identity.</strong> A program authenticates. Historically this meant a
-<strong>service account</strong> — a username and a long-lived secret, checked into a config
-file and shared by everything in the deployment. Modern practice replaces the
-secret with <em>attestation</em>: SPIFFE/SPIRE, IRSA, managed identities. The platform
-vouches for the workload because of where it is running, so no secret has to be
-planted anywhere. The result says <em>this is the payments-api pod in cluster-3</em>.</p>
-<p>Both work because each answers a different question cleanly. A human token says
-who <em>intended</em> something. A workload token says which <em>code</em> is running.</p>
-<p>An agent breaks the distinction, because an agent is code that acts on a
-human's intent, and the two identities have different lifetimes, different
-scopes, and different revocation stories. Answer "who is calling?" with only
-one of them and you lose information you will need later:</p>
+<p><strong>Mitigates: T9 Identity Spoofing · T3 Privilege Compromise · T1 Memory Poisoning.</strong></p>
+<p>Three identities are in play whenever an agent acts, and A1.6 and A1.7 were both
+caused by collapsing them into one.</p>
+<p><strong>The user.</strong> The human who asked. Carries the business authority and is the
+answer to "on whose behalf".</p>
+<p><strong>The workload.</strong> The process that runs — a container, a function, a pod. It has
+its own identity, derived from the platform, not from a secret someone pasted.</p>
+<p><strong>The agent instance.</strong> This particular run, of this particular agent, for this
+particular task. It is what you revoke when one agent misbehaves.</p>
+<p>The control is to keep all three, and to use them for different things:</p>
 <ul>
-<li>Use the <strong>human's</strong> identity → the audit log says dana did it. She did not.
-  She asked for something, three hops ago, and cannot tell you what happened.</li>
-<li>Use the <strong>workload's</strong> identity → the log says <code>triage-agent</code> did it, and now
-  nobody knows <em>for whom</em>, or whether that person was allowed to ask.</li>
+<li><strong>Authorize on the workload.</strong> What may this agent ever do? That is its
+  ceiling, and it does not change per request.</li>
+<li><strong>Attribute to the user.</strong> Who caused this? That is what the audit trail needs
+  and what A1.13 could not answer.</li>
+<li><strong>Scope memory and state to the instance or the user</strong>, never to the workload
+  alone — which is the write that made A1.4 spread across sessions.</li>
 </ul>
-<p>The correct answer needs both at once, plus every intermediary. That is the rest
-of this track.</p></div><div class="nbmd"><h2>2 · Demo — the two identities we already know how to do</h2>
-<p>Start with the familiar, working correctly. Nothing here is new; the point is to have both mechanisms concrete before we break them.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import hashlib, json, time
-from dataclasses import dataclass, field
+<p>The failure mode to watch for is a system that authenticates the agent and then
+forgets the human, because it produces logs that are complete and useless.</p></div><div class="nbmd"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>Answers <strong>who is calling</strong>, so every later control has a subject. Without it, default-deny has nothing to deny and the audit trail has nobody to name.\n\n## 2 · The control</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
 
-# ---------- human identity: short-lived, session-bound, one account -------
-@dataclass
-class HumanToken:
-    sub: str                       # dana@corp
-    scopes: set
-    auth_time: float = field(default_factory=time.time)
-    amr: tuple = (&quot;pwd&quot;, &quot;mfa&quot;)    # how they proved it
-    ttl: float = 3600
+@dataclass(frozen=True)
+class Principal:
+    user: str            # the human who asked
+    workload: str        # the process, from platform attestation
+    instance: str        # this run of this agent
+    scopes: frozenset    # the workload&#x27;s ceiling
 
-    @property
-    def expired(self): return time.time() - self.auth_time &gt; self.ttl
-    def describe(self):
-        return (f&quot;human   sub={self.sub:14s} scopes={sorted(self.scopes)} &quot;
-                f&quot;amr={list(self.amr)} ttl={self.ttl:.0f}s&quot;)
+def authorize(p, required):
+    &quot;&quot;&quot;Authorization is about the WORKLOAD: what may this agent ever do.&quot;&quot;&quot;
+    return required in p.scopes
 
-# ---------- workload identity: attested, no planted secret ---------------
-@dataclass
-class WorkloadToken:
-    spiffe_id: str                 # spiffe://corp/ns/prod/sa/triage-agent
-    scopes: set
-    attested_by: str = &quot;spire-agent on node-7&quot;
-    issued: float = field(default_factory=time.time)
-    ttl: float = 300               # short, because it is cheap to reissue
+def attribute(p, action):
+    &quot;&quot;&quot;Attribution is about the USER: who caused this.&quot;&quot;&quot;
+    return {&quot;action&quot;: action, &quot;caused_by&quot;: p.user,
+            &quot;performed_by&quot;: p.workload, &quot;run&quot;: p.instance}
 
-    @property
-    def expired(self): return time.time() - self.issued &gt; self.ttl
-    def describe(self):
-        return (f&quot;workload id={self.spiffe_id:38s} scopes={sorted(self.scopes)} &quot;
-                f&quot;ttl={self.ttl:.0f}s&quot;)
+def memory_key(p, workspace):
+    &quot;&quot;&quot;Memory is scoped to the USER, not the workspace - this is the write that
+    let A1.4 leak a poisoned note between people.&quot;&quot;&quot;
+    return f&quot;{workspace}:{p.user}&quot;
 
-dana = HumanToken(&quot;dana@corp&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;deploy:prod&quot;})
-svc  = WorkloadToken(&quot;spiffe://corp/ns/prod/sa/triage-agent&quot;, {&quot;repo:read&quot;})
+dana = Principal(&quot;dana@corp&quot;, &quot;reports-agent&quot;, &quot;run-8812&quot;,
+                 frozenset({&quot;reports:read&quot;}))
+priya = Principal(&quot;priya@corp&quot;, &quot;reports-agent&quot;, &quot;run-8813&quot;,
+                  frozenset({&quot;reports:read&quot;}))
 
-print(dana.describe())
-print(svc.describe())
-print(&quot;\nBoth answer &#x27;who is calling?&#x27; — for different questions:&quot;)
-print(&quot;  human    → who INTENDED this&quot;)
-print(&quot;  workload → which CODE is running&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the agent needs both, and gets one</h2>
-<p>Now put an agent in the middle. Dana asks the triage agent to fix a finding. The agent calls GitHub. What identity does GitHub see?</p>
-<p>In practice, one of two things happens, and both lose information.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def github_sees(token):
-    &quot;&quot;&quot;What the resource server can actually record.&quot;&quot;&quot;
-    if isinstance(token, HumanToken):
-        return {&quot;actor&quot;: token.sub, &quot;on_behalf_of&quot;: token.sub,
-                &quot;audit_line&quot;: f&quot;{token.sub} pushed a commit&quot;,
-                &quot;lost&quot;: &quot;that an agent acted, and which one&quot;}
-    return {&quot;actor&quot;: token.spiffe_id.split(&#x27;/&#x27;)[-1], &quot;on_behalf_of&quot;: &quot;unknown&quot;,
-            &quot;audit_line&quot;: f&quot;{token.spiffe_id.split(&#x27;/&#x27;)[-1]} pushed a commit&quot;,
-            &quot;lost&quot;: &quot;who asked for it, and whether they were allowed to&quot;}
+print(f&quot;{&#x27;request&#x27;:28s}{&#x27;authorized?&#x27;:13s}attributed to&quot;)
+for p, need in ((dana, &quot;reports:read&quot;), (dana, &quot;db:admin&quot;)):
+    ok = authorize(p, need)
+    rec = attribute(p, need)
+    print(f&quot;{p.user + &#x27; -&gt; &#x27; + need:28s}{str(ok):13s}{rec[&#x27;caused_by&#x27;]} via {rec[&#x27;performed_by&#x27;]}&quot;)
 
-print(&quot;PATTERN 1 — hand the agent Dana&#x27;s token (&#x27;it just needs her permissions&#x27;)&quot;)
-for k, v in github_sees(dana).items():
-    print(f&quot;   {k:14s} {v}&quot;)
-
-print(&quot;\nPATTERN 2 — give the agent its own service account&quot;)
-for k, v in github_sees(svc).items():
-    print(f&quot;   {k:14s} {v}&quot;)
-
-print(&quot;\nBoth are complete, consistent records. Both are missing half the answer.&quot;)</code></pre></div><div class="nbmd"><h2>4 · What the answer has to contain</h2>
-<p>Three facts, together, at the moment of the call:</p>
-<ul>
-<li><strong><code>sub</code></strong> — the principal the action is <em>for</em> (Dana)</li>
-<li><strong><code>actor</code></strong> — the identity actually making the call (<code>triage-agent</code>)</li>
-<li><strong><code>act</code></strong> — the chain of everything in between</li>
-</ul>
-<p>This is not invented for agents. It is <a href="https://datatracker.ietf.org/doc/html/rfc8693">RFC 8693 token exchange</a>, which OAuth has had since 2020 for exactly this problem, under the name <strong>on-behalf-of</strong>. A2.5 builds it properly. Here is just the shape, so the rest of the track has something to point at.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
-class AgentToken:
-    sub: str            # the human the action is for
-    actor: str          # who is actually calling right now
-    scopes: set
-    act: dict = None    # nested chain of prior actors
-    issued: float = field(default_factory=time.time)
-    ttl: float = 300
-
-    def chain(self):
-        out, node = [], self.act
-        while node:
-            out.append(node[&quot;actor&quot;]); node = node.get(&quot;act&quot;)
-        c = list(reversed(out)) + [self.actor]
-        if c[0] != self.sub:
-            c.insert(0, self.sub)
-        return c
-
-    def describe(self):
-        return (f&quot;sub={self.sub}  actor={self.actor}\n&quot;
-                f&quot;   chain  {&#x27; → &#x27;.join(self.chain())}\n&quot;
-                f&quot;   scopes {sorted(self.scopes)}&quot;)
-
-agent_tok = AgentToken(sub=&quot;dana@corp&quot;, actor=&quot;triage-agent&quot;,
-                       scopes={&quot;repo:read&quot;}, act=None)
-print(agent_tok.describe())
-
-print(&quot;\nwhat GitHub can now record:&quot;)
-print(f&quot;   &#x27;triage-agent pushed a commit on behalf of dana@corp&#x27;&quot;)
-print(&quot;   → both questions answered, one log line, nothing reconstructed later.&quot;)</code></pre></div><div class="nbmd"><h2>5 · Verify — the three patterns side by side</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def audit(actor, on_behalf_of, chain):
-    answerable = actor != &quot;?&quot; and on_behalf_of != &quot;?&quot; and chain != &quot;not recorded&quot;
-    return {&quot;who acted&quot;: actor, &quot;for whom&quot;: on_behalf_of,
-            &quot;chain&quot;: chain, &quot;answerable&quot;: answerable}
-
-rows = {
- &quot;agent uses Dana&#x27;s token&quot;:  audit(&quot;dana@corp&quot;, &quot;dana@corp&quot;, &quot;not recorded&quot;),
- &quot;agent uses service acct&quot;:  audit(&quot;triage-agent&quot;, &quot;?&quot;, &quot;not recorded&quot;),
- &quot;on-behalf-of (RFC 8693)&quot;:  audit(&quot;triage-agent&quot;, &quot;dana@corp&quot;,
-                                   &quot; → &quot;.join(agent_tok.chain())),
-}
-for name, r in rows.items():
-    print(f&quot;{name:28s} answerable={str(r[&#x27;answerable&#x27;]):5s} &quot;
-          f&quot;acted={r[&#x27;who acted&#x27;]:14s} for={r[&#x27;for whom&#x27;]:11s} {r[&#x27;chain&#x27;]}&quot;)
-assert rows[&quot;on-behalf-of (RFC 8693)&quot;][&quot;answerable&quot;]
-print(&quot;\nOnly the third can answer an incident question without guesswork.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The human and workload tokens each print with their distinct properties. Both single-identity patterns produce a complete, consistent and incomplete audit record — one blaming Dana, one unable to say who asked. The on-behalf-of token records <code>dana@corp → triage-agent</code> and is the only one marked answerable.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Take one agent in your estate and find out which pattern it uses. The test is a single question: <em>for an action it took last week, can you name both the agent and the human who asked?</em> If you have to reconstruct it from timestamps, the answer is no.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">A2.2 · The bootstrap problem</a></strong></p>
+print(&quot;\nmemory keys - the same workspace, two users:&quot;)
+print(f&quot;   dana  -&gt; {memory_key(dana, &#x27;acme&#x27;)}&quot;)
+print(f&quot;   priya -&gt; {memory_key(priya, &#x27;acme&#x27;)}&quot;)
+print(f&quot;   shared? {memory_key(dana, &#x27;acme&#x27;) == memory_key(priya, &#x27;acme&#x27;)}&quot;)
+print()
+print(&quot;db:admin is refused because the WORKLOAD never held it - so no user can&quot;)
+print(&quot;borrow it through the agent, which is A1.6 closed. The audit line names&quot;)
+print(&quot;dana, which is A1.13 closed. And a note written in dana&#x27;s session cannot&quot;)
+print(&quot;be read back in priya&#x27;s, which is A1.4 closed.&quot;)
+assert not authorize(dana, &quot;db:admin&quot;)
+assert memory_key(dana, &quot;acme&quot;) != memory_key(priya, &quot;acme&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Authorization resolves against the workload ceiling and refuses <code>db:admin</code> no matter who asks, attribution names the human on every action, and memory keys differ per user so a note written in one session cannot be read back in another's.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>For one agent, write down its three identities. If the workload and the user are the same value, you have inherited credentials; if the instance does not exist, you cannot revoke one run.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">A2.2 · Bootstrapping the first credential</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.1.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Each agent labelled user-agent vs workload, sandboxed vs not, managed vs personal — with the evidence for each claim.</div><div class="chips"><span>SPIRE</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.1.ipynb</code></p></div><div class="pager"><a href="A1.12.html"><span class="k">← Previous</span><span class="t">A1.12 · Proving guardrails work</span></a><a class="next" href="A2.2.html"><span class="k">Next →</span><span class="t">A2.2 · The bootstrap problem</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Authorization resolves against the workload ceiling and refuses `db:admin` no matter who asks, attribution names the human on every action, and memory keys differ per user so a note written in one session cannot be read back in another&#x27;s.</div><div class="chips"><span>SPIFFE/SPIRE</span><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.1.ipynb</code></p></div><div class="pager"><a href="A1.16.html"><span class="k">← Previous</span><span class="t">A1.16 · Attacks that target the humans</span></a><a class="next" href="A2.2.html"><span class="k">Next →</span><span class="t">A2.2 · Bootstrapping the first credential</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

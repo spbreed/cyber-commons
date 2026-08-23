@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.7 — Systems that don&#x27;t understand agents | Cyber Commons</title><meta name="description" content="Token translation plus action-class blocking at the boundary."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.7</div><h1>Systems that don&#x27;t understand agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Legacy services see only the human&#x27;s token and grant everything.</p></div><div class="ctrl"><div class="lab">Control</div><p>Token translation plus action-class blocking at the boundary.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Teach a legacy service to refuse agent writes it cannot understand.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 37 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.7 · Systems that don't understand agents</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Identity &amp; Non-Human Identity Engineer</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.6.html">A2.6 · The agentic gateway</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.7 — Attribution: an audit trail that answers &quot;who&quot; | Cyber Commons</title><meta name="description" content="Per-hop attribution written to an append-only store outside the agent&#x27;s reach."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › Controls — Identity and Ingress</div><div class="sid">A2.7</div><h1>Attribution: an audit trail that answers &quot;who&quot;</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed.</p></div><div class="ctrl"><div class="lab">Control</div><p>Per-hop attribution written to an append-only store outside the agent&#x27;s reach.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Answer &#x27;which user caused this deletion&#x27; from the trace, then try the same on a trace missing one field.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 12 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.7 · Attribution: an audit trail that answers "who"</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → Controls — Identity and Ingress</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.6.html">A2.6 · Ingress: marking untrusted content at the door</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,7 +11,7 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>agentgateway, OPA</td>
+<td>OpenTelemetry, Sigstore</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
@@ -22,115 +22,68 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>A2.6 assumed you can put a gateway in front of the system. Sometimes you cannot.</p>
-<p>There is a category of system where the agent must be allowed access, the system
-cannot be modified, and no meaningful per-agent identity is possible:</p>
-<ul>
-<li>A vendor SaaS with one API key per tenant.</li>
-<li>A mainframe or ERP where the integration account was configured in 2003 and
-  the person who understood it has retired.</li>
-<li>A database that only does username/password, reached over a private link.</li>
-</ul>
-<p>You cannot give these systems identity. What you <em>can</em> do is control <strong>the one
-place every call passes through</strong> — a choke point — and apply the controls that
-do not need identity:</p>
-<ul>
-<li><strong>Rate limiting</strong>, so a compromised agent cannot drain a dataset at machine
-  speed.</li>
-<li><strong>Volume and pattern budgets</strong>, because the difference between an agent doing
-  its job and an agent exfiltrating is almost always <em>quantity</em>.</li>
-<li><strong>Time-of-day and concurrency limits</strong>, matching the business process the
-  legacy system actually serves.</li>
-<li><strong>Full recording at the choke point</strong>, since the downstream log is useless.</li>
-</ul>
-<p>This is a genuinely weaker control than identity, and it should be labelled as
-such rather than presented as equivalent. What it buys is a bounded worst case.</p></div><div class="nbmd"><h2>2 · Demo — the legacy system, and why identity is off the table</h2>
-<p>A customer database behind one shared account. Every consumer — three agents and a nightly batch job — presents the same credential.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-from dataclasses import dataclass, field
+<p><strong>Mitigates: T8 Repudiation &amp; Untraceability · T13 Rogue Agents.</strong></p>
+<p>A1.13 showed a log that was complete for debugging and empty for investigation.
+This is the record that is not.</p>
+<p>Four fields, each answering a question the tool-call log could not:</p>
+<p><strong>The human principal</strong> — who caused this. From A2.1.</p>
+<p><strong>The agent identity and instance</strong> — what performed it, and which run. From
+A2.2, so it is attested rather than claimed.</p>
+<p><strong>The delegation chain</strong> — how authority got from the human to this action. From
+A2.3, which is also what makes A1.16's laundering path visible.</p>
+<p><strong>The motivating input, with its origin</strong> — what made the agent decide. From
+A2.6. This is the field that establishes root cause, and the one most often
+missing, because logging tool calls feels like logging decisions.</p>
+<p>Then the structural property, which is not a field: <strong>the store must be outside
+the agent's reach.</strong> An agent with broad credentials can usually touch the
+logging stack, and a record the actor can edit is not evidence. Append-only,
+different credential, ideally different trust domain.</p>
+<p>The test is not whether the log looks thorough. It is whether you can answer
+"which user caused this, and what made it happen" without asking anyone.</p></div><div class="nbmd"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>Makes the incident answerable. Also the control an auditor asks for first, because a system that cannot attribute an action cannot be defended even on a quiet day.\n\n## 2 · The control</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>LEDGER = []          # append-only, and the agent holds no credential for it
 
-LEGACY = {&quot;name&quot;: &quot;crm-oracle-prod&quot;, &quot;auth&quot;: &quot;shared username/password&quot;,
-          &quot;per_caller_identity&quot;: False, &quot;can_be_modified&quot;: False,
-          &quot;holds&quot;: &quot;1.2M customer records&quot;}
-for k, v in LEGACY.items():
-    print(f&quot;{k:22s} {v}&quot;)
+def record(principal, workload, instance, chain, action, motivating):
+    LEDGER.append({
+        &quot;principal&quot;: principal, &quot;workload&quot;: workload, &quot;instance&quot;: instance,
+        &quot;chain&quot;: list(chain), &quot;action&quot;: action,
+        &quot;motivating_input&quot;: motivating[&quot;text&quot;][:44],
+        &quot;input_origin&quot;: motivating[&quot;origin&quot;],
+    })
 
-CONSUMERS = [&quot;support-agent&quot;, &quot;billing-agent&quot;, &quot;analytics-agent&quot;, &quot;nightly-batch&quot;]
-print(f&quot;\nconsumers sharing one credential: {CONSUMERS}&quot;)
-print(&quot;the database&#x27;s own log will attribute every query to &#x27;SVC_CRM_INT&#x27;.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — normal use and abuse look identical</h2>
-<p>The support agent legitimately reads customer records. So does an agent whose prompt has been compromised. Per-query, they are indistinguishable — which is exactly why the control has to be about <em>rate and volume</em>, not about intent.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def session(name, queries, rows_each, seconds):
-    return {&quot;caller&quot;: name, &quot;queries&quot;: queries, &quot;rows&quot;: queries * rows_each,
-            &quot;seconds&quot;: seconds, &quot;rows_per_min&quot;: queries * rows_each / (seconds/60)}
+def agent_writes(entry):
+    &quot;&quot;&quot;The agent tries to amend the record.&quot;&quot;&quot;
+    raise PermissionError(&quot;ledger is append-only and out of the agent&#x27;s trust domain&quot;)
 
-sessions = [
-    session(&quot;support-agent  (normal)&quot;,     40,     1, 3600),
-    session(&quot;billing-agent  (normal)&quot;,    600,     1, 3600),
-    session(&quot;nightly-batch  (normal)&quot;,      1, 50000, 1800),
-    session(&quot;support-agent  (compromised)&quot;, 9000,  50,  120),
-]
-print(f&quot;{&#x27;caller&#x27;:30s}{&#x27;queries&#x27;:&gt;8}{&#x27;rows&#x27;:&gt;9}{&#x27;rows/min&#x27;:&gt;11}&quot;)
-print(&quot;-&quot; * 60)
-for s in sessions:
-    print(f&quot;{s[&#x27;caller&#x27;]:30s}{s[&#x27;queries&#x27;]:&gt;8}{s[&#x27;rows&#x27;]:&gt;9}{s[&#x27;rows_per_min&#x27;]:&gt;11.0f}&quot;)
-print(&quot;\nEvery one of these presents the same credential and issues valid SQL.&quot;)
-print(&quot;The compromised session is not doing anything the account may not do —&quot;)
-print(&quot;it is doing a permitted thing far too much.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — a throttling choke point</h2>
-<p>One place all four consumers must pass through. It cannot tell them apart cryptographically, but it <em>can</em> give each a named lane with its own budget, and enforce the budget.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
-class ChokePoint:
-    &quot;&quot;&quot;The one place every call to the legacy system passes through.
+record(&quot;dana@corp&quot;, &quot;spiffe://corp/reports-agent&quot;, &quot;run-8812&quot;,
+       [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;reports-agent&quot;],
+       &quot;run_query DELETE FROM invoices WHERE id=8812&quot;,
+       {&quot;text&quot;: &quot;wiki/473: retire invoice 8812 when the customer closes&quot;, &quot;origin&quot;: &quot;knowledge&quot;})
 
-    Identity here is a *declared lane*, not a proven one — a compromised agent
-    could claim another lane. That is an honest weakness: the control bounds
-    the worst case, it does not attribute. Say so in the design doc.
-    &quot;&quot;&quot;
-    budgets: dict                        # lane -&gt; (rows_per_min, max_concurrent)
-    window_start: float = field(default_factory=time.time)
-    used: dict = field(default_factory=dict)
-    log: list = field(default_factory=list)
+QUESTIONS = {
+ &quot;which user caused the deletion?&quot;:         lambda e: e[&quot;principal&quot;],
+ &quot;what performed it?&quot;:                      lambda e: f&quot;{e[&#x27;workload&#x27;]} ({e[&#x27;instance&#x27;]})&quot;,
+ &quot;how did authority reach it?&quot;:             lambda e: &quot; -&gt; &quot;.join(e[&quot;chain&quot;]),
+ &quot;what made the agent decide?&quot;:             lambda e: f&quot;{e[&#x27;motivating_input&#x27;]!r} from {e[&#x27;input_origin&#x27;]}&quot;,
+}
+e = LEDGER[0]
+for q, answer in QUESTIONS.items():
+    print(f&quot;   {q:36s}{answer(e)}&quot;)
 
-    def query(self, lane, rows, at=None):
-        at = at or time.time()
-        limit, _ = self.budgets.get(lane, (0, 0))
-        spent = self.used.get(lane, 0)
-        if spent + rows &gt; limit:
-            entry = {&quot;lane&quot;: lane, &quot;rows&quot;: rows, &quot;allowed&quot;: False,
-                     &quot;why&quot;: f&quot;rate budget exceeded: {spent}+{rows} &gt; {limit} rows/min&quot;}
-            self.log.append(entry); return entry
-        self.used[lane] = spent + rows
-        entry = {&quot;lane&quot;: lane, &quot;rows&quot;: rows, &quot;allowed&quot;: True,
-                 &quot;remaining&quot;: limit - self.used[lane]}
-        self.log.append(entry); return entry
+print(f&quot;\nquestions answerable: {len(QUESTIONS)}/{len(QUESTIONS)}&quot;)
+print()
+print(f&quot;input origin was {e[&#x27;input_origin&#x27;]!r} - a trust-0 component. That single&quot;)
+print(&quot;field turns &#x27;the agent deleted an invoice&#x27; into &#x27;a wiki page told it to&#x27;,&quot;)
+print(&quot;which is a root cause rather than an observation.&quot;)
 
-choke = ChokePoint(budgets={
-    &quot;support-agent&quot;:   (200,    4),      # a human-paced support workflow
-    &quot;billing-agent&quot;:   (1200,   8),
-    &quot;analytics-agent&quot;: (5000,   2),
-    &quot;nightly-batch&quot;:   (60000,  1),      # bulk, but only in its window
-})
-
-print(&quot;normal traffic:&quot;)
-for lane, rows in [(&quot;support-agent&quot;, 30), (&quot;support-agent&quot;, 45),
-                   (&quot;billing-agent&quot;, 900), (&quot;nightly-batch&quot;, 50000)]:
-    r = choke.query(lane, rows)
-    print(f&quot;   {lane:18s} {rows:&gt;6} rows → &quot;
-          f&quot;{&#x27;ok, &#x27; + str(r[&#x27;remaining&#x27;]) + &#x27; left&#x27; if r[&#x27;allowed&#x27;] else r[&#x27;why&#x27;]}&quot;)
-
-print(&quot;\ncompromised support agent tries to drain the table:&quot;)
-for attempt in range(1, 5):
-    r = choke.query(&quot;support-agent&quot;, 5000)
-    print(f&quot;   attempt {attempt}: {&#x27;ALLOWED&#x27; if r[&#x27;allowed&#x27;] else &#x27;BLOCKED — &#x27; + r[&#x27;why&#x27;]}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: what did the choke point actually bound?
-attacker_got = sum(e[&quot;rows&quot;] for e in choke.log
-                   if e[&quot;lane&quot;] == &quot;support-agent&quot; and e[&quot;allowed&quot;])
-unbounded = 9000 * 50
-print(f&quot;rows the compromised lane obtained: {attacker_got}&quot;)
-print(f&quot;rows it would have obtained unthrottled: {unbounded:,}&quot;)
-print(f&quot;reduction: {unbounded / max(attacker_got,1):,.0f}×&quot;)
-print(&quot;\nHonest framing for the design doc:&quot;)
-print(&quot;  · this does NOT tell you which agent misbehaved (no identity available)&quot;)
-print(&quot;  · it DOES bound the worst case to one lane&#x27;s budget per window&quot;)
-print(&quot;  · and the choke point log is the only per-caller record that exists&quot;)
-assert attacker_got &lt; unbounded</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The legacy system is shown with no per-caller identity. Normal and compromised sessions are indistinguishable per query — the compromised one differs only by rate (225,000 rows/min vs 40). The choke point permits normal traffic and blocks the drain attempts, bounding what the attacker obtains to a fraction of the unthrottled 450,000 rows.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Find one system in your estate where every agent shares a credential. Set a rows-per-minute budget from the <em>legitimate</em> workload's 99th percentile, not from the system's capacity. The gap between those two numbers is what an attacker currently has.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.8.html">A2.8 · Just-in-time authority</a></strong></p>
+try:
+    agent_writes({&quot;action&quot;: &quot;tidy up&quot;})
+except PermissionError as err:
+    print(f&quot;\nagent attempting to amend the ledger: refused ({err})&quot;)
+assert len(LEDGER) == 1 and LEDGER[0][&quot;input_origin&quot;] == &quot;knowledge&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take the last significant action one of your agents performed and try to fill in these four fields from what you actually logged. The missing one is almost always the motivating input.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.1.html">A3.1 · Default-deny on the tool call</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.7.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The legacy app is unchanged; the boundary does the work.</div><div class="chips"><span>agentgateway</span><span>OPA</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.7.ipynb</code></p></div><div class="pager"><a href="A2.6.html"><span class="k">← Previous</span><span class="t">A2.6 · The agentic gateway</span></a><a class="next" href="A2.8.html"><span class="k">Next →</span><span class="t">A2.8 · Just-in-time authority</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent&#x27;s attempt to amend the record is refused.</div><div class="chips"><span>OpenTelemetry</span><span>Sigstore</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.7.ipynb</code></p></div><div class="pager"><a href="A2.6.html"><span class="k">← Previous</span><span class="t">A2.6 · Ingress: marking untrusted content at the door</span></a><a class="next" href="A3.1.html"><span class="k">Next →</span><span class="t">A3.1 · Default-deny on the tool call</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

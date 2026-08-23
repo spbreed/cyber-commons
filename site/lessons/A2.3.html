@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.3 — Shadow Autonomy | Cyber Commons</title><meta name="description" content="Detect it first, then separate the principal; revocation is impossible until you can name the actor."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.3</div><h1>Shadow Autonomy</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Agents executing under inherited human credentials — your audit trail is already wrong.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detect it first, then separate the principal; revocation is impossible until you can name the actor.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Find agents running on inherited human credentials.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 52 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.3 · Shadow Autonomy</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Identity &amp; Non-Human Identity Engineer</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">A2.2 · The bootstrap problem</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.3 — Delegation that narrows, and survives audit | Cyber Commons</title><meta name="description" content="Token exchange that intersects presented scope with the actor&#x27;s ceiling, and records the chain."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › Controls — Identity and Ingress</div><div class="sid">A2.3</div><h1>Delegation that narrows, and survives audit</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Subset-only lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked.</p></div><div class="ctrl"><div class="lab">Control</div><p>Token exchange that intersects presented scope with the actor&#x27;s ceiling, and records the chain.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run both narrowing rules against a request that passes one and fails the other.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 11 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.3 · Delegation that narrows, and survives audit</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → Controls — Identity and Ingress</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">A2.2 · Bootstrapping the first credential</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,136 +11,84 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>Keycloak, SPIRE</td>
+<td>Keycloak</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>Llama 3.3</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p><strong>Shadow autonomy</strong> is what you get when an agent acts using a human's identity.</p>
-<p>It is not a bug anyone wrote. It is the path of least resistance: the agent
-needs permissions, the human already has them, handing over the human's token
-takes ten minutes and requesting a properly scoped agent identity takes three
-weeks. Everyone involved is being reasonable.</p>
-<p>The result is that the agent becomes indistinguishable from the person, in every
-system that matters:</p>
-<ul>
-<li>The audit log names the human for actions they never saw.</li>
-<li>Anomaly detection tuned to human behaviour sees a human doing 400 things a
-  minute and either alerts on everything or gets retuned until it alerts on
-  nothing.</li>
-<li>Incident containment aims at the human's account, which does not stop the
-  agent if it holds a copy of the token.</li>
-<li>The human is accountable, in the formal sense, for decisions made by a model
-  they cannot inspect.</li>
-</ul>
-<p>The name is deliberate: the autonomy is real, and it is invisible to every
-control you have.</p></div><div class="nbmd"><h2>2 · Demo — an ordinary Tuesday, correctly recorded</h2>
-<p>First, what a <em>properly</em> attributed session looks like, so the broken one is recognisable by contrast.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-from dataclasses import dataclass, field
+<p><strong>Mitigates: T3 Privilege Compromise · T8 Repudiation · T14 Human Attacks.</strong></p>
+<p>The agent has its own identity now. This lesson is about carrying the user's
+authority alongside it without either losing it or amplifying it.</p>
+<p>Delegation — RFC 8693 token exchange, "on behalf of" — issues a new token for a
+downstream hop. It must satisfy <strong>two</strong> narrowing rules, and checking only one
+is the common and dangerous mistake:</p>
+<p><strong>Subset of presented.</strong> The issued token carries no more scope than the
+incoming one. Stops the agent inventing authority.</p>
+<p><strong>Within the actor's ceiling.</strong> The issued token carries no more than the
+receiving agent is ever permitted to hold. Stops a privileged user handing an
+agent authority the agent must never have.</p>
+<p>Neither is sufficient alone, and they fail in opposite directions. Subset-only
+lets an admin's request give a low-trust agent <code>db:admin</code> — legitimately, and it
+looks correct in every log. Ceiling-only lets an agent exceed the person who
+asked, which is A1.6.</p>
+<p>The issued scope is the <strong>intersection</strong>.</p>
+<p>The second half is the <strong>actor chain</strong>: <code>dana → orchestrator → patch-agent</code>,
+recorded on the token and carried to every hop. That is what makes A1.13
+answerable and what makes A1.16's laundering path visible, because the
+composition is written down rather than inferred.</p></div><div class="nbmd"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>Both rules, every hop. Checking one is how a privileged user hands an agent authority it must never hold — legitimately, and invisibly.\n\n## 2 · The control</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CEILINGS = {
+ &quot;dana@corp&quot;:     {&quot;reports:read&quot;, &quot;reports:write&quot;},
+ &quot;priya@corp&quot;:    {&quot;reports:read&quot;, &quot;reports:write&quot;, &quot;db:admin&quot;},
+ &quot;orchestrator&quot;:  {&quot;reports:read&quot;, &quot;reports:write&quot;},
+ &quot;patch-agent&quot;:   {&quot;reports:read&quot;},
+}
 
-@dataclass
-class LogLine:
-    ts: float
-    logged_actor: str      # what the audit log says
-    real_actor: str        # what actually happened
-    action: str
-    target: str = &quot;&quot;
+class DelegationError(Exception): pass
 
-def render(lines, truth=False):
-    base = lines[0].ts
-    out = [f&quot;{&#x27;t+s&#x27;:&gt;5}  {&#x27;actor&#x27;:16s}{&#x27;action&#x27;:16s}target&quot;]
-    for ln in sorted(lines, key=lambda x: x.ts):
-        who = ln.real_actor if truth else ln.logged_actor
-        out.append(f&quot;{ln.ts-base:&gt;5.0f}  {who:16s}{ln.action:16s}{ln.target}&quot;)
-    return &quot;\n&quot;.join(out)
+def exchange(presented_scopes, presented_chain, actor, requested):
+    &quot;&quot;&quot;One hop. BOTH narrowing rules, then record the chain.&quot;&quot;&quot;
+    requested = set(requested)
+    if not requested &lt;= set(presented_scopes):                    # rule 1
+        raise DelegationError(
+            f&quot;widening: {sorted(requested - set(presented_scopes))} not in presented&quot;)
+    ceiling = CEILINGS[actor]
+    issued = requested &amp; ceiling                                  # rule 2
+    if issued != requested:
+        print(f&quot;      (narrowed by {actor} ceiling: dropped &quot;
+              f&quot;{sorted(requested - ceiling)})&quot;)
+    return {&quot;scopes&quot;: issued, &quot;chain&quot;: presented_chain + [actor]}
 
-t0 = time.time()
-proper = [
-    LogLine(t0,      &quot;dana@corp&quot;,    &quot;dana@corp&quot;,    &quot;login&quot;,       &quot;console&quot;),
-    LogLine(t0+30,   &quot;dana@corp&quot;,    &quot;dana@corp&quot;,    &quot;assign_task&quot;, &quot;finding-4471&quot;),
-    LogLine(t0+31,   &quot;triage-agent&quot;, &quot;triage-agent&quot;, &quot;read_source&quot;, &quot;src/auth.py&quot;),
-    LogLine(t0+33,   &quot;triage-agent&quot;, &quot;triage-agent&quot;, &quot;open_pr&quot;,     &quot;pr/8812&quot;),
-]
-print(&quot;PROPERLY ATTRIBUTED — agent has its own identity&quot;)
-print(render(proper))</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the same Tuesday, one shortcut</h2>
-<p>Now the agent is handed Dana's token. Nothing else changes: same actions, same times, same outcome. Only the identity is different.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>shadow = [
-    LogLine(t0,      &quot;dana@corp&quot;, &quot;dana@corp&quot;,    &quot;login&quot;,        &quot;console&quot;),
-    LogLine(t0+30,   &quot;dana@corp&quot;, &quot;dana@corp&quot;,    &quot;assign_task&quot;,  &quot;finding-4471&quot;),
-    LogLine(t0+31,   &quot;dana@corp&quot;, &quot;triage-agent&quot;, &quot;read_source&quot;,  &quot;src/auth.py&quot;),
-    LogLine(t0+33,   &quot;dana@corp&quot;, &quot;triage-agent&quot;, &quot;open_pr&quot;,      &quot;pr/8812&quot;),
-    LogLine(t0+34,   &quot;dana@corp&quot;, &quot;triage-agent&quot;, &quot;merge_pr&quot;,     &quot;pr/8812&quot;),
-    LogLine(t0+36,   &quot;dana@corp&quot;, &quot;triage-agent&quot;, &quot;deploy&quot;,       &quot;prod&quot;),
-]
-print(&quot;WHAT THE RESPONDER SEES&quot;)
-print(render(shadow))
-print(&quot;\nWHAT ACTUALLY HAPPENED&quot;)
-print(render(shadow, truth=True))
+# --- the honest path -------------------------------------------------------
+user = {&quot;scopes&quot;: CEILINGS[&quot;dana@corp&quot;], &quot;chain&quot;: [&quot;dana@corp&quot;]}
+hop1 = exchange(user[&quot;scopes&quot;], user[&quot;chain&quot;], &quot;orchestrator&quot;,
+                {&quot;reports:read&quot;, &quot;reports:write&quot;})
+hop2 = exchange(hop1[&quot;scopes&quot;], hop1[&quot;chain&quot;], &quot;patch-agent&quot;, {&quot;reports:read&quot;})
+print(f&quot;   chain  : {&#x27; -&gt; &#x27;.join(hop2[&#x27;chain&#x27;])}&quot;)
+print(f&quot;   scopes : {sorted(hop2[&#x27;scopes&#x27;])}&quot;)
 
-def reconstruct(lines):
-    logged = {l.logged_actor for l in lines}
-    real   = {l.real_actor for l in lines}
-    wrong  = [l for l in lines if l.logged_actor != l.real_actor]
-    return {&quot;actors_in_logs&quot;: sorted(logged), &quot;actors_in_reality&quot;: sorted(real),
-            &quot;misattributed_lines&quot;: len(wrong),
-            &quot;hidden_actors&quot;: sorted(real - logged),
-            &quot;attribution&quot;: &quot;sound&quot; if not wrong else &quot;BROKEN&quot;}
-
-r = reconstruct(shadow)
-for k, v in r.items():
-    print(f&quot;{k:22s} {v}&quot;)</code></pre></div><div class="nbmd"><h2>4 · The three controls that misfire</h2>
-<p>This is the part worth internalising: shadow autonomy does not merely make logs untidy. It <strong>breaks controls you are relying on</strong>, silently.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- control 1: behavioural anomaly detection -------------------------
-def human_baseline_alert(lines, actor):
-    acts = [l for l in lines if l.logged_actor == actor]
-    if len(acts) &lt; 2: return None
-    span = max(l.ts for l in acts) - min(l.ts for l in acts)
-    rate = len(acts) / max(span, 1e-9) * 60
-    return (f&quot;{actor}: {rate:.0f} actions/min — &quot;
-            f&quot;{&#x27;IMPOSSIBLE for a human, alert&#x27; if rate &gt; 30 else &#x27;normal&#x27;}&quot;)
-
-print(&quot;control 1 — anomaly detection tuned for humans&quot;)
-print(&quot;   &quot;, human_baseline_alert(shadow, &quot;dana@corp&quot;))
-print(&quot;    → this alert fires on every agent-assisted session, so it gets tuned&quot;)
-print(&quot;      down or disabled within a week. Then it never fires again.&quot;)
-
-# --- control 2: incident containment ---------------------------------
-print(&quot;\ncontrol 2 — containment&quot;)
-def contain(disable_account, lines):
-    stopped = {l.real_actor for l in lines if l.logged_actor == disable_account
-               and l.real_actor == disable_account}
-    still_running = {l.real_actor for l in lines} - stopped
-    return sorted(still_running)
-print(f&quot;    disable dana@corp → still running: {contain(&#x27;dana@corp&#x27;, shadow)}&quot;)
-print(&quot;    → the agent holds a copy of the token. Disabling the human&#x27;s login&quot;)
-print(&quot;      does not invalidate a bearer token already issued.&quot;)
-
-# --- control 3: accountability ---------------------------------------
-print(&quot;\ncontrol 3 — accountability&quot;)
-print(&quot;    formal record: dana@corp deployed to prod at t+36s&quot;)
-print(&quot;    reality:       dana was in a meeting; a model chose to deploy&quot;)
-print(&quot;    → she is accountable for a decision she could not have reviewed.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The fix, and why it is A2.5's job</h2>
-<p>The fix is not "log harder". You cannot recover the acting identity afterwards, because it was never transmitted — the resource server saw Dana's token and recorded exactly what it was given.</p>
-<p>The fix is that the agent must present a token that names <em>both</em>. That is on-behalf-of, and it is A2.5. What this lesson establishes is that the alternative is not merely untidy: it disables anomaly detection, containment and accountability at the same time.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def containment_options(has_agent_identity):
-    if has_agent_identity:
-        return [&quot;revoke the agent identity (agent stops, human keeps working)&quot;,
-                &quot;revoke the human (agent&#x27;s delegated tokens die with the chain)&quot;,
-                &quot;revoke one agent in a fleet, leaving the others up&quot;]
-    return [&quot;disable the human&#x27;s account (agent may continue on a live token)&quot;,
-            &quot;rotate the shared credential (breaks every consumer at once)&quot;,
-            &quot;…that is the complete list&quot;]
-
-for label, flag in ((&quot;with agent identity&quot;, True), (&quot;shadow autonomy&quot;, False)):
-    print(f&quot;{label}:&quot;)
-    for o in containment_options(flag):
-        print(f&quot;   · {o}&quot;)
-    print()</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The properly-attributed timeline names <code>triage-agent</code> for its own actions. The shadow timeline is identical except that all four agent actions are logged as <code>dana@corp</code> — attribution BROKEN, 4 misattributed lines, <code>triage-agent</code> hidden. The anomaly rule computes an impossible human rate, containment shows the agent still running after the account is disabled, and the containment-options list collapses to two bad choices.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Search your audit logs for a human account performing more than 30 actions in a minute. Every hit is either an incident or shadow autonomy, and you will not be able to tell which from the log alone — which is the point.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.4.html">A2.4 · The NHI governance gap</a></strong></p>
+# --- a privileged user, and the rule that saves you ------------------------
+print(&quot;\npriya holds db:admin. She asks the same low-trust agent to use it:&quot;)
+priv = {&quot;scopes&quot;: CEILINGS[&quot;priya@corp&quot;], &quot;chain&quot;: [&quot;priya@corp&quot;]}
+subset_only = {&quot;db:admin&quot;} &lt;= priv[&quot;scopes&quot;]
+issued = exchange(priv[&quot;scopes&quot;], priv[&quot;chain&quot;], &quot;patch-agent&quot;, {&quot;db:admin&quot;})
+print(f&quot;   subset-of-presented alone would allow it : {subset_only}&quot;)
+print(f&quot;   scopes actually issued                   : {sorted(issued[&#x27;scopes&#x27;]) or &#x27;none&#x27;}&quot;)
+print()
+print(&quot;Subset-only says yes - she really does hold db:admin. The ceiling rule&quot;)
+print(&quot;issues the intersection, which is empty, because patch-agent may never&quot;)
+print(&quot;hold it no matter who asks.&quot;)
+assert subset_only and not issued[&quot;scopes&quot;]
+assert hop2[&quot;chain&quot;] == [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>A two-hop delegation narrows to <code>reports:read</code> and records the chain <code>dana → orchestrator → patch-agent</code>. A privileged user's request for <code>db:admin</code> passes subset-of-presented and still issues nothing, because the receiving agent's ceiling is empty of it.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Find your token exchange and check which of the two rules it implements. Most implement subset-of-presented, because it is the one the specification example shows.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.4.html">A2.4 · Just-in-time authority</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.3.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Flags credentials used with machine timing/sequencing. Every hit is an audit trail that is currently wrong.</div><div class="chips"><span>Keycloak</span><span>SPIRE</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.3.ipynb</code></p></div><div class="pager"><a href="A2.2.html"><span class="k">← Previous</span><span class="t">A2.2 · The bootstrap problem</span></a><a class="next" href="A2.4.html"><span class="k">Next →</span><span class="t">A2.4 · The NHI governance gap</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A two-hop delegation narrows to `reports:read` and records the chain `dana → orchestrator → patch-agent`. A privileged user&#x27;s request for `db:admin` passes subset-of-presented and still issues nothing, because the receiving agent&#x27;s ceiling is empty of it.</div><div class="chips"><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.3.ipynb</code></p></div><div class="pager"><a href="A2.2.html"><span class="k">← Previous</span><span class="t">A2.2 · Bootstrapping the first credential</span></a><a class="next" href="A2.4.html"><span class="k">Next →</span><span class="t">A2.4 · Just-in-time authority</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

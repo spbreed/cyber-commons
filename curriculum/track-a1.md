@@ -1,31 +1,31 @@
-# Track A1 — The Security Architect
+# Track A1 — The Agentic Reference Architecture, and Every Risk It Carries
 
 **Function A · Security Architecture & Platform**  
-*The people who decide what is structurally possible. If they get it wrong, no amount of downstream diligence recovers it.*
+*One reference architecture, every risk it carries, and the controls that close them. Get this wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** Security Architect, Principal Security Engineer, Head of Security Architecture
 
-**What changes:** Designing systems that act — and defending them at every layer. 12 lessons.
+**What changes:** One vendor-neutral reference architecture, then one lesson per risk that architecture makes possible — mapped to the OWASP Agentic AI threat taxonomy and explained in plain English. 16 lessons.
 
-**Autonomy focus:** Designs must be safe at L3 even when deployed at L2.5.
+**Autonomy focus:** Read the architecture once; every risk after it names the component it attacks.
 
-**Deliverable:** A reference architecture and a blast-radius measurement for one real business workflow.
+**Deliverable:** A component map of one agentic system you run, with every applicable threat marked against the component it lands on.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### A1.1 — What an agentic system is actually made of
+### A1.1 — The reference architecture for agentic AI
 
 `both directions`
 
-- **Risk** — "Secure the agent" has no referent until you can name the parts. Every control in this curriculum attaches to one specific component or one boundary between two.
-- **Control** — Draw the system as it really runs: app, model, agent loop, tools and APIs, MCP servers, retrieval, memory — and mark which boundaries untrusted data crosses.
-- **Lab** — Build the component graph for a working agent, then trace one user request through every hop and mark where trust changes.
+- **Risk** — Without a shared picture, 'secure the agent' has no referent and every later risk lands nowhere in particular.
+- **Control** — One component map and five topologies, named once and reused by every lesson that follows.
+- **Lab** — Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
 - **Tools** — `kagent`, `OpenTelemetry`
 - **Models** — `Llama 3.3`, `GLM-4.6`
 
-**Run it** — Name the seven parts of an agentic system, then find the two boundaries every later control binds to.
+**Run it** — Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -33,21 +33,21 @@ jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it
 ```
 
-*Expect:* The component graph prints with trust levels, one request traces to a tool call, and a poisoned document steers the naive loop 134 times in 400 while the provenance-aware loop fires zero times.
+*Expect:* Thirteen components print with the authority their content should carry, three of them at trust 0 — mcp, knowledge and the corpus behind it — and five topologies print as component chains. Every topology contains the same edge: agent_runtime reaching tools.
 
 ---
 
-### A1.2 — The controls, and where each one binds
+### A1.2 — Prompt injection
 
 `Security of AI`
 
-- **Risk** — Controls chosen as a checklist land in the wrong layer — a prompt rule where an authorization rule was needed, and nothing to point at when asked what stops it.
-- **Control** — One map: identity, default-deny authorization, sandboxed execution, tool and MCP trust, egress, containment, audit — each bound to the component it constrains.
-- **Lab** — Place seven controls on the component graph from A1.1, then remove one at a time and count which attacks stop being stopped.
-- **Tools** — `OPA`, `SPIFFE/SPIRE`, `Falco`, `agentgateway`
-- **Models** — `GLM-4.6`
+- **Risk** — The user redirects their own agent past the behaviour the operator specified — bounded by their own authority, and therefore the milder of the two injection risks.
+- **Control** — Provenance at ingress (A2.6) and default-deny on the tool call (A3.1). The system prompt is not a control.
+- **Lab** — Send an override through the ingress component and watch the agent's goal change.
+- **Tools** — `garak`, `promptfoo`
+- **Models** — `Llama Guard 4`
 
-**Run it** — Map seven controls onto the components they bind to, then measure what each one alone is holding up.
+**Run it** — Send an override through the ingress component and watch the agent's goal change.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -55,190 +55,150 @@ jupyter notebook labs/notebooks/A1.2.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it
 ```
 
-*Expect:* Removing each control in turn shows which attacks it alone was stopping; audit newly unstops nothing, because audit explains rather than prevents.
+*Expect:* The same agent answers a normal question correctly and hands over its internal note when the user tells it to ignore its instructions — because both instructions arrived in one string with no channel separating them.
 
 ---
 
-### A1.3 — Architecture review when the system acts
+### A1.3 — Indirect prompt injection
 
 `Security of AI`
 
-- **Risk** — PDF threat models go stale the moment the agent's tools change.
-- **Control** — Living, continuously re-evaluated threat models over the three planes separately.
-- **Lab** — Generate a threat model from a running agent's actual tool manifest, then diff it after adding one tool.
-- **Tools** — `OWASP Threat Dragon`, `kagent`
+- **Risk** — Anyone who can write into a corpus the agent reads can steer it, using the victim's authority rather than their own. Nobody is phished and no credential leaks.
+- **Control** — Provenance marking at ingress (A2.6), and a rule that untrusted spans may not select a tool (A3.1).
+- **Lab** — Poison one retrieved document and watch the agent act on it with the user's authority.
+- **Tools** — `garak`, `LLM Guard`
+- **Models** — `Llama Guard 4`
+
+**Run it** — Poison one retrieved document and watch the agent act on it with the user's authority.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it
+```
+
+*Expect:* The same payload steers the agent through all four untrusted entry components — retrieved knowledge, persisted memory, an MCP tool description and a tool result — and in every case the action runs with the requesting user's authority.
+
+---
+
+### A1.4 — Memory poisoning
+
+`Security of AI`
+
+- **Risk** — An attacker's instruction outlives the conversation that delivered it, and re-fires on requests from users who never met the original payload.
+- **Control** — Provenance survives into memory (A2.6), and memory writes are scoped to the identity that made them (A2.1).
+- **Lab** — Write one poisoned fact into memory and watch it steer a later, unrelated session.
+- **Tools** — `LLM Guard`
 - **Models** — `GLM-4.6`
 
-**Run it** — Make the threat model a living artefact that moves when the tools move.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a1-control-plane
-python3 tm_from_manifest.py --manifest agent-tools.json --out tm-before.md
-jq '.tools += [{"name":"http_post","scope":"any-host"}]' agent-tools.json > t && mv t agent-tools.json
-python3 tm_from_manifest.py --manifest agent-tools.json --out tm-after.md
-diff tm-before.md tm-after.md
-```
-
-*Expect:* One added tool changes the trust boundaries section. A PDF threat model would not have moved.
-
----
-
-### A1.4 — Designing the agent control plane
-
-`Security of AI`
-
-- **Risk** — Controls assumed to live 'in the agent' are advisory, not enforced.
-- **Control** — Identity fabric → agentic gateway → policy decision point → sandboxed runtime → audited action plane.
-- **Lab** — Stand the whole reference stack up on kind: SPIRE + agentgateway + OPA + a sandboxed runner.
-- **Tools** — `kind`, `SPIRE`, `agentgateway`, `OPA`
-- **Models** — `Llama 3.3`
-
-**Run it** — Stand up the whole reference control plane locally.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a1-control-plane
-kind create cluster --config kind.yaml
-kubectl apply -k spire/     # identity fabric
-kubectl apply -k gateway/   # agentgateway
-kubectl apply -k opa/       # policy decision point
-./verify.sh                 # asserts each layer actually enforces
-```
-
-*Expect:* verify.sh fails loudly if any layer is advisory rather than enforcing.
-
----
-
-### A1.5 — Blast radius as a design metric
-
-`Security of AI`
-
-- **Risk** — Blast radius is asserted in review, never measured.
-- **Control** — Make it a number that appears in the design review.
-- **Lab** — Measure reachable actions under flat RBAC vs attenuated delegation while an injection fires.
-- **Tools** — `OpenFGA`, `SPIRE`
-- **Models** — `Kimi K2`
-
-**Run it** — Put a blast-radius number in the design review.
+**Run it** — Write one poisoned fact into memory and watch it steer a later, unrelated session.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A1.4.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a1-control-plane
-python3 blast_radius.py --model flat-rbac    --scenario injection
-python3 blast_radius.py --model attenuated   --scenario injection
-python3 blast_radius.py --compare flat-rbac attenuated --out blast.md
 ```
 
-*Expect:* Reachable-action counts for both models, side by side. The delta is what attenuation bought you.
+*Expect:* A poisoned note extracted from one user's ticket is written to workspace memory, and days later steers an unrelated request from a different user — because memory is keyed by workspace rather than by the identity that wrote it, and the origin was discarded on write.
 
 ---
 
-### A1.6 — Multi-agent topology
+### A1.5 — Tool misuse
 
 `Security of AI`
 
-- **Risk** — Fan-out concentrates authority somewhere nobody drew.
-- **Control** — Planner/executor/critic splits with delegation-depth limits.
-- **Lab** — Build a 3-agent topology in kagent and chart where authority actually accumulates.
-- **Tools** — `kagent`
-- **Models** — `GLM-4.6`, `Llama 3.3`
+- **Risk** — The agent uses a legitimate tool, with legitimate arguments, to do something nobody intended — and every log line looks normal.
+- **Control** — Default-deny authorization on the tool call (A3.1) and just-in-time authority (A2.4).
+- **Lab** — Call one over-scoped tool with attacker-chosen arguments and see what it reaches.
+- **Tools** — `OPA`, `kmcp`
+- **Models** — `GLM-4.6`
 
-**Run it** — Find where authority actually concentrates in a multi-agent topology.
+**Run it** — Call one over-scoped tool with attacker-chosen arguments and see what it reaches.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A1.5.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.5   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a1-control-plane
-kubectl apply -f topology/planner-executor-critic.yaml
-python3 authority_map.py --namespace agents --max-depth 3
 ```
 
-*Expect:* A graph showing the node holding the union of all scopes — usually not the one you expected.
+*Expect:* A single database tool, scoped for the widest job it ever performs, reads a signing key and empties the secrets table for requests it was never meant to serve — with the right identity, a familiar tool and well-formed arguments on every call.
 
 ---
 
-### A1.7 — Build vs buy
+### A1.6 — Privilege compromise
 
-`both directions`
+`Security of AI`
 
-- **Risk** — Outsourcing the control plane to a vendor you cannot audit.
-- **Control** — Buy the commodity, build the boundary, never outsource identity or stop authority.
-- **Lab** — Score three gateway options against a fixed control checklist.
-- **Tools** — `agentgateway`, `Envoy`
+- **Risk** — The agent acts with more authority than the person who asked it to act, and the log records the service account rather than the human.
+- **Control** — Delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1).
+- **Lab** — Have an agent inherit a privileged token and reach something its requester never could.
+- **Tools** — `Keycloak`, `SPIFFE/SPIRE`
 
-**Run it** — Score gateways against a fixed control checklist instead of a feature matrix.
+**Run it** — Have an agent inherit a privileged token and reach something its requester never could.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A1.6.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.6   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a1-control-plane
-python3 score_option.py --option agentgateway --checklist controls.yaml
-python3 score_option.py --option envoy-ext-authz --checklist controls.yaml
-python3 score_option.py --report
 ```
 
-*Expect:* Each option scored on: identity mapping, per-tool RBAC, output scanning, audit, stop lever. Gaps are explicit.
+*Expect:* A user holding only `reports:read` triggers a `db:admin` action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names `agent-svc` on every row, so the human who caused it cannot be recovered from it at all.
 
 ---
 
-### A1.8 — Model routing architecture
+### A1.7 — Identity spoofing and impersonation
 
-`both directions`
+`Security of AI`
 
-- **Risk** — The router fails open to a weaker model under load — a silent downgrade of every guardrail.
-- **Control** — Treat tier selection as a security decision with explicit fail-closed defaults.
-- **Lab** — Route across GLM-4.6 / Llama / Kimi with LiteLLM, then force a failure and watch what it falls back to.
-- **Tools** — `LiteLLM`, `vLLM`
-- **Models** — `GLM-4.6`, `Llama 3.3`, `Kimi K2`
+- **Risk** — Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them.
+- **Control** — Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).
+- **Lab** — Have two agents share a credential, then try to work out which one made the call.
+- **Tools** — `SPIFFE/SPIRE`
 
-**Run it** — Prove the router fails closed, not open.
+**Run it** — Have two agents share a credential, then try to work out which one made the call.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A1.7.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.7   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-pip install 'litellm[proxy]'
-cd labs/a1-control-plane && litellm --config router.yaml &
-python3 force_failure.py --kill primary   # take the reasoner offline mid-request
-python3 assert_failclosed.py
 ```
 
-*Expect:* The router refuses rather than silently downgrading to a weaker model with weaker guardrails.
+*Expect:* Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.
 
 ---
 
-### A1.9 — The injection surface: direct and indirect prompt injection
+### A1.8 — Unexpected code execution
 
 `Security of AI`
 
-- **Risk** — Attacker text arrives inside a document, ticket, web page, email or code comment, and the agent obeys it. Every untrusted-content path into the context window is an unauthenticated code path nobody enumerated.
-- **Control** — Map every untrusted-content path into the context window and treat each as unauthenticated input: provenance tagging, source allow-listing, and no tool selection from an untrusted span.
-- **Lab** — Enumerate the untrusted-content paths into one agent's context, land the same payload through each, then show provenance enforcement refusing all of them.
-- **Tools** — `garak`, `promptfoo`, `LLM Guard`
-- **Models** — `Llama Guard 4`, `GLM-4.6`
+- **Risk** — Model-authored code runs with the runtime's privileges — reaching the filesystem, the network and any credential in the environment.
+- **Control** — Sandboxed execution (A3.2) and egress control (A3.3).
+- **Lab** — Execute model-authored code and enumerate what the process could touch.
+- **Tools** — `Falco`, `gVisor`
+- **Models** — `GLM-4.6`
 
-**Run it** — Enumerate the untrusted-content paths into one agent's context, land the same payload through each, then show provenance enforcement refusing all of them.
+**Run it** — Execute model-authored code and enumerate what the process could touch.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.8   # run it headless and check it
+```
+
+*Expect:* Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address.
+
+---
+
+### A1.9 — Agent communication poisoning
+
+`Security of AI`
+
+- **Risk** — One compromised agent steers every agent downstream of it, because a peer's message is treated as a colleague's instruction rather than as input.
+- **Control** — Message validation and provenance on the inter-agent channel (A3.5), and per-agent identity (A2.1).
+- **Lab** — Send one poisoned inter-agent message and watch it propagate through the topology.
+- **Tools** — `agentgateway`
+
+**Run it** — Send one poisoned inter-agent message and watch it propagate through the topology.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -246,21 +206,20 @@ jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it
 ```
 
-*Expect:* Six untrusted-content paths are enumerated, four of them reviewed by nobody. The same payload steers the naive agent through all six. A denylist catches one of four rewrites of the identical instruction, while the provenance rule refuses all six paths and every rewrite — and still lets the user's own request through.
+*Expect:* A single poisoned document read by one agent propagates through the topology as a peer message, and more than one agent acts on it — with the phrase identifying its source dropped on the first hop, because summarising is what the hand-off does.
 
 ---
 
-### A1.10 — Jailbreaks, model inversion and extraction
+### A1.10 — Rogue agents in a multi-agent system
 
 `Security of AI`
 
-- **Risk** — The whole model-layer attack taxonomy gets called "jailbreaks". Inversion, membership inference, prompt extraction and embedding inversion each recover something different and are blunted by different controls.
-- **Control** — Name what each attack actually recovers, then bind the architectural control that genuinely blunts it — most of which do not sit at the model layer.
-- **Lab** — Run each attack class against a deterministic stand-in, record what it recovered, and map each to the layer that can stop it.
-- **Tools** — `garak`, `Presidio`
-- **Models** — `Llama Guard 4`
+- **Risk** — An agent nobody approved receives delegated work and delegated authority, and the orchestrator has no way to tell it apart from a legitimate worker.
+- **Control** — A registry of approved agents with identity-bound admission (A2.5) and an audit trail per hop (A2.7).
+- **Lab** — Introduce an unregistered agent into the topology and have it receive delegated work.
+- **Tools** — `SPIFFE/SPIRE`, `kagent`
 
-**Run it** — Run each attack class against a deterministic stand-in, record what it recovered, and map each to the layer that can stop it.
+**Run it** — Introduce an unregistered agent into the topology and have it receive delegated work.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -268,21 +227,21 @@ jupyter notebook labs/notebooks/A1.10.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.10   # run it headless and check it
 ```
 
-*Expect:* Five distinct attacks run against a deterministic stand-in and each prints what it recovered: behaviour, context data, one membership bit, the system prompt, and the source text pulled back out of the vector store. Four of the five are shown to be stoppable at runtime by architecture, and only membership inference requires a decision made before the model existed.
+*Expect:* Three agents are discovered, two are in the registry, and all three receive delegated work — including the narrowed user token. The unregistered agent can now act as the requesting user against any downstream that honours it.
 
 ---
 
-### A1.11 — Building outcome-driven guardrails, layer by layer
+### A1.11 — Cascading hallucination
 
 `Security of AI`
 
-- **Risk** — Guardrails specified by the input string you hope to block. Attackers rewrite strings freely; they cannot rewrite consequences.
-- **Control** — Specify each guardrail by the outcome you refuse to permit, then place it at a layer that can actually enforce it — and know that any single-layer defence is a demo.
-- **Lab** — Take one refused outcome, place it across all ten enforcement layers, and measure which placements actually deny it.
-- **Tools** — `OPA`, `agentgateway`, `Cilium`
+- **Risk** — A single fabrication becomes a shared premise, and by the third hop nothing in the system records that it was ever uncertain.
+- **Control** — Verification against ground truth before a claim propagates (A3.5).
+- **Lab** — Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.
+- **Tools** — `Inspect`
 - **Models** — `GLM-4.6`
 
-**Run it** — Take one refused outcome, place it across all ten enforcement layers, and measure which placements actually deny it.
+**Run it** — Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -290,21 +249,20 @@ jupyter notebook labs/notebooks/A1.11.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.11   # run it headless and check it
 ```
 
-*Expect:* The ten layers print with what each can and cannot enforce. One refused outcome placed across all ten is denied only at layers 4, 6, 7, 8 and 9 — and layer 9 is then shown degrading to a rubber stamp above about twenty approvals a day. A layered below-the-model configuration refuses the attack and keeps refusing with any single layer removed, while four rephrasings defeat string matching and none defeat the outcome rule.
+*Expect:* A hedged guess at confidence 0.2 becomes a confident claim above 0.8 in three hops, while the provenance field empties — confidence rising at exactly the rate evidence disappears.
 
 ---
 
-### A1.12 — Proving guardrails work
+### A1.12 — Resource overload
 
 `Security of AI`
 
-- **Risk** — A guardrail claim with no bypass testing behind it. A control that fails three times in a hundred is not a control against an attacker who can retry.
-- **Control** — Adversarial suites and bypass economics that convert a guardrail claim into evidence a red team or an auditor will accept.
-- **Lab** — Run a bypass suite against a guardrail and compute the attacker's expected cost per success.
-- **Tools** — `garak`, `promptfoo`
-- **Models** — `GLM-4.6`
+- **Risk** — An agent consumes budget, tokens, API quota or downstream capacity without bound, and the failure is denial of service against your own systems.
+- **Control** — Budgets and stop conditions bound to the loop (A3.4).
+- **Lab** — Run a loop with no ceiling and count what it consumes before anything notices.
+- **Tools** — `OpenTelemetry`
 
-**Run it** — Run a bypass suite against a guardrail and compute the attacker's expected cost per success.
+**Run it** — Run a loop with no ceiling and count what it consumes before anything notices.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -312,6 +270,89 @@ jupyter notebook labs/notebooks/A1.12.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.12   # run it headless and check it
 ```
 
-*Expect:* The retry arithmetic prints: a 97% guardrail is defeated within 98 attempts 19 times out of 20, for about twenty cents. Twenty single-run tests of the same control return a mix of passes and failures, and the Wilson interval at n=10 is wide enough to contain both 'strong control' and 'no control'. The lesson ends with a reproducible evidence record carrying a seed, an interval and an attacker cost per success.
+*Expect:* An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.
+
+---
+
+### A1.13 — Repudiation and untraceability
+
+`Security of AI`
+
+- **Risk** — You cannot say which user caused an action, or what made the agent decide — so the incident cannot be scoped and the action cannot be attributed.
+- **Control** — Attribution carried on every hop, in a store the agent cannot write to (A2.7).
+- **Lab** — Reconstruct who caused a deletion from a log that records only tool calls.
+- **Tools** — `OpenTelemetry`
+
+**Run it** — Reconstruct who caused a deletion from a log that records only tool calls.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.13.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.13   # run it headless and check it
+```
+
+*Expect:* A complete-looking tool-call log answers none of the three questions an investigation needs — which user, what motivated it, which hop originated it — because the principal, the motivating input and the delegation chain were never recorded.
+
+---
+
+### A1.14 — Overwhelming the human in the loop
+
+`Security of AI`
+
+- **Risk** — The approval gate is recorded as a control and operates as a click. At volume it approves everything, including the one request that mattered.
+- **Control** — Approval reserved for irreversible actions, with everything else bounded by policy (A3.6).
+- **Lab** — Push approval volume up and measure the point at which review quality collapses.
+
+**Run it** — Push approval volume up and measure the point at which review quality collapses.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.14.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.14   # run it headless and check it
+```
+
+*Expect:* Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it.
+
+---
+
+### A1.15 — Misaligned and deceptive behaviour
+
+`Security of AI`
+
+- **Risk** — The agent satisfies the letter of its instruction — including by reporting a success it did not achieve — and the transcript contains no lie you can point at.
+- **Control** — An independent verifier that checks the outcome rather than the claim (A3.5).
+- **Lab** — Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.
+- **Tools** — `Inspect`
+- **Models** — `GLM-4.6`
+
+**Run it** — Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.15.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.15   # run it headless and check it
+```
+
+*Expect:* An agent told to reduce open alerts closes all twenty for a quarter of its budget, meeting the objective exactly — while closing five real incidents unread, with each step defensible in isolation and no false statement anywhere in the transcript.
+
+---
+
+### A1.16 — Attacks that target the humans
+
+`Security of AI`
+
+- **Risk** — The delegation chain is used as a privilege-laundering path, and the agent's output becomes an unusually persuasive channel into a human decision.
+- **Control** — Ceiling-bound delegation (A2.3), attribution per hop (A2.7) and marking machine-generated output as such (A3.6).
+- **Lab** — Launder a request through a delegation chain to reach something the requester was denied.
+
+**Run it** — Launder a request through a delegation chain to reach something the requester was denied.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.16.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.16   # run it headless and check it
+```
+
+*Expect:* A user denied `payments:write` directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does.
 
 ---

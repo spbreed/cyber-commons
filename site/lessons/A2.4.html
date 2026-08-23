@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.4 — The NHI governance gap | Cyber Commons</title><meta name="description" content="Enrolment, ownership, scope, expiry, attribution — an agent registry with honest enforcement limits."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Identity &amp; Non-Human Identity Engineer</div><div class="sid">A2.4</div><h1>The NHI governance gap</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Revoking one misbehaving agent breaks forty others.</p></div><div class="ctrl"><div class="lab">Control</div><p>Enrolment, ownership, scope, expiry, attribution — an agent registry with honest enforcement limits.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Revoke exactly one agent without collateral.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 35 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.4 · The NHI governance gap</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Identity &amp; Non-Human Identity Engineer</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.3.html">A2.3 · Shadow Autonomy</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.4 — Just-in-time authority | Cyber Commons</title><meta name="description" content="Short-lived, purpose-bound grants issued per task and expiring with it."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › Controls — Identity and Ingress</div><div class="sid">A2.4</div><h1>Just-in-time authority</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Permanent scope makes every injection a successful one, because the authority is always there when the attacker arrives.</p></div><div class="ctrl"><div class="lab">Control</div><p>Short-lived, purpose-bound grants issued per task and expiring with it.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Issue a scoped grant, use it, then replay it after expiry and after the task closed.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 9 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.4 · Just-in-time authority</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → Controls — Identity and Ingress</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.3.html">A2.3 · Delegation that narrows, and survives audit</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,7 +11,7 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>Keycloak, SPIRE</td>
+<td>Keycloak, OPA</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
@@ -22,135 +22,76 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>Non-human identities outnumber human ones in a typical estate by somewhere
-between 10:1 and 50:1. They are governed by roughly none of the same process:
-no joiner-mover-leaver, no manager attestation, no periodic recertification,
-frequently no owner.</p>
-<p>The gap is not primarily a policy gap. Policies for this exist and are easy to
-write. The gap is that <strong>nobody can enumerate them</strong>, and you cannot govern,
-tier, revoke or recertify a list you do not have.</p>
-<p>Agents make this acute for three reasons:</p>
-<ul>
-<li>They are created <strong>programmatically</strong>, often per task, so the population grows
-  without anyone filing a request.</li>
-<li>They are frequently created by <em>other</em> agents, so the requester is not a
-  person who can be asked.</li>
-<li>They <strong>outlive their purpose</strong>. A retired agent whose identity still exists is
-  a standing credential with no owner and no expiry — the single most common
-  finding in a first NHI review.</li>
-</ul>
-<p>So the first control is not a policy. It is an inventory, built from telemetry
-rather than from a survey nobody answers.</p></div><div class="nbmd"><h2>2 · Demo — build the inventory from telemetry</h2>
-<p>The registry below is what a survey produces. The auth log is what is actually happening. The interesting rows are the ones in one and not the other.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-from dataclasses import dataclass, field
+<p><strong>Mitigates: T3 Privilege Compromise · T2 Tool Misuse.</strong></p>
+<p>A2.3 narrows authority at the moment of delegation. This lesson removes it when
+the task is over.</p>
+<p>Standing authority is the reason an injection is always worth attempting: the
+credential is there, permanently, waiting. Every successful A1.3 lands on a live
+grant. Just-in-time authority changes the arithmetic — the attacker has to
+arrive during a window that exists only while a specific task is running, and
+that is bound to a specific resource.</p>
+<p>Three properties, and the third is the one usually skipped:</p>
+<p><strong>Short-lived.</strong> Minutes, not months. Theft has a deadline.</p>
+<p><strong>Purpose-bound.</strong> Scoped to <em>this</em> resource, not to the resource class. Not
+<code>reports:write</code> but <code>reports:write</code> on report 8812.</p>
+<p><strong>Revoked on completion.</strong> The grant ends when the task ends, not when the timer
+does. A task that finishes in ten seconds should not leave a fifteen-minute
+credential lying around, which is the difference between a TTL and an actual
+lifecycle.</p>
+<p>The operational cost is real and worth stating plainly: something must issue
+these, and if that path breaks, work stops. That is the trade — a system that
+fails closed under a control outage, in exchange for a system that has no
+standing authority to steal.</p></div><div class="nbmd"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>Removes the <strong>standing</strong> grant an injection needs. The attacker must now arrive inside a window bound to one task and one resource.\n\n## 2 · The control</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>GRANTS = {}
+CLOCK = {&quot;now&quot;: 1000}
 
-now = time.time(); DAY = 86400
+def grant(task_id, principal, scope, resource, ttl=120):
+    &quot;&quot;&quot;Purpose-bound: this scope, on this resource, for this task.&quot;&quot;&quot;
+    GRANTS[task_id] = {&quot;principal&quot;: principal, &quot;scope&quot;: scope, &quot;resource&quot;: resource,
+                       &quot;expires&quot;: CLOCK[&quot;now&quot;] + ttl, &quot;open&quot;: True}
+    return task_id
 
-# what the CMDB / spreadsheet says exists
-REGISTERED = {
-    &quot;ci-builder&quot;:    {&quot;owner&quot;: &quot;platform&quot;, &quot;created&quot;: now - 900*DAY},
-    &quot;deploy-bot&quot;:    {&quot;owner&quot;: &quot;platform&quot;, &quot;created&quot;: now - 700*DAY},
-    &quot;triage-agent&quot;:  {&quot;owner&quot;: &quot;appsec&quot;,   &quot;created&quot;: now - 120*DAY},
-    &quot;backup-runner&quot;: {&quot;owner&quot;: &quot;&quot;,         &quot;created&quot;: now - 1400*DAY},
-}
-# what the identity provider actually saw authenticate in the last 90 days
-AUTH_LOG = {
-    &quot;ci-builder&quot;:        now - 0.2*DAY,
-    &quot;deploy-bot&quot;:        now - 1*DAY,
-    &quot;triage-agent&quot;:      now - 0.1*DAY,
-    &quot;svc-legacy-etl&quot;:    now - 3*DAY,      # not in the registry at all
-    &quot;agent-worker-7f3c&quot;: now - 0.05*DAY,   # spawned by another agent
-    &quot;agent-worker-a91b&quot;: now - 0.05*DAY,
-    # backup-runner: absent — has not authenticated in 90 days
-}
+def use(task_id, scope, resource):
+    g = GRANTS.get(task_id)
+    if not g:                                return False, &quot;no such grant&quot;
+    if not g[&quot;open&quot;]:                        return False, &quot;task closed&quot;
+    if CLOCK[&quot;now&quot;] &gt; g[&quot;expires&quot;]:          return False, &quot;expired&quot;
+    if scope != g[&quot;scope&quot;]:                  return False, f&quot;scoped to {g[&#x27;scope&#x27;]}&quot;
+    if resource != g[&quot;resource&quot;]:            return False, f&quot;bound to {g[&#x27;resource&#x27;]}&quot;
+    return True, &quot;permitted&quot;
 
-registered, seen = set(REGISTERED), set(AUTH_LOG)
-print(f&quot;{&#x27;identity&#x27;:22s}{&#x27;in registry&#x27;:13s}{&#x27;seen in logs&#x27;:14s}{&#x27;owner&#x27;:10s}status&quot;)
-print(&quot;-&quot; * 74)
-for ident in sorted(registered | seen):
-    in_reg, in_log = ident in registered, ident in seen
-    owner = REGISTERED.get(ident, {}).get(&quot;owner&quot;) or &quot;—&quot;
-    if in_reg and in_log:   status = &quot;governed&quot; if owner != &quot;—&quot; else &quot;NO OWNER&quot;
-    elif in_log:            status = &quot;SHADOW — unregistered but active&quot;
-    else:                   status = &quot;ORPHAN — registered, never authenticates&quot;
-    print(f&quot;{ident:22s}{str(in_reg):13s}{str(in_log):14s}{owner:10s}{status}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks</h2>
-<p>Three of the six active identities were never registered, and one registered identity has not authenticated in 90 days. Both directions are findings, and they fail differently:</p>
-<ul>
-<li><strong>Shadow</strong> identities have no owner, so no one can answer "should this exist?" during an incident.</li>
-<li><strong>Orphans</strong> are standing credentials for a purpose that ended. Nobody will notice them being used, because nobody is watching something they believe is retired.</li>
-</ul></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def gaps(ident):
-    out = []
-    reg = REGISTERED.get(ident)
-    if reg is None:
-        out.append(&quot;unregistered: in use but never requested or approved&quot;)
-    elif not reg[&quot;owner&quot;]:
-        out.append(&quot;no named owner — nobody can accept the risk or recertify it&quot;)
-    last = AUTH_LOG.get(ident)
-    if last is None:
-        age = (now - reg[&quot;created&quot;]) / DAY if reg else 0
-        out.append(f&quot;no authentication in 90d — decommissioning never finished &quot;
-                   f&quot;(identity is {age:.0f}d old)&quot;)
-    if ident.startswith(&quot;agent-worker-&quot;):
-        out.append(&quot;created by another agent — no human requester exists&quot;)
-    return out
+def close(task_id):
+    if task_id in GRANTS:
+        GRANTS[task_id][&quot;open&quot;] = False       # revoked on completion, not on expiry
 
-for ident in sorted(registered | seen):
-    g = gaps(ident)
-    if g:
-        print(f&quot;{ident}&quot;)
-        for x in g:
-            print(f&quot;   ⚠ {x}&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — per-identity revocation, proven</h2>
-<p>An inventory is only useful if you can act on a single row. The test that separates an <em>identity</em> from a <em>shared password</em> is: can you revoke exactly one of these without breaking the others?</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>class Registry:
-    def __init__(self):
-        self.revoked, self.issued = set(), []
-    def issue(self, actor, scopes):
-        t = {&quot;actor&quot;: actor, &quot;scopes&quot;: set(scopes), &quot;id&quot;: len(self.issued)}
-        self.issued.append(t); return t
-    def revoke(self, actor):
-        self.revoked.add(actor)
-        return sum(1 for t in self.issued if t[&quot;actor&quot;] == actor)
-    def valid(self, t):
-        return t[&quot;actor&quot;] not in self.revoked
+grant(&quot;t-1&quot;, &quot;dana@corp&quot;, &quot;reports:write&quot;, &quot;report/8812&quot;)
 
-reg = Registry()
-toks = {a: reg.issue(a, {&quot;repo:read&quot;}) for a in
-        (&quot;ci-builder&quot;, &quot;deploy-bot&quot;, &quot;agent-worker-7f3c&quot;, &quot;agent-worker-a91b&quot;)}
+attempts = [
+ (&quot;the task&#x27;s own write&quot;,        &quot;reports:write&quot;, &quot;report/8812&quot;),
+ (&quot;a different report&quot;,          &quot;reports:write&quot;, &quot;report/9999&quot;),
+ (&quot;a different scope&quot;,           &quot;db:admin&quot;,      &quot;report/8812&quot;),
+]
+for label, scope, resource in attempts:
+    ok, why = use(&quot;t-1&quot;, scope, resource)
+    print(f&quot;   {label:26s}{&#x27;ok&#x27; if ok else &#x27;REFUSED&#x27;:8s}{why}&quot;)
 
-print(&quot;revoking one dynamically-spawned worker:&quot;)
-n = reg.revoke(&quot;agent-worker-7f3c&quot;)
-print(f&quot;   invalidated {n} token(s)\n&quot;)
-for a, t in toks.items():
-    print(f&quot;   {a:22s} valid={reg.valid(t)}&quot;)
+close(&quot;t-1&quot;)
+ok, why = use(&quot;t-1&quot;, &quot;reports:write&quot;, &quot;report/8812&quot;)
+print(f&quot;   {&#x27;after the task completes&#x27;:26s}{&#x27;ok&#x27; if ok else &#x27;REFUSED&#x27;:8s}{why}&quot;)
 
-print(&quot;\nNow the shared-secret world, for contrast:&quot;)
-SHARED = &quot;one API key used by all four&quot;
-print(f&quot;   revoking the shared key stops: {list(toks)}&quot;)
-print(&quot;   → which is why, in practice, nobody ever revokes it.&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: the inventory has to be reproducible, not a one-off spreadsheet.
-def build_inventory(registry, auth_log, stale_days=90):
-    rows = []
-    for ident in sorted(set(registry) | set(auth_log)):
-        reg = registry.get(ident)
-        last = auth_log.get(ident)
-        rows.append({
-            &quot;identity&quot;: ident,
-            &quot;owner&quot;: (reg or {}).get(&quot;owner&quot;) or None,
-            &quot;registered&quot;: reg is not None,
-            &quot;active&quot;: last is not None,
-            &quot;stale&quot;: last is None,
-            &quot;auto_spawned&quot;: ident.startswith(&quot;agent-worker-&quot;),
-        })
-    return rows
-
-inv = build_inventory(REGISTERED, AUTH_LOG)
-unowned = [r[&quot;identity&quot;] for r in inv if not r[&quot;owner&quot;]]
-shadow  = [r[&quot;identity&quot;] for r in inv if not r[&quot;registered&quot;]]
-stale   = [r[&quot;identity&quot;] for r in inv if r[&quot;stale&quot;]]
-print(f&quot;identities: {len(inv)}   unowned: {len(unowned)}   &quot;
-      f&quot;shadow: {len(shadow)}   stale: {len(stale)}&quot;)
-print(f&quot;   unowned {unowned}\n   shadow  {shadow}\n   stale   {stale}&quot;)
-assert shadow and stale, &quot;a first inventory always finds both&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Seven identities appear across the registry and the auth log: three governed, one with no owner, three shadow (including two agent-spawned workers) and one orphan. Revoking <code>agent-worker-7f3c</code> invalidates only its own token. The inventory reports 4 unowned, 3 shadow and 1 stale.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Run the real query: every non-human identity in one production account, joined against 90 days of authentication events. Count the rows with no owner. That number, not a policy document, is your NHI governance gap.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.5.html">A2.5 · Delegation that survives audit</a></strong></p>
+CLOCK[&quot;now&quot;] = 2000
+GRANTS[&quot;t-2&quot;] = dict(GRANTS[&quot;t-1&quot;], open=True, expires=1500)
+ok, why = use(&quot;t-2&quot;, &quot;reports:write&quot;, &quot;report/8812&quot;)
+print(f&quot;   {&#x27;after the TTL expires&#x27;:26s}{&#x27;ok&#x27; if ok else &#x27;REFUSED&#x27;:8s}{why}&quot;)
+print()
+print(&quot;An injection landing at 09:14 needs a task to be open, on the resource&quot;)
+print(&quot;it wants, holding the scope it wants. Standing authority required none&quot;)
+print(&quot;of those three things to line up.&quot;)
+assert use(&quot;t-1&quot;, &quot;reports:write&quot;, &quot;report/8812&quot;)[0] is False</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>A grant bound to one scope, one resource and one task permits only the task's own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take one standing grant an agent holds and work out what would break if it expired in two minutes. That list is the real cost of just-in-time, and it is usually shorter than expected.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.5.html">A2.5 · The non-human identity lifecycle</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.4.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>reviewer&#x27;s tokens fail immediately; patcher keeps working. If both die, your scoping was shared.</div><div class="chips"><span>Keycloak</span><span>SPIRE</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.4.ipynb</code></p></div><div class="pager"><a href="A2.3.html"><span class="k">← Previous</span><span class="t">A2.3 · Shadow Autonomy</span></a><a class="next" href="A2.5.html"><span class="k">Next →</span><span class="t">A2.5 · Delegation that survives audit</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A grant bound to one scope, one resource and one task permits only the task&#x27;s own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires.</div><div class="chips"><span>Keycloak</span><span>OPA</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.4.ipynb</code></p></div><div class="pager"><a href="A2.3.html"><span class="k">← Previous</span><span class="t">A2.3 · Delegation that narrows, and survives audit</span></a><a class="next" href="A2.5.html"><span class="k">Next →</span><span class="t">A2.5 · The non-human identity lifecycle</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

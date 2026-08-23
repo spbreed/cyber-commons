@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.12 — Proving guardrails work | Cyber Commons</title><meta name="description" content="Adversarial suites and bypass economics that convert a guardrail claim into evidence a red team or an auditor will accept."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.12</div><h1>Proving guardrails work</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.12.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A guardrail claim with no bypass testing behind it. A control that fails three times in a hundred is not a control against an attacker who can retry.</p></div><div class="ctrl"><div class="lab">Control</div><p>Adversarial suites and bypass economics that convert a guardrail claim into evidence a red team or an auditor will accept.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run a bypass suite against a guardrail and compute the attacker&#x27;s expected cost per success.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.12.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.12.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 50 lines of output in 0.02s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.12 · Proving guardrails work</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.11.html">A1.11 · Building outcome-driven guardrails, layer by layer</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.12 — Resource overload | Cyber Commons</title><meta name="description" content="Budgets and stop conditions bound to the loop (A3.4)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Agentic Reference Architecture, and Every Risk It Carries</div><div class="sid">A1.12</div><h1>Resource overload</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.12.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent consumes budget, tokens, API quota or downstream capacity without bound, and the failure is denial of service against your own systems.</p></div><div class="ctrl"><div class="lab">Control</div><p>Budgets and stop conditions bound to the loop (A3.4).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run a loop with no ceiling and count what it consumes before anything notices.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.12.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.12.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 12 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.12 · Resource overload</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → The Agentic Reference Architecture, and Every Risk It Carries</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.11.html">A1.11 · Cascading hallucination</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,141 +11,82 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>garak, promptfoo</td>
+<td>OpenTelemetry</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>GLM-4.6</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>A guardrail claim is not evidence. "The agent will not exfiltrate data" is a
-sentence; what an auditor and a red team both want is the measurement behind it.</p>
-<p>Two things make that measurement different from ordinary testing.</p>
-<p><strong>The attacker retries.</strong> A control that holds 97 times in 100 sounds strong and
-is not, because the attacker is not sampling randomly — they run it again. At a
-3% per-attempt success rate, the expected number of attempts before a success is
-about 33, and the probability of at least one success within 100 attempts is
-over 95%. For an attacker paying fractions of a cent per attempt, a 97% control
-is a speed bump with a number attached.</p>
-<p><strong>The system is stochastic.</strong> The same input can produce a refusal and a
-compliance on two runs. So a single passing test tells you almost nothing — the
-question is not "did it hold" but "at what rate, with what confidence interval,
-and how many attempts does an attacker need".</p>
-<p>The output of this lesson is a number you can defend: <strong>the attacker's expected
-cost per success.</strong> That converts a guardrail from an assertion into an economic
-statement, which is the form a risk committee can actually act on.</p></div><div class="nbmd"><h2>2 · The arithmetic of a control that mostly holds\n\nPer-attempt success rate, and what it means to someone who can retry.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def attempts_for(p_success, confidence=0.95):
-    &quot;&quot;&quot;How many attempts before the attacker succeeds, with `confidence`.&quot;&quot;&quot;
-    import math
-    if p_success &lt;= 0: return float(&quot;inf&quot;)
-    if p_success &gt;= 1: return 1
-    return math.ceil(math.log(1 - confidence) / math.log(1 - p_success))
+<p><strong>OWASP T4 — Resource Overload. LLM10 — Unbounded Consumption.</strong></p>
+<p>The <strong>agent_runtime</strong> loops: plan, act, observe, decide again. The loop is the
+component that makes an agent an agent, and a loop with no exit condition runs
+until something outside it intervenes.</p>
+<p>What intervenes, in practice, is a bill, a rate limit, or a person at 3am.</p>
+<p>Four resources drain, and they fail differently:</p>
+<p><strong>Tokens and money</strong> — the visible one, discovered on an invoice.</p>
+<p><strong>Downstream capacity</strong> — the one that hurts other people. An agent retrying a
+failing API in a tight loop is a denial-of-service attack on your own service,
+launched from inside your perimeter by something with valid credentials.</p>
+<p><strong>Rate limit budget</strong> — shared with the humans who need it. The agent exhausts
+the quota and the on-call engineer cannot query the API they need.</p>
+<p><strong>Wall-clock time in a critical path</strong> — a workflow step that never returns.</p>
+<p>This is a security risk rather than a cost problem for two reasons. It is
+<strong>reachable by an attacker</strong>: a task that cannot succeed is easy to construct
+via A1.3, and costs the attacker nothing. And it is <strong>availability</strong>, which is
+one third of the triad regardless of how the outage was caused.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where this lands on the reference architecture.</strong></p>
+<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
+                               |              |
+                         messaging        tools / mcp
+                               |              |
+                      knowledge / memory   egress
+           identity + policy wrap every call · observability records it</code>
+\n## 2 · The risk, realised\n\nA task that cannot succeed, and a loop with no ceiling.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>DOWNSTREAM = {&quot;calls&quot;: 0, &quot;capacity&quot;: 50, &quot;rejected&quot;: 0}
 
-print(f&quot;{&#x27;guardrail holds&#x27;:&gt;16s}{&#x27;attacker p&#x27;:&gt;12s}{&#x27;expected tries&#x27;:&gt;16s}&quot;
-      f&quot;{&#x27;tries for 95%&#x27;:&gt;15s}&quot;)
-for hold in (0.50, 0.90, 0.97, 0.99, 0.999, 0.9999):
-    p = 1 - hold
-    print(f&quot;{hold:&gt;15.2%} {p:&gt;11.2%} {1/p:&gt;15.1f} {attempts_for(p):&gt;15d}&quot;)
+def flaky_api(query):
+    &quot;&quot;&quot;A downstream service. It is not broken - the query cannot be satisfied.&quot;&quot;&quot;
+    DOWNSTREAM[&quot;calls&quot;] += 1
+    if DOWNSTREAM[&quot;calls&quot;] &gt; DOWNSTREAM[&quot;capacity&quot;]:
+        DOWNSTREAM[&quot;rejected&quot;] += 1
+        return {&quot;error&quot;: &quot;capacity exceeded&quot;}
+    return {&quot;result&quot;: None}                     # no match, ever
+
+def agent_loop(task, max_steps=None):
+    &quot;&quot;&quot;plan -&gt; act -&gt; observe -&gt; decide again. Stops when it succeeds.&quot;&quot;&quot;
+    steps, tokens = 0, 0
+    while True:
+        steps += 1
+        tokens += 1800
+        result = flaky_api(task)
+        if result.get(&quot;result&quot;):
+            return {&quot;done&quot;: True, &quot;steps&quot;: steps, &quot;tokens&quot;: tokens}
+        if max_steps and steps &gt;= max_steps:
+            return {&quot;done&quot;: False, &quot;steps&quot;: steps, &quot;tokens&quot;: tokens, &quot;stopped_by&quot;: &quot;budget&quot;}
+        if steps &gt; 500:                          # the notebook&#x27;s own safety net
+            return {&quot;done&quot;: False, &quot;steps&quot;: steps, &quot;tokens&quot;: tokens, &quot;stopped_by&quot;: &quot;runaway&quot;}
+
+r = agent_loop(&quot;find the order for customer 99999&quot;)     # this order does not exist
+print(f&quot;steps taken           : {r[&#x27;steps&#x27;]}&quot;)
+print(f&quot;tokens spent          : {r[&#x27;tokens&#x27;]:,}  (about ${r[&#x27;tokens&#x27;]/1000*0.002:,.2f})&quot;)
+print(f&quot;downstream calls      : {DOWNSTREAM[&#x27;calls&#x27;]}&quot;)
+print(f&quot;downstream rejections : {DOWNSTREAM[&#x27;rejected&#x27;]}  &lt;- other callers got these&quot;)
+print(f&quot;stopped by            : {r[&#x27;stopped_by&#x27;]}&quot;)
 print()
-print(&quot;A 97% guardrail is defeated within 98 attempts, 19 times out of 20.&quot;)
-print(&quot;At $0.002 an attempt that is about twenty cents.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Measure it, do not assert it\n\nA bypass suite against a guardrail with a deterministic, seeded stand-in for the model's variability.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import random
-
-def guardrail(payload, strength, rng):
-    &quot;&quot;&quot;Holds with probability `strength`. Deterministic given the seed.&quot;&quot;&quot;
-    return rng.random() &lt; strength
-
-def bypass_suite(strength, attempts=1000, seed=7):
-    rng = random.Random(seed)          # seeded: the same suite every run
-    held = sum(guardrail(&quot;payload&quot;, strength, rng) for _ in range(attempts))
-    return {&quot;attempts&quot;: attempts, &quot;held&quot;: held, &quot;bypassed&quot;: attempts - held,
-            &quot;hold_rate&quot;: held / attempts}
-
-for strength in (0.97, 0.99, 0.999):
-    r = bypass_suite(strength, attempts=5000)
-    p = 1 - r[&quot;hold_rate&quot;]
-    cost = (1 / p * 0.002) if p else float(&quot;inf&quot;)
-    print(f&quot;claimed {strength:.1%}  measured {r[&#x27;hold_rate&#x27;]:.2%}  &quot;
-          f&quot;bypassed {r[&#x27;bypassed&#x27;]:&gt;3d}/{r[&#x27;attempts&#x27;]}  &quot;
-          f&quot;attacker cost per success ${cost:,.2f}&quot;)
+print(&quot;The agent was not attacked and nothing malfunctioned. It was given a&quot;)
+print(&quot;task that cannot succeed, and the loop did what loops do.&quot;)
 print()
-print(&quot;The measured rate is what goes in the report. The claimed rate is what&quot;)
-print(&quot;the vendor said.&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — one run, and the confidence interval nobody quotes\n\nA single test is not a measurement of a stochastic system.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def single_run(strength, seed):
-    rng = random.Random(seed)
-    return guardrail(&quot;payload&quot;, strength, rng)
-
-results = [single_run(0.97, s) for s in range(20)]
-print(f&quot;twenty single-run tests of the same 97% guardrail:&quot;)
-print(&quot;   &quot; + &quot; &quot;.join(&quot;HOLD&quot; if r else &quot;FAIL&quot; for r in results))
-print(f&quot;   -&gt; {results.count(True)} passed, {results.count(False)} failed&quot;)
-suite = bypass_suite(0.97, attempts=1000)
-print(f&quot;   the same control over {suite[&#x27;attempts&#x27;]} attempts: &quot;
-      f&quot;{suite[&#x27;bypassed&#x27;]} bypasses&quot;)
-print()
-print(&quot;Twenty demos, twenty passes, and a control that fails about three times&quot;)
-print(&quot;in a hundred. The demo was not lucky - it was too small to contain a&quot;)
-print(&quot;failure, which is a different and much more comfortable kind of wrong.&quot;)
-
-def wilson(held, n, z=1.96):
-    &quot;&quot;&quot;A confidence interval, because a rate without one is a rumour.&quot;&quot;&quot;
-    if n == 0: return (0.0, 1.0)
-    p = held / n
-    d = 1 + z*z/n
-    c = (p + z*z/(2*n)) / d
-    m = z * ((p*(1-p)/n + z*z/(4*n*n)) ** 0.5) / d
-    return (max(0.0, c - m), min(1.0, c + m))
-
-for n in (10, 100, 1000):
-    r = bypass_suite(0.97, attempts=n)
-    lo, hi = wilson(r[&quot;held&quot;], n)
-    print(f&quot;   n={n:&gt;4}  measured {r[&#x27;hold_rate&#x27;]:.2%}  95% CI [{lo:.2%}, {hi:.2%}]&quot;)
-print()
-print(&quot;At n=10 the interval is wide enough to contain both &#x27;strong control&#x27; and&quot;)
-print(&quot;&#x27;no control&#x27;. The sample size is part of the claim.&quot;)
-assert results.count(True) == 20 and suite[&quot;bypassed&quot;] &gt; 0</code></pre></div><div class="nbmd"><h2>5 · The control — state the bar before you run the suite\n\nAn acceptance threshold decided after seeing the result is not a threshold.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def accepts(measured_lo, required_hold, attacker_budget, cost_per_attempt=0.002):
-    &quot;&quot;&quot;Two tests: the lower CI bound clears the bar, and the attacker cannot
-    afford the expected attempts at that bound.&quot;&quot;&quot;
-    p = 1 - measured_lo
-    afford = attacker_budget / cost_per_attempt
-    return {&quot;clears_bar&quot;: measured_lo &gt;= required_hold,
-            &quot;expected_attempts&quot;: (1/p) if p else float(&quot;inf&quot;),
-            &quot;attacker_can_afford&quot;: (1/p if p else float(&quot;inf&quot;)) &lt;= afford}
-
-for hold, bar in ((0.97, 0.999), (0.999, 0.999), (0.99999, 0.999)):
-    r = bypass_suite(hold, attempts=2000)
-    lo, _ = wilson(r[&quot;held&quot;], 2000)
-    v = accepts(lo, bar, attacker_budget=100.0)
-    print(f&quot;claimed {hold:&lt;9.5f} CI-low {lo:.3%}  clears {bar:.1%} bar: &quot;
-          f&quot;{str(v[&#x27;clears_bar&#x27;]):5s}  attacker needs &quot;
-          f&quot;{v[&#x27;expected_attempts&#x27;]:,.0f} tries, affordable: {v[&#x27;attacker_can_afford&#x27;]}&quot;)
-print()
-print(&quot;The bar is set by what the outcome is worth, not by what the control&quot;)
-print(&quot;happens to score. A control that clears the bar and is still affordable&quot;)
-print(&quot;to brute-force has not passed - it has been priced.&quot;)</code></pre></div><div class="nbmd"><h2>6 · Verify — evidence a red team will accept</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>r = bypass_suite(0.999, attempts=5000)
-lo, hi = wilson(r[&quot;held&quot;], 5000)
-p = 1 - lo
-evidence = {
-  &quot;control&quot;: &quot;no mail leaves the corporate tenant&quot;,
-  &quot;layer&quot;: 7,
-  &quot;attempts&quot;: r[&quot;attempts&quot;],
-  &quot;bypasses&quot;: r[&quot;bypassed&quot;],
-  &quot;hold_rate&quot;: round(r[&quot;hold_rate&quot;], 5),
-  &quot;ci95&quot;: [round(lo, 5), round(hi, 5)],
-  &quot;expected_attacker_attempts&quot;: round(1/p, 1) if p else None,
-  &quot;cost_per_attempt_usd&quot;: 0.002,
-  &quot;expected_cost_per_success_usd&quot;: round(1/p * 0.002, 2) if p else None,
-  &quot;suite_seed&quot;: 7,
-}
-for k, v in evidence.items():
-    print(f&quot;   {k:32s}{v}&quot;)
-print()
-print(&quot;Every field here is reproducible and every one is falsifiable. That is&quot;)
-print(&quot;the difference between a guardrail claim and guardrail evidence.&quot;)
-assert evidence[&quot;bypasses&quot;] &gt;= 0 and evidence[&quot;ci95&quot;][0] &lt;= evidence[&quot;hold_rate&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The retry arithmetic prints: a 97% guardrail is defeated within 98 attempts 19 times out of 20, for about twenty cents. Twenty single-run tests of the same control return a mix of passes and failures, and the Wilson interval at n=10 is wide enough to contain both 'strong control' and 'no control'. The lesson ends with a reproducible evidence record carrying a seed, an interval and an attacker cost per success.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Take a guardrail you rely on and estimate its per-attempt hold rate honestly. Then compute the attacker's cost per success at your own inference prices. Most teams discover the number is smaller than the coffee they bought while reading this.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.1.html">A2.1 · "Who is calling?"</a></strong></p>
+print(f&quot;{DOWNSTREAM[&#x27;rejected&#x27;]} rejections went to whoever else was using that&quot;)
+print(&quot;service - a denial of service launched from inside the perimeter, by&quot;)
+print(&quot;something holding valid credentials.&quot;)
+assert DOWNSTREAM[&quot;rejected&quot;] &gt; 0</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Find the ceiling on one agent loop you run. If there is a token budget but no cap on downstream calls, the cost is bounded and the availability risk is not.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.13.html">A1.13 · Repudiation and untraceability</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.12.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.12.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The retry arithmetic prints: a 97% guardrail is defeated within 98 attempts 19 times out of 20, for about twenty cents. Twenty single-run tests of the same control return a mix of passes and failures, and the Wilson interval at n=10 is wide enough to contain both &#x27;strong control&#x27; and &#x27;no control&#x27;. The lesson ends with a reproducible evidence record carrying a seed, an interval and an attacker cost per success.</div><div class="chips"><span>garak</span><span>promptfoo</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.12.ipynb</code></p></div><div class="pager"><a href="A1.11.html"><span class="k">← Previous</span><span class="t">A1.11 · Building outcome-driven guardrails, layer by layer</span></a><a class="next" href="A2.1.html"><span class="k">Next →</span><span class="t">A2.1 · &quot;Who is calling?&quot;</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>An agent given an impossible task loops until the notebook&#x27;s own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service&#x27;s capacity — with the rejections landing on whoever else was using that service.</div><div class="chips"><span>OpenTelemetry</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.12.ipynb</code></p></div><div class="pager"><a href="A1.11.html"><span class="k">← Previous</span><span class="t">A1.11 · Cascading hallucination</span></a><a class="next" href="A1.13.html"><span class="k">Next →</span><span class="t">A1.13 · Repudiation and untraceability</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

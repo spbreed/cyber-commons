@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.7 — Runtime containment levers | Cyber Commons</title><meta name="description" content="Throttle, scope-reduce, reroute, force HITL, hard stop — built and tested first."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Platform &amp; Cloud Security Engineer</div><div class="sid">A3.7</div><h1>Runtime containment levers</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The stop lever is built during the incident.</p></div><div class="ctrl"><div class="lab">Control</div><p>Throttle, scope-reduce, reroute, force HITL, hard stop — built and tested first.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build the five containment levers before you need them.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 31 lines of output in 0.03s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.7 · Runtime containment levers</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Platform &amp; Cloud Security Engineer</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.6.html">A3.6 · Egress control for agents</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.7 — The agent gateway: one choke point when you scale | Cyber Commons</title><meta name="description" content="A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › Controls — Runtime and the Gateway</div><div class="sid">A3.7</div><h1>The agent gateway: one choke point when you scale</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Per-agent controls diverge as the fleet grows, and legacy downstreams force a static credential back into agent code.</p></div><div class="ctrl"><div class="lab">Control</div><p>A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Route every call through one gateway and show the same policy holding for agents that never implemented it.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 15 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.7 · The agent gateway: one choke point when you scale</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → Controls — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.6.html">A3.6 · Human approval that survives volume</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,7 +11,7 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>Falco, Kyverno, kagent</td>
+<td>agentgateway, OPA, Keycloak</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
@@ -22,141 +22,88 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>Every control before this one is preventive. This lesson is about what you have
-left when prevention has failed and an agent is actively doing damage.</p>
-<p>There are four levers, and they differ on two axes that matter during an
-incident: <strong>how fast they take effect</strong>, and <strong>what they leave running</strong>.</p>
-<table>
-<thead>
-<tr>
-<th>Lever</th>
-<th>Speed</th>
-<th>What it misses</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Kill the process</td>
-<td>seconds</td>
-<td>It restarts. The credential still works.</td>
-</tr>
-<tr>
-<td>Network quarantine</td>
-<td>seconds</td>
-<td>Stops egress, not local damage</td>
-</tr>
-<tr>
-<td><strong>Revoke the identity</strong></td>
-<td>seconds</td>
-<td>Nothing — the agent cannot act anywhere, even after restart</td>
-</tr>
-<tr>
-<td>Rotate the credential</td>
-<td>minutes</td>
-<td>Correct, but slow and breaks bystanders</td>
-</tr>
-</tbody>
-</table>
-<p>Revoking the identity is almost always the right first lever, and it is only
-available if A2 was done: an agent with its own separately-revocable identity
-can be stopped without stopping anything else. That is the operational payoff of
-the entire identity track.</p>
-<p>The second thing this lesson establishes is a number: <strong>how much damage happens
-while containment waits for a human approval</strong>. It is usually the argument that
-gets automated containment funded.</p></div><div class="nbmd"><h2>2 · Demo — the four levers, timed</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
-import time
+<p><strong>Mitigates: every threat in this chapter, at one enforcement point.</strong></p>
+<p>Everything in Chapters 2 and 3 works. The problem is where it lives.</p>
+<p>At one agent, the controls sit in the agent, and that is fine. At fifty, it
+stops being fine for reasons that have nothing to do with security engineering:</p>
+<ul>
+<li>Each team implements provenance, budgets and egress slightly differently.</li>
+<li>Nobody can answer "is this control on, everywhere" without reading fifty
+  repositories.</li>
+<li>A new agent starts at zero and re-earns every control by hand.</li>
+<li>Fixing a control means fifty pull requests and a migration.</li>
+</ul>
+<p>The <strong>gateway</strong> is the same controls, moved to a point every call must pass
+through. It holds identity (A2.1–A2.3), policy (A3.1), egress (A3.3), budgets
+(A3.4) and audit (A2.7). An agent that implements none of them still gets all of
+them, because the enforcement is no longer the agent's responsibility.</p>
+<p>It also solves a problem nothing else does: <strong>downstream systems that cannot
+consume a delegated identity.</strong> A legacy database or a vendor API that only
+understands a static credential forces that credential back into agent code —
+undoing A2.3 completely. The gateway holds it instead, authorises the <em>user</em>
+before the call, and presents the static credential onward. The agent never sees
+it.</p>
+<p>The honest cost: the gateway is now a single point of failure and a very
+attractive target. It has to be operated accordingly.</p></div><div class="nbmd"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>Not a new control. The same controls, at a point every call passes through — and the only answer to a downstream that cannot consume delegated identity.\n\n## 2 · The control</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>LEGACY_DB_CREDENTIAL = &quot;static-service-password&quot;     # never leaves the gateway
 
-@dataclass
-class Fleet:
-    &quot;&quot;&quot;Three agents sharing infrastructure, each with its own identity.&quot;&quot;&quot;
-    running: set = field(default_factory=lambda: {&quot;triage-agent&quot;, &quot;patch-agent&quot;,
-                                                  &quot;deploy-agent&quot;})
-    identities_valid: set = field(default_factory=lambda: {&quot;triage-agent&quot;,
-                                                           &quot;patch-agent&quot;, &quot;deploy-agent&quot;})
-    shared_credential_valid: bool = True
+REGISTRY = {&quot;spiffe://corp/reports-agent&quot;: {&quot;owner&quot;: &quot;sam@corp&quot;, &quot;expires&quot;: 9000}}
+POLICY = {(&quot;reports-agent&quot;, &quot;run_query&quot;, &quot;table:reports&quot;): {&quot;SELECT&quot;}}
+EGRESS_ALLOW = {&quot;reports-db.corp.example&quot;}
 
-    def can_act(self, agent):
-        return (agent in self.running and agent in self.identities_valid
-                and self.shared_credential_valid)
+AUDIT = []
 
-    # --- the levers -------------------------------------------------------
-    def kill_process(self, agent, restarts=True):
-        self.running.discard(agent)
-        detail = &quot;process killed&quot;
-        if restarts:                      # supervisors restart things. That is their job.
-            self.running.add(agent)
-            detail += &quot;; supervisor restarted it — identity still valid&quot;
-        return 2, detail
-    def quarantine(self, agent):
-        return 5, &quot;egress blocked; local filesystem actions continue&quot;
-    def revoke_identity(self, agent):
-        self.identities_valid.discard(agent)
-        return 12, &quot;identity revoked; agent cannot act even after restart&quot;
-    def rotate_shared_credential(self):
-        self.shared_credential_valid = False
-        return 420, &quot;credential rotated; EVERY consumer is now broken&quot;
+def gateway(call):
+    &quot;&quot;&quot;One choke point: identity, registry, policy, egress, budget, audit.&quot;&quot;&quot;
+    checks = []
+    def check(name, ok, why=&quot;&quot;):
+        checks.append((name, ok, why)); return ok
 
-for lever in (&quot;kill_process&quot;, &quot;quarantine&quot;, &quot;revoke_identity&quot;, &quot;rotate_shared_credential&quot;):
-    f = Fleet()
-    secs, detail = (getattr(f, lever)(&quot;patch-agent&quot;) if lever != &quot;rotate_shared_credential&quot;
-                    else f.rotate_shared_credential())
-    still = sorted(a for a in (&quot;triage-agent&quot;, &quot;patch-agent&quot;, &quot;deploy-agent&quot;) if f.can_act(a))
-    print(f&quot;{lever:26s} {secs:&gt;4}s  target still acts: &quot;
-          f&quot;{f.can_act(&#x27;patch-agent&#x27;)!s:5s}  others up: {[a for a in still if a!=&#x27;patch-agent&#x27;]}&quot;)
-    print(f&quot;{&#x27;&#x27;:26s}       {detail}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the human in the containment path</h2>
-<p>The lever is fast. The decision to pull it is not, if it needs an approval. Here is the cost, in the only unit that matters: <strong>actions the agent completed while you were waiting.</strong></p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def containment_race(actions_per_min, human_minutes, auto_seconds=12):
-    manual = actions_per_min * human_minutes
-    auto   = actions_per_min * (auto_seconds / 60)
-    return {&quot;manual&quot;: round(manual), &quot;auto&quot;: round(auto),
-            &quot;ratio&quot;: round(manual / max(auto, 1e-9), 1)}
+    if not check(&quot;identity&quot;, call[&quot;identity&quot;] in REGISTRY, &quot;attested and registered&quot;):
+        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
+    verbs = POLICY.get((call[&quot;agent&quot;], call[&quot;tool&quot;], call[&quot;resource&quot;]), set())
+    if not check(&quot;policy&quot;, call[&quot;verb&quot;] in verbs, f&quot;permitted verbs {sorted(verbs) or &#x27;none&#x27;}&quot;):
+        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
+    if not check(&quot;egress&quot;, call[&quot;destination&quot;] in EGRESS_ALLOW, &quot;destination allow-list&quot;):
+        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
+    if not check(&quot;budget&quot;, call[&quot;calls_so_far&quot;] &lt; 5, &quot;per-target ceiling&quot;):
+        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
 
-print(f&quot;{&#x27;agent rate&#x27;:&gt;14}{&#x27;human 8min&#x27;:&gt;13}{&#x27;automated 12s&#x27;:&gt;16}{&#x27;ratio&#x27;:&gt;8}&quot;)
-print(&quot;-&quot; * 52)
-for rate in (60, 300, 1200):
-    r = containment_race(rate, human_minutes=8)
-    print(f&quot;{rate:&gt;10}/min{r[&#x27;manual&#x27;]:&gt;13}{r[&#x27;auto&#x27;]:&gt;16}{r[&#x27;ratio&#x27;]:&gt;8}×&quot;)
+    # the agent never held this; the gateway attaches it on the way out
+    AUDIT.append({&quot;principal&quot;: call[&quot;principal&quot;], &quot;agent&quot;: call[&quot;agent&quot;],
+                  &quot;tool&quot;: call[&quot;tool&quot;], &quot;resource&quot;: call[&quot;resource&quot;]})
+    return {&quot;allowed&quot;: True, &quot;checks&quot;: checks, &quot;credential_attached&quot;: LEGACY_DB_CREDENTIAL[:6] + &quot;...&quot;}
 
-print(&quot;\nAt 300 actions/min an 8-minute approval costs 2,400 further actions&quot;)
-print(&quot;against 60 for automated revocation. That ratio is the funding argument.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — pre-authorised revocation for non-human identities</h2>
-<p>The asymmetry to exploit: revoking a <em>human's</em> access needs care, because a false positive locks out a person mid-shift. Revoking a <em>non-human</em> identity is cheap to get wrong — the agent re-requests, or an on-call re-enables it in a minute.</p>
-<p>So the policy can be different, and should be: <strong>automated revocation for NHIs on high-confidence signals, no human in the path.</strong></p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>RULES = {
- &quot;reached the cloud metadata service&quot;: {&quot;confidence&quot;: 0.99, &quot;auto&quot;: True},
- &quot;read a path matching */.ssh/*&quot;:       {&quot;confidence&quot;: 0.97, &quot;auto&quot;: True},
- &quot;egress to an unlisted host&quot;:          {&quot;confidence&quot;: 0.90, &quot;auto&quot;: True},
- &quot;tool-call rate 20× baseline&quot;:         {&quot;confidence&quot;: 0.75, &quot;auto&quot;: True},
- &quot;unusual working hours&quot;:               {&quot;confidence&quot;: 0.30, &quot;auto&quot;: False},
+BASE = {&quot;identity&quot;: &quot;spiffe://corp/reports-agent&quot;, &quot;agent&quot;: &quot;reports-agent&quot;,
+        &quot;principal&quot;: &quot;dana@corp&quot;, &quot;tool&quot;: &quot;run_query&quot;, &quot;resource&quot;: &quot;table:reports&quot;,
+        &quot;verb&quot;: &quot;SELECT&quot;, &quot;destination&quot;: &quot;reports-db.corp.example&quot;, &quot;calls_so_far&quot;: 0}
+
+CASES = {
+ &quot;the intended call&quot;:          BASE,
+ &quot;unregistered agent&quot;:         dict(BASE, identity=&quot;spiffe://corp/rogue-agent&quot;),
+ &quot;verb not permitted&quot;:         dict(BASE, verb=&quot;DELETE&quot;),
+ &quot;exfiltration destination&quot;:   dict(BASE, destination=&quot;archive.evil.example&quot;),
+ &quot;over the per-target ceiling&quot;:dict(BASE, calls_so_far=9),
 }
-THRESHOLD = 0.70
+for label, call in CASES.items():
+    r = gateway(call)
+    failed = [n for n, ok, _ in r[&quot;checks&quot;] if not ok]
+    print(f&quot;   {label:28s}{&#x27;ALLOWED&#x27; if r[&#x27;allowed&#x27;] else &#x27;denied at &#x27; + failed[0]}&quot;)
 
-def respond(signal, subject_is_human):
-    rule = RULES[signal]
-    if subject_is_human:
-        return &quot;page on-call — human lockout needs a person to confirm&quot;
-    if rule[&quot;confidence&quot;] &gt;= THRESHOLD and rule[&quot;auto&quot;]:
-        return f&quot;AUTO-REVOKE (confidence {rule[&#x27;confidence&#x27;]:.2f})&quot;
-    return f&quot;alert only (confidence {rule[&#x27;confidence&#x27;]:.2f} &lt; {THRESHOLD})&quot;
-
-for sig in RULES:
-    print(f&quot;{sig:38s} NHI: {respond(sig, False):44s}&quot;)
+print(f&quot;\naudit entries written: {len(AUDIT)}&quot;)
+print(f&quot;credential held by the agent: never - attached at the gateway&quot;)
 print()
-print(f&quot;{&#x27;same signal, human subject&#x27;:38s}     {respond(&#x27;read a path matching */.ssh/*&#x27;, True)}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: end-to-end. Signal fires, identity revoked, agent cannot act,
-# and the rest of the fleet is unaffected.
-f = Fleet()
-print(&quot;before:&quot;, {a: f.can_act(a) for a in sorted(f.running)})
-
-signal = &quot;reached the cloud metadata service&quot;
-action = respond(signal, subject_is_human=False)
-print(f&quot;\nsignal: {signal}\naction: {action}&quot;)
-assert action.startswith(&quot;AUTO-REVOKE&quot;)
-secs, detail = f.revoke_identity(&quot;patch-agent&quot;)
-
-print(f&quot;after {secs}s:&quot;, {a: f.can_act(a) for a in sorted(f.running | {&#x27;patch-agent&#x27;})})
-assert not f.can_act(&quot;patch-agent&quot;)
-assert f.can_act(&quot;triage-agent&quot;) and f.can_act(&quot;deploy-agent&quot;)
-print(&quot;\nContained agent stopped. Two other agents unaffected. No human waited.&quot;)
-print(&quot;This only works because A2 gave each agent its own revocable identity.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Killing the process leaves the agent acting after a supervisor restart; quarantine leaves local actions running; identity revocation stops it in 12s with the other agents up; credential rotation takes 420s and breaks everything. The race table shows 2,400 vs 60 actions at 300/min. Four of five signals auto-revoke for NHIs and none do for a human subject. The end-to-end check confirms only the target stops.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Time your own revocation path: from the decision to the agent's next call actually failing. Most teams find it is minutes, and that the slow part is finding the right console — not the revocation itself.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.8.html">A3.8 · Environment separation</a></strong></p>
+print(&quot;The agent implements none of this. Add a new agent tomorrow and it&quot;)
+print(&quot;inherits every control by being on the other side of one hop.&quot;)
+print()
+print(&quot;And the legacy database, which cannot consume a delegated token, is&quot;)
+print(&quot;reached with a static credential the agent has never seen - authorised&quot;)
+print(&quot;against dana before the call was made.&quot;)
+assert len(AUDIT) == 1 and gateway(CASES[&quot;unregistered agent&quot;])[&quot;allowed&quot;] is False</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Count your agents. If it is more than five, work out how you would currently answer 'is egress control on for all of them' — and how long that would take.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.1.html">B1.1 · Historical parsing and structural indexing</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.7.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Each lever fires under load and is timed. A lever that only works when idle is not a lever.</div><div class="chips"><span>Falco</span><span>Kyverno</span><span>kagent</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.7.ipynb</code></p></div><div class="pager"><a href="A3.6.html"><span class="k">← Previous</span><span class="t">A3.6 · Egress control for agents</span></a><a class="next" href="A3.8.html"><span class="k">Next →</span><span class="t">A3.8 · Environment separation</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent.</div><div class="chips"><span>agentgateway</span><span>OPA</span><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.7.ipynb</code></p></div><div class="pager"><a href="A3.6.html"><span class="k">← Previous</span><span class="t">A3.6 · Human approval that survives volume</span></a><a class="next" href="B1.1.html"><span class="k">Next →</span><span class="t">B1.1 · Historical parsing and structural indexing</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

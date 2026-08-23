@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.14 — Overwhelming the human in the loop | Cyber Commons</title><meta name="description" content="Approval reserved for irreversible actions, with everything else bounded by policy (A3.6)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Agentic Reference Architecture, and Every Risk It Carries</div><div class="sid">A1.14</div><h1>Overwhelming the human in the loop</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.14.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The approval gate is recorded as a control and operates as a click. At volume it approves everything, including the one request that mattered.</p></div><div class="ctrl"><div class="lab">Control</div><p>Approval reserved for irreversible actions, with everything else bounded by policy (A3.6).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Push approval volume up and measure the point at which review quality collapses.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.14.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.14.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 11 lines of output in 0.01s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.14 · Overwhelming the human in the loop</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → The Agentic Reference Architecture, and Every Risk It Carries</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.13.html">A1.13 · Repudiation and untraceability</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p><strong>OWASP T10 — Overwhelming Human-in-the-Loop.</strong></p>
+<p>Human approval is the control everyone reaches for first. It is placed at the
+tool call — the right place — and it is genuinely strong for rare, consequential
+decisions.</p>
+<p>Then the system scales, and the arithmetic turns on it.</p>
+<p>An agent generates approval requests at machine speed. A human reads them at
+human speed. When the queue exceeds what a person can actually consider, the
+behaviour does not degrade gracefully into "slower but careful". It degrades
+into <strong>approving without reading</strong>, because the alternative is being the reason
+nothing shipped.</p>
+<p>The failure is invisible from inside the system. Every approval is recorded. The
+audit trail shows a human decision on every action. The control appears to be
+operating at 100%, and the thing being measured — that a human clicked — is not
+the thing anyone cared about.</p>
+<p>There is a second-order effect worth naming: an attacker who wants one approval
+can <em>manufacture the volume that makes it likely</em>. Generate two hundred benign
+requests, put the one that matters at position 173, and the control has been
+defeated by arithmetic rather than by cleverness.</p>
+<p>Approval is a control for irreversible actions. Used as a general-purpose gate
+it becomes a click, and the risk register still counts it.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where this lands on the reference architecture.</strong></p>
+<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
+                               |              |
+                         messaging        tools / mcp
+                               |              |
+                      knowledge / memory   egress
+           identity + policy wrap every call · observability records it</code>
+\n## 2 · The risk, realised\n\nApproval quality against volume, and the position an attacker chooses.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def review(queue, careful_capacity=25):
+    &quot;&quot;&quot;A reviewer considers the first `careful_capacity` properly. The rest are
+    approved to keep the queue moving - which is what actually happens.&quot;&quot;&quot;
+    considered = queue[:careful_capacity]
+    rubber_stamped = queue[careful_capacity:]
+    caught = [r for r in considered if r[&quot;malicious&quot;]]
+    missed = [r for r in rubber_stamped if r[&quot;malicious&quot;]]
+    return {&quot;considered&quot;: len(considered), &quot;rubber_stamped&quot;: len(rubber_stamped),
+            &quot;caught&quot;: len(caught), &quot;missed&quot;: len(missed)}
+
+def build_queue(volume, malicious_at):
+    return [{&quot;id&quot;: i, &quot;malicious&quot;: i == malicious_at} for i in range(volume)]
+
+print(f&quot;{&#x27;daily volume&#x27;:&gt;13}{&#x27;considered&#x27;:&gt;12}{&#x27;stamped&#x27;:&gt;9}{&#x27;caught&#x27;:&gt;8}{&#x27;missed&#x27;:&gt;8}&quot;)
+for volume in (10, 25, 100, 500):
+    q = build_queue(volume, malicious_at=volume - 1)     # attacker picks the position
+    r = review(q)
+    print(f&quot;{volume:&gt;13}{r[&#x27;considered&#x27;]:&gt;12}{r[&#x27;rubber_stamped&#x27;]:&gt;9}&quot;
+          f&quot;{r[&#x27;caught&#x27;]:&gt;8}{r[&#x27;missed&#x27;]:&gt;8}&quot;)
+
+print()
+print(&quot;At every volume the audit trail shows a human approval on 100% of&quot;)
+print(&quot;actions. The control reports full coverage in all four rows.&quot;)
+print()
+print(&quot;The attacker does not need to defeat the reviewer. They need to arrive&quot;)
+print(&quot;at position 173 of 200, and generating positions 1 to 172 is free.&quot;)
+r = review(build_queue(500, malicious_at=499))
+assert r[&quot;missed&quot;] == 1 and r[&quot;caught&quot;] == 0</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Count how many approval requests one of your agents generates per day and ask the person approving them how many they read in full. The gap between those two numbers is the control's real coverage.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.15.html">A1.15 · Misaligned and deceptive behaviour</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.14.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.14.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.14.ipynb</code></p></div><div class="pager"><a href="A1.13.html"><span class="k">← Previous</span><span class="t">A1.13 · Repudiation and untraceability</span></a><a class="next" href="A1.15.html"><span class="k">Next →</span><span class="t">A1.15 · Misaligned and deceptive behaviour</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

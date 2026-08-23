@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.2 — Sandboxing is the perimeter | Cyber Commons</title><meta name="description" content="Process → container → microVM → ephemeral workstation → air-gapped runner, chosen deliberately."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Platform &amp; Cloud Security Engineer</div><div class="sid">A3.2</div><h1>Sandboxing is the perimeter</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Tier chosen by convenience, not by action class.</p></div><div class="ctrl"><div class="lab">Control</div><p>Process → container → microVM → ephemeral workstation → air-gapped runner, chosen deliberately.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Measure escape surface across three sandbox tiers.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 46 lines of output in 0.04s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.2 · Sandboxing is the perimeter</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Platform &amp; Cloud Security Engineer</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.1.html">A3.1 · Authorization models that make bad grants impossible</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.2 — Sandboxed execution | Cyber Commons</title><meta name="description" content="Execution in an isolate with no ambient credentials, a bounded filesystem and no default network."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › Controls — Runtime and the Gateway</div><div class="sid">A3.2</div><h1>Sandboxed execution</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model-authored code inherits the runtime&#x27;s reach, including any credential mounted into the environment.</p></div><div class="ctrl"><div class="lab">Control</div><p>Execution in an isolate with no ambient credentials, a bounded filesystem and no default network.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the same code inside and outside the sandbox and enumerate what each could reach.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 25 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.2 · Sandboxed execution</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → Controls — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.1.html">A3.1 · Default-deny on the tool call</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,179 +11,81 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>gVisor, Firecracker, Docker</td>
+<td>gVisor, Falco</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>Llama 3.3</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>For ordinary software, the perimeter is the network and the control is the code:
-the program does what it was written to do, so review the code and you know the
-behaviour.</p>
-<p>An agent's behaviour is decided at runtime by a model reading attacker-reachable
-text. You cannot review it. You cannot even enumerate it. <strong>Intent is not a
-control you own.</strong></p>
-<p>What you do own is the <em>sandbox</em>: the set of things the process is capable of,
-regardless of what it decides to want. That is why for an agent, containment is
-the perimeter — and why the right way to evaluate an agent design is to assume
-the prompt is fully attacker-controlled and ask what still holds.</p>
-<p>Three levers do the work, and each answers a different attacker question:</p>
-<table>
-<thead>
-<tr>
-<th>Lever</th>
-<th>Attacker question</th>
-<th>Real tooling</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Tool policy</td>
-<td>what can I invoke?</td>
-<td>OPA, Kyverno, the framework's own allowlist</td>
-</tr>
-<tr>
-<td>Egress</td>
-<td>who can I reach?</td>
-<td>Cilium, a forward proxy, VPC egress rules</td>
-</tr>
-<tr>
-<td>Paths</td>
-<td>what can I read/write?</td>
-<td>container mounts, seccomp, AppArmor</td>
-</tr>
-</tbody>
-</table>
-<p>The rest of A3 takes each one apart. This lesson establishes the test.</p></div><div class="nbmd"><h2>2 · Demo — build the sandbox, then assume total prompt compromise</h2>
-<p>The agent below is a code-review bot. Its legitimate job needs four capabilities. Everything else is refused by default.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import fnmatch, re
-from dataclasses import dataclass, field
-from urllib.parse import urlparse
+<p><strong>Mitigates: T11 Unexpected Code Execution · T2 Tool Misuse.</strong></p>
+<p>For an agent that runs code, the sandbox <strong>is</strong> the security boundary. Not the
+prompt, not the code review, not the model's training. The question is never
+"is there a sandbox" but "what does this one actually contain".</p>
+<p>A1.8's lesson was that reach is a property of the environment, not of intent —
+the benign task touched a private key because <code>open()</code> sees what the process
+sees. So the control is to change what the process sees.</p>
+<p>Four dimensions, and the fourth is the one teams get wrong:</p>
+<p><strong>Filesystem.</strong> A bounded working directory. Not the home directory, which holds
+<code>.ssh</code>, <code>.aws</code> and <code>.config</code>.</p>
+<p><strong>Process and syscall.</strong> No spawning, no ptrace, resource ceilings so a runaway
+loop is contained rather than fatal.</p>
+<p><strong>Network.</strong> No egress by default. Combined with A3.3 this is what makes an
+exfiltration primitive useless.</p>
+<p><strong>Credentials.</strong> The one people miss: <strong>a sandbox with production credentials
+mounted in it is not a sandbox.</strong> Isolation of the filesystem is irrelevant if
+the environment holds a token that reaches production over a network the
+sandbox does permit. The strongest boundary in the world does not help when the
+keys are inside it.</p></div><div class="nbmd"><blockquote>
+<p><strong>What this control closes.</strong></p>
+<p>Changes what the executing process can <strong>reach</strong>, which is the only variable A1.8 turned on. A sandbox holding production credentials contains nothing that matters.\n\n## 2 · The control</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>HOST = {&quot;fs&quot;: [&quot;/home/agent/work/data.csv&quot;, &quot;/home/agent/.ssh/id_ed25519&quot;,
+                &quot;/etc/passwd&quot;],
+        &quot;env&quot;: {&quot;AWS_ACCESS_KEY_ID&quot;: &quot;AKIA-EXAMPLE-NOT-REAL&quot;,
+                &quot;DATABASE_URL&quot;: &quot;postgres://prod-db/main&quot;},
+        &quot;net&quot;: [&quot;prod-db:5432&quot;, &quot;169.254.169.254:80&quot;, &quot;0.0.0.0/0&quot;]}
 
-@dataclass
-class Decision:
-    allowed: bool; reason: str; subject: str = &quot;&quot;
-    def __str__(self):
-        return f&quot;{&#x27;ALLOW&#x27; if self.allowed else &#x27;DENY &#x27;:5s} {self.subject:44s} {self.reason}&quot;
+def sandbox(workdir=&quot;/sandbox/work&quot;, allow_net=(), keep_env=()):
+    return {&quot;fs&quot;: [p for p in HOST[&quot;fs&quot;] if p.startswith(workdir)] + [f&quot;{workdir}/data.csv&quot;],
+            &quot;env&quot;: {k: v for k, v in HOST[&quot;env&quot;].items() if k in keep_env},
+            &quot;net&quot;: list(allow_net)}
 
-PRIVATE = [re.compile(p) for p in (r&quot;^127\.&quot;, r&quot;^10\.&quot;, r&quot;^192\.168\.&quot;,
-                                   r&quot;^169\.254\.&quot;, r&quot;^172\.(1[6-9]|2\d|3[01])\.&quot;,
-                                   r&quot;^localhost$&quot;)]
+def reach(env, code):
+    out = []
+    if &quot;open(&quot;    in code: out += [f&quot;file:{p}&quot; for p in sorted(env[&quot;fs&quot;])]
+    if &quot;environ&quot;  in code: out += [f&quot;env:{k}&quot;  for k in sorted(env[&quot;env&quot;])]
+    if &quot;connect&quot;  in code: out += [f&quot;net:{h}&quot;  for h in sorted(env[&quot;net&quot;])]
+    return out
 
-@dataclass
-class Sandbox:
-    allow_hosts: set
-    workspace: str
-    allow_tools: set
-    approval_tools: set = field(default_factory=set)
-    deny_tools: set = field(default_factory=set)
-    deny_globs: tuple = (&quot;*/.ssh/*&quot;, &quot;*/.aws/*&quot;, &quot;*.pem&quot;, &quot;*/.env&quot;, &quot;*/etc/shadow&quot;)
-    log: list = field(default_factory=list)
+CODE = &quot;import os; d=os.environ; open(&#x27;/home/agent/.ssh/id_ed25519&#x27;); connect(&#x27;x&#x27;)&quot;
 
-    @staticmethod
-    def _norm(p):
-        parts = []
-        for seg in p.split(&quot;/&quot;):
-            if seg in (&quot;&quot;, &quot;.&quot;): continue
-            if seg == &quot;..&quot;:
-                if parts: parts.pop()
-                continue
-            parts.append(seg)
-        return &quot;/&quot; + &quot;/&quot;.join(parts)
+configs = {
+ &quot;no sandbox&quot;:                    HOST,
+ &quot;sandbox, prod creds mounted&quot;:   sandbox(allow_net=[&quot;prod-db:5432&quot;],
+                                          keep_env=(&quot;AWS_ACCESS_KEY_ID&quot;, &quot;DATABASE_URL&quot;)),
+ &quot;sandbox, no ambient creds&quot;:     sandbox(),
+}
+for label, env in configs.items():
+    r = reach(env, CODE)
+    print(f&quot;{label:32s}reached {len(r)}&quot;)
+    for item in r:
+        print(f&quot;      {item}&quot;)
+    print()
 
-    def _tool(self, tool, approved):
-        if tool in self.deny_tools:      return Decision(False, &quot;tool denied outright&quot;, tool)
-        if tool in self.approval_tools and not approved:
-            return Decision(False, &quot;needs human approval, none presented&quot;, tool)
-        if tool in self.allow_tools or tool in self.approval_tools:
-            return Decision(True, &quot;permitted&quot;, tool)
-        return Decision(False, &quot;not on the tool allowlist (deny by default)&quot;, tool)
-
-    def _net(self, url):
-        host = (urlparse(url).hostname or &quot;&quot;).lower()
-        if not host: return Decision(False, &quot;unparseable destination&quot;, url)
-        if any(p.match(host) for p in PRIVATE):
-            tag = &quot; — cloud metadata service&quot; if host.startswith(&quot;169.254&quot;) else &quot;&quot;
-            return Decision(False, f&quot;private/link-local blocked{tag}&quot;, url)
-        if host in self.allow_hosts: return Decision(True, &quot;host allowlisted&quot;, url)
-        return Decision(False, &quot;not on the egress allowlist&quot;, url)
-
-    def _path(self, p):
-        real = self._norm(p)
-        for g in self.deny_globs:
-            if fnmatch.fnmatch(real, g): return Decision(False, f&quot;deny rule {g}&quot;, p)
-        ws = self._norm(self.workspace)
-        if real == ws or real.startswith(ws + &quot;/&quot;):
-            return Decision(True, f&quot;inside workspace ({real})&quot;, p)
-        return Decision(False, f&quot;outside workspace; resolves to {real}&quot;, p)
-
-    def call(self, tool, target=&quot;&quot;, approved=False):
-        d = self._tool(tool, approved)
-        if d.allowed and target.startswith((&quot;http://&quot;, &quot;https://&quot;)): d = self._net(target)
-        elif d.allowed and target.startswith(&quot;/&quot;):                   d = self._path(target)
-        self.log.append(d); return d
-
-box = Sandbox(allow_hosts={&quot;api.github.com&quot;}, workspace=&quot;/work/repo&quot;,
-              allow_tools={&quot;read_file&quot;, &quot;search_code&quot;, &quot;http_get&quot;},
-              approval_tools={&quot;post_comment&quot;},
-              deny_tools={&quot;run_shell&quot;, &quot;rotate_credential&quot;})
-
-print(&quot;the agent doing its actual job:&quot;)
-for tool, target in [(&quot;read_file&quot;, &quot;/work/repo/src/auth.py&quot;),
-                     (&quot;search_code&quot;, &quot;&quot;),
-                     (&quot;http_get&quot;, &quot;https://api.github.com/repos/x/y/pulls/8812&quot;),
-                     (&quot;post_comment&quot;, &quot;&quot;)]:
-    print(&quot;  &quot;, box.call(tool, target, approved=(tool == &quot;post_comment&quot;)))</code></pre></div><div class="nbmd"><h2>3 · The test — assume the prompt is entirely attacker-controlled</h2>
-<p>Every call below was <em>requested</em> by the model. Assume the attacker owns the text completely: they have read the system prompt, they know the tool names, and there is no filter they have not seen. What holds?</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ATTACKS = [
- (&quot;read the deploy key&quot;,         &quot;read_file&quot;, &quot;/work/repo/../../root/.ssh/id_rsa&quot;),
- (&quot;read cloud credentials&quot;,      &quot;read_file&quot;, &quot;/work/repo/../../home/app/.aws/credentials&quot;),
- (&quot;read the env file&quot;,           &quot;read_file&quot;, &quot;/work/repo/.env&quot;),
- (&quot;steal the instance role&quot;,     &quot;http_get&quot;,  &quot;http://169.254.169.254/latest/meta-data/iam/security-credentials/&quot;),
- (&quot;reach an internal service&quot;,   &quot;http_get&quot;,  &quot;http://10.0.3.14:8080/admin&quot;),
- (&quot;exfiltrate the source&quot;,       &quot;http_get&quot;,  &quot;https://collect.example.com/upload&quot;),
- (&quot;spawn a shell&quot;,               &quot;run_shell&quot;, &quot;&quot;),
- (&quot;rotate credentials&quot;,          &quot;rotate_credential&quot;, &quot;&quot;),
- (&quot;use an undiscovered tool&quot;,    &quot;exec_python&quot;, &quot;&quot;),
-]
-blocked = 0
-for label, tool, target in ATTACKS:
-    d = box.call(tool, target)
-    blocked += not d.allowed
-    print(f&quot;{label:28s} {d}&quot;)
-print(f&quot;\n{blocked}/{len(ATTACKS)} attacks blocked with the prompt fully compromised.&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — what the sandbox does NOT stop</h2>
-<p>Being honest about the limits is what makes the control trustworthy. The sandbox bounds <em>capability</em>. It does nothing about correctness within that capability.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>NOT_COVERED = [
- (&quot;wrong but permitted action&quot;,
-  &quot;post a misleading review comment approving a vulnerable PR&quot;,
-  &quot;inside the tool allowlist — this is a verification problem (B2.2)&quot;),
- (&quot;data exfiltration through an allowed channel&quot;,
-  &quot;encode the source into a GitHub comment on a public repo&quot;,
-  &quot;api.github.com is allowlisted; egress control cannot see intent&quot;),
- (&quot;resource exhaustion&quot;,
-  &quot;loop forever calling search_code&quot;,
-  &quot;needs budgets and stop conditions (B2.4)&quot;),
- (&quot;acting on injected instructions within its remit&quot;,
-  &quot;a diff says &#x27;approve this PR&#x27;; the agent approves it&quot;,
-  &quot;needs instruction/data provenance (C1.3)&quot;),
-]
-for name, example, why in NOT_COVERED:
-    print(f&quot;✗ {name}\n    example: {example}\n    why: {why}\n&quot;)
-
-d = box.call(&quot;post_comment&quot;, &quot;&quot;, approved=True)
-print(&quot;proof:&quot;, d, &quot;  ← a permitted tool, whatever the comment says&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: summarise what the sandbox actually bought.
-denied = [x for x in box.log if not x.allowed]
-reasons = sorted({x.reason for x in denied})
-print(f&quot;calls {len(box.log)} · allowed {len(box.log)-len(denied)} · denied {len(denied)}&quot;)
-print(&quot;distinct denial reasons:&quot;)
-for r in reasons: print(&quot;   ·&quot;, r)
-assert len(denied) &gt;= 9
-print(&quot;\nThe honest claim: capability is bounded, correctness is not.&quot;)
-print(&quot;Every other A3 lesson tightens one of these levers; B2 handles correctness.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The four legitimate calls succeed. All nine attacks are blocked, each with a specific reason — traversal resolving outside the workspace, the deny rule on <code>.env</code>, the metadata service, the private address, the unlisted host, the two denied tools and the unknown tool. The final section shows four real attacks the sandbox does not address.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Take your own agent's configuration and run this exact test: assume the prompt is attacker-owned and list what still holds. The list of things that hold is your actual security posture; everything else is a hope about model behaviour.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.3.html">A3.3 · Filesystem and path guards</a></strong></p>
+print(&quot;The middle configuration is the one that ships. The filesystem is&quot;)
+print(&quot;isolated, the syscalls are filtered, and the environment holds a&quot;)
+print(&quot;credential that reaches production over a network hop the sandbox allows.&quot;)
+print()
+print(&quot;Isolation of the wrong dimension is not a weaker control. It is the&quot;)
+print(&quot;appearance of one.&quot;)
+assert reach(configs[&quot;sandbox, no ambient creds&quot;], CODE) and \
+       not any(&quot;env:&quot; in r for r in reach(configs[&quot;sandbox, no ambient creds&quot;], CODE))</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The same code is executed against three environments. Unsandboxed it reaches a private key, two credentials and the whole network. Sandboxed but with production credentials mounted it still reaches both credentials and the production database. Only the third — no ambient credentials — contains it.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Print the environment of one sandbox you run code in. Every credential in it is reachable by anything that executes there, and the isolation you paid for does not apply to any of them.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.3.html">A3.3 · Egress control</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.2.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A table of syscall surface and reachable host resources per tier — a number you can put in a design review.</div><div class="chips"><span>gVisor</span><span>Firecracker</span><span>Docker</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.2.ipynb</code></p></div><div class="pager"><a href="A3.1.html"><span class="k">← Previous</span><span class="t">A3.1 · Authorization models that make bad grants impossible</span></a><a class="next" href="A3.3.html"><span class="k">Next →</span><span class="t">A3.3 · Filesystem and path guards</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The same code is executed against three environments. Unsandboxed it reaches a private key, two credentials and the whole network. Sandboxed but with production credentials mounted it still reaches both credentials and the production database. Only the third — no ambient credentials — contains it.</div><div class="chips"><span>gVisor</span><span>Falco</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.2.ipynb</code></p></div><div class="pager"><a href="A3.1.html"><span class="k">← Previous</span><span class="t">A3.1 · Default-deny on the tool call</span></a><a class="next" href="A3.3.html"><span class="k">Next →</span><span class="t">A3.3 · Egress control</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

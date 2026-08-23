@@ -6,9 +6,9 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 
 | Track | Role | Sessions | Function |
 |---|---|---|---|
-| [A1](track-a1.md) | The Security Architect | 12 | A — Security Architecture & Platform |
-| [A2](track-a2.md) | The Identity & Non-Human Identity Engineer | 9 | A — Security Architecture & Platform |
-| [A3](track-a3.md) | The Platform & Cloud Security Engineer | 9 | A — Security Architecture & Platform |
+| [A1](track-a1.md) | The Agentic Reference Architecture, and Every Risk It Carries | 16 | A — Security Architecture & Platform |
+| [A2](track-a2.md) | Controls — Identity and Ingress | 7 | A — Security Architecture & Platform |
+| [A3](track-a3.md) | Controls — Runtime and the Gateway | 7 | A — Security Architecture & Platform |
 | [B1](track-b1.md) | The AppSec Engineer / Code Reviewer | 16 | B — Product & Application Security |
 | [B2](track-b2.md) | The Security Automation / Harness Engineer | 18 | B — Product & Application Security |
 | [C1](track-c1.md) | The Pentester / Red Teamer | 7 | C — Offensive Security & Research |

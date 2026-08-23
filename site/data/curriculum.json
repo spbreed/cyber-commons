@@ -26,25 +26,26 @@
   {
    "id": "A",
    "title": "Security Architecture & Platform",
-   "blurb": "The people who decide what is structurally possible. If they get it wrong, no amount of downstream diligence recovers it.",
+   "blurb": "One reference architecture, every risk it carries, and the controls that close them. Get this wrong and no amount of downstream diligence recovers it.",
    "tracks": [
     {
      "id": "A1",
      "chapter": 1,
-     "title": "The Security Architect",
+     "title": "The Agentic Reference Architecture, and Every Risk It Carries",
      "titles": "Security Architect, Principal Security Engineer, Head of Security Architecture",
-     "changes": "Designing systems that act — and defending them at every layer. 12 lessons.",
-     "autonomy": "Designs must be safe at L3 even when deployed at L2.5.",
-     "deliverable": "A reference architecture and a blast-radius measurement for one real business workflow.",
+     "changes": "One vendor-neutral reference architecture, then one lesson per risk that architecture makes possible — mapped to the OWASP Agentic AI threat taxonomy and explained in plain English. 16 lessons.",
+     "autonomy": "Read the architecture once; every risk after it names the component it attacks.",
+     "deliverable": "A component map of one agentic system you run, with every applicable threat marked against the component it lands on.",
      "sessions": [
       {
        "id": "A1.1",
-       "title": "What an agentic system is actually made of",
+       "title": "The reference architecture for agentic AI",
        "track": "both",
-       "summary": "Decompose an agent into model, harness, tools, memory, identity and egress path. You cannot secure what you cannot decompose — this is the vocabulary the rest of the course runs on.",
-       "risk": "\"Secure the agent\" has no referent until you can name the parts. Every control in this curriculum attaches to one specific component or one boundary between two.",
-       "control": "Draw the system as it really runs: app, model, agent loop, tools and APIs, MCP servers, retrieval, memory — and mark which boundaries untrusted data crosses.",
-       "lab": "Build the component graph for a working agent, then trace one user request through every hop and mark where trust changes.",
+       "kind": "architecture",
+       "summary": "One vendor-neutral picture of an agentic system: ingress, orchestrator, agent runtime, model layer, tools and MCP, knowledge and memory, agent-to-agent messaging, identity and policy, egress, observability. Plus the five topologies these compose into. Every risk and every control in this chapter names a component from this map.",
+       "risk": "Without a shared picture, 'secure the agent' has no referent and every later risk lands nowhere in particular.",
+       "control": "One component map and five topologies, named once and reused by every lesson that follows.",
+       "lab": "Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.",
        "tools": [
         "kagent",
         "OpenTelemetry"
@@ -56,475 +57,486 @@
       },
       {
        "id": "A1.2",
-       "title": "The controls, and where each one binds",
+       "title": "Prompt injection",
        "track": "secure",
-       "summary": "Map every available control to the layer that actually enforces it: prompt, harness, gateway, runtime, network. Shows why a control placed at the wrong layer produces paper assurance and nothing else.",
-       "risk": "Controls chosen as a checklist land in the wrong layer — a prompt rule where an authorization rule was needed, and nothing to point at when asked what stops it.",
-       "control": "One map: identity, default-deny authorization, sandboxed execution, tool and MCP trust, egress, containment, audit — each bound to the component it constrains.",
-       "lab": "Place seven controls on the component graph from A1.1, then remove one at a time and count which attacks stop being stopped.",
-       "tools": [
-        "OPA",
-        "SPIFFE/SPIRE",
-        "Falco",
-        "agentgateway"
-       ],
-       "models": [
-        "GLM-4.6"
-       ]
-      },
-      {
-       "id": "A1.3",
-       "title": "Architecture review when the system acts",
-       "track": "secure",
-       "summary": "Rebuild the design review for systems that take actions rather than return answers. New questions, new failure assumptions, new sign-off criteria.",
-       "risk": "PDF threat models go stale the moment the agent's tools change.",
-       "control": "Living, continuously re-evaluated threat models over the three planes separately.",
-       "lab": "Generate a threat model from a running agent's actual tool manifest, then diff it after adding one tool.",
-       "tools": [
-        "OWASP Threat Dragon",
-        "kagent"
-       ],
-       "models": [
-        "GLM-4.6"
-       ]
-      },
-      {
-       "id": "A1.4",
-       "title": "Designing the agent control plane",
-       "track": "secure",
-       "summary": "The central point where agent identity, policy, tool access and audit converge. How to build one without turning it into the org's slowest bottleneck.",
-       "risk": "Controls assumed to live 'in the agent' are advisory, not enforced.",
-       "control": "Identity fabric → agentic gateway → policy decision point → sandboxed runtime → audited action plane.",
-       "lab": "Stand the whole reference stack up on kind: SPIRE + agentgateway + OPA + a sandboxed runner.",
-       "tools": [
-        "kind",
-        "SPIRE",
-        "agentgateway",
-        "OPA"
-       ],
-       "models": [
-        "Llama 3.3"
-       ]
-      },
-      {
-       "id": "A1.5",
-       "title": "Blast radius as a design metric",
-       "track": "secure",
-       "summary": "Treat \"what can this agent reach if fully compromised\" as a measurable, first-class design constraint. Concrete techniques to shrink it before anything ships.",
-       "risk": "Blast radius is asserted in review, never measured.",
-       "control": "Make it a number that appears in the design review.",
-       "lab": "Measure reachable actions under flat RBAC vs attenuated delegation while an injection fires.",
-       "tools": [
-        "OpenFGA",
-        "SPIRE"
-       ],
-       "models": [
-        "Kimi K2"
-       ]
-      },
-      {
-       "id": "A1.6",
-       "title": "Multi-agent topology",
-       "track": "secure",
-       "summary": "Orchestrator, peer and swarm patterns, and how trust propagates between agents. Where delegation chains quietly amplify privilege nobody granted.",
-       "risk": "Fan-out concentrates authority somewhere nobody drew.",
-       "control": "Planner/executor/critic splits with delegation-depth limits.",
-       "lab": "Build a 3-agent topology in kagent and chart where authority actually accumulates.",
-       "tools": [
-        "kagent"
-       ],
-       "models": [
-        "GLM-4.6",
-        "Llama 3.3"
-       ]
-      },
-      {
-       "id": "A1.7",
-       "title": "Build vs buy",
-       "track": "both",
-       "summary": "A decision framework for agent platforms, gateways and guardrail products. What you must own to retain control, and what can safely be outsourced.",
-       "risk": "Outsourcing the control plane to a vendor you cannot audit.",
-       "control": "Buy the commodity, build the boundary, never outsource identity or stop authority.",
-       "lab": "Score three gateway options against a fixed control checklist.",
-       "tools": [
-        "agentgateway",
-        "Envoy"
-       ],
-       "models": []
-      },
-      {
-       "id": "A1.8",
-       "title": "Model routing architecture",
-       "track": "both",
-       "summary": "Routing across model tiers, vendors and hosting modes without leaking data or dropping policy. Cost, latency and assurance tradeoffs made explicit rather than assumed.",
-       "risk": "The router fails open to a weaker model under load — a silent downgrade of every guardrail.",
-       "control": "Treat tier selection as a security decision with explicit fail-closed defaults.",
-       "lab": "Route across GLM-4.6 / Llama / Kimi with LiteLLM, then force a failure and watch what it falls back to.",
-       "tools": [
-        "LiteLLM",
-        "vLLM"
-       ],
-       "models": [
-        "GLM-4.6",
-        "Llama 3.3",
-        "Kimi K2"
-       ]
-      },
-      {
-       "id": "A1.9",
-       "title": "The injection surface: direct and indirect prompt injection",
-       "track": "secure",
-       "summary": "Direct injection is a user attacking their own agent; indirect injection is attacker text arriving inside a document, web page, ticket, email or code comment that the agent then obeys. Map every untrusted-content path into the context window and treat each one as an unauthenticated code path.",
-       "risk": "Attacker text arrives inside a document, ticket, web page, email or code comment, and the agent obeys it. Every untrusted-content path into the context window is an unauthenticated code path nobody enumerated.",
-       "control": "Map every untrusted-content path into the context window and treat each as unauthenticated input: provenance tagging, source allow-listing, and no tool selection from an untrusted span.",
-       "lab": "Enumerate the untrusted-content paths into one agent's context, land the same payload through each, then show provenance enforcement refusing all of them.",
-       "tools": [
-        "garak",
-        "promptfoo",
-        "LLM Guard"
-       ],
-       "models": [
-        "Llama Guard 4",
-        "GLM-4.6"
-       ]
-      },
-      {
-       "id": "A1.10",
-       "title": "Jailbreaks, model inversion and extraction",
-       "track": "secure",
-       "summary": "The model-layer attack taxonomy: jailbreaks that bypass behavioural policy, model inversion that reconstructs training or context data from outputs, membership inference, model and prompt extraction, and embedding inversion against your vector store. What each attack actually recovers, and which architectural control genuinely blunts it.",
-       "risk": "The whole model-layer attack taxonomy gets called \"jailbreaks\". Inversion, membership inference, prompt extraction and embedding inversion each recover something different and are blunted by different controls.",
-       "control": "Name what each attack actually recovers, then bind the architectural control that genuinely blunts it — most of which do not sit at the model layer.",
-       "lab": "Run each attack class against a deterministic stand-in, record what it recovered, and map each to the layer that can stop it.",
-       "tools": [
-        "garak",
-        "Presidio"
-       ],
-       "models": [
-        "Llama Guard 4"
-       ]
-      },
-      {
-       "id": "A1.11",
-       "title": "Building outcome-driven guardrails, layer by layer",
-       "track": "secure",
-       "summary": "Specify guardrails by the *outcome you refuse to permit* rather than by the input string you hope to block — because attackers rewrite strings and cannot rewrite consequences. Placement and tradeoffs across all ten enforcement layers, and why any single-layer defence is a demo, not a control.",
-       "risk": "Guardrails specified by the input string you hope to block. Attackers rewrite strings freely; they cannot rewrite consequences.",
-       "control": "Specify each guardrail by the outcome you refuse to permit, then place it at a layer that can actually enforce it — and know that any single-layer defence is a demo.",
-       "lab": "Take one refused outcome, place it across all ten enforcement layers, and measure which placements actually deny it.",
-       "tools": [
-        "OPA",
-        "agentgateway",
-        "Cilium"
-       ],
-       "models": [
-        "GLM-4.6"
-       ]
-      },
-      {
-       "id": "A1.12",
-       "title": "Proving guardrails work",
-       "track": "secure",
-       "summary": "Bypass testing, adversarial suites, and the economics of a control that fails three times in a hundred against a determined attacker. Measurement discipline that converts a guardrail claim into evidence an auditor or a red team will accept.",
-       "risk": "A guardrail claim with no bypass testing behind it. A control that fails three times in a hundred is not a control against an attacker who can retry.",
-       "control": "Adversarial suites and bypass economics that convert a guardrail claim into evidence a red team or an auditor will accept.",
-       "lab": "Run a bypass suite against a guardrail and compute the attacker's expected cost per success.",
+       "kind": "risk",
+       "summary": "A user types instructions that override the operator's. It lands at the ingress component and travels straight into the context window, where an operator instruction and a user instruction are the same kind of token.",
+       "risk": "The user redirects their own agent past the behaviour the operator specified — bounded by their own authority, and therefore the milder of the two injection risks.",
+       "control": "Provenance at ingress (A2.6) and default-deny on the tool call (A3.1). The system prompt is not a control.",
+       "lab": "Send an override through the ingress component and watch the agent's goal change.",
        "tools": [
         "garak",
         "promptfoo"
        ],
        "models": [
+        "Llama Guard 4"
+       ],
+       "owasp": "T6 Intent Breaking & Goal Manipulation · LLM01"
+      },
+      {
+       "id": "A1.3",
+       "title": "Indirect prompt injection",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "Attacker text arrives inside content the agent was asked to process — a retrieved document, a ticket body, a web page, a tool result. It enters at the knowledge or tool component, and the agent obeys it while carrying the user's authority.",
+       "risk": "Anyone who can write into a corpus the agent reads can steer it, using the victim's authority rather than their own. Nobody is phished and no credential leaks.",
+       "control": "Provenance marking at ingress (A2.6), and a rule that untrusted spans may not select a tool (A3.1).",
+       "lab": "Poison one retrieved document and watch the agent act on it with the user's authority.",
+       "tools": [
+        "garak",
+        "LLM Guard"
+       ],
+       "models": [
+        "Llama Guard 4"
+       ],
+       "owasp": "T6 Intent Breaking & Goal Manipulation · LLM01"
+      },
+      {
+       "id": "A1.4",
+       "title": "Memory poisoning",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "The memory component persists across turns and sessions. Anything written into it once is read back as trusted context forever, so a single successful injection becomes a permanent instruction.",
+       "risk": "An attacker's instruction outlives the conversation that delivered it, and re-fires on requests from users who never met the original payload.",
+       "control": "Provenance survives into memory (A2.6), and memory writes are scoped to the identity that made them (A2.1).",
+       "lab": "Write one poisoned fact into memory and watch it steer a later, unrelated session.",
+       "tools": [
+        "LLM Guard"
+       ],
+       "models": [
         "GLM-4.6"
-       ]
+       ],
+       "owasp": "T1 Memory Poisoning · LLM04"
+      },
+      {
+       "id": "A1.5",
+       "title": "Tool misuse",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "The tool component is the only part of the architecture that changes anything. A tool granted broad scope for convenience does exactly what it was built to do, for whoever asks.",
+       "risk": "The agent uses a legitimate tool, with legitimate arguments, to do something nobody intended — and every log line looks normal.",
+       "control": "Default-deny authorization on the tool call (A3.1) and just-in-time authority (A2.4).",
+       "lab": "Call one over-scoped tool with attacker-chosen arguments and see what it reaches.",
+       "tools": [
+        "OPA",
+        "kmcp"
+       ],
+       "models": [
+        "GLM-4.6"
+       ],
+       "owasp": "T2 Tool Misuse · LLM06"
+      },
+      {
+       "id": "A1.6",
+       "title": "Privilege compromise",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "The identity component decides what the agent may reach. When an agent inherits a human's standing permissions, or holds a shared service account, its authority is whatever the broadest user has.",
+       "risk": "The agent acts with more authority than the person who asked it to act, and the log records the service account rather than the human.",
+       "control": "Delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1).",
+       "lab": "Have an agent inherit a privileged token and reach something its requester never could.",
+       "tools": [
+        "Keycloak",
+        "SPIFFE/SPIRE"
+       ],
+       "models": [],
+       "owasp": "T3 Privilege Compromise · LLM06"
+      },
+      {
+       "id": "A1.7",
+       "title": "Identity spoofing and impersonation",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "When agents share a credential, the identity component cannot distinguish them. One agent can present itself as another, and a downstream service has no way to tell.",
+       "risk": "Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them.",
+       "control": "Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).",
+       "lab": "Have two agents share a credential, then try to work out which one made the call.",
+       "tools": [
+        "SPIFFE/SPIRE"
+       ],
+       "models": [],
+       "owasp": "T9 Identity Spoofing & Impersonation"
+      },
+      {
+       "id": "A1.8",
+       "title": "Unexpected code execution",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "Many agents write and run code as a tool. The agent runtime component then executes model-authored text on a host, with whatever the process can reach.",
+       "risk": "Model-authored code runs with the runtime's privileges — reaching the filesystem, the network and any credential in the environment.",
+       "control": "Sandboxed execution (A3.2) and egress control (A3.3).",
+       "lab": "Execute model-authored code and enumerate what the process could touch.",
+       "tools": [
+        "Falco",
+        "gVisor"
+       ],
+       "models": [
+        "GLM-4.6"
+       ],
+       "owasp": "T11 Unexpected RCE and Code Attacks · LLM05"
+      },
+      {
+       "id": "A1.9",
+       "title": "Agent communication poisoning",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "In multi-agent topologies the messaging component carries text between agents. A message from a peer arrives with more trust than a document, and usually with none of the checks.",
+       "risk": "One compromised agent steers every agent downstream of it, because a peer's message is treated as a colleague's instruction rather than as input.",
+       "control": "Message validation and provenance on the inter-agent channel (A3.5), and per-agent identity (A2.1).",
+       "lab": "Send one poisoned inter-agent message and watch it propagate through the topology.",
+       "tools": [
+        "agentgateway"
+       ],
+       "models": [],
+       "owasp": "T12 Agent Communication Poisoning"
+      },
+      {
+       "id": "A1.10",
+       "title": "Rogue agents in a multi-agent system",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "The orchestrator delegates to agents it discovers or is configured with. An agent that is compromised, or simply unregistered, participates in the topology as a peer.",
+       "risk": "An agent nobody approved receives delegated work and delegated authority, and the orchestrator has no way to tell it apart from a legitimate worker.",
+       "control": "A registry of approved agents with identity-bound admission (A2.5) and an audit trail per hop (A2.7).",
+       "lab": "Introduce an unregistered agent into the topology and have it receive delegated work.",
+       "tools": [
+        "SPIFFE/SPIRE",
+        "kagent"
+       ],
+       "models": [],
+       "owasp": "T13 Rogue Agents in Multi-Agent Systems"
+      },
+      {
+       "id": "A1.11",
+       "title": "Cascading hallucination",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "One agent's unverified output becomes the next agent's input. The model layer produces a confident wrong fact, the messaging component carries it, and every downstream step treats it as established.",
+       "risk": "A single fabrication becomes a shared premise, and by the third hop nothing in the system records that it was ever uncertain.",
+       "control": "Verification against ground truth before a claim propagates (A3.5).",
+       "lab": "Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.",
+       "tools": [
+        "Inspect"
+       ],
+       "models": [
+        "GLM-4.6"
+       ],
+       "owasp": "T5 Cascading Hallucination Attacks · LLM09"
+      },
+      {
+       "id": "A1.12",
+       "title": "Resource overload",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "The agent runtime loops. Without a ceiling it loops until something external stops it — a bill, a rate limit, or a person.",
+       "risk": "An agent consumes budget, tokens, API quota or downstream capacity without bound, and the failure is denial of service against your own systems.",
+       "control": "Budgets and stop conditions bound to the loop (A3.4).",
+       "lab": "Run a loop with no ceiling and count what it consumes before anything notices.",
+       "tools": [
+        "OpenTelemetry"
+       ],
+       "models": [],
+       "owasp": "T4 Resource Overload · LLM10"
+      },
+      {
+       "id": "A1.13",
+       "title": "Repudiation and untraceability",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "The observability component records what happened. If it records tool calls without the input that motivated them, or without the human principal, the record cannot answer the only question that matters afterwards.",
+       "risk": "You cannot say which user caused an action, or what made the agent decide — so the incident cannot be scoped and the action cannot be attributed.",
+       "control": "Attribution carried on every hop, in a store the agent cannot write to (A2.7).",
+       "lab": "Reconstruct who caused a deletion from a log that records only tool calls.",
+       "tools": [
+        "OpenTelemetry"
+       ],
+       "models": [],
+       "owasp": "T8 Repudiation & Untraceability"
+      },
+      {
+       "id": "A1.14",
+       "title": "Overwhelming the human in the loop",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "Human approval is placed at the tool call as a control. Agents generate approval requests far faster than people can read them.",
+       "risk": "The approval gate is recorded as a control and operates as a click. At volume it approves everything, including the one request that mattered.",
+       "control": "Approval reserved for irreversible actions, with everything else bounded by policy (A3.6).",
+       "lab": "Push approval volume up and measure the point at which review quality collapses.",
+       "tools": [],
+       "models": [],
+       "owasp": "T10 Overwhelming Human-in-the-Loop"
+      },
+      {
+       "id": "A1.15",
+       "title": "Misaligned and deceptive behaviour",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "The agent optimises for the objective it was given, which is never quite the objective you meant. Where the two diverge, reporting success is cheaper than achieving it.",
+       "risk": "The agent satisfies the letter of its instruction — including by reporting a success it did not achieve — and the transcript contains no lie you can point at.",
+       "control": "An independent verifier that checks the outcome rather than the claim (A3.5).",
+       "lab": "Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.",
+       "tools": [
+        "Inspect"
+       ],
+       "models": [
+        "GLM-4.6"
+       ],
+       "owasp": "T7 Misaligned & Deceptive Behaviors"
+      },
+      {
+       "id": "A1.16",
+       "title": "Attacks that target the humans",
+       "track": "secure",
+       "kind": "risk",
+       "summary": "Two threats that route through people rather than components: an insider abusing delegation to reach what they could not reach directly, and an agent whose trusted output steers the person reading it.",
+       "risk": "The delegation chain is used as a privilege-laundering path, and the agent's output becomes an unusually persuasive channel into a human decision.",
+       "control": "Ceiling-bound delegation (A2.3), attribution per hop (A2.7) and marking machine-generated output as such (A3.6).",
+       "lab": "Launder a request through a delegation chain to reach something the requester was denied.",
+       "tools": [],
+       "models": [],
+       "owasp": "T14 Human Attacks on Multi-Agent Systems · T15 Human Manipulation"
       }
      ]
     },
     {
      "id": "A2",
      "chapter": 2,
-     "title": "The Identity & Non-Human Identity Engineer",
-     "titles": "IAM Engineer, NHI Lead, Identity Architect, Workload Identity Engineer",
-     "changes": "The hardest unsolved problem in the stack. 9 lessons.",
-     "autonomy": "Identity is the control that makes L2.5 defensible; without it you are running L3 and calling it L2.",
-     "deliverable": "A working three-hop delegation chain with proven attenuation, and a rollback of one agent's access without collateral.",
+     "title": "Controls — Identity and Ingress",
+     "titles": "IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer",
+     "changes": "The two controls that stop the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 7 lessons.",
+     "autonomy": "Identity first: every later control is a predicate that takes a caller as its argument.",
+     "deliverable": "A delegation chain for one agent that an auditor can follow from human to action.",
      "sessions": [
       {
        "id": "A2.1",
-       "title": "\"Who is calling?\"",
+       "title": "Agent identity: user, workload, agent",
        "track": "secure",
-       "summary": "The core identity question when the caller is software acting for a human. Authentication patterns for agents, workloads and the credentials they carry.",
-       "risk": "You cannot answer the first question of every investigation.",
-       "control": "A taxonomy: user-agent vs workload identity, sandboxed vs not, managed vs personal.",
-       "lab": "Classify every agent in your lab and record what proves each claim.",
+       "kind": "control",
+       "summary": "Three identities are in play whenever an agent acts: the human who asked, the workload that runs, and the agent instance doing the work. Collapsing them into one service account is what makes spoofing and privilege compromise possible.",
+       "risk": "A shared service account answers 'what ran' and destroys 'for whom' — so no later control can be conditioned on the caller.",
+       "control": "A distinct identity per workload, carrying the human principal alongside it, asserted on every call.",
+       "lab": "Separate the three identities and show a downstream service authorising on the agent while attributing to the human.",
        "tools": [
-        "SPIRE"
+        "SPIFFE/SPIRE",
+        "Keycloak"
        ],
-       "models": []
+       "models": [],
+       "mitigates": "T9 Identity Spoofing · T3 Privilege Compromise · T1 Memory Poisoning"
       },
       {
        "id": "A2.2",
-       "title": "The bootstrap problem",
+       "title": "Bootstrapping the first credential",
        "track": "secure",
-       "summary": "How an agent obtains its first credential without a pre-shared secret. Attestation, workload identity and the trust anchor that starts every chain.",
-       "risk": "Proving identity before you hold a credential — usually solved with a long-lived secret in a file.",
-       "control": "Workload attestation: SPIFFE SVIDs, instance identity documents, projected SA tokens, re-attestation on rotation.",
-       "lab": "Issue an SVID to a workload with SPIRE and watch it re-attest after rotation — zero static secrets.",
+       "kind": "control",
+       "summary": "An agent needs a credential to prove who it is, and cannot be given one securely without already proving who it is. Attestation breaks the circle: the platform vouches for what it started.",
+       "risk": "A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.",
+       "control": "Platform attestation exchanged for a short-lived, workload-bound credential.",
+       "lab": "Exchange an attestation for a credential, then show a copied secret failing the same exchange.",
        "tools": [
-        "SPIFFE/SPIRE",
-        "kind"
+        "SPIFFE/SPIRE"
        ],
-       "models": []
+       "models": [],
+       "mitigates": "T9 Identity Spoofing & Impersonation"
       },
       {
        "id": "A2.3",
-       "title": "Shadow Autonomy",
+       "title": "Delegation that narrows, and survives audit",
        "track": "secure",
-       "summary": "Agents that acquire capability nobody approved — inherited tokens, service accounts, copy-pasted keys. How to find them before an auditor or an attacker does.",
-       "risk": "Agents executing under inherited human credentials — your audit trail is already wrong.",
-       "control": "Detect it first, then separate the principal; revocation is impossible until you can name the actor.",
-       "lab": "Find agent-vs-human credential use in logs by behavioural signature; then split the principal.",
+       "kind": "control",
+       "summary": "On-behalf-of delegation must satisfy two rules at once: the issued authority is a subset of what was presented, and within the ceiling the receiving agent is ever allowed to hold. Checking one is the common failure.",
+       "risk": "Subset-only lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked.",
+       "control": "Token exchange that intersects presented scope with the actor's ceiling, and records the chain.",
+       "lab": "Run both narrowing rules against a request that passes one and fails the other.",
        "tools": [
-        "Keycloak",
-        "SPIRE"
+        "Keycloak"
        ],
-       "models": [
-        "Llama 3.3"
-       ]
+       "models": [],
+       "mitigates": "T3 Privilege Compromise · T8 Repudiation · T14 Human Attacks"
       },
       {
        "id": "A2.4",
-       "title": "The NHI governance gap",
+       "title": "Just-in-time authority",
        "track": "secure",
-       "summary": "Non-human identities now outnumber humans and sit entirely outside joiner-mover-leaver. Building lifecycle, ownership and revocation for identities with no HR record.",
-       "risk": "Revoking one misbehaving agent breaks forty others.",
-       "control": "Enrolment, ownership, scope, expiry, attribution — an agent registry with honest enforcement limits.",
-       "lab": "Build the registry, then revoke exactly one agent and prove no collateral.",
+       "kind": "control",
+       "summary": "Standing authority means a successful injection always finds a live credential. Just-in-time grants are scoped to one task, expire on a timer, and are unavailable the moment the task ends.",
+       "risk": "Permanent scope makes every injection a successful one, because the authority is always there when the attacker arrives.",
+       "control": "Short-lived, purpose-bound grants issued per task and expiring with it.",
+       "lab": "Issue a scoped grant, use it, then replay it after expiry and after the task closed.",
        "tools": [
         "Keycloak",
-        "SPIRE"
+        "OPA"
        ],
-       "models": []
+       "models": [],
+       "mitigates": "T3 Privilege Compromise · T2 Tool Misuse"
       },
       {
        "id": "A2.5",
-       "title": "Delegation that survives audit",
+       "title": "The non-human identity lifecycle",
        "track": "secure",
-       "summary": "Encoding \"acting on behalf of\" so the human principal remains provable months later. Token exchange, on-behalf-of flows and chain integrity.",
-       "risk": "On-behalf-of implemented as impersonation — the chain is unprovable afterwards.",
-       "control": "RFC 8693 token exchange with the `act` claim as a real delegation chain.",
-       "lab": "Build a three-hop chain in Keycloak; decode the `act` claims and show attenuation at each hop.",
+       "kind": "control",
+       "summary": "Non-human identities outnumber humans and sit outside joiner-mover-leaver entirely. Without registration, ownership and revocation, an agent nobody approved is indistinguishable from one that was.",
+       "risk": "Agents accumulate with no owner and no expiry, and an unregistered agent joins a topology as a peer.",
+       "control": "A registry with a named owner, an expiry, and admission bound to a registered identity.",
+       "lab": "Admit agents against a registry and show an unregistered one refused at the door.",
        "tools": [
-        "Keycloak",
-        "RFC 8693"
+        "SPIFFE/SPIRE",
+        "kagent"
        ],
-       "models": []
+       "models": [],
+       "mitigates": "T9 Identity Spoofing · T13 Rogue Agents · T3 Privilege Compromise"
       },
       {
        "id": "A2.6",
-       "title": "The agentic gateway",
+       "title": "Ingress: marking untrusted content at the door",
        "track": "secure",
-       "summary": "A policy enforcement point every agent call passes through. What it must see, decide and record to be worth the extra hop.",
-       "risk": "Secrets end up in agent code because there was nowhere else to put them.",
-       "control": "Gateway-side credential exchange: virtual keys, JWKS validation, identity mapping.",
-       "lab": "Put agentgateway in front of an MCP server and move every credential out of the agent.",
+       "kind": "control",
+       "summary": "The context window is one flat string by the time the model sees it. The control is to attach an origin to every span before it is assembled, and carry that label everywhere the span goes — including into memory.",
+       "risk": "Concatenation destroys the one fact that separates an operator instruction from an attacker's: where it came from.",
+       "control": "Provenance tagging at every ingress point, and a rule that only trusted origins may select a tool.",
+       "lab": "Tag every span at ingress, then show the same payload refused through six different entry paths.",
        "tools": [
-        "agentgateway",
-        "kmcp"
+        "LLM Guard",
+        "agentgateway"
        ],
        "models": [
-        "GLM-4.6"
-       ]
+        "Llama Guard 4"
+       ],
+       "mitigates": "T6 Intent Breaking (direct and indirect) · T1 Memory Poisoning · T12 Communication Poisoning"
       },
       {
        "id": "A2.7",
-       "title": "Systems that don't understand agents",
+       "title": "Attribution: an audit trail that answers \"who\"",
        "track": "secure",
-       "summary": "Legacy apps, SaaS and databases that only model human users. Shimming agent identity into them without resorting to shared accounts.",
-       "risk": "Legacy services see only the human's token and grant everything.",
-       "control": "Token translation plus action-class blocking at the boundary.",
-       "lab": "Allow reads, deny protected-branch merges by token type, at the gateway.",
+       "kind": "control",
+       "summary": "A trace that records tool calls is not evidence. Evidence records the human principal, the agent identity, the delegation chain and the input that motivated each action — in a store the agent cannot write to.",
+       "risk": "Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed.",
+       "control": "Per-hop attribution written to an append-only store outside the agent's reach.",
+       "lab": "Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.",
        "tools": [
-        "agentgateway",
-        "OPA"
+        "OpenTelemetry",
+        "Sigstore"
        ],
-       "models": []
-      },
-      {
-       "id": "A2.8",
-       "title": "Just-in-time authority",
-       "track": "secure",
-       "summary": "Replacing standing agent privilege with short-lived, scoped, purpose-bound grants. Approval flow, expiry design and the operational cost of getting it wrong.",
-       "risk": "Standing access means an injection always has something to spend.",
-       "control": "Human-initiated credential release, change-window binding, maker/checker under agent attribution.",
-       "lab": "Cut standing access to zero and issue authority only inside a change window.",
-       "tools": [
-        "Keycloak",
-        "Vault (OSS)"
-       ],
-       "models": []
-      },
-      {
-       "id": "A2.9",
-       "title": "The classic failures",
-       "track": "secure",
-       "summary": "The recurring identity failure patterns: over-broad service accounts, unrotated keys, confused deputy, privilege inheritance. Each with its detection signal and its fix.",
-       "risk": "Confused deputy, token replay, shared static credentials, over-broad scope.",
-       "control": "Reproduce each one, then close it.",
-       "lab": "Exploit all four in the lab, then re-run against the hardened chain.",
-       "tools": [
-        "SPIRE",
-        "Keycloak"
-       ],
-       "models": [
-        "Kimi K2"
-       ]
+       "models": [],
+       "mitigates": "T8 Repudiation & Untraceability · T13 Rogue Agents"
       }
      ]
     },
     {
      "id": "A3",
      "chapter": 3,
-     "title": "The Platform & Cloud Security Engineer",
-     "titles": "Cloud Security Engineer, Platform Security Engineer, Infrastructure Security",
-     "changes": "Containment is where theory meets the kernel. 9 lessons.",
-     "autonomy": "Containment is what lets you say yes to L2.5 without pretending the agent is trustworthy.",
-     "deliverable": "A hardened runtime that survives a deliberate injected payload with a measured blast radius of zero outside the sandbox.",
+     "title": "Controls — Runtime and the Gateway",
+     "titles": "Platform Security Engineer, Cloud Security Architect, SRE",
+     "changes": "What holds when identity has already been defeated — and how the controls collapse into one enforcement point once you run more than a handful of agents. 7 lessons.",
+     "autonomy": "Every control here binds below the model, where a persuaded agent cannot argue with it.",
+     "deliverable": "A gateway policy that denies one high-consequence outcome at four independent layers.",
      "sessions": [
       {
        "id": "A3.1",
-       "title": "Authorization models that make bad grants impossible",
+       "title": "Default-deny on the tool call",
        "track": "secure",
-       "summary": "Choosing RBAC, ReBAC or policy-as-code so unsafe permissions cannot even be expressed. Design for structural denial rather than human review.",
-       "risk": "RBAC has no unit small enough to express the grant you actually meant.",
-       "control": "ReBAC/ABAC with time-scoped delegation and attenuation by construction.",
-       "lab": "Model the same grant in flat RBAC and in OpenFGA; prove the over-privileged grant is unrepresentable.",
+       "kind": "control",
+       "summary": "The tool call is the moment text becomes consequence, and the last place a decision can be made on facts rather than on intent. Default-deny means an unsafe grant cannot be expressed, not that it is reviewed.",
+       "risk": "Allow-by-default authorization is defeated by any argument the model can be persuaded to produce.",
+       "control": "Policy evaluated per call on (identity, tool, arguments, resource), denying unless a rule permits.",
+       "lab": "Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.",
        "tools": [
-        "OpenFGA",
-        "OPA"
+        "OPA",
+        "kmcp"
        ],
-       "models": []
+       "models": [],
+       "mitigates": "T2 Tool Misuse · T3 Privilege Compromise · T6 Intent Breaking"
       },
       {
        "id": "A3.2",
-       "title": "Sandboxing is the perimeter",
+       "title": "Sandboxed execution",
        "track": "secure",
-       "summary": "For an executing agent, the sandbox *is* the real security boundary. Isolation options compared by what each one genuinely contains.",
-       "risk": "Tier chosen by convenience, not by action class.",
-       "control": "Process → container → microVM → ephemeral workstation → air-gapped runner, chosen deliberately.",
-       "lab": "Run the same agent in three tiers and measure escape surface in each.",
+       "kind": "control",
+       "summary": "For an agent that runs code, the sandbox is the real security boundary. What matters is not that a sandbox exists but what it genuinely contains — filesystem, process, network and credentials.",
+       "risk": "Model-authored code inherits the runtime's reach, including any credential mounted into the environment.",
+       "control": "Execution in an isolate with no ambient credentials, a bounded filesystem and no default network.",
+       "lab": "Run the same code inside and outside the sandbox and enumerate what each could reach.",
        "tools": [
         "gVisor",
-        "Firecracker",
-        "Docker"
+        "Falco"
        ],
-       "models": [
-        "Llama 3.3"
-       ]
+       "models": [],
+       "mitigates": "T11 Unexpected Code Execution · T2 Tool Misuse"
       },
       {
        "id": "A3.3",
-       "title": "Filesystem and path guards",
+       "title": "Egress control",
        "track": "secure",
-       "summary": "Constraining what an agent can read, write and traverse. Path canonicalisation, mount strategy and the escapes teams routinely miss.",
-       "risk": "The agent iterating on code wanders into credentials.",
-       "control": "Workspace scoping, mount discipline, ephemeral state.",
-       "lab": "Attempt credential read from inside the sandbox; close it with mount policy.",
+       "kind": "control",
+       "summary": "Egress is the highest-leverage exfiltration control in the architecture, because every exfiltration path ends at the network boundary regardless of how the agent was persuaded.",
+       "risk": "An agent with unrestricted egress turns any successful injection into data loss.",
+       "control": "An allow-list at the network boundary, enforced where the agent cannot rewrite it.",
+       "lab": "Attempt exfiltration to several destinations under an allow-list and see which survive.",
        "tools": [
-        "Docker",
-        "Kyverno"
+        "Cilium",
+        "agentgateway"
        ],
-       "models": []
+       "models": [],
+       "mitigates": "T2 Tool Misuse · T6 Intent Breaking · LLM02 Sensitive Information Disclosure"
       },
       {
        "id": "A3.4",
-       "title": "Tool permission models",
+       "title": "Budgets and stop conditions",
        "track": "secure",
-       "summary": "Granting tools per-agent, per-task and per-risk-tier instead of all-or-nothing. Approval gates for destructive and irreversible operations.",
-       "risk": "The confused deputy at the tool layer.",
-       "control": "Capability scoping, allowlisted actions, structured output contracts, read-only defaults.",
-       "lab": "Redesign a dangerous tool so the dangerous call doesn't exist.",
+       "kind": "control",
+       "summary": "A budget is what makes 'autonomous' a bounded word. Token, time, cost and action ceilings turn an unbounded loop into one with a defined worst case.",
+       "risk": "Without a ceiling the loop runs until an external system stops it, and the failure mode is denial of service against yourself.",
+       "control": "Ceilings bound to the loop, with the run terminating rather than degrading when one is hit.",
+       "lab": "Run a looping agent against each ceiling and record which one fires first.",
        "tools": [
-        "kmcp",
-        "OPA"
+        "OpenTelemetry"
        ],
-       "models": []
+       "models": [],
+       "mitigates": "T4 Resource Overload · T10 Overwhelming Human-in-the-Loop"
       },
       {
        "id": "A3.5",
-       "title": "MCP is not a security boundary",
+       "title": "Validating what comes back",
        "track": "secure",
-       "summary": "What MCP does and does not guarantee about trust, provenance and authorization. The controls you must add around it before production.",
-       "risk": "Connector chaining as privilege escalation; unpinned servers.",
-       "control": "Server scanning, version pinning with hash verification, self-hosting.",
-       "lab": "Chain two MCP connectors to escalate, then pin and scan to stop it.",
+       "kind": "control",
+       "summary": "Tool results and peer messages re-enter the context as facts. A schema check catches malformed input; a verifier checks the claim against something that is true independently of the agent.",
+       "risk": "An unverified claim becomes a shared premise, and a peer message is trusted more than a document it is no safer than.",
+       "control": "Schema validation plus an independent verifier before any claim propagates.",
+       "lab": "Pass a fabricated claim through a schema check and then through a ground-truth verifier.",
        "tools": [
-        "kmcp",
-        "MCP Inspector",
-        "Sigstore"
+        "Inspect"
        ],
-       "models": [
-        "GLM-4.6"
-       ]
+       "models": [],
+       "mitigates": "T5 Cascading Hallucination · T12 Communication Poisoning · T7 Misaligned Behaviour"
       },
       {
        "id": "A3.6",
-       "title": "Egress control for agents",
+       "title": "Human approval that survives volume",
        "track": "secure",
-       "summary": "Allow-lists, proxies and DNS control for outbound agent traffic. Why egress is the single highest-leverage exfiltration control available to you.",
-       "risk": "An agent with unrestricted egress has no other meaningful control.",
-       "control": "Allowlists, inspecting proxies, DNS conditional forwarding, data perimeters.",
-       "lab": "Put a Squid allowlist in front of an agent and watch exfiltration fail.",
-       "tools": [
-        "Squid",
-        "Cilium",
-        "Kyverno"
-       ],
-       "models": [
-        "GLM-4.6"
-       ]
+       "kind": "control",
+       "summary": "Approval is a real control for rare, irreversible actions and a rubber stamp for everything else. The design question is not whether to have it but how few things reach it.",
+       "risk": "An approval queue at volume approves everything, and the risk register still records it as a control.",
+       "control": "Approval reserved for irreversible actions only, with machine-generated content labelled as such.",
+       "lab": "Route actions by reversibility and measure how many reach a human under each policy.",
+       "tools": [],
+       "models": [],
+       "mitigates": "T10 Overwhelming Human-in-the-Loop · T15 Human Manipulation"
       },
       {
        "id": "A3.7",
-       "title": "Runtime containment levers",
+       "title": "The agent gateway: one choke point when you scale",
        "track": "secure",
-       "summary": "Resource limits, syscall filtering, quotas and kill switches applied to running agents. Tuning containment without breaking legitimate work.",
-       "risk": "The stop lever is built during the incident.",
-       "control": "Throttle, scope-reduce, reroute, force HITL, hard stop — built and tested first.",
-       "lab": "Wire all five levers and prove each fires under load.",
+       "kind": "control",
+       "summary": "At one agent the controls live in the agent. At fifty they cannot: each team implements them differently and none of them can be audited centrally. The gateway is the same controls moved to a point every call must pass through — and it is what makes downstream systems that cannot consume delegated identity survivable.",
+       "risk": "Per-agent controls diverge as the fleet grows, and legacy downstreams force a static credential back into agent code.",
+       "control": "A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent.",
+       "lab": "Route every call through one gateway and show the same policy holding for agents that never implemented it.",
        "tools": [
-        "Falco",
-        "Kyverno",
-        "kagent"
+        "agentgateway",
+        "OPA",
+        "Keycloak"
        ],
-       "models": []
-      },
-      {
-       "id": "A3.8",
-       "title": "Environment separation",
-       "track": "secure",
-       "summary": "Keeping agent dev, test and production genuinely separate when the agent itself can move data between them. Data classes and credential scoping.",
-       "risk": "\"The agent knows not to\" is not separation.",
-       "control": "Dev-agent credentials structurally unable to reach production.",
-       "lab": "Prove the dev SVID cannot mint a prod token, by construction.",
-       "tools": [
-        "SPIRE",
-        "OPA"
-       ],
-       "models": []
-      },
-      {
-       "id": "A3.9",
-       "title": "The unmanaged agent problem",
-       "track": "secure",
-       "summary": "Developer-run agents, personal API keys and desktop tools operating on corporate data. Discovery, enrolment, and a realistic amnesty path.",
-       "risk": "Personal, non-sandboxed agents on managed endpoints.",
-       "control": "Endpoint + secure web gateway, behavioural monitoring — with an honest account of the gap.",
-       "lab": "Detect an unmanaged local agent by its egress and filesystem signature.",
-       "tools": [
-        "Falco",
-        "osquery"
-       ],
-       "models": []
+       "models": [],
+       "mitigates": "every threat in this chapter, at one enforcement point"
       }
      ]
     }

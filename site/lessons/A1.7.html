@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.7 — Build vs buy | Cyber Commons</title><meta name="description" content="Buy the commodity, build the boundary, never outsource identity or stop authority."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.7</div><h1>Build vs buy</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Outsourcing the control plane to a vendor you cannot audit.</p></div><div class="ctrl"><div class="lab">Control</div><p>Buy the commodity, build the boundary, never outsource identity or stop authority.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Score gateways against a fixed control checklist instead of a feature matrix.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 39 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.7 · Build vs buy</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Both directions</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.6.html">A1.6 · Multi-agent topology</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.7 — Identity spoofing and impersonation | Cyber Commons</title><meta name="description" content="Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Agentic Reference Architecture, and Every Risk It Carries</div><div class="sid">A1.7</div><h1>Identity spoofing and impersonation</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them.</p></div><div class="ctrl"><div class="lab">Control</div><p>Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Have two agents share a credential, then try to work out which one made the call.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 16 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.7 · Identity spoofing and impersonation</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → The Agentic Reference Architecture, and Every Risk It Carries</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.6.html">A1.6 · Privilege compromise</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,7 +11,7 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>agentgateway, Envoy</td>
+<td>SPIFFE/SPIRE</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
@@ -22,96 +22,71 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>The build-vs-buy conversation for agent infrastructure usually runs on features:
-which platform supports more models, more connectors, more dashboards.</p>
-<p>That is the wrong axis. Features can be added later. The question that cannot be
-retrofitted is: <strong>which controls can you still evidence in eighteen months, when
-an auditor or a regulator asks?</strong></p>
-<p>Two capabilities decide it, and both are effectively impossible to bolt on
-afterwards because they have to be present at the moment an action happens:</p>
-<ul>
-<li><strong>Delegation chains.</strong> Can you show, for one action, who caused it and through
-  which intermediaries? If the platform authenticates every agent as a service
-  account, that information was never recorded and cannot be reconstructed.</li>
-<li><strong>An independent stop mechanism.</strong> Can you halt the fleet without the vendor's
-  cooperation, and have you timed it?</li>
-</ul>
-<p>Everything else — routing, observability, prompt management — is genuinely
-easier to buy.</p></div><div class="nbmd"><h2>2 · Demo — score the options on evidenceability</h2>
-<p>Three realistic options. The CNCF column is the open-source stack this curriculum uses throughout: SPIFFE/SPIRE for workload identity, OPA for policy, an agent gateway for mediation, OpenTelemetry for traces.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CONTROLS = {
- &quot;AC-1&quot;: &quot;agent identities distinct from human, separately revocable&quot;,
- &quot;AC-2&quot;: &quot;delegated authority narrows at every hop, recorded in an act chain&quot;,
- &quot;SB-1&quot;: &quot;egress deny-by-default with an allowlist&quot;,
- &quot;SB-2&quot;: &quot;privileged tools require approval below L3&quot;,
- &quot;EV-1&quot;: &quot;every action logged with the ACTING identity, not the principal&quot;,
- &quot;EV-2&quot;: &quot;harness accuracy evaluated against a held-out key per release&quot;,
- &quot;ST-1&quot;: &quot;a tested stop mechanism you own, timed&quot;,
-}
-RETROFITTABLE = {&quot;AC-1&quot;: False, &quot;AC-2&quot;: False, &quot;SB-1&quot;: True, &quot;SB-2&quot;: True,
-                 &quot;EV-1&quot;: False, &quot;EV-2&quot;: True, &quot;ST-1&quot;: False}
+<p><strong>OWASP T9 — Identity Spoofing &amp; Impersonation.</strong></p>
+<p>A1.6 was about an agent holding too much authority. This one is about the
+<strong>identity</strong> component being unable to say <em>which agent</em> is calling at all.</p>
+<p>When several agents share one credential — the same service account, the same
+API key baked into the same image — they are, to every downstream system, the
+same principal. There is no spoofing step required. Impersonation is the
+default state, because there was never a distinction to defeat.</p>
+<p>Three consequences follow, and the third is the one that hurts during an
+incident:</p>
+<p><strong>Authorization cannot differ.</strong> Every agent gets the union of what any of them
+needs, which is A1.6 again, arriving through a different door.</p>
+<p><strong>Attribution is impossible.</strong> "Which agent called this?" has no answer. Not a
+hard answer — no answer, because the information was never present.</p>
+<p><strong>Revocation is all-or-nothing.</strong> You have one misbehaving agent and one
+credential shared by forty. Rotating it stops the incident and stops the other
+thirty-nine, so the decision becomes a business call in the middle of a
+response, at whatever hour it is.</p>
+<p>In a multi-agent topology this compounds. A peer's message is trusted because it
+came from a peer — but if identity cannot distinguish peers, "it came from a
+peer" is a claim anyone inside the perimeter can make.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where this lands on the reference architecture.</strong></p>
+<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
+                               |              |
+                         messaging        tools / mcp
+                               |              |
+                      knowledge / memory   egress
+           identity + policy wrap every call · observability records it</code>
+\n## 2 · The risk, realised\n\nThree agents, one credential, one incident.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SHARED_KEY = &quot;svc-agent-7f3a1c&quot;
 
-OPTIONS = {
- &quot;vendor agent platform&quot;:
-    {&quot;AC-1&quot;: True, &quot;AC-2&quot;: False, &quot;SB-1&quot;: True,  &quot;SB-2&quot;: True,
-     &quot;EV-1&quot;: False, &quot;EV-2&quot;: True, &quot;ST-1&quot;: False},
- &quot;CNCF stack (SPIRE+OPA+gateway+OTel)&quot;:
-    {&quot;AC-1&quot;: True, &quot;AC-2&quot;: True,  &quot;SB-1&quot;: True,  &quot;SB-2&quot;: True,
-     &quot;EV-1&quot;: True,  &quot;EV-2&quot;: True, &quot;ST-1&quot;: True},
- &quot;roll your own from scratch&quot;:
-    {&quot;AC-1&quot;: True, &quot;AC-2&quot;: True,  &quot;SB-1&quot;: False, &quot;SB-2&quot;: True,
-     &quot;EV-1&quot;: True,  &quot;EV-2&quot;: False, &quot;ST-1&quot;: False},
-}
-for name, support in OPTIONS.items():
-    missing = [c for c in CONTROLS if not support[c]]
-    hard = [c for c in missing if not RETROFITTABLE[c]]
-    print(f&quot;{name}&quot;)
-    print(f&quot;   covers {len(CONTROLS)-len(missing)}/{len(CONTROLS)}   &quot;
-          f&quot;unfixable-later gaps: {hard or &#x27;none&#x27;}&quot;)
-    for c in missing:
-        flag = &quot;✗✗&quot; if not RETROFITTABLE[c] else &quot;✗ &quot;
-        print(f&quot;   {flag} {c}  {CONTROLS[c]}&quot;)
-    print()</code></pre></div><div class="nbmd"><h2>3 · Where it breaks</h2>
-<p>The vendor platform scores 5/7, which reads fine in a comparison table. But both of its gaps are marked <code>✗✗</code> — not retrofittable. In eighteen months you will be asked to produce an act chain for one action and you will not be able to, because the data was never captured.</p>
-<p>Let's make that concrete rather than rhetorical.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def audit_record(platform, action, principal, agent, chain):
-    &quot;&quot;&quot;What the platform can actually produce when asked about one action.&quot;&quot;&quot;
-    if platform[&quot;EV-1&quot;] and platform[&quot;AC-2&quot;]:
-        return {&quot;action&quot;: action, &quot;acting_identity&quot;: agent,
-                &quot;on_behalf_of&quot;: principal, &quot;chain&quot;: chain, &quot;answerable&quot;: True}
-    if platform[&quot;EV-1&quot;]:
-        return {&quot;action&quot;: action, &quot;acting_identity&quot;: agent,
-                &quot;on_behalf_of&quot;: &quot;?&quot;, &quot;chain&quot;: &quot;not recorded&quot;, &quot;answerable&quot;: False}
-    return {&quot;action&quot;: action, &quot;acting_identity&quot;: principal,   # the human takes the blame
-            &quot;on_behalf_of&quot;: principal, &quot;chain&quot;: &quot;not recorded&quot;, &quot;answerable&quot;: False}
+AGENTS = {&quot;triage-agent&quot;:  {&quot;key&quot;: SHARED_KEY},
+          &quot;patch-agent&quot;:   {&quot;key&quot;: SHARED_KEY},
+          &quot;deploy-agent&quot;:  {&quot;key&quot;: SHARED_KEY}}
 
-for name, support in OPTIONS.items():
-    r = audit_record(support, &quot;merge_pr #4471&quot;, &quot;dana@corp&quot;, &quot;fixer-agent&quot;,
-                     [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;fixer-agent&quot;])
-    print(f&quot;{name}&quot;)
-    print(f&quot;   {r}&quot;)
-    if not r[&quot;answerable&quot;]:
-        print(f&quot;   → cannot answer &#x27;who caused this?&#x27;. &quot;
-              f&quot;{&#x27;Logs name the human who never saw it.&#x27; if r[&#x27;acting_identity&#x27;]==&#x27;dana@corp&#x27; else &#x27;&#x27;}&quot;)
-    print()</code></pre></div><div class="nbmd"><h2>4 · The control — buy, but specify the two hard things</h2>
-<p>This is not an argument for building everything. It is an argument for making two requirements non-negotiable in procurement, where they are cheap, instead of discovering them in an audit, where they are not.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PROCUREMENT_QUESTIONS = [
- (&quot;Can you produce, for a single action, the full chain of identities that &quot;
-  &quot;caused it — not just the last one?&quot;, &quot;AC-2 + EV-1&quot;),
- (&quot;Can we halt every agent without your assistance, and what is the measured &quot;
-  &quot;time from decision to the agent&#x27;s next call failing?&quot;, &quot;ST-1&quot;),
- (&quot;Is the agent&#x27;s identity distinct from the human&#x27;s, and separately &quot;
-  &quot;revocable?&quot;, &quot;AC-1&quot;),
- (&quot;Can we export the policy and the traces in a form we still own if we &quot;
-  &quot;leave?&quot;, &quot;exit strategy — see E2.4 (DORA)&quot;),
-]
-for q, maps_to in PROCUREMENT_QUESTIONS:
-    print(f&quot;Q: {q}\n   → {maps_to}\n&quot;)
+CALLS = []
 
-decision = {n: sum(s.values()) for n, s in OPTIONS.items()}
-best = max(decision, key=decision.get)
-print(&quot;scored:&quot;, decision)
-print(&quot;recommended spine:&quot;, best)
-assert best.startswith(&quot;CNCF&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The vendor platform covers 5/7 with two unfixable-later gaps (AC-2, ST-1, EV-1); the CNCF stack covers 7/7; rolling your own covers 5/7 with two hard gaps. The audit demo shows the vendor platform attributing the merge to the human who never saw it.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Send the four procurement questions to whichever platform you are currently evaluating. The answer to question 2 — a measured number, not 'yes we support that' — tells you most of what you need.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.8.html">A1.8 · Model routing architecture</a></strong></p>
+def downstream(api_key, action, resource):
+    &quot;&quot;&quot;A downstream service sees only the credential presented.&quot;&quot;&quot;
+    CALLS.append({&quot;presented&quot;: api_key, &quot;action&quot;: action, &quot;resource&quot;: resource})
+    return {&quot;ok&quot;: True, &quot;caller&quot;: api_key}
+
+for name in sorted(AGENTS):
+    downstream(AGENTS[name][&quot;key&quot;], &quot;read&quot;, &quot;reports&quot;)
+downstream(SHARED_KEY, &quot;delete&quot;, &quot;prod.customers&quot;)     # one of them did this
+
+print(&quot;what the downstream service recorded:&quot;)
+for c in CALLS:
+    print(f&quot;   caller={c[&#x27;presented&#x27;]}  {c[&#x27;action&#x27;]:7s} {c[&#x27;resource&#x27;]}&quot;)
+
+incident = [c for c in CALLS if c[&quot;action&quot;] == &quot;delete&quot;]
+candidates = sorted(AGENTS)
+print(f&quot;\nincident: {incident[0][&#x27;action&#x27;]} on {incident[0][&#x27;resource&#x27;]}&quot;)
+print(f&quot;which agent did it? candidates: {candidates}&quot;)
+print(f&quot;distinguishable from the record? {len({c[&#x27;presented&#x27;] for c in CALLS}) &gt; 1}&quot;)
+
+print(&quot;\ncontainment options:&quot;)
+print(f&quot;   rotate {SHARED_KEY} -&gt; stops the incident, and stops &quot;
+      f&quot;{len(AGENTS)} agents including {len(AGENTS)-1} innocent ones&quot;)
+print(&quot;   rotate only the culprit -&gt; not available; there is no &#x27;only&#x27;&quot;)
+print()
+print(&quot;No attacker forged anything. Impersonation is the resting state of a&quot;)
+print(&quot;system where identity was never per-workload.&quot;)
+assert len({c[&quot;presented&quot;] for c in CALLS}) == 1</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Count the distinct credentials across your agents and divide by the number of agents. Any answer below one is this risk, and the number tells you how many innocent agents a revocation takes down.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.8.html">A1.8 · Unexpected code execution</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Each option scored on: identity mapping, per-tool RBAC, output scanning, audit, stop lever. Gaps are explicit.</div><div class="chips"><span>agentgateway</span><span>Envoy</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.7.ipynb</code></p></div><div class="pager"><a href="A1.6.html"><span class="k">← Previous</span><span class="t">A1.6 · Multi-agent topology</span></a><a class="next" href="A1.8.html"><span class="k">Next →</span><span class="t">A1.8 · Model routing architecture</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.</div><div class="chips"><span>SPIFFE/SPIRE</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.7.ipynb</code></p></div><div class="pager"><a href="A1.6.html"><span class="k">← Previous</span><span class="t">A1.6 · Privilege compromise</span></a><a class="next" href="A1.8.html"><span class="k">Next →</span><span class="t">A1.8 · Unexpected code execution</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

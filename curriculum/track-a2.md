@@ -1,267 +1,165 @@
-# Track A2 — The Identity & Non-Human Identity Engineer
+# Track A2 — Controls — Identity and Ingress
 
 **Function A · Security Architecture & Platform**  
-*The people who decide what is structurally possible. If they get it wrong, no amount of downstream diligence recovers it.*
+*One reference architecture, every risk it carries, and the controls that close them. Get this wrong and no amount of downstream diligence recovers it.*
 
-**Job titles:** IAM Engineer, NHI Lead, Identity Architect, Workload Identity Engineer
+**Job titles:** IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer
 
-**What changes:** The hardest unsolved problem in the stack. 9 lessons.
+**What changes:** The two controls that stop the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 7 lessons.
 
-**Autonomy focus:** Identity is the control that makes L2.5 defensible; without it you are running L3 and calling it L2.
+**Autonomy focus:** Identity first: every later control is a predicate that takes a caller as its argument.
 
-**Deliverable:** A working three-hop delegation chain with proven attenuation, and a rollback of one agent's access without collateral.
+**Deliverable:** A delegation chain for one agent that an auditor can follow from human to action.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### A2.1 — "Who is calling?"
+### A2.1 — Agent identity: user, workload, agent
 
 `Security of AI`
 
-- **Risk** — You cannot answer the first question of every investigation.
-- **Control** — A taxonomy: user-agent vs workload identity, sandboxed vs not, managed vs personal.
-- **Lab** — Classify every agent in your lab and record what proves each claim.
-- **Tools** — `SPIRE`
+- **Risk** — A shared service account answers 'what ran' and destroys 'for whom' — so no later control can be conditioned on the caller.
+- **Control** — A distinct identity per workload, carrying the human principal alongside it, asserted on every call.
+- **Lab** — Separate the three identities and show a downstream service authorising on the agent while attributing to the human.
+- **Tools** — `SPIFFE/SPIRE`, `Keycloak`
 
-**Run it** — Answer 'who is calling?' for every principal in the lab.
+**Run it** — Separate the three identities and show a downstream service authorising on the agent while attributing to the human.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A2.1.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A2.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-python3 classify.py --scan-spire --scan-keycloak --out taxonomy.csv
-column -s, -t taxonomy.csv
 ```
 
-*Expect:* Each agent labelled user-agent vs workload, sandboxed vs not, managed vs personal — with the evidence for each claim.
+*Expect:* Authorization resolves against the workload ceiling and refuses `db:admin` no matter who asks, attribution names the human on every action, and memory keys differ per user so a note written in one session cannot be read back in another's.
 
 ---
 
-### A2.2 — The bootstrap problem
+### A2.2 — Bootstrapping the first credential
 
 `Security of AI`
 
-- **Risk** — Proving identity before you hold a credential — usually solved with a long-lived secret in a file.
-- **Control** — Workload attestation: SPIFFE SVIDs, instance identity documents, projected SA tokens, re-attestation on rotation.
-- **Lab** — Issue an SVID to a workload with SPIRE and watch it re-attest after rotation — zero static secrets.
-- **Tools** — `SPIFFE/SPIRE`, `kind`
+- **Risk** — A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.
+- **Control** — Platform attestation exchanged for a short-lived, workload-bound credential.
+- **Lab** — Exchange an attestation for a credential, then show a copied secret failing the same exchange.
+- **Tools** — `SPIFFE/SPIRE`
 
-**Run it** — Issue a workload identity with zero static secrets.
+**Run it** — Exchange an attestation for a credential, then show a copied secret failing the same exchange.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A2.2.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A2.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-kind create cluster --name a2
-kubectl apply -f spire/
-kubectl exec -n spire spire-server-0 -- /opt/spire/bin/spire-server entry create \
-  -spiffeID spiffe://cybercommons/agent/reviewer \
-  -parentID spiffe://cybercommons/node -selector k8s:pod-label:app:reviewer
-./show-svid.sh   # fetch and decode the SVID from inside the workload
 ```
 
-*Expect:* A short-lived SVID appears with no secret ever written to disk; re-attests automatically after rotation.
+*Expect:* An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry.
 
 ---
 
-### A2.3 — Shadow Autonomy
+### A2.3 — Delegation that narrows, and survives audit
 
 `Security of AI`
 
-- **Risk** — Agents executing under inherited human credentials — your audit trail is already wrong.
-- **Control** — Detect it first, then separate the principal; revocation is impossible until you can name the actor.
-- **Lab** — Find agent-vs-human credential use in logs by behavioural signature; then split the principal.
-- **Tools** — `Keycloak`, `SPIRE`
-- **Models** — `Llama 3.3`
+- **Risk** — Subset-only lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked.
+- **Control** — Token exchange that intersects presented scope with the actor's ceiling, and records the chain.
+- **Lab** — Run both narrowing rules against a request that passes one and fails the other.
+- **Tools** — `Keycloak`
 
-**Run it** — Find agents running on inherited human credentials.
+**Run it** — Run both narrowing rules against a request that passes one and fails the other.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A2.3.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A2.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-python3 delegate.py impersonate   # what the audit log says vs what happened
-python3 shadow_autonomy.py --logs sample-auth.log --baseline human-baseline.json
 ```
 
-*Expect:* Flags credentials used with machine timing/sequencing. Every hit is an audit trail that is currently wrong.
+*Expect:* A two-hop delegation narrows to `reports:read` and records the chain `dana → orchestrator → patch-agent`. A privileged user's request for `db:admin` passes subset-of-presented and still issues nothing, because the receiving agent's ceiling is empty of it.
 
 ---
 
-### A2.4 — The NHI governance gap
+### A2.4 — Just-in-time authority
 
 `Security of AI`
 
-- **Risk** — Revoking one misbehaving agent breaks forty others.
-- **Control** — Enrolment, ownership, scope, expiry, attribution — an agent registry with honest enforcement limits.
-- **Lab** — Build the registry, then revoke exactly one agent and prove no collateral.
-- **Tools** — `Keycloak`, `SPIRE`
+- **Risk** — Permanent scope makes every injection a successful one, because the authority is always there when the attacker arrives.
+- **Control** — Short-lived, purpose-bound grants issued per task and expiring with it.
+- **Lab** — Issue a scoped grant, use it, then replay it after expiry and after the task closed.
+- **Tools** — `Keycloak`, `OPA`
 
-**Run it** — Revoke exactly one agent without collateral.
+**Run it** — Issue a scoped grant, use it, then replay it after expiry and after the task closed.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A2.4.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A2.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-python3 delegate.py revoke reviewer-agent   # revoke exactly one actor
-python3 registry.py --enrol reviewer --owner appsec --scope repo:read --expires 30d
 ```
 
-*Expect:* reviewer's tokens fail immediately; patcher keeps working. If both die, your scoping was shared.
+*Expect:* A grant bound to one scope, one resource and one task permits only the task's own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires.
 
 ---
 
-### A2.5 — Delegation that survives audit
+### A2.5 — The non-human identity lifecycle
 
 `Security of AI`
 
-- **Risk** — On-behalf-of implemented as impersonation — the chain is unprovable afterwards.
-- **Control** — RFC 8693 token exchange with the `act` claim as a real delegation chain.
-- **Lab** — Build a three-hop chain in Keycloak; decode the `act` claims and show attenuation at each hop.
-- **Tools** — `Keycloak`, `RFC 8693`
+- **Risk** — Agents accumulate with no owner and no expiry, and an unregistered agent joins a topology as a peer.
+- **Control** — A registry with a named owner, an expiry, and admission bound to a registered identity.
+- **Lab** — Admit agents against a registry and show an unregistered one refused at the door.
+- **Tools** — `SPIFFE/SPIRE`, `kagent`
 
-**Run it** — A three-hop delegation chain that survives audit.
+**Run it** — Admit agents against a registry and show an unregistered one refused at the door.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A2.5.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A2.5   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-# no-infra variant — stdlib only, runs anywhere:
-python3 delegate.py chain && python3 delegate.py verify
-python3 delegate.py escalate      # widening refused by the token
-python3 delegate.py impersonate   # the anti-pattern (A2.3 Shadow Autonomy)
-python3 delegate.py revoke reviewer-agent   # one actor dies, others live (A2.4)
-# full variant against real Keycloak (RFC 8693 token exchange):
-docker compose up -d keycloak && ./setup-realm.sh && ./delegate.sh
-python3 decode_chain.py token.jwt
 ```
 
-*Expect:* Each hop shows a nested `act` claim and a strictly smaller scope; escalation is refused by the token, not by an app check. Attenuation is visible in the token, not asserted in a doc.
+*Expect:* Four agents present identities and one is admitted: the unregistered one is refused, the lapsed registration is refused, and the orphaned entry with no owner is refused. Revoking a single agent then leaves the others running.
 
 ---
 
-### A2.6 — The agentic gateway
+### A2.6 — Ingress: marking untrusted content at the door
 
 `Security of AI`
 
-- **Risk** — Secrets end up in agent code because there was nowhere else to put them.
-- **Control** — Gateway-side credential exchange: virtual keys, JWKS validation, identity mapping.
-- **Lab** — Put agentgateway in front of an MCP server and move every credential out of the agent.
-- **Tools** — `agentgateway`, `kmcp`
-- **Models** — `GLM-4.6`
+- **Risk** — Concatenation destroys the one fact that separates an operator instruction from an attacker's: where it came from.
+- **Control** — Provenance tagging at every ingress point, and a rule that only trusted origins may select a tool.
+- **Lab** — Tag every span at ingress, then show the same payload refused through six different entry paths.
+- **Tools** — `LLM Guard`, `agentgateway`
+- **Models** — `Llama Guard 4`
 
-**Run it** — Move every credential out of the agent and into the gateway.
+**Run it** — Tag every span at ingress, then show the same payload refused through six different entry paths.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A2.6.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A2.6   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-docker compose up -d agentgateway kmcp
-grep -r 'API_KEY\|token' agent/ || echo 'no secrets in agent code'
-curl -s localhost:8080/mcp/tools -H "Authorization: Bearer $(cat svid.jwt)" | jq '.tools[].name'
 ```
 
-*Expect:* The agent holds only its SVID; the gateway exchanges it for the downstream credential.
+*Expect:* The same payload is refused through all five untrusted ingress components and through two rewordings, the user's own request still reaches the tool, and a memory record written from an untrusted document is still refused a week later because the origin was stored with it.
 
 ---
 
-### A2.7 — Systems that don't understand agents
+### A2.7 — Attribution: an audit trail that answers "who"
 
 `Security of AI`
 
-- **Risk** — Legacy services see only the human's token and grant everything.
-- **Control** — Token translation plus action-class blocking at the boundary.
-- **Lab** — Allow reads, deny protected-branch merges by token type, at the gateway.
-- **Tools** — `agentgateway`, `OPA`
+- **Risk** — Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed.
+- **Control** — Per-hop attribution written to an append-only store outside the agent's reach.
+- **Lab** — Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.
+- **Tools** — `OpenTelemetry`, `Sigstore`
 
-**Run it** — Teach a legacy service to refuse agent writes it cannot understand.
+**Run it** — Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A2.7.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A2.7   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-python3 action_class.py --allow read --deny protected-branch-merge --by-token-type agent
-./try.sh --as agent --action read      # 200
-./try.sh --as agent --action merge     # 403 at the gateway, not the app
 ```
 
-*Expect:* The legacy app is unchanged; the boundary does the work.
-
----
-
-### A2.8 — Just-in-time authority
-
-`Security of AI`
-
-- **Risk** — Standing access means an injection always has something to spend.
-- **Control** — Human-initiated credential release, change-window binding, maker/checker under agent attribution.
-- **Lab** — Cut standing access to zero and issue authority only inside a change window.
-- **Tools** — `Keycloak`, `Vault (OSS)`
-
-**Run it** — Cut standing access to zero so an injection has nothing to spend.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.8   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-./jit.sh --request deploy --window 15m --approver alice
-./jit.sh --status    # authority exists only inside the window
-sleep 900 && ./jit.sh --status
-```
-
-*Expect:* Authority is absent before and after the window; the agent literally cannot spend what it does not hold.
-
----
-
-### A2.9 — The classic failures
-
-`Security of AI`
-
-- **Risk** — Confused deputy, token replay, shared static credentials, over-broad scope.
-- **Control** — Reproduce each one, then close it.
-- **Lab** — Exploit all four in the lab, then re-run against the hardened chain.
-- **Tools** — `SPIRE`, `Keycloak`
-- **Models** — `Kimi K2`
-
-**Run it** — Reproduce the four classic identity failures, then close them.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A2.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A2.9   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation/classic-failures
-./confused_deputy.sh && ./token_replay.sh && ./shared_creds.sh && ./overbroad_scope.sh
-./harden.sh && ./rerun-all.sh
-```
-
-*Expect:* All four succeed pre-hardening and fail after. The diff between the runs is your control set.
+*Expect:* One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused.
 
 ---
 

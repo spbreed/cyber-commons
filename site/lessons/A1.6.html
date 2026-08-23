@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.6 — Multi-agent topology | Cyber Commons</title><meta name="description" content="Planner/executor/critic splits with delegation-depth limits."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.6</div><h1>Multi-agent topology</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Fan-out concentrates authority somewhere nobody drew.</p></div><div class="ctrl"><div class="lab">Control</div><p>Planner/executor/critic splits with delegation-depth limits.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Find where authority actually concentrates in a multi-agent topology.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 21 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.6 · Multi-agent topology</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.5.html">A1.5 · Blast radius as a design metric</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.6 — Privilege compromise | Cyber Commons</title><meta name="description" content="Delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Agentic Reference Architecture, and Every Risk It Carries</div><div class="sid">A1.6</div><h1>Privilege compromise</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The agent acts with more authority than the person who asked it to act, and the log records the service account rather than the human.</p></div><div class="ctrl"><div class="lab">Control</div><p>Delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Have an agent inherit a privileged token and reach something its requester never could.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 15 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.6 · Privilege compromise</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → The Agentic Reference Architecture, and Every Risk It Carries</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.5.html">A1.5 · Tool misuse</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,123 +11,79 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>kagent</td>
+<td>Keycloak, SPIFFE/SPIRE</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>GLM-4.6, Llama 3.3</td>
+<td>—</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>Multi-agent systems are sold on capability: a planner, a coder, a reviewer, each
-good at one thing. What they actually introduce is <strong>delegation depth</strong>, and
-depth is the variable nobody bounds.</p>
-<p>Two properties change when one agent can call another:</p>
-<p><strong>Authority composes.</strong> A3.1 shows the walk-around: each grant legal, the
-composition not. With three or four hops, no single reviewer sees the whole
-path.</p>
-<p><strong>Failure propagates.</strong> If the orchestrator is compromised, every sub-agent is a
-capability it now holds. The blast radius of the system is not the largest
-agent's — it is the <em>sum over everything reachable</em>.</p>
-<p>The topology decision is therefore a security decision, and the three common
-shapes have genuinely different properties. This lesson measures them rather
-than asserting a preference.</p></div><div class="nbmd"><h2>2 · Demo — three topologies, same capability</h2>
-<p><strong>Star</strong>: one orchestrator calls specialised workers.
-<strong>Chain</strong>: each agent hands to the next.
-<strong>Mesh</strong>: any agent may call any other.</p>
-<p>All three deliver "triage → fix → review → ship".</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20}
-AGENTS = {   # agent -&gt; (scope of its most dangerous tool, reversible?)
-    &quot;orchestrator&quot;: (&quot;self&quot;,    True),
-    &quot;triager&quot;:      (&quot;project&quot;, True),
-    &quot;fixer&quot;:        (&quot;project&quot;, True),
-    &quot;reviewer&quot;:     (&quot;project&quot;, True),
-    &quot;shipper&quot;:      (&quot;org&quot;,     False),
-}
-def agent_blast(a):
-    scope, rev = AGENTS[a]
-    return SCOPE_WEIGHT[scope] * (1 if rev else 2)
+<p><strong>OWASP T3 — Privilege Compromise. LLM06 — Excessive Agency.</strong></p>
+<p>Tool misuse is about what a tool can do. Privilege compromise is about <strong>whose
+authority it does it with</strong> — the <strong>identity</strong> component rather than the tools
+component.</p>
+<p>Three patterns produce it, and all three are things teams do for good reasons.</p>
+<p><strong>Inherited human credentials.</strong> The agent runs with the token of the user who
+started it. Convenient, and it means the agent holds every permission that user
+holds — including the ones irrelevant to the task, and including the ones they
+hold because of a role they were given three years ago.</p>
+<p><strong>Shared service accounts.</strong> Every agent authenticates as <code>agent-svc</code>. That
+account needs the union of everything any agent ever needs, so each agent holds
+the maximum of the set.</p>
+<p><strong>Standing scope.</strong> The grant is permanent because renewing it was operationally
+awkward. The authority is therefore present at the moment any injection lands.</p>
+<p>What makes this distinct from ordinary over-permissioning is the <strong>direction of
+the audit trail</strong>. When a human has too much access and misuses it, the log
+names them. When an agent does it, the log names the service account — and the
+human who caused it is not in the record at all. The compromise is of privilege
+<em>and</em> of attribution, at the same time.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where this lands on the reference architecture.</strong></p>
+<p><code>ingress -&gt; orchestrator -&gt; agent_runtime -&gt; model
+                               |              |
+                         messaging        tools / mcp
+                               |              |
+                      knowledge / memory   egress
+           identity + policy wrap every call · observability records it</code>
+\n## 2 · The risk, realised\n\nA read-only user asks for something, and the agent has more authority than they do.</p>
+</blockquote></div><div class="nbcode"><span class="nbtag">In</span><pre><code>USERS = {&quot;dana&quot;:  {&quot;scopes&quot;: {&quot;reports:read&quot;}},
+         &quot;priya&quot;: {&quot;scopes&quot;: {&quot;reports:read&quot;, &quot;reports:write&quot;, &quot;db:admin&quot;}}}
 
-TOPOLOGIES = {
-    &quot;star&quot;:  {&quot;orchestrator&quot;: [&quot;triager&quot;, &quot;fixer&quot;, &quot;reviewer&quot;, &quot;shipper&quot;],
-              &quot;triager&quot;: [], &quot;fixer&quot;: [], &quot;reviewer&quot;: [], &quot;shipper&quot;: []},
-    &quot;chain&quot;: {&quot;orchestrator&quot;: [&quot;triager&quot;], &quot;triager&quot;: [&quot;fixer&quot;],
-              &quot;fixer&quot;: [&quot;reviewer&quot;], &quot;reviewer&quot;: [&quot;shipper&quot;], &quot;shipper&quot;: []},
-    &quot;mesh&quot;:  {a: [b for b in AGENTS if b != a] for a in AGENTS},
-}
+# the agent authenticates as itself, and needs the union of what any user needs
+AGENT_SVC = {&quot;name&quot;: &quot;agent-svc&quot;, &quot;scopes&quot;: {&quot;reports:read&quot;, &quot;reports:write&quot;, &quot;db:admin&quot;}}
 
-def reachable(topo, start):
-    seen, stack = set(), [start]
-    while stack:
-        n = stack.pop()
-        for m in topo.get(n, []):
-            if m not in seen:
-                seen.add(m); stack.append(m)
-    return seen
+AUDIT = []
 
-def depth(topo, start, _seen=None):
-    _seen = _seen or set()
-    if start in _seen: return 0
-    _seen = _seen | {start}
-    kids = [depth(topo, k, _seen) for k in topo.get(start, []) if k not in _seen]
-    return 1 + max(kids, default=0)
+def call_tool(caller_identity, on_behalf_of, tool, required_scope):
+    &quot;&quot;&quot;Authorization is checked against the CALLER - which is the agent.&quot;&quot;&quot;
+    allowed = required_scope in caller_identity[&quot;scopes&quot;]
+    AUDIT.append({&quot;actor&quot;: caller_identity[&quot;name&quot;], &quot;tool&quot;: tool,
+                  &quot;allowed&quot;: allowed})          # note: no human principal
+    return allowed
 
-print(f&quot;{&#x27;topology&#x27;:10s}{&#x27;depth&#x27;:&gt;7}{&#x27;reachable from orchestrator&#x27;:&gt;32}{&#x27;blast&#x27;:&gt;8}&quot;)
-print(&quot;-&quot; * 60)
-for name, topo in TOPOLOGIES.items():
-    r = reachable(topo, &quot;orchestrator&quot;)
-    b = sum(agent_blast(a) for a in r)
-    print(f&quot;{name:10s}{depth(topo,&#x27;orchestrator&#x27;):&gt;7}{len(r):&gt;10} agents{&#x27;&#x27;:&lt;16}{b:&gt;8}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks</h2>
-<p>All three reach the same four agents and the same blast radius of 55, so on that metric alone they are identical. The difference shows up under <strong>compromise</strong>: which agent, if taken over, gives the attacker what?</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>print(f&quot;{&#x27;topology&#x27;:10s}{&#x27;compromised&#x27;:14s}{&#x27;reaches&#x27;:&gt;9}{&#x27;blast&#x27;:&gt;7}   worst case&quot;)
-print(&quot;-&quot; * 64)
-for name, topo in TOPOLOGIES.items():
-    worst, worst_b = None, -1
-    for a in AGENTS:
-        r = reachable(topo, a)
-        b = sum(agent_blast(x) for x in r) + agent_blast(a)
-        if b &gt; worst_b:
-            worst, worst_b = a, b
-    for a in (&quot;fixer&quot;, worst):
-        r = reachable(topo, a)
-        b = sum(agent_blast(x) for x in r) + agent_blast(a)
-        tag = &quot;  ← worst&quot; if a == worst else &quot;&quot;
-        print(f&quot;{name:10s}{a:14s}{len(r):&gt;9}{b:&gt;7}{tag}&quot;)
-    print()
-print(&quot;In the mesh, compromising the LOWEST-privilege agent reaches everything.&quot;)
-print(&quot;In the star, only the orchestrator does. That is the whole argument.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — bound the depth, and make it refuse</h2>
-<p>Two controls, both cheap:</p>
-<ol>
-<li><strong>A depth limit</strong>, enforced at the token issuer rather than the orchestrator — because when the orchestrator is the compromised component, a check inside it is worth nothing.</li>
-<li><strong>No cycles.</strong> A mesh where A can call B can call A has unbounded depth by construction.</li>
-</ol></div><div class="nbcode"><span class="nbtag">In</span><pre><code>MAX_DEPTH = 3
+print(f&quot;{&#x27;requester&#x27;:8s}{&#x27;their scopes&#x27;:44s}{&#x27;asked for&#x27;:16s}allowed?&quot;)
+for user in sorted(USERS):
+    ok = call_tool(AGENT_SVC, user, &quot;drop_table&quot;, &quot;db:admin&quot;)
+    print(f&quot;{user:8s}{str(sorted(USERS[user][&#x27;scopes&#x27;])):44s}{&#x27;db:admin&#x27;:16s}{ok}&quot;)
 
-class DepthExceeded(Exception): pass
+print(&quot;\nAUDIT TRAIL&quot;)
+for a in AUDIT:
+    print(f&quot;   actor={a[&#x27;actor&#x27;]:10s} tool={a[&#x27;tool&#x27;]:12s} allowed={a[&#x27;allowed&#x27;]}&quot;)
 
-def call(chain, callee, topo):
-    if callee not in topo.get(chain[-1], []):
-        raise PermissionError(f&quot;{chain[-1]} may not call {callee} in this topology&quot;)
-    if callee in chain:
-        raise DepthExceeded(f&quot;cycle: {&#x27; → &#x27;.join(chain)} → {callee}&quot;)
-    if len(chain) + 1 &gt; MAX_DEPTH:
-        raise DepthExceeded(f&quot;depth {len(chain)+1} &gt; limit {MAX_DEPTH}: &quot;
-                            f&quot;{&#x27; → &#x27;.join(chain)} → {callee}&quot;)
-    return chain + [callee]
-
-for topo_name, path in [(&quot;star&quot;,  [&quot;orchestrator&quot;, &quot;shipper&quot;]),
-                        (&quot;chain&quot;, [&quot;orchestrator&quot;, &quot;triager&quot;, &quot;fixer&quot;, &quot;reviewer&quot;]),
-                        (&quot;mesh&quot;,  [&quot;orchestrator&quot;, &quot;fixer&quot;, &quot;orchestrator&quot;])]:
-    topo = TOPOLOGIES[topo_name]
-    chain = [path[0]]
-    try:
-        for nxt in path[1:]:
-            chain = call(chain, nxt, topo)
-        print(f&quot;{topo_name:6s} OK      {&#x27; → &#x27;.join(chain)}&quot;)
-    except (DepthExceeded, PermissionError) as e:
-        print(f&quot;{topo_name:6s} REFUSED {e}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>All three topologies reach 4 agents and a blast radius of 55. Under compromise they diverge sharply: in the mesh, taking over <code>fixer</code> reaches everything, while in the star only the orchestrator does. The depth limit permits the star's 2-hop call, refuses the chain at depth 4, and refuses the mesh cycle.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Draw your actual agent topology, including the calls that were added for convenience rather than design. If any two agents can call each other, you have a mesh — and the lowest-privilege agent in it is your real attack surface.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.7.html">A1.7 · Build vs buy</a></strong></p>
+print(&quot;\ndana holds reports:read only, and her request reached db:admin.&quot;)
+print(&quot;The authorization decision was made about the agent, not about her.&quot;)
+print()
+print(&quot;Now answer &#x27;which user caused the table to be dropped&#x27; from that trail.&quot;)
+print(&quot;You cannot: every row says agent-svc. Privilege and attribution failed&quot;)
+print(&quot;in the same step, which is what makes this different from a human with&quot;)
+print(&quot;too much access.&quot;)
+assert all(a[&quot;allowed&quot;] for a in AUDIT)
+assert all(&quot;dana&quot; not in str(a) for a in AUDIT)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>A user holding only <code>reports:read</code> triggers a <code>db:admin</code> action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names <code>agent-svc</code> on every row, so the human who caused it cannot be recovered from it at all.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Pick one agent and answer two questions: what identity does it authenticate as, and can you name the human behind any single action it took last week. If the second answer is no, you have this risk regardless of how the scopes are set.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.7.html">A1.7 · Identity spoofing and impersonation</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.6.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A graph showing the node holding the union of all scopes — usually not the one you expected.</div><div class="chips"><span>kagent</span><span class="m">GLM-4.6</span><span class="m">Llama 3.3</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.6.ipynb</code></p></div><div class="pager"><a href="A1.5.html"><span class="k">← Previous</span><span class="t">A1.5 · Blast radius as a design metric</span></a><a class="next" href="A1.7.html"><span class="k">Next →</span><span class="t">A1.7 · Build vs buy</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A user holding only `reports:read` triggers a `db:admin` action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names `agent-svc` on every row, so the human who caused it cannot be recovered from it at all.</div><div class="chips"><span>Keycloak</span><span>SPIFFE/SPIRE</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.6.ipynb</code></p></div><div class="pager"><a href="A1.5.html"><span class="k">← Previous</span><span class="t">A1.5 · Tool misuse</span></a><a class="next" href="A1.7.html"><span class="k">Next →</span><span class="t">A1.7 · Identity spoofing and impersonation</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
