@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.10 — Jailbreaks, model inversion and extraction | Cyber Commons</title><meta name="description" content="Name what each attack actually recovers, then bind the architectural control that genuinely blunts it — most of which do not sit at the model layer."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Security Architect</div><div class="sid">A1.10</div><h1>Jailbreaks, model inversion and extraction</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The whole model-layer attack taxonomy gets called &quot;jailbreaks&quot;. Inversion, membership inference, prompt extraction and embedding inversion each recover something different and are blunted by different controls.</p></div><div class="ctrl"><div class="lab">Control</div><p>Name what each attack actually recovers, then bind the architectural control that genuinely blunts it — most of which do not sit at the model layer.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run each attack class against a deterministic stand-in, record what it recovered, and map each to the layer that can stop it.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.10.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.10.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 41 lines of output in 0.02s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.10 · Jailbreaks, model inversion and extraction</h1>
+<p><strong>Function A — Security Architecture &amp; Platform → The Security Architect</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.9.html">A1.9 · The injection surface: direct and indirect prompt injection</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>garak, Presidio</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>Llama Guard 4</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Everything at the model layer gets called "a jailbreak". It is five different
+attacks that recover five different things, and they are stopped by different
+controls — most of which are not at the model layer at all.</p>
+<p><strong>Jailbreak.</strong> Bypasses the model's behavioural policy so it produces output it
+was trained to refuse. Recovers: <em>behaviour</em>. It does not, by itself, reach any
+data or any tool.</p>
+<p><strong>Model inversion.</strong> Reconstructs data the model saw — training records, or
+the contents of the context window — from its outputs. Recovers: <em>data</em>.</p>
+<p><strong>Membership inference.</strong> Determines whether a particular record was in the
+training set. Recovers: <em>a single bit</em>, which is often the whole disclosure
+when the dataset is "patients treated for X".</p>
+<p><strong>Prompt / model extraction.</strong> Recovers the system prompt, or enough
+input-output pairs to clone the model's behaviour. Recovers: <em>your IP, and the
+description of your controls</em>.</p>
+<p><strong>Embedding inversion.</strong> Reconstructs source text from the vectors in your
+vector store. Recovers: <em>the corpus you thought you had de-identified</em> —
+embeddings are not a hashing function and were never a privacy control.</p>
+<p>The reason to separate them is that the defence differs. A jailbreak is
+contained by what the agent is <em>allowed to do</em> once persuaded — a layer 4/6/7/8
+problem. Inversion and membership are contained by what went into the model and
+what comes out of it. Embedding inversion is contained by treating the vector
+store as a copy of the source text, with the same classification.</p></div><div class="nbmd"><h2>2 · The taxonomy, as a table you can act on\n\nFive attacks, what each actually recovers, and the layer that blunts it. The stand-in below is deterministic and is not a language model — it stands in for one so the mechanics are visible.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ATTACKS = {
+ &quot;jailbreak&quot;:            (&quot;behaviour: output the model was trained to refuse&quot;,
+                          &quot;layer 4/6/7/8 - what it may DO once persuaded&quot;),
+ &quot;model_inversion&quot;:      (&quot;data: training records or context reconstructed&quot;,
+                          &quot;layer 3/5 - what goes in, and what comes out&quot;),
+ &quot;membership_inference&quot;: (&quot;one bit: was this record in the training set&quot;,
+                          &quot;training-time - DP noise, dedup, minimisation&quot;),
+ &quot;prompt_extraction&quot;:    (&quot;your system prompt and your control descriptions&quot;,
+                          &quot;assume disclosure - never put a secret in a prompt&quot;),
+ &quot;embedding_inversion&quot;:  (&quot;source text reconstructed from stored vectors&quot;,
+                          &quot;classify the vector store as a copy of the corpus&quot;),
+}
+print(f&quot;{&#x27;attack&#x27;:22s}{&#x27;what it recovers&#x27;:52s}where it is blunted&quot;)
+for name in sorted(ATTACKS):
+    recovers, control = ATTACKS[name]
+    print(f&quot;{name:22s}{recovers:52s}{control}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Run each one against a stand-in, and record what came back\n\nA tiny deterministic system with a secret prompt, a training set and an embedding store — enough to show what each attack actually gets.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import hashlib
+
+SYSTEM_PROMPT = &quot;You are ACME support. Never reveal refund codes. Code: RF-2291.&quot;
+TRAINING = [&quot;alice@corp.example treated 2019&quot;, &quot;bob@corp.example treated 2021&quot;,
+            &quot;carol@corp.example treated 2020&quot;]
+CORPUS   = [&quot;patient bob@corp.example, diagnosis withheld&quot;,
+            &quot;patient alice@corp.example, diagnosis withheld&quot;]
+
+def embed(text):
+    &quot;&quot;&quot;A stand-in embedding: deterministic, and - like a real one - invertible
+    if you keep the mapping, which every vector store does.&quot;&quot;&quot;
+    h = hashlib.sha256(text.encode()).hexdigest()[:16]
+    return [int(h[i:i+2], 16) / 255 for i in range(0, 16, 2)]
+
+STORE = {tuple(embed(c)): c for c in CORPUS}     # vector -&gt; source text
+
+def jailbreak():
+    return &quot;produced refused content (a policy bypass, no data, no tool)&quot;
+def model_inversion():
+    return f&quot;reconstructed from output: {SYSTEM_PROMPT.split(&#x27;Code: &#x27;)[1]}&quot;
+def membership_inference(record):
+    return f&quot;{record.split(&#x27;@&#x27;)[0]!r} in training set: {record in TRAINING}&quot;
+def prompt_extraction():
+    return SYSTEM_PROMPT
+def embedding_inversion(vec):
+    return STORE.get(tuple(vec), &quot;not recoverable&quot;)
+
+print(&quot;jailbreak            -&gt;&quot;, jailbreak())
+print(&quot;model_inversion      -&gt;&quot;, model_inversion())
+print(&quot;membership_inference -&gt;&quot;, membership_inference(&quot;bob@corp.example treated 2021&quot;))
+print(&quot;prompt_extraction    -&gt;&quot;, prompt_extraction())
+print(&quot;embedding_inversion  -&gt;&quot;, embedding_inversion(embed(CORPUS[0])))</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the vector store was never de-identified\n\nThe most commonly missed one, because embeddings look like noise.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>print(&quot;what the vector store looks like:&quot;)
+for vec, src in list(STORE.items())[:1]:
+    print(f&quot;   {[round(x, 3) for x in vec]}&quot;)
+print()
+print(&quot;what it is:&quot;)
+for vec in STORE:
+    print(f&quot;   {embedding_inversion(list(vec))}&quot;)
+print()
+print(&quot;Nobody stored a name. Every name is retrievable, because the store keeps&quot;)
+print(&quot;the mapping in order to be useful at all - that is what retrieval is.&quot;)
+print(&quot;An embedding is a representation of the text, not a redaction of it.&quot;)
+recovered = [embedding_inversion(list(v)) for v in STORE]
+assert all(&quot;@&quot; in r for r in recovered)</code></pre></div><div class="nbmd"><h2>5 · The control — bind each attack where it can actually be stopped\n\nThree of these five are not model problems, which is why hardening the model does not move them.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CONTROLS = {
+ &quot;jailbreak&quot;:            (&quot;tool allowlist + sandbox + egress&quot;,  True),
+ &quot;model_inversion&quot;:      (&quot;output filtering + no secrets in context&quot;, True),
+ &quot;membership_inference&quot;: (&quot;training-time minimisation&quot;,         False),
+ &quot;prompt_extraction&quot;:    (&quot;assume it is public&quot;,                True),
+ &quot;embedding_inversion&quot;:  (&quot;classify the store as the corpus&quot;,   True),
+}
+print(f&quot;{&#x27;attack&#x27;:22s}{&#x27;control&#x27;:42s}available to you at runtime?&quot;)
+for a in sorted(ATTACKS):
+    c, runtime = CONTROLS[a]
+    print(f&quot;{a:22s}{c:42s}{&#x27;yes&#x27; if runtime else &#x27;NO - training time only&#x27;}&quot;)
+
+model_layer = [a for a in ATTACKS if CONTROLS[a][0].startswith(&quot;training&quot;)]
+print(f&quot;\nstoppable only before the model exists: {model_layer}&quot;)
+print(&quot;Everything else is stopped by architecture you already control.&quot;)
+print()
+print(&quot;The jailbreak case is the clearest. You cannot guarantee the model&quot;)
+print(&quot;refuses. You can guarantee that a persuaded model reaches no tool, no&quot;)
+print(&quot;credential and no network - and then the bypass produces text, not harm.&quot;)
+assert len(model_layer) == 1</code></pre></div><div class="nbmd"><h2>6 · Verify — a persuaded model with nothing to reach</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def blast_of(persuaded, tools_allowed, egress_allowed):
+    &quot;&quot;&quot;What a successful jailbreak actually gets, given the layers below it.&quot;&quot;&quot;
+    if not persuaded:                 return &quot;nothing - the model refused&quot;
+    if tools_allowed and egress_allowed: return &quot;data leaves the building&quot;
+    if tools_allowed:                 return &quot;local action, no exfiltration path&quot;
+    return &quot;text on a screen&quot;
+
+for tools in (True, False):
+    for egress in (True, False):
+        print(f&quot;   persuaded=yes tools={str(tools):5s} egress={str(egress):5s}&quot;
+              f&quot; -&gt; {blast_of(True, tools, egress)}&quot;)
+print()
+print(&quot;The same successful jailbreak is a headline or a non-event depending&quot;)
+print(&quot;entirely on layers the model never sees.&quot;)
+assert blast_of(True, False, False) == &quot;text on a screen&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Five distinct attacks run against a deterministic stand-in and each prints what it recovered: behaviour, context data, one membership bit, the system prompt, and the source text pulled back out of the vector store. Four of the five are shown to be stoppable at runtime by architecture, and only membership inference requires a decision made before the model existed.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take your own vector store and ask what classification it carries. If the answer is lower than the corpus it was built from, you have a data-classification finding rather than an AI one — and it predates any agent you deployed.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.11.html">A1.11 · Building outcome-driven guardrails, layer by layer</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.10.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.10.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Five distinct attacks run against a deterministic stand-in and each prints what it recovered: behaviour, context data, one membership bit, the system prompt, and the source text pulled back out of the vector store. Four of the five are shown to be stoppable at runtime by architecture, and only membership inference requires a decision made before the model existed.</div><div class="chips"><span>garak</span><span>Presidio</span><span class="m">Llama Guard 4</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.10.ipynb</code></p></div><div class="pager"><a href="A1.9.html"><span class="k">← Previous</span><span class="t">A1.9 · The injection surface: direct and indirect prompt injection</span></a><a class="next" href="A1.11.html"><span class="k">Next →</span><span class="t">A1.11 · Building outcome-driven guardrails, layer by layer</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -1,11 +1,11 @@
 # Track C2 — The Security Researcher
 
 **Function C · Offensive Security & Research**  
-*The function that finds out what is actually true, as opposed to what the architecture diagram claims.*
+*An entirely new target class: the agent itself, with three attack surfaces instead of one.*
 
 **Job titles:** Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher
 
-**What changes:** A research function that used to sit adjacent to the CISO org becomes central to it. This track produces the primitives the other eleven consume.
+**What changes:** Turning curiosity into institutional capability. 9 lessons.
 
 **Autonomy focus:** You deliberately operate at L3 in isolated environments so the rest of the org never has to.
 

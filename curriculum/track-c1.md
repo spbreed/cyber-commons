@@ -1,11 +1,11 @@
 # Track C1 — The Pentester / Red Teamer
 
 **Function C · Offensive Security & Research**  
-*The function that finds out what is actually true, as opposed to what the architecture diagram claims.*
+*An entirely new target class: the agent itself, with three attack surfaces instead of one.*
 
 **Job titles:** Penetration Tester, Red Team Operator, Offensive Security Engineer
 
-**What changes:** You become a scenario architect rather than a tool runner. And you acquire an entirely new target class: the agent itself.
+**What changes:** Three surfaces, one adversary mindset. 7 lessons.
 
 **Autonomy focus:** You test at L3 the systems deployed at L2.5, because that's where they'll be next quarter.
 

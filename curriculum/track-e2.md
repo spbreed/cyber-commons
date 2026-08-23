@@ -1,11 +1,11 @@
 # Track E2 — The Regulatory & Compliance Lead
 
 **Function E · Governance, Risk, Compliance & the CISO Office**  
-*The function that has to make all of the above defensible to a board, an auditor and a regulator — usually in that order.*
+*Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.*
 
 **Job titles:** Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead
 
-**What changes:** You translate between engineering, legal and supervisory vocabularies at once — on a subject where the regulations are newer than the technology's failure modes.
+**What changes:** Obligations, evidence, and the supervisory conversation. 9 lessons.
 
 **Autonomy focus:** You determine which action classes are legally prohibited from ever reaching L2.5, irrespective of measured performance.
 

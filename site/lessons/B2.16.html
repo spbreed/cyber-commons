@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.16 — Performance testing: reliability under non-determinism | Cyber Commons</title><meta name="description" content="Measure pass^k — succeeds k times out of k — alongside pass@k, plus run-to-run variance on a fixed corpus, so harness failure can be separated from model failure before either is c"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.16</div><h1>Performance testing: reliability under non-determinism</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.16.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A single lucky run published as a result. One run tells you almost nothing about a stochastic system.</p></div><div class="ctrl"><div class="lab">Control</div><p>Measure pass^k — succeeds k times out of k — alongside pass@k, plus run-to-run variance on a fixed corpus, so harness failure can be separated from model failure before either is changed.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run one task k times, compute pass@k and pass^k from the same runs, and watch the two numbers disagree.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.16.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.16.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 47 lines of output in 0.03s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.16 · Performance testing: reliability under non-determinism</h1>
+<p><strong>Function B — Product &amp; Application Security → The Security Automation / Harness Engineer</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.10.html">B2.10 · Evaluating a security harness</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>Inspect, promptfoo</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>GLM-5.2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>A single run tells you almost nothing about a stochastic system, and almost
+every published harness result is a single run.</p>
+<p>Two metrics, and the gap between them is the whole lesson:</p>
+<p><strong>pass@k</strong> — succeeded <em>at least once</em> in k attempts. This is the right metric
+when you can cheaply check which attempt was correct and keep it. A code
+generator whose output you compile and test is a pass@k system: five tries and
+one good answer is a good day.</p>
+<p><strong>pass^k</strong> — succeeded <em>every time</em>, k out of k. This is the right metric when
+the run is autonomous and nobody is checking, which describes every security
+harness that files tickets, gates a merge or closes an alert.</p>
+<p>A harness at 80% per-run reliability has a pass@5 of 99.97% and a pass^5 of
+33%. Both numbers are true. Quoting the first one for a system that runs
+unattended is where most harness claims quietly go wrong.</p>
+<p>The other half is <strong>run-to-run variance.</strong> If the same input produces eleven
+findings one day and four the next, the average is not a description of
+anything, and any change you make afterwards is being measured against noise.</p></div><div class="nbmd"><h2>2 · The two metrics, from the same runs</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import random
+
+def run_once(reliability, rng):
+    return rng.random() &lt; reliability
+
+def measure(reliability, k=5, trials=2000, seed=3):
+    rng = random.Random(seed)                  # seeded: identical every run
+    at_least_one = every_time = 0
+    for _ in range(trials):
+        outcomes = [run_once(reliability, rng) for _ in range(k)]
+        at_least_one += any(outcomes)
+        every_time   += all(outcomes)
+    return at_least_one / trials, every_time / trials
+
+print(f&quot;{&#x27;per-run&#x27;:&gt;9}{&#x27;pass@5&#x27;:&gt;10}{&#x27;pass^5&#x27;:&gt;10}  what it means unattended&quot;)
+for r in (0.95, 0.90, 0.80, 0.60, 0.50):
+    at_k, pow_k = measure(r)
+    note = (&quot;dependable&quot; if pow_k &gt; .8 else
+            &quot;coin flip&quot; if pow_k &gt; .3 else &quot;fails most nights&quot;)
+    print(f&quot;{r:&gt;8.0%}{at_k:&gt;10.1%}{pow_k:&gt;10.1%}  {note}&quot;)
+print()
+print(&quot;At 80% per-run the same harness is 99.9% reliable if a human picks the&quot;)
+print(&quot;good answer, and 33% reliable if nobody is looking.&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the demo that was a lucky run</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def one_demo(reliability, seed):
+    return run_once(reliability, random.Random(seed))
+
+demos = [one_demo(0.6, s) for s in range(12)]
+print(&quot;twelve single-run demos of the same 60% harness:&quot;)
+print(&quot;   &quot; + &quot; &quot;.join(&quot;PASS&quot; if d else &quot;fail&quot; for d in demos))
+print(f&quot;   -&gt; {demos.count(True)} passed&quot;)
+print()
+print(&quot;Publish any of the passes. Every one is an honest single run. None of&quot;)
+print(&quot;them is a measurement, and the reader has no way to tell which they got.&quot;)
+assert demos.count(True) and demos.count(False)</code></pre></div><div class="nbmd"><h2>4 · Variance, and why it precedes every other question</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def findings_per_run(base, noise, rng):
+    return max(0, int(rng.gauss(base, noise)))
+
+def variance_profile(base, noise, runs=30, seed=11):
+    rng = random.Random(seed)
+    xs = [findings_per_run(base, noise, rng) for _ in range(runs)]
+    mean = sum(xs) / len(xs)
+    sd = (sum((x - mean) ** 2 for x in xs) / len(xs)) ** 0.5
+    return xs, mean, sd
+
+for noise in (0.5, 3.0):
+    xs, mean, sd = variance_profile(8, noise)
+    print(f&quot;noise sd={noise}:  mean {mean:.1f}  sd {sd:.2f}  &quot;
+          f&quot;range {min(xs)}-{max(xs)}&quot;)
+    print(f&quot;   runs: {xs[:12]} ...&quot;)
+
+_, m_stable, sd_stable = variance_profile(8, 0.5)
+_, m_noisy,  sd_noisy   = variance_profile(8, 3.0)
+improvement = 1.5
+print()
+print(f&quot;suppose a change adds {improvement} findings on average.&quot;)
+print(f&quot;   against sd {sd_stable:.2f}: visible after a handful of runs&quot;)
+print(f&quot;   against sd {sd_noisy:.2f}: indistinguishable from a quiet Tuesday&quot;)
+print()
+print(&quot;Until variance is characterised, every A/B comparison you run is&quot;)
+print(&quot;measuring the dice.&quot;)
+assert sd_noisy &gt; sd_stable</code></pre></div><div class="nbmd"><h2>5 · The control — separate harness failure from model failure\n\nBefore changing either one, find out which is moving.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def attribute(runs_same_model_same_harness, runs_same_model_new_harness):
+    &quot;&quot;&quot;If output changes when only the harness changed, it was the harness.&quot;&quot;&quot;
+    a = sum(runs_same_model_same_harness) / len(runs_same_model_same_harness)
+    b = sum(runs_same_model_new_harness) / len(runs_same_model_new_harness)
+    return a, b, (&quot;harness&quot; if abs(b - a) &gt; 0.15 else &quot;not the harness&quot;)
+
+rng = random.Random(5)
+baseline = [run_once(0.6, rng) for _ in range(200)]
+better_harness = [run_once(0.85, rng) for _ in range(200)]   # same model, better verifier
+a, b, verdict = attribute(baseline, better_harness)
+print(f&quot;same model, original harness : {a:.0%}&quot;)
+print(f&quot;same model, better verifier  : {b:.0%}&quot;)
+print(f&quot;attribution                  : {verdict}&quot;)
+print()
+print(&quot;Twenty-five points of reliability, no model change. Teams routinely&quot;)
+print(&quot;spend that budget on a bigger backbone instead, because the harness&quot;)
+print(&quot;was never measured separately.&quot;)
+assert verdict == &quot;harness&quot;</code></pre></div><div class="nbmd"><h2>6 · Verify — the scorecard line that has to be published</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>k = 5
+rel = 0.85
+at_k, pow_k = measure(rel, k=k)
+xs, mean, sd = variance_profile(8, 0.9)
+card = {
+  &quot;per_run_reliability&quot;: rel,
+  &quot;k&quot;: k,
+  &quot;pass_at_k&quot;: round(at_k, 4),
+  &quot;pass_pow_k&quot;: round(pow_k, 4),
+  &quot;runs_measured&quot;: 2000,
+  &quot;findings_mean&quot;: round(mean, 2),
+  &quot;findings_sd&quot;: round(sd, 2),
+  &quot;seed&quot;: 3,
+  &quot;unattended&quot;: True,
+  &quot;headline_metric&quot;: &quot;pass^k&quot;,       # because unattended is True
+}
+for kk, vv in card.items():
+    print(f&quot;   {kk:22s}{vv}&quot;)
+print()
+print(&quot;The headline metric is chosen by how the harness runs, not by which&quot;)
+print(&quot;number is larger. An unattended harness that reports pass@k is&quot;)
+print(&quot;reporting the reliability of a system it is not.&quot;)
+assert card[&quot;headline_metric&quot;] == &quot;pass^k&quot; and card[&quot;pass_pow_k&quot;] &lt; card[&quot;pass_at_k&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Run your harness on one fixed task five times and count how many times it fully succeeded. That integer, out of five, is the number to put in front of anyone deciding whether to let it run unattended.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.17.html">B2.17 · Regression suites, cost curves and the economics of autonomy</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.16.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.16.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3.</div><div class="chips"><span>Inspect</span><span>promptfoo</span><span class="m">GLM-5.2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.16.ipynb</code></p></div><div class="pager"><a href="B2.10.html"><span class="k">← Previous</span><span class="t">B2.10 · Evaluating a security harness</span></a><a class="next" href="B2.17.html"><span class="k">Next →</span><span class="t">B2.17 · Regression suites, cost curves and the economics of autonomy</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

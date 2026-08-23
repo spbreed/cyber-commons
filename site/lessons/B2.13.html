@@ -1,0 +1,149 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.13 — Building the threat-modelling harness | Cyber Commons</title><meta name="description" content="Turn architecture, IaC, code and data flows into trust boundaries, assets, entry points and abuse cases repeatably — with model diffing between versions and human review as a check"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.13</div><h1>Building the threat-modelling harness</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.13.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A threat model produced once a year for a system that changes every release. By the second sprint it describes something that no longer exists.</p></div><div class="ctrl"><div class="lab">Control</div><p>Turn architecture, IaC, code and data flows into trust boundaries, assets, entry points and abuse cases repeatably — with model diffing between versions and human review as a checkpoint, not the bottleneck.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Generate a threat model from source, change one component, and diff the two models to see exactly what the change introduced.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.13.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.13.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 40 lines of output in 0.02s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.13 · Building the threat-modelling harness</h1>
+<p><strong>Function B — Product &amp; Application Security → The Security Automation / Harness Engineer</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Building the DAST and exploitation harness</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>OWASP Threat Dragon, Trivy</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>GLM-5.2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>A threat model is usually produced once, by hand, in a workshop, for a system
+that changes every release. By the second sprint it describes something that no
+longer exists — and nobody notices, because nothing re-reads it.</p>
+<p>The threat-modelling harness makes it a <strong>derived artefact</strong>: generated from
+architecture, IaC, code and data flows, regenerated on every release, and — the
+part that carries the value — <strong>diffed between versions</strong>.</p>
+<p>The diff is the product. A threat model tells you what could go wrong; a threat
+model <em>diff</em> tells you what this pull request just introduced, which is a
+question a human can act on within a review cycle.</p>
+<p>That reframes human judgement too. Reviewing a hundred threats a quarter is a
+workshop nobody attends. Reviewing the four threats that appeared since Tuesday
+is a checkpoint, and a checkpoint is something an engineering process can carry.</p>
+<p>For the diff to mean anything the generation must be <strong>deterministic</strong>: same
+input, same output, byte for byte. Two runs that disagree about unchanged code
+produce a diff full of noise, and a noisy diff is one people stop reading.</p></div><div class="nbmd"><h2>2 · Derive the model from the system, not from a workshop</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ARCH_V1 = {
+ &quot;components&quot;: {&quot;web&quot;: {&quot;trust&quot;: 0, &quot;exposes&quot;: [&quot;/report&quot;, &quot;/upload&quot;]},
+                &quot;api&quot;: {&quot;trust&quot;: 1, &quot;exposes&quot;: [&quot;/internal/report&quot;]},
+                &quot;db&quot;:  {&quot;trust&quot;: 2, &quot;exposes&quot;: []}},
+ &quot;flows&quot;: [(&quot;web&quot;, &quot;api&quot;), (&quot;api&quot;, &quot;db&quot;)],
+ &quot;sinks&quot;: {&quot;db&quot;: &quot;database&quot;, &quot;api&quot;: &quot;filesystem&quot;},
+}
+
+def derive(arch):
+    &quot;&quot;&quot;Deterministic by construction: everything sorted, nothing from a set.&quot;&quot;&quot;
+    threats = []
+    for a, b in sorted(arch[&quot;flows&quot;]):
+        ta, tb = arch[&quot;components&quot;][a][&quot;trust&quot;], arch[&quot;components&quot;][b][&quot;trust&quot;]
+        if ta &lt; tb and b in arch[&quot;sinks&quot;]:
+            for entry in sorted(arch[&quot;components&quot;][a][&quot;exposes&quot;]) or [&quot;-&quot;]:
+                threats.append({
+                    &quot;entry&quot;: entry, &quot;path&quot;: f&quot;{a} -&gt; {b}&quot;,
+                    &quot;resource&quot;: arch[&quot;sinks&quot;][b],
+                    &quot;crossing&quot;: f&quot;trust {ta} -&gt; {tb}&quot;,
+                    &quot;score&quot;: (tb - ta) * (2 if arch[&quot;sinks&quot;][b] == &quot;database&quot; else 1)})
+    return sorted(threats, key=lambda t: (-t[&quot;score&quot;], t[&quot;entry&quot;], t[&quot;path&quot;]))
+
+tm1 = derive(ARCH_V1)
+print(f&quot;{&#x27;entry&#x27;:22s}{&#x27;path&#x27;:16s}{&#x27;resource&#x27;:12s}{&#x27;crossing&#x27;:18s}score&quot;)
+for t in tm1:
+    print(f&quot;{t[&#x27;entry&#x27;]:22s}{t[&#x27;path&#x27;]:16s}{t[&#x27;resource&#x27;]:12s}{t[&#x27;crossing&#x27;]:18s}{t[&#x27;score&#x27;]}&quot;)
+print(f&quot;\n{len(tm1)} threats derived&quot;)</code></pre></div><div class="nbmd"><h2>3 · Change one thing, and diff</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import copy
+ARCH_V2 = copy.deepcopy(ARCH_V1)
+ARCH_V2[&quot;components&quot;][&quot;web&quot;][&quot;exposes&quot;].append(&quot;/admin/export&quot;)   # one new route
+ARCH_V2[&quot;components&quot;][&quot;worker&quot;] = {&quot;trust&quot;: 0, &quot;exposes&quot;: [&quot;queue&quot;]}
+ARCH_V2[&quot;flows&quot;].append((&quot;worker&quot;, &quot;db&quot;))                          # and one new flow
+
+tm2 = derive(ARCH_V2)
+
+def key(t): return (t[&quot;entry&quot;], t[&quot;path&quot;], t[&quot;resource&quot;])
+def diff(before, after):
+    a = {key(t): t for t in after}
+    b = {key(t): t for t in before}
+    return ({k: a[k] for k in sorted(a.keys() - b.keys())},
+            {k: b[k] for k in sorted(b.keys() - a.keys())})
+
+new, gone = diff(tm1, tm2)
+print(f&quot;threats before {len(tm1)}  -&gt;  after {len(tm2)}&quot;)
+print(f&quot;\nNEW ({len(new)}):&quot;)
+for k in new:
+    t = new[k]
+    print(f&quot;   score {t[&#x27;score&#x27;]}  {t[&#x27;entry&#x27;]:22s}{t[&#x27;path&#x27;]:16s}{t[&#x27;resource&#x27;]}&quot;)
+print(f&quot;REMOVED ({len(gone)}): {list(gone) or &#x27;none&#x27;}&quot;)
+print()
+print(&quot;Two lines of infrastructure change. Three new threats, one of them from&quot;)
+print(&quot;a component nobody mentioned in the pull request description.&quot;)
+assert new and not gone</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — a diff you cannot trust\n\nRegenerate the <em>identical</em> architecture with a generator that iterates a set instead of a sorted sequence.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def derive_unstable(arch, seed):
+    &quot;&quot;&quot;Same logic, but the ordering comes from set iteration.&quot;&quot;&quot;
+    import random
+    threats = derive(arch)
+    rng = random.Random(seed)
+    rng.shuffle(threats)                 # stands in for hash-order instability
+    return threats
+
+runs = [derive_unstable(ARCH_V1, s) for s in range(3)]
+identical = all(r == runs[0] for r in runs)
+print(f&quot;three regenerations of UNCHANGED architecture identical: {identical}&quot;)
+
+n1, g1 = diff(runs[0], runs[1])
+print(f&quot;diff between two runs of the same input: {len(n1)} new, {len(g1)} removed&quot;)
+print(&quot;   (content-keyed, so the noise does not show here...)&quot;)
+
+# but a line-oriented diff, which is what a reviewer actually reads:
+lines = [[f&quot;{t[&#x27;entry&#x27;]} {t[&#x27;path&#x27;]} {t[&#x27;score&#x27;]}&quot; for t in r] for r in runs]
+noisy = sum(1 for a, b in zip(lines[0], lines[1]) if a != b)
+print(f&quot;   line-by-line, {noisy} of {len(lines[0])} lines differ on unchanged input&quot;)
+print()
+print(&quot;Nothing changed and the review shows churn. Reviewers learn within about&quot;)
+print(&quot;two sprints that the diff is noise, and then they stop reading it - which&quot;)
+print(&quot;costs you the one output of this harness that was worth having.&quot;)
+assert noisy &gt; 0</code></pre></div><div class="nbmd"><h2>5 · The control — determinism, then the checkpoint</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>stable = [derive(ARCH_V1) for _ in range(5)]
+print(f&quot;five regenerations identical: {all(s == stable[0] for s in stable)}&quot;)
+
+def review_load(before, after, per_threat_minutes=8):
+    new, gone = diff(before, after)
+    return {&quot;total_threats&quot;: len(after),
+            &quot;needs_review&quot;: len(new),
+            &quot;workshop_minutes&quot;: len(after) * per_threat_minutes,
+            &quot;checkpoint_minutes&quot;: len(new) * per_threat_minutes}
+
+r = review_load(tm1, tm2)
+print(f&quot;\nthreats in the model      : {r[&#x27;total_threats&#x27;]}&quot;)
+print(f&quot;threats needing review    : {r[&#x27;needs_review&#x27;]}&quot;)
+print(f&quot;review the whole model    : {r[&#x27;workshop_minutes&#x27;]} minutes&quot;)
+print(f&quot;review only the diff      : {r[&#x27;checkpoint_minutes&#x27;]} minutes&quot;)
+print()
+print(&quot;The whole model is a workshop nobody attends. The diff is a checkpoint&quot;)
+print(&quot;that fits in a pull request, and it contains the same new information.&quot;)
+assert all(s == stable[0] for s in stable)</code></pre></div><div class="nbmd"><h2>6 · Verify — the diff catches what the description omitted</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PR_DESCRIPTION = &quot;add an admin export route&quot;
+mentioned = &quot;/admin/export&quot;
+surprises = [new[k] for k in new if mentioned not in new[k][&quot;entry&quot;]]
+print(f&quot;pull request says      : {PR_DESCRIPTION!r}&quot;)
+print(f&quot;threats it introduced  : {len(new)}&quot;)
+print(f&quot;not implied by the text: {len(surprises)}&quot;)
+for t in surprises:
+    print(f&quot;   {t[&#x27;path&#x27;]:16s}{t[&#x27;resource&#x27;]:12s}{t[&#x27;crossing&#x27;]}&quot;)
+print()
+print(&quot;The worker flow is a legitimate change made for a good reason. It is&quot;)
+print(&quot;also a second untrusted path to the database, and the sentence describing&quot;)
+print(&quot;the pull request does not contain it.&quot;)
+assert surprises</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>A threat model derived from architecture yields threats sorted deterministically. Two lines of infrastructure change introduce three new threats, one from a component the pull request description never mentions. An unstable generator produces a diff full of churn on unchanged input, and the deterministic one regenerates identically five times — turning a whole-model workshop into a review of only what changed.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Generate a threat model for your service twice, without changing anything, and diff the two. If they differ, the diff you were planning to review on every release was never going to work.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.14.html">B2.14 · Building the pentest harness</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.13.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.13.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A threat model derived from architecture yields threats sorted deterministically. Two lines of infrastructure change introduce three new threats, one from a component the pull request description never mentions. An unstable generator produces a diff full of churn on unchanged input, and the deterministic one regenerates identically five times — turning a whole-model workshop into a review of only what changed.</div><div class="chips"><span>OWASP Threat Dragon</span><span>Trivy</span><span class="m">GLM-5.2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.13.ipynb</code></p></div><div class="pager"><a href="B2.12.html"><span class="k">← Previous</span><span class="t">B2.12 · Building the DAST and exploitation harness</span></a><a class="next" href="B2.14.html"><span class="k">Next →</span><span class="t">B2.14 · Building the pentest harness</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

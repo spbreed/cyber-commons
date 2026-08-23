@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.11 — Model risk management for AI systems | Cyber Commons</title><meta name="description" content="Extend the SR 11-7 lineage — conceptual soundness, ongoing monitoring, independent validation — to non-deterministic, tool-using systems, and name where it still holds."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — Governance, Risk, Compliance &amp; the CISO Office › The GRC Practitioner (Risk &amp; Control)</div><div class="sid">E1.11</div><h1>Model risk management for AI systems</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The classical model-risk playbook silently breaks once the model can act: conceptual soundness was validated, and then the agent was granted write access nobody validated.</p></div><div class="ctrl"><div class="lab">Control</div><p>Extend the SR 11-7 lineage — conceptual soundness, ongoing monitoring, independent validation — to non-deterministic, tool-using systems, and name where it still holds.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Take a validated model, add one tool, and show which parts of the validation are now void.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 54 lines of output in 0.01s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.11 · Model risk management for AI systems</h1>
+<p><strong>Function E — Governance, Risk, Compliance &amp; the CISO Office → The GRC Practitioner (Risk &amp; Control)</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.10.html">E1.10 · The stakeholder map: who owns what</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>Inspect</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Model risk management is not new. The SR 11-7 lineage has governed models in
+regulated institutions for over a decade, and its three pillars are sound:</p>
+<ol>
+<li><strong>Conceptual soundness</strong> — is the method appropriate for the purpose?</li>
+<li><strong>Ongoing monitoring</strong> — is it still performing as validated?</li>
+<li><strong>Independent validation</strong> — did someone other than the builder check?</li>
+</ol>
+<p>All three still hold for AI systems. What breaks is not the framework but a
+silent assumption underneath it: <strong>that a model produces an output, and a human
+decides what to do with it.</strong></p>
+<p>Once the model can call a tool, that assumption is void. Validation scoped to
+the model's <em>predictions</em> says nothing about the model's <em>actions</em>. You can hold
+a perfectly valid validation report for a system that has since been granted
+write access to a production database, and nothing in the classical process is
+required to notice.</p>
+<p>So the extension is narrow and specific: the unit of validation becomes the
+<strong>model plus its tool surface plus its autonomy level</strong>, and any change to any of
+the three triggers revalidation — not just a change to the weights.</p></div><div class="nbmd"><h2>2 · The three pillars, and what each assumes</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PILLARS = {
+ &quot;conceptual_soundness&quot;: (&quot;is the method appropriate for the purpose&quot;,
+                          &quot;assumes the purpose is stable and stated&quot;),
+ &quot;ongoing_monitoring&quot;:   (&quot;is it still performing as validated&quot;,
+                          &quot;assumes performance is what changes&quot;),
+ &quot;independent_validation&quot;:(&quot;did someone other than the builder check&quot;,
+                          &quot;assumes the thing checked is the thing deployed&quot;),
+}
+print(f&quot;{&#x27;pillar&#x27;:24s}{&#x27;what it asks&#x27;:46s}what it quietly assumes&quot;)
+for p in sorted(PILLARS):
+    asks, assumes = PILLARS[p]
+    print(f&quot;{p:24s}{asks:46s}{assumes}&quot;)
+print()
+print(&quot;All three survive contact with AI. The assumptions are what break.&quot;)</code></pre></div><div class="nbmd"><h2>3 · The unit of validation, before and after tools</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>VALIDATED = {
+ &quot;model&quot;: &quot;glm-5.2&quot;, &quot;version&quot;: &quot;2026-03&quot;,
+ &quot;purpose&quot;: &quot;summarise support tickets&quot;,
+ &quot;tools&quot;: [],                       # at validation time it had none
+ &quot;autonomy&quot;: &quot;L1&quot;,                  # suggests; a human acts
+}
+
+def validation_covers(deployed, validated):
+    diffs = []
+    if deployed[&quot;model&quot;] != validated[&quot;model&quot;]:       diffs.append(&quot;model changed&quot;)
+    if deployed[&quot;version&quot;] != validated[&quot;version&quot;]:   diffs.append(&quot;version changed&quot;)
+    if deployed[&quot;purpose&quot;] != validated[&quot;purpose&quot;]:   diffs.append(&quot;purpose changed&quot;)
+    if sorted(deployed[&quot;tools&quot;]) != sorted(validated[&quot;tools&quot;]):
+        diffs.append(f&quot;tool surface changed: {sorted(set(deployed[&#x27;tools&#x27;]) - set(validated[&#x27;tools&#x27;]))}&quot;)
+    if deployed[&quot;autonomy&quot;] != validated[&quot;autonomy&quot;]: diffs.append(
+        f&quot;autonomy raised {validated[&#x27;autonomy&#x27;]} -&gt; {deployed[&#x27;autonomy&#x27;]}&quot;)
+    return (not diffs), diffs
+
+DEPLOYED = dict(VALIDATED, tools=[&quot;read_ticket&quot;, &quot;write_ticket&quot;, &quot;db_update&quot;],
+                autonomy=&quot;L3&quot;)
+ok, diffs = validation_covers(DEPLOYED, VALIDATED)
+print(f&quot;validation still covers what is deployed: {ok}&quot;)
+for d in diffs:
+    print(f&quot;   {d}&quot;)
+print()
+print(&quot;Same weights. Same version. The validation report is accurate about a&quot;)
+print(&quot;system that no longer exists, and nothing in the classical process is&quot;)
+print(&quot;required to notice, because the classical trigger is a model change.&quot;)
+assert not ok</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — monitoring the wrong thing well</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import random
+def monitor(metric, runs=200, seed=4):
+    rng = random.Random(seed)
+    return [round(rng.gauss(0.92, 0.01), 3) for _ in range(runs)]
+
+acc = monitor(&quot;summarisation_accuracy&quot;)
+print(f&quot;summarisation accuracy over 200 runs: mean {sum(acc)/len(acc):.3f}, &quot;
+      f&quot;min {min(acc)}, max {max(acc)}&quot;)
+print(&quot;threshold 0.85 -&gt; breaches:&quot;, sum(a &lt; 0.85 for a in acc))
+print()
+UNMONITORED = [&quot;rows written to production&quot;, &quot;tools invoked per run&quot;,
+               &quot;actions taken without human review&quot;, &quot;scope of the credential used&quot;]
+print(&quot;what is NOT on the dashboard:&quot;)
+for u in UNMONITORED:
+    print(f&quot;   {u}&quot;)
+print()
+print(&quot;The monitoring is excellent and it is monitoring the prediction. The&quot;)
+print(&quot;risk moved to the action, and the action has no threshold, no baseline&quot;)
+print(&quot;and no alert.&quot;)
+assert sum(a &lt; 0.85 for a in acc) == 0</code></pre></div><div class="nbmd"><h2>5 · The control — revalidate on the triple, not on the weights</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TRIGGERS = {
+ &quot;model or version change&quot;: True,
+ &quot;prompt or config change&quot;: True,
+ &quot;tool added or scope widened&quot;: True,
+ &quot;autonomy level raised&quot;: True,
+ &quot;purpose changed&quot;: True,
+ &quot;calendar year elapsed&quot;: True,
+}
+CLASSICAL = {&quot;model or version change&quot;, &quot;calendar year elapsed&quot;}
+
+print(f&quot;{&#x27;trigger&#x27;:32s}{&#x27;classical MRM&#x27;:16s}extended&quot;)
+for t in TRIGGERS:
+    print(f&quot;{t:32s}{&#x27;yes&#x27; if t in CLASSICAL else &#x27;no&#x27;:16s}yes&quot;)
+missed = [t for t in TRIGGERS if t not in CLASSICAL]
+print(f&quot;\ntriggers classical MRM would miss: {len(missed)}&quot;)
+for m in missed: print(f&quot;   {m}&quot;)
+print()
+ok2, diffs2 = validation_covers(DEPLOYED, VALIDATED)
+print(f&quot;under the extended triggers, this deployment requires revalidation: {not ok2}&quot;)
+print(f&quot;reasons: {diffs2}&quot;)
+assert len(missed) == 4</code></pre></div><div class="nbmd"><h2>6 · Verify — what a validation record must now carry</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>record = {
+ &quot;model&quot;: DEPLOYED[&quot;model&quot;], &quot;version&quot;: DEPLOYED[&quot;version&quot;],
+ &quot;purpose&quot;: DEPLOYED[&quot;purpose&quot;],
+ &quot;tool_surface&quot;: sorted(DEPLOYED[&quot;tools&quot;]),
+ &quot;autonomy&quot;: DEPLOYED[&quot;autonomy&quot;],
+ &quot;validated_unit&quot;: &quot;model + tool surface + autonomy&quot;,
+ &quot;monitors&quot;: [&quot;summarisation_accuracy&quot;, &quot;rows_written&quot;, &quot;tools_per_run&quot;,
+              &quot;actions_without_review&quot;],
+ &quot;revalidation_triggers&quot;: sorted(TRIGGERS),
+ &quot;independent_of_builder&quot;: True,
+}
+for k in sorted(record):
+    print(f&quot;   {k:24s}{record[k]}&quot;)
+print()
+print(&quot;Three fields carry the whole extension: validated_unit, tool_surface and&quot;)
+print(&quot;autonomy. Without them a validation report describes a text generator,&quot;)
+print(&quot;and the thing in production is an actor.&quot;)
+assert record[&quot;validated_unit&quot;].startswith(&quot;model + tool&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The three SR 11-7 pillars print with the assumption each makes. A system validated with no tools at L1 is shown deployed with three tools at L3 — same model, same version — and the validation no longer covers it. Monitoring reports 200 clean runs of summarisation accuracy while four action-level metrics have no threshold at all, and four revalidation triggers classical MRM would miss are named.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take one validated model in your estate and list the tools it holds today. If any of them post-dates the validation report, the report is describing a different system.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.12.html">E1.12 · Working the seams</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.11.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.11.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The three SR 11-7 pillars print with the assumption each makes. A system validated with no tools at L1 is shown deployed with three tools at L3 — same model, same version — and the validation no longer covers it. Monitoring reports 200 clean runs of summarisation accuracy while four action-level metrics have no threshold at all, and four revalidation triggers classical MRM would miss are named.</div><div class="chips"><span>Inspect</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.11.ipynb</code></p></div><div class="pager"><a href="E1.10.html"><span class="k">← Previous</span><span class="t">E1.10 · The stakeholder map: who owns what</span></a><a class="next" href="E1.12.html"><span class="k">Next →</span><span class="t">E1.12 · Working the seams</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

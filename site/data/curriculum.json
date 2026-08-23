@@ -30,9 +30,10 @@
    "tracks": [
     {
      "id": "A1",
+     "chapter": 1,
      "title": "The Security Architect",
      "titles": "Security Architect, Principal Security Engineer, Head of Security Architecture",
-     "changes": "Starts from zero: what an agentic system is made of, then the map of every control that holds it. Only then the architect's own work — living threat models, the control plane, blast radius, topology, build-vs-buy, routing.",
+     "changes": "Designing systems that act — and defending them at every layer. 12 lessons.",
      "autonomy": "Designs must be safe at L3 even when deployed at L2.5.",
      "deliverable": "A reference architecture and a blast-radius measurement for one real business workflow.",
      "sessions": [
@@ -40,6 +41,7 @@
        "id": "A1.1",
        "title": "What an agentic system is actually made of",
        "track": "both",
+       "summary": "Decompose an agent into model, harness, tools, memory, identity and egress path. You cannot secure what you cannot decompose — this is the vocabulary the rest of the course runs on.",
        "risk": "\"Secure the agent\" has no referent until you can name the parts. Every control in this curriculum attaches to one specific component or one boundary between two.",
        "control": "Draw the system as it really runs: app, model, agent loop, tools and APIs, MCP servers, retrieval, memory — and mark which boundaries untrusted data crosses.",
        "lab": "Build the component graph for a working agent, then trace one user request through every hop and mark where trust changes.",
@@ -56,6 +58,7 @@
        "id": "A1.2",
        "title": "The controls, and where each one binds",
        "track": "secure",
+       "summary": "Map every available control to the layer that actually enforces it: prompt, harness, gateway, runtime, network. Shows why a control placed at the wrong layer produces paper assurance and nothing else.",
        "risk": "Controls chosen as a checklist land in the wrong layer — a prompt rule where an authorization rule was needed, and nothing to point at when asked what stops it.",
        "control": "One map: identity, default-deny authorization, sandboxed execution, tool and MCP trust, egress, containment, audit — each bound to the component it constrains.",
        "lab": "Place seven controls on the component graph from A1.1, then remove one at a time and count which attacks stop being stopped.",
@@ -73,6 +76,7 @@
        "id": "A1.3",
        "title": "Architecture review when the system acts",
        "track": "secure",
+       "summary": "Rebuild the design review for systems that take actions rather than return answers. New questions, new failure assumptions, new sign-off criteria.",
        "risk": "PDF threat models go stale the moment the agent's tools change.",
        "control": "Living, continuously re-evaluated threat models over the three planes separately.",
        "lab": "Generate a threat model from a running agent's actual tool manifest, then diff it after adding one tool.",
@@ -88,6 +92,7 @@
        "id": "A1.4",
        "title": "Designing the agent control plane",
        "track": "secure",
+       "summary": "The central point where agent identity, policy, tool access and audit converge. How to build one without turning it into the org's slowest bottleneck.",
        "risk": "Controls assumed to live 'in the agent' are advisory, not enforced.",
        "control": "Identity fabric → agentic gateway → policy decision point → sandboxed runtime → audited action plane.",
        "lab": "Stand the whole reference stack up on kind: SPIRE + agentgateway + OPA + a sandboxed runner.",
@@ -105,6 +110,7 @@
        "id": "A1.5",
        "title": "Blast radius as a design metric",
        "track": "secure",
+       "summary": "Treat \"what can this agent reach if fully compromised\" as a measurable, first-class design constraint. Concrete techniques to shrink it before anything ships.",
        "risk": "Blast radius is asserted in review, never measured.",
        "control": "Make it a number that appears in the design review.",
        "lab": "Measure reachable actions under flat RBAC vs attenuated delegation while an injection fires.",
@@ -120,6 +126,7 @@
        "id": "A1.6",
        "title": "Multi-agent topology",
        "track": "secure",
+       "summary": "Orchestrator, peer and swarm patterns, and how trust propagates between agents. Where delegation chains quietly amplify privilege nobody granted.",
        "risk": "Fan-out concentrates authority somewhere nobody drew.",
        "control": "Planner/executor/critic splits with delegation-depth limits.",
        "lab": "Build a 3-agent topology in kagent and chart where authority actually accumulates.",
@@ -135,6 +142,7 @@
        "id": "A1.7",
        "title": "Build vs buy",
        "track": "both",
+       "summary": "A decision framework for agent platforms, gateways and guardrail products. What you must own to retain control, and what can safely be outsourced.",
        "risk": "Outsourcing the control plane to a vendor you cannot audit.",
        "control": "Buy the commodity, build the boundary, never outsource identity or stop authority.",
        "lab": "Score three gateway options against a fixed control checklist.",
@@ -148,6 +156,7 @@
        "id": "A1.8",
        "title": "Model routing architecture",
        "track": "both",
+       "summary": "Routing across model tiers, vendors and hosting modes without leaking data or dropping policy. Cost, latency and assurance tradeoffs made explicit rather than assumed.",
        "risk": "The router fails open to a weaker model under load — a silent downgrade of every guardrail.",
        "control": "Treat tier selection as a security decision with explicit fail-closed defaults.",
        "lab": "Route across GLM-4.6 / Llama / Kimi with LiteLLM, then force a failure and watch what it falls back to.",
@@ -160,14 +169,82 @@
         "Llama 3.3",
         "Kimi K2"
        ]
+      },
+      {
+       "id": "A1.9",
+       "title": "The injection surface: direct and indirect prompt injection",
+       "track": "secure",
+       "summary": "Direct injection is a user attacking their own agent; indirect injection is attacker text arriving inside a document, web page, ticket, email or code comment that the agent then obeys. Map every untrusted-content path into the context window and treat each one as an unauthenticated code path.",
+       "risk": "Attacker text arrives inside a document, ticket, web page, email or code comment, and the agent obeys it. Every untrusted-content path into the context window is an unauthenticated code path nobody enumerated.",
+       "control": "Map every untrusted-content path into the context window and treat each as unauthenticated input: provenance tagging, source allow-listing, and no tool selection from an untrusted span.",
+       "lab": "Enumerate the untrusted-content paths into one agent's context, land the same payload through each, then show provenance enforcement refusing all of them.",
+       "tools": [
+        "garak",
+        "promptfoo",
+        "LLM Guard"
+       ],
+       "models": [
+        "Llama Guard 4",
+        "GLM-4.6"
+       ]
+      },
+      {
+       "id": "A1.10",
+       "title": "Jailbreaks, model inversion and extraction",
+       "track": "secure",
+       "summary": "The model-layer attack taxonomy: jailbreaks that bypass behavioural policy, model inversion that reconstructs training or context data from outputs, membership inference, model and prompt extraction, and embedding inversion against your vector store. What each attack actually recovers, and which architectural control genuinely blunts it.",
+       "risk": "The whole model-layer attack taxonomy gets called \"jailbreaks\". Inversion, membership inference, prompt extraction and embedding inversion each recover something different and are blunted by different controls.",
+       "control": "Name what each attack actually recovers, then bind the architectural control that genuinely blunts it — most of which do not sit at the model layer.",
+       "lab": "Run each attack class against a deterministic stand-in, record what it recovered, and map each to the layer that can stop it.",
+       "tools": [
+        "garak",
+        "Presidio"
+       ],
+       "models": [
+        "Llama Guard 4"
+       ]
+      },
+      {
+       "id": "A1.11",
+       "title": "Building outcome-driven guardrails, layer by layer",
+       "track": "secure",
+       "summary": "Specify guardrails by the *outcome you refuse to permit* rather than by the input string you hope to block — because attackers rewrite strings and cannot rewrite consequences. Placement and tradeoffs across all ten enforcement layers, and why any single-layer defence is a demo, not a control.",
+       "risk": "Guardrails specified by the input string you hope to block. Attackers rewrite strings freely; they cannot rewrite consequences.",
+       "control": "Specify each guardrail by the outcome you refuse to permit, then place it at a layer that can actually enforce it — and know that any single-layer defence is a demo.",
+       "lab": "Take one refused outcome, place it across all ten enforcement layers, and measure which placements actually deny it.",
+       "tools": [
+        "OPA",
+        "agentgateway",
+        "Cilium"
+       ],
+       "models": [
+        "GLM-4.6"
+       ]
+      },
+      {
+       "id": "A1.12",
+       "title": "Proving guardrails work",
+       "track": "secure",
+       "summary": "Bypass testing, adversarial suites, and the economics of a control that fails three times in a hundred against a determined attacker. Measurement discipline that converts a guardrail claim into evidence an auditor or a red team will accept.",
+       "risk": "A guardrail claim with no bypass testing behind it. A control that fails three times in a hundred is not a control against an attacker who can retry.",
+       "control": "Adversarial suites and bypass economics that convert a guardrail claim into evidence a red team or an auditor will accept.",
+       "lab": "Run a bypass suite against a guardrail and compute the attacker's expected cost per success.",
+       "tools": [
+        "garak",
+        "promptfoo"
+       ],
+       "models": [
+        "GLM-4.6"
+       ]
       }
      ]
     },
     {
      "id": "A2",
+     "chapter": 2,
      "title": "The Identity & Non-Human Identity Engineer",
      "titles": "IAM Engineer, NHI Lead, Identity Architect, Workload Identity Engineer",
-     "changes": "You have a new population of principals that outnumbers your humans, changes hourly, and inherits credentials nobody granted it. The most genuinely new material in the programme.",
+     "changes": "The hardest unsolved problem in the stack. 9 lessons.",
      "autonomy": "Identity is the control that makes L2.5 defensible; without it you are running L3 and calling it L2.",
      "deliverable": "A working three-hop delegation chain with proven attenuation, and a rollback of one agent's access without collateral.",
      "sessions": [
@@ -175,6 +252,7 @@
        "id": "A2.1",
        "title": "\"Who is calling?\"",
        "track": "secure",
+       "summary": "The core identity question when the caller is software acting for a human. Authentication patterns for agents, workloads and the credentials they carry.",
        "risk": "You cannot answer the first question of every investigation.",
        "control": "A taxonomy: user-agent vs workload identity, sandboxed vs not, managed vs personal.",
        "lab": "Classify every agent in your lab and record what proves each claim.",
@@ -187,6 +265,7 @@
        "id": "A2.2",
        "title": "The bootstrap problem",
        "track": "secure",
+       "summary": "How an agent obtains its first credential without a pre-shared secret. Attestation, workload identity and the trust anchor that starts every chain.",
        "risk": "Proving identity before you hold a credential — usually solved with a long-lived secret in a file.",
        "control": "Workload attestation: SPIFFE SVIDs, instance identity documents, projected SA tokens, re-attestation on rotation.",
        "lab": "Issue an SVID to a workload with SPIRE and watch it re-attest after rotation — zero static secrets.",
@@ -200,6 +279,7 @@
        "id": "A2.3",
        "title": "Shadow Autonomy",
        "track": "secure",
+       "summary": "Agents that acquire capability nobody approved — inherited tokens, service accounts, copy-pasted keys. How to find them before an auditor or an attacker does.",
        "risk": "Agents executing under inherited human credentials — your audit trail is already wrong.",
        "control": "Detect it first, then separate the principal; revocation is impossible until you can name the actor.",
        "lab": "Find agent-vs-human credential use in logs by behavioural signature; then split the principal.",
@@ -215,6 +295,7 @@
        "id": "A2.4",
        "title": "The NHI governance gap",
        "track": "secure",
+       "summary": "Non-human identities now outnumber humans and sit entirely outside joiner-mover-leaver. Building lifecycle, ownership and revocation for identities with no HR record.",
        "risk": "Revoking one misbehaving agent breaks forty others.",
        "control": "Enrolment, ownership, scope, expiry, attribution — an agent registry with honest enforcement limits.",
        "lab": "Build the registry, then revoke exactly one agent and prove no collateral.",
@@ -228,6 +309,7 @@
        "id": "A2.5",
        "title": "Delegation that survives audit",
        "track": "secure",
+       "summary": "Encoding \"acting on behalf of\" so the human principal remains provable months later. Token exchange, on-behalf-of flows and chain integrity.",
        "risk": "On-behalf-of implemented as impersonation — the chain is unprovable afterwards.",
        "control": "RFC 8693 token exchange with the `act` claim as a real delegation chain.",
        "lab": "Build a three-hop chain in Keycloak; decode the `act` claims and show attenuation at each hop.",
@@ -241,6 +323,7 @@
        "id": "A2.6",
        "title": "The agentic gateway",
        "track": "secure",
+       "summary": "A policy enforcement point every agent call passes through. What it must see, decide and record to be worth the extra hop.",
        "risk": "Secrets end up in agent code because there was nowhere else to put them.",
        "control": "Gateway-side credential exchange: virtual keys, JWKS validation, identity mapping.",
        "lab": "Put agentgateway in front of an MCP server and move every credential out of the agent.",
@@ -256,6 +339,7 @@
        "id": "A2.7",
        "title": "Systems that don't understand agents",
        "track": "secure",
+       "summary": "Legacy apps, SaaS and databases that only model human users. Shimming agent identity into them without resorting to shared accounts.",
        "risk": "Legacy services see only the human's token and grant everything.",
        "control": "Token translation plus action-class blocking at the boundary.",
        "lab": "Allow reads, deny protected-branch merges by token type, at the gateway.",
@@ -269,6 +353,7 @@
        "id": "A2.8",
        "title": "Just-in-time authority",
        "track": "secure",
+       "summary": "Replacing standing agent privilege with short-lived, scoped, purpose-bound grants. Approval flow, expiry design and the operational cost of getting it wrong.",
        "risk": "Standing access means an injection always has something to spend.",
        "control": "Human-initiated credential release, change-window binding, maker/checker under agent attribution.",
        "lab": "Cut standing access to zero and issue authority only inside a change window.",
@@ -282,6 +367,7 @@
        "id": "A2.9",
        "title": "The classic failures",
        "track": "secure",
+       "summary": "The recurring identity failure patterns: over-broad service accounts, unrotated keys, confused deputy, privilege inheritance. Each with its detection signal and its fix.",
        "risk": "Confused deputy, token replay, shared static credentials, over-broad scope.",
        "control": "Reproduce each one, then close it.",
        "lab": "Exploit all four in the lab, then re-run against the hardened chain.",
@@ -297,9 +383,10 @@
     },
     {
      "id": "A3",
+     "chapter": 3,
      "title": "The Platform & Cloud Security Engineer",
      "titles": "Cloud Security Engineer, Platform Security Engineer, Infrastructure Security",
-     "changes": "The controls themselves, in the order they take effect: default-deny authorization, then sandboxed execution, then the filesystem and tool boundaries, then MCP, then egress — and finally the levers you pull when one of them fails.",
+     "changes": "Containment is where theory meets the kernel. 9 lessons.",
      "autonomy": "Containment is what lets you say yes to L2.5 without pretending the agent is trustworthy.",
      "deliverable": "A hardened runtime that survives a deliberate injected payload with a measured blast radius of zero outside the sandbox.",
      "sessions": [
@@ -307,6 +394,7 @@
        "id": "A3.1",
        "title": "Authorization models that make bad grants impossible",
        "track": "secure",
+       "summary": "Choosing RBAC, ReBAC or policy-as-code so unsafe permissions cannot even be expressed. Design for structural denial rather than human review.",
        "risk": "RBAC has no unit small enough to express the grant you actually meant.",
        "control": "ReBAC/ABAC with time-scoped delegation and attenuation by construction.",
        "lab": "Model the same grant in flat RBAC and in OpenFGA; prove the over-privileged grant is unrepresentable.",
@@ -320,6 +408,7 @@
        "id": "A3.2",
        "title": "Sandboxing is the perimeter",
        "track": "secure",
+       "summary": "For an executing agent, the sandbox *is* the real security boundary. Isolation options compared by what each one genuinely contains.",
        "risk": "Tier chosen by convenience, not by action class.",
        "control": "Process → container → microVM → ephemeral workstation → air-gapped runner, chosen deliberately.",
        "lab": "Run the same agent in three tiers and measure escape surface in each.",
@@ -336,6 +425,7 @@
        "id": "A3.3",
        "title": "Filesystem and path guards",
        "track": "secure",
+       "summary": "Constraining what an agent can read, write and traverse. Path canonicalisation, mount strategy and the escapes teams routinely miss.",
        "risk": "The agent iterating on code wanders into credentials.",
        "control": "Workspace scoping, mount discipline, ephemeral state.",
        "lab": "Attempt credential read from inside the sandbox; close it with mount policy.",
@@ -349,6 +439,7 @@
        "id": "A3.4",
        "title": "Tool permission models",
        "track": "secure",
+       "summary": "Granting tools per-agent, per-task and per-risk-tier instead of all-or-nothing. Approval gates for destructive and irreversible operations.",
        "risk": "The confused deputy at the tool layer.",
        "control": "Capability scoping, allowlisted actions, structured output contracts, read-only defaults.",
        "lab": "Redesign a dangerous tool so the dangerous call doesn't exist.",
@@ -362,6 +453,7 @@
        "id": "A3.5",
        "title": "MCP is not a security boundary",
        "track": "secure",
+       "summary": "What MCP does and does not guarantee about trust, provenance and authorization. The controls you must add around it before production.",
        "risk": "Connector chaining as privilege escalation; unpinned servers.",
        "control": "Server scanning, version pinning with hash verification, self-hosting.",
        "lab": "Chain two MCP connectors to escalate, then pin and scan to stop it.",
@@ -378,6 +470,7 @@
        "id": "A3.6",
        "title": "Egress control for agents",
        "track": "secure",
+       "summary": "Allow-lists, proxies and DNS control for outbound agent traffic. Why egress is the single highest-leverage exfiltration control available to you.",
        "risk": "An agent with unrestricted egress has no other meaningful control.",
        "control": "Allowlists, inspecting proxies, DNS conditional forwarding, data perimeters.",
        "lab": "Put a Squid allowlist in front of an agent and watch exfiltration fail.",
@@ -394,6 +487,7 @@
        "id": "A3.7",
        "title": "Runtime containment levers",
        "track": "secure",
+       "summary": "Resource limits, syscall filtering, quotas and kill switches applied to running agents. Tuning containment without breaking legitimate work.",
        "risk": "The stop lever is built during the incident.",
        "control": "Throttle, scope-reduce, reroute, force HITL, hard stop — built and tested first.",
        "lab": "Wire all five levers and prove each fires under load.",
@@ -408,6 +502,7 @@
        "id": "A3.8",
        "title": "Environment separation",
        "track": "secure",
+       "summary": "Keeping agent dev, test and production genuinely separate when the agent itself can move data between them. Data classes and credential scoping.",
        "risk": "\"The agent knows not to\" is not separation.",
        "control": "Dev-agent credentials structurally unable to reach production.",
        "lab": "Prove the dev SVID cannot mint a prod token, by construction.",
@@ -421,6 +516,7 @@
        "id": "A3.9",
        "title": "The unmanaged agent problem",
        "track": "secure",
+       "summary": "Developer-run agents, personal API keys and desktop tools operating on corporate data. Discovery, enrolment, and a realistic amnesty path.",
        "risk": "Personal, non-sandboxed agents on managed endpoints.",
        "control": "Endpoint + secure web gateway, behavioural monitoring — with an honest account of the gap.",
        "lab": "Detect an unmanaged local agent by its egress and filesystem signature.",
@@ -437,13 +533,14 @@
   {
    "id": "B",
    "title": "Product & Application Security",
-   "blurb": "Closest to the developers, and therefore first to meet agents at scale — usually before anyone approved it.",
+   "blurb": "Closest to developers, so first to meet agents at scale — and the ones who build the pipeline rather than buy it.",
    "tracks": [
     {
      "id": "B1",
+     "chapter": 4,
      "title": "The AppSec Engineer / Code Reviewer",
      "titles": "AppSec Engineer, Product Security Engineer, Secure Code Reviewer",
-     "changes": "Your review becomes a 15-stage pipeline rather than a queue: ingest, model the threat, analyse, validate dynamically, report. Judgment becomes the bottleneck, which is a better problem.",
+     "changes": "The full agentic security pipeline, end to end. 16 lessons.",
      "autonomy": "Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.",
      "deliverable": "A five-phase AppSec pipeline running as a CI gate, with confirmed-by-exploitation severity and published precision and escape metrics.",
      "sessions": [
@@ -451,6 +548,7 @@
        "id": "B1.1",
        "title": "Historical parsing and structural indexing",
        "track": "defend",
+       "summary": "Turn a large codebase into a machine-navigable structure agents can reason over. Parsing, symbol graphs and repository indexing as the foundation layer.",
        "risk": "Review starts at the diff, so the pipeline never learns which parts of the repo keep breaking.",
        "control": "Stages 1–2: mine commit and advisory history for repeat risk zones, then index the codebase into semantic units.",
        "lab": "Parse a repo's vulnerability history into risk zones, then build a function/class index and rank files by prior-defect density.",
@@ -467,6 +565,7 @@
        "id": "B1.2",
        "title": "Component summarisation and architecture synthesis",
        "track": "defend",
+       "summary": "Compress components into accurate summaries and rebuild system architecture from source. Everything downstream inherits the quality of this map.",
        "risk": "The model is handed files and asked about a system, so it invents the parts it cannot see.",
        "control": "Stages 3–4: summarise each module, then compile a global map of data flows, entry points and trust boundaries.",
        "lab": "Generate per-directory summaries and synthesise them into an architecture map with entry points and trust boundaries.",
@@ -483,6 +582,7 @@
        "id": "B1.3",
        "title": "Threat modelling from the architecture map",
        "track": "secure",
+       "summary": "Derive trust boundaries, assets and attacker goals from the synthesized architecture. Automate the tedious half while keeping human judgement on the rest.",
        "risk": "Threat models are written once, by hand, against a system that has since changed.",
        "control": "Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.",
        "lab": "Turn an architecture map into a ranked threat model, then diff it after one entry point is added.",
@@ -497,6 +597,7 @@
        "id": "B1.4",
        "title": "Strategic planning and agent allocation",
        "track": "defend",
+       "summary": "Decide where to spend finite agent effort across a very large codebase. Prioritisation, budget allocation and parallelisation strategy.",
        "risk": "Every scanner is pointed at every file, so cost scales with the repo instead of with the risk.",
        "control": "Stage 6: allocate specialised agents and tools to specific trust boundaries, budgeted by threat rank.",
        "lab": "Allocate a fixed analysis budget across boundaries and compare coverage against a uniform sweep.",
@@ -513,6 +614,7 @@
        "id": "B1.5",
        "title": "Vulnerability auditing: three generations of SAST",
        "track": "defend",
+       "summary": "Pattern matching, dataflow analysis and LLM-driven reasoning compared honestly. What each generation finds, and what each one structurally cannot.",
        "risk": "Pattern matching floods the queue; the false-positive rate is what actually changed.",
        "control": "Stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express.",
        "lab": "Score grep, taint rules and model review against the same corpus, then combine them behind a confidence gate.",
@@ -524,13 +626,13 @@
        "models": [
         "GLM-4.6",
         "Kimi K2"
-       ],
-       "featured": true
+       ]
       },
       {
        "id": "B1.6",
        "title": "Deduplication and contextual verification",
        "track": "defend",
+       "summary": "Collapse duplicate findings and verify each against real code context. The step that converts raw noise into a queue a human will actually read.",
        "risk": "Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.",
        "control": "Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.",
        "lab": "Deduplicate findings across three analysis tracks, then verify each against the AST and drop the ones that reference code that is not there.",
@@ -546,6 +648,7 @@
        "id": "B1.7",
        "title": "Feasibility filtering and reachability",
        "track": "defend",
+       "summary": "Prove a finding is genuinely reachable from untrusted input. Reachability analysis as the primary false-positive killer in the pipeline.",
        "risk": "A finding in dead code costs the same to triage as one on the login path.",
        "control": "Stage 10: decide whether an external caller can actually reach the sink before anyone is paged.",
        "lab": "Build a call graph from entry points and partition findings into reachable, unreachable and unknown.",
@@ -561,6 +664,7 @@
        "id": "B1.8",
        "title": "Sandbox replication",
        "track": "secure",
+       "summary": "Stand up a runnable replica of the target so findings can be tested safely. Environment fidelity, data stubs and orchestration.",
        "risk": "Dynamic testing is run against staging, so a destructive probe becomes an incident.",
        "control": "Stage 11: replicate the application in an isolated, disposable runtime with no path to production.",
        "lab": "Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.",
@@ -577,6 +681,7 @@
        "id": "B1.9",
        "title": "Dynamic exploitation (DAST)",
        "track": "defend",
+       "summary": "Drive the running application to confirm a vulnerability empirically. Payload generation, oracle design and evidence capture.",
        "risk": "A SAST finding is a hypothesis, and hypotheses get argued about instead of fixed.",
        "control": "Stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped.",
        "lab": "Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.",
@@ -593,6 +698,7 @@
        "id": "B1.10",
        "title": "Exploit chaining",
        "track": "defend",
+       "summary": "Combine individually low-severity findings into a materially damaging path. How agents search chain space, and why chains rewrite severity.",
        "risk": "Three medium findings are triaged as three mediums, and nobody notices they compose.",
        "control": "Stage 13: combine validated findings into multi-step sequences and score the chain, not the links.",
        "lab": "Chain individually-medium findings into a critical path and show the severity the chain earns.",
@@ -607,6 +713,7 @@
        "id": "B1.11",
        "title": "Remediation engineering",
        "track": "defend",
+       "summary": "Generate fixes that survive review and do not break behaviour. Patch generation, regression testing and clean developer handoff.",
        "risk": "A patch that silences the scanner is indistinguishable from a patch that fixes the bug.",
        "control": "Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.",
        "lab": "Validate four candidate patches on three axes and show which of them only made the scanner green.",
@@ -623,6 +730,7 @@
        "id": "B1.12",
        "title": "Severity calibration and reporting",
        "track": "defend",
+       "summary": "Score findings against real exploitability and business impact rather than CVSS alone. Write reports engineers will actually act on.",
        "risk": "Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing.",
        "control": "Stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.",
        "lab": "Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.",
@@ -637,6 +745,7 @@
        "id": "B1.13",
        "title": "Context engineering for the pipeline",
        "track": "defend",
+       "summary": "Decide what each agent sees, when, and at what token cost. Context budgets, retrieval strategy and the accuracy cliff past which more context hurts.",
        "risk": "The model is given the repository and asked to be thorough, so the relevant line falls out of the window.",
        "control": "Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.",
        "lab": "Compare four context strategies against one bug and measure which are decidable and at what size.",
@@ -652,6 +761,7 @@
        "id": "B1.14",
        "title": "Injection in your own pipeline",
        "track": "secure",
+       "summary": "Your analysis agents read attacker-controlled code — and can be instructed by it. Isolation, sanitisation and rules for trusting agent output.",
        "risk": "The pipeline reads attacker-controlled code and then takes actions — a confused deputy you built yourself.",
        "control": "Instruction/data provenance: content the pipeline read may never drive a state-changing tool.",
        "lab": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
@@ -666,6 +776,7 @@
        "id": "B1.15",
        "title": "Securing the developers' coding agents",
        "track": "secure",
+       "summary": "Guardrails for IDE and CLI coding agents holding repo and credential access. Policy, telemetry and safe defaults for engineering teams at scale.",
        "risk": "The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment.",
        "control": "The strongest containment a developer does not notice: credential deny-lists and workspace confinement first.",
        "lab": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
@@ -681,6 +792,7 @@
        "id": "B1.16",
        "title": "Bonus — Google Mantis, the pipeline in production",
        "track": "defend",
+       "summary": "A worked case study of an agentic security pipeline operating at real scale. What held up, what broke, and which lessons transfer to your estate.",
        "risk": "A reference implementation is adopted as a product, and its outputs are trusted without an eval.",
        "control": "Map Mantis's stages onto the pipeline you built, then score it with your own held-out key before trusting it.",
        "lab": "Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.",
@@ -691,23 +803,41 @@
        "models": [
         "GLM-4.6",
         "Kimi K2"
-       ],
-       "featured": true
+       ]
       }
      ]
     },
     {
      "id": "B2",
+     "chapter": 5,
      "title": "The Security Automation / Harness Engineer",
      "titles": "Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet",
-     "changes": "This is a new job. You build the loops every other track runs. SRE for the security function's agents.",
+     "changes": "Build the loop, point it at a discipline, then prove it works. 18 lessons.",
      "autonomy": "You are the person who builds the L2.5 boundary everyone else operates inside.",
      "deliverable": "A reusable harness scaffold adopted by at least two other tracks.",
      "sessions": [
       {
+       "id": "B2.0",
+       "title": "What an agentic harness actually is",
+       "track": "defend",
+       "summary": "Separate model, loop, tools, context, verifier, budgets and orchestrator, and build a minimal working harness from scratch. Establishes the reference architecture that every later lesson in this chapter builds on.",
+       "risk": "Capability gets attributed to the model when it comes from the scaffold. Two teams handed the identical model routinely differ by an order of magnitude on harness design alone.",
+       "control": "Separate model, loop, tools, context, verifier, budgets and orchestrator — and treat the harness itself as an autonomous actor holding credentials, which must be governed like one.",
+       "lab": "Build a minimal working harness from scratch, naming each component as it appears, then show what breaks when the verifier is removed.",
+       "tools": [
+        "LiteLLM",
+        "OpenTelemetry"
+       ],
+       "models": [
+        "Llama 3.3",
+        "GLM-4.6"
+       ]
+      },
+      {
        "id": "B2.1",
        "title": "Plan–act–verify",
        "track": "defend",
+       "summary": "The core agentic loop, and why verification is the phase that determines output quality. Designing each phase to be inspectable rather than magical.",
        "risk": "Writing the code instead of writing the loop.",
        "control": "The minimum viable security harness: context, toolset, verifier, budget.",
        "lab": "Build the scaffold; swap the model underneath without touching the loop.",
@@ -725,6 +855,7 @@
        "id": "B2.2",
        "title": "Verify signals that don't lie",
        "track": "defend",
+       "summary": "Choose ground-truth signals — tests, working exploits, compiler output — over model self-assessment. Building oracles that resist being gamed.",
        "risk": "LLM-as-judge from the same family as the generator — the loop grades its own homework.",
        "control": "Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists.",
        "lab": "Score the same findings with a compiler oracle and with a same-family judge; show the gap.",
@@ -740,6 +871,7 @@
        "id": "B2.3",
        "title": "Tool design",
        "track": "secure",
+       "summary": "Write tools agents use correctly: narrow contracts, clear errors, safe defaults. Poor tool ergonomics is a security defect, not a usability one.",
        "risk": "The dangerous call exists and is merely blocked.",
        "control": "Read-only defaults, structured output contracts, allowlisted actions — design it out.",
        "lab": "Refactor a shell tool into three narrow, structured tools.",
@@ -752,6 +884,7 @@
        "id": "B2.4",
        "title": "Budgets and stop conditions",
        "track": "defend",
+       "summary": "Token, time, cost and action budgets that bound an autonomous run. Defining concretely what \"done\" and \"give up\" mean.",
        "risk": "Every loop needs a reason to stop that isn't \"it finished\".",
        "control": "Step limits, goal timeouts, token ceilings, spend circuit breakers.",
        "lab": "Make a loop diverge, then bound it four different ways.",
@@ -766,6 +899,7 @@
        "id": "B2.5",
        "title": "Model tiering and routing inside the loop",
        "track": "defend",
+       "summary": "Cheap models for breadth, strong models for judgement. Routing rules, escalation triggers and enforceable quality floors.",
        "risk": "Paying frontier prices for executor-grade steps.",
        "control": "Cheap executor, escalated reasoner, advisor at decision points.",
        "lab": "Route Llama-executor → GLM-reasoner with LiteLLM and attribute spend per run.",
@@ -783,6 +917,7 @@
        "id": "B2.6",
        "title": "Sub-agents and delegation depth",
        "track": "secure",
+       "summary": "When spawning sub-agents helps, and when it multiplies both error and privilege. Depth limits and disciplined context handoff.",
        "risk": "Authority inherited silently from parent to child agent.",
        "control": "Fan-out control, recursion budgets, explicit authority inheritance.",
        "lab": "Cap delegation depth and prove a grandchild agent cannot exceed its parent.",
@@ -796,6 +931,7 @@
        "id": "B2.7",
        "title": "Failure taxonomy",
        "track": "defend",
+       "summary": "A named catalogue of how harnesses fail: loops, drift, hallucinated success, silent truncation. Detection signature for each failure mode.",
        "risk": "Loop divergence, objective drift, reward hacking, silent truncation, tool thrash.",
        "control": "Recognise each from a trace.",
        "lab": "Read five real traces and name the failure in each.",
@@ -808,6 +944,7 @@
        "id": "B2.8",
        "title": "Self-improving scaffolds",
        "track": "secure",
+       "summary": "Harnesses that learn from run history and adjust prompts, tools or routing. Guardrails so improvement never becomes uncontrolled change.",
        "risk": "A harness that rewrites its own config makes the fitness function the security control.",
        "control": "Sandbox the mutation, keep only measured gains, pin the fitness function.",
        "lab": "Let a scaffold mutate itself in a sandbox and keep only what the oracle confirms.",
@@ -823,6 +960,7 @@
        "id": "B2.9",
        "title": "Idempotency, replay and rollback",
        "track": "defend",
+       "summary": "Make agent actions safe to repeat, replay and undo. Transaction design for systems that act on the real world.",
        "risk": "Any agent action you cannot replay you cannot investigate.",
        "control": "Design requirements, not afterthoughts.",
        "lab": "Replay a full agent run from the trace and reproduce its decision.",
@@ -832,10 +970,95 @@
        "models": []
       },
       {
+       "id": "B2.11",
+       "title": "Building the SAST harness",
+       "track": "defend",
+       "summary": "Index → summarise → hypothesise → verify: an agentic loop over source that reasons about semantics instead of matching patterns, and can explain *why* something is a vulnerability. Per-file context budgets, reachability gating and the deduplication stage that decides whether the output is a queue or a landfill.",
+       "risk": "A SAST loop that matches patterns instead of reasoning about semantics, and cannot explain why anything is a vulnerability.",
+       "control": "Index → summarise → hypothesise → verify, with per-file context budgets, reachability gating and a deduplication stage that decides whether the output is a queue or a landfill.",
+       "lab": "Run the four-stage loop over a seeded corpus and measure how much of the output survives reachability gating.",
+       "tools": [
+        "OpenGrep",
+        "Trivy"
+       ],
+       "models": [
+        "Kimi K2.6",
+        "GLM-5.2"
+       ]
+      },
+      {
+       "id": "B2.12",
+       "title": "Building the DAST and exploitation harness",
+       "track": "defend",
+       "summary": "Drive a running target, generate payloads, observe behaviour, and confirm the finding with a deterministic oracle rather than a model opinion. Sandbox replication, safe-action policy, blast-radius limits and evidence capture for every confirmed exploit.",
+       "risk": "A model opinion recorded as a confirmed exploit. Without a deterministic oracle the harness reports whatever it believes.",
+       "control": "Drive a running target, generate payloads, observe behaviour, and confirm only on a deterministic oracle — inside sandbox replication with blast-radius limits and evidence capture.",
+       "lab": "Confirm one vulnerability empirically against a replica, and show the same finding failing to confirm when the oracle is the model's own judgement.",
+       "tools": [
+        "OWASP ZAP",
+        "Metasploit",
+        "CAI"
+       ],
+       "models": [
+        "GLM-5.2"
+       ]
+      },
+      {
+       "id": "B2.13",
+       "title": "Building the threat-modelling harness",
+       "track": "defend",
+       "summary": "Turn architecture, IaC, code and data flows into trust boundaries, assets, entry points and abuse cases — repeatably, on every release rather than once a year. Model diffing between versions, and human review as a checkpoint instead of the bottleneck.",
+       "risk": "A threat model produced once a year for a system that changes every release. By the second sprint it describes something that no longer exists.",
+       "control": "Turn architecture, IaC, code and data flows into trust boundaries, assets, entry points and abuse cases repeatably — with model diffing between versions and human review as a checkpoint, not the bottleneck.",
+       "lab": "Generate a threat model from source, change one component, and diff the two models to see exactly what the change introduced.",
+       "tools": [
+        "OWASP Threat Dragon",
+        "Trivy"
+       ],
+       "models": [
+        "GLM-5.2"
+       ]
+      },
+      {
+       "id": "B2.14",
+       "title": "Building the pentest harness",
+       "track": "defend",
+       "summary": "Recon, enumeration, exploitation and lateral movement as a bounded, auditable agent loop with hard scope enforcement. Destructive-action gating, credential handling, and the operator handoff points that keep the engagement lawful.",
+       "risk": "An offensive loop with no hard scope enforcement is an incident with a project plan.",
+       "control": "Recon, enumeration, exploitation and lateral movement as a bounded, auditable agent loop — hard scope enforcement, destructive-action gating, credential handling and named operator handoff points.",
+       "lab": "Run the loop against an owned target and show the scope guard refusing an out-of-scope host before the request is made.",
+       "tools": [
+        "Metasploit",
+        "CAI"
+       ],
+       "models": [
+        "Kimi K2.6"
+       ]
+      },
+      {
+       "id": "B2.15",
+       "title": "Choosing the model backbone",
+       "track": "defend",
+       "summary": "Frontier vs open-weight vs self-hosted for security work, evaluated on your corpus rather than on a vendor chart. The current field: Kimi K2.6 / K2.7-Code for long-horizon repository work, the GLM-5.x line for vulnerability discovery, frontier models for deep exploitation chains — with data sovereignty, cost-per-finding and, above all, designing for backbone substitution, since this list will be stale within a quarter.",
+       "risk": "A backbone chosen on a vendor chart, then wired in so deeply that substituting it means rewriting the harness.",
+       "control": "Evaluate candidates on your own corpus, and above all design for backbone substitution — any list of best models is stale within a quarter.",
+       "lab": "Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.",
+       "tools": [
+        "LiteLLM",
+        "vLLM",
+        "Ollama"
+       ],
+       "models": [
+        "Kimi K2.7-Code",
+        "GLM-5.2",
+        "Llama 4"
+       ]
+      },
+      {
        "id": "B2.10",
        "title": "Evaluating a security harness",
        "track": "defend",
-       "featured": true,
+       "summary": "Measure recall, precision, cost and time-to-finding on a corpus with known answers. Benchmarks, regression suites and reporting that does not flatter the person who built it.",
        "risk": "A single successful run hides how unreliable an agent really is; a hallucinated finding looks exactly like a real one.",
        "control": "Ground truth + blind protocol + execution-verified scoring; report reliability (pass^k) not just capability (pass@k); never quote schema conformance as accuracy.",
        "lab": "The full Cyber Commons eval harness: build 552-row ground truth from SecLLMHolmes + TerraGoat/Checkov, run a blind model audit, score with expert-proxy + dual judges, and compare Llama / GLM / Kimi as the backing model.",
@@ -849,8 +1072,39 @@
         "Llama 3.3",
         "GLM-4.6",
         "Kimi K2"
+       ]
+      },
+      {
+       "id": "B2.16",
+       "title": "Performance testing: reliability under non-determinism",
+       "track": "defend",
+       "summary": "A single run tells you almost nothing about a stochastic system: measure **pass^k** (succeeds *k* times out of *k*) alongside pass@k, plus run-to-run variance on a fixed corpus. Learn to separate harness failure from model failure before you change either one.",
+       "risk": "A single lucky run published as a result. One run tells you almost nothing about a stochastic system.",
+       "control": "Measure pass^k — succeeds k times out of k — alongside pass@k, plus run-to-run variance on a fixed corpus, so harness failure can be separated from model failure before either is changed.",
+       "lab": "Run one task k times, compute pass@k and pass^k from the same runs, and watch the two numbers disagree.",
+       "tools": [
+        "Inspect",
+        "promptfoo"
        ],
-       "repo": "labs/b2.10-eval-harness"
+       "models": [
+        "GLM-5.2"
+       ]
+      },
+      {
+       "id": "B2.17",
+       "title": "Regression suites, cost curves and the economics of autonomy",
+       "track": "defend",
+       "summary": "Build a seeded corpus with planted, known-answer vulnerabilities so recall and precision are measurable rather than asserted. Track cost per confirmed finding, time-to-first-finding and human-review load as first-class metrics alongside accuracy.",
+       "risk": "Accuracy asserted rather than measured, and cost per finding never computed at all — so nobody notices the tool moved work instead of removing it.",
+       "control": "A seeded corpus with planted known-answer vulnerabilities, plus cost per confirmed finding, time-to-first-finding and human-review load tracked as first-class metrics beside accuracy.",
+       "lab": "Score a harness against a seeded corpus and compute its cost per confirmed finding and analyst minutes per accepted finding.",
+       "tools": [
+        "Inspect",
+        "CyberGym"
+       ],
+       "models": [
+        "GLM-5.2"
+       ]
       }
      ]
     }
@@ -859,13 +1113,14 @@
   {
    "id": "C",
    "title": "Offensive Security & Research",
-   "blurb": "The function that finds out what is actually true, as opposed to what the architecture diagram claims.",
+   "blurb": "An entirely new target class: the agent itself, with three attack surfaces instead of one.",
    "tracks": [
     {
      "id": "C1",
+     "chapter": 6,
      "title": "The Pentester / Red Teamer",
      "titles": "Penetration Tester, Red Team Operator, Offensive Security Engineer",
-     "changes": "You become a scenario architect rather than a tool runner. And you acquire an entirely new target class: the agent itself.",
+     "changes": "Three surfaces, one adversary mindset. 7 lessons.",
      "autonomy": "You test at L3 the systems deployed at L2.5, because that's where they'll be next quarter.",
      "deliverable": "A full agent red-team engagement report against an internal agentic workflow, with reproducible traces.",
      "sessions": [
@@ -873,6 +1128,7 @@
        "id": "C1.1",
        "title": "Agentic offensive workflow",
        "track": "defend",
+       "summary": "Recon, foothold, escalation and lateral movement run as an agent loop. Where autonomy genuinely accelerates the work, and where it stalls.",
        "risk": "Payload suggestions instead of attack chains.",
        "control": "Feed the harness full target context before it swings.",
        "lab": "Drive a planner/executor pair against a local vulnerable target — never the open internet.",
@@ -890,6 +1146,7 @@
        "id": "C1.2",
        "title": "Sandboxing the offensive harness",
        "track": "secure",
+       "summary": "Contain your own offensive agents so testing never escapes scope. Network, credential and target-scope controls for red team infrastructure.",
        "risk": "Your harness is the most dangerous one in the building.",
        "control": "Exploit isolation, target scoping, authorization and legal guardrails.",
        "lab": "Air-gap the offensive lab and prove no route to anything you don't own.",
@@ -903,6 +1160,7 @@
        "id": "C1.3",
        "title": "Red-teaming agents: the injection surface",
        "track": "secure",
+       "summary": "Direct and indirect prompt injection against production agents. Test design, payload placement and defensible success criteria.",
        "risk": "Retrieval poisoning, tool-output poisoning, multi-turn manipulation.",
        "control": "Systematic injection campaigns with measured success rates.",
        "lab": "Run garak + promptfoo campaigns against your own production agent.",
@@ -918,6 +1176,7 @@
        "id": "C1.4",
        "title": "Red-teaming agents: the identity surface",
        "track": "secure",
+       "summary": "Attack delegation, token scope and confused-deputy paths. Demonstrate an agent acting beyond the authority its principal ever held.",
        "risk": "Confused deputy, token replay, scope escalation through delegation chains.",
        "control": "Test whether revocation actually revokes.",
        "lab": "Attack the A2 delegation chain; prove or disprove attenuation.",
@@ -931,6 +1190,7 @@
        "id": "C1.5",
        "title": "Red-teaming agents: the containment surface",
        "track": "secure",
+       "summary": "Test sandbox escape, egress bypass and tool-permission circumvention. Turn architectural containment claims into evidence or into findings.",
        "risk": "Sandbox escape, egress bypass, path-guard evasion.",
        "control": "Prove the stop lever fires under load.",
        "lab": "Attack the A3 sandbox from inside; measure what leaves.",
@@ -944,6 +1204,7 @@
        "id": "C1.6",
        "title": "Attacking evaluation itself",
        "track": "secure",
+       "summary": "Gaming benchmarks, poisoning eval data and exploiting scoring oracles. An unattacked evaluation is an unreliable control.",
        "risk": "If the eval can be fooled, the assurance is theatre.",
        "control": "Eval gaming, sandbagging, contamination and judge manipulation as test cases.",
        "lab": "Game the B2.10 harness deliberately, then close the hole you used.",
@@ -958,6 +1219,7 @@
        "id": "C1.7",
        "title": "Reporting agentic findings",
        "track": "both",
+       "summary": "Communicate autonomy-related risk to engineers and executives. Reproduction steps and severity framing for probabilistic systems.",
        "risk": "The vulnerability is emergent behaviour, not a line of code.",
        "control": "Reproducibility requirements for probabilistic systems.",
        "lab": "Write a finding a CISO can act on, with a replayable trace.",
@@ -970,9 +1232,10 @@
     },
     {
      "id": "C2",
+     "chapter": 7,
      "title": "The Security Researcher",
      "titles": "Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher",
-     "changes": "A research function that used to sit adjacent to the CISO org becomes central to it. This track produces the primitives the other eleven consume.",
+     "changes": "Turning curiosity into institutional capability. 9 lessons.",
      "autonomy": "You deliberately operate at L3 in isolated environments so the rest of the org never has to.",
      "deliverable": "One reproducible research artefact with a named control implication, handed to a platform or AppSec track.",
      "sessions": [
@@ -980,6 +1243,7 @@
        "id": "C2.1",
        "title": "What research means in a CISO org",
        "track": "both",
+       "summary": "Frame security research as a capability that produces controls, not papers. Scoping, funding and success criteria a CISO will defend.",
        "risk": "Research with a publication outcome and no control outcome.",
        "control": "Choose problems that end in a deployable control; get funded.",
        "lab": "Write a one-page research charter with a named consuming track.",
@@ -990,6 +1254,7 @@
        "id": "C2.2",
        "title": "Model-layer research",
        "track": "secure",
+       "summary": "Investigate model behaviour: jailbreaks, refusal boundaries, tool-use reliability. Methods for reproducible findings on non-deterministic systems.",
        "risk": "Model cards read credulously.",
        "control": "Adversarial robustness, jailbreak taxonomy, refusal analysis, capability elicitation.",
        "lab": "Run a jailbreak taxonomy across Llama, GLM and Kimi and chart where they differ.",
@@ -1006,6 +1271,7 @@
        "id": "C2.3",
        "title": "Weight-level techniques",
        "track": "secure",
+       "summary": "Fine-tuning, distillation and interpretability probes used as security instruments. What weight access lets you see, and what it lets you change.",
        "risk": "Claiming a capability was removed when it was only hidden.",
        "control": "Concept erasure and orthogonalisation on open weights — with honest claims.",
        "lab": "Attempt targeted unlearning on an open-weight model and try to elicit the capability back.",
@@ -1021,6 +1287,7 @@
        "id": "C2.4",
        "title": "Data-layer research",
        "track": "secure",
+       "summary": "Training-data poisoning, RAG corpus manipulation and memory contamination. Detection strategies and provenance controls for each.",
        "risk": "Memorisation, extraction, embedding inversion, index poisoning.",
        "control": "Measure extraction rates rather than assert privacy.",
        "lab": "Invert embeddings from a local vector store and recover source text.",
@@ -1034,6 +1301,7 @@
        "id": "C2.5",
        "title": "Supply-chain research",
        "track": "secure",
+       "summary": "Model, dataset, adapter and MCP-server provenance risk. Verification, signing, and vendor questions that produce real answers.",
        "risk": "Adapter and LoRA provenance, registry tampering, dependency confusion in agent ecosystems.",
        "control": "Verify provenance; sign and attest artefacts.",
        "lab": "Sign a model artefact with Sigstore and detect a tampered adapter.",
@@ -1048,6 +1316,7 @@
        "id": "C2.6",
        "title": "Building the research harness",
        "track": "defend",
+       "summary": "Infrastructure for repeatable experiments: environments, logging, seeds, datasets. Making results reproducible enough to defend under challenge.",
        "risk": "Model effects and harness effects confounded.",
        "control": "Multi-backbone benchmarking with statistical honesty.",
        "lab": "Run one harness across three model families and separate the two effects.",
@@ -1065,6 +1334,7 @@
        "id": "C2.7",
        "title": "Benchmark design and critique",
        "track": "defend",
+       "summary": "Build benchmarks that measure what they claim, and dismantle vendor ones that don't. Contamination, ceiling effects and construct validity.",
        "risk": "Most published security benchmarks overstate real-world capability.",
        "control": "Contamination checks; adapt methodology to your own corpus.",
        "lab": "Contamination-check a public benchmark against a model's training window.",
@@ -1077,6 +1347,7 @@
        "id": "C2.8",
        "title": "From finding to control",
        "track": "both",
+       "summary": "Convert a research result into a deployed, testable control. The handoff that makes the research function pay for itself.",
        "risk": "Research output the platform team cannot deploy.",
        "control": "Hand over something deployable and evidenceable; handle disclosure.",
        "lab": "Convert one finding into a Kyverno/OPA policy another track adopts.",
@@ -1090,6 +1361,7 @@
        "id": "C2.9",
        "title": "Research as institutional capital",
        "track": "both",
+       "summary": "Turn findings into patents, standards positions, hiring signal and regulator credibility. Value that compounds well past the original fix.",
        "risk": "Invisible work, uncredited function.",
        "control": "Publication, open-source release, a defensible public record.",
        "lab": "Release one artefact publicly with a reproducibility README.",
@@ -1105,13 +1377,14 @@
   {
    "id": "D",
    "title": "Security Operations",
-   "blurb": "Machine-speed decisions were already the problem here. Agents make it both worse and tractable.",
+   "blurb": "Detecting, attributing and stopping an actor that is not a person and does not slow down.",
    "tracks": [
     {
      "id": "D1",
+     "chapter": 8,
      "title": "The SOC Analyst & Detection Engineer",
      "titles": "SOC Analyst (T1–T3), Detection Engineer, Threat Hunter, Threat Intelligence Analyst",
-     "changes": "You stop reading alerts and start compressing signal. And you acquire a new detection domain: agents behaving badly.",
+     "changes": "Detecting an actor that is not a person. 8 lessons.",
      "autonomy": "Triage and enrichment reach L2.5 quickly; containment actions stay L2.",
      "deliverable": "A triage loop in production plus five detections covering agent misbehaviour.",
      "sessions": [
@@ -1119,6 +1392,7 @@
        "id": "D1.1",
        "title": "From alert queue to loop operator",
        "track": "defend",
+       "summary": "The analyst role shifts from triaging alerts to supervising agent loops. New skills, new quality bar, new failure modes to watch for.",
        "risk": "Supervising by re-reading everything the loop did.",
        "control": "Know what the loop must escalate and sample the rest.",
        "lab": "Run a triage loop over Wazuh alerts and supervise by exception.",
@@ -1134,6 +1408,7 @@
        "id": "D1.2",
        "title": "Context that makes triage work",
        "track": "defend",
+       "summary": "Assemble the identity, asset and history context an agent needs to triage correctly. Bad context — not a bad model — is usually the reason triage fails.",
        "risk": "Generic triage agents underperform your worst analyst.",
        "control": "Feed the baseline, known FPs, crown-jewel map and prior decisions.",
        "lab": "A/B a generic prompt vs a context-loaded one on the same alert set.",
@@ -1149,6 +1424,7 @@
        "id": "D1.3",
        "title": "Agent-assisted detection engineering",
        "track": "defend",
+       "summary": "Use agents to write, test and tune detections far faster. Validation discipline that stops confident-but-wrong rules reaching production.",
        "risk": "Coverage gaps nobody mapped.",
        "control": "Detection-as-code with agents inside the CI loop.",
        "lab": "Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.",
@@ -1164,6 +1440,7 @@
        "id": "D1.4",
        "title": "Detection engineering *for* agents",
        "track": "secure",
+       "summary": "Write detections where the subject is an agent rather than a user. Behavioural baselines for non-human actors with legitimate machine-speed behaviour.",
        "risk": "Scope drift, unusual tool sequencing, off-hours autonomous action.",
        "control": "Detections whose subject is a non-human principal.",
        "lab": "Write five detections for agent misbehaviour and fire each one.",
@@ -1177,6 +1454,7 @@
        "id": "D1.5",
        "title": "Agent telemetry as a data source",
        "track": "secure",
+       "summary": "What agents must emit — prompts, tool calls, decisions, identities — to be observable at all. Schema, retention and honest pipeline cost.",
        "risk": "Prompts, traces, tool calls and approvals never reach the SIEM.",
        "control": "Onboard agent telemetry deliberately; decide retention.",
        "lab": "Ship OTEL agent traces into OpenSearch and query them.",
@@ -1190,6 +1468,7 @@
        "id": "D1.6",
        "title": "Distinguishing agent from human",
        "track": "secure",
+       "summary": "Attribution when a machine acts carrying a human's authority. Signals, tagging strategy, and why this breaks conventional UEBA.",
        "risk": "Your earliest Shadow Autonomy signal is invisible.",
        "control": "Behavioural signatures separating agent from inherited human.",
        "lab": "Build the classifier on timing, sequencing and volume features.",
@@ -1204,6 +1483,7 @@
        "id": "D1.7",
        "title": "Drift monitoring",
        "track": "secure",
+       "summary": "Detect behavioural change across model updates, prompt edits and tool changes. Baselines, thresholds and what to do when drift is legitimate.",
        "risk": "A detection that worked last month is silently degraded.",
        "control": "Watch model updates, prompt changes, index refreshes, tool versions.",
        "lab": "Change the model underneath and catch the detection regression.",
@@ -1218,6 +1498,7 @@
        "id": "D1.8",
        "title": "Threat intel sub-lane",
        "track": "defend",
+       "summary": "Track adversary use of AI and threats aimed at your AI systems. Sources, tagging, and feeding intel usefully into detection.",
        "risk": "Unsourced confidence in synthesis loops.",
        "control": "Provenance discipline; refuse claims without a source.",
        "lab": "Build a synthesis loop that must cite or abstain.",
@@ -1233,9 +1514,10 @@
     },
     {
      "id": "D2",
+     "chapter": 9,
      "title": "The Incident Responder",
      "titles": "Incident Responder, DFIR Analyst, CSIRT Lead",
-     "changes": "You gain a co-investigator that reconstructs timelines faster than you can — and incidents where the actor is an agent, which breaks most of your playbook.",
+     "changes": "Responding at machine speed. 8 lessons.",
      "autonomy": "Response tooling at L2.5; containment authority never leaves human hands.",
      "deliverable": "A tabletop exercise for an agentic incident, with a replayed trace and a named stop-authority holder.",
      "sessions": [
@@ -1243,6 +1525,7 @@
        "id": "D2.1",
        "title": "Agent-assisted reconstruction",
        "track": "defend",
+       "summary": "Use agents to rebuild incident timelines from scattered evidence. Real speed gains, and the verification discipline that keeps them trustworthy.",
        "risk": "Reaching for the agent once you're already behind.",
        "control": "Pre-load logs, telemetry, segmentation model and playbooks.",
        "lab": "Reconstruct a timeline from raw logs with a context-loaded agent.",
@@ -1258,6 +1541,7 @@
        "id": "D2.2",
        "title": "When the actor is an agent",
        "track": "secure",
+       "summary": "Investigate an incident where the internal actor was autonomous. Questions of intent, instruction and accountability that have no prior playbook.",
        "risk": "\"Which user\" is now the wrong first question.",
        "control": "Attribute to agent, authority, delegation chain and prompt.",
        "lab": "Attribute an incident through the A2 `act` chain.",
@@ -1271,6 +1555,7 @@
        "id": "D2.3",
        "title": "Scoping an agentic incident",
        "track": "secure",
+       "summary": "Determine reach when the actor moved at machine speed on delegated credentials. Blast-radius reconstruction from identity and egress logs.",
        "risk": "The initiating agent is not the acting one.",
        "control": "Reconstruct the action chain across all three planes.",
        "lab": "Scope a multi-agent incident end to end.",
@@ -1285,6 +1570,7 @@
        "id": "D2.4",
        "title": "Containment at machine speed",
        "track": "secure",
+       "summary": "Stop an agent faster than it acts: credential revocation, gateway cutoff, kill switches. Containment paths built in advance, not improvised.",
        "risk": "Mass revocation takes down the business.",
        "control": "Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.",
        "lab": "Exercise the ladder against a live misbehaving agent.",
@@ -1298,6 +1584,7 @@
        "id": "D2.5",
        "title": "Replay and forensics",
        "track": "secure",
+       "summary": "Reconstruct exactly what an agent saw and what it decided. Log completeness requirements and handling non-determinism in evidence.",
        "risk": "Non-determinism as an evidentiary problem.",
        "control": "Log at design time what replay will need.",
        "lab": "Replay an agent run for a regulator-grade record.",
@@ -1310,6 +1597,7 @@
        "id": "D2.6",
        "title": "Post-incident change surface",
        "track": "secure",
+       "summary": "What actually changes after an agentic incident: prompts, tools, scopes, models, policy. Making the fixes durable rather than cosmetic.",
        "risk": "Fixing the prompt when the bug is in the control plane.",
        "control": "Choose among model, prompt, tool, policy, sandbox, identity, eval.",
        "lab": "Pick the right layer for five real incidents.",
@@ -1320,6 +1608,7 @@
        "id": "D2.7",
        "title": "Stop authority",
        "track": "secure",
+       "summary": "Who can halt an autonomous system, on what evidence, at 3am. Pre-agreed authority beats a forty-person bridge call every time.",
        "risk": "Nobody has rehearsed halting an autonomous workflow.",
        "control": "Named holder, measured time-to-stop, tested.",
        "lab": "Time your own stop authority end to end.",
@@ -1332,6 +1621,7 @@
        "id": "D2.8",
        "title": "Regulatory clock",
        "track": "secure",
+       "summary": "Disclosure timelines that start ticking during an AI incident. Determining materiality when the actor itself was probabilistic.",
        "risk": "Notification obligations discovered in week two.",
        "control": "Feed Track E2 in hour one.",
        "lab": "Run the first-hour checklist in a tabletop.",
@@ -1345,20 +1635,35 @@
   {
    "id": "E",
    "title": "Governance, Risk, Compliance & the CISO Office",
-   "blurb": "The function that has to make all of the above defensible to a board, an auditor and a regulator — usually in that order.",
+   "blurb": "Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.",
    "tracks": [
     {
      "id": "E1",
+     "chapter": 10,
      "title": "The GRC Practitioner (Risk & Control)",
      "titles": "GRC Analyst, Risk Manager, Control Owner, Third-Party Risk Analyst, Internal Audit liaison",
-     "changes": "Point-in-time assessment stops working entirely. Models change through fine-tuning, prompt updates and index refreshes without a single code change. You move from assessing to continuously evidencing.",
+     "changes": "Trustworthy AI, and the five functions that have to deliver it. 13 lessons.",
      "autonomy": "You define the promotion criteria that let a workflow move from L2 to L2.5 — and the conditions that force it back down.",
      "deliverable": "A risk-tiered agent register with mapped controls and one fully evidenced control assertion.",
      "sessions": [
       {
+       "id": "E1.0",
+       "title": "What \"trustworthy AI\" actually means",
+       "track": "secure",
+       "summary": "Unpack the seven dimensions every serious framework converges on — valid and reliable, safe, secure and resilient, accountable and transparent, explainable and interpretable, privacy-enhanced, and fair with harmful bias managed. Then the part that is actually hard: deciding which function in your organisation owns each dimension, because \"everyone\" means no one.",
+       "risk": "\"Trustworthy AI\" asserted as a value rather than decomposed into dimensions with an owner behind each. \"Everyone owns it\" means no one does.",
+       "control": "Unpack the seven dimensions every serious framework converges on, then do the hard part: decide which function in your organisation owns each one.",
+       "lab": "Assign each of the seven dimensions to a named function, then find the dimensions with no owner and the ones with three.",
+       "tools": [
+        "NIST AI RMF"
+       ],
+       "models": []
+      },
+      {
        "id": "E1.1",
        "title": "Why point-in-time control testing fails for AI",
        "track": "secure",
+       "summary": "Annual testing cannot assure a system whose behaviour changes between tests. The structural case for continuous evidence.",
        "risk": "An annual review certifies nothing about a system that changed on Tuesday.",
        "control": "Continuous assurance; control effectiveness redefined for probabilistic systems.",
        "lab": "Change a prompt and show the control evidence going stale in real time.",
@@ -1371,6 +1676,7 @@
        "id": "E1.2",
        "title": "Building the AI and agent inventory",
        "track": "secure",
+       "summary": "Discover and register every model, agent and integration in the estate. Attributes, ownership, and the far harder problem of keeping it current.",
        "risk": "Shadow AI and shadow agents — the inventory is the control most orgs still lack.",
        "control": "Discovery, registration, ownership, risk tiering.",
        "lab": "Discover agents from gateway and identity telemetry; build the register.",
@@ -1384,6 +1690,7 @@
        "id": "E1.3",
        "title": "Risk tiering agentic use cases",
        "track": "secure",
+       "summary": "A tiering model driven by autonomy level, data sensitivity and blast radius. Proportionate control sets per tier instead of one heavy default.",
        "risk": "Tiering by model name instead of by what the thing can do.",
        "control": "Autonomy level × action class × data sensitivity.",
        "lab": "Tier ten real workflows and assign approval authority.",
@@ -1394,6 +1701,7 @@
        "id": "E1.4",
        "title": "Control mapping for agents",
        "track": "secure",
+       "summary": "Map agentic risks onto existing control frameworks and isolate the genuine gaps. Avoid building a second, duplicate control estate.",
        "risk": "Inventing new controls where an existing one applied to a new principal type.",
        "control": "Map identity, secrets, sandbox, eval and telemetry onto the existing library.",
        "lab": "Map the A2/A3 controls onto your control library.",
@@ -1406,7 +1714,7 @@
        "id": "E1.5",
        "title": "Evaluation output as audit evidence",
        "track": "secure",
-       "featured": true,
+       "summary": "Turn eval and red-team results into evidence auditors will accept. Provenance, retention and reproducibility requirements.",
        "risk": "Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy.",
        "control": "Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.",
        "lab": "Take the B2.10 harness output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.",
@@ -1414,13 +1722,13 @@
         "Cyber Commons eval harness",
         "OSCAL"
        ],
-       "models": [],
-       "repo": "labs/b2.10-eval-harness"
+       "models": []
       },
       {
        "id": "E1.6",
        "title": "Operating vs outcome guardrails",
        "track": "secure",
+       "summary": "Separate controls on *how* the system runs from controls on *what* it produces. Where each belongs, and how each is tested.",
        "risk": "Frameworks specify how the system works; regulators care what it produced.",
        "control": "Constrain both, and know which evidence answers which question.",
        "lab": "Classify your own guardrails into the two buckets.",
@@ -1436,6 +1744,7 @@
        "id": "E1.7",
        "title": "Continuous control verification",
        "track": "secure",
+       "summary": "Automated, ongoing proof that controls are still functioning. Instrumentation, sampling strategy and failure escalation.",
        "risk": "Automating judgment instead of evidence collection.",
        "control": "Agent-assisted evidence collection, drift detection, exception tracking.",
        "lab": "Automate one evidence package on a schedule.",
@@ -1451,6 +1760,7 @@
        "id": "E1.8",
        "title": "Third-party and model supply chain risk",
        "track": "secure",
+       "summary": "Assess model vendors, hosting, adapters and agent tooling. Contract terms and diligence questions that surface real answers.",
        "risk": "Vendor AI features enabled by default; sub-processor chains you never mapped.",
        "control": "Questions that actually discriminate between vendors.",
        "lab": "Run a real AIBOM against a vendor model artefact.",
@@ -1464,19 +1774,61 @@
        "id": "E1.9",
        "title": "Model and agent lifecycle governance",
        "track": "secure",
+       "summary": "Approval, change, revalidation and decommission for models and agents. Version control and explicit rollback expectations.",
        "risk": "Re-indexing treated as maintenance, not change.",
        "control": "Retraining, fine-tuning and re-indexing as change-management events.",
        "lab": "Write the gate that a re-index has to pass.",
        "tools": [],
+       "models": []
+      },
+      {
+       "id": "E1.10",
+       "title": "The stakeholder map: who owns what",
+       "track": "secure",
+       "summary": "Legal, compliance, data privacy, cyber security and model risk management each hold a portion of the AI control estate — and none of them holds all of it. Who decides, who tests, who signs, and where the handoffs create gaps nobody is watching.",
+       "risk": "Legal, compliance, privacy, cyber and model risk each hold part of the AI control estate and none holds all of it. The programme fails at the seams between them, not inside any one.",
+       "control": "A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching.",
+       "lab": "Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.",
+       "tools": [
+        "NIST AI RMF",
+        "ISO 42001"
+       ],
+       "models": []
+      },
+      {
+       "id": "E1.11",
+       "title": "Model risk management for AI systems",
+       "track": "secure",
+       "summary": "Extend the SR 11-7 lineage — conceptual soundness, ongoing monitoring, independent validation — to non-deterministic, tool-using systems. Where the classical model-risk playbook still holds, and where it silently breaks once the model can act.",
+       "risk": "The classical model-risk playbook silently breaks once the model can act: conceptual soundness was validated, and then the agent was granted write access nobody validated.",
+       "control": "Extend the SR 11-7 lineage — conceptual soundness, ongoing monitoring, independent validation — to non-deterministic, tool-using systems, and name where it still holds.",
+       "lab": "Take a validated model, add one tool, and show which parts of the validation are now void.",
+       "tools": [
+        "Inspect"
+       ],
+       "models": []
+      },
+      {
+       "id": "E1.12",
+       "title": "Working the seams",
+       "track": "secure",
+       "summary": "Joint runbooks for the handoffs that fail most often: privacy assessment into control design, legal position into system prompt, MRM validation into security evidence. One artefact, many consumers, one owner.",
+       "risk": "The handoffs fail, not the functions: privacy assessment into control design, legal position into system prompt, MRM validation into security evidence.",
+       "control": "Joint runbooks for the seams — one artefact, many consumers, one owner.",
+       "lab": "Trace one artefact across three functions and find the consumer who never received it.",
+       "tools": [
+        "ISO 42001"
+       ],
        "models": []
       }
      ]
     },
     {
      "id": "E2",
+     "chapter": 11,
      "title": "The Regulatory & Compliance Lead",
      "titles": "Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead",
-     "changes": "You translate between engineering, legal and supervisory vocabularies at once — on a subject where the regulations are newer than the technology's failure modes.",
+     "changes": "Obligations, evidence, and the supervisory conversation. 9 lessons.",
      "autonomy": "You determine which action classes are legally prohibited from ever reaching L2.5, irrespective of measured performance.",
      "deliverable": "One control set mapped to three regimes, plus an evidence pack for a single high-risk agentic workflow.",
      "sessions": [
@@ -1484,6 +1836,7 @@
        "id": "E2.1",
        "title": "The regulatory map",
        "track": "secure",
+       "summary": "Orientation across the AI regulatory landscape by jurisdiction and instrument. How to read it without drowning in draft text.",
        "risk": "One programme per regime; four times the work, none of it joined up.",
        "control": "One control set that satisfies several regimes. Verify current status before relying on any date.",
        "lab": "Build the crosswalk for your own sector.",
@@ -1496,6 +1849,7 @@
        "id": "E2.2",
        "title": "Horizontal AI regulation",
        "track": "secure",
+       "summary": "Cross-sector AI law and its obligations for risk management, documentation and oversight. Practical interpretation for a working programme.",
        "risk": "\"We only deployed it, we didn't build it\" — sometimes true, often not.",
        "control": "Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification.",
        "lab": "Classify three workflows and defend the boundary cases.",
@@ -1506,6 +1860,7 @@
        "id": "E2.3",
        "title": "Voluntary frameworks as your spine",
        "track": "secure",
+       "summary": "Use NIST AI RMF, ISO 42001 and peers as the structural backbone. One control set mapped outward to many obligations.",
        "risk": "Regime-specific mappings with nothing to hang off.",
        "control": "AI RMF / management-system standards as the structure; regulator mappings as overlays.",
        "lab": "Hang two regulator mappings off one framework spine.",
@@ -1519,6 +1874,7 @@
        "id": "E2.4",
        "title": "Sector overlays",
        "track": "secure",
+       "summary": "Additional requirements in finance, healthcare, critical infrastructure and public sector. Reconciling overlays against the common spine.",
        "risk": "An agent is already a \"model\" under model-risk rules you already comply with.",
        "control": "Find the regime you're already in before inventing a new one.",
        "lab": "Map one agent to existing model-risk obligations.",
@@ -1529,6 +1885,7 @@
        "id": "E2.5",
        "title": "Privacy and data protection",
        "track": "secure",
+       "summary": "Data flowing into prompts, context, logs and training runs. Lawful basis, minimisation, retention and cross-border movement.",
        "risk": "Deletion when the data is in weights, not a database.",
        "control": "Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces.",
        "lab": "Run PII redaction inside the trust boundary with Presidio before anything crosses out.",
@@ -1542,6 +1899,7 @@
        "id": "E2.6",
        "title": "Incident and disclosure obligations",
        "track": "secure",
+       "summary": "Which AI incidents are reportable, to whom, and how quickly. Build the trigger criteria long before you need them.",
        "risk": "Materiality assessed for an autonomous actor with a human-actor playbook.",
        "control": "Coordinate with D2 in hour one.",
        "lab": "Draft the notification for an agentic incident.",
@@ -1552,6 +1910,7 @@
        "id": "E2.7",
        "title": "Documentation that survives supervision",
        "track": "secure",
+       "summary": "Model cards, decision records and control narratives that hold up under examination. Written once, reused everywhere.",
        "risk": "\"Explainability\" for a system with no deterministic reasoning.",
        "control": "System documentation, data lineage, eval records, oversight evidence, decision logs.",
        "lab": "Assemble the pack for one high-risk workflow.",
@@ -1565,6 +1924,7 @@
        "id": "E2.8",
        "title": "Auditability of autonomous action",
        "track": "secure",
+       "summary": "Make a machine decision explainable and traceable after the fact. Logging designed backwards from the questions an auditor will ask.",
        "risk": "No trail showing under whose authority the agent acted.",
        "control": "The delegation chain *is* the audit trail.",
        "lab": "Produce an audit trail from the A2 chain that names authority at every hop.",
@@ -1577,6 +1937,7 @@
        "id": "E2.9",
        "title": "Regulator and auditor conversations",
        "track": "secure",
+       "summary": "Present your AI programme credibly to supervisors. Framing genuine uncertainty without surrendering confidence.",
        "risk": "Overclaiming control, or triggering a moratorium.",
        "control": "Explain bounded autonomy with evidence, and anticipate the real questions.",
        "lab": "Defend one workflow in a mock supervisory conversation.",
@@ -1587,9 +1948,10 @@
     },
     {
      "id": "E3",
+     "chapter": 12,
      "title": "The BISO, Risk Communicator & CISO Office",
      "titles": "BISO, Deputy CISO, Head of Security Strategy, CISO",
-     "changes": "You are being asked to approve a class of system whose failure modes your existing risk language cannot express, on a timeline set by the business.",
+     "changes": "Running the programme. 8 lessons.",
      "autonomy": "You hold the authority to move any workflow down a rung — and the obligation to use it.",
      "deliverable": "A one-page autonomy governance policy and a board-level narrative for one agentic programme.",
      "sessions": [
@@ -1597,6 +1959,7 @@
        "id": "E3.1",
        "title": "Translating agentic risk upward",
        "track": "secure",
+       "summary": "Convert technical agent risk into exposure a board can act on. Language, framing and defensible quantification.",
        "risk": "Blast radius explained in engineering terms to a board that needs consequence.",
        "control": "What can happen, how fast, who can stop it.",
        "lab": "Convert one blast-radius measurement into a board paragraph.",
@@ -1607,6 +1970,7 @@
        "id": "E3.2",
        "title": "Governing autonomy rather than approving tools",
        "track": "secure",
+       "summary": "Shift governance from an ever-growing tool list to autonomy levels and conditions. A model that still works at a thousand agents.",
        "risk": "A per-tool review queue becomes a bottleneck and then a bypass.",
        "control": "A policy on delegated authority instead of tool-by-tool approval.",
        "lab": "Write the delegated-authority policy.",
@@ -1617,6 +1981,7 @@
        "id": "E3.3",
        "title": "Sequencing the programme",
        "track": "secure",
+       "summary": "What to build first, second and third. Dependency order, plus the early wins that buy you organisational credibility.",
        "risk": "Starting with the workflow that is most visible rather than most winnable.",
        "control": "Use the maturity model to order investment; choose your first hard \"no\".",
        "lab": "Sequence your first three workflows and name the no.",
@@ -1627,6 +1992,7 @@
        "id": "E3.4",
        "title": "Org design and ownership",
        "track": "secure",
+       "summary": "Where AI security sits, and who owns agents, identity, evals and incidents. A RACI that survives contact with reality.",
        "risk": "Harness engineering with no home; research as a hobby.",
        "control": "Identity owns the control plane; BUs own grants; security owns stop authority.",
        "lab": "Draw your org's ownership map against the topic matrix.",
@@ -1637,6 +2003,7 @@
        "id": "E3.5",
        "title": "The metrics that matter at your level",
        "track": "secure",
+       "summary": "Programme metrics that demonstrate control rather than activity. Coverage, containment, verification and time-to-stop.",
        "risk": "Reporting activity instead of exposure.",
        "control": "Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.",
        "lab": "Instrument the six metrics from your lab stack.",
@@ -1649,6 +2016,7 @@
        "id": "E3.6",
        "title": "Saying no, and saying yes with conditions",
        "track": "secure",
+       "summary": "Conditional approval as the default posture. Writing conditions that are enforceable, time-bound and actually tracked.",
        "risk": "Conditional approval that is aspirational rather than enforceable.",
        "control": "Autonomy promotion as an earned event with named evidence.",
        "lab": "Write one enforceable conditional approval.",
@@ -1659,6 +2027,7 @@
        "id": "E3.7",
        "title": "Building the capability",
        "track": "secure",
+       "summary": "Hiring, upskilling and structuring a team for agentic security. Role definitions and realistic ramp expectations.",
        "risk": "Hiring for conceptual familiarity instead of practice.",
        "control": "Interview questions that separate the two; internal transition paths.",
        "lab": "Write the interview loop for an agentic security engineer.",
@@ -1669,6 +2038,7 @@
        "id": "E3.8",
        "title": "Resilience over perfection",
        "track": "secure",
+       "summary": "Design for graceful failure rather than prevention of every failure. Recovery, containment and honestly defined acceptable loss.",
        "risk": "Trying to enumerate every failure mode of a probabilistic system.",
        "control": "Maturity measured by containment, detection and recovery — not prevention.",
        "lab": "Re-score your programme on the resilience axis.",

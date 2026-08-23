@@ -1,0 +1,180 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.10 — The stakeholder map: who owns what | Cyber Commons</title><meta name="description" content="A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — Governance, Risk, Compliance &amp; the CISO Office › The GRC Practitioner (Risk &amp; Control)</div><div class="sid">E1.10</div><h1>The stakeholder map: who owns what</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Legal, compliance, privacy, cyber and model risk each hold part of the AI control estate and none holds all of it. The programme fails at the seams between them, not inside any one.</p></div><div class="ctrl"><div class="lab">Control</div><p>A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.10.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.10.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 68 lines of output in 0.01s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.10 · The stakeholder map: who owns what</h1>
+<p><strong>Function E — Governance, Risk, Compliance &amp; the CISO Office → The GRC Practitioner (Risk &amp; Control)</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.9.html">E1.9 · Model and agent lifecycle governance</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>NIST AI RMF, ISO 42001</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Five functions hold the AI control estate between them, and <strong>none of them holds
+all of it.</strong> The programme does not fail inside any one function. It fails at the
+seams, where each side reasonably believed the other had it.</p>
+<table>
+<thead>
+<tr>
+<th>Stakeholder</th>
+<th>The question they are actually asking</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Legal</strong></td>
+<td>Can we be held liable, and under what theory?</td>
+</tr>
+<tr>
+<td><strong>Compliance</strong></td>
+<td>Which obligations apply, and can we demonstrate we meet them?</td>
+</tr>
+<tr>
+<td><strong>Data Privacy</strong></td>
+<td>Whose data is in this, on what basis, and for how long?</td>
+</tr>
+<tr>
+<td><strong>Cyber Security</strong></td>
+<td>Can this be attacked, and can we contain it if it is?</td>
+</tr>
+<tr>
+<td><strong>Model Risk</strong></td>
+<td>Is this fit for its stated purpose, and will we know when it stops being so?</td>
+</tr>
+</tbody>
+</table>
+<p>Two seats are routinely forgotten. The <strong>business or product owner</strong> in the
+first line, who defines intended purpose and risk appetite and funds
+remediation — if that seat is empty, the other five are governing an orphan. And
+<strong>internal audit</strong> in the third line, whose job is independent assurance that the
+five are doing what they claim.</p>
+<p>What makes this a lesson rather than an org chart is the four gaps below. Each
+one is a real failure that happens because <em>both</em> sides made a reasonable
+assumption about the other.</p></div><div class="nbmd"><h2>2 · Who operates which control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>STAKEHOLDERS = {
+ &quot;legal&quot;:      {&quot;asks&quot;: &quot;can we be held liable, and under what theory&quot;,
+                &quot;controls&quot;: [&quot;contract clauses&quot;, &quot;acceptable-use terms&quot;,
+                             &quot;IP screening&quot;, &quot;e-discovery retention&quot;]},
+ &quot;compliance&quot;: {&quot;asks&quot;: &quot;which obligations apply, can we demonstrate we meet them&quot;,
+                &quot;controls&quot;: [&quot;AI policy&quot;, &quot;use-case classification&quot;,
+                             &quot;attestations&quot;, &quot;disclosure triggers&quot;]},
+ &quot;privacy&quot;:    {&quot;asks&quot;: &quot;whose data, on what basis, for how long&quot;,
+                &quot;controls&quot;: [&quot;impact assessment gate&quot;, &quot;PII redaction&quot;,
+                             &quot;retention schedules&quot;, &quot;transfer mechanisms&quot;]},
+ &quot;cyber&quot;:      {&quot;asks&quot;: &quot;can this be attacked, can we contain it&quot;,
+                &quot;controls&quot;: [&quot;agent identity and JIT authz&quot;, &quot;tool permissions&quot;,
+                             &quot;sandbox and egress&quot;, &quot;guardrails&quot;,
+                             &quot;telemetry and detections&quot;, &quot;kill switch&quot;]},
+ &quot;model_risk&quot;: {&quot;asks&quot;: &quot;is it fit for purpose, will we know when it stops being&quot;,
+                &quot;controls&quot;: [&quot;pre-deployment validation&quot;, &quot;performance thresholds&quot;,
+                             &quot;drift alerting&quot;, &quot;revalidation on change&quot;]},
+}
+ALSO = {&quot;business_owner&quot;: &quot;accountable for the use case; defines purpose and risk appetite&quot;,
+        &quot;internal_audit&quot;: &quot;independent assurance that the five do what they claim&quot;}
+
+for name in sorted(STAKEHOLDERS):
+    s = STAKEHOLDERS[name]
+    print(f&quot;{name:12s}{s[&#x27;asks&#x27;]}&quot;)
+    print(f&quot;            controls: {&#x27;, &#x27;.join(s[&#x27;controls&#x27;])}&quot;)
+print()
+for name, role in sorted(ALSO.items()):
+    print(f&quot;{name:16s}{role}&quot;)
+total = sum(len(s[&quot;controls&quot;]) for s in STAKEHOLDERS.values())
+print(f&quot;\n{total} controls across {len(STAKEHOLDERS)} functions&quot;)</code></pre></div><div class="nbmd"><h2>3 · The four seams, each with two reasonable assumptions</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SEAMS = [
+ {&quot;gap&quot;: &quot;agent traces are full of personal data&quot;,
+  &quot;a&quot;: (&quot;cyber&quot;, &quot;privacy owns retention of anything containing personal data&quot;),
+  &quot;b&quot;: (&quot;privacy&quot;, &quot;security owns the log store, so security sets its schedule&quot;),
+  &quot;result&quot;: &quot;no schedule was set; three years of prompts are discoverable&quot;},
+ {&quot;gap&quot;: &quot;the model was validated, the tools were not&quot;,
+  &quot;a&quot;: (&quot;model_risk&quot;, &quot;validation covered the model, which is our scope&quot;),
+  &quot;b&quot;: (&quot;cyber&quot;, &quot;MRM signed it off, so the deployment was approved&quot;),
+  &quot;result&quot;: &quot;an agent holds production write access that was never in scope&quot;},
+ {&quot;gap&quot;: &quot;&#x27;no training on our data&#x27; was negotiated, never instrumented&quot;,
+  &quot;a&quot;: (&quot;legal&quot;, &quot;the clause is in the contract and it is binding&quot;),
+  &quot;b&quot;: (&quot;cyber&quot;, &quot;legal handled the vendor, so the restriction is handled&quot;),
+  &quot;result&quot;: &quot;nobody built the control that verifies the vendor honours it&quot;},
+ {&quot;gap&quot;: &quot;the use case was risk-tiered before it had tools&quot;,
+  &quot;a&quot;: (&quot;compliance&quot;, &quot;classified low-risk: it was a chatbot when we saw it&quot;),
+  &quot;b&quot;: (&quot;business_owner&quot;, &quot;we shipped features, not a new use case&quot;),
+  &quot;result&quot;: &quot;it files tickets, sends mail and moves money at the low-risk tier&quot;},
+]
+for i, s in enumerate(SEAMS, 1):
+    print(f&quot;{i}. {s[&#x27;gap&#x27;]}&quot;)
+    print(f&quot;   {s[&#x27;a&#x27;][0]:15s} assumed: {s[&#x27;a&#x27;][1]}&quot;)
+    print(f&quot;   {s[&#x27;b&#x27;][0]:15s} assumed: {s[&#x27;b&#x27;][1]}&quot;)
+    print(f&quot;   -&gt; {s[&#x27;result&#x27;]}&quot;)
+    print()
+print(&quot;Neither assumption in any pair is unreasonable. That is what makes these&quot;)
+print(&quot;seams rather than mistakes - and why naming the handoff is the control.&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — every function reports green</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def self_report(function):
+    &quot;&quot;&quot;Each function reports on the controls it operates. All true.&quot;&quot;&quot;
+    if function in STAKEHOLDERS:
+        return {&quot;function&quot;: function, &quot;controls_operating&quot;: len(STAKEHOLDERS[function][&quot;controls&quot;]),
+                &quot;status&quot;: &quot;green&quot;}
+    return {&quot;function&quot;: function, &quot;controls_operating&quot;: 0, &quot;status&quot;: &quot;n/a&quot;}
+
+for f in sorted(STAKEHOLDERS):
+    r = self_report(f)
+    print(f&quot;   {r[&#x27;function&#x27;]:12s}{r[&#x27;controls_operating&#x27;]} controls  {r[&#x27;status&#x27;]}&quot;)
+print()
+print(f&quot;functions reporting green : {len(STAKEHOLDERS)}/{len(STAKEHOLDERS)}&quot;)
+print(f&quot;open seams                : {len(SEAMS)}&quot;)
+print()
+print(&quot;A dashboard assembled from function self-reports is all green, and four&quot;)
+print(&quot;material gaps are open. The dashboard is not lying - it is asking each&quot;)
+print(&quot;function about the inside of its own box, and every failure here is&quot;)
+print(&quot;between boxes.&quot;)
+assert len(SEAMS) == 4</code></pre></div><div class="nbmd"><h2>5 · The control — name the handoff, give it one owner</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>HANDOFFS = {
+ &quot;trace retention schedule&quot;:      {&quot;owner&quot;: &quot;privacy&quot;,  &quot;consumers&quot;: [&quot;cyber&quot;, &quot;legal&quot;]},
+ &quot;tool scope in validation&quot;:      {&quot;owner&quot;: &quot;model_risk&quot;,&quot;consumers&quot;: [&quot;cyber&quot;, &quot;business_owner&quot;]},
+ &quot;vendor no-train verification&quot;:  {&quot;owner&quot;: &quot;cyber&quot;,    &quot;consumers&quot;: [&quot;legal&quot;, &quot;compliance&quot;]},
+ &quot;re-tier on capability change&quot;:  {&quot;owner&quot;: &quot;compliance&quot;,&quot;consumers&quot;: [&quot;business_owner&quot;, &quot;cyber&quot;]},
+}
+print(f&quot;{&#x27;handoff artefact&#x27;:32s}{&#x27;accountable&#x27;:13s}consumers&quot;)
+for h in sorted(HANDOFFS):
+    v = HANDOFFS[h]
+    print(f&quot;{h:32s}{v[&#x27;owner&#x27;]:13s}{&#x27;, &#x27;.join(v[&#x27;consumers&#x27;])}&quot;)
+
+covered = len(HANDOFFS)
+print(f&quot;\nseams: {len(SEAMS)}   handoffs with a named owner: {covered}&quot;)
+print()
+print(&quot;One artefact, many consumers, exactly one owner. The consumers matter as&quot;)
+print(&quot;much as the owner: a handoff nobody consumes was never a handoff, and a&quot;)
+print(&quot;handoff with two owners is the contested case from E1.0 again.&quot;)
+assert covered == len(SEAMS)</code></pre></div><div class="nbmd"><h2>6 · Verify — the two forgotten seats</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def governed(use_case):
+    missing = [seat for seat in (&quot;business_owner&quot;, &quot;internal_audit&quot;)
+               if seat not in use_case[&quot;seats&quot;]]
+    five = [f for f in STAKEHOLDERS if f in use_case[&quot;seats&quot;]]
+    return {&quot;control_functions_present&quot;: len(five),
+            &quot;missing_seats&quot;: missing,
+            &quot;is_governed&quot;: not missing and len(five) == len(STAKEHOLDERS)}
+
+CASES = [
+ {&quot;name&quot;: &quot;customer support agent&quot;, &quot;seats&quot;: list(STAKEHOLDERS) + [&quot;business_owner&quot;, &quot;internal_audit&quot;]},
+ {&quot;name&quot;: &quot;internal code assistant&quot;, &quot;seats&quot;: list(STAKEHOLDERS)},
+]
+for c in CASES:
+    g = governed(c)
+    print(f&quot;   {c[&#x27;name&#x27;]:26s}five functions: {g[&#x27;control_functions_present&#x27;]}/5   &quot;
+          f&quot;missing: {g[&#x27;missing_seats&#x27;] or &#x27;none&#x27;}   governed: {g[&#x27;is_governed&#x27;]}&quot;)
+print()
+print(&quot;The second one has every control function at the table and no accountable&quot;)
+print(&quot;owner. Five functions are governing something nobody has agreed to own,&quot;)
+print(&quot;which is how a use case survives a review and still has no one to fund&quot;)
+print(&quot;the remediation it was told to do.&quot;)
+assert not governed(CASES[1])[&quot;is_governed&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Five stakeholder functions print with the question each is asking and the controls each operates — 22 controls in total. Four seam failures are shown as pairs of individually reasonable assumptions, and every function still self-reports green while all four gaps are open. Naming one accountable owner per handoff closes them, and a use case with all five control functions and no business owner is shown to be ungoverned.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Pick one of the four seams and find out, today, who owns it in your organisation. The answer 'I assume security does' from one side and 'I assume privacy does' from the other is the finding.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.11.html">E1.11 · Model risk management for AI systems</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.10.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.10.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Five stakeholder functions print with the question each is asking and the controls each operates — 22 controls in total. Four seam failures are shown as pairs of individually reasonable assumptions, and every function still self-reports green while all four gaps are open. Naming one accountable owner per handoff closes them, and a use case with all five control functions and no business owner is shown to be ungoverned.</div><div class="chips"><span>NIST AI RMF</span><span>ISO 42001</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.10.ipynb</code></p></div><div class="pager"><a href="E1.9.html"><span class="k">← Previous</span><span class="t">E1.9 · Model and agent lifecycle governance</span></a><a class="next" href="E1.11.html"><span class="k">Next →</span><span class="t">E1.11 · Model risk management for AI systems</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

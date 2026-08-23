@@ -1,0 +1,172 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.0 — What &quot;trustworthy AI&quot; actually means | Cyber Commons</title><meta name="description" content="Unpack the seven dimensions every serious framework converges on, then do the hard part: decide which function in your organisation owns each one."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — Governance, Risk, Compliance &amp; the CISO Office › The GRC Practitioner (Risk &amp; Control)</div><div class="sid">E1.0</div><h1>What &quot;trustworthy AI&quot; actually means</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;Trustworthy AI&quot; asserted as a value rather than decomposed into dimensions with an owner behind each. &quot;Everyone owns it&quot; means no one does.</p></div><div class="ctrl"><div class="lab">Control</div><p>Unpack the seven dimensions every serious framework converges on, then do the hard part: decide which function in your organisation owns each one.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Assign each of the seven dimensions to a named function, then find the dimensions with no owner and the ones with three.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.0.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.0.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 63 lines of output in 0.01s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.0 · What "trustworthy AI" actually means</h1>
+<p><strong>Function E — Governance, Risk, Compliance &amp; the CISO Office → The GRC Practitioner (Risk &amp; Control)</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.8.html">D2.8 · Regulatory clock</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>NIST AI RMF</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>"Trustworthy AI" is used as a value, and values do not have owners. Every
+serious framework — NIST AI RMF chief among them — converges on roughly seven
+dimensions:</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>The question it answers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Valid and reliable</strong></td>
+<td>Does it do what it claims, repeatably?</td>
+</tr>
+<tr>
+<td><strong>Safe</strong></td>
+<td>Can it cause physical, financial or psychological harm?</td>
+</tr>
+<tr>
+<td><strong>Secure and resilient</strong></td>
+<td>Can it be attacked, and does it degrade gracefully?</td>
+</tr>
+<tr>
+<td><strong>Accountable and transparent</strong></td>
+<td>Can you say who is responsible, and show your working?</td>
+</tr>
+<tr>
+<td><strong>Explainable and interpretable</strong></td>
+<td>Can you say why it produced this output?</td>
+</tr>
+<tr>
+<td><strong>Privacy-enhanced</strong></td>
+<td>Whose data is in it, on what basis, for how long?</td>
+</tr>
+<tr>
+<td><strong>Fair, with harmful bias managed</strong></td>
+<td>Does it distribute error evenly across people?</td>
+</tr>
+</tbody>
+</table>
+<p>Learning the list is the easy half and takes an afternoon.</p>
+<p>The hard half is that <strong>each dimension needs a named owning function</strong>, and in
+most organisations two or three of them have either no owner or three. "Everyone
+owns trustworthy AI" is operationally identical to nobody owning it, and it fails
+in a predictable direction: the dimensions with obvious homes get controls, and
+the ones that sit between functions get a policy sentence.</p>
+<p>Below, the seven dimensions are assigned across five functions, and then the
+assignment is checked — because an ownership map with gaps is more useful than
+one without, provided you can see the gaps.</p></div><div class="nbmd"><h2>2 · The seven dimensions, and who could own each</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>DIMENSIONS = {
+ &quot;valid_and_reliable&quot;:     &quot;does it do what it claims, repeatably&quot;,
+ &quot;safe&quot;:                   &quot;can it cause physical, financial or psychological harm&quot;,
+ &quot;secure_and_resilient&quot;:   &quot;can it be attacked, does it degrade gracefully&quot;,
+ &quot;accountable_transparent&quot;:&quot;who is responsible, and can you show your working&quot;,
+ &quot;explainable&quot;:            &quot;why did it produce this output&quot;,
+ &quot;privacy_enhanced&quot;:       &quot;whose data, on what basis, for how long&quot;,
+ &quot;fair_bias_managed&quot;:      &quot;is error distributed evenly across people&quot;,
+}
+FUNCTIONS = [&quot;legal&quot;, &quot;compliance&quot;, &quot;privacy&quot;, &quot;cyber&quot;, &quot;model_risk&quot;]
+
+print(f&quot;{&#x27;dimension&#x27;:26s}the question it answers&quot;)
+for d in sorted(DIMENSIONS):
+    print(f&quot;{d:26s}{DIMENSIONS[d]}&quot;)
+print(f&quot;\nfunctions available to own them: {FUNCTIONS}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Assign, then look for the gaps\n\nA typical assignment in a large organisation. Not a recommended one — an observed one.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>OWNERS = {
+ &quot;valid_and_reliable&quot;:      [&quot;model_risk&quot;],
+ &quot;safe&quot;:                    [],                       # nobody
+ &quot;secure_and_resilient&quot;:    [&quot;cyber&quot;],
+ &quot;accountable_transparent&quot;: [&quot;compliance&quot;, &quot;legal&quot;, &quot;model_risk&quot;],   # three
+ &quot;explainable&quot;:             [&quot;model_risk&quot;],
+ &quot;privacy_enhanced&quot;:        [&quot;privacy&quot;],
+ &quot;fair_bias_managed&quot;:       [],                       # nobody
+}
+print(f&quot;{&#x27;dimension&#x27;:26s}{&#x27;owners&#x27;:34s}status&quot;)
+for d in sorted(DIMENSIONS):
+    o = OWNERS[d]
+    status = (&quot;UNOWNED&quot; if not o else
+              &quot;contested&quot; if len(o) &gt; 1 else &quot;clear&quot;)
+    print(f&quot;{d:26s}{&#x27;, &#x27;.join(o) or &#x27;-&#x27;:34s}{status}&quot;)
+
+unowned = sorted(d for d in DIMENSIONS if not OWNERS[d])
+contested = sorted(d for d in DIMENSIONS if len(OWNERS[d]) &gt; 1)
+print(f&quot;\nunowned   : {unowned}&quot;)
+print(f&quot;contested : {contested}&quot;)
+assert unowned and contested</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the two failure modes look different and are not\n\nAn unowned dimension produces no control. A contested one produces three partial controls and no complete one.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def controls_for(dimension, owners):
+    &quot;&quot;&quot;Each owner builds the part of the control they can see from their seat.&quot;&quot;&quot;
+    coverage = {&quot;legal&quot;: 0.3, &quot;compliance&quot;: 0.35, &quot;privacy&quot;: 0.4,
+                &quot;cyber&quot;: 0.9, &quot;model_risk&quot;: 0.8}
+    if not owners:
+        return 0.0, &quot;no control exists&quot;
+    if len(owners) == 1:
+        return coverage[owners[0]], f&quot;{owners[0]} builds it end to end&quot;
+    best = max(coverage[o] for o in owners)
+    return best, f&quot;{len(owners)} partial controls, none complete, best is {best:.0%}&quot;
+
+print(f&quot;{&#x27;dimension&#x27;:26s}{&#x27;coverage&#x27;:&gt;10s}  what actually got built&quot;)
+for d in sorted(DIMENSIONS):
+    cov, why = controls_for(d, OWNERS[d])
+    print(f&quot;{d:26s}{cov:&gt;9.0%}  {why}&quot;)
+print()
+weakest = sorted((controls_for(d, OWNERS[d])[0], d) for d in DIMENSIONS)[:3]
+print(&quot;weakest three:&quot;, [d for _, d in weakest])
+print()
+print(&quot;The unowned dimensions are at zero, which at least is visible. The&quot;)
+print(&quot;contested one is worse: three functions each report that it is covered,&quot;)
+print(&quot;and each is telling the truth about their part.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — one accountable owner, others named as contributors</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>FIXED = {
+ &quot;valid_and_reliable&quot;:      (&quot;model_risk&quot;, [&quot;cyber&quot;]),
+ &quot;safe&quot;:                    (&quot;business_owner&quot;, [&quot;legal&quot;, &quot;compliance&quot;]),
+ &quot;secure_and_resilient&quot;:    (&quot;cyber&quot;, [&quot;model_risk&quot;]),
+ &quot;accountable_transparent&quot;: (&quot;compliance&quot;, [&quot;legal&quot;, &quot;model_risk&quot;]),
+ &quot;explainable&quot;:             (&quot;model_risk&quot;, [&quot;compliance&quot;]),
+ &quot;privacy_enhanced&quot;:        (&quot;privacy&quot;, [&quot;cyber&quot;, &quot;legal&quot;]),
+ &quot;fair_bias_managed&quot;:       (&quot;model_risk&quot;, [&quot;compliance&quot;, &quot;legal&quot;]),
+}
+print(f&quot;{&#x27;dimension&#x27;:26s}{&#x27;accountable&#x27;:16s}contributors&quot;)
+for d in sorted(FIXED):
+    owner, contrib = FIXED[d]
+    print(f&quot;{d:26s}{owner:16s}{&#x27;, &#x27;.join(contrib)}&quot;)
+
+still_unowned = [d for d in DIMENSIONS if not FIXED[d][0]]
+print(f&quot;\ndimensions with no accountable owner: {still_unowned or &#x27;none&#x27;}&quot;)
+print()
+print(&quot;Note the seat that had to be invented: `business_owner`. Safety of a use&quot;)
+print(&quot;case is not a control function&#x27;s decision - it belongs to whoever chose&quot;)
+print(&quot;to deploy it, and if that seat is empty the other five are governing an&quot;)
+print(&quot;orphan.&quot;)
+assert not still_unowned</code></pre></div><div class="nbmd"><h2>6 · Verify — every dimension resolves to a person who can be asked</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def audit_question(dimension):
+    owner, contrib = FIXED[dimension]
+    return {&quot;dimension&quot;: dimension,
+            &quot;who_do_i_ask&quot;: owner,
+            &quot;who_else_must_agree&quot;: contrib,
+            &quot;answerable&quot;: bool(owner)}
+
+for d in sorted(DIMENSIONS):
+    q = audit_question(d)
+    print(f&quot;   {d:26s}ask {q[&#x27;who_do_i_ask&#x27;]:16s}&quot;
+          f&quot;agreed with {&#x27;, &#x27;.join(q[&#x27;who_else_must_agree&#x27;]) or &#x27;-&#x27;}&quot;)
+print()
+print(f&quot;answerable for all seven: {all(audit_question(d)[&#x27;answerable&#x27;] for d in DIMENSIONS)}&quot;)
+print()
+print(&quot;That is the whole test. An auditor asks one question per dimension, and&quot;)
+print(&quot;every question resolves to a person. E1.10 takes the same five functions&quot;)
+print(&quot;and maps the controls each one actually operates.&quot;)
+assert all(audit_question(d)[&quot;answerable&quot;] for d in DIMENSIONS)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The seven trustworthy-AI dimensions print with the question each answers. A typical assignment leaves two unowned and one contested between three functions — and the contested one is shown to be worse than the unowned ones, because three functions each honestly report their part as covered. The fix names one accountable owner per dimension and has to invent the business-owner seat to do it.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Write your organisation's names against the seven dimensions. The interesting rows are the blanks and the ones where you wrote three names — and the second kind is the one that will surprise you in an audit.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.1.html">E1.1 · Why point-in-time control testing fails for AI</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.0.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.0.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The seven trustworthy-AI dimensions print with the question each answers. A typical assignment leaves two unowned and one contested between three functions — and the contested one is shown to be worse than the unowned ones, because three functions each honestly report their part as covered. The fix names one accountable owner per dimension and has to invent the business-owner seat to do it.</div><div class="chips"><span>NIST AI RMF</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.0.ipynb</code></p></div><div class="pager"><a href="D2.8.html"><span class="k">← Previous</span><span class="t">D2.8 · Regulatory clock</span></a><a class="next" href="E1.1.html"><span class="k">Next →</span><span class="t">E1.1 · Why point-in-time control testing fails for AI</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -1,11 +1,11 @@
 # Track D2 — The Incident Responder
 
 **Function D · Security Operations**  
-*Machine-speed decisions were already the problem here. Agents make it both worse and tractable.*
+*Detecting, attributing and stopping an actor that is not a person and does not slow down.*
 
 **Job titles:** Incident Responder, DFIR Analyst, CSIRT Lead
 
-**What changes:** You gain a co-investigator that reconstructs timelines faster than you can — and incidents where the actor is an agent, which breaks most of your playbook.
+**What changes:** Responding at machine speed. 8 lessons.
 
 **Autonomy focus:** Response tooling at L2.5; containment authority never leaves human hands.
 

@@ -5,7 +5,7 @@
 
 **Job titles:** Cloud Security Engineer, Platform Security Engineer, Infrastructure Security
 
-**What changes:** The controls themselves, in the order they take effect: default-deny authorization, then sandboxed execution, then the filesystem and tool boundaries, then MCP, then egress — and finally the levers you pull when one of them fails.
+**What changes:** Containment is where theory meets the kernel. 9 lessons.
 
 **Autonomy focus:** Containment is what lets you say yes to L2.5 without pretending the agent is trustworthy.
 

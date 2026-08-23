@@ -1,0 +1,134 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.12 — Working the seams | Cyber Commons</title><meta name="description" content="Joint runbooks for the seams — one artefact, many consumers, one owner."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — Governance, Risk, Compliance &amp; the CISO Office › The GRC Practitioner (Risk &amp; Control)</div><div class="sid">E1.12</div><h1>Working the seams</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.12.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The handoffs fail, not the functions: privacy assessment into control design, legal position into system prompt, MRM validation into security evidence.</p></div><div class="ctrl"><div class="lab">Control</div><p>Joint runbooks for the seams — one artefact, many consumers, one owner.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Trace one artefact across three functions and find the consumer who never received it.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.12.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.12.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 51 lines of output in 0.01s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.12 · Working the seams</h1>
+<p><strong>Function E — Governance, Risk, Compliance &amp; the CISO Office → The GRC Practitioner (Risk &amp; Control)</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.11.html">E1.11 · Model risk management for AI systems</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>ISO 42001</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>Everything in this chapter has pointed at the same conclusion: the functions
+work, and the <strong>handoffs</strong> are where the programme leaks.</p>
+<p>A seam is not a disagreement. Both sides are usually competent, usually right
+about their own scope, and usually assuming the other side has the piece in the
+middle. Nobody is wrong, and the gap is real.</p>
+<p>The control is a <strong>joint runbook</strong> per seam, and it has exactly three
+properties:</p>
+<ul>
+<li><strong>One artefact.</strong> A named, versioned thing that exists — not a meeting, not an
+  understanding.</li>
+<li><strong>One owner.</strong> Accountable for the artefact existing and being current.
+  Contributors are named; owners are singular.</li>
+<li><strong>Named consumers.</strong> Who receives it, and what they are entitled to assume
+  once they have. A handoff nobody consumes was never a handoff.</li>
+</ul>
+<p>The three seams below are the ones that fail most often, and each is traced
+here from producer to consumer to see exactly where it stops.</p></div><div class="nbmd"><h2>2 · Three seams, traced end to end</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>RUNBOOKS = {
+ &quot;privacy assessment -&gt; control design&quot;: {
+   &quot;artefact&quot;: &quot;DPIA with a control annex&quot;,
+   &quot;owner&quot;: &quot;privacy&quot;,
+   &quot;consumers&quot;: [&quot;cyber&quot;, &quot;model_risk&quot;],
+   &quot;consumer_entitled_to_assume&quot;: &quot;the data classes and retention limits are settled&quot;,
+   &quot;delivered_to&quot;: [&quot;cyber&quot;]},                       # model_risk never receives it
+ &quot;legal position -&gt; system prompt&quot;: {
+   &quot;artefact&quot;: &quot;approved language and refusal set&quot;,
+   &quot;owner&quot;: &quot;legal&quot;,
+   &quot;consumers&quot;: [&quot;cyber&quot;, &quot;business_owner&quot;],
+   &quot;consumer_entitled_to_assume&quot;: &quot;these refusals are contractually required&quot;,
+   &quot;delivered_to&quot;: [&quot;cyber&quot;, &quot;business_owner&quot;]},
+ &quot;MRM validation -&gt; security evidence&quot;: {
+   &quot;artefact&quot;: &quot;validation report with tool surface and autonomy&quot;,
+   &quot;owner&quot;: &quot;model_risk&quot;,
+   &quot;consumers&quot;: [&quot;cyber&quot;, &quot;compliance&quot;, &quot;internal_audit&quot;],
+   &quot;consumer_entitled_to_assume&quot;: &quot;the validated unit matches what is deployed&quot;,
+   &quot;delivered_to&quot;: [&quot;compliance&quot;]},                  # cyber and audit never receive it
+}
+for name in sorted(RUNBOOKS):
+    r = RUNBOOKS[name]
+    print(f&quot;{name}&quot;)
+    print(f&quot;   artefact  : {r[&#x27;artefact&#x27;]}&quot;)
+    print(f&quot;   owner     : {r[&#x27;owner&#x27;]}&quot;)
+    print(f&quot;   consumers : {&#x27;, &#x27;.join(r[&#x27;consumers&#x27;])}&quot;)
+    print()</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the consumer who never received it</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>gaps = []
+for name in sorted(RUNBOOKS):
+    r = RUNBOOKS[name]
+    missing = sorted(set(r[&quot;consumers&quot;]) - set(r[&quot;delivered_to&quot;]))
+    status = &quot;complete&quot; if not missing else f&quot;NOT DELIVERED to {&#x27;, &#x27;.join(missing)}&quot;
+    print(f&quot;{name[:44]:46s}{status}&quot;)
+    for m in missing:
+        gaps.append((name, m, r[&quot;consumer_entitled_to_assume&quot;]))
+print()
+print(f&quot;undelivered handoffs: {len(gaps)}&quot;)
+for name, who, assumption in gaps:
+    print(f&quot;   {who:14s} is assuming: {assumption}&quot;)
+    print(f&quot;   {&#x27;&#x27;:14s} and has not received: {RUNBOOKS[name][&#x27;artefact&#x27;]}&quot;)
+assert gaps</code></pre></div><div class="nbmd"><h2>4 · What each undelivered handoff actually costs</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CONSEQUENCE = {
+ (&quot;privacy assessment -&gt; control design&quot;, &quot;model_risk&quot;):
+   &quot;validation runs on data the DPIA restricted; the restriction is invisible to it&quot;,
+ (&quot;MRM validation -&gt; security evidence&quot;, &quot;cyber&quot;):
+   &quot;security cannot see the validated tool surface, so scope creep is undetectable&quot;,
+ (&quot;MRM validation -&gt; security evidence&quot;, &quot;internal_audit&quot;):
+   &quot;third line cannot test the second line&#x27;s assurance; it audits the artefact it has&quot;,
+}
+for name, who, _ in gaps:
+    print(f&quot;   {who:16s}{CONSEQUENCE.get((name, who), &#x27;unknown&#x27;)}&quot;)
+print()
+print(&quot;None of these is a control failing. Each is a control that was built,&quot;)
+print(&quot;works, and is invisible to the function whose decision depends on it.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — deliver, and record the delivery</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def close(runbooks):
+    out = {}
+    for name, r in runbooks.items():
+        out[name] = dict(r, delivered_to=sorted(r[&quot;consumers&quot;]))
+    return out
+
+CLOSED = close(RUNBOOKS)
+remaining = [(n, c) for n, r in sorted(CLOSED.items())
+             for c in r[&quot;consumers&quot;] if c not in r[&quot;delivered_to&quot;]]
+print(f&quot;{&#x27;seam&#x27;:46s}{&#x27;owner&#x27;:13s}delivered to&quot;)
+for n in sorted(CLOSED):
+    r = CLOSED[n]
+    print(f&quot;{n[:44]:46s}{r[&#x27;owner&#x27;]:13s}{&#x27;, &#x27;.join(r[&#x27;delivered_to&#x27;])}&quot;)
+print(f&quot;\nundelivered handoffs remaining: {len(remaining)}&quot;)
+print()
+print(&quot;One owner per artefact, every consumer named, and delivery recorded&quot;)
+print(&quot;rather than assumed. The delivery record is the part people skip, and it&quot;)
+print(&quot;is the only part that makes the seam auditable a year later.&quot;)
+assert not remaining</code></pre></div><div class="nbmd"><h2>6 · Verify — one artefact, many consumers, one owner</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def check(runbooks):
+    problems = []
+    for name, r in sorted(runbooks.items()):
+        if not r[&quot;artefact&quot;]:                     problems.append(f&quot;{name}: no artefact&quot;)
+        if not r[&quot;owner&quot;]:                        problems.append(f&quot;{name}: no owner&quot;)
+        if isinstance(r[&quot;owner&quot;], list):          problems.append(f&quot;{name}: {len(r[&#x27;owner&#x27;])} owners&quot;)
+        if not r[&quot;consumers&quot;]:                    problems.append(f&quot;{name}: no consumers&quot;)
+        undel = set(r[&quot;consumers&quot;]) - set(r[&quot;delivered_to&quot;])
+        if undel:                                 problems.append(f&quot;{name}: undelivered to {sorted(undel)}&quot;)
+    return problems
+
+print(&quot;before:&quot;, len(check(RUNBOOKS)), &quot;problem(s)&quot;)
+for p in check(RUNBOOKS): print(&quot;   &quot;, p)
+print(&quot;after :&quot;, len(check(CLOSED)), &quot;problem(s)&quot;)
+print()
+print(&quot;Four properties, checked mechanically: an artefact exists, one owner is&quot;)
+print(&quot;accountable, consumers are named, delivery is recorded. A governance&quot;)
+print(&quot;programme that can run this check on its own seams is doing something&quot;)
+print(&quot;more useful than another policy document.&quot;)
+assert check(RUNBOOKS) and not check(CLOSED)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Pick the artefact your function produces for someone else and ask the recipient when they last received it. The gap between 'we produce that' and 'we receive that' is the seam, and it is usually measured in quarters.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.1.html">E2.1 · The regulatory map</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.12.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.12.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero.</div><div class="chips"><span>ISO 42001</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.12.ipynb</code></p></div><div class="pager"><a href="E1.11.html"><span class="k">← Previous</span><span class="t">E1.11 · Model risk management for AI systems</span></a><a class="next" href="E2.1.html"><span class="k">Next →</span><span class="t">E2.1 · The regulatory map</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

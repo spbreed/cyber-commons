@@ -1,11 +1,11 @@
 # Track E3 — The BISO, Risk Communicator & CISO Office
 
 **Function E · Governance, Risk, Compliance & the CISO Office**  
-*The function that has to make all of the above defensible to a board, an auditor and a regulator — usually in that order.*
+*Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.*
 
 **Job titles:** BISO, Deputy CISO, Head of Security Strategy, CISO
 
-**What changes:** You are being asked to approve a class of system whose failure modes your existing risk language cannot express, on a timeline set by the business.
+**What changes:** Running the programme. 8 lessons.
 
 **Autonomy focus:** You hold the authority to move any workflow down a rung — and the obligation to use it.
 

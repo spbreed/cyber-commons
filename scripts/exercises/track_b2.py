@@ -1602,4 +1602,1295 @@ assert rep2.conformance == 1.0 and rep2.expert_accuracy < 0.7
               "file matcher in whatever produced it. Both checks take an hour and "
               "one of them usually changes the number.",
 },
+
+"B2.0": {
+ "concept": """
+**The model is not the system.**
+
+A model is a text generator. Give it tokens, get tokens back. It has no memory
+between calls, no ability to act, and no notion of whether it succeeded. Left
+alone it cannot read a file, run a scanner or open a pull request.
+
+A **harness** is everything wrapped around that model which turns it into
+something that gets work done:
+
+| Component | What it does |
+|---|---|
+| **The loop** | Decides what happens next — plan, act, observe, decide again — and when to stop |
+| **Tools** | The only way the model touches the world |
+| **Context management** | What the model sees at each step, assembled from a world much larger than the window |
+| **The verifier** | The independent check on whether a step actually succeeded |
+| **State & memory** | What survives between steps and between runs |
+| **Budgets & stop conditions** | Token, time, cost and action ceilings that bound autonomy |
+| **Orchestrator** | Sub-agent spawning, parallelism, delegation depth |
+| **Telemetry** | The record that makes a run auditable, replayable and debuggable |
+
+Why this chapter exists: two teams given the **identical model** routinely
+differ by an order of magnitude in output quality, purely on harness design.
+Most of the capability you attribute to a model is the scaffold around it.
+
+And the security consequence is direct. A harness is itself an autonomous actor
+holding credentials and tools — so every harness you build is a system that must
+be governed, contained and audited like any other.
+""",
+ "steps": [
+  ("md", "## 2 · Build the smallest harness that is still a harness\\n\\n"
+         "Eight components, none optional. The model here is a deterministic "
+         "stand-in — labelled as one — so the scaffold is what you can see."),
+  ("py", '''from dataclasses import dataclass, field
+
+def stand_in_model(prompt):
+    """NOT a language model. A deterministic stub, so the harness is visible.
+
+    It reads the transcript so far to decide what is left to do - which is all
+    any agent loop does, minus the part that is hard."""
+    if "write_patch" not in prompt:
+        return {"tool": "write_patch", "args": {"file": "auth.py"}}
+    if "run_tests" not in prompt:
+        return {"tool": "run_tests", "args": {}}
+    return {"tool": "done", "args": {"claim": "fixed it"}}
+
+WORLD = {"tests_pass": False, "patched": False}
+
+def run_tests(**_):
+    # the patch this stub writes does not actually fix the bug
+    return {"passed": WORLD["tests_pass"], "failing": [] if WORLD["tests_pass"] else ["test_login"]}
+def write_patch(file, **_):
+    WORLD["patched"] = True
+    return {"wrote": file}
+def done(claim, **_):
+    return {"claim": claim}
+
+TOOLS = {"run_tests": run_tests, "write_patch": write_patch, "done": done}
+
+@dataclass
+class Budget:
+    steps: int = 6
+    used: int = 0
+    def spend(self):
+        self.used += 1
+        return self.used <= self.steps
+
+def harness(task, verifier=None, budget=None, telemetry=None):
+    """loop + tools + context + verifier + state + budget + telemetry."""
+    budget = budget or Budget()
+    telemetry = telemetry if telemetry is not None else []
+    context = [f"TASK: {task}"]                       # context management
+    state = {"steps": 0}                              # state
+    while budget.spend():                             # budgets / stop conditions
+        step = stand_in_model("\\n".join(context))     # the model
+        tool, args = step["tool"], step["args"]
+        result = TOOLS[tool](**args)                  # tools
+        state["steps"] += 1
+        telemetry.append({"step": state["steps"], "tool": tool, "result": result})
+        context.append(f"{tool} -> {result}")
+        if tool == "done":
+            ok = verifier() if verifier else True     # the verifier
+            return {"claimed": True, "verified": ok, "steps": state["steps"],
+                    "telemetry": telemetry}
+    return {"claimed": False, "verified": False, "steps": state["steps"],
+            "telemetry": telemetry}
+
+print("components wired:", ["loop","tools","context","verifier","state",
+                            "budget","orchestrator","telemetry"])
+'''),
+
+  ("md", "## 3 · Run it once with no verifier"),
+  ("py", '''WORLD.update(tests_pass=False, patched=False)
+r = harness("fix the failing test_login", verifier=None)
+print(f"agent claimed success : {r['claimed']}")
+print(f"independently checked : {r['verified']}")
+print(f"steps                 : {r['steps']}")
+for t in r["telemetry"]:
+    print(f"   {t['step']}. {t['tool']:12s}{t['result']}")
+print()
+print("It reported success. The tests still fail. Nothing in that transcript")
+print("is a lie - the agent did write a patch, and then it said it was done.")
+assert r["claimed"] and not WORLD["tests_pass"]
+'''),
+
+  ("md", "## 4 · Where it breaks — the component people leave out\\n\\n"
+         "Add the verifier and change nothing else."),
+  ("py", '''def real_verifier():
+    """Ground truth, not self-assessment: run the tests and read the result."""
+    return run_tests()["passed"]
+
+WORLD.update(tests_pass=False, patched=False)
+r2 = harness("fix the failing test_login", verifier=real_verifier)
+print(f"claimed {r2['claimed']}  verified {r2['verified']}")
+
+WORLD.update(tests_pass=True)          # now the fix actually works
+r3 = harness("fix the failing test_login", verifier=real_verifier)
+print(f"claimed {r3['claimed']}  verified {r3['verified']}")
+print()
+print("Same model. Same loop. Same tools. The only difference between a harness")
+print("that reports the truth and one that reports its own optimism is one")
+print("component - and it is the cheapest one in the table.")
+assert not r2["verified"] and r3["verified"]
+'''),
+
+  ("md", "## 5 · The budget is a security control, not a cost control"),
+  ("py", '''def looping_model(prompt):
+    return {"tool": "run_tests", "args": {}}          # never finishes
+
+import builtins
+_orig = stand_in_model
+try:
+    globals()["stand_in_model"] = looping_model
+    WORLD.update(tests_pass=False)
+    r4 = harness("fix it", verifier=real_verifier, budget=Budget(steps=4))
+finally:
+    globals()["stand_in_model"] = _orig
+
+print(f"ran {r4['steps']} steps, then stopped: claimed={r4['claimed']}")
+print()
+print("Without the ceiling this runs until something else stops it - a bill, a")
+print("rate limit, or an on-call engineer. The budget is what makes 'autonomous'")
+print("a bounded word.")
+assert r4["steps"] == 4 and not r4["claimed"]
+'''),
+
+  ("md", "## 6 · Verify — the harness is itself an actor\\n\\n"
+         "It holds credentials and calls tools. Score it the way you would "
+         "score any other non-human identity."),
+  ("py", '''HARNESS_ACTOR = {
+ "identity": "ci-sast-harness",
+ "tools": sorted(TOOLS),
+ "writes": ["write_patch"],
+ "credentials": ["repo:write"],
+ "runs_unattended": True,
+ "telemetry": True,
+}
+irreversible = [t for t in HARNESS_ACTOR["writes"]]
+print(f"{'property':22s}value")
+for k, v in HARNESS_ACTOR.items():
+    print(f"{k:22s}{v}")
+print()
+print(f"tools that change state : {irreversible}")
+print(f"unattended              : {HARNESS_ACTOR['runs_unattended']}")
+print(f"auditable               : {HARNESS_ACTOR['telemetry']}")
+print()
+print("Every question you would ask of an agent applies to the thing you just")
+print("built to review agents. A harness with repo:write running unattended is")
+print("a non-human identity, and it belongs in the inventory in A2 and E1.2.")
+assert HARNESS_ACTOR["telemetry"], "an unauditable harness cannot be governed"
+'''),
+ ],
+ "expect": "The minimal harness runs and reports success while the tests still "
+           "fail. Adding one component — a verifier that reads ground truth "
+           "rather than the agent's own claim — flips `verified` to False on the "
+           "same run and to True only when the fix genuinely works. A four-step "
+           "budget stops a looping model. The harness then scores itself as a "
+           "non-human identity holding repo:write and running unattended.",
+ "challenge": "Take a harness you already run and name its eight components. The "
+              "one people cannot name is almost always the verifier, and the "
+              "answer 'the model tells us' means there isn't one.",
+},
+
+"B2.11": {
+ "concept": """
+The SAST harness is the first of four disciplines, and they all share the same
+loop: **index → summarise → hypothesise → verify.** What makes each discipline
+different is only the last step — what counts as proof.
+
+For static analysis the shape is:
+
+1. **Index.** Turn the repository into something navigable — symbols, call
+   edges, entry points. Done once, reused by every later stage.
+2. **Summarise.** Compress each component to something that fits in a context
+   window, because the repository never will.
+3. **Hypothesise.** Ask the model where a weakness could be, given the summary
+   and the neighbourhood. This is the step people think is the whole system.
+4. **Verify.** Check the hypothesis against the code — is the sink real, is the
+   path reachable, is a sanitiser already present.
+
+Two design decisions decide whether the output is usable:
+
+**Per-file context budget.** More context stops helping and starts hurting past
+a threshold that is specific to your corpus. A budget makes that measurable
+rather than a matter of taste.
+
+**Reachability gating before deduplication.** Gate first, then dedupe. Doing it
+the other way round spends the expensive step on findings that were never
+reachable.
+
+The deduplication stage is what decides whether you ship *a queue* or *a
+landfill*.
+""",
+ "steps": [
+  ("md", "## 2 · The four stages, on a seeded corpus\\n\\n"
+         "The corpus has planted defects, so recall and precision are "
+         "measurable rather than asserted."),
+  ("py", '''SEEDED = {
+ # unit            (has_defect, cwe,      reachable_from_entry, sanitised)
+ "get_report":     (True,  "CWE-22",  True,  False),
+ "run_export":     (True,  "CWE-78",  True,  False),
+ "legacy_import":  (True,  "CWE-89",  False, False),   # real bug, unreachable
+ "render_row":     (False, None,      True,  False),
+ "safe_query":     (True,  "CWE-89",  True,  True),    # real sink, sanitised
+ "admin_purge":    (True,  "CWE-78",  True,  False),
+ "format_date":    (False, None,      True,  False),
+ "parse_config":   (False, None,      False, False),
+}
+planted = sorted(u for u, v in SEEDED.items() if v[0])
+print(f"corpus units    : {len(SEEDED)}")
+print(f"planted defects : {len(planted)}  {planted}")
+'''),
+
+  ("md", "## 3 · Index → summarise → hypothesise"),
+  ("py", '''def index(corpus):
+    return sorted(corpus)                                  # stage 1
+
+def summarise(unit, budget_tokens):
+    """Stage 2. A summary that fits the budget; detail is dropped, not hidden."""
+    has_defect, cwe, reachable, sanitised = SEEDED[unit]
+    full = {"unit": unit, "sink": bool(cwe), "cwe": cwe,
+            "reachable": reachable, "sanitised": sanitised}
+    if budget_tokens < 40:            # too small to carry the sanitiser fact
+        full.pop("sanitised")
+    if budget_tokens < 25:            # too small to carry reachability
+        full.pop("reachable")
+    return full
+
+def hypothesise(summary):
+    """Stage 3. Flags anything that looks like a sink. Deliberately noisy."""
+    return summary["sink"]
+
+for budget in (20, 30, 60):
+    hyps = [u for u in index(SEEDED) if hypothesise(summarise(u, budget))]
+    print(f"context budget {budget:>3} tokens -> {len(hyps)} hypotheses: {hyps}")
+'''),
+
+  ("md", "## 4 · Verify, and gate on reachability before you deduplicate"),
+  ("py", '''def verify(unit, summary):
+    """Stage 4. The cheap facts first; each one can only remove a finding."""
+    if summary.get("sanitised"):
+        return None, "a sanitiser is already present"
+    if summary.get("reachable") is False:
+        return None, "no path from any entry point"
+    if summary.get("reachable") is None:
+        return unit, "reachability unknown - budget too small to carry it"
+    return unit, "reachable, unsanitised sink"
+
+def pipeline(budget):
+    hyps = [u for u in index(SEEDED) if hypothesise(summarise(u, budget))]
+    kept, dropped = [], []
+    for u in hyps:
+        keep, why = verify(u, summarise(u, budget))
+        (kept if keep else dropped).append((u, why))
+    return hyps, kept, dropped
+
+for budget in (20, 30, 60):
+    hyps, kept, dropped = pipeline(budget)
+    tp = [u for u, _ in kept if SEEDED[u][0]]
+    fp = [u for u, _ in kept if not SEEDED[u][0]]
+    recall = len(tp) / len(planted)
+    prec = len(tp) / len(kept) if kept else 0
+    print(f"budget {budget:>3}: {len(hyps)} hyp -> {len(kept)} kept  "
+          f"recall {recall:.0%}  precision {prec:.0%}  fp={fp}")
+'''),
+
+  ("md", "## 5 · Where it breaks — more context is not monotonically better\\n\\n"
+         "The budget that carries every fact is not the budget with the best "
+         "output, and the reason is worth understanding."),
+  ("py", '''print(f"{'budget':>7}{'kept':>6}{'recall':>9}{'precision':>11}  note")
+for budget in (20, 25, 30, 40, 60):
+    _, kept, _ = pipeline(budget)
+    tp = [u for u, _ in kept if SEEDED[u][0]]
+    prec = len(tp) / len(kept) if kept else 0
+    note = ("reachability unknown - everything survives" if budget < 25 else
+            "sanitiser fact missing - safe_query survives" if budget < 40 else
+            "all facts present")
+    print(f"{budget:>7}{len(kept):>6}{len(tp)/len(planted):>8.0%}{prec:>10.0%}  {note}")
+print()
+print("At budget 20 the harness keeps everything and calls it recall. It is not")
+print("finding more - it is verifying less, and reporting the difference as a")
+print("result. A recall number without its precision is a marketing number.")
+'''),
+
+  ("md", "## 6 · Verify — queue or landfill\\n\\n"
+         "The deduplication stage, and the number that decides which one you "
+         "shipped."),
+  ("py", '''ANALYSERS = ("grep", "taint", "model")
+
+_, kept, _ = pipeline(60)
+raw = [(u, tool) for u, _ in kept for tool in ANALYSERS]     # each tool reports each
+by_defect = sorted({u for u, _ in raw})
+
+print(f"raw findings across {len(ANALYSERS)} analysers : {len(raw)}")
+print(f"distinct defects                     : {len(by_defect)}")
+print(f"inflation if you do not deduplicate  : {len(raw)/len(by_defect):.1f}x")
+print()
+minutes_per = 6
+print(f"analyst minutes, undeduplicated : {len(raw)*minutes_per}")
+print(f"analyst minutes, deduplicated   : {len(by_defect)*minutes_per}")
+print()
+print("Same findings, same accuracy, three times the queue. Nobody reads the")
+print("third page, so the defect that gets fixed is whichever sorted first.")
+assert len(raw) == 3 * len(by_defect)
+'''),
+ ],
+ "expect": "The four-stage loop runs over a seeded corpus of eight units with "
+           "five planted defects. Shrinking the per-file context budget removes "
+           "the facts verification depends on: below 25 tokens reachability is "
+           "unknown and everything survives, which reads as higher recall and is "
+           "actually less verification. Deduplicating three analysers' output "
+           "collapses a 3x inflated queue back to the real defect count.",
+ "challenge": "Find the context budget where your own corpus stops improving. It "
+              "exists, it is specific to your codebase, and until you have "
+              "measured it you are paying for tokens that make the output worse.",
+},
+
+"B2.12": {
+ "concept": """
+Static analysis produces a hypothesis. Dynamic analysis produces a fact — but
+only if the thing deciding is not the model.
+
+The DAST harness is the same loop with a different last step: drive a running
+target, generate a payload, observe what happened, and confirm on a
+**deterministic oracle**. Not "the model thinks this worked". A signal that
+exists independently of anything the agent believes:
+
+- the query the database actually executed
+- the process that actually spawned
+- the file that actually opened
+- the sleep that actually delayed the response by five seconds
+
+The distinction is not pedantic. A model asked "did that work?" after sending a
+payload will answer confidently either way, and its confidence is uncorrelated
+with the truth. An oracle that reads the target's own logs cannot be talked
+into anything.
+
+Three things bound this phase, and they are preconditions rather than
+afterthoughts: **sandbox replication** (a replica, never production), a
+**safe-action policy** (demonstrate, never damage), and **blast-radius limits**
+(the exploit stops at proof). Evidence capture is what makes it a finding
+instead of an anecdote.
+""",
+ "steps": [
+  ("md", "## 2 · A target that records what actually happened\\n\\n"
+         "The oracle is the target's own log, not the agent's opinion of it."),
+  ("py", '''SANDBOX = {"is_replica": True, "has_prod_credentials": False,
+           "network_egress": False}
+
+class Target:
+    """A stand-in application. Its log is the oracle."""
+    def __init__(self):
+        self.log = []
+    def handle(self, path, param):
+        if path == "/report":
+            q = f"SELECT * FROM reports WHERE name = '{param}'"
+            self.log.append(("query", q))
+            return {"status": 200, "body": "report data"}
+        if path == "/export":
+            cmd = f"exporter --format {param}"
+            self.log.append(("exec", cmd))
+            return {"status": 200, "body": "ok"}
+        return {"status": 404, "body": ""}
+
+def preconditions_ok(sb):
+    fails = [k for k, v in (("is_replica", sb["is_replica"]),
+                            ("no_prod_credentials", not sb["has_prod_credentials"]),
+                            ("no_egress", not sb["network_egress"])) if not v]
+    return (not fails), fails
+
+ok, fails = preconditions_ok(SANDBOX)
+print(f"sandbox preconditions: {'PASS' if ok else 'REFUSE ' + str(fails)}")
+assert ok, "the harness must refuse to run outside a sandbox"
+'''),
+
+  ("md", "## 3 · Drive it, and confirm on the oracle"),
+  ("py", '''PAYLOADS = {
+ "/report": ["normal", "x' OR '1'='1", "'; DROP TABLE reports; --"],
+ "/export": ["pdf", "pdf; id", "pdf && whoami"],
+}
+
+def oracle_sqli(entry):    return entry[0] == "query" and ("OR '1'='1" in entry[1] or "DROP" in entry[1])
+def oracle_cmdi(entry):    return entry[0] == "exec" and (";" in entry[1] or "&&" in entry[1])
+ORACLES = {"/report": ("CWE-89", oracle_sqli), "/export": ("CWE-78", oracle_cmdi)}
+
+confirmed = []
+for path, payloads in sorted(PAYLOADS.items()):
+    cwe, oracle = ORACLES[path]
+    for p in payloads:
+        t = Target()
+        resp = t.handle(path, p)
+        fired = any(oracle(e) for e in t.log)
+        mark = "CONFIRMED" if fired else "no        "
+        print(f"   {path:9s}{p[:26]:28s}status {resp['status']}  {mark}")
+        if fired:
+            confirmed.append({"path": path, "cwe": cwe, "payload": p,
+                              "observable": t.log[-1][1]})
+print(f"\\nconfirmed by oracle: {len(confirmed)}")
+'''),
+
+  ("md", "## 4 · Where it breaks — the model as its own oracle\\n\\n"
+         "Same payloads, same target. The only change is who decides."),
+  ("py", '''def model_opinion(path, payload, response):
+    """NOT a language model - a stub reproducing the failure mode: it reads the
+    response, sees HTTP 200, and calls that success."""
+    return response["status"] == 200
+
+model_confirmed = []
+for path, payloads in sorted(PAYLOADS.items()):
+    for p in payloads:
+        t = Target()
+        resp = t.handle(path, p)
+        if model_opinion(path, p, resp):
+            model_confirmed.append((path, p))
+
+print(f"oracle confirmed : {len(confirmed)}")
+print(f"model confirmed  : {len(model_confirmed)}")
+print()
+false_positives = [(p, pl) for p, pl in model_confirmed
+                   if not any(c["path"] == p and c["payload"] == pl for c in confirmed)]
+print(f"findings the model asserted that the oracle refuses: {len(false_positives)}")
+for p, pl in false_positives:
+    print(f"   {p:9s}{pl}")
+print()
+print("Every one of these returns HTTP 200 because the application works. The")
+print("model is not lying; it was asked a question it has no way to answer, and")
+print("it answered anyway.")
+assert len(model_confirmed) > len(confirmed)
+'''),
+
+  ("md", "## 5 · The control — stop at proof, and capture the evidence"),
+  ("py", '''SAFE_ACTIONS = {"read", "observe", "time"}
+DESTRUCTIVE = {"drop", "delete", "truncate", "shutdown"}
+
+def safe_to_send(payload):
+    low = payload.lower()
+    hit = sorted(d for d in DESTRUCTIVE if d in low)
+    return (not hit), hit
+
+print(f"{'payload':32s}{'sendable?':11s}why")
+for path, payloads in sorted(PAYLOADS.items()):
+    for p in payloads:
+        ok, hit = safe_to_send(p)
+        print(f"{p[:30]:32s}{'yes' if ok else 'REFUSED':11s}"
+              f"{'demonstrates without damage' if ok else 'destructive: ' + str(hit)}")
+print()
+print("The DROP TABLE payload proves nothing that OR '1'='1' has not already")
+print("proved, and it destroys the replica you need for the next test.")
+print("Demonstrating the flaw and exercising it are different jobs.")
+assert not safe_to_send("'; DROP TABLE reports; --")[0]
+'''),
+
+  ("md", "## 6 · Verify — an evidence record somebody can re-run"),
+  ("py", '''evidence = [{
+   "cwe": c["cwe"], "entry": c["path"], "input": c["payload"],
+   "observable": c["observable"],                    # the oracle's own words
+   "oracle": "target execution log",
+   "sandbox": {"replica": True, "prod_credentials": False, "egress": False},
+   "reproducible": True,
+} for c in confirmed if safe_to_send(c["payload"])[0]]
+
+for e in evidence:
+    print(f"   {e['cwe']}  {e['entry']}")
+    print(f"      input      : {e['input']}")
+    print(f"      observable : {e['observable']}")
+print()
+print(f"{len(evidence)} findings, each with the observable that proves it.")
+print("An exit code is not an observable. The query the database ran is.")
+assert evidence and all(e["observable"] for e in evidence)
+'''),
+ ],
+ "expect": "Six payloads are driven at a sandboxed replica. The deterministic "
+           "oracle — the target's own execution log — confirms the injections "
+           "and refuses the benign requests, while a stub standing in for model "
+           "self-assessment confirms every request that returned HTTP 200, "
+           "including the ones that prove nothing. The destructive payload is "
+           "refused before it is sent, and each surviving finding carries the "
+           "observable that proves it.",
+ "challenge": "Take one 'confirmed' finding from a tool you run and ask what the "
+              "oracle was. If the answer is the model's own summary of the "
+              "response, you have a hypothesis with a confident tone.",
+},
+
+"B2.13": {
+ "concept": """
+A threat model is usually produced once, by hand, in a workshop, for a system
+that changes every release. By the second sprint it describes something that no
+longer exists — and nobody notices, because nothing re-reads it.
+
+The threat-modelling harness makes it a **derived artefact**: generated from
+architecture, IaC, code and data flows, regenerated on every release, and — the
+part that carries the value — **diffed between versions**.
+
+The diff is the product. A threat model tells you what could go wrong; a threat
+model *diff* tells you what this pull request just introduced, which is a
+question a human can act on within a review cycle.
+
+That reframes human judgement too. Reviewing a hundred threats a quarter is a
+workshop nobody attends. Reviewing the four threats that appeared since Tuesday
+is a checkpoint, and a checkpoint is something an engineering process can carry.
+
+For the diff to mean anything the generation must be **deterministic**: same
+input, same output, byte for byte. Two runs that disagree about unchanged code
+produce a diff full of noise, and a noisy diff is one people stop reading.
+""",
+ "steps": [
+  ("md", "## 2 · Derive the model from the system, not from a workshop"),
+  ("py", '''ARCH_V1 = {
+ "components": {"web": {"trust": 0, "exposes": ["/report", "/upload"]},
+                "api": {"trust": 1, "exposes": ["/internal/report"]},
+                "db":  {"trust": 2, "exposes": []}},
+ "flows": [("web", "api"), ("api", "db")],
+ "sinks": {"db": "database", "api": "filesystem"},
+}
+
+def derive(arch):
+    """Deterministic by construction: everything sorted, nothing from a set."""
+    threats = []
+    for a, b in sorted(arch["flows"]):
+        ta, tb = arch["components"][a]["trust"], arch["components"][b]["trust"]
+        if ta < tb and b in arch["sinks"]:
+            for entry in sorted(arch["components"][a]["exposes"]) or ["-"]:
+                threats.append({
+                    "entry": entry, "path": f"{a} -> {b}",
+                    "resource": arch["sinks"][b],
+                    "crossing": f"trust {ta} -> {tb}",
+                    "score": (tb - ta) * (2 if arch["sinks"][b] == "database" else 1)})
+    return sorted(threats, key=lambda t: (-t["score"], t["entry"], t["path"]))
+
+tm1 = derive(ARCH_V1)
+print(f"{'entry':22s}{'path':16s}{'resource':12s}{'crossing':18s}score")
+for t in tm1:
+    print(f"{t['entry']:22s}{t['path']:16s}{t['resource']:12s}{t['crossing']:18s}{t['score']}")
+print(f"\\n{len(tm1)} threats derived")
+'''),
+
+  ("md", "## 3 · Change one thing, and diff"),
+  ("py", '''import copy
+ARCH_V2 = copy.deepcopy(ARCH_V1)
+ARCH_V2["components"]["web"]["exposes"].append("/admin/export")   # one new route
+ARCH_V2["components"]["worker"] = {"trust": 0, "exposes": ["queue"]}
+ARCH_V2["flows"].append(("worker", "db"))                          # and one new flow
+
+tm2 = derive(ARCH_V2)
+
+def key(t): return (t["entry"], t["path"], t["resource"])
+def diff(before, after):
+    a = {key(t): t for t in after}
+    b = {key(t): t for t in before}
+    return ({k: a[k] for k in sorted(a.keys() - b.keys())},
+            {k: b[k] for k in sorted(b.keys() - a.keys())})
+
+new, gone = diff(tm1, tm2)
+print(f"threats before {len(tm1)}  ->  after {len(tm2)}")
+print(f"\\nNEW ({len(new)}):")
+for k in new:
+    t = new[k]
+    print(f"   score {t['score']}  {t['entry']:22s}{t['path']:16s}{t['resource']}")
+print(f"REMOVED ({len(gone)}): {list(gone) or 'none'}")
+print()
+print("Two lines of infrastructure change. Three new threats, one of them from")
+print("a component nobody mentioned in the pull request description.")
+assert new and not gone
+'''),
+
+  ("md", "## 4 · Where it breaks — a diff you cannot trust\\n\\n"
+         "Regenerate the *identical* architecture with a generator that "
+         "iterates a set instead of a sorted sequence."),
+  ("py", '''def derive_unstable(arch, seed):
+    """Same logic, but the ordering comes from set iteration."""
+    import random
+    threats = derive(arch)
+    rng = random.Random(seed)
+    rng.shuffle(threats)                 # stands in for hash-order instability
+    return threats
+
+runs = [derive_unstable(ARCH_V1, s) for s in range(3)]
+identical = all(r == runs[0] for r in runs)
+print(f"three regenerations of UNCHANGED architecture identical: {identical}")
+
+n1, g1 = diff(runs[0], runs[1])
+print(f"diff between two runs of the same input: {len(n1)} new, {len(g1)} removed")
+print("   (content-keyed, so the noise does not show here...)")
+
+# but a line-oriented diff, which is what a reviewer actually reads:
+lines = [[f"{t['entry']} {t['path']} {t['score']}" for t in r] for r in runs]
+noisy = sum(1 for a, b in zip(lines[0], lines[1]) if a != b)
+print(f"   line-by-line, {noisy} of {len(lines[0])} lines differ on unchanged input")
+print()
+print("Nothing changed and the review shows churn. Reviewers learn within about")
+print("two sprints that the diff is noise, and then they stop reading it - which")
+print("costs you the one output of this harness that was worth having.")
+assert noisy > 0
+'''),
+
+  ("md", "## 5 · The control — determinism, then the checkpoint"),
+  ("py", '''stable = [derive(ARCH_V1) for _ in range(5)]
+print(f"five regenerations identical: {all(s == stable[0] for s in stable)}")
+
+def review_load(before, after, per_threat_minutes=8):
+    new, gone = diff(before, after)
+    return {"total_threats": len(after),
+            "needs_review": len(new),
+            "workshop_minutes": len(after) * per_threat_minutes,
+            "checkpoint_minutes": len(new) * per_threat_minutes}
+
+r = review_load(tm1, tm2)
+print(f"\\nthreats in the model      : {r['total_threats']}")
+print(f"threats needing review    : {r['needs_review']}")
+print(f"review the whole model    : {r['workshop_minutes']} minutes")
+print(f"review only the diff      : {r['checkpoint_minutes']} minutes")
+print()
+print("The whole model is a workshop nobody attends. The diff is a checkpoint")
+print("that fits in a pull request, and it contains the same new information.")
+assert all(s == stable[0] for s in stable)
+'''),
+
+  ("md", "## 6 · Verify — the diff catches what the description omitted"),
+  ("py", '''PR_DESCRIPTION = "add an admin export route"
+mentioned = "/admin/export"
+surprises = [new[k] for k in new if mentioned not in new[k]["entry"]]
+print(f"pull request says      : {PR_DESCRIPTION!r}")
+print(f"threats it introduced  : {len(new)}")
+print(f"not implied by the text: {len(surprises)}")
+for t in surprises:
+    print(f"   {t['path']:16s}{t['resource']:12s}{t['crossing']}")
+print()
+print("The worker flow is a legitimate change made for a good reason. It is")
+print("also a second untrusted path to the database, and the sentence describing")
+print("the pull request does not contain it.")
+assert surprises
+'''),
+ ],
+ "expect": "A threat model derived from architecture yields threats sorted "
+           "deterministically. Two lines of infrastructure change introduce "
+           "three new threats, one from a component the pull request description "
+           "never mentions. An unstable generator produces a diff full of churn "
+           "on unchanged input, and the deterministic one regenerates identically "
+           "five times — turning a whole-model workshop into a "
+           "review of only what changed.",
+ "challenge": "Generate a threat model for your service twice, without changing "
+              "anything, and diff the two. If they differ, the diff you were "
+              "planning to review on every release was never going to work.",
+},
+
+"B2.14": {
+ "concept": """
+The pentest harness is the one where the loop can do real damage, so it is the
+one where the bounds come before the capability.
+
+Same four stages — recon, enumeration, exploitation, lateral movement — run as
+an agent loop. What makes it lawful rather than an incident with a project plan
+is three things, and all three are structural rather than procedural:
+
+**Hard scope enforcement.** Not a note in the engagement letter: a check in the
+request path that refuses a target outside scope before the packet leaves. Scope
+is a property of the harness, not of the operator's attention.
+
+**Destructive-action gating.** Some actions demonstrate; some destroy. The loop
+may take the first class autonomously and must stop at the second, every time,
+regardless of how confident it is.
+
+**Operator handoff points.** Named places where a human decides. Not "the
+operator supervises" — specific transitions, so that when the loop pauses
+everybody knows whose decision it is.
+
+The output that makes this defensible afterwards is the audit trail: every
+target touched, every action taken, every refusal and why. A pentest you cannot
+reconstruct is indistinguishable from an intrusion.
+""",
+ "steps": [
+  ("md", "## 2 · Scope is a check in the path, not a line in a document"),
+  ("py", '''import ipaddress
+
+SCOPE = {"cidrs": ["10.20.0.0/24"], "hosts": ["app.test.corp.example"],
+         "excluded": ["10.20.0.1"]}          # the gateway is always excluded
+
+def in_scope(target):
+    if target in SCOPE["excluded"]:
+        return False, "explicitly excluded"
+    if target in SCOPE["hosts"]:
+        return True, "named host"
+    try:
+        ip = ipaddress.ip_address(target)
+    except ValueError:
+        return False, "not a named host and not an address in scope"
+    for c in SCOPE["cidrs"]:
+        if ip in ipaddress.ip_network(c):
+            return True, f"inside {c}"
+    return False, "outside every scoped range"
+
+TARGETS = ["10.20.0.15", "app.test.corp.example", "10.20.0.1",
+           "10.99.4.7", "prod.corp.example", "169.254.169.254"]
+print(f"{'target':26s}{'allowed':9s}why")
+for t in TARGETS:
+    ok, why = in_scope(t)
+    print(f"{t:26s}{'yes' if ok else 'REFUSE':9s}{why}")
+allowed = [t for t in TARGETS if in_scope(t)[0]]
+print(f"\\n{len(allowed)} of {len(TARGETS)} targets are in scope")
+assert "169.254.169.254" not in allowed and "prod.corp.example" not in allowed
+'''),
+
+  ("md", "## 3 · The loop, bounded by the check"),
+  ("py", '''AUDIT = []
+
+def act(phase, target, action, destructive=False):
+    ok, why = in_scope(target)
+    if not ok:
+        AUDIT.append({"phase": phase, "target": target, "action": action,
+                      "result": "REFUSED", "why": why})
+        return "refused"
+    if destructive:
+        AUDIT.append({"phase": phase, "target": target, "action": action,
+                      "result": "HELD", "why": "destructive - operator decision"})
+        return "held"
+    AUDIT.append({"phase": phase, "target": target, "action": action,
+                  "result": "done", "why": why})
+    return "done"
+
+PLAN = [
+ ("recon",       "10.20.0.15",            "port scan",            False),
+ ("recon",       "10.99.4.7",             "port scan",            False),
+ ("enumerate",   "app.test.corp.example", "enumerate endpoints",  False),
+ ("exploit",     "10.20.0.15",            "sql injection proof",  False),
+ ("exploit",     "10.20.0.15",            "drop table",           True),
+ ("lateral",     "10.20.0.1",             "pivot via gateway",    False),
+ ("lateral",     "169.254.169.254",       "read instance metadata", False),
+]
+for phase, target, action, destructive in PLAN:
+    r = act(phase, target, action, destructive)
+    print(f"   {phase:11s}{target:26s}{action:24s}-> {r}")
+'''),
+
+  ("md", "## 4 · Where it breaks — the operator who was supervising\\n\\n"
+         "Scope enforcement placed in the operator's attention rather than in "
+         "the request path."),
+  ("py", '''def act_supervised(phase, target, action, operator_attention):
+    """The same loop, gated by a human who is watching most of the time."""
+    ok, _ = in_scope(target)
+    if ok:
+        return "done"
+    return "refused" if operator_attention else "SENT OUT OF SCOPE"
+
+out_of_scope = [(p, t, a) for p, t, a, _ in PLAN if not in_scope(t)[0]]
+for attention in (1.0, 0.9, 0.5):
+    # deterministic: the nth action is missed when n * attention has rolled over
+    missed = [t for i, (p, t, a) in enumerate(out_of_scope)
+              if act_supervised(p, t, a, (i + 1) * attention % 1 < attention
+                                and i < len(out_of_scope) * attention) == "SENT OUT OF SCOPE"]
+    print(f"operator catching {attention:.0%} of them -> "
+          f"{len(out_of_scope) - len(missed)}/{len(out_of_scope)} refused")
+print()
+print("At 100% attention the outcome matches the structural check exactly. The")
+print("difference is that the structural check does not have a bad week, and it")
+print("does not get faster when the engagement is running late.")
+print()
+print("169.254.169.254 is the case that matters: it is one typo away from every")
+print("cloud credential the harness could ever want, and it looks like a")
+print("perfectly ordinary address.")
+'''),
+
+  ("md", "## 5 · The control — handoff points that are named, not implied"),
+  ("py", '''HANDOFFS = {
+ "destructive_action":   "operator approves each one, individually",
+ "scope_expansion":      "written client approval before the range changes",
+ "credential_use":       "operator supplies; the harness never stores",
+ "lateral_to_new_host":  "operator confirms the host is in the engagement",
+}
+held = [a for a in AUDIT if a["result"] == "HELD"]
+refused = [a for a in AUDIT if a["result"] == "REFUSED"]
+
+print(f"{'transition':24s}who decides")
+for k, v in sorted(HANDOFFS.items()):
+    print(f"{k:24s}{v}")
+print()
+print(f"actions held for an operator : {len(held)}")
+for h in held:
+    print(f"   {h['target']:26s}{h['action']}")
+print(f"actions refused outright     : {len(refused)}")
+for r in refused:
+    print(f"   {r['target']:26s}{r['action']:24s}({r['why']})")
+assert held and refused
+'''),
+
+  ("md", "## 6 · Verify — a run you can reconstruct"),
+  ("py", '''from collections import Counter
+counts = Counter(a["result"] for a in AUDIT)
+print(f"audit entries : {len(AUDIT)}")
+for k in sorted(counts):
+    print(f"   {k:9s}{counts[k]}")
+print()
+print(f"{'phase':11s}{'target':26s}{'action':24s}result")
+for a in AUDIT:
+    print(f"{a['phase']:11s}{a['target']:26s}{a['action']:24s}{a['result']}")
+print()
+print("Every target touched, every action taken, every refusal and its reason.")
+print("This is the artefact that distinguishes an authorised engagement from an")
+print("intrusion, and it has to exist before anyone asks for it.")
+assert len(AUDIT) == len(PLAN) and counts["REFUSED"] >= 3
+'''),
+ ],
+ "expect": "Six of seven targets are classified against scope, with the cloud "
+           "metadata address and the production host both refused before any "
+           "request is made. The bounded loop refuses three actions, holds the "
+           "destructive one for an operator, and completes the rest — and an "
+           "attention-based gate is shown matching the structural check only at "
+           "100% attention. The run ends with a reconstructable audit trail.",
+ "challenge": "Add 169.254.169.254 and its IPv6 equivalent to the exclusion list "
+              "of any offensive tooling you run. It is the highest-value target "
+              "in most cloud estates and the one most likely to be reached by "
+              "accident.",
+},
+
+"B2.15": {
+ "concept": """
+Two questions get confused here, and only one of them is worth your time.
+
+The first is *which model is best for security work right now*. As of writing:
+Kimi K2.6 and K2.7-Code hold up well on long-horizon repository work, the GLM-5.x
+line performs strongly on vulnerability discovery, and frontier models still lead
+on deep exploitation chains. That paragraph will be wrong within a quarter, and
+anything built on it will be wrong with it.
+
+The second question is the one that lasts: **can you substitute the backbone
+without rewriting the harness?** If swapping a model means touching prompt
+assembly, tool schemas, parsing and retry logic, then the honest answer is that
+you did not choose a model — you married one.
+
+So the discipline is:
+
+- Evaluate on **your corpus**, not a vendor chart. The chart measures a
+  distribution that is not yours, on tasks that are not yours.
+- Put the backbone behind an **interface** — one adapter, one place to change.
+- Keep the eval so a substitution is a measurement, not an argument.
+- Weigh what the chart never shows: data sovereignty, cost per finding, and
+  whether your estate is allowed to send code to that endpoint at all.
+""",
+ "steps": [
+  ("md", "## 2 · An interface, so the backbone is a parameter\\n\\n"
+         "Three stand-in backbones with deliberately different behaviour. None "
+         "is a language model; each stands in for one so substitution is visible."),
+  ("py", '''CORPUS = [
+ # (unit, true_cwe)
+ ("get_report",   "CWE-22"), ("run_export", "CWE-78"), ("safe_query", None),
+ ("legacy_dump",  "CWE-89"), ("render_row", None),     ("admin_purge", "CWE-78"),
+]
+
+def backbone_a(unit):                 # strong on injection, misses traversal
+    return {"run_export": "CWE-78", "legacy_dump": "CWE-89",
+            "admin_purge": "CWE-78"}.get(unit)
+def backbone_b(unit):                 # broad recall, some false positives
+    return {"get_report": "CWE-22", "run_export": "CWE-78", "legacy_dump": "CWE-89",
+            "admin_purge": "CWE-78", "render_row": "CWE-79"}.get(unit)
+def backbone_c(unit):                 # conservative
+    return {"run_export": "CWE-78"}.get(unit)
+
+BACKBONES = {"kimi-k2.6-stand-in": backbone_a,
+             "glm-5.2-stand-in":   backbone_b,
+             "small-local-stand-in": backbone_c}
+
+def harness(find, corpus):
+    """The harness. Note it takes `find` as an argument - that is the point."""
+    return [(u, find(u)) for u, _ in corpus if find(u)]
+
+for name in sorted(BACKBONES):
+    out = harness(BACKBONES[name], CORPUS)
+    print(f"{name:22s}{len(out)} findings")
+'''),
+
+  ("md", "## 3 · Score them on your corpus, not on a chart"),
+  ("py", '''def score(find, corpus, cost_per_call=0.004):
+    truth = dict(corpus)
+    found = harness(find, corpus)
+    tp = [u for u, c in found if truth.get(u) == c]
+    fp = [u for u, c in found if truth.get(u) != c]
+    planted = [u for u, c in corpus if c]
+    fn = [u for u in planted if u not in [x for x, _ in found]]
+    recall = len(tp) / len(planted)
+    prec = len(tp) / len(found) if found else 0.0
+    spend = len(corpus) * cost_per_call
+    return {"recall": recall, "precision": prec, "tp": len(tp), "fp": len(fp),
+            "fn": len(fn), "spend": spend,
+            "cost_per_tp": (spend / len(tp)) if tp else float("inf")}
+
+print(f"{'backbone':22s}{'recall':>8}{'prec':>7}{'tp':>4}{'fp':>4}{'fn':>4}{'$/finding':>11}")
+results = {}
+for name in sorted(BACKBONES):
+    s = score(BACKBONES[name], CORPUS)
+    results[name] = s
+    print(f"{name:22s}{s['recall']:>7.0%}{s['precision']:>7.0%}"
+          f"{s['tp']:>4}{s['fp']:>4}{s['fn']:>4}{s['cost_per_tp']:>10.3f}")
+best_recall = max(results, key=lambda n: (results[n]["recall"], n))
+best_cost = min(results, key=lambda n: (results[n]["cost_per_tp"], n))
+print(f"\\nbest recall        : {best_recall}")
+print(f"best cost/finding  : {best_cost}")
+print("They are not the same backbone, and which one you want depends on")
+print("whether an analyst reviews the output or a ticket is opened from it.")
+'''),
+
+  ("md", "## 4 · Where it breaks — the harness that married its model"),
+  ("py", '''def coupled_harness(unit, backbone_name):
+    """Prompt assembly, parsing and retry all keyed to one vendor's quirks."""
+    if backbone_name == "kimi-k2.6-stand-in":
+        raw = backbone_a(unit)
+        return raw                                   # returns a bare CWE
+    if backbone_name == "glm-5.2-stand-in":
+        raw = backbone_b(unit)
+        return {"cwe": raw} if raw else None         # returns an object
+    raise KeyError(f"no parsing branch for {backbone_name}")
+
+for name in sorted(BACKBONES):
+    try:
+        out = [u for u, _ in CORPUS if coupled_harness(u, name)]
+        print(f"   {name:22s}{len(out)} findings")
+    except KeyError as e:
+        print(f"   {name:22s}FAILS: {e}")
+print()
+print("Adding a third backbone to the coupled harness is a code change in the")
+print("parser, the prompt and the retry path. Adding it to the harness above is")
+print("a dictionary entry. Same models, same corpus - the difference is where")
+print("the vendor's shape was allowed to leak to.")
+'''),
+
+  ("md", "## 5 · The control — substitute behind an unchanged interface"),
+  ("py", '''def substitute(harness_fn, corpus, frm, to):
+    before = score(BACKBONES[frm], corpus)
+    after  = score(BACKBONES[to], corpus)
+    return {"from": frm, "to": to,
+            "recall": (before["recall"], after["recall"]),
+            "precision": (before["precision"], after["precision"]),
+            "cost_per_tp": (round(before["cost_per_tp"], 3), round(after["cost_per_tp"], 3)),
+            "harness_changed": False}
+
+sw = substitute(harness, CORPUS, "kimi-k2.6-stand-in", "glm-5.2-stand-in")
+for k, v in sw.items():
+    print(f"   {k:16s}{v}")
+print()
+print("Recall up, precision down, cost per finding down. That is a decision with")
+print("numbers behind it, taken in one line, and reversible in one line.")
+assert sw["harness_changed"] is False
+'''),
+
+  ("md", "## 6 · Verify — the constraints the chart never shows"),
+  ("py", '''CONSTRAINTS = {
+ "kimi-k2.6-stand-in":   {"weights": "open", "self_hostable": True,  "code_leaves_estate": False},
+ "glm-5.2-stand-in":     {"weights": "open", "self_hostable": True,  "code_leaves_estate": False},
+ "frontier-api-stand-in":{"weights": "closed","self_hostable": False, "code_leaves_estate": True},
+}
+print(f"{'backbone':24s}{'weights':9s}{'self-host':11s}source code leaves the estate")
+for n in sorted(CONSTRAINTS):
+    c = CONSTRAINTS[n]
+    print(f"{n:24s}{c['weights']:9s}{str(c['self_hostable']):11s}{c['code_leaves_estate']}")
+print()
+eligible = [n for n, c in sorted(CONSTRAINTS.items()) if not c["code_leaves_estate"]]
+print(f"eligible where source may not leave the estate: {eligible}")
+print()
+print("For a great many organisations this single column removes the top of")
+print("every published leaderboard before accuracy is discussed at all - which")
+print("is the strongest argument for designing the substitution seam early.")
+assert "frontier-api-stand-in" not in eligible
+'''),
+ ],
+ "expect": "Three stand-in backbones are scored on the same corpus: the one with "
+           "the best recall is not the one with the best cost per finding. A "
+           "harness that couples to vendor output shapes fails outright on the "
+           "third backbone, while the interface version substitutes in a single "
+           "line and reports the recall, precision and cost deltas. A data-"
+           "sovereignty column then removes the closed-weights option entirely.",
+ "challenge": "Time how long it takes to swap the backbone in your own harness. "
+              "If it is more than an afternoon, that number — not a benchmark — "
+              "is what will decide your model choice for the next two years.",
+},
+
+"B2.16": {
+ "concept": """
+A single run tells you almost nothing about a stochastic system, and almost
+every published harness result is a single run.
+
+Two metrics, and the gap between them is the whole lesson:
+
+**pass@k** — succeeded *at least once* in k attempts. This is the right metric
+when you can cheaply check which attempt was correct and keep it. A code
+generator whose output you compile and test is a pass@k system: five tries and
+one good answer is a good day.
+
+**pass^k** — succeeded *every time*, k out of k. This is the right metric when
+the run is autonomous and nobody is checking, which describes every security
+harness that files tickets, gates a merge or closes an alert.
+
+A harness at 80% per-run reliability has a pass@5 of 99.97% and a pass^5 of
+33%. Both numbers are true. Quoting the first one for a system that runs
+unattended is where most harness claims quietly go wrong.
+
+The other half is **run-to-run variance.** If the same input produces eleven
+findings one day and four the next, the average is not a description of
+anything, and any change you make afterwards is being measured against noise.
+""",
+ "steps": [
+  ("md", "## 2 · The two metrics, from the same runs"),
+  ("py", '''import random
+
+def run_once(reliability, rng):
+    return rng.random() < reliability
+
+def measure(reliability, k=5, trials=2000, seed=3):
+    rng = random.Random(seed)                  # seeded: identical every run
+    at_least_one = every_time = 0
+    for _ in range(trials):
+        outcomes = [run_once(reliability, rng) for _ in range(k)]
+        at_least_one += any(outcomes)
+        every_time   += all(outcomes)
+    return at_least_one / trials, every_time / trials
+
+print(f"{'per-run':>9}{'pass@5':>10}{'pass^5':>10}  what it means unattended")
+for r in (0.95, 0.90, 0.80, 0.60, 0.50):
+    at_k, pow_k = measure(r)
+    note = ("dependable" if pow_k > .8 else
+            "coin flip" if pow_k > .3 else "fails most nights")
+    print(f"{r:>8.0%}{at_k:>10.1%}{pow_k:>10.1%}  {note}")
+print()
+print("At 80% per-run the same harness is 99.9% reliable if a human picks the")
+print("good answer, and 33% reliable if nobody is looking.")
+'''),
+
+  ("md", "## 3 · Where it breaks — the demo that was a lucky run"),
+  ("py", '''def one_demo(reliability, seed):
+    return run_once(reliability, random.Random(seed))
+
+demos = [one_demo(0.6, s) for s in range(12)]
+print("twelve single-run demos of the same 60% harness:")
+print("   " + " ".join("PASS" if d else "fail" for d in demos))
+print(f"   -> {demos.count(True)} passed")
+print()
+print("Publish any of the passes. Every one is an honest single run. None of")
+print("them is a measurement, and the reader has no way to tell which they got.")
+assert demos.count(True) and demos.count(False)
+'''),
+
+  ("md", "## 4 · Variance, and why it precedes every other question"),
+  ("py", '''def findings_per_run(base, noise, rng):
+    return max(0, int(rng.gauss(base, noise)))
+
+def variance_profile(base, noise, runs=30, seed=11):
+    rng = random.Random(seed)
+    xs = [findings_per_run(base, noise, rng) for _ in range(runs)]
+    mean = sum(xs) / len(xs)
+    sd = (sum((x - mean) ** 2 for x in xs) / len(xs)) ** 0.5
+    return xs, mean, sd
+
+for noise in (0.5, 3.0):
+    xs, mean, sd = variance_profile(8, noise)
+    print(f"noise sd={noise}:  mean {mean:.1f}  sd {sd:.2f}  "
+          f"range {min(xs)}-{max(xs)}")
+    print(f"   runs: {xs[:12]} ...")
+
+_, m_stable, sd_stable = variance_profile(8, 0.5)
+_, m_noisy,  sd_noisy   = variance_profile(8, 3.0)
+improvement = 1.5
+print()
+print(f"suppose a change adds {improvement} findings on average.")
+print(f"   against sd {sd_stable:.2f}: visible after a handful of runs")
+print(f"   against sd {sd_noisy:.2f}: indistinguishable from a quiet Tuesday")
+print()
+print("Until variance is characterised, every A/B comparison you run is")
+print("measuring the dice.")
+assert sd_noisy > sd_stable
+'''),
+
+  ("md", "## 5 · The control — separate harness failure from model failure\\n\\n"
+         "Before changing either one, find out which is moving."),
+  ("py", '''def attribute(runs_same_model_same_harness, runs_same_model_new_harness):
+    """If output changes when only the harness changed, it was the harness."""
+    a = sum(runs_same_model_same_harness) / len(runs_same_model_same_harness)
+    b = sum(runs_same_model_new_harness) / len(runs_same_model_new_harness)
+    return a, b, ("harness" if abs(b - a) > 0.15 else "not the harness")
+
+rng = random.Random(5)
+baseline = [run_once(0.6, rng) for _ in range(200)]
+better_harness = [run_once(0.85, rng) for _ in range(200)]   # same model, better verifier
+a, b, verdict = attribute(baseline, better_harness)
+print(f"same model, original harness : {a:.0%}")
+print(f"same model, better verifier  : {b:.0%}")
+print(f"attribution                  : {verdict}")
+print()
+print("Twenty-five points of reliability, no model change. Teams routinely")
+print("spend that budget on a bigger backbone instead, because the harness")
+print("was never measured separately.")
+assert verdict == "harness"
+'''),
+
+  ("md", "## 6 · Verify — the scorecard line that has to be published"),
+  ("py", '''k = 5
+rel = 0.85
+at_k, pow_k = measure(rel, k=k)
+xs, mean, sd = variance_profile(8, 0.9)
+card = {
+  "per_run_reliability": rel,
+  "k": k,
+  "pass_at_k": round(at_k, 4),
+  "pass_pow_k": round(pow_k, 4),
+  "runs_measured": 2000,
+  "findings_mean": round(mean, 2),
+  "findings_sd": round(sd, 2),
+  "seed": 3,
+  "unattended": True,
+  "headline_metric": "pass^k",       # because unattended is True
+}
+for kk, vv in card.items():
+    print(f"   {kk:22s}{vv}")
+print()
+print("The headline metric is chosen by how the harness runs, not by which")
+print("number is larger. An unattended harness that reports pass@k is")
+print("reporting the reliability of a system it is not.")
+assert card["headline_metric"] == "pass^k" and card["pass_pow_k"] < card["pass_at_k"]
+'''),
+ ],
+ "expect": "pass@5 and pass^5 are computed from the same 2000 trials and "
+           "diverge sharply: at 80% per-run reliability the harness is 99.9% "
+           "reliable with a human picking the good answer and 33% reliable "
+           "unattended. Twelve single-run demos of a 60% harness return a mix of "
+           "passes and failures, and a change worth 1.5 findings is shown to be "
+           "invisible against a standard deviation of 3.",
+ "challenge": "Run your harness on one fixed task five times and count how many "
+              "times it fully succeeded. That integer, out of five, is the "
+              "number to put in front of anyone deciding whether to let it run "
+              "unattended.",
+},
+
+"B2.17": {
+ "concept": """
+A harness has three costs and most teams measure one of them.
+
+**Accuracy** is measured — usually against whatever the tool happened to find,
+which is circular. The fix is a **seeded corpus**: known defects planted
+deliberately, so recall is a fraction with a real denominator instead of a
+count with a confident tone.
+
+**Money** is rarely measured per unit of value. Total spend is visible on an
+invoice; *cost per confirmed finding* is the number that says whether the thing
+is worth running, and it is the one that moves when someone changes the model
+tier.
+
+**Human time** is almost never measured, and it is the one that decides whether
+the tool survives. A harness that produces four hundred findings a week has not
+removed work if an analyst spends nine minutes on each. It has moved the work,
+renamed it triage, and made it somebody else's problem.
+
+The fourth number closes the loop: **regression drift.** A fixed suite re-run on
+every harness change, because the most common failure mode in this whole
+chapter is a change that improves the case you were looking at and quietly
+degrades six you were not.
+""",
+ "steps": [
+  ("md", "## 2 · A corpus with a real denominator"),
+  ("py", '''SEEDED_CORPUS = {
+ f"unit_{i:02d}": (i % 4 == 0, ["CWE-22","CWE-78","CWE-89","CWE-79"][i % 4])
+ for i in range(40)
+}
+planted = sorted(u for u, (is_bug, _) in SEEDED_CORPUS.items() if is_bug)
+print(f"units in corpus  : {len(SEEDED_CORPUS)}")
+print(f"planted defects  : {len(planted)}")
+print(f"denominator for recall is now a fact, not an estimate")
+'''),
+
+  ("md", "## 3 · Score a harness against it"),
+  ("py", '''def harness_run(corpus, sensitivity, seed=2):
+    """Higher sensitivity finds more real defects and more false ones."""
+    import random
+    rng = random.Random(seed)
+    out = []
+    for unit, (is_bug, cwe) in sorted(corpus.items()):
+        if is_bug and rng.random() < sensitivity:
+            out.append((unit, cwe, True))
+        elif not is_bug and rng.random() < sensitivity * 0.35:
+            out.append((unit, cwe, False))
+    return out
+
+def scorecard(found, corpus, tokens_per_unit=1800, usd_per_1k=0.002,
+              analyst_minutes=6):
+    tp = [f for f in found if f[2]]
+    fp = [f for f in found if not f[2]]
+    planted_n = sum(1 for _, (b, _) in corpus.items() if b)
+    spend = len(corpus) * tokens_per_unit / 1000 * usd_per_1k
+    return {
+      "recall": len(tp) / planted_n,
+      "precision": len(tp) / len(found) if found else 0.0,
+      "true_positives": len(tp), "false_positives": len(fp),
+      "spend_usd": round(spend, 3),
+      "cost_per_finding_usd": round(spend / len(tp), 3) if tp else None,
+      "analyst_minutes": len(found) * analyst_minutes,
+      "minutes_per_accepted": round(len(found) * analyst_minutes / len(tp), 1) if tp else None,
+    }
+
+print(f"{'sens':>6}{'recall':>9}{'prec':>7}{'$/find':>9}{'min/accepted':>14}")
+for s in (0.4, 0.7, 0.95):
+    card = scorecard(harness_run(SEEDED_CORPUS, s), SEEDED_CORPUS)
+    print(f"{s:>6.2f}{card['recall']:>9.0%}{card['precision']:>7.0%}"
+          f"{card['cost_per_finding_usd']:>9.3f}{card['minutes_per_accepted']:>14}")
+'''),
+
+  ("md", "## 4 · Where it breaks — the tool that moved the work"),
+  ("py", '''BASELINE_MANUAL_MINUTES = 40 * 6      # a human reviewing the same corpus
+
+for s in (0.4, 0.7, 0.95):
+    card = scorecard(harness_run(SEEDED_CORPUS, s), SEEDED_CORPUS)
+    saved = BASELINE_MANUAL_MINUTES - card["analyst_minutes"]
+    verdict = "saves time" if saved > 0 else "COSTS MORE TIME THAN IT SAVES"
+    print(f"sensitivity {s:.2f}: analyst {card['analyst_minutes']:>4} min vs "
+          f"manual {BASELINE_MANUAL_MINUTES} min -> {verdict}")
+print()
+print("At high sensitivity recall looks excellent and the review queue is")
+print("longer than reading the code by hand. The accuracy metric improved and")
+print("the thing got worse - which is invisible unless review load is tracked")
+print("as a first-class number beside it.")
+'''),
+
+  ("md", "## 5 · The control — regression drift on every change"),
+  ("py", '''FIXED_SUITE = dict(list(SEEDED_CORPUS.items())[:20])
+
+def suite_result(sensitivity):
+    found = harness_run(FIXED_SUITE, sensitivity, seed=9)
+    return {u for u, _, is_tp in found if is_tp}
+
+before = suite_result(0.7)
+after_a = suite_result(0.75)      # the "improvement" someone shipped
+after_b = suite_result(0.5)       # a change that helped one case
+
+for label, after in (("tuned up", after_a), ("tuned down", after_b)):
+    gained = sorted(after - before)
+    lost = sorted(before - after)
+    print(f"{label:12s} gained {len(gained):>2}  lost {len(lost):>2}  "
+          f"net {len(after) - len(before):+d}")
+    if lost:
+        print(f"   regressions: {lost}")
+print()
+print("A net-positive change can still lose findings it used to catch. Net is")
+print("the number people quote; the lost list is the number that pages someone")
+print("three months later.")
+assert (before - after_b)
+'''),
+
+  ("md", "## 6 · Verify — the full scorecard, published or it did not happen"),
+  ("py", '''card = scorecard(harness_run(SEEDED_CORPUS, 0.7), SEEDED_CORPUS)
+card.update({
+  "corpus_size": len(SEEDED_CORPUS),
+  "planted_defects": len(planted),
+  "regression_suite": len(FIXED_SUITE),
+  "regressions_last_change": len(before - after_b),
+  "seed": 2,
+})
+for k in sorted(card):
+    print(f"   {k:24s}{card[k]}")
+print()
+print("Ten fields, four of them about cost and human time. A harness reported")
+print("on accuracy alone has answered the easiest question and skipped the two")
+print("that decide whether anyone still runs it next quarter.")
+assert card["cost_per_finding_usd"] and card["minutes_per_accepted"]
+'''),
+ ],
+ "expect": "A forty-unit corpus with ten planted defects gives recall a real "
+           "denominator. Raising sensitivity improves recall while pushing the "
+           "analyst review queue past the cost of reading the code by hand — the "
+           "accuracy metric improves as the tool gets worse. A regression suite "
+           "then shows a net-positive change that still lost findings it used to "
+           "catch.",
+ "challenge": "Compute cost per confirmed finding and analyst minutes per "
+              "accepted finding for one tool you already run. If nobody has the "
+              "second number, the tool's value is currently an article of faith.",
+},
 }

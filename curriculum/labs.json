@@ -115,6 +115,42 @@
    ],
    "expect": "The router refuses rather than silently downgrading to a weaker model with weaker guardrails."
   },
+  "A1.9": {
+   "goal": "Enumerate the untrusted-content paths into one agent's context, land the same payload through each, then show provenance enforcement refusing all of them.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it"
+   ],
+   "expect": "Six untrusted-content paths are enumerated, four of them reviewed by nobody. The same payload steers the naive agent through all six. A denylist catches one of four rewrites of the identical instruction, while the provenance rule refuses all six paths and every rewrite — and still lets the user's own request through."
+  },
+  "A1.10": {
+   "goal": "Run each attack class against a deterministic stand-in, record what it recovered, and map each to the layer that can stop it.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.10.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.10   # run it headless and check it"
+   ],
+   "expect": "Five distinct attacks run against a deterministic stand-in and each prints what it recovered: behaviour, context data, one membership bit, the system prompt, and the source text pulled back out of the vector store. Four of the five are shown to be stoppable at runtime by architecture, and only membership inference requires a decision made before the model existed."
+  },
+  "A1.11": {
+   "goal": "Take one refused outcome, place it across all ten enforcement layers, and measure which placements actually deny it.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.11.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.11   # run it headless and check it"
+   ],
+   "expect": "The ten layers print with what each can and cannot enforce. One refused outcome placed across all ten is denied only at layers 4, 6, 7, 8 and 9 — and layer 9 is then shown degrading to a rubber stamp above about twenty approvals a day. A layered below-the-model configuration refuses the attack and keeps refusing with any single layer removed, while four rephrasings defeat string matching and none defeat the outcome rule."
+  },
+  "A1.12": {
+   "goal": "Run a bypass suite against a guardrail and compute the attacker's expected cost per success.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.12.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.12   # run it headless and check it"
+   ],
+   "expect": "The retry arithmetic prints: a 97% guardrail is defeated within 98 attempts 19 times out of 20, for about twenty cents. Twenty single-run tests of the same control return a mix of passes and failures, and the Wilson interval at n=10 is wide enough to contain both 'strong control' and 'no control'. The lesson ends with a reproducible evidence record carrying a seed, an interval and an attacker cost per success."
+  },
   "A2.1": {
    "goal": "Answer 'who is calling?' for every principal in the lab.",
    "run": [
@@ -575,6 +611,15 @@
    ],
    "expect": "The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones."
   },
+  "B2.0": {
+   "goal": "Build a minimal working harness from scratch, naming each component as it appears, then show what breaks when the verifier is removed.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.0.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it"
+   ],
+   "expect": "The minimal harness runs and reports success while the tests still fail. Adding one component — a verifier that reads ground truth rather than the agent's own claim — flips `verified` to False on the same run and to True only when the fix genuinely works. A four-step budget stops a looping model. The harness then scores itself as a non-human identity holding repo:write and running unattended."
+  },
   "B2.1": {
    "goal": "One scaffold, swappable model, unchanged loop.",
    "run": [
@@ -723,6 +768,69 @@
     "./scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?"
    ],
    "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
+  },
+  "B2.11": {
+   "goal": "Run the four-stage loop over a seeded corpus and measure how much of the output survives reachability gating.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it"
+   ],
+   "expect": "The four-stage loop runs over a seeded corpus of eight units with five planted defects. Shrinking the per-file context budget removes the facts verification depends on: below 25 tokens reachability is unknown and everything survives, which reads as higher recall and is actually less verification. Deduplicating three analysers' output collapses a 3x inflated queue back to the real defect count."
+  },
+  "B2.12": {
+   "goal": "Confirm one vulnerability empirically against a replica, and show the same finding failing to confirm when the oracle is the model's own judgement.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it"
+   ],
+   "expect": "Six payloads are driven at a sandboxed replica. The deterministic oracle — the target's own execution log — confirms the injections and refuses the benign requests, while a stub standing in for model self-assessment confirms every request that returned HTTP 200, including the ones that prove nothing. The destructive payload is refused before it is sent, and each surviving finding carries the observable that proves it."
+  },
+  "B2.13": {
+   "goal": "Generate a threat model from source, change one component, and diff the two models to see exactly what the change introduced.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it"
+   ],
+   "expect": "A threat model derived from architecture yields threats sorted deterministically. Two lines of infrastructure change introduce three new threats, one from a component the pull request description never mentions. An unstable generator produces a diff full of churn on unchanged input, and the deterministic one regenerates identically five times — turning a whole-model workshop into a review of only what changed."
+  },
+  "B2.14": {
+   "goal": "Run the loop against an owned target and show the scope guard refusing an out-of-scope host before the request is made.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.14.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.14   # run it headless and check it"
+   ],
+   "expect": "Six of seven targets are classified against scope, with the cloud metadata address and the production host both refused before any request is made. The bounded loop refuses three actions, holds the destructive one for an operator, and completes the rest — and an attention-based gate is shown matching the structural check only at 100% attention. The run ends with a reconstructable audit trail."
+  },
+  "B2.15": {
+   "goal": "Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.15.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.15   # run it headless and check it"
+   ],
+   "expect": "Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely."
+  },
+  "B2.16": {
+   "goal": "Run one task k times, compute pass@k and pass^k from the same runs, and watch the two numbers disagree.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.16.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.16   # run it headless and check it"
+   ],
+   "expect": "pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3."
+  },
+  "B2.17": {
+   "goal": "Score a harness against a seeded corpus and compute its cost per confirmed finding and analyst minutes per accepted finding.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.17.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.17   # run it headless and check it"
+   ],
+   "expect": "A forty-unit corpus with ten planted defects gives recall a real denominator. Raising sensitivity improves recall while pushing the analyst review queue past the cost of reading the code by hand — the accuracy metric improves as the tool gets worse. A regression suite then shows a net-positive change that still lost findings it used to catch."
   },
   "C1.1": {
    "goal": "Drive a planner/executor pair against a local target you own.",
@@ -1184,6 +1292,15 @@
    ],
    "expect": "A materiality call and a notification clock started in hour one, feeding Track E2."
   },
+  "E1.0": {
+   "goal": "Assign each of the seven dimensions to a named function, then find the dimensions with no owner and the ones with three.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.0.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it"
+   ],
+   "expect": "The seven trustworthy-AI dimensions print with the question each answers. A typical assignment leaves two unowned and one contested between three functions — and the contested one is shown to be worse than the unowned ones, because three functions each honestly report their part as covered. The fix names one accountable owner per dimension and has to invent the business-owner seat to do it."
+  },
   "E1.1": {
    "goal": "Watch control evidence go stale without a code change.",
    "run": [
@@ -1310,6 +1427,33 @@
     "python3 lifecycle_gate.py --simulate reindex --without rollback-plan   # blocked"
    ],
    "expect": "Re-indexing is a change-management event with a gate, not maintenance."
+  },
+  "E1.10": {
+   "goal": "Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.10.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.10   # run it headless and check it"
+   ],
+   "expect": "Five stakeholder functions print with the question each is asking and the controls each operates — 22 controls in total. Four seam failures are shown as pairs of individually reasonable assumptions, and every function still self-reports green while all four gaps are open. Naming one accountable owner per handoff closes them, and a use case with all five control functions and no business owner is shown to be ungoverned."
+  },
+  "E1.11": {
+   "goal": "Take a validated model, add one tool, and show which parts of the validation are now void.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.11.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.11   # run it headless and check it"
+   ],
+   "expect": "The three SR 11-7 pillars print with the assumption each makes. A system validated with no tools at L1 is shown deployed with three tools at L3 — same model, same version — and the validation no longer covers it. Monitoring reports 200 clean runs of summarisation accuracy while four action-level metrics have no threshold at all, and four revalidation triggers classical MRM would miss are named."
+  },
+  "E1.12": {
+   "goal": "Trace one artefact across three functions and find the consumer who never received it.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/E1.12.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session E1.12   # run it headless and check it"
+   ],
+   "expect": "Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero."
   },
   "E2.1": {
    "goal": "Build one control set that answers several regimes.",

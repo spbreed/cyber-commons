@@ -5,7 +5,7 @@
 
 **Job titles:** Security Architect, Principal Security Engineer, Head of Security Architecture
 
-**What changes:** Starts from zero: what an agentic system is made of, then the map of every control that holds it. Only then the architect's own work — living threat models, the control plane, blast radius, topology, build-vs-buy, routing.
+**What changes:** Designing systems that act — and defending them at every layer. 12 lessons.
 
 **Autonomy focus:** Designs must be safe at L3 even when deployed at L2.5.
 
@@ -225,5 +225,93 @@ python3 assert_failclosed.py
 ```
 
 *Expect:* The router refuses rather than silently downgrading to a weaker model with weaker guardrails.
+
+---
+
+### A1.9 — The injection surface: direct and indirect prompt injection
+
+`Security of AI`
+
+- **Risk** — Attacker text arrives inside a document, ticket, web page, email or code comment, and the agent obeys it. Every untrusted-content path into the context window is an unauthenticated code path nobody enumerated.
+- **Control** — Map every untrusted-content path into the context window and treat each as unauthenticated input: provenance tagging, source allow-listing, and no tool selection from an untrusted span.
+- **Lab** — Enumerate the untrusted-content paths into one agent's context, land the same payload through each, then show provenance enforcement refusing all of them.
+- **Tools** — `garak`, `promptfoo`, `LLM Guard`
+- **Models** — `Llama Guard 4`, `GLM-4.6`
+
+**Run it** — Enumerate the untrusted-content paths into one agent's context, land the same payload through each, then show provenance enforcement refusing all of them.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it
+```
+
+*Expect:* Six untrusted-content paths are enumerated, four of them reviewed by nobody. The same payload steers the naive agent through all six. A denylist catches one of four rewrites of the identical instruction, while the provenance rule refuses all six paths and every rewrite — and still lets the user's own request through.
+
+---
+
+### A1.10 — Jailbreaks, model inversion and extraction
+
+`Security of AI`
+
+- **Risk** — The whole model-layer attack taxonomy gets called "jailbreaks". Inversion, membership inference, prompt extraction and embedding inversion each recover something different and are blunted by different controls.
+- **Control** — Name what each attack actually recovers, then bind the architectural control that genuinely blunts it — most of which do not sit at the model layer.
+- **Lab** — Run each attack class against a deterministic stand-in, record what it recovered, and map each to the layer that can stop it.
+- **Tools** — `garak`, `Presidio`
+- **Models** — `Llama Guard 4`
+
+**Run it** — Run each attack class against a deterministic stand-in, record what it recovered, and map each to the layer that can stop it.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.10.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.10   # run it headless and check it
+```
+
+*Expect:* Five distinct attacks run against a deterministic stand-in and each prints what it recovered: behaviour, context data, one membership bit, the system prompt, and the source text pulled back out of the vector store. Four of the five are shown to be stoppable at runtime by architecture, and only membership inference requires a decision made before the model existed.
+
+---
+
+### A1.11 — Building outcome-driven guardrails, layer by layer
+
+`Security of AI`
+
+- **Risk** — Guardrails specified by the input string you hope to block. Attackers rewrite strings freely; they cannot rewrite consequences.
+- **Control** — Specify each guardrail by the outcome you refuse to permit, then place it at a layer that can actually enforce it — and know that any single-layer defence is a demo.
+- **Lab** — Take one refused outcome, place it across all ten enforcement layers, and measure which placements actually deny it.
+- **Tools** — `OPA`, `agentgateway`, `Cilium`
+- **Models** — `GLM-4.6`
+
+**Run it** — Take one refused outcome, place it across all ten enforcement layers, and measure which placements actually deny it.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.11.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.11   # run it headless and check it
+```
+
+*Expect:* The ten layers print with what each can and cannot enforce. One refused outcome placed across all ten is denied only at layers 4, 6, 7, 8 and 9 — and layer 9 is then shown degrading to a rubber stamp above about twenty approvals a day. A layered below-the-model configuration refuses the attack and keeps refusing with any single layer removed, while four rephrasings defeat string matching and none defeat the outcome rule.
+
+---
+
+### A1.12 — Proving guardrails work
+
+`Security of AI`
+
+- **Risk** — A guardrail claim with no bypass testing behind it. A control that fails three times in a hundred is not a control against an attacker who can retry.
+- **Control** — Adversarial suites and bypass economics that convert a guardrail claim into evidence a red team or an auditor will accept.
+- **Lab** — Run a bypass suite against a guardrail and compute the attacker's expected cost per success.
+- **Tools** — `garak`, `promptfoo`
+- **Models** — `GLM-4.6`
+
+**Run it** — Run a bypass suite against a guardrail and compute the attacker's expected cost per success.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.12.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.12   # run it headless and check it
+```
+
+*Expect:* The retry arithmetic prints: a 97% guardrail is defeated within 98 attempts 19 times out of 20, for about twenty cents. Twenty single-run tests of the same control return a mix of passes and failures, and the Wilson interval at n=10 is wide enough to contain both 'strong control' and 'no control'. The lesson ends with a reproducible evidence record carrying a seed, an interval and an attacker cost per success.
 
 ---

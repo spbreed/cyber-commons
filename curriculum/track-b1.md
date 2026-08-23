@@ -1,11 +1,11 @@
 # Track B1 — The AppSec Engineer / Code Reviewer
 
 **Function B · Product & Application Security**  
-*Closest to the developers, and therefore first to meet agents at scale — usually before anyone approved it.*
+*Closest to developers, so first to meet agents at scale — and the ones who build the pipeline rather than buy it.*
 
 **Job titles:** AppSec Engineer, Product Security Engineer, Secure Code Reviewer
 
-**What changes:** Your review becomes a 15-stage pipeline rather than a queue: ingest, model the threat, analyse, validate dynamically, report. Judgment becomes the bottleneck, which is a better problem.
+**What changes:** The full agentic security pipeline, end to end. 16 lessons.
 
 **Autonomy focus:** Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.
 
@@ -130,7 +130,7 @@ python3 venn.py --sast sast.json --dast dast.json
 
 ### B1.5 — Vulnerability auditing: three generations of SAST
 
-`AI for Security`  ·  **flagship lab**
+`AI for Security`
 
 - **Risk** — Pattern matching floods the queue; the false-positive rate is what actually changed.
 - **Control** — Stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express.
@@ -389,7 +389,7 @@ python3 scripts/run_notebooks.py --session B1.15   # run it headless and check i
 
 ### B1.16 — Bonus — Google Mantis, the pipeline in production
 
-`AI for Security`  ·  **flagship lab**
+`AI for Security`
 
 - **Risk** — A reference implementation is adopted as a product, and its outputs are trusted without an eval.
 - **Control** — Map Mantis's stages onto the pipeline you built, then score it with your own held-out key before trusting it.

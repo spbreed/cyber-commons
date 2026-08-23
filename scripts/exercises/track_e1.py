@@ -1188,4 +1188,625 @@ print("for something everyone believes is switched off.")
               "Every hit is either an undocumented dependency or someone else's "
               "foothold, and you cannot tell which from the directory alone.",
 },
+
+"E1.0": {
+ "concept": """
+"Trustworthy AI" is used as a value, and values do not have owners. Every
+serious framework — NIST AI RMF chief among them — converges on roughly seven
+dimensions:
+
+| Dimension | The question it answers |
+|---|---|
+| **Valid and reliable** | Does it do what it claims, repeatably? |
+| **Safe** | Can it cause physical, financial or psychological harm? |
+| **Secure and resilient** | Can it be attacked, and does it degrade gracefully? |
+| **Accountable and transparent** | Can you say who is responsible, and show your working? |
+| **Explainable and interpretable** | Can you say why it produced this output? |
+| **Privacy-enhanced** | Whose data is in it, on what basis, for how long? |
+| **Fair, with harmful bias managed** | Does it distribute error evenly across people? |
+
+Learning the list is the easy half and takes an afternoon.
+
+The hard half is that **each dimension needs a named owning function**, and in
+most organisations two or three of them have either no owner or three. "Everyone
+owns trustworthy AI" is operationally identical to nobody owning it, and it fails
+in a predictable direction: the dimensions with obvious homes get controls, and
+the ones that sit between functions get a policy sentence.
+
+Below, the seven dimensions are assigned across five functions, and then the
+assignment is checked — because an ownership map with gaps is more useful than
+one without, provided you can see the gaps.
+""",
+ "steps": [
+  ("md", "## 2 · The seven dimensions, and who could own each"),
+  ("py", '''DIMENSIONS = {
+ "valid_and_reliable":     "does it do what it claims, repeatably",
+ "safe":                   "can it cause physical, financial or psychological harm",
+ "secure_and_resilient":   "can it be attacked, does it degrade gracefully",
+ "accountable_transparent":"who is responsible, and can you show your working",
+ "explainable":            "why did it produce this output",
+ "privacy_enhanced":       "whose data, on what basis, for how long",
+ "fair_bias_managed":      "is error distributed evenly across people",
+}
+FUNCTIONS = ["legal", "compliance", "privacy", "cyber", "model_risk"]
+
+print(f"{'dimension':26s}the question it answers")
+for d in sorted(DIMENSIONS):
+    print(f"{d:26s}{DIMENSIONS[d]}")
+print(f"\\nfunctions available to own them: {FUNCTIONS}")
+'''),
+
+  ("md", "## 3 · Assign, then look for the gaps\\n\\n"
+         "A typical assignment in a large organisation. Not a recommended one — "
+         "an observed one."),
+  ("py", '''OWNERS = {
+ "valid_and_reliable":      ["model_risk"],
+ "safe":                    [],                       # nobody
+ "secure_and_resilient":    ["cyber"],
+ "accountable_transparent": ["compliance", "legal", "model_risk"],   # three
+ "explainable":             ["model_risk"],
+ "privacy_enhanced":        ["privacy"],
+ "fair_bias_managed":       [],                       # nobody
+}
+print(f"{'dimension':26s}{'owners':34s}status")
+for d in sorted(DIMENSIONS):
+    o = OWNERS[d]
+    status = ("UNOWNED" if not o else
+              "contested" if len(o) > 1 else "clear")
+    print(f"{d:26s}{', '.join(o) or '-':34s}{status}")
+
+unowned = sorted(d for d in DIMENSIONS if not OWNERS[d])
+contested = sorted(d for d in DIMENSIONS if len(OWNERS[d]) > 1)
+print(f"\\nunowned   : {unowned}")
+print(f"contested : {contested}")
+assert unowned and contested
+'''),
+
+  ("md", "## 4 · Where it breaks — the two failure modes look different and are not\\n\\n"
+         "An unowned dimension produces no control. A contested one produces "
+         "three partial controls and no complete one."),
+  ("py", '''def controls_for(dimension, owners):
+    """Each owner builds the part of the control they can see from their seat."""
+    coverage = {"legal": 0.3, "compliance": 0.35, "privacy": 0.4,
+                "cyber": 0.9, "model_risk": 0.8}
+    if not owners:
+        return 0.0, "no control exists"
+    if len(owners) == 1:
+        return coverage[owners[0]], f"{owners[0]} builds it end to end"
+    best = max(coverage[o] for o in owners)
+    return best, f"{len(owners)} partial controls, none complete, best is {best:.0%}"
+
+print(f"{'dimension':26s}{'coverage':>10s}  what actually got built")
+for d in sorted(DIMENSIONS):
+    cov, why = controls_for(d, OWNERS[d])
+    print(f"{d:26s}{cov:>9.0%}  {why}")
+print()
+weakest = sorted((controls_for(d, OWNERS[d])[0], d) for d in DIMENSIONS)[:3]
+print("weakest three:", [d for _, d in weakest])
+print()
+print("The unowned dimensions are at zero, which at least is visible. The")
+print("contested one is worse: three functions each report that it is covered,")
+print("and each is telling the truth about their part.")
+'''),
+
+  ("md", "## 5 · The control — one accountable owner, others named as contributors"),
+  ("py", '''FIXED = {
+ "valid_and_reliable":      ("model_risk", ["cyber"]),
+ "safe":                    ("business_owner", ["legal", "compliance"]),
+ "secure_and_resilient":    ("cyber", ["model_risk"]),
+ "accountable_transparent": ("compliance", ["legal", "model_risk"]),
+ "explainable":             ("model_risk", ["compliance"]),
+ "privacy_enhanced":        ("privacy", ["cyber", "legal"]),
+ "fair_bias_managed":       ("model_risk", ["compliance", "legal"]),
+}
+print(f"{'dimension':26s}{'accountable':16s}contributors")
+for d in sorted(FIXED):
+    owner, contrib = FIXED[d]
+    print(f"{d:26s}{owner:16s}{', '.join(contrib)}")
+
+still_unowned = [d for d in DIMENSIONS if not FIXED[d][0]]
+print(f"\\ndimensions with no accountable owner: {still_unowned or 'none'}")
+print()
+print("Note the seat that had to be invented: `business_owner`. Safety of a use")
+print("case is not a control function's decision - it belongs to whoever chose")
+print("to deploy it, and if that seat is empty the other five are governing an")
+print("orphan.")
+assert not still_unowned
+'''),
+
+  ("md", "## 6 · Verify — every dimension resolves to a person who can be asked"),
+  ("py", '''def audit_question(dimension):
+    owner, contrib = FIXED[dimension]
+    return {"dimension": dimension,
+            "who_do_i_ask": owner,
+            "who_else_must_agree": contrib,
+            "answerable": bool(owner)}
+
+for d in sorted(DIMENSIONS):
+    q = audit_question(d)
+    print(f"   {d:26s}ask {q['who_do_i_ask']:16s}"
+          f"agreed with {', '.join(q['who_else_must_agree']) or '-'}")
+print()
+print(f"answerable for all seven: {all(audit_question(d)['answerable'] for d in DIMENSIONS)}")
+print()
+print("That is the whole test. An auditor asks one question per dimension, and")
+print("every question resolves to a person. E1.10 takes the same five functions")
+print("and maps the controls each one actually operates.")
+assert all(audit_question(d)["answerable"] for d in DIMENSIONS)
+'''),
+ ],
+ "expect": "The seven trustworthy-AI dimensions print with the question each "
+           "answers. A typical assignment leaves two unowned and one contested "
+           "between three functions — and the contested one is shown to be worse "
+           "than the unowned ones, because three functions each honestly report "
+           "their part as covered. The fix names one accountable owner per "
+           "dimension and has to invent the business-owner seat to do it.",
+ "challenge": "Write your organisation's names against the seven dimensions. The "
+              "interesting rows are the blanks and the ones where you wrote "
+              "three names — and the second kind is the one that will surprise "
+              "you in an audit.",
+},
+
+"E1.10": {
+ "concept": """
+Five functions hold the AI control estate between them, and **none of them holds
+all of it.** The programme does not fail inside any one function. It fails at the
+seams, where each side reasonably believed the other had it.
+
+| Stakeholder | The question they are actually asking |
+|---|---|
+| **Legal** | Can we be held liable, and under what theory? |
+| **Compliance** | Which obligations apply, and can we demonstrate we meet them? |
+| **Data Privacy** | Whose data is in this, on what basis, and for how long? |
+| **Cyber Security** | Can this be attacked, and can we contain it if it is? |
+| **Model Risk** | Is this fit for its stated purpose, and will we know when it stops being so? |
+
+Two seats are routinely forgotten. The **business or product owner** in the
+first line, who defines intended purpose and risk appetite and funds
+remediation — if that seat is empty, the other five are governing an orphan. And
+**internal audit** in the third line, whose job is independent assurance that the
+five are doing what they claim.
+
+What makes this a lesson rather than an org chart is the four gaps below. Each
+one is a real failure that happens because *both* sides made a reasonable
+assumption about the other.
+""",
+ "steps": [
+  ("md", "## 2 · Who operates which control"),
+  ("py", '''STAKEHOLDERS = {
+ "legal":      {"asks": "can we be held liable, and under what theory",
+                "controls": ["contract clauses", "acceptable-use terms",
+                             "IP screening", "e-discovery retention"]},
+ "compliance": {"asks": "which obligations apply, can we demonstrate we meet them",
+                "controls": ["AI policy", "use-case classification",
+                             "attestations", "disclosure triggers"]},
+ "privacy":    {"asks": "whose data, on what basis, for how long",
+                "controls": ["impact assessment gate", "PII redaction",
+                             "retention schedules", "transfer mechanisms"]},
+ "cyber":      {"asks": "can this be attacked, can we contain it",
+                "controls": ["agent identity and JIT authz", "tool permissions",
+                             "sandbox and egress", "guardrails",
+                             "telemetry and detections", "kill switch"]},
+ "model_risk": {"asks": "is it fit for purpose, will we know when it stops being",
+                "controls": ["pre-deployment validation", "performance thresholds",
+                             "drift alerting", "revalidation on change"]},
+}
+ALSO = {"business_owner": "accountable for the use case; defines purpose and risk appetite",
+        "internal_audit": "independent assurance that the five do what they claim"}
+
+for name in sorted(STAKEHOLDERS):
+    s = STAKEHOLDERS[name]
+    print(f"{name:12s}{s['asks']}")
+    print(f"            controls: {', '.join(s['controls'])}")
+print()
+for name, role in sorted(ALSO.items()):
+    print(f"{name:16s}{role}")
+total = sum(len(s["controls"]) for s in STAKEHOLDERS.values())
+print(f"\\n{total} controls across {len(STAKEHOLDERS)} functions")
+'''),
+
+  ("md", "## 3 · The four seams, each with two reasonable assumptions"),
+  ("py", '''SEAMS = [
+ {"gap": "agent traces are full of personal data",
+  "a": ("cyber", "privacy owns retention of anything containing personal data"),
+  "b": ("privacy", "security owns the log store, so security sets its schedule"),
+  "result": "no schedule was set; three years of prompts are discoverable"},
+ {"gap": "the model was validated, the tools were not",
+  "a": ("model_risk", "validation covered the model, which is our scope"),
+  "b": ("cyber", "MRM signed it off, so the deployment was approved"),
+  "result": "an agent holds production write access that was never in scope"},
+ {"gap": "'no training on our data' was negotiated, never instrumented",
+  "a": ("legal", "the clause is in the contract and it is binding"),
+  "b": ("cyber", "legal handled the vendor, so the restriction is handled"),
+  "result": "nobody built the control that verifies the vendor honours it"},
+ {"gap": "the use case was risk-tiered before it had tools",
+  "a": ("compliance", "classified low-risk: it was a chatbot when we saw it"),
+  "b": ("business_owner", "we shipped features, not a new use case"),
+  "result": "it files tickets, sends mail and moves money at the low-risk tier"},
+]
+for i, s in enumerate(SEAMS, 1):
+    print(f"{i}. {s['gap']}")
+    print(f"   {s['a'][0]:15s} assumed: {s['a'][1]}")
+    print(f"   {s['b'][0]:15s} assumed: {s['b'][1]}")
+    print(f"   -> {s['result']}")
+    print()
+print("Neither assumption in any pair is unreasonable. That is what makes these")
+print("seams rather than mistakes - and why naming the handoff is the control.")
+'''),
+
+  ("md", "## 4 · Where it breaks — every function reports green"),
+  ("py", '''def self_report(function):
+    """Each function reports on the controls it operates. All true."""
+    if function in STAKEHOLDERS:
+        return {"function": function, "controls_operating": len(STAKEHOLDERS[function]["controls"]),
+                "status": "green"}
+    return {"function": function, "controls_operating": 0, "status": "n/a"}
+
+for f in sorted(STAKEHOLDERS):
+    r = self_report(f)
+    print(f"   {r['function']:12s}{r['controls_operating']} controls  {r['status']}")
+print()
+print(f"functions reporting green : {len(STAKEHOLDERS)}/{len(STAKEHOLDERS)}")
+print(f"open seams                : {len(SEAMS)}")
+print()
+print("A dashboard assembled from function self-reports is all green, and four")
+print("material gaps are open. The dashboard is not lying - it is asking each")
+print("function about the inside of its own box, and every failure here is")
+print("between boxes.")
+assert len(SEAMS) == 4
+'''),
+
+  ("md", "## 5 · The control — name the handoff, give it one owner"),
+  ("py", '''HANDOFFS = {
+ "trace retention schedule":      {"owner": "privacy",  "consumers": ["cyber", "legal"]},
+ "tool scope in validation":      {"owner": "model_risk","consumers": ["cyber", "business_owner"]},
+ "vendor no-train verification":  {"owner": "cyber",    "consumers": ["legal", "compliance"]},
+ "re-tier on capability change":  {"owner": "compliance","consumers": ["business_owner", "cyber"]},
+}
+print(f"{'handoff artefact':32s}{'accountable':13s}consumers")
+for h in sorted(HANDOFFS):
+    v = HANDOFFS[h]
+    print(f"{h:32s}{v['owner']:13s}{', '.join(v['consumers'])}")
+
+covered = len(HANDOFFS)
+print(f"\\nseams: {len(SEAMS)}   handoffs with a named owner: {covered}")
+print()
+print("One artefact, many consumers, exactly one owner. The consumers matter as")
+print("much as the owner: a handoff nobody consumes was never a handoff, and a")
+print("handoff with two owners is the contested case from E1.0 again.")
+assert covered == len(SEAMS)
+'''),
+
+  ("md", "## 6 · Verify — the two forgotten seats"),
+  ("py", '''def governed(use_case):
+    missing = [seat for seat in ("business_owner", "internal_audit")
+               if seat not in use_case["seats"]]
+    five = [f for f in STAKEHOLDERS if f in use_case["seats"]]
+    return {"control_functions_present": len(five),
+            "missing_seats": missing,
+            "is_governed": not missing and len(five) == len(STAKEHOLDERS)}
+
+CASES = [
+ {"name": "customer support agent", "seats": list(STAKEHOLDERS) + ["business_owner", "internal_audit"]},
+ {"name": "internal code assistant", "seats": list(STAKEHOLDERS)},
+]
+for c in CASES:
+    g = governed(c)
+    print(f"   {c['name']:26s}five functions: {g['control_functions_present']}/5   "
+          f"missing: {g['missing_seats'] or 'none'}   governed: {g['is_governed']}")
+print()
+print("The second one has every control function at the table and no accountable")
+print("owner. Five functions are governing something nobody has agreed to own,")
+print("which is how a use case survives a review and still has no one to fund")
+print("the remediation it was told to do.")
+assert not governed(CASES[1])["is_governed"]
+'''),
+ ],
+ "expect": "Five stakeholder functions print with the question each is asking "
+           "and the controls each operates — 22 controls in total. Four seam "
+           "failures are shown as pairs of individually reasonable assumptions, "
+           "and every function still self-reports green while all four gaps are "
+           "open. Naming one accountable owner per handoff closes them, and a "
+           "use case with all five control functions and no business owner is "
+           "shown to be ungoverned.",
+ "challenge": "Pick one of the four seams and find out, today, who owns it in "
+              "your organisation. The answer 'I assume security does' from one "
+              "side and 'I assume privacy does' from the other is the finding.",
+},
+
+"E1.11": {
+ "concept": """
+Model risk management is not new. The SR 11-7 lineage has governed models in
+regulated institutions for over a decade, and its three pillars are sound:
+
+1. **Conceptual soundness** — is the method appropriate for the purpose?
+2. **Ongoing monitoring** — is it still performing as validated?
+3. **Independent validation** — did someone other than the builder check?
+
+All three still hold for AI systems. What breaks is not the framework but a
+silent assumption underneath it: **that a model produces an output, and a human
+decides what to do with it.**
+
+Once the model can call a tool, that assumption is void. Validation scoped to
+the model's *predictions* says nothing about the model's *actions*. You can hold
+a perfectly valid validation report for a system that has since been granted
+write access to a production database, and nothing in the classical process is
+required to notice.
+
+So the extension is narrow and specific: the unit of validation becomes the
+**model plus its tool surface plus its autonomy level**, and any change to any of
+the three triggers revalidation — not just a change to the weights.
+""",
+ "steps": [
+  ("md", "## 2 · The three pillars, and what each assumes"),
+  ("py", '''PILLARS = {
+ "conceptual_soundness": ("is the method appropriate for the purpose",
+                          "assumes the purpose is stable and stated"),
+ "ongoing_monitoring":   ("is it still performing as validated",
+                          "assumes performance is what changes"),
+ "independent_validation":("did someone other than the builder check",
+                          "assumes the thing checked is the thing deployed"),
+}
+print(f"{'pillar':24s}{'what it asks':46s}what it quietly assumes")
+for p in sorted(PILLARS):
+    asks, assumes = PILLARS[p]
+    print(f"{p:24s}{asks:46s}{assumes}")
+print()
+print("All three survive contact with AI. The assumptions are what break.")
+'''),
+
+  ("md", "## 3 · The unit of validation, before and after tools"),
+  ("py", '''VALIDATED = {
+ "model": "glm-5.2", "version": "2026-03",
+ "purpose": "summarise support tickets",
+ "tools": [],                       # at validation time it had none
+ "autonomy": "L1",                  # suggests; a human acts
+}
+
+def validation_covers(deployed, validated):
+    diffs = []
+    if deployed["model"] != validated["model"]:       diffs.append("model changed")
+    if deployed["version"] != validated["version"]:   diffs.append("version changed")
+    if deployed["purpose"] != validated["purpose"]:   diffs.append("purpose changed")
+    if sorted(deployed["tools"]) != sorted(validated["tools"]):
+        diffs.append(f"tool surface changed: {sorted(set(deployed['tools']) - set(validated['tools']))}")
+    if deployed["autonomy"] != validated["autonomy"]: diffs.append(
+        f"autonomy raised {validated['autonomy']} -> {deployed['autonomy']}")
+    return (not diffs), diffs
+
+DEPLOYED = dict(VALIDATED, tools=["read_ticket", "write_ticket", "db_update"],
+                autonomy="L3")
+ok, diffs = validation_covers(DEPLOYED, VALIDATED)
+print(f"validation still covers what is deployed: {ok}")
+for d in diffs:
+    print(f"   {d}")
+print()
+print("Same weights. Same version. The validation report is accurate about a")
+print("system that no longer exists, and nothing in the classical process is")
+print("required to notice, because the classical trigger is a model change.")
+assert not ok
+'''),
+
+  ("md", "## 4 · Where it breaks — monitoring the wrong thing well"),
+  ("py", '''import random
+def monitor(metric, runs=200, seed=4):
+    rng = random.Random(seed)
+    return [round(rng.gauss(0.92, 0.01), 3) for _ in range(runs)]
+
+acc = monitor("summarisation_accuracy")
+print(f"summarisation accuracy over 200 runs: mean {sum(acc)/len(acc):.3f}, "
+      f"min {min(acc)}, max {max(acc)}")
+print("threshold 0.85 -> breaches:", sum(a < 0.85 for a in acc))
+print()
+UNMONITORED = ["rows written to production", "tools invoked per run",
+               "actions taken without human review", "scope of the credential used"]
+print("what is NOT on the dashboard:")
+for u in UNMONITORED:
+    print(f"   {u}")
+print()
+print("The monitoring is excellent and it is monitoring the prediction. The")
+print("risk moved to the action, and the action has no threshold, no baseline")
+print("and no alert.")
+assert sum(a < 0.85 for a in acc) == 0
+'''),
+
+  ("md", "## 5 · The control — revalidate on the triple, not on the weights"),
+  ("py", '''TRIGGERS = {
+ "model or version change": True,
+ "prompt or config change": True,
+ "tool added or scope widened": True,
+ "autonomy level raised": True,
+ "purpose changed": True,
+ "calendar year elapsed": True,
+}
+CLASSICAL = {"model or version change", "calendar year elapsed"}
+
+print(f"{'trigger':32s}{'classical MRM':16s}extended")
+for t in TRIGGERS:
+    print(f"{t:32s}{'yes' if t in CLASSICAL else 'no':16s}yes")
+missed = [t for t in TRIGGERS if t not in CLASSICAL]
+print(f"\\ntriggers classical MRM would miss: {len(missed)}")
+for m in missed: print(f"   {m}")
+print()
+ok2, diffs2 = validation_covers(DEPLOYED, VALIDATED)
+print(f"under the extended triggers, this deployment requires revalidation: {not ok2}")
+print(f"reasons: {diffs2}")
+assert len(missed) == 4
+'''),
+
+  ("md", "## 6 · Verify — what a validation record must now carry"),
+  ("py", '''record = {
+ "model": DEPLOYED["model"], "version": DEPLOYED["version"],
+ "purpose": DEPLOYED["purpose"],
+ "tool_surface": sorted(DEPLOYED["tools"]),
+ "autonomy": DEPLOYED["autonomy"],
+ "validated_unit": "model + tool surface + autonomy",
+ "monitors": ["summarisation_accuracy", "rows_written", "tools_per_run",
+              "actions_without_review"],
+ "revalidation_triggers": sorted(TRIGGERS),
+ "independent_of_builder": True,
+}
+for k in sorted(record):
+    print(f"   {k:24s}{record[k]}")
+print()
+print("Three fields carry the whole extension: validated_unit, tool_surface and")
+print("autonomy. Without them a validation report describes a text generator,")
+print("and the thing in production is an actor.")
+assert record["validated_unit"].startswith("model + tool")
+'''),
+ ],
+ "expect": "The three SR 11-7 pillars print with the assumption each makes. A "
+           "system validated with no tools at L1 is shown deployed with three "
+           "tools at L3 — same model, same version — and the validation no "
+           "longer covers it. Monitoring reports 200 clean runs of summarisation "
+           "accuracy while four action-level metrics have no threshold at all, "
+           "and four revalidation triggers classical MRM would miss are named.",
+ "challenge": "Take one validated model in your estate and list the tools it "
+              "holds today. If any of them post-dates the validation report, "
+              "the report is describing a different system.",
+},
+
+"E1.12": {
+ "concept": """
+Everything in this chapter has pointed at the same conclusion: the functions
+work, and the **handoffs** are where the programme leaks.
+
+A seam is not a disagreement. Both sides are usually competent, usually right
+about their own scope, and usually assuming the other side has the piece in the
+middle. Nobody is wrong, and the gap is real.
+
+The control is a **joint runbook** per seam, and it has exactly three
+properties:
+
+- **One artefact.** A named, versioned thing that exists — not a meeting, not an
+  understanding.
+- **One owner.** Accountable for the artefact existing and being current.
+  Contributors are named; owners are singular.
+- **Named consumers.** Who receives it, and what they are entitled to assume
+  once they have. A handoff nobody consumes was never a handoff.
+
+The three seams below are the ones that fail most often, and each is traced
+here from producer to consumer to see exactly where it stops.
+""",
+ "steps": [
+  ("md", "## 2 · Three seams, traced end to end"),
+  ("py", '''RUNBOOKS = {
+ "privacy assessment -> control design": {
+   "artefact": "DPIA with a control annex",
+   "owner": "privacy",
+   "consumers": ["cyber", "model_risk"],
+   "consumer_entitled_to_assume": "the data classes and retention limits are settled",
+   "delivered_to": ["cyber"]},                       # model_risk never receives it
+ "legal position -> system prompt": {
+   "artefact": "approved language and refusal set",
+   "owner": "legal",
+   "consumers": ["cyber", "business_owner"],
+   "consumer_entitled_to_assume": "these refusals are contractually required",
+   "delivered_to": ["cyber", "business_owner"]},
+ "MRM validation -> security evidence": {
+   "artefact": "validation report with tool surface and autonomy",
+   "owner": "model_risk",
+   "consumers": ["cyber", "compliance", "internal_audit"],
+   "consumer_entitled_to_assume": "the validated unit matches what is deployed",
+   "delivered_to": ["compliance"]},                  # cyber and audit never receive it
+}
+for name in sorted(RUNBOOKS):
+    r = RUNBOOKS[name]
+    print(f"{name}")
+    print(f"   artefact  : {r['artefact']}")
+    print(f"   owner     : {r['owner']}")
+    print(f"   consumers : {', '.join(r['consumers'])}")
+    print()
+'''),
+
+  ("md", "## 3 · Where it breaks — the consumer who never received it"),
+  ("py", '''gaps = []
+for name in sorted(RUNBOOKS):
+    r = RUNBOOKS[name]
+    missing = sorted(set(r["consumers"]) - set(r["delivered_to"]))
+    status = "complete" if not missing else f"NOT DELIVERED to {', '.join(missing)}"
+    print(f"{name[:44]:46s}{status}")
+    for m in missing:
+        gaps.append((name, m, r["consumer_entitled_to_assume"]))
+print()
+print(f"undelivered handoffs: {len(gaps)}")
+for name, who, assumption in gaps:
+    print(f"   {who:14s} is assuming: {assumption}")
+    print(f"   {'':14s} and has not received: {RUNBOOKS[name]['artefact']}")
+assert gaps
+'''),
+
+  ("md", "## 4 · What each undelivered handoff actually costs"),
+  ("py", '''CONSEQUENCE = {
+ ("privacy assessment -> control design", "model_risk"):
+   "validation runs on data the DPIA restricted; the restriction is invisible to it",
+ ("MRM validation -> security evidence", "cyber"):
+   "security cannot see the validated tool surface, so scope creep is undetectable",
+ ("MRM validation -> security evidence", "internal_audit"):
+   "third line cannot test the second line's assurance; it audits the artefact it has",
+}
+for name, who, _ in gaps:
+    print(f"   {who:16s}{CONSEQUENCE.get((name, who), 'unknown')}")
+print()
+print("None of these is a control failing. Each is a control that was built,")
+print("works, and is invisible to the function whose decision depends on it.")
+'''),
+
+  ("md", "## 5 · The control — deliver, and record the delivery"),
+  ("py", '''def close(runbooks):
+    out = {}
+    for name, r in runbooks.items():
+        out[name] = dict(r, delivered_to=sorted(r["consumers"]))
+    return out
+
+CLOSED = close(RUNBOOKS)
+remaining = [(n, c) for n, r in sorted(CLOSED.items())
+             for c in r["consumers"] if c not in r["delivered_to"]]
+print(f"{'seam':46s}{'owner':13s}delivered to")
+for n in sorted(CLOSED):
+    r = CLOSED[n]
+    print(f"{n[:44]:46s}{r['owner']:13s}{', '.join(r['delivered_to'])}")
+print(f"\\nundelivered handoffs remaining: {len(remaining)}")
+print()
+print("One owner per artefact, every consumer named, and delivery recorded")
+print("rather than assumed. The delivery record is the part people skip, and it")
+print("is the only part that makes the seam auditable a year later.")
+assert not remaining
+'''),
+
+  ("md", "## 6 · Verify — one artefact, many consumers, one owner"),
+  ("py", '''def check(runbooks):
+    problems = []
+    for name, r in sorted(runbooks.items()):
+        if not r["artefact"]:                     problems.append(f"{name}: no artefact")
+        if not r["owner"]:                        problems.append(f"{name}: no owner")
+        if isinstance(r["owner"], list):          problems.append(f"{name}: {len(r['owner'])} owners")
+        if not r["consumers"]:                    problems.append(f"{name}: no consumers")
+        undel = set(r["consumers"]) - set(r["delivered_to"])
+        if undel:                                 problems.append(f"{name}: undelivered to {sorted(undel)}")
+    return problems
+
+print("before:", len(check(RUNBOOKS)), "problem(s)")
+for p in check(RUNBOOKS): print("   ", p)
+print("after :", len(check(CLOSED)), "problem(s)")
+print()
+print("Four properties, checked mechanically: an artefact exists, one owner is")
+print("accountable, consumers are named, delivery is recorded. A governance")
+print("programme that can run this check on its own seams is doing something")
+print("more useful than another policy document.")
+assert check(RUNBOOKS) and not check(CLOSED)
+'''),
+ ],
+ "expect": "Three joint runbooks are traced from owner to consumer, and three "
+           "handoffs turn out never to have been delivered — model risk never "
+           "receives the privacy assessment, and neither security nor internal "
+           "audit receives the validation report. Each undelivered handoff is a "
+           "control that was built, works, and is invisible to the function "
+           "whose decision depends on it. A four-property check runs over the "
+           "seams and goes from several problems to zero.",
+ "challenge": "Pick the artefact your function produces for someone else and ask "
+              "the recipient when they last received it. The gap between 'we "
+              "produce that' and 'we receive that' is the seam, and it is "
+              "usually measured in quarters.",
+},
 }

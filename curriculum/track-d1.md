@@ -1,11 +1,11 @@
 # Track D1 — The SOC Analyst & Detection Engineer
 
 **Function D · Security Operations**  
-*Machine-speed decisions were already the problem here. Agents make it both worse and tractable.*
+*Detecting, attributing and stopping an actor that is not a person and does not slow down.*
 
 **Job titles:** SOC Analyst (T1–T3), Detection Engineer, Threat Hunter, Threat Intelligence Analyst
 
-**What changes:** You stop reading alerts and start compressing signal. And you acquire a new detection domain: agents behaving badly.
+**What changes:** Detecting an actor that is not a person. 8 lessons.
 
 **Autonomy focus:** Triage and enrichment reach L2.5 quickly; containment actions stay L2.
 

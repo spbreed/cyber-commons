@@ -1,17 +1,38 @@
 # Track E1 — The GRC Practitioner (Risk & Control)
 
 **Function E · Governance, Risk, Compliance & the CISO Office**  
-*The function that has to make all of the above defensible to a board, an auditor and a regulator — usually in that order.*
+*Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.*
 
 **Job titles:** GRC Analyst, Risk Manager, Control Owner, Third-Party Risk Analyst, Internal Audit liaison
 
-**What changes:** Point-in-time assessment stops working entirely. Models change through fine-tuning, prompt updates and index refreshes without a single code change. You move from assessing to continuously evidencing.
+**What changes:** Trustworthy AI, and the five functions that have to deliver it. 13 lessons.
 
 **Autonomy focus:** You define the promotion criteria that let a workflow move from L2 to L2.5 — and the conditions that force it back down.
 
 **Deliverable:** A risk-tiered agent register with mapped controls and one fully evidenced control assertion.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+
+---
+
+### E1.0 — What "trustworthy AI" actually means
+
+`Security of AI`
+
+- **Risk** — "Trustworthy AI" asserted as a value rather than decomposed into dimensions with an owner behind each. "Everyone owns it" means no one does.
+- **Control** — Unpack the seven dimensions every serious framework converges on, then do the hard part: decide which function in your organisation owns each one.
+- **Lab** — Assign each of the seven dimensions to a named function, then find the dimensions with no owner and the ones with three.
+- **Tools** — `NIST AI RMF`
+
+**Run it** — Assign each of the seven dimensions to a named function, then find the dimensions with no owner and the ones with three.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.0.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it
+```
+
+*Expect:* The seven trustworthy-AI dimensions print with the question each answers. A typical assignment leaves two unowned and one contested between three functions — and the contested one is shown to be worse than the unowned ones, because three functions each honestly report their part as covered. The fix names one accountable owner per dimension and has to invent the business-owner seat to do it.
 
 ---
 
@@ -120,7 +141,7 @@ python3 map_controls.py --new agent-controls.yaml --existing control-library.yam
 
 ### E1.5 — Evaluation output as audit evidence
 
-`Security of AI`  ·  **flagship lab**
+`Security of AI`
 
 - **Risk** — Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy.
 - **Control** — Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.
@@ -142,8 +163,6 @@ python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three way
 ```
 
 *Expect:* An OSCAL-shaped evidence pack, plus a written challenge: best-of-k reporting, conformance-as-accuracy, and judge dependence.
-
-> Lab source: [`labs/b2.10-eval-harness`](../labs/b2.10-eval-harness)
 
 ---
 
@@ -249,6 +268,69 @@ python3 lifecycle_gate.py --simulate reindex --without rollback-plan   # blocked
 ```
 
 *Expect:* Re-indexing is a change-management event with a gate, not maintenance.
+
+---
+
+### E1.10 — The stakeholder map: who owns what
+
+`Security of AI`
+
+- **Risk** — Legal, compliance, privacy, cyber and model risk each hold part of the AI control estate and none holds all of it. The programme fails at the seams between them, not inside any one.
+- **Control** — A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching.
+- **Lab** — Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.
+- **Tools** — `NIST AI RMF`, `ISO 42001`
+
+**Run it** — Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.10.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.10   # run it headless and check it
+```
+
+*Expect:* Five stakeholder functions print with the question each is asking and the controls each operates — 22 controls in total. Four seam failures are shown as pairs of individually reasonable assumptions, and every function still self-reports green while all four gaps are open. Naming one accountable owner per handoff closes them, and a use case with all five control functions and no business owner is shown to be ungoverned.
+
+---
+
+### E1.11 — Model risk management for AI systems
+
+`Security of AI`
+
+- **Risk** — The classical model-risk playbook silently breaks once the model can act: conceptual soundness was validated, and then the agent was granted write access nobody validated.
+- **Control** — Extend the SR 11-7 lineage — conceptual soundness, ongoing monitoring, independent validation — to non-deterministic, tool-using systems, and name where it still holds.
+- **Lab** — Take a validated model, add one tool, and show which parts of the validation are now void.
+- **Tools** — `Inspect`
+
+**Run it** — Take a validated model, add one tool, and show which parts of the validation are now void.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.11.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.11   # run it headless and check it
+```
+
+*Expect:* The three SR 11-7 pillars print with the assumption each makes. A system validated with no tools at L1 is shown deployed with three tools at L3 — same model, same version — and the validation no longer covers it. Monitoring reports 200 clean runs of summarisation accuracy while four action-level metrics have no threshold at all, and four revalidation triggers classical MRM would miss are named.
+
+---
+
+### E1.12 — Working the seams
+
+`Security of AI`
+
+- **Risk** — The handoffs fail, not the functions: privacy assessment into control design, legal position into system prompt, MRM validation into security evidence.
+- **Control** — Joint runbooks for the seams — one artefact, many consumers, one owner.
+- **Lab** — Trace one artefact across three functions and find the consumer who never received it.
+- **Tools** — `ISO 42001`
+
+**Run it** — Trace one artefact across three functions and find the consumer who never received it.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.12.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.12   # run it headless and check it
+```
+
+*Expect:* Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero.
 
 ---
 

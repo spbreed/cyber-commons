@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.11 — Building the SAST harness | Cyber Commons</title><meta name="description" content="Index → summarise → hypothesise → verify, with per-file context budgets, reachability gating and a deduplication stage that decides whether the output is a queue or a landfill."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.11</div><h1>Building the SAST harness</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A SAST loop that matches patterns instead of reasoning about semantics, and cannot explain why anything is a vulnerability.</p></div><div class="ctrl"><div class="lab">Control</div><p>Index → summarise → hypothesise → verify, with per-file context budgets, reachability gating and a deduplication stage that decides whether the output is a queue or a landfill.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the four-stage loop over a seeded corpus and measure how much of the output survives reachability gating.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 27 lines of output in 0.01s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.11 · Building the SAST harness</h1>
+<p><strong>Function B — Product &amp; Application Security → The Security Automation / Harness Engineer</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.9.html">B2.9 · Idempotency, replay and rollback</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>OpenGrep, Trivy</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>Kimi K2.6, GLM-5.2</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+<p>The SAST harness is the first of four disciplines, and they all share the same
+loop: <strong>index → summarise → hypothesise → verify.</strong> What makes each discipline
+different is only the last step — what counts as proof.</p>
+<p>For static analysis the shape is:</p>
+<ol>
+<li><strong>Index.</strong> Turn the repository into something navigable — symbols, call
+   edges, entry points. Done once, reused by every later stage.</li>
+<li><strong>Summarise.</strong> Compress each component to something that fits in a context
+   window, because the repository never will.</li>
+<li><strong>Hypothesise.</strong> Ask the model where a weakness could be, given the summary
+   and the neighbourhood. This is the step people think is the whole system.</li>
+<li><strong>Verify.</strong> Check the hypothesis against the code — is the sink real, is the
+   path reachable, is a sanitiser already present.</li>
+</ol>
+<p>Two design decisions decide whether the output is usable:</p>
+<p><strong>Per-file context budget.</strong> More context stops helping and starts hurting past
+a threshold that is specific to your corpus. A budget makes that measurable
+rather than a matter of taste.</p>
+<p><strong>Reachability gating before deduplication.</strong> Gate first, then dedupe. Doing it
+the other way round spends the expensive step on findings that were never
+reachable.</p>
+<p>The deduplication stage is what decides whether you ship <em>a queue</em> or <em>a
+landfill</em>.</p></div><div class="nbmd"><h2>2 · The four stages, on a seeded corpus\n\nThe corpus has planted defects, so recall and precision are measurable rather than asserted.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SEEDED = {
+ # unit            (has_defect, cwe,      reachable_from_entry, sanitised)
+ &quot;get_report&quot;:     (True,  &quot;CWE-22&quot;,  True,  False),
+ &quot;run_export&quot;:     (True,  &quot;CWE-78&quot;,  True,  False),
+ &quot;legacy_import&quot;:  (True,  &quot;CWE-89&quot;,  False, False),   # real bug, unreachable
+ &quot;render_row&quot;:     (False, None,      True,  False),
+ &quot;safe_query&quot;:     (True,  &quot;CWE-89&quot;,  True,  True),    # real sink, sanitised
+ &quot;admin_purge&quot;:    (True,  &quot;CWE-78&quot;,  True,  False),
+ &quot;format_date&quot;:    (False, None,      True,  False),
+ &quot;parse_config&quot;:   (False, None,      False, False),
+}
+planted = sorted(u for u, v in SEEDED.items() if v[0])
+print(f&quot;corpus units    : {len(SEEDED)}&quot;)
+print(f&quot;planted defects : {len(planted)}  {planted}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Index → summarise → hypothesise</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def index(corpus):
+    return sorted(corpus)                                  # stage 1
+
+def summarise(unit, budget_tokens):
+    &quot;&quot;&quot;Stage 2. A summary that fits the budget; detail is dropped, not hidden.&quot;&quot;&quot;
+    has_defect, cwe, reachable, sanitised = SEEDED[unit]
+    full = {&quot;unit&quot;: unit, &quot;sink&quot;: bool(cwe), &quot;cwe&quot;: cwe,
+            &quot;reachable&quot;: reachable, &quot;sanitised&quot;: sanitised}
+    if budget_tokens &lt; 40:            # too small to carry the sanitiser fact
+        full.pop(&quot;sanitised&quot;)
+    if budget_tokens &lt; 25:            # too small to carry reachability
+        full.pop(&quot;reachable&quot;)
+    return full
+
+def hypothesise(summary):
+    &quot;&quot;&quot;Stage 3. Flags anything that looks like a sink. Deliberately noisy.&quot;&quot;&quot;
+    return summary[&quot;sink&quot;]
+
+for budget in (20, 30, 60):
+    hyps = [u for u in index(SEEDED) if hypothesise(summarise(u, budget))]
+    print(f&quot;context budget {budget:&gt;3} tokens -&gt; {len(hyps)} hypotheses: {hyps}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Verify, and gate on reachability before you deduplicate</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def verify(unit, summary):
+    &quot;&quot;&quot;Stage 4. The cheap facts first; each one can only remove a finding.&quot;&quot;&quot;
+    if summary.get(&quot;sanitised&quot;):
+        return None, &quot;a sanitiser is already present&quot;
+    if summary.get(&quot;reachable&quot;) is False:
+        return None, &quot;no path from any entry point&quot;
+    if summary.get(&quot;reachable&quot;) is None:
+        return unit, &quot;reachability unknown - budget too small to carry it&quot;
+    return unit, &quot;reachable, unsanitised sink&quot;
+
+def pipeline(budget):
+    hyps = [u for u in index(SEEDED) if hypothesise(summarise(u, budget))]
+    kept, dropped = [], []
+    for u in hyps:
+        keep, why = verify(u, summarise(u, budget))
+        (kept if keep else dropped).append((u, why))
+    return hyps, kept, dropped
+
+for budget in (20, 30, 60):
+    hyps, kept, dropped = pipeline(budget)
+    tp = [u for u, _ in kept if SEEDED[u][0]]
+    fp = [u for u, _ in kept if not SEEDED[u][0]]
+    recall = len(tp) / len(planted)
+    prec = len(tp) / len(kept) if kept else 0
+    print(f&quot;budget {budget:&gt;3}: {len(hyps)} hyp -&gt; {len(kept)} kept  &quot;
+          f&quot;recall {recall:.0%}  precision {prec:.0%}  fp={fp}&quot;)</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — more context is not monotonically better\n\nThe budget that carries every fact is not the budget with the best output, and the reason is worth understanding.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>print(f&quot;{&#x27;budget&#x27;:&gt;7}{&#x27;kept&#x27;:&gt;6}{&#x27;recall&#x27;:&gt;9}{&#x27;precision&#x27;:&gt;11}  note&quot;)
+for budget in (20, 25, 30, 40, 60):
+    _, kept, _ = pipeline(budget)
+    tp = [u for u, _ in kept if SEEDED[u][0]]
+    prec = len(tp) / len(kept) if kept else 0
+    note = (&quot;reachability unknown - everything survives&quot; if budget &lt; 25 else
+            &quot;sanitiser fact missing - safe_query survives&quot; if budget &lt; 40 else
+            &quot;all facts present&quot;)
+    print(f&quot;{budget:&gt;7}{len(kept):&gt;6}{len(tp)/len(planted):&gt;8.0%}{prec:&gt;10.0%}  {note}&quot;)
+print()
+print(&quot;At budget 20 the harness keeps everything and calls it recall. It is not&quot;)
+print(&quot;finding more - it is verifying less, and reporting the difference as a&quot;)
+print(&quot;result. A recall number without its precision is a marketing number.&quot;)</code></pre></div><div class="nbmd"><h2>6 · Verify — queue or landfill\n\nThe deduplication stage, and the number that decides which one you shipped.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ANALYSERS = (&quot;grep&quot;, &quot;taint&quot;, &quot;model&quot;)
+
+_, kept, _ = pipeline(60)
+raw = [(u, tool) for u, _ in kept for tool in ANALYSERS]     # each tool reports each
+by_defect = sorted({u for u, _ in raw})
+
+print(f&quot;raw findings across {len(ANALYSERS)} analysers : {len(raw)}&quot;)
+print(f&quot;distinct defects                     : {len(by_defect)}&quot;)
+print(f&quot;inflation if you do not deduplicate  : {len(raw)/len(by_defect):.1f}x&quot;)
+print()
+minutes_per = 6
+print(f&quot;analyst minutes, undeduplicated : {len(raw)*minutes_per}&quot;)
+print(f&quot;analyst minutes, deduplicated   : {len(by_defect)*minutes_per}&quot;)
+print()
+print(&quot;Same findings, same accuracy, three times the queue. Nobody reads the&quot;)
+print(&quot;third page, so the defect that gets fixed is whichever sorted first.&quot;)
+assert len(raw) == 3 * len(by_defect)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The four-stage loop runs over a seeded corpus of eight units with five planted defects. Shrinking the per-file context budget removes the facts verification depends on: below 25 tokens reachability is unknown and everything survives, which reads as higher recall and is actually less verification. Deduplicating three analysers' output collapses a 3x inflated queue back to the real defect count.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Find the context budget where your own corpus stops improving. It exists, it is specific to your codebase, and until you have measured it you are paying for tokens that make the output worse.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Building the DAST and exploitation harness</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.11.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The four-stage loop runs over a seeded corpus of eight units with five planted defects. Shrinking the per-file context budget removes the facts verification depends on: below 25 tokens reachability is unknown and everything survives, which reads as higher recall and is actually less verification. Deduplicating three analysers&#x27; output collapses a 3x inflated queue back to the real defect count.</div><div class="chips"><span>OpenGrep</span><span>Trivy</span><span class="m">Kimi K2.6</span><span class="m">GLM-5.2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.11.ipynb</code></p></div><div class="pager"><a href="B2.9.html"><span class="k">← Previous</span><span class="t">B2.9 · Idempotency, replay and rollback</span></a><a class="next" href="B2.12.html"><span class="k">Next →</span><span class="t">B2.12 · Building the DAST and exploitation harness</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

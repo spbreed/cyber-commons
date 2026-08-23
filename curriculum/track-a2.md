@@ -5,7 +5,7 @@
 
 **Job titles:** IAM Engineer, NHI Lead, Identity Architect, Workload Identity Engineer
 
-**What changes:** You have a new population of principals that outnumbers your humans, changes hourly, and inherits credentials nobody granted it. The most genuinely new material in the programme.
+**What changes:** The hardest unsolved problem in the stack. 9 lessons.
 
 **Autonomy focus:** Identity is the control that makes L2.5 defensible; without it you are running L3 and calling it L2.
 
