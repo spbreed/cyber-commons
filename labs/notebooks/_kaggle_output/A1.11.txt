@@ -1,0 +1,57 @@
+  #  layer                   can enforce                               kind
+  1  model / weights         broad behavioural priors                  shapes
+  2  system prompt           intent, role, tone, task scope            shapes
+  3  input & retrieval       provenance, allow-listing, redaction      shapes
+  4  tool-call / pre-exec    which tool, which params, whose identity  CONSTRAINS
+  5  output / response       DLP, secret and PII egress, schema        after the fact
+  6  runtime / sandbox       filesystem, process, syscall, ceilings    CONSTRAINS
+  7  network / egress        where data can go                         CONSTRAINS
+  8  identity / authz        who it is, whose authority, what it reachesCONSTRAINS
+  9  human-in-the-loop       high-consequence irreversible actions     after the fact
+ 10  detection & audit       evidence, attribution, reconstruction     after the fact
+
+layers that constrain: [4, 6, 7, 8]   layers that shape: [1, 2, 3]
+outcome refused: no mail is sent to a domain outside corp.example
+
+  #  layer                   denies?  why
+  1  model / weights         no       a prior, not a boundary
+  2  system prompt           no       a suggestion in the same channel as the attack
+  3  input & retrieval       no       the retrieved text is legitimately retrieved
+  4  tool-call / pre-exec    YES      checks the parameter
+  5  output / response       no       the mail was already sent to produce the output
+  6  runtime / sandbox       YES      no SMTP client exists in the sandbox
+  7  network / egress        YES      the destination is not in the egress allow-list
+  8  identity / authz        YES      this identity holds no external-mail scope
+  9  human-in-the-loop       YES      a human approves each external recipient
+ 10  detection & audit       no       records it, after it happened
+
+layers that actually denied it: [4, 6, 7, 8, 9]
+       5 approvals/day ->     0 approved without reading (0%)
+      20 approvals/day ->     0 approved without reading (0%)
+     200 approvals/day ->   180 approved without reading (90%)
+    2000 approvals/day ->  1980 approved without reading (99%)
+
+Layer 9 is a real control for rare, irreversible actions. As the only
+control on a high-volume path it converts into a click, and the risk
+register still records it as an approval gate.
+
+Same failure, different shape, at layer 2: it holds until someone
+rephrases. A control is only worth what it is worth on the worst day.
+configuration                 refuses?  survives one layer being wrong?
+prompt only                   NO        no
+prompt + output filter        NO        no
+tool-call check only          yes       no
+egress only                   yes       no
+below-the-model, layered      yes       yes
+everything                    yes       yes
+
+'tool-call check only' refuses the attack and fails completely the day
+that check has a bug. 'below-the-model, layered' refuses it and keeps
+refusing with any one of the three removed.
+rephrasings tested          : 4
+blocked by matching strings : 1
+blocked by refusing outcomes: 4
+
+The outcome rule never read the sentence. It checked the destination,
+which is the part the attacker needed and the part they could not
+rewrite without giving up what they came for.

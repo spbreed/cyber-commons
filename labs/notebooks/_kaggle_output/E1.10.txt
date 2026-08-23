@@ -1,0 +1,68 @@
+compliance  which obligations apply, can we demonstrate we meet them
+            controls: AI policy, use-case classification, attestations, disclosure triggers
+cyber       can this be attacked, can we contain it
+            controls: agent identity and JIT authz, tool permissions, sandbox and egress, guardrails, telemetry and detections, kill switch
+legal       can we be held liable, and under what theory
+            controls: contract clauses, acceptable-use terms, IP screening, e-discovery retention
+model_risk  is it fit for purpose, will we know when it stops being
+            controls: pre-deployment validation, performance thresholds, drift alerting, revalidation on change
+privacy     whose data, on what basis, for how long
+            controls: impact assessment gate, PII redaction, retention schedules, transfer mechanisms
+
+business_owner  accountable for the use case; defines purpose and risk appetite
+internal_audit  independent assurance that the five do what they claim
+
+22 controls across 5 functions
+1. agent traces are full of personal data
+   cyber           assumed: privacy owns retention of anything containing personal data
+   privacy         assumed: security owns the log store, so security sets its schedule
+   -> no schedule was set; three years of prompts are discoverable
+
+2. the model was validated, the tools were not
+   model_risk      assumed: validation covered the model, which is our scope
+   cyber           assumed: MRM signed it off, so the deployment was approved
+   -> an agent holds production write access that was never in scope
+
+3. 'no training on our data' was negotiated, never instrumented
+   legal           assumed: the clause is in the contract and it is binding
+   cyber           assumed: legal handled the vendor, so the restriction is handled
+   -> nobody built the control that verifies the vendor honours it
+
+4. the use case was risk-tiered before it had tools
+   compliance      assumed: classified low-risk: it was a chatbot when we saw it
+   business_owner  assumed: we shipped features, not a new use case
+   -> it files tickets, sends mail and moves money at the low-risk tier
+
+Neither assumption in any pair is unreasonable. That is what makes these
+seams rather than mistakes - and why naming the handoff is the control.
+   compliance  4 controls  green
+   cyber       6 controls  green
+   legal       4 controls  green
+   model_risk  4 controls  green
+   privacy     4 controls  green
+
+functions reporting green : 5/5
+open seams                : 4
+
+A dashboard assembled from function self-reports is all green, and four
+material gaps are open. The dashboard is not lying - it is asking each
+function about the inside of its own box, and every failure here is
+between boxes.
+handoff artefact                accountable  consumers
+re-tier on capability change    compliance   business_owner, cyber
+tool scope in validation        model_risk   cyber, business_owner
+trace retention schedule        privacy      cyber, legal
+vendor no-train verification    cyber        legal, compliance
+
+seams: 4   handoffs with a named owner: 4
+
+One artefact, many consumers, exactly one owner. The consumers matter as
+much as the owner: a handoff nobody consumes was never a handoff, and a
+handoff with two owners is the contested case from E1.0 again.
+   customer support agent    five functions: 5/5   missing: none   governed: True
+   internal code assistant   five functions: 5/5   missing: ['business_owner', 'internal_audit']   governed: False
+
+The second one has every control function at the table and no accountable
+owner. Five functions are governing something nobody has agreed to own,
+which is how a use case survives a review and still has no one to fund
+the remediation it was told to do.

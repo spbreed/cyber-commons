@@ -1,0 +1,39 @@
+units in corpus  : 40
+planted defects  : 10
+denominator for recall is now a fact, not an estimate
+  sens   recall   prec   $/find  min/accepted
+  0.40      30%    38%    0.048          16.0
+  0.70      60%    46%    0.024          13.0
+  0.95      90%    45%    0.016          13.3
+sensitivity 0.40: analyst   48 min vs manual 240 min -> saves time
+sensitivity 0.70: analyst   78 min vs manual 240 min -> saves time
+sensitivity 0.95: analyst  120 min vs manual 240 min -> saves time
+
+At high sensitivity recall looks excellent and the review queue is
+longer than reading the code by hand. The accuracy metric improved and
+the thing got worse - which is invisible unless review load is tracked
+as a first-class number beside it.
+tuned up     gained  1  lost  0  net +1
+tuned down   gained  0  lost  1  net -1
+   regressions: ['unit_08']
+
+A net-positive change can still lose findings it used to catch. Net is
+the number people quote; the lost list is the number that pages someone
+three months later.
+   analyst_minutes         78
+   corpus_size             40
+   cost_per_finding_usd    0.024
+   false_positives         7
+   minutes_per_accepted    13.0
+   planted_defects         10
+   precision               0.46153846153846156
+   recall                  0.6
+   regression_suite        20
+   regressions_last_change 1
+   seed                    2
+   spend_usd               0.144
+   true_positives          6
+
+Ten fields, four of them about cost and human time. A harness reported
+on accuracy alone has answered the easiest question and skipped the two
+that decide whether anyone still runs it next quarter.

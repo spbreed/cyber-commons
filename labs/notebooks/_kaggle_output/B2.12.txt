@@ -1,0 +1,42 @@
+sandbox preconditions: PASS
+   /export  pdf                         status 200  no        
+   /export  pdf; id                     status 200  CONFIRMED
+   /export  pdf && whoami               status 200  CONFIRMED
+   /report  normal                      status 200  no        
+   /report  x' OR '1'='1                status 200  CONFIRMED
+   /report  '; DROP TABLE reports; --   status 200  CONFIRMED
+
+confirmed by oracle: 4
+oracle confirmed : 4
+model confirmed  : 6
+
+findings the model asserted that the oracle refuses: 2
+   /export  pdf
+   /report  normal
+
+Every one of these returns HTTP 200 because the application works. The
+model is not lying; it was asked a question it has no way to answer, and
+it answered anyway.
+payload                         sendable?  why
+pdf                             yes        demonstrates without damage
+pdf; id                         yes        demonstrates without damage
+pdf && whoami                   yes        demonstrates without damage
+normal                          yes        demonstrates without damage
+x' OR '1'='1                    yes        demonstrates without damage
+'; DROP TABLE reports; --       REFUSED    destructive: ['drop']
+
+The DROP TABLE payload proves nothing that OR '1'='1' has not already
+proved, and it destroys the replica you need for the next test.
+Demonstrating the flaw and exercising it are different jobs.
+   CWE-78  /export
+      input      : pdf; id
+      observable : exporter --format pdf; id
+   CWE-78  /export
+      input      : pdf && whoami
+      observable : exporter --format pdf && whoami
+   CWE-89  /report
+      input      : x' OR '1'='1
+      observable : SELECT * FROM reports WHERE name = 'x' OR '1'='1'
+
+3 findings, each with the observable that proves it.
+An exit code is not an observable. The query the database ran is.

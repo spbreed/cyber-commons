@@ -1,0 +1,54 @@
+pillar                  what it asks                                  what it quietly assumes
+conceptual_soundness    is the method appropriate for the purpose     assumes the purpose is stable and stated
+independent_validation  did someone other than the builder check      assumes the thing checked is the thing deployed
+ongoing_monitoring      is it still performing as validated           assumes performance is what changes
+
+All three survive contact with AI. The assumptions are what break.
+validation still covers what is deployed: False
+   tool surface changed: ['db_update', 'read_ticket', 'write_ticket']
+   autonomy raised L1 -> L3
+
+Same weights. Same version. The validation report is accurate about a
+system that no longer exists, and nothing in the classical process is
+required to notice, because the classical trigger is a model change.
+summarisation accuracy over 200 runs: mean 0.921, min 0.895, max 0.955
+threshold 0.85 -> breaches: 0
+
+what is NOT on the dashboard:
+   rows written to production
+   tools invoked per run
+   actions taken without human review
+   scope of the credential used
+
+The monitoring is excellent and it is monitoring the prediction. The
+risk moved to the action, and the action has no threshold, no baseline
+and no alert.
+trigger                         classical MRM   extended
+model or version change         yes             yes
+prompt or config change         no              yes
+tool added or scope widened     no              yes
+autonomy level raised           no              yes
+purpose changed                 no              yes
+calendar year elapsed           yes             yes
+
+triggers classical MRM would miss: 4
+   prompt or config change
+   tool added or scope widened
+   autonomy level raised
+   purpose changed
+
+under the extended triggers, this deployment requires revalidation: True
+reasons: ["tool surface changed: ['db_update', 'read_ticket', 'write_ticket']", 'autonomy raised L1 -> L3']
+   autonomy                L3
+   independent_of_builder  True
+   model                   glm-5.2
+   monitors                ['summarisation_accuracy', 'rows_written', 'tools_per_run', 'actions_without_review']
+   purpose                 summarise support tickets
+   revalidation_triggers   ['autonomy level raised', 'calendar year elapsed', 'model or version change', 'prompt or config change', 'purpose changed', 'tool added or scope widened']
+   tool_surface            ['db_update', 'read_ticket', 'write_ticket']
+   validated_unit          model + tool surface + autonomy
+   version                 2026-03
+
+Three fields carry the whole extension: validated_unit, tool_surface and
+autonomy. Without them a validation report describes a text generator,
+and the thing in production is an actor.

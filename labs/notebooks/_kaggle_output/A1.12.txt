@@ -1,0 +1,50 @@
+ guardrail holds  attacker p  expected tries  tries for 95%
+         50.00%      50.00%             2.0               5
+         90.00%      10.00%            10.0              29
+         97.00%       3.00%            33.3              99
+         99.00%       1.00%           100.0             299
+         99.90%       0.10%          1000.0            2995
+         99.99%       0.01%         10000.0           29956
+
+A 97% guardrail is defeated within 98 attempts, 19 times out of 20.
+At $0.002 an attempt that is about twenty cents.
+claimed 97.0%  measured 97.30%  bypassed 135/5000  attacker cost per success $0.07
+claimed 99.0%  measured 99.06%  bypassed  47/5000  attacker cost per success $0.21
+claimed 99.9%  measured 99.96%  bypassed   2/5000  attacker cost per success $5.00
+
+The measured rate is what goes in the report. The claimed rate is what
+the vendor said.
+twenty single-run tests of the same 97% guardrail:
+   HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD HOLD
+   -> 20 passed, 0 failed
+   the same control over 1000 attempts: 31 bypasses
+
+Twenty demos, twenty passes, and a control that fails about three times
+in a hundred. The demo was not lucky - it was too small to contain a
+failure, which is a different and much more comfortable kind of wrong.
+   n=  10  measured 100.00%  95% CI [72.25%, 100.00%]
+   n= 100  measured 97.00%  95% CI [91.55%, 98.97%]
+   n=1000  measured 96.90%  95% CI [95.63%, 97.81%]
+
+At n=10 the interval is wide enough to contain both 'strong control' and
+'no control'. The sample size is part of the claim.
+claimed 0.97000   CI-low 96.382%  clears 99.9% bar: False  attacker needs 28 tries, affordable: True
+claimed 0.99900   CI-low 99.808%  clears 99.9% bar: False  attacker needs 522 tries, affordable: True
+claimed 0.99999   CI-low 99.808%  clears 99.9% bar: False  attacker needs 522 tries, affordable: True
+
+The bar is set by what the outcome is worth, not by what the control
+happens to score. A control that clears the bar and is still affordable
+to brute-force has not passed - it has been priced.
+   control                         no mail leaves the corporate tenant
+   layer                           7
+   attempts                        5000
+   bypasses                        2
+   hold_rate                       0.9996
+   ci95                            [0.99854, 0.99989]
+   expected_attacker_attempts      686.1
+   cost_per_attempt_usd            0.002
+   expected_cost_per_success_usd   1.37
+   suite_seed                      7
+
+Every field here is reproducible and every one is falsifiable. That is
+the difference between a guardrail claim and guardrail evidence.

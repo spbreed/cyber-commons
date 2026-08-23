@@ -1,0 +1,63 @@
+dimension                 the question it answers
+accountable_transparent   who is responsible, and can you show your working
+explainable               why did it produce this output
+fair_bias_managed         is error distributed evenly across people
+privacy_enhanced          whose data, on what basis, for how long
+safe                      can it cause physical, financial or psychological harm
+secure_and_resilient      can it be attacked, does it degrade gracefully
+valid_and_reliable        does it do what it claims, repeatably
+
+functions available to own them: ['legal', 'compliance', 'privacy', 'cyber', 'model_risk']
+dimension                 owners                            status
+accountable_transparent   compliance, legal, model_risk     contested
+explainable               model_risk                        clear
+fair_bias_managed         -                                 UNOWNED
+privacy_enhanced          privacy                           clear
+safe                      -                                 UNOWNED
+secure_and_resilient      cyber                             clear
+valid_and_reliable        model_risk                        clear
+
+unowned   : ['fair_bias_managed', 'safe']
+contested : ['accountable_transparent']
+dimension                   coverage  what actually got built
+accountable_transparent         80%  3 partial controls, none complete, best is 80%
+explainable                     80%  model_risk builds it end to end
+fair_bias_managed                0%  no control exists
+privacy_enhanced                40%  privacy builds it end to end
+safe                             0%  no control exists
+secure_and_resilient            90%  cyber builds it end to end
+valid_and_reliable              80%  model_risk builds it end to end
+
+weakest three: ['fair_bias_managed', 'safe', 'privacy_enhanced']
+
+The unowned dimensions are at zero, which at least is visible. The
+contested one is worse: three functions each report that it is covered,
+and each is telling the truth about their part.
+dimension                 accountable     contributors
+accountable_transparent   compliance      legal, model_risk
+explainable               model_risk      compliance
+fair_bias_managed         model_risk      compliance, legal
+privacy_enhanced          privacy         cyber, legal
+safe                      business_owner  legal, compliance
+secure_and_resilient      cyber           model_risk
+valid_and_reliable        model_risk      cyber
+
+dimensions with no accountable owner: none
+
+Note the seat that had to be invented: `business_owner`. Safety of a use
+case is not a control function's decision - it belongs to whoever chose
+to deploy it, and if that seat is empty the other five are governing an
+orphan.
+   accountable_transparent   ask compliance      agreed with legal, model_risk
+   explainable               ask model_risk      agreed with compliance
+   fair_bias_managed         ask model_risk      agreed with compliance, legal
+   privacy_enhanced          ask privacy         agreed with cyber, legal
+   safe                      ask business_owner  agreed with legal, compliance
+   secure_and_resilient      ask cyber           agreed with model_risk
+   valid_and_reliable        ask model_risk      agreed with cyber
+
+answerable for all seven: True
+
+That is the whole test. An auditor asks one question per dimension, and
+every question resolves to a person. E1.10 takes the same five functions
+and maps the controls each one actually operates.

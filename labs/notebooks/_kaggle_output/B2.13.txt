@@ -1,0 +1,40 @@
+entry                 path            resource    crossing          score
+/internal/report      api -> db       database    trust 1 -> 2      2
+/report               web -> api      filesystem  trust 0 -> 1      1
+/upload               web -> api      filesystem  trust 0 -> 1      1
+
+3 threats derived
+threats before 3  ->  after 5
+
+NEW (2):
+   score 1  /admin/export         web -> api      filesystem
+   score 4  queue                 worker -> db    database
+REMOVED (0): none
+
+Two lines of infrastructure change. Three new threats, one of them from
+a component nobody mentioned in the pull request description.
+three regenerations of UNCHANGED architecture identical: False
+diff between two runs of the same input: 0 new, 0 removed
+   (content-keyed, so the noise does not show here...)
+   line-by-line, 2 of 3 lines differ on unchanged input
+
+Nothing changed and the review shows churn. Reviewers learn within about
+two sprints that the diff is noise, and then they stop reading it - which
+costs you the one output of this harness that was worth having.
+five regenerations identical: True
+
+threats in the model      : 5
+threats needing review    : 2
+review the whole model    : 40 minutes
+review only the diff      : 16 minutes
+
+The whole model is a workshop nobody attends. The diff is a checkpoint
+that fits in a pull request, and it contains the same new information.
+pull request says      : 'add an admin export route'
+threats it introduced  : 2
+not implied by the text: 1
+   worker -> db    database    trust 0 -> 2
+
+The worker flow is a legitimate change made for a good reason. It is
+also a second untrusted path to the database, and the sentence describing
+the pull request does not contain it.
