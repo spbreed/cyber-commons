@@ -1,0 +1,18 @@
+the log you have:
+   09:14:02  agent-svc search      {'q': 'invoice 8812'}
+   09:14:07  agent-svc fetch_doc   {'id': 'wiki/473'}
+   09:14:11  agent-svc run_query   {'sql': 'DELETE FROM invoices WHERE id=8812'}
+   09:14:12  agent-svc send_email  {'to': 'ops@corp.example'}
+
+question                                    field needed        present?
+which user caused the deletion?             principal           NO
+what made the agent decide to delete?       motivating_input    NO
+which agent in the chain originated it?     delegation_chain    NO
+
+questions answerable from this log: 0/3
+
+The log is not broken. It is complete for debugging and empty for
+investigation, and the difference is three fields nobody was asked for.
+
+One more: agent-svc holds db:admin. The log store is a database.
+A record the actor can edit is not evidence of anything.

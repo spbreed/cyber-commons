@@ -1,32 +1,22 @@
-ALLOW https://api.github.com/repos/x/y                             host allowlisted
-ALLOW https://pypi.org/simple/requests/                            host allowlisted
-DENY  http://169.254.169.254/latest/meta-data/iam/security-crede   blocked: link-local / cloud metadata (169.254.0.0/16)
-DENY  http://127.0.0.1:8080/admin                                  blocked: loopback (127.0.0.0/8)
-DENY  http://10.0.3.14:9200/_search                                blocked: RFC1918 private (10.0.0.0/8)
-DENY  https://collect.example.com/upload                           not on the egress allowlist (deny by default)
-DENY  https://pastebin.com/api/api_post.php                        not on the egress allowlist (deny by default)
-suffix allowlist — looks tidy, permits the internet:
-ALLOW https://api.github.com/repos/x/y                             matches suffix .com
-DENY  https://pypi.org/simple/requests/                            no suffix match
-DENY  http://169.254.169.254/latest/meta-data/iam/security-crede   no suffix match
-DENY  http://127.0.0.1:8080/admin                                  no suffix match
-DENY  http://10.0.3.14:9200/_search                                no suffix match
-ALLOW https://collect.example.com/upload                           matches suffix .com  ← EXFILTRATION PATH
-ALLOW https://pastebin.com/api/api_post.php                        matches suffix .com  ← EXFILTRATION PATH
+action              reversible  external  routing         per day
+delete_row          False       False     human approval  6
+issue_refund        False       True      human approval  2
+read_report         True        False     policy only     400
+rotate_credential   False       False     human approval  1
+send_email          False       True      human approval  3
+update_ticket       True        False     policy only     260
+write_draft         True        False     policy only     120
 
-ALLOW https://attacker-controlled.s3.amazonaws.com/loot  matches suffix .amazonaws.com
-An attacker's own S3 bucket matches '.amazonaws.com'. The suffix that
-was added to reduce toil is now the exfiltration channel.
-URL-level check:      ALLOW host allowlisted
-but it resolves to:   169.254.169.254 (link-local / cloud metadata (169.254.0.0/16))
+actions per day            : 792
+reaching a human           : 12
+a reviewer considers ~25/day properly
+gate holds?                : True
 
-same URLs, checked after resolution:
-   ALLOW https://api.github.com/x                       allowlisted and resolves to public 140.82.121.5
-   DENY  https://metrics.partner.example/collect        resolved address is link-local / cloud metadata (169.254.0.0/16) — refusing (metrics.partner.example → 169.254.169.254)
-suffix allowlist                   incorrect decisions: 3
-      https://collect.example.com/upload
-      https://pastebin.com/api/api_post.php
-      https://pypi.org/simple/requests/
-host allowlist (URL only)          incorrect decisions: 1
-      https://metrics.partner.example/c
-host allowlist + resolution        incorrect decisions: 0
+Approving everything would send 792 a day to someone who can read
+25. Routing by reversibility sends 12, and every one gets read.
+
+unlabelled : libfoo has no known vulnerabilities
+labelled   : [machine-generated, unverified] libfoo has no known vulnerabilities
+
+The label does not stop anyone acting on it. It restores the scepticism
+they would give a colleague saying the same sentence.

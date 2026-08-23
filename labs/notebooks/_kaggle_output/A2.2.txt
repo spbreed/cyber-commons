@@ -1,19 +1,11 @@
-bootstrap via secret zero: {'identity': 'triage-agent', 'method': 'bearer secret', 'age_days': 400, 'ok': True}
-→ it works. Every service in your estate does this today.
-process env read       → LEAKED sk-live-7f3c9a…
-debug log line         → LEAKED sk-live-7f3c9a…
-crash report           → LEAKED sk-live-7f3c9a…
+   proc-1        spiffe://corp/reports-agent     issued
+   proc-2        -                               image is not registered to any identity
+   proc-stolen   -                               no attestation - unattested process
 
-credential age: 400 days
-exposure window for every one of those leaks: the whole 400 days,
-because nothing about a static secret expires on its own.
-ISSUED   spiffe://corp/ns/prod/sa/triage-agent  ttl=300s
-REFUSED  sa=triage-agent image=ghcr.io/attacker/evil@sha256:dead…… — image 'ghcr.io/attacker/evil@sha256:dead…' is not an attested workload image
-REFUSED  sa=triage-agent image=ghcr.io/corp/triage-agent@sha256:9… — process is not running on node-7
-secret zero (env var)      useful for until someone rotates it         (never rotated)
-SPIFFE SVID                useful for 300s                             (auto-reissued continuously)
+   presented from n-7 at t=1100: ok (accepted)
+   presented from n-9 at t=1100: REFUSED (bound to n-7)
+   presented from n-7 at t=2000: REFUSED (expired)
 
-ratio: a leaked static key is useful 115,200× longer than a leaked SVID
-
-And the SVID names its own holder — a stolen one identifies the thief's
-workload, which a shared bearer secret can never do.
+Copying the credential does not help: it is bound to a node and expires
+in five minutes. Copying the image does not help either - proc-2 is a
+real process and still gets nothing, because its image is not registered.

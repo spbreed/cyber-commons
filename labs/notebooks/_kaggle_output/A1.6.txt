@@ -1,21 +1,15 @@
-topology    depth     reachable from orchestrator   blast
-------------------------------------------------------------
-star            2         4 agents                      49
-chain           5         4 agents                      49
-mesh            5         5 agents                      50
-topology  compromised     reaches  blast   worst case
-----------------------------------------------------------------
-star      fixer                 0      3
-star      orchestrator          4     50  ← worst
+requestertheir scopes                                asked for       allowed?
+dana    ['reports:read']                            db:admin        True
+priya   ['db:admin', 'reports:read', 'reports:write']db:admin        True
 
-chain     fixer                 2     46
-chain     orchestrator          4     50  ← worst
+AUDIT TRAIL
+   actor=agent-svc  tool=drop_table   allowed=True
+   actor=agent-svc  tool=drop_table   allowed=True
 
-mesh      fixer                 5     53
-mesh      shipper               5     90  ← worst
+dana holds reports:read only, and her request reached db:admin.
+The authorization decision was made about the agent, not about her.
 
-In the mesh, compromising the LOWEST-privilege agent reaches everything.
-In the star, only the orchestrator does. That is the whole argument.
-star   OK      orchestrator → shipper
-chain  REFUSED depth 4 > limit 3: orchestrator → triager → fixer → reviewer
-mesh   REFUSED cycle: orchestrator → fixer → orchestrator
+Now answer 'which user caused the table to be dropped' from that trail.
+You cannot: every row says agent-svc. Privilege and attribution failed
+in the same step, which is what makes this different from a human with
+too much access.

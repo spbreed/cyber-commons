@@ -1,37 +1,12 @@
-name                   crm-oracle-prod
-auth                   shared username/password
-per_caller_identity    False
-can_be_modified        False
-holds                  1.2M customer records
+   which user caused the deletion?     dana@corp
+   what performed it?                  spiffe://corp/reports-agent (run-8812)
+   how did authority reach it?         dana@corp -> orchestrator -> reports-agent
+   what made the agent decide?         'wiki/473: retire invoice 8812 when the custo' from knowledge
 
-consumers sharing one credential: ['support-agent', 'billing-agent', 'analytics-agent', 'nightly-batch']
-the database's own log will attribute every query to 'SVC_CRM_INT'.
-caller                         queries     rows   rows/min
-------------------------------------------------------------
-support-agent  (normal)             40       40          1
-billing-agent  (normal)            600      600         10
-nightly-batch  (normal)              1    50000       1667
-support-agent  (compromised)      9000   450000     225000
+questions answerable: 4/4
 
-Every one of these presents the same credential and issues valid SQL.
-The compromised session is not doing anything the account may not do —
-it is doing a permitted thing far too much.
-normal traffic:
-   support-agent          30 rows → ok, 170 left
-   support-agent          45 rows → ok, 125 left
-   billing-agent         900 rows → ok, 300 left
-   nightly-batch       50000 rows → ok, 10000 left
+input origin was 'knowledge' - a trust-0 component. That single
+field turns 'the agent deleted an invoice' into 'a wiki page told it to',
+which is a root cause rather than an observation.
 
-compromised support agent tries to drain the table:
-   attempt 1: BLOCKED — rate budget exceeded: 75+5000 > 200 rows/min
-   attempt 2: BLOCKED — rate budget exceeded: 75+5000 > 200 rows/min
-   attempt 3: BLOCKED — rate budget exceeded: 75+5000 > 200 rows/min
-   attempt 4: BLOCKED — rate budget exceeded: 75+5000 > 200 rows/min
-rows the compromised lane obtained: 75
-rows it would have obtained unthrottled: 450,000
-reduction: 6,000×
-
-Honest framing for the design doc:
-  · this does NOT tell you which agent misbehaved (no identity available)
-  · it DOES bound the worst case to one lane's budget per window
-  · and the choke point log is the only per-caller record that exists
+agent attempting to amend the ledger: refused (ledger is append-only and out of the agent's trust domain)

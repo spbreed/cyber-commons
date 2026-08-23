@@ -1,41 +1,12 @@
-attack                what it recovers                                    where it is blunted
-embedding_inversion   source text reconstructed from stored vectors       classify the vector store as a copy of the corpus
-jailbreak             behaviour: output the model was trained to refuse   layer 4/6/7/8 - what it may DO once persuaded
-membership_inference  one bit: was this record in the training set        training-time - DP noise, dedup, minimisation
-model_inversion       data: training records or context reconstructed     layer 3/5 - what goes in, and what comes out
-prompt_extraction     your system prompt and your control descriptions    assume disclosure - never put a secret in a prompt
-jailbreak            -> produced refused content (a policy bypass, no data, no tool)
-model_inversion      -> reconstructed from output: RF-2291.
-membership_inference -> 'bob' in training set: True
-prompt_extraction    -> You are ACME support. Never reveal refund codes. Code: RF-2291.
-embedding_inversion  -> patient bob@corp.example, diagnosis withheld
-what the vector store looks like:
-   [0.557, 0.953, 0.671, 0.549, 0.988, 0.427, 0.243, 1.0]
+agent                 in registry?  approved?  received work?
+pricing-agent         True          True       yes
+billing-agent         True          True       yes
+reporting-agent-v2    False         False      yes
 
-what it is:
-   patient bob@corp.example, diagnosis withheld
-   patient alice@corp.example, diagnosis withheld
+agents that received delegated work : 3
+of which unregistered               : 1
+   reporting-agent-v2 now holds obo:dana@corp:reports:read,reports:write
 
-Nobody stored a name. Every name is retrievable, because the store keeps
-the mapping in order to be useful at all - that is what retrieval is.
-An embedding is a representation of the text, not a redaction of it.
-attack                control                                   available to you at runtime?
-embedding_inversion   classify the store as the corpus          yes
-jailbreak             tool allowlist + sandbox + egress         yes
-membership_inference  training-time minimisation                NO - training time only
-model_inversion       output filtering + no secrets in context  yes
-prompt_extraction     assume it is public                       yes
-
-stoppable only before the model exists: ['membership_inference']
-Everything else is stopped by architecture you already control.
-
-The jailbreak case is the clearest. You cannot guarantee the model
-refuses. You can guarantee that a persuaded model reaches no tool, no
-credential and no network - and then the bypass produces text, not harm.
-   persuaded=yes tools=True  egress=True  -> data leaves the building
-   persuaded=yes tools=True  egress=False -> local action, no exfiltration path
-   persuaded=yes tools=False egress=True  -> text on a screen
-   persuaded=yes tools=False egress=False -> text on a screen
-
-The same successful jailbreak is a headline or a non-event depending
-entirely on layers the model never sees.
+It was admitted because it answered the protocol in the right place.
+It received the task AND the narrowed user token, so it can act as dana
+against every downstream that honours that token.

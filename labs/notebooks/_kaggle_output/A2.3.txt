@@ -1,52 +1,11 @@
-PROPERLY ATTRIBUTED — agent has its own identity
-  t+s  actor           action          target
-    0  dana@corp       login           console
-   30  dana@corp       assign_task     finding-4471
-   31  triage-agent    read_source     src/auth.py
-   33  triage-agent    open_pr         pr/8812
-WHAT THE RESPONDER SEES
-  t+s  actor           action          target
-    0  dana@corp       login           console
-   30  dana@corp       assign_task     finding-4471
-   31  dana@corp       read_source     src/auth.py
-   33  dana@corp       open_pr         pr/8812
-   34  dana@corp       merge_pr        pr/8812
-   36  dana@corp       deploy          prod
+   chain  : dana@corp -> orchestrator -> patch-agent
+   scopes : ['reports:read']
 
-WHAT ACTUALLY HAPPENED
-  t+s  actor           action          target
-    0  dana@corp       login           console
-   30  dana@corp       assign_task     finding-4471
-   31  triage-agent    read_source     src/auth.py
-   33  triage-agent    open_pr         pr/8812
-   34  triage-agent    merge_pr        pr/8812
-   36  triage-agent    deploy          prod
-actors_in_logs         ['dana@corp']
-actors_in_reality      ['dana@corp', 'triage-agent']
-misattributed_lines    4
-hidden_actors          ['triage-agent']
-attribution            BROKEN
-control 1 — anomaly detection tuned for humans
-    dana@corp: 10 actions/min — normal
-    → this alert fires on every agent-assisted session, so it gets tuned
-      down or disabled within a week. Then it never fires again.
+priya holds db:admin. She asks the same low-trust agent to use it:
+      (narrowed by patch-agent ceiling: dropped ['db:admin'])
+   subset-of-presented alone would allow it : True
+   scopes actually issued                   : none
 
-control 2 — containment
-    disable dana@corp → still running: ['triage-agent']
-    → the agent holds a copy of the token. Disabling the human's login
-      does not invalidate a bearer token already issued.
-
-control 3 — accountability
-    formal record: dana@corp deployed to prod at t+36s
-    reality:       dana was in a meeting; a model chose to deploy
-    → she is accountable for a decision she could not have reviewed.
-with agent identity:
-   · revoke the agent identity (agent stops, human keeps working)
-   · revoke the human (agent's delegated tokens die with the chain)
-   · revoke one agent in a fleet, leaving the others up
-
-shadow autonomy:
-   · disable the human's account (agent may continue on a live token)
-   · rotate the shared credential (breaks every consumer at once)
-   · …that is the complete list
-
+Subset-only says yes - she really does hold db:admin. The ceiling rule
+issues the intersection, which is empty, because patch-agent may never
+hold it no matter who asks.

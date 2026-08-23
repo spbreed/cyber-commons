@@ -1,22 +1,22 @@
-GRANTED  ci-builder     ['artifact:write', 'repo:read']   — the normal build grant
-GRANTED  deploy-bot     ['deploy:staging']   — staging deploy
-REFUSED  deploy-bot     ['deploy:prod']   — 'just for the hotfix'
-         deploy-bot may never hold ['deploy:prod'] (ceiling: ['artifact:read', 'deploy:staging'])
-REFUSED  triage-agent   ['repo:write']   — 'so it can fix what it finds'
-         triage-agent may never hold ['repo:write'] (ceiling: ['finding:comment', 'repo:read'])
-REFUSED  ci-builder     ['secrets:read']   — 'the build needs a token'
-         ci-builder may never hold ['secrets:read'] (ceiling: ['artifact:write', 'repo:read'])
-triage-agent → ci-builder → deploy-bot
-scopes reachable through the chain: ['artifact:read', 'artifact:write', 'deploy:staging', 'finding:comment', 'repo:read']
-triage-agent's own ceiling:         ['finding:comment', 'repo:read']
+allow-by-default:
+   run_query  table:reports         SELECT ALLOW rule reports-agent/run_query/table:reports
+   run_query  table:secrets         SELECT ALLOW allowed by default
+   run_query  table:reports         DELETE deny  verb DELETE not permitted on table:reports
+   send_email domain:evil.example   *      ALLOW allowed by default
+   drop_table table:reports         *      ALLOW allowed by default
+   -> 4/5 permitted
 
-No ceiling was broken. The agent still reached artifact:write and
-deploy:staging, because it can ask something else to do the work.
-triage-agent holds:       ['finding:comment', 'repo:read']
-→ delegated to ci-builder: ['repo:read']
-→ delegated to deploy-bot: ∅ — nothing survives
+DEFAULT-DENY:
+   run_query  table:reports         SELECT ALLOW rule reports-agent/run_query/table:reports
+   run_query  table:secrets         SELECT deny  no rule matches - default deny
+   run_query  table:reports         DELETE deny  verb DELETE not permitted on table:reports
+   send_email domain:evil.example   *      deny  no rule matches - default deny
+   drop_table table:reports         *      deny  no rule matches - default deny
+   -> 1/5 permitted
 
-Authority can only shrink along a chain. The walk-around is closed,
-and no reviewer had to notice anything.
-2000 random delegations, widening violations: 0
-Property holds: result ⊆ presented AND result ⊆ new actor's ceiling.
+The only call that should succeed is the first. Under allow-by-default
+four do, and each one is a real risk from Chapter 1 walking through.
+
+Note the third row: same identity, same tool, same resource, refused on
+the verb. Authorization attached to the tool instead of the call cannot
+express that distinction at all.

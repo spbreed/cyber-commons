@@ -16,8 +16,6 @@
   "A2.5": "complete",
   "A2.6": "complete",
   "A2.7": "complete",
-  "A2.8": "complete",
-  "A2.9": "complete",
   "A3.1": "complete",
   "A3.2": "complete",
   "A3.3": "complete",
@@ -25,7 +23,6 @@
   "A3.5": "complete",
   "A3.6": "complete",
   "A3.7": "complete",
-  "A3.8": "complete",
   "B1.1": "complete",
   "B1.10": "complete",
   "B1.11": "complete",
@@ -110,7 +107,6 @@
   "E3.7": "complete",
   "E3.8": "complete",
   "A1.8": "complete",
-  "A3.9": "complete",
   "A1.9": "complete",
   "A1.10": "complete",
   "A1.11": "complete",
@@ -126,6 +122,10 @@
   "E1.0": "complete",
   "E1.10": "complete",
   "E1.11": "complete",
-  "E1.12": "complete"
+  "E1.12": "complete",
+  "A1.13": "complete",
+  "A1.14": "complete",
+  "A1.15": "complete",
+  "A1.16": "complete"
  }
 }

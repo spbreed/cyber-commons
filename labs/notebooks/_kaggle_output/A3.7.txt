@@ -1,31 +1,15 @@
-kill_process                  2s  target still acts: True   others up: ['deploy-agent', 'triage-agent']
-                                 process killed; supervisor restarted it — identity still valid
-quarantine                    5s  target still acts: True   others up: ['deploy-agent', 'triage-agent']
-                                 egress blocked; local filesystem actions continue
-revoke_identity              12s  target still acts: False  others up: ['deploy-agent', 'triage-agent']
-                                 identity revoked; agent cannot act even after restart
-rotate_shared_credential    420s  target still acts: False  others up: []
-                                 credential rotated; EVERY consumer is now broken
-    agent rate   human 8min   automated 12s   ratio
-----------------------------------------------------
-        60/min          480              12    40.0×
-       300/min         2400              60    40.0×
-      1200/min         9600             240    40.0×
+   the intended call           ALLOWED
+   unregistered agent          denied at identity
+   verb not permitted          denied at policy
+   exfiltration destination    denied at egress
+   over the per-target ceiling denied at budget
 
-At 300 actions/min an 8-minute approval costs 2,400 further actions
-against 60 for automated revocation. That ratio is the funding argument.
-reached the cloud metadata service     NHI: AUTO-REVOKE (confidence 0.99)               
-read a path matching */.ssh/*          NHI: AUTO-REVOKE (confidence 0.97)               
-egress to an unlisted host             NHI: AUTO-REVOKE (confidence 0.90)               
-tool-call rate 20× baseline            NHI: AUTO-REVOKE (confidence 0.75)               
-unusual working hours                  NHI: alert only (confidence 0.30 < 0.7)          
+audit entries written: 1
+credential held by the agent: never - attached at the gateway
 
-same signal, human subject                 page on-call — human lockout needs a person to confirm
-before: {'deploy-agent': True, 'patch-agent': True, 'triage-agent': True}
+The agent implements none of this. Add a new agent tomorrow and it
+inherits every control by being on the other side of one hop.
 
-signal: reached the cloud metadata service
-action: AUTO-REVOKE (confidence 0.99)
-after 12s: {'deploy-agent': True, 'patch-agent': False, 'triage-agent': True}
-
-Contained agent stopped. Two other agents unaffected. No human waited.
-This only works because A2 gave each agent its own revocable identity.
+And the legacy database, which cannot consume a delegated token, is
+reached with a static credential the agent has never seen - authorised
+against dana before the call was made.

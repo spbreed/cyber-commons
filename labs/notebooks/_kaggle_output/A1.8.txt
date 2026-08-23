@@ -1,27 +1,23 @@
-stage      model                      tools  blast
-----------------------------------------------------
-plan       Kimi K2 (large, open)          0      0
-act        GLM-4.6 (mid, open)            2      3
-verify     GLM-4.6 (mid, open)            0      0
-summarise  Llama 3.3 8B (small)           0      0
+ordinary bug / benign task:
+   code   : rows = open('/home/agent/work/data.csv').read()
+   reached: 3 things
+      file:/etc/passwd
+      file:/home/agent/.ssh/id_ed25519
+      file:/home/agent/work/data.csv
 
-Only one stage holds tools at all, and its one risky tool is gated.
-as designed
-   system blast   3   tools held by: [('act', 'GLM-4.6 (mid, open)')]
-   verifier model: GLM-4.6 (mid, open)
+steered by an injection:
+   code   : import os; d=os.environ; connect('169.254.169.254')
+   reached: 6 things
+      env:AWS_ACCESS_KEY_ID
+      env:DATABASE_URL
+      env:HOME
+      net:prod-db:5432
+      net:169.254.169.254:80
+      net:0.0.0.0/0
 
-'speed up the act stage' — small model, ungated, +deploy
-   system blast  46   tools held by: [('act', 'Llama 3.3 8B (small)')]
-   verifier model: GLM-4.6 (mid, open)
+The benign task reached every file the process can see, including a
+private key it had no reason to touch. It was not attacked - the code
+used open(), and open() sees what the process sees.
 
-'verification is just a check' — tiny model verifies
-   system blast   3   tools held by: [('act', 'GLM-4.6 (mid, open)')]
-   verifier model: Llama 3.2 1B (tiny)
-   blast unchanged — and that is exactly why this one is dangerous:
-   the metric does not move, but every result is now trusted on the
-   word of the weakest model in the system. See B2.2.
-as designed      PASS
-fast-actor       FAIL
-                 ⚠ act: Llama 3.3 8B (small) (tier 1) holds blast 46 > budget 3
-cheap-verifier   FAIL
-                 ⚠ verifier tier 0 < actor tier 2 — the check is weaker than the thing it checks
+Blast radius here is a property of the environment. A3.2 changes the
+environment; no amount of instruction changes it.

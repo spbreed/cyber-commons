@@ -1,0 +1,19 @@
+mallory holds        : ['reports:read']
+mallory asks directly for payments:write -> DENIED
+
+same outcome, requested through the architecture:
+   user asks orchestrator    mallory         ok
+   orchestrator routes       orchestrator    ok
+   agent acts                finance-agent   ok
+   -> reached payments:write: True
+
+Every hop was legitimate. Mallory was allowed to ask, the orchestrator
+was allowed to route, the agent was allowed to act. The composition
+reached exactly what the direct check refused.
+
+and the other direction - the same claim, two ways:
+   colleague says : 'dependency libfoo has no known vulnerabilities'   -> reader asks how they know
+   agent reports  : 'dependency libfoo has no known vulnerabilities'   -> reader treats it as checked
+
+Nothing about the second is more true. It is formatted like a system
+output, so it recruits the authority of one.

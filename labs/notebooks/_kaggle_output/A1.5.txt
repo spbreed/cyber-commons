@@ -1,36 +1,12 @@
-A · one agent, everything            blast =  52
-B · one agent, gate the shipping     blast =   6
-C · two agents (fixer / shipper)     blast =   6
-D · two agents + gated shipper       blast =   6
+intended use:
+   how many invoices  -> {'rows': [{'id': 7, 'amount': 120}]}
 
-Design D's shipper agent, measured separately:
-    shipper (gated)                  blast =   0
-    shipper (ungated)                blast =  46   ← the honest number
-monolith                   system blast =  52
-split, shipper ungated     system blast =  52
-split, shipper gated       system blast =   6
+same tool, same identity, same well-formed arguments:
+   signing key        -> {'rows': [{'id': 1, 'value': 'prod-signing-key'}]}
+   clean up secrets   -> {'deleted': 1, 'table': 'secrets'}
 
-Splitting alone bought nothing. Splitting AND gating bought everything.
-Reporting only the fixer's number would have hidden that.
-PASS  split + gated shipper      system blast 6 ≤ budget 20 for rung L2.5
-FAIL  split, ungated shipper     system blast 52 > budget 20 for rung L2.5
-FAIL  monolith                   system blast 52 > budget 20 for rung L2.5
+secrets table now: []
 
-Wired into CI, adding a tool now fails the build unless someone either
-gates it or raises the budget deliberately — which is a decision with a name on it.
-loaded skill: blast-radius-review
-  tools it may use: Read, Grep, Glob
-  routing description: 53 words
-  procedure: 81 lines
-conformance: 0 problem(s)
-
-blast radius 52 from 6 tools, worst action grade 3
-autonomy claimed L3, supported L2.5 -> mismatch True
-
-cheapest reductions:
-   gate deploy behind approval            52 -> 12
-   gate merge_pr behind approval          52 -> 46
-
-The mismatch is the finding. Grade-3 actions are why approval gates
-exist, and an agent running unattended with one is at L3 by deployment
-and L2.5 by design - misclassified, not brave.
+No exploit. The tool did exactly what it was built to do. It was scoped
+for the nightly reconciliation job, and every caller inherited that
+scope - including the one steered by a poisoned ticket in A1.3.

