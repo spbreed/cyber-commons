@@ -1,0 +1,50 @@
+stage  name                              mantis    note
+------------------------------------------------------------------------------------------------
+  1  historical parsing                yes       historical_learnings.jsonl is read on subsequent runs
+  2  structural indexing               partial   operates over the agent's code-reading tools
+  3  component summarisation           partial   context assembled per review target
+  4  architecture synthesis            no        assumes you supply the architecture context
+  5  threat modelling                  partial   review skills encode threat patterns rather than deriving them
+  6  strategic planning                no        you decide what to point it at
+  7  vulnerability auditing            yes       the core: security-review skills emitting finding objects
+  8  deduplication                     partial   findings are structured, so dedup is possible downstream
+  9  contextual verification           partial   structured output aids verification; you still run the checks
+ 10  feasibility filtering             no        reachability is yours
+ 11  sandbox replication               no        no sandbox — it is a review harness, not a DAST
+ 12  dynamic exploitation              no        static review only
+ 13  exploit chaining                  no        no chaining
+ 14  remediation engineering           partial   can propose fixes; validation is yours (B1.11)
+ 15  severity calibration and reportingpartial   emits severity; calibration against confirmation is yours
+
+coverage: {'yes': 2, 'partial': 7, 'no': 6}
+→ Mantis is a strong Phase 3 stage-7 implementation with a stage-1 loop.
+  Phases 4 and 5 remain yours, which is exactly what B1.8-B1.12 built.
+conforming                                                {"type":"learning_entry","title":"owner filt…
+conforming                                                {"type":"finding","title":"SQL injection in …
+non-conforming: learning_entry missing ['history']        {"type":"learning_entry","title":"path join …
+non-conforming: finding missing ['cwe']                   {"type":"finding","title":"traversal","sever…
+non-conforming: not JSON (Expecting value)                I found a SQL injection in the reports modul…
+
+conformance: 2/5 = 0.40
+file                      result                                score
+--------------------------------------------------------------------------
+src/data/reports.py       correct                               1.0
+src/data/docs.py          right file, wrong class (None)        0.5
+src/web/handlers.py       MISSED                                0.0
+
+conformance       0.4000   ← structural. NOT quality.
+expert accuracy   0.5000   ← the adoption number
+1 learning entry/entries carried into the next run:
+   owner filter built by concatenation
+      history: introduced in c3d4e5f, fixed once in 2025 and reintroduced
+
+stage 1 input for the next run (Phase 5 → Phase 1):
+   src/data/reports.py        weight 3
+   src/data/docs.py           weight 1
+
+ADOPTION CHECKLIST
+   · map its stages onto your fifteen — know what it does NOT do
+   · score it against YOUR held-out key before trusting a single finding
+   · report conformance and accuracy separately, always
+   · keep Phase 4 — a static reviewer cannot confirm exploitability
+   · feed learning entries back into stage 1, or the loop does not close
