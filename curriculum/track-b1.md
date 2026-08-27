@@ -387,7 +387,32 @@ python3 scripts/run_notebooks.py --session B1.15   # run it headless and check i
 
 ---
 
-### B1.16 — Bonus — Google Mantis, the pipeline in production
+### B1.16 — Attesting control intent for agents and MCP servers
+
+`Security of AI`
+
+- **Risk** — Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change.
+- **Control** — Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.
+- **Lab** — Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.
+- **Tools** — `in-toto`, `Sigstore`, `OSCAL`, `OPA`
+- **Models** — `GLM-4.6`
+
+**Run it** — Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B1.16.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.16   # run it headless and check it
+
+# --- the full variant, against real repositories ---
+python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json
+```
+
+*Expect:* Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification's destructive, open-world default.
+
+---
+
+### B1.17 — Bonus — Google Mantis, the pipeline in production
 
 `AI for Security`
 

@@ -1,0 +1,2635 @@
+[
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "awslabs_mcp",
+    "digest": {
+     "gitCommit": "a7ca8dc3712d5864cda09dcb4a824b6ea0166cdb"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "awslabs_mcp",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 2616,
+    "tool_declaration_sites": 140,
+    "tool_files": [
+     "scripts/migrate-mcp-v2.py",
+     "scripts/verify_tool_names.py",
+     "src/amazon-bedrock-agentcore-mcp-server/tests/browser/test_integ_mcp_protocol.py",
+     "src/amazon-kendra-index-mcp-server/awslabs/amazon_kendra_index_mcp_server/server.py",
+     "src/amazon-keyspaces-mcp-server/awslabs/amazon_keyspaces_mcp_server/server.py",
+     "src/amazon-mq-mcp-server/awslabs/amazon_mq_mcp_server/server.py",
+     "src/amazon-neptune-mcp-server/awslabs/amazon_neptune_mcp_server/server.py",
+     "src/amazon-qbusiness-anonymous-mcp-server/awslabs/amazon_qbusiness_anonymous_mcp_server/server.py",
+     "src/amazon-qindex-mcp-server/awslabs/amazon_qindex_mcp_server/server.py",
+     "src/amazon-qindex-mcp-server/tests/test_server.py"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "credential",
+      "what": "credential access",
+      "examples": [
+       "samples/mcp-integration-with-kb/clients/client_server.py",
+       "samples/mcp-integration-with-nova-canvas/clients/client_server.py",
+       "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/gateway/guide.py",
+       "src/amazon-kendra-index-mcp-server/awslabs/amazon_kendra_index_mcp_server/util.py",
+       "src/amazon-kendra-index-mcp-server/tests/test_server.py"
+      ]
+     },
+     {
+      "class": "destructive",
+      "what": "destructive sql",
+      "examples": [
+       "src/amazon-keyspaces-mcp-server/awslabs/amazon_keyspaces_mcp_server/llm_context.py",
+       "src/amazon-keyspaces-mcp-server/tests/test_client.py",
+       "src/amazon-keyspaces-mcp-server/tests/test_server.py",
+       "src/amazon-translate-mcp-server/tests/test_security_validators.py",
+       "src/aurora-dsql-mcp-server/awslabs/aurora_dsql_mcp_server/mutable_sql_detector.py"
+      ]
+     },
+     {
+      "class": "filesystem",
+      "what": "filesystem write or delete",
+      "examples": [
+       ".github/workflows/release.py",
+       "src/aws-healthomics-mcp-server/tests/test_content_resolver.py",
+       "src/aws-healthomics-mcp-server/tests/test_run_timeline_output.py",
+       "src/aws-pricing-mcp-server/awslabs/aws_pricing_mcp_server/report_generator.py",
+       "src/aws-serverless-mcp-server/awslabs/aws_serverless_mcp_server/tools/sam/sam_local_invoke.py"
+      ]
+     },
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       ".github/workflows/aws-api-mcp-upgrade-version.yml",
+       "samples/mcp-integration-with-kb/user_interfaces/chat_bedrock_st.py",
+       "samples/mcp-integration-with-nova-canvas/user_interfaces/image_generator_st.py",
+       "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/browser/observation.py",
+       "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/identity/guide.py"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "dynamic evaluation",
+      "examples": [
+       "src/amazon-qindex-mcp-server/tests/test_clients.py",
+       "src/aurora-dsql-mcp-server/awslabs/aurora_dsql_mcp_server/server.py",
+       "src/aurora-dsql-mcp-server/tests/test_dsql_lint.py",
+       "src/aws-healthomics-mcp-server/awslabs/aws_healthomics_mcp_server/tools/workflow_linting.py",
+       "src/aws-healthomics-mcp-server/tests/test_path_traversal.py"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {
+     "readOnlyHint": 17,
+     "destructiveHint": 15,
+     "idempotentHint": 14,
+     "openWorldHint": 5
+    },
+    "unannotated_default_applied": false,
+    "unannotated_default": null,
+    "surface_hash": "97392ee922448bb57cef13866835fd06"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "allowlist",
+       "evidence_files": [
+        ".github/workflows/scanners.yml",
+        ".gitleaks.toml",
+        "src/amazon-bedrock-agentcore-mcp-server/tests/identity/test_unit_api_key_providers.py"
+       ]
+      },
+      {
+       "signal": "authorisation check",
+       "evidence_files": [
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/identity/guide.py",
+        "src/amazon-qindex-mcp-server/awslabs/amazon_qindex_mcp_server/server.py",
+        "src/amazon-qindex-mcp-server/tests/test_server.py"
+       ]
+      },
+      {
+       "signal": "explicit default-deny",
+       "evidence_files": [
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/policy/guide.py"
+       ]
+      },
+      {
+       "signal": "least privilege",
+       "evidence_files": [
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/identity/resource_policy.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/runtime/guide.py",
+        "src/aws-dataprocessing-mcp-server/awslabs/aws_dataprocessing_mcp_server/handlers/commons/common_resource_handler.py"
+       ]
+      },
+      {
+       "signal": "policy engine",
+       "evidence_files": [
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/policy/engines.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/policy/generations.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/policy/guide.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "absence of a covert channel is not provable from source; documented DNS and object-storage bypass paths exist even for approved sandboxes",
+     "signals": [
+      {
+       "signal": "isolation runtime",
+       "evidence_files": [
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/browser/session.py"
+       ]
+      },
+      {
+       "signal": "kernel confinement",
+       "evidence_files": [
+        "src/eks-mcp-server/awslabs/eks_mcp_server/templates/k8s-templates/deployment.yaml"
+       ]
+      },
+      {
+       "signal": "network mode control",
+       "evidence_files": [
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/runtime/guide.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/runtime/lifecycle.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/runtime/models.py"
+       ]
+      },
+      {
+       "signal": "sandbox reference",
+       "evidence_files": [
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/server.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/code_interpreter/execution.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/code_interpreter/files.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "3 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "audience validation",
+       "evidence_files": [
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/gateway/gateways.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/gateway/guide.py",
+        "src/amazon-translate-mcp-server/pyproject.toml"
+       ]
+      },
+      {
+       "signal": "oauth pkce",
+       "evidence_files": [
+        "src/aws-transform-mcp-server/awslabs/aws_transform_mcp_server/models.py",
+        "src/aws-transform-mcp-server/awslabs/aws_transform_mcp_server/oauth.py",
+        "src/aws-transform-mcp-server/awslabs/aws_transform_mcp_server/tools/configure.py"
+       ]
+      },
+      {
+       "signal": "on-behalf-of",
+       "evidence_files": [
+        "src/cloudtrail-mcp-server/awslabs/cloudtrail_mcp_server/tools.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        "docusaurus/docusaurus.config.ts",
+        "docusaurus/tsconfig.json",
+        "scripts/verify-mcp-v2-locks.py"
+       ]
+      },
+      {
+       "signal": "gateway reference",
+       "evidence_files": [
+        "docusaurus/static/assets/server-cards.json",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/server.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/docs.py"
+       ]
+      },
+      {
+       "signal": "guardrail",
+       "evidence_files": [
+        "src/aws-pricing-mcp-server/awslabs/aws_pricing_mcp_server/server.py",
+        "src/cloudwatch-applicationsignals-mcp-server/tests/test_dynamic_instrumentation_tools.py",
+        "src/ecs-mcp-server/tests/unit/api/test_ecs_troubleshooting.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "detector presence is verifiable; robustness is not - adaptive attacks drive published defences back above 95% success",
+     "signals": [
+      {
+       "signal": "provenance tagging",
+       "evidence_files": [
+        "src/aws-bedrock-custom-model-import-mcp-server/awslabs/aws_bedrock_custom_model_import_mcp_server/tools/get_imported_model.py"
+       ]
+      },
+      {
+       "signal": "sanitisation",
+       "evidence_files": [
+        ".github/workflows/release.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/memory/guide.py",
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/runtime/guide.py"
+       ]
+      },
+      {
+       "signal": "spotlighting or delimiting",
+       "evidence_files": [
+        "src/amazon-bedrock-agentcore-mcp-server/awslabs/amazon_bedrock_agentcore_mcp_server/tools/code_interpreter/files.py",
+        "src/amazon-translate-mcp-server/awslabs/amazon_translate_mcp_server/workflow_orchestrator.py",
+        "src/aws-dataprocessing-mcp-server/awslabs/aws_dataprocessing_mcp_server/handlers/glue/crawler_handler.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ },
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "crewAIInc_crewAI",
+    "digest": {
+     "gitCommit": "fcdeb3d98d8537e71f36a22fe23c2828c8b98754"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "crewAIInc_crewAI",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 2105,
+    "tool_declaration_sites": 35,
+    "tool_files": [
+     "lib/cli/src/crewai_cli/cli.py",
+     "lib/crewai-tools/tests/adapters/mcp_adapter_test.py",
+     "lib/crewai-tools/tests/base_tool_test.py",
+     "lib/crewai/src/crewai/agents/agent_adapters/langgraph/langgraph_tool_adapter.py",
+     "lib/crewai/src/crewai/llms/providers/gemini/completion.py",
+     "lib/crewai/src/crewai/mcp/client.py",
+     "lib/crewai/src/crewai/mcp/tool_resolver.py",
+     "lib/crewai/src/crewai/tools/base_tool.py",
+     "lib/crewai/src/crewai/tools/mcp_tool_wrapper.py",
+     "lib/crewai/src/crewai/tools/structured_tool.py"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "credential",
+      "what": "credential access",
+      "examples": [
+       "lib/crewai/src/crewai/knowledge/knowledge.py",
+       "lib/crewai/src/crewai/llms/providers/bedrock/completion.py",
+       "lib/crewai/tests/agents/test_agent.py",
+       "lib/crewai/tests/cassettes/utilities/test_crew_emits_end_task_event.yaml",
+       "lib/crewai-files/src/crewai_files/uploaders/bedrock.py"
+      ]
+     },
+     {
+      "class": "destructive",
+      "what": "destructive sql",
+      "examples": [
+       "lib/cli/src/crewai_cli/checkpoint_cli.py",
+       "lib/crewai/src/crewai/flow/persistence/sqlite.py",
+       "lib/crewai/src/crewai/memory/storage/kickoff_task_outputs_storage.py",
+       "lib/crewai/src/crewai/state/provider/sqlite_provider.py",
+       "lib/crewai-tools/src/crewai_tools/tools/nl2sql/nl2sql_tool.py"
+      ]
+     },
+     {
+      "class": "filesystem",
+      "what": "filesystem write or delete",
+      "examples": [
+       ".github/workflows/docs-broken-links.yml",
+       "lib/cli/src/crewai_cli/checkpoint_cli.py",
+       "lib/cli/src/crewai_cli/create_crew.py",
+       "lib/cli/src/crewai_cli/create_flow.py",
+       "lib/cli/src/crewai_cli/create_json_crew.py"
+      ]
+     },
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       "conftest.py",
+       "lib/cli/src/crewai_cli/command.py",
+       "lib/cli/src/crewai_cli/deploy/main.py",
+       "lib/cli/src/crewai_cli/enterprise/main.py",
+       "lib/cli/src/crewai_cli/git.py"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "process execution",
+      "examples": [
+       ".github/workflows/publish.yml",
+       "lib/cli/src/crewai_cli/cli.py",
+       "lib/cli/src/crewai_cli/deploy/validate.py",
+       "lib/cli/src/crewai_cli/evaluate_crew.py",
+       "lib/cli/src/crewai_cli/git.py"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {},
+    "unannotated_default_applied": true,
+    "unannotated_default": "destructiveHint=true, openWorldHint=true",
+    "surface_hash": "4985deed0f8e835af1d356c0227a2bdb"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "allowlist",
+       "evidence_files": [
+        "lib/crewai/src/crewai/a2a/extensions/a2ui/client_extension.py",
+        "lib/crewai/tests/mcp/test_stdio_transport.py",
+        "lib/crewai-tools/src/crewai_tools/tools/db2_search_tool/db2_search_tool.py"
+       ]
+      },
+      {
+       "signal": "authorisation check",
+       "evidence_files": [
+        "lib/cli/tests/authentication/providers/test_okta.py",
+        "lib/crewai/src/crewai/a2a/config.py",
+        "lib/crewai/tests/cli/authentication/providers/test_okta.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "absence of a covert channel is not provable from source; documented DNS and object-storage bypass paths exist even for approved sandboxes",
+     "signals": [
+      {
+       "signal": "sandbox reference",
+       "evidence_files": [
+        "lib/cli/src/crewai_cli/create_json_crew.py",
+        "lib/crewai/src/crewai/agent/core.py",
+        "lib/crewai/tests/cassettes/TestCrewMultimodalAnthropic.test_pdf_file[anthropic-claude-sonnet-4-20250514].yaml"
+       ]
+      },
+      {
+       "signal": "sandboxed interpreter",
+       "evidence_files": [
+        "lib/cli/src/crewai_cli/create_json_crew.py",
+        "lib/crewai/src/crewai/agent/core.py",
+        "lib/crewai/src/crewai/llms/constants.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "2 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "audience validation",
+       "evidence_files": [
+        "lib/cli/src/crewai_cli/enterprise/main.py",
+        "lib/cli/src/crewai_cli/templates/flow/crews/content_crew/config/agents.yaml",
+        "lib/cli/tests/authentication/providers/test_auth0.py"
+       ]
+      },
+      {
+       "signal": "resource metadata",
+       "evidence_files": [
+        "lib/crewai/src/crewai/a2a/auth/utils.py",
+        "lib/crewai/src/crewai/a2a/utils/agent_card.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "content filtering",
+       "evidence_files": [
+        "lib/cli/src/crewai_cli/model_catalog.py",
+        "lib/crewai/tests/cassettes/test_hierarchical_verbose_false_manager_agent.yaml",
+        "lib/crewai/tests/events/test_llm_finish_reason_response_id.py"
+       ]
+      },
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        "lib/cli/src/crewai_cli/deploy/main.py",
+        "lib/cli/src/crewai_cli/model_catalog.py",
+        "lib/cli/src/crewai_cli/plus_api.py"
+       ]
+      },
+      {
+       "signal": "gateway reference",
+       "evidence_files": [
+        "lib/crewai/tests/llms/openai/test_openai.py",
+        "lib/crewai-tools/tests/tools/brave_search_tool_test.py"
+       ]
+      },
+      {
+       "signal": "guardrail",
+       "evidence_files": [
+        "lib/cli/tests/test_create_crew.py",
+        "lib/crewai/src/crewai/agent/core.py",
+        "lib/crewai/src/crewai/events/event_listener.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "detector presence is verifiable; robustness is not - adaptive attacks drive published defences back above 95% success",
+     "signals": [
+      {
+       "signal": "provenance tagging",
+       "evidence_files": [
+        "lib/crewai/src/crewai/memory/types.py",
+        "lib/crewai/src/crewai/memory/unified_memory.py",
+        "lib/crewai/tests/cassettes/agents/test_first_task_auto_inject_trigger.yaml"
+       ]
+      },
+      {
+       "signal": "sanitisation",
+       "evidence_files": [
+        "lib/crewai/src/crewai/agent/core.py",
+        "lib/crewai/src/crewai/agent/utils.py",
+        "lib/crewai/src/crewai/agents/agent_adapters/base_tool_adapter.py"
+       ]
+      },
+      {
+       "signal": "spotlighting or delimiting",
+       "evidence_files": [
+        "lib/cli/src/crewai_cli/deploy/validate.py",
+        "lib/crewai/src/crewai/skills/models.py",
+        "lib/crewai/src/crewai/skills/parser.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ },
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "github_github-mcp-server",
+    "digest": {
+     "gitCommit": "febc3293a4feb70e62399f39a26b082f78b9b176"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "github_github-mcp-server",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 258,
+    "tool_declaration_sites": 41,
+    "tool_files": [
+     "internal/ghmcp/oauth.go",
+     "internal/ghmcp/oauth_test.go",
+     "pkg/github/actions.go",
+     "pkg/github/code_quality.go",
+     "pkg/github/code_scanning.go",
+     "pkg/github/context_tools.go",
+     "pkg/github/context_tools_test.go",
+     "pkg/github/copilot.go",
+     "pkg/github/csv_output.go",
+     "pkg/github/csv_output_test.go"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "filesystem",
+      "what": "filesystem write or delete",
+      "examples": [
+       "cmd/github-mcp-server/feature_flag_docs.go",
+       "cmd/github-mcp-server/generate_docs.go",
+       "cmd/github-mcp-server/main_test.go",
+       "internal/toolsnaps/toolsnaps.go",
+       "internal/toolsnaps/toolsnaps_test.go"
+      ]
+     },
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       "internal/ghmcp/server.go",
+       "internal/githubapp/githubapp.go",
+       "internal/githubapp/githubapp_test.go",
+       "internal/githubv4mock/githubv4mock.go",
+       "internal/oauth/manager.go"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "process execution",
+      "examples": [
+       "cmd/mcpcurl/main.go",
+       "e2e/e2e_test.go",
+       "internal/oauth/env.go"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {},
+    "unannotated_default_applied": true,
+    "unannotated_default": "destructiveHint=true, openWorldHint=true",
+    "surface_hash": "a059a7512b29e62424bea2d406d3f619"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "allowlist",
+       "evidence_files": [
+        "pkg/github/feature_flags.go",
+        "pkg/github/issues_test.go",
+        "pkg/github/pullrequests_test.go"
+       ]
+      },
+      {
+       "signal": "authorisation check",
+       "evidence_files": [
+        "internal/ghmcp/oauth.go",
+        "internal/ghmcp/oauth_test.go",
+        "internal/oauth/flow.go"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "absence of a covert channel is not provable from source; documented DNS and object-storage bypass paths exist even for approved sandboxes",
+     "signals": [
+      {
+       "signal": "kernel confinement",
+       "evidence_files": [
+        "internal/oauth/env.go"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "3 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "delegation claim",
+       "evidence_files": [
+        "internal/githubv4mock/objects_are_equal_values.go"
+       ]
+      },
+      {
+       "signal": "oauth pkce",
+       "evidence_files": [
+        "internal/buildinfo/buildinfo.go",
+        "internal/oauth/manager_test.go",
+        "internal/oauth/testutil_test.go"
+       ]
+      },
+      {
+       "signal": "resource metadata",
+       "evidence_files": [
+        "pkg/http/middleware/cors.go",
+        "pkg/http/middleware/cors_test.go",
+        "pkg/http/middleware/scope_challenge.go"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        ".github/workflows/code-scanning.yml",
+        "cmd/github-mcp-server/main.go",
+        "cmd/github-mcp-server/main_test.go"
+       ]
+      },
+      {
+       "signal": "guardrail",
+       "evidence_files": [
+        "pkg/github/tools_static_validation_test.go",
+        "pkg/toolvalidation/readonlyhint.go"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "detector presence is verifiable; robustness is not - adaptive attacks drive published defences back above 95% success",
+     "signals": [
+      {
+       "signal": "provenance tagging",
+       "evidence_files": [
+        ".github/workflows/goreleaser.yml",
+        "pkg/github/issues.go"
+       ]
+      },
+      {
+       "signal": "sanitisation",
+       "evidence_files": [
+        "pkg/errors/error.go",
+        "pkg/errors/error_test.go",
+        "pkg/github/discussions.go"
+       ]
+      },
+      {
+       "signal": "spotlighting or delimiting",
+       "evidence_files": [
+        "pkg/github/search_utils.go",
+        "pkg/sanitize/sanitize_test.go"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ },
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "langchain-ai_langchain",
+    "digest": {
+     "gitCommit": "502b2b445b89b753cd468df979b71503f8f99425"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "langchain-ai_langchain",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 2673,
+    "tool_declaration_sites": 99,
+    "tool_files": [
+     "libs/core/langchain_core/runnables/base.py",
+     "libs/core/langchain_core/runnables/schema.py",
+     "libs/core/langchain_core/tools/__init__.py",
+     "libs/core/langchain_core/tools/base.py",
+     "libs/core/langchain_core/tools/convert.py",
+     "libs/core/langchain_core/tools/retriever.py",
+     "libs/core/langchain_core/tools/simple.py",
+     "libs/core/langchain_core/tools/structured.py",
+     "libs/core/tests/benchmarks/test_tool_schema_conversion.py",
+     "libs/core/tests/unit_tests/messages/test_utils.py"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "credential",
+      "what": "credential access",
+      "examples": [
+       "libs/langchain/tests/integration_tests/test_hub.py",
+       "libs/langchain/tests/unit_tests/load/test_load.py",
+       "libs/partners/anthropic/tests/unit_tests/test_chat_models.py",
+       "libs/partners/anthropic/tests/unit_tests/test_llms.py",
+       "libs/partners/groq/tests/unit_tests/test_chat_models.py"
+      ]
+     },
+     {
+      "class": "destructive",
+      "what": "destructive sql",
+      "examples": [
+       "libs/langchain/langchain_classic/memory/entity.py"
+      ]
+     },
+     {
+      "class": "filesystem",
+      "what": "filesystem write or delete",
+      "examples": [
+       ".github/workflows/_release.yml",
+       "libs/core/langchain_core/chat_history.py",
+       "libs/core/langchain_core/language_models/llms.py",
+       "libs/core/langchain_core/prompts/base.py",
+       "libs/core/langchain_core/vectorstores/in_memory.py"
+      ]
+     },
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       ".github/scripts/get_min_versions.py",
+       ".github/workflows/_release.yml",
+       "libs/core/langchain_core/_security/_transport.py",
+       "libs/core/langchain_core/runnables/graph_mermaid.py",
+       "libs/core/langchain_core/utils/aiter.py"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "process execution",
+      "examples": [
+       ".github/workflows/check_release_deps.yml",
+       ".github/workflows/close_unchecked_issues.yml",
+       "libs/core/tests/benchmarks/test_imports.py",
+       "libs/core/tests/unit_tests/_api/test_deprecation.py",
+       "libs/core/tests/unit_tests/test_imports.py"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {},
+    "unannotated_default_applied": true,
+    "unannotated_default": "destructiveHint=true, openWorldHint=true",
+    "surface_hash": "f80f7db20231dbb4d018d744fc7e8cf5"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "allowlist",
+       "evidence_files": [
+        ".github/scripts/test_release_options.py",
+        ".github/workflows/_release.yml",
+        "libs/core/langchain_core/load/_validation.py"
+       ]
+      },
+      {
+       "signal": "authorisation check",
+       "evidence_files": [
+        "libs/langchain/tests/unit_tests/examples/test_specs/zapier/apispec.json",
+        "libs/partners/openai/langchain_openai/chatgpt_oauth.py",
+        "libs/partners/openai/tests/unit_tests/test_chatgpt_oauth.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "absence of a covert channel is not provable from source; documented DNS and object-storage bypass paths exist even for approved sandboxes",
+     "signals": [
+      {
+       "signal": "isolation runtime",
+       "evidence_files": [
+        "libs/partners/openai/langchain_openai/chat_models/_client_utils.py",
+        "libs/partners/openai/langchain_openai/chat_models/base.py"
+       ]
+      },
+      {
+       "signal": "kernel confinement",
+       "evidence_files": [
+        "libs/langchain_v1/langchain/agents/middleware/_execution.py",
+        "libs/partners/openai/langchain_openai/chat_models/_client_utils.py"
+       ]
+      },
+      {
+       "signal": "network mode control",
+       "evidence_files": [
+        "libs/text-splitters/langchain_text_splitters/html.py"
+       ]
+      },
+      {
+       "signal": "sandbox reference",
+       "evidence_files": [
+        "libs/core/langchain_core/load/load.py",
+        "libs/core/langchain_core/prompts/string.py",
+        "libs/langchain/langchain_classic/agents/agent_toolkits/csv/__init__.py"
+       ]
+      },
+      {
+       "signal": "sandboxed interpreter",
+       "evidence_files": [
+        "libs/langchain/langchain_classic/agents/openai_assistant/base.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "3 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "audience validation",
+       "evidence_files": [
+        "libs/core/pyproject.toml",
+        "libs/core/tests/unit_tests/output_parsers/test_json.py",
+        "libs/langchain/pyproject.toml"
+       ]
+      },
+      {
+       "signal": "delegation claim",
+       "evidence_files": [
+        "libs/langchain/tests/unit_tests/agents/test_openai_functions_multi.py"
+       ]
+      },
+      {
+       "signal": "oauth pkce",
+       "evidence_files": [
+        "libs/partners/openai/langchain_openai/chatgpt_oauth.py",
+        "libs/partners/openai/tests/unit_tests/test_chatgpt_oauth.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "content filtering",
+       "evidence_files": [
+        "libs/langchain/langchain_classic/chains/__init__.py",
+        "libs/langchain/langchain_classic/chains/moderation.py",
+        "libs/langchain/tests/integration_tests/chains/openai_functions/test_openapi.py"
+       ]
+      },
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        "libs/core/langchain_core/load/load.py",
+        "libs/core/langchain_core/runnables/graph.py",
+        "libs/core/langchain_core/runnables/graph_mermaid.py"
+       ]
+      },
+      {
+       "signal": "gateway reference",
+       "evidence_files": [
+        "libs/core/langchain_core/tracers/core.py",
+        "libs/core/langchain_core/utils/_gateway.py",
+        "libs/core/tests/unit_tests/language_models/chat_models/test_base.py"
+       ]
+      },
+      {
+       "signal": "guardrail",
+       "evidence_files": [
+        "libs/langchain/langchain_classic/chains/constitutional_ai/base.py",
+        "libs/langchain/langchain_classic/output_parsers/__init__.py",
+        "libs/langchain/langchain_classic/output_parsers/rail_parser.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "detector presence is verifiable; robustness is not - adaptive attacks drive published defences back above 95% success",
+     "signals": [
+      {
+       "signal": "injection detector",
+       "evidence_files": [
+        "libs/partners/groq/langchain_groq/data/_profiles.py"
+       ]
+      },
+      {
+       "signal": "provenance tagging",
+       "evidence_files": [
+        "libs/core/langchain_core/utils/_gateway.py"
+       ]
+      },
+      {
+       "signal": "sanitisation",
+       "evidence_files": [
+        "libs/core/langchain_core/utils/__init__.py",
+        "libs/core/langchain_core/utils/strings.py",
+        "libs/core/tests/unit_tests/language_models/chat_models/test_base.py"
+       ]
+      },
+      {
+       "signal": "spotlighting or delimiting",
+       "evidence_files": [
+        "libs/core/langchain_core/caches.py",
+        "libs/core/langchain_core/output_parsers/list.py",
+        "libs/core/langchain_core/utils/mustache.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ },
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "langchain-ai_langgraph",
+    "digest": {
+     "gitCommit": "bdb8a9c7a4aa1390af225f6a5d292e5088659bd5"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "langchain-ai_langgraph",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 538,
+    "tool_declaration_sites": 20,
+    "tool_files": [
+     "libs/cli/examples/graphs/storm.py",
+     "libs/cli/tests/unit_tests/agent.py",
+     "libs/langgraph/bench/react_agent.py",
+     "libs/langgraph/tests/example_app/example_graph.py",
+     "libs/langgraph/tests/test_large_cases.py",
+     "libs/langgraph/tests/test_large_cases_async.py",
+     "libs/langgraph/tests/test_pregel.py",
+     "libs/langgraph/tests/test_pregel_async.py",
+     "libs/langgraph/tests/test_tool_stream_handler.py",
+     "libs/prebuilt/langgraph/prebuilt/tool_node.py"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "destructive",
+      "what": "destructive sql",
+      "examples": [
+       "libs/checkpoint-postgres/langgraph/checkpoint/postgres/__init__.py",
+       "libs/checkpoint-postgres/langgraph/checkpoint/postgres/aio.py",
+       "libs/checkpoint-postgres/langgraph/checkpoint/postgres/shallow.py",
+       "libs/checkpoint-postgres/langgraph/store/postgres/aio.py",
+       "libs/checkpoint-postgres/langgraph/store/postgres/base.py"
+      ]
+     },
+     {
+      "class": "filesystem",
+      "what": "filesystem write or delete",
+      "examples": [
+       "docs/generate_redirects.py",
+       "examples/delta-channel-dump/dump.py",
+       "libs/checkpoint/langgraph/checkpoint/memory/__init__.py",
+       "libs/checkpoint/tests/test_jsonplus.py",
+       "libs/cli/generate_schema.py"
+      ]
+     },
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       "libs/checkpoint-postgres/langgraph/store/postgres/base.py",
+       "libs/checkpoint-sqlite/langgraph/store/sqlite/base.py",
+       "libs/cli/langgraph_cli/analytics.py",
+       "libs/cli/langgraph_cli/config.py",
+       "libs/cli/langgraph_cli/deploy.py"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "process execution",
+      "examples": [
+       "libs/checkpoint/tests/test_jsonplus.py",
+       "libs/cli/langgraph_cli/docker.py",
+       "libs/langgraph/tests/test_subgraph_detection.py"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {},
+    "unannotated_default_applied": true,
+    "unannotated_default": "destructiveHint=true, openWorldHint=true",
+    "surface_hash": "3f5e8127f8aadf7a69d2459bdd84fa5f"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "allowlist",
+       "evidence_files": [
+        "libs/checkpoint/langgraph/checkpoint/base/__init__.py",
+        "libs/checkpoint/langgraph/checkpoint/serde/event_hooks.py",
+        "libs/checkpoint/langgraph/checkpoint/serde/jsonplus.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "NO_INTENT_FOUND",
+     "confidence": "STATIC",
+     "rationale": "no signal for this control in the source",
+     "signals": [],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "1 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "resource metadata",
+       "evidence_files": [
+        "libs/sdk-py/langgraph_sdk/auth/exceptions.py",
+        "libs/sdk-py/langgraph_sdk/auth/types.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "content filtering",
+       "evidence_files": [
+        "libs/langgraph/langgraph/stream/_types.py"
+       ]
+      },
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        ".github/scripts/run_langgraph_cli_test.py",
+        "libs/checkpoint/tests/test_memory.py",
+        "libs/cli/langgraph_cli/cli.py"
+       ]
+      },
+      {
+       "signal": "gateway reference",
+       "evidence_files": [
+        "libs/langgraph/tests/test_retry.py"
+       ]
+      },
+      {
+       "signal": "guardrail",
+       "evidence_files": [
+        "libs/prebuilt/langgraph/prebuilt/chat_agent_executor.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "detector presence is verifiable; robustness is not - adaptive attacks drive published defences back above 95% success",
+     "signals": [
+      {
+       "signal": "sanitisation",
+       "evidence_files": [
+        "libs/checkpoint-postgres/langgraph/store/postgres/base.py",
+        "libs/cli/langgraph_cli/deploy.py",
+        "libs/langgraph/langgraph/pregel/_algo.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ },
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "microsoft_autogen",
+    "digest": {
+     "gitCommit": "027ecf0a379bcc1d09956d46d12d44a3ad9cee14"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "microsoft_autogen",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 707,
+    "tool_declaration_sites": 49,
+    "tool_files": [
+     "python/packages/autogen-agentchat/src/autogen_agentchat/agents/_assistant_agent.py",
+     "python/packages/autogen-agentchat/tests/test_assistant_agent.py",
+     "python/packages/autogen-core/src/autogen_core/tools/_base.py",
+     "python/packages/autogen-core/src/autogen_core/tools/_static_workbench.py",
+     "python/packages/autogen-core/src/autogen_core/tools/_workbench.py",
+     "python/packages/autogen-core/tests/test_static_workbench_overrides.py",
+     "python/packages/autogen-core/tests/test_workbench.py",
+     "python/packages/autogen-ext/examples/mcp_example_server.py",
+     "python/packages/autogen-ext/src/autogen_ext/agents/azure/_azure_ai_agent.py",
+     "python/packages/autogen-ext/src/autogen_ext/agents/openai/_openai_assistant_agent.py"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "credential",
+      "what": "credential access",
+      "examples": [
+       "python/packages/autogen-agentchat/tests/test_group_chat_endpoint.py",
+       "python/packages/autogen-ext/src/autogen_ext/memory/chromadb/_chromadb.py",
+       "python/packages/autogen-ext/src/autogen_ext/models/azure/_azure_ai_client.py",
+       "python/packages/autogen-ext/src/autogen_ext/models/openai/_openai_client.py",
+       "python/packages/autogen-ext/src/autogen_ext/models/semantic_kernel/_sk_chat_completion_adapter.py"
+      ]
+     },
+     {
+      "class": "destructive",
+      "what": "destructive sql",
+      "examples": [
+       "python/packages/autogen-agentchat/tests/test_code_executor_agent.py",
+       "python/packages/autogen-studio/autogenstudio/database/schema_manager.py"
+      ]
+     },
+     {
+      "class": "filesystem",
+      "what": "filesystem write or delete",
+      "examples": [
+       ".github/workflows/docs.yml",
+       "python/docs/redirects/redirects.py",
+       "python/docs/src/generate_api_reference.py",
+       "python/fixup_generated_files.py",
+       "python/packages/agbench/benchmarks/GAIA/Templates/ParallelAgents/scenario.py"
+      ]
+     },
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       "python/packages/agbench/benchmarks/HumanEval/Scripts/init_tasks.py",
+       "python/packages/autogen-ext/src/autogen_ext/agents/azure/_azure_ai_agent.py",
+       "python/packages/autogen-ext/src/autogen_ext/tools/http/_http_tool.py",
+       "python/packages/autogen-ext/src/autogen_ext/tools/langchain/_langchain_adapter.py",
+       "python/packages/autogen-ext/tests/models/test_ollama_chat_completion_client.py"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "process execution",
+      "examples": [
+       "python/check_md_code_blocks.py",
+       "python/docs/src/_extension/code_lint.py",
+       "python/docs/src/conf.py",
+       "python/packages/agbench/src/agbench/run_cmd.py",
+       "python/packages/autogen-agentchat/src/autogen_agentchat/agents/_code_executor_agent.py"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {
+     "readOnlyHint": 1,
+     "destructiveHint": 1,
+     "idempotentHint": 1,
+     "openWorldHint": 1
+    },
+    "unannotated_default_applied": false,
+    "unannotated_default": null,
+    "surface_hash": "bdf61596029245b4276a560412b955c2"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "authorisation check",
+       "evidence_files": [
+        "python/packages/autogen-studio/autogenstudio/web/auth/providers.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "absence of a covert channel is not provable from source; documented DNS and object-storage bypass paths exist even for approved sandboxes",
+     "signals": [
+      {
+       "signal": "kernel confinement",
+       "evidence_files": [
+        ".devcontainer/docker-compose.yml"
+       ]
+      },
+      {
+       "signal": "sandbox reference",
+       "evidence_files": [
+        "python/packages/autogen-ext/src/autogen_ext/agents/file_surfer/_markdown_file_browser.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "1 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "audience validation",
+       "evidence_files": [
+        "python/packages/autogen-ext/tests/task_centric_memory/sessions/teachability/session.json",
+        "python/packages/autogen-ext/tests/tools/test_mcp_tools.py",
+        "python/samples/agentchat_graphrag/settings.yaml"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "content filtering",
+       "evidence_files": [
+        "python/packages/autogen-core/src/autogen_core/models/_types.py",
+        "python/packages/autogen-ext/src/autogen_ext/models/_utils/normalize_stop_reason.py",
+        "python/packages/autogen-ext/src/autogen_ext/models/azure/_azure_ai_client.py"
+       ]
+      },
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        "dotnet/website/articles/toc.yml",
+        "python/packages/agbench/benchmarks/GAIA/config.yaml",
+        "python/packages/agbench/benchmarks/HumanEval/config.yaml"
+       ]
+      },
+      {
+       "signal": "gateway reference",
+       "evidence_files": [
+        "python/packages/autogen-ext/src/autogen_ext/code_executors/docker/_docker_code_executor.py",
+        "python/packages/autogen-ext/src/autogen_ext/code_executors/docker_jupyter/_jupyter_server.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "detector presence is verifiable; robustness is not - adaptive attacks drive published defences back above 95% success",
+     "signals": [
+      {
+       "signal": "sanitisation",
+       "evidence_files": [
+        "python/packages/agbench/src/agbench/linter/coders/oai_coder.py",
+        "python/packages/autogen-ext/src/autogen_ext/agents/web_surfer/page_script.js",
+        "python/packages/autogen-ext/src/autogen_ext/code_executors/local/__init__.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ },
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "modelcontextprotocol_python-sdk",
+    "digest": {
+     "gitCommit": "6705402e246dc4eb1fcdf4d9902b78d3c9c36e1b"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "modelcontextprotocol_python-sdk",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 894,
+    "tool_declaration_sites": 710,
+    "tool_files": [
+     ".github/actions/conformance/client.py",
+     "docs_src/apps/tutorial001.py",
+     "docs_src/asgi/tutorial001.py",
+     "docs_src/asgi/tutorial002.py",
+     "docs_src/asgi/tutorial004.py",
+     "docs_src/asgi/tutorial005.py",
+     "docs_src/asgi/tutorial006.py",
+     "docs_src/authorization/tutorial001.py",
+     "docs_src/authorization/tutorial002.py",
+     "docs_src/caching/tutorial001.py"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "destructive",
+      "what": "destructive sql",
+      "examples": [
+       "examples/mcpserver/memory.py"
+      ]
+     },
+     {
+      "class": "filesystem",
+      "what": "filesystem write or delete",
+      "examples": [
+       "scripts/docs/gen_ref_pages.py",
+       "scripts/docs/translations.py",
+       "tests/transports/stdio/test_lifecycle.py",
+       "tests/transports/stdio/test_windows.py"
+      ]
+     },
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       "examples/mcpserver/memory.py",
+       "tests/interaction/transports/test_hosting_http_modern.py"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "process execution",
+      "examples": [
+       "scripts/gen_surface_types.py",
+       "src/mcp/cli/cli.py",
+       "src/mcp/os/win32/utilities.py",
+       "tests/client/test_stdio.py",
+       "tests/test_types.py"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {
+     "readOnlyHint": 12,
+     "destructiveHint": 4,
+     "idempotentHint": 4,
+     "openWorldHint": 4
+    },
+    "unannotated_default_applied": false,
+    "unannotated_default": null,
+    "surface_hash": "bda45c411b3c562b197cbf01e2051d19"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "allowlist",
+       "evidence_files": [
+        "scripts/gen_surface_types.py",
+        "src/mcp/client/_probe.py",
+        "src/mcp/server/request_state.py"
+       ]
+      },
+      {
+       "signal": "authorisation check",
+       "evidence_files": [
+        ".github/workflows/docs-preview.yml",
+        "docs_src/identity_assertion/tutorial002.py",
+        "examples/servers/simple-auth/mcp_simple_auth/simple_auth_provider.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "absence of a covert channel is not provable from source; documented DNS and object-storage bypass paths exist even for approved sandboxes",
+     "signals": [
+      {
+       "signal": "sandbox reference",
+       "evidence_files": [
+        "src/mcp/shared/path_security.py",
+        "tests/shared/test_path_security.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "4 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "audience validation",
+       "evidence_files": [
+        ".github/actions/conformance/client.py",
+        "docs_src/identity_assertion/tutorial001.py",
+        "docs_src/identity_assertion/tutorial002.py"
+       ]
+      },
+      {
+       "signal": "oauth pkce",
+       "evidence_files": [
+        "examples/servers/simple-auth/mcp_simple_auth/simple_auth_provider.py",
+        "examples/stories/_shared/auth.py",
+        "src/mcp/client/auth/oauth2.py"
+       ]
+      },
+      {
+       "signal": "resource metadata",
+       "evidence_files": [
+        "examples/stories/legacy_routing/server.py",
+        "src/mcp/client/auth/oauth2.py",
+        "src/mcp/client/auth/utils.py"
+       ]
+      },
+      {
+       "signal": "rfc 8693 exchange",
+       "evidence_files": [
+        ".github/actions/conformance/client.py",
+        "examples/stories/identity_assertion/client.py",
+        "examples/stories/identity_assertion/idp.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        "examples/stories/_harness.py",
+        "examples/stories/_shared/auth.py",
+        "examples/stories/oauth_client_credentials/server.py"
+       ]
+      },
+      {
+       "signal": "gateway reference",
+       "evidence_files": [
+        ".github/scripts/pr_intake_gate.test.js",
+        "schema/2026-07-28.json",
+        "src/mcp/client/streamable_http.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "detector presence is verifiable; robustness is not - adaptive attacks drive published defences back above 95% success",
+     "signals": [
+      {
+       "signal": "provenance tagging",
+       "evidence_files": [
+        "scripts/docs/translations.py",
+        "tests/docs/test_translations.py",
+        "tests/interaction/_requirements.py"
+       ]
+      },
+      {
+       "signal": "sanitisation",
+       "evidence_files": [
+        "src/mcp/server/_otel.py",
+        "src/mcp/server/request_state.py",
+        "src/mcp/shared/direct_dispatcher.py"
+       ]
+      },
+      {
+       "signal": "spotlighting or delimiting",
+       "evidence_files": [
+        "src/mcp/client/auth/utils.py",
+        "src/mcp/client/client.py",
+        "src/mcp/client/stdio.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ },
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "modelcontextprotocol_servers",
+    "digest": {
+     "gitCommit": "599dafc1054550a6eeb87a6545c1e1b03b3ca827"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "modelcontextprotocol_servers",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 100,
+    "tool_declaration_sites": 9,
+    "tool_files": [
+     "src/fetch/src/mcp_server_fetch/server.py",
+     "src/git/src/mcp_server_git/server.py",
+     "src/time/src/mcp_server_time/server.py"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "filesystem",
+      "what": "filesystem write or delete",
+      "examples": [
+       "scripts/release.py",
+       "src/filesystem/__tests__/path-validation.test.ts",
+       "src/git/tests/test_server.py"
+      ]
+     },
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       "src/everything/tools/gzip-file-as-resource.ts",
+       "src/fetch/tests/test_server.py"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "process execution",
+      "examples": [
+       "scripts/release.py"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {
+     "readOnlyHint": 57,
+     "destructiveHint": 47,
+     "idempotentHint": 47,
+     "openWorldHint": 57
+    },
+    "unannotated_default_applied": false,
+    "unannotated_default": null,
+    "surface_hash": "c450061970d5d14f4b6cf1aff7bcfb0c"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "access check",
+       "evidence_files": [
+        "src/filesystem/lib.ts"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "NO_INTENT_FOUND",
+     "confidence": "STATIC",
+     "rationale": "no signal for this control in the source",
+     "signals": [],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "1 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "audience validation",
+       "evidence_files": [
+        "src/everything/__tests__/tools.test.ts",
+        "src/everything/tools/get-annotated-message.ts",
+        "src/fetch/pyproject.toml"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        "package-lock.json",
+        "src/fetch/src/mcp_server_fetch/__init__.py",
+        "src/fetch/src/mcp_server_fetch/server.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "NO_INTENT_FOUND",
+     "confidence": "STATIC",
+     "rationale": "no signal for this control in the source",
+     "signals": [],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ },
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "modelcontextprotocol_typescript-sdk",
+    "digest": {
+     "gitCommit": "7b781ed4e25355a25d15974f3c76de81299694ed"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "modelcontextprotocol_typescript-sdk",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 957,
+    "tool_declaration_sites": 58,
+    "tool_files": [
+     "examples/guides/advanced/wire-schemas.examples.ts",
+     "examples/oauth/simpleOAuthClient.ts",
+     "examples/repl/client.ts",
+     "packages/client/src/client/client.ts",
+     "packages/client/src/index.ts",
+     "packages/codemod/src/migrations/v1-to-v2/mappings/schemaToMethodMap.ts",
+     "packages/codemod/src/migrations/v1-to-v2/mappings/specSchemaNames.ts",
+     "packages/codemod/src/migrations/v1-to-v2/transforms/handlerRegistration.ts",
+     "packages/codemod/test/commentInsertion.test.ts",
+     "packages/codemod/test/integration.test.ts"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       "examples/bearer-auth/client.ts",
+       "examples/bearer-auth-web/client.ts",
+       "examples/bearer-auth-web/server.ts",
+       "examples/caching/server.ts",
+       "examples/cli-client/test/auth.test.ts"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "dynamic evaluation",
+      "examples": [
+       "docs/.vitepress/llms.ts",
+       "examples/cli-client/host/ui.ts",
+       "examples/shared/src/auth.ts",
+       "packages/client/src/client/auth.ts",
+       "packages/core-internal/src/util/standardSchema.ts"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {
+     "readOnlyHint": 42,
+     "destructiveHint": 13,
+     "idempotentHint": 15,
+     "openWorldHint": 15
+    },
+    "unannotated_default_applied": false,
+    "unannotated_default": null,
+    "surface_hash": "c4f27bc6526ac71e718151b26b052ebd"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "allowlist",
+       "evidence_files": [
+        "examples/guides/serving/webStandard.examples.ts",
+        "packages/client/src/client/probeClassifier.ts",
+        "packages/client/test/client/errorBrandConformance.test.ts"
+       ]
+      },
+      {
+       "signal": "authorisation check",
+       "evidence_files": [
+        "examples/cli-client/host/auth.ts",
+        "examples/cli-client/test/auth.test.ts",
+        "examples/elicitation/server.ts"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "NO_INTENT_FOUND",
+     "confidence": "STATIC",
+     "rationale": "no signal for this control in the source",
+     "signals": [],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "5 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "audience validation",
+       "evidence_files": [
+        "examples/guides/clients/machine-auth.examples.ts",
+        "packages/client/src/client/authExtensions.ts",
+        "packages/client/src/client/crossAppAccess.ts"
+       ]
+      },
+      {
+       "signal": "delegation claim",
+       "evidence_files": [
+        "packages/core-internal/test/shared/inputRequired.test.ts"
+       ]
+      },
+      {
+       "signal": "oauth pkce",
+       "evidence_files": [
+        "packages/client/src/client/auth.ts",
+        "packages/client/test/client/auth.test.ts",
+        "packages/server-legacy/src/auth/handlers/authorize.ts"
+       ]
+      },
+      {
+       "signal": "resource metadata",
+       "evidence_files": [
+        "examples/bearer-auth/client.ts",
+        "examples/bearer-auth/package.json",
+        "examples/bearer-auth-web/client.ts"
+       ]
+      },
+      {
+       "signal": "rfc 8693 exchange",
+       "evidence_files": [
+        "packages/client/src/client/authErrors.ts",
+        "packages/client/src/client/crossAppAccess.ts",
+        "packages/client/test/client/crossAppAccess.test.ts"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        "examples/cli-client/providers/openai.ts",
+        "examples/guides/advanced/wire-schemas.examples.ts",
+        "examples/oauth/simpleOAuthClient.ts"
+       ]
+      },
+      {
+       "signal": "gateway reference",
+       "evidence_files": [
+        "docs/.vitepress/nav.ts",
+        "examples/gateway/client.ts",
+        "examples/gateway/package.json"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "detector presence is verifiable; robustness is not - adaptive attacks drive published defences back above 95% success",
+     "signals": [
+      {
+       "signal": "provenance tagging",
+       "evidence_files": [
+        "examples/cli-client/host/content.ts",
+        "examples/cli-client/host/host.ts",
+        "examples/cli-client/script/session.ts"
+       ]
+      },
+      {
+       "signal": "sanitisation",
+       "evidence_files": [
+        "examples/cli-client/host/host.ts",
+        "examples/cli-client/host/naming.ts",
+        "examples/cli-client/test/host.test.ts"
+       ]
+      },
+      {
+       "signal": "spotlighting or delimiting",
+       "evidence_files": [
+        "docs/.vitepress/llms.ts",
+        "packages/client/src/client/auth.ts",
+        "packages/client/src/client/responseCache.ts"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ },
+ {
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+   {
+    "name": "openai_openai-agents-python",
+    "digest": {
+     "gitCommit": "10cdae4a3c30a29c6e96c8ec14e6bf1c5f02940e"
+    }
+   }
+  ],
+  "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+  "predicate": {
+   "deployment_id": "openai_openai-agents-python",
+   "evaluator": "control_intent.py/1.0",
+   "scope": "static source analysis only - no live deployment was inspected",
+   "code_surface": {
+    "files_scanned": 998,
+    "tool_declaration_sites": 182,
+    "tool_files": [
+     "examples/agent_patterns/agents_as_tools_conditional.py",
+     "examples/agent_patterns/agents_as_tools_streaming.py",
+     "examples/agent_patterns/forcing_tool_use.py",
+     "examples/agent_patterns/hosted_multi_agent_beta.py",
+     "examples/agent_patterns/human_in_the_loop.py",
+     "examples/agent_patterns/human_in_the_loop_custom_rejection.py",
+     "examples/agent_patterns/human_in_the_loop_stream.py",
+     "examples/basic/agent_lifecycle_example.py",
+     "examples/basic/image_tool_output.py",
+     "examples/basic/lifecycle_example.py"
+    ],
+    "dangerous_sinks": [
+     {
+      "class": "credential",
+      "what": "credential access",
+      "examples": [
+       "examples/sandbox/sandbox_agent_with_remote_snapshot.py",
+       "src/agents/tracing/processors.py",
+       "tests/conftest.py"
+      ]
+     },
+     {
+      "class": "destructive",
+      "what": "destructive sql",
+      "examples": [
+       "src/agents/extensions/memory/advanced_sqlite_session.py",
+       "src/agents/extensions/memory/async_sqlite_session.py",
+       "src/agents/memory/sqlite_session.py",
+       "tests/extensions/memory/test_advanced_sqlite_session.py",
+       "tests/extensions/memory/test_async_sqlite_session.py"
+      ]
+     },
+     {
+      "class": "filesystem",
+      "what": "filesystem write or delete",
+      "examples": [
+       ".agents/skills/implementation-final-review/scripts/test_review_state.py",
+       ".github/scripts/run_integration_tests.py",
+       "docs/scripts/translate_docs.py",
+       "examples/agent_patterns/human_in_the_loop.py",
+       "examples/memory/hitl_session_scenario.py"
+      ]
+     },
+     {
+      "class": "network",
+      "what": "outbound http",
+      "examples": [
+       "examples/mcp/manager_example/smoke_test.py",
+       "examples/mcp/streamablehttp_example/server.py",
+       "examples/sandbox/extensions/daytona/usaspending_text2sql/setup_db.py",
+       "examples/sandbox/extensions/runloop/capabilities.py",
+       "examples/sandbox/extensions/vercel_runner.py"
+      ]
+     },
+     {
+      "class": "process",
+      "what": "process execution",
+      "examples": [
+       ".agents/skills/implementation-final-review/scripts/review_state.py",
+       ".agents/skills/implementation-final-review/scripts/test_review_protocol.py",
+       ".agents/skills/implementation-final-review/scripts/test_review_state.py",
+       ".agents/skills/implementation-kickoff/scripts/test_validate_handoff.py",
+       ".agents/skills/implementation-kickoff/scripts/validate_handoff.py"
+      ]
+     }
+    ],
+    "mcp_annotations_found": {},
+    "unannotated_default_applied": true,
+    "unannotated_default": "destructiveHint=true, openWorldHint=true",
+    "surface_hash": "b5642eab4873dbbb15e8d7be22e70a8e"
+   },
+   "controls": [
+    {
+     "id": "C1_default_deny_least_privilege",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs usage data and the effective role policy",
+     "signals": [
+      {
+       "signal": "allowlist",
+       "evidence_files": [
+        "src/agents/mcp/server.py",
+        "src/agents/mcp/util.py",
+        "src/agents/run_internal/blocked_output.py"
+       ]
+      },
+      {
+       "signal": "authorisation check",
+       "evidence_files": [
+        ".agents/skills/implementation-final-review/scripts/test_skill_contract.py",
+        "src/agents/run_context.py",
+        "src/agents/sandbox/sandboxes/unix_local.py"
+       ]
+      },
+      {
+       "signal": "policy engine",
+       "evidence_files": [
+        "src/agents/voice/model.py",
+        "tests/test_released_api_contract.py",
+        "tests/voice/test_tts_voice_types.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T3"
+      ]
+     }
+    },
+    {
+     "id": "C2_sandbox_no_egress",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "absence of a covert channel is not provable from source; documented DNS and object-storage bypass paths exist even for approved sandboxes",
+     "signals": [
+      {
+       "signal": "kernel confinement",
+       "evidence_files": [
+        "src/agents/sandbox/sandboxes/docker.py",
+        "tests/sandbox/test_docker.py"
+       ]
+      },
+      {
+       "signal": "network mode control",
+       "evidence_files": [
+        "integration_tests/security/test_local_sandbox_isolation.py",
+        "src/agents/sandbox/sandboxes/docker.py",
+        "tests/fixtures/run_state/features/v1_17_docker_labels.json"
+       ]
+      },
+      {
+       "signal": "sandbox reference",
+       "evidence_files": [
+        ".agents/skills/code-change-verification/agents/openai.yaml",
+        ".agents/skills/implementation-final-review/scripts/test_skill_contract.py",
+        ".github/scripts/update_rclone_pin.py"
+       ]
+      },
+      {
+       "signal": "sandboxed interpreter",
+       "evidence_files": [
+        "examples/sandbox/extensions/cloudflare_runner.py",
+        "examples/sandbox/extensions/daytona/daytona_runner.py",
+        "examples/sandbox/extensions/e2b_runner.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM05"
+      ],
+      "owasp_agentic": [
+       "T11"
+      ]
+     }
+    },
+    {
+     "id": "C3_identity_chain_obo",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "2 distinct signals; enforcement not verifiable from source",
+     "signals": [
+      {
+       "signal": "audience validation",
+       "evidence_files": [
+        "pyproject.toml"
+       ]
+      },
+      {
+       "signal": "delegation claim",
+       "evidence_files": [
+        "tests/test_stream_input_guardrail_timing.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM06"
+      ],
+      "owasp_agentic": [
+       "T3",
+       "T9"
+      ]
+     }
+    },
+    {
+     "id": "C4_gateway_guardrails",
+     "verdict": "INTENT_EVIDENCED",
+     "confidence": "STATIC",
+     "rationale": "intent present in source; runtime verdict needs reachability testing from the deployment's network position",
+     "signals": [
+      {
+       "signal": "content filtering",
+       "evidence_files": [
+        "src/agents/extensions/models/any_llm_model.py",
+        "src/agents/extensions/models/litellm_model.py",
+        "src/agents/models/chatcmpl_stream_handler.py"
+       ]
+      },
+      {
+       "signal": "endpoint indirection",
+       "evidence_files": [
+        "examples/basic/hello_world_gpt_oss.py",
+        "examples/mcp/manager_example/smoke_test.py",
+        "examples/mcp/streamablehttp_custom_client_example/main.py"
+       ]
+      },
+      {
+       "signal": "gateway reference",
+       "evidence_files": [
+        "examples/sandbox/extensions/runloop/capabilities.py",
+        "examples/sandbox/extensions/vercel_runner.py",
+        "src/agents/extensions/sandbox/runloop/sandbox.py"
+       ]
+      },
+      {
+       "signal": "guardrail",
+       "evidence_files": [
+        "docs/scripts/translate_docs.py",
+        "examples/agent_patterns/input_guardrails.py",
+        "examples/agent_patterns/output_guardrails.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM02"
+      ],
+      "owasp_agentic": [
+       "T2",
+       "T6"
+      ]
+     }
+    },
+    {
+     "id": "C5_injection_screening",
+     "verdict": "PARTIAL",
+     "confidence": "CAPPED",
+     "rationale": "detector presence is verifiable; robustness is not - adaptive attacks drive published defences back above 95% success",
+     "signals": [
+      {
+       "signal": "provenance tagging",
+       "evidence_files": [
+        ".agents/skills/implementation-final-review/scripts/test_skill_contract.py",
+        "integration_tests/packaging/test_released_api_contract.py",
+        "integration_tests/packaging/test_run_state_compatibility.py"
+       ]
+      },
+      {
+       "signal": "sanitisation",
+       "evidence_files": [
+        "examples/realtime/app/server.py",
+        "integration_tests/_contract_support.py",
+        "src/agents/extensions/models/any_llm_model.py"
+       ]
+      },
+      {
+       "signal": "spotlighting or delimiting",
+       "evidence_files": [
+        ".github/scripts/update_rclone_pin.py",
+        "docs/scripts/translate_docs.py",
+        "src/agents/sandbox/_mount_security.py"
+       ]
+      }
+     ],
+     "framework_mappings": {
+      "owasp_llm": [
+       "LLM01"
+      ],
+      "owasp_agentic": [
+       "T6",
+       "T12"
+      ]
+     }
+    }
+   ],
+   "drift": {
+    "since": null,
+    "changed": []
+   }
+  },
+  "signatures": [],
+  "signing_note": "unsigned - see skills/attestation/attestation-signer-lifecycle"
+ }
+]

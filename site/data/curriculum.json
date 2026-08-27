@@ -802,6 +802,24 @@
       },
       {
        "id": "B1.16",
+       "title": "Attesting control intent for agents and MCP servers",
+       "track": "secure",
+       "summary": "Decompose real-time control attestation into eleven deployment-scoped skills joined by a deployment_id, then run the static half against ten widely-deployed open-source agent and MCP repositories. Produces a signed-shaped in-toto attestation with per-control verdicts, evidence pointers and the confidence ceilings that stop it overclaiming.",
+       "risk": "Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change.",
+       "control": "Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.",
+       "lab": "Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.",
+       "tools": [
+        "in-toto",
+        "Sigstore",
+        "OSCAL",
+        "OPA"
+       ],
+       "models": [
+        "GLM-4.6"
+       ]
+      },
+      {
+       "id": "B1.17",
        "title": "Bonus — Google Mantis, the pipeline in production",
        "track": "defend",
        "summary": "A worked case study of an agentic security pipeline operating at real scale. What held up, what broke, and which lessons transfer to your estate.",

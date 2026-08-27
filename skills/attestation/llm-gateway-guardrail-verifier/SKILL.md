@@ -1,0 +1,65 @@
+---
+name: llm-gateway-guardrail-verifier
+description: >-
+  Prove all model traffic leaves through the sanctioned gateway, including
+  tool-initiated and background calls, and that guardrail policies are
+  attached and enforced. Use to attest gateway routing, to check whether a
+  provider endpoint is directly reachable, or to evidence which guardrail
+  policies are switched on.
+allowed-tools: Bash, Read
+---
+
+# Llm Gateway Guardrail Verifier
+
+**Controls:** Control 4 — gateway routing and guardrails
+
+## Confidence: HIGH **only if** egress is enforced below the application
+
+An application-layer gateway configuration is a routing preference. An agent
+that can open a socket can bypass it by calling the provider directly. If the
+allowlist is not enforced at the network layer, **downgrade this control to
+PARTIAL** and say why.
+
+## Procedure
+
+1. **Test reachability, do not read configuration.** From the deployment's
+   network position, attempt to reach provider endpoints directly. Anything
+   reachable that is not the gateway is a finding, regardless of what the
+   configuration says.
+
+2. **Cover the paths people forget.** Tool-initiated calls, background jobs,
+   scheduled tasks, retry paths and sub-agents. A gateway that fronts the main
+   request path and not the batch job is a gateway with a hole in it.
+
+3. **Confirm guardrail attachment and version.** Record the guardrail ID and
+   version actually attached to the route, not the one in the template.
+
+4. **Enumerate enabled policies.** Content filters, prompt-attack filtering,
+   denied topics, sensitive-information filters, contextual grounding. Record
+   whether each is applied on **input, output, or both** — input-only filtering
+   is a common and quiet gap.
+
+5. **Confirm the action.** A filter set to observe rather than block is
+   telemetry, not a control. Record the configured action per policy.
+
+## Output contract
+
+```json
+{
+  "deployment_id": "str",
+  "gateway_enforced": true,
+  "enforcement_layer": "network|application",
+  "reachable_provider_findings": [{"endpoint": "str", "path": "direct|tool|background"}],
+  "guardrail": {"id": "str", "version": "str",
+                "policies": [{"name": "str", "applied_to": "input|output|both",
+                              "action": "block|anonymize|observe"}]},
+  "verdict": "PASS|PARTIAL|FAIL"
+}
+```
+
+## Failure modes
+
+- **Reading the route table instead of testing reachability.**
+- **Missing the background path.** Scheduled and tool-initiated calls are the
+  ones that bypass the gateway in practice.
+- **Recording a guardrail as enforced when its action is observe.**
