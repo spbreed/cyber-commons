@@ -75,7 +75,7 @@ that teaches only one produces a practitioner who gets surprised.
 
 ### The AppSec pipeline (track B1)
 
-B1 is one artefact built over sixteen sessions: a five-phase, fifteen-stage
+B1 is one artefact built over seventeen sessions: a five-phase, fifteen-stage
 automated application-security pipeline.
 
 ```
@@ -94,8 +94,12 @@ automated application-security pipeline.
 | **5 · Governance & reporting** | severity calibration and reporting | B1.12 |
 
 Three cross-cutting sessions cover context engineering, injection in your own
-pipeline, and securing developers' coding agents. The track closes with
-**[B1.16 — Google Mantis as a bonus](labs/notebooks/B1.16.ipynb)**: a real
+pipeline, and securing developers' coding agents. **[B1.16](labs/notebooks/B1.16.ipynb)**
+then attests the whole thing — eleven skills that turn a control claim into a
+signed statement bound to one deployment, tested against ten real open-source
+agent and MCP repositories ([`labs/attestation/`](labs/attestation)). The track
+closes with
+**[B1.17 — Google Mantis as a bonus](labs/notebooks/B1.17.ipynb)**: a real
 implementation mapped stage by stage onto the pipeline you just built, its two
 output shapes parsed, and its findings scored against a held-out key *before*
 you adopt it. A reference implementation is a starting point you evaluate, not a
