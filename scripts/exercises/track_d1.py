@@ -594,7 +594,7 @@ for label, (mix, scopes) in WEEKS.items():
             f"   why it matters: the controls in A3 were tested against the old\\n"
             f"                   behaviour; a new tool may not be covered\\n"
             f"   do this      : confirm a manifest change was reviewed (A1.1),\\n"
-            f"                   then re-run the containment suite (C1.5)")
+            f"                   then re-run the containment suite (C1.2)")
 
 ev = [Event(now, "patch-agent", tool) for tool, n in WEEKS["week 8 (upgrade)"][0]
       for _ in range(n)]

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.11 — Building the SAST harness | Cyber Commons</title><meta name="description" content="Index → summarise → hypothesise → verify, with per-file context budgets, reachability gating and a deduplication stage that decides whether the output is a queue or a landfill."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.11</div><h1>Building the SAST harness</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A SAST loop that matches patterns instead of reasoning about semantics, and cannot explain why anything is a vulnerability.</p></div><div class="ctrl"><div class="lab">Control</div><p>Index → summarise → hypothesise → verify, with per-file context budgets, reachability gating and a deduplication stage that decides whether the output is a queue or a landfill.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the four-stage loop over a seeded corpus and measure how much of the output survives reachability gating.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 27 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.11 · Building the SAST harness</h1>
-<p><strong>Function B — Product &amp; Application Security → The Security Automation / Harness Engineer</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.9.html">B2.9 · Idempotency, replay and rollback</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.11 — Evaluating a security harness | Cyber Commons</title><meta name="description" content="Ground truth + blind protocol + execution-verified scoring; report reliability (pass^k) not just capability (pass@k); never quote schema conformance as accuracy."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product and Application Security with AI › The Security Automation / Harness Engineer</div><div class="sid">B2.11</div><h1>Evaluating a security harness</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A single successful run hides how unreliable an agent really is; a hallucinated finding looks exactly like a real one.</p></div><div class="ctrl"><div class="lab">Control</div><p>Ground truth + blind protocol + execution-verified scoring; report reliability (pass^k) not just capability (pass@k); never quote schema conformance as accuracy.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 36 lines of output in 0.04s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.11 · Evaluating a security harness</h1>
+<p><strong>Function B — Product and Application Security with AI → The Security Automation / Harness Engineer</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.10.html">B2.10 · Choosing the model backbone</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,128 +11,191 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>OpenGrep, Trivy</td>
+<td>Cyber Commons eval harness, Checkov, CyberGym, Inspect</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>Kimi K2.6, GLM-5.2</td>
+<td>Llama 3.3, GLM-4.6, Kimi K2</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>The SAST harness is the first of four disciplines, and they all share the same
-loop: <strong>index → summarise → hypothesise → verify.</strong> What makes each discipline
-different is only the last step — what counts as proof.</p>
-<p>For static analysis the shape is:</p>
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>A single successful run hides how unreliable an agent is, and a hallucinated finding is indistinguishable from a real one until something checks. Evaluation is the only part of this chapter that tells you whether the rest of it worked.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   corpus with known answers
+        |
+        v
+   harness run --&gt; findings --&gt; scored against the key
+                                     |
+                    +----------------+----------------+
+                    | recall  precision  cost  time   |
+                    +---------------------------------+
+
+   a hallucinated finding looks exactly like a real one
+   until something with the answers checks
+</code></pre>
+<p>This is the flagship lesson of the track: how to tell whether a security harness
+is any good.</p>
+<p>Four stages, in order, each answering a different question:</p>
 <ol>
-<li><strong>Index.</strong> Turn the repository into something navigable — symbols, call
-   edges, entry points. Done once, reused by every later stage.</li>
-<li><strong>Summarise.</strong> Compress each component to something that fits in a context
-   window, because the repository never will.</li>
-<li><strong>Hypothesise.</strong> Ask the model where a weakness could be, given the summary
-   and the neighbourhood. This is the step people think is the whole system.</li>
-<li><strong>Verify.</strong> Check the hypothesis against the code — is the sink real, is the
-   path reachable, is a sanitiser already present.</li>
+<li><strong>Ingest</strong> — did the output parse and match the schema?</li>
+<li><strong>Path matching</strong> — is the finding about the file we asked about?</li>
+<li><strong>Expert proxy</strong> — is it right? Scored {0, 0.5, 1}.</li>
+<li><strong>Dual judges</strong> — is the reasoning sound? Two judges, aggregated by <strong>MIN</strong>.</li>
 </ol>
-<p>Two design decisions decide whether the output is usable:</p>
-<p><strong>Per-file context budget.</strong> More context stops helping and starts hurting past
-a threshold that is specific to your corpus. A budget makes that measurable
-rather than a matter of taste.</p>
-<p><strong>Reachability gating before deduplication.</strong> Gate first, then dedupe. Doing it
-the other way round spends the expensive step on findings that were never
-reachable.</p>
-<p>The deduplication stage is what decides whether you ship <em>a queue</em> or <em>a
-landfill</em>.</p></div><div class="nbmd"><h2>2 · The four stages, on a seeded corpus\n\nThe corpus has planted defects, so recall and precision are measurable rather than asserted.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SEEDED = {
- # unit            (has_defect, cwe,      reachable_from_entry, sanitised)
- &quot;get_report&quot;:     (True,  &quot;CWE-22&quot;,  True,  False),
- &quot;run_export&quot;:     (True,  &quot;CWE-78&quot;,  True,  False),
- &quot;legacy_import&quot;:  (True,  &quot;CWE-89&quot;,  False, False),   # real bug, unreachable
- &quot;render_row&quot;:     (False, None,      True,  False),
- &quot;safe_query&quot;:     (True,  &quot;CWE-89&quot;,  True,  True),    # real sink, sanitised
- &quot;admin_purge&quot;:    (True,  &quot;CWE-78&quot;,  True,  False),
- &quot;format_date&quot;:    (False, None,      True,  False),
- &quot;parse_config&quot;:   (False, None,      False, False),
+<p>And the distinction the whole lesson exists for:</p>
+<blockquote>
+<p><strong>Conformance</strong> is schema validity. With structured output it is ~100% by
+construction. It is a build-health signal.</p>
+<p><strong>Accuracy</strong> is correctness. It is the number that means something.</p>
+</blockquote>
+<p>Quoting conformance as quality — "our harness scores 100%" — is the single most
+common way a security evaluation misleads its own sponsors.</p>
+<p>There is also one implementation detail that silently randomises everyone's
+results, and it is a single line: <strong>file matching must use parent directory plus
+filename, never the bare basename.</strong> Public corpora reuse <code>1.py</code> and <code>3.c</code> across
+every CWE directory.</p></div><div class="nbmd"><h2>3 · Stage 1 — ingest, where conformance is decided</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json
+from dataclasses import dataclass, field
+
+@dataclass
+class Answer:
+    qid: str; cwe: str = &quot;&quot;; file: str = &quot;&quot;; line: int = 0; rationale: str = &quot;&quot;
+    REQUIRED = (&quot;qid&quot;, &quot;cwe&quot;, &quot;file&quot;, &quot;rationale&quot;)
+
+    @classmethod
+    def parse(cls, raw):
+        try:
+            d = json.loads(raw)
+        except json.JSONDecodeError as e:
+            return None, f&quot;non-conforming: not JSON ({e.msg})&quot;
+        missing = [k for k in cls.REQUIRED if not d.get(k)]
+        if missing:
+            return None, f&quot;non-conforming: missing {missing}&quot;
+        return cls(str(d[&quot;qid&quot;]), str(d[&quot;cwe&quot;]).upper(), str(d[&quot;file&quot;]),
+                   int(d.get(&quot;line&quot;, 0)), str(d[&quot;rationale&quot;])), &quot;conforming&quot;
+
+@dataclass
+class Truth:
+    qid: str; cwe: str; file: str; line: int = 0
+
+TRUTHS = {
+ &quot;q1&quot;: Truth(&quot;q1&quot;, &quot;CWE-89&quot;,  &quot;CWE-89/1.py&quot;),
+ &quot;q2&quot;: Truth(&quot;q2&quot;, &quot;CWE-78&quot;,  &quot;CWE-78/1.py&quot;),
+ &quot;q3&quot;: Truth(&quot;q3&quot;, &quot;CWE-22&quot;,  &quot;CWE-22/3.c&quot;),
+ &quot;q4&quot;: Truth(&quot;q4&quot;, &quot;CWE-798&quot;, &quot;CWE-798/2.py&quot;),
 }
-planted = sorted(u for u, v in SEEDED.items() if v[0])
-print(f&quot;corpus units    : {len(SEEDED)}&quot;)
-print(f&quot;planted defects : {len(planted)}  {planted}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Index → summarise → hypothesise</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def index(corpus):
-    return sorted(corpus)                                  # stage 1
+ANSWERS = {
+ &quot;q1&quot;: &#x27;{&quot;qid&quot;:&quot;q1&quot;,&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;file&quot;:&quot;CWE-89/1.py&quot;,&quot;line&quot;:2,&#x27;
+       &#x27;&quot;rationale&quot;:&quot;user input is concatenated into the query string&quot;}&#x27;,
+ &quot;q2&quot;: &#x27;{&quot;qid&quot;:&quot;q2&quot;,&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;file&quot;:&quot;CWE-78/1.py&quot;,&quot;line&quot;:3,&#x27;
+       &#x27;&quot;rationale&quot;:&quot;untrusted input reaches a shell&quot;}&#x27;,
+ &quot;q3&quot;: &#x27;{&quot;qid&quot;:&quot;q3&quot;,&quot;cwe&quot;:&quot;CWE-22&quot;,&quot;file&quot;:&quot;CWE-89/1.py&quot;,&quot;line&quot;:1,&#x27;
+       &#x27;&quot;rationale&quot;:&quot;path built from user input&quot;}&#x27;,
+ &quot;q4&quot;: &#x27;I think this file contains a hardcoded credential.&#x27;,
+}
+for qid, raw in ANSWERS.items():
+    _, note = Answer.parse(raw)
+    print(f&quot;{qid}: {note}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Stage 2 — the one line that decides whether this is a benchmark</h2>
+<p>Public corpora reuse filenames across directories. Match on the basename and you score an answer about CWE-79 against the ground truth for CWE-89 — and your accuracy becomes a random variable.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def path_key(path):
+    &quot;&quot;&quot;Parent directory + filename. NEVER the bare basename.&quot;&quot;&quot;
+    parts = [p for p in path.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;) if p not in (&quot;&quot;, &quot;.&quot;)]
+    return &quot;/&quot;.join(parts[-2:]) if len(parts) &gt; 1 else (parts[-1] if parts else &quot;&quot;)
 
-def summarise(unit, budget_tokens):
-    &quot;&quot;&quot;Stage 2. A summary that fits the budget; detail is dropped, not hidden.&quot;&quot;&quot;
-    has_defect, cwe, reachable, sanitised = SEEDED[unit]
-    full = {&quot;unit&quot;: unit, &quot;sink&quot;: bool(cwe), &quot;cwe&quot;: cwe,
-            &quot;reachable&quot;: reachable, &quot;sanitised&quot;: sanitised}
-    if budget_tokens &lt; 40:            # too small to carry the sanitiser fact
-        full.pop(&quot;sanitised&quot;)
-    if budget_tokens &lt; 25:            # too small to carry reachability
-        full.pop(&quot;reachable&quot;)
-    return full
+def basename(path):
+    return path.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;)[-1]
 
-def hypothesise(summary):
-    &quot;&quot;&quot;Stage 3. Flags anything that looks like a sink. Deliberately noisy.&quot;&quot;&quot;
-    return summary[&quot;sink&quot;]
+pairs = [(&quot;CWE-89/1.py&quot;, &quot;CWE-79/1.py&quot;), (&quot;a/CWE-22/3.c&quot;, &quot;b/CWE-78/3.c&quot;)]
+print(f&quot;{&#x27;pair&#x27;:34s}{&#x27;basename match&#x27;:17s}path_key match&quot;)
+print(&quot;-&quot; * 66)
+for a, b in pairs:
+    print(f&quot;{a + &#x27;  vs  &#x27; + b:34s}{str(basename(a)==basename(b)):17s}&quot;
+          f&quot;{path_key(a)==path_key(b)}&quot;)
+print(&quot;\nq3 answered about CWE-89/1.py when the truth is CWE-22/3.c.&quot;)
+print(f&quot;   basename says match: {basename(&#x27;CWE-89/1.py&#x27;) == basename(&#x27;CWE-22/3.c&#x27;)}&quot;)
+print(f&quot;   path_key says match: {path_key(&#x27;CWE-89/1.py&#x27;) == path_key(&#x27;CWE-22/3.c&#x27;)}&quot;)</code></pre></div><div class="nbmd"><h2>5 · Stages 3 and 4 — expert proxy and two judges</h2>
+<p>Half credit is not politeness. "Right file, wrong vulnerability class" is a genuinely different failure from "wrong file entirely", and averaging them away hides which one your harness is making.</p>
+<p>Two judges aggregated by <strong>MIN</strong>, not mean — judges exist to catch each other, and averaging lets the lenient one carry the strict one's failures.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def path_match(a, t): return path_key(a.file) == path_key(t.file)
+def cwe_match(a, t):  return a.cwe == t.cwe.upper()
 
-for budget in (20, 30, 60):
-    hyps = [u for u in index(SEEDED) if hypothesise(summarise(u, budget))]
-    print(f&quot;context budget {budget:&gt;3} tokens -&gt; {len(hyps)} hypotheses: {hyps}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Verify, and gate on reachability before you deduplicate</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def verify(unit, summary):
-    &quot;&quot;&quot;Stage 4. The cheap facts first; each one can only remove a finding.&quot;&quot;&quot;
-    if summary.get(&quot;sanitised&quot;):
-        return None, &quot;a sanitiser is already present&quot;
-    if summary.get(&quot;reachable&quot;) is False:
-        return None, &quot;no path from any entry point&quot;
-    if summary.get(&quot;reachable&quot;) is None:
-        return unit, &quot;reachability unknown - budget too small to carry it&quot;
-    return unit, &quot;reachable, unsanitised sink&quot;
+def expert_proxy(a, t):
+    if not path_match(a, t): return 0.0
+    return 1.0 if cwe_match(a, t) else 0.5
 
-def pipeline(budget):
-    hyps = [u for u in index(SEEDED) if hypothesise(summarise(u, budget))]
-    kept, dropped = [], []
-    for u in hyps:
-        keep, why = verify(u, summarise(u, budget))
-        (kept if keep else dropped).append((u, why))
-    return hyps, kept, dropped
+MECHANISM = (&quot;concatenat&quot;, &quot;unsanitis&quot;, &quot;unsanitiz&quot;, &quot;untrusted&quot;, &quot;user input&quot;,
+             &quot;interpolat&quot;, &quot;taint&quot;, &quot;unvalidated&quot;)
+def judge_strict(a, t):
+    if expert_proxy(a, t) &lt; 1.0: return 0.0
+    return 1.0 if any(w in a.rationale.lower() for w in MECHANISM) else 0.5
+def judge_lenient(a, t):
+    return 1.0 if cwe_match(a, t) else 0.0
 
-for budget in (20, 30, 60):
-    hyps, kept, dropped = pipeline(budget)
-    tp = [u for u, _ in kept if SEEDED[u][0]]
-    fp = [u for u, _ in kept if not SEEDED[u][0]]
-    recall = len(tp) / len(planted)
-    prec = len(tp) / len(kept) if kept else 0
-    print(f&quot;budget {budget:&gt;3}: {len(hyps)} hyp -&gt; {len(kept)} kept  &quot;
-          f&quot;recall {recall:.0%}  precision {prec:.0%}  fp={fp}&quot;)</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — more context is not monotonically better\n\nThe budget that carries every fact is not the budget with the best output, and the reason is worth understanding.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>print(f&quot;{&#x27;budget&#x27;:&gt;7}{&#x27;kept&#x27;:&gt;6}{&#x27;recall&#x27;:&gt;9}{&#x27;precision&#x27;:&gt;11}  note&quot;)
-for budget in (20, 25, 30, 40, 60):
-    _, kept, _ = pipeline(budget)
-    tp = [u for u, _ in kept if SEEDED[u][0]]
-    prec = len(tp) / len(kept) if kept else 0
-    note = (&quot;reachability unknown - everything survives&quot; if budget &lt; 25 else
-            &quot;sanitiser fact missing - safe_query survives&quot; if budget &lt; 40 else
-            &quot;all facts present&quot;)
-    print(f&quot;{budget:&gt;7}{len(kept):&gt;6}{len(tp)/len(planted):&gt;8.0%}{prec:&gt;10.0%}  {note}&quot;)
-print()
-print(&quot;At budget 20 the harness keeps everything and calls it recall. It is not&quot;)
-print(&quot;finding more - it is verifying less, and reporting the difference as a&quot;)
-print(&quot;result. A recall number without its precision is a marketing number.&quot;)</code></pre></div><div class="nbmd"><h2>6 · Verify — queue or landfill\n\nThe deduplication stage, and the number that decides which one you shipped.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ANALYSERS = (&quot;grep&quot;, &quot;taint&quot;, &quot;model&quot;)
+@dataclass
+class Report:
+    total: int = 0; conforming: int = 0
+    expert_sum: float = 0.0; judge_sum: float = 0.0
+    failures: list = field(default_factory=list)
+    @property
+    def conformance(self): return self.conforming / self.total if self.total else 0
+    @property
+    def expert_accuracy(self): return self.expert_sum / self.total if self.total else 0
+    @property
+    def judge_accuracy(self): return self.judge_sum / self.total if self.total else 0
+    def render(self):
+        return (f&quot;  questions            {self.total}\n&quot;
+                f&quot;  conformance          {self.conformance:.4f}   &quot;
+                f&quot;← schema validity. Structural. NOT quality.\n&quot;
+                f&quot;  expert accuracy      {self.expert_accuracy:.4f}   ← correctness\n&quot;
+                f&quot;  judge accuracy (MIN) {self.judge_accuracy:.4f}\n&quot;
+                f&quot;  failures             {len(self.failures)}&quot;)
 
-_, kept, _ = pipeline(60)
-raw = [(u, tool) for u, _ in kept for tool in ANALYSERS]     # each tool reports each
-by_defect = sorted({u for u, _ in raw})
+def evaluate(answers, truths):
+    rep = Report(total=len(truths))
+    for qid, t in truths.items():
+        a, note = Answer.parse(answers.get(qid, &quot;&quot;))
+        if a is None:
+            rep.failures.append((qid, &quot;1-ingest&quot;, note)); continue
+        rep.conforming += 1
+        e = expert_proxy(a, t)
+        j = min(judge_strict(a, t), judge_lenient(a, t))
+        rep.expert_sum += e; rep.judge_sum += j
+        if e &lt; 1.0:
+            why = (&quot;wrong file&quot; if not path_match(a, t)
+                   else f&quot;right file, wrong class (said {a.cwe}, truth {t.cwe})&quot;)
+            rep.failures.append((qid, &quot;3-expert&quot;, why))
+    return rep
 
-print(f&quot;raw findings across {len(ANALYSERS)} analysers : {len(raw)}&quot;)
-print(f&quot;distinct defects                     : {len(by_defect)}&quot;)
-print(f&quot;inflation if you do not deduplicate  : {len(raw)/len(by_defect):.1f}x&quot;)
-print()
-minutes_per = 6
-print(f&quot;analyst minutes, undeduplicated : {len(raw)*minutes_per}&quot;)
-print(f&quot;analyst minutes, deduplicated   : {len(by_defect)*minutes_per}&quot;)
-print()
-print(&quot;Same findings, same accuracy, three times the queue. Nobody reads the&quot;)
-print(&quot;third page, so the defect that gets fixed is whichever sorted first.&quot;)
-assert len(raw) == 3 * len(by_defect)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The four-stage loop runs over a seeded corpus of eight units with five planted defects. Shrinking the per-file context budget removes the facts verification depends on: below 25 tokens reachability is unknown and everything survives, which reads as higher recall and is actually less verification. Deduplicating three analysers' output collapses a 3x inflated queue back to the real defect count.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Find the context budget where your own corpus stops improving. It exists, it is specific to your codebase, and until you have measured it you are paying for tokens that make the output worse.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Building the DAST and exploitation harness</a></strong></p>
+rep = evaluate(ANSWERS, TRUTHS)
+print(rep.render())
+print(&quot;\nfailures:&quot;)
+for qid, stage, why in rep.failures:
+    print(f&quot;   {qid}  [{stage}]  {why}&quot;)</code></pre></div><div class="nbmd"><h2>6 · The control — never report one number</h2>
+<p>Here is what happens when the harness is upgraded to emit structured output. Conformance goes to 1.0. Nothing about its capability changed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>STRUCTURED = dict(ANSWERS)
+STRUCTURED[&quot;q4&quot;] = (&#x27;{&quot;qid&quot;:&quot;q4&quot;,&quot;cwe&quot;:&quot;CWE-798&quot;,&quot;file&quot;:&quot;CWE-798/2.py&quot;,&quot;line&quot;:1,&#x27;
+                    &#x27;&quot;rationale&quot;:&quot;a credential is hardcoded&quot;}&#x27;)
+rep2 = evaluate(STRUCTURED, TRUTHS)
+print(&quot;after adding structured output:&quot;)
+print(rep2.render())
+print(f&quot;\nconformance  {rep.conformance:.2f} → {rep2.conformance:.2f}   &quot;
+      f&quot;(+{rep2.conformance-rep.conformance:.2f})&quot;)
+print(f&quot;expert acc   {rep.expert_accuracy:.2f} → {rep2.expert_accuracy:.2f}   &quot;
+      f&quot;(+{rep2.expert_accuracy-rep.expert_accuracy:.2f})&quot;)
+print(&quot;\nA press release could truthfully say &#x27;conformance improved to 100%&#x27;.&quot;)
+print(&quot;The harness still gets half the questions wrong.&quot;)
+
+def gameable(answers):
+    parsed = [Answer.parse(r)[0] for r in answers.values()]
+    ok = [p for p in parsed if p]
+    cwes = [p.cwe for p in ok]
+    maj = max(set(cwes), key=cwes.count) if cwes else &quot;&quot;
+    return {&quot;conformance&quot;: round(len(ok)/len(answers), 3),
+            &quot;majority_class&quot;: maj,
+            &quot;accuracy_by_always_guessing_majority&quot;:
+                round(cwes.count(maj)/len(cwes), 3) if cwes else 0}
+print(&quot;\nwithout any capability at all:&quot;, gameable(STRUCTURED))
+assert rep2.conformance == 1.0 and rep2.expert_accuracy &lt; 0.7</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>q1–q3 conform and q4 does not, giving conformance 0.75 against expert accuracy 0.375 — q1 scores 1.0, q2 scores 0.5 (right file, wrong class), q3 and q4 score 0. The basename comparison wrongly matches <code>CWE-89/1.py</code> with <code>CWE-79/1.py</code> where <code>path_key</code> does not. Adding structured output raises conformance to 1.00 while expert accuracy moves to 0.625, and the gameability check shows high conformance with no capability.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take an eval number your organisation has quoted — internally or externally — and determine which of the two it was. Then check the file matcher in whatever produced it. Both checks take an hour and one of them usually changes the number.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Reliability and cost under non-determinism</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.11.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The four-stage loop runs over a seeded corpus of eight units with five planted defects. Shrinking the per-file context budget removes the facts verification depends on: below 25 tokens reachability is unknown and everything survives, which reads as higher recall and is actually less verification. Deduplicating three analysers&#x27; output collapses a 3x inflated queue back to the real defect count.</div><div class="chips"><span>OpenGrep</span><span>Trivy</span><span class="m">Kimi K2.6</span><span class="m">GLM-5.2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.11.ipynb</code></p></div><div class="pager"><a href="B2.9.html"><span class="k">← Previous</span><span class="t">B2.9 · Idempotency, replay and rollback</span></a><a class="next" href="B2.12.html"><span class="k">Next →</span><span class="t">B2.12 · Building the DAST and exploitation harness</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results.</div><div class="chips"><span>Cyber Commons eval harness</span><span>Checkov</span><span>CyberGym</span><span>Inspect</span><span class="m">Llama 3.3</span><span class="m">GLM-4.6</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.11.ipynb</code></p></div><div class="pager"><a href="B2.10.html"><span class="k">← Previous</span><span class="t">B2.10 · Choosing the model backbone</span></a><a class="next" href="B2.12.html"><span class="k">Next →</span><span class="t">B2.12 · Reliability and cost under non-determinism</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

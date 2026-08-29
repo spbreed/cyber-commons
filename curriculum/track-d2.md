@@ -1,6 +1,6 @@
 # Track D2 — The Incident Responder
 
-**Function D · Security Operations**  
+**Function D · AI for SecOps**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down.*
 
 **Job titles:** Incident Responder, DFIR Analyst, CSIRT Lead

@@ -1781,7 +1781,7 @@ Phase 1, which is the property that turns a pipeline into something that
 improves.
 
 The bonus framing is deliberate: a reference implementation is a **starting
-point you evaluate**, not a product you trust. B2.10 and C2.7 gave you the tools;
+point you evaluate**, not a product you trust. B2.11 and C2.6 gave you the tools;
 this is where you point them at someone else's pipeline.
 """,
  "steps": [
@@ -1883,7 +1883,7 @@ print(f"\\nconformance: {len(conforming)}/{len(SAMPLE)} = {len(conforming)/len(S
          "This is the whole point of the bonus. Conformance is structural — with "
          "structured output it goes to 1.00 and says nothing about quality. The "
          "number that decides adoption is expert accuracy against a key the tool "
-         "never saw, matched on **parent directory plus filename** (B2.10)."),
+         "never saw, matched on **parent directory plus filename** (B2.11)."),
   ("py", '''def path_key(p):
     parts = [x for x in (p or "").replace("\\\\","/").split("/") if x not in ("",".")]
     return "/".join(parts[-2:]) if len(parts) > 1 else (parts[-1] if parts else "")
@@ -1966,7 +1966,7 @@ for item in [
            "risk zones.",
  "challenge": "Run the real thing: clone `google/mantis`, point it at a "
               "repository you have ground truth for, and score its output with "
-              "the harness from B2.10. The gap between its conformance and its "
+              "the harness from B2.11. The gap between its conformance and its "
               "expert accuracy on *your* code is the only number that should "
               "decide whether you adopt it.",
 },

@@ -1,17 +1,37 @@
 # Track A1 — The Agentic Reference Architecture, and Every Risk It Carries
 
-**Function A · Security Architecture & Platform**  
-*One reference architecture, every risk it carries, and the controls that close them. Get this wrong and no amount of downstream diligence recovers it.*
+**Function A · AI Architecture, Risks and Mitigations**  
+*One vendor-neutral reference architecture, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** Security Architect, Principal Security Engineer, Head of Security Architecture
 
-**What changes:** One vendor-neutral reference architecture, then one lesson per risk that architecture makes possible — mapped to the OWASP Agentic AI threat taxonomy and explained in plain English. 16 lessons.
+**What changes:** One vendor-neutral reference architecture, then one lesson per risk that architecture makes possible — mapped to the OWASP Agentic AI threat taxonomy and explained in plain English. 17 lessons.
 
 **Autonomy focus:** Read the architecture once; every risk after it names the component it attacks.
 
 **Deliverable:** A component map of one agentic system you run, with every applicable threat marked against the component it lands on.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+
+---
+
+### A1.0 — Start here — what securing AI architecture means
+
+`both directions`
+
+- **Risk** — Without a shared architecture, "secure the agent" has no referent, and every control argument is really an argument about two different systems.
+- **Control** — One picture, three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
+- **Lab** — Place the five functions of the commons on one diagram and find where your own work sits.
+
+**Run it** — Place the five functions of the commons on one map and find what each of the other four borrows from Function A.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.0.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.0   # run it headless and check it
+```
+
+*Expect:* The five functions print with the direction each runs in, and every one of the other four names something it borrows from Function A's component map. Function A itself is three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
 
 ---
 
@@ -25,7 +45,7 @@
 - **Tools** — `kagent`, `OpenTelemetry`
 - **Models** — `Llama 3.3`, `GLM-4.6`
 
-**Run it** — Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
+**Run it** — Draw the thirteen components, the five patterns they compose into, and the one edge that exists in all five.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -33,7 +53,7 @@ jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it
 ```
 
-*Expect:* Thirteen components print with the authority their content should carry, three of them at trust 0 — mcp, knowledge and the corpus behind it — and five topologies print as component chains. Every topology contains the same edge: agent_runtime reaching tools.
+*Expect:* You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow.
 
 ---
 

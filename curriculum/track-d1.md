@@ -1,17 +1,37 @@
 # Track D1 — The SOC Analyst & Detection Engineer
 
-**Function D · Security Operations**  
+**Function D · AI for SecOps**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down.*
 
 **Job titles:** SOC Analyst (T1–T3), Detection Engineer, Threat Hunter, Threat Intelligence Analyst
 
-**What changes:** Detecting an actor that is not a person. 8 lessons.
+**What changes:** Detecting an actor that is not a person. 9 lessons.
 
 **Autonomy focus:** Triage and enrichment reach L2.5 quickly; containment actions stay L2.
 
 **Deliverable:** A triage loop in production plus five detections covering agent misbehaviour.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+
+---
+
+### D1.0 — Start here — what AI for security operations means
+
+`both directions`
+
+- **Risk** — A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.
+- **Control** — Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.
+- **Lab** — Put one agent trace and one human session side by side and list what separates them.
+
+**Run it** — Put one hour of an agent beside one hour of a person, then run a human-tempo rule against both.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.0.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
+```
+
+*Expect:* Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.
 
 ---
 

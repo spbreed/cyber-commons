@@ -1,7 +1,7 @@
 # Track A3 — Controls — Runtime and the Gateway
 
-**Function A · Security Architecture & Platform**  
-*One reference architecture, every risk it carries, and the controls that close them. Get this wrong and no amount of downstream diligence recovers it.*
+**Function A · AI Architecture, Risks and Mitigations**  
+*One vendor-neutral reference architecture, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** Platform Security Engineer, Cloud Security Architect, SRE
 
@@ -87,15 +87,22 @@ python3 scripts/run_notebooks.py --session A3.3   # run it headless and check it
 - **Lab** — Run a looping agent against each ceiling and record which one fires first.
 - **Tools** — `OpenTelemetry`
 
-**Run it** — Run a looping agent against each ceiling and record which one fires first.
+**Run it** — Bound a divergent loop four different ways.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/m0-agent-loop
+python3 loop.py --task impossible --max-steps 5
+python3 loop.py --task impossible --timeout 60
+python3 loop.py --task impossible --token-ceiling 20000
+python3 loop.py --task impossible --spend-cap 0.50
 ```
 
-*Expect:* The impossible task from A1.12 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries `complete: False` rather than reporting what it managed.
+*Expect:* Four different stop reasons, all recorded in the trace. 'It finished' is never one of them.
 
 ---
 

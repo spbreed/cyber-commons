@@ -1,11 +1,11 @@
 # Track C2 — The Security Researcher
 
-**Function C · Offensive Security & Research**  
-*An entirely new target class: the agent itself, with three attack surfaces instead of one.*
+**Function C · AI for Security Research**  
+*Offensive testing and research where the agent is both the instrument and the target, and where a result is only worth what it can be reproduced at.*
 
 **Job titles:** Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher
 
-**What changes:** Turning curiosity into institutional capability. 9 lessons.
+**What changes:** Turning curiosity into a result somebody else can deploy. 7 lessons.
 
 **Autonomy focus:** You deliberately operate at L3 in isolated environments so the rest of the org never has to.
 
@@ -146,17 +146,17 @@ cosign verify-blob --bundle model.sig adapter.safetensors   # fails
 
 ---
 
-### C2.6 — Building the research harness
+### C2.6 — Benchmarks, reproducibility and the research harness
 
 `AI for Security`
 
-- **Risk** — Model effects and harness effects confounded.
-- **Control** — Multi-backbone benchmarking with statistical honesty.
-- **Lab** — Run one harness across three model families and separate the two effects.
+- **Risk** — Model effects and harness effects confounded, and published benchmarks overstating real-world capability.
+- **Control** — Multi-backbone runs on fixed seeds and corpora, plus contamination and construct-validity checks before any number is trusted.
+- **Lab** — Run one harness across three model families, separate the two effects, then contamination-check a public benchmark against a training window.
 - **Tools** — `Inspect`, `Cyber Commons eval harness`
 - **Models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
 
-**Run it** — Separate model effects from harness effects.
+**Run it** — Separate the model effect from the harness effect, then check a public benchmark for its majority baseline, its key provenance and its matcher.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -164,25 +164,25 @@ jupyter notebook labs/notebooks/C2.6.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session C2.6   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b2.10-eval-harness
-for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M ./scripts/vulnbench.sh compare; done
-python3 work_mantis/compare_models.py
+cd labs/c2-research
+python3 harness_vs_model.py --models llama3.3,glm-4.6,kimi-k2 --seeds 5
+python3 contamination.py --benchmark ../b2.10-eval-harness/ground-truth --report
 ```
 
-*Expect:* Same harness, three backbones — the delta is the model. This is exactly how the committed comparison table was produced.
+*Expect:* The baseline suite reports per-case rates with intervals. Provenance reduces every injection case to about 0.02 with non-overlapping intervals, while identity and containment are unchanged. Adding 12 trivially-blocked cases cuts aggregate ASR by roughly 60% with no change to the build, and the suite-health check flags that suite as diluted. On the critique side: a skewed key gives a 0.875 floor before anyone answers anything, a leaked key scores a perfect 1.000, and answers naming the wrong directory score 1.000 under basename matching against 0.250 under path matching.
 
 ---
 
-### C2.7 — Benchmark design and critique
+### C2.7 — From finding to control, and to institutional capital
 
-`AI for Security`
+`both directions`
 
-- **Risk** — Most published security benchmarks overstate real-world capability.
-- **Control** — Contamination checks; adapt methodology to your own corpus.
-- **Lab** — Contamination-check a public benchmark against a model's training window.
-- **Tools** — `Cyber Commons eval harness`
+- **Risk** — Research output the platform team cannot deploy, and a function whose work stays invisible and uncredited.
+- **Control** — Hand over something deployable and evidenceable, handle disclosure, and leave a defensible public record.
+- **Lab** — Convert one finding into a policy another track adopts, and release it with a reproducibility README.
+- **Tools** — `OPA`, `Kyverno`, `git`
 
-**Run it** — Contamination-check a public benchmark.
+**Run it** — Turn one finding into a control with an eval case that fails on the old build, then score a year of findings by what still holds without you.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -191,63 +191,10 @@ python3 scripts/run_notebooks.py --session C2.7   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c2-research
-python3 contamination.py --benchmark ../b2.10-eval-harness/ground-truth --model $MODEL --method canary
-python3 contamination.py --report
-```
-
-*Expect:* Overlap evidence between benchmark corpus and plausible training data — the basis for saying 'this score is overstated' defensibly.
-
----
-
-### C2.8 — From finding to control
-
-`both directions`
-
-- **Risk** — Research output the platform team cannot deploy.
-- **Control** — Hand over something deployable and evidenceable; handle disclosure.
-- **Lab** — Convert one finding into a Kyverno/OPA policy another track adopts.
-- **Tools** — `OPA`, `Kyverno`
-
-**Run it** — Turn a finding into a policy another track deploys.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C2.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C2.8   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/c2-research
-python3 finding_to_policy.py --finding findings/F-07.json --target opa --out policy.rego
-opa test policy.rego policy_test.rego
-cp policy.rego ../a3-sandbox/policies/
-```
-
-*Expect:* A tested Rego policy handed to A3 — research output the platform team can actually deploy.
-
----
-
-### C2.9 — Research as institutional capital
-
-`both directions`
-
-- **Risk** — Invisible work, uncredited function.
-- **Control** — Publication, open-source release, a defensible public record.
-- **Lab** — Release one artefact publicly with a reproducibility README.
-- **Tools** — `git`
-
-**Run it** — Release one artefact with a reproducibility README.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C2.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C2.9   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/c2-research
 python3 package_artefact.py --finding F-07 --include data,code,traces --out release/
 cd release && ./reproduce.sh   # must work on a clean machine
 ```
 
-*Expect:* Someone else can rerun it. That is what makes it institutional capital rather than a claim.
+*Expect:* The eval case returns False on the old build and True on the new one, covering 12 privileged/source combinations while leaving the principal path working. The control blocks the payload; the detection fires at critical severity on the old build and at info severity on the new one as coverage evidence. The handover package permits closure only when the proof of fix is valid and something shipped. Scored across a year of eight findings the programme lands 20 of a possible 40 durability points, with only three still holding without a person behind them.
 
 ---

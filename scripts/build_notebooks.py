@@ -14,18 +14,21 @@ it work on a Kaggle kernel with the internet switched off, and it means a
 reader can copy one cell into their own repository without inheriting a
 dependency. Standard library only.
 
-**Concept before risk.** Each lesson is built in one order and only one:
+**One concept, in one order.** Each lesson is built the same way and only that
+way — see LESSON_DESIGN.md for the authoring contract:
 
-    1. The concept        what the thing is, from first principles
-    2. Demo               that concept working, so it is concrete
-    3. Where it breaks    the risk, now that you have seen the mechanism
-    4. Demo               the failure, reproduced
-    5. The control        the fix, and the demo that it holds
-    6. Your turn
+    1. The hook           why this matters, in three sentences
+    2. The framework      the diagram first, then the idea it names
+    3..n Practical        the concept working, where it breaks, the control
+    What you just proved  the expected output, stated before you run it
+    Your turn             the same thing against a system you own
+    Where this leaves you the bridge, on the last lesson of a chapter
 
 Leading with the risk teaches people to fear a mechanism they cannot yet
-describe. The order above is enforced structurally: `concept` is a required
-field, and the build fails without it.
+describe, and leading with a terminal teaches the "how" before the "why". Both
+orders are enforced structurally: `hook`, `diagram` and `concept` are required
+fields, the framework is rendered before any code cell, and the build fails
+without them.
 
     python3 scripts/build_notebooks.py           # write them all
     python3 scripts/build_notebooks.py --check   # CI: fail if any is stale
@@ -34,6 +37,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -48,6 +52,7 @@ BRANCH = "claude/vulnbench-setup-scheduling-81aqov"
 SITE = "https://spbreed.github.io/cyber-commons"
 
 from exercises import EXERCISES  # noqa: E402
+from exercises.framing import BRIDGES  # noqa: E402
 
 SKILLS = ROOT / "skills"
 
@@ -84,7 +89,11 @@ DIRECTION = {"defend": "AI for Security", "secure": "Security of AI",
 
 # ------------------------------------------------------------------ ipynb bits
 def md(source: str) -> dict:
-    return {"cell_type": "markdown", "metadata": {}, "source": _lines(source)}
+    # Several exercises were authored with "\\n" inside a normal (non-raw) string,
+    # which reaches the notebook as the two characters \ and n and renders as
+    # literal text. Markdown never wants that sequence, so normalise it here.
+    return {"cell_type": "markdown", "metadata": {},
+            "source": _lines(source.replace("\\n", "\n"))}
 
 
 def code(source: str) -> dict:
@@ -104,10 +113,27 @@ def flatten() -> list[dict]:
     seq = []
     for fn in CUR["functions"]:
         for tr in fn["tracks"]:
-            for s in tr["sessions"]:
+            for i, s in enumerate(tr["sessions"]):
                 seq.append({"s": s, "track_id": tr["id"], "track": tr["title"],
+                            "last_in_track": i == len(tr["sessions"]) - 1,
                             "fn": f"Function {fn['id']} — {fn['title']}"})
     return seq
+
+
+SECTION = re.compile(r"^## \d+ · ", re.M)
+
+
+def renumber(source: str, counter: list[int]) -> str:
+    """Rewrite '## 7 · Title' to the next section number in the assembled lesson.
+
+    Exercises carry their own numbering, written when the lesson had a different
+    shape. Renumbering here means adding a section to the template never
+    requires editing 121 exercise files.
+    """
+    def one(_m):
+        counter[0] += 1
+        return f"## {counter[0]} · "
+    return SECTION.sub(one, source)
 
 
 def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
@@ -117,9 +143,13 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     ex = EXERCISES.get(sid)
     if ex is None:
         raise KeyError(f"no exercise defined for {sid} — add it to scripts/exercises/")
-    if not ex.get("concept"):
-        raise KeyError(f"{sid} has no 'concept' — every lesson introduces the idea "
-                       f"before it raises the risk")
+    for field, why in (
+        ("hook", "every lesson opens on why it matters, in three sentences"),
+        ("diagram", "the framework is taught as a picture before any terminal"),
+        ("concept", "every lesson introduces the idea before it raises the risk"),
+    ):
+        if not ex.get(field):
+            raise KeyError(f"{sid} has no {field!r} — {why}")
 
     tools = ", ".join(s.get("tools", [])) or "—"
     models = ", ".join(s.get("models", [])) or "—"
@@ -140,22 +170,42 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
         f"so it works on a Kaggle kernel with the internet switched off."
     )]
 
-    # ---- 1. the concept ---------------------------------------------------
-    cells.append(md(f"## 1 · The concept\n\n{ex['concept']}"))
+    # ---- 1. the hook ------------------------------------------------------
+    cells.append(md(f"## 1 · The hook\n\n{ex['hook'].strip()}"))
 
-    # ---- 2..n the built arc ----------------------------------------------
+    # ---- 2. the framework: the picture first, then the idea it names ------
+    diagram = ex["diagram"].strip("\n")
+    cells.append(md(f"## 2 · The framework\n\n```\n{diagram}\n```\n\n"
+                    f"{ex['concept'].strip()}"))
+
+    # ---- 3..n the practical application, renumbered from here -------------
+    counter = [2]
     for kind, source in ex["steps"]:
         if kind == "skill":
             cells.append(code(skill_source(source)))
+        elif kind == "md":
+            cells.append(md(renumber(source, counter)))
         else:
-            cells.append(md(source) if kind == "md" else code(source))
+            cells.append(code(source))
 
     # ---- close ------------------------------------------------------------
     expect = ex.get("expect") or lab.get("expect", "")
     if expect:
-        cells.append(md(f"## What you just proved\n\n{expect}"))
+        # A1.1 runs no code at all — it is a drawing lesson — so "proved" would
+        # be a lie there.
+        ran = any(k != "md" for k, _ in ex["steps"])
+        cells.append(md(f"## What you just proved\n\n{expect}" if ran
+                        else f"## What this gives you\n\n{expect}"))
     if challenge := ex.get("challenge"):
         cells.append(md(f"## Your turn\n\n{challenge}"))
+
+    # ---- the knowledge gap, on the last lesson of a chapter ---------------
+    if bridge := BRIDGES.get(entry["track_id"]) if entry["last_in_track"] else None:
+        cells.append(md(
+            f"## Where this leaves you\n\n"
+            f"**What you can do now.** {bridge['gained']}\n\n"
+            f"**What you still cannot do.** {bridge['gap']}\n\n"
+            f"**{bridge['next']}**"))
 
     foot = ""
     if nxt:

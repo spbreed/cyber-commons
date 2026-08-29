@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.4 — Detection engineering *for* agents | Cyber Commons</title><meta name="description" content="Detections whose subject is a non-human principal."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — Security Operations › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.4</div><h1>Detection engineering *for* agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Scope drift, unusual tool sequencing, off-hours autonomous action.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detections whose subject is a non-human principal.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Five detections whose subject is a non-human principal.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 21 lines of output in 0.05s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.4 · Detection engineering <em>for</em> agents</h1>
-<p><strong>Function D — Security Operations → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>Security of AI</em></p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.4 — Detection engineering *for* agents | Cyber Commons</title><meta name="description" content="Detections whose subject is a non-human principal."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — AI for SecOps › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.4</div><h1>Detection engineering *for* agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Scope drift, unusual tool sequencing, off-hours autonomous action.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detections whose subject is a non-human principal.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Five detections whose subject is a non-human principal.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 21 lines of output in 0.05s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.4 · Detection engineering <em>for</em> agents</h1>
+<p><strong>Function D — AI for SecOps → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Agent-assisted detection engineering</a></strong>.</p>
 <table>
 <thead>
@@ -21,7 +21,18 @@
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Writing a detection for an agent means writing one where machine-speed behaviour is normal and the baseline has no human rhythm in it at all. Every heuristic that relies on tiredness, working hours or typing speed is gone.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   human baseline                agent baseline
+   +-------------------+         +----------------------+
+   | works 9-6         |         | works always         |
+   | 12 actions/hour   |         | 1400 actions/hour    |
+   | makes typos       |         | never retries a typo |
+   +-------------------+         +----------------------+
+
+   detect on SHAPE, not volume: new resource classes, new tool
+   sequences, a spike in distinct destinations
+</code></pre>
 <p>This is the new work, and it starts by discarding baselines that have served the
 SOC well for twenty years.</p>
 <p>Human behavioural detection assumes irregularity, working hours, and a rate
@@ -62,7 +73,7 @@ correctly</em>:</p>
 rule gets tuned down, and then it never fires again — including when something
 is genuinely wrong.</p>
 <p>The signals that <em>do</em> work for agents are about <strong>change</strong>: a tool it has never
-used, a mix that has shifted, a scope exercised that was never needed before.</p></div><div class="nbmd"><h2>2 · Demo — classic baselines against agent traffic</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import statistics, time
+used, a mix that has shifted, a scope exercised that was never needed before.</p></div><div class="nbmd"><h2>3 · Demo — classic baselines against agent traffic</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import statistics, time
 from dataclasses import dataclass
 
 @dataclass
@@ -89,7 +100,7 @@ print(&quot;-&quot; * 66)
 for name, rule in CLASSIC.items():
     print(f&quot;{name:34s}{str(rule(AGENT)):16s}{rule(HUMAN)}&quot;)
 print(&quot;\nAll three fire on an agent doing exactly its job. Deployed as-is, they&quot;)
-print(&quot;produce continuous noise and are disabled within a week.&quot;)</code></pre></div><div class="nbmd"><h2>3 · The control — detect change, not activity</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
+print(&quot;produce continuous noise and are disabled within a week.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — detect change, not activity</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
 class Baseline:
     &quot;&quot;&quot;What normal looked like when the control was signed off.&quot;&quot;&quot;
     tool_mix: dict
@@ -128,7 +139,7 @@ for label, (mix, scopes) in WEEKS.items():
     d = base.compare(ev, scopes)
     print(f&quot;{label:22s} drift={d[&#x27;drift&#x27;]:.3f}  rate×{d[&#x27;rate_ratio&#x27;]}  {d[&#x27;verdict&#x27;]}&quot;)
     if d[&quot;new_tools&quot;]:  print(f&quot;{&#x27;&#x27;:22s} new tools:  {d[&#x27;new_tools&#x27;]}&quot;)
-    if d[&quot;new_scopes&quot;]: print(f&quot;{&#x27;&#x27;:22s} new scopes: {d[&#x27;new_scopes&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Verify — the alert text an analyst can act on</h2>
+    if d[&quot;new_scopes&quot;]: print(f&quot;{&#x27;&#x27;:22s} new scopes: {d[&#x27;new_scopes&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>5 · Verify — the alert text an analyst can act on</h2>
 <p>"Anomaly detected" fails both tests: it does not say what changed, and it does not say what to do.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def alert_text(agent, d):
     if d[&quot;verdict&quot;].startswith(&quot;within&quot;): return None
     changes = []
@@ -140,7 +151,7 @@ for label, (mix, scopes) in WEEKS.items():
             f&quot;   why it matters: the controls in A3 were tested against the old\n&quot;
             f&quot;                   behaviour; a new tool may not be covered\n&quot;
             f&quot;   do this      : confirm a manifest change was reviewed (A1.1),\n&quot;
-            f&quot;                   then re-run the containment suite (C1.5)&quot;)
+            f&quot;                   then re-run the containment suite (C1.2)&quot;)
 
 ev = [Event(now, &quot;patch-agent&quot;, tool) for tool, n in WEEKS[&quot;week 8 (upgrade)&quot;][0]
       for _ in range(n)]

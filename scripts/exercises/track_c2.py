@@ -6,9 +6,9 @@
     C2.4  data-layer research: provenance beats volume
     C2.5  supply-chain research, including the two artefacts with no process
     C2.6  building the research harness
-    C2.7  benchmark design and critique
-    C2.8  from finding to control
-    C2.9  research as institutional capital
+    C2.6  benchmark design and critique
+    C2.7  from finding to control
+    C2.7  research as institutional capital
 """
 
 EXERCISES: dict[str, dict] = {
@@ -340,7 +340,7 @@ for rate in (0.005, 0.05):
                               "bound attempts per identity per window"),
  "abuse monitoring":         ("D1.4 detection for agents",
                               "your telemetry is the only signal now"),
- "refusal behaviour":        ("A3.5 tool policy + C1.3 provenance",
+ "refusal behaviour":        ("A3.5 tool policy + C1.2 provenance",
                               "do not rely on the model refusing; refuse at the tool"),
  "immutable logging":        ("A2.5 act chains + D2.5 replay",
                               "you own retention and integrity"),
@@ -663,6 +663,19 @@ Three properties make it a harness rather than a script:
 The failure mode to avoid is a harness that only ever produces a number going
 down, because the suite is only ever extended with cases the current build
 already passes.
+
+The same three properties are what let you **critique somebody else's
+benchmark**, which is the other half of this job. Three questions decide whether
+a published security number means anything, and all three are answerable from
+the benchmark's own data:
+
+1. **What is the class balance?** If one class dominates, a constant answer
+   scores well. Report lift over the majority baseline, never the raw number.
+2. **Is the key held out?** If the harness has seen the answers — through
+   training, through prompt examples, through its own logs — the number is a
+   training metric.
+3. **How are files matched?** Bare-basename matching on a corpus that reuses
+   filenames turns accuracy into a partly random variable.
 """,
  "steps": [
   ("md", "## 2 · Demo — suite as data, target as adapter"),
@@ -756,153 +769,90 @@ for label, suite in (("original", SUITE), ("diluted", SUITE + EASY)):
     print(f"{label:12s}{h}")
 assert not suite_health(SUITE + EASY, run_suite(target_baseline, SUITE + EASY))["healthy"]
 '''),
+
+  ("md", "## 6 · The same discipline, pointed at somebody else's benchmark\\n\\n"
+         "Dilution is one way a number lies. Three more are structural, and all "
+         "three are checkable from the benchmark's own key: class balance, "
+         "whether the key was held out, and how answers are matched to files."),
+  ("py", '''from collections import Counter
+
+def make_key(n, classes, collide=False):
+    """Ground truth: question -> (class, file). `collide` reuses bare filenames."""
+    return {f"q{i}": (classes[i % len(classes)],
+                      f"{classes[i % len(classes)]}/"
+                      f"{i % 8 if collide else i}.py")
+            for i in range(1, n + 1)}
+
+def path_key(p):  return "/".join(p.split("/")[-2:])
+def basename(p):  return p.split("/")[-1]
+
+def score(answers, key, matcher=path_key):
+    hit = 0
+    for q, (cls, f) in key.items():
+        a_cls, a_file = answers.get(q, (None, None))
+        if a_file and matcher(a_file) == matcher(f) and a_cls == cls:
+            hit += 1
+    return hit / len(key)
+
+def majority_floor(key):
+    maj = Counter(c for c, _ in key.values()).most_common(1)[0][0]
+    return score({q: (maj, f) for q, (c, f) in key.items()}, key), maj
+
+SKEWED   = make_key(40, ["CWE-89"] * 7 + ["CWE-78"])
+BALANCED = make_key(40, ["CWE-89", "CWE-78", "CWE-22", "CWE-798"])
+
+print("check 1 - class balance sets the floor a result must clear")
+for name, k in (("skewed", SKEWED), ("balanced", BALANCED)):
+    floor, maj = majority_floor(k)
+    print(f"   {name:9s}{dict(Counter(c for c, _ in k.values()))}")
+    print(f"   {'':9s}always answer {maj}: {floor:.3f}  <- the floor")
+
+import random
+def run(key, seen_key, skill=0.6, seed=3):
+    rng = random.Random(seed)
+    return {q: ((c, f) if seen_key or rng.random() < skill else ("CWE-89", f))
+            for q, (c, f) in key.items()}
+
+print("\\ncheck 2 - a leaked key is a training metric, not a result")
+floor, _ = majority_floor(BALANCED)
+for label, seen in (("key held out", False), ("key leaked", True)):
+    s = score(run(BALANCED, seen), BALANCED)
+    print(f"   {label:16s}{s:.3f}   lift over floor {s - floor:+.3f}")
+
+print("\\ncheck 3 - matching answers by bare filename invents accuracy")
+COLLIDING = make_key(40, ["CWE-89", "CWE-78", "CWE-22", "CWE-798"], collide=True)
+wrong_dir = {q: (c, f"CWE-89/{q[1:]}.py") for q, (c, f) in BALANCED.items()}
+print(f"   answers naming the wrong directory, path_key : "
+      f"{score(wrong_dir, BALANCED, path_key):.3f}")
+print(f"   the same answers, basename only              : "
+      f"{score(wrong_dir, BALANCED, basename):.3f}")
+print(f"   distinct basenames in a colliding corpus     : "
+      f"{len({basename(f) for _, f in COLLIDING.values()})} of {len(COLLIDING)}")
+print()
+print("Report the floor, the matcher and the key's provenance beside every")
+print("number, or the number is not comparable to anything - including to itself")
+print("next quarter.")
+assert score(run(BALANCED, True), BALANCED) == 1.0
+assert score(wrong_dir, BALANCED, basename) > score(wrong_dir, BALANCED, path_key)
+'''),
  ],
  "expect": "The baseline suite reports per-case rates with intervals. Provenance "
            "reduces every injection case to about 0.02 with non-overlapping "
            "intervals, while identity and containment are unchanged. Adding 12 "
            "trivially-blocked cases cuts aggregate ASR by roughly 60% with no "
            "change to the build, and the suite-health check flags that suite as "
-           "diluted.",
- "challenge": "Check your own security regression suite for dilution: what "
-              "fraction of its cases have ever failed? If it is under 30%, the "
-              "aggregate number it produces is mostly measuring how many easy "
-              "cases you added.",
+           "diluted. On the critique side: a skewed key gives a 0.875 floor before "
+           "anyone answers anything, a leaked key scores a perfect 1.000, and "
+           "answers naming the wrong directory score 1.000 under basename matching "
+           "against 0.250 under path matching.",
+ "challenge": "Check your own security regression suite for dilution — what "
+              "fraction of its cases have ever failed? Under 30% and the aggregate "
+              "number is mostly measuring how many easy cases you added. Then take "
+              "the last benchmark someone quoted at you and find its majority "
+              "baseline. Most published numbers are never reported against one.",
 },
 
 "C2.7": {
- "concept": """
-Benchmark critique is a research skill, and the three questions that decide
-whether a security-harness number means anything are always the same:
-
-1. **What is the class balance?** If one class dominates, a constant answer
-   scores well. Always compute what always-guessing-the-majority scores, and
-   report the *lift over that baseline* rather than the raw number.
-2. **Is the key held out?** If the harness has seen the answers — through
-   training, through prompt examples, or through its own logs — the number is a
-   training metric.
-3. **How are files matched?** Bare-basename matching on corpora that reuse
-   filenames turns accuracy into a partly random variable.
-
-C1.6 attacked a benchmark. This lesson designs one that survives the attack.
-""",
- "steps": [
-  ("md", "## 2 · Demo — the three checks, applied"),
-  ("py", '''import json
-from collections import Counter
-from dataclasses import dataclass
-
-@dataclass
-class Truth:
-    qid: str; cwe: str; file: str
-
-def make(n, classes, files_collide=False):
-    t = {}
-    for i in range(1, n + 1):
-        cwe = classes[i % len(classes)]
-        fname = f"{i}.py" if files_collide else f"{cwe}/{i}.py"
-        t[f"q{i}"] = Truth(f"q{i}", cwe, fname if files_collide else f"{cwe}/{i}.py")
-    return t
-
-def path_key(p):
-    parts = [x for x in p.replace("\\\\", "/").split("/") if x not in ("", ".")]
-    return "/".join(parts[-2:]) if len(parts) > 1 else (parts[-1] if parts else "")
-def basename(p): return p.replace("\\\\", "/").split("/")[-1]
-
-def score(answers, truths, matcher=path_key):
-    conf = expert = 0
-    for q, t in truths.items():
-        try: d = json.loads(answers[q])
-        except (json.JSONDecodeError, KeyError): continue
-        conf += 1
-        if matcher(d["file"]) != matcher(t.file): continue
-        expert += 1.0 if d["cwe"].upper() == t.cwe else 0.5
-    return {"conformance": round(conf/len(truths), 3),
-            "expert": round(expert/len(truths), 3)}
-
-def majority_baseline(truths, matcher=path_key):
-    maj = Counter(t.cwe for t in truths.values()).most_common(1)[0][0]
-    ans = {q: json.dumps({"qid": q, "cwe": maj, "file": t.file, "rationale": "x"})
-           for q, t in truths.items()}
-    return score(ans, truths, matcher)["expert"], maj
-
-SKEWED   = make(40, ["CWE-89"]*7 + ["CWE-78"])
-BALANCED = make(40, ["CWE-89", "CWE-78", "CWE-22", "CWE-798"])
-for name, t in (("skewed", SKEWED), ("balanced", BALANCED)):
-    counts = Counter(x.cwe for x in t.values())
-    floor, maj = majority_baseline(t)
-    print(f"{name:10s} balance={dict(counts)}")
-    print(f"{'':10s} always-guess-{maj} scores {floor:.3f}  ← the floor to beat")
-'''),
-  ("md", "## 3 · Check 2 and 3 — held-out keys and file matching"),
-  ("py", '''# a harness that has seen the key vs one that has not
-def harness(truths, seen_key, skill=0.6, seed=3):
-    import random
-    rng = random.Random(seed)
-    ans = {}
-    for q, t in truths.items():
-        if seen_key or rng.random() < skill:
-            cwe, f = t.cwe, t.file
-        else:
-            cwe, f = "CWE-89", t.file
-        ans[q] = json.dumps({"qid": q, "cwe": cwe, "file": f, "rationale": "untrusted input"})
-    return ans
-
-for label, seen in (("key held out", False), ("key leaked into the harness", True)):
-    s = score(harness(BALANCED, seen), BALANCED)
-    floor, _ = majority_baseline(BALANCED)
-    print(f"{label:30s} expert={s['expert']:.3f}  lift over floor={s['expert']-floor:+.3f}")
-
-# file matching
-WRONG_DIR = {q: json.dumps({"qid": q, "cwe": t.cwe, "file": f"CWE-89/{q[1:]}.py",
-                            "rationale": "x"})
-             for q, t in BALANCED.items()}
-print()
-for m, name in ((path_key, "path_key"), (basename, "basename only")):
-    print(f"answers naming the wrong directory, matched by {name:14s}: "
-          f"expert={score(WRONG_DIR, BALANCED, m)['expert']:.3f}")
-'''),
-  ("md", "## 4 · The control — a benchmark spec that survives critique"),
-  ("py", '''def benchmark_spec(truths, answers, matcher=path_key, key_held_out=True):
-    counts = Counter(t.cwe for t in truths.values())
-    floor, maj = majority_baseline(truths, matcher)
-    s = score(answers, truths, matcher)
-    collisions = len(truths) - len({matcher(t.file) for t in truths.values()})
-    return {
-      "n": len(truths),
-      "class_balance": dict(counts),
-      "majority_class": maj,
-      "trivial_baseline": floor,
-      "conformance": s["conformance"],
-      "expert_accuracy": s["expert"],
-      "LIFT_over_baseline": round(s["expert"] - floor, 3),
-      "key_held_out": key_held_out,
-      "matcher": matcher.__name__,
-      "matcher_collisions": collisions,
-      "publishable": (key_held_out and collisions == 0
-                      and s["expert"] - floor > 0.1),
-    }
-
-good = benchmark_spec(BALANCED, harness(BALANCED, False), path_key, True)
-bad  = benchmark_spec(SKEWED,   harness(SKEWED, True),    basename, False)
-for label, spec in (("designed properly", good), ("as usually published", bad)):
-    print(f"=== {label} ===")
-    for k, v in spec.items(): print(f"   {k:22s} {v}")
-    print()
-assert good["publishable"] and not bad["publishable"]
-'''),
- ],
- "expect": "The skewed corpus gives always-guessing-the-majority about 0.88; the "
-           "balanced one about 0.31. A harness with a leaked key scores near 1.0 "
-           "while the held-out one lands near its true skill. Wrong-directory "
-           "answers score near 0 under `path_key` and near 1.0 under basename "
-           "matching. The properly designed spec is marked publishable and the "
-           "usual one is not.",
- "challenge": "Apply the three checks to one published agentic-security benchmark "
-              "you rely on. Write the critique as a repro card so someone can "
-              "check your claim rather than taking it on trust.",
-},
-
-"C2.8": {
  "concept": """
 A finding becomes institutional capital only when it ships as something. C2.1
 listed the four endings; this lesson builds all four for one finding, so the
@@ -914,6 +864,20 @@ something was fixed, and claims regress silently.
 
 The order also matters. Build the eval case *first*, before the control, because
 a test written after the fix tends to test the fix rather than the property.
+
+That is also the whole answer to "what is a research function worth". The test
+of a programme is not what it discovered; it is **what still protects you after
+the person who discovered it has left**. Findings land in artefacts of very
+different durability, and only the bottom two rows here are institutional
+capital:
+
+| Landed as | Survives staff turnover? | Survives a refactor? |
+|---|---|---|
+| a chat thread | no | no |
+| a slide deck | technically | no |
+| a repro card | yes | no |
+| a regression case in CI | yes | **yes — it fails the build** |
+| a control + its eval case | yes | yes |
 """,
  "steps": [
   ("md", "## 2 · The finding, and the four artefacts it must become"),
@@ -1014,131 +978,61 @@ print(f"\\nsame finding with nothing shipped: may_close={no_control['may_close']
 assert not no_control["may_close"]
 print("→ then it needs artefact 4: a written accepted risk with an owner and a date.")
 '''),
+
+  ("md", "## 7 · Score a year of findings by what still holds\\n\\n"
+         "One finding handed over properly is the unit. A research programme is "
+         "the sum of them — and the honest measure is not how much was found, but "
+         "how much of it would still stop the same problem next year with nobody "
+         "watching."),
+  ("py", '''LADDER = {
+ "chat thread":           (0, "gone at the next retention sweep"),
+ "slide deck":            (1, "survives; nobody re-runs it"),
+ "written repro card":    (2, "someone else can reproduce it"),
+ "detection rule":        (3, "fires if the precondition recurs"),
+ "regression case in CI": (4, "fails the build when the finding returns"),
+ "control + eval case":   (5, "prevents it AND proves it stays prevented"),
+}
+YEAR = [
+ ("diff-borne approval",          "control + eval case"),
+ ("token widening at hop 3",      "control + eval case"),
+ ("metadata reachable in staging","regression case in CI"),
+ ("prompt leak via error text",   "detection rule"),
+ ("model drift after upgrade",    "slide deck"),
+ ("odd retry storm",              "chat thread"),
+ ("MCP package with no signature","written repro card"),
+ ("agent scored as human",        "chat thread"),
+]
+print(f"{'artefact':24s}{'durability':>11}  what it buys")
+print("-" * 74)
+for k, (score, buys) in LADDER.items():
+    print(f"{k:24s}{score:>11}  {buys}")
+
+total = sum(LADDER[a][0] for _, a in YEAR)
+holding = [f for f, a in YEAR if LADDER[a][0] >= 4]
+print(f"\\nfindings this year        : {len(YEAR)}")
+print(f"durability score          : {total} of {5 * len(YEAR)}")
+print(f"still holding by themselves: {len(holding)} - {', '.join(holding)}")
+print()
+print("Five of eight findings landed somewhere that stops protecting you the")
+print("moment the author leaves. The count that goes in the board pack is the")
+print("first number; the one that is true is the third.")
+assert len(holding) == 3 and total < 5 * len(YEAR)
+'''),
  ],
  "expect": "The eval case returns False on the old build and True on the new one, "
            "covering 12 privileged/source combinations while leaving the "
            "principal path working. The control blocks the payload; the detection "
            "fires at critical severity on the old build and at info severity on "
            "the new one as coverage evidence. The handover package permits "
-           "closure only when the proof of fix is valid and something shipped.",
+           "closure only when the proof of fix is valid and something shipped. "
+           "Scored across a year of eight findings the programme lands 20 of a "
+           "possible 40 durability points, with only three still holding without "
+           "a person behind them.",
  "challenge": "Take a finding your team closed last quarter and check whether its "
               "eval case would fail on the pre-fix build. If nobody wrote one, "
-              "you cannot currently tell whether the fix is still in place.",
+              "you cannot currently tell whether the fix is still in place. Then "
+              "score last year's findings on the ladder and report the durability "
+              "number instead of the count.",
 },
 
-"C2.9": {
- "concept": """
-The test of a research programme is not what it discovered. It is what still
-protects you after the person who discovered it has left.
-
-Findings land in artefacts of very different durability, and the difference is
-stark:
-
-| Landed as | Survives staff turnover? | Survives a refactor? |
-|---|---|---|
-| a chat thread | no | no |
-| a slide deck | technically | no |
-| a repro card | yes | no |
-| a regression case in CI | yes | **yes — it fails the build** |
-| a control + its eval case | yes | yes |
-
-Only the last two are institutional capital. Everything above them is a record
-of work, not protection.
-
-This is also the lesson where the programme gets measured, because "how much
-research did we do" is the wrong question and "how much of it is still holding"
-is the right one.
-""",
- "steps": [
-  ("md", "## 2 · Demo — score the artefact ladder"),
-  ("py", '''LADDER = {
- "chat thread":            (0, "gone at the next retention sweep"),
- "slide deck":             (1, "survives; nobody re-runs it"),
- "written repro card":     (2, "someone else can reproduce it"),
- "detection rule":         (3, "fires if the precondition recurs"),
- "regression case in CI":  (4, "fails the build when the finding returns"),
- "control + eval case":    (5, "prevents it AND proves it stays prevented"),
-}
-print(f"{'artefact':26s}{'durability':>11}  what it buys")
-print("-" * 78)
-for k, (score, buys) in LADDER.items():
-    print(f"{k:26s}{score:>11}  {buys}")
-'''),
-  ("md", "## 3 · Where it breaks — a productive year that protects nothing"),
-  ("py", '''YEAR = [
- ("diff-borne approval",        "control + eval case"),
- ("token widening at hop 3",    "control + eval case"),
- ("metadata reachable in staging","regression case in CI"),
- ("prompt leak via error text", "detection rule"),
- ("model drift after upgrade",  "slide deck"),
- ("odd retry storm",            "chat thread"),
- ("MCP package with no signature","written repro card"),
- ("agent scored as human",      "chat thread"),
- ("eval corpus imbalance",      "slide deck"),
- ("SSRF via allowlisted host",  "written repro card"),
-]
-total = sum(LADDER[a][0] for _, a in YEAR)
-maxi  = 5 * len(YEAR)
-print(f"{'finding':34s}{'landed as':26s}{'score':>6}")
-print("-" * 68)
-for name, artefact in YEAR:
-    print(f"{name:34s}{artefact:26s}{LADDER[artefact][0]:>6}")
-print(f"\\nfindings: {len(YEAR)}   durability {total}/{maxi} = {total/maxi:.0%}")
-
-survives_turnover = sum(1 for _, a in YEAR if LADDER[a][0] >= 2)
-survives_refactor = sum(1 for _, a in YEAR if LADDER[a][0] >= 4)
-print(f"survives staff turnover: {survives_turnover}/{len(YEAR)}")
-print(f"survives a refactor:     {survives_refactor}/{len(YEAR)}")
-print("\\nTen findings. Three of them will still protect you in two years.")
-'''),
-  ("md", "## 4 · The control — a promotion rule, applied at closure"),
-  ("py", '''def promotion_target(severity, recurring, cheap_to_test):
-    """Where a finding MUST land before it may be closed."""
-    if severity in ("critical", "high"):
-        return "control + eval case"
-    if recurring:
-        return "regression case in CI"
-    if cheap_to_test:
-        return "regression case in CI"
-    return "written repro card"
-
-CANDIDATES = [
- ("diff-borne approval",         "critical", True,  True),
- ("model drift after upgrade",   "medium",   True,  True),
- ("odd retry storm",             "low",      False, False),
- ("SSRF via allowlisted host",   "high",     False, True),
-]
-print(f"{'finding':32s}{'severity':10s}{'must land as':26s}")
-print("-" * 72)
-for name, sev, recurring, cheap in CANDIDATES:
-    print(f"{name:32s}{sev:10s}{promotion_target(sev, recurring, cheap):26s}")
-
-def may_close(landed_as, required):
-    return LADDER[landed_as][0] >= LADDER[required][0]
-
-print("\\nclosure check against what actually happened:")
-ACTUAL = {"diff-borne approval": "control + eval case",
-          "model drift after upgrade": "slide deck",
-          "odd retry storm": "chat thread",
-          "SSRF via allowlisted host": "written repro card"}
-for name, sev, rec, cheap in CANDIDATES:
-    req = promotion_target(sev, rec, cheap)
-    ok = may_close(ACTUAL[name], req)
-    print(f"   {name:32s} landed={ACTUAL[name]:24s} {'CLOSE' if ok else 'REOPEN'}")
-reopened = [n for n, s, r, c in CANDIDATES
-            if not may_close(ACTUAL[n], promotion_target(s, r, c))]
-print(f"\\nmust reopen: {reopened}")
-assert "model drift after upgrade" in reopened
-'''),
- ],
- "expect": "The ladder scores six artefact types 0–5. The year's ten findings "
-           "score 26/50 durability, with 6 surviving staff turnover and only 3 "
-           "surviving a refactor. The promotion rule requires critical findings "
-           "to land as a control plus eval case, and the closure check reopens the "
-           "drift and retry-storm findings.",
- "challenge": "Apply the promotion rule to your open findings backlog. The ones "
-              "that were closed below their required artefact are the ones you "
-              "will rediscover — budget for finding them twice, or promote them "
-              "now.",
-},
 }

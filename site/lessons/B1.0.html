@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.0 — Start here — what application security with AI means | Cyber Commons</title><meta name="description" content="Build the pipeline and the harness as one system, and hold both to the same evidence standard."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product and Application Security with AI › The AppSec Engineer / Code Reviewer</div><div class="sid">B1.0</div><h1>Start here — what application security with AI means</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A security pipeline built as if it were exempt from the risks it exists to find.</p></div><div class="ctrl"><div class="lab">Control</div><p>Build the pipeline and the harness as one system, and hold both to the same evidence standard.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Trace one finding from ingestion to a signed report and name the stage that decides whether it is true.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.0.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.0.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 25 lines of output in 0.01s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.0 · Start here — what application security with AI means</h1>
+<p><strong>Function B — Product and Application Security with AI → The AppSec Engineer / Code Reviewer</strong>  ·  <em>Both directions</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.7.html">A3.7 · The agent gateway: one choke point when you scale</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>The pipeline you are about to build reads code you do not trust, holds credentials, and writes to your repository. It is a security tool, and that grants it no exemption whatsoever from the risks in Function A. Both directions of this commons run through the same system here.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   chapter 4 — the pipeline (AI for security)
+
+   [ingest] -&gt; [threat model] -&gt; [audit] -&gt; [confirm] -&gt; [remediate] -&gt; [report]
+      B1.1-2       B1.3-4        B1.5-7     B1.8-10       B1.11         B1.12
+
+   chapter 5 — the harness underneath every one of those stages
+   +---------------------------------------------------------------+
+   | plan . act . verify . stop | tools | budgets | replay | evals  |
+   +---------------------------------------------------------------+
+
+   the same pipeline, read as an agentic system (security of AI)
+   ingress = a pull request      knowledge = the repo, untrusted by definition
+   tools   = tests, sandbox      identity  = a bot that can write your branch
+</code></pre>
+<p>Function B is where both directions meet on the same system, and the reason it
+is the largest function in the commons.</p>
+<p><strong>AI for Security.</strong> An agentic pipeline that ingests a codebase, models its
+threats, audits for vulnerabilities, confirms the real ones by exploiting them
+in a sandbox, engineers the remediation, and reports with a severity somebody
+can act on. That is chapter 4, built stage by stage as one artefact.</p>
+<p><strong>Security of AI.</strong> That pipeline is itself an agentic system. It reads
+untrusted input by definition — the code it reviews is the code you do not yet
+trust. It holds credentials. It writes to your repository. Every risk in
+Function A applies to it, and the fact that it is a <em>security</em> tool grants no
+exemption.</p>
+<p>Underneath it sits the second chapter: <strong>the harness</strong>. Chapter 5 is the loop —
+plan, act, verify, stop — and the engineering that makes it reliable enough to
+leave alone: tool design, failure taxonomies, replay, evaluation, and the two
+numbers that decide whether autonomy is worth paying for.</p>
+<p>The relationship is the point. Chapter 4 is a product built out of chapter 5's
+material. If you only read one, read the one you are being asked to ship.</p></div><div class="nbmd"><h2>3 · The pipeline, the harness, and the fact that they are the same kind of thing</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PIPELINE = {
+ 1: (&quot;ingestion and structural mapping&quot;,   &quot;B1.1-B1.2&quot;),
+ 2: (&quot;threat modelling and strategy&quot;,      &quot;B1.3-B1.4&quot;),
+ 3: (&quot;analysis and filtering&quot;,             &quot;B1.5-B1.7&quot;),
+ 4: (&quot;dynamic validation and remediation&quot;, &quot;B1.8-B1.11&quot;),
+ 5: (&quot;governance and reporting&quot;,           &quot;B1.12&quot;),
+}
+HARNESS = [&quot;the loop: plan, act, verify, stop&quot;, &quot;tool design&quot;,
+           &quot;failure taxonomy&quot;, &quot;replay and rollback&quot;,
+           &quot;one skeleton per domain, not one per team&quot;,
+           &quot;evaluation, reliability and cost&quot;]
+
+print(&quot;chapter 4 - the pipeline, as five phases&quot;)
+for n in sorted(PIPELINE):
+    what, where = PIPELINE[n]
+    print(f&quot;   phase {n}  {what:38s}{where}&quot;)
+
+print(&quot;\nchapter 5 - the harness underneath every one of those stages&quot;)
+for h in HARNESS:
+    print(f&quot;   . {h}&quot;)
+
+# The pipeline read as an agentic system, with the Function A components it uses.
+AS_AN_AGENT = {
+ &quot;ingress&quot;:       &quot;a pull request, written by anyone with commit access&quot;,
+ &quot;knowledge&quot;:     &quot;the repository itself - untrusted by definition&quot;,
+ &quot;tools&quot;:         &quot;the test runner, the sandbox, the ticket API&quot;,
+ &quot;identity&quot;:      &quot;a service account that can write to your default branch&quot;,
+ &quot;egress&quot;:        &quot;the report, and anything it happens to contain&quot;,
+}
+print(&quot;\nthe same pipeline, read as an agentic system&quot;)
+for c in sorted(AS_AN_AGENT):
+    print(f&quot;   {c:14s}{AS_AN_AGENT[c]}&quot;)
+print()
+print(&quot;Five components, every one of them a risk surface from Function A. A&quot;)
+print(&quot;security pipeline is not exempt from the risks it exists to find - it is&quot;)
+print(&quot;the clearest example of them.&quot;)
+assert len(PIPELINE) == 5 and len(AS_AN_AGENT) == 5</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The five pipeline phases print against the lessons that build them, the harness capabilities underneath them print as a list, and the same pipeline reads back as an agentic system with five Function A components — ingress, knowledge, tools, identity and egress.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Name the service account your existing CI security tooling runs as, and what it can write to. That account is the identity component of an agentic system whether or not anyone has called it one.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.1.html">B1.1 · Historical parsing and structural indexing</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.0.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.0.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.0.ipynb</code></p></div><div class="pager"><a href="A3.7.html"><span class="k">← Previous</span><span class="t">A3.7 · The agent gateway: one choke point when you scale</span></a><a class="next" href="B1.1.html"><span class="k">Next →</span><span class="t">B1.1 · Historical parsing and structural indexing</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

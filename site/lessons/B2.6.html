@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.6 — Sub-agents and delegation depth | Cyber Commons</title><meta name="description" content="Fan-out control, recursion budgets, explicit authority inheritance."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.6</div><h1>Sub-agents and delegation depth</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Authority inherited silently from parent to child agent.</p></div><div class="ctrl"><div class="lab">Control</div><p>Fan-out control, recursion budgets, explicit authority inheritance.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Prove a grandchild agent cannot exceed its parent.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 18 lines of output in 0.06s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.6 · Sub-agents and delegation depth</h1>
-<p><strong>Function B — Product &amp; Application Security → The Security Automation / Harness Engineer</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.5.html">B2.5 · Model tiering and routing inside the loop</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.6 — Failure taxonomy | Cyber Commons</title><meta name="description" content="Recognise each from a trace."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product and Application Security with AI › The Security Automation / Harness Engineer</div><div class="sid">B2.6</div><h1>Failure taxonomy</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Loop divergence, objective drift, reward hacking, silent truncation, tool thrash.</p></div><div class="ctrl"><div class="lab">Control</div><p>Recognise each from a trace.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Name the failure from the trace alone.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 32 lines of output in 0.02s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.6 · Failure taxonomy</h1>
+<p><strong>Function B — Product and Application Security with AI → The Security Automation / Harness Engineer</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.5.html">B2.5 · Sub-agents and delegation depth</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,7 +11,7 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>kagent, SPIRE</td>
+<td>OpenTelemetry</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
@@ -21,125 +21,153 @@
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>Sub-agents buy specialisation. What they also buy — and what is never on the
-roadmap — is <strong>delegation depth</strong>.</p>
-<p>Two things grow with depth, and only one of them is obvious:</p>
-<ul>
-<li><strong>Authority composition</strong> (A1.3, A2.5). Each hop is a place authority could
-  widen if the narrowing rules are not enforced at <em>every</em> hop.</li>
-<li><strong>Attribution distance.</strong> By hop four, the action is five identities away from
-  the human who asked, and no single reviewer has seen the whole path.</li>
-</ul>
-<p>The control is a depth limit, and the interesting question is <strong>where to enforce
-it</strong>. Enforcing it in the orchestrator is the obvious choice and the wrong one:
-when the orchestrator is the compromised component, its own check is worth
-nothing. It has to live at the token issuer or the resource server.</p></div><div class="nbmd"><h2>2 · Demo — a depth-3 sub-agent chain that narrows correctly</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Harnesses fail in a small number of recognisable ways, and every one of them has a signature you can detect. Without the catalogue, each failure looks like a new and mysterious problem with the model.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   failure                signature you can detect
+   +--------------------+ +----------------------------------+
+   | loop               | | same action repeated, no progress |
+   | drift              | | later steps stop citing the goal  |
+   | hallucinated succes| | claims done, verifier never ran   |
+   | silent truncation  | | context at limit, no error raised |
+   +--------------------+ +----------------------------------+
 
-CEILINGS = {&quot;dana@corp&quot;: {&quot;repo:read&quot;,&quot;repo:write&quot;,&quot;deploy:prod&quot;},
-            &quot;orchestrator&quot;: {&quot;repo:read&quot;,&quot;repo:write&quot;,&quot;deploy:prod&quot;},
-            &quot;planner&quot;:   {&quot;repo:read&quot;},
-            &quot;coder&quot;:     {&quot;repo:read&quot;,&quot;repo:write&quot;},
-            &quot;reviewer&quot;:  {&quot;repo:read&quot;},
-            &quot;shipper&quot;:   {&quot;repo:read&quot;,&quot;deploy:prod&quot;}}
+   without the catalogue, every failure looks like a new mystery
+</code></pre>
+<p>"The agent messed up" is not a defect report. It routes to nobody, and every
+incident feels novel.</p>
+<p>A failure taxonomy fixes that by making the class determine the <strong>owner</strong> and
+the <strong>fix</strong>. Seven classes cover almost everything an agentic system does wrong:</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>What happened</th>
+<th>Who fixes it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>capability</td>
+<td>the model could not do it</td>
+<td>better model or better context</td>
+</tr>
+<tr>
+<td><strong>verification</strong></td>
+<td>it did it wrong and we believed it</td>
+<td>harness engineer (B2.2)</td>
+</tr>
+<tr>
+<td>authority</td>
+<td>it did something it should not be able to do</td>
+<td>identity (A2)</td>
+</tr>
+<tr>
+<td>containment</td>
+<td>the action reached further than intended</td>
+<td>platform (A3)</td>
+</tr>
+<tr>
+<td>injection</td>
+<td>it was told to by untrusted content</td>
+<td>provenance (C1.2)</td>
+</tr>
+<tr>
+<td>budget</td>
+<td>it never stopped</td>
+<td>harness engineer (A3.4)</td>
+</tr>
+<tr>
+<td>idempotency</td>
+<td>it did the right thing twice</td>
+<td>harness engineer (B2.8)</td>
+</tr>
+</tbody>
+</table>
+<p>The most important distinction in the table is between <strong>capability</strong> and
+<strong>verification</strong>, because they look identical from the outside and have
+completely different fixes. A capability failure means the model produced
+something wrong. A verification failure means <em>your harness shipped it</em>. The
+second is your defect, not the model's.</p></div><div class="nbmd"><h2>3 · Demo — classify eight real incidents</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>INCIDENTS = [
+ (&quot;agent&#x27;s patch did not compile; the loop retried and fixed it&quot;, None),
+ (&quot;agent&#x27;s patch passed CI and introduced a SQL injection&quot;, None),
+ (&quot;agent deleted a production table it should never have had access to&quot;, None),
+ (&quot;agent posted the contents of .env to a public issue&quot;, None),
+ (&quot;agent approved a PR because a code comment told it to&quot;, None),
+ (&quot;agent looped for 6 hours re-running the same failing test&quot;, None),
+ (&quot;agent opened the same pull request 14 times&quot;, None),
+ (&quot;agent could not solve the task and correctly reported failure&quot;, None),
+]
+TAXONOMY = {
+ &quot;capability&quot;:   (&quot;the model could not do it&quot;,              &quot;better model / better context&quot;),
+ &quot;verification&quot;: (&quot;it did it wrong and we believed it&quot;,     &quot;harness engineer — B2.2&quot;),
+ &quot;authority&quot;:    (&quot;it did what it should not be able to do&quot;,&quot;identity — A2&quot;),
+ &quot;containment&quot;:  (&quot;the action reached further than intended&quot;,&quot;platform — A3&quot;),
+ &quot;injection&quot;:    (&quot;untrusted content drove it&quot;,             &quot;provenance — C1.2&quot;),
+ &quot;budget&quot;:       (&quot;it never stopped&quot;,                       &quot;harness engineer — A3.4&quot;),
+ &quot;idempotency&quot;:  (&quot;it did the right thing twice&quot;,           &quot;harness engineer — B2.8&quot;),
+}
+LABELS = [&quot;capability&quot;, &quot;verification&quot;, &quot;authority&quot;, &quot;containment&quot;,
+          &quot;injection&quot;, &quot;budget&quot;, &quot;idempotency&quot;, &quot;capability&quot;]
 
-class DelegationError(Exception): pass
+for (text, _), label in zip(INCIDENTS, LABELS):
+    what, owner = TAXONOMY[label]
+    print(f&quot;{label:13s} {text}&quot;)
+    print(f&quot;{&#x27;&#x27;:13s} → {owner}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the two that get confused</h2>
+<p>Incidents 1 and 2 both start "the agent's patch was wrong". They are different defects with different owners, and conflating them is how a team spends a quarter upgrading models to fix a verifier.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def classify(produced_wrong_output, harness_accepted_it, action_taken):
+    &quot;&quot;&quot;The decision rule that separates capability from verification.&quot;&quot;&quot;
+    if not produced_wrong_output:
+        return &quot;not a model failure&quot;
+    if not harness_accepted_it:
+        return &quot;capability — the harness caught it, the loop worked&quot;
+    if action_taken:
+        return &quot;VERIFICATION — the harness shipped wrong work&quot;
+    return &quot;verification (contained) — accepted but nothing acted on it&quot;
 
-@dataclass
-class Token:
-    sub: str; actor: str; scopes: set; act: dict = None
-    def chain(self):
-        out, node = [], self.act
-        while node: out.append(node[&quot;actor&quot;]); node = node.get(&quot;act&quot;)
-        c = list(reversed(out)) + [self.actor]
-        if c[0] != self.sub: c.insert(0, self.sub)
-        return c
-    @property
-    def depth(self): return len(self.chain())
+CASES = [
+ (&quot;patch did not compile, loop retried&quot;,  True,  False, False),
+ (&quot;patch passed CI, shipped SQLi&quot;,        True,  True,  True),
+ (&quot;patch wrong, accepted, never merged&quot;,  True,  True,  False),
+ (&quot;patch correct&quot;,                        False, True,  True),
+]
+for name, wrong, accepted, acted in CASES:
+    print(f&quot;{name:38s} → {classify(wrong, accepted, acted)}&quot;)
+print(&quot;\nThe model was equally wrong in the first three. Only one is YOUR defect.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — classify automatically from the trace</h2>
+<p>The taxonomy is only useful if applying it is cheap. Most of the classification is derivable from what the harness already records.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def classify_from_trace(trace):
+    &quot;&quot;&quot;trace: dict of facts the harness already has.&quot;&quot;&quot;
+    if trace.get(&quot;denied_by_policy&quot;):        return &quot;authority&quot;
+    if trace.get(&quot;denied_by_sandbox&quot;):       return &quot;containment&quot;
+    if trace.get(&quot;instruction_source&quot;) not in (None, &quot;principal&quot;):
+        return &quot;injection&quot;
+    if trace.get(&quot;stopped_by&quot;, &quot;&quot;).startswith((&quot;step budget&quot;, &quot;time budget&quot;)):
+        return &quot;budget&quot;
+    if trace.get(&quot;duplicate_effect&quot;):        return &quot;idempotency&quot;
+    if trace.get(&quot;verifier_passed&quot;) and trace.get(&quot;outcome_wrong&quot;):
+        return &quot;verification&quot;
+    if trace.get(&quot;outcome_wrong&quot;):           return &quot;capability&quot;
+    return &quot;success&quot;
 
-def exchange(pres, actor, scopes):
-    scopes = set(scopes)
-    if not scopes &lt;= pres.scopes:
-        raise DelegationError(f&quot;widening: {sorted(scopes - pres.scopes)}&quot;)
-    if not scopes &lt;= CEILINGS.get(actor, set()):
-        raise DelegationError(f&quot;above {actor}&#x27;s ceiling&quot;)
-    return Token(pres.sub, actor, scopes, {&quot;actor&quot;: pres.actor, &quot;act&quot;: pres.act})
+TRACES = [
+ {&quot;verifier_passed&quot;: False, &quot;outcome_wrong&quot;: True, &quot;stopped_by&quot;: &quot;step budget (5 steps)&quot;},
+ {&quot;verifier_passed&quot;: True,  &quot;outcome_wrong&quot;: True},
+ {&quot;denied_by_policy&quot;: True},
+ {&quot;denied_by_sandbox&quot;: True},
+ {&quot;instruction_source&quot;: &quot;pull-request-diff&quot;},
+ {&quot;stopped_by&quot;: &quot;time budget (300s)&quot;},
+ {&quot;duplicate_effect&quot;: True},
+ {&quot;verifier_passed&quot;: True,  &quot;outcome_wrong&quot;: False},
+]
+for t in TRACES:
+    cls = classify_from_trace(t)
+    owner = TAXONOMY.get(cls, (&quot;&quot;, &quot;—&quot;))[1]
+    print(f&quot;{cls:14s} {owner:32s} {t}&quot;)
 
-root  = Token(&quot;dana@corp&quot;, &quot;dana@corp&quot;, set(CEILINGS[&quot;dana@corp&quot;]))
-orch  = exchange(root, &quot;orchestrator&quot;, {&quot;repo:read&quot;,&quot;repo:write&quot;,&quot;deploy:prod&quot;})
-coder = exchange(orch, &quot;coder&quot;, {&quot;repo:read&quot;,&quot;repo:write&quot;})
-rev   = exchange(coder, &quot;reviewer&quot;, {&quot;repo:read&quot;})
-
-for t in (root, orch, coder, rev):
-    print(f&quot;depth {t.depth}  {&#x27; → &#x27;.join(t.chain()):52s} {sorted(t.scopes)}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the check in the wrong place</h2>
-<p>The orchestrator enforces <code>MAX_DEPTH</code>. Now assume the orchestrator is the compromised component, which is the realistic case: it is the one processing untrusted task descriptions.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>MAX_DEPTH = 3
-
-def orchestrator_enforced(chain_token, new_actor, scopes, honest=True):
-    &quot;&quot;&quot;The limit lives inside the orchestrator&#x27;s own code.&quot;&quot;&quot;
-    if honest and chain_token.depth + 1 &gt; MAX_DEPTH:
-        raise DelegationError(f&quot;depth {chain_token.depth+1} &gt; {MAX_DEPTH}&quot;)
-    return exchange(chain_token, new_actor, scopes)
-
-print(&quot;honest orchestrator:&quot;)
-try:
-    t = orchestrator_enforced(rev, &quot;shipper&quot;, {&quot;repo:read&quot;}, honest=True)
-    print(&quot;   granted:&quot;, t.chain())
-except DelegationError as e:
-    print(&quot;   refused:&quot;, e)
-
-print(&quot;\ncompromised orchestrator (simply does not run its own check):&quot;)
-t = orchestrator_enforced(rev, &quot;shipper&quot;, {&quot;repo:read&quot;}, honest=False)
-print(f&quot;   granted: depth {t.depth}  {&#x27; → &#x27;.join(t.chain())}&quot;)
-print(&quot;   The limit was a line of code inside the component we no longer trust.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — enforce at the issuer and the resource server</h2>
-<p>Both of these are outside the orchestrator's control, so a compromised orchestrator cannot skip them.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def issuer_exchange(pres, actor, scopes, max_depth=MAX_DEPTH):
-    &quot;&quot;&quot;The token issuer counts the act chain it is being asked to extend.&quot;&quot;&quot;
-    if pres.depth + 1 &gt; max_depth:
-        raise DelegationError(f&quot;issuer refuses: depth {pres.depth+1} &gt; {max_depth}&quot;)
-    return exchange(pres, actor, scopes)
-
-def resource_server(token, scope, max_depth=MAX_DEPTH):
-    &quot;&quot;&quot;Independent second check, at the point the action actually happens.&quot;&quot;&quot;
-    if token.depth &gt; max_depth:
-        return False, f&quot;resource server refuses: depth {token.depth} &gt; {max_depth}&quot;
-    if scope not in token.scopes:
-        return False, f&quot;missing scope {scope}&quot;
-    return True, f&quot;allowed for {&#x27; → &#x27;.join(token.chain())}&quot;
-
-print(&quot;issuer enforcement:&quot;)
-try:
-    issuer_exchange(rev, &quot;shipper&quot;, {&quot;repo:read&quot;})
-except DelegationError as e:
-    print(&quot;   &quot;, e)
-
-print(&quot;\nresource server enforcement (even if a deep token somehow exists):&quot;)
-deep = Token(&quot;dana@corp&quot;, &quot;shipper&quot;, {&quot;repo:read&quot;},
-             {&quot;actor&quot;:&quot;reviewer&quot;,&quot;act&quot;:{&quot;actor&quot;:&quot;coder&quot;,
-              &quot;act&quot;:{&quot;actor&quot;:&quot;orchestrator&quot;,&quot;act&quot;:None}}})
-print(f&quot;   depth {deep.depth}: {resource_server(deep, &#x27;repo:read&#x27;)}&quot;)
-print(f&quot;   depth {rev.depth}: {resource_server(rev, &#x27;repo:read&#x27;)}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: no chain the compromised orchestrator can build is ever honoured.
-import random
-random.seed(9)
-actors = [&quot;planner&quot;,&quot;coder&quot;,&quot;reviewer&quot;,&quot;shipper&quot;]
-honoured_too_deep = 0
-for _ in range(3000):
-    tok = Token(&quot;dana@corp&quot;,&quot;dana@corp&quot;, set(CEILINGS[&quot;dana@corp&quot;]))
-    for _ in range(random.randint(1,6)):
-        a = random.choice(actors)
-        want = set(random.sample(sorted(tok.scopes),
-                                 k=random.randint(0,len(tok.scopes))))
-        try:
-            tok = exchange(tok, a, want)      # compromised: no depth check
-        except DelegationError:
-            break
-    ok, _ = resource_server(tok, &quot;repo:read&quot;)
-    if ok and tok.depth &gt; MAX_DEPTH:
-        honoured_too_deep += 1
-print(f&quot;3000 chains built without any orchestrator-side limit — &quot;
-      f&quot;over-deep chains honoured by the resource server: {honoured_too_deep}&quot;)
-assert honoured_too_deep == 0
-print(&quot;The limit holds because it is enforced where the orchestrator cannot reach.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The three-hop chain narrows correctly to <code>dana@corp → orchestrator → coder → reviewer</code>. An honest orchestrator refuses the fourth hop; a compromised one grants it. The issuer refuses the same exchange, and the resource server refuses a depth-4 token while allowing depth 3. Over 3,000 randomly-built chains, zero over-deep chains are honoured.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Draw your own agent call graph and count the longest path. Then find where the depth limit is enforced. If the answer is "in the orchestrator", move it — the component that builds the chain cannot be the one that bounds it.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.7.html">B2.7 · Failure taxonomy</a></strong></p>
+counts = {}
+for t in TRACES:
+    c = classify_from_trace(t); counts[c] = counts.get(c, 0) + 1
+print(f&quot;\ndistribution: {counts}&quot;)
+assert classify_from_trace(TRACES[1]) == &quot;verification&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The eight incidents classify across all seven classes with a named owner each. The capability-vs-verification rule separates the compile failure (capability — the loop worked) from the shipped SQL injection (verification — your defect). Automatic classification from trace facts reproduces the same labels.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take your last five agent incidents and assign exactly one class to each. Any incident that seems to need two classes is really two incidents, and separating them usually reveals that one of them was never fixed.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.7.html">B2.7 · Self-improving scaffolds</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.6.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Recursion budget caps depth; the escalation attempt is refused by the token, not by a check.</div><div class="chips"><span>kagent</span><span>SPIRE</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.6.ipynb</code></p></div><div class="pager"><a href="B2.5.html"><span class="k">← Previous</span><span class="t">B2.5 · Model tiering and routing inside the loop</span></a><a class="next" href="B2.7.html"><span class="k">Next →</span><span class="t">B2.7 · Failure taxonomy</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Loop divergence, objective drift, reward hacking, silent truncation, tool thrash — one per trace.</div><div class="chips"><span>OpenTelemetry</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.6.ipynb</code></p></div><div class="pager"><a href="B2.5.html"><span class="k">← Previous</span><span class="t">B2.5 · Sub-agents and delegation depth</span></a><a class="next" href="B2.7.html"><span class="k">Next →</span><span class="t">B2.7 · Self-improving scaffolds</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

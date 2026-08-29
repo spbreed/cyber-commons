@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C1.0 — Start here — what AI security research means | Cyber Commons</title><meta name="description" content="A campaign with a stated criterion, a harness that separates the model effect from the harness effect, and a handoff that ends in a control."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — AI for Security Research › The Pentester / Red Teamer</div><div class="sid">C1.0</div><h1>Start here — what AI security research means</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Offensive work that produces anecdotes: a result that worked once, on one target, with no rate and no reproduction.</p></div><div class="ctrl"><div class="lab">Control</div><p>A campaign with a stated criterion, a harness that separates the model effect from the harness effect, and a handoff that ends in a control.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Take one published agentic attack and list what you would need to reproduce it.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.0.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.0.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 14 lines of output in 0.02s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C1.0 · Start here — what AI security research means</h1>
+<p><strong>Function C — AI for Security Research → The Pentester / Red Teamer</strong>  ·  <em>Both directions</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Reliability and cost under non-determinism</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>"It worked when I tried it" is the most common security claim about agents and the least useful. This function is about the difference between that sentence and one a defender can act on — which is a rate, a sample size, and somebody else reproducing it.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   chapter 6 — offensive          chapter 7 — research
+   +---------------------+        +--------------------------+
+   | the agent as your   |        | does it reproduce?       |
+   | instrument          |        | can someone deploy it?   |
+   | the agent as target |        +--------------------------+
+   +---------------------+
+
+   the standard of proof, in four steps
+   &quot;it worked&quot;            -&gt; anecdote
+   &quot;7/20, suite attached&quot; -&gt; measurement
+   &quot;7/20, 0/20 patched&quot;   -&gt; result
+   &quot;and another team got the same&quot; -&gt; evidence
+</code></pre>
+<p>Function C is the smallest function in the commons and the one with the
+strictest standard of proof.</p>
+<p>Two chapters, and one idea holding them together: <strong>an anecdote is not a
+result.</strong></p>
+<p><strong>Chapter 6 — offensive.</strong> The agent as your instrument, running recon,
+foothold, escalation and lateral movement inside a scope you can defend in
+writing. Then the agent as the target: red-teaming it across its three attack
+surfaces — injection, identity and containment — as a campaign that reports a
+rate with a sample size rather than a screenshot.</p>
+<p><strong>Chapter 7 — research.</strong> Model-layer, weight-level, data-layer and
+supply-chain work, then the two questions that decide whether any of it is worth
+having. Does it reproduce, once you separate the model effect from the harness
+effect? And can somebody else deploy it as a control after you have moved on?</p>
+<p>Both directions run through here at once, and unusually they run through the
+<em>same</em> artefact. The harness you attack with is the harness someone will attack.
+The scope guard that keeps your engagement lawful is the containment control
+Function A teaches. Offensive work on agents is the shortest path to
+understanding the defences, which is why this function sits after A and B rather
+than before them.</p></div><div class="nbmd"><h2>3 · What separates a finding from an anecdote</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SURFACES = {
+ &quot;injection&quot;:   &quot;what the agent reads - direct, indirect, and via tool output&quot;,
+ &quot;identity&quot;:    &quot;who it acts as - delegation, scope, expiry, impersonation&quot;,
+ &quot;containment&quot;: &quot;what it can reach - tools, paths, egress, metadata&quot;,
+}
+print(&quot;the three surfaces of an agent, and chapter 6 tests all three&quot;)
+for s in sorted(SURFACES):
+    print(f&quot;   {s:14s}{SURFACES[s]}&quot;)
+
+# The same claim, at four standards of proof.
+CLAIMS = [
+ (&quot;it worked when I tried it&quot;,                    False, False, False),
+ (&quot;it worked 7 times out of 20, suite attached&quot;,   True, False, False),
+ (&quot;7/20, and 0/20 on the patched build&quot;,           True,  True, False),
+ (&quot;7/20, 0/20 patched, reproduced by another team&quot;, True, True,  True),
+]
+print(f&quot;\n{&#x27;claim&#x27;:50s}{&#x27;rate&#x27;:&gt;6}{&#x27;control&#x27;:&gt;9}{&#x27;reproduced&#x27;:&gt;12}  verdict&quot;)
+for text, rate, control, repro in CLAIMS:
+    score = sum((rate, control, repro))
+    verdict = (&quot;anecdote&quot;, &quot;measurement&quot;, &quot;result&quot;, &quot;evidence&quot;)[score]
+    print(f&quot;{text:50s}{str(rate):&gt;6}{str(control):&gt;9}{str(repro):&gt;12}  {verdict}&quot;)
+
+print()
+print(&quot;Chapter 6 gets you to the second row. Chapter 7 is entirely about the&quot;)
+print(&quot;third and fourth, because a finding that nobody can reproduce protects&quot;)
+print(&quot;nobody, however true it was on the day.&quot;)
+assert len(SURFACES) == 3 and len(CLAIMS) == 4</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The three attack surfaces of an agent print with what each covers, and the same claim scores as anecdote, measurement, result or evidence depending on whether it carries a rate, a control comparison and an independent reproduction.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Find the last agentic security claim you read — a blog post, a vendor page, a conference talk — and score it on those three columns. Most public claims sit on the first row.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.1.html">C1.1 · The agentic offensive workflow, and containing it</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C1.0.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C1.0.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C1.0.ipynb</code></p></div><div class="pager"><a href="B2.12.html"><span class="k">← Previous</span><span class="t">B2.12 · Reliability and cost under non-determinism</span></a><a class="next" href="C1.1.html"><span class="k">Next →</span><span class="t">C1.1 · The agentic offensive workflow, and containing it</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

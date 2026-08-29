@@ -1,6 +1,6 @@
 # Track E1 — The GRC Practitioner (Risk & Control)
 
-**Function E · Governance, Risk, Compliance & the CISO Office**  
+**Function E · AI for GRC**  
 *Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.*
 
 **Job titles:** GRC Analyst, Risk Manager, Control Owner, Third-Party Risk Analyst, Internal Audit liaison
@@ -15,16 +15,15 @@
 
 ---
 
-### E1.0 — What "trustworthy AI" actually means
+### E1.0 — Start here — what AI governance means
 
-`Security of AI`
+`both directions`
 
-- **Risk** — "Trustworthy AI" asserted as a value rather than decomposed into dimensions with an owner behind each. "Everyone owns it" means no one does.
-- **Control** — Unpack the seven dimensions every serious framework converges on, then do the hard part: decide which function in your organisation owns each one.
-- **Lab** — Assign each of the seven dimensions to a named function, then find the dimensions with no owner and the ones with three.
-- **Tools** — `NIST AI RMF`
+- **Risk** — A trustworthy-AI statement with no owner per property, so every property is somebody else's job.
+- **Control** — One register, risk-tiered, with each property mapped to a control, an owner and evidence that can be re-checked.
+- **Lab** — Take the seven properties and assign each an owner in your own organisation. The gaps are the programme.
 
-**Run it** — Assign each of the seven dimensions to a named function, then find the dimensions with no owner and the ones with three.
+**Run it** — Assign each of the seven trustworthy-AI properties to a named owner, and count how many of them security holds outright.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -32,7 +31,7 @@ jupyter notebook labs/notebooks/E1.0.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it
 ```
 
-*Expect:* The seven trustworthy-AI dimensions print with the question each answers. A typical assignment leaves two unowned and one contested between three functions — and the contested one is shown to be worse than the unowned ones, because three functions each honestly report their part as covered. The fix names one accountable owner per dimension and has to invent the business-owner seat to do it.
+*Expect:* Seven trustworthy-AI properties print with a typical owner each. Security owns exactly one outright and contributes evidence to the other six — which is the reason this function exists as more than a security document.
 
 ---
 
@@ -145,7 +144,7 @@ python3 map_controls.py --new agent-controls.yaml --existing control-library.yam
 
 - **Risk** — Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy.
 - **Control** — Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.
-- **Lab** — Take the B2.10 harness output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
+- **Lab** — Take the B2.11 harness output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 - **Tools** — `Cyber Commons eval harness`, `OSCAL`
 
 **Run it** — Turn an eval report into audit evidence — and find how it could mislead you.

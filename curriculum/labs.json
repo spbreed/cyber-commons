@@ -5,14 +5,23 @@
   "env": "export OPENAI_BASE_URL=http://localhost:11434/v1; export OPENAI_API_KEY=ollama; export MODEL=glm-4.6"
  },
  "labs": {
+  "A1.0": {
+   "goal": "Place the five functions of the commons on one map and find what each of the other four borrows from Function A.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.0.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.0   # run it headless and check it"
+   ],
+   "expect": "The five functions print with the direction each runs in, and every one of the other four names something it borrows from Function A's component map. Function A itself is three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway."
+  },
   "A1.1": {
-   "goal": "Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.",
+   "goal": "Draw the thirteen components, the five patterns they compose into, and the one edge that exists in all five.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it"
    ],
-   "expect": "Thirteen components print with the authority their content should carry, three of them at trust 0 — mcp, knowledge and the corpus behind it — and five topologies print as component chains. Every topology contains the same edge: agent_runtime reaching tools."
+   "expect": "You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow."
   },
   "A1.2": {
    "goal": "Send an override through the ingress component and watch the agent's goal change.",
@@ -240,13 +249,20 @@
    "expect": "Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs."
   },
   "A3.4": {
-   "goal": "Run a looping agent against each ceiling and record which one fires first.",
+   "goal": "Bound a divergent loop four different ways.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it"
+    "python3 scripts/run_notebooks.py --session A3.4   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "cd labs/m0-agent-loop",
+    "python3 loop.py --task impossible --max-steps 5",
+    "python3 loop.py --task impossible --timeout 60",
+    "python3 loop.py --task impossible --token-ceiling 20000",
+    "python3 loop.py --task impossible --spend-cap 0.50"
    ],
-   "expect": "The impossible task from A1.12 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries `complete: False` rather than reporting what it managed."
+   "expect": "Four different stop reasons, all recorded in the trace. 'It finished' is never one of them."
   },
   "A3.5": {
    "goal": "Pass a fabricated claim through a schema check and then through a ground-truth verifier.",
@@ -274,6 +290,15 @@
     "python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it"
    ],
    "expect": "Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent."
+  },
+  "B1.0": {
+   "goal": "Read the AppSec pipeline twice: once as five phases, and once as an agentic system with five Function A components.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.0.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.0   # run it headless and check it"
+   ],
+   "expect": "The five pipeline phases print against the lessons that build them, the harness capabilities underneath them print as a list, and the same pipeline reads back as an agentic system with five Function A components — ingress, knowledge, tools, identity and egress."
   },
   "B1.1": {
    "goal": "Cut the false-positive rate with reachability reasoning, and measure it.",
@@ -528,27 +553,11 @@
    "expect": "Same task completed; the arbitrary-execution capability is absent rather than blocked."
   },
   "B2.4": {
-   "goal": "Bound a divergent loop four different ways.",
+   "goal": "Route cheap executor to escalated reasoner and attribute spend.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.4.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B2.4   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/m0-agent-loop",
-    "python3 loop.py --task impossible --max-steps 5",
-    "python3 loop.py --task impossible --timeout 60",
-    "python3 loop.py --task impossible --token-ceiling 20000",
-    "python3 loop.py --task impossible --spend-cap 0.50"
-   ],
-   "expect": "Four different stop reasons, all recorded in the trace. 'It finished' is never one of them."
-  },
-  "B2.5": {
-   "goal": "Route cheap executor to escalated reasoner and attribute spend.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.5.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.5   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install 'litellm[proxy]' && cd labs/shared",
@@ -558,12 +567,12 @@
    ],
    "expect": "Per-run, per-tier spend attribution. Escalation happens only at decision points."
   },
-  "B2.6": {
+  "B2.5": {
    "goal": "Prove a grandchild agent cannot exceed its parent.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.6.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.6   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B2.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.5   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/a2-delegation",
@@ -572,12 +581,12 @@
    ],
    "expect": "Recursion budget caps depth; the escalation attempt is refused by the token, not by a check."
   },
-  "B2.7": {
+  "B2.6": {
    "goal": "Name the failure from the trace alone.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.7   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B2.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.6   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop/traces",
@@ -586,12 +595,12 @@
    ],
    "expect": "Loop divergence, objective drift, reward hacking, silent truncation, tool thrash — one per trace."
   },
-  "B2.8": {
+  "B2.7": {
    "goal": "Let a scaffold mutate itself, and keep only measured gains.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.8   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.7   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
@@ -600,12 +609,12 @@
    ],
    "expect": "Only mutations the deterministic oracle confirms survive. Pin the fitness function — it is now the security control."
   },
-  "B2.9": {
+  "B2.8": {
    "goal": "Replay an agent run from its trace.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.9   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.8   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
@@ -614,12 +623,35 @@
    ],
    "expect": "Either it reproduces, or the tool names the field you failed to log. Anything you cannot replay you cannot investigate."
   },
+  "B2.9": {
+   "goal": "Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "cd labs/b2-harness",
+    "python3 domain_harness.py --domain sast   --oracle reachability+test",
+    "python3 domain_harness.py --domain pentest --require-signed-scope"
+   ],
+   "expect": "One skeleton runs all four domains unchanged. With each domain's own oracle every confirmed finding is real — precision 1.00 across sast, threat model, dast and pentest — and the pentest run refuses outright without a signed scope, because its blast radius is live action. Swapping in the model's own confidence as the oracle confirms all 12 candidates, 8 of which are real: precision 0.67 in every domain, invisible from inside the harness."
+  },
   "B2.10": {
-   "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
+   "goal": "Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it",
+    "python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it"
+   ],
+   "expect": "Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely."
+  },
+  "B2.11": {
+   "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
@@ -631,71 +663,31 @@
    ],
    "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
   },
-  "B2.11": {
-   "goal": "Run the four-stage loop over a seeded corpus and measure how much of the output survives reachability gating.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it"
-   ],
-   "expect": "The four-stage loop runs over a seeded corpus of eight units with five planted defects. Shrinking the per-file context budget removes the facts verification depends on: below 25 tokens reachability is unknown and everything survives, which reads as higher recall and is actually less verification. Deduplicating three analysers' output collapses a 3x inflated queue back to the real defect count."
-  },
   "B2.12": {
-   "goal": "Confirm one vulnerability empirically against a replica, and show the same finding failing to confirm when the oracle is the model's own judgement.",
+   "goal": "Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it"
+    "python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "cd labs/b2.10-eval-harness",
+    "python3 reliability.py --task fix-cwe-89 --k 5 --repeat 200",
+    "python3 cost.py --corpus seeded --analyst-minutes 9"
    ],
-   "expect": "Six payloads are driven at a sandboxed replica. The deterministic oracle — the target's own execution log — confirms the injections and refuses the benign requests, while a stub standing in for model self-assessment confirms every request that returned HTTP 200, including the ones that prove nothing. The destructive payload is refused before it is sent, and each surviving finding carries the observable that proves it."
+   "expect": "pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand."
   },
-  "B2.13": {
-   "goal": "Generate a threat model from source, change one component, and diff the two models to see exactly what the change introduced.",
+  "C1.0": {
+   "goal": "Score the same claim at four standards of proof and find where the line between an anecdote and a result actually sits.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it"
+    "jupyter notebook labs/notebooks/C1.0.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C1.0   # run it headless and check it"
    ],
-   "expect": "A threat model derived from architecture yields threats sorted deterministically. Two lines of infrastructure change introduce three new threats, one from a component the pull request description never mentions. An unstable generator produces a diff full of churn on unchanged input, and the deterministic one regenerates identically five times — turning a whole-model workshop into a review of only what changed."
-  },
-  "B2.14": {
-   "goal": "Run the loop against an owned target and show the scope guard refusing an out-of-scope host before the request is made.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.14.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.14   # run it headless and check it"
-   ],
-   "expect": "Six of seven targets are classified against scope, with the cloud metadata address and the production host both refused before any request is made. The bounded loop refuses three actions, holds the destructive one for an operator, and completes the rest — and an attention-based gate is shown matching the structural check only at 100% attention. The run ends with a reconstructable audit trail."
-  },
-  "B2.15": {
-   "goal": "Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.15.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.15   # run it headless and check it"
-   ],
-   "expect": "Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely."
-  },
-  "B2.16": {
-   "goal": "Run one task k times, compute pass@k and pass^k from the same runs, and watch the two numbers disagree.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.16.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.16   # run it headless and check it"
-   ],
-   "expect": "pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3."
-  },
-  "B2.17": {
-   "goal": "Score a harness against a seeded corpus and compute its cost per confirmed finding and analyst minutes per accepted finding.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.17.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.17   # run it headless and check it"
-   ],
-   "expect": "A forty-unit corpus with ten planted defects gives recall a real denominator. Raising sensitivity improves recall while pushing the analyst review queue past the cost of reading the code by hand — the accuracy metric improves as the tool gets worse. A regression suite then shows a net-positive change that still lost findings it used to catch."
+   "expect": "The three attack surfaces of an agent print with what each covers, and the same claim scores as anecdote, measurement, result or evidence depending on whether it carries a rate, a control comparison and an independent reproduction."
   },
   "C1.1": {
-   "goal": "Drive a planner/executor pair against a local target you own.",
+   "goal": "Drive a planner/executor pair against a target you own, and watch scope refuse an out-of-scope host in the harness and again in the sandbox.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C1.1.ipynb    # or open it on the lesson page",
@@ -703,13 +695,13 @@
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c1-redteam",
-    "docker compose up -d dvwa juice-shop     # local targets only",
-    "python3 offensive_loop.py --target http://localhost:3000 --model $MODEL --scope scope.yaml"
+    "./airgap.sh up   # isolated docker network, no default route",
+    "./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com"
    ],
-   "expect": "Attack chains, not payload suggestions. scope.yaml is enforced by the harness — out-of-scope hosts are refused."
+   "expect": "Severity sorting puts 2 of 3 exploitable findings in the top 3; model triage puts 3 of 3, and correctly reasons that the partner CDN is out of scope. With the model adversarially convinced that the out-of-scope host is critical, the unenforced harness acts on it and the enforced harness refuses. Underneath the harness the sandbox refuses three requests for three different reasons — rate limit, engagement boundary, and cloud metadata — without consulting the model at all."
   },
   "C1.2": {
-   "goal": "Prove the offensive harness cannot reach anything you don't own.",
+   "goal": "Run one campaign across the injection, identity and containment surfaces and report a rate with its sample size for each.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C1.2.ipynb    # or open it on the lesson page",
@@ -717,62 +709,17 @@
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c1-redteam",
-    "./airgap.sh up   # isolated docker network, no default route",
-    "./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com"
+    "python3 campaign.py --surfaces injection,identity,containment --n 200",
+    "python3 campaign.py --report --include-benign-controls"
    ],
-   "expect": "In-scope succeeds, out-of-scope fails at the network layer — not at a politeness check in the prompt."
+   "expect": "No defence gives ASR 1.00. The keyword filter gives ASR 0.67 with false alarms on 2 of 4 benign security-writing cases. Provenance gives ASR 0.00 with no false alarms — until the payload is delivered through the principal channel, where ASR returns to 1.00. The same two numbers then score all three surfaces in one table."
   },
   "C1.3": {
-   "goal": "Run a real injection campaign and get a success rate.",
+   "goal": "Game the eval deliberately, then close the hole you used.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C1.3.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session C1.3   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "pip install garak promptfoo",
-    "cd labs/c1-redteam",
-    "garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject,dan,encoding",
-    "promptfoo eval -c redteam.yaml"
-   ],
-   "expect": "A measured attack-success-rate per probe family, per model — comparable across Llama / GLM / Kimi."
-  },
-  "C1.4": {
-   "goal": "Attack the delegation chain and see if attenuation holds.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/C1.4.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session C1.4   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/c1-redteam",
-    "python3 attack_identity.py --target ../a2-delegation --technique confused-deputy",
-    "python3 attack_identity.py --target ../a2-delegation --technique token-replay",
-    "python3 attack_identity.py --target ../a2-delegation --technique scope-escalation",
-    "python3 attack_identity.py --verify-revocation"
-   ],
-   "expect": "A pass/fail per technique against A2's chain — including whether revocation actually revokes."
-  },
-  "C1.5": {
-   "goal": "Attack the sandbox from inside and measure what leaves.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/C1.5.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session C1.5   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/c1-redteam",
-    "python3 escape.py --target ../a3-sandbox --techniques mount,egress,path-guard,mcp",
-    "python3 escape.py --measure-exfil --bytes-out"
-   ],
-   "expect": "Blast radius in bytes and reachable hosts. A3's deliverable is zero outside the sandbox."
-  },
-  "C1.6": {
-   "goal": "Game the eval deliberately, then close the hole you used.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/C1.6.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session C1.6   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
@@ -782,12 +729,12 @@
    ],
    "expect": "You reproduce an inflated score, then patch the harness so the same trick fails."
   },
-  "C1.7": {
+  "C1.4": {
    "goal": "Write a finding for an emergent behaviour, not a line of code.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/C1.7.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session C1.7   # run it headless and check it",
+    "jupyter notebook labs/notebooks/C1.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C1.4   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c1-redteam",
@@ -867,21 +814,21 @@
    "expect": "Signature verification catches it; an unsigned registry would not have."
   },
   "C2.6": {
-   "goal": "Separate model effects from harness effects.",
+   "goal": "Separate the model effect from the harness effect, then check a public benchmark for its majority baseline, its key provenance and its matcher.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.6.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session C2.6   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b2.10-eval-harness",
-    "for M in llama3.3 glm-4.6 kimi-k2; do MODEL=$M ./scripts/vulnbench.sh compare; done",
-    "python3 work_mantis/compare_models.py"
+    "cd labs/c2-research",
+    "python3 harness_vs_model.py --models llama3.3,glm-4.6,kimi-k2 --seeds 5",
+    "python3 contamination.py --benchmark ../b2.10-eval-harness/ground-truth --report"
    ],
-   "expect": "Same harness, three backbones — the delta is the model. This is exactly how the committed comparison table was produced."
+   "expect": "The baseline suite reports per-case rates with intervals. Provenance reduces every injection case to about 0.02 with non-overlapping intervals, while identity and containment are unchanged. Adding 12 trivially-blocked cases cuts aggregate ASR by roughly 60% with no change to the build, and the suite-health check flags that suite as diluted. On the critique side: a skewed key gives a 0.875 floor before anyone answers anything, a leaked key scores a perfect 1.000, and answers naming the wrong directory score 1.000 under basename matching against 0.250 under path matching."
   },
   "C2.7": {
-   "goal": "Contamination-check a public benchmark.",
+   "goal": "Turn one finding into a control with an eval case that fails on the old build, then score a year of findings by what still holds without you.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.7.ipynb    # or open it on the lesson page",
@@ -889,39 +836,19 @@
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/c2-research",
-    "python3 contamination.py --benchmark ../b2.10-eval-harness/ground-truth --model $MODEL --method canary",
-    "python3 contamination.py --report"
-   ],
-   "expect": "Overlap evidence between benchmark corpus and plausible training data — the basis for saying 'this score is overstated' defensibly."
-  },
-  "C2.8": {
-   "goal": "Turn a finding into a policy another track deploys.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/C2.8.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session C2.8   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/c2-research",
-    "python3 finding_to_policy.py --finding findings/F-07.json --target opa --out policy.rego",
-    "opa test policy.rego policy_test.rego",
-    "cp policy.rego ../a3-sandbox/policies/"
-   ],
-   "expect": "A tested Rego policy handed to A3 — research output the platform team can actually deploy."
-  },
-  "C2.9": {
-   "goal": "Release one artefact with a reproducibility README.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/C2.9.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session C2.9   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/c2-research",
     "python3 package_artefact.py --finding F-07 --include data,code,traces --out release/",
     "cd release && ./reproduce.sh   # must work on a clean machine"
    ],
-   "expect": "Someone else can rerun it. That is what makes it institutional capital rather than a claim."
+   "expect": "The eval case returns False on the old build and True on the new one, covering 12 privileged/source combinations while leaving the principal path working. The control blocks the payload; the detection fires at critical severity on the old build and at info severity on the new one as coverage evidence. The handover package permits closure only when the proof of fix is valid and something shipped. Scored across a year of eight findings the programme lands 20 of a possible 40 durability points, with only three still holding without a person behind them."
+  },
+  "D1.0": {
+   "goal": "Put one hour of an agent beside one hour of a person, then run a human-tempo rule against both.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.0.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it"
+   ],
+   "expect": "Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished."
   },
   "D1.1": {
    "goal": "Supervise a triage loop by exception rather than by re-reading.",
@@ -1155,13 +1082,13 @@
    "expect": "A materiality call and a notification clock started in hour one, feeding Track E2."
   },
   "E1.0": {
-   "goal": "Assign each of the seven dimensions to a named function, then find the dimensions with no owner and the ones with three.",
+   "goal": "Assign each of the seven trustworthy-AI properties to a named owner, and count how many of them security holds outright.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.0.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it"
    ],
-   "expect": "The seven trustworthy-AI dimensions print with the question each answers. A typical assignment leaves two unowned and one contested between three functions — and the contested one is shown to be worse than the unowned ones, because three functions each honestly report their part as covered. The fix names one accountable owner per dimension and has to invent the business-owner seat to do it."
+   "expect": "Seven trustworthy-AI properties print with a typical owner each. Security owns exactly one outright and contributes evidence to the other six — which is the reason this function exists as more than a security document."
   },
   "E1.1": {
    "goal": "Watch control evidence go stale without a code change.",

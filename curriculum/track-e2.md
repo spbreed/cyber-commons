@@ -1,6 +1,6 @@
 # Track E2 — The Regulatory & Compliance Lead
 
-**Function E · Governance, Risk, Compliance & the CISO Office**  
+**Function E · AI for GRC**  
 *Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.*
 
 **Job titles:** Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead

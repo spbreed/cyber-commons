@@ -1,11 +1,11 @@
 # Track B2 — The Security Automation / Harness Engineer
 
-**Function B · Product & Application Security**  
-*Closest to developers, so first to meet agents at scale — and the ones who build the pipeline rather than buy it.*
+**Function B · Product and Application Security with AI**  
+*Closest to developers, so first to meet agents at scale — and the ones who build the security pipeline rather than buy it.*
 
 **Job titles:** Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet
 
-**What changes:** Build the loop, point it at a discipline, then prove it works. 18 lessons.
+**What changes:** Build the loop once, point it at a discipline, then prove it works. 13 lessons.
 
 **Autonomy focus:** You are the person who builds the L2.5 boundary everyone else operates inside.
 
@@ -120,36 +120,7 @@ python3 tool_audit.py --compare shell narrow
 
 ---
 
-### B2.4 — Budgets and stop conditions
-
-`AI for Security`
-
-- **Risk** — Every loop needs a reason to stop that isn't "it finished".
-- **Control** — Step limits, goal timeouts, token ceilings, spend circuit breakers.
-- **Lab** — Make a loop diverge, then bound it four different ways.
-- **Tools** — `Python`
-- **Models** — `Llama 3.3`
-
-**Run it** — Bound a divergent loop four different ways.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop
-python3 loop.py --task impossible --max-steps 5
-python3 loop.py --task impossible --timeout 60
-python3 loop.py --task impossible --token-ceiling 20000
-python3 loop.py --task impossible --spend-cap 0.50
-```
-
-*Expect:* Four different stop reasons, all recorded in the trace. 'It finished' is never one of them.
-
----
-
-### B2.5 — Model tiering and routing inside the loop
+### B2.4 — Model tiering and routing inside the loop
 
 `AI for Security`
 
@@ -163,8 +134,8 @@ python3 loop.py --task impossible --spend-cap 0.50
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.5   # run it headless and check it
+jupyter notebook labs/notebooks/B2.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 pip install 'litellm[proxy]' && cd labs/shared
@@ -177,7 +148,7 @@ python3 ../shared/spend_report.py --by-run
 
 ---
 
-### B2.6 — Sub-agents and delegation depth
+### B2.5 — Sub-agents and delegation depth
 
 `Security of AI`
 
@@ -190,8 +161,8 @@ python3 ../shared/spend_report.py --by-run
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.6   # run it headless and check it
+jupyter notebook labs/notebooks/B2.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.5   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/a2-delegation
@@ -203,7 +174,7 @@ python3 subagent.py --depth 3 --parent-scope repo:read --attempt-escalate
 
 ---
 
-### B2.7 — Failure taxonomy
+### B2.6 — Failure taxonomy
 
 `AI for Security`
 
@@ -216,8 +187,8 @@ python3 subagent.py --depth 3 --parent-scope repo:read --attempt-escalate
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.7   # run it headless and check it
+jupyter notebook labs/notebooks/B2.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.6   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/m0-agent-loop/traces
@@ -229,7 +200,7 @@ for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t -
 
 ---
 
-### B2.8 — Self-improving scaffolds
+### B2.7 — Self-improving scaffolds
 
 `Security of AI`
 
@@ -243,8 +214,8 @@ for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t -
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.8   # run it headless and check it
+jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.7   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/m0-agent-loop
@@ -256,7 +227,7 @@ python3 evolve.py --show-lineage   # what changed, what was kept, what was rever
 
 ---
 
-### B2.9 — Idempotency, replay and rollback
+### B2.8 — Idempotency, replay and rollback
 
 `AI for Security`
 
@@ -269,8 +240,8 @@ python3 evolve.py --show-lineage   # what changed, what was kept, what was rever
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.9   # run it headless and check it
+jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.8   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/m0-agent-loop
@@ -282,95 +253,34 @@ python3 replay.py --trace run.json --assert-identical
 
 ---
 
-### B2.11 — Building the SAST harness
+### B2.9 — Building a domain harness: one skeleton, four oracles
 
 `AI for Security`
 
-- **Risk** — A SAST loop that matches patterns instead of reasoning about semantics, and cannot explain why anything is a vulnerability.
-- **Control** — Index → summarise → hypothesise → verify, with per-file context budgets, reachability gating and a deduplication stage that decides whether the output is a queue or a landfill.
-- **Lab** — Run the four-stage loop over a seeded corpus and measure how much of the output survives reachability gating.
-- **Tools** — `OpenGrep`, `Trivy`
-- **Models** — `Kimi K2.6`, `GLM-5.2`
+- **Risk** — Four teams build four harnesses, each re-deciding loop control, budgets and verification — and each getting the oracle wrong in its own way.
+- **Control** — One skeleton with a pluggable oracle and a declared blast radius. The domain supplies the oracle, not a new loop.
+- **Lab** — Run one skeleton across four domains and watch the oracle, not the loop, decide what the harness is worth.
+- **Tools** — `OpenGrep`, `OWASP ZAP`, `OWASP Threat Dragon`, `CAI`
+- **Models** — `GLM-4.6`, `Kimi K2`
 
-**Run it** — Run the four-stage loop over a seeded corpus and measure how much of the output survives reachability gating.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it
-```
-
-*Expect:* The four-stage loop runs over a seeded corpus of eight units with five planted defects. Shrinking the per-file context budget removes the facts verification depends on: below 25 tokens reachability is unknown and everything survives, which reads as higher recall and is actually less verification. Deduplicating three analysers' output collapses a 3x inflated queue back to the real defect count.
-
----
-
-### B2.12 — Building the DAST and exploitation harness
-
-`AI for Security`
-
-- **Risk** — A model opinion recorded as a confirmed exploit. Without a deterministic oracle the harness reports whatever it believes.
-- **Control** — Drive a running target, generate payloads, observe behaviour, and confirm only on a deterministic oracle — inside sandbox replication with blast-radius limits and evidence capture.
-- **Lab** — Confirm one vulnerability empirically against a replica, and show the same finding failing to confirm when the oracle is the model's own judgement.
-- **Tools** — `OWASP ZAP`, `Metasploit`, `CAI`
-- **Models** — `GLM-5.2`
-
-**Run it** — Confirm one vulnerability empirically against a replica, and show the same finding failing to confirm when the oracle is the model's own judgement.
+**Run it** — Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it
+jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.9   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/b2-harness
+python3 domain_harness.py --domain sast   --oracle reachability+test
+python3 domain_harness.py --domain pentest --require-signed-scope
 ```
 
-*Expect:* Six payloads are driven at a sandboxed replica. The deterministic oracle — the target's own execution log — confirms the injections and refuses the benign requests, while a stub standing in for model self-assessment confirms every request that returned HTTP 200, including the ones that prove nothing. The destructive payload is refused before it is sent, and each surviving finding carries the observable that proves it.
+*Expect:* One skeleton runs all four domains unchanged. With each domain's own oracle every confirmed finding is real — precision 1.00 across sast, threat model, dast and pentest — and the pentest run refuses outright without a signed scope, because its blast radius is live action. Swapping in the model's own confidence as the oracle confirms all 12 candidates, 8 of which are real: precision 0.67 in every domain, invisible from inside the harness.
 
 ---
 
-### B2.13 — Building the threat-modelling harness
-
-`AI for Security`
-
-- **Risk** — A threat model produced once a year for a system that changes every release. By the second sprint it describes something that no longer exists.
-- **Control** — Turn architecture, IaC, code and data flows into trust boundaries, assets, entry points and abuse cases repeatably — with model diffing between versions and human review as a checkpoint, not the bottleneck.
-- **Lab** — Generate a threat model from source, change one component, and diff the two models to see exactly what the change introduced.
-- **Tools** — `OWASP Threat Dragon`, `Trivy`
-- **Models** — `GLM-5.2`
-
-**Run it** — Generate a threat model from source, change one component, and diff the two models to see exactly what the change introduced.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it
-```
-
-*Expect:* A threat model derived from architecture yields threats sorted deterministically. Two lines of infrastructure change introduce three new threats, one from a component the pull request description never mentions. An unstable generator produces a diff full of churn on unchanged input, and the deterministic one regenerates identically five times — turning a whole-model workshop into a review of only what changed.
-
----
-
-### B2.14 — Building the pentest harness
-
-`AI for Security`
-
-- **Risk** — An offensive loop with no hard scope enforcement is an incident with a project plan.
-- **Control** — Recon, enumeration, exploitation and lateral movement as a bounded, auditable agent loop — hard scope enforcement, destructive-action gating, credential handling and named operator handoff points.
-- **Lab** — Run the loop against an owned target and show the scope guard refusing an out-of-scope host before the request is made.
-- **Tools** — `Metasploit`, `CAI`
-- **Models** — `Kimi K2.6`
-
-**Run it** — Run the loop against an owned target and show the scope guard refusing an out-of-scope host before the request is made.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.14.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.14   # run it headless and check it
-```
-
-*Expect:* Six of seven targets are classified against scope, with the cloud metadata address and the production host both refused before any request is made. The bounded loop refuses three actions, holds the destructive one for an operator, and completes the rest — and an attention-based gate is shown matching the structural check only at 100% attention. The run ends with a reconstructable audit trail.
-
----
-
-### B2.15 — Choosing the model backbone
+### B2.10 — Choosing the model backbone
 
 `AI for Security`
 
@@ -384,15 +294,15 @@ python3 scripts/run_notebooks.py --session B2.14   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.15.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.15   # run it headless and check it
+jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it
 ```
 
 *Expect:* Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely.
 
 ---
 
-### B2.10 — Evaluating a security harness
+### B2.11 — Evaluating a security harness
 
 `AI for Security`
 
@@ -406,8 +316,8 @@ python3 scripts/run_notebooks.py --session B2.15   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it
+jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b2.10-eval-harness
@@ -422,46 +332,29 @@ cd labs/b2.10-eval-harness
 
 ---
 
-### B2.16 — Performance testing: reliability under non-determinism
+### B2.12 — Reliability and cost under non-determinism
 
 `AI for Security`
 
-- **Risk** — A single lucky run published as a result. One run tells you almost nothing about a stochastic system.
-- **Control** — Measure pass^k — succeeds k times out of k — alongside pass@k, plus run-to-run variance on a fixed corpus, so harness failure can be separated from model failure before either is changed.
-- **Lab** — Run one task k times, compute pass@k and pass^k from the same runs, and watch the two numbers disagree.
-- **Tools** — `Inspect`, `promptfoo`
-- **Models** — `GLM-5.2`
+- **Risk** — A single lucky run published as a result, and cost per finding never computed at all, so nobody notices the tool moved work instead of removing it.
+- **Control** — pass^k alongside pass@k on a seeded corpus, plus cost per confirmed finding and analyst minutes per accepted finding, tracked as first-class metrics beside accuracy.
+- **Lab** — Run one task k times, compute pass@k and pass^k from the same runs, then price the result.
+- **Tools** — `Inspect`, `promptfoo`, `CyberGym`
+- **Models** — `GLM-4.6`
 
-**Run it** — Run one task k times, compute pass@k and pass^k from the same runs, and watch the two numbers disagree.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.16.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.16   # run it headless and check it
-```
-
-*Expect:* pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3.
-
----
-
-### B2.17 — Regression suites, cost curves and the economics of autonomy
-
-`AI for Security`
-
-- **Risk** — Accuracy asserted rather than measured, and cost per finding never computed at all — so nobody notices the tool moved work instead of removing it.
-- **Control** — A seeded corpus with planted known-answer vulnerabilities, plus cost per confirmed finding, time-to-first-finding and human-review load tracked as first-class metrics beside accuracy.
-- **Lab** — Score a harness against a seeded corpus and compute its cost per confirmed finding and analyst minutes per accepted finding.
-- **Tools** — `Inspect`, `CyberGym`
-- **Models** — `GLM-5.2`
-
-**Run it** — Score a harness against a seeded corpus and compute its cost per confirmed finding and analyst minutes per accepted finding.
+**Run it** — Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.17.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.17   # run it headless and check it
+jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/b2.10-eval-harness
+python3 reliability.py --task fix-cwe-89 --k 5 --repeat 200
+python3 cost.py --corpus seeded --analyst-minutes 9
 ```
 
-*Expect:* A forty-unit corpus with ten planted defects gives recall a real denominator. Raising sensitivity improves recall while pushing the analyst review queue past the cost of reading the code by hand — the accuracy metric improves as the tool gets worse. A regression suite then shows a net-positive change that still lost findings it used to catch.
+*Expect:* pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand.
 
 ---

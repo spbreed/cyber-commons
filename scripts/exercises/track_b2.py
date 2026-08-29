@@ -5,13 +5,13 @@ The track builds one artefact, in order, and each lesson modifies the previous:
     B2.1  the loop            plan → act → verify → stop
     B2.2  the verifier        the single highest-value hour in the track
     B2.3  tool design         the signature is the control
-    B2.4  budgets             what works when everything else has failed
-    B2.5  model routing       inside the loop this time
-    B2.6  sub-agents          depth, and what it does to authority
-    B2.7  failure taxonomy    so "it broke" routes to the right owner
-    B2.8  self-improvement    why a held-out signal stops being optional
-    B2.9  idempotency         it will do the same thing twice
-    B2.10 evaluation          conformance vs accuracy, and the matching bug
+    A3.4  budgets             what works when everything else has failed
+    B2.4  model routing       inside the loop this time
+    B2.5  sub-agents          depth, and what it does to authority
+    B2.6  failure taxonomy    so "it broke" routes to the right owner
+    B2.7  self-improvement    why a held-out signal stops being optional
+    B2.8  idempotency         it will do the same thing twice
+    B2.11 evaluation          conformance vs accuracy, and the matching bug
 """
 
 MODEL_NOTE = """
@@ -330,7 +330,7 @@ shutil.rmtree(work, ignore_errors=True)
  (3, "exact-match oracle",          "nothing — but needs the answer in advance",
      "only usable on a fixed corpus"),
  (4, "shape / schema check",        "any well-formed output",
-     "use for conformance ONLY, never for quality — see B2.10"),
+     "use for conformance ONLY, never for quality — see B2.11"),
  (5, "llm judge",                   "confident prose",
      "acceptable only as a filter before a real check, never as the last word"),
 ]
@@ -527,163 +527,6 @@ for name, free, bounded, minimal in TOOLS:
 
 "B2.4": {
  "concept": """
-Budgets are the only control that still works when everything else has failed —
-including the verifier.
-
-Two budgets, bounding different things:
-
-- **Step budget** bounds *cost*. It caps how many times the loop can iterate.
-- **Time budget** bounds *damage*. A loop calling a fast tool can complete
-  thousands of actions in the seconds a step budget still permits.
-
-You need both, and you need to decide what happens when one fires. There are
-three options and they are not equivalent:
-
-1. **Halt** — stop and leave the world as it is. Safe when actions are additive.
-2. **Roll back** — undo the partial work. Requires every action to be undoable.
-3. **Escalate** — hand to a human with the trace. The only right answer when
-   the work is half-done and not undoable.
-
-A harness that halts mid-way through a multi-step change and cannot say which
-steps completed has not been contained; it has been abandoned.
-""",
- "steps": [
-  ("md", "## 2 · Demo — a loop that never converges"),
-  ("py", '''import time
-from dataclasses import dataclass, field
-
-class ReplayModel:
-    """DETERMINISTIC REPLAY — not a language model."""
-    def __init__(self, proposals): self.proposals, self.calls = list(proposals), 0
-    def propose(self, _):
-        p = self.proposals[min(self.calls, len(self.proposals)-1)]; self.calls += 1
-        return p
-
-def never_satisfied(_): return False, "still not right"
-
-def run(model, verifier, max_steps=5, max_seconds=10.0):
-    steps, started = [], time.monotonic()
-    for n in range(1, max_steps+1):
-        p = model.propose("")
-        ok, why = verifier(p)
-        steps.append((n, p, ok, why))
-        if ok:   return steps, "verifier satisfied"
-        if time.monotonic() - started > max_seconds:
-            return steps, f"time budget ({max_seconds}s)"
-    return steps, f"step budget ({max_steps} steps)"
-
-spinner = lambda: ReplayModel(["retrying the same approach"])
-for limit in (1, 3, 10):
-    steps, why = run(spinner(), never_satisfied, max_steps=limit)
-    print(f"max_steps={limit:>3} → {len(steps):>3} steps, stopped by {why}")
-
-steps, why = run(spinner(), never_satisfied, max_steps=10_000, max_seconds=0.05)
-print(f"\\ntime budget      → {len(steps):>3} steps, stopped by {why}")
-print("The step budget alone would have permitted 10,000 iterations.")
-'''),
-  ("md", "## 3 · Where it breaks — the loop stops half-way through a change\n\n"
-         "Budgets that only halt leave the system in a state nobody chose. Here "
-         "is a three-step remediation that gets cut off after step two."),
-  ("py", '''@dataclass
-class World:
-    firewall_rule_added: bool = False
-    service_restarted: bool = False
-    monitoring_updated: bool = False
-    def state(self):
-        return {k: v for k, v in vars(self).items()}
-
-PLAN = [("add firewall rule",  "firewall_rule_added"),
-        ("restart service",    "service_restarted"),
-        ("update monitoring",  "monitoring_updated")]
-
-def apply_plan(world, budget):
-    done = []
-    for i, (label, attr) in enumerate(PLAN, 1):
-        if i > budget:
-            return done, f"budget exhausted after step {i-1}"
-        setattr(world, attr, True)
-        done.append(label)
-    return done, "complete"
-
-w = World()
-done, why = apply_plan(w, budget=2)
-print("plan:", [p[0] for p in PLAN])
-print("done:", done)
-print("why :", why)
-print("world state:", w.state())
-print("\\nThe firewall now blocks traffic the service needs, the service has been")
-print("restarted into that condition, and monitoring does not know to alert.")
-print("Halting was worse than either finishing or never starting.")
-'''),
-  ("md", "## 4 · The control — choose the stop behaviour per action class"),
-  ("py", '''ACTIONS = {
- # action                 undoable?  safe to leave half-done?
- "add firewall rule":     (True,     False),
- "restart service":       (False,    False),
- "update monitoring":     (True,     True),
- "post a comment":        (False,    True),
- "open a pull request":   (True,     True),
- "merge a pull request":  (False,    False),
-}
-def stop_behaviour(action):
-    undoable, safe_partial = ACTIONS[action]
-    if safe_partial:            return "HALT — additive, safe to leave"
-    if undoable:                return "ROLL BACK — undo what completed"
-    return "ESCALATE — half-done and not undoable; hand the trace to a human"
-
-for a in ACTIONS:
-    print(f"{a:24s}{stop_behaviour(a)}")
-'''),
-  ("py", '''# Verify: a budgeted run that rolls back or escalates correctly.
-@dataclass
-class Runner:
-    world: World = field(default_factory=World)
-    applied: list = field(default_factory=list)
-
-    def apply(self, label, attr):
-        setattr(self.world, attr, True); self.applied.append((label, attr))
-
-    def rollback(self):
-        undone = []
-        for label, attr in reversed(self.applied):
-            if ACTIONS[label][0]:                       # undoable
-                setattr(self.world, attr, False); undone.append(label)
-            else:
-                return undone, f"cannot undo {label!r} — escalating"
-        return undone, "fully rolled back"
-
-    def run(self, plan, budget):
-        for i, (label, attr) in enumerate(plan, 1):
-            if i > budget:
-                worst = [l for l, _ in self.applied if not ACTIONS[l][1]]
-                if not worst:
-                    return "HALT", "all completed actions are safe to leave"
-                undone, detail = self.rollback()
-                return ("ESCALATE" if "escalat" in detail else "ROLLBACK"), detail
-            self.apply(label, attr)
-        return "COMPLETE", "plan finished"
-
-for budget in (1, 2, 3):
-    r = Runner()
-    verdict, detail = r.run(PLAN, budget)
-    print(f"budget={budget}  {verdict:9s} {detail}")
-    print(f"          world: {r.world.state()}")
-'''),
- ],
- "expect": "Each step budget is honoured exactly; the time budget stops the loop "
-           "far short of 10,000 steps. The half-applied plan leaves a firewall "
-           "rule blocking a service that was then restarted. The per-action table "
-           "assigns HALT, ROLL BACK and ESCALATE correctly, and the budgeted "
-           "runner rolls back at budget 1 and escalates at budget 2 because the "
-           "service restart cannot be undone.",
- "challenge": "Classify every action your harness can take into the three "
-              "columns. The ones that are neither undoable nor safe to leave "
-              "half-done are the ones that need a human in the escalation path — "
-              "and they are usually the ones nobody has thought about.",
-},
-
-"B2.5": {
- "concept": """
 A1.7 routed models across *stages* at the architecture level. This lesson routes
 them **inside the loop**, where the decision is made per iteration and the
 temptation is stronger.
@@ -836,7 +679,7 @@ print(f"\\nrule: verifier tier must be ≥ {top} (the highest tier the ladder re
               "answer is yes and nobody chose it.",
 },
 
-"B2.6": {
+"B2.5": {
  "concept": """
 Sub-agents buy specialisation. What they also buy — and what is never on the
 roadmap — is **delegation depth**.
@@ -983,7 +826,7 @@ print("The limit holds because it is enforced where the orchestrator cannot reac
               "cannot be the one that bounds it.",
 },
 
-"B2.7": {
+"B2.6": {
  "concept": """
 "The agent messed up" is not a defect report. It routes to nobody, and every
 incident feels novel.
@@ -997,9 +840,9 @@ the **fix**. Seven classes cover almost everything an agentic system does wrong:
 | **verification** | it did it wrong and we believed it | harness engineer (B2.2) |
 | authority | it did something it should not be able to do | identity (A2) |
 | containment | the action reached further than intended | platform (A3) |
-| injection | it was told to by untrusted content | provenance (C1.3) |
-| budget | it never stopped | harness engineer (B2.4) |
-| idempotency | it did the right thing twice | harness engineer (B2.9) |
+| injection | it was told to by untrusted content | provenance (C1.2) |
+| budget | it never stopped | harness engineer (A3.4) |
+| idempotency | it did the right thing twice | harness engineer (B2.8) |
 
 The most important distinction in the table is between **capability** and
 **verification**, because they look identical from the outside and have
@@ -1024,9 +867,9 @@ TAXONOMY = {
  "verification": ("it did it wrong and we believed it",     "harness engineer — B2.2"),
  "authority":    ("it did what it should not be able to do","identity — A2"),
  "containment":  ("the action reached further than intended","platform — A3"),
- "injection":    ("untrusted content drove it",             "provenance — C1.3"),
- "budget":       ("it never stopped",                       "harness engineer — B2.4"),
- "idempotency":  ("it did the right thing twice",           "harness engineer — B2.9"),
+ "injection":    ("untrusted content drove it",             "provenance — C1.2"),
+ "budget":       ("it never stopped",                       "harness engineer — A3.4"),
+ "idempotency":  ("it did the right thing twice",           "harness engineer — B2.8"),
 }
 LABELS = ["capability", "verification", "authority", "containment",
           "injection", "budget", "idempotency", "capability"]
@@ -1110,7 +953,7 @@ assert classify_from_trace(TRACES[1]) == "verification"
               "was never fixed.",
 },
 
-"B2.8": {
+"B2.7": {
  "concept": """
 A self-improving scaffold edits its own prompts, tools or routing based on how
 well it is doing. It is genuinely effective, and it makes evaluation
@@ -1256,7 +1099,7 @@ print("oracle rejected it, which is the only reason the system still works.")
               "logs? If yes, you have a self-metric with extra steps.",
 },
 
-"B2.9": {
+"B2.8": {
  "concept": """
 Your agent will do the same thing twice. Retries, restarts, a duplicated webhook,
 a loop that lost track — the cause varies and the outcome does not.
@@ -1405,7 +1248,7 @@ assert Replay(["p"], ["t"], "m", 1).replayable()[0]
               "key containing a timestamp or an attempt number is not a key.",
 },
 
-"B2.10": {
+"B2.11": {
  "concept": """
 This is the flagship lesson of the track: how to tell whether a security harness
 is any good.
@@ -1787,657 +1630,185 @@ assert HARNESS_ACTOR["telemetry"], "an unauditable harness cannot be governed"
               "answer 'the model tells us' means there isn't one.",
 },
 
-"B2.11": {
+"B2.9": {
  "concept": """
-The SAST harness is the first of four disciplines, and they all share the same
-loop: **index → summarise → hypothesise → verify.** What makes each discipline
-different is only the last step — what counts as proof.
+Teams build a SAST harness, then a threat-modelling harness, then a DAST
+harness, then a pentest harness — and re-decide loop control, budgets, retries
+and verification four times. The loops end up nearly identical, and the four
+teams each get one thing wrong in their own way.
 
-For static analysis the shape is:
+They are the same skeleton. Plan a candidate, act on it, verify it, stop. What
+actually differs between the four is two things, and both belong to the domain
+rather than to the loop:
 
-1. **Index.** Turn the repository into something navigable — symbols, call
-   edges, entry points. Done once, reused by every later stage.
-2. **Summarise.** Compress each component to something that fits in a context
-   window, because the repository never will.
-3. **Hypothesise.** Ask the model where a weakness could be, given the summary
-   and the neighbourhood. This is the step people think is the whole system.
-4. **Verify.** Check the hypothesis against the code — is the sink real, is the
-   path reachable, is a sanitiser already present.
+**The oracle** — what decides a candidate is real. Reachability plus a failing
+test for static analysis. A diff against the previous model for threat
+modelling. An observed change in a response for DAST. A shell, a row or a file
+for a pentest. The oracle is the whole value of the harness: everything else is
+plumbing you have already built once.
 
-Two design decisions decide whether the output is usable:
+**The blast radius** — what acting costs if the candidate is wrong. Reading
+source costs nothing. Sending a request to a replica costs a little. Running an
+exploit against a live host costs an incident, so it needs an authorisation the
+loop cannot grant itself.
 
-**Per-file context budget.** More context stops helping and starts hurting past
-a threshold that is specific to your corpus. A budget makes that measurable
-rather than a matter of taste.
-
-**Reachability gating before deduplication.** Gate first, then dedupe. Doing it
-the other way round spends the expensive step on findings that were never
-reachable.
-
-The deduplication stage is what decides whether you ship *a queue* or *a
-landfill*.
+Build the skeleton once. Then a new domain is an oracle, a blast radius, and
+nothing else.
 """,
  "steps": [
-  ("md", "## 2 · The four stages, on a seeded corpus\\n\\n"
-         "The corpus has planted defects, so recall and precision are "
-         "measurable rather than asserted."),
-  ("py", '''SEEDED = {
- # unit            (has_defect, cwe,      reachable_from_entry, sanitised)
- "get_report":     (True,  "CWE-22",  True,  False),
- "run_export":     (True,  "CWE-78",  True,  False),
- "legacy_import":  (True,  "CWE-89",  False, False),   # real bug, unreachable
- "render_row":     (False, None,      True,  False),
- "safe_query":     (True,  "CWE-89",  True,  True),    # real sink, sanitised
- "admin_purge":    (True,  "CWE-78",  True,  False),
- "format_date":    (False, None,      True,  False),
- "parse_config":   (False, None,      False, False),
+  ("md", "## 2 · One skeleton, and the two things a domain supplies"),
+  ("py", '''DOMAINS = {
+ "sast":         {"reads": "source at a commit",     "blast": "read-only"},
+ "threat model": {"reads": "architecture and IaC",   "blast": "read-only"},
+ "dast":         {"reads": "a running replica",      "blast": "replica-write"},
+ "pentest":      {"reads": "an owned host in scope", "blast": "live-action"},
 }
-planted = sorted(u for u, v in SEEDED.items() if v[0])
-print(f"corpus units    : {len(SEEDED)}")
-print(f"planted defects : {len(planted)}  {planted}")
+ORACLES = {
+ "sast":         ("reachable from an entrypoint AND a failing test",
+                  lambda e: e["reachable"] and e["failing_test"]),
+ "threat model": ("present in the new model and absent from the old",
+                  lambda e: e["in_new"] and not e["in_old"]),
+ "dast":         ("response differs from the control request",
+                  lambda e: e["response_differs"]),
+ "pentest":      ("an artefact that should not have been obtainable",
+                  lambda e: e["artefact"] is not None),
+}
+AUTHORISED = {"read-only", "replica-write"}      # live-action needs a signed scope
+
+def harness(domain, candidates, oracle, budget=6, scope_signed=False):
+    """The skeleton. Identical for all four domains."""
+    blast = DOMAINS[domain]["blast"]
+    if blast not in AUTHORISED and not scope_signed:
+        return {"domain": domain, "refused": "live action without a signed scope",
+                "confirmed": [], "steps": 0}
+    confirmed, steps = [], 0
+    for c in sorted(candidates, key=lambda c: c["id"]):
+        if steps >= budget:
+            break
+        steps += 1
+        if oracle(c["evidence"]):
+            confirmed.append(c)
+    return {"domain": domain, "refused": None, "confirmed": confirmed, "steps": steps}
+
+for d in sorted(DOMAINS):
+    print(f"{d:14s}{DOMAINS[d]['blast']:14s}oracle: {ORACLES[d][0]}")
 '''),
 
-  ("md", "## 3 · Index → summarise → hypothesise"),
-  ("py", '''def index(corpus):
-    return sorted(corpus)                                  # stage 1
-
-def summarise(unit, budget_tokens):
-    """Stage 2. A summary that fits the budget; detail is dropped, not hidden."""
-    has_defect, cwe, reachable, sanitised = SEEDED[unit]
-    full = {"unit": unit, "sink": bool(cwe), "cwe": cwe,
-            "reachable": reachable, "sanitised": sanitised}
-    if budget_tokens < 40:            # too small to carry the sanitiser fact
-        full.pop("sanitised")
-    if budget_tokens < 25:            # too small to carry reachability
-        full.pop("reachable")
-    return full
-
-def hypothesise(summary):
-    """Stage 3. Flags anything that looks like a sink. Deliberately noisy."""
-    return summary["sink"]
-
-for budget in (20, 30, 60):
-    hyps = [u for u in index(SEEDED) if hypothesise(summarise(u, budget))]
-    print(f"context budget {budget:>3} tokens -> {len(hyps)} hypotheses: {hyps}")
-'''),
-
-  ("md", "## 4 · Verify, and gate on reachability before you deduplicate"),
-  ("py", '''def verify(unit, summary):
-    """Stage 4. The cheap facts first; each one can only remove a finding."""
-    if summary.get("sanitised"):
-        return None, "a sanitiser is already present"
-    if summary.get("reachable") is False:
-        return None, "no path from any entry point"
-    if summary.get("reachable") is None:
-        return unit, "reachability unknown - budget too small to carry it"
-    return unit, "reachable, unsanitised sink"
-
-def pipeline(budget):
-    hyps = [u for u in index(SEEDED) if hypothesise(summarise(u, budget))]
-    kept, dropped = [], []
-    for u in hyps:
-        keep, why = verify(u, summarise(u, budget))
-        (kept if keep else dropped).append((u, why))
-    return hyps, kept, dropped
-
-for budget in (20, 30, 60):
-    hyps, kept, dropped = pipeline(budget)
-    tp = [u for u, _ in kept if SEEDED[u][0]]
-    fp = [u for u, _ in kept if not SEEDED[u][0]]
-    recall = len(tp) / len(planted)
-    prec = len(tp) / len(kept) if kept else 0
-    print(f"budget {budget:>3}: {len(hyps)} hyp -> {len(kept)} kept  "
-          f"recall {recall:.0%}  precision {prec:.0%}  fp={fp}")
-'''),
-
-  ("md", "## 5 · Where it breaks — more context is not monotonically better\\n\\n"
-         "The budget that carries every fact is not the budget with the best "
-         "output, and the reason is worth understanding."),
-  ("py", '''print(f"{'budget':>7}{'kept':>6}{'recall':>9}{'precision':>11}  note")
-for budget in (20, 25, 30, 40, 60):
-    _, kept, _ = pipeline(budget)
-    tp = [u for u, _ in kept if SEEDED[u][0]]
-    prec = len(tp) / len(kept) if kept else 0
-    note = ("reachability unknown - everything survives" if budget < 25 else
-            "sanitiser fact missing - safe_query survives" if budget < 40 else
-            "all facts present")
-    print(f"{budget:>7}{len(kept):>6}{len(tp)/len(planted):>8.0%}{prec:>10.0%}  {note}")
-print()
-print("At budget 20 the harness keeps everything and calls it recall. It is not")
-print("finding more - it is verifying less, and reporting the difference as a")
-print("result. A recall number without its precision is a marketing number.")
-'''),
-
-  ("md", "## 6 · Verify — queue or landfill\\n\\n"
-         "The deduplication stage, and the number that decides which one you "
-         "shipped."),
-  ("py", '''ANALYSERS = ("grep", "taint", "model")
-
-_, kept, _ = pipeline(60)
-raw = [(u, tool) for u, _ in kept for tool in ANALYSERS]     # each tool reports each
-by_defect = sorted({u for u, _ in raw})
-
-print(f"raw findings across {len(ANALYSERS)} analysers : {len(raw)}")
-print(f"distinct defects                     : {len(by_defect)}")
-print(f"inflation if you do not deduplicate  : {len(raw)/len(by_defect):.1f}x")
-print()
-minutes_per = 6
-print(f"analyst minutes, undeduplicated : {len(raw)*minutes_per}")
-print(f"analyst minutes, deduplicated   : {len(by_defect)*minutes_per}")
-print()
-print("Same findings, same accuracy, three times the queue. Nobody reads the")
-print("third page, so the defect that gets fixed is whichever sorted first.")
-assert len(raw) == 3 * len(by_defect)
-'''),
- ],
- "expect": "The four-stage loop runs over a seeded corpus of eight units with "
-           "five planted defects. Shrinking the per-file context budget removes "
-           "the facts verification depends on: below 25 tokens reachability is "
-           "unknown and everything survives, which reads as higher recall and is "
-           "actually less verification. Deduplicating three analysers' output "
-           "collapses a 3x inflated queue back to the real defect count.",
- "challenge": "Find the context budget where your own corpus stops improving. It "
-              "exists, it is specific to your codebase, and until you have "
-              "measured it you are paying for tokens that make the output worse.",
-},
-
-"B2.12": {
- "concept": """
-Static analysis produces a hypothesis. Dynamic analysis produces a fact — but
-only if the thing deciding is not the model.
-
-The DAST harness is the same loop with a different last step: drive a running
-target, generate a payload, observe what happened, and confirm on a
-**deterministic oracle**. Not "the model thinks this worked". A signal that
-exists independently of anything the agent believes:
-
-- the query the database actually executed
-- the process that actually spawned
-- the file that actually opened
-- the sleep that actually delayed the response by five seconds
-
-The distinction is not pedantic. A model asked "did that work?" after sending a
-payload will answer confidently either way, and its confidence is uncorrelated
-with the truth. An oracle that reads the target's own logs cannot be talked
-into anything.
-
-Three things bound this phase, and they are preconditions rather than
-afterthoughts: **sandbox replication** (a replica, never production), a
-**safe-action policy** (demonstrate, never damage), and **blast-radius limits**
-(the exploit stops at proof). Evidence capture is what makes it a finding
-instead of an anecdote.
-""",
- "steps": [
-  ("md", "## 2 · A target that records what actually happened\\n\\n"
-         "The oracle is the target's own log, not the agent's opinion of it."),
-  ("py", '''SANDBOX = {"is_replica": True, "has_prod_credentials": False,
-           "network_egress": False}
-
-class Target:
-    """A stand-in application. Its log is the oracle."""
-    def __init__(self):
-        self.log = []
-    def handle(self, path, param):
-        if path == "/report":
-            q = f"SELECT * FROM reports WHERE name = '{param}'"
-            self.log.append(("query", q))
-            return {"status": 200, "body": "report data"}
-        if path == "/export":
-            cmd = f"exporter --format {param}"
-            self.log.append(("exec", cmd))
-            return {"status": 200, "body": "ok"}
-        return {"status": 404, "body": ""}
-
-def preconditions_ok(sb):
-    fails = [k for k, v in (("is_replica", sb["is_replica"]),
-                            ("no_prod_credentials", not sb["has_prod_credentials"]),
-                            ("no_egress", not sb["network_egress"])) if not v]
-    return (not fails), fails
-
-ok, fails = preconditions_ok(SANDBOX)
-print(f"sandbox preconditions: {'PASS' if ok else 'REFUSE ' + str(fails)}")
-assert ok, "the harness must refuse to run outside a sandbox"
-'''),
-
-  ("md", "## 3 · Drive it, and confirm on the oracle"),
-  ("py", '''PAYLOADS = {
- "/report": ["normal", "x' OR '1'='1", "'; DROP TABLE reports; --"],
- "/export": ["pdf", "pdf; id", "pdf && whoami"],
+  ("md", "## 3 · Four domains through the same loop"),
+  ("py", '''CANDIDATES = {
+ "sast": [
+  {"id": "unit_07 CWE-89 in build_query", "real": True,
+   "evidence": {"reachable": True,  "failing_test": True}},
+  {"id": "unit_12 CWE-89 in log_line",    "real": False,
+   "evidence": {"reachable": False, "failing_test": False}},
+  {"id": "unit_31 CWE-22 in export_path", "real": True,
+   "evidence": {"reachable": True,  "failing_test": True}}],
+ "threat model": [
+  {"id": "worker -> db crosses trust 0 to 2", "real": True,
+   "evidence": {"in_new": True,  "in_old": False}},
+  {"id": "component web renamed to frontend", "real": False,
+   "evidence": {"in_new": True,  "in_old": True}},
+  {"id": "/admin/export on an untrusted entry", "real": True,
+   "evidence": {"in_new": True,  "in_old": False}}],
+ "dast": [
+  {"id": "GET /v1/users returns 200 unauthenticated", "real": True,
+   "evidence": {"response_differs": True}},
+  {"id": "banner discloses framework version",        "real": False,
+   "evidence": {"response_differs": False}},
+  {"id": "POST /report reflects payload unencoded",   "real": True,
+   "evidence": {"response_differs": True}}],
+ "pentest": [
+  {"id": "password auth permits spraying, no lockout", "real": True,
+   "evidence": {"artefact": "session as svc-reports"}},
+  {"id": "expired certificate on the partner CDN",     "real": False,
+   "evidence": {"artefact": None}},
+  {"id": "/backup listing exposes a database dump",    "real": True,
+   "evidence": {"artefact": "orders.sql, 41 MB"}}],
 }
 
-def oracle_sqli(entry):    return entry[0] == "query" and ("OR '1'='1" in entry[1] or "DROP" in entry[1])
-def oracle_cmdi(entry):    return entry[0] == "exec" and (";" in entry[1] or "&&" in entry[1])
-ORACLES = {"/report": ("CWE-89", oracle_sqli), "/export": ("CWE-78", oracle_cmdi)}
+def precision(result, candidates):
+    if not result["confirmed"]:
+        return None
+    return sum(c["real"] for c in result["confirmed"]) / len(result["confirmed"])
 
-confirmed = []
-for path, payloads in sorted(PAYLOADS.items()):
-    cwe, oracle = ORACLES[path]
-    for p in payloads:
-        t = Target()
-        resp = t.handle(path, p)
-        fired = any(oracle(e) for e in t.log)
-        mark = "CONFIRMED" if fired else "no        "
-        print(f"   {path:9s}{p[:26]:28s}status {resp['status']}  {mark}")
-        if fired:
-            confirmed.append({"path": path, "cwe": cwe, "payload": p,
-                              "observable": t.log[-1][1]})
-print(f"\\nconfirmed by oracle: {len(confirmed)}")
+print(f"{'domain':14s}{'confirmed':>10}{'precision':>11}  note")
+for d in sorted(DOMAINS):
+    r = harness(d, CANDIDATES[d], ORACLES[d][1], scope_signed=True)
+    p = precision(r, CANDIDATES[d])
+    print(f"{d:14s}{len(r['confirmed']):>10}{p:>11.2f}  {ORACLES[d][0][:38]}")
+
+r = harness("pentest", CANDIDATES["pentest"], ORACLES["pentest"][1])
+print(f"\\npentest without a signed scope: {r['refused']}")
+assert r["confirmed"] == []
 '''),
 
-  ("md", "## 4 · Where it breaks — the model as its own oracle\\n\\n"
-         "Same payloads, same target. The only change is who decides."),
-  ("py", '''def model_opinion(path, payload, response):
-    """NOT a language model - a stub reproducing the failure mode: it reads the
-    response, sees HTTP 200, and calls that success."""
-    return response["status"] == 200
+  ("md", "## 4 · Where it breaks — the oracle everyone reaches for\\n\\n"
+         "Every one of those four oracles is a fact about the target. The "
+         "tempting fifth is the model's own opinion, because it is the only one "
+         "that works in every domain without being built."),
+  ("py", '''def model_oracle(evidence):
+    """The model read the evidence and is confident. Confidence is not an oracle."""
+    return True
 
-model_confirmed = []
-for path, payloads in sorted(PAYLOADS.items()):
-    for p in payloads:
-        t = Target()
-        resp = t.handle(path, p)
-        if model_opinion(path, p, resp):
-            model_confirmed.append((path, p))
+print(f"{'domain':14s}{'confirmed':>10}{'precision':>11}")
+for d in sorted(DOMAINS):
+    r = harness(d, CANDIDATES[d], model_oracle, scope_signed=True)
+    print(f"{d:14s}{len(r['confirmed']):>10}{precision(r, CANDIDATES[d]):>11.2f}")
 
-print(f"oracle confirmed : {len(confirmed)}")
-print(f"model confirmed  : {len(model_confirmed)}")
-print()
-false_positives = [(p, pl) for p, pl in model_confirmed
-                   if not any(c["path"] == p and c["payload"] == pl for c in confirmed)]
-print(f"findings the model asserted that the oracle refuses: {len(false_positives)}")
-for p, pl in false_positives:
-    print(f"   {p:9s}{pl}")
-print()
-print("Every one of these returns HTTP 200 because the application works. The")
-print("model is not lying; it was asked a question it has no way to answer, and")
-print("it answered anyway.")
-assert len(model_confirmed) > len(confirmed)
+total = sum(len(CANDIDATES[d]) for d in CANDIDATES)
+real = sum(c["real"] for d in CANDIDATES for c in CANDIDATES[d])
+print(f"\\nevery one of {total} candidates confirmed; {real} of them are real.")
+print("Precision 0.67 in every domain, and it looks like 1.00 from inside the")
+print("harness, because the thing producing the finding is also the thing")
+print("agreeing with it.")
+assert all(precision(harness(d, CANDIDATES[d], model_oracle, scope_signed=True),
+                     CANDIDATES[d]) < 1.0 for d in DOMAINS)
 '''),
 
-  ("md", "## 5 · The control — stop at proof, and capture the evidence"),
-  ("py", '''SAFE_ACTIONS = {"read", "observe", "time"}
-DESTRUCTIVE = {"drop", "delete", "truncate", "shutdown"}
-
-def safe_to_send(payload):
-    low = payload.lower()
-    hit = sorted(d for d in DESTRUCTIVE if d in low)
-    return (not hit), hit
-
-print(f"{'payload':32s}{'sendable?':11s}why")
-for path, payloads in sorted(PAYLOADS.items()):
-    for p in payloads:
-        ok, hit = safe_to_send(p)
-        print(f"{p[:30]:32s}{'yes' if ok else 'REFUSED':11s}"
-              f"{'demonstrates without damage' if ok else 'destructive: ' + str(hit)}")
-print()
-print("The DROP TABLE payload proves nothing that OR '1'='1' has not already")
-print("proved, and it destroys the replica you need for the next test.")
-print("Demonstrating the flaw and exercising it are different jobs.")
-assert not safe_to_send("'; DROP TABLE reports; --")[0]
-'''),
-
-  ("md", "## 6 · Verify — an evidence record somebody can re-run"),
-  ("py", '''evidence = [{
-   "cwe": c["cwe"], "entry": c["path"], "input": c["payload"],
-   "observable": c["observable"],                    # the oracle's own words
-   "oracle": "target execution log",
-   "sandbox": {"replica": True, "prod_credentials": False, "egress": False},
-   "reproducible": True,
-} for c in confirmed if safe_to_send(c["payload"])[0]]
-
-for e in evidence:
-    print(f"   {e['cwe']}  {e['entry']}")
-    print(f"      input      : {e['input']}")
-    print(f"      observable : {e['observable']}")
-print()
-print(f"{len(evidence)} findings, each with the observable that proves it.")
-print("An exit code is not an observable. The query the database ran is.")
-assert evidence and all(e["observable"] for e in evidence)
-'''),
- ],
- "expect": "Six payloads are driven at a sandboxed replica. The deterministic "
-           "oracle — the target's own execution log — confirms the injections "
-           "and refuses the benign requests, while a stub standing in for model "
-           "self-assessment confirms every request that returned HTTP 200, "
-           "including the ones that prove nothing. The destructive payload is "
-           "refused before it is sent, and each surviving finding carries the "
-           "observable that proves it.",
- "challenge": "Take one 'confirmed' finding from a tool you run and ask what the "
-              "oracle was. If the answer is the model's own summary of the "
-              "response, you have a hypothesis with a confident tone.",
-},
-
-"B2.13": {
- "concept": """
-A threat model is usually produced once, by hand, in a workshop, for a system
-that changes every release. By the second sprint it describes something that no
-longer exists — and nobody notices, because nothing re-reads it.
-
-The threat-modelling harness makes it a **derived artefact**: generated from
-architecture, IaC, code and data flows, regenerated on every release, and — the
-part that carries the value — **diffed between versions**.
-
-The diff is the product. A threat model tells you what could go wrong; a threat
-model *diff* tells you what this pull request just introduced, which is a
-question a human can act on within a review cycle.
-
-That reframes human judgement too. Reviewing a hundred threats a quarter is a
-workshop nobody attends. Reviewing the four threats that appeared since Tuesday
-is a checkpoint, and a checkpoint is something an engineering process can carry.
-
-For the diff to mean anything the generation must be **deterministic**: same
-input, same output, byte for byte. Two runs that disagree about unchanged code
-produce a diff full of noise, and a noisy diff is one people stop reading.
-""",
- "steps": [
-  ("md", "## 2 · Derive the model from the system, not from a workshop"),
-  ("py", '''ARCH_V1 = {
- "components": {"web": {"trust": 0, "exposes": ["/report", "/upload"]},
-                "api": {"trust": 1, "exposes": ["/internal/report"]},
-                "db":  {"trust": 2, "exposes": []}},
- "flows": [("web", "api"), ("api", "db")],
- "sinks": {"db": "database", "api": "filesystem"},
+  ("md", "## 5 · The control — classify the oracle, gate on the class"),
+  ("py", '''ORACLE_CLASS = {
+ "sast":         "deterministic",   # re-runs to the same answer on the same commit
+ "threat model": "deterministic",
+ "dast":         "observational",   # a real observation, but of a system that moves
+ "pentest":      "observational",
+ "model":        "judgement",       # not re-checkable, not falsifiable
 }
+MAY_FILE = {"deterministic", "observational"}
 
-def derive(arch):
-    """Deterministic by construction: everything sorted, nothing from a set."""
-    threats = []
-    for a, b in sorted(arch["flows"]):
-        ta, tb = arch["components"][a]["trust"], arch["components"][b]["trust"]
-        if ta < tb and b in arch["sinks"]:
-            for entry in sorted(arch["components"][a]["exposes"]) or ["-"]:
-                threats.append({
-                    "entry": entry, "path": f"{a} -> {b}",
-                    "resource": arch["sinks"][b],
-                    "crossing": f"trust {ta} -> {tb}",
-                    "score": (tb - ta) * (2 if arch["sinks"][b] == "database" else 1)})
-    return sorted(threats, key=lambda t: (-t["score"], t["entry"], t["path"]))
+def dispatch(domain, oracle_name, result):
+    cls = ORACLE_CLASS[oracle_name]
+    return {"domain": domain, "oracle_class": cls,
+            "action": "file the finding" if cls in MAY_FILE else "queue for a human",
+            "count": len(result["confirmed"])}
 
-tm1 = derive(ARCH_V1)
-print(f"{'entry':22s}{'path':16s}{'resource':12s}{'crossing':18s}score")
-for t in tm1:
-    print(f"{t['entry']:22s}{t['path']:16s}{t['resource']:12s}{t['crossing']:18s}{t['score']}")
-print(f"\\n{len(tm1)} threats derived")
-'''),
+for d in sorted(DOMAINS):
+    good = harness(d, CANDIDATES[d], ORACLES[d][1], scope_signed=True)
+    bad  = harness(d, CANDIDATES[d], model_oracle, scope_signed=True)
+    print(dispatch(d, d, good))
+    print(dispatch(d, "model", bad))
 
-  ("md", "## 3 · Change one thing, and diff"),
-  ("py", '''import copy
-ARCH_V2 = copy.deepcopy(ARCH_V1)
-ARCH_V2["components"]["web"]["exposes"].append("/admin/export")   # one new route
-ARCH_V2["components"]["worker"] = {"trust": 0, "exposes": ["queue"]}
-ARCH_V2["flows"].append(("worker", "db"))                          # and one new flow
-
-tm2 = derive(ARCH_V2)
-
-def key(t): return (t["entry"], t["path"], t["resource"])
-def diff(before, after):
-    a = {key(t): t for t in after}
-    b = {key(t): t for t in before}
-    return ({k: a[k] for k in sorted(a.keys() - b.keys())},
-            {k: b[k] for k in sorted(b.keys() - a.keys())})
-
-new, gone = diff(tm1, tm2)
-print(f"threats before {len(tm1)}  ->  after {len(tm2)}")
-print(f"\\nNEW ({len(new)}):")
-for k in new:
-    t = new[k]
-    print(f"   score {t['score']}  {t['entry']:22s}{t['path']:16s}{t['resource']}")
-print(f"REMOVED ({len(gone)}): {list(gone) or 'none'}")
 print()
-print("Two lines of infrastructure change. Three new threats, one of them from")
-print("a component nobody mentioned in the pull request description.")
-assert new and not gone
-'''),
-
-  ("md", "## 4 · Where it breaks — a diff you cannot trust\\n\\n"
-         "Regenerate the *identical* architecture with a generator that "
-         "iterates a set instead of a sorted sequence."),
-  ("py", '''def derive_unstable(arch, seed):
-    """Same logic, but the ordering comes from set iteration."""
-    import random
-    threats = derive(arch)
-    rng = random.Random(seed)
-    rng.shuffle(threats)                 # stands in for hash-order instability
-    return threats
-
-runs = [derive_unstable(ARCH_V1, s) for s in range(3)]
-identical = all(r == runs[0] for r in runs)
-print(f"three regenerations of UNCHANGED architecture identical: {identical}")
-
-n1, g1 = diff(runs[0], runs[1])
-print(f"diff between two runs of the same input: {len(n1)} new, {len(g1)} removed")
-print("   (content-keyed, so the noise does not show here...)")
-
-# but a line-oriented diff, which is what a reviewer actually reads:
-lines = [[f"{t['entry']} {t['path']} {t['score']}" for t in r] for r in runs]
-noisy = sum(1 for a, b in zip(lines[0], lines[1]) if a != b)
-print(f"   line-by-line, {noisy} of {len(lines[0])} lines differ on unchanged input")
-print()
-print("Nothing changed and the review shows churn. Reviewers learn within about")
-print("two sprints that the diff is noise, and then they stop reading it - which")
-print("costs you the one output of this harness that was worth having.")
-assert noisy > 0
-'''),
-
-  ("md", "## 5 · The control — determinism, then the checkpoint"),
-  ("py", '''stable = [derive(ARCH_V1) for _ in range(5)]
-print(f"five regenerations identical: {all(s == stable[0] for s in stable)}")
-
-def review_load(before, after, per_threat_minutes=8):
-    new, gone = diff(before, after)
-    return {"total_threats": len(after),
-            "needs_review": len(new),
-            "workshop_minutes": len(after) * per_threat_minutes,
-            "checkpoint_minutes": len(new) * per_threat_minutes}
-
-r = review_load(tm1, tm2)
-print(f"\\nthreats in the model      : {r['total_threats']}")
-print(f"threats needing review    : {r['needs_review']}")
-print(f"review the whole model    : {r['workshop_minutes']} minutes")
-print(f"review only the diff      : {r['checkpoint_minutes']} minutes")
-print()
-print("The whole model is a workshop nobody attends. The diff is a checkpoint")
-print("that fits in a pull request, and it contains the same new information.")
-assert all(s == stable[0] for s in stable)
-'''),
-
-  ("md", "## 6 · Verify — the diff catches what the description omitted"),
-  ("py", '''PR_DESCRIPTION = "add an admin export route"
-mentioned = "/admin/export"
-surprises = [new[k] for k in new if mentioned not in new[k]["entry"]]
-print(f"pull request says      : {PR_DESCRIPTION!r}")
-print(f"threats it introduced  : {len(new)}")
-print(f"not implied by the text: {len(surprises)}")
-for t in surprises:
-    print(f"   {t['path']:16s}{t['resource']:12s}{t['crossing']}")
-print()
-print("The worker flow is a legitimate change made for a good reason. It is")
-print("also a second untrusted path to the database, and the sentence describing")
-print("the pull request does not contain it.")
-assert surprises
+print("The skeleton did not change once across four domains. What changed was")
+print("the oracle and the blast radius - which is the whole argument for")
+print("building the loop once and never again.")
+assert dispatch("sast", "model", harness("sast", CANDIDATES["sast"], model_oracle,
+                scope_signed=True))["action"] == "queue for a human"
 '''),
  ],
- "expect": "A threat model derived from architecture yields threats sorted "
-           "deterministically. Two lines of infrastructure change introduce "
-           "three new threats, one from a component the pull request description "
-           "never mentions. An unstable generator produces a diff full of churn "
-           "on unchanged input, and the deterministic one regenerates identically "
-           "five times — turning a whole-model workshop into a "
-           "review of only what changed.",
- "challenge": "Generate a threat model for your service twice, without changing "
-              "anything, and diff the two. If they differ, the diff you were "
-              "planning to review on every release was never going to work.",
+ "expect": "One skeleton runs all four domains unchanged. With each domain's own "
+           "oracle every confirmed finding is real — precision 1.00 across sast, "
+           "threat model, dast and pentest — and the pentest run refuses "
+           "outright without a signed scope, because its blast radius is live "
+           "action. Swapping in the model's own confidence as the oracle confirms "
+           "all 12 candidates, 8 of which are real: precision 0.67 in every "
+           "domain, invisible from inside the harness.",
+ "challenge": "Name the oracle for the harness you are building. If the sentence "
+              "contains the words 'the model determines', you have a judgement, "
+              "not an oracle — and the finding belongs in a human queue rather "
+              "than in a ticket.",
 },
 
-"B2.14": {
- "concept": """
-The pentest harness is the one where the loop can do real damage, so it is the
-one where the bounds come before the capability.
-
-Same four stages — recon, enumeration, exploitation, lateral movement — run as
-an agent loop. What makes it lawful rather than an incident with a project plan
-is three things, and all three are structural rather than procedural:
-
-**Hard scope enforcement.** Not a note in the engagement letter: a check in the
-request path that refuses a target outside scope before the packet leaves. Scope
-is a property of the harness, not of the operator's attention.
-
-**Destructive-action gating.** Some actions demonstrate; some destroy. The loop
-may take the first class autonomously and must stop at the second, every time,
-regardless of how confident it is.
-
-**Operator handoff points.** Named places where a human decides. Not "the
-operator supervises" — specific transitions, so that when the loop pauses
-everybody knows whose decision it is.
-
-The output that makes this defensible afterwards is the audit trail: every
-target touched, every action taken, every refusal and why. A pentest you cannot
-reconstruct is indistinguishable from an intrusion.
-""",
- "steps": [
-  ("md", "## 2 · Scope is a check in the path, not a line in a document"),
-  ("py", '''import ipaddress
-
-SCOPE = {"cidrs": ["10.20.0.0/24"], "hosts": ["app.test.corp.example"],
-         "excluded": ["10.20.0.1"]}          # the gateway is always excluded
-
-def in_scope(target):
-    if target in SCOPE["excluded"]:
-        return False, "explicitly excluded"
-    if target in SCOPE["hosts"]:
-        return True, "named host"
-    try:
-        ip = ipaddress.ip_address(target)
-    except ValueError:
-        return False, "not a named host and not an address in scope"
-    for c in SCOPE["cidrs"]:
-        if ip in ipaddress.ip_network(c):
-            return True, f"inside {c}"
-    return False, "outside every scoped range"
-
-TARGETS = ["10.20.0.15", "app.test.corp.example", "10.20.0.1",
-           "10.99.4.7", "prod.corp.example", "169.254.169.254"]
-print(f"{'target':26s}{'allowed':9s}why")
-for t in TARGETS:
-    ok, why = in_scope(t)
-    print(f"{t:26s}{'yes' if ok else 'REFUSE':9s}{why}")
-allowed = [t for t in TARGETS if in_scope(t)[0]]
-print(f"\\n{len(allowed)} of {len(TARGETS)} targets are in scope")
-assert "169.254.169.254" not in allowed and "prod.corp.example" not in allowed
-'''),
-
-  ("md", "## 3 · The loop, bounded by the check"),
-  ("py", '''AUDIT = []
-
-def act(phase, target, action, destructive=False):
-    ok, why = in_scope(target)
-    if not ok:
-        AUDIT.append({"phase": phase, "target": target, "action": action,
-                      "result": "REFUSED", "why": why})
-        return "refused"
-    if destructive:
-        AUDIT.append({"phase": phase, "target": target, "action": action,
-                      "result": "HELD", "why": "destructive - operator decision"})
-        return "held"
-    AUDIT.append({"phase": phase, "target": target, "action": action,
-                  "result": "done", "why": why})
-    return "done"
-
-PLAN = [
- ("recon",       "10.20.0.15",            "port scan",            False),
- ("recon",       "10.99.4.7",             "port scan",            False),
- ("enumerate",   "app.test.corp.example", "enumerate endpoints",  False),
- ("exploit",     "10.20.0.15",            "sql injection proof",  False),
- ("exploit",     "10.20.0.15",            "drop table",           True),
- ("lateral",     "10.20.0.1",             "pivot via gateway",    False),
- ("lateral",     "169.254.169.254",       "read instance metadata", False),
-]
-for phase, target, action, destructive in PLAN:
-    r = act(phase, target, action, destructive)
-    print(f"   {phase:11s}{target:26s}{action:24s}-> {r}")
-'''),
-
-  ("md", "## 4 · Where it breaks — the operator who was supervising\\n\\n"
-         "Scope enforcement placed in the operator's attention rather than in "
-         "the request path."),
-  ("py", '''def act_supervised(phase, target, action, operator_attention):
-    """The same loop, gated by a human who is watching most of the time."""
-    ok, _ = in_scope(target)
-    if ok:
-        return "done"
-    return "refused" if operator_attention else "SENT OUT OF SCOPE"
-
-out_of_scope = [(p, t, a) for p, t, a, _ in PLAN if not in_scope(t)[0]]
-for attention in (1.0, 0.9, 0.5):
-    # deterministic: the nth action is missed when n * attention has rolled over
-    missed = [t for i, (p, t, a) in enumerate(out_of_scope)
-              if act_supervised(p, t, a, (i + 1) * attention % 1 < attention
-                                and i < len(out_of_scope) * attention) == "SENT OUT OF SCOPE"]
-    print(f"operator catching {attention:.0%} of them -> "
-          f"{len(out_of_scope) - len(missed)}/{len(out_of_scope)} refused")
-print()
-print("At 100% attention the outcome matches the structural check exactly. The")
-print("difference is that the structural check does not have a bad week, and it")
-print("does not get faster when the engagement is running late.")
-print()
-print("169.254.169.254 is the case that matters: it is one typo away from every")
-print("cloud credential the harness could ever want, and it looks like a")
-print("perfectly ordinary address.")
-'''),
-
-  ("md", "## 5 · The control — handoff points that are named, not implied"),
-  ("py", '''HANDOFFS = {
- "destructive_action":   "operator approves each one, individually",
- "scope_expansion":      "written client approval before the range changes",
- "credential_use":       "operator supplies; the harness never stores",
- "lateral_to_new_host":  "operator confirms the host is in the engagement",
-}
-held = [a for a in AUDIT if a["result"] == "HELD"]
-refused = [a for a in AUDIT if a["result"] == "REFUSED"]
-
-print(f"{'transition':24s}who decides")
-for k, v in sorted(HANDOFFS.items()):
-    print(f"{k:24s}{v}")
-print()
-print(f"actions held for an operator : {len(held)}")
-for h in held:
-    print(f"   {h['target']:26s}{h['action']}")
-print(f"actions refused outright     : {len(refused)}")
-for r in refused:
-    print(f"   {r['target']:26s}{r['action']:24s}({r['why']})")
-assert held and refused
-'''),
-
-  ("md", "## 6 · Verify — a run you can reconstruct"),
-  ("py", '''from collections import Counter
-counts = Counter(a["result"] for a in AUDIT)
-print(f"audit entries : {len(AUDIT)}")
-for k in sorted(counts):
-    print(f"   {k:9s}{counts[k]}")
-print()
-print(f"{'phase':11s}{'target':26s}{'action':24s}result")
-for a in AUDIT:
-    print(f"{a['phase']:11s}{a['target']:26s}{a['action']:24s}{a['result']}")
-print()
-print("Every target touched, every action taken, every refusal and its reason.")
-print("This is the artefact that distinguishes an authorised engagement from an")
-print("intrusion, and it has to exist before anyone asks for it.")
-assert len(AUDIT) == len(PLAN) and counts["REFUSED"] >= 3
-'''),
- ],
- "expect": "Six of seven targets are classified against scope, with the cloud "
-           "metadata address and the production host both refused before any "
-           "request is made. The bounded loop refuses three actions, holds the "
-           "destructive one for an operator, and completes the rest — and an "
-           "attention-based gate is shown matching the structural check only at "
-           "100% attention. The run ends with a reconstructable audit trail.",
- "challenge": "Add 169.254.169.254 and its IPv6 equivalent to the exclusion list "
-              "of any offensive tooling you run. It is the highest-value target "
-              "in most cloud estates and the one most likely to be reached by "
-              "accident.",
-},
-
-"B2.15": {
+"B2.10": {
  "concept": """
 Two questions get confused here, and only one of them is worth your time.
 
@@ -2597,7 +1968,7 @@ assert "frontier-api-stand-in" not in eligible
               "is what will decide your model choice for the next two years.",
 },
 
-"B2.16": {
+"B2.12": {
  "concept": """
 A single run tells you almost nothing about a stochastic system, and almost
 every published harness result is a single run.
@@ -2620,6 +1991,18 @@ unattended is where most harness claims quietly go wrong.
 The other half is **run-to-run variance.** If the same input produces eleven
 findings one day and four the next, the average is not a description of
 anything, and any change you make afterwards is being measured against noise.
+
+Reliability is one of three numbers that decide whether a harness is worth
+running, and most teams measure only the first:
+
+- **Accuracy**, usually against whatever the tool happened to find, which is
+  circular. A **seeded corpus** of deliberately planted defects turns recall
+  into a fraction with a real denominator.
+- **Money**, per unit of value. Total spend is on the invoice; *cost per
+  confirmed finding* is what changes when someone switches model tier.
+- **Human time**, which is almost never measured and decides whether the tool
+  survives. Four hundred findings a week at nine minutes each has not removed
+  work. It has moved the work, renamed it triage, and made it somebody else's.
 """,
  "steps": [
   ("md", "## 2 · The two metrics, from the same runs"),
@@ -2739,59 +2122,22 @@ print("number is larger. An unattended harness that reports pass@k is")
 print("reporting the reliability of a system it is not.")
 assert card["headline_metric"] == "pass^k" and card["pass_pow_k"] < card["pass_at_k"]
 '''),
- ],
- "expect": "pass@5 and pass^5 are computed from the same 2000 trials and "
-           "diverge sharply: at 80% per-run reliability the harness is 99.9% "
-           "reliable with a human picking the good answer and 33% reliable "
-           "unattended. Twelve single-run demos of a 60% harness return a mix of "
-           "passes and failures, and a change worth 1.5 findings is shown to be "
-           "invisible against a standard deviation of 3.",
- "challenge": "Run your harness on one fixed task five times and count how many "
-              "times it fully succeeded. That integer, out of five, is the "
-              "number to put in front of anyone deciding whether to let it run "
-              "unattended.",
-},
 
-"B2.17": {
- "concept": """
-A harness has three costs and most teams measure one of them.
-
-**Accuracy** is measured — usually against whatever the tool happened to find,
-which is circular. The fix is a **seeded corpus**: known defects planted
-deliberately, so recall is a fraction with a real denominator instead of a
-count with a confident tone.
-
-**Money** is rarely measured per unit of value. Total spend is visible on an
-invoice; *cost per confirmed finding* is the number that says whether the thing
-is worth running, and it is the one that moves when someone changes the model
-tier.
-
-**Human time** is almost never measured, and it is the one that decides whether
-the tool survives. A harness that produces four hundred findings a week has not
-removed work if an analyst spends nine minutes on each. It has moved the work,
-renamed it triage, and made it somebody else's problem.
-
-The fourth number closes the loop: **regression drift.** A fixed suite re-run on
-every harness change, because the most common failure mode in this whole
-chapter is a change that improves the case you were looking at and quietly
-degrades six you were not.
-""",
- "steps": [
-  ("md", "## 2 · A corpus with a real denominator"),
+  ("md", "## 6 · The other two numbers — money, and somebody's afternoon\\n\\n"
+         "Reliability says whether the harness can be left alone. Cost per "
+         "confirmed finding and analyst minutes per accepted finding say whether "
+         "leaving it alone is worth doing. Both need a corpus whose defects you "
+         "planted, so recall has a real denominator."),
   ("py", '''SEEDED_CORPUS = {
- f"unit_{i:02d}": (i % 4 == 0, ["CWE-22","CWE-78","CWE-89","CWE-79"][i % 4])
+ f"unit_{i:02d}": (i % 4 == 0, ["CWE-22", "CWE-78", "CWE-89", "CWE-79"][i % 4])
  for i in range(40)
 }
 planted = sorted(u for u, (is_bug, _) in SEEDED_CORPUS.items() if is_bug)
-print(f"units in corpus  : {len(SEEDED_CORPUS)}")
-print(f"planted defects  : {len(planted)}")
-print(f"denominator for recall is now a fact, not an estimate")
-'''),
+print(f"units in corpus : {len(SEEDED_CORPUS)}")
+print(f"planted defects : {len(planted)}   <- the denominator is now a fact")
 
-  ("md", "## 3 · Score a harness against it"),
-  ("py", '''def harness_run(corpus, sensitivity, seed=2):
-    """Higher sensitivity finds more real defects and more false ones."""
-    import random
+def harness_run(corpus, sensitivity, seed=2):
+    """Higher sensitivity finds more real defects, and more false ones."""
     rng = random.Random(seed)
     out = []
     for unit, (is_bug, cwe) in sorted(corpus.items()):
@@ -2802,95 +2148,51 @@ print(f"denominator for recall is now a fact, not an estimate")
     return out
 
 def scorecard(found, corpus, tokens_per_unit=1800, usd_per_1k=0.002,
-              analyst_minutes=6):
+              analyst_minutes=9):
     tp = [f for f in found if f[2]]
-    fp = [f for f in found if not f[2]]
     planted_n = sum(1 for _, (b, _) in corpus.items() if b)
     spend = len(corpus) * tokens_per_unit / 1000 * usd_per_1k
-    return {
-      "recall": len(tp) / planted_n,
-      "precision": len(tp) / len(found) if found else 0.0,
-      "true_positives": len(tp), "false_positives": len(fp),
-      "spend_usd": round(spend, 3),
-      "cost_per_finding_usd": round(spend / len(tp), 3) if tp else None,
-      "analyst_minutes": len(found) * analyst_minutes,
-      "minutes_per_accepted": round(len(found) * analyst_minutes / len(tp), 1) if tp else None,
-    }
+    return {"recall": len(tp) / planted_n,
+            "precision": len(tp) / len(found) if found else 0.0,
+            "usd_per_finding": spend / len(tp) if tp else None,
+            "analyst_minutes": len(found) * analyst_minutes,
+            "minutes_per_accepted": len(found) * analyst_minutes / len(tp) if tp else None}
 
-print(f"{'sens':>6}{'recall':>9}{'prec':>7}{'$/find':>9}{'min/accepted':>14}")
+MANUAL_MINUTES = 40 * 4          # a human reading the same forty units
+print(f"\\n{'sens':>6}{'recall':>9}{'prec':>7}{'$/find':>9}{'min/accepted':>14}"
+      f"{'review load':>13}")
 for s in (0.4, 0.7, 0.95):
-    card = scorecard(harness_run(SEEDED_CORPUS, s), SEEDED_CORPUS)
-    print(f"{s:>6.2f}{card['recall']:>9.0%}{card['precision']:>7.0%}"
-          f"{card['cost_per_finding_usd']:>9.3f}{card['minutes_per_accepted']:>14}")
-'''),
+    c = scorecard(harness_run(SEEDED_CORPUS, s), SEEDED_CORPUS)
+    verdict = "saves time" if c["analyst_minutes"] < MANUAL_MINUTES else "COSTS MORE"
+    print(f"{s:>6.2f}{c['recall']:>9.0%}{c['precision']:>7.0%}"
+          f"{c['usd_per_finding']:>9.3f}{c['minutes_per_accepted']:>14.1f}"
+          f"{verdict:>13}")
 
-  ("md", "## 4 · Where it breaks — the tool that moved the work"),
-  ("py", '''BASELINE_MANUAL_MINUTES = 40 * 6      # a human reviewing the same corpus
-
-for s in (0.4, 0.7, 0.95):
-    card = scorecard(harness_run(SEEDED_CORPUS, s), SEEDED_CORPUS)
-    saved = BASELINE_MANUAL_MINUTES - card["analyst_minutes"]
-    verdict = "saves time" if saved > 0 else "COSTS MORE TIME THAN IT SAVES"
-    print(f"sensitivity {s:.2f}: analyst {card['analyst_minutes']:>4} min vs "
-          f"manual {BASELINE_MANUAL_MINUTES} min -> {verdict}")
+best_recall = scorecard(harness_run(SEEDED_CORPUS, 0.95), SEEDED_CORPUS)
 print()
-print("At high sensitivity recall looks excellent and the review queue is")
-print("longer than reading the code by hand. The accuracy metric improved and")
-print("the thing got worse - which is invisible unless review load is tracked")
-print("as a first-class number beside it.")
-'''),
-
-  ("md", "## 5 · The control — regression drift on every change"),
-  ("py", '''FIXED_SUITE = dict(list(SEEDED_CORPUS.items())[:20])
-
-def suite_result(sensitivity):
-    found = harness_run(FIXED_SUITE, sensitivity, seed=9)
-    return {u for u, _, is_tp in found if is_tp}
-
-before = suite_result(0.7)
-after_a = suite_result(0.75)      # the "improvement" someone shipped
-after_b = suite_result(0.5)       # a change that helped one case
-
-for label, after in (("tuned up", after_a), ("tuned down", after_b)):
-    gained = sorted(after - before)
-    lost = sorted(before - after)
-    print(f"{label:12s} gained {len(gained):>2}  lost {len(lost):>2}  "
-          f"net {len(after) - len(before):+d}")
-    if lost:
-        print(f"   regressions: {lost}")
-print()
-print("A net-positive change can still lose findings it used to catch. Net is")
-print("the number people quote; the lost list is the number that pages someone")
-print("three months later.")
-assert (before - after_b)
-'''),
-
-  ("md", "## 6 · Verify — the full scorecard, published or it did not happen"),
-  ("py", '''card = scorecard(harness_run(SEEDED_CORPUS, 0.7), SEEDED_CORPUS)
-card.update({
-  "corpus_size": len(SEEDED_CORPUS),
-  "planted_defects": len(planted),
-  "regression_suite": len(FIXED_SUITE),
-  "regressions_last_change": len(before - after_b),
-  "seed": 2,
-})
-for k in sorted(card):
-    print(f"   {k:24s}{card[k]}")
-print()
-print("Ten fields, four of them about cost and human time. A harness reported")
-print("on accuracy alone has answered the easiest question and skipped the two")
-print("that decide whether anyone still runs it next quarter.")
-assert card["cost_per_finding_usd"] and card["minutes_per_accepted"]
+print(f"At the highest sensitivity recall is {best_recall['recall']:.0%} and the review")
+print(f"queue is {best_recall['analyst_minutes']} minutes against {MANUAL_MINUTES} for reading the code by")
+print("hand. The accuracy metric improved and the thing got worse - which stays")
+print("invisible unless review load is a first-class number beside it.")
+assert best_recall["analyst_minutes"] > MANUAL_MINUTES
 '''),
  ],
- "expect": "A forty-unit corpus with ten planted defects gives recall a real "
-           "denominator. Raising sensitivity improves recall while pushing the "
-           "analyst review queue past the cost of reading the code by hand — the "
-           "accuracy metric improves as the tool gets worse. A regression suite "
-           "then shows a net-positive change that still lost findings it used to "
-           "catch.",
- "challenge": "Compute cost per confirmed finding and analyst minutes per "
-              "accepted finding for one tool you already run. If nobody has the "
-              "second number, the tool's value is currently an article of faith.",
+ "expect": "pass@5 and pass^5 are computed from the same 2000 trials and "
+           "diverge sharply: at 80% per-run reliability the harness is 99.9% "
+           "reliable with a human picking the good answer and 33% reliable "
+           "unattended. Twelve single-run demos of a 60% harness return a mix of "
+           "passes and failures, and a change worth 1.5 findings is shown to be "
+           "invisible against a standard deviation of 3. On the same seeded "
+           "corpus of 40 units with 10 planted defects, raising sensitivity from "
+           "0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue "
+           "from 'saves time' to 180 analyst minutes against 160 for reading the "
+           "code by hand.",
+ "challenge": "Run your harness on one fixed task five times and count how many "
+              "times it fully succeeded. That integer, out of five, is the number "
+              "to put in front of anyone deciding whether to let it run "
+              "unattended. Then divide last month's spend by the findings anyone "
+              "actually accepted, and compare that to an hour of the reviewer's "
+              "time.",
 },
+
 }

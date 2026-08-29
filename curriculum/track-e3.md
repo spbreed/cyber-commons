@@ -1,6 +1,6 @@
 # Track E3 — The BISO, Risk Communicator & CISO Office
 
-**Function E · Governance, Risk, Compliance & the CISO Office**  
+**Function E · AI for GRC**  
 *Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.*
 
 **Job titles:** BISO, Deputy CISO, Head of Security Strategy, CISO

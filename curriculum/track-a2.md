@@ -1,7 +1,7 @@
 # Track A2 — Controls — Identity and Ingress
 
-**Function A · Security Architecture & Platform**  
-*One reference architecture, every risk it carries, and the controls that close them. Get this wrong and no amount of downstream diligence recovers it.*
+**Function A · AI Architecture, Risks and Mitigations**  
+*One vendor-neutral reference architecture, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer
 

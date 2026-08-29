@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.7 — Failure taxonomy | Cyber Commons</title><meta name="description" content="Recognise each from a trace."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product &amp; Application Security › The Security Automation / Harness Engineer</div><div class="sid">B2.7</div><h1>Failure taxonomy</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Loop divergence, objective drift, reward hacking, silent truncation, tool thrash.</p></div><div class="ctrl"><div class="lab">Control</div><p>Recognise each from a trace.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Name the failure from the trace alone.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 32 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.7 · Failure taxonomy</h1>
-<p><strong>Function B — Product &amp; Application Security → The Security Automation / Harness Engineer</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.6.html">B2.6 · Sub-agents and delegation depth</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.7 — Self-improving scaffolds | Cyber Commons</title><meta name="description" content="Sandbox the mutation, keep only measured gains, pin the fitness function."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Product and Application Security with AI › The Security Automation / Harness Engineer</div><div class="sid">B2.7</div><h1>Self-improving scaffolds</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A harness that rewrites its own config makes the fitness function the security control.</p></div><div class="ctrl"><div class="lab">Control</div><p>Sandbox the mutation, keep only measured gains, pin the fitness function.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Let a scaffold mutate itself, and keep only measured gains.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 37 lines of output in 0.02s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.7 · Self-improving scaffolds</h1>
+<p><strong>Function B — Product and Application Security with AI → The Security Automation / Harness Engineer</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.6.html">B2.6 · Failure taxonomy</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,152 +11,149 @@
 <tbody>
 <tr>
 <td>Open-source tooling</td>
-<td>OpenTelemetry</td>
+<td>Python, Docker</td>
 </tr>
 <tr>
 <td>Open-weight models</td>
-<td>—</td>
+<td>Kimi K2</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>"The agent messed up" is not a defect report. It routes to nobody, and every
-incident feels novel.</p>
-<p>A failure taxonomy fixes that by making the class determine the <strong>owner</strong> and
-the <strong>fix</strong>. Seven classes cover almost everything an agentic system does wrong:</p>
-<table>
-<thead>
-<tr>
-<th>Class</th>
-<th>What happened</th>
-<th>Who fixes it</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>capability</td>
-<td>the model could not do it</td>
-<td>better model or better context</td>
-</tr>
-<tr>
-<td><strong>verification</strong></td>
-<td>it did it wrong and we believed it</td>
-<td>harness engineer (B2.2)</td>
-</tr>
-<tr>
-<td>authority</td>
-<td>it did something it should not be able to do</td>
-<td>identity (A2)</td>
-</tr>
-<tr>
-<td>containment</td>
-<td>the action reached further than intended</td>
-<td>platform (A3)</td>
-</tr>
-<tr>
-<td>injection</td>
-<td>it was told to by untrusted content</td>
-<td>provenance (C1.3)</td>
-</tr>
-<tr>
-<td>budget</td>
-<td>it never stopped</td>
-<td>harness engineer (B2.4)</td>
-</tr>
-<tr>
-<td>idempotency</td>
-<td>it did the right thing twice</td>
-<td>harness engineer (B2.9)</td>
-</tr>
-</tbody>
-</table>
-<p>The most important distinction in the table is between <strong>capability</strong> and
-<strong>verification</strong>, because they look identical from the outside and have
-completely different fixes. A capability failure means the model produced
-something wrong. A verification failure means <em>your harness shipped it</em>. The
-second is your defect, not the model's.</p></div><div class="nbmd"><h2>2 · Demo — classify eight real incidents</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>INCIDENTS = [
- (&quot;agent&#x27;s patch did not compile; the loop retried and fixed it&quot;, None),
- (&quot;agent&#x27;s patch passed CI and introduced a SQL injection&quot;, None),
- (&quot;agent deleted a production table it should never have had access to&quot;, None),
- (&quot;agent posted the contents of .env to a public issue&quot;, None),
- (&quot;agent approved a PR because a code comment told it to&quot;, None),
- (&quot;agent looped for 6 hours re-running the same failing test&quot;, None),
- (&quot;agent opened the same pull request 14 times&quot;, None),
- (&quot;agent could not solve the task and correctly reported failure&quot;, None),
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>A harness that rewrites its own prompts is a system that changes without a pull request. The improvement is real; so is the fact that nobody reviewed it, and that last week's evidence no longer describes what is running.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   run history --&gt; proposed change --&gt; prompt / tool / routing
+                          |
+                   +------v-------+
+                   |  guardrail   |  eval suite must not regress
+                   |  human diff  |  the change is a reviewable artefact
+                   +--------------+
+
+   a harness that rewrites itself is a system that changes with no pull request
+</code></pre>
+<p>A self-improving scaffold edits its own prompts, tools or routing based on how
+well it is doing. It is genuinely effective, and it makes evaluation
+non-optional rather than good practice.</p>
+<p>The reason is mechanical. Optimisation moves toward whatever the metric rewards.
+If the scaffold's metric is its own verifier, the scaffold will converge on
+<strong>satisfying the verifier</strong>, which is only the same thing as doing the job if
+the verifier is perfect. B2.2 established that yours is not.</p>
+<p>So the loop is:</p>
+<ol>
+<li>scaffold changes itself,</li>
+<li>its own metric improves,</li>
+<li>actual capability does not,</li>
+<li>the dashboard is monotone and green.</li>
+</ol>
+<p>The control is a <strong>held-out signal</strong>: a set of cases the scaffold cannot see,
+cannot train on, and cannot reach — including through its logs. And the hard
+part is not building it. It is keeping it held out.</p></div><div class="nbmd"><blockquote>
+<p><strong>About the model in this notebook.</strong> It runs offline against a deterministic
+replay, so the lesson executes on a Kaggle kernel with no network. The replay
+is not a language model and is labelled as such. To run the identical harness
+against a real open-weight model:</p>
+<p><code>bash
+ollama pull glm-4.6            # or kimi-k2, llama3.3
+export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6</code></p>
+</blockquote></div><div class="nbmd"><h2>3 · Demo — a scaffold optimising against its own judge</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import random
+
+TASKS = [{&quot;id&quot;: i, &quot;input&quot;: i, &quot;correct&quot;: i * 2} for i in range(1, 21)]
+
+class Scaffold:
+    &quot;&quot;&quot;Adjusts its own strategy based on feedback. DETERMINISTIC — not a model.&quot;&quot;&quot;
+    def __init__(self):
+        self.strategy = &quot;double&quot;        # starts correct
+        self.history = []
+
+    def solve(self, task):
+        if self.strategy == &quot;double&quot;:     return task[&quot;input&quot;] * 2
+        if self.strategy == &quot;constant&quot;:   return 42
+        return task[&quot;input&quot;]
+
+    def improve(self, score):
+        &quot;&quot;&quot;Move toward whatever scored better last round.&quot;&quot;&quot;
+        self.history.append((self.strategy, score))
+        if len(self.history) &gt;= 2 and self.history[-1][1] &lt;= self.history[-2][1]:
+            order = [&quot;double&quot;, &quot;constant&quot;, &quot;identity&quot;]
+            self.strategy = order[(order.index(self.strategy) + 1) % 3]
+
+def own_judge(task, answer):
+    &quot;&quot;&quot;The scaffold&#x27;s own verifier: is the answer a plausible-looking number?&quot;&quot;&quot;
+    return isinstance(answer, int) and answer &gt; 0
+
+def held_out_oracle(task, answer):
+    &quot;&quot;&quot;The truth. The scaffold never sees this.&quot;&quot;&quot;
+    return answer == task[&quot;correct&quot;]
+
+def evaluate(scaffold, verifier, tasks):
+    return sum(verifier(t, scaffold.solve(t)) for t in tasks) / len(tasks)
+
+s = Scaffold()
+print(f&quot;{&#x27;round&#x27;:6s}{&#x27;strategy&#x27;:11s}{&#x27;own judge&#x27;:11s}{&#x27;held-out truth&#x27;:15s}&quot;)
+print(&quot;-&quot; * 46)
+for r in range(1, 7):
+    own = evaluate(s, own_judge, TASKS)
+    truth = evaluate(s, held_out_oracle, TASKS)
+    print(f&quot;{r:&lt;6}{s.strategy:11s}{own:&lt;11.2f}{truth:&lt;15.2f}&quot;)
+    s.improve(own)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the self-metric cannot fall</h2>
+<p>The judge scores 1.00 for every strategy, including <code>constant</code>, which returns 42 for everything. There is no gradient for the scaffold to follow toward correctness, and no signal that anything is wrong. The dashboard is green in every round.</p>
+<p>Now let the scaffold drift, and watch the two curves separate.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>s2 = Scaffold()
+s2.strategy = &quot;constant&quot;            # a drift that the judge cannot penalise
+print(f&quot;{&#x27;round&#x27;:6s}{&#x27;strategy&#x27;:11s}{&#x27;own judge&#x27;:11s}{&#x27;held-out truth&#x27;:15s}verdict&quot;)
+print(&quot;-&quot; * 62)
+for r in range(1, 5):
+    own = evaluate(s2, own_judge, TASKS)
+    truth = evaluate(s2, held_out_oracle, TASKS)
+    verdict = &quot;looks fine&quot; if own &gt; 0.9 else &quot;alert&quot;
+    real = &quot;BROKEN&quot; if truth &lt; 0.9 else &quot;ok&quot;
+    print(f&quot;{r:&lt;6}{s2.strategy:11s}{own:&lt;11.2f}{truth:&lt;15.2f}{verdict} / actually {real}&quot;)
+    s2.improve(own)</code></pre></div><div class="nbmd"><h2>5 · The control — a held-out set, and keeping it held out</h2>
+<p>Building the set is easy. The three ways it leaks are not obvious, and each one silently converts your held-out signal into another self-metric.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>LEAKS = [
+ (&quot;the scaffold reads its own logs, which contain held-out failures&quot;,
+  &quot;it optimises against them without anyone deciding to&quot;),
+ (&quot;held-out cases are added to the prompt as &#x27;examples of hard tasks&#x27;&quot;,
+  &quot;the most common leak, and it looks like good engineering&quot;),
+ (&quot;the same corpus is used for both tuning and evaluation&quot;,
+  &quot;the number becomes a training metric and rises forever&quot;),
+ (&quot;a human adjusts the scaffold after reading held-out results&quot;,
+  &quot;slower leak, same effect — the human is the gradient&quot;),
 ]
-TAXONOMY = {
- &quot;capability&quot;:   (&quot;the model could not do it&quot;,              &quot;better model / better context&quot;),
- &quot;verification&quot;: (&quot;it did it wrong and we believed it&quot;,     &quot;harness engineer — B2.2&quot;),
- &quot;authority&quot;:    (&quot;it did what it should not be able to do&quot;,&quot;identity — A2&quot;),
- &quot;containment&quot;:  (&quot;the action reached further than intended&quot;,&quot;platform — A3&quot;),
- &quot;injection&quot;:    (&quot;untrusted content drove it&quot;,             &quot;provenance — C1.3&quot;),
- &quot;budget&quot;:       (&quot;it never stopped&quot;,                       &quot;harness engineer — B2.4&quot;),
- &quot;idempotency&quot;:  (&quot;it did the right thing twice&quot;,           &quot;harness engineer — B2.9&quot;),
-}
-LABELS = [&quot;capability&quot;, &quot;verification&quot;, &quot;authority&quot;, &quot;containment&quot;,
-          &quot;injection&quot;, &quot;budget&quot;, &quot;idempotency&quot;, &quot;capability&quot;]
+for how, why in LEAKS:
+    print(f&quot;✗ {how}\n    → {why}\n&quot;)
 
-for (text, _), label in zip(INCIDENTS, LABELS):
-    what, owner = TAXONOMY[label]
-    print(f&quot;{label:13s} {text}&quot;)
-    print(f&quot;{&#x27;&#x27;:13s} → {owner}&quot;)</code></pre></div><div class="nbmd"><h2>3 · Where it breaks — the two that get confused</h2>
-<p>Incidents 1 and 2 both start "the agent's patch was wrong". They are different defects with different owners, and conflating them is how a team spends a quarter upgrading models to fix a verifier.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def classify(produced_wrong_output, harness_accepted_it, action_taken):
-    &quot;&quot;&quot;The decision rule that separates capability from verification.&quot;&quot;&quot;
-    if not produced_wrong_output:
-        return &quot;not a model failure&quot;
-    if not harness_accepted_it:
-        return &quot;capability — the harness caught it, the loop worked&quot;
-    if action_taken:
-        return &quot;VERIFICATION — the harness shipped wrong work&quot;
-    return &quot;verification (contained) — accepted but nothing acted on it&quot;
+def evaluation_is_sound(scaffold_can_read_logs, cases_in_prompt,
+                        same_corpus, human_tunes_on_results):
+    problems = []
+    if scaffold_can_read_logs:    problems.append(&quot;scaffold can read held-out outcomes&quot;)
+    if cases_in_prompt:           problems.append(&quot;held-out cases appear in the prompt&quot;)
+    if same_corpus:               problems.append(&quot;tuning and eval share a corpus&quot;)
+    if human_tunes_on_results:    problems.append(&quot;human closes the loop manually&quot;)
+    return (not problems), problems
 
-CASES = [
- (&quot;patch did not compile, loop retried&quot;,  True,  False, False),
- (&quot;patch passed CI, shipped SQLi&quot;,        True,  True,  True),
- (&quot;patch wrong, accepted, never merged&quot;,  True,  True,  False),
- (&quot;patch correct&quot;,                        False, True,  True),
-]
-for name, wrong, accepted, acted in CASES:
-    print(f&quot;{name:38s} → {classify(wrong, accepted, acted)}&quot;)
-print(&quot;\nThe model was equally wrong in the first three. Only one is YOUR defect.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — classify automatically from the trace</h2>
-<p>The taxonomy is only useful if applying it is cheap. Most of the classification is derivable from what the harness already records.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def classify_from_trace(trace):
-    &quot;&quot;&quot;trace: dict of facts the harness already has.&quot;&quot;&quot;
-    if trace.get(&quot;denied_by_policy&quot;):        return &quot;authority&quot;
-    if trace.get(&quot;denied_by_sandbox&quot;):       return &quot;containment&quot;
-    if trace.get(&quot;instruction_source&quot;) not in (None, &quot;principal&quot;):
-        return &quot;injection&quot;
-    if trace.get(&quot;stopped_by&quot;, &quot;&quot;).startswith((&quot;step budget&quot;, &quot;time budget&quot;)):
-        return &quot;budget&quot;
-    if trace.get(&quot;duplicate_effect&quot;):        return &quot;idempotency&quot;
-    if trace.get(&quot;verifier_passed&quot;) and trace.get(&quot;outcome_wrong&quot;):
-        return &quot;verification&quot;
-    if trace.get(&quot;outcome_wrong&quot;):           return &quot;capability&quot;
-    return &quot;success&quot;
+for label, args in ((&quot;as usually built&quot;, (True, True, True, True)),
+                    (&quot;after the fix&quot;,    (False, False, False, False))):
+    ok, problems = evaluation_is_sound(*args)
+    print(f&quot;{label:18s} sound={ok}&quot;)
+    for p in problems: print(f&quot;      ⚠ {p}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: gate the scaffold on the held-out signal, not its own.
+def gated_improve(scaffold, tasks, holdout_tasks):
+    before = evaluate(scaffold, held_out_oracle, holdout_tasks)
+    candidate = Scaffold(); candidate.strategy = &quot;constant&quot;
+    after = evaluate(candidate, held_out_oracle, holdout_tasks)
+    if after &lt; before:
+        return scaffold, f&quot;REJECTED change: held-out {before:.2f} → {after:.2f}&quot;
+    return candidate, f&quot;accepted: held-out {before:.2f} → {after:.2f}&quot;
 
-TRACES = [
- {&quot;verifier_passed&quot;: False, &quot;outcome_wrong&quot;: True, &quot;stopped_by&quot;: &quot;step budget (5 steps)&quot;},
- {&quot;verifier_passed&quot;: True,  &quot;outcome_wrong&quot;: True},
- {&quot;denied_by_policy&quot;: True},
- {&quot;denied_by_sandbox&quot;: True},
- {&quot;instruction_source&quot;: &quot;pull-request-diff&quot;},
- {&quot;stopped_by&quot;: &quot;time budget (300s)&quot;},
- {&quot;duplicate_effect&quot;: True},
- {&quot;verifier_passed&quot;: True,  &quot;outcome_wrong&quot;: False},
-]
-for t in TRACES:
-    cls = classify_from_trace(t)
-    owner = TAXONOMY.get(cls, (&quot;&quot;, &quot;—&quot;))[1]
-    print(f&quot;{cls:14s} {owner:32s} {t}&quot;)
-
-counts = {}
-for t in TRACES:
-    c = classify_from_trace(t); counts[c] = counts.get(c, 0) + 1
-print(f&quot;\ndistribution: {counts}&quot;)
-assert classify_from_trace(TRACES[1]) == &quot;verification&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The eight incidents classify across all seven classes with a named owner each. The capability-vs-verification rule separates the compile failure (capability — the loop worked) from the shipped SQL injection (verification — your defect). Automatic classification from trace facts reproduces the same labels.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Take your last five agent incidents and assign exactly one class to each. Any incident that seems to need two classes is really two incidents, and separating them usually reveals that one of them was never fixed.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.8.html">B2.8 · Self-improving scaffolds</a></strong></p>
+HOLDOUT = [{&quot;id&quot;: 100+i, &quot;input&quot;: 100+i, &quot;correct&quot;: (100+i)*2} for i in range(10)]
+good = Scaffold()
+kept, why = gated_improve(good, TASKS, HOLDOUT)
+print(why)
+print(&quot;final strategy:&quot;, kept.strategy)
+assert kept.strategy == &quot;double&quot;
+print(&quot;\nThe scaffold&#x27;s own judge would have accepted the change. The held-out&quot;)
+print(&quot;oracle rejected it, which is the only reason the system still works.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The self-judge scores 1.00 in every round regardless of strategy, while held-out truth is 1.00 only for <code>double</code>. With the scaffold drifted to <code>constant</code>, the judge still reports 1.00 and "looks fine" while held-out truth is 0.00 and the system is BROKEN. The leak checklist flags all four paths, and the held-out gate rejects the change the self-judge would have accepted.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>For any self-tuning component you run, answer one question: can it see the outcomes of its evaluation, through any path including logs? If yes, you have a self-metric with extra steps.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.8.html">B2.8 · Idempotency, replay and rollback</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Loop divergence, objective drift, reward hacking, silent truncation, tool thrash — one per trace.</div><div class="chips"><span>OpenTelemetry</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.7.ipynb</code></p></div><div class="pager"><a href="B2.6.html"><span class="k">← Previous</span><span class="t">B2.6 · Sub-agents and delegation depth</span></a><a class="next" href="B2.8.html"><span class="k">Next →</span><span class="t">B2.8 · Self-improving scaffolds</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Only mutations the deterministic oracle confirms survive. Pin the fitness function — it is now the security control.</div><div class="chips"><span>Python</span><span>Docker</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.7.ipynb</code></p></div><div class="pager"><a href="B2.6.html"><span class="k">← Previous</span><span class="t">B2.6 · Failure taxonomy</span></a><a class="next" href="B2.8.html"><span class="k">Next →</span><span class="t">B2.8 · Idempotency, replay and rollback</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

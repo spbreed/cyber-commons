@@ -6,18 +6,18 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 
 | Track | Role | Sessions | Function |
 |---|---|---|---|
-| [A1](track-a1.md) | The Agentic Reference Architecture, and Every Risk It Carries | 16 | A — Security Architecture & Platform |
-| [A2](track-a2.md) | Controls — Identity and Ingress | 7 | A — Security Architecture & Platform |
-| [A3](track-a3.md) | Controls — Runtime and the Gateway | 7 | A — Security Architecture & Platform |
-| [B1](track-b1.md) | The AppSec Engineer / Code Reviewer | 17 | B — Product & Application Security |
-| [B2](track-b2.md) | The Security Automation / Harness Engineer | 18 | B — Product & Application Security |
-| [C1](track-c1.md) | The Pentester / Red Teamer | 7 | C — Offensive Security & Research |
-| [C2](track-c2.md) | The Security Researcher | 9 | C — Offensive Security & Research |
-| [D1](track-d1.md) | The SOC Analyst & Detection Engineer | 8 | D — Security Operations |
-| [D2](track-d2.md) | The Incident Responder | 8 | D — Security Operations |
-| [E1](track-e1.md) | The GRC Practitioner (Risk & Control) | 13 | E — Governance, Risk, Compliance & the CISO Office |
-| [E2](track-e2.md) | The Regulatory & Compliance Lead | 9 | E — Governance, Risk, Compliance & the CISO Office |
-| [E3](track-e3.md) | The BISO, Risk Communicator & CISO Office | 8 | E — Governance, Risk, Compliance & the CISO Office |
+| [A1](track-a1.md) | The Agentic Reference Architecture, and Every Risk It Carries | 17 | A — AI Architecture, Risks and Mitigations |
+| [A2](track-a2.md) | Controls — Identity and Ingress | 7 | A — AI Architecture, Risks and Mitigations |
+| [A3](track-a3.md) | Controls — Runtime and the Gateway | 7 | A — AI Architecture, Risks and Mitigations |
+| [B1](track-b1.md) | The AppSec Engineer / Code Reviewer | 18 | B — Product and Application Security with AI |
+| [B2](track-b2.md) | The Security Automation / Harness Engineer | 13 | B — Product and Application Security with AI |
+| [C1](track-c1.md) | The Pentester / Red Teamer | 5 | C — AI for Security Research |
+| [C2](track-c2.md) | The Security Researcher | 7 | C — AI for Security Research |
+| [D1](track-d1.md) | The SOC Analyst & Detection Engineer | 9 | D — AI for SecOps |
+| [D2](track-d2.md) | The Incident Responder | 8 | D — AI for SecOps |
+| [E1](track-e1.md) | The GRC Practitioner (Risk & Control) | 13 | E — AI for GRC |
+| [E2](track-e2.md) | The Regulatory & Compliance Lead | 9 | E — AI for GRC |
+| [E3](track-e3.md) | The BISO, Risk Communicator & CISO Office | 8 | E — AI for GRC |
 
 ## Seniority overlay
 

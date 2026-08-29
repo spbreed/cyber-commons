@@ -67,6 +67,12 @@ jobs:
           python3 scripts/build_notebooks.py --check
           python3 scripts/relink_labs.py --check
 
+      # Every lesson carries a hook, a diagram rendered before any code, and —
+      # if it closes a chapter — a bridge naming what it still cannot do. See
+      # LESSON_DESIGN.md for why each of those is a rule rather than a habit.
+      - name: Check lessons against the authoring contract
+        run: python3 scripts/check_lessons.py --check
+
       - name: Build lesson pages
         run: |
           pip install --quiet markdown

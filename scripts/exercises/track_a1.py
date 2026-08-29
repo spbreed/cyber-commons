@@ -24,22 +24,24 @@ ARCH_NOTE = """
 
 EXERCISES: dict[str, dict] = {
 
+# A1.1 is the only lesson in the commons with no code in it. It is a drawing
+# lesson: the components, and the patterns they compose into. Every risk in this
+# chapter and every control in the next two names something from these diagrams,
+# so the picture has to land before anything executes.
 "A1.1": {
  "concept": """
-Every risk in this chapter and every control in the next two names a part of
-one picture. This is that picture, and it is deliberately vendor-neutral —
-these components exist under different product names in every agent platform,
-and the risks attach to the component, not to the brand.
+These components exist under different product names in every agent platform,
+and the risks attach to the component rather than to the brand.
 
 **Ingress.** Where a request enters: a chat surface, an API call, a webhook, a
 scheduled trigger, another system. It carries the requester's identity and
 whatever text they supplied.
 
-**Orchestrator.** Decides which agent handles what, and in what topology. In a
-single-agent system this is a few lines; in a multi-agent one it is the thing
-that holds the whole design.
+**Orchestrator.** Decides which agent handles what, and in what pattern. In a
+single-agent system this is a few lines; in a multi-agent one it holds the whole
+design.
 
-**Agent runtime.** The loop: plan, call a tool, observe the result, decide
+**Agent runtime.** The loop — plan, call a tool, observe the result, decide
 again, stop. This is the component that turns text into consequence.
 
 **Model.** Predicts tokens. Holds no credential, opens no socket, changes
@@ -52,7 +54,7 @@ server is a third party's process whose tool descriptions land in your context.
 persists state across turns and sessions. Both inject text the user did not
 write.
 
-**Messaging.** The agent-to-agent channel in a multi-agent topology.
+**Messaging.** The agent-to-agent channel in a multi-agent pattern.
 
 **Identity and policy.** Who is calling, on whose behalf, and whether this call
 is permitted. These wrap every other component.
@@ -61,68 +63,133 @@ is permitted. These wrap every other component.
 
 **Observability.** What can be reconstructed afterwards.
 
-These compose into five topologies, and the topology decides which risks apply:
-**single agent**, **orchestrator–worker**, **peer handoff**, **swarm**, and
-**workflow with agent steps**.
+Three of them carry content an outsider can author: **MCP**, **knowledge** and
+the corpus behind it. Those are the input surface for the next fifteen lessons.
 """,
  "steps": [
-  ("md", "## 2 · The architecture, and the five topologies it composes into\\n\\n"
-         "`trust` is how much authority content originating at that component "
-         "should carry: 2 is the authenticated requester, 1 is machinery with no "
-         "authority of its own, 0 is anything an outsider can write into."),
-  ("py", '''COMPONENTS = {
- "ingress":       ("where a request enters the system",                 2),
- "orchestrator":  ("routes work to agents and chooses the topology",    2),
- "agent_runtime": ("the plan-act-observe loop; turns text into action", 2),
- "model":         ("predicts tokens; no credential, no socket",         1),
- "tools":         ("the only components that change anything",          2),
- "mcp":           ("a third party's process exposing tools",            0),
- "knowledge":     ("retrieval; pulls documents in at query time",       0),
- "memory":        ("state that persists across turns and sessions",     1),
- "messaging":     ("the agent-to-agent channel",                        1),
- "identity":      ("who is calling, and on whose behalf",               2),
- "policy":        ("may this caller do this, to this resource",         2),
- "egress":        ("where data is allowed to go",                       2),
- "observability": ("what can be reconstructed afterwards",              2),
-}
+  ("md", """## 2 · Pattern 1 — the single agent
 
-TOPOLOGIES = {
- "single agent":            ["ingress", "agent_runtime", "tools"],
- "orchestrator-worker":     ["ingress", "orchestrator", "agent_runtime", "messaging", "tools"],
- "peer handoff":            ["ingress", "agent_runtime", "messaging", "agent_runtime", "tools"],
- "swarm":                   ["ingress", "orchestrator", "messaging", "agent_runtime", "memory", "tools"],
- "workflow with agent steps":["ingress", "orchestrator", "agent_runtime", "tools", "policy"],
-}
+One loop, one set of tools. Almost everything in production today.
 
-print(f"{'component':15s}{'trust':>6}  role")
-for name in sorted(COMPONENTS):
-    role, trust = COMPONENTS[name]
-    print(f"{name:15s}{trust:>6}  {role}")
+```
+  user --> ingress --> agent runtime --> tools --> egress
+                          |     ^
+                          v     |
+                        model (predicts; changes nothing)
 
-print("\\nUNTRUSTED SOURCES (trust 0) - an outsider can author content here")
-print("   " + ", ".join(sorted(c for c, (_, t) in COMPONENTS.items() if t == 0)))
+  identity + policy wrap every arrow · observability records every arrow
+```
 
-print("\\nTOPOLOGIES")
-for name in sorted(TOPOLOGIES):
-    hops = TOPOLOGIES[name]
-    print(f"   {name:26s}{' -> '.join(hops)}")
+The edge that matters is `agent runtime -> tools`. That is where text becomes
+consequence, and it exists in every pattern below."""),
 
-# the boundary every risk in this chapter crosses, in every topology
-print("\\nIn all five topologies the same edge exists: something reaches")
-print("agent_runtime, and agent_runtime reaches tools. That edge is where text")
-print("becomes consequence, and it is the edge every control in Chapters 2 and 3")
-print("is trying to stand on.")
-assert all("agent_runtime" in h and "tools" in h for h in TOPOLOGIES.values())
-'''),
+  ("md", """## 3 · Pattern 2 — orchestrator and workers
+
+One planner fans work out to specialised workers and joins the results. The
+pattern most multi-agent platforms mean when they say "multi-agent".
+
+```
+                            +--> worker A --> tools
+  user --> orchestrator ----+--> worker B --> tools
+                            +--> worker C --> tools
+                                   |
+                            join / summarise
+```
+
+New surface: the orchestrator decides *who* runs, so anything that can influence
+its routing decides which permissions get used."""),
+
+  ("md", """## 4 · Pattern 3 — sequential handoff
+
+A pipeline of agents, each taking the previous one's output as its input.
+
+```
+  user --> agent 1 --> agent 2 --> agent 3 --> result
+            recon      analyse     report
+
+  each hop inherits the previous hop's claims; nobody re-checks them
+```
+
+New surface: an unverified claim at hop 1 is a fact by hop 3. This is the shape
+that makes cascading hallucination (A1.11) a systems problem rather than a model
+problem."""),
+
+  ("md", """## 5 · Pattern 4 — peer swarm over shared memory
+
+Agents with no central planner, coordinating through state they all write to.
+
+```
+     +--> agent A --+
+  user +--> agent B --+--> shared memory <--+
+     +--> agent C --+          ^            |
+                               |            |
+                    every agent reads what any agent wrote
+```
+
+New surface: memory is a write-once, read-forever channel between agents. One
+poisoned entry is read back as trusted context indefinitely (A1.4), and there is
+no orchestrator to notice."""),
+
+  ("md", """## 6 · Pattern 5 — a workflow with agent steps
+
+Deterministic control flow, with one or two steps handed to an agent. The
+pattern with the best safety properties, and the one people skip.
+
+```
+  [fetch] --> [validate] --> (( agent step )) --> [approve] --> [commit]
+      deterministic          non-deterministic        deterministic
+
+  the blast radius of the agent is bounded by the two steps either side
+```
+
+New surface: almost none, which is the point. If the work fits this shape, the
+other four patterns are a cost you do not have to pay."""),
+
+  ("md", """## 7 · The two components that appear inside all five
+
+Retrieval and human approval are not patterns of their own — they attach to any
+of the five above, and each brings one surface with it.
+
+```
+  retrieval          agent --> retriever --> corpus
+                       ^                       |
+                       +----- documents -------+
+                       anyone who can write to the corpus writes to the context
+
+  human approval     agent --> proposed action --> [ human ] --> tools
+                                                       ^
+                       requests arrive faster than a person can read them
+```
+
+Retrieval is how outside text reaches the context window without anyone typing
+it (A1.3). Approval is a real control for rare irreversible actions and a rubber
+stamp for everything else (A1.14)."""),
+
+  ("md", """## 8 · The edge every pattern shares
+
+```
+                    +---------------+       +-------+
+   untrusted text   | agent runtime | ----> | tools |   consequence
+   ---------------> |               |       +-------+
+                    +---------------+
+                       ^        ^
+                  knowledge   messaging
+                    memory      MCP
+```
+
+Whatever the topology, something reaches the agent runtime and the agent runtime
+reaches tools. Every risk in the rest of this chapter is a route into the left
+side of that picture. Every control in chapters 2 and 3 is an attempt to stand
+somewhere on the arrow."""),
  ],
- "expect": "Thirteen components print with the authority their content should "
-           "carry, three of them at trust 0 — mcp, knowledge and the corpus "
-           "behind it — and five topologies print as component chains. Every "
-           "topology contains the same edge: agent_runtime reaching tools.",
- "challenge": "Draw these thirteen components for one agentic system you run, "
-              "and mark which topology it is. The useful output is the list of "
-              "trust-0 components you actually have, because that list is the "
-              "input surface for the next fifteen lessons.",
+ "expect": "You can draw one agentic system you run as thirteen named components, "
+           "say which of the five patterns it is, and name the three components "
+           "in it whose content an outsider can author. That list is the input "
+           "surface for the fifteen risk lessons that follow.",
+ "challenge": "Draw your own system on one page, then mark the "
+              "`agent_runtime -> tools` edge on it. Everything in chapters 2 and "
+              "3 is an argument about what is allowed to stand on that arrow, and "
+              "you will get more out of them having drawn it first.",
 },
 
 "A1.2": {

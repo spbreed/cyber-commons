@@ -58,7 +58,7 @@ for a, b in sorted(exposure.items(), key=lambda kv: -kv[1]):
 total_exposure = sum(exposure.values())
 print(f"{'FLEET TOTAL':24s}{total_exposure:>14}")
 
-# likelihood — measured, from C1.5
+# likelihood — measured, from C1.2
 ATTACKS = [("metadata service", False), ("path traversal", False),
            ("unlisted egress", True), ("denied tool", False)]
 asr = sum(1 for _, through in ATTACKS if through) / len(ATTACKS)

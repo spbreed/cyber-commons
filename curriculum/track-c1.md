@@ -1,11 +1,11 @@
 # Track C1 — The Pentester / Red Teamer
 
-**Function C · Offensive Security & Research**  
-*An entirely new target class: the agent itself, with three attack surfaces instead of one.*
+**Function C · AI for Security Research**  
+*Offensive testing and research where the agent is both the instrument and the target, and where a result is only worth what it can be reproduced at.*
 
 **Job titles:** Penetration Tester, Red Team Operator, Offensive Security Engineer
 
-**What changes:** Three surfaces, one adversary mindset. 7 lessons.
+**What changes:** Three surfaces, one adversary mindset — and a campaign that reports a rate. 5 lessons.
 
 **Autonomy focus:** You test at L3 the systems deployed at L2.5, because that's where they'll be next quarter.
 
@@ -15,17 +15,37 @@
 
 ---
 
-### C1.1 — Agentic offensive workflow
+### C1.0 — Start here — what AI security research means
 
-`AI for Security`
+`both directions`
 
-- **Risk** — Payload suggestions instead of attack chains.
-- **Control** — Feed the harness full target context before it swings.
-- **Lab** — Drive a planner/executor pair against a local vulnerable target — never the open internet.
-- **Tools** — `CAI`, `Metasploit`, `InterCode-CTF`
+- **Risk** — Offensive work that produces anecdotes: a result that worked once, on one target, with no rate and no reproduction.
+- **Control** — A campaign with a stated criterion, a harness that separates the model effect from the harness effect, and a handoff that ends in a control.
+- **Lab** — Take one published agentic attack and list what you would need to reproduce it.
+
+**Run it** — Score the same claim at four standards of proof and find where the line between an anecdote and a result actually sits.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C1.0.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.0   # run it headless and check it
+```
+
+*Expect:* The three attack surfaces of an agent print with what each covers, and the same claim scores as anecdote, measurement, result or evidence depending on whether it carries a rate, a control comparison and an independent reproduction.
+
+---
+
+### C1.1 — The agentic offensive workflow, and containing it
+
+`both directions`
+
+- **Risk** — Payload suggestions instead of attack chains — and an offensive loop with no hard scope enforcement, which is an incident with a project plan.
+- **Control** — Full target context before it swings, and scope enforced at the network layer rather than by a politeness clause in the prompt.
+- **Lab** — Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
+- **Tools** — `CAI`, `Metasploit`, `Firecracker`
 - **Models** — `Kimi K2`, `GLM-4.6`
 
-**Run it** — Drive a planner/executor pair against a local target you own.
+**Run it** — Drive a planner/executor pair against a target you own, and watch scope refuse an out-of-scope host in the harness and again in the sandbox.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -34,24 +54,25 @@ python3 scripts/run_notebooks.py --session C1.1   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c1-redteam
-docker compose up -d dvwa juice-shop     # local targets only
-python3 offensive_loop.py --target http://localhost:3000 --model $MODEL --scope scope.yaml
+./airgap.sh up   # isolated docker network, no default route
+./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com
 ```
 
-*Expect:* Attack chains, not payload suggestions. scope.yaml is enforced by the harness — out-of-scope hosts are refused.
+*Expect:* Severity sorting puts 2 of 3 exploitable findings in the top 3; model triage puts 3 of 3, and correctly reasons that the partner CDN is out of scope. With the model adversarially convinced that the out-of-scope host is critical, the unenforced harness acts on it and the enforced harness refuses. Underneath the harness the sandbox refuses three requests for three different reasons — rate limit, engagement boundary, and cloud metadata — without consulting the model at all.
 
 ---
 
-### C1.2 — Sandboxing the offensive harness
+### C1.2 — Red-teaming an agent: designing the campaign
 
 `Security of AI`
 
-- **Risk** — Your harness is the most dangerous one in the building.
-- **Control** — Exploit isolation, target scoping, authorization and legal guardrails.
-- **Lab** — Air-gap the offensive lab and prove no route to anything you don't own.
-- **Tools** — `Firecracker`, `Squid`
+- **Risk** — A red-team result nobody can act on, because "it worked once" is not a rate.
+- **Control** — Systematic campaigns across all three surfaces, with measured success rates and a criterion agreed before the first payload.
+- **Lab** — Run a campaign across the three surfaces and report a rate with its sample size, not an anecdote.
+- **Tools** — `garak`, `promptfoo`, `SPIRE`, `Falco`
+- **Models** — `Llama 3.3`
 
-**Run it** — Prove the offensive harness cannot reach anything you don't own.
+**Run it** — Run one campaign across the injection, identity and containment surfaces and report a rate with its sample size for each.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -60,103 +81,21 @@ python3 scripts/run_notebooks.py --session C1.2   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c1-redteam
-./airgap.sh up   # isolated docker network, no default route
-./scope-test.sh --in-scope http://target.local --out-of-scope https://example.com
+python3 campaign.py --surfaces injection,identity,containment --n 200
+python3 campaign.py --report --include-benign-controls
 ```
 
-*Expect:* In-scope succeeds, out-of-scope fails at the network layer — not at a politeness check in the prompt.
+*Expect:* No defence gives ASR 1.00. The keyword filter gives ASR 0.67 with false alarms on 2 of 4 benign security-writing cases. Provenance gives ASR 0.00 with no false alarms — until the payload is delivered through the principal channel, where ASR returns to 1.00. The same two numbers then score all three surfaces in one table.
 
 ---
 
-### C1.3 — Red-teaming agents: the injection surface
-
-`Security of AI`
-
-- **Risk** — Retrieval poisoning, tool-output poisoning, multi-turn manipulation.
-- **Control** — Systematic injection campaigns with measured success rates.
-- **Lab** — Run garak + promptfoo campaigns against your own production agent.
-- **Tools** — `garak`, `promptfoo`
-- **Models** — `Llama 3.3`
-
-**Run it** — Run a real injection campaign and get a success rate.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-pip install garak promptfoo
-cd labs/c1-redteam
-garak --model_type openai.OpenAICompatible --model_name $MODEL --probes promptinject,dan,encoding
-promptfoo eval -c redteam.yaml
-```
-
-*Expect:* A measured attack-success-rate per probe family, per model — comparable across Llama / GLM / Kimi.
-
----
-
-### C1.4 — Red-teaming agents: the identity surface
-
-`Security of AI`
-
-- **Risk** — Confused deputy, token replay, scope escalation through delegation chains.
-- **Control** — Test whether revocation actually revokes.
-- **Lab** — Attack the A2 delegation chain; prove or disprove attenuation.
-- **Tools** — `Keycloak`, `SPIRE`
-
-**Run it** — Attack the delegation chain and see if attenuation holds.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/c1-redteam
-python3 attack_identity.py --target ../a2-delegation --technique confused-deputy
-python3 attack_identity.py --target ../a2-delegation --technique token-replay
-python3 attack_identity.py --target ../a2-delegation --technique scope-escalation
-python3 attack_identity.py --verify-revocation
-```
-
-*Expect:* A pass/fail per technique against A2's chain — including whether revocation actually revokes.
-
----
-
-### C1.5 — Red-teaming agents: the containment surface
-
-`Security of AI`
-
-- **Risk** — Sandbox escape, egress bypass, path-guard evasion.
-- **Control** — Prove the stop lever fires under load.
-- **Lab** — Attack the A3 sandbox from inside; measure what leaves.
-- **Tools** — `Falco`, `gVisor`
-
-**Run it** — Attack the sandbox from inside and measure what leaves.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.5   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/c1-redteam
-python3 escape.py --target ../a3-sandbox --techniques mount,egress,path-guard,mcp
-python3 escape.py --measure-exfil --bytes-out
-```
-
-*Expect:* Blast radius in bytes and reachable hosts. A3's deliverable is zero outside the sandbox.
-
----
-
-### C1.6 — Attacking evaluation itself
+### C1.3 — Attacking evaluation itself
 
 `Security of AI`
 
 - **Risk** — If the eval can be fooled, the assurance is theatre.
 - **Control** — Eval gaming, sandbagging, contamination and judge manipulation as test cases.
-- **Lab** — Game the B2.10 harness deliberately, then close the hole you used.
+- **Lab** — Game the B2.11 harness deliberately, then close the hole you used.
 - **Tools** — `Cyber Commons eval harness`
 - **Models** — `Kimi K2`
 
@@ -164,8 +103,8 @@ python3 escape.py --measure-exfil --bytes-out
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.6   # run it headless and check it
+jupyter notebook labs/notebooks/C1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.3   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b2.10-eval-harness
@@ -178,7 +117,7 @@ python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
 
 ---
 
-### C1.7 — Reporting agentic findings
+### C1.4 — Reporting agentic findings
 
 `both directions`
 
@@ -191,8 +130,8 @@ python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/C1.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session C1.7   # run it headless and check it
+jupyter notebook labs/notebooks/C1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C1.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/c1-redteam

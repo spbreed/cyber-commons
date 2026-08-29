@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.0 — Start here — what AI for security operations means | Cyber Commons</title><meta name="description" content="Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — AI for SecOps › The SOC Analyst &amp; Detection Engineer</div><div class="sid">D1.0</div><h1>Start here — what AI for security operations means</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.</p></div><div class="ctrl"><div class="lab">Control</div><p>Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Put one agent trace and one human session side by side and list what separates them.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 16 lines of output in 0.02s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.0 · Start here — what AI for security operations means</h1>
+<p><strong>Function D — AI for SecOps → The SOC Analyst &amp; Detection Engineer</strong>  ·  <em>Both directions</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.7.html">C2.7 · From finding to control, and to institutional capital</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>An hour of an agent is 1,400 actions across 260 resources in 96 sessions. An hour of a person is twelve actions. Every detection, baseline and playbook you own was tuned against the second number.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   one hour                person        agent
+   actions                    12          1400
+   distinct resources          5           260
+   gap between calls        180s             2s
+   sessions                    1            96
+
+   chapter 8   detect it     chapter 9   respond to it
+   +----------------------+  +-------------------------+
+   | triage as a loop     |  | scope at machine speed  |
+   | detections FOR agents|  | contain, replay, stop   |
+   +----------------------+  +-------------------------+
+</code></pre>
+<p>Function D is the only function that has to work while something is actively
+going wrong, and agents change it at both ends.</p>
+<p><strong>Agents as the instrument.</strong> A triage loop that reads an alert, pulls the
+context a human would have pulled, and proposes a disposition. Detection
+engineering with a loop that writes and tests the rule. Reconstruction that
+reads six months of logs in the time it takes to read a paragraph. The gain is
+real and the risk is specific: a loop that closes alerts confidently is a loop
+that can close the wrong one at scale.</p>
+<p><strong>Agents as the actor.</strong> An adversary — or your own misbehaving agent — that
+acts a thousand times an hour, never gets bored, never repeats a session
+verbatim, and leaves a trace shaped nothing like a person's. Detections tuned to
+human tempo do not fire on it, and the ones that do fire arrive after it has
+finished.</p>
+<p>Two chapters:</p>
+<ul>
+<li><strong>Chapter 8 — detection.</strong> Triage as a loop you supervise, detections written
+  <em>for</em> agent behaviour, agent telemetry as a first-class data source, and
+  telling agent from human when both hold the same credential.</li>
+<li><strong>Chapter 9 — response.</strong> Scoping an incident whose actor is an agent,
+  containment at machine speed, replay as forensics, and the one thing that has
+  to stay human: who is allowed to stop it.</li>
+</ul></div><div class="nbmd"><h2>3 · One hour of an agent, one hour of a person</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>HOUR = {
+ &quot;actions taken&quot;:            (&quot;person&quot;, 12,   &quot;agent&quot;, 1400),
+ &quot;distinct resources&quot;:       (&quot;person&quot;, 5,    &quot;agent&quot;, 260),
+ &quot;median gap between calls&quot;: (&quot;person&quot;, 180,  &quot;agent&quot;, 2),
+ &quot;sessions&quot;:                 (&quot;person&quot;, 1,    &quot;agent&quot;, 96),
+ &quot;typo/retry events&quot;:        (&quot;person&quot;, 3,    &quot;agent&quot;, 0),
+}
+print(f&quot;{&#x27;signal&#x27;:28s}{&#x27;person&#x27;:&gt;9}{&#x27;agent&#x27;:&gt;9}{&#x27;ratio&#x27;:&gt;9}&quot;)
+for sig in sorted(HOUR):
+    _, p, _, a = HOUR[sig]
+    ratio = f&quot;{a / p:.0f}x&quot; if p else &quot;-&quot;
+    print(f&quot;{sig:28s}{p:&gt;9}{a:&gt;9}{ratio:&gt;9}&quot;)
+
+# A rule tuned for a person, evaluated against both.
+def burst_rule(actions_per_hour, threshold=60):
+    return actions_per_hour &gt; threshold
+
+print(f&quot;\nrule &#x27;more than 60 actions in an hour&#x27;&quot;)
+for who, n in ((&quot;person&quot;, 12), (&quot;agent&quot;, 1400)):
+    print(f&quot;   {who:8s}{n:&gt;6} actions -&gt; {&#x27;ALERT&#x27; if burst_rule(n) else &#x27;silent&#x27;}&quot;)
+
+print()
+print(&quot;That rule fires. The problem is the next one: at 1400 actions an hour the&quot;)
+print(&quot;alert arrives after roughly 150 seconds of activity, and everything the&quot;)
+print(&quot;actor was going to do is already done. Chapter 8 is about detections that&quot;)
+print(&quot;fire on shape rather than volume; chapter 9 is about who can pull the&quot;)
+print(&quot;stop lever without asking permission first.&quot;)
+assert burst_rule(1400) and not burst_rule(12)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Pull one hour of activity for a service account in your own environment and compute those five signals. If you cannot, that is the first finding of chapter 8: the telemetry does not exist yet.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · From alert queue to loop operator</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.0.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.0.ipynb</code></p></div><div class="pager"><a href="C2.7.html"><span class="k">← Previous</span><span class="t">C2.7 · From finding to control, and to institutional capital</span></a><a class="next" href="D1.1.html"><span class="k">Next →</span><span class="t">D1.1 · From alert queue to loop operator</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -1,17 +1,37 @@
 # Track B1 — The AppSec Engineer / Code Reviewer
 
-**Function B · Product & Application Security**  
-*Closest to developers, so first to meet agents at scale — and the ones who build the pipeline rather than buy it.*
+**Function B · Product and Application Security with AI**  
+*Closest to developers, so first to meet agents at scale — and the ones who build the security pipeline rather than buy it.*
 
 **Job titles:** AppSec Engineer, Product Security Engineer, Secure Code Reviewer
 
-**What changes:** The full agentic security pipeline, end to end. 16 lessons.
+**What changes:** The full agentic security pipeline, end to end. 18 lessons.
 
 **Autonomy focus:** Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.
 
 **Deliverable:** A five-phase AppSec pipeline running as a CI gate, with confirmed-by-exploitation severity and published precision and escape metrics.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
+
+---
+
+### B1.0 — Start here — what application security with AI means
+
+`both directions`
+
+- **Risk** — A security pipeline built as if it were exempt from the risks it exists to find.
+- **Control** — Build the pipeline and the harness as one system, and hold both to the same evidence standard.
+- **Lab** — Trace one finding from ingestion to a signed report and name the stage that decides whether it is true.
+
+**Run it** — Read the AppSec pipeline twice: once as five phases, and once as an agentic system with five Function A components.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B1.0.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.0   # run it headless and check it
+```
+
+*Expect:* The five pipeline phases print against the lessons that build them, the harness capabilities underneath them print as a list, and the same pipeline reads back as an agentic system with five Function A components — ingress, knowledge, tools, identity and egress.
 
 ---
 

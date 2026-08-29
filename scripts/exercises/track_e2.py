@@ -1029,7 +1029,7 @@ of the engagement is spent re-establishing credibility you had at the start.
 
 Three things to bring, in this order:
 
-1. **The distinction you understand.** Conformance versus accuracy (B2.10).
+1. **The distinction you understand.** Conformance versus accuracy (B2.11).
    Volunteering it demonstrates you know what your own numbers mean.
 2. **Your current coverage, honestly stated**, including stale and unevidenced
    controls (E1.7).

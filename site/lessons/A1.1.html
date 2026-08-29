@@ -1,5 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.1 — The reference architecture for agentic AI | Cyber Commons</title><meta name="description" content="One component map and five topologies, named once and reused by every lesson that follows."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Security Architecture &amp; Platform › The Agentic Reference Architecture, and Every Risk It Carries</div><div class="sid">A1.1</div><h1>The reference architecture for agentic AI</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Without a shared picture, &#x27;secure the agent&#x27; has no referent and every later risk lands nowhere in particular.</p></div><div class="ctrl"><div class="lab">Control</div><p>One component map and five topologies, named once and reused by every lesson that follows.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 29 lines of output in 0.01s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.1 · The reference architecture for agentic AI</h1>
-<p><strong>Function A — Security Architecture &amp; Platform → The Agentic Reference Architecture, and Every Risk It Carries</strong>  ·  <em>Both directions</em></p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.1 — The reference architecture for agentic AI | Cyber Commons</title><meta name="description" content="One component map and five topologies, named once and reused by every lesson that follows."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — AI Architecture, Risks and Mitigations › The Agentic Reference Architecture, and Every Risk It Carries</div><div class="sid">A1.1</div><h1>The reference architecture for agentic AI</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Without a shared picture, &#x27;secure the agent&#x27; has no referent and every later risk lands nowhere in particular.</p></div><div class="ctrl"><div class="lab">Control</div><p>One component map and five topologies, named once and reused by every lesson that follows.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. Its first cell clones this repository for the lab library, so the exercise is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed and reproduced</b> — this notebook runs top to bottom on Python 3.11+, producing 0 lines of output in 0.02s. No network, no API key, no installs. It was run again on Kaggle, on a different machine, and printed exactly the same output — so what you see below is reproducible, not a recording. <span>Evidence: <code>labs/notebooks/_results.json · labs/notebooks/_kaggle_verified.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.1 · The reference architecture for agentic AI</h1>
+<p><strong>Function A — AI Architecture, Risks and Mitigations → The Agentic Reference Architecture, and Every Risk It Carries</strong>  ·  <em>Both directions</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.0.html">A1.0 · Start here — what securing AI architecture means</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -20,18 +21,41 @@
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The concept</h2>
-<p>Every risk in this chapter and every control in the next two names a part of
-one picture. This is that picture, and it is deliberately vendor-neutral —
-these components exist under different product names in every agent platform,
-and the risks attach to the component, not to the brand.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>"Secure the agent" is not an instruction. It becomes one the moment you can point at a component and a boundary — and every risk in this chapter, every control in the next two, and every detection in Function D names something on the picture you are about to draw.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>                      +-----------+
+   request ----------&gt;|  ingress  |
+                      +-----+-----+
+                            v
+                   +----------------+        +-------------+
+                   |  orchestrator  |-------&gt;|  messaging  |---&gt; peers
+                   +--------+-------+        +-------------+
+                            v
+                  +-------------------+      +-------------+
+                  |   agent runtime   |&lt;----&gt;|    model    |
+                  | plan . act . obs  |      |  (predicts) |
+                  +----+---------+----+      +-------------+
+                       |         |
+            +----------v-+   +---v---------------+
+            | tools /MCP |   | knowledge /memory |
+            +------+-----+   +-------------------+
+                   v
+              +---------+
+              | egress  |
+              +---------+
+
+   identity + policy wrap every arrow · observability records every arrow
+   trust 0 (an outsider can write here): mcp, knowledge, and the corpus
+</code></pre>
+<p>These components exist under different product names in every agent platform,
+and the risks attach to the component rather than to the brand.</p>
 <p><strong>Ingress.</strong> Where a request enters: a chat surface, an API call, a webhook, a
 scheduled trigger, another system. It carries the requester's identity and
 whatever text they supplied.</p>
-<p><strong>Orchestrator.</strong> Decides which agent handles what, and in what topology. In a
-single-agent system this is a few lines; in a multi-agent one it is the thing
-that holds the whole design.</p>
-<p><strong>Agent runtime.</strong> The loop: plan, call a tool, observe the result, decide
+<p><strong>Orchestrator.</strong> Decides which agent handles what, and in what pattern. In a
+single-agent system this is a few lines; in a multi-agent one it holds the whole
+design.</p>
+<p><strong>Agent runtime.</strong> The loop — plan, call a tool, observe the result, decide
 again, stop. This is the component that turns text into consequence.</p>
 <p><strong>Model.</strong> Predicts tokens. Holds no credential, opens no socket, changes
 nothing. Most of what people fear "the model doing" is done by the runtime.</p>
@@ -40,58 +64,89 @@ server is a third party's process whose tool descriptions land in your context.<
 <p><strong>Knowledge and memory.</strong> Retrieval pulls documents in at query time; memory
 persists state across turns and sessions. Both inject text the user did not
 write.</p>
-<p><strong>Messaging.</strong> The agent-to-agent channel in a multi-agent topology.</p>
+<p><strong>Messaging.</strong> The agent-to-agent channel in a multi-agent pattern.</p>
 <p><strong>Identity and policy.</strong> Who is calling, on whose behalf, and whether this call
 is permitted. These wrap every other component.</p>
 <p><strong>Egress.</strong> Where data is allowed to go — the last boundary before it leaves.</p>
 <p><strong>Observability.</strong> What can be reconstructed afterwards.</p>
-<p>These compose into five topologies, and the topology decides which risks apply:
-<strong>single agent</strong>, <strong>orchestrator–worker</strong>, <strong>peer handoff</strong>, <strong>swarm</strong>, and
-<strong>workflow with agent steps</strong>.</p></div><div class="nbmd"><h2>2 · The architecture, and the five topologies it composes into\n\n<code>trust</code> is how much authority content originating at that component should carry: 2 is the authenticated requester, 1 is machinery with no authority of its own, 0 is anything an outsider can write into.</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>COMPONENTS = {
- &quot;ingress&quot;:       (&quot;where a request enters the system&quot;,                 2),
- &quot;orchestrator&quot;:  (&quot;routes work to agents and chooses the topology&quot;,    2),
- &quot;agent_runtime&quot;: (&quot;the plan-act-observe loop; turns text into action&quot;, 2),
- &quot;model&quot;:         (&quot;predicts tokens; no credential, no socket&quot;,         1),
- &quot;tools&quot;:         (&quot;the only components that change anything&quot;,          2),
- &quot;mcp&quot;:           (&quot;a third party&#x27;s process exposing tools&quot;,            0),
- &quot;knowledge&quot;:     (&quot;retrieval; pulls documents in at query time&quot;,       0),
- &quot;memory&quot;:        (&quot;state that persists across turns and sessions&quot;,     1),
- &quot;messaging&quot;:     (&quot;the agent-to-agent channel&quot;,                        1),
- &quot;identity&quot;:      (&quot;who is calling, and on whose behalf&quot;,               2),
- &quot;policy&quot;:        (&quot;may this caller do this, to this resource&quot;,         2),
- &quot;egress&quot;:        (&quot;where data is allowed to go&quot;,                       2),
- &quot;observability&quot;: (&quot;what can be reconstructed afterwards&quot;,              2),
-}
+<p>Three of them carry content an outsider can author: <strong>MCP</strong>, <strong>knowledge</strong> and
+the corpus behind it. Those are the input surface for the next fifteen lessons.</p></div><div class="nbmd"><h2>3 · Pattern 1 — the single agent</h2>
+<p>One loop, one set of tools. Almost everything in production today.</p>
+<pre><code>  user --&gt; ingress --&gt; agent runtime --&gt; tools --&gt; egress
+                          |     ^
+                          v     |
+                        model (predicts; changes nothing)
 
-TOPOLOGIES = {
- &quot;single agent&quot;:            [&quot;ingress&quot;, &quot;agent_runtime&quot;, &quot;tools&quot;],
- &quot;orchestrator-worker&quot;:     [&quot;ingress&quot;, &quot;orchestrator&quot;, &quot;agent_runtime&quot;, &quot;messaging&quot;, &quot;tools&quot;],
- &quot;peer handoff&quot;:            [&quot;ingress&quot;, &quot;agent_runtime&quot;, &quot;messaging&quot;, &quot;agent_runtime&quot;, &quot;tools&quot;],
- &quot;swarm&quot;:                   [&quot;ingress&quot;, &quot;orchestrator&quot;, &quot;messaging&quot;, &quot;agent_runtime&quot;, &quot;memory&quot;, &quot;tools&quot;],
- &quot;workflow with agent steps&quot;:[&quot;ingress&quot;, &quot;orchestrator&quot;, &quot;agent_runtime&quot;, &quot;tools&quot;, &quot;policy&quot;],
-}
+  identity + policy wrap every arrow · observability records every arrow
+</code></pre>
+<p>The edge that matters is <code>agent runtime -&gt; tools</code>. That is where text becomes
+consequence, and it exists in every pattern below.</p></div><div class="nbmd"><h2>4 · Pattern 2 — orchestrator and workers</h2>
+<p>One planner fans work out to specialised workers and joins the results. The
+pattern most multi-agent platforms mean when they say "multi-agent".</p>
+<pre><code>                            +--&gt; worker A --&gt; tools
+  user --&gt; orchestrator ----+--&gt; worker B --&gt; tools
+                            +--&gt; worker C --&gt; tools
+                                   |
+                            join / summarise
+</code></pre>
+<p>New surface: the orchestrator decides <em>who</em> runs, so anything that can influence
+its routing decides which permissions get used.</p></div><div class="nbmd"><h2>5 · Pattern 3 — sequential handoff</h2>
+<p>A pipeline of agents, each taking the previous one's output as its input.</p>
+<pre><code>  user --&gt; agent 1 --&gt; agent 2 --&gt; agent 3 --&gt; result
+            recon      analyse     report
 
-print(f&quot;{&#x27;component&#x27;:15s}{&#x27;trust&#x27;:&gt;6}  role&quot;)
-for name in sorted(COMPONENTS):
-    role, trust = COMPONENTS[name]
-    print(f&quot;{name:15s}{trust:&gt;6}  {role}&quot;)
+  each hop inherits the previous hop's claims; nobody re-checks them
+</code></pre>
+<p>New surface: an unverified claim at hop 1 is a fact by hop 3. This is the shape
+that makes cascading hallucination (A1.11) a systems problem rather than a model
+problem.</p></div><div class="nbmd"><h2>6 · Pattern 4 — peer swarm over shared memory</h2>
+<p>Agents with no central planner, coordinating through state they all write to.</p>
+<pre><code>     +--&gt; agent A --+
+  user +--&gt; agent B --+--&gt; shared memory &lt;--+
+     +--&gt; agent C --+          ^            |
+                               |            |
+                    every agent reads what any agent wrote
+</code></pre>
+<p>New surface: memory is a write-once, read-forever channel between agents. One
+poisoned entry is read back as trusted context indefinitely (A1.4), and there is
+no orchestrator to notice.</p></div><div class="nbmd"><h2>7 · Pattern 5 — a workflow with agent steps</h2>
+<p>Deterministic control flow, with one or two steps handed to an agent. The
+pattern with the best safety properties, and the one people skip.</p>
+<pre><code>  [fetch] --&gt; [validate] --&gt; (( agent step )) --&gt; [approve] --&gt; [commit]
+      deterministic          non-deterministic        deterministic
 
-print(&quot;\nUNTRUSTED SOURCES (trust 0) - an outsider can author content here&quot;)
-print(&quot;   &quot; + &quot;, &quot;.join(sorted(c for c, (_, t) in COMPONENTS.items() if t == 0)))
+  the blast radius of the agent is bounded by the two steps either side
+</code></pre>
+<p>New surface: almost none, which is the point. If the work fits this shape, the
+other four patterns are a cost you do not have to pay.</p></div><div class="nbmd"><h2>8 · The two components that appear inside all five</h2>
+<p>Retrieval and human approval are not patterns of their own — they attach to any
+of the five above, and each brings one surface with it.</p>
+<pre><code>  retrieval          agent --&gt; retriever --&gt; corpus
+                       ^                       |
+                       +----- documents -------+
+                       anyone who can write to the corpus writes to the context
 
-print(&quot;\nTOPOLOGIES&quot;)
-for name in sorted(TOPOLOGIES):
-    hops = TOPOLOGIES[name]
-    print(f&quot;   {name:26s}{&#x27; -&gt; &#x27;.join(hops)}&quot;)
-
-# the boundary every risk in this chapter crosses, in every topology
-print(&quot;\nIn all five topologies the same edge exists: something reaches&quot;)
-print(&quot;agent_runtime, and agent_runtime reaches tools. That edge is where text&quot;)
-print(&quot;becomes consequence, and it is the edge every control in Chapters 2 and 3&quot;)
-print(&quot;is trying to stand on.&quot;)
-assert all(&quot;agent_runtime&quot; in h and &quot;tools&quot; in h for h in TOPOLOGIES.values())</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Thirteen components print with the authority their content should carry, three of them at trust 0 — mcp, knowledge and the corpus behind it — and five topologies print as component chains. Every topology contains the same edge: agent_runtime reaching tools.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Draw these thirteen components for one agentic system you run, and mark which topology it is. The useful output is the list of trust-0 components you actually have, because that list is the input surface for the next fifteen lessons.</p></div><div class="nbmd"><hr />
+  human approval     agent --&gt; proposed action --&gt; [ human ] --&gt; tools
+                                                       ^
+                       requests arrive faster than a person can read them
+</code></pre>
+<p>Retrieval is how outside text reaches the context window without anyone typing
+it (A1.3). Approval is a real control for rare irreversible actions and a rubber
+stamp for everything else (A1.14).</p></div><div class="nbmd"><h2>9 · The edge every pattern shares</h2>
+<pre><code>                    +---------------+       +-------+
+   untrusted text   | agent runtime | ----&gt; | tools |   consequence
+   ---------------&gt; |               |       +-------+
+                    +---------------+
+                       ^        ^
+                  knowledge   messaging
+                    memory      MCP
+</code></pre>
+<p>Whatever the topology, something reaches the agent runtime and the agent runtime
+reaches tools. Every risk in the rest of this chapter is a route into the left
+side of that picture. Every control in chapters 2 and 3 is an attempt to stand
+somewhere on the arrow.</p></div><div class="nbmd"><h2>What this gives you</h2>
+<p>You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Draw your own system on one page, then mark the <code>agent_runtime -&gt; tools</code> edge on it. Everything in chapters 2 and 3 is an argument about what is allowed to stand on that arrow, and you will get more out of them having drawn it first.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.2.html">A1.2 · Prompt injection</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.1.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Thirteen components print with the authority their content should carry, three of them at trust 0 — mcp, knowledge and the corpus behind it — and five topologies print as component chains. Every topology contains the same edge: agent_runtime reaching tools.</div><div class="chips"><span>kagent</span><span>OpenTelemetry</span><span class="m">Llama 3.3</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.1.ipynb</code></p></div><div class="pager"><span></span><a class="next" href="A1.2.html"><span class="k">Next →</span><span class="t">A1.2 · Prompt injection</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Thirteen components print with the authority their content should carry, three of them at trust 0 — mcp, knowledge and the corpus behind it — and five topologies print as component chains. Every topology contains the same edge: agent_runtime reaching tools.</div><div class="chips"><span>kagent</span><span>OpenTelemetry</span><span class="m">Llama 3.3</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.1.ipynb</code></p></div><div class="pager"><a href="A1.0.html"><span class="k">← Previous</span><span class="t">A1.0 · Start here — what securing AI architecture means</span></a><a class="next" href="A1.2.html"><span class="k">Next →</span><span class="t">A1.2 · Prompt injection</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
