@@ -524,7 +524,7 @@ def cost_of_false_revocation(subject_is_human, agent_can_rerequest=True):
         return {"impact": "person locked out mid-shift", "recovery": "helpdesk, 20-60 min",
                 "cost": "high"}
     if agent_can_rerequest:
-        return {"impact": "task fails, agent re-requests with a reason (A2.8)",
+        return {"impact": "task fails, agent re-requests with a reason (A2.4)",
                 "recovery": "seconds to minutes", "cost": "low"}
     return {"impact": "agent stops until an on-call re-enables it",
             "recovery": "minutes", "cost": "moderate"}

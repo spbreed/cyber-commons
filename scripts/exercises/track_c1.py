@@ -1,10 +1,8 @@
-"""C1 — The Pentester / Red Teamer. Seven sessions.
+"""C1 — The Pentester / Red Teamer. Five sessions.
 
-    C1.1  the offensive workflow: manual → scripted → semi-auto → autonomous
-    C1.1  sandboxing the offensive harness (the content you process is hostile)
-    C1.2  red-teaming the injection surface
-    C1.2  red-teaming the identity surface
-    C1.2  red-teaming the containment surface
+    C1.0  what AI security research means, and the standard of proof it holds to
+    C1.1  the offensive workflow, and the containment that makes it lawful
+    C1.2  red-teaming an agent: one campaign across all three surfaces
     C1.3  attacking evaluation itself
     C1.4  reporting agentic findings so they get fixed
 

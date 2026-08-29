@@ -1,17 +1,22 @@
-"""B2 — The Security Automation / Harness Engineer. Ten sessions.
+"""B2 — The Security Automation / Harness Engineer. Thirteen sessions.
 
 The track builds one artefact, in order, and each lesson modifies the previous:
 
+    B2.0  the eight parts     what a harness actually is
     B2.1  the loop            plan → act → verify → stop
     B2.2  the verifier        the single highest-value hour in the track
     B2.3  tool design         the signature is the control
-    A3.4  budgets             what works when everything else has failed
-    B2.4  model routing       inside the loop this time
+    B2.4  model routing       breadth cheap, judgement expensive
     B2.5  sub-agents          depth, and what it does to authority
     B2.6  failure taxonomy    so "it broke" routes to the right owner
     B2.7  self-improvement    why a held-out signal stops being optional
     B2.8  idempotency         it will do the same thing twice
+    B2.9  domain harnesses    one skeleton, four oracles, four blast radii
+    B2.10 the backbone        chosen on your corpus, not on a vendor chart
     B2.11 evaluation          conformance vs accuracy, and the matching bug
+    B2.12 reliability + cost  pass^k, variance, and dollars per finding
+
+Budgets and stop conditions are A3.4, and are not repeated here.
 """
 
 MODEL_NOTE = """
@@ -840,7 +845,7 @@ the **fix**. Seven classes cover almost everything an agentic system does wrong:
 | **verification** | it did it wrong and we believed it | harness engineer (B2.2) |
 | authority | it did something it should not be able to do | identity (A2) |
 | containment | the action reached further than intended | platform (A3) |
-| injection | it was told to by untrusted content | provenance (C1.2) |
+| injection | it was told to by untrusted content | provenance (A2.6) |
 | budget | it never stopped | harness engineer (A3.4) |
 | idempotency | it did the right thing twice | harness engineer (B2.8) |
 
@@ -867,7 +872,7 @@ TAXONOMY = {
  "verification": ("it did it wrong and we believed it",     "harness engineer — B2.2"),
  "authority":    ("it did what it should not be able to do","identity — A2"),
  "containment":  ("the action reached further than intended","platform — A3"),
- "injection":    ("untrusted content drove it",             "provenance — C1.2"),
+ "injection":    ("untrusted content drove it",             "provenance — A2.6"),
  "budget":       ("it never stopped",                       "harness engineer — A3.4"),
  "idempotency":  ("it did the right thing twice",           "harness engineer — B2.8"),
 }

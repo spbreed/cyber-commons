@@ -1,14 +1,13 @@
-"""C2 — The Security Researcher. Nine sessions.
+"""C2 — The Security Researcher. Seven sessions.
 
     C2.1  what research means in a CISO org (it ends in a control, not a paper)
     C2.2  model-layer research: rates, not anecdotes
     C2.3  weight-level access, and what the defender loses with it
     C2.4  data-layer research: provenance beats volume
     C2.5  supply-chain research, including the two artefacts with no process
-    C2.6  building the research harness
-    C2.6  benchmark design and critique
-    C2.7  from finding to control
-    C2.7  research as institutional capital
+    C2.6  benchmarks, reproducibility, and the harness that separates the two
+          effects — model and scaffolding — that everyone confounds
+    C2.7  from finding to control, and to something that still holds without you
 """
 
 EXERCISES: dict[str, dict] = {
