@@ -58,7 +58,7 @@ different door.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Turns an unbounded loop into a defined worst case, and bounds the harm to <strong>other people's</strong> capacity, not just your bill.</p>
 </blockquote>
-<h2>2 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>class Budget:
+<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>class Budget:
     def __init__(self, tokens=50_000, seconds=60, actions=20, per_target=5):
         self.limits = {&quot;tokens&quot;: tokens, &quot;seconds&quot;: seconds,
                        &quot;actions&quot;: actions, &quot;per_target&quot;: per_target}

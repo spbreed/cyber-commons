@@ -60,7 +60,7 @@ succeeded" is not a verifier — it is the same component grading its own work.<
 <p><strong>What this control closes.</strong></p>
 <p>Stops a claim propagating without evidence attached. Schema validity is not truth: a well-formed object can assert anything.</p>
 </blockquote>
-<h2>2 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SCHEMA = {&quot;claim&quot;: str, &quot;confidence&quot;: float, &quot;verified_by&quot;: (str, type(None))}
+<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SCHEMA = {&quot;claim&quot;: str, &quot;confidence&quot;: float, &quot;verified_by&quot;: (str, type(None))}
 
 def schema_ok(msg):
     return all(k in msg and isinstance(msg[k], t) for k, t in SCHEMA.items())

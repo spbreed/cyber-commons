@@ -56,7 +56,7 @@ forgets the human, because it produces logs that are complete and useless.</p></
 <p><strong>What this control closes.</strong></p>
 <p>Answers <strong>who is calling</strong>, so every later control has a subject. Without it, default-deny has nothing to deny and the audit trail has nobody to name.</p>
 </blockquote>
-<h2>2 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
+<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
 
 @dataclass(frozen=True)
 class Principal:

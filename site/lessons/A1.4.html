@@ -58,7 +58,7 @@ memory writes have to be scoped to the identity that made them.</p></div><div cl
                       knowledge / memory   egress
            identity + policy wrap every call · observability records it</code></p>
 </blockquote>
-<h2>2 · The risk, realised</h2>
+<h2>3 · The risk, realised</h2>
 <p>One poisoned write, then an unrelated session for a different user.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>MEMORY = {}          # the memory component: keyed by workspace, not by user
 
 def remember(workspace, key, value):

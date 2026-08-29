@@ -133,7 +133,10 @@ def renumber(source: str, counter: list[int]) -> str:
     def one(_m):
         counter[0] += 1
         return f"## {counter[0]} · "
-    return SECTION.sub(one, source)
+    # Normalise the escaped newline first: a heading that is not at the start
+    # of a real line is invisible to the anchor, and several steps were
+    # authored with "\\n" inside a non-raw string.
+    return SECTION.sub(one, source.replace("\\n", "\n"))
 
 
 def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
