@@ -5,7 +5,7 @@
 
 **Job titles:** Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher
 
-**What changes:** Turning curiosity into a result somebody else can deploy. 7 lessons.
+**What changes:** Turning curiosity into a result somebody else can deploy. 8 lessons.
 
 **Autonomy focus:** You deliberately operate at L3 in isolated environments so the rest of the org never has to.
 
@@ -196,5 +196,32 @@ cd release && ./reproduce.sh   # must work on a clean machine
 ```
 
 *Expect:* The eval case returns False on the old build and True on the new one, covering 12 privileged/source combinations while leaving the principal path working. The control blocks the payload; the detection fires at critical severity on the old build and at info severity on the new one as coverage evidence. The handover package permits closure only when the proof of fix is valid and something shipped. Scored across a year of eight findings the programme lands 20 of a possible 40 durability points, with only three still holding without a person behind them.
+
+---
+
+### C2.8 — Case study: an agent swarm incident, from evidence to control register
+
+`both directions`
+
+- **Risk** — An incident report that is read once and cited forever. Nothing in it is testable, nothing is assigned, and the same class recurs.
+- **Control** — T/E/C indexing so each item can be cited alone, control types and NIST anchors so the register is comparable to the one you already have, and a named owning lesson for every control.
+- **Lab** — Build the register from the report's own figures, find the chain three rows share, and check that every control has an owner.
+- **Tools** — `NIST SP 800-53r5`
+
+**Run it** — Build the control register from the report's own figures, find the surface three rows share, and check that every control has an owning lesson.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+python3 -m json.tool labs/incident-register/register.json | head -40
+python3 scripts/check_register.py    # register vs the curriculum
+```
+
+*Expect:* The register prints as 10 rows carrying 34 threats, 40 evidence items and 40 controls, each individually citable. 22 controls are purely preventive against 12 that are detective at all. One shared surface — the artifact repository — appears in three rows, which is the chain the report asks you not to file separately. Every control has an owning lesson, and six of the forty land on lessons that already existed.
+
+> Lab source: [`labs/incident-register`](../labs/incident-register)
 
 ---

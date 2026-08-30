@@ -1,6 +1,6 @@
 # Lesson notebooks
 
-One Python notebook per curriculum session — **121 of them**, generated from the
+One Python notebook per curriculum session — **130 of them**, generated from the
 single source of truth and executed in CI before they ship.
 
 Each notebook is **self-contained**: it carries every line of code it runs. No
@@ -31,7 +31,7 @@ jupyter notebook labs/notebooks/A2.5.ipynb
 
 ```bash
 python3 scripts/run_notebooks.py --session A2.5
-python3 scripts/run_notebooks.py              # all 121, writes _results.json
+python3 scripts/run_notebooks.py              # all 130, writes _results.json
 ```
 
 ## What they run against
@@ -69,7 +69,7 @@ Every exercise needs a `concept` field. The build fails without one — a lesson
 that opens with a risk teaches people to fear a mechanism they cannot describe.
 
 ```bash
-python3 scripts/build_notebooks.py   # regenerate all 121
+python3 scripts/build_notebooks.py   # regenerate all 130
 python3 scripts/run_notebooks.py     # prove they still run, refresh the evidence
 python3 scripts/build_site.py        # re-render the lesson pages
 ```
@@ -119,7 +119,7 @@ python3 scripts/kaggle_verify.py --save     # writes _kaggle_verified.json
 
 Because the notebooks are deterministic by design, byte-identical output from
 two independent machines is the real evidence a lesson runs — and any
-difference is a finding, not noise. All 121 currently match. It has already
+difference is a finding, not noise. All 121 matched at the last full verification; the nine lessons added since are pending a re-push. It has already
 caught two that did not:
 
 - **B1.3** iterated a set difference into a stable sort. With tied threat

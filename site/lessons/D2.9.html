@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.9 — The fleet kill switch | Cyber Commons</title><meta name="description" content="A tested kill path independent of the agent execution path, snapshot before terminate, revocation in the same action, a measured activation target and named authority to pull it (C"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — AI for SecOps › The Incident Responder</div><div class="sid">D2.9</div><h1>The fleet kill switch</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Terminating agents while their tokens stay valid leaves the persistence in place. In the incident, third-party access ended when the third party revoked keys — not when the agents stopped.</p></div><div class="ctrl"><div class="lab">Control</div><p>A tested kill path independent of the agent execution path, snapshot before terminate, revocation in the same action, a measured activation target and named authority to pull it (C8.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Kill a fleet in a non-production environment and measure what the revocation step changes about what an attacker still holds.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 32 lines of output in 0.01s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.9 · The fleet kill switch</h1>
+<p><strong>Function D — AI for SecOps → The Incident Responder</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.8.html">D2.8 · Regulatory clock</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>Vault, Kubernetes</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>The third party's exposure ended when the third party revoked its keys, not when the agents were stopped. Terminating a fleet whose credentials stay valid moves the incident rather than ending it.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   one selector, one action, in this order
+
+      snapshot state + transcripts     &lt;- or the incident is unreconstructable
+              |
+           terminate
+              |
+        revoke credentials             &lt;- or the tokens outlive the agents
+
+   the path must not run through the fleet
+      via orchestrator API      NO   depends on the thing being stopped
+      via the agent sidecar     NO   workload credentials
+      out-of-band control plane YES  separate creds, separate network
+
+   tested quarterly, under partial failure, target under 5 minutes
+</code></pre>
+<p>D2.4 contained one agent. This is the control for the case where the unit of
+containment is the fleet.</p>
+<p>The source incident makes the requirement concrete in one detail: third-party
+access ended when the <strong>third party</strong> revoked its keys — not when the agents
+stopped. Terminating agents while their credentials stay valid leaves the
+persistence exactly where it was, and moves the incident rather than ending it.</p>
+<p>So the kill switch is one action with four properties:</p>
+<p><strong>One selector.</strong> Experiment, model, time window, or everything. Not a runbook
+of forty steps executed under pressure.</p>
+<p><strong>Independent of the agent execution path.</strong> Separate credentials, separate
+network path, so a compromised fleet cannot interfere with the thing that stops
+it.</p>
+<p><strong>Evidence-preserving.</strong> Snapshot state and transcripts <em>before</em> terminating.
+An incident you cannot reconstruct afterwards has been survived, not handled.</p>
+<p><strong>Revocation in the same action.</strong> Terminate and revoke together, or the
+attacker keeps what the agents were holding.</p>
+<p>Plus the operational half: a tested activation path with a measured target
+under five minutes, quarterly tests including partial-failure conditions, and a
+documented authority to activate that does not require consensus. A kill switch
+nobody has pulled is a hypothesis.</p></div><div class="nbmd"><h2>3 · Kill the fleet, and count what is left</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>FLEET = [
+ {&quot;id&quot;: f&quot;agent-{i:03d}&quot;,
+  &quot;experiment&quot;: &quot;exploitgym&quot;,
+  &quot;token&quot;: f&quot;tok-{i:03d}&quot;,
+  &quot;token_ttl_hours&quot;: 72}
+ for i in range(8)
+]
+ISSUED = {a[&quot;token&quot;] for a in FLEET}
+
+def terminate_only(fleet):
+    return {&quot;terminated&quot;: len(fleet), &quot;tokens_still_valid&quot;: len(ISSUED)}
+
+def terminate_and_revoke(fleet, revoked):
+    revoked |= {a[&quot;token&quot;] for a in fleet}
+    return {&quot;terminated&quot;: len(fleet), &quot;tokens_still_valid&quot;: len(ISSUED - revoked)}
+
+r1 = terminate_only(FLEET)
+print(f&quot;terminate only        : {r1[&#x27;terminated&#x27;]} agents stopped, &quot;
+      f&quot;{r1[&#x27;tokens_still_valid&#x27;]} tokens still valid for up to 72h&quot;)
+
+revoked = set()
+r2 = terminate_and_revoke(FLEET, revoked)
+print(f&quot;terminate and revoke  : {r2[&#x27;terminated&#x27;]} agents stopped, &quot;
+      f&quot;{r2[&#x27;tokens_still_valid&#x27;]} tokens still valid&quot;)
+print()
+print(&quot;In the source incident, third-party access ended when the third party&quot;)
+print(&quot;revoked its keys - not when the agents stopped. Stopping the process is&quot;)
+print(&quot;the visible half of containment and the smaller one.&quot;)
+assert r1[&quot;tokens_still_valid&quot;] == 8 and r2[&quot;tokens_still_valid&quot;] == 0</code></pre></div><div class="nbmd"><h2>4 · Preserve first, then terminate</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def kill(fleet, preserve=True, revoke=True):
+    steps, evidence = [], 0
+    if preserve:
+        steps.append(&quot;snapshot state and transcripts&quot;)
+        evidence = len(fleet)
+    steps.append(&quot;terminate&quot;)
+    if revoke:
+        steps.append(&quot;revoke credentials&quot;)
+    return {&quot;steps&quot;: steps, &quot;evidence_preserved&quot;: evidence,
+            &quot;reconstructable&quot;: evidence == len(fleet)}
+
+for label, preserve in ((&quot;terminate first&quot;, False), (&quot;preserve first&quot;, True)):
+    r = kill(FLEET, preserve=preserve)
+    print(f&quot;{label:18s}{&#x27; -&gt; &#x27;.join(r[&#x27;steps&#x27;]):58s}&quot;
+          f&quot;reconstructable={r[&#x27;reconstructable&#x27;]}&quot;)
+print()
+print(&quot;The ordering is the whole design. Terminating first is faster by seconds&quot;)
+print(&quot;and costs the investigation everything, which is the trade nobody makes&quot;)
+print(&quot;deliberately at three in the morning.&quot;)
+assert kill(FLEET, preserve=True)[&quot;reconstructable&quot;]
+assert not kill(FLEET, preserve=False)[&quot;reconstructable&quot;]</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — the path that runs through the fleet</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PATHS = {
+ &quot;via the orchestrator API&quot;:   {&quot;depends_on_fleet&quot;: True,  &quot;creds&quot;: &quot;shared&quot;},
+ &quot;via the agent&#x27;s own sidecar&quot;:{&quot;depends_on_fleet&quot;: True,  &quot;creds&quot;: &quot;workload&quot;},
+ &quot;out-of-band control plane&quot;:  {&quot;depends_on_fleet&quot;: False, &quot;creds&quot;: &quot;separate&quot;},
+}
+print(f&quot;{&#x27;activation path&#x27;:30s}{&#x27;usable if fleet compromised&#x27;:&gt;30}&quot;)
+for p in sorted(PATHS):
+    d = PATHS[p]
+    usable = not d[&quot;depends_on_fleet&quot;] and d[&quot;creds&quot;] == &quot;separate&quot;
+    print(f&quot;{p:30s}{(&#x27;yes&#x27; if usable else &#x27;NO&#x27;):&gt;30}&quot;)
+
+print()
+print(&quot;Two of three paths are the ones teams actually build, and both run&quot;)
+print(&quot;through the thing they are trying to stop. The switch has to be&quot;)
+print(&quot;independent in credentials AND in network path, or it is a request.&quot;)
+assert sum(1 for p in PATHS if not PATHS[p][&quot;depends_on_fleet&quot;]) == 1</code></pre></div><div class="nbmd"><h2>6 · Verify — a switch nobody has pulled is a hypothesis</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TESTS = [
+ (&quot;Q1&quot;, True,  4.2, &quot;full fleet, clean conditions&quot;),
+ (&quot;Q2&quot;, True,  4.9, &quot;full fleet, one region degraded&quot;),
+ (&quot;Q3&quot;, False, None, &quot;not run - no window agreed&quot;),
+ (&quot;Q4&quot;, True,  6.8, &quot;partial failure: revocation API throttled&quot;),
+]
+TARGET_MIN = 5.0
+print(f&quot;{&#x27;quarter&#x27;:9s}{&#x27;ran&#x27;:5s}{&#x27;minutes&#x27;:&gt;9}  condition&quot;)
+for q, ran, mins, cond in TESTS:
+    shown = f&quot;{mins:.1f}&quot; if mins else &quot;-&quot;
+    print(f&quot;{q:9s}{(&#x27;yes&#x27; if ran else &#x27;no&#x27;):5s}{shown:&gt;9}  {cond}&quot;)
+
+timed = [m for _, ran, m, _ in TESTS if ran and m]
+over = [m for m in timed if m &gt; TARGET_MIN]
+print(f&quot;\ntests run: {len(timed)} of {len(TESTS)}   target: under {TARGET_MIN:.0f} min&quot;)
+print(f&quot;over target: {len(over)}  ({&#x27;, &#x27;.join(f&#x27;{m:.1f}&#x27; for m in over) or &#x27;none&#x27;})&quot;)
+print()
+print(&quot;The quarter that was not run is the finding, and the quarter that ran&quot;)
+print(&quot;long is the second one: under partial failure the revocation half is&quot;)
+print(&quot;what slows down, which is the half that matters.&quot;)
+assert len(timed) == 3 and over == [6.8]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Ask who in your organisation is allowed to stop every agent at once, without asking anyone. If the answer is a committee, you do not have a kill switch — you have an escalation path, and they take different amounts of time.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
+<p><strong>What you can do now.</strong> An incident practice for an autonomous actor: reconstruct the timeline with every claim sourced, scope the blast radius from identity and egress logs, contain in seconds rather than hours, a named person with stop authority at 3am, and one tested switch that stops a whole fleet and revokes what it was holding.</p>
+<p><strong>What you still cannot do.</strong> All of it is one incident at a time. Nothing here tells you whether the estate as a whole is governed — how many agents exist, who owns them, which controls apply, and what you would tell a regulator on the Monday.</p>
+<p><strong>Function E is the estate view, and it starts by being precise about a phrase everyone uses loosely. Next → E1.0, what AI governance means.</strong></p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.0.html">E1.0 · Start here — what AI governance means</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.9.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.9.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed.</div><div class="chips"><span>Vault</span><span>Kubernetes</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.9.ipynb</code></p></div><div class="pager"><a href="D2.8.html"><span class="k">← Previous</span><span class="t">D2.8 · Regulatory clock</span></a><a class="next" href="E1.0.html"><span class="k">Next →</span><span class="t">E1.0 · Start here — what AI governance means</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

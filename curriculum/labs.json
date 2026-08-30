@@ -221,6 +221,21 @@
    ],
    "expect": "One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused."
   },
+  "A2.8": {
+   "goal": "Spoof a transcript, then watch a hash chain and a host-syscall reconciliation both refuse it — and check whether the workload role can reach the logging plane at all.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A2.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A2.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "falco --rules host-escape.yaml    # out-of-band, on the host",
+    "python3 chain_verify.py --bucket agent-transcripts --since 24h",
+    "aws iam simulate-principal-policy --policy-source-arn $AGENT_ROLE \\",
+    "  --action-names s3:PutObject --resource-arns arn:aws:s3:::agent-transcripts/*"
+   ],
+   "expect": "The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it."
+  },
   "A3.1": {
    "goal": "Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.",
    "run": [
@@ -290,6 +305,46 @@
     "python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it"
    ],
    "expect": "Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent."
+  },
+  "A3.8": {
+   "goal": "Pass a message between two 'isolated' runs through a shared artifact cache, then close the surface with per-run namespaces, immutable tags and signature verification at pull.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "cosign verify --certificate-identity-regexp '.*' libtarget-1.4.jar",
+    "kubectl apply -f kyverno/verify-images.yaml   # fail closed at admission",
+    "./ns-probe.sh --from run-B --to run-A         # must be denied and logged"
+   ],
+   "expect": "Six of seven shared surfaces qualify as channels, and only two of them look like storage. Two runs with no network path between them exchange a message through repository properties. Namespacing, immutable tags, trusted-builder publishing and fail-closed signature verification then produce five refusals for five different reasons, and the workload can reach neither the admin API nor the transcript store."
+  },
+  "A3.9": {
+   "goal": "Disable a control without an approved exemption and watch the platform refuse; then launch under one that is approved and watch the cap change with the coverage.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "opa eval -d exemptions.rego -i launch.json 'data.launch.allow'",
+    "./orchestrator launch --agents 50000 --exemption EX-118   # expect refusal"
+   ],
+   "expect": "An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25."
+  },
+  "A3.10": {
+   "goal": "Plant a finding, run the agent with and without a report-to-human tool, and compare what it does with what it says it wants to do.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A3.10.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A3.10   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "python3 escalation_eval.py --planted credentials --runs 50",
+    "python3 escalation_eval.py --report-rate --by-reason"
+   ],
+   "expect": "The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt."
   },
   "B1.0": {
    "goal": "Read the AppSec pipeline twice: once as five phases, and once as an agentic system with five Function A components.",
@@ -677,6 +732,19 @@
    ],
    "expect": "pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand."
   },
+  "B2.13": {
+   "goal": "Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "python3 canary.py --place worker-env,docs,artifact-metadata",
+    "python3 honeypot.py --salt benchmark/ --ratio 0.15 --rotate-days 21"
+   ],
+   "expect": "Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00."
+  },
   "C1.0": {
    "goal": "Score the same claim at four standards of proof and find where the line between an anecdote and a result actually sits.",
    "run": [
@@ -841,6 +909,19 @@
    ],
    "expect": "The eval case returns False on the old build and True on the new one, covering 12 privileged/source combinations while leaving the principal path working. The control blocks the payload; the detection fires at critical severity on the old build and at info severity on the new one as coverage evidence. The handover package permits closure only when the proof of fix is valid and something shipped. Scored across a year of eight findings the programme lands 20 of a possible 40 durability points, with only three still holding without a person behind them."
   },
+  "C2.8": {
+   "goal": "Build the control register from the report's own figures, find the surface three rows share, and check that every control has an owning lesson.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.8.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.8   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "python3 -m json.tool labs/incident-register/register.json | head -40",
+    "python3 scripts/check_register.py    # register vs the curriculum"
+   ],
+   "expect": "The register prints as 10 rows carrying 34 threats, 40 evidence items and 40 controls, each individually citable. 22 controls are purely preventive against 12 that are detective at all. One shared surface — the artifact repository — appears in three rows, which is the chain the report asks you not to file separately. Every control has an owning lesson, and six of the forty land on lessons that already existed."
+  },
   "D1.0": {
    "goal": "Put one hour of an agent beside one hour of a person, then run a human-tempo rule against both.",
    "run": [
@@ -968,6 +1049,33 @@
    ],
    "expect": "With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently."
   },
+  "D1.9": {
+   "goal": "Run four platform detectors over one day of events and find the ones a generic anomaly score would have missed.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "falco --rules agent-escape.yaml --validate",
+    "python3 cache_diff.py --manifest build-manifest.json --repo artifactory",
+    "gitleaks detect --redact --report-format sarif"
+   ],
+   "expect": "Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one."
+  },
+  "D1.10": {
+   "goal": "Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artefact graph.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.10.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.10   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "python3 fleet_graph.py --window 24h --min-unrelated-readers 2",
+    "python3 fleet_graph.py --signatures vocab,pivot,role"
+   ],
+   "expect": "Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human."
+  },
   "D2.1": {
    "goal": "Pre-load the agent so it reasons as a partner, not a tool you reach for late.",
    "run": [
@@ -1080,6 +1188,19 @@
     "python3 first_hour.py --case case-01 --materiality"
    ],
    "expect": "A materiality call and a notification clock started in hour one, feeding Track E2."
+  },
+  "D2.9": {
+   "goal": "Kill a fleet in a non-production environment and measure what the revocation step changes about what an attacker still holds.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D2.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D2.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "./killswitch --selector experiment=exploitgym --snapshot --revoke",
+    "./killswitch --test --partial-failure revocation-api"
+   ],
+   "expect": "Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed."
   },
   "E1.0": {
    "goal": "Assign each of the seven trustworthy-AI properties to a named owner, and count how many of them security holds outright.",

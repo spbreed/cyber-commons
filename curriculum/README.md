@@ -7,14 +7,14 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 | Track | Role | Sessions | Function |
 |---|---|---|---|
 | [A1](track-a1.md) | The Agentic Reference Architecture, and Every Risk It Carries | 17 | A — Securing AI Architectures |
-| [A2](track-a2.md) | Securing the Architecture — Identity and Ingress | 7 | A — Securing AI Architectures |
-| [A3](track-a3.md) | Securing the Architecture — Runtime and the Gateway | 7 | A — Securing AI Architectures |
+| [A2](track-a2.md) | Securing the Architecture — Identity and Ingress | 8 | A — Securing AI Architectures |
+| [A3](track-a3.md) | Securing the Architecture — Runtime and the Gateway | 10 | A — Securing AI Architectures |
 | [B1](track-b1.md) | The AI SDLC: an Agentic AppSec Pipeline | 18 | B — Application Security with an AI SDLC |
-| [B2](track-b2.md) | The Harness that Runs the SDLC | 13 | B — Application Security with an AI SDLC |
+| [B2](track-b2.md) | The Harness that Runs the SDLC | 14 | B — Application Security with an AI SDLC |
 | [C1](track-c1.md) | Red Teaming with AI | 5 | C — Red Teaming and Security Research with AI |
-| [C2](track-c2.md) | Security Research with AI | 7 | C — Red Teaming and Security Research with AI |
-| [D1](track-d1.md) | The SOC Analyst & Detection Engineer | 9 | D — AI for SecOps |
-| [D2](track-d2.md) | The Incident Responder | 8 | D — AI for SecOps |
+| [C2](track-c2.md) | Security Research with AI | 8 | C — Red Teaming and Security Research with AI |
+| [D1](track-d1.md) | The SOC Analyst & Detection Engineer | 11 | D — AI for SecOps |
+| [D2](track-d2.md) | The Incident Responder | 9 | D — AI for SecOps |
 | [E1](track-e1.md) | The GRC Practitioner (Risk & Control) | 13 | E — AI for GRC |
 | [E2](track-e2.md) | The Regulatory & Compliance Lead | 9 | E — AI for GRC |
 | [E3](track-e3.md) | The BISO, Risk Communicator & CISO Office | 8 | E — AI for GRC |

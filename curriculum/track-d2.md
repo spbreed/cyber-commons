@@ -5,7 +5,7 @@
 
 **Job titles:** Incident Responder, DFIR Analyst, CSIRT Lead
 
-**What changes:** Responding at machine speed. 8 lessons.
+**What changes:** Responding at machine speed. 9 lessons.
 
 **Autonomy focus:** Response tooling at L2.5; containment authority never leaves human hands.
 
@@ -221,5 +221,30 @@ python3 first_hour.py --case case-01 --materiality
 ```
 
 *Expect:* A materiality call and a notification clock started in hour one, feeding Track E2.
+
+---
+
+### D2.9 — The fleet kill switch
+
+`AI for Security`
+
+- **Risk** — Terminating agents while their tokens stay valid leaves the persistence in place. In the incident, third-party access ended when the third party revoked keys — not when the agents stopped.
+- **Control** — A tested kill path independent of the agent execution path, snapshot before terminate, revocation in the same action, a measured activation target and named authority to pull it (C8.3).
+- **Lab** — Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.
+- **Tools** — `Vault`, `Kubernetes`
+
+**Run it** — Kill a fleet in a non-production environment and measure what the revocation step changes about what an attacker still holds.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D2.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.9   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+./killswitch --selector experiment=exploitgym --snapshot --revoke
+./killswitch --test --partial-failure revocation-api
+```
+
+*Expect:* Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed.
 
 ---

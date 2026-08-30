@@ -5,7 +5,7 @@
 
 **Job titles:** IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer
 
-**What changes:** The two controls that close the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 7 lessons.
+**What changes:** The two controls that close the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 8 lessons.
 
 **Autonomy focus:** Identity first: every later control is a predicate that takes a caller as its argument.
 
@@ -160,6 +160,33 @@ python3 scripts/run_notebooks.py --session A2.7   # run it headless and check it
 ```
 
 *Expect:* One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused.
+
+---
+
+### A2.8 — An audit trail the workload cannot forge
+
+`Security of AI`
+
+- **Risk** — An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls.
+- **Control** — Out-of-band capture (C1.1), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.
+- **Lab** — Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.
+- **Tools** — `Falco`, `Tetragon`, `Sigstore`
+
+**Run it** — Spoof a transcript, then watch a hash chain and a host-syscall reconciliation both refuse it — and check whether the workload role can reach the logging plane at all.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A2.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A2.8   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+falco --rules host-escape.yaml    # out-of-band, on the host
+python3 chain_verify.py --bucket agent-transcripts --since 24h
+aws iam simulate-principal-policy --policy-source-arn $AGENT_ROLE \
+  --action-names s3:PutObject --resource-arns arn:aws:s3:::agent-transcripts/*
+```
+
+*Expect:* The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.
 
 ---
 

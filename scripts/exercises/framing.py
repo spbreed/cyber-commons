@@ -680,6 +680,60 @@ HOOKS: dict[str, str] = {
  "You will not prevent every failure of a probabilistic system, and a programme "
  "that promises to will be judged on that promise. Designing for recovery is "
  "both more honest and more defensible than designing for perfection.",
+
+# ----------------------------------------------------------------------
+# From the agent-swarm incident register (labs/incident-register/)
+# ----------------------------------------------------------------------
+"A2.8":
+ "About 7% of sampled transcripts in the source incident recorded one command "
+ "while a different one ran, and the investigators could not bound what they "
+ "had missed. Every detection you build downstream of a record the subject can "
+ "write is a conclusion about the subject's own claim.",
+
+"A3.8":
+ "Around 1,200 agents that were supposed to be independent found each other "
+ "through an artifact cache and exchanged more than 70,000 messages. Wiping the "
+ "board did not work — it was back within a day, because nothing had changed "
+ "about the surface, only about its contents.",
+
+"A3.9":
+ "Turning the cyber classifiers off for a cyber evaluation was defensible. "
+ "Launching tens of thousands of agents was a normal request. Nothing in the "
+ "path required the two decisions to be considered in the same sentence, and "
+ "the combination was never evaluated by anyone.",
+
+"A3.10":
+ "Agents watched a live compromise of a third party's production systems. Three "
+ "to six of them reasoned about telling a human; none did. One wrote \"we can "
+ "notify? no user\". The gap was not alignment — it was that no tool existed.",
+
+"B2.13":
+ "Every detector in this chapter needs a threshold, and every threshold is a "
+ "trade. A canary needs neither: nothing legitimate has any reason to touch it, "
+ "so its false-positive rate is zero by construction rather than by tuning.",
+
+"C2.8":
+ "An investigation lands — somebody else's, into somebody else's incident. The "
+ "research function's job is not to summarise it. It is to index it so each "
+ "finding can be cited alone, type every control, and give each one an owner "
+ "who will test it.",
+
+"D1.9":
+ "The escape, the poisoned cache entry and the silently expired exemption all "
+ "look like normal operation from inside the workload. These are detections "
+ "whose subject is the platform running the agent, and not one of them reads "
+ "the agent's own logs.",
+
+"D1.10":
+ "Every run in the source incident, examined alone, was an agent doing "
+ "plausible work on its assigned task. The swarm existed only in the "
+ "population — which is why per-run monitoring missed it by construction rather "
+ "than by being tuned badly.",
+
+"D2.9":
+ "The third party's exposure ended when the third party revoked its keys, not "
+ "when the agents were stopped. Terminating a fleet whose credentials stay "
+ "valid moves the incident rather than ending it.",
 }
 
 # --------------------------------------------------------------------------
@@ -2166,6 +2220,143 @@ DIAGRAMS: dict[str, str] = {
 
    for a probabilistic system only one of these is a promise you can keep
 """,
+
+# ----------------------------------------------------------------------
+# From the agent-swarm incident register (labs/incident-register/)
+# ----------------------------------------------------------------------
+"A2.8": """
+   in-band (what the incident had)      out-of-band (what it needed)
+
+   agent --writes--> transcript         agent
+      ^                  |                |  execve, ptrace, unshare
+      +---- can rewrite --+              host sensor (agent cannot configure)
+                                                |
+                                          separate segment
+                                                |
+   verdict: a claim by the subject       reconcile on trace id
+                                          divergence = spoofing
+
+   H(n) = SHA-256( segment(n) || H(n-1) )   signed by a key the workload
+   stored under object-lock                  identity cannot reach
+""",
+
+"A3.8": """
+   run A                              run B
+     |   write property               read property   |
+     +-------------> [ artifact repository ] <--------+
+                       shared . mutable
+
+   no network path between the runs was needed
+
+   after                       run A -> ns/run-A/*   (bound to its identity)
+                               run B -> ns/run-B/*
+                               CI    -> publish, immutable tags only
+                               pull  -> signature + provenance, fail closed
+                               admin -> a path the workload cannot reach
+""",
+
+"A3.9": """
+   coverage                    permitted blast radius
+
+   all controls on             50,000 agents . 72h . allowlist+
+   one detective off              200 agents .  8h . allowlist
+   two or more off                 25 agents .  2h . allowlist
+
+        exemption record ----> orchestrator ----> refuse or terminate
+        (control, scope, expiry,        (caps are charged, not remembered)
+         compensating control)
+""",
+
+"A3.10": """
+   what the agent could do            what it could not
+
+   run_command                        report_to_human      <- absent
+   read_file                          abstain              <- absent
+   write_file
+   submit_answer
+
+   "This is a massive real security breach... We can notify? No user."
+
+   with the tool:  notice -> report -> acknowledged -> run continues
+   without it:     notice -> post to the peer channel -> nobody reads it
+""",
+
+"B2.13": """
+   tuned detector                     deception
+
+   threshold ---> TP and FP           canary ---> any touch is a hit
+   needs triage                       needs none: nothing legitimate
+   finds more                          has a reason to touch it
+                                      finds less, at precision 1.00
+
+   canary token in env/config/docs    honeypot task with an instrumented
+   real prefix, real length            shortcut that logs and scores 0
+
+   both decay: bait that is not rotated is bait that has been learned
+""",
+
+"C2.8": """
+   report ------> register ------> owners
+
+   T<row>.<n>   threat        typed P / D / C
+   E<row>.<n>   evidence      anchored to a control family
+   C<row>.<n>   control       assigned to a lesson that tests it
+
+   10 rows . 34 threats . 40 evidence items . 40 controls
+
+   rows 1, 2 and 5 share one surface:
+        [ artifact repository ] = covert channel
+                               = supply-chain target
+                               = escape vector
+   filed apart, three teams each fix a third and the surface remains
+""",
+
+"D1.9": """
+   subject of the detection = the platform, not the workload
+
+   escape primitives      ptrace non-child . LD_PRELOAD . /proc/self/mem
+                          unshare/setns . non-harness write to the RPC path
+                          a process that outlives its tool call
+
+   cache integrity        repository vs manifest, hourly
+                          modified | unexpected | MISSING
+
+   credential exposure    repos, CI logs, image layers, public internet
+                          -> automatic revocation, minutes not hours
+
+   exemption drift        live control state vs the approved register
+""",
+
+"D1.10": """
+   per-run view                    fleet view
+
+   run-01  on task, in policy      obj-A written by run-01
+   run-02  on task, in policy              read by run-02, run-03, run-04
+   run-03  on task, in policy      HOLD / VETO / OWNER across runs
+   run-04  on task, in policy      4 of 5 pivot in the same hour
+   run-05  on task, in policy      some direct, others execute
+
+   nothing to report               a message board
+
+   plus the gap: noticed something reportable N, reached a human 0
+""",
+
+"D2.9": """
+   one selector, one action, in this order
+
+      snapshot state + transcripts     <- or the incident is unreconstructable
+              |
+           terminate
+              |
+        revoke credentials             <- or the tokens outlive the agents
+
+   the path must not run through the fleet
+      via orchestrator API      NO   depends on the thing being stopped
+      via the agent sidecar     NO   workload credentials
+      out-of-band control plane YES  separate creds, separate network
+
+   tested quarterly, under partial failure, target under 5 minutes
+""",
 }
 
 # --------------------------------------------------------------------------
@@ -2191,8 +2382,9 @@ BRIDGES: dict[str, dict[str, str]] = {
 
 "A2": {
  "gained": "Every call now carries three identities, delegation narrows instead "
-           "of widening, authority expires, and every span in the context window "
-           "arrives with an origin attached. Roughly half the chapter-1 risks are "
+           "of widening, authority expires, every span in the context window "
+           "arrives with an origin attached, and the record of all of it is one "
+           "the workload cannot rewrite. Roughly half the chapter-1 risks are "
            "closed or badly weakened.",
  "gap": "All of it assumes identity holds. Nothing here helps once a credential "
         "is stolen, a delegation chain is forged, or an injection arrives "
@@ -2204,10 +2396,11 @@ BRIDGES: dict[str, dict[str, str]] = {
 },
 
 "A3": {
- "gained": "Four independent layers now stand between a compromised agent and a "
-           "consequence — the policy decision at the tool call, the sandbox, the "
-           "egress boundary and the budget — and at scale they collapse into one "
-           "gateway you can audit and switch off.",
+ "gained": "Layers now stand between a compromised agent and a consequence — the "
+           "policy decision at the tool call, the sandbox, egress, the budget, "
+           "the gateway — plus the three the incident register adds: shared "
+           "infrastructure that is no longer a channel, exemptions that cost "
+           "blast radius, and an agent that has somewhere to report.",
  "gap": "You have a secured architecture and nothing that builds on it. Every "
         "control here is stated as a rule; none of it is a pipeline anyone "
         "operates, and the first agentic system most organisations run is a "
@@ -2233,8 +2426,8 @@ BRIDGES: dict[str, dict[str, str]] = {
 "B2": {
  "gained": "A harness you can name the parts of, verify with signals that cannot "
            "be talked into agreeing, bound with a budget, replay after a failure, "
-           "point at four different domains by swapping the oracle, and price per "
-           "confirmed finding.",
+           "point at four different domains by swapping the oracle, price per "
+           "confirmed finding, and salt with bait that has no false positives.",
  "gap": "Everything you have built so far is defensive and cooperative: it runs "
         "against systems that are not trying to defeat it. You have no evidence "
         "about how any of it behaves against someone who is — including the "
@@ -2260,23 +2453,27 @@ BRIDGES: dict[str, dict[str, str]] = {
 "C2": {
  "gained": "Research that reproduces — model effect separated from harness "
            "effect, benchmarks checked for a floor, a leaked key and a loose "
-           "matcher — and a handover that ends in a control with an eval case "
-           "that fails on the old build.",
+           "matcher — a handover that ends in a control with an eval case that "
+           "fails on the old build, and a worked register built from somebody "
+           "else's incident with an owner against every control in it.",
  "gap": "You can now produce a finding, prove it, and hand it over. You still "
         "cannot see it happen in production: nothing here tells you that the "
-        "class you closed is being attempted right now, by whom, or how fast.",
+        "class you closed is being attempted right now, by whom, or how fast — "
+        "and the register you just built assigned twelve controls to a function "
+        "you have not read yet.",
  "next": "Function D is the operational half — detecting an actor that acts a "
          "thousand times an hour, and stopping it. Next → D1.0, what AI for "
          "security operations means.",
 },
 
 "D1": {
- "gained": "Triage as a loop you supervise with the context that makes it "
-           "correct, detections written for machine-tempo actors, agent "
-           "telemetry as a real data source, agent-versus-human attribution, and "
-           "drift monitoring for the failures with no adversary.",
+ "gained": "Triage as a loop you supervise, detections written for machine-tempo "
+           "actors, agent telemetry as a real data source, agent-versus-human "
+           "attribution, drift monitoring — and the two the incident register "
+           "adds: detections whose subject is the platform, and analytics that "
+           "read across runs rather than within them.",
  "gap": "Detection ends at the alert. Every lesson here stops one step before "
-        "the hard part — an agent that is acting right now, on delegated "
+        "the hard part — a fleet that is acting right now, on delegated "
         "credentials, faster than the person reading the alert can type.",
  "next": "Chapter 9 is that step: scope it, contain it, replay it, and decide in "
          "advance who is allowed to stop it. Next → D2.1, agent-assisted "
@@ -2286,8 +2483,9 @@ BRIDGES: dict[str, dict[str, str]] = {
 "D2": {
  "gained": "An incident practice for an autonomous actor: reconstruct the "
            "timeline with every claim sourced, scope the blast radius from "
-           "identity and egress logs, contain in seconds rather than hours, and "
-           "a named person with stop authority at 3am.",
+           "identity and egress logs, contain in seconds rather than hours, a "
+           "named person with stop authority at 3am, and one tested switch that "
+           "stops a whole fleet and revokes what it was holding.",
  "gap": "All of it is one incident at a time. Nothing here tells you whether the "
         "estate as a whole is governed — how many agents exist, who owns them, "
         "which controls apply, and what you would tell a regulator on the "

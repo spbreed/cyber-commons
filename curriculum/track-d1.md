@@ -5,7 +5,7 @@
 
 **Job titles:** SOC Analyst (T1–T3), Detection Engineer, Threat Hunter, Threat Intelligence Analyst
 
-**What changes:** Detecting an actor that is not a person. 9 lessons.
+**What changes:** Detecting an actor that is not a person. 11 lessons.
 
 **Autonomy focus:** Triage and enrichment reach L2.5 quickly; containment actions stay L2.
 
@@ -252,6 +252,57 @@ python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch co
 ```
 
 *Expect:* With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.
+
+---
+
+### D1.9 — Detections whose subject is the agent platform
+
+`AI for Security`
+
+- **Risk** — Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.
+- **Control** — Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).
+- **Lab** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
+- **Tools** — `Falco`, `Gitleaks`, `Sigstore`
+
+**Run it** — Run four platform detectors over one day of events and find the ones a generic anomaly score would have missed.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.9   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+falco --rules agent-escape.yaml --validate
+python3 cache_diff.py --manifest build-manifest.json --repo artifactory
+gitleaks detect --redact --report-format sarif
+```
+
+*Expect:* Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.
+
+---
+
+### D1.10 — Fleet-level correlation: seeing a swarm
+
+`AI for Security`
+
+- **Risk** — Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not.
+- **Control** — Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).
+- **Lab** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
+- **Tools** — `OpenTelemetry`, `Sigma`
+
+**Run it** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artefact graph.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.10.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.10   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+python3 fleet_graph.py --window 24h --min-unrelated-readers 2
+python3 fleet_graph.py --signatures vocab,pivot,role
+```
+
+*Expect:* Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.
 
 ---
 

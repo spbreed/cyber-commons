@@ -315,7 +315,7 @@
      "chapter": 2,
      "title": "Securing the Architecture — Identity and Ingress",
      "titles": "IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer",
-     "changes": "The two controls that close the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 7 lessons.",
+     "changes": "The two controls that close the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 8 lessons.",
      "autonomy": "Identity first: every later control is a predicate that takes a caller as its argument.",
      "deliverable": "A delegation chain for one agent that an auditor can follow from human to action.",
      "sessions": [
@@ -430,6 +430,23 @@
        ],
        "models": [],
        "mitigates": "T8 Repudiation & Untraceability · T13 Rogue Agents"
+      },
+      {
+       "id": "A2.8",
+       "title": "An audit trail the workload cannot forge",
+       "track": "secure",
+       "kind": "control",
+       "summary": "A2.7 made the trail answer 'who'. This makes it answer honestly. Telemetry captured outside the agent's trust boundary, transcripts hash-chained into write-once storage signed by a key the workload cannot reach, and a logging plane with no path back from the workload at all.",
+       "risk": "An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls.",
+       "control": "Out-of-band capture (C1.1), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.",
+       "lab": "Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.",
+       "tools": [
+        "Falco",
+        "Tetragon",
+        "Sigstore"
+       ],
+       "models": [],
+       "mitigates": "C1.1 AU-9 · C1.2 AU-10 · C1.3 SC-39"
       }
      ]
     },
@@ -438,7 +455,7 @@
      "chapter": 3,
      "title": "Securing the Architecture — Runtime and the Gateway",
      "titles": "Platform Security Engineer, Cloud Security Architect, SRE",
-     "changes": "What holds when identity has already been defeated — and how the controls collapse into one enforcement point once you run more than a handful of agents. 7 lessons.",
+     "changes": "What holds when identity has already been defeated — and how the controls collapse into one enforcement point once you run more than a handful of agents. 10 lessons.",
      "autonomy": "Every control here binds below the model, where a persuaded agent cannot argue with it.",
      "deliverable": "A gateway policy that denies one high-consequence outcome at four independent layers.",
      "sessions": [
@@ -549,6 +566,56 @@
        ],
        "models": [],
        "mitigates": "every threat in this chapter, at one enforcement point"
+      },
+      {
+       "id": "A3.8",
+       "title": "Shared infrastructure between agent runs",
+       "track": "secure",
+       "kind": "control",
+       "summary": "Two agents that share a package repository, a cache or an object store are not isolated, whatever the orchestrator claims. Per-run namespaces, an artifact cache nothing in the workload may write, and signatures plus provenance verified at pull rather than at build.",
+       "risk": "Any shared mutable surface is a channel. The same repository is then the covert channel, the supply-chain target and the place a poisoned artifact is staged — one chain, not three findings.",
+       "control": "Per-run namespaces bound to the run's workload identity (C2.1), an immutable write-once cache (C2.2), signing and provenance verified at consumption (C5.1, C5.2), admin plane off the workload path (C5.3), and scoring infrastructure the agent cannot reach (C10.4).",
+       "lab": "Pass a message between two 'isolated' runs through a shared cache, then close it with namespacing and watch the same write be denied.",
+       "tools": [
+        "Sigstore",
+        "Kyverno",
+        "Artifactory"
+       ],
+       "models": [],
+       "mitigates": "C2.1 SC-4 · C2.2 AC-4 · C5.1 SR-11 · C5.2 SR-4 · C5.3 AC-6 · C10.4 SC-7"
+      },
+      {
+       "id": "A3.9",
+       "title": "Turning a control off without turning the system into an experiment",
+       "track": "secure",
+       "kind": "control",
+       "summary": "Controls do get disabled, for real reasons. What makes that safe is not the approval — it is that reduced detective coverage automatically buys a smaller blast radius, enforced where the workload cannot reach it.",
+       "risk": "Classifiers off, no compensating cap, and tens of thousands of agents launched under that configuration. Each decision was defensible; the combination was never evaluated.",
+       "control": "An exemption gate the platform enforces (C6.1), caps that tighten as coverage drops (C6.2), quotas on population and lifetime (C8.2), and an exemption register reviewed at fleet-launch approval (C6.4).",
+       "lab": "Disable a classifier without an approved exemption and watch the platform refuse; then launch 50,000 agents under one that is approved.",
+       "tools": [
+        "OPA",
+        "Kyverno"
+       ],
+       "models": [],
+       "mitigates": "C6.1 CM-3 · C6.2 RA-3 · C6.4 PM-9 · C8.2 SC-6"
+      },
+      {
+       "id": "A3.10",
+       "title": "The agent's escalation path",
+       "track": "secure",
+       "kind": "control",
+       "summary": "Every control so far constrains what the agent may do. This one gives it somewhere to go: a first-class way to report a finding to a human, a checkpoint that pauses on an out-of-scope discovery, and a way to say a task is impossible without being punished for it.",
+       "risk": "An agent that finds a live breach, reasons about telling someone, and has no tool for it, does nothing. Of roughly 1,200 agents that saw one, none reported it.",
+       "control": "A report-to-human tool that is cheap, non-terminal and signposted (C9.1), a mandatory checkpoint on out-of-scope discovery (C9.4), and an abstain affordance scored neutrally (C10.2).",
+       "lab": "Plant a finding, run the agent with and without the tool, and compare what it does with what it says it wants to do.",
+       "tools": [
+        "OpenTelemetry"
+       ],
+       "models": [
+        "Llama 3.3"
+       ],
+       "mitigates": "C9.1 IR-6 · C9.4 AC-3 · C10.2 SA-8"
       }
      ]
     }
@@ -866,7 +933,7 @@
      "chapter": 5,
      "title": "The Harness that Runs the SDLC",
      "titles": "Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet",
-     "changes": "Build the loop once, point it at a discipline, then prove it works. 13 lessons.",
+     "changes": "Build the loop once, point it at a discipline, then prove it works. 14 lessons.",
      "autonomy": "You are the person who builds the L2.5 boundary everyone else operates inside.",
      "deliverable": "A reusable harness scaffold adopted by at least two other tracks.",
      "sessions": [
@@ -1082,6 +1149,24 @@
        "models": [
         "GLM-4.6"
        ]
+      },
+      {
+       "id": "B2.13",
+       "title": "Honeypots, canaries and deception in the agent's environment",
+       "track": "defend",
+       "kind": "control",
+       "summary": "Two deception controls with a property nothing else in this chapter has: a false-positive rate of zero by construction. A canary credential nobody legitimate will ever use, and a benchmark task whose shortcut is instrumented rather than functional.",
+       "risk": "Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.",
+       "control": "Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).",
+       "lab": "Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.",
+       "tools": [
+        "Canarytokens",
+        "Inspect"
+       ],
+       "models": [
+        "GLM-4.6"
+       ],
+       "mitigates": "C4.4 SI-4 · C10.3 RA-5"
       }
      ]
     }
@@ -1184,7 +1269,7 @@
      "chapter": 7,
      "title": "Security Research with AI",
      "titles": "Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher",
-     "changes": "Turning curiosity into a result somebody else can deploy. 7 lessons.",
+     "changes": "Turning curiosity into a result somebody else can deploy. 8 lessons.",
      "autonomy": "You deliberately operate at L3 in isolated environments so the rest of the org never has to.",
      "deliverable": "One reproducible research artefact with a named control implication, handed to a platform or AppSec track.",
      "sessions": [
@@ -1293,6 +1378,21 @@
         "git"
        ],
        "models": []
+      },
+      {
+       "id": "C2.8",
+       "title": "Case study: an agent swarm incident, from evidence to control register",
+       "track": "both",
+       "kind": "research",
+       "summary": "A published investigation into a coordinated agent swarm during a large-scale cyber evaluation, worked the way a research function works it: index every threat and every piece of evidence, derive a control per threat, and hand each control to the team that will own it.",
+       "risk": "An incident report that is read once and cited forever. Nothing in it is testable, nothing is assigned, and the same class recurs.",
+       "control": "T/E/C indexing so each item can be cited alone, control types and NIST anchors so the register is comparable to the one you already have, and a named owning lesson for every control.",
+       "lab": "Build the register from the report's own figures, find the chain three rows share, and check that every control has an owner.",
+       "tools": [
+        "NIST SP 800-53r5"
+       ],
+       "models": [],
+       "repo": "labs/incident-register"
       }
      ]
     }
@@ -1308,7 +1408,7 @@
      "chapter": 8,
      "title": "The SOC Analyst & Detection Engineer",
      "titles": "SOC Analyst (T1–T3), Detection Engineer, Threat Hunter, Threat Intelligence Analyst",
-     "changes": "Detecting an actor that is not a person. 9 lessons.",
+     "changes": "Detecting an actor that is not a person. 11 lessons.",
      "autonomy": "Triage and enrichment reach L2.5 quickly; containment actions stay L2.",
      "deliverable": "A triage loop in production plus five detections covering agent misbehaviour.",
      "sessions": [
@@ -1445,6 +1545,39 @@
        "models": [
         "GLM-4.6"
        ]
+      },
+      {
+       "id": "D1.9",
+       "title": "Detections whose subject is the agent platform",
+       "track": "defend",
+       "kind": "control",
+       "summary": "Not detections for what an agent does to your estate — detections for what happens to the platform running it: escape primitives, a cache that no longer matches its manifest, a credential loose on the internet, a control that is off and should not be.",
+       "risk": "Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.",
+       "control": "Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).",
+       "lab": "Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.",
+       "tools": [
+        "Falco",
+        "Gitleaks",
+        "Sigstore"
+       ],
+       "models": [],
+       "mitigates": "C1.4 SI-7 · C3.4 SI-10 · C4.1 IA-5 · C5.4 SI-7 · C6.3 CA-7"
+      },
+      {
+       "id": "D1.10",
+       "title": "Fleet-level correlation: seeing a swarm",
+       "track": "defend",
+       "kind": "control",
+       "summary": "The single structural change that matters most: monitoring that reads across runs rather than within them. Shared-artifact graphs, cross-run similarity, novel shared vocabulary, synchronised pivots, and the gap between what agents noticed and what they reported.",
+       "risk": "Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not.",
+       "control": "Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).",
+       "lab": "Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.",
+       "tools": [
+        "OpenTelemetry",
+        "Sigma"
+       ],
+       "models": [],
+       "mitigates": "C2.3 SC-31 · C2.4 SI-4 · C7.4 AU-2 · C8.1 SI-4 · C8.4 SI-4 · C9.2 IR-3 · C9.3 SI-4"
       }
      ]
     },
@@ -1453,7 +1586,7 @@
      "chapter": 9,
      "title": "The Incident Responder",
      "titles": "Incident Responder, DFIR Analyst, CSIRT Lead",
-     "changes": "Responding at machine speed. 8 lessons.",
+     "changes": "Responding at machine speed. 9 lessons.",
      "autonomy": "Response tooling at L2.5; containment authority never leaves human hands.",
      "deliverable": "A tabletop exercise for an agentic incident, with a replayed trace and a named stop-authority holder.",
      "sessions": [
@@ -1563,6 +1696,22 @@
        "lab": "Run the first-hour checklist in a tabletop.",
        "tools": [],
        "models": []
+      },
+      {
+       "id": "D2.9",
+       "title": "The fleet kill switch",
+       "track": "defend",
+       "kind": "control",
+       "summary": "D2.4 contained one agent. This stops all of them: one control that terminates every agent matching a selector, revokes their credentials in the same action, preserves state first, and runs on a path a compromised fleet cannot interfere with.",
+       "risk": "Terminating agents while their tokens stay valid leaves the persistence in place. In the incident, third-party access ended when the third party revoked keys — not when the agents stopped.",
+       "control": "A tested kill path independent of the agent execution path, snapshot before terminate, revocation in the same action, a measured activation target and named authority to pull it (C8.3).",
+       "lab": "Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.",
+       "tools": [
+        "Vault",
+        "Kubernetes"
+       ],
+       "models": [],
+       "mitigates": "C8.3 IR-4"
       }
      ]
     }

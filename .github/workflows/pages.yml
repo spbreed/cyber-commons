@@ -73,6 +73,12 @@ jobs:
       - name: Check lessons against the authoring contract
         run: python3 scripts/check_lessons.py --check
 
+      # The incident register assigns every control from the source report to a
+      # lesson that teaches it. Renumber a lesson and the register points at
+      # nothing; edit one copy of it and the notebook disagrees with the file.
+      - name: Check the incident control register
+        run: python3 scripts/check_register.py --check
+
       - name: Build lesson pages
         run: |
           pip install --quiet markdown

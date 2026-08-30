@@ -2,11 +2,11 @@
  "generated_by": "scripts/run_notebooks.py",
  "python": "3.11.15",
  "platform": "linux",
- "notebooks": 121,
- "passed": 121,
+ "notebooks": 130,
+ "passed": 130,
  "failed": 0,
- "total_seconds": 2.6,
- "total_output_lines": 4176,
+ "total_seconds": 2.8,
+ "total_output_lines": 4550,
  "results": [
   {
    "session": "A1.0",
@@ -270,7 +270,18 @@
    "stdout_chars": 633,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 8
+   "markdown_cells": 7
+  },
+  {
+   "session": "A2.8",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.02,
+   "stdout_lines": 31,
+   "stdout_chars": 1406,
+   "error": "",
+   "code_cells": 4,
+   "markdown_cells": 11
   },
   {
    "session": "A3.1",
@@ -282,6 +293,17 @@
    "error": "",
    "code_cells": 1,
    "markdown_cells": 7
+  },
+  {
+   "session": "A3.10",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.02,
+   "stdout_lines": 34,
+   "stdout_chars": 1928,
+   "error": "",
+   "code_cells": 4,
+   "markdown_cells": 11
   },
   {
    "session": "A3.2",
@@ -347,7 +369,29 @@
    "stdout_chars": 630,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 8
+   "markdown_cells": 7
+  },
+  {
+   "session": "A3.8",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.01,
+   "stdout_lines": 38,
+   "stdout_chars": 2119,
+   "error": "",
+   "code_cells": 4,
+   "markdown_cells": 10
+  },
+  {
+   "session": "A3.9",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.01,
+   "stdout_lines": 31,
+   "stdout_chars": 1602,
+   "error": "",
+   "code_cells": 4,
+   "markdown_cells": 10
   },
   {
    "session": "B1.0",
@@ -408,7 +452,7 @@
    "session": "B1.13",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.02,
+   "seconds": 0.01,
    "stdout_lines": 34,
    "stdout_chars": 1554,
    "error": "",
@@ -485,7 +529,7 @@
    "session": "B1.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 50,
    "stdout_chars": 2167,
    "error": "",
@@ -496,7 +540,7 @@
    "session": "B1.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.03,
    "stdout_lines": 39,
    "stdout_chars": 1937,
    "error": "",
@@ -518,7 +562,7 @@
    "session": "B1.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 86,
    "stdout_chars": 3883,
    "error": "",
@@ -600,7 +644,18 @@
    "stdout_chars": 2423,
    "error": "",
    "code_cells": 6,
-   "markdown_cells": 13
+   "markdown_cells": 12
+  },
+  {
+   "session": "B2.13",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.01,
+   "stdout_lines": 42,
+   "stdout_chars": 2177,
+   "error": "",
+   "code_cells": 4,
+   "markdown_cells": 11
   },
   {
    "session": "B2.2",
@@ -661,7 +716,7 @@
    "session": "B2.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.01,
+   "seconds": 0.02,
    "stdout_lines": 37,
    "stdout_chars": 1682,
    "error": "",
@@ -820,7 +875,18 @@
    "stdout_chars": 2405,
    "error": "",
    "code_cells": 5,
-   "markdown_cells": 11
+   "markdown_cells": 10
+  },
+  {
+   "session": "C2.8",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.02,
+   "stdout_lines": 79,
+   "stdout_chars": 3366,
+   "error": "",
+   "code_cells": 5,
+   "markdown_cells": 13
   },
   {
    "session": "D1.0",
@@ -845,10 +911,21 @@
    "markdown_cells": 10
   },
   {
+   "session": "D1.10",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.02,
+   "stdout_lines": 45,
+   "stdout_chars": 1882,
+   "error": "",
+   "code_cells": 4,
+   "markdown_cells": 11
+  },
+  {
    "session": "D1.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 53,
    "stdout_chars": 2339,
    "error": "",
@@ -914,9 +991,20 @@
    "session": "D1.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 40,
    "stdout_chars": 2430,
+   "error": "",
+   "code_cells": 4,
+   "markdown_cells": 9
+  },
+  {
+   "session": "D1.9",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.02,
+   "stdout_lines": 42,
+   "stdout_chars": 2076,
    "error": "",
    "code_cells": 4,
    "markdown_cells": 10
@@ -947,7 +1035,7 @@
    "session": "D2.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.02,
+   "seconds": 0.03,
    "stdout_lines": 50,
    "stdout_chars": 2715,
    "error": "",
@@ -969,7 +1057,7 @@
    "session": "D2.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.05,
    "stdout_lines": 42,
    "stdout_chars": 1942,
    "error": "",
@@ -991,7 +1079,7 @@
    "session": "D2.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 45,
    "stdout_chars": 1907,
    "error": "",
@@ -1007,7 +1095,18 @@
    "stdout_chars": 2042,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 10
+   "markdown_cells": 9
+  },
+  {
+   "session": "D2.9",
+   "ok": true,
+   "returncode": 0,
+   "seconds": 0.01,
+   "stdout_lines": 32,
+   "stdout_chars": 1683,
+   "error": "",
+   "code_cells": 4,
+   "markdown_cells": 11
   },
   {
    "session": "E1.0",
@@ -1244,7 +1343,7 @@
    "session": "E2.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.03,
    "stdout_lines": 42,
    "stdout_chars": 1504,
    "error": "",

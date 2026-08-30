@@ -5,7 +5,7 @@
 
 **Job titles:** Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet
 
-**What changes:** Build the loop once, point it at a discipline, then prove it works. 13 lessons.
+**What changes:** Build the loop once, point it at a discipline, then prove it works. 14 lessons.
 
 **Autonomy focus:** You are the person who builds the L2.5 boundary everyone else operates inside.
 
@@ -356,5 +356,31 @@ python3 cost.py --corpus seeded --analyst-minutes 9
 ```
 
 *Expect:* pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand.
+
+---
+
+### B2.13 — Honeypots, canaries and deception in the agent's environment
+
+`AI for Security`
+
+- **Risk** — Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.
+- **Control** — Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).
+- **Lab** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
+- **Tools** — `Canarytokens`, `Inspect`
+- **Models** — `GLM-4.6`
+
+**Run it** — Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+python3 canary.py --place worker-env,docs,artifact-metadata
+python3 honeypot.py --salt benchmark/ --ratio 0.15 --rotate-days 21
+```
+
+*Expect:* Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.
 
 ---
