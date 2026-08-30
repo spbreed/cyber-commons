@@ -1,0 +1,16 @@
+signal                         person    agent    ratio
+actions taken                      12     1400     117x
+distinct resources                  5      260      52x
+median gap between calls          180        2       0x
+sessions                            1       96      96x
+typo/retry events                   3        0       0x
+
+rule 'more than 60 actions in an hour'
+   person      12 actions -> silent
+   agent     1400 actions -> ALERT
+
+That rule fires. The problem is the next one: at 1400 actions an hour the
+alert arrives after roughly 150 seconds of activity, and everything the
+actor was going to do is already done. Chapter 8 is about detections that
+fire on shape rather than volume; chapter 9 is about who can pull the
+stop lever without asking permission first.

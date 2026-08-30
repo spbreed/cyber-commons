@@ -1,27 +1,36 @@
-corpus units    : 8
-planted defects : 5  ['admin_purge', 'get_report', 'legacy_import', 'run_export', 'safe_query']
-context budget  20 tokens -> 5 hypotheses: ['admin_purge', 'get_report', 'legacy_import', 'run_export', 'safe_query']
-context budget  30 tokens -> 5 hypotheses: ['admin_purge', 'get_report', 'legacy_import', 'run_export', 'safe_query']
-context budget  60 tokens -> 5 hypotheses: ['admin_purge', 'get_report', 'legacy_import', 'run_export', 'safe_query']
-budget  20: 5 hyp -> 5 kept  recall 100%  precision 100%  fp=[]
-budget  30: 5 hyp -> 4 kept  recall 80%  precision 100%  fp=[]
-budget  60: 5 hyp -> 3 kept  recall 60%  precision 100%  fp=[]
- budget  kept   recall  precision  note
-     20     5    100%      100%  reachability unknown - everything survives
-     25     4     80%      100%  sanitiser fact missing - safe_query survives
-     30     4     80%      100%  sanitiser fact missing - safe_query survives
-     40     3     60%      100%  all facts present
-     60     3     60%      100%  all facts present
+q1: conforming
+q2: conforming
+q3: conforming
+q4: non-conforming: not JSON (Expecting value)
+pair                              basename match   path_key match
+------------------------------------------------------------------
+CWE-89/1.py  vs  CWE-79/1.py      True             False
+a/CWE-22/3.c  vs  b/CWE-78/3.c    True             False
 
-At budget 20 the harness keeps everything and calls it recall. It is not
-finding more - it is verifying less, and reporting the difference as a
-result. A recall number without its precision is a marketing number.
-raw findings across 3 analysers : 9
-distinct defects                     : 3
-inflation if you do not deduplicate  : 3.0x
+q3 answered about CWE-89/1.py when the truth is CWE-22/3.c.
+   basename says match: False
+   path_key says match: False
+  questions            4
+  conformance          0.7500   ← schema validity. Structural. NOT quality.
+  expert accuracy      0.3750   ← correctness
+  judge accuracy (MIN) 0.2500
+  failures             3
 
-analyst minutes, undeduplicated : 54
-analyst minutes, deduplicated   : 18
+failures:
+   q2  [3-expert]  right file, wrong class (said CWE-89, truth CWE-78)
+   q3  [3-expert]  wrong file
+   q4  [1-ingest]  non-conforming: not JSON (Expecting value)
+after adding structured output:
+  questions            4
+  conformance          1.0000   ← schema validity. Structural. NOT quality.
+  expert accuracy      0.6250   ← correctness
+  judge accuracy (MIN) 0.3750
+  failures             2
 
-Same findings, same accuracy, three times the queue. Nobody reads the
-third page, so the defect that gets fixed is whichever sorted first.
+conformance  0.75 → 1.00   (+0.25)
+expert acc   0.38 → 0.62   (+0.25)
+
+A press release could truthfully say 'conformance improved to 100%'.
+The harness still gets half the questions wrong.
+
+without any capability at all: {'conformance': 1.0, 'majority_class': 'CWE-89', 'accuracy_by_always_guessing_majority': 0.5}

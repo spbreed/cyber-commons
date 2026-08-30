@@ -29,6 +29,6 @@ same signal, human subject                  page on-call (confidence 0.99) — h
 automated path: 21s vs manual 920s (44× faster)
 actions prevented at 300/min: 4,495
 human subject         high      person locked out mid-shift
-non-human identity    low       task fails, agent re-requests with a reason (A2.8)
+non-human identity    low       task fails, agent re-requests with a reason (A2.4)
 
 That asymmetry is the entire justification for two different policies.

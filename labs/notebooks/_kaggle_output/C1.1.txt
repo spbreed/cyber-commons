@@ -32,3 +32,12 @@ model convinced F-06 is critical:
 
 Scope enforcement in the harness is what makes autonomy professionally
 defensible. Without it, your engagement letter is protected by a prompt.
+ALLOW https://api.target.example/v1/users            in scope, within rate
+ALLOW https://api.target.example/v1/orders           in scope, within rate
+DENY  https://api.target.example/v1/admin            rate limit 2/min reached - protecting the client's production service
+DENY  https://cdn.partner.example/asset.js           host 'cdn.partner.example' is outside the engagement scope
+DENY  http://169.254.169.254/latest/meta-data/       private/link-local address - not part of any engagement
+
+Three refusals for three different reasons: the client's rate limit, the
+engagement boundary, and the cloud metadata endpoint that is in nobody's
+scope. None of them consulted the model.

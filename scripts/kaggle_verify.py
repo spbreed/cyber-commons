@@ -88,6 +88,17 @@ def local_output(session: str) -> str:
     return p.stdout
 
 
+def has_code(session: str) -> bool:
+    """Does this lesson run anything at all?
+
+    A1.1 is a drawing lesson with no code cells, so an empty remote log is the
+    correct result for it rather than the failure it would be anywhere else.
+    """
+    nb = json.loads((NB_DIR / f"{session}.ipynb").read_text())
+    return any(c["cell_type"] == "code" and "".join(c["source"]).strip()
+               for c in nb["cells"])
+
+
 def normalise(text: str) -> list[str]:
     """Kaggle's log stream splits on newlines differently; compare content."""
     return [ln.rstrip() for ln in text.replace("\r\n", "\n").split("\n") if ln.strip()]
@@ -128,18 +139,25 @@ def main() -> int:
         # strong form: the two machines printed the same thing, not merely a
         # similar amount of it.
         identical = r_lines == l_lines
-        ok = bool(r_lines) and identical
-        if not r_lines:
+        runs_code = has_code(sid)
+        # Empty remote output is a failure for a lesson that runs code — a
+        # notebook printing nothing also reports 'complete'. For a lesson with
+        # no code cells it is the only correct answer.
+        ok = identical and (bool(r_lines) or not runs_code)
+        if not r_lines and runs_code:
             empty.append(sid)
         elif not ok:
             mismatched.append(sid)
         first_diff = next((i for i, (x, y) in enumerate(zip(r_lines, l_lines))
                            if x != y), None)
         rows.append({"session": sid, "ok": ok, "identical": identical,
+                     "runs_code": runs_code,
                      "remote_lines": len(r_lines), "local_lines": len(l_lines),
                      "first_differing_line": first_diff})
         mark = "ok  " if ok else "DIFF"
-        detail = (f"{len(r_lines):>4} lines, identical to the local run" if ok
+        detail = ((f"{len(r_lines):>4} lines, identical to the local run"
+                   if r_lines else "   0 lines, and the lesson runs no code")
+                  if ok
                   else f"remote {len(r_lines)} vs local {len(l_lines)}"
                        + (f", first diff at line {first_diff}" if first_diff is not None else ""))
         print(f"  {mark} {sid:8s} {detail}")

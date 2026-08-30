@@ -1,39 +1,33 @@
-APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
-SKIP  issue_refund (key 722b4a84 already applied)
-SKIP  issue_refund (key 722b4a84 already applied)
-APPLY issue_refund {'order': 'ORD-4472', 'amount': 90}
+dast          replica-write oracle: response differs from the control request
+pentest       live-action   oracle: an artefact that should not have been obtainable
+sast          read-only     oracle: reachable from an entrypoint AND a failing test
+threat model  read-only     oracle: present in the new model and absent from the old
+domain         confirmed  precision  note
+dast                   2       1.00  response differs from the control requ
+pentest                2       1.00  an artefact that should not have been 
+sast                   2       1.00  reachable from an entrypoint AND a fai
+threat model           2       1.00  present in the new model and absent fr
 
-4 calls → 2 effects
-key includes a timestamp — every retry is a new operation:
-APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
-APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
-APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
-→ refunded 750 instead of 250
+pentest without a signed scope: live action without a signed scope
+domain         confirmed  precision
+dast                   3       0.67
+pentest                3       0.67
+sast                   3       0.67
+threat model           3       0.67
 
-key includes only the op — different refunds collide:
-APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
-SKIP  issue_refund (key f324acea already applied)
-→ the second customer never got their money
-action          nature                needs a key
-----------------------------------------------------
-set_config      naturally idempotent  False
-add_label       naturally idempotent  False
-post_comment    accumulating          True
-send_email      accumulating          True
-issue_refund    dangerous             True
-rotate_secret   dangerous             True
-scale_cluster   dangerous             True
+every one of 12 candidates confirmed; 8 of them are real.
+Precision 0.67 in every domain, and it looks like 1.00 from inside the
+harness, because the thing producing the finding is also the thing
+agreeing with it.
+{'domain': 'dast', 'oracle_class': 'observational', 'action': 'file the finding', 'count': 2}
+{'domain': 'dast', 'oracle_class': 'judgement', 'action': 'queue for a human', 'count': 3}
+{'domain': 'pentest', 'oracle_class': 'observational', 'action': 'file the finding', 'count': 2}
+{'domain': 'pentest', 'oracle_class': 'judgement', 'action': 'queue for a human', 'count': 3}
+{'domain': 'sast', 'oracle_class': 'deterministic', 'action': 'file the finding', 'count': 2}
+{'domain': 'sast', 'oracle_class': 'judgement', 'action': 'queue for a human', 'count': 3}
+{'domain': 'threat model', 'oracle_class': 'deterministic', 'action': 'file the finding', 'count': 2}
+{'domain': 'threat model', 'oracle_class': 'judgement', 'action': 'queue for a human', 'count': 3}
 
-APPLY set_config {'key': 'tls_min', 'value': '1.2'} (idempotent by nature)
-APPLY issue_refund {'order': 'ORD-4471', 'amount': 250}
-APPLY set_config {'key': 'tls_min', 'value': '1.2'} (idempotent by nature)
-SKIP  issue_refund (key 722b4a84 already applied)
-fully instrumented     replayable=True
-typical production     replayable=False
-      ✗ model version not pinned — a silent upgrade changes the output
-      ✗ no seed — sampling makes it unrepeatable
-actions only           replayable=False
-      ✗ prompts not recorded
-      ✗ tool results not recorded — the agent saw a world you cannot rebuild
-      ✗ model version not pinned — a silent upgrade changes the output
-      ✗ no seed — sampling makes it unrepeatable
+The skeleton did not change once across four domains. What changed was
+the oracle and the blast radius - which is the whole argument for
+building the loop once and never again.

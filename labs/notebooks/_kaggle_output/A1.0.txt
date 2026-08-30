@@ -1,0 +1,21 @@
+functioncovers                                      direction
+A   AI architecture, risks and mitigations      mostly Security of AI
+B   Product and application security with AI    both directions at once
+C   AI for security research                    both directions at once
+D   AI for SecOps                               both directions at once
+E   AI for GRC                                  governs both directions
+
+what each later function borrows from Function A
+   B -> the pipeline it builds is itself an agentic system with these components
+   C -> the three attack surfaces it tests are components on this map
+   D -> the telemetry it detects on is emitted by these components
+   E -> the register it maintains lists these components and their controls
+
+Function A, in order
+   chapter 1  the architecture, and every risk it carries   17 lessons
+   chapter 2  controls - identity and ingress               7 lessons
+   chapter 3  controls - runtime and the gateway            7 lessons
+
+Chapter 1 is the only one that introduces no control at all. That is
+deliberate: you cannot choose a control for a risk you cannot yet name,
+and naming the risk requires the picture.

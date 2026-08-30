@@ -1,0 +1,14 @@
+the three surfaces of an agent, and chapter 6 tests all three
+   containment   what it can reach - tools, paths, egress, metadata
+   identity      who it acts as - delegation, scope, expiry, impersonation
+   injection     what the agent reads - direct, indirect, and via tool output
+
+claim                                               rate  control  reproduced  verdict
+it worked when I tried it                          False    False       False  anecdote
+it worked 7 times out of 20, suite attached         True    False       False  measurement
+7/20, and 0/20 on the patched build                 True     True       False  result
+7/20, 0/20 patched, reproduced by another team      True     True        True  evidence
+
+Chapter 6 gets you to the second row. Chapter 7 is entirely about the
+third and fourth, because a finding that nobody can reproduce protects
+nobody, however true it was on the day.

@@ -11,7 +11,7 @@ breaks      VAGUE    not much
             CONCRETE auto-remediation pauses; ticket queue grows ~40/hour; agreed with the service owner 2026-05-11
 
 restart     VAGUE    when it's safe
-            CONCRETE security lead, after the C1.5 containment suite passes on the new build
+            CONCRETE security lead, after the C1.2 containment suite passes on the new build
 
 mechanism                 secs  stops it   survives restart
 ------------------------------------------------------------

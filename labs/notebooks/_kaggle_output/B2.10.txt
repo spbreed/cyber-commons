@@ -1,36 +1,39 @@
-q1: conforming
-q2: conforming
-q3: conforming
-q4: non-conforming: not JSON (Expecting value)
-pair                              basename match   path_key match
-------------------------------------------------------------------
-CWE-89/1.py  vs  CWE-79/1.py      True             False
-a/CWE-22/3.c  vs  b/CWE-78/3.c    True             False
+glm-5.2-stand-in      5 findings
+kimi-k2.6-stand-in    3 findings
+small-local-stand-in  1 findings
+backbone                recall   prec  tp  fp  fn  $/finding
+glm-5.2-stand-in         100%    80%   4   1   0     0.006
+kimi-k2.6-stand-in        75%   100%   3   0   1     0.008
+small-local-stand-in      25%   100%   1   0   3     0.024
 
-q3 answered about CWE-89/1.py when the truth is CWE-22/3.c.
-   basename says match: False
-   path_key says match: False
-  questions            4
-  conformance          0.7500   ← schema validity. Structural. NOT quality.
-  expert accuracy      0.3750   ← correctness
-  judge accuracy (MIN) 0.2500
-  failures             3
+best recall        : glm-5.2-stand-in
+best cost/finding  : glm-5.2-stand-in
+They are not the same backbone, and which one you want depends on
+whether an analyst reviews the output or a ticket is opened from it.
+   glm-5.2-stand-in      5 findings
+   kimi-k2.6-stand-in    3 findings
+   small-local-stand-in  FAILS: 'no parsing branch for small-local-stand-in'
 
-failures:
-   q2  [3-expert]  right file, wrong class (said CWE-89, truth CWE-78)
-   q3  [3-expert]  wrong file
-   q4  [1-ingest]  non-conforming: not JSON (Expecting value)
-after adding structured output:
-  questions            4
-  conformance          1.0000   ← schema validity. Structural. NOT quality.
-  expert accuracy      0.6250   ← correctness
-  judge accuracy (MIN) 0.3750
-  failures             2
+Adding a third backbone to the coupled harness is a code change in the
+parser, the prompt and the retry path. Adding it to the harness above is
+a dictionary entry. Same models, same corpus - the difference is where
+the vendor's shape was allowed to leak to.
+   from            kimi-k2.6-stand-in
+   to              glm-5.2-stand-in
+   recall          (0.75, 1.0)
+   precision       (1.0, 0.8)
+   cost_per_tp     (0.008, 0.006)
+   harness_changed False
 
-conformance  0.75 → 1.00   (+0.25)
-expert acc   0.38 → 0.62   (+0.25)
+Recall up, precision down, cost per finding down. That is a decision with
+numbers behind it, taken in one line, and reversible in one line.
+backbone                weights  self-host  source code leaves the estate
+frontier-api-stand-in   closed   False      True
+glm-5.2-stand-in        open     True       False
+kimi-k2.6-stand-in      open     True       False
 
-A press release could truthfully say 'conformance improved to 100%'.
-The harness still gets half the questions wrong.
+eligible where source may not leave the estate: ['glm-5.2-stand-in', 'kimi-k2.6-stand-in']
 
-without any capability at all: {'conformance': 1.0, 'majority_class': 'CWE-89', 'accuracy_by_always_guessing_majority': 0.5}
+For a great many organisations this single column removes the top of
+every published leaderboard before accuracy is discussed at all - which
+is the strongest argument for designing the substitution seam early.

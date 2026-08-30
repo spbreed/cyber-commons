@@ -1,38 +1,18 @@
-model          tier  tools it may invoke
-----------------------------------------------------------------------
-llama3.2:1b       0  ['read_file', 'search']
-llama3.3:8b       1  ['read_file', 'search', 'write_file', 'open_pr']
-glm-4.6           2  ['read_file', 'search', 'write_file', 'open_pr', 'merge_pr']
-kimi-k2           3  ['read_file', 'search', 'write_file', 'open_pr', 'merge_pr', 'deploy']
-a task that keeps failing verification:
-   step 1  llama3.2:1b    tier 0     40ms  may invoke ['read_file', 'search']
-   step 2  llama3.3:8b    tier 1    220ms  may invoke ['read_file', 'search', 'write_file', 'open_pr']
-   step 3  glm-4.6        tier 2    900ms  may invoke ['read_file', 'search', 'write_file', 'open_pr', 'merge_pr']
-   step 4  kimi-k2        tier 3   2400ms  may invoke ['read_file', 'search', 'write_file', 'open_pr', 'merge_pr', 'deploy']
+depth 1  dana@corp                                            ['deploy:prod', 'repo:read', 'repo:write']
+depth 2  dana@corp → orchestrator                             ['deploy:prod', 'repo:read', 'repo:write']
+depth 3  dana@corp → orchestrator → coder                     ['repo:read', 'repo:write']
+depth 4  dana@corp → orchestrator → coder → reviewer          ['repo:read']
+honest orchestrator:
+   refused: depth 5 > 3
 
-cost of one forced escalation: 3560ms and the final step could invoke ['read_file', 'search', 'write_file', 'open_pr', 'merge_pr', 'deploy']
-An attacker who can make verification fail has just promoted the loop to
-the most capable model AND the widest tool set. Both, for free.
-   task authority budget: 3  → ladder starts at the lowest tier that covers it
-   step 1  llama3.3:8b    may invoke ['read_file', 'search', 'write_file', 'open_pr']
-   step 2  glm-4.6        may invoke ['read_file', 'search', 'write_file', 'open_pr']
-   step 3  kimi-k2        may invoke ['read_file', 'search', 'write_file', 'open_pr']
-   step 4  kimi-k2        may invoke ['read_file', 'search', 'write_file', 'open_pr']
+compromised orchestrator (simply does not run its own check):
+   granted: depth 5  dana@corp → orchestrator → coder → reviewer → shipper
+   The limit was a line of code inside the component we no longer trust.
+issuer enforcement:
+    issuer refuses: depth 5 > 3
 
-The model gets smarter. The authority does not move.
-tools the attacker gained under the naive policy: ['deploy', 'merge_pr']
-escalate authority too           2 FINDING(S)
-      ⚠ step 3: verifier llama3.3:8b is weaker than actor glm-4.6
-      ⚠ step 4: verifier llama3.3:8b is weaker than actor kimi-k2
-capability only, glm verifier    2 FINDING(S)
-      ⚠ step 3: verifier glm-4.6 is weaker than actor kimi-k2
-      ⚠ step 4: verifier glm-4.6 is weaker than actor kimi-k2
-capability only, kimi verifier   PASS
-
-Read the middle row. Fixing the authority leak was not enough:
-once the ladder can reach kimi-k2, a glm-4.6 verifier is weaker than the
-actor on the final step, and rule 2 fires. Escalating capability forces
-the verifier's tier up with it — a second-order cost of dynamic routing
-that cost models never include.
-
-rule: verifier tier must be ≥ 3 (the highest tier the ladder reaches)
+resource server enforcement (even if a deep token somehow exists):
+   depth 5: (False, 'resource server refuses: depth 5 > 3')
+   depth 4: (False, 'resource server refuses: depth 4 > 3')
+3000 chains built without any orchestrator-side limit — over-deep chains honoured by the resource server: 0
+The limit holds because it is enforced where the orchestrator cannot reach.

@@ -24,7 +24,7 @@ rank verifier                      fooled by
 3    exact-match oracle            nothing — but needs the answer in advance   
                                    only usable on a fixed corpus
 4    shape / schema check          any well-formed output                      
-                                   use for conformance ONLY, never for quality — see B2.10
+                                   use for conformance ONLY, never for quality — see B2.11
 5    llm judge                     confident prose                             
                                    acceptable only as a filter before a real check, never as the last word
 

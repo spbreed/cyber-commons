@@ -23,7 +23,7 @@ provider control lost     your replacement
 ------------------------------------------------------------------------------------------------
 rate limiting             A2.7 choke point / A3.6 runtime levers      bound attempts per identity per window
 abuse monitoring          D1.4 detection for agents                   your telemetry is the only signal now
-refusal behaviour         A3.5 tool policy + C1.3 provenance          do not rely on the model refusing; refuse at the tool
+refusal behaviour         A3.5 tool policy + C1.2 provenance          do not rely on the model refusing; refuse at the tool
 immutable logging         A2.5 act chains + D2.5 replay               you own retention and integrity
 model version stability   D1.7 drift monitoring                       you now own upgrades AND their behavioural changes
 

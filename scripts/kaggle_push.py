@@ -197,6 +197,15 @@ def main() -> int:
     except (OSError, KeyError, json.JSONDecodeError):
         pass
 
+    # ...but a lesson that has been renumbered or merged away is no longer
+    # evidence of anything. Left in, its row sends the verifier looking for a
+    # notebook that does not exist.
+    live = {p.stem for p in NB_DIR.glob("*.ipynb")}
+    if stale := sorted(set(results) - live):
+        print(f"dropping {len(stale)} ledger row(s) for sessions that no longer "
+              f"exist: {', '.join(stale)}")
+        results = {s: v for s, v in results.items() if s in live}
+
     def push_one(sid: str) -> str:
         """Push with backoff. Returns a URL, or a string starting with ERROR."""
         for attempt in range(6):

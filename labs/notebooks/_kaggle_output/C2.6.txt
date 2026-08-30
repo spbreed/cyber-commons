@@ -28,3 +28,21 @@ The build did not change. The number improved by 60%.
 Report per-surface and per-case, and state when cases were added.
 original    {'cases': 8, 'still_landing': 6, 'trivially_blocked': 2, 'dilution_ratio': 0.25, 'healthy': True}
 diluted     {'cases': 20, 'still_landing': 6, 'trivially_blocked': 14, 'dilution_ratio': 0.7, 'healthy': False}
+check 1 - class balance sets the floor a result must clear
+   skewed   {'CWE-89': 35, 'CWE-78': 5}
+            always answer CWE-89: 0.875  <- the floor
+   balanced {'CWE-78': 10, 'CWE-22': 10, 'CWE-798': 10, 'CWE-89': 10}
+            always answer CWE-78: 0.250  <- the floor
+
+check 2 - a leaked key is a training metric, not a result
+   key held out    0.650   lift over floor +0.400
+   key leaked      1.000   lift over floor +0.750
+
+check 3 - matching answers by bare filename invents accuracy
+   answers naming the wrong directory, path_key : 0.250
+   the same answers, basename only              : 1.000
+   distinct basenames in a colliding corpus     : 8 of 40
+
+Report the floor, the matcher and the key's provenance beside every
+number, or the number is not comparable to anything - including to itself
+next quarter.

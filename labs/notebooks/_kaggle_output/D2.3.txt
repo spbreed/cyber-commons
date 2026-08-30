@@ -13,7 +13,7 @@ resources, including a payments repository and a dev vault.
      3                  2             5         2.5
      4                  1             6         6.0
 
-Each hop adds resources the last actor never touched. This is why B2.6
+Each hop adds resources the last actor never touched. This is why B2.5
 bounds delegation depth: depth is an incident-scope multiplier.
 resources_direct      ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
 actors_in_scope       ['build-agent', 'dana@corp', 'deploy-agent', 'finance-agent', 'monitor-agent', 'orchestrator', 'patch-agent', 'test-agent']

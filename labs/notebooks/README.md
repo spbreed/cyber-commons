@@ -119,7 +119,8 @@ python3 scripts/kaggle_verify.py --save     # writes _kaggle_verified.json
 
 Because the notebooks are deterministic by design, byte-identical output from
 two independent machines is the real evidence a lesson runs — and any
-difference is a finding, not noise. It has already caught two:
+difference is a finding, not noise. All 121 currently match. It has already
+caught two that did not:
 
 - **B1.3** iterated a set difference into a stable sort. With tied threat
   scores the sort preserved set-iteration order, which Python randomises per
