@@ -1,11 +1,11 @@
-# Track C1 — The Pentester / Red Teamer
+# Track C1 — Red Teaming with AI
 
-**Function C · AI for Security Research**  
-*Offensive testing and research where the agent is both the instrument and the target, and where a result is only worth what it can be reproduced at.*
+**Function C · Red Teaming and Security Research with AI**  
+*The agent as instrument and as target: offensive workflows you can run lawfully, campaigns that report a rate rather than an anecdote, and research that reproduces.*
 
 **Job titles:** Penetration Tester, Red Team Operator, Offensive Security Engineer
 
-**What changes:** Three surfaces, one adversary mindset — and a campaign that reports a rate. 5 lessons.
+**What changes:** The offensive loop, contained — and a campaign across all three of an agent's attack surfaces that reports a rate. 5 lessons.
 
 **Autonomy focus:** You test at L3 the systems deployed at L2.5, because that's where they'll be next quarter.
 
@@ -15,7 +15,7 @@
 
 ---
 
-### C1.0 — Start here — what AI security research means
+### C1.0 — Start here — what red teaming and research with AI means
 
 `both directions`
 

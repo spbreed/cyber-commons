@@ -1,11 +1,11 @@
-# Track B1 — The AppSec Engineer / Code Reviewer
+# Track B1 — The AI SDLC: an Agentic AppSec Pipeline
 
-**Function B · Product and Application Security with AI**  
-*Closest to developers, so first to meet agents at scale — and the ones who build the security pipeline rather than buy it.*
+**Function B · Application Security with an AI SDLC**  
+*The secure development lifecycle rebuilt around agents: they review the code, model the threats, confirm the exploits and file the fix — and the pipeline that does it is itself software you have to secure.*
 
 **Job titles:** AppSec Engineer, Product Security Engineer, Secure Code Reviewer
 
-**What changes:** The full agentic security pipeline, end to end. 18 lessons.
+**What changes:** The secure development lifecycle as one artefact, built stage by stage: ingest, model, audit, confirm, remediate, report. 18 lessons.
 
 **Autonomy focus:** Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.
 
@@ -15,7 +15,7 @@
 
 ---
 
-### B1.0 — Start here — what application security with AI means
+### B1.0 — Start here — what an AI SDLC means
 
 `both directions`
 

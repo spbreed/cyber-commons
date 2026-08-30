@@ -22,9 +22,9 @@ and the agent is a tool that got fast.
 identity, a set of permissions, a memory, a network path, and an attacker who is
 interested in all four.
 
-**Agentic AI architecture is the foundation of the second direction.** You
-cannot secure a system you cannot draw. "Secure the agent" is not an
-instruction; it is a sentence that becomes an instruction only once you can say
+**Securing an AI architecture is the whole of the second direction, taken at
+the layer everything else sits on.** You cannot secure a system you cannot draw.
+"Secure the agent" is not an instruction; it becomes one only once you can say
 *which component* and *which boundary*.
 
 So this function is one picture and its consequences, in three chapters:
@@ -32,24 +32,24 @@ So this function is one picture and its consequences, in three chapters:
 - **Chapter 1 — the architecture, and every risk it carries.** One
   vendor-neutral component map, then one lesson per risk, each naming the
   component it attacks and grounded in the OWASP Agentic AI threat taxonomy.
-- **Chapter 2 — identity and ingress.** Who is calling, on whose behalf, and
-  what came in from outside. These two controls close more risks than anything
-  else, which is why they come first.
-- **Chapter 3 — runtime and the gateway.** What holds after identity has been
-  defeated, and how the controls collapse into one enforcement point once you
-  run more than a handful of agents.
+- **Chapter 2 — securing it: identity and ingress.** Who is calling, on whose
+  behalf, and what came in from outside. These two controls close more risks
+  than anything else, which is why they come first.
+- **Chapter 3 — securing it: runtime and the gateway.** What holds after
+  identity has been defeated, and how the controls collapse into one enforcement
+  point once you run more than a handful of agents.
 
-Everything downstream names a component from chapter 1. The AppSec pipeline in
-Function B is an agentic system with all of these risks. The red-team campaign
-in Function C attacks these components. The detections in Function D watch them.
+Everything downstream names a component from chapter 1. The AI SDLC in Function
+B is an agentic system with all of these risks. The red-team campaign in
+Function C attacks these components. The detections in Function D watch them.
 The control register in Function E lists them.
 """,
  "steps": [
   ("md", "## 2 · Where the five functions sit, and what depends on this one"),
   ("py", '''FUNCTIONS = {
- "A": ("AI architecture, risks and mitigations", "mostly Security of AI"),
- "B": ("Product and application security with AI", "both directions at once"),
- "C": ("AI for security research", "both directions at once"),
+ "A": ("Securing AI architectures",                "mostly Security of AI"),
+ "B": ("Application security with an AI SDLC",     "both directions at once"),
+ "C": ("Red teaming and security research with AI","both directions at once"),
  "D": ("AI for SecOps", "both directions at once"),
  "E": ("AI for GRC", "governs both directions"),
 }
@@ -72,8 +72,8 @@ for f in sorted(DEPENDS_ON_A):
 
 CHAPTERS = {
  1: ("the architecture, and every risk it carries", "17 lessons"),
- 2: ("controls - identity and ingress",             "7 lessons"),
- 3: ("controls - runtime and the gateway",          "7 lessons"),
+ 2: ("securing it - identity and ingress",          "7 lessons"),
+ 3: ("securing it - runtime and the gateway",       "7 lessons"),
 }
 print("\\nFunction A, in order")
 for n in sorted(CHAPTERS):
@@ -100,13 +100,14 @@ assert set(DEPENDS_ON_A) == set(FUNCTIONS) - {"A"}
 
 "B1.0": {
  "concept": """
-Function B is where both directions meet on the same system, and the reason it
-is the largest function in the commons.
+Function B rebuilds the **secure development lifecycle** around agents, and it
+is where both directions meet on the same system.
 
-**AI for Security.** An agentic pipeline that ingests a codebase, models its
-threats, audits for vulnerabilities, confirms the real ones by exploiting them
-in a sandbox, engineers the remediation, and reports with a severity somebody
-can act on. That is chapter 4, built stage by stage as one artefact.
+**AI for Security.** An SDLC in which agents do the work: ingest a codebase,
+model its threats, audit for vulnerabilities, confirm the real ones by
+exploiting them in a sandbox, engineer the remediation, and report with a
+severity somebody can act on. That is chapter 4, built stage by stage as one
+artefact.
 
 **Security of AI.** That pipeline is itself an agentic system. It reads
 untrusted input by definition — the code it reviews is the code you do not yet
@@ -175,13 +176,13 @@ assert len(PIPELINE) == 5 and len(AS_AN_AGENT) == 5
 
 "C1.0": {
  "concept": """
-Function C is the smallest function in the commons and the one with the
-strictest standard of proof.
+Function C is red teaming and research, and it is the smallest function in the
+commons with the strictest standard of proof.
 
 Two chapters, and one idea holding them together: **an anecdote is not a
 result.**
 
-**Chapter 6 — offensive.** The agent as your instrument, running recon,
+**Chapter 6 — red teaming.** The agent as your instrument, running recon,
 foothold, escalation and lateral movement inside a scope you can defend in
 writing. Then the agent as the target: red-teaming it across its three attack
 surfaces — injection, identity and containment — as a campaign that reports a

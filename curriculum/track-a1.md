@@ -1,7 +1,7 @@
 # Track A1 — The Agentic Reference Architecture, and Every Risk It Carries
 
-**Function A · AI Architecture, Risks and Mitigations**  
-*One vendor-neutral reference architecture, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
+**Function A · Securing AI Architectures**  
+*One vendor-neutral reference architecture for agentic AI, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** Security Architect, Principal Security Engineer, Head of Security Architecture
 
@@ -15,7 +15,7 @@
 
 ---
 
-### A1.0 — Start here — what securing AI architecture means
+### A1.0 — Start here — what securing an AI architecture means
 
 `both directions`
 

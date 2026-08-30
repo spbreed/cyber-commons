@@ -1,7 +1,7 @@
-# Track B2 — The Security Automation / Harness Engineer
+# Track B2 — The Harness that Runs the SDLC
 
-**Function B · Product and Application Security with AI**  
-*Closest to developers, so first to meet agents at scale — and the ones who build the security pipeline rather than buy it.*
+**Function B · Application Security with an AI SDLC**  
+*The secure development lifecycle rebuilt around agents: they review the code, model the threats, confirm the exploits and file the fix — and the pipeline that does it is itself software you have to secure.*
 
 **Job titles:** Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet
 

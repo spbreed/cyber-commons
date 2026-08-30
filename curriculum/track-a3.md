@@ -1,7 +1,7 @@
-# Track A3 — Controls — Runtime and the Gateway
+# Track A3 — Securing the Architecture — Runtime and the Gateway
 
-**Function A · AI Architecture, Risks and Mitigations**  
-*One vendor-neutral reference architecture, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
+**Function A · Securing AI Architectures**  
+*One vendor-neutral reference architecture for agentic AI, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** Platform Security Engineer, Cloud Security Architect, SRE
 

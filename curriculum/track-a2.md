@@ -1,11 +1,11 @@
-# Track A2 — Controls — Identity and Ingress
+# Track A2 — Securing the Architecture — Identity and Ingress
 
-**Function A · AI Architecture, Risks and Mitigations**  
-*One vendor-neutral reference architecture, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
+**Function A · Securing AI Architectures**  
+*One vendor-neutral reference architecture for agentic AI, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer
 
-**What changes:** The two controls that stop the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 7 lessons.
+**What changes:** The two controls that close the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 7 lessons.
 
 **Autonomy focus:** Identity first: every later control is a predicate that takes a caller as its argument.
 

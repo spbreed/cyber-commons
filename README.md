@@ -72,9 +72,9 @@ lesson** that says what it is for and which direction it runs in.
 
 | Function | Chapters | Lessons |
 |---|---|---|
-| **A · AI Architecture, Risks and Mitigations** | [1](curriculum/track-a1.md) The architecture and every risk it carries · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 31 |
-| **B · Product and Application Security with AI** | [4](curriculum/track-b1.md) The AppSec pipeline · [5](curriculum/track-b2.md) The harness underneath it | 31 |
-| **C · AI for Security Research** | [6](curriculum/track-c1.md) Offensive and red team · [7](curriculum/track-c2.md) Research | 12 |
+| **A · Securing AI Architectures** | [1](curriculum/track-a1.md) The architecture and every risk it carries · [2](curriculum/track-a2.md) Securing it: identity and ingress · [3](curriculum/track-a3.md) Securing it: runtime and the gateway | 31 |
+| **B · Application Security with an AI SDLC** | [4](curriculum/track-b1.md) The AI SDLC, as an agentic AppSec pipeline · [5](curriculum/track-b2.md) The harness that runs it | 31 |
+| **C · Red Teaming and Security Research with AI** | [6](curriculum/track-c1.md) Red teaming with AI · [7](curriculum/track-c2.md) Security research with AI | 12 |
 | **D · AI for SecOps** | [8](curriculum/track-d1.md) Detection · [9](curriculum/track-d2.md) Response | 17 |
 | **E · AI for GRC** | [10](curriculum/track-e1.md) Risk and control · [11](curriculum/track-e2.md) Regulatory · [12](curriculum/track-e3.md) The CISO office | 30 |
 | | **12 chapters** | **121** |
@@ -94,8 +94,8 @@ Two chapters carry a single artefact end to end:
   architecture — thirteen components and five patterns, drawn rather than coded
   — then one risk per lesson grounded in the OWASP Agentic Top 10, each naming
   the component it attacks. Chapters 2 and 3 are the controls that close them.
-- **[B1](curriculum/track-b1.md)** is a five-phase, fifteen-stage automated
-  AppSec pipeline built over seventeen sessions, attested in
+- **[B1](curriculum/track-b1.md)** is the AI SDLC itself — a five-phase,
+  fifteen-stage agentic AppSec pipeline built over seventeen sessions, attested in
   [B1.16](labs/notebooks/B1.16.ipynb) and closed in
   [B1.17](labs/notebooks/B1.17.ipynb) by scoring Google's Mantis against a
   held-out key — a reference implementation is something you evaluate, not

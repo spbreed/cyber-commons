@@ -25,8 +25,8 @@
  "functions": [
   {
    "id": "A",
-   "title": "AI Architecture, Risks and Mitigations",
-   "blurb": "One vendor-neutral reference architecture, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.",
+   "title": "Securing AI Architectures",
+   "blurb": "One vendor-neutral reference architecture for agentic AI, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.",
    "tracks": [
     {
      "id": "A1",
@@ -39,7 +39,7 @@
      "sessions": [
       {
        "id": "A1.0",
-       "title": "Start here — what securing AI architecture means",
+       "title": "Start here — what securing an AI architecture means",
        "track": "both",
        "kind": "introduction",
        "summary": "Function A is the Security of AI half of the commons, taken at the architecture layer: the components an agentic system is built from, the risks those components make possible, and the controls that close them. Everything downstream — the AppSec pipeline, the red-team campaign, the detections, the control register — names a component from here.",
@@ -313,9 +313,9 @@
     {
      "id": "A2",
      "chapter": 2,
-     "title": "Controls — Identity and Ingress",
+     "title": "Securing the Architecture — Identity and Ingress",
      "titles": "IAM Engineer, Non-Human Identity Engineer, Platform Security Engineer",
-     "changes": "The two controls that stop the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 7 lessons.",
+     "changes": "The two controls that close the most risks: knowing who is calling, and marking what came in from outside. Each lesson names the threats it closes. 7 lessons.",
      "autonomy": "Identity first: every later control is a predicate that takes a caller as its argument.",
      "deliverable": "A delegation chain for one agent that an auditor can follow from human to action.",
      "sessions": [
@@ -436,7 +436,7 @@
     {
      "id": "A3",
      "chapter": 3,
-     "title": "Controls — Runtime and the Gateway",
+     "title": "Securing the Architecture — Runtime and the Gateway",
      "titles": "Platform Security Engineer, Cloud Security Architect, SRE",
      "changes": "What holds when identity has already been defeated — and how the controls collapse into one enforcement point once you run more than a handful of agents. 7 lessons.",
      "autonomy": "Every control here binds below the model, where a persuaded agent cannot argue with it.",
@@ -556,24 +556,24 @@
   },
   {
    "id": "B",
-   "title": "Product and Application Security with AI",
-   "blurb": "Closest to developers, so first to meet agents at scale — and the ones who build the security pipeline rather than buy it.",
+   "title": "Application Security with an AI SDLC",
+   "blurb": "The secure development lifecycle rebuilt around agents: they review the code, model the threats, confirm the exploits and file the fix — and the pipeline that does it is itself software you have to secure.",
    "tracks": [
     {
      "id": "B1",
      "chapter": 4,
-     "title": "The AppSec Engineer / Code Reviewer",
+     "title": "The AI SDLC: an Agentic AppSec Pipeline",
      "titles": "AppSec Engineer, Product Security Engineer, Secure Code Reviewer",
-     "changes": "The full agentic security pipeline, end to end. 18 lessons.",
+     "changes": "The secure development lifecycle as one artefact, built stage by stage: ingest, model, audit, confirm, remediate, report. 18 lessons.",
      "autonomy": "Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.",
      "deliverable": "A five-phase AppSec pipeline running as a CI gate, with confirmed-by-exploitation severity and published precision and escape metrics.",
      "sessions": [
       {
        "id": "B1.0",
-       "title": "Start here — what application security with AI means",
+       "title": "Start here — what an AI SDLC means",
        "track": "both",
        "kind": "introduction",
-       "summary": "Function B is both directions at once. AI for Security: an agentic pipeline that reviews code, models threats, confirms exploits and reports them. Security of AI: that pipeline is itself an agentic system, with every risk Function A described. Chapter 4 builds the pipeline; chapter 5 builds the harness underneath it.",
+       "summary": "Function B rebuilds the secure development lifecycle around agents, in both directions at once. AI for Security: an agentic pipeline that reviews code, models threats, confirms exploits and reports them. Security of AI: that pipeline is itself an agentic system, with every risk Function A described. Chapter 4 builds the SDLC; chapter 5 builds the harness underneath it.",
        "risk": "A security pipeline built as if it were exempt from the risks it exists to find.",
        "control": "Build the pipeline and the harness as one system, and hold both to the same evidence standard.",
        "lab": "Trace one finding from ingestion to a signed report and name the stage that decides whether it is true.",
@@ -864,7 +864,7 @@
     {
      "id": "B2",
      "chapter": 5,
-     "title": "The Security Automation / Harness Engineer",
+     "title": "The Harness that Runs the SDLC",
      "titles": "Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet",
      "changes": "Build the loop once, point it at a discipline, then prove it works. 13 lessons.",
      "autonomy": "You are the person who builds the L2.5 boundary everyone else operates inside.",
@@ -1089,21 +1089,21 @@
   },
   {
    "id": "C",
-   "title": "AI for Security Research",
-   "blurb": "Offensive testing and research where the agent is both the instrument and the target, and where a result is only worth what it can be reproduced at.",
+   "title": "Red Teaming and Security Research with AI",
+   "blurb": "The agent as instrument and as target: offensive workflows you can run lawfully, campaigns that report a rate rather than an anecdote, and research that reproduces.",
    "tracks": [
     {
      "id": "C1",
      "chapter": 6,
-     "title": "The Pentester / Red Teamer",
+     "title": "Red Teaming with AI",
      "titles": "Penetration Tester, Red Team Operator, Offensive Security Engineer",
-     "changes": "Three surfaces, one adversary mindset — and a campaign that reports a rate. 5 lessons.",
+     "changes": "The offensive loop, contained — and a campaign across all three of an agent's attack surfaces that reports a rate. 5 lessons.",
      "autonomy": "You test at L3 the systems deployed at L2.5, because that's where they'll be next quarter.",
      "deliverable": "A full agent red-team engagement report against an internal agentic workflow, with reproducible traces.",
      "sessions": [
       {
        "id": "C1.0",
-       "title": "Start here — what AI security research means",
+       "title": "Start here — what red teaming and research with AI means",
        "track": "both",
        "kind": "introduction",
        "summary": "Function C is where the agent is both the instrument and the target. Chapter 6 runs the offensive workflow and red-teams agents across their three surfaces; chapter 7 asks the harder question — whether a result reproduces, and what it takes to turn one into a control somebody else deploys.",
@@ -1182,7 +1182,7 @@
     {
      "id": "C2",
      "chapter": 7,
-     "title": "The Security Researcher",
+     "title": "Security Research with AI",
      "titles": "Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher",
      "changes": "Turning curiosity into a result somebody else can deploy. 7 lessons.",
      "autonomy": "You deliberately operate at L3 in isolated environments so the rest of the org never has to.",

@@ -23,7 +23,7 @@ and the curriculum stay in step.
 """
 
 # --------------------------------------------------------------------------
-# Function A — AI architecture, risks and mitigations
+# Function A — securing AI architectures
 # --------------------------------------------------------------------------
 HOOKS: dict[str, str] = {
 
@@ -196,10 +196,10 @@ HOOKS: dict[str, str] = {
  "to \"is default-deny on?\" is \"in some of them\".",
 
 # ----------------------------------------------------------------------
-# Function B — product and application security with AI
+# Function B — application security with an AI SDLC
 # ----------------------------------------------------------------------
 "B1.0":
- "The pipeline you are about to build reads code you do not trust, holds "
+ "The SDLC you are about to build reads code you do not trust, holds "
  "credentials, and writes to your repository. It is a security tool, and that "
  "grants it no exemption whatsoever from the risks in Function A. Both "
  "directions of this commons run through the same system here.",
@@ -364,7 +364,7 @@ HOOKS: dict[str, str] = {
  "quietly go wrong.",
 
 # ----------------------------------------------------------------------
-# Function C — AI for security research
+# Function C — red teaming and security research with AI
 # ----------------------------------------------------------------------
 "C1.0":
  "\"It worked when I tried it\" is the most common security claim about agents "
@@ -695,8 +695,9 @@ DIAGRAMS: dict[str, str] = {
    Function A sits almost entirely on the right, at the architecture layer:
 
         [ chapter 1 ]        [ chapter 2 ]        [ chapter 3 ]
-        the picture   -->    identity and   -->   runtime and
-        and its risks        ingress              the gateway
+        the picture   -->    securing it:   -->   securing it:
+        and its risks        identity and         runtime and
+                             ingress              the gateway
 
    everything downstream (B, C, D, E) names a component from chapter 1
 """,
@@ -1069,7 +1070,7 @@ DIAGRAMS: dict[str, str] = {
 # Function B — product and application security with AI
 # ----------------------------------------------------------------------
 "B1.0": """
-   chapter 4 — the pipeline (AI for security)
+   chapter 4 — the SDLC, with agents doing the work (AI for security)
 
    [ingest] -> [threat model] -> [audit] -> [confirm] -> [remediate] -> [report]
       B1.1-2       B1.3-4        B1.5-7     B1.8-10       B1.11         B1.12
@@ -1079,7 +1080,7 @@ DIAGRAMS: dict[str, str] = {
    | plan . act . verify . stop | tools | budgets | replay | evals  |
    +---------------------------------------------------------------+
 
-   the same pipeline, read as an agentic system (security of AI)
+   the same SDLC, read as an agentic system (security of AI)
    ingress = a pull request      knowledge = the repo, untrusted by definition
    tools   = tests, sandbox      identity  = a bot that can write your branch
 """,
@@ -1470,7 +1471,7 @@ DIAGRAMS: dict[str, str] = {
 # Function C — AI for security research
 # ----------------------------------------------------------------------
 "C1.0": """
-   chapter 6 — offensive          chapter 7 — research
+   chapter 6 — red teaming        chapter 7 — research
    +---------------------+        +--------------------------+
    | the agent as your   |        | does it reproduce?       |
    | instrument          |        | can someone deploy it?   |
@@ -2211,8 +2212,8 @@ BRIDGES: dict[str, dict[str, str]] = {
         "control here is stated as a rule; none of it is a pipeline anyone "
         "operates, and the first agentic system most organisations run is a "
         "security tool that reads untrusted code all day.",
- "next": "Function B builds that system, and holds it to every rule in this "
-         "chapter. Next → B1.0, what application security with AI means.",
+ "next": "Function B builds that system as an SDLC, and holds it to every rule "
+         "in this chapter. Next → B1.0, what an AI SDLC means.",
 },
 
 "B1": {
@@ -2239,7 +2240,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "about how any of it behaves against someone who is — including the "
         "evaluation you have been trusting.",
  "next": "Function C attacks it, starting with the loop pointed the other way "
-         "round. Next → C1.0, what AI security research means.",
+         "round. Next → C1.0, what red teaming and research with AI means.",
 },
 
 "C1": {

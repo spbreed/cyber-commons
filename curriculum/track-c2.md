@@ -1,7 +1,7 @@
-# Track C2 — The Security Researcher
+# Track C2 — Security Research with AI
 
-**Function C · AI for Security Research**  
-*Offensive testing and research where the agent is both the instrument and the target, and where a result is only worth what it can be reproduced at.*
+**Function C · Red Teaming and Security Research with AI**  
+*The agent as instrument and as target: offensive workflows you can run lawfully, campaigns that report a rate rather than an anecdote, and research that reproduces.*
 
 **Job titles:** Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher
 
