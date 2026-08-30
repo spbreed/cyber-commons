@@ -289,9 +289,11 @@ def lesson_page(entry, prev, nxt) -> str:
                  f'rel="noopener">Get a model free</a>'
                  '</div>')
     parts.append('<p class="sub kagnote">“Run on Kaggle” opens the notebook in '
-                 '<b>your own</b> Kaggle account as a new kernel. Its first cell '
-                 'clones this repository for the lab library, so the exercise is '
-                 'yours to edit and re-run. Nothing is written back here.</p>')
+                 '<b>your own</b> Kaggle account as a new kernel. It carries '
+                 'every line of code it runs — nothing to clone, nothing to '
+                 'install — so it works with the internet switched off, and the '
+                 'copy is yours to edit and re-run. Nothing is written back '
+                 'here.</p>')
     parts.append(verified_badge(sid))
 
     nb = notebook_block(sid)
