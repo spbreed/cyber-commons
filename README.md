@@ -132,18 +132,31 @@ Where a lesson names a tool you would really deploy — SPIRE, OPA, Falco,
 Keycloak, garak — the notebook models the *decision* that tool makes, and
 [`curriculum/labs.json`](curriculum/labs.json) keeps the real invocation
 underneath as the full-infrastructure variant. Those variants are **not**
-executed in CI and are labelled as such. Where a lesson involves a model, it
-runs against a **deterministic stand-in**, labelled as a stand-in everywhere it
-appears, never presented as a model's output. To use a real one:
+executed in CI and are labelled as such.
+
+**Where a lesson involves a model, the same code runs three ways.** Offline it
+uses a deterministic stand-in, labelled as a stand-in everywhere it appears and
+never presented as a model's output — which is what lets it run on Kaggle with
+the internet off and keeps the determinism gate meaningful. Set one environment
+variable and the identical code calls a real model:
 
 ```bash
-ollama pull glm-4.6            # or kimi-k2, llama3.3
+# open weight — Ollama, vLLM, or any OpenAI-compatible endpoint
 export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6
+
+# frontier — MODEL defaults to the cheapest current Claude model
+export ANTHROPIC_API_KEY=...
 ```
 
-See [MODELS.md](MODELS.md), and [labs/kimi/](labs/kimi) for what happened when
-these skills were run against a Kimi-family model on Kaggle — including the
-parts that did not work.
+The adapter is standard library only, so nothing about the self-contained
+property changes, and it **never silently substitutes**: if a backend is
+configured and the call fails, the lesson says so and labels what it used. Nine
+lessons carry a live section, and `scripts/live_model_test.py` runs all nine
+against a real backend and records what came back.
+
+See [MODELS.md](MODELS.md) for which model suits which lab, and
+[labs/kimi/](labs/kimi) for what happened when these skills were run against a
+Kimi-family model on Kaggle — including the parts that did not work.
 
 ## Changing a lesson
 

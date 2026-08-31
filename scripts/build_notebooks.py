@@ -53,6 +53,7 @@ SITE = "https://spbreed.github.io/cyber-commons"
 
 from exercises import EXERCISES  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
+from exercises.models import LIVE_MD, MODEL_RUNTIME, live_cell  # noqa: E402
 
 SKILLS = ROOT / "skills"
 
@@ -155,7 +156,8 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
             raise KeyError(f"{sid} has no {field!r} — {why}")
 
     tools = ", ".join(s.get("tools", [])) or "—"
-    models = ", ".join(s.get("models", [])) or "—"
+    open_weight = ", ".join(s.get("open_weight", [])) or "—"
+    frontier = ", ".join(s.get("frontier", [])) or "—"
 
     # ---- header ----------------------------------------------------------
     where = f"**{entry['fn']} → {entry['track']}**  ·  " \
@@ -167,10 +169,13 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
         f"# {sid} · {s['title']}\n\n{where}\n\n"
         f"| | |\n|---|---|\n"
         f"| Open-source tooling | {tools} |\n"
-        f"| Open-weight models | {models} |\n\n"
+        f"| Open-weight models | {open_weight} |\n"
+        f"| Frontier models | {frontier} |\n\n"
         f"> **Runs anywhere.** Every line of code is in this notebook — nothing to "
         f"install, nothing to clone, no API key, no network. Standard library only, "
-        f"so it works on a Kaggle kernel with the internet switched off."
+        f"so it works on a Kaggle kernel with the internet switched off — and where "
+        f"a lesson involves a model, the same code calls an open-weight endpoint or "
+        f"a frontier API when you configure one."
     )]
 
     # ---- 1. the hook ------------------------------------------------------
@@ -186,6 +191,16 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     for kind, source in ex["steps"]:
         if kind == "skill":
             cells.append(code(skill_source(source)))
+        elif kind == "model":
+            # One adapter, then the same task run for real. The lesson keeps its
+            # deterministic replay as the offline default, so CI and the offline
+            # Kaggle run are unchanged.
+            cells.append(md(renumber("## 2 · " + source.get("title", "The model backend"),
+                                     counter)))
+            cells.append(code(MODEL_RUNTIME))
+            cells.append(md(renumber(LIVE_MD, counter)))
+            cells.append(code(live_cell(source["task"], source["replay"],
+                                        source.get("system"), source["check"])))
         elif kind == "md":
             cells.append(md(renumber(source, counter)))
         else:

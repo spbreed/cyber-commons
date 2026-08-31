@@ -17,10 +17,14 @@
 <td>Open-weight models</td>
 <td>GLM-4.6</td>
 </tr>
+<tr>
+<td>Frontier models</td>
+<td>Claude Haiku 4.5</td>
+</tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Asking a model to write code is safe. Running the code it wrote is the part that is not, and most agent frameworks ship the second one enabled with the same process privileges as the framework itself.</p></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   model ---&gt; &quot;here is a script that does it&quot; ---&gt; agent runtime
@@ -104,4 +108,4 @@ assert any(&quot;id_ed25519&quot; in r for r in execute(BENIGN))</code></pre></d
 <p>For one agent that executes code, list what is in its process environment right now. The credentials in that list are the blast radius of the next ordinary bug, not of the next attack.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.9.html">A1.9 · Agent communication poisoning</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.8.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address.</div><div class="chips"><span>Falco</span><span>gVisor</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.8.ipynb</code></p></div><div class="pager"><a href="A1.7.html"><span class="k">← Previous</span><span class="t">A1.7 · Identity spoofing and impersonation</span></a><a class="next" href="A1.9.html"><span class="k">Next →</span><span class="t">A1.9 · Agent communication poisoning</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address.</div><div class="chips"><span>Falco</span><span>gVisor</span><span class="m">GLM-4.6</span><span class="f">Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A1.8.ipynb</code></p></div><div class="pager"><a href="A1.7.html"><span class="k">← Previous</span><span class="t">A1.7 · Identity spoofing and impersonation</span></a><a class="next" href="A1.9.html"><span class="k">Next →</span><span class="t">A1.9 · Agent communication poisoning</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

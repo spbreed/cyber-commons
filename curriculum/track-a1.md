@@ -43,7 +43,8 @@ python3 scripts/run_notebooks.py --session A1.0   # run it headless and check it
 - **Control** — One component map and five topologies, named once and reused by every lesson that follows.
 - **Lab** — Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
 - **Tools** — `kagent`, `OpenTelemetry`
-- **Models** — `Llama 3.3`, `GLM-4.6`
+- **Open-weight models** — `Llama 3.3`, `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Draw the thirteen components, the five patterns they compose into, and the one edge that exists in all five.
 
@@ -65,7 +66,8 @@ python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it
 - **Control** — Provenance at ingress (A2.6) and default-deny on the tool call (A3.1). The system prompt is not a control.
 - **Lab** — Send an override through the ingress component and watch the agent's goal change.
 - **Tools** — `garak`, `promptfoo`
-- **Models** — `Llama Guard 4`
+- **Open-weight models** — `Llama Guard 4`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Send an override through the ingress component and watch the agent's goal change.
 
@@ -87,7 +89,8 @@ python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it
 - **Control** — Provenance marking at ingress (A2.6), and a rule that untrusted spans may not select a tool (A3.1).
 - **Lab** — Poison one retrieved document and watch the agent act on it with the user's authority.
 - **Tools** — `garak`, `LLM Guard`
-- **Models** — `Llama Guard 4`
+- **Open-weight models** — `Llama Guard 4`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Poison one retrieved document and watch the agent act on it with the user's authority.
 
@@ -109,7 +112,8 @@ python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it
 - **Control** — Provenance survives into memory (A2.6), and memory writes are scoped to the identity that made them (A2.1).
 - **Lab** — Write one poisoned fact into memory and watch it steer a later, unrelated session.
 - **Tools** — `LLM Guard`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Write one poisoned fact into memory and watch it steer a later, unrelated session.
 
@@ -131,7 +135,8 @@ python3 scripts/run_notebooks.py --session A1.4   # run it headless and check it
 - **Control** — Default-deny authorization on the tool call (A3.1) and just-in-time authority (A2.4).
 - **Lab** — Call one over-scoped tool with attacker-chosen arguments and see what it reaches.
 - **Tools** — `OPA`, `kmcp`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Call one over-scoped tool with attacker-chosen arguments and see what it reaches.
 
@@ -195,7 +200,8 @@ python3 scripts/run_notebooks.py --session A1.7   # run it headless and check it
 - **Control** — Sandboxed execution (A3.2) and egress control (A3.3).
 - **Lab** — Execute model-authored code and enumerate what the process could touch.
 - **Tools** — `Falco`, `gVisor`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Execute model-authored code and enumerate what the process could touch.
 
@@ -259,7 +265,8 @@ python3 scripts/run_notebooks.py --session A1.10   # run it headless and check i
 - **Control** — Verification against ground truth before a claim propagates (A3.5).
 - **Lab** — Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.
 - **Tools** — `Inspect`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.
 
@@ -343,7 +350,8 @@ python3 scripts/run_notebooks.py --session A1.14   # run it headless and check i
 - **Control** — An independent verifier that checks the outcome rather than the claim (A3.5).
 - **Lab** — Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.
 - **Tools** — `Inspect`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.
 

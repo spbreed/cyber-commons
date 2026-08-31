@@ -17,10 +17,14 @@
 <td>Open-weight models</td>
 <td>GLM-4.6</td>
 </tr>
+<tr>
+<td>Frontier models</td>
+<td>Claude Haiku 4.5</td>
+</tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Nothing was attacked. The model was upgraded, a prompt was edited, a tool changed its output format — and the behaviour of the system moved. Drift is the failure mode with no adversary, and it is far more common than the ones with one.</p></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   nothing was attacked
@@ -128,4 +132,4 @@ assert any(t.state(now) == &quot;STALE&quot; for t in tests)</code></pre></div><
 <p>Compute the drift rate for one production agent from three months of telemetry, and set its control freshness window from that number rather than from the audit calendar.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.8.html">D1.8 · Threat intel sub-lane</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.7.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A rule that passed last month fails now. Nothing in your code changed.</div><div class="chips"><span>promptfoo</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.7.ipynb</code></p></div><div class="pager"><a href="D1.6.html"><span class="k">← Previous</span><span class="t">D1.6 · Distinguishing agent from human</span></a><a class="next" href="D1.8.html"><span class="k">Next →</span><span class="t">D1.8 · Threat intel sub-lane</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A rule that passed last month fails now. Nothing in your code changed.</div><div class="chips"><span>promptfoo</span><span class="m">GLM-4.6</span><span class="f">Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.7.ipynb</code></p></div><div class="pager"><a href="D1.6.html"><span class="k">← Previous</span><span class="t">D1.6 · Distinguishing agent from human</span></a><a class="next" href="D1.8.html"><span class="k">Next →</span><span class="t">D1.8 · Threat intel sub-lane</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

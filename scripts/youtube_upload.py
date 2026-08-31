@@ -59,8 +59,10 @@ def build_metadata(sid: str, privacy: str, playlist_note: str = "") -> dict:
     ]
     if s.get("tools"):
         desc.append("Tools: " + ", ".join(s["tools"]))
-    if s.get("models"):
-        desc.append("Open-weight models: " + ", ".join(s["models"]))
+    if s.get("open_weight"):
+        desc.append("Open-weight models: " + ", ".join(s["open_weight"]))
+    if s.get("frontier"):
+        desc.append("Frontier models: " + ", ".join(s["frontier"]))
     desc += ["",
              "Cyber Commons is a free, open commons for Cyber AI — every lab runs on",
              "open-source tooling and open-weight models. No frontier-lab account needed.",

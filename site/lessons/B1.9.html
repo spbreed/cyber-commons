@@ -17,10 +17,14 @@
 <td>Open-weight models</td>
 <td>GLM-4.6, Kimi K2</td>
 </tr>
+<tr>
+<td>Frontier models</td>
+<td>Claude Haiku 4.5</td>
+</tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>A finding becomes a fact the moment something other than a model says so. Driving the running application is how you get that second opinion — and the oracle you choose is what makes it worth having.</p></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   candidate finding
@@ -172,4 +176,4 @@ print(&quot;appear in the report as one.&quot;)</code></pre></div><div class="nb
 <p>Look at your DAST assertions. If any of them checks only for a non-error response, it is confirming findings it has not tested — and the control probe above is how you prove that in five minutes.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.10.html">B1.10 · Exploit chaining</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.9.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.9.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe.</div><div class="chips"><span>OWASP ZAP</span><span>Nuclei</span><span class="m">GLM-4.6</span><span class="m">Kimi K2</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.9.ipynb</code></p></div><div class="pager"><a href="B1.8.html"><span class="k">← Previous</span><span class="t">B1.8 · Sandbox replication</span></a><a class="next" href="B1.10.html"><span class="k">Next →</span><span class="t">B1.10 · Exploit chaining</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe.</div><div class="chips"><span>OWASP ZAP</span><span>Nuclei</span><span class="m">GLM-4.6</span><span class="m">Kimi K2</span><span class="f">Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.9.ipynb</code></p></div><div class="pager"><a href="B1.8.html"><span class="k">← Previous</span><span class="t">B1.8 · Sandbox replication</span></a><a class="next" href="B1.10.html"><span class="k">Next →</span><span class="t">B1.10 · Exploit chaining</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

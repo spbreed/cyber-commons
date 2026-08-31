@@ -47,7 +47,8 @@ $EDITOR charter.md   # problem, control outcome, consuming track, funding ask
 - **Control** — Adversarial robustness, jailbreak taxonomy, refusal analysis, capability elicitation.
 - **Lab** — Run a jailbreak taxonomy across Llama, GLM and Kimi and chart where they differ.
 - **Tools** — `garak`
-- **Models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
+- **Open-weight models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
+- **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Chart jailbreak taxonomy differences across three open-weight families.
 
@@ -74,7 +75,8 @@ python3 compare_reports.py
 - **Control** — Concept erasure and orthogonalisation on open weights — with honest claims.
 - **Lab** — Attempt targeted unlearning on an open-weight model and try to elicit the capability back.
 - **Tools** — `TransformerLens`, `PyTorch`
-- **Models** — `Llama 3.3`
+- **Open-weight models** — `Llama 3.3`
+- **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Attempt targeted unlearning, then try to get the capability back.
 
@@ -154,7 +156,8 @@ cosign verify-blob --bundle model.sig adapter.safetensors   # fails
 - **Control** — Multi-backbone runs on fixed seeds and corpora, plus contamination and construct-validity checks before any number is trusted.
 - **Lab** — Run one harness across three model families, separate the two effects, then contamination-check a public benchmark against a training window.
 - **Tools** — `Inspect`, `Cyber Commons eval harness`
-- **Models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
+- **Open-weight models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
+- **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Separate the model effect from the harness effect, then check a public benchmark for its majority baseline, its key provenance and its matcher.
 

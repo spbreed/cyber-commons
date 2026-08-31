@@ -17,10 +17,14 @@
 <td>Open-weight models</td>
 <td>Llama Guard 4</td>
 </tr>
+<tr>
+<td>Frontier models</td>
+<td>Claude Haiku 4.5</td>
+</tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Two different kinds of control get confused constantly. One bounds how the system runs — budgets, scopes, approvals. The other bounds what it produces. They are tested differently and they fail differently.</p></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   operating guardrails            outcome guardrails
@@ -115,4 +119,4 @@ assert any(s[&quot;status&quot;] != &quot;enforceable&quot; for s in SPECS)</cod
 <p>Pick one outcome guardrail your programme has agreed and specify its metric, threshold, source and cadence precisely enough that someone could dispute the result. If you cannot, say so in the coverage report rather than counting it.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.7.html">E1.7 · Continuous control verification</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.6.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Frameworks specify how the system works; regulators ask what it produced. Most orgs are long on the first.</div><div class="chips"><span>NeMo Guardrails</span><span>LLM Guard</span><span class="m">Llama Guard 4</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.6.ipynb</code></p></div><div class="pager"><a href="E1.5.html"><span class="k">← Previous</span><span class="t">E1.5 · Evaluation output as audit evidence</span></a><a class="next" href="E1.7.html"><span class="k">Next →</span><span class="t">E1.7 · Continuous control verification</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Frameworks specify how the system works; regulators ask what it produced. Most orgs are long on the first.</div><div class="chips"><span>NeMo Guardrails</span><span>LLM Guard</span><span class="m">Llama Guard 4</span><span class="f">Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.6.ipynb</code></p></div><div class="pager"><a href="E1.5.html"><span class="k">← Previous</span><span class="t">E1.5 · Evaluation output as audit evidence</span></a><a class="next" href="E1.7.html"><span class="k">Next →</span><span class="t">E1.7 · Continuous control verification</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

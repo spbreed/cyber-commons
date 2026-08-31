@@ -128,7 +128,8 @@ python3 scripts/run_notebooks.py --session A2.5   # run it headless and check it
 - **Control** — Provenance tagging at every ingress point, and a rule that only trusted origins may select a tool.
 - **Lab** — Tag every span at ingress, then show the same payload refused through six different entry paths.
 - **Tools** — `LLM Guard`, `agentgateway`
-- **Models** — `Llama Guard 4`
+- **Open-weight models** — `Llama Guard 4`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Tag every span at ingress, then show the same payload refused through six different entry paths.
 

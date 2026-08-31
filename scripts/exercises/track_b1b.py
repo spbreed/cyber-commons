@@ -600,7 +600,12 @@ the only question that cannot be gamed by editing the code around the detector.
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
-  ("md", MODEL_NOTE),
+  ("model", {
+   "title": 'The model backend, and the patch it proposes',
+   "task": 'Fix this without changing the function\'s behaviour for valid input. Return only the patched function.\n\ndef report(request):\n    q = "SELECT * FROM orders WHERE ref = \'" + request.args[\'ref\'] + "\'"\n    return db.execute(q)',
+   "replay": 'def report(request):\n    q = "SELECT * FROM orders WHERE ref = ?"\n    return db.execute(q, (request.args[\'ref\'],))',
+   "system": 'You are a remediation engineer. Output code only, no explanation.',
+   "check": '("parameterises the query", "?" in answer or "%s" in answer or ":ref" in answer)'}),
   ("md", "## 2 · The confirmed finding, with its working exploit"),
   ("py", '''import re, sqlite3
 

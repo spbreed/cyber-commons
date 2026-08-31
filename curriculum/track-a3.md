@@ -227,7 +227,8 @@ opa eval -d exemptions.rego -i launch.json 'data.launch.allow'
 - **Control** — A report-to-human tool that is cheap, non-terminal and signposted (C9.1), a mandatory checkpoint on out-of-scope discovery (C9.4), and an abstain affordance scored neutrally (C10.2).
 - **Lab** — Plant a finding, run the agent with and without the tool, and compare what it does with what it says it wants to do.
 - **Tools** — `OpenTelemetry`
-- **Models** — `Llama 3.3`
+- **Open-weight models** — `Llama 3.3`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Plant a finding, run the agent with and without a report-to-human tool, and compare what it does with what it says it wants to do.
 

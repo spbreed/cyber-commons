@@ -39,11 +39,15 @@ def session_md(s: dict) -> str:
     if s.get("lab"):
         out.append(f"- **Lab** — {s['lab']}")
     tools = ", ".join(f"`{t}`" for t in s.get("tools", []))
-    models = ", ".join(f"`{m}`" for m in s.get("models", []))
+    open_weight = ", ".join(f"`{m}`" for m in s.get("open_weight", []))
+    frontier = ", ".join(f"`{m}`" for m in s.get("frontier", []))
     if tools:
         out.append(f"- **Tools** — {tools}")
-    if models:
-        out.append(f"- **Models** — {models}")
+    if open_weight:
+        out.append(f"- **Open-weight models** — {open_weight}")
+    if frontier:
+        out.append(f"- **Frontier models** — {frontier}"
+                   "  ·  *every lab runs on either, and offline on neither*")
     out.append(lab_block(s["id"]))
     if s.get("repo"):
         out.append(f"> Lab source: [`{s['repo']}`](../{s['repo']})\n")

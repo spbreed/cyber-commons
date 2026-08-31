@@ -60,7 +60,12 @@ else (egress control, so a compromised harness cannot pivot outward), and you
 (findings and client data must not leave by a route the agent chooses).
 """,
  "steps": [
-  ("md", MODEL_NOTE),
+  ("model", {
+   "title": 'The model backend, and the triage it proposes',
+   "task": 'Rank these findings by which to chase first on an authorised engagement, and say why in one clause each.\nF-01 TLS 1.0 enabled on api.target.example\nF-02 /v1/users returns data without auth on api.target.example\nF-06 expired certificate on cdn.partner.example (not in scope)',
+   "replay": '1. F-02 - unauthenticated data endpoint, directly exploitable.\n2. F-01 - needs a downgrade position; no evidence of one here.\n3. F-06 - out of scope, do not touch.',
+   "system": 'You triage penetration-test findings. Ranked list, one clause each.',
+   "check": '("put the unauthenticated endpoint first", answer.find("F-02") in range(0, 40))'}),
   ("md", "## 2 · Demo — the four generations on the same recon output\n\n"
          "Realistic scan output from an authorised engagement against hosts you "
          "own. The question at every generation is the same: what do I chase first?"),

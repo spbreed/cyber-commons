@@ -42,7 +42,12 @@ loop may believe — because a triage loop with a weak verifier closes true
 positives at machine speed, and closing a true positive is silent.
 """,
  "steps": [
-  ("md", MODEL_NOTE),
+  ("model", {
+   "title": 'The model backend, and the disposition it proposes',
+   "task": 'Triage this alert to one of: escalate, close-benign, needs-context.\n\nAlert: service account svc-reports authenticated from 203.0.113.9 at 03:14 and listed all S3 buckets. svc-reports normally runs hourly from 10.2.0.0/16 and touches one bucket.',
+   "replay": "escalate - the source range and the breadth of the list call are both outside this account's established pattern.",
+   "system": 'You are a SOC triage assistant. One line: disposition, then why.',
+   "check": '("returned one of the three dispositions", any(d in answer.lower() for d in ("escalate", "close-benign", "needs-context")))'}),
   ("md", "## 2 · Demo — the queue, and the loop that reads it"),
   ("py", '''import time
 from dataclasses import dataclass, field
@@ -375,7 +380,12 @@ real historical telemetry decides which survive. The scoring step is the job, an
 it is the part teams skip.
 """,
  "steps": [
-  ("md", MODEL_NOTE),
+  ("model", {
+   "title": 'The model backend, and the detection it writes',
+   "task": 'Write the detection condition for: a non-human identity listing more than 20 distinct buckets within 5 minutes, from outside its usual CIDR. Pseudocode, at most four lines.',
+   "replay": "actor.type == 'service_account'\nand count_distinct(event.bucket, window='5m') > 20\nand not cidr_match(source.ip, actor.baseline_cidr)",
+   "system": 'You write detection logic. Condition only, no prose.',
+   "check": '("expresses a threshold", any(t in answer for t in (">", ">=", "20")))'}),
   ("md", "## 2 · Demo — five candidate rules for one concern"),
   ("py", '''import time
 from dataclasses import dataclass

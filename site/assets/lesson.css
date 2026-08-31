@@ -117,6 +117,10 @@ pre code{color:#cfe0ff;line-height:1.7}
 .chips span{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-dim);
   border:1px solid var(--line-soft);border-radius:5px;padding:3px 9px}
 .chips span.m{color:var(--secure);border-color:var(--secure-soft)}
+/* frontier models sit beside the open-weight ones, never instead of them */
+.chips span.f{color:var(--defend);border-color:var(--defend-soft)}
+.chips span.m::before{content:"open ";color:var(--text-faint)}
+.chips span.f::before{content:"frontier ";color:var(--text-faint)}
 
 /* notes (authored markdown) */
 .notes{border-top:1px solid var(--line-soft);padding-top:26px;margin-top:34px}

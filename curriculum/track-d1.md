@@ -43,7 +43,8 @@ python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
 - **Control** — Know what the loop must escalate and sample the rest.
 - **Lab** — Run a triage loop over Wazuh alerts and supervise by exception.
 - **Tools** — `Wazuh`, `OpenSearch`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Supervise a triage loop by exception rather than by re-reading.
 
@@ -71,7 +72,8 @@ python3 triage_loop.py --model $MODEL --escalate-on high
 - **Control** — Feed the baseline, known FPs, crown-jewel map and prior decisions.
 - **Lab** — A/B a generic prompt vs a context-loaded one on the same alert set.
 - **Tools** — `Wazuh`
-- **Models** — `GLM-4.6`, `Llama 3.3`
+- **Open-weight models** — `GLM-4.6`, `Llama 3.3`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Show a context-loaded triage loop beating a generic one.
 
@@ -99,7 +101,8 @@ python3 compare.py
 - **Control** — Detection-as-code with agents inside the CI loop.
 - **Lab** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
 - **Tools** — `Sigma`, `Wazuh`
-- **Models** — `Kimi K2`
+- **Open-weight models** — `Kimi K2`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Generate, unit-test and tune detections inside CI.
 
@@ -180,7 +183,8 @@ curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply
 - **Control** — Behavioural signatures separating agent from inherited human.
 - **Lab** — Build the classifier on timing, sequencing and volume features.
 - **Tools** — `OpenSearch`
-- **Models** — `Llama 3.3`
+- **Open-weight models** — `Llama 3.3`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Tell an agent apart from the human whose credential it inherited.
 
@@ -207,7 +211,8 @@ python3 agent_vs_human.py --classify live.jsonl
 - **Control** — Watch model updates, prompt changes, index refreshes, tool versions.
 - **Lab** — Change the model underneath and catch the detection regression.
 - **Tools** — `promptfoo`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Catch a detection silently degrading after a model change.
 
@@ -235,7 +240,8 @@ python3 drift_report.py
 - **Control** — Provenance discipline; refuse claims without a source.
 - **Lab** — Build a synthesis loop that must cite or abstain.
 - **Tools** — `MISP`, `OpenCTI`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Build a synthesis loop that must cite or abstain.
 

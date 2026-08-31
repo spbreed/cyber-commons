@@ -55,7 +55,12 @@ thing — the verifier — to show that the same model and the same proposals
 produce opposite outcomes.
 """,
  "steps": [
-  ("md", MODEL_NOTE),
+  ("model", {
+   "title": 'The model backend, and the plan it produces',
+   "task": 'Plan how to determine whether a reported SQL injection in orders/report.py is reachable from an unauthenticated HTTP request. Give at most four numbered steps, each one an action, not a thought.',
+   "replay": "1. Locate the HTTP route that reaches orders/report.py.\n2. Check whether that route requires authentication.\n3. Trace request.args['ref'] from the handler to db.execute.\n4. Send one request with a benign marker and observe the query log.",
+   "system": 'You produce plans for a security harness. Numbered actions only.',
+   "check": '("produced numbered steps", any(answer.strip().startswith(p) for p in ("1.", "1)", "- 1")))'}),
   ("md", "## 2 · Demo — the loop, with a task that has a right answer\n\n"
          "The task: fix a function that mis-computes a security-relevant value. "
          "The model produces three attempts, the last of which is correct."),
@@ -553,7 +558,12 @@ the most capable model — and, more importantly, the escalation path usually
 carries more authority too.
 """,
  "steps": [
-  ("md", MODEL_NOTE),
+  ("model", {
+   "title": 'The model backend, and the routing decision',
+   "task": 'Classify this task as CHEAP or ESCALATE for a two-tier security harness, and give one clause of reasoning.\n\nTask: decide whether a 4,000-line authentication module correctly invalidates sessions on password change.',
+   "replay": 'ESCALATE - multi-file state reasoning about session lifetime, which is where a cheap model produces a confident wrong answer.',
+   "system": 'You route tasks between a cheap and a strong model. One line.',
+   "check": '("returned a routing decision", "ESCALATE" in answer.upper() or "CHEAP" in answer.upper())'}),
   ("md", "## 2 · Demo — tiered routing that works"),
   ("py", '''TIERS = {
  "llama3.2:1b":  {"tier": 0, "ms": 40,   "solves": 0.2},
@@ -981,7 +991,12 @@ cannot train on, and cannot reach — including through its logs. And the hard
 part is not building it. It is keeping it held out.
 """,
  "steps": [
-  ("md", MODEL_NOTE),
+  ("model", {
+   "title": 'The model backend, and the change it proposes to itself',
+   "task": 'This harness reports success when the test suite is green but the patch did not change behaviour. Propose one change to its verification step. One sentence.',
+   "replay": 'Require the test suite to fail on the pre-patch build and pass on the post-patch build, so a no-op patch cannot be reported as a fix.',
+   "system": 'You improve agent harnesses. One sentence, no preamble.',
+   "check": '("mentions the pre-fix build", any(w in answer.lower() for w in ("before", "pre-", "old build", "fail")))'}),
   ("md", "## 2 · Demo — a scaffold optimising against its own judge"),
   ("py", '''import random
 

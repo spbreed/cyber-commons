@@ -17,10 +17,14 @@
 <td>Open-weight models</td>
 <td>GLM-4.6</td>
 </tr>
+<tr>
+<td>Frontier models</td>
+<td>Claude Haiku 4.5</td>
+</tr>
 </tbody>
 </table>
 <blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off.</p>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An agent with a two-million-token context and a four-million-line repository has the same problem as an analyst with a week: it cannot read everything, so the question is what it reads first. Structure is what makes that choice something other than luck.</p></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   4,000,000 lines            context budget: ~30,000 lines
@@ -210,4 +214,4 @@ print(&quot;is the whole accuracy of stage 1, and it is worth tuning on your own
 <p>Run the stage-1 query against a real repository: <code>git log --name-only --grep='CVE\|security\|injection'</code>. Rank the files by how often they appear. That list usually surprises people, and it is free.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.2.html">B1.2 · Component summarisation and architecture synthesis</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.1.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Prints precision before/after triage. The FP rate — not the detection rate — is the number that moved.</div><div class="chips"><span>git</span><span>OpenGrep</span><span>tree-sitter</span><span class="m">GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.1.ipynb</code></p></div><div class="pager"><a href="B1.0.html"><span class="k">← Previous</span><span class="t">B1.0 · Start here — what an AI SDLC means</span></a><a class="next" href="B1.2.html"><span class="k">Next →</span><span class="t">B1.2 · Component summarisation and architecture synthesis</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Prints precision before/after triage. The FP rate — not the detection rate — is the number that moved.</div><div class="chips"><span>git</span><span>OpenGrep</span><span>tree-sitter</span><span class="m">GLM-4.6</span><span class="f">Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.1.ipynb</code></p></div><div class="pager"><a href="B1.0.html"><span class="k">← Previous</span><span class="t">B1.0 · Start here — what an AI SDLC means</span></a><a class="next" href="B1.2.html"><span class="k">Next →</span><span class="t">B1.2 · Component summarisation and architecture synthesis</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

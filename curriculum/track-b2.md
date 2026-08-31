@@ -23,7 +23,8 @@
 - **Control** — Separate model, loop, tools, context, verifier, budgets and orchestrator — and treat the harness itself as an autonomous actor holding credentials, which must be governed like one.
 - **Lab** — Build a minimal working harness from scratch, naming each component as it appears, then show what breaks when the verifier is removed.
 - **Tools** — `LiteLLM`, `OpenTelemetry`
-- **Models** — `Llama 3.3`, `GLM-4.6`
+- **Open-weight models** — `Llama 3.3`, `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Build a minimal working harness from scratch, naming each component as it appears, then show what breaks when the verifier is removed.
 
@@ -45,7 +46,8 @@ python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it
 - **Control** — The minimum viable security harness: context, toolset, verifier, budget.
 - **Lab** — Build the scaffold; swap the model underneath without touching the loop.
 - **Tools** — `Python`, `LiteLLM`
-- **Models** — `GLM-4.6`, `Llama 3.3`, `Kimi K2`
+- **Open-weight models** — `GLM-4.6`, `Llama 3.3`, `Kimi K2`
+- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — One scaffold, swappable model, unchanged loop.
 
@@ -73,7 +75,8 @@ MODEL=kimi-k2  python3 loop.py --task fix-tests
 - **Control** — Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists.
 - **Lab** — Score the same findings with a compiler oracle and with a same-family judge; show the gap.
 - **Tools** — `pytest`, `Checkov`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Show a same-family judge grading its own homework.
 
@@ -128,7 +131,8 @@ python3 tool_audit.py --compare shell narrow
 - **Control** — Cheap executor, escalated reasoner, advisor at decision points.
 - **Lab** — Route Llama-executor → GLM-reasoner with LiteLLM and attribute spend per run.
 - **Tools** — `LiteLLM`, `vLLM`
-- **Models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
+- **Open-weight models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Route cheap executor to escalated reasoner and attribute spend.
 
@@ -208,7 +212,8 @@ for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t -
 - **Control** — Sandbox the mutation, keep only measured gains, pin the fitness function.
 - **Lab** — Let a scaffold mutate itself in a sandbox and keep only what the oracle confirms.
 - **Tools** — `Python`, `Docker`
-- **Models** — `Kimi K2`
+- **Open-weight models** — `Kimi K2`
+- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Let a scaffold mutate itself, and keep only measured gains.
 
@@ -261,7 +266,8 @@ python3 replay.py --trace run.json --assert-identical
 - **Control** — One skeleton with a pluggable oracle and a declared blast radius. The domain supplies the oracle, not a new loop.
 - **Lab** — Run one skeleton across four domains and watch the oracle, not the loop, decide what the harness is worth.
 - **Tools** — `OpenGrep`, `OWASP ZAP`, `OWASP Threat Dragon`, `CAI`
-- **Models** — `GLM-4.6`, `Kimi K2`
+- **Open-weight models** — `GLM-4.6`, `Kimi K2`
+- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.
 
@@ -288,7 +294,8 @@ python3 domain_harness.py --domain pentest --require-signed-scope
 - **Control** — Evaluate candidates on your own corpus, and above all design for backbone substitution — any list of best models is stale within a quarter.
 - **Lab** — Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.
 - **Tools** — `LiteLLM`, `vLLM`, `Ollama`
-- **Models** — `Kimi K2.7-Code`, `GLM-5.2`, `Llama 4`
+- **Open-weight models** — `Kimi K2.7-Code`, `GLM-5.2`, `Llama 4`
+- **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.
 
@@ -310,7 +317,8 @@ python3 scripts/run_notebooks.py --session B2.10   # run it headless and check i
 - **Control** — Ground truth + blind protocol + execution-verified scoring; report reliability (pass^k) not just capability (pass@k); never quote schema conformance as accuracy.
 - **Lab** — The full Cyber Commons eval harness: build 552-row ground truth from SecLLMHolmes + TerraGoat/Checkov, run a blind model audit, score with expert-proxy + dual judges, and compare Llama / GLM / Kimi as the backing model.
 - **Tools** — `Cyber Commons eval harness`, `Checkov`, `CyberGym`, `Inspect`
-- **Models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
+- **Open-weight models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
+- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.
 
@@ -340,7 +348,8 @@ cd labs/b2.10-eval-harness
 - **Control** — pass^k alongside pass@k on a seeded corpus, plus cost per confirmed finding and analyst minutes per accepted finding, tracked as first-class metrics beside accuracy.
 - **Lab** — Run one task k times, compute pass@k and pass^k from the same runs, then price the result.
 - **Tools** — `Inspect`, `promptfoo`, `CyberGym`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.
 
@@ -367,7 +376,8 @@ python3 cost.py --corpus seeded --analyst-minutes 9
 - **Control** — Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).
 - **Lab** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
 - **Tools** — `Canarytokens`, `Inspect`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.
 

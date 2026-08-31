@@ -1,9 +1,38 @@
-# Getting the models — free, open-weight, no frontier-lab account
+# Getting the models — open weight, frontier, or neither
 
-Every lab in Cyber Commons is designed to reach its acceptance criteria on
-**open-weight models you can download or call for free**. Commercial frontier
-models are named where relevant but **never required**. This is what keeps the
-commons usable by a two-person NGO and a global bank alike.
+Every lab runs **three ways from one code path**, and the choice is one
+environment variable:
+
+| Backend | How | What it costs |
+|---|---|---|
+| **offline** (the default) | nothing to set | nothing — a deterministic stand-in, labelled as one everywhere it appears |
+| **open weight** | `OPENAI_BASE_URL` | nothing, on your own hardware — Ollama, vLLM, or a free hosted tier |
+| **frontier** | `ANTHROPIC_API_KEY` | cents per lesson on the cheapest model |
+
+Every lab is designed to reach its acceptance criteria on **open-weight models
+you can download or call for free**. A frontier model is a supported option,
+never a requirement — which is what keeps the commons usable by a two-person NGO
+and a global bank alike.
+
+```bash
+# open weight, local
+ollama pull glm-4.6
+export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6
+
+# frontier — cheapest current Claude model
+export ANTHROPIC_API_KEY=...            # MODEL defaults to claude-haiku-4-5-20251001
+```
+
+The adapter is standard library only (`urllib`), so a notebook stays
+self-contained and still runs on a Kaggle kernel with the internet switched off.
+If a backend is configured and the call fails, the lesson **says so and falls
+back to the replay, labelled as a replay** — it never reports a model's answer
+when no model answered.
+
+**Keys never go in this repository.** Put them in your environment or in a file
+outside the working tree; `scripts/check_secrets.py` blocks anything
+credential-shaped from being committed, and it runs as a pre-commit hook and in
+CI.
 
 > **Check current terms.** Free tiers, rate limits and even licences change.
 > Everything below was accurate when written; verify before you depend on it.
@@ -108,14 +137,32 @@ litellm --config labs/shared/litellm.config.yaml   # routes llama/glm/kimi behin
 
 ## Which model for which lab
 
-| Lab type | Recommended | Why |
-|----------|-------------|-----|
-| Code review / SAST triage (B1) | **GLM-4.6** | strongest code reasoning per unit of RAM |
-| Harness loops, tool use (B2, M0) | **Kimi K2** | built for agentic tool sequences |
-| Offensive planning (C1) | **Kimi K2** or GLM-4.6 | multi-step planning |
-| Guardrails / classification (B2.3, E1.6) | **Llama Guard** | purpose-built safety classifier |
-| SOC triage (D1) | **GLM-4.6** or Llama 3.3 | cheap, high volume |
-| Multi-backbone benchmarking (C2.6) | **all three** | separating model effects from harness effects *is* the lab |
+Two columns, because the honest answer depends on what you already have. The
+open-weight column is what the lab was designed against; the frontier column is
+what to reach for if you have a key and want the ceiling.
+
+| Lab type | Open weight | Frontier | Why |
+|---|---|---|---|
+| Code review / SAST triage (B1) | **GLM-4.6** | Claude Sonnet 5 | strongest code reasoning per unit of RAM |
+| Harness loops, tool use (B2) | **Kimi K2** | Claude Sonnet 5 | built for agentic tool sequences |
+| Offensive planning (C1) | **Kimi K2** or GLM-4.6 | Claude Sonnet 5 | multi-step planning |
+| Guardrails / classification | **Llama Guard** | Claude Haiku 4.5 | purpose-built, and cheap at volume |
+| SOC triage (D1) | **GLM-4.6** or Llama 3.3 | Claude Haiku 4.5 | cheap, high volume |
+| Exploit chaining, research (B1.10, C2) | Kimi K2 | Claude Opus 5 | multi-file adversarial reasoning |
+| Multi-backbone benchmarking (C2.6) | **all three** | any | separating model effects from harness effects *is* the lab |
+
+Start with **Claude Haiku 4.5** on the frontier side. It is the cheapest current
+Claude model, it is what `MODEL` defaults to, and for most of these lessons the
+difference a larger model makes is smaller than the difference a better prompt
+makes.
+
+Nine lessons carry a live section that calls a real model through the adapter.
+To run them all against a backend and record what came back:
+
+```bash
+python3 scripts/live_model_test.py --backend frontier --save
+python3 scripts/live_model_test.py --backend open-weight --model glm-4.6 --save
+```
 
 ## A note on "open"
 
@@ -126,5 +173,6 @@ Linux Foundation** projects (SPIFFE/SPIRE, OPA, Falco, Kyverno, Cilium,
 OpenTelemetry, Keycloak, Sigstore, in-toto, kagent, kmcp, agentgateway) —
 genuinely open governance, no vendor lock, and the thing you'd actually deploy.
 
-If a lab ever *requires* a closed model to pass, that's a bug in the lab.
-[Open an issue](../../issues).
+If a lab ever *requires* a closed model to pass, that's a bug in the lab —
+the frontier path is an option, and `live_model_test.py` runs the same
+assertions on both sides. [Open an issue](../../issues).

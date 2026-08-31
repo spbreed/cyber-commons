@@ -23,7 +23,8 @@
 - **Control** — Pre-load logs, telemetry, segmentation model and playbooks.
 - **Lab** — Reconstruct a timeline from raw logs with a context-loaded agent.
 - **Tools** — `Velociraptor`, `OpenSearch`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Pre-load the agent so it reasons as a partner, not a tool you reach for late.
 
@@ -77,7 +78,8 @@ python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
 - **Control** — Reconstruct the action chain across all three planes.
 - **Lab** — Scope a multi-agent incident end to end.
 - **Tools** — `OpenTelemetry`
-- **Models** — `Kimi K2`
+- **Open-weight models** — `Kimi K2`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Scope an incident where the initiating agent is not the acting one.
 

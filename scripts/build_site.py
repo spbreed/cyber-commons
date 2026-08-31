@@ -307,7 +307,10 @@ def lesson_page(entry, prev, nxt) -> str:
         parts.append(f'<div class="expect"><b>Expect</b>{html.escape(lab["expect"])}</div>')
 
     chips = "".join(f'<span>{html.escape(t)}</span>' for t in s.get("tools", []))
-    chips += "".join(f'<span class="m">{html.escape(m)}</span>' for m in s.get("models", []))
+    chips += "".join(f'<span class="m">{html.escape(m)}</span>'
+                     for m in s.get("open_weight", []))
+    chips += "".join(f'<span class="f">{html.escape(m)}</span>'
+                     for m in s.get("frontier", []))
     if chips:
         parts.append(f'<div class="chips">{chips}</div>')
 

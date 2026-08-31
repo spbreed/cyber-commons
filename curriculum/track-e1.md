@@ -173,7 +173,8 @@ python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three way
 - **Control** — Constrain both, and know which evidence answers which question.
 - **Lab** — Classify your own guardrails into the two buckets.
 - **Tools** — `NeMo Guardrails`, `LLM Guard`
-- **Models** — `Llama Guard 4`
+- **Open-weight models** — `Llama Guard 4`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Sort your guardrails into operating vs outcome.
 
@@ -200,7 +201,8 @@ python3 classify_guardrails.py --gap-analysis   # which regulator question is un
 - **Control** — Agent-assisted evidence collection, drift detection, exception tracking.
 - **Lab** — Automate one evidence package on a schedule.
 - **Tools** — `OPA`, `OSCAL`
-- **Models** — `GLM-4.6`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Automate the evidence package, not the judgment.
 

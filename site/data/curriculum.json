@@ -62,9 +62,12 @@
         "kagent",
         "OpenTelemetry"
        ],
-       "models": [
+       "open_weight": [
         "Llama 3.3",
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -80,10 +83,13 @@
         "garak",
         "promptfoo"
        ],
-       "models": [
+       "owasp": "T6 Intent Breaking & Goal Manipulation · LLM01",
+       "open_weight": [
         "Llama Guard 4"
        ],
-       "owasp": "T6 Intent Breaking & Goal Manipulation · LLM01"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       },
       {
        "id": "A1.3",
@@ -98,10 +104,13 @@
         "garak",
         "LLM Guard"
        ],
-       "models": [
+       "owasp": "T6 Intent Breaking & Goal Manipulation · LLM01",
+       "open_weight": [
         "Llama Guard 4"
        ],
-       "owasp": "T6 Intent Breaking & Goal Manipulation · LLM01"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       },
       {
        "id": "A1.4",
@@ -115,10 +124,13 @@
        "tools": [
         "LLM Guard"
        ],
-       "models": [
+       "owasp": "T1 Memory Poisoning · LLM04",
+       "open_weight": [
         "GLM-4.6"
        ],
-       "owasp": "T1 Memory Poisoning · LLM04"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       },
       {
        "id": "A1.5",
@@ -133,10 +145,13 @@
         "OPA",
         "kmcp"
        ],
-       "models": [
+       "owasp": "T2 Tool Misuse · LLM06",
+       "open_weight": [
         "GLM-4.6"
        ],
-       "owasp": "T2 Tool Misuse · LLM06"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       },
       {
        "id": "A1.6",
@@ -182,10 +197,13 @@
         "Falco",
         "gVisor"
        ],
-       "models": [
+       "owasp": "T11 Unexpected RCE and Code Attacks · LLM05",
+       "open_weight": [
         "GLM-4.6"
        ],
-       "owasp": "T11 Unexpected RCE and Code Attacks · LLM05"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       },
       {
        "id": "A1.9",
@@ -230,10 +248,13 @@
        "tools": [
         "Inspect"
        ],
-       "models": [
+       "owasp": "T5 Cascading Hallucination Attacks · LLM09",
+       "open_weight": [
         "GLM-4.6"
        ],
-       "owasp": "T5 Cascading Hallucination Attacks · LLM09"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       },
       {
        "id": "A1.12",
@@ -290,10 +311,13 @@
        "tools": [
         "Inspect"
        ],
-       "models": [
+       "owasp": "T7 Misaligned & Deceptive Behaviors",
+       "open_weight": [
         "GLM-4.6"
        ],
-       "owasp": "T7 Misaligned & Deceptive Behaviors"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       },
       {
        "id": "A1.16",
@@ -410,10 +434,13 @@
         "LLM Guard",
         "agentgateway"
        ],
-       "models": [
+       "mitigates": "T6 Intent Breaking (direct and indirect) · T1 Memory Poisoning · T12 Communication Poisoning",
+       "open_weight": [
         "Llama Guard 4"
        ],
-       "mitigates": "T6 Intent Breaking (direct and indirect) · T1 Memory Poisoning · T12 Communication Poisoning"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       },
       {
        "id": "A2.7",
@@ -612,10 +639,13 @@
        "tools": [
         "OpenTelemetry"
        ],
-       "models": [
+       "mitigates": "C9.1 IR-6 · C9.4 AC-3 · C10.2 SA-8",
+       "open_weight": [
         "Llama 3.3"
        ],
-       "mitigates": "C9.1 IR-6 · C9.4 AC-3 · C10.2 SA-8"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       }
      ]
     }
@@ -660,8 +690,11 @@
         "OpenGrep",
         "tree-sitter"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -676,9 +709,12 @@
         "tree-sitter",
         "Graphviz"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -692,8 +728,11 @@
        "tools": [
         "OWASP Threat Dragon"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -708,9 +747,12 @@
         "Semgrep OSS",
         "CodeQL"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Llama 3.3"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -726,9 +768,12 @@
         "Semgrep OSS",
         "CodeQL"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -743,8 +788,11 @@
         "OpenGrep",
         "tree-sitter"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -759,8 +807,11 @@
         "CodeQL",
         "tree-sitter"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -776,8 +827,11 @@
         "gVisor",
         "Cilium"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -792,9 +846,12 @@
         "OWASP ZAP",
         "Nuclei"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -808,8 +865,11 @@
        "tools": [
         "OWASP ZAP"
        ],
-       "models": [
+       "open_weight": [
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Opus 5"
        ]
       },
       {
@@ -824,9 +884,12 @@
         "Semgrep OSS",
         "pytest"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -840,8 +903,11 @@
        "tools": [
         "OpenGrep"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -855,9 +921,12 @@
        "tools": [
         "tree-sitter"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Llama 3.3"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -871,8 +940,11 @@
        "tools": [
         "OpenGrep"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -887,8 +959,11 @@
         "Docker",
         "Cilium"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -905,8 +980,11 @@
         "OSCAL",
         "OPA"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -921,9 +999,12 @@
         "Google Mantis",
         "OpenGrep"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       }
      ]
@@ -949,9 +1030,12 @@
         "LiteLLM",
         "OpenTelemetry"
        ],
-       "models": [
+       "open_weight": [
         "Llama 3.3",
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -966,10 +1050,13 @@
         "Python",
         "LiteLLM"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Llama 3.3",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -984,8 +1071,11 @@
         "pytest",
         "Checkov"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -1013,10 +1103,13 @@
         "LiteLLM",
         "vLLM"
        ],
-       "models": [
+       "open_weight": [
         "Llama 3.3",
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1058,8 +1151,11 @@
         "Python",
         "Docker"
        ],
-       "models": [
+       "open_weight": [
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -1089,9 +1185,12 @@
         "OWASP Threat Dragon",
         "CAI"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -1107,10 +1206,13 @@
         "vLLM",
         "Ollama"
        ],
-       "models": [
+       "open_weight": [
         "Kimi K2.7-Code",
         "GLM-5.2",
         "Llama 4"
+       ],
+       "frontier": [
+        "Claude Opus 5"
        ]
       },
       {
@@ -1127,10 +1229,13 @@
         "CyberGym",
         "Inspect"
        ],
-       "models": [
+       "open_weight": [
         "Llama 3.3",
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -1146,8 +1251,11 @@
         "promptfoo",
         "CyberGym"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1163,10 +1271,13 @@
         "Canarytokens",
         "Inspect"
        ],
-       "models": [
+       "mitigates": "C4.4 SI-4 · C10.3 RA-5",
+       "open_weight": [
         "GLM-4.6"
        ],
-       "mitigates": "C4.4 SI-4 · C10.3 RA-5"
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       }
      ]
     }
@@ -1211,9 +1322,12 @@
         "Metasploit",
         "Firecracker"
        ],
-       "models": [
+       "open_weight": [
         "Kimi K2",
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -1230,8 +1344,11 @@
         "SPIRE",
         "Falco"
        ],
-       "models": [
+       "open_weight": [
         "Llama 3.3"
+       ],
+       "frontier": [
+        "Claude Sonnet 5"
        ]
       },
       {
@@ -1245,8 +1362,11 @@
        "tools": [
         "Cyber Commons eval harness"
        ],
-       "models": [
+       "open_weight": [
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1295,10 +1415,13 @@
        "tools": [
         "garak"
        ],
-       "models": [
+       "open_weight": [
         "Llama 3.3",
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Opus 5"
        ]
       },
       {
@@ -1313,8 +1436,11 @@
         "TransformerLens",
         "PyTorch"
        ],
-       "models": [
+       "open_weight": [
         "Llama 3.3"
+       ],
+       "frontier": [
+        "Claude Opus 5"
        ]
       },
       {
@@ -1358,10 +1484,13 @@
         "Inspect",
         "Cyber Commons eval harness"
        ],
-       "models": [
+       "open_weight": [
         "Llama 3.3",
         "GLM-4.6",
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Opus 5"
        ]
       },
       {
@@ -1436,8 +1565,11 @@
         "Wazuh",
         "OpenSearch"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1451,9 +1583,12 @@
        "tools": [
         "Wazuh"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6",
         "Llama 3.3"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1468,8 +1603,11 @@
         "Sigma",
         "Wazuh"
        ],
-       "models": [
+       "open_weight": [
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1511,8 +1649,11 @@
        "tools": [
         "OpenSearch"
        ],
-       "models": [
+       "open_weight": [
         "Llama 3.3"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1526,8 +1667,11 @@
        "tools": [
         "promptfoo"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1542,8 +1686,11 @@
         "MISP",
         "OpenCTI"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1602,8 +1749,11 @@
         "Velociraptor",
         "OpenSearch"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1631,8 +1781,11 @@
        "tools": [
         "OpenTelemetry"
        ],
-       "models": [
+       "open_weight": [
         "Kimi K2"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1820,8 +1973,11 @@
         "NeMo Guardrails",
         "LLM Guard"
        ],
-       "models": [
+       "open_weight": [
         "Llama Guard 4"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {
@@ -1836,8 +1992,11 @@
         "OPA",
         "OSCAL"
        ],
-       "models": [
+       "open_weight": [
         "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
        ]
       },
       {

@@ -281,7 +281,12 @@ flows.
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
-  ("md", MODEL_NOTE),
+  ("model", {
+   "title": 'The model backend, and the map it produces',
+   "task": 'Summarise what this component does in one sentence, then name its trust boundary.\n\nFiles: auth/session.py, auth/token.py, auth/mfa.py\nExports: issue_session(user), verify_session(tok), revoke(tok)\nCallers: api/login.py (public HTTP), admin/impersonate.py (internal)',
+   "replay": 'Issues and verifies user sessions, including MFA and revocation.\nTrust boundary: api/login.py is reachable from the public internet, so session issuance sits on the untrusted edge; admin/impersonate.py is internal and crosses into the same component from a higher-trust zone.',
+   "system": 'You summarise code components for a security architecture map. Two sentences, no preamble.',
+   "check": '("names a trust boundary", "trust" in answer.lower() or "boundary" in answer.lower())'}),
   ("md", "## 2 · Stage 3 — summarise each component, locally"),
   ("py", '''import ast
 from dataclasses import dataclass, field
@@ -1010,7 +1015,12 @@ model for what rules cannot express; and everything the model says treated as a
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
-  ("md", MODEL_NOTE),
+  ("model", {
+   "title": 'The model backend, and the third generation of SAST',
+   "task": 'Is this function vulnerable? Name the CWE if so, and say which value reaches the sink.\n\ndef report(request):\n    q = "SELECT * FROM orders WHERE ref = \'" + request.args[\'ref\'] + "\'"\n    return db.execute(q)',
+   "replay": "Yes - CWE-89, SQL injection. request.args['ref'] is concatenated directly into the query string and reaches db.execute unsanitised.",
+   "system": 'You are a code reviewer. Answer in at most three lines.',
+   "check": '("names the CWE identifier", "CWE-89" in answer.upper() or "SQL INJECT" in answer.upper())'}),
   ("md", "## 2 · Generation 1 — grep, and why it gets muted\n\n"
          "The safe functions in this corpus matter more than the buggy ones: a "
          "scanner that fires on parameterised SQL is one nobody runs twice."),

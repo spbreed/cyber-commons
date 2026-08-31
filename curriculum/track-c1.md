@@ -43,7 +43,8 @@ python3 scripts/run_notebooks.py --session C1.0   # run it headless and check it
 - **Control** — Full target context before it swings, and scope enforced at the network layer rather than by a politeness clause in the prompt.
 - **Lab** — Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
 - **Tools** — `CAI`, `Metasploit`, `Firecracker`
-- **Models** — `Kimi K2`, `GLM-4.6`
+- **Open-weight models** — `Kimi K2`, `GLM-4.6`
+- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Drive a planner/executor pair against a target you own, and watch scope refuse an out-of-scope host in the harness and again in the sandbox.
 
@@ -70,7 +71,8 @@ cd labs/c1-redteam
 - **Control** — Systematic campaigns across all three surfaces, with measured success rates and a criterion agreed before the first payload.
 - **Lab** — Run a campaign across the three surfaces and report a rate with its sample size, not an anecdote.
 - **Tools** — `garak`, `promptfoo`, `SPIRE`, `Falco`
-- **Models** — `Llama 3.3`
+- **Open-weight models** — `Llama 3.3`
+- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Run one campaign across the injection, identity and containment surfaces and report a rate with its sample size for each.
 
@@ -97,7 +99,8 @@ python3 campaign.py --report --include-benign-controls
 - **Control** — Eval gaming, sandbagging, contamination and judge manipulation as test cases.
 - **Lab** — Game the B2.11 harness deliberately, then close the hole you used.
 - **Tools** — `Cyber Commons eval harness`
-- **Models** — `Kimi K2`
+- **Open-weight models** — `Kimi K2`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Game the eval deliberately, then close the hole you used.
 
