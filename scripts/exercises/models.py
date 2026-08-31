@@ -37,9 +37,26 @@ FRONTIER_DEFAULT   = "claude-haiku-4-5-20251001"
 OPEN_WEIGHT_DEFAULT = "glm-4.6"
 TIMEOUT = 60
 
+def _kaggle_secret(name):
+    """On Kaggle, a key lives in Add-ons -> Secrets rather than the environment.
+
+    kaggle_secrets is pre-installed in the Kaggle image and absent everywhere
+    else, so the import is guarded and the notebook needs no dependency. It also
+    requires the notebook to have internet enabled, which on Kaggle requires a
+    phone-verified account - see the note printed below.
+    """
+    try:
+        from kaggle_secrets import UserSecretsClient
+        return UserSecretsClient().get_secret(name)
+    except Exception:
+        return None
+
 def backend():
     """(kind, model). Configuration comes from the environment, never a literal."""
-    if os.environ.get("ANTHROPIC_API_KEY"):
+    if os.environ.get("ANTHROPIC_API_KEY") or _kaggle_secret("ANTHROPIC_API_KEY"):
+        os.environ.setdefault("ANTHROPIC_API_KEY",
+                              os.environ.get("ANTHROPIC_API_KEY")
+                              or _kaggle_secret("ANTHROPIC_API_KEY") or "")
         return "frontier", os.environ.get("MODEL", FRONTIER_DEFAULT)
     if os.environ.get("OPENAI_BASE_URL"):
         return "open-weight", os.environ.get("MODEL", OPEN_WEIGHT_DEFAULT)
@@ -103,6 +120,11 @@ if _kind == "replay":
     print("   frontier     export ANTHROPIC_API_KEY=...   # cheapest: " + FRONTIER_DEFAULT)
     print("   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \\\\")
     print("                       OPENAI_API_KEY=ollama MODEL=glm-4.6")
+    print()
+    print("   On Kaggle: Add-ons -> Secrets, add ANTHROPIC_API_KEY, and switch")
+    print("   Internet on in the notebook settings. Internet requires a")
+    print("   phone-verified Kaggle account; without it DNS fails in the kernel")
+    print("   and this lesson correctly stays on the replay.")
 '''
 
 # The section appended to a model lesson: the same task, run for real.

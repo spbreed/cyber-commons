@@ -101,6 +101,32 @@ reading documentation:
   count of 5 reached"* plus HTTP 429s, so the client pushes in batches and waits
   for each to finish.
 
+### Internet, and therefore frontier models, on Kaggle
+
+Nine lessons can call a real model. On Kaggle that needs two things, and the
+first one is an account setting rather than anything the code can arrange:
+
+1. **Internet enabled on the notebook**, which Kaggle gates behind a
+   **phone-verified account** — the same verification that gates public
+   notebooks.
+2. **The key in Add-ons → Secrets** as `ANTHROPIC_API_KEY`. The adapter reads
+   it from there automatically (`kaggle_secrets` is pre-installed in the Kaggle
+   image and the import is guarded, so nothing is added to the dependency set).
+
+Pushed with `enableInternet: true` on an unverified account, the kernel runs and
+reports:
+
+```
+  dns  api.anthropic.com: FAILED gaierror
+  dns  pypi.org:          FAILED gaierror
+  http api.anthropic.com: BLOCKED URLError: Temporary failure in name resolution
+```
+
+The flag is accepted by the API and silently not granted — the same shape as the
+GPU flag. Until the account is verified, every lesson on Kaggle correctly stays
+on the deterministic replay and says so, which is why the offline path is the
+default rather than a fallback.
+
 Kernels are created **private**. Kaggle rejects a public push with HTTP 403
 *"Phone verification is required to make a notebook public"* unless the owning
 account has a verified phone number — an account setting, not something the
