@@ -10,6 +10,8 @@
     C2.7  from finding to control, and to something that still holds without you
 """
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "C2.1": {
@@ -284,27 +286,17 @@ other track in this curriculum has been building.
 """,
  "steps": [
   ("md", "## 2 · Demo — what changes with access level"),
-  ("py", '''ACCESS = {
- "hosted API": {
-   "unlimited probing": False, "no abuse signal": False,
-   "can remove refusals": False, "controls own version": False,
-   "activation access": False},
- "open weights, local": {
-   "unlimited probing": True, "no abuse signal": True,
-   "can remove refusals": True, "controls own version": True,
-   "activation access": True},
-}
-caps = list(ACCESS["hosted API"])
-print(f"{'capability':24s}{'hosted API':>12}{'local weights':>15}")
-print("-" * 52)
-for c in caps:
-    print(f"{c:24s}{str(ACCESS['hosted API'][c]):>12}{str(ACCESS['open weights, local'][c]):>15}")
-
-gained = [c for c in caps if ACCESS["open weights, local"][c]
-          and not ACCESS["hosted API"][c]]
-print(f"\\nan attacker gains: {gained}")
-print("a defender gains exactly the same list — which is why the commons works.")
-'''),
+  ("html", D.table(
+    ["capability", "hosted API", "open weights, running locally"],
+    [["unlimited probing", "no", "<b>yes</b>"],
+     ["no abuse signal reaches the provider", "no", "<b>yes</b>"],
+     ["can remove refusals", "no", "<b>yes</b>"],
+     ["controls its own version", "no", "<b>yes</b>"],
+     ["activation-level access", "no", "<b>yes</b>"]],
+    emphasise=2,
+    caption="An attacker gains all five. A defender gains exactly the same five "
+            "— which is the whole argument for a commons built on open weights, "
+            "and the reason the asymmetry people expect here does not exist.")),
   ("md", "## 3 · Where it breaks — measure the probing asymmetry"),
   ("py", '''def attempts_available(rate_limit_per_min, hours, parallel=1):
     if rate_limit_per_min is None:                     # local: bounded by hardware

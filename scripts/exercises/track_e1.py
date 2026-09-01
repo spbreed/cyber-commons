@@ -1329,9 +1329,9 @@ print("the remediation it was told to do.")
 assert not governed(CASES[1])["is_governed"]
 '''),
  ],
- "expect": "Five stakeholder functions print with the question each is asking "
-           "and the controls each operates — 22 controls in total. Four seam "
-           "failures are shown as pairs of individually reasonable assumptions, "
+ "expect": "Five control functions, the question each is asking and the "
+           "controls each operates — 22 in total. Four seam failures laid out as "
+           "pairs of individually reasonable assumptions, "
            "and every function still self-reports green while all four gaps are "
            "open. Naming one accountable owner per handoff closes them, and a "
            "use case with all five control functions and no business owner is "

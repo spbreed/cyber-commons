@@ -18,6 +18,8 @@ Three things change when the actor is an agent, and each has a lesson:
 
 from .skills import SKILL_RUNTIME
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "D2.1": {
@@ -252,18 +254,19 @@ for lever, (secs, note) in LEVERS.items():
 assert not SESSIONS["patch-agent"].can_act(now)[0]
 assert SESSIONS["deploy-agent"].can_act(now)[0]
 '''),
-  ("py", '''# Verify: the runbook, rewritten.
-OLD = ["1. disable the user account",
-       "2. interview the user",
-       "3. review the user's recent activity"]
-NEW = ["1. identify the ACTING identity from the act chain (A2.5)",
-       "2. revoke that identity — no approval needed for a non-human (A3.6)",
-       "3. scope by walking the delegation chain, not the host list (D2.3)",
-       "4. preserve the run trace before anything restarts (D2.5)",
-       "5. only then consider the human's account, and say why"]
-print("OLD RUNBOOK");  [print("   " + s) for s in OLD]
-print("\\nNEW RUNBOOK"); [print("   " + s) for s in NEW]
-'''),
+  ("html", D.table(
+    ["the runbook you have", "the runbook this incident needs"],
+    [["1. disable the user account",
+      "1. identify the <b>acting</b> identity from the act chain (A2.5)"],
+     ["2. interview the user",
+      "2. revoke that identity — no approval needed for a non-human (A3.6)"],
+     ["3. review the user's recent activity",
+      "3. scope by walking the delegation chain, not the host list (D2.3)"],
+     ["", "4. preserve the run trace before anything restarts (D2.5)"],
+     ["", "5. only then consider the human's account, and say why"]],
+    emphasise=1,
+    caption="Every step on the left is correct for a human actor and wrong here. "
+            "The human authorised a task; the actions were chosen by a model.")),
  ],
  "expect": "Disabling the human's account leaves both agents able to act on "
            "already-issued tokens. The interview establishes the user authorised "
@@ -676,43 +679,35 @@ as done six weeks later.
 """,
  "steps": [
   ("md", "## 2 · Demo — where post-incident changes actually land"),
-  ("py", '''SURFACES = {
- "application code":   ("yes",       "PR, review, CI, deploy"),
- "agent prompt":       ("no",        "edited in a console, no diff retained"),
- "tool manifest":      ("no",        "config change; no threat-model diff (A1.1)"),
- "model version":      ("no",        "provider-side; you may not be told"),
- "policy (in git)":    ("yes",       "if it is in git — often it is not"),
- "approval settings":  ("no",        "a toggle in an admin UI"),
- "egress allowlist":   ("sometimes", "depends whether it is IaC or a console"),
-}
-print(f"{'change surface':22s}{'in change mgmt?':18s}what happens today")
-print("-" * 76)
-for k, (managed, how) in SURFACES.items():
-    print(f"{k:22s}{managed:18s}{how}")
-unmanaged = [k for k, (m, _) in SURFACES.items() if m == "no"]
-print(f"\\n{len(unmanaged)}/{len(SURFACES)} bypass change management: {unmanaged}")
-'''),
+  ("html", D.table(
+    ["change surface", "in change management?", "what happens today"],
+    [["application code", "yes", "pull request, review, CI, deploy"],
+     ["agent prompt", "<b>no</b>", "edited in a console, no diff retained"],
+     ["tool manifest", "<b>no</b>", "a config change, with no threat-model diff"],
+     ["model version", "<b>no</b>", "provider-side; you may not be told"],
+     ["policy", "yes", "if it is in git — often it is not"],
+     ["approval settings", "<b>no</b>", "a toggle in an admin UI"],
+     ["egress allowlist", "sometimes", "depends whether it is IaC or a console"]],
+    emphasise=1,
+    caption="The same surfaces D1.7 watches for drift. There they were the "
+            "things that change without anyone deciding; here they are the "
+            "things you change on purpose, after an incident — and four of "
+            "seven still leave no record that you did.")),
   ("md", "## 3 · Where it breaks — six weeks later"),
-  ("py", '''ACTIONS = [
- ("revoke the compromised agent identity", "identity provider", True),
- ("add collect.example.com to the egress denylist", "console", False),
- ("remove read access to /home/app/.aws", "tool manifest", False),
- ("require approval for http_post", "admin toggle", False),
- ("add a regression test for the credential read", "code", True),
- ("update the prompt to warn about credential files", "console", False),
-]
-print(f"{'action':48s}{'landed in':20s}verifiable in 6 weeks?")
-print("-" * 92)
-for a, where, verifiable in ACTIONS:
-    print(f"{a:48s}{where:20s}{verifiable}")
-v = sum(x[2] for x in ACTIONS)
-print(f"\\n{v}/{len(ACTIONS)} post-incident actions can be verified later.")
-print("The other four exist only in the incident document.")
-
-print("\\nAlso note action 6: 'update the prompt to warn about credential files'.")
-print("That is a request for the model to behave better. It is not a control,")
-print("and it will be silently reverted by the next prompt edit.")
-'''),
+  ("html", D.table(
+    ["the action, as written in the report", "where it landed",
+     "still verifiable in six weeks?"],
+    [["revoke the compromised agent identity", "identity provider", "<b>yes</b>"],
+     ["add collect.example.com to the egress denylist", "a console", "no"],
+     ["remove read access to /home/app/.aws", "tool manifest", "no"],
+     ["require approval for http_post", "an admin toggle", "no"],
+     ["add a regression test for the credential read", "code", "<b>yes</b>"],
+     ["update the prompt to warn about credential files", "a console", "no"]],
+    emphasise=2,
+    caption="Two of six survive as something you can check. The other four exist "
+            "only in the incident document — and the last of them is not a "
+            "control at all: it is a request for the model to behave better, and "
+            "the next prompt edit will silently revert it.")),
   ("md", "## 4 · The control — the manifest diff, and a verification date"),
   ("py", '''SCOPE_WEIGHT = {"self": 1, "project": 3, "tenant": 8, "org": 20}
 def blast(tools, gated=frozenset()):

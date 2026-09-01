@@ -21,6 +21,8 @@ MODEL_NOTE = """
 
 from .skills import SKILL_RUNTIME
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "D1.1": {
@@ -953,21 +955,18 @@ for ts, event, mix in TIMELINE:
     print(f"{(now-ts)/DAY:>6.0f}d  {event:26s}{d['drift']:>7.3f}  {d['new_tools']}")
 '''),
   ("md", "## 3 · Where it breaks — none of these was a code change"),
-  ("py", '''CHANGE_SURFACES = {
- "application code":  ("yes", "PR, review, CI"),
- "agent prompt":      ("no",  "edited in a console"),
- "tool manifest":     ("no",  "config change, no threat-model diff"),
- "model version":     ("no",  "provider-side; you may not be told"),
- "policy (in git)":   ("yes", "if it is in git"),
- "approval settings": ("no",  "a toggle in an admin UI"),
-}
-print(f"{'surface':20s}{'in change mgmt?':18s}what happens today")
-print("-" * 68)
-for k, (managed, how) in CHANGE_SURFACES.items():
-    print(f"{k:20s}{managed:18s}{how}")
-unmanaged = [k for k, (m, _) in CHANGE_SURFACES.items() if m == "no"]
-print(f"\\n{len(unmanaged)}/{len(CHANGE_SURFACES)} surfaces bypass change management: {unmanaged}")
-'''),
+  ("html", D.table(
+    ["change surface", "in change management?", "what happens today"],
+    [["application code", "yes", "pull request, review, CI"],
+     ["agent prompt", "<b>no</b>", "edited in a console"],
+     ["tool manifest", "<b>no</b>", "a config change, with no threat-model diff"],
+     ["model version", "<b>no</b>", "provider-side; you may not be told"],
+     ["policy", "yes", "if it is in git — often it is not"],
+     ["approval settings", "<b>no</b>", "a toggle in an admin UI"]],
+    emphasise=1,
+    caption="Four of six surfaces bypass change management entirely. Drift is "
+            "the failure mode with no adversary, and this table is why it is "
+            "also the failure mode with no ticket.")),
   ("md", "## 4 · The control — freshness derived from the observed drift rate"),
   ("py", '''def drift_rate(baseline, timeline):
     """How fast does this agent actually drift? Set the window from the answer."""
@@ -1117,22 +1116,20 @@ print(f"   alerts actioned     : {ACTIONED}  ({ACTIONED/max(len(fired),1):.0%})"
 print("\\nThe third number is the one that decides whether the subscription renews.")
 '''),
   ("md", "## 4 · The control — agent-specific intel is mostly internal"),
-  ("py", '''SOURCES = {
- "commercial feed":     (0.30, "generic IOCs; little agent-specific content yet"),
- "your own incidents":  (1.00, "the technique that worked against YOU"),
- "your red team (C1)":  (0.90, "attack suite results become detections directly"),
- "your drift monitor":  (0.80, "D1.7 baseline changes are leading indicators"),
- "vendor advisories":   (0.50, "useful for supply chain (C2.5)"),
-}
-print(f"{'source':22s}{'conversion':>12}  note")
-print("-" * 76)
-for s, (rate, note) in sorted(SOURCES.items(), key=lambda kv: -kv[1][0]):
-    print(f"{s:22s}{rate:>12.0%}  {note}")
-print("\\nThe highest-converting sources are all internal. For agentic threats the")
-print("intel programme is mostly a feedback loop from C1 and D1.7, not a purchase.")
-best = max(SOURCES.items(), key=lambda kv: kv[1][0])
-assert best[0] == "your own incidents"
-'''),
+  ("html", D.table(
+    ["intel source", "converts to a detection", "why"],
+    [["your own incidents", "<b>100%</b>", "the technique that worked against you"],
+     ["your red team (C1)", "<b>90%</b>",
+      "attack-suite results become detections directly"],
+     ["your drift monitor (D1.7)", "<b>80%</b>",
+      "baseline changes are leading indicators"],
+     ["vendor advisories", "50%", "useful for the supply chain (C2.5)"],
+     ["commercial feed", "30%",
+      "generic indicators; little agent-specific content yet"]],
+    emphasise=1,
+    caption="The highest-converting sources are all internal. For agentic "
+            "threats the intel programme is mostly a feedback loop out of C1 and "
+            "D1.7, not a purchase.")),
  ],
  "expect": "Four of seven indicators convert to rules — the two narratives and "
            "the low-confidence host are dropped with reasons. The rules fire on "

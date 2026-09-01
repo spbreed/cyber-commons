@@ -1284,25 +1284,17 @@ assert len(diff(MANIFEST, REPOSITORY)) == 3
 '''),
 
   ("md", "## 5 · Verify — who owns each of these"),
-  ("py", '''OWNERS = {
- "escape detection (C1.4)":        ("platform security", "host sensor"),
- "cache integrity (C5.4)":         ("build/release",     "artifact repository"),
- "secret scanning (C4.1)":         ("appsec",            "repos, CI, internet"),
- "exemption drift (C6.3)":         ("governance",        "control registry"),
- "upload scanning (C3.4)":         ("the ingest team",   "upload path"),
-}
-print(f"{'detection':34s}{'owner':20s}data source")
-for d in sorted(OWNERS):
-    owner, src = OWNERS[d]
-    print(f"{d:34s}{owner:20s}{src}")
-
-print()
-print(f"{len(OWNERS)} detections, {len({o for o, _ in OWNERS.values()})} different owners,")
-print("and not one of them reads the workload's own logs. That is the property")
-print("that makes them useful after A2.8: they survive the subject of the")
-print("investigation having had write access to everything else.")
-assert len({o for o, _ in OWNERS.values()}) == 5
-'''),
+  ("html", D.table(
+    ["detection", "owner", "data source"],
+    [["escape detection (C1.4)", "platform security", "host sensor"],
+     ["cache integrity (C5.4)", "build / release", "artifact repository"],
+     ["secret scanning (C4.1)", "appsec", "repos, CI, the public internet"],
+     ["exemption drift (C6.3)", "governance", "control registry"],
+     ["upload scanning (C3.4)", "the ingest team", "upload path"]],
+    caption="Five detections, five different owners, and not one of them reads "
+            "the workload's own logs. That is the property that makes them "
+            "useful after A2.8: they survive the subject of the investigation "
+            "having had write access to everything else.")),
  ],
  "expect": "Four named rules fire on a seven-event escape sequence that scores "
            "0.07 on a generic volume anomaly. The orphaned-process rule isolates "
@@ -1569,23 +1561,17 @@ assert not kill(FLEET, preserve=False)["reconstructable"]
 '''),
 
   ("md", "## 4 · Where it breaks — the path that runs through the fleet"),
-  ("py", '''PATHS = {
- "via the orchestrator API":   {"depends_on_fleet": True,  "creds": "shared"},
- "via the agent's own sidecar":{"depends_on_fleet": True,  "creds": "workload"},
- "out-of-band control plane":  {"depends_on_fleet": False, "creds": "separate"},
-}
-print(f"{'activation path':30s}{'usable if fleet compromised':>30}")
-for p in sorted(PATHS):
-    d = PATHS[p]
-    usable = not d["depends_on_fleet"] and d["creds"] == "separate"
-    print(f"{p:30s}{('yes' if usable else 'NO'):>30}")
-
-print()
-print("Two of three paths are the ones teams actually build, and both run")
-print("through the thing they are trying to stop. The switch has to be")
-print("independent in credentials AND in network path, or it is a request.")
-assert sum(1 for p in PATHS if not PATHS[p]["depends_on_fleet"]) == 1
-'''),
+  ("html", D.table(
+    ["activation path", "runs through the fleet?", "credentials",
+     "usable if the fleet is compromised"],
+    [["via the orchestrator API", "yes", "shared", "<b>no</b>"],
+     ["via the agent's own sidecar", "yes", "the workload's", "<b>no</b>"],
+     ["out-of-band control plane", "no", "separate", "<b>yes</b>"]],
+    emphasise=3,
+    caption="The first two are the ones teams actually build, and both run "
+            "through the thing they are trying to stop. The switch has to be "
+            "independent in credentials AND in network path, or it is a "
+            "request.")),
 
   ("md", "## 5 · Verify — a switch nobody has pulled is a hypothesis"),
   ("py", '''TESTS = [
