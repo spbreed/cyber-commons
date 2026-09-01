@@ -47,6 +47,8 @@ MODEL_NOTE = """
 > ```
 """
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "B1.1": {

@@ -13,6 +13,8 @@ senior has to make, and the job is to make it makeable.
     E3.8  resilience over perfection
 """
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "E3.1": {
@@ -473,31 +475,22 @@ print("decisions rather than work.")
 assert total > owned_only * 5
 '''),
   ("md", "## 4 · The control — four roles, and which to hire first"),
-  ("py", '''ROLES = {
- "harness engineer":   ("owns the loop, the verifier, the eval", "B2",
-                        ["evaluation", "stop conditions"], 1),
- "identity engineer":  ("owns agent identity and delegation", "A2",
-                        ["revocation", "attribution", "act chains"], 3),
- "detection engineer": ("owns agent telemetry and drift", "D1",
-                        ["drift alerts", "agent detections"], 2),
- "GRC practitioner":   ("owns tiering, evidence, continuous verification", "E1",
-                        ["inventory", "control coverage"], 2),
-}
-print(f"{'role':22s}{'track':7s}{'unblocks':>10}  owns")
-print("-" * 84)
-for role, (what, track, unlocks, n_unblocked) in sorted(
-        ROLES.items(), key=lambda kv: -kv[1][3]):
-    print(f"{role:22s}{track:7s}{n_unblocked:>10}  {what}")
-    print(f"{'':39s}delivers: {', '.join(unlocks)}")
-
-first = max(ROLES, key=lambda r: ROLES[r][3])
-print(f"\\nmost commonly hired first : harness engineer")
-print(f"unblocks the most others  : {first}")
-print("\\nThe identity engineer is the one who makes revocation, attribution and")
-print("act chains possible — which E3.3 showed are prerequisites for evidence,")
-print("evaluation and continuous verification. Hiring them second costs a quarter.")
-assert first == "identity engineer"
-'''),
+  ("html", D.table(
+    ["role", "track", "owns", "delivers", "how many others it unblocks"],
+    [["identity engineer", "A2", "agent identity and delegation",
+      "revocation · attribution · act chains", "<b>3</b>"],
+     ["detection engineer", "D1", "agent telemetry and drift",
+      "drift alerts · agent detections", "2"],
+     ["GRC practitioner", "E1", "tiering, evidence, continuous verification",
+      "inventory · control coverage", "2"],
+     ["harness engineer", "B2", "the loop, the verifier, the eval",
+      "evaluation · stop conditions", "1"]],
+    emphasise=4,
+    caption="The harness engineer is the one most teams hire first. The identity "
+            "engineer is the one who unblocks the most others — revocation, "
+            "attribution and act chains are prerequisites for evidence, "
+            "evaluation and continuous verification alike, so hiring them second "
+            "costs a quarter.")),
  ],
  "expect": "Two of six seams have no named owner — autonomy rung decisions and "
            "trace retention. The simulated incident takes 36.5 hours, of which 35 "

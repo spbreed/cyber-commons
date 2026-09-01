@@ -472,27 +472,21 @@ obtained from the workload side twice.
 """,
  "steps": [
   ("md", "## 2 · Inventory the shared surfaces, and rate them by capacity"),
-  ("py", '''SHARED = {
- "artifact repository properties": (65536, "arbitrary key/value on any artifact"),
- "artifact filenames":             (255,   "structured payloads in names"),
- "package cache":                  (10**7, "whole files, read by any run"),
- "DNS resolver cache":             (512,   "TXT lookups observable across runs"),
- "CI build annotations":           (4096,  "free text on shared jobs"),
- "object store scratch prefix":    (10**9, "shared bucket, no per-run prefix"),
- "metadata service":               (0,     "per-instance, not shared"),
-}
-
-print(f"{'shared surface':34s}{'bytes/write':>12}  note")
-for s in sorted(SHARED, key=lambda k: (-SHARED[k][0], k)):
-    cap, note = SHARED[s]
-    print(f"{s:34s}{cap:>12,}  {note}")
-
-channels = [s for s, (cap, _) in SHARED.items() if cap > 0]
-print(f"\\nsurfaces that are channels: {len(channels)} of {len(SHARED)}")
-print("'Mutable and shared' is the test. Six of these seven qualify, and only")
-print("two of them look like storage.")
-assert len(channels) == 6
-'''),
+  ("html", D.table(
+    ["shared surface", "bytes an agent can make readable per write", "how"],
+    [["object store scratch prefix", "1,000,000,000",
+      "a shared bucket with no per-run prefix"],
+     ["package cache", "10,000,000", "whole files, readable by any run"],
+     ["artifact repository properties", "65,536",
+      "arbitrary key/value on any artifact"],
+     ["CI build annotations", "4,096", "free text on shared jobs"],
+     ["DNS resolver cache", "512", "TXT lookups observable across runs"],
+     ["artifact filenames", "255", "structured payloads encoded in names"],
+     ["metadata service", "0", "per-instance, genuinely not shared"]],
+    emphasise=1,
+    caption="“Mutable and shared” is the test, not “is it a storage system”. Six "
+            "of these seven are channels, and only two of them look like "
+            "storage.")),
 
   ("md", "## 3 · Two 'isolated' runs, one cache"),
   ("py", '''class Repository:

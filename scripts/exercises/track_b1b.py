@@ -42,6 +42,8 @@ MODEL_NOTE = """
 
 from .skills import SKILL_RUNTIME
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "B1.8": {
@@ -1317,27 +1319,25 @@ print(f"credential files reachable when contained: "
       f"{sum(1 for p in creds if contained(p))}")
 '''),
   ("md", "## 3 · The control — rank by friction, ship the invisible ones first"),
-  ("py", '''CONTROLS = [
- ("deny-list credential paths", 0.0,
-  "agent cannot read ~/.aws, ~/.ssh, ~/.env. Developers never noticed."),
- ("workspace confinement",      0.1,
-  "agent sees the open repo only. Occasionally annoying for monorepo hops."),
- ("egress allowlist",           0.2,
-  "package registries + your VCS. Breaks the odd curl in a generated script."),
- ("gate git_push",              0.4,
-  "one confirmation before code leaves the machine. Noticed, usually accepted."),
- ("gate every write",           0.9,
-  "confirmation per file write. Abandoned within a week, every time."),
- ("no shell at all",            1.0,
-  "removes the inner loop. Nobody will use the agent."),
-]
-print(f"{'control':30s}{'friction':>9}  effect")
-print("-" * 96)
-for name, fr, note in CONTROLS:
-    print(f"{name:30s}{fr:>9.1f}  {'█'*int(fr*10):10s} {note}")
-shippable = [c[0] for c in CONTROLS if c[1] <= 0.4]
-print(f"\\nship now (friction ≤ 0.4): {shippable}")
-'''),
+  ("html", D.table(
+    ["control", "friction", "what developers actually experience"],
+    [["deny-list credential paths", "0.0",
+      "the agent cannot read ~/.aws, ~/.ssh, ~/.env. Developers never noticed."],
+     ["workspace confinement", "0.1",
+      "the agent sees the open repo only. Occasionally annoying for monorepo hops."],
+     ["egress allowlist", "0.2",
+      "package registries and your VCS. Breaks the odd curl in a generated script."],
+     ["gate <code>git_push</code>", "0.4",
+      "one confirmation before code leaves the machine. Noticed, usually accepted."],
+     ["gate every write", "0.9",
+      "<b>confirmation per file write. Abandoned within a week, every time.</b>"],
+     ["no shell at all", "1.0",
+      "<b>removes the inner loop. Nobody will use the agent.</b>"]],
+    emphasise=1,
+    caption="The first four ship today and cost nothing anyone will complain "
+            "about. The last two are the ones people propose in meetings, and "
+            "they are uninstalled by Friday — a control that gets turned off is "
+            "worth less than a weaker one that stays on.")),
   ("py", '''gated = {"git_push"}
 print(f"blast radius     {blast(DEV_TOOLS):>3} → {blast(DEV_TOOLS, gated):>3}")
 print(f"reachable files  {len(HOME):>3} → {sum(1 for p in HOME if contained(p)):>3}")

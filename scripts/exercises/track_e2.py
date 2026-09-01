@@ -11,6 +11,8 @@
     E2.9  regulator and auditor conversations
 """
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "E2.1": {
@@ -35,26 +37,24 @@ system on all three layers and find the shortest clock.**
 """,
  "steps": [
   ("md", "## 2 · Demo — the three layers, and what triggers each"),
-  ("py", '''LAYERS = {
- "1 · horizontal AI regulation": {
-   "examples": ["EU AI Act", "national AI acts in progress"],
-   "triggered_by": "the system being AI, and its risk classification",
-   "typical_lead_time": "months to years of transition periods"},
- "2 · sector overlays": {
-   "examples": ["DORA (financial)", "HIPAA (health)", "PCI DSS (cards)", "NIS2 (CNI)"],
-   "triggered_by": "what your organisation does — already in force",
-   "typical_lead_time": "none: already applies"},
- "3 · cross-cutting": {
-   "examples": ["GDPR / privacy law", "consumer protection", "incident reporting"],
-   "triggered_by": "the data processed and the outcome produced",
-   "typical_lead_time": "none: already applies"},
-}
-for name, l in LAYERS.items():
-    print(f"{name}")
-    print(f"   {', '.join(l['examples'])}")
-    print(f"   triggered by : {l['triggered_by']}")
-    print(f"   lead time    : {l['typical_lead_time']}\\n")
-'''),
+  ("html", D.table(
+    ["layer", "instruments", "triggered by", "lead time"],
+    [["1 · horizontal AI regulation",
+      "EU AI Act, national AI acts in progress",
+      "the system being AI, and its risk classification",
+      "months to years of transition"],
+     ["2 · sector overlays",
+      "DORA (financial), HIPAA (health), PCI DSS (cards), NIS2 (CNI)",
+      "what your organisation does",
+      "<b>none — already applies</b>"],
+     ["3 · cross-cutting",
+      "GDPR and privacy law, consumer protection, incident reporting",
+      "the data processed and the outcome produced",
+      "<b>none — already applies</b>"]],
+    emphasise=3,
+    caption="Layer 1 is the one that gets written about and the one with time "
+            "left on it. Layers 2 and 3 were already in force before anyone "
+            "deployed an agent.")),
   ("md", "## 3 · Locate one system on all three layers"),
   ("py", '''from dataclasses import dataclass
 
@@ -833,19 +833,16 @@ for label, text in (("WEAK", WEAK), ("STRONG", STRONG)):
 print("C = names a control · A = names an artefact · D = carries a date")
 '''),
   ("md", "## 3 · Where it breaks — the follow-up question"),
-  ("py", '''FOLLOWUPS = [
- ("'appropriate oversight' — show me the last time it operated.", "WEAK"),
- ("'reviewed periodically' — what period, and when was the last one?", "WEAK"),
- ("'comprehensive logging' — produce one action's full record.", "WEAK"),
- ("'act chain for every action' — produce the August sample.", "STRONG"),
-]
-print(f"{'follow-up question':64s}{'answerable?':>12}")
-print("-" * 78)
-for q, source in FOLLOWUPS:
-    print(f"{q:64s}{('yes' if source == 'STRONG' else 'NO'):>12}")
-print("\\nThree of four cannot be answered from the document, and the person")
-print("asking now doubts the fourth as well.")
-'''),
+  ("html", D.table(
+    ["the follow-up question", "answerable from the document?"],
+    [["“appropriate oversight” — show me the last time it operated.", "<b>no</b>"],
+     ["“reviewed periodically” — what period, and when was the last one?", "<b>no</b>"],
+     ["“comprehensive logging” — produce one action's full record.", "<b>no</b>"],
+     ["“act chain for every action” — produce the August sample.", "yes"]],
+    emphasise=1,
+    caption="Three of four cannot be answered, and by the time the fourth is "
+            "asked the person asking doubts that one too. Vague language does "
+            "not fail on its own line; it fails the lines around it.")),
   ("md", "## 4 · The control — verify the document against live control state"),
   ("py", '''from dataclasses import dataclass
 @dataclass
@@ -1097,23 +1094,20 @@ for c, s in rows: print(f"{c:9s}{s:14s}")
 print(f"\\ncoverage: {evidenced}/{len(REQUIRED)} = {evidenced/len(REQUIRED):.0%}")
 '''),
   ("md", "## 3 · Where it breaks — leading with the strongest number"),
-  ("py", '''OPENINGS = {
- "Our harness scores 100%.":
-   ("conformance quoted as quality",
-    "the follow-up 'against what key?' ends the credibility of the meeting"),
- "We have full coverage of our AI controls.":
-   ("counts stale and untested as passing",
-    "one date request exposes it"),
- "Conformance is 100%; expert accuracy is 50% against a held-out key of 20. "
- "Coverage is 63%, with SB-1 stale at 45 days and two controls not yet deployed.":
-   ("both numbers, honestly",
-    "nothing left for them to discover — the conversation moves to the plan"),
-}
-for text, (label, consequence) in OPENINGS.items():
-    print(f"{label}")
-    print(f'   "{text[:72]}{"…" if len(text) > 72 else ""}"')
-    print(f"   → {consequence}\\n")
-'''),
+  ("html", D.table(
+    ["how you open", "what it is", "what happens next"],
+    [["“Our harness scores 100%.”", "conformance quoted as quality",
+      "<b>the follow-up “against what key?” ends the meeting's credibility</b>"],
+     ["“We have full coverage of our AI controls.”",
+      "stale and untested counted as passing",
+      "<b>one request for dates exposes it</b>"],
+     ["“Conformance is 100%; expert accuracy is 50% against a held-out key of "
+      "20. Coverage is 63%, with SB-1 stale at 45 days and two controls not yet "
+      "deployed.”", "both numbers, honestly",
+      "nothing left for them to discover — the conversation moves to the plan"]],
+    emphasise=2,
+    caption="The third opening is the only one that survives a follow-up, and it "
+            "is the one that sounds worst when you rehearse it.")),
   ("md", "## 4 · The control — the disclosure script, generated from live state"),
   ("py", '''def disclosure(evalr, rows, required):
     evidenced = [c for c, s in rows if s == "PASS"]

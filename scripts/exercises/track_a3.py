@@ -21,6 +21,8 @@ MITIGATES = """
 >
 """
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "A3.1": {
