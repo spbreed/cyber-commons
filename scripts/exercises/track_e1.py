@@ -17,6 +17,8 @@ and none of the changes that break it are code changes.
 
 from .skills import SKILL_RUNTIME
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "E1.1": {
@@ -592,20 +594,16 @@ print(f"conformance      {r['conformance']:.4f}   ← structural. NOT a quality 
 print(f"expert accuracy  {r['expert_accuracy']:.4f}   ← the number that evidences EV-2")
 '''),
   ("md", "## 3 · Where it breaks — the number that gets quoted"),
-  ("py", '''CLAIMS = [
- ("Our AI security harness scores 100%.", "conformance", False),
- ("Our harness achieves 100% schema conformance.", "conformance", True),
- ("Our harness scores 0.81 expert accuracy on a 24-question held-out set.",
-  "accuracy", True),
- ("Our harness passes all automated checks.", "unspecified", False),
-]
-print(f"{'claim':66s}{'defensible?':>12}")
-print("-" * 80)
-for text, kind, ok in CLAIMS:
-    print(f"{text:66s}{str(ok):>12}")
-print("\\nClaim 1 is TRUE and misleading — conformance really is 100%.")
-print("Claim 4 is the most common and evidences nothing at all.")
-'''),
+  ("html", D.table(
+    ["the claim, as written", "what it measures", "defensible?"],
+    [["Our AI security harness scores 100%.", "conformance", "<b>no</b>"],
+     ["Our harness achieves 100% schema conformance.", "conformance", "yes"],
+     ["Our harness scores 0.81 expert accuracy on a 24-question held-out set.",
+      "accuracy", "yes"],
+     ["Our harness passes all automated checks.", "unspecified", "<b>no</b>"]],
+    emphasise=2,
+    caption="The first is true and misleading — conformance really is 100%. The "
+            "last is the most common of the four and evidences nothing at all.")),
   ("md", "## 4 · The control — evidence with an expiry"),
   ("py", '''DAY = 86400
 now = time.time()
@@ -1097,21 +1095,22 @@ because everyone believes it is gone.
 """,
  "steps": [
   ("md", "## 2 · Demo — the lifecycle, and which events generate a record"),
-  ("py", '''EVENTS = {
- "new agent deployed":         ("usually", "existing change process catches it"),
- "tool added to the manifest": ("no",      "changes blast radius; no PR raised"),
- "prompt edited in a console": ("no",      "changes behaviour, not code"),
- "provider upgrades the model":("no",      "you may not be told at all"),
- "scope widened in IAM":       ("sometimes","depends on your access review cadence"),
- "agent decommissioned":       ("rarely",  "the IDENTITY usually outlives the agent"),
-}
-print(f"{'lifecycle event':30s}{'ticketed?':12s}why it matters")
-print("-" * 86)
-for e, (t, why) in EVENTS.items():
-    print(f"{e:30s}{t:12s}{why}")
-untracked = [e for e, (t, _) in EVENTS.items() if t in ("no", "rarely")]
-print(f"\\n{len(untracked)}/{len(EVENTS)} events generate no reliable record.")
-'''),
+  ("html", D.table(
+    ["lifecycle event", "does it raise a ticket?", "why it matters"],
+    [["new agent deployed", "usually", "the existing change process catches it"],
+     ["tool added to the manifest", "<b>no</b>",
+      "changes blast radius, and no pull request is raised"],
+     ["prompt edited in a console", "<b>no</b>",
+      "changes behaviour, not code"],
+     ["provider upgrades the model", "<b>no</b>",
+      "you may not be told at all"],
+     ["scope widened in IAM", "sometimes",
+      "depends entirely on your access-review cadence"],
+     ["agent decommissioned", "<b>rarely</b>",
+      "the identity usually outlives the agent"]],
+    emphasise=1,
+    caption="Four of six generate no reliable record. A lifecycle you cannot "
+            "observe is a lifecycle you are not governing.")),
   ("md", "## 3 · Where it breaks — the identity that outlived the agent"),
   ("py", '''import time
 now = time.time(); DAY = 86400
@@ -1178,7 +1177,7 @@ print(f"\\n{len(crit)} critical lifecycle finding(s) — each is a standing cred
 print("for something everyone believes is switched off.")
 '''),
  ],
- "expect": "Four of six lifecycle events generate no reliable record. The identity "
+ "expect": "Four of six lifecycle events generate no reliable record at all. The identity "
            "review flags `sunset-agent` as critical — an active credential for a "
            "decommissioned service — plus two orphans with no authentication in "
            "300+ days. The manifest diff shows the blast radius rising from 0 to "
@@ -1215,87 +1214,72 @@ assumption about the other.
 """,
  "steps": [
   ("md", "## 2 · Who operates which control"),
-  ("py", '''STAKEHOLDERS = {
- "legal":      {"asks": "can we be held liable, and under what theory",
-                "controls": ["contract clauses", "acceptable-use terms",
-                             "IP screening", "e-discovery retention"]},
- "compliance": {"asks": "which obligations apply, can we demonstrate we meet them",
-                "controls": ["AI policy", "use-case classification",
-                             "attestations", "disclosure triggers"]},
- "privacy":    {"asks": "whose data, on what basis, for how long",
-                "controls": ["impact assessment gate", "PII redaction",
-                             "retention schedules", "transfer mechanisms"]},
- "cyber":      {"asks": "can this be attacked, can we contain it",
-                "controls": ["agent identity and JIT authz", "tool permissions",
-                             "sandbox and egress", "guardrails",
-                             "telemetry and detections", "kill switch"]},
- "model_risk": {"asks": "is it fit for purpose, will we know when it stops being",
-                "controls": ["pre-deployment validation", "performance thresholds",
-                             "drift alerting", "revalidation on change"]},
-}
-ALSO = {"business_owner": "accountable for the use case; defines purpose and risk appetite",
-        "internal_audit": "independent assurance that the five do what they claim"}
-
-for name in sorted(STAKEHOLDERS):
-    s = STAKEHOLDERS[name]
-    print(f"{name:12s}{s['asks']}")
-    print(f"            controls: {', '.join(s['controls'])}")
-print()
-for name, role in sorted(ALSO.items()):
-    print(f"{name:16s}{role}")
-total = sum(len(s["controls"]) for s in STAKEHOLDERS.values())
-print(f"\\n{total} controls across {len(STAKEHOLDERS)} functions")
-'''),
+  ("html", D.table(
+    ["function", "the question it is asking", "the controls it holds"],
+    [["legal", "can we be held liable, and under what theory",
+      "contract clauses · acceptable-use terms · IP screening · e-discovery retention"],
+     ["compliance", "which obligations apply, can we demonstrate we meet them",
+      "AI policy · use-case classification · attestations · disclosure triggers"],
+     ["privacy", "whose data, on what basis, for how long",
+      "impact-assessment gate · PII redaction · retention schedules · transfers"],
+     ["cyber", "can this be attacked, can we contain it",
+      "agent identity and JIT authz · tool permissions · sandbox and egress · "
+      "guardrails · telemetry · kill switch"],
+     ["model risk", "is it fit for purpose, will we know when it stops being",
+      "pre-deployment validation · thresholds · drift alerting · revalidation"]],
+    caption="Plus two more that hold no controls and decide everything: the "
+            "business owner, accountable for the use case and its risk appetite, "
+            "and internal audit, independently assuring that the five above do "
+            "what they claim. 22 controls across five functions, and no function "
+            "holds more than a quarter of them.")),
 
   ("md", "## 3 · The four seams, each with two reasonable assumptions"),
-  ("py", '''SEAMS = [
- {"gap": "agent traces are full of personal data",
-  "a": ("cyber", "privacy owns retention of anything containing personal data"),
-  "b": ("privacy", "security owns the log store, so security sets its schedule"),
-  "result": "no schedule was set; three years of prompts are discoverable"},
- {"gap": "the model was validated, the tools were not",
-  "a": ("model_risk", "validation covered the model, which is our scope"),
-  "b": ("cyber", "MRM signed it off, so the deployment was approved"),
-  "result": "an agent holds production write access that was never in scope"},
- {"gap": "'no training on our data' was negotiated, never instrumented",
-  "a": ("legal", "the clause is in the contract and it is binding"),
-  "b": ("cyber", "legal handled the vendor, so the restriction is handled"),
-  "result": "nobody built the control that verifies the vendor honours it"},
- {"gap": "the use case was risk-tiered before it had tools",
-  "a": ("compliance", "classified low-risk: it was a chatbot when we saw it"),
-  "b": ("business_owner", "we shipped features, not a new use case"),
-  "result": "it files tickets, sends mail and moves money at the low-risk tier"},
-]
-for i, s in enumerate(SEAMS, 1):
-    print(f"{i}. {s['gap']}")
-    print(f"   {s['a'][0]:15s} assumed: {s['a'][1]}")
-    print(f"   {s['b'][0]:15s} assumed: {s['b'][1]}")
-    print(f"   -> {s['result']}")
-    print()
-print("Neither assumption in any pair is unreasonable. That is what makes these")
-print("seams rather than mistakes - and why naming the handoff is the control.")
-'''),
+  ("html", D.table(
+    ["the seam", "one side assumed…", "the other assumed…", "what happened"],
+    [["agent traces are full of personal data",
+      "<i>cyber:</i> privacy owns retention of anything containing personal data",
+      "<i>privacy:</i> security owns the log store, so security sets its schedule",
+      "<b>no schedule was set; three years of prompts are discoverable</b>"],
+     ["the model was validated, the tools were not",
+      "<i>model risk:</i> validation covered the model, which is our scope",
+      "<i>cyber:</i> MRM signed it off, so the deployment was approved",
+      "<b>an agent holds production write access that was never in scope</b>"],
+     ["“no training on our data” was negotiated, never instrumented",
+      "<i>legal:</i> the clause is in the contract and it is binding",
+      "<i>cyber:</i> legal handled the vendor, so the restriction is handled",
+      "<b>nobody built the control that verifies the vendor honours it</b>"],
+     ["the use case was risk-tiered before it had tools",
+      "<i>compliance:</i> classified low-risk — it was a chatbot when we saw it",
+      "<i>business owner:</i> we shipped features, not a new use case",
+      "<b>it files tickets, sends mail and moves money at the low-risk tier</b>"]],
+    emphasise=3,
+    caption="Neither assumption in any pair is unreasonable. That is what makes "
+            "these seams rather than mistakes — and why naming the handoff is "
+            "the control.")),
 
   ("md", "## 4 · Where it breaks — every function reports green"),
-  ("py", '''def self_report(function):
-    """Each function reports on the controls it operates. All true."""
-    if function in STAKEHOLDERS:
-        return {"function": function, "controls_operating": len(STAKEHOLDERS[function]["controls"]),
-                "status": "green"}
-    return {"function": function, "controls_operating": 0, "status": "n/a"}
+  ("py", '''# The five control functions from the table above, with the count of
+# controls each one operates. Everything here is true, and self-reported.
+OPERATES = {"legal": 4, "compliance": 4, "privacy": 4, "cyber": 6, "model_risk": 4}
+OPEN_SEAMS = 4                      # the four from the previous section
 
-for f in sorted(STAKEHOLDERS):
+def self_report(function):
+    """Each function reports on the controls it operates. All of it is true."""
+    return {"function": function, "controls_operating": OPERATES[function],
+            "status": "green"}
+
+for f in sorted(OPERATES):
     r = self_report(f)
     print(f"   {r['function']:12s}{r['controls_operating']} controls  {r['status']}")
 print()
-print(f"functions reporting green : {len(STAKEHOLDERS)}/{len(STAKEHOLDERS)}")
-print(f"open seams                : {len(SEAMS)}")
+print(f"functions reporting green : {len(OPERATES)}/{len(OPERATES)}")
+print(f"open seams                : {OPEN_SEAMS}")
 print()
 print("A dashboard assembled from function self-reports is all green, and four")
 print("material gaps are open. The dashboard is not lying - it is asking each")
 print("function about the inside of its own box, and every failure here is")
 print("between boxes.")
-assert len(SEAMS) == 4
+assert OPEN_SEAMS == 4 and len(OPERATES) == 5
 '''),
 
   ("md", "## 5 · The control — name the handoff, give it one owner"),
@@ -1311,26 +1295,27 @@ for h in sorted(HANDOFFS):
     print(f"{h:32s}{v['owner']:13s}{', '.join(v['consumers'])}")
 
 covered = len(HANDOFFS)
-print(f"\\nseams: {len(SEAMS)}   handoffs with a named owner: {covered}")
+print(f"\\nseams: {OPEN_SEAMS}   handoffs with an accountable owner: {covered}")
 print()
 print("One artefact, many consumers, exactly one owner. The consumers matter as")
 print("much as the owner: a handoff nobody consumes was never a handoff, and a")
 print("handoff with two owners is the contested case from E1.0 again.")
-assert covered == len(SEAMS)
+assert covered == OPEN_SEAMS
 '''),
 
   ("md", "## 6 · Verify — the two forgotten seats"),
   ("py", '''def governed(use_case):
     missing = [seat for seat in ("business_owner", "internal_audit")
                if seat not in use_case["seats"]]
-    five = [f for f in STAKEHOLDERS if f in use_case["seats"]]
+    five = [f for f in OPERATES if f in use_case["seats"]]
     return {"control_functions_present": len(five),
             "missing_seats": missing,
-            "is_governed": not missing and len(five) == len(STAKEHOLDERS)}
+            "is_governed": not missing and len(five) == len(OPERATES)}
 
 CASES = [
- {"name": "customer support agent", "seats": list(STAKEHOLDERS) + ["business_owner", "internal_audit"]},
- {"name": "internal code assistant", "seats": list(STAKEHOLDERS)},
+ {"name": "customer support agent",
+  "seats": list(OPERATES) + ["business_owner", "internal_audit"]},
+ {"name": "internal code assistant", "seats": list(OPERATES)},
 ]
 for c in CASES:
     g = governed(c)
@@ -1497,7 +1482,7 @@ print("and the thing in production is an actor.")
 assert record["validated_unit"].startswith("model + tool")
 '''),
  ],
- "expect": "The three SR 11-7 pillars print with the assumption each makes. A "
+ "expect": "The three SR 11-7 pillars, each with the assumption it quietly makes. A "
            "system validated with no tools at L1 is shown deployed with three "
            "tools at L3 — same model, same version — and the validation no "
            "longer covers it. Monitoring reports 200 clean runs of summarisation "
