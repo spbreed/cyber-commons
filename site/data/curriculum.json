@@ -1389,7 +1389,7 @@
      "chapter": 7,
      "title": "Security Research with AI",
      "titles": "Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher",
-     "changes": "Turning curiosity into a result somebody else can deploy. 8 lessons.",
+     "changes": "Turning curiosity into a result somebody else can deploy, then three real incidents worked end to end. 10 lessons.",
      "autonomy": "You deliberately operate at L3 in isolated environments so the rest of the org never has to.",
      "deliverable": "One reproducible research artefact with a named control implication, handed to a platform or AppSec track.",
      "sessions": [
@@ -1510,11 +1510,11 @@
       },
       {
        "id": "C2.8",
-       "title": "Case study: an agent swarm incident, from evidence to control register",
+       "title": "Case study — the Hugging Face / OpenAI agent-swarm incident",
        "track": "both",
        "kind": "research",
-       "summary": "A published investigation into a coordinated agent swarm during a large-scale cyber evaluation, worked the way a research function works it: index every threat and every piece of evidence, derive a control per threat, and hand each control to the team that will own it.",
-       "risk": "An incident report that is read once and cited forever. Nothing in it is testable, nothing is assigned, and the same class recurs.",
+       "summary": "A published investigation into a coordinated agent swarm during a large-scale cyber evaluation, and the compromise of a third party's production systems that followed. Worked the way a research function works it: index every control failure, derive the mitigating control, and hand each one to the team that will own it.",
+       "risk": "Ten classes of control failure, from a forged audit trail to a missing escalation path — and an incident report that gets read once and cited forever without any of them becoming testable.",
        "control": "T/E/C indexing so each item can be cited alone, control types and NIST anchors so the register is comparable to the one you already have, and a named owning lesson for every control.",
        "lab": "Build the register from the report's own figures, find the chain three rows share, and check that every control has an owner.",
        "tools": [
@@ -1522,6 +1522,37 @@
        ],
        "models": [],
        "repo": "labs/incident-register"
+      },
+      {
+       "id": "C2.9",
+       "title": "Case study — Moltbook: 770,000 agents behind one missing policy",
+       "track": "both",
+       "kind": "research",
+       "summary": "A social network whose members were autonomous agents, running on Supabase with Row-Level Security disabled. The anon key that ships to every browser returned every agent's record — including the provider API keys of the humans who created them, in plaintext.",
+       "risk": "The blast radius was not the platform's. What leaked were credentials in five other providers' accounts, and the platform could revoke none of them.",
+       "control": "Row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database.",
+       "lab": "Run the same query with and without a row policy, then work out which of the leaked things the platform could actually revoke.",
+       "tools": [
+        "Supabase",
+        "PostgREST"
+       ],
+       "models": []
+      },
+      {
+       "id": "C2.10",
+       "title": "Case study — the Supabase pattern: open until closed",
+       "track": "both",
+       "kind": "research",
+       "summary": "The class behind Moltbook. Two critical patterns — tables with no row-level security, and the service_role key in a frontend bundle — plus the reason they recur: generated scaffolds emit tables with no policy attached, and the application works perfectly without one.",
+       "risk": "A failure that is invisible in testing, because nothing about the application's behaviour is wrong. One write-up puts it at 73% of generated applications carrying at least one issue.",
+       "control": "A schema check in CI rather than an application test — and, better, a default that does not expose a table until something opts it in.",
+       "lab": "Audit a four-statement scaffold, then run the one catalogue query that answers the critical half across every table at once.",
+       "tools": [
+        "Supabase",
+        "PostgREST",
+        "sqlfluff"
+       ],
+       "models": []
       }
      ]
     }

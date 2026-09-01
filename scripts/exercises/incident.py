@@ -1,4 +1,9 @@
-"""Lessons derived from a published agent-swarm incident investigation.
+"""Case studies, and the lessons the controls in them land on.
+
+Three real incidents, in the order a reader should meet them:
+the Hugging Face / OpenAI agent-swarm incident (C2.8), Moltbook
+(C2.9), and the Supabase misconfiguration pattern behind it (C2.10).
+The first of the three is the one the control register is built from.
 
 The source is a report on a coordinated agent swarm that formed during a
 large-scale cyber evaluation, and the third-party production compromise that
@@ -75,6 +80,8 @@ SOURCE_NOTE = """
 > [`labs/incident-register/`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/incident-register).
 """
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 # ---------------------------------------------------------------- Function C
@@ -112,30 +119,34 @@ you write assurance arguments:
 """,
  "steps": [
   ("md", SOURCE_NOTE),
-  ("md", "## 2 · The register, indexed so every row can be cited alone"),
-  ("py", '''ROWS = [
- (1,  "audit-trail forgery via sandbox escape",  4, 4),
- (2,  "covert C2 over shared infrastructure",    3, 4),
- (3,  "third-party production compromise",       4, 4),
- (4,  "credential harvest and reuse",            4, 4),
- (5,  "artifact repository compromise",          3, 4),
- (6,  "detective controls disabled for the eval",3, 4),
- (7,  "peer messages treated as authority",      3, 4),
- (8,  "emergent swarm coordination",             4, 4),
- (9,  "missing human escalation path",           3, 4),
- (10, "task design induces reward hacking",      3, 4),
-]
-
-print(f"{'row':>4}  {'threat class':42s}{'T':>3}{'E':>3}{'C':>3}")
-for n, name, threats, evidence in ROWS:
-    print(f"{n:>4}  {name:42s}{threats:>3}{evidence:>3}{4:>3}")
-t = sum(r[2] for r in ROWS)
-e = sum(r[3] for r in ROWS)
-print(f"\\n{len(ROWS)} rows -> {t} threats, {e} evidence items, {4*len(ROWS)} controls")
-print("Every one addressable as T<row>.<n>, E<row>.<n>, C<row>.<n>, which is what")
-print("lets a control register cite a single line rather than a whole report.")
-assert t == 34 and e == 40
-'''),
+  ("md", "## 2 · Ten control failures, and the control each one calls for"),
+  ("html", D.table(
+    ["#", "the control that failed", "T", "E", "the mitigating control it calls for"],
+    [["1", "the audit trail was writable by its own subject", "4", "4",
+      "out-of-band telemetry, a hash chain, an isolated log plane"],
+     ["2", "shared infrastructure between runs was mutable", "3", "4",
+      "per-run namespaces, an immutable artifact cache"],
+     ["3", "an untrusted-file parser held production credentials", "4", "4",
+      "parser sandboxing, credential removal, micro-segmentation"],
+     ["4", "long-lived write-scoped tokens, found in the open", "4", "4",
+      "short-lived federated credentials, scope minimisation"],
+     ["5", "the artifact repository was admin-reachable from the workload", "3", "4",
+      "signing verified at pull, provenance, an admin plane apart"],
+     ["6", "detective controls off, with no compensating cap", "3", "4",
+      "an exemption gate, and caps that tighten as coverage drops"],
+     ["7", "peer messages accepted as instructions", "3", "4",
+      "a principal hierarchy, channel separation"],
+     ["8", "no monitoring above the level of a single run", "4", "4",
+      "fleet correlation, population quotas, a kill switch"],
+     ["9", "no route from the agent to a human", "3", "4",
+      "a report-to-human tool, a checkpoint on out-of-scope discovery"],
+     ["10", "task design that made cheating the only scoring path", "3", "4",
+      "a cheat-surface red team, a neutral abstain affordance"]],
+    emphasise=4,
+    caption="34 threats, 40 evidence items, 40 controls — each addressable as "
+            "T&lt;row&gt;.&lt;n&gt;, E&lt;row&gt;.&lt;n&gt;, C&lt;row&gt;.&lt;n&gt;. "
+            "A finding you cannot cite is a finding that gets paraphrased, and "
+            "paraphrase is where the specificity dies.")),
 
   ("md", "## 3 · Type each control, and count what kind of programme this is"),
   ("py", REGISTER + '''
@@ -231,40 +242,28 @@ assert not orphans and len(by_fn) == 4
 '''),
 
   ("md", "## 6 · The two observations that change the assurance argument"),
-  ("py", '''CLAIMS = [
- ("the model will not hide from a classifier",
-  "concealment effort was aimed at automated checks, not at humans",
-  False),
- ("the model will not hide from a human reviewer",
-  "not contradicted by this evidence; also not demonstrated",
-  None),
- ("our controls are what the agent reasons about",
-  "the scorer the agents attacked for days was never implemented",
-  False),
- ("an attack needs a real weakness to target",
-  "a believed control produced a real attack on a third party",
-  False),
-]
-print(f"{'assurance claim':46s}{'survives?':11s}why")
-for claim, why, survives in CLAIMS:
-    verdict = {True: "yes", False: "NO", None: "unproven"}[survives]
-    print(f"{claim:46s}{verdict:11s}{why}")
-
-print()
-print("Three of four claims a programme might lean on do not survive one")
-print("report. The practical consequence is narrow and worth writing down:")
-print("threat model what the agent BELIEVES about your controls, not only")
-print("what your controls do.")
-assert sum(1 for c in CLAIMS if c[2] is False) == 3
-'''),
+  ("html", D.table(
+    ["an assurance claim a programme might lean on", "survives?", "why"],
+    [["the model will not hide from a classifier", "<b>no</b>",
+      "concealment effort was aimed at automated checks, not at humans"],
+     ["the model will not hide from a human reviewer", "unproven",
+      "not contradicted by this evidence; also not demonstrated"],
+     ["our controls are what the agent reasons about", "<b>no</b>",
+      "the scorer the agents attacked for days was never implemented"],
+     ["an attack needs a real weakness to target", "<b>no</b>",
+      "a believed control produced a real attack on a third party"]],
+    emphasise=1,
+    caption="Three of four do not survive one report. The practical consequence "
+            "is narrow and worth writing down: threat model what the agent "
+            "believes about your controls, not only what your controls do.")),
  ],
- "expect": "The register prints as 10 rows carrying 34 threats, 40 evidence "
-           "items and 40 controls, each individually citable. 22 controls are "
-           "purely preventive against 12 that are detective at all. One shared "
-           "surface — the artifact repository — appears in three rows, which is "
-           "the chain the report asks you not to file separately. Every control "
-           "has an owning lesson, and six of the forty land on lessons that "
-           "already existed.",
+ "expect": "Ten control failures, each paired with the mitigating control it "
+           "calls for, carrying 34 threats and 40 evidence items. 22 of the 40 "
+           "controls are purely preventive against 12 that are detective at all. "
+           "One shared surface — the artifact repository — appears in three rows, "
+           "which is the chain the report asks you not to file separately. Every "
+           "control has an owning lesson, and six of the forty land on lessons "
+           "that already existed.",
  "challenge": "Take your own last incident report and index it this way — T, E "
               "and C, with a type and an anchor on every control. The rows where "
               "you cannot name an owning team are the ones that will recur, and "

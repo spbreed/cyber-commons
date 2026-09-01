@@ -910,7 +910,7 @@
    "expect": "The eval case returns False on the old build and True on the new one, covering 12 privileged/source combinations while leaving the principal path working. The control blocks the payload; the detection fires at critical severity on the old build and at info severity on the new one as coverage evidence. The handover package permits closure only when the proof of fix is valid and something shipped. Scored across a year of eight findings the programme lands 20 of a possible 40 durability points, with only three still holding without a person behind them."
   },
   "C2.8": {
-   "goal": "Build the control register from the report's own figures, find the surface three rows share, and check that every control has an owning lesson.",
+   "goal": "Build the control register from the report's own figures, find the surface three rows share, and check that every mitigating control has an owning lesson.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.8.ipynb    # or open it on the lesson page",
@@ -921,6 +921,32 @@
     "python3 scripts/check_register.py    # register vs the curriculum"
    ],
    "expect": "The register prints as 10 rows carrying 34 threats, 40 evidence items and 40 controls, each individually citable. 22 controls are purely preventive against 12 that are detective at all. One shared surface — the artifact repository — appears in three rows, which is the chain the report asks you not to file separately. Every control has an owning lesson, and six of the forty land on lessons that already existed."
+  },
+  "C2.9": {
+   "goal": "Run the same query with and without a row policy, then work out which of the leaked things the platform could actually have revoked.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.9   # run it headless and check it",
+    "",
+    "# --- the full variant, against a real project ---",
+    "psql \"$SUPABASE_URL\" -c \"select relname from pg_class where relrowsecurity = false;\"",
+    "curl -s \"$SUPABASE_URL/rest/v1/agents?select=*\" -H \"apikey: $ANON_KEY\" | head"
+   ],
+   "expect": "With RLS disabled the anon key returns all three agent rows, secret provider keys included; with RLS enabled and no signed-in user it returns none, and one row for the owner. Reported scale spans 770,000 to 1.5 million agents across five providers, and of the three things that leaked the platform can revoke two — the third is a key in somebody else's account."
+  },
+  "C2.10": {
+   "goal": "Audit a generated scaffold, then run the one catalogue query that answers the critical half across every table at once.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/C2.10.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session C2.10   # run it headless and check it",
+    "",
+    "# --- the full variant, against a real project ---",
+    "psql \"$DATABASE_URL\" -f scripts/rls_audit.sql",
+    "grep -rn 'service_role' dist/ src/    # an admin key must never be here"
+   ],
+   "expect": "An audit of a four-statement scaffold finds a critical issue: the `profiles` table holds an api_key column and has no RLS at all, while every feature of the application works. The catalogue query then finds two of four tables open via the public API, both of them holding credentials or session state — a one-line check that no application test expresses."
   },
   "D1.0": {
    "goal": "Put one hour of an agent beside one hour of a person, then run a human-tempo rule against both.",

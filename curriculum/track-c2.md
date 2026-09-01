@@ -5,7 +5,7 @@
 
 **Job titles:** Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher
 
-**What changes:** Turning curiosity into a result somebody else can deploy. 8 lessons.
+**What changes:** Turning curiosity into a result somebody else can deploy, then three real incidents worked end to end. 10 lessons.
 
 **Autonomy focus:** You deliberately operate at L3 in isolated environments so the rest of the org never has to.
 
@@ -202,16 +202,16 @@ cd release && ./reproduce.sh   # must work on a clean machine
 
 ---
 
-### C2.8 — Case study: an agent swarm incident, from evidence to control register
+### C2.8 — Case study — the Hugging Face / OpenAI agent-swarm incident
 
 `both directions`
 
-- **Risk** — An incident report that is read once and cited forever. Nothing in it is testable, nothing is assigned, and the same class recurs.
+- **Risk** — Ten classes of control failure, from a forged audit trail to a missing escalation path — and an incident report that gets read once and cited forever without any of them becoming testable.
 - **Control** — T/E/C indexing so each item can be cited alone, control types and NIST anchors so the register is comparable to the one you already have, and a named owning lesson for every control.
 - **Lab** — Build the register from the report's own figures, find the chain three rows share, and check that every control has an owner.
 - **Tools** — `NIST SP 800-53r5`
 
-**Run it** — Build the control register from the report's own figures, find the surface three rows share, and check that every control has an owning lesson.
+**Run it** — Build the control register from the report's own figures, find the surface three rows share, and check that every mitigating control has an owning lesson.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -226,5 +226,55 @@ python3 scripts/check_register.py    # register vs the curriculum
 *Expect:* The register prints as 10 rows carrying 34 threats, 40 evidence items and 40 controls, each individually citable. 22 controls are purely preventive against 12 that are detective at all. One shared surface — the artifact repository — appears in three rows, which is the chain the report asks you not to file separately. Every control has an owning lesson, and six of the forty land on lessons that already existed.
 
 > Lab source: [`labs/incident-register`](../labs/incident-register)
+
+---
+
+### C2.9 — Case study — Moltbook: 770,000 agents behind one missing policy
+
+`both directions`
+
+- **Risk** — The blast radius was not the platform's. What leaked were credentials in five other providers' accounts, and the platform could revoke none of them.
+- **Control** — Row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database.
+- **Lab** — Run the same query with and without a row policy, then work out which of the leaked things the platform could actually revoke.
+- **Tools** — `Supabase`, `PostgREST`
+
+**Run it** — Run the same query with and without a row policy, then work out which of the leaked things the platform could actually have revoked.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.9   # run it headless and check it
+
+# --- the full variant, against a real project ---
+psql "$SUPABASE_URL" -c "select relname from pg_class where relrowsecurity = false;"
+curl -s "$SUPABASE_URL/rest/v1/agents?select=*" -H "apikey: $ANON_KEY" | head
+```
+
+*Expect:* With RLS disabled the anon key returns all three agent rows, secret provider keys included; with RLS enabled and no signed-in user it returns none, and one row for the owner. Reported scale spans 770,000 to 1.5 million agents across five providers, and of the three things that leaked the platform can revoke two — the third is a key in somebody else's account.
+
+---
+
+### C2.10 — Case study — the Supabase pattern: open until closed
+
+`both directions`
+
+- **Risk** — A failure that is invisible in testing, because nothing about the application's behaviour is wrong. One write-up puts it at 73% of generated applications carrying at least one issue.
+- **Control** — A schema check in CI rather than an application test — and, better, a default that does not expose a table until something opts it in.
+- **Lab** — Audit a four-statement scaffold, then run the one catalogue query that answers the critical half across every table at once.
+- **Tools** — `Supabase`, `PostgREST`, `sqlfluff`
+
+**Run it** — Audit a generated scaffold, then run the one catalogue query that answers the critical half across every table at once.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/C2.10.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session C2.10   # run it headless and check it
+
+# --- the full variant, against a real project ---
+psql "$DATABASE_URL" -f scripts/rls_audit.sql
+grep -rn 'service_role' dist/ src/    # an admin key must never be here
+```
+
+*Expect:* An audit of a four-statement scaffold finds a critical issue: the `profiles` table holds an api_key column and has no RLS at all, while every feature of the application works. The catalogue query then finds two of four tables open via the public API, both of them holding credentials or session state — a one-line check that no application test expresses.
 
 ---

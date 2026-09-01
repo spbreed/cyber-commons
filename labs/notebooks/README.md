@@ -1,6 +1,6 @@
 # Lesson notebooks
 
-One Python notebook per curriculum session — **130 of them**, generated from the
+One Python notebook per curriculum session — **132 of them**, generated from the
 single source of truth and executed in CI before they ship.
 
 Each notebook is **self-contained**: it carries every line of code it runs. No
@@ -31,7 +31,7 @@ jupyter notebook labs/notebooks/A2.5.ipynb
 
 ```bash
 python3 scripts/run_notebooks.py --session A2.5
-python3 scripts/run_notebooks.py              # all 130, writes _results.json
+python3 scripts/run_notebooks.py              # all 132, writes _results.json
 ```
 
 ## What they run against
@@ -69,7 +69,7 @@ Every exercise needs a `concept` field. The build fails without one — a lesson
 that opens with a risk teaches people to fear a mechanism they cannot describe.
 
 ```bash
-python3 scripts/build_notebooks.py   # regenerate all 130
+python3 scripts/build_notebooks.py   # regenerate all 132
 python3 scripts/run_notebooks.py     # prove they still run, refresh the evidence
 python3 scripts/build_site.py        # re-render the lesson pages
 ```

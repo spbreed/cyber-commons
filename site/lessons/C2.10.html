@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.10 — Case study — the Supabase pattern: open until closed | Cyber Commons</title><meta name="description" content="A schema check in CI rather than an application test — and, better, a default that does not expose a table until something opts it in."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.10</div><h1>Case study — the Supabase pattern: open until closed</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A failure that is invisible in testing, because nothing about the application&#x27;s behaviour is wrong. One write-up puts it at 73% of generated applications carrying at least one issue.</p></div><div class="ctrl"><div class="lab">Control</div><p>A schema check in CI rather than an application test — and, better, a default that does not expose a table until something opts it in.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Audit a generated scaffold, then run the one catalogue query that answers the critical half across every table at once.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.10.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.10.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 20 lines of output in 0.02s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.10 · Case study — the Supabase pattern: open until closed</h1>
+<p><strong>Function C — Red Teaming and Security Research with AI → Security Research with AI</strong>  ·  <em>Both directions</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.9.html">C2.9 · Case study — Moltbook: 770,000 agents behind one missing policy</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>Supabase, PostgREST, sqlfluff</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Frontier models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Supabase has never been breached. Applications built on it leak constantly, and always through the same two doors — a table with no row policy, and an admin key in a frontend bundle. One write-up puts it at 73% of generated applications carrying at least one issue.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   two critical patterns, and they are not degrees of one thing
+
+   RLS disabled on a table        service_role key in the frontend
+   removes the POLICY             removes the POLICY ENGINE
+   anon key reads that table      admin key reads every table
+
+   why it recurs
+   generator -&gt; create table ... (no policy attached)
+             -&gt; frontend works perfectly
+             -&gt; every test passes
+             -&gt; nothing in the suite is shaped like the question
+
+   the two fixes, and only one survives the next deadline
+   per table   alter table ... enable row level security
+   by default  not exposed through the Data API unless opted in   &lt;- 2026
+</code></pre>
+<p>Moltbook is the instance. This is the class, and the class is bigger than any
+one platform.</p>
+<p>Supabase has not been breached. What has happened repeatedly is that
+<em>applications built on it</em> expose their data, and the write-ups converge on a
+small number of patterns — two of them critical:</p>
+<p><strong>Tables without Row-Level Security.</strong> RLS was historically opt-in. A table
+created without it is, in the write-ups' own words, "completely open via the
+public API": anyone with the anon key — which ships to every browser — can read
+it, and depending on policy, write it.</p>
+<p><strong>The <code>service_role</code> key in client code.</strong> That key exists to bypass RLS for
+trusted server-side work. In a frontend bundle it is a complete RLS bypass and
+full administrative database access, regardless of how good the policies are.</p>
+<p>Three more sit just below: overly permissive policies, RPC functions with no
+authorisation check of their own, and unsecured storage buckets.</p>
+<p>What makes this a lesson rather than a checklist is <strong>why it recurs now</strong>.
+Code generators scaffold a project, create tables and write the frontend — and
+happily emit <code>create table</code> with no policy attached, because nothing in the
+prompt asked for one and the code works without it. The failure is invisible in
+testing: the app functions perfectly. One write-up puts it at <strong>73% of
+"vibe-coded" applications carrying at least one security issue</strong>, with secrets
+the most common category.</p>
+<p>The structural fix is the one worth taking away. From 2026, new Supabase
+projects <strong>no longer expose public-schema tables through the Data API by
+default</strong> — closing the gap at the level of the default rather than at the level
+of everyone remembering. That is the same argument as default-deny on the tool
+call (A3.1), arriving at a database.</p></div><div class="nbmd"><blockquote>
+<p><strong>Sources.</strong> Public write-ups of the Supabase misconfiguration patterns and
+CVE-2025-48757: <a href="https://vibeappscanner.com/issues/supabase">VibeAppScanner</a>,
+<a href="https://www.guardlayer.io/blog/supabase-security-breaches">GuardLayer</a>.
+Supabase itself has not been breached; the pattern is in applications built
+on it, which is what makes it a lesson about defaults rather than about a
+vendor.</p>
+</blockquote></div><div class="nbmd"><h2>3 · The two critical patterns, and what each defeats</h2></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">pattern</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what an attacker holds</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it defeats</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">severity</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">table with RLS disabled</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the anon key, from any browser</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">all row-level access control on that table</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>critical</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><code>service_role</code> key in the frontend</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">an admin key</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">every policy, on every table</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>critical</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">overly permissive policy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the anon key</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the intent of the policy, not its existence</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">high</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">RPC function with no auth check</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the anon key</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the policies the function bypasses</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">high</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">unsecured storage bucket</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the bucket URL</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">object-level access</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">high</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The first two are not degrees of the same problem. One removes the policy; the other removes the policy engine.</div></div><div class="nbmd"><h2>4 · Why generated code lands here by default</h2>
+<p>This is the part worth running: the vulnerable version and the safe version are indistinguishable from the application's behaviour, which is exactly why testing does not catch it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SCAFFOLD = [
+ &quot;create table profiles (id uuid primary key, email text, api_key text);&quot;,
+ &quot;create table posts    (id uuid primary key, author uuid, body text);&quot;,
+ &quot;alter table posts enable row level security;&quot;,
+ &quot;create policy p_read on posts for select using (true);&quot;,
+]
+
+def audit(statements):
+    &quot;&quot;&quot;The check a generator does not run, expressed as three questions.&quot;&quot;&quot;
+    tables = [s.split()[2] for s in statements if s.startswith(&quot;create table&quot;)]
+    rls_on = {s.split()[2] for s in statements if &quot;enable row level security&quot; in s}
+    permissive = [s.split()[2] for s in statements
+                  if s.startswith(&quot;create policy&quot;) and &quot;using (true)&quot; in s]
+    findings = []
+    for tbl in tables:
+        if tbl not in rls_on:
+            findings.append((tbl, &quot;critical&quot;, &quot;RLS disabled - open via the public API&quot;))
+    for s in statements:
+        if s.startswith(&quot;create policy&quot;) and &quot;using (true)&quot; in s:
+            findings.append((s.split()[4], &quot;high&quot;, &quot;policy matches every row&quot;))
+    return tables, findings
+
+tables, findings = audit(SCAFFOLD)
+print(f&quot;tables created : {&#x27;, &#x27;.join(tables)}&quot;)
+print(f&quot;findings       : {len(findings)}\n&quot;)
+print(f&quot;{&#x27;table&#x27;:12s}{&#x27;severity&#x27;:11s}why&quot;)
+for tbl, sev, why in findings:
+    print(f&quot;{tbl:12s}{sev:11s}{why}&quot;)
+
+print()
+print(&quot;The application works. Every feature passes. `profiles` holds an api_key&quot;)
+print(&quot;column and has no policy at all, and nothing in the test suite is shaped&quot;)
+print(&quot;like the question that would find it.&quot;)
+assert any(f[1] == &quot;critical&quot; for f in findings)
+assert &quot;profiles&quot; in [f[0] for f in findings]</code></pre></div><div class="nbmd"><h2>5 · The detection that actually scales</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># One query answers the critical half, across every table at once.
+CATALOG = [                       # what pg_class would return
+ {&quot;relname&quot;: &quot;profiles&quot;, &quot;relrowsecurity&quot;: False},
+ {&quot;relname&quot;: &quot;posts&quot;,    &quot;relrowsecurity&quot;: True},
+ {&quot;relname&quot;: &quot;sessions&quot;, &quot;relrowsecurity&quot;: False},
+ {&quot;relname&quot;: &quot;audit&quot;,    &quot;relrowsecurity&quot;: True},
+]
+SENSITIVE = {&quot;profiles&quot;, &quot;sessions&quot;, &quot;audit&quot;}
+
+open_tables = sorted(r[&quot;relname&quot;] for r in CATALOG if not r[&quot;relrowsecurity&quot;])
+print(&quot;select relname from pg_class where relrowsecurity = false;&quot;)
+for name in open_tables:
+    mark = &quot;  &lt;- holds credentials or session state&quot; if name in SENSITIVE else &quot;&quot;
+    print(f&quot;   {name}{mark}&quot;)
+
+print(f&quot;\ntables open via the public API : {len(open_tables)} of {len(CATALOG)}&quot;)
+exposed_sensitive = [t for t in open_tables if t in SENSITIVE]
+print(f&quot;of those, sensitive             : {len(exposed_sensitive)} &quot;
+      f&quot;({&#x27;, &#x27;.join(exposed_sensitive)})&quot;)
+print()
+print(&quot;This is a one-line query and it is the highest-value one in the whole&quot;)
+print(&quot;pattern. It is also not something an application test can express, which&quot;)
+print(&quot;is why it belongs in CI against the schema rather than in the test suite.&quot;)
+assert exposed_sensitive == [&quot;profiles&quot;, &quot;sessions&quot;]</code></pre></div><div class="nbmd"><h2>6 · The fix that does not rely on anyone remembering</h2>
+<p>Two ways to close this. Only one of them survives the next engineer, the next generated scaffold, and the next deadline.</p></div><div class="nbmd"><p><svg viewBox="0 0 700 152" width="100%" style="max-width:700px;height:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8A93A6"/></marker></defs><rect x="6" y="14" width="320" height="96" rx="5" fill="none" stroke="#E0912F" stroke-width="1.4"/><text x="166.0" y="66.0" text-anchor="middle" fill="#E0912F">fix each table</text><text x="166" y="58" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">alter table … enable row level security</text><text x="166" y="76" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">create policy … using (auth.uid() = owner)</text><text x="166" y="96" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">correct, and true only until the next table</text><rect x="374" y="14" width="320" height="96" rx="5" fill="none" stroke="#3FA06B" stroke-width="1.4"/><text x="534.0" y="66.0" text-anchor="middle" fill="#3FA06B">fix the default</text><text x="534" y="58" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">tables are not exposed through the Data API</text><text x="534" y="76" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">unless something opts them in</text><text x="534" y="96" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">the Supabase default since 2026</text><text x="350" y="138" text-anchor="middle" fill="#8A93A6" font-size="11.5" font-weight="normal">the same argument as default-deny on the tool call (A3.1), arriving at a database</text></svg><div style="font-size:12px;color:#8A93A6;margin-top:2px">A control that depends on everyone remembering is a control with a half-life.</div></p></div><div class="nbmd"><h2>7 · What this hands to the rest of the commons</h2></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">finding here</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the control, and where it lives</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">credential-shaped data in a client-readable table</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.8 — shared infrastructure between agent runs</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">an admin key reachable from the client</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.8 — admin plane off the workload path</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a default that is open until closed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.1 — default-deny, applied to data rather than tools</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a schema check no application test expresses</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.9 — detections whose subject is the platform</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">73% of generated apps carrying at least one issue</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B1.15 — securing the developers&#x27; coding agents</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Every row is a control that already exists in this curriculum. The case study's job was to show you why it is there.</div></div><div class="nbmd"><h2>What you just proved</h2>
+<p>An audit of a four-statement scaffold finds a critical issue: the <code>profiles</code> table holds an api_key column and has no RLS at all, while every feature of the application works. The catalogue query then finds two of four tables open via the public API, both of them holding credentials or session state — a one-line check that no application test expresses.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take the last thing a code generator scaffolded for you and run the two questions from this lesson against it: which tables have no row policy, and is any admin-scoped key reachable from the client bundle? Neither question is about the framework — both are about what the default was when nobody said otherwise.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
+<p><strong>What you can do now.</strong> Research that reproduces — model effect separated from harness effect, benchmarks checked for a floor, a leaked key and a loose matcher — a handover that ends in a control with an eval case that fails on the old build, and three real incidents worked end to end: an agent swarm, a platform that shipped its database open, and the default that made the third one ordinary.</p>
+<p><strong>What you still cannot do.</strong> You can now produce a finding, prove it, and hand it over. You still cannot see it happen in production: nothing here tells you that the class you closed is being attempted right now, by whom, or how fast — and the register you just built assigned twelve controls to a function you have not read yet.</p>
+<p><strong>Function D is the operational half — detecting an actor that acts a thousand times an hour, and stopping it. Next → D1.0, what AI for security operations means.</strong></p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.0.html">D1.0 · Start here — what AI for security operations means</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.10.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.10.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>An audit of a four-statement scaffold finds a critical issue: the `profiles` table holds an api_key column and has no RLS at all, while every feature of the application works. The catalogue query then finds two of four tables open via the public API, both of them holding credentials or session state — a one-line check that no application test expresses.</div><div class="chips"><span>Supabase</span><span>PostgREST</span><span>sqlfluff</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C2.10.ipynb</code></p></div><div class="pager"><a href="C2.9.html"><span class="k">← Previous</span><span class="t">C2.9 · Case study — Moltbook: 770,000 agents behind one missing policy</span></a><a class="next" href="D1.0.html"><span class="k">Next →</span><span class="t">D1.0 · Start here — what AI for security operations means</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

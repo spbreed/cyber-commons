@@ -12,7 +12,7 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 | [B1](track-b1.md) | The AI SDLC: an Agentic AppSec Pipeline | 18 | B — Application Security with an AI SDLC |
 | [B2](track-b2.md) | The Harness that Runs the SDLC | 14 | B — Application Security with an AI SDLC |
 | [C1](track-c1.md) | Red Teaming with AI | 5 | C — Red Teaming and Security Research with AI |
-| [C2](track-c2.md) | Security Research with AI | 8 | C — Red Teaming and Security Research with AI |
+| [C2](track-c2.md) | Security Research with AI | 10 | C — Red Teaming and Security Research with AI |
 | [D1](track-d1.md) | The SOC Analyst & Detection Engineer | 11 | D — AI for SecOps |
 | [D2](track-d2.md) | The Incident Responder | 9 | D — AI for SecOps |
 | [E1](track-e1.md) | The GRC Practitioner (Risk & Control) | 13 | E — AI for GRC |

@@ -734,6 +734,18 @@ HOOKS: dict[str, str] = {
  "The third party's exposure ended when the third party revoked its keys, not "
  "when the agents were stopped. Terminating a fleet whose credentials stay "
  "valid moves the incident rather than ending it.",
+
+"C2.9":
+ "A social network whose members were AI agents shipped its database key to "
+ "every browser, which is normal, and left row-level security off, which is "
+ "not. One query returned every agent's record — including the OpenAI, "
+ "Anthropic and AWS keys of the people who created them, in plaintext.",
+
+"C2.10":
+ "Supabase has never been breached. Applications built on it leak constantly, "
+ "and always through the same two doors — a table with no row policy, and an "
+ "admin key in a frontend bundle. One write-up puts it at 73% of generated "
+ "applications carrying at least one issue.",
 }
 
 # --------------------------------------------------------------------------
@@ -2357,6 +2369,40 @@ DIAGRAMS: dict[str, str] = {
 
    tested quarterly, under partial failure, target under 5 minutes
 """,
+
+"C2.9": """
+   browser                    Supabase Data API           agents table
+   +-----------+              +-----------------+         +---------------+
+   | anon key  | -----------> |  row-level      |  ...    | id            |
+   | (by       |              |  security       |         | owner         |
+   |  design)  |              |  DISABLED       | ------> | provider_key  |  <-
+   +-----------+              +-----------------+         | claim_token   |
+                                                          +---------------+
+   the anon key was never the problem. the absent policy was.
+
+   what leaked            who can revoke it
+   session token          Moltbook
+   claim token            Moltbook
+   provider API key       the person who created the agent   <- not the platform
+""",
+
+"C2.10": """
+   two critical patterns, and they are not degrees of one thing
+
+   RLS disabled on a table        service_role key in the frontend
+   removes the POLICY             removes the POLICY ENGINE
+   anon key reads that table      admin key reads every table
+
+   why it recurs
+   generator -> create table ... (no policy attached)
+             -> frontend works perfectly
+             -> every test passes
+             -> nothing in the suite is shaped like the question
+
+   the two fixes, and only one survives the next deadline
+   per table   alter table ... enable row level security
+   by default  not exposed through the Data API unless opted in   <- 2026
+"""
 }
 
 # --------------------------------------------------------------------------
@@ -2454,8 +2500,9 @@ BRIDGES: dict[str, dict[str, str]] = {
  "gained": "Research that reproduces — model effect separated from harness "
            "effect, benchmarks checked for a floor, a leaked key and a loose "
            "matcher — a handover that ends in a control with an eval case that "
-           "fails on the old build, and a worked register built from somebody "
-           "else's incident with an owner against every control in it.",
+           "fails on the old build, and three real incidents worked end to end: "
+           "an agent swarm, a platform that shipped its database open, and the "
+           "default that made the third one ordinary.",
  "gap": "You can now produce a finding, prove it, and hand it over. You still "
         "cannot see it happen in production: nothing here tells you that the "
         "class you closed is being attempted right now, by whom, or how fast — "

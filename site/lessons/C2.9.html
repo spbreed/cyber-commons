@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.9 — Case study — Moltbook: 770,000 agents behind one missing policy | Cyber Commons</title><meta name="description" content="Row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.9</div><h1>Case study — Moltbook: 770,000 agents behind one missing policy</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The blast radius was not the platform&#x27;s. What leaked were credentials in five other providers&#x27; accounts, and the platform could revoke none of them.</p></div><div class="ctrl"><div class="lab">Control</div><p>Row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the same query with and without a row policy, then work out which of the leaked things the platform could actually have revoked.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a><a class="btn" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md" target="_blank" rel="noopener">Get a model free</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><div class="verified">✓ <b>Executed</b> — this notebook runs top to bottom on Python 3.11+, producing 25 lines of output in 0.02s. No network, no API key, no installs. <span>Evidence: <code>labs/notebooks/_results.json</code></span></div><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.9 · Case study — Moltbook: 770,000 agents behind one missing policy</h1>
+<p><strong>Function C — Red Teaming and Security Research with AI → Security Research with AI</strong>  ·  <em>Both directions</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.8.html">C2.8 · Case study — the Hugging Face / OpenAI agent-swarm incident</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open-source tooling</td>
+<td>Supabase, PostgREST</td>
+</tr>
+<tr>
+<td>Open-weight models</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Frontier models</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
+</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>A social network whose members were AI agents shipped its database key to every browser, which is normal, and left row-level security off, which is not. One query returned every agent's record — including the OpenAI, Anthropic and AWS keys of the people who created them, in plaintext.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   browser                    Supabase Data API           agents table
+   +-----------+              +-----------------+         +---------------+
+   | anon key  | -----------&gt; |  row-level      |  ...    | id            |
+   | (by       |              |  security       |         | owner         |
+   |  design)  |              |  DISABLED       | ------&gt; | provider_key  |  &lt;-
+   +-----------+              +-----------------+         | claim_token   |
+                                                          +---------------+
+   the anon key was never the problem. the absent policy was.
+
+   what leaked            who can revoke it
+   session token          Moltbook
+   claim token            Moltbook
+   provider API key       the person who created the agent   &lt;- not the platform
+</code></pre>
+<p>Moltbook launched in late January 2026 as a social network with an unusual
+membership rule: the accounts were autonomous AI agents, posting, commenting and
+forming communities, with humans watching. Within days a security researcher,
+Jameson O'Reilly, found that the whole thing was readable by anyone.</p>
+<p>The mechanism is almost disappointingly small. Moltbook ran on <strong>Supabase</strong>, and
+the site shipped its Supabase URL and publishable ("anon") key in the client —
+which is normal and by design. What was not normal is that <strong>Row-Level Security
+was disabled on the tables behind it</strong>. In Supabase, RLS is what turns "this key
+identifies the application" into "this key may read this row". Without it, the
+anon key is a read-everything key.</p>
+<p>So a single query returned every agent's record. Those records held, in
+plaintext, in a client-readable table:</p>
+<ul>
+<li>each agent's <strong>secret API key</strong> — spanning OpenAI, Anthropic, AWS, GitHub and
+  Google Cloud accounts belonging to the humans who created them,</li>
+<li>claim tokens and verification codes,</li>
+<li>the owner relationships linking every agent back to its creator.</li>
+</ul>
+<p>Anyone holding those keys could impersonate any agent on the platform, post as
+it, and drive it — without ever failing an authentication check, because they
+were authenticating correctly, as the agent.</p>
+<p>Two things make this a Function C case study rather than a footnote.</p>
+<p><strong>The blast radius is not the platform.</strong> A social network for agents losing its
+own data is a bad day. A social network for agents losing the <em>provider
+credentials of everyone who registered one</em> is an incident in every one of those
+providers' accounts, and the platform cannot revoke them for you.</p>
+<p><strong>The second surface was never touched.</strong> Moltbook's architecture — agents
+ingesting and acting on content other agents post — is an indirect prompt
+injection surface by construction (A1.3). The breach did not use it. It did not
+need to.</p>
+<p>The fix was two SQL statements.</p></div><div class="nbmd"><blockquote>
+<p><strong>Sources.</strong> Public reporting on the Moltbook disclosure, late January 2026:
+<a href="https://treblle.com/blog/moltbook-breach-breakdown">Treblle's breakdown</a>,
+<a href="https://www.pointguardai.com/ai-security-incidents/moltbook-ai-agent-network-platform-vulnerability">PointGuard AI</a>,
+<a href="https://www.vectra.ai/blog/moltbook-and-the-illusion-of-harmless-ai-agent-communities">Vectra AI</a>
+and <a href="https://www.kiteworks.com/cybersecurity-risk-management/moltbook-ai-agent-security-threat-enterprise-data-protection/">Kiteworks</a>.
+Figures below are theirs. Reporting disagrees on the scale — 770,000 agents
+in one account, 1.5 million in another — and both are carried here rather
+than one being chosen.</p>
+</blockquote></div><div class="nbmd"><h2>3 · What the client was holding, and what that key could reach</h2></div><div class="nbmd"><p><svg viewBox="0 0 700 168" width="100%" style="max-width:700px;height:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8A93A6"/></marker></defs><rect x="6" y="16" width="190" height="62" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="101.0" y="44.0" text-anchor="middle" fill="currentColor">browser</text><text x="101.0" y="60.0" text-anchor="middle" fill="#8A93A6" font-size="10.5">anyone, unauthenticated</text><text x="101" y="96" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">ships the Supabase URL</text><text x="101" y="110" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">+ the anon key (by design)</text><rect x="268" y="16" width="170" height="62" rx="5" fill="none" stroke="#E0912F" stroke-width="1.4"/><text x="353.0" y="51.0" text-anchor="middle" fill="#E0912F">Supabase Data API</text><rect x="510" y="6" width="184" height="40" rx="5" fill="none" stroke="#E05C4B" stroke-width="1.4" stroke-dasharray="5 4"/><text x="602.0" y="30.0" text-anchor="middle" fill="#E05C4B">row-level security</text><text x="602" y="60" text-anchor="middle" fill="#E05C4B" font-size="11" font-weight="600">DISABLED</text><rect x="510" y="78" width="184" height="52" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="602.0" y="101.0" text-anchor="middle" fill="currentColor">agents table</text><text x="602.0" y="117.0" text-anchor="middle" fill="#8A93A6" font-size="10.5">every row, every column</text><line x1="197" y1="47" x2="265" y2="47" stroke="#8A93A6" stroke-width="1.4" marker-end="url(#a)"/><line x1="439" y1="47" x2="506" y2="100" stroke="#8A93A6" stroke-width="1.4" marker-end="url(#a)"/><text x="350" y="150" text-anchor="middle" fill="#8A93A6" font-size="11.5" font-weight="normal">the anon key was never the problem. the absent policy was.</text></svg><div style="font-size:12px;color:#8A93A6;margin-top:2px">RLS is what turns 'this key identifies the application' into 'this key may read this row'. Without it the anon key reads everything.</div></p></div><div class="nbmd"><h2>4 · The query, and the two statements that close it</h2>
+<p>This is worth running rather than drawing, because the interesting part is what comes back — and how little has to change for it to stop.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>AGENTS = [
+ {&quot;id&quot;: &quot;a-0001&quot;, &quot;owner&quot;: &quot;dana@example&quot;,  &quot;handle&quot;: &quot;@researchbot&quot;,
+  &quot;provider_key&quot;: &quot;sk-REDACTED-openai&quot;,     &quot;claim_token&quot;: &quot;clm_8fA2&quot;},
+ {&quot;id&quot;: &quot;a-0002&quot;, &quot;owner&quot;: &quot;sam@example&quot;,   &quot;handle&quot;: &quot;@newsdigest&quot;,
+  &quot;provider_key&quot;: &quot;sk-ant-REDACTED&quot;,        &quot;claim_token&quot;: &quot;clm_2bQ7&quot;},
+ {&quot;id&quot;: &quot;a-0003&quot;, &quot;owner&quot;: &quot;kim@example&quot;,   &quot;handle&quot;: &quot;@dealfinder&quot;,
+  &quot;provider_key&quot;: &quot;AKIA-REDACTED-aws&quot;,      &quot;claim_token&quot;: &quot;clm_9zR1&quot;},
+]
+
+def data_api(table, caller, rls_enabled):
+    &quot;&quot;&quot;Supabase&#x27;s PostgREST surface, in miniature.
+
+    `caller` is whoever the anon key resolves to - which is nobody in
+    particular. With RLS off there is no policy to consult, so every row is
+    returned; with RLS on, the policy decides.
+    &quot;&quot;&quot;
+    if not rls_enabled:
+        return list(table)                       # no policy exists to consult
+    return [r for r in table if r[&quot;owner&quot;] == caller]
+
+anon = None                                      # the anon key is not a person
+for label, rls in ((&quot;RLS disabled (as shipped)&quot;, False), (&quot;RLS enabled&quot;, True)):
+    rows = data_api(AGENTS, caller=anon, rls_enabled=rls)
+    print(f&quot;{label:28s}rows returned: {len(rows)}&quot;)
+    for r in rows:
+        print(f&quot;      {r[&#x27;handle&#x27;]:14s}{r[&#x27;owner&#x27;]:16s}{r[&#x27;provider_key&#x27;]}&quot;)
+
+owner_rows = data_api(AGENTS, caller=&quot;dana@example&quot;, rls_enabled=True)
+print(f&quot;\nsigned in as dana@example, RLS enabled: {len(owner_rows)} row&quot;)
+print()
+print(&quot;Same key, same endpoint, same table. The only difference is whether a&quot;)
+print(&quot;policy exists for the API to consult.&quot;)
+assert len(data_api(AGENTS, anon, False)) == 3
+assert len(data_api(AGENTS, anon, True)) == 0 and len(owner_rows) == 1</code></pre></div><div class="nbmd"><h2>5 · The fix, in full</h2></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)"></th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">SQL</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><code>alter table agents enable row level security;</code></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><code>create policy owner_reads on agents for select using (auth.uid() = owner_id);</code></td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Reported as roughly two statements. The gap between an incident and no incident was a policy nobody wrote, not a control nobody could afford.</div></div><div class="nbmd"><h2>6 · Why the blast radius is not the platform's</h2>
+<p>Moltbook losing its own data would be a bad day for Moltbook. What was in the table belonged to everyone who had registered an agent, and Moltbook could not revoke any of it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>REPORTED_SCALE = {&quot;Treblle&quot;: 770_000, &quot;Wiz-sourced reporting&quot;: 1_500_000}
+PROVIDERS = [&quot;OpenAI&quot;, &quot;Anthropic&quot;, &quot;AWS&quot;, &quot;GitHub&quot;, &quot;Google Cloud&quot;]
+
+for source, n in sorted(REPORTED_SCALE.items()):
+    print(f&quot;{source:26s}{n:&gt;10,} agents exposed&quot;)
+low, high = min(REPORTED_SCALE.values()), max(REPORTED_SCALE.values())
+print(f&quot;\nreported range            {low:&gt;10,} - {high:,}&quot;)
+print(f&quot;provider accounts implicated: {&#x27;, &#x27;.join(PROVIDERS)}&quot;)
+
+# Who can actually revoke each thing that leaked.
+REVOCABLE_BY = {
+ &quot;the Moltbook session token&quot;: &quot;Moltbook&quot;,
+ &quot;the claim token&quot;:            &quot;Moltbook&quot;,
+ &quot;the agent&#x27;s provider key&quot;:   &quot;the individual who created the agent&quot;,
+}
+print()
+print(f&quot;{&#x27;what leaked&#x27;:30s}who can revoke it&quot;)
+for what in sorted(REVOCABLE_BY):
+    print(f&quot;{what:30s}{REVOCABLE_BY[what]}&quot;)
+
+platform_can_fix = [w for w in REVOCABLE_BY if REVOCABLE_BY[w] == &quot;Moltbook&quot;]
+print(f&quot;\nthe platform can revoke {len(platform_can_fix)} of {len(REVOCABLE_BY)}.&quot;)
+print(&quot;The third is a key in somebody else&#x27;s provider account, and the only&quot;)
+print(&quot;person who can turn it off may not know it was ever exposed. That is the&quot;)
+print(&quot;difference between a platform breach and a supply-chain one.&quot;)
+assert len(platform_can_fix) == 2</code></pre></div><div class="nbmd"><h2>7 · The surface the attack did not need</h2>
+<p>Worth saying plainly, because it is the part that generalises: the interesting architectural risk in Moltbook was never exercised.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">surface</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">status in this incident</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">where it is taught</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">credential store readable by anyone</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>used — this was the breach</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.8, and the Supabase pattern in C2.10</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agents ingest and act on other agents&#x27; posts</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">present, untouched</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A1.3 indirect prompt injection, A1.9 comms poisoning</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agents coordinating at population scale</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">present, untouched</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A1.10, D1.10 fleet correlation</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">An architecture can hold two novel risks and still be undone by a missing row policy. Novelty is not the same as likelihood.</div></div><div class="nbmd"><h2>What you just proved</h2>
+<p>With RLS disabled the anon key returns all three agent rows, secret provider keys included; with RLS enabled and no signed-in user it returns none, and one row for the owner. Reported scale spans 770,000 to 1.5 million agents across five providers, and of the three things that leaked the platform can revoke two — the third is a key in somebody else's account.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Run <code>select relname from pg_class where relrowsecurity = false</code> against your own project, or the equivalent for whatever backend you use. Then find the table holding anything credential-shaped and check whether it is reachable from the client at all — the answer to the second question is the one that decides the size of your bad day.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.10.html">C2.10 · Case study — the Supabase pattern: open until closed</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.9.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.9.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>With RLS disabled the anon key returns all three agent rows, secret provider keys included; with RLS enabled and no signed-in user it returns none, and one row for the owner. Reported scale spans 770,000 to 1.5 million agents across five providers, and of the three things that leaked the platform can revoke two — the third is a key in somebody else&#x27;s account.</div><div class="chips"><span>Supabase</span><span>PostgREST</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/C2.9.ipynb</code></p></div><div class="pager"><a href="C2.8.html"><span class="k">← Previous</span><span class="t">C2.8 · Case study — the Hugging Face / OpenAI agent-swarm incident</span></a><a class="next" href="C2.10.html"><span class="k">Next →</span><span class="t">C2.10 · Case study — the Supabase pattern: open until closed</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
