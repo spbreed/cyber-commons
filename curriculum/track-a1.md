@@ -1,11 +1,11 @@
-# Track A1 — The Agentic Reference Architecture, and Every Risk It Carries
+# Track A1 — TripBot's Architecture, and Every Risk It Carries
 
 **Function A · Securing AI Architectures**  
-*One vendor-neutral reference architecture for agentic AI, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
+*TripBot as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** Security Architect, Principal Security Engineer, Head of Security Architecture
 
-**What changes:** One vendor-neutral reference architecture, then one lesson per risk that architecture makes possible — mapped to the OWASP Agentic AI threat taxonomy and explained in plain English. 17 lessons.
+**What changes:** CyberTravels as built, then one lesson per risk that architecture makes possible — mapped to the OWASP Agentic AI threat taxonomy and closed by a register. 18 lessons.
 
 **Autonomy focus:** Read the architecture once; every risk after it names the component it attacks.
 
@@ -382,5 +382,25 @@ python3 scripts/run_notebooks.py --session A1.16   # run it headless and check i
 ```
 
 *Expect:* A user denied `payments:write` directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does.
+
+---
+
+### A1.17 — The CyberTravels risk register
+
+`Security of AI`
+
+- **Risk** — A list of risks is read once. Without a component, a control and an owner against each row, nothing in it is actionable and nothing in it is re-checkable when TripBot grows a fifth agent.
+- **Control** — Four columns — scene, component, control, owning lesson — and a rule that no row ships without the fourth.
+- **Lab** — Roll the twelve risks up into families, find which agent carries each, and check that every row has an owner.
+
+**Run it** — Roll the twelve CyberTravels risks up into families, find which agent carries each, and check that every row has an owning lesson.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.17.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.17   # run it headless and check it
+```
+
+*Expect:* Twelve risks, each as a scene rather than a mechanism, each with a control and an owning lesson. Identity and authorisation is the largest family at three of twelve. Five of the twelve belong to no single agent — ingress, transport, identity, logging and blast radius are properties of how the four are wired together. Every risk has an owner, across more than fifteen lessons in four functions.
 
 ---

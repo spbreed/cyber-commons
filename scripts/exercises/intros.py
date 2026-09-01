@@ -7,66 +7,100 @@ small piece of code that makes the framework concrete, and no risk material —
 the risks start in the chapter that follows.
 """
 
+from . import cybertravels as CT
 from . import diagrams as D
 
 EXERCISES: dict[str, dict] = {
 
 "A1.0": {
  "concept": """
-Everything in Cyber Commons runs in one of two directions, and Function A is
-almost entirely the second one.
+Meet **CyberTravels**. It sells corporate travel, and last quarter it shipped
+**TripBot** — an agentic platform that plans and manages a trip through a
+conversation. Alex is the product engineer who built it.
 
-**AI for Security** — the agent is your instrument. It reviews code, triages
-alerts, reconstructs an incident. The thing you are protecting is the business,
-and the agent is a tool that got fast.
+TripBot is four agents, not one:
 
-**Security of AI** — the agent is the thing you are protecting. It has an
-identity, a set of permissions, a memory, a network path, and an attacker who is
-interested in all four.
+- a **Workflow Agent** that books flights and hotels, takes payments and issues
+  refunds, through an MCP server with tool orchestration;
+- a **RAG Travel Advisor** that recommends itineraries from curated templates
+  indexed in a vector store;
+- a **Coding Agent** that writes code, patches libraries, tests features in
+  lower environments and generates unit tests;
+- a **File System Agent** that reads vendor and customer PDFs and images with
+  OCR and an LLM, then updates backend APIs and validates invoices.
 
-**Securing an AI architecture is the whole of the second direction, taken at
-the layer everything else sits on.** You cannot secure a system you cannot draw.
-"Secure the agent" is not an instruction; it becomes one only once you can say
-*which component* and *which boundary*.
+Most of them reach their tools through MCP servers — one internal, one from a
+third party. Some call APIs directly, with no MCP in the path at all. They send
+each other messages. And when Alex runs TripBot locally to debug it, it reads
+his laptop's filesystem over standard I/O.
+
+Every one of those sentences is a design decision, and every one of them is
+also an attack surface. **That is the whole subject of this commons, and
+CyberTravels is the system it is taught on.** You will attack TripBot in
+Function C, build the pipeline that reviews its code in Function B, detect it
+misbehaving in Function D, and govern it in Function E. It starts here, because
+none of the rest is possible until the system is drawn.
 
 So this function is one picture and its consequences, in three chapters:
 
-- **Chapter 1 — the architecture, and every risk it carries.** One
-  vendor-neutral component map, then one lesson per risk, each naming the
-  component it attacks and grounded in the OWASP Agentic AI threat taxonomy.
+- **Chapter 1 — the architecture, and every risk it carries.** The component
+  map, then one lesson per risk, each naming the component of TripBot it
+  attacks and grounded in the OWASP Agentic AI threat taxonomy.
 - **Chapter 2 — securing it: identity and ingress.** Who is calling, on whose
-  behalf, and what came in from outside. These two controls close more risks
-  than anything else, which is why they come first.
+  behalf, and what came in from outside. These two controls close more of
+  TripBot's risks than anything else, which is why they come first.
 - **Chapter 3 — securing it: runtime and the gateway.** What holds after
   identity has been defeated, and how the controls collapse into one enforcement
-  point once you run more than a handful of agents.
+  point once CyberTravels runs more than four agents.
 
-Everything downstream names a component from chapter 1. The AI SDLC in Function
-B is an agentic system with all of these risks. The red-team campaign in
-Function C attacks these components. The detections in Function D watch them.
-The control register in Function E lists them.
+> The CyberTravels narrative, the six risk families and the twelve-row register
+> used throughout this commons are from *Agentic AI is rising fast — but the
+> attack surface is exploding*, Karthik Ramamoorthy, May 2025. The mapping onto
+> lessons, the controls and all of the code are this commons'.
 """,
  "steps": [
-  ("md", "## 2 · Where the five functions sit"),
+  ("md", "## 2 · TripBot, as built"),
+  ("html", CT.ARCHITECTURE),
+
+  ("md", "## 3 · The four agents, and what each one can reach"),
   ("html", D.table(
-    ["function", "covers", "direction it runs in"],
-    [["A", "Securing AI architectures", "mostly Security of AI"],
-     ["B", "Application security with an AI SDLC", "both directions at once"],
-     ["C", "Red teaming and security research with AI", "both directions at once"],
-     ["D", "AI for SecOps", "both directions at once"],
-     ["E", "AI for GRC", "governs both directions"]],
+    ["agent", "what it does", "what it can reach"],
+    [["Workflow Agent", CT.AGENTS["workflow"][1],
+      "flights · hotels · <b>payments and refunds</b> · CRM"],
+     ["RAG Travel Advisor", CT.AGENTS["advisor"][1],
+      "the vector store — and whatever else was ingested into it"],
+     ["Coding Agent", CT.AGENTS["coding"][1],
+      "the repository, and the CI runner that builds it"],
+     ["File System Agent", CT.AGENTS["files"][1],
+      "uploaded files, backend APIs, and Alex's laptop when run locally"]],
+    emphasise=2,
+    caption="Read the third column as a permission set rather than a feature "
+            "list. Two of these four can move money or ship code.")),
+
+  ("md", "## 4 · Where the five functions sit\\n\\n"
+         "Each one takes the same system and asks a different question of it."),
+  ("html", D.table(
+    ["function", "the question it asks of TripBot", "direction"],
+    [["A", "what can go wrong here, and what closes it", "mostly Security of AI"],
+     ["B", "how do we review its code, at its speed", "both directions at once"],
+     ["C", "can we break it before somebody else does", "both directions at once"],
+     ["D", "would we see it happening, and could we stop it",
+      "both directions at once"],
+     ["E", "who signed off, and can they still evidence it",
+      "governs both directions"]],
     caption="Nobody takes all five. Everyone takes the common spine first, then "
             "the chapters for the chair they sit in, then one adjacent chapter.")),
 
-  ("md", "## 3 · What the other four borrow from this one\\n\\n"
+  ("md", "## 5 · What the other four borrow from this one\\n\\n"
          "Not a claim about tidiness. It is why the map has to come first: every "
-         "later function names a component from it."),
+         "later function names a component of TripBot from it."),
   ("html", D.svg(D.DEFS
-    + D.box(240, 10, 220, 48, "chapter 1", sub="the component map", colour=D.SECURE)
-    + D.box(6, 124, 158, 66, "Function B", sub="the SDLC is itself an agent")
-    + D.box(180, 124, 158, 66, "Function C", sub="its 3 surfaces are here")
-    + D.box(354, 124, 158, 66, "Function D", sub="these emit the telemetry")
-    + D.box(528, 124, 166, 66, "Function E", sub="the register lists these")
+    + D.box(240, 10, 220, 48, "chapter 1", sub="TripBot's component map",
+            colour=D.SECURE)
+    + D.box(6, 124, 158, 66, "Function B", sub="reviews TripBot's code")
+    + D.box(180, 124, 158, 66, "Function C", sub="attacks these components")
+    + D.box(354, 124, 158, 66, "Function D", sub="watches them at run time")
+    + D.box(528, 124, 166, 66, "Function E", sub="governs and evidences them")
     + D.arrow(320, 58, 96, 120) + D.arrow(335, 58, 250, 120)
     + D.arrow(365, 58, 424, 120) + D.arrow(380, 58, 600, 120),
     height=200,
@@ -82,43 +116,73 @@ The control register in Function E lists them.
     caption="Chapters 2 and 3 are controls. Chapter 1 is the picture they "
             "stand on.")),
  ],
- "expect": "A map of the five functions, the direction each runs in, and what "
-           "each of the other four borrows from Function A's component map. "
-           "Function A itself is three chapters: the architecture and its risks, "
-           "then identity and ingress, then runtime and the gateway.",
- "challenge": "Before the next lesson, write down the components of one agentic "
-              "system you already run — even as a list of nouns. A1.1 gives you "
-              "the standard names; comparing your list to it is the fastest way "
-              "to find the component you forgot you had.",
+ "expect": "TripBot as built — four agents, two MCP servers, direct API calls "
+           "that skip MCP, agent-to-agent messaging and a local std-I/O path — "
+           "with what each agent can reach read as a permission set. Then the "
+           "question each of the five functions asks of that same system, and "
+           "what each borrows from this chapter's component map.",
+ "challenge": "Draw your own TripBot before the next lesson — the agents you "
+              "run, the MCP servers and APIs they reach, and which of them can "
+              "move money or ship code. A1.1 gives you the standard names for "
+              "the boxes; comparing your drawing to it is the fastest way to "
+              "find the component you forgot you had.",
 },
 
 "B1.0": {
  "concept": """
-Function B rebuilds the **secure development lifecycle** around agents, and it
-is where both directions meet on the same system.
+CyberTravels has a problem that is not about TripBot's users. It is about
+TripBot's own code.
 
-**AI for Security.** An SDLC in which agents do the work: ingest a codebase,
-model its threats, audit for vulnerabilities, confirm the real ones by
-exploiting them in a sandbox, engineer the remediation, and report with a
-severity somebody can act on. That is chapter 4, built stage by stage as one
-artefact.
+The Coding Agent opens pull requests. Some of them touch a hundred files. Alex
+is one engineer, the release cadence has not slowed down, and the review that
+used to be a careful hour is now a scroll. Function B is what he builds instead
+of scrolling: **an SDLC in which agents do the reviewing**, and the harnesses
+that make their output worth acting on.
 
-**Security of AI.** That pipeline is itself an agentic system. It reads
-untrusted input by definition — the code it reviews is the code you do not yet
-trust. It holds credentials. It writes to your repository. Every risk in
-Function A applies to it, and the fact that it is a *security* tool grants no
-exemption.
+Both directions of this commons meet here, on the same system.
 
-Underneath it sits the second chapter: **the harness**. Chapter 5 is the loop —
-plan, act, verify, stop — and the engineering that makes it reliable enough to
-leave alone: tool design, failure taxonomies, replay, evaluation, and the two
-numbers that decide whether autonomy is worth paying for.
+**AI for Security.** A pipeline that ingests the TripBot repository, models its
+threats, audits for vulnerabilities, confirms the real ones by exploiting them
+in a replica, engineers the fix and reports a severity somebody acts on. That
+is chapter 4, built stage by stage as one artefact.
 
-The relationship is the point. Chapter 4 is a product built out of chapter 5's
-material. If you only read one, read the one you are being asked to ship.
+**Security of AI.** That pipeline is itself an agentic system with all of
+TripBot's risks. It reads untrusted input by definition — the code it reviews is
+the code nobody trusts yet. It holds a credential that can write to the default
+branch. Every risk in Function A applies to it, and being a security tool grants
+no exemption.
+
+Chapter 5 is what sits underneath: **the harness**. One loop — plan, act,
+verify, stop — and the engineering that makes it reliable enough to leave alone.
+The order it is taught in is the order you have to build it:
+
+1. **the loop and its verifier**, because a harness whose verifier is the model
+   agreeing with itself produces confident nonsense at scale;
+2. **tools, budgets, sub-agents and replay**, because the loop meets the real
+   world through them;
+3. **one skeleton, four oracles** — SAST, DAST, threat modelling and pentest are
+   the same loop with a different thing deciding what is true;
+4. **evaluation**, on a corpus with known answers, because a hallucinated
+   finding looks exactly like a real one until something checks;
+5. **reliability and cost**, because a harness that is right 80% of the time is
+   33% reliable across five unattended runs, and somebody is paying per finding.
 """,
  "steps": [
-  ("md", "## 2 · Chapter 4 — the lifecycle, with agents doing the work"),
+  ("md", "## 2 · What Alex is actually up against"),
+  ("html", D.table(
+    ["", "before the Coding Agent", "after"],
+    [["pull requests per week", "6", "<b>40</b>"],
+     ["files touched per PR", "3", "<b>up to 120</b>"],
+     ["review time available", "unchanged", "unchanged"],
+     ["what review becomes", "reading", "<b>scrolling</b>"],
+     ["what gets through", "the occasional bug",
+      "<b>an IDOR that exposes card details by booking ID</b>"]],
+    emphasise=2,
+    caption="Nothing in the left column was wrong. The volume changed and the "
+            "review process did not, which is the whole argument for building "
+            "the pipeline in chapter 4.")),
+
+  ("md", "## 3 · Chapter 4 — the lifecycle, with agents doing the work"),
   ("html", D.svg(D.DEFS
     + D.box(2, 26, 96, 46, "ingest", sub="B1.1-2", colour=D.DEFEND)
     + D.box(112, 26, 116, 46, "threat model", sub="B1.3-4", colour=D.DEFEND)
@@ -130,224 +194,339 @@ material. If you only read one, read the one you are being asked to ship.
     + D.box(2, 108, 682, 52, "", colour=D.INK, dashed=True)
     + D.label(343, 130, "chapter 5 — the harness underneath every one of those stages",
               anchor="middle", colour=D.INK, size=12, weight="600")
-    + D.label(343, 148, "plan · act · verify · stop  ·  tool design  ·  failure "
-                        "taxonomy  ·  replay  ·  evals", anchor="middle"),
+    + D.label(343, 148, "plan · act · verify · stop  ·  tools · budgets · replay  ·  "
+                        "one skeleton, four oracles  ·  evals · cost",
+              anchor="middle"),
     height=178,
-    caption="Chapter 4 is a product built out of chapter 5's material. If you "
-            "only read one, read the one you are being asked to ship.")),
+    caption="Chapter 4 is a product built out of chapter 5's material. Alex "
+            "needs the product; he cannot ship it without the material.")),
 
-  ("md", "## 3 · The same lifecycle, read as an agentic system\\n\\n"
+  ("md", "## 4 · The harnesses, in the order you have to build them\n\n"
+         "Each row is a thing CyberTravels needs and a chapter-5 lesson that "
+         "builds it. The order is not preference — each one is unusable without "
+         "the one above it."),
+  ("html", D.table(
+    ["harness", "what it decides for CyberTravels", "built in"],
+    [["the loop and its verifier",
+      "whether a finding about TripBot is true, on evidence rather than the "
+      "model's own agreement", "B2.0 – B2.3"],
+     ["tools, budgets, sub-agents, replay",
+      "what the loop may touch, how long it may run, and whether a half-finished "
+      "run is safe to repeat", "B2.4 – B2.8"],
+     ["SAST · DAST · threat model · pentest",
+      "the same skeleton with four different oracles — reachability, an observed "
+      "response, a diff, a shell", "B2.9"],
+     ["the model backbone",
+      "which model, chosen on TripBot's own corpus rather than a vendor chart",
+      "B2.10"],
+     ["evaluation",
+      "recall and precision against a corpus whose answers you already know",
+      "B2.11"],
+     ["reliability and cost",
+      "pass^k unattended, and dollars per confirmed finding", "B2.12"],
+     ["deception",
+      "canaries and honeypot tasks in TripBot's own environment", "B2.13"]],
+    emphasise=2,
+    caption="Skip to evaluation and you will measure a harness whose verifier "
+            "you never built. That is the most common way this goes wrong.")),
+
+  ("md", "## 5 · The same pipeline, read as an agentic system\n\n"
          "Every stage above runs inside something that has an identity, reads "
-         "untrusted input and writes to your repository. These are Function A's "
-         "components, and a security tool gets no exemption from them."),
+         "untrusted input and writes to CyberTravels' repository. These are "
+         "Function A's components, and a security tool gets no exemption."),
   ("html", D.table(
     ["Function A component", "what it is, in this pipeline"],
-    [["ingress", "a pull request, written by anyone with commit access"],
-     ["knowledge", "the repository itself — untrusted by definition"],
-     ["tools", "the test runner, the sandbox, the ticket API"],
-     ["identity", "a service account that can write to your default branch"],
+    [["ingress", "a pull request, opened by TripBot's own Coding Agent"],
+     ["knowledge", "the TripBot repository — untrusted by definition"],
+     ["tools", "the test runner, the sandbox replica, the ticket API"],
+     ["identity", "a service account that can write to the default branch"],
      ["egress", "the report, and anything it happens to contain"]],
-    caption="Five components, every one of them a risk surface from Function A.")),
+    caption="Five components, every one of them a risk surface from Function A. "
+            "R7 and R8 in the CyberTravels register are exactly this pipeline "
+            "going wrong.")),
  ],
- "expect": "The five phases of the lifecycle against the lessons that build "
-           "them, the harness capabilities underneath them, and the same "
-           "pipeline read back as an agentic system with five Function A "
-           "components — ingress, knowledge, tools, identity and egress.",
- "challenge": "Name the service account your existing CI security tooling runs "
-              "as, and what it can write to. That account is the identity "
-              "component of an agentic system whether or not anyone has called "
-              "it one.",
+ "expect": "The volume problem stated plainly — 6 pull requests a week becoming "
+           "40, touching up to 120 files, with review time unchanged — then the "
+           "five phases of the lifecycle, the seven harnesses in the order they "
+           "have to be built, and the same pipeline read back as an agentic "
+           "system with five Function A components.",
+ "challenge": "Count your own numbers for the first table: pull requests per "
+              "week before and after, files touched, and review minutes "
+              "available. If the third number has not moved, you are already in "
+              "the situation this function is for.",
 },
 
 "C1.0": {
  "concept": """
-Function C is red teaming and research, and it is the smallest function in the
-commons with the strictest standard of proof.
+CyberTravels' security team has a standing question from the board, and it is
+not "is TripBot secure". It is **"how would we know"**.
 
-Two chapters, and one idea holding them together: **an anecdote is not a
-result.**
+Function C answers it twice. Chapter 6 attacks TripBot the way somebody else
+eventually will. Chapter 7 asks whether what you found survives contact with
+a second person, a second week and a second model.
 
-**Chapter 6 — red teaming.** The agent as your instrument, running recon,
-foothold, escalation and lateral movement inside a scope you can defend in
-writing. Then the agent as the target: red-teaming it across its three attack
-surfaces — injection, identity and containment — as a campaign that reports a
-rate with a sample size rather than a screenshot.
+**Chapter 6 — red teaming.** The agent as your instrument first: recon,
+foothold, escalation and lateral movement run as a loop, inside a scope you can
+defend in writing — because an offensive harness pointed at CyberTravels'
+staging estate is the most dangerous thing in the building. Then the agent as
+the target: TripBot has three attack surfaces and a campaign has to cover all
+three.
 
-**Chapter 7 — research.** Model-layer, weight-level, data-layer and
-supply-chain work, then the two questions that decide whether any of it is worth
-having. Does it reproduce, once you separate the model effect from the harness
-effect? And can somebody else deploy it as a control after you have moved on?
+- **injection** — what the Workflow Agent reads. A booking note, a hotel
+  description, an OCR'd invoice. R3 in the register.
+- **identity** — who it acts as. Delegation from Alex, scope, expiry,
+  impersonation. R1, R5 and R11.
+- **containment** — what it can reach once you hold it. The refund endpoint,
+  the CRM, the CI runner, Alex's laptop. R6, R7 and R9.
 
-Both directions run through here at once, and unusually they run through the
-*same* artefact. The harness you attack with is the harness someone will attack.
-The scope guard that keeps your engagement lawful is the containment control
-Function A teaches. Offensive work on agents is the shortest path to
-understanding the defences, which is why this function sits after A and B rather
-than before them.
+**Chapter 7 — research.** Model-layer, weight-level, data-layer and supply-chain
+work, then the two questions that decide whether any of it was worth doing.
+Does it reproduce once you separate the model effect from the harness effect?
+And can somebody else deploy it as a control after you have moved on?
+
+The chapter closes on three real incidents, because the most useful red-team
+finding is often one that already happened to somebody else — including one
+where a swarm of agents compromised a third party's production systems, which is
+the shape of a bad week CyberTravels has not had yet.
+
+One idea holds all of it together: **an anecdote is not a result.** "TripBot
+refunded a booking when I asked it to" is a story. "7 of 20 attempts, 0 of 20
+against the patched build, reproduced by the platform team" is a finding
+somebody can act on.
 """,
  "steps": [
-  ("md", "## 2 · The three surfaces chapter 6 tests"),
+  ("md", "## 2 · TripBot's three attack surfaces"),
   ("html", D.svg(D.DEFS
-    + D.box(268, 8, 164, 44, "the agent", colour=D.INK)
-    + D.box(6, 108, 206, 74, "injection", colour=D.SECURE,
+    + D.box(268, 8, 164, 44, "TripBot", colour=D.INK)
+    + D.box(6, 108, 206, 84, "injection", colour=D.SECURE,
             sub="what it reads")
-    + D.label(109, 158, "direct · indirect · via tool output", anchor="middle")
-    + D.box(246, 108, 208, 74, "identity", colour=D.SECURE,
+    + D.label(109, 158, "booking notes · hotel copy", anchor="middle")
+    + D.label(109, 173, "OCR'd invoices · templates", anchor="middle")
+    + D.box(246, 108, 208, 84, "identity", colour=D.SECURE,
             sub="who it acts as")
-    + D.label(350, 158, "delegation · scope · expiry", anchor="middle")
-    + D.box(488, 108, 206, 74, "containment", colour=D.SECURE,
+    + D.label(350, 158, "delegation from Alex", anchor="middle")
+    + D.label(350, 173, "scope · expiry · lineage", anchor="middle")
+    + D.box(488, 108, 206, 84, "containment", colour=D.SECURE,
             sub="what it can reach")
-    + D.label(591, 158, "tools · paths · egress", anchor="middle")
+    + D.label(591, 158, "refunds · CRM · CI runner", anchor="middle")
+    + D.label(591, 173, "the local filesystem", anchor="middle")
     + D.arrow(320, 52, 130, 104) + D.arrow(350, 52, 350, 104)
     + D.arrow(380, 52, 570, 104),
-    height=196,
-    caption="A campaign covers all three and scores them the same way. A demo "
-            "covers whichever one was interesting that week.")),
+    height=206,
+    caption="Nine of the twelve risks in the CyberTravels register land on one "
+            "of these three. A campaign that covers one surface has covered a "
+            "third of the register and will read as though it covered all of "
+            "it.")),
 
-  ("md", "## 3 · The same claim, at four standards of proof\\n\\n"
+  ("md", "## 3 · The same claim, at four standards of proof\n\n"
          "Chapter 6 gets you to the second row. Chapter 7 is entirely about the "
          "third and fourth, because a finding nobody can reproduce protects "
-         "nobody, however true it was on the day."),
+         "nobody — however true it was on the day."),
   ("html", D.table(
-    ["the claim", "rate", "control arm", "reproduced", "what it is"],
-    [["it worked when I tried it", "—", "—", "—", "<b>anecdote</b>"],
+    ["what the report says about TripBot", "rate", "control arm", "reproduced",
+     "what it is"],
+    [["it refunded a booking when I asked it to", "—", "—", "—",
+      "<b>anecdote</b>"],
      ["7 of 20 attempts, suite attached", "yes", "—", "—", "<b>measurement</b>"],
-     ["7/20, and 0/20 on the patched build", "yes", "yes", "—", "<b>result</b>"],
-     ["7/20, 0/20 patched, another team got the same", "yes", "yes", "yes",
+     ["7/20, and 0/20 against the patched build", "yes", "yes", "—",
+      "<b>result</b>"],
+     ["7/20, 0/20 patched, platform team got the same", "yes", "yes", "yes",
       "<b>evidence</b>"]],
     emphasise=4)),
  ],
- "expect": "The three attack surfaces of an agent, and the same claim graded as "
-           "anecdote, measurement, result or evidence depending on whether it "
-           "carries a rate, a control arm and an independent reproduction.",
- "challenge": "Find the last agentic security claim you read — a blog post, a "
-              "vendor page, a conference talk — and score it on those three "
-              "columns. Most public claims sit on the first row.",
+ "expect": "TripBot's three attack surfaces, with the parts of CyberTravels that "
+           "sit behind each, and nine of twelve register risks landing on one of "
+           "them. Then the same claim graded as anecdote, measurement, result or "
+           "evidence depending on whether it carries a rate, a control arm and "
+           "an independent reproduction.",
+ "challenge": "Take the last security claim anyone made about an agent you run "
+              "and score it on those three columns. Most claims — including "
+              "vendor ones — sit on the first row.",
 },
 
 "D1.0": {
  "concept": """
-Function D is the only function that has to work while something is actively
-going wrong, and agents change it at both ends.
+CyberTravels has a SOC. It was built for people.
 
-**Agents as the instrument.** A triage loop that reads an alert, pulls the
-context a human would have pulled, and proposes a disposition. Detection
-engineering with a loop that writes and tests the rule. Reconstruction that
-reads six months of logs in the time it takes to read a paragraph. The gain is
-real and the risk is specific: a loop that closes alerts confidently is a loop
-that can close the wrong one at scale.
+It watches for a login from an unusual country, a burst of failed
+authentications, an employee downloading the customer list on their last day. It
+is good at those, and none of them describes TripBot.
 
-**Agents as the actor.** An adversary — or your own misbehaving agent — that
-acts a thousand times an hour, never gets bored, never repeats a session
-verbatim, and leaves a trace shaped nothing like a person's. Detections tuned to
-human tempo do not fire on it, and the ones that do fire arrive after it has
-finished.
+**An agentic SOC watches a different actor.** One hour of TripBot's Workflow
+Agent is roughly 1,400 tool calls across 260 resources in 96 sessions. One hour
+of Alex is twelve actions. Every threshold, baseline and playbook CyberTravels
+owns was tuned against the second number.
 
-Two chapters:
+And the actor is not only the adversary. It is also the instrument: chapter 8
+puts an agent on the alert queue and on detection engineering, which works, and
+brings its own failure mode — a loop that closes alerts confidently can close
+the wrong one at machine speed.
 
-- **Chapter 8 — detection.** Triage as a loop you supervise, detections written
-  *for* agent behaviour, agent telemetry as a first-class data source, and
-  telling agent from human when both hold the same credential.
-- **Chapter 9 — response.** Scoping an incident whose actor is an agent,
-  containment at machine speed, replay as forensics, and the one thing that has
-  to stay human: who is allowed to stop it.
+**Chapter 8 — detection.** Triage as a loop you supervise, with the context that
+makes it correct. Detections written *for* an actor with no human rhythm.
+TripBot's telemetry as a first-class data source, because you cannot detect on
+what was never emitted — prompts, tool calls, decisions, identities, none of
+which appear in an application log. Telling agent from human when both hold
+Alex's authority. And drift, the failure with no adversary at all: the model was
+upgraded, a prompt was edited, and the baseline moved.
+
+**Chapter 9 — response.** Scope an incident whose actor moved at machine speed
+on delegated credentials. Contain faster than it acts. Replay what it saw and
+what it decided. And decide, in advance, who is allowed to stop all four agents
+at three in the morning without asking anyone.
+
+Two rows of the CyberTravels register are this function's whole reason to exist:
+**R9**, where holding one agent reaches CRM, payroll and the cloud resource
+manager, and **R10**, where passport numbers are in the logs that would have
+told you.
 """,
  "steps": [
-  ("md", "## 2 · One hour of an agent, one hour of a person"),
+  ("md", "## 2 · One hour of TripBot, one hour of Alex"),
   ("html", D.table(
-    ["signal, over one hour", "person", "agent", "ratio"],
+    ["signal, over one hour", "Alex", "TripBot's Workflow Agent", "ratio"],
     [["actions taken", "12", "1,400", "117×"],
-     ["distinct resources", "5", "260", "52×"],
+     ["distinct resources touched", "5", "260", "52×"],
      ["median gap between calls", "180s", "2s", "1/90×"],
      ["sessions", "1", "96", "96×"],
      ["typo / retry events", "3", "0", "—"]],
     emphasise=3,
-    caption="Every detection, baseline and playbook you own was tuned against "
-            "the middle column.")),
+    caption="Every detection, baseline and playbook CyberTravels owns was tuned "
+            "against the second column.")),
 
-  ("md", "## 3 · Why a volume rule is not the answer\\n\\n"
+  ("md", "## 3 · Why a volume rule is not the answer\n\n"
          "The obvious rule does fire. The problem is *when* — which is the one "
          "thing a table cannot show you, so this part is worth running."),
   ("py", '''def burst_rule(actions_per_hour, threshold=60):
     return actions_per_hour > threshold
 
-RATE = {"person": 12, "agent": 1400}
+RATE = {"Alex": 12, "workflow agent": 1400}
 for who, n in RATE.items():
-    print(f"   {who:8s}{n:>6} actions/hour -> "
+    print(f"   {who:16s}{n:>6} actions/hour -> "
           f"{'ALERT' if burst_rule(n) else 'silent'}")
 
-seconds_to_trip = 60 * 3600 / RATE["agent"]
+seconds_to_trip = 60 * 3600 / RATE["workflow agent"]
 print(f"\\nthe agent crosses the threshold after {seconds_to_trip:.0f} seconds")
 print(f"and keeps going for the remaining {3600 - seconds_to_trip:.0f}.")
 print()
-print("So the rule fires, and it fires after about two and a half minutes of a")
-print("sixty-minute run - by which point most of what the actor was going to do")
-print("is done. Chapter 8 is about detections that fire on shape rather than")
-print("volume; chapter 9 is about who can pull the stop lever without asking.")
+print("So the rule fires, about two and a half minutes into a sixty-minute run -")
+print("by which point most of what the actor was going to do is done. If those")
+print("were refunds, the alert arrives after the money has moved.")
+print()
+print("Chapter 8 is about detections that fire on shape rather than volume.")
+print("Chapter 9 is about who can pull the stop lever without asking.")
 assert burst_rule(1400) and not burst_rule(12) and seconds_to_trip < 200
 '''),
+
+  ("md", "## 4 · What TripBot has to emit before any of this works"),
+  ("html", D.table(
+    ["what the SOC needs", "is it in an application log?", "which lesson gets it"],
+    [["the prompt that motivated the action", "<b>no</b>", "D1.5"],
+     ["the tool call, with arguments", "<b>no</b>", "D1.5"],
+     ["the decision, and what it was based on", "<b>no</b>", "D2.5"],
+     ["which agent acted", "<b>no</b>", "D1.6"],
+     ["which human it acted for", "<b>no</b>", "A2.7 · D1.6"],
+     ["the HTTP request the tool made", "yes", "already there"]],
+    emphasise=1,
+    caption="Five of six do not exist yet. R10 in the register is the sixth "
+            "one's twin problem — the log you do have is full of passport "
+            "numbers.")),
  ],
- "expect": "Five behavioural signals for a person and an agent over the same "
-           "hour, with ratios in the hundreds. The volume rule tuned for human "
-           "tempo does fire on the agent — 154 seconds into a sixty-minute run, "
-           "with the remaining 3,446 seconds unmonitored.",
+ "expect": "Five behavioural signals for Alex and for TripBot's Workflow Agent "
+           "over the same hour, with ratios in the hundreds. The volume rule "
+           "tuned for human tempo does fire — 154 seconds into a sixty-minute "
+           "run, leaving 3,446 seconds unmonitored. Five of the six things an "
+           "agentic SOC needs are not in any application log.",
  "challenge": "Pull one hour of activity for a service account in your own "
-              "environment and compute those five signals. If you cannot, that is "
-              "the first finding of chapter 8: the telemetry does not exist yet.",
+              "environment and compute those five signals. If you cannot, that "
+              "is the first finding of chapter 8 and it is a telemetry problem "
+              "rather than a detection one.",
 },
 
 "E1.0": {
  "concept": """
-Function E governs autonomy rather than approving tools, and the difference is
-not rhetorical. A list of approved products works when there are forty products.
-It does not survive a thousand agents, most of them assembled by people who do
-not think of themselves as building software.
+Someone at CyberTravels signed off on TripBot. Function E is about whether that
+signature still means anything.
 
-The vocabulary this function runs on is **trustworthy AI**, and it is worth
-being precise about it, because it is used loosely everywhere else. It names
-seven properties a system is expected to hold:
+It has to, because the sign-off happened when TripBot was a chatbot. It now
+issues refunds, writes code, reads invoices and indexes contracts. Nothing about
+the approval was wrong on the day; everything about it is stale, and the
+approval process has no step that notices.
 
-| Property | What it means when an agent has it |
+**Governing autonomy rather than approving tools** is the shift. A list of
+approved products works at forty products. CyberTravels will not stop at four
+agents, and neither will the list.
+
+The vocabulary is **trustworthy AI**, and it is worth being precise about,
+because it is used loosely everywhere else. Seven properties, and not one of
+them belongs to a single team:
+
+| property | what it means for TripBot |
 |---|---|
-| valid and reliable | it does the thing, repeatably, and you measured that |
-| safe | it does not cause harm even when it is wrong |
-| secure and resilient | it withstands attack and recovers |
-| accountable and transparent | someone owns it, and its behaviour is visible |
-| explainable and interpretable | the reason for an action can be recovered |
-| privacy-enhanced | it does not leak what it was trusted with |
-| fair, with harmful bias managed | it does not distribute harm unevenly |
+| valid and reliable | it recommends hotels that exist, repeatably, and somebody measured that |
+| safe | a wrong recommendation does not become a $5,000 refund |
+| secure and resilient | it withstands the twelve risks in the register, and recovers |
+| accountable and transparent | a named person owns it, and its actions are visible |
+| explainable | the reason it issued a refund can be recovered afterwards |
+| privacy-enhanced | passport numbers do not end up in a log or a vector store |
+| fair, harmful bias managed | it does not quietly serve some travellers worse |
 
-Not one of those belongs to a single team. Security owns part of "secure and
-resilient" and almost none of "fair". The three chapters here are all attempts
-to answer the same question — **who owns which** — at three different distances:
+Security owns one of the seven outright. That ratio is the whole reason this
+function exists as more than a security document, and three chapters follow
+from it:
 
-- **Chapter 10 — risk and control.** The inventory, the risk tiering, the
-  control mapping, and evidence that can be re-checked instead of asserted once.
-- **Chapter 11 — regulatory and compliance.** The obligations, the documentation
-  that survives supervision, and the conversation with an auditor.
-- **Chapter 12 — the CISO office.** Sequencing the programme, org design,
-  metrics, and how to say no — or yes with conditions.
+- **Chapter 10 — risk and control.** The register of every agent CyberTravels
+  runs, risk-tiered by autonomy, data and blast radius, mapped to controls, with
+  evidence that can be re-checked rather than asserted once.
+- **Chapter 11 — regulatory and compliance.** What CyberTravels owes and to
+  whom. A travel company holds passports, payment data and health information;
+  layer 2 and 3 obligations were in force before TripBot existed.
+- **Chapter 12 — the CISO office.** Sequencing, org design, metrics, and how to
+  tell the board what the exposure is without either alarming them or misleading
+  them.
+
+Two rows of the register belong to this function outright: **R2**, where a
+guardrail was disabled for a demo and nobody had to approve it, and **R12**,
+where contracts were indexed for better answers and became searchable by
+contractors.
 """,
  "steps": [
-  ("md", "## 2 · Seven properties, and the question of who owns each"),
+  ("md", "## 2 · Seven properties, and who at CyberTravels owns each"),
   ("html", D.table(
-    ["trustworthy-AI property", "typical owner", "security's share"],
-    [["valid and reliable", "engineering + the eval harness", "contributes evidence"],
-     ["safe", "product owner + risk", "contributes evidence"],
+    ["trustworthy-AI property", "who owns it at CyberTravels", "security's share"],
+    [["valid and reliable", "engineering + the eval harness (B2.11)",
+      "contributes evidence"],
+     ["safe", "the TripBot product owner + risk", "contributes evidence"],
      ["secure and resilient", "security", "<b>owns it</b>"],
-     ["accountable and transparent", "the named system owner", "contributes evidence"],
-     ["explainable and interpretable", "engineering + model risk", "contributes evidence"],
+     ["accountable and transparent", "the named system owner",
+      "contributes evidence"],
+     ["explainable and interpretable", "engineering + model risk",
+      "contributes evidence"],
      ["privacy-enhanced", "privacy office + engineering", "contributes evidence"],
-     ["fair, harmful bias managed", "product owner + legal", "contributes evidence"]],
+     ["fair, harmful bias managed", "product owner + legal",
+      "contributes evidence"]],
     emphasise=2,
-    caption="Security owns one of the seven outright and contributes evidence "
-            "to the other six. That ratio is why this function exists as more "
-            "than a security document.")),
+    caption="Security owns one of the seven and contributes evidence to the "
+            "other six. A trustworthy-AI statement with no owner per property is "
+            "a statement that every property is somebody else's job.")),
 
-  ("md", "## 3 · Three distances from the same question\\n\\n"
-         "A trustworthy-AI statement with no owner per property is a statement "
-         "that every property is somebody else's job. All three chapters here "
-         "are attempts to fix that, at different ranges."),
+  ("md", "## 3 · What the sign-off actually covered\n\n"
+         "The approval was accurate when it was given. This is what changed "
+         "underneath it, and which of those changes raised a ticket."),
+  ("html", D.table(
+    ["at approval", "today", "did it go through change management?"],
+    [["one agent, answers questions", "four agents", "<b>no</b>"],
+     ["read-only", "issues refunds", "<b>no</b>"],
+     ["no repository access", "opens and self-approves pull requests",
+      "<b>no</b>"],
+     ["no document store", "indexes contracts and pricing models", "<b>no</b>"],
+     ["hosted model, fixed version", "provider upgrades it silently",
+      "<b>no — you may not be told</b>"]],
+    emphasise=2,
+    caption="Five material changes, none of them ticketed. This is R2 and the "
+            "lifecycle problem of E1.9 in one table, and it is why chapter 10 "
+            "starts with an inventory rather than a policy.")),
+
+  ("md", "## 4 · Three distances from the same question"),
   ("html", D.svg(D.DEFS
     + D.box(6, 14, 218, 84, "chapter 10", sub="risk and control", colour=D.INK)
     + D.label(115, 62, "inventory · tiering", anchor="middle")
@@ -359,18 +538,17 @@ to answer the same question — **who owns which** — at three different distan
     + D.label(586, 62, "sequencing · org design", anchor="middle")
     + D.label(586, 78, "metrics · stop authority", anchor="middle")
     + D.arrow(224, 56, 240) + D.arrow(460, 56, 476)
-    + D.label(350, 124, "inside the organisation  →  to a regulator  →  to the board",
+    + D.label(350, 124, "inside CyberTravels  →  to a regulator  →  to the board",
               anchor="middle", size=11.5),
     height=140)),
  ],
- "expect": "Seven trustworthy-AI properties with a named owner each, security "
-           "owning exactly one outright, and the three chapters laid out by how "
-           "far from the system each one sits — the register, the regulator, the "
-           "board.",
- "challenge": "Write the seven properties down and put a real name against each "
-              "one in your own organisation. The properties you cannot assign are "
-              "the programme; the ones assigned to 'security' by default are the "
-              "argument you are about to have.",
+ "expect": "Seven trustworthy-AI properties with a named owner each and security "
+           "owning exactly one outright. Five material changes to TripBot since "
+           "its approval, none of which raised a ticket. The three chapters laid "
+           "out by how far from the system each one sits.",
+ "challenge": "Find the approval record for one agent you run and compare it to "
+              "what that agent does today. The gap is the programme, and the "
+              "reason nobody noticed it is what chapter 10 is for.",
 },
 
 }

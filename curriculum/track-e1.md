@@ -1,7 +1,7 @@
 # Track E1 — The GRC Practitioner (Risk & Control)
 
-**Function E · AI for GRC**  
-*Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.*
+**Function E · AI Governance for Agentic Systems**  
+*Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
 **Job titles:** GRC Analyst, Risk Manager, Control Owner, Third-Party Risk Analyst, Internal Audit liaison
 

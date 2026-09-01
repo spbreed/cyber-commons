@@ -1,7 +1,7 @@
 # Track B1 — The AI SDLC: an Agentic AppSec Pipeline
 
 **Function B · Application Security with an AI SDLC**  
-*The secure development lifecycle rebuilt around agents: they review the code, model the threats, confirm the exploits and file the fix — and the pipeline that does it is itself software you have to secure.*
+*The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*
 
 **Job titles:** AppSec Engineer, Product Security Engineer, Secure Code Reviewer
 

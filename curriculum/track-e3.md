@@ -1,7 +1,7 @@
 # Track E3 — The BISO, Risk Communicator & CISO Office
 
-**Function E · AI for GRC**  
-*Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.*
+**Function E · AI Governance for Agentic Systems**  
+*Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
 **Job titles:** BISO, Deputy CISO, Head of Security Strategy, CISO
 

@@ -1,11 +1,11 @@
-# Track D2 — The Incident Responder
+# Track D2 — The Agentic SOC — Response
 
-**Function D · AI for SecOps**  
-*Detecting, attributing and stopping an actor that is not a person and does not slow down.*
+**Function D · The Agentic SOC**  
+*Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like TripBot's.*
 
 **Job titles:** Incident Responder, DFIR Analyst, CSIRT Lead
 
-**What changes:** Responding at machine speed. 9 lessons.
+**What changes:** Responding at machine speed when the actor is one of TripBot's agents. 9 lessons.
 
 **Autonomy focus:** Response tooling at L2.5; containment authority never leaves human hands.
 

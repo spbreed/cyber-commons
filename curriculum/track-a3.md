@@ -1,7 +1,7 @@
 # Track A3 — Securing the Architecture — Runtime and the Gateway
 
 **Function A · Securing AI Architectures**  
-*One vendor-neutral reference architecture for agentic AI, every risk it carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
+*TripBot as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** Platform Security Engineer, Cloud Security Architect, SRE
 

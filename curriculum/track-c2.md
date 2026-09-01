@@ -1,7 +1,7 @@
 # Track C2 — Security Research with AI
 
 **Function C · Red Teaming and Security Research with AI**  
-*The agent as instrument and as target: offensive workflows you can run lawfully, campaigns that report a rate rather than an anecdote, and research that reproduces.*
+*Break TripBot before somebody else does: the offensive workflow, a campaign across its three attack surfaces, and research that reproduces.*
 
 **Job titles:** Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher
 

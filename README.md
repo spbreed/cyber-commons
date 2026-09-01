@@ -3,7 +3,7 @@
 **A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.**
 
-**132 lessons across 12 chapters.** Every lesson is a self-contained Python
+**133 lessons across 12 chapters.** Every lesson is a self-contained Python
 notebook that runs in a browser on the standard library alone, and is executed
 in CI before it ships. No licence, no vendor, no frontier-lab account.
 
@@ -72,12 +72,12 @@ lesson** that says what it is for and which direction it runs in.
 
 | Function | Chapters | Lessons |
 |---|---|---|
-| **A · Securing AI Architectures** | [1](curriculum/track-a1.md) The architecture and every risk it carries · [2](curriculum/track-a2.md) Securing it: identity and ingress · [3](curriculum/track-a3.md) Securing it: runtime and the gateway | 35 |
+| **A · Securing AI Architectures** | [1](curriculum/track-a1.md) The architecture and every risk it carries · [2](curriculum/track-a2.md) Securing it: identity and ingress · [3](curriculum/track-a3.md) Securing it: runtime and the gateway | 36 |
 | **B · Application Security with an AI SDLC** | [4](curriculum/track-b1.md) The AI SDLC, as an agentic AppSec pipeline · [5](curriculum/track-b2.md) The harness that runs it | 32 |
 | **C · Red Teaming and Security Research with AI** | [6](curriculum/track-c1.md) Red teaming with AI · [7](curriculum/track-c2.md) Security research with AI | 15 |
-| **D · AI for SecOps** | [8](curriculum/track-d1.md) Detection · [9](curriculum/track-d2.md) Response | 20 |
-| **E · AI for GRC** | [10](curriculum/track-e1.md) Risk and control · [11](curriculum/track-e2.md) Regulatory · [12](curriculum/track-e3.md) The CISO office | 30 |
-| | **12 chapters** | **132** |
+| **D · The Agentic SOC** | [8](curriculum/track-d1.md) Detection · [9](curriculum/track-d2.md) Response | 20 |
+| **E · AI Governance for Agentic Systems** | [10](curriculum/track-e1.md) Risk and control · [11](curriculum/track-e2.md) Regulatory · [12](curriculum/track-e3.md) The CISO office | 30 |
+| | **12 chapters** | **133** |
 
 Nobody takes all of it. Everyone takes the **common spine** first — twenty
 lessons, in order, that carry the vocabulary the rest runs on. Then the chapters
@@ -117,7 +117,7 @@ remote stdout line-for-line against a fresh local run
 ([evidence](labs/notebooks/_kaggle_verified.json)). It caught two lessons whose
 output depended on `PYTHONHASHSEED`; both are fixed, and
 [`check_determinism.py`](scripts/check_determinism.py) now gates CI so the next
-one is caught in nine seconds instead of after 132 remote pushes.
+one is caught in nine seconds instead of after 133 remote pushes.
 
 Two properties make that possible, and both are enforced by the build:
 
@@ -180,7 +180,7 @@ python3 scripts/build_site.py
 git add -A && git commit -m "lesson: A2.5" && git push
 ```
 
-CI re-runs all of it with `--check` — secret scan, 132 notebooks, determinism
+CI re-runs all of it with `--check` — secret scan, 133 notebooks, determinism
 gate, skill contracts — and fails on drift, so the notebook you read on the site
 is always the notebook that ran. Pushing deploys the site.
 
@@ -195,11 +195,11 @@ refuses to read a credential file inside the repo. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 132 sessions, 12 chapters
+site/data/curriculum.json   source of truth: 133 sessions, 12 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
 skills/                     22 agent skills, embedded verbatim into notebooks
-labs/notebooks/             132 generated notebooks + execution and Kaggle evidence
+labs/notebooks/             133 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · run_notebooks · check_{lessons,skills,secrets,determinism,register} · kaggle_*

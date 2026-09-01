@@ -1,7 +1,7 @@
 # Track E2 — The Regulatory & Compliance Lead
 
-**Function E · AI for GRC**  
-*Governing autonomy instead of approving tools — a list of approved products does not survive a thousand agents.*
+**Function E · AI Governance for Agentic Systems**  
+*Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
 **Job titles:** Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead
 
