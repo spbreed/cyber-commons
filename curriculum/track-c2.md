@@ -5,7 +5,7 @@
 
 **Job titles:** Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher
 
-**What changes:** Turning curiosity into a result somebody else can deploy, then three real incidents worked end to end. 10 lessons.
+**What changes:** Turning curiosity into a result somebody else can deploy, then three real incidents worked end to end against CyberTravels. 10 lessons.
 
 **Autonomy focus:** You deliberately operate at L3 in isolated environments so the rest of the org never has to.
 

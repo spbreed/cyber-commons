@@ -1,11 +1,11 @@
-# Track E2 — The Regulatory & Compliance Lead
+# Track E2 — Building the Governance Platform — Regulatory and Compliance
 
 **Function E · AI Governance for Agentic Systems**  
 *Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
 **Job titles:** Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead
 
-**What changes:** Obligations, evidence, and the supervisory conversation. 9 lessons.
+**What changes:** What a travel company holding passports, payment and health data owes, to whom, and how to evidence it once rather than per regulator. 9 lessons.
 
 **Autonomy focus:** You determine which action classes are legally prohibited from ever reaching L2.5, irrespective of measured performance.
 

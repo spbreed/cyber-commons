@@ -1,11 +1,11 @@
-# Track E1 — The GRC Practitioner (Risk & Control)
+# Track E1 — Building the Governance Framework — Risk and Control
 
 **Function E · AI Governance for Agentic Systems**  
 *Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
 **Job titles:** GRC Analyst, Risk Manager, Control Owner, Third-Party Risk Analyst, Internal Audit liaison
 
-**What changes:** Trustworthy AI, and the five functions that have to deliver it. 13 lessons.
+**What changes:** The register of every agent CyberTravels runs, risk-tiered by autonomy, data and blast radius, mapped to controls, with evidence that can be re-checked. 13 lessons.
 
 **Autonomy focus:** You define the promotion criteria that let a workflow move from L2 to L2.5 — and the conditions that force it back down.
 

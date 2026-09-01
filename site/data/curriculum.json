@@ -1024,9 +1024,9 @@
     {
      "id": "B2",
      "chapter": 5,
-     "title": "The Harness that Runs the SDLC",
+     "title": "The Harnesses that Test TripBot",
      "titles": "Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet",
-     "changes": "Build the loop once, point it at a discipline, then prove it works. 14 lessons.",
+     "changes": "Build the loop once, then the SAST, DAST, triage, code-fix, skills and harness evaluations CyberTravels needs — in the order each one becomes possible. 14 lessons.",
      "autonomy": "You are the person who builds the L2.5 boundary everyone else operates inside.",
      "deliverable": "A reusable harness scaffold adopted by at least two other tracks.",
      "sessions": [
@@ -1401,7 +1401,7 @@
      "chapter": 7,
      "title": "Security Research with AI",
      "titles": "Security Researcher, Applied Research Engineer, Vulnerability Researcher, AI Security Researcher",
-     "changes": "Turning curiosity into a result somebody else can deploy, then three real incidents worked end to end. 10 lessons.",
+     "changes": "Turning curiosity into a result somebody else can deploy, then three real incidents worked end to end against CyberTravels. 10 lessons.",
      "autonomy": "You deliberately operate at L3 in isolated environments so the rest of the org never has to.",
      "deliverable": "One reproducible research artefact with a named control implication, handed to a platform or AppSec track.",
      "sessions": [
@@ -1921,9 +1921,9 @@
     {
      "id": "E1",
      "chapter": 10,
-     "title": "The GRC Practitioner (Risk & Control)",
+     "title": "Building the Governance Framework — Risk and Control",
      "titles": "GRC Analyst, Risk Manager, Control Owner, Third-Party Risk Analyst, Internal Audit liaison",
-     "changes": "Trustworthy AI, and the five functions that have to deliver it. 13 lessons.",
+     "changes": "The register of every agent CyberTravels runs, risk-tiered by autonomy, data and blast radius, mapped to controls, with evidence that can be re-checked. 13 lessons.",
      "autonomy": "You define the promotion criteria that let a workflow move from L2 to L2.5 — and the conditions that force it back down.",
      "deliverable": "A risk-tiered agent register with mapped controls and one fully evidenced control assertion.",
      "sessions": [
@@ -2112,9 +2112,9 @@
     {
      "id": "E2",
      "chapter": 11,
-     "title": "The Regulatory & Compliance Lead",
+     "title": "Building the Governance Platform — Regulatory and Compliance",
      "titles": "Compliance Manager, Regulatory Affairs (Tech), Privacy Engineer, AI Governance Lead",
-     "changes": "Obligations, evidence, and the supervisory conversation. 9 lessons.",
+     "changes": "What a travel company holding passports, payment and health data owes, to whom, and how to evidence it once rather than per regulator. 9 lessons.",
      "autonomy": "You determine which action classes are legally prohibited from ever reaching L2.5, irrespective of measured performance.",
      "deliverable": "One control set mapped to three regimes, plus an evidence pack for a single high-risk agentic workflow.",
      "sessions": [
@@ -2235,9 +2235,9 @@
     {
      "id": "E3",
      "chapter": 12,
-     "title": "The BISO, Risk Communicator & CISO Office",
+     "title": "Running the Programme — the CISO Office",
      "titles": "BISO, Deputy CISO, Head of Security Strategy, CISO",
-     "changes": "Running the programme. 8 lessons.",
+     "changes": "Sequencing, org design, metrics and stop authority for an estate that will not stop at four agents. 8 lessons.",
      "autonomy": "You hold the authority to move any workflow down a rung — and the obligation to use it.",
      "deliverable": "A one-page autonomy governance policy and a board-level narrative for one agentic programme.",
      "sessions": [

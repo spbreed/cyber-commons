@@ -1,11 +1,11 @@
-# Track B2 — The Harness that Runs the SDLC
+# Track B2 — The Harnesses that Test TripBot
 
 **Function B · Application Security with an AI SDLC**  
 *The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*
 
 **Job titles:** Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet
 
-**What changes:** Build the loop once, point it at a discipline, then prove it works. 14 lessons.
+**What changes:** Build the loop once, then the SAST, DAST, triage, code-fix, skills and harness evaluations CyberTravels needs — in the order each one becomes possible. 14 lessons.
 
 **Autonomy focus:** You are the person who builds the L2.5 boundary everyone else operates inside.
 

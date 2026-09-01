@@ -1,11 +1,11 @@
-# Track E3 — The BISO, Risk Communicator & CISO Office
+# Track E3 — Running the Programme — the CISO Office
 
 **Function E · AI Governance for Agentic Systems**  
 *Governing autonomy rather than approving tools: the register, the obligations and the programme that keep CyberTravels defensible.*
 
 **Job titles:** BISO, Deputy CISO, Head of Security Strategy, CISO
 
-**What changes:** Running the programme. 8 lessons.
+**What changes:** Sequencing, org design, metrics and stop authority for an estate that will not stop at four agents. 8 lessons.
 
 **Autonomy focus:** You hold the authority to move any workflow down a rung — and the obligation to use it.
 
