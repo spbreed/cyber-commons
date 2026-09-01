@@ -7,6 +7,8 @@ small piece of code that makes the framework concrete, and no risk material —
 the risks start in the chapter that follows.
 """
 
+from . import diagrams as D
+
 EXERCISES: dict[str, dict] = {
 
 "A1.0": {
@@ -45,53 +47,45 @@ Function C attacks these components. The detections in Function D watch them.
 The control register in Function E lists them.
 """,
  "steps": [
-  ("md", "## 2 · Where the five functions sit, and what depends on this one"),
-  ("py", '''FUNCTIONS = {
- "A": ("Securing AI architectures",                "mostly Security of AI"),
- "B": ("Application security with an AI SDLC",     "both directions at once"),
- "C": ("Red teaming and security research with AI","both directions at once"),
- "D": ("AI for SecOps", "both directions at once"),
- "E": ("AI for GRC", "governs both directions"),
-}
-# What each later function needs from the component map built in chapter 1.
-DEPENDS_ON_A = {
- "B": "the pipeline it builds is itself an agentic system with these components",
- "C": "the three attack surfaces it tests are components on this map",
- "D": "the telemetry it detects on is emitted by these components",
- "E": "the register it maintains lists these components and their controls",
-}
+  ("md", "## 2 · Where the five functions sit"),
+  ("html", D.table(
+    ["function", "covers", "direction it runs in"],
+    [["A", "Securing AI architectures", "mostly Security of AI"],
+     ["B", "Application security with an AI SDLC", "both directions at once"],
+     ["C", "Red teaming and security research with AI", "both directions at once"],
+     ["D", "AI for SecOps", "both directions at once"],
+     ["E", "AI for GRC", "governs both directions"]],
+    caption="Nobody takes all five. Everyone takes the common spine first, then "
+            "the chapters for the chair they sit in, then one adjacent chapter.")),
 
-print(f"{'function':4s}{'covers':44s}direction")
-for f in sorted(FUNCTIONS):
-    name, direction = FUNCTIONS[f]
-    print(f"{f:4s}{name:44s}{direction}")
+  ("md", "## 3 · What the other four borrow from this one\\n\\n"
+         "Not a claim about tidiness. It is why the map has to come first: every "
+         "later function names a component from it."),
+  ("html", D.svg(D.DEFS
+    + D.box(240, 10, 220, 48, "chapter 1", sub="the component map", colour=D.SECURE)
+    + D.box(6, 124, 158, 66, "Function B", sub="the SDLC is itself an agent")
+    + D.box(180, 124, 158, 66, "Function C", sub="its 3 surfaces are here")
+    + D.box(354, 124, 158, 66, "Function D", sub="these emit the telemetry")
+    + D.box(528, 124, 166, 66, "Function E", sub="the register lists these")
+    + D.arrow(320, 58, 96, 120) + D.arrow(335, 58, 250, 120)
+    + D.arrow(365, 58, 424, 120) + D.arrow(380, 58, 600, 120),
+    height=200,
+    caption="Chapter 1 introduces no control at all, on purpose: you cannot "
+            "choose a control for a risk you cannot yet name.")),
 
-print("\\nwhat each later function borrows from Function A")
-for f in sorted(DEPENDS_ON_A):
-    print(f"   {f} -> {DEPENDS_ON_A[f]}")
-
-CHAPTERS = {
- 1: ("the architecture, and every risk it carries", "17 lessons"),
- 2: ("securing it - identity and ingress",          "7 lessons"),
- 3: ("securing it - runtime and the gateway",       "7 lessons"),
-}
-print("\\nFunction A, in order")
-for n in sorted(CHAPTERS):
-    what, size = CHAPTERS[n]
-    print(f"   chapter {n}  {what:46s}{size}")
-
-print()
-print("Chapter 1 is the only one that introduces no control at all. That is")
-print("deliberate: you cannot choose a control for a risk you cannot yet name,")
-print("and naming the risk requires the picture.")
-assert set(DEPENDS_ON_A) == set(FUNCTIONS) - {"A"}
-'''),
+  ("md", "## 4 · Function A, in order"),
+  ("html", D.table(
+    ["chapter", "what it covers", "lessons"],
+    [["1", "the architecture, and every risk it carries", "17"],
+     ["2", "securing it — identity and ingress", "8"],
+     ["3", "securing it — runtime and the gateway", "10"]],
+    caption="Chapters 2 and 3 are controls. Chapter 1 is the picture they "
+            "stand on.")),
  ],
- "expect": "The five functions print with the direction each runs in, and every "
-           "one of the other four names something it borrows from Function A's "
-           "component map. Function A itself is three chapters: the architecture "
-           "and its risks, then identity and ingress, then runtime and the "
-           "gateway.",
+ "expect": "A map of the five functions, the direction each runs in, and what "
+           "each of the other four borrows from Function A's component map. "
+           "Function A itself is three chapters: the architecture and its risks, "
+           "then identity and ingress, then runtime and the gateway.",
  "challenge": "Before the next lesson, write down the components of one agentic "
               "system you already run — even as a list of nouns. A1.1 gives you "
               "the standard names; comparing your list to it is the fastest way "
@@ -124,49 +118,40 @@ The relationship is the point. Chapter 4 is a product built out of chapter 5's
 material. If you only read one, read the one you are being asked to ship.
 """,
  "steps": [
-  ("md", "## 2 · The pipeline, the harness, and the fact that they are the same kind of thing"),
-  ("py", '''PIPELINE = {
- 1: ("ingestion and structural mapping",   "B1.1-B1.2"),
- 2: ("threat modelling and strategy",      "B1.3-B1.4"),
- 3: ("analysis and filtering",             "B1.5-B1.7"),
- 4: ("dynamic validation and remediation", "B1.8-B1.11"),
- 5: ("governance and reporting",           "B1.12"),
-}
-HARNESS = ["the loop: plan, act, verify, stop", "tool design",
-           "failure taxonomy", "replay and rollback",
-           "one skeleton per domain, not one per team",
-           "evaluation, reliability and cost"]
+  ("md", "## 2 · Chapter 4 — the lifecycle, with agents doing the work"),
+  ("html", D.svg(D.DEFS
+    + D.box(2, 26, 96, 46, "ingest", sub="B1.1-2", colour=D.DEFEND)
+    + D.box(112, 26, 116, 46, "threat model", sub="B1.3-4", colour=D.DEFEND)
+    + D.box(242, 26, 92, 46, "audit", sub="B1.5-7", colour=D.DEFEND)
+    + D.box(348, 26, 104, 46, "confirm", sub="B1.8-10", colour=D.DEFEND)
+    + D.box(466, 26, 108, 46, "remediate", sub="B1.11", colour=D.DEFEND)
+    + D.box(588, 26, 96, 46, "report", sub="B1.12", colour=D.DEFEND)
+    + "".join(D.arrow(a, 49, a + 12) for a in (99, 229, 335, 453, 575))
+    + D.box(2, 108, 682, 52, "", colour=D.INK, dashed=True)
+    + D.label(343, 130, "chapter 5 — the harness underneath every one of those stages",
+              anchor="middle", colour=D.INK, size=12, weight="600")
+    + D.label(343, 148, "plan · act · verify · stop  ·  tool design  ·  failure "
+                        "taxonomy  ·  replay  ·  evals", anchor="middle"),
+    height=178,
+    caption="Chapter 4 is a product built out of chapter 5's material. If you "
+            "only read one, read the one you are being asked to ship.")),
 
-print("chapter 4 - the pipeline, as five phases")
-for n in sorted(PIPELINE):
-    what, where = PIPELINE[n]
-    print(f"   phase {n}  {what:38s}{where}")
-
-print("\\nchapter 5 - the harness underneath every one of those stages")
-for h in HARNESS:
-    print(f"   . {h}")
-
-# The pipeline read as an agentic system, with the Function A components it uses.
-AS_AN_AGENT = {
- "ingress":       "a pull request, written by anyone with commit access",
- "knowledge":     "the repository itself - untrusted by definition",
- "tools":         "the test runner, the sandbox, the ticket API",
- "identity":      "a service account that can write to your default branch",
- "egress":        "the report, and anything it happens to contain",
-}
-print("\\nthe same pipeline, read as an agentic system")
-for c in sorted(AS_AN_AGENT):
-    print(f"   {c:14s}{AS_AN_AGENT[c]}")
-print()
-print("Five components, every one of them a risk surface from Function A. A")
-print("security pipeline is not exempt from the risks it exists to find - it is")
-print("the clearest example of them.")
-assert len(PIPELINE) == 5 and len(AS_AN_AGENT) == 5
-'''),
+  ("md", "## 3 · The same lifecycle, read as an agentic system\\n\\n"
+         "Every stage above runs inside something that has an identity, reads "
+         "untrusted input and writes to your repository. These are Function A's "
+         "components, and a security tool gets no exemption from them."),
+  ("html", D.table(
+    ["Function A component", "what it is, in this pipeline"],
+    [["ingress", "a pull request, written by anyone with commit access"],
+     ["knowledge", "the repository itself — untrusted by definition"],
+     ["tools", "the test runner, the sandbox, the ticket API"],
+     ["identity", "a service account that can write to your default branch"],
+     ["egress", "the report, and anything it happens to contain"]],
+    caption="Five components, every one of them a risk surface from Function A.")),
  ],
- "expect": "The five pipeline phases print against the lessons that build them, "
-           "the harness capabilities underneath them print as a list, and the "
-           "same pipeline reads back as an agentic system with five Function A "
+ "expect": "The five phases of the lifecycle against the lessons that build "
+           "them, the harness capabilities underneath them, and the same "
+           "pipeline read back as an agentic system with five Function A "
            "components — ingress, knowledge, tools, identity and egress.",
  "challenge": "Name the service account your existing CI security tooling runs "
               "as, and what it can write to. That account is the identity "
@@ -201,40 +186,40 @@ understanding the defences, which is why this function sits after A and B rather
 than before them.
 """,
  "steps": [
-  ("md", "## 2 · What separates a finding from an anecdote"),
-  ("py", '''SURFACES = {
- "injection":   "what the agent reads - direct, indirect, and via tool output",
- "identity":    "who it acts as - delegation, scope, expiry, impersonation",
- "containment": "what it can reach - tools, paths, egress, metadata",
-}
-print("the three surfaces of an agent, and chapter 6 tests all three")
-for s in sorted(SURFACES):
-    print(f"   {s:14s}{SURFACES[s]}")
+  ("md", "## 2 · The three surfaces chapter 6 tests"),
+  ("html", D.svg(D.DEFS
+    + D.box(268, 8, 164, 44, "the agent", colour=D.INK)
+    + D.box(6, 108, 206, 74, "injection", colour=D.SECURE,
+            sub="what it reads")
+    + D.label(109, 158, "direct · indirect · via tool output", anchor="middle")
+    + D.box(246, 108, 208, 74, "identity", colour=D.SECURE,
+            sub="who it acts as")
+    + D.label(350, 158, "delegation · scope · expiry", anchor="middle")
+    + D.box(488, 108, 206, 74, "containment", colour=D.SECURE,
+            sub="what it can reach")
+    + D.label(591, 158, "tools · paths · egress", anchor="middle")
+    + D.arrow(320, 52, 130, 104) + D.arrow(350, 52, 350, 104)
+    + D.arrow(380, 52, 570, 104),
+    height=196,
+    caption="A campaign covers all three and scores them the same way. A demo "
+            "covers whichever one was interesting that week.")),
 
-# The same claim, at four standards of proof.
-CLAIMS = [
- ("it worked when I tried it",                    False, False, False),
- ("it worked 7 times out of 20, suite attached",   True, False, False),
- ("7/20, and 0/20 on the patched build",           True,  True, False),
- ("7/20, 0/20 patched, reproduced by another team", True, True,  True),
-]
-print(f"\\n{'claim':50s}{'rate':>6}{'control':>9}{'reproduced':>12}  verdict")
-for text, rate, control, repro in CLAIMS:
-    score = sum((rate, control, repro))
-    verdict = ("anecdote", "measurement", "result", "evidence")[score]
-    print(f"{text:50s}{str(rate):>6}{str(control):>9}{str(repro):>12}  {verdict}")
-
-print()
-print("Chapter 6 gets you to the second row. Chapter 7 is entirely about the")
-print("third and fourth, because a finding that nobody can reproduce protects")
-print("nobody, however true it was on the day.")
-assert len(SURFACES) == 3 and len(CLAIMS) == 4
-'''),
+  ("md", "## 3 · The same claim, at four standards of proof\\n\\n"
+         "Chapter 6 gets you to the second row. Chapter 7 is entirely about the "
+         "third and fourth, because a finding nobody can reproduce protects "
+         "nobody, however true it was on the day."),
+  ("html", D.table(
+    ["the claim", "rate", "control arm", "reproduced", "what it is"],
+    [["it worked when I tried it", "—", "—", "—", "<b>anecdote</b>"],
+     ["7 of 20 attempts, suite attached", "yes", "—", "—", "<b>measurement</b>"],
+     ["7/20, and 0/20 on the patched build", "yes", "yes", "—", "<b>result</b>"],
+     ["7/20, 0/20 patched, another team got the same", "yes", "yes", "yes",
+      "<b>evidence</b>"]],
+    emphasise=4)),
  ],
- "expect": "The three attack surfaces of an agent print with what each covers, "
-           "and the same claim scores as anecdote, measurement, result or "
-           "evidence depending on whether it carries a rate, a control "
-           "comparison and an independent reproduction.",
+ "expect": "The three attack surfaces of an agent, and the same claim graded as "
+           "anecdote, measurement, result or evidence depending on whether it "
+           "carries a rate, a control arm and an independent reproduction.",
  "challenge": "Find the last agentic security claim you read — a blog post, a "
               "vendor page, a conference talk — and score it on those three "
               "columns. Most public claims sit on the first row.",
@@ -269,40 +254,43 @@ Two chapters:
 """,
  "steps": [
   ("md", "## 2 · One hour of an agent, one hour of a person"),
-  ("py", '''HOUR = {
- "actions taken":            ("person", 12,   "agent", 1400),
- "distinct resources":       ("person", 5,    "agent", 260),
- "median gap between calls": ("person", 180,  "agent", 2),
- "sessions":                 ("person", 1,    "agent", 96),
- "typo/retry events":        ("person", 3,    "agent", 0),
-}
-print(f"{'signal':28s}{'person':>9}{'agent':>9}{'ratio':>9}")
-for sig in sorted(HOUR):
-    _, p, _, a = HOUR[sig]
-    ratio = f"{a / p:.0f}x" if p else "-"
-    print(f"{sig:28s}{p:>9}{a:>9}{ratio:>9}")
+  ("html", D.table(
+    ["signal, over one hour", "person", "agent", "ratio"],
+    [["actions taken", "12", "1,400", "117×"],
+     ["distinct resources", "5", "260", "52×"],
+     ["median gap between calls", "180s", "2s", "1/90×"],
+     ["sessions", "1", "96", "96×"],
+     ["typo / retry events", "3", "0", "—"]],
+    emphasise=3,
+    caption="Every detection, baseline and playbook you own was tuned against "
+            "the middle column.")),
 
-# A rule tuned for a person, evaluated against both.
-def burst_rule(actions_per_hour, threshold=60):
+  ("md", "## 3 · Why a volume rule is not the answer\\n\\n"
+         "The obvious rule does fire. The problem is *when* — which is the one "
+         "thing a table cannot show you, so this part is worth running."),
+  ("py", '''def burst_rule(actions_per_hour, threshold=60):
     return actions_per_hour > threshold
 
-print(f"\\nrule 'more than 60 actions in an hour'")
-for who, n in (("person", 12), ("agent", 1400)):
-    print(f"   {who:8s}{n:>6} actions -> {'ALERT' if burst_rule(n) else 'silent'}")
+RATE = {"person": 12, "agent": 1400}
+for who, n in RATE.items():
+    print(f"   {who:8s}{n:>6} actions/hour -> "
+          f"{'ALERT' if burst_rule(n) else 'silent'}")
 
+seconds_to_trip = 60 * 3600 / RATE["agent"]
+print(f"\\nthe agent crosses the threshold after {seconds_to_trip:.0f} seconds")
+print(f"and keeps going for the remaining {3600 - seconds_to_trip:.0f}.")
 print()
-print("That rule fires. The problem is the next one: at 1400 actions an hour the")
-print("alert arrives after roughly 150 seconds of activity, and everything the")
-print("actor was going to do is already done. Chapter 8 is about detections that")
-print("fire on shape rather than volume; chapter 9 is about who can pull the")
-print("stop lever without asking permission first.")
-assert burst_rule(1400) and not burst_rule(12)
+print("So the rule fires, and it fires after about two and a half minutes of a")
+print("sixty-minute run - by which point most of what the actor was going to do")
+print("is done. Chapter 8 is about detections that fire on shape rather than")
+print("volume; chapter 9 is about who can pull the stop lever without asking.")
+assert burst_rule(1400) and not burst_rule(12) and seconds_to_trip < 200
 '''),
  ],
- "expect": "Five behavioural signals print for a person and an agent over the "
-           "same hour, with ratios in the hundreds. A volume rule tuned for human "
-           "tempo does fire on the agent — roughly 150 seconds in, by which point "
-           "the actor has finished.",
+ "expect": "Five behavioural signals for a person and an agent over the same "
+           "hour, with ratios in the hundreds. The volume rule tuned for human "
+           "tempo does fire on the agent — 154 seconds into a sixty-minute run, "
+           "with the remaining 3,446 seconds unmonitored.",
  "challenge": "Pull one hour of activity for a service account in your own "
               "environment and compute those five signals. If you cannot, that is "
               "the first finding of chapter 8: the telemetry does not exist yet.",
@@ -342,46 +330,43 @@ to answer the same question — **who owns which** — at three different distan
 """,
  "steps": [
   ("md", "## 2 · Seven properties, and the question of who owns each"),
-  ("py", '''PROPERTIES = {
- "valid and reliable":          "engineering + the eval harness",
- "safe":                        "product owner + risk",
- "secure and resilient":        "security",
- "accountable and transparent": "the named system owner",
- "explainable":                 "engineering + model risk",
- "privacy-enhanced":            "privacy office + engineering",
- "fair, bias managed":          "product owner + legal",
-}
-SECURITY_OWNS = {"secure and resilient"}
+  ("html", D.table(
+    ["trustworthy-AI property", "typical owner", "security's share"],
+    [["valid and reliable", "engineering + the eval harness", "contributes evidence"],
+     ["safe", "product owner + risk", "contributes evidence"],
+     ["secure and resilient", "security", "<b>owns it</b>"],
+     ["accountable and transparent", "the named system owner", "contributes evidence"],
+     ["explainable and interpretable", "engineering + model risk", "contributes evidence"],
+     ["privacy-enhanced", "privacy office + engineering", "contributes evidence"],
+     ["fair, harmful bias managed", "product owner + legal", "contributes evidence"]],
+    emphasise=2,
+    caption="Security owns one of the seven outright and contributes evidence "
+            "to the other six. That ratio is why this function exists as more "
+            "than a security document.")),
 
-print(f"{'property':30s}{'typical owner':34s}security's share")
-for p in sorted(PROPERTIES):
-    share = "owns it" if p in SECURITY_OWNS else "contributes evidence"
-    print(f"{p:30s}{PROPERTIES[p]:34s}{share}")
-
-print(f"\\nproperties in scope           : {len(PROPERTIES)}")
-print(f"owned by security             : {len(SECURITY_OWNS)}")
-print(f"needing somebody else to act  : {len(PROPERTIES) - len(SECURITY_OWNS)}")
-
-CHAPTERS = {
- 10: "risk and control - inventory, tiering, mapping, evidence",
- 11: "regulatory and compliance - obligations, documentation, supervision",
- 12: "the CISO office - sequencing, org design, metrics, stop authority",
-}
-print("\\nthree distances from the same question")
-for n in sorted(CHAPTERS):
-    print(f"   chapter {n}  {CHAPTERS[n]}")
-
-print()
-print("A trustworthy-AI statement with no owner per property is a statement that")
-print("every property is somebody else's job. The register in chapter 10 exists")
-print("to make that assignment explicit and re-checkable.")
-assert len(PROPERTIES) == 7 and SECURITY_OWNS < set(PROPERTIES)
-'''),
+  ("md", "## 3 · Three distances from the same question\\n\\n"
+         "A trustworthy-AI statement with no owner per property is a statement "
+         "that every property is somebody else's job. All three chapters here "
+         "are attempts to fix that, at different ranges."),
+  ("html", D.svg(D.DEFS
+    + D.box(6, 14, 218, 84, "chapter 10", sub="risk and control", colour=D.INK)
+    + D.label(115, 62, "inventory · tiering", anchor="middle")
+    + D.label(115, 78, "mapping · evidence", anchor="middle")
+    + D.box(242, 14, 218, 84, "chapter 11", sub="regulatory", colour=D.INK)
+    + D.label(351, 62, "obligations · documentation", anchor="middle")
+    + D.label(351, 78, "supervision", anchor="middle")
+    + D.box(478, 14, 216, 84, "chapter 12", sub="the CISO office", colour=D.INK)
+    + D.label(586, 62, "sequencing · org design", anchor="middle")
+    + D.label(586, 78, "metrics · stop authority", anchor="middle")
+    + D.arrow(224, 56, 240) + D.arrow(460, 56, 476)
+    + D.label(350, 124, "inside the organisation  →  to a regulator  →  to the board",
+              anchor="middle", size=11.5),
+    height=140)),
  ],
- "expect": "Seven trustworthy-AI properties print with a typical owner each. "
-           "Security owns exactly one outright and contributes evidence to the "
-           "other six — which is the reason this function exists as more than a "
-           "security document.",
+ "expect": "Seven trustworthy-AI properties with a named owner each, security "
+           "owning exactly one outright, and the three chapters laid out by how "
+           "far from the system each one sits — the register, the regulator, the "
+           "board.",
  "challenge": "Write the seven properties down and put a real name against each "
               "one in your own organisation. The properties you cannot assign are "
               "the programme; the ones assigned to 'security' by default are the "

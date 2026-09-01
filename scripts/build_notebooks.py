@@ -201,7 +201,9 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
             cells.append(md(renumber(LIVE_MD, counter)))
             cells.append(code(live_cell(source["task"], source["replay"],
                                         source.get("system"), source["check"])))
-        elif kind == "md":
+        elif kind in ("md", "html"):
+            # An HTML/SVG diagram is markdown too — it just renders as a picture
+            # instead of asking the reader to parse a print statement.
             cells.append(md(renumber(source, counter)))
         else:
             cells.append(code(source))
