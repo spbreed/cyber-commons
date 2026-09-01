@@ -26,7 +26,10 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Models and agents get approved once and then change forever. Without an explicit lifecycle — approval, change, revalidation, decommission — what you approved and what is running have no necessary relationship.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<p>Models and agents get approved once and then change forever. Without an explicit lifecycle — approval, change, revalidation, decommission — what you approved and what is running have no necessary relationship.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> TripBot was approved once and has changed continuously since — a tool added, a prompt edited, a model upgraded silently by the provider. None of it raised a ticket.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   approved once                   changes forever
    +---------------+               prompt . model . tools . scope
    | v1, march     |  ----------&gt;  ??? , ??? , ??? , ???

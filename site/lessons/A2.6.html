@@ -26,7 +26,10 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>By the time the model sees it, the context window is one flat string. The operator's instruction, the user's question and a paragraph from a stranger's web page are indistinguishable — unless something attached an origin to each span before they were concatenated.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<p>By the time the model sees it, the context window is one flat string. The operator's instruction, the user's question and a paragraph from a stranger's web page are indistinguishable — unless something attached an origin to each span before they were concatenated.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> A hotel description, a booking note and CyberTravels' operator prompt arrive at the model as one flat string. Marking each span with where it came from is what makes “a retrieved document may not select a tool” expressible at all. R3.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   before                          after
    +-------------------------+     +---------------------------+
    | system prompt           |     | [principal] system prompt |

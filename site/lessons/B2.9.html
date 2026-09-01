@@ -26,7 +26,10 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Four teams build four harnesses and each re-decides loop control, budgets and verification from scratch. The loops end up nearly identical. What actually differs is the oracle and the blast radius — which belong to the domain, not to the loop.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<p>Four teams build four harnesses and each re-decides loop control, budgets and verification from scratch. The loops end up nearly identical. What actually differs is the oracle and the blast radius — which belong to the domain, not to the loop.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> CyberTravels needs SAST, DAST, a threat model and a pentest against TripBot. They are one skeleton with four different oracles, and building four harnesses is how four teams each get the oracle wrong differently.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   one skeleton                       four oracles
    +---------------------+            sast   reachable + failing test
    | plan . act . verify |  &lt;-------  tmodel present in new, absent in old

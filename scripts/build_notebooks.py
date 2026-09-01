@@ -52,6 +52,7 @@ BRANCH = "claude/vulnbench-setup-scheduling-81aqov"
 SITE = "https://spbreed.github.io/cyber-commons"
 
 from exercises import EXERCISES  # noqa: E402
+from exercises.cybertravels import GROUNDING  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 from exercises.models import LIVE_MD, MODEL_RUNTIME, live_cell  # noqa: E402
 
@@ -178,8 +179,15 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
         f"a frontier API when you configure one."
     )]
 
-    # ---- 1. the hook ------------------------------------------------------
-    cells.append(md(f"## 1 · The hook\n\n{ex['hook'].strip()}"))
+    # ---- 1. the hook, and what it looks like at CyberTravels --------------
+    hook = f"## 1 · The hook\n\n{ex['hook'].strip()}"
+    ground = GROUNDING.get(sid)
+    if not ground:
+        raise KeyError(f"{sid} has no CyberTravels grounding — every lesson says "
+                       f"what its idea looks like in the system the reader has "
+                       f"been following")
+    hook += (f"\n\n> **At CyberTravels.** {ground.strip()}")
+    cells.append(md(hook))
 
     # ---- 2. the framework: the picture first, then the idea it names ------
     diagram = ex["diagram"].strip("\n")

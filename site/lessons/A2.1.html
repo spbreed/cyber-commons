@@ -26,7 +26,10 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Three identities are present every time an agent acts: the person who asked, the workload that runs, and the agent instance doing the work. Collapse any two of them and you lose the ability to answer the only question that matters after an incident.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<p>Three identities are present every time an agent acts: the person who asked, the workload that runs, and the agent instance doing the work. Collapse any two of them and you lose the ability to answer the only question that matters after an incident.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> Three identities are present whenever TripBot books a flight: the traveller who asked, the workload the agent runs as, and which of the four agents is acting. CyberTravels collapses all three into <code>tripbot-svc</code>, which is R11.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   who asked        what runs         what acted
    +----------+     +-----------+     +--------------+
    |  human   | --&gt; | workload  | --&gt; | agent        |

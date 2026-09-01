@@ -11,12 +11,16 @@ Four rules, and each one exists because breaking it made a lesson worse:
    the first code cell in every built notebook. Teaching the "how" before the
    "why" is the most common way a good lesson lands badly.
 
-3. **A bridge out of every chapter.** The last lesson of each chapter names the
+3. **Grounded in CyberTravels.** Every lesson says what its idea looks like in
+   TripBot — the one system the whole commons is taught on — so a reader is
+   never asked to hold a fresh example per lesson.
+
+4. **A bridge out of every chapter.** The last lesson of each chapter names the
    skill just acquired, the flaw it still has, and the next chapter as the
    answer. A chapter that ends without that reads as though the subject is
    closed.
 
-4. **Realistic demos.** A lesson whose code only ever shows the happy path has
+5. **Realistic demos.** A lesson whose code only ever shows the happy path has
    not shown the reader anything they could not have assumed. This one is
    reported rather than enforced — a handful of lessons are legitimately
    demonstrations rather than experiments — but the count is printed so it
@@ -39,6 +43,7 @@ CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 NB = ROOT / "labs" / "notebooks"
 
 from exercises import EXERCISES  # noqa: E402
+from exercises.cybertravels import GROUNDING  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 
 HOOK_MIN_WORDS, HOOK_MAX_WORDS = 20, 90
@@ -78,7 +83,9 @@ def main() -> int:
             problems.append(f"{sid}: no exercise")
             continue
 
-        # 1 — one concept, three parts
+        # 1 — one concept, three parts, grounded in the running system
+        if not GROUNDING.get(sid, "").strip():
+            problems.append(f"{sid}: no CyberTravels grounding")
         for field in ("hook", "diagram", "concept"):
             if not (ex.get(field) or "").strip():
                 problems.append(f"{sid}: no {field}")

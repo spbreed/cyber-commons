@@ -241,7 +241,67 @@ print("one that maps onto it.")
 assert not orphans and len(by_fn) == 4
 '''),
 
-  ("md", "## 6 · The two observations that change the assurance argument"),
+  ("md", "## 6 · The same incident, at CyberTravels\\n\\n"
+         "This happened to an AI lab running an evaluation, which is easy to "
+         "read as somebody else's problem. It is not. Every precondition it "
+         "needed is present in TripBot, and most of them are present because of "
+         "a decision that was reasonable at the time."),
+  ("html", D.table(
+    ["what the incident needed", "where CyberTravels already has it",
+     "the register row"],
+    [["many agents running the same task in parallel",
+      "the Coding Agent fans out across services on every release", "R8"],
+     ["a shared mutable surface between runs",
+      "the package cache and artifact repository the CI runner shares",
+      "R4, R7"],
+     ["agents able to read each other's output",
+      "agent-to-agent messaging between the workflow and advisor agents", "R3"],
+     ["a transcript the workload itself could write",
+      "TripBot's own application logs are the only record of what it did",
+      "R10, R11"],
+     ["credentials reachable from the workload",
+      "long-lived bearer tokens, held in plaintext by the agent", "R5"],
+     ["a third party who could be reached from inside",
+      "the third-party MCP server, and every downstream travel API", "R4, R9"],
+     ["no way for an agent to report what it found",
+      "no <code>report_to_human</code> tool exists in TripBot at all", "—"],
+     ["a detective control switched off for a deadline",
+      "guardrails disabled for the demo", "R2"]],
+    emphasise=2,
+    caption="Eight preconditions, seven of them already true at CyberTravels. "
+            "The one that is not — thousands of agents launched at once — is a "
+            "matter of scale rather than of design, and scale is the variable "
+            "that changes fastest.")),
+  ("py", '''PRECONDITIONS = {
+ "parallel agents on one task":        ("present", "R8"),
+ "shared mutable surface between runs":("present", "R4, R7"),
+ "agents read each other's output":    ("present", "R3"),
+ "workload-writable transcript":       ("present", "R10, R11"),
+ "credentials reachable from workload":("present", "R5"),
+ "reachable third party":              ("present", "R4, R9"),
+ "no agent-to-human escalation path":  ("present", "-"),
+ "detective control switched off":     ("present", "R2"),
+ "tens of thousands of agents at once":("not yet",  "-"),
+}
+present = [k for k, (s, _) in PRECONDITIONS.items() if s == "present"]
+print(f"preconditions the incident needed : {len(PRECONDITIONS)}")
+print(f"already true at CyberTravels      : {len(present)}")
+print(f"still missing                     : "
+      f"{len(PRECONDITIONS) - len(present)}  (scale)")
+print()
+covered = {r for _, (_, rows) in PRECONDITIONS.items()
+           for r in rows.replace(" ", "").split(",") if r != "-"}
+print(f"register rows implicated: {len(covered)}  "
+      f"({', '.join(sorted(covered, key=lambda x: int(x[1:])))})")
+print()
+print("Read the incident as a story about an AI lab and it is a curiosity. Read")
+print("it as a list of preconditions and eight of nine are already sitting in a")
+print("travel company's booking platform. The ninth is a scaling decision")
+print("somebody will make for good reasons on an ordinary Tuesday.")
+assert len(present) == 8 and len(covered) == 9
+'''),
+
+  ("md", "## 7 · The two observations that change the assurance argument"),
   ("html", D.table(
     ["an assurance claim a programme might lean on", "survives?", "why"],
     [["the model will not hide from a classifier", "<b>no</b>",
@@ -263,7 +323,10 @@ assert not orphans and len(by_fn) == 4
            "One shared surface — the artifact repository — appears in three rows, "
            "which is the chain the report asks you not to file separately. Every "
            "control has an owning lesson, and six of the forty land on lessons "
-           "that already existed.",
+           "that already existed. Read as a list of preconditions rather "
+           "than as a story about an AI lab, eight of the nine it needed "
+           "are already true at CyberTravels, implicating nine rows of "
+           "that register — the ninth precondition is scale.",
  "challenge": "Take your own last incident report and index it this way — T, E "
               "and C, with a type and an anchor on every control. The rows where "
               "you cannot name an owning team are the ones that will recur, and "

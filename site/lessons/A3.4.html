@@ -26,7 +26,10 @@
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>A budget is what makes "autonomous" a bounded word. Without one, the honest description of the worst case is "until someone notices", and nobody signs off on that when it is written down.</p></div><div class="nbmd"><h2>2 · The framework</h2>
+<p>A budget is what makes "autonomous" a bounded word. Without one, the honest description of the worst case is "until someone notices", and nobody signs off on that when it is written down.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> What makes “TripBot runs autonomously” a bounded sentence: a ceiling on tokens, wall clock, spend and, above all, on how many refunds one run may issue. R1.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
 <pre><code>   bounded run
    +-------------------------------------------+
    | tokens   &lt;= 60k     wall clock &lt;= 5 min   |
