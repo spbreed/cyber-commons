@@ -27,3 +27,6 @@ kaggle.json
 .env
 .env.*
 !.env.example
+
+# tool labs download and run real products; nothing there is source
+labs/tools/*/work/

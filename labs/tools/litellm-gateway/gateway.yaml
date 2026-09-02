@@ -1,0 +1,15 @@
+model_list:
+  - model_name: advisor-model
+    litellm_params:
+      model: anthropic/claude-haiku-4-5-20251001
+      api_key: os.environ/ANTHROPIC_API_KEY
+      mock_response: "Two nights in Lisbon, then the train to Porto."
+  - model_name: coding-model
+    litellm_params:
+      model: anthropic/claude-haiku-4-5-20251001
+      api_key: os.environ/ANTHROPIC_API_KEY
+      mock_response: "def book(ref): ..."
+litellm_settings:
+  drop_params: true
+general_settings:
+  master_key: sk-cybertravels-master

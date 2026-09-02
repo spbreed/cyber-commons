@@ -1,0 +1,37 @@
+openapi: 3.1.0
+info: {title: CyberTravels Bookings API, version: "1.4.0"}
+servers: [{url: https://api.cybertravels.com/v1}]
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://idp.cybertravels.com/realms/cybertravels/protocol/openid-connect/token
+          scopes:
+            bookings:read: read a booking
+            bookings:write: create or amend a booking
+            payments:refund: issue a refund
+security: [{oauth2: [bookings:read]}]
+paths:
+  /bookings/{ref}:
+    get:
+      operationId: getBooking
+      security: [{oauth2: [bookings:read]}]
+      parameters: [{name: ref, in: path, required: true, schema: {type: string}}]
+      responses: {"200": {description: ok}}
+  /bookings:
+    post:
+      operationId: createBooking
+      security: [{oauth2: [bookings:write]}]
+      responses: {"201": {description: created}}
+  /bookings/{ref}/refund:
+    post:
+      operationId: refundBooking
+      parameters: [{name: ref, in: path, required: true, schema: {type: string}}]
+      responses: {"200": {description: refunded}}
+  /internal/customers/export:
+    get:
+      operationId: exportCustomers
+      security: []
+      responses: {"200": {description: ok}}

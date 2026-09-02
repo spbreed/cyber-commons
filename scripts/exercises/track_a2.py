@@ -414,6 +414,52 @@ except PermissionError:
     pass
 assert subset_ok and refund["scope"] == ""
 assert tok["act"]["sub"].endswith("/sa/agent-alpha")'''),
+  ("md", """## 5 · The same three layers, against real Keycloak
+
+Everything above is the protocol, modelled in the standard library so this
+notebook runs with the internet switched off. That proves RFC 8693 and RFC 8705
+work. It does not prove the product you are about to deploy implements them,
+which is a different question and has a different answer.
+
+[`labs/tools/keycloak-obo/`](https://github.com/spbreed/cyber-commons/tree/main/labs/tools/keycloak-obo)
+downloads Keycloak 26.0.7, starts it with mTLS, configures this realm and runs
+the same three checks. Three of them behaved as the specifications describe:
+
+```
+the agent asks for its own token over plain HTTP, with no certificate:
+  {"error":"invalid_request",
+   "error_description":"Client Certification missing for MTLS HoK Token Binding"}
+
+its x5t#S256 thumbprint (computed with openssl):
+  BuTPvYMaI3z-suLCcWsnFHDCv_6VQdDrYwLlf70Sjfg
+the cnf claim on the token Keycloak issued:
+  {"x5t#S256": "BuTPvYMaI3z-suLCcWsnFHDCv_6VQdDrYwLlf70Sjfg"}
+
+the same token, presented to a resource server that compares:
+  legitimate agent  HTTP 200
+  the thief         HTTP 403  cnf mismatch - token was not issued to this client
+  no client cert    HTTP 403  no client certificate presented
+```
+
+The thief's certificate is signed by the same CA and is therefore trusted.
+Trust is not what separates them.
+
+**And two did not.** These are the ones worth carrying out of this lesson:
+
+**Keycloak's standard token exchange emits no `act` claim** — with or without
+an `actor_token`. It returns 200 either way and produces the same token. `azp`
+does name the agent, so the information is not lost, but `azp` is one value and
+`act` nests: a three-hop chain has nowhere to go. The delegation chain
+reconstructed in the next cell is something you write a protocol mapper for.
+
+**The exchange drops the certificate binding.** The direct token carries `cnf`.
+The exchanged token — requested over the same mTLS connection, with the same
+certificate — does not. So the token the agent actually carries downstream, the
+one issued for acting on alice's behalf, is a bearer token again, and the theft
+the binding was bought to prevent is back.
+
+Neither is a reason not to build this. Both are reasons to check your own
+deployment rather than assume the control is on because the feature exists."""),
   ("md", "## 5 · What the audit trail can now answer\n\nEvery hop is on the "
          "token, so the chain reconstructs from the token alone rather than by "
          "correlating four services' logs on timestamp. This is the thing A1.13 "

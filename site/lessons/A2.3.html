@@ -198,7 +198,43 @@ try:
 except PermissionError:
     pass
 assert subset_ok and refund[&quot;scope&quot;] == &quot;&quot;
-assert tok[&quot;act&quot;][&quot;sub&quot;].endswith(&quot;/sa/agent-alpha&quot;)</code></pre></div><div class="nbmd"><h2>6 · What the audit trail can now answer</h2>
+assert tok[&quot;act&quot;][&quot;sub&quot;].endswith(&quot;/sa/agent-alpha&quot;)</code></pre></div><div class="nbmd"><h2>6 · The same three layers, against real Keycloak</h2>
+<p>Everything above is the protocol, modelled in the standard library so this
+notebook runs with the internet switched off. That proves RFC 8693 and RFC 8705
+work. It does not prove the product you are about to deploy implements them,
+which is a different question and has a different answer.</p>
+<p><a href="https://github.com/spbreed/cyber-commons/tree/main/labs/tools/keycloak-obo"><code>labs/tools/keycloak-obo/</code></a>
+downloads Keycloak 26.0.7, starts it with mTLS, configures this realm and runs
+the same three checks. Three of them behaved as the specifications describe:</p>
+<pre><code>the agent asks for its own token over plain HTTP, with no certificate:
+  {&quot;error&quot;:&quot;invalid_request&quot;,
+   &quot;error_description&quot;:&quot;Client Certification missing for MTLS HoK Token Binding&quot;}
+
+its x5t#S256 thumbprint (computed with openssl):
+  BuTPvYMaI3z-suLCcWsnFHDCv_6VQdDrYwLlf70Sjfg
+the cnf claim on the token Keycloak issued:
+  {&quot;x5t#S256&quot;: &quot;BuTPvYMaI3z-suLCcWsnFHDCv_6VQdDrYwLlf70Sjfg&quot;}
+
+the same token, presented to a resource server that compares:
+  legitimate agent  HTTP 200
+  the thief         HTTP 403  cnf mismatch - token was not issued to this client
+  no client cert    HTTP 403  no client certificate presented
+</code></pre>
+<p>The thief's certificate is signed by the same CA and is therefore trusted.
+Trust is not what separates them.</p>
+<p><strong>And two did not.</strong> These are the ones worth carrying out of this lesson:</p>
+<p><strong>Keycloak's standard token exchange emits no <code>act</code> claim</strong> — with or without
+an <code>actor_token</code>. It returns 200 either way and produces the same token. <code>azp</code>
+does name the agent, so the information is not lost, but <code>azp</code> is one value and
+<code>act</code> nests: a three-hop chain has nowhere to go. The delegation chain
+reconstructed in the next cell is something you write a protocol mapper for.</p>
+<p><strong>The exchange drops the certificate binding.</strong> The direct token carries <code>cnf</code>.
+The exchanged token — requested over the same mTLS connection, with the same
+certificate — does not. So the token the agent actually carries downstream, the
+one issued for acting on alice's behalf, is a bearer token again, and the theft
+the binding was bought to prevent is back.</p>
+<p>Neither is a reason not to build this. Both are reasons to check your own
+deployment rather than assume the control is on because the feature exists.</p></div><div class="nbmd"><h2>7 · What the audit trail can now answer</h2>
 <p>Every hop is on the token, so the chain reconstructs from the token alone rather than by correlating four services' logs on timestamp. This is the thing A1.13 could not do.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ORCH = SVID(&quot;spiffe://cybertravels.com/ns/prod/sa/orchestrator&quot;,
             b&quot;cert-orchestrator&quot;)
 
