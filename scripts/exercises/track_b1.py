@@ -1,28 +1,36 @@
-"""B1 (part 1) — The AppSec pipeline, phases 1 to 3. Sessions B1.1–B1.7.
+"""B1 (part 1) — The AppSec pipeline, phases 1 to 3. Sessions B1.1–B1.5.
 
 The whole track is one artefact built in order: a five-phase, fifteen-stage
-automated application-security pipeline.
+automated application-security pipeline, and the lessons run in exactly the
+order the stages do.
 
     [Ingestion & Mapping] → [Threat Modelling] → [Discovery]
         → [Dynamic Validation] → [Reporting]
 
     Phase 1 · Ingestion & Structural Mapping
-        1 historical parsing        2 structural indexing          → B1.1
-        3 component summarisation   4 architecture synthesis       → B1.2
-    Phase 2 · Threat Modelling & Strategy
-        5 threat modelling                                         → B1.3
-        6 strategic planning                                       → B1.4
+        1 historical parsing        2 structural indexing
+        3 component summarisation   4 architecture synthesis       → B1.1
+    Phase 2 · Threat Modelling
+        5 threat modelling, from six static inputs                 → B1.2
     Phase 3 · Analysis & Filtering
-        7 vulnerability auditing                                   → B1.5
-        8 deduplication             9 contextual verification      → B1.6
-       10 feasibility filtering                                    → B1.7
+        7 vulnerability auditing, three generations of SAST        → B1.3
+        8 deduplication             9 contextual verification      → B1.4
+       10 feasibility filtering                                    → B1.5
 
-Phases 4 and 5 continue in track_b1b.py, and B1.16 closes the track with Google
+Stage 6 (strategic planning) is not a lesson of its own. Allocation is a
+property of the stage that spends the budget rather than a stage that spends
+none, so it is taught where the money actually goes: the audit agent in B1.3
+decides where to run the model pass, and B1.5 decides what is worth
+reproducing.
+
+Phases 4 and 5 continue in track_b1b.py, and B1.15 closes the track with Google
 Mantis as a bonus: a real implementation of this pipeline, mapped stage by stage
 onto what you built.
 """
 
-from .skills import SKILL_RUNTIME
+from .skills import SKILL_RUNTIME, runtime_step
+
+RUNTIME_STEP = runtime_step()
 
 PIPELINE_NOTE = """
 > **Where you are in the pipeline.**
@@ -53,265 +61,125 @@ EXERCISES: dict[str, dict] = {
 
 "B1.1": {
  "concept": """
-Most review starts at the diff. That is the smallest possible context and it
+Most review starts at the diff. That is the smallest possible context, and it
 throws away the single best predictor you have: **this repository has already
 told you where it breaks.**
 
-Phase 1 of the pipeline fixes that, and it begins with two stages that run
-before any analysis:
+Phase 1 is four stages, and they run before any analysis. They take a
+repository and produce the one artefact everything downstream consumes — a map.
 
 **Stage 1 — Historical parsing.** Extract prior vulnerabilities, the commits
 that fixed them, and pull-request history. Files that have been fixed for
-security reasons before are dramatically more likely to be fixed again. This is
-one of the oldest empirical results in software engineering and almost nobody
+security reasons before are dramatically more likely to be fixed again. It is
+one of the oldest empirical results in software engineering, and almost nobody
 wires it into a scanner.
 
-**Stage 2 — Structural indexing.** Break the codebase into *semantic units* —
-functions, classes, modules — and index how they relate. Not lines, not files.
-A scanner that reasons over lines cannot answer "who calls this?", and every
-later stage needs that answer.
+**Stage 2 — Structural indexing.** Break the code into *semantic units* —
+functions, classes, modules — and index how they call each other. Not lines,
+not files. A scanner that reasons over lines cannot answer "who reaches this?",
+and every later stage needs that answer.
 
-Together these produce the two inputs the rest of the pipeline runs on: a
-**risk-ranked file list** and a **structural index**.
+**Stage 3 — Component summarisation.** One short summary per directory: what it
+is for, what it talks to, what data passes through it. *Local* is the important
+word — summarise the whole repository at once and you get a paragraph that is
+true of every repository.
+
+**Stage 4 — Architecture synthesis.** Compile the summaries into a single map
+carrying three things: **entry points** where untrusted input arrives, **data
+flows** between components, and **trust boundaries** where data crosses from
+less trusted to more trusted.
+
+The map is the artefact. Stage 5 reads its boundaries, stage 7 prioritises
+against them, stage 10 walks its flows. And because it is derived rather than
+drawn, it changes when the code changes — which is the property the last cell
+in this lesson demonstrates and the reason the next lesson works at all.
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
   ("md", "## 2 · Stage 1 — historical parsing\n\n"
-         "A realistic slice of repository history: commits, their subjects, and "
-         "which of them were security fixes."),
-  ("py", '''import re, math
-from dataclasses import dataclass, field
+         "A slice of the CyberTravels bookings repository: commits, their "
+         "subjects, and which of them were security fixes. Nothing has been "
+         "scanned yet."),
+  ("py", '''import ast, math, re
 from collections import Counter, defaultdict
+from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Commit:
     sha: str; subject: str; files: tuple; days_ago: int
 
 HISTORY = [
- Commit("a1b2c3d", "fix(auth): reject empty session tokens (CVE-2025-0091)",
-        ("src/auth.py", "src/session.py"), 420),
- Commit("b2c3d4e", "refactor: extract render helper", ("src/render.py",), 400),
- Commit("c3d4e5f", "fix(billing): SQL injection in report filter (CVE-2025-1188)",
-        ("src/billing.py",), 300),
- Commit("d4e5f6a", "feat: add CSV export", ("src/billing.py", "src/export.py"), 260),
- Commit("e5f6a7b", "security: patch path traversal in doc fetch",
-        ("src/docs.py",), 210),
+ Commit("a1b2c3d", "fix(api): reject empty session tokens (CVE-2025-0091)",
+        ("src/api/bookings.py",), 420),
+ Commit("b2c3d4e", "refactor: extract render helper", ("src/util/render.py",), 400),
+ Commit("c3d4e5f", "fix(data): SQL injection in the booking filter (CVE-2025-1188)",
+        ("src/data/reports.py",), 300),
+ Commit("d4e5f6a", "feat: CSV export of itineraries",
+        ("src/data/reports.py", "src/util/render.py"), 260),
+ Commit("e5f6a7b", "security: patch path traversal in the voucher store",
+        ("src/data/docs.py",), 210),
  Commit("f6a7b8c", "chore: bump deps", ("requirements.txt",), 180),
- Commit("a7b8c9d", "fix(auth): timing leak in token compare",
-        ("src/auth.py",), 150),
- Commit("b8c9d0e", "feat: pagination on reports", ("src/billing.py",), 120),
- Commit("c9d0e1f", "fix: harden docs path join after report", ("src/docs.py",), 60),
- Commit("d0e1f2a", "style: formatting", ("src/render.py", "src/export.py"), 30),
+ Commit("a7b8c9d", "fix(api): timing leak in the token compare",
+        ("src/api/bookings.py",), 150),
+ Commit("b8c9d0e", "feat: pagination on bookings", ("src/data/reports.py",), 120),
+ Commit("c9d0e1f", "fix: harden the voucher path join after the report",
+        ("src/data/docs.py",), 60),
+ Commit("d0e1f2a", "style: formatting", ("src/util/render.py",), 30),
 ]
 
-SECURITY_MARKERS = re.compile(
+MARKERS = re.compile(
     r"\\b(cve-\\d{4}-\\d+|security|injection|traversal|xss|ssrf|auth|hardcoded|"
     r"leak|sanitis|sanitiz|escap)\\w*", re.I)
 
 def is_security_fix(c):
-    return bool(SECURITY_MARKERS.search(c.subject))
+    return bool(MARKERS.search(c.subject))
 
-sec = [c for c in HISTORY if is_security_fix(c)]
-print(f"{len(HISTORY)} commits, {len(sec)} security-relevant\\n")
-for c in sec:
-    print(f"   {c.sha}  {c.days_ago:>4}d  {c.subject[:56]}")
-    print(f"{'':14s}touched {list(c.files)}")
-'''),
-  ("py", '''def risk_zones(history, half_life_days=180):
-    """Prior-defect density, decayed by age. Recent security fixes weigh more."""
-    score = defaultdict(float)
-    fixes = defaultdict(int)
-    churn = Counter()
+def risk_zones(history, half_life_days=180):
+    """Prior-defect density, decayed by age. A recent security fix weighs more."""
+    score, fixes, churn = defaultdict(float), defaultdict(int), Counter()
     for c in history:
         for f in c.files:
             churn[f] += 1
             if is_security_fix(c):
                 fixes[f] += 1
                 score[f] += math.exp(-c.days_ago / half_life_days)
-    rows = []
-    for f in churn:
-        rows.append({"file": f, "commits": churn[f], "security_fixes": fixes[f],
-                     "risk": round(score[f], 3)})
-    return sorted(rows, key=lambda r: -r["risk"])
+    return sorted(
+        ({"file": f, "commits": churn[f], "security_fixes": fixes[f],
+          "risk": round(score[f], 3)} for f in churn),
+        key=lambda r: (-r["risk"], r["file"]))
 
 zones = risk_zones(HISTORY)
-print(f"{'file':22s}{'commits':>9}{'sec fixes':>11}{'risk':>8}")
+print(f"{'file':24s}{'commits':>9}{'sec fixes':>11}{'risk':>8}")
 print("-" * 52)
 for r in zones:
-    print(f"{r['file']:22s}{r['commits']:>9}{r['security_fixes']:>11}{r['risk']:>8}")
-print("\\nsrc/auth.py and src/docs.py are the repeat zones. Nothing has been")
-print("scanned yet — this ordering comes entirely from history.")
-'''),
+    print(f"{r['file']:24s}{r['commits']:>9}{r['security_fixes']:>11}{r['risk']:>8}")
+
+print("\\nsrc/api/bookings.py and src/data/docs.py are the repeat zones, and the")
+print("ordering comes entirely from history - no rule has run.")
+print("Note what stage 1 missed: 'harden the voucher path join' is the most")
+print("recent security commit in the list and matches no marker, so it scores")
+print("nothing. Marker quality IS the accuracy of this stage.")'''),
   ("md", "## 3 · Stage 2 — structural indexing\n\n"
-         "Now index the code into semantic units. `ast` does the real work here; "
-         "in a polyglot repo this is what tree-sitter is for."),
-  ("py", '''import ast
+         "Index the code into semantic units. `ast` does the work here; in a "
+         "polyglot repository this is what tree-sitter is for."),
+  ("py", '''SOURCES = {
+ "src/api/bookings.py": \'\'\'
+def get_booking(request):
+    """HTTP GET /bookings/<ref> - request.args is traveller-controlled."""
+    return render(load_booking(request.args["ref"], request.args["owner"]))
 
-SOURCES = {
- "src/auth.py": \'\'\'
-def compare_token(supplied, stored):
-    return supplied == stored
-
-def login(request):
-    user = lookup(request["user"])
-    if user and compare_token(request["token"], user.token):
-        return make_session(user)
-    return None
-\'\'\',
- "src/billing.py": \'\'\'
-def build_filter(owner):
-    return "WHERE owner = '" + owner + "'"
-
-def list_reports(conn, owner):
-    return conn.execute("SELECT * FROM reports " + build_filter(owner))
-\'\'\',
- "src/docs.py": \'\'\'
-def safe_join(base, name):
-    return base + "/" + name
-
-def fetch(base, name):
-    return open(safe_join(base, name)).read()
-\'\'\',
-}
-
-@dataclass
-class Unit:
-    name: str; file: str; line: int; calls: tuple; params: tuple
-
-def index(sources):
-    units, by_name = [], {}
-    for path, src in sources.items():
-        tree = ast.parse(src)
-        for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
-            calls = tuple(sorted({
-                (c.func.id if isinstance(c.func, ast.Name) else
-                 getattr(c.func, "attr", ""))
-                for c in ast.walk(fn) if isinstance(c, ast.Call)} - {""}))
-            u = Unit(fn.name, path, fn.lineno, calls,
-                     tuple(a.arg for a in fn.args.args))
-            units.append(u); by_name[fn.name] = u
-    return units, by_name
-
-units, by_name = index(SOURCES)
-print(f"{'unit':16s}{'file':16s}{'line':>5}  params → calls")
-print("-" * 74)
-for u in units:
-    print(f"{u.name:16s}{u.file:16s}{u.line:>5}  {list(u.params)} → {list(u.calls)}")
-'''),
-  ("md", "## 4 · Where it breaks — an index of files cannot answer the question\n\n"
-         "The whole point of semantic units is the relationships between them. "
-         "Here is the question every later stage asks, and what each kind of "
-         "index can say about it."),
-  ("py", '''def callers_of(name, units):
-    return [u.name for u in units if name in u.calls]
-
-QUESTION = "who reaches safe_join(), and with what?"
-print(QUESTION)
-print(f"   line-based index : cannot answer — 'safe_join' appears in 2 places")
-print(f"   file-based index : 'it is in src/docs.py'")
-print(f"   semantic index   : callers = {callers_of('safe_join', units)}, "
-      f"reached from fetch(base, name)")
-
-reverse = {u.name: callers_of(u.name, units) for u in units}
-print("\\nreverse call index:")
-for name, callers in reverse.items():
-    print(f"   {name:16s}← {callers or '(entry point)'}")
-entry_points = [n for n, c in reverse.items() if not c]
-print(f"\\nentry points (nothing calls them): {entry_points}")
-'''),
-  ("py", '''# Stage 1 + Stage 2 combined: the pipeline's actual input.
-def phase1_partial(history, sources):
-    zones = {r["file"]: r["risk"] for r in risk_zones(history)}
-    units, _ = index(sources)
-    out = []
-    for u in units:
-        out.append({"unit": u.name, "file": u.file,
-                    "historical_risk": zones.get(u.file, 0.0),
-                    "params": list(u.params), "calls": list(u.calls)})
-    return sorted(out, key=lambda r: -r["historical_risk"])
-
-pipeline_input = phase1_partial(HISTORY, SOURCES)
-print(f"{'unit':16s}{'file':16s}{'hist risk':>11}")
-print("-" * 44)
-for r in pipeline_input:
-    print(f"{r['unit']:16s}{r['file']:16s}{r['historical_risk']:>11.3f}")
-
-top = pipeline_input[0]["file"]
-assert top == "src/auth.py", top
-print(f"\\nAnalysis budget goes to {top} first — decided before a single rule ran.")
-print("Note why docs.py ranks below it: the recent 'harden docs path join' commit")
-print("does not match the security markers, so it scores nothing. Marker quality")
-print("is the whole accuracy of stage 1, and it is worth tuning on your own history.")
-'''),
- ],
- "expect": "Four of ten commits match the security markers. `src/auth.py` ranks "
-           "highest on decayed risk (0.53) — two dated security fixes, the more "
-           "recent dominating — followed by `src/docs.py` (0.31) and "
-           "`src/billing.py` (0.19), purely from history. Note that a recent "
-           "'harden docs path join' commit scores nothing because it matches no "
-           "marker. The structural index extracts six functions with their "
-           "parameters and calls, the reverse index identifies `login`, "
-           "`list_reports` and `fetch` as entry points, and the combined Phase 1 "
-           "output orders units by historical risk before any scanning.",
- "challenge": "Run the stage-1 query against a real repository: `git log "
-              "--name-only --grep='CVE\\|security\\|injection'`. Rank the files by "
-              "how often they appear. That list usually surprises people, and it "
-              "is free.",
-},
-
-"B1.2": {
- "concept": """
-Stages 1 and 2 produced units and their call relationships. That is still a
-pile of functions. Phase 1 finishes by turning it into something a threat model
-can be derived from.
-
-**Stage 3 — Component summarisation.** Generate a localised summary per
-directory or module: what it is for, what it talks to, what data passes through
-it. Localised is the important word — summarising the whole repository at once
-produces a paragraph that is true of every repository.
-
-**Stage 4 — Architecture synthesis.** Compile those summaries into a single map
-with three things on it:
-
-- **entry points** — where untrusted input arrives,
-- **data flows** — how it travels between components,
-- **trust boundaries** — where it crosses from less trusted to more trusted.
-
-The map is the artefact. Every later stage consumes it: threat modelling reads
-the boundaries, planning allocates against them, feasibility filtering walks the
-flows.
-""",
- "steps": [
-  ("md", PIPELINE_NOTE),
-  ("model", {
-   "title": 'The model backend, and the map it produces',
-   "task": 'Summarise what this component does in one sentence, then name its trust boundary.\n\nFiles: auth/session.py, auth/token.py, auth/mfa.py\nExports: issue_session(user), verify_session(tok), revoke(tok)\nCallers: api/login.py (public HTTP), admin/impersonate.py (internal)',
-   "replay": 'Issues and verifies user sessions, including MFA and revocation.\nTrust boundary: api/login.py is reachable from the public internet, so session issuance sits on the untrusted edge; admin/impersonate.py is internal and crosses into the same component from a higher-trust zone.',
-   "system": 'You summarise code components for a security architecture map. Two sentences, no preamble.',
-   "check": '("names a trust boundary", "trust" in answer.lower() or "boundary" in answer.lower())'}),
-  ("md", "## 2 · Stage 3 — summarise each component, locally"),
-  ("py", '''import ast
-from dataclasses import dataclass, field
-from collections import defaultdict
-
-SOURCES = {
- "src/web/handlers.py": \'\'\'
-def get_report(request):
-    """HTTP GET /reports/<id> — request.args is user-controlled."""
-    return render(load_report(request.args["id"], request.args["owner"]))
-
-def upload_doc(request):
-    """HTTP POST /docs — multipart body is user-controlled."""
+def upload_voucher(request):
+    """HTTP POST /vouchers - the multipart body is traveller-controlled."""
     return store(request.files["doc"], request.args["name"])
 \'\'\',
  "src/data/reports.py": \'\'\'
-def load_report(report_id, owner):
-    return DB.execute("SELECT * FROM reports WHERE id=" + report_id +
+def load_booking(ref, owner):
+    return DB.execute("SELECT * FROM bookings WHERE ref=" + ref +
                       " AND owner='" + owner + "'")
 \'\'\',
  "src/data/docs.py": \'\'\'
 def store(blob, name):
-    path = "/srv/docs/" + name
+    path = "/srv/vouchers/" + name
     open(path, "wb").write(blob)
     return path
 \'\'\',
@@ -321,397 +189,413 @@ def render(rows):
 \'\'\',
 }
 
+DANGEROUS = {"execute": "database", "open": "filesystem", "write": "filesystem"}
+
 def units_of(src, path):
-    tree = ast.parse(src)
     out = []
-    for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
+    for fn in [n for n in ast.walk(ast.parse(src))
+               if isinstance(n, ast.FunctionDef)]:
         calls = sorted({(c.func.id if isinstance(c.func, ast.Name)
                          else getattr(c.func, "attr", ""))
                         for c in ast.walk(fn) if isinstance(c, ast.Call)} - {""})
-        doc = ast.get_docstring(fn) or ""
-        # file + line, never a bare name: two `handler` functions in different
-        # files are two different units, and merging them loses a finding
+        # file AND line, never a bare name: two functions called `handler` in
+        # two files are two units, and merging them loses a finding
         out.append({"name": fn.name, "file": path, "line": fn.lineno,
-                    "params": [a.arg for a in fn.args.args],
-                    "calls": calls, "doc": doc})
+                    "params": [a.arg for a in fn.args.args], "calls": calls,
+                    "doc": ast.get_docstring(fn) or ""})
     return out
 
-ALL_UNITS = [u for p, s in SOURCES.items() for u in units_of(s, p)]
+UNITS = [u for p, s in sorted(SOURCES.items()) for u in units_of(s, p)]
+NAMES = {u["name"] for u in UNITS}
 
-DANGEROUS = {"execute": "database", "open": "filesystem", "write": "filesystem",
-             "system": "shell", "get": "network"}
+print(f"{'unit':16s}{'file':24s}{'line':>5}  params -> calls")
+print("-" * 78)
+for u in UNITS:
+    print(f"{u['name']:16s}{u['file']:24s}{u['line']:>5}  "
+          f"{u['params']} -> {u['calls']}")
 
-def summarise_component(directory, units):
-    """Stage 3 — a LOCAL summary. Deterministic here; a model does this in production."""
+# The question every later stage asks, and what each kind of index can say.
+def callers_of(name):
+    return sorted(u["name"] for u in UNITS if name in u["calls"])
+
+print("\\n\\"who reaches store(), and with what?\\"")
+print("   line-based index : cannot answer - the token appears in two places")
+print("   file-based index : \\"it is in src/data/docs.py\\"")
+print(f"   semantic index   : callers = {callers_of('store')}, and its input is "
+      f"a traveller-supplied filename")
+entries = sorted(u["name"] for u in UNITS if not callers_of(u["name"]))
+print(f"\\nentry points (nothing in the repository calls them): {entries}")'''),
+  ("model", {
+   "title": "Stage 3, with a model actually doing the summarising",
+   "task": ("Summarise what this component does in one sentence, then name its "
+            "trust boundary.\n\nFiles: src/api/bookings.py\nExports: "
+            "get_booking(request), upload_voucher(request)\nCallers: the public "
+            "HTTP router. Calls into: src/data/reports.py, src/data/docs.py"),
+   "replay": ("Accepts traveller HTTP requests for bookings and voucher "
+              "uploads, passing both straight into the data layer.\nTrust "
+              "boundary: every parameter here arrives from the public internet, "
+              "so the edge between src/api and src/data is where untrusted "
+              "input crosses into a component that reaches the database and "
+              "the filesystem."),
+   "system": ("You summarise code components for a security architecture map. "
+              "Two sentences, no preamble."),
+   "check": ('("names a trust boundary", "trust" in answer.lower() '
+             'or "boundary" in answer.lower())')}),
+  ("md", "## 5 · Stage 3 — summarise each component, locally\n\n"
+         "The model call above is what stage 3 looks like in production. Below "
+         "is the deterministic version, so the rest of the lesson has a fixed "
+         "input to work from."),
+  ("py", '''def summarise(component, units):
+    """Stage 3 - a LOCAL summary. One component, not the repository."""
     names = [u["name"] for u in units]
-    external = sorted({c for u in units for c in u["calls"]
-                       if c not in names and c in DANGEROUS})
-    outbound = sorted({c for u in units for c in u["calls"] if c in
-                       {x["name"] for x in ALL_UNITS} and c not in names})
-    entry = [u["name"] for u in units if u["doc"].startswith("HTTP")]
-    return {"component": directory, "units": names, "entry_points": entry,
-            "talks_to": outbound,
-            "touches": sorted({DANGEROUS[c] for c in external})}
+    return {
+      "component": component,
+      "units": names,
+      "entry_points": [u["name"] for u in units if u["doc"].startswith("HTTP")],
+      "talks_to": sorted({c for u in units for c in u["calls"]
+                          if c in NAMES and c not in names}),
+      "touches": sorted({DANGEROUS[c] for u in units for c in u["calls"]
+                         if c in DANGEROUS}),
+    }
 
 by_dir = defaultdict(list)
-for u in ALL_UNITS:
-    by_dir["/".join(u["file"].split("/")[:-1])].append(u)
+for u in UNITS:
+    by_dir[u["file"].rsplit("/", 1)[0]].append(u)
 
-SUMMARIES = [summarise_component(d, us) for d, us in sorted(by_dir.items())]
+SUMMARIES = [summarise(d, us) for d, us in sorted(by_dir.items())]
 for s in SUMMARIES:
-    print(f"{s['component']}")
+    print(s["component"])
     print(f"   units       {s['units']}")
-    print(f"   entry pts   {s['entry_points'] or '—'}")
-    print(f"   talks to    {s['talks_to'] or '—'}")
-    print(f"   touches     {s['touches'] or '—'}")
-    print()
-'''),
-  ("md", "## 3 · Stage 4 — synthesise the architecture map"),
-  ("py", '''def synthesise(summaries, units):
-    by_name = {u["name"]: u for u in units}
-    entry_points, flows, sinks = [], [], []
-    for s in summaries:
-        for e in s["entry_points"]:
-            entry_points.append({"unit": e, "component": s["component"],
-                                 "input": "HTTP request (untrusted)"})
-    for u in units:
-        for c in u["calls"]:
-            if c in by_name:
-                flows.append((u["name"], c))
-            elif c in DANGEROUS:
-                sinks.append({"unit": u["name"], "sink": c,
-                              "resource": DANGEROUS[c]})
-    return {"entry_points": entry_points, "flows": sorted(set(flows)), "sinks": sinks}
+    print(f"   entry pts   {s['entry_points'] or '-'}")
+    print(f"   talks to    {s['talks_to'] or '-'}")
+    print(f"   touches     {s['touches'] or '-'}\\n")'''),
+  ("md", "## 6 · Stage 4 — synthesise the map, and find the boundaries\n\n"
+         "A trust boundary is any edge where data crosses from a less-trusted "
+         "component into a more-trusted one. Those edges are where every "
+         "finding in the rest of the pipeline turns out to live."),
+  ("py", '''TRUST = {"src/api": 0, "src/util": 1, "src/data": 2}   # 0 = untrusted edge
 
-MAP = synthesise(SUMMARIES, ALL_UNITS)
-print("ENTRY POINTS (untrusted input arrives here)")
-for e in MAP["entry_points"]:
-    print(f"   {e['unit']:14s} {e['component']:22s} {e['input']}")
-print("\\nDATA FLOWS")
+def synthesise(summaries, units):
+    comp = {u["name"]: u["file"].rsplit("/", 1)[0] for u in units}
+    flows = sorted({(u["name"], c) for u in units for c in u["calls"]
+                    if c in NAMES})
+    return {
+      "entry_points": sorted(e for s in summaries for e in s["entry_points"]),
+      "flows": flows,
+      "sinks": sorted({(u["name"], DANGEROUS[c]) for u in units
+                       for c in u["calls"] if c in DANGEROUS}),
+      "boundaries": [(a, b, comp[a], comp[b]) for a, b in flows
+                     if TRUST[comp[a]] < TRUST[comp[b]]],
+    }
+
+MAP = synthesise(SUMMARIES, UNITS)
+print("ENTRY POINTS   ", MAP["entry_points"])
+print("DATA FLOWS")
 for a, b in MAP["flows"]:
-    print(f"   {a} → {b}")
-print("\\nSINKS (state changes / external resources)")
-for s in MAP["sinks"]:
-    print(f"   {s['unit']:14s} {s['sink']:10s} {s['resource']}")
-'''),
-  ("md", "## 4 · Trust boundaries — the part the map exists for\n\n"
-         "A boundary is any edge where data crosses from a less-trusted component "
-         "into a more-trusted one. Those edges are where every finding in the rest "
-         "of the pipeline will turn out to live."),
-  ("py", '''TRUST = {"src/web": 0, "src/data": 2, "src/util": 1}   # 0 = untrusted edge
-
-def boundaries(flows, units):
-    comp = {u["name"]: "/".join(u["file"].split("/")[:-1]) for u in units}
-    out = []
-    for a, b in flows:
-        ca, cb = comp[a], comp[b]
-        if TRUST.get(ca, 0) < TRUST.get(cb, 0):
-            out.append({"edge": f"{a} → {b}", "from": ca, "to": cb,
-                        "crossing": f"trust {TRUST[ca]} → {TRUST[cb]}"})
-    return out
-
-B = boundaries(MAP["flows"], ALL_UNITS)
+    print(f"   {a} -> {b}")
+print("SINKS")
+for u, res in MAP["sinks"]:
+    print(f"   {u:16s}touches the {res}")
 print("TRUST BOUNDARY CROSSINGS")
-for b in B:
-    print(f"   {b['edge']:28s}{b['from']:10s} → {b['to']:10s} ({b['crossing']})")
+for a, b, ca, cb in MAP["boundaries"]:
+    print(f"   {a + ' -> ' + b:34s}{ca} (trust {TRUST[ca]}) -> "
+          f"{cb} (trust {TRUST[cb]})")
 
-reachable_sinks = []
-entry_names = {e["unit"] for e in MAP["entry_points"]}
 adj = defaultdict(list)
-for a, b in MAP["flows"]: adj[a].append(b)
-def walk(start, seen=None):
+for a, b in MAP["flows"]:
+    adj[a].append(b)
+
+def reaches(start, seen=None):
     seen = seen or set()
-    if start in seen: return set()
-    seen |= {start}
+    if start in seen:
+        return set()
     out = {start}
-    for n in adj[start]: out |= walk(n, seen)
+    for n in adj[start]:
+        out |= reaches(n, seen | {start})
     return out
-# sorted(), not the set itself: a reachability report that lists the same
-# entry points in a different order on every machine cannot be diffed between
-# two scans, and diffing scans is the whole point of mapping the architecture.
-for e in sorted(entry_names):
-    for s in MAP["sinks"]:
-        if s["unit"] in walk(e):
-            reachable_sinks.append((e, s["unit"], s["resource"]))
+
+# sorted(), not the set: a reachability report that lists the same entry points
+# in a different order on every machine cannot be diffed between two scans, and
+# diffing scans is the whole point of deriving the map rather than drawing it.
 print("\\nSINKS REACHABLE FROM AN ENTRY POINT")
-for e, u, res in reachable_sinks:
-    print(f"   {e:14s} → {u:14s} touches {res}")
-assert reachable_sinks
-'''),
-  ("py", '''# Verify: the map must change when the architecture changes.
-SOURCES_V2 = dict(SOURCES)
-SOURCES_V2["src/web/handlers.py"] = SOURCES["src/web/handlers.py"] + \'\'\'
+for e in MAP["entry_points"]:
+    for u, res in MAP["sinks"]:
+        if u in reaches(e):
+            print(f"   {e:16s} -> {u:16s} touches the {res}")'''),
+  ("md", "## 7 · The map changes when the code changes\n\n"
+         "This is the whole reason for deriving it. One function is added; the "
+         "map is regenerated; the delta is the thing the next lesson threat-models."),
+  ("py", '''SOURCES_V2 = dict(SOURCES)
+SOURCES_V2["src/api/bookings.py"] += \'\'\'
 def admin_export(request):
-    """HTTP GET /admin/export — user-controlled, previously internal only."""
-    return store(load_report(request.args["id"], request.args["owner"]),
+    """HTTP GET /admin/export - was internal-only until this morning."""
+    return store(load_booking(request.args["ref"], request.args["owner"]),
                  request.args["name"])
 \'\'\'
-units_v2 = [u for p, s in SOURCES_V2.items() for u in units_of(s, p)]
+
+units2 = [u for p, s in sorted(SOURCES_V2.items()) for u in units_of(s, p)]
+NAMES = {u["name"] for u in units2}
 by_dir2 = defaultdict(list)
-for u in units_v2: by_dir2["/".join(u["file"].split("/")[:-1])].append(u)
-map_v2 = synthesise([summarise_component(d, us) for d, us in sorted(by_dir2.items())],
-                    units_v2)
+for u in units2:
+    by_dir2[u["file"].rsplit("/", 1)[0]].append(u)
+map2 = synthesise([summarise(d, us) for d, us in sorted(by_dir2.items())], units2)
 
-before = {e["unit"] for e in MAP["entry_points"]}
-after  = {e["unit"] for e in map_v2["entry_points"]}
-print(f"entry points before: {sorted(before)}")
-print(f"entry points after : {sorted(after)}")
-print(f"NEW ENTRY POINT    : {sorted(after - before)}")
-print(f"flows before {len(MAP['flows'])} → after {len(map_v2['flows'])}")
-print("\\nOne function added. A new untrusted entry point now reaches both the")
-print("database and the filesystem. That delta is what B1.3 threat-models.")
-assert after - before
-'''),
-
-  ("md", """## 6 · Write the procedure down as an agent skill
-
-You have just run four stages by hand. The next repository needs the same four,
-and so does the next agent. An **agent skill** is how that procedure stops
-living in your head.
-
-A skill is a markdown file with a small header:
-
-```
----
-name: appsec-repo-recon
-description: >-
-  Build the structural and historical map of a codebase before any security
-  analysis. Use at the start of an application security review, when asked to
-  find entry points, sinks, trust boundaries or attack surface ...
-allowed-tools: Read, Grep, Glob, Bash
----
-
-# the procedure, written for whoever runs it next
-```
-
-Three fields, three different jobs:
-
-- **`name`** identifies it.
-- **`description`** is the **routing key**, not documentation. An agent decides
-  whether to load a skill by reading this sentence and nothing else. A
-  description that says "helps with security stuff" never fires, and two
-  descriptions that overlap fire the wrong one.
-- **`allowed-tools`** bounds it. This skill reads a repository; it never writes
-  to one, and that is enforceable rather than merely stated.
-
-The body carries the procedure and — the part that matters here — an **output
-contract**: the exact JSON shape Phase 2 will join against. A skill with a
-contract is testable. A skill without one is a wish."""),
-
-  ("py", SKILL_RUNTIME),
+before, after = set(MAP["entry_points"]), set(map2["entry_points"])
+print(f"entry points before : {sorted(before)}")
+print(f"entry points after  : {sorted(after)}")
+print(f"NEW                 : {sorted(after - before)}")
+print(f"flows {len(MAP['flows'])} -> {len(map2['flows'])}, "
+      f"boundary crossings {len(MAP['boundaries'])} -> {len(map2['boundaries'])}")
+print()
+print("One function. A new untrusted entry point now reaches both the database")
+print("and the filesystem, and two new edges cross a trust boundary. A threat")
+print("model drawn in a workshop last quarter says nothing about any of it.")
+assert after - before == {"admin_export"}
+assert len(map2["boundaries"]) > len(MAP["boundaries"])
+assert MAP["entry_points"] == ["get_booking", "upload_voucher"]'''),
+  ("md", "## 8 · Write the four stages down as an agent skill\n\n"
+         "You have just run Phase 1 by hand. The next repository needs the same "
+         "four stages and so does the next agent, so the procedure belongs in a "
+         "file rather than in your head. This is the one in this repository:"),
+  RUNTIME_STEP,
   ("skill", "appsec/appsec-repo-recon"),
-
-  ("md", "## 7 · The contract is executable — check the map you just built\n\n"
-         "The skill promised a shape. You built a map. Those two claims can be "
-         "checked against each other mechanically, which is the whole reason to "
-         "write the contract down."),
-  ("py", '''# Express the map this lesson built in the shape the skill promises.
-contract = contract_of(body)
-at = {u["name"]: u for u in ALL_UNITS}
-EXPOSURE = {"src/web": "public", "src/util": "internal", "src/data": "internal"}
-
-recon = {"architecture_map": {
-  "entry_points": [
-      {"unit": e["unit"], "file": at[e["unit"]]["file"], "line": at[e["unit"]]["line"],
-       "exposure": EXPOSURE.get("/".join(at[e["unit"]]["file"].split("/")[:-1]), "internal")}
-      for e in MAP["entry_points"]],
-  "sinks": [
-      {"unit": s["unit"], "file": at[s["unit"]]["file"], "resource": s["resource"]}
-      for s in MAP["sinks"]],
-  "flows": [[a, b] for a, b in MAP["flows"]],
-  "boundaries": [
-      {"edge": b["edge"], "from_trust": TRUST[b["from"]], "to_trust": TRUST[b["to"]]}
-      for b in B],
-  "reachable": [
-      {"entry": e, "sink": u, "path": [e, u]} for e, u, _ in reachable_sinks],
-  # carried forward from stage 1 in B1.1 — each notebook stands alone, so the
-  # result of the previous stage arrives as a literal rather than an import
-  "hotspots": [{"file": "src/auth.py", "fix_count": 3},
-               {"file": "src/data/reports.py", "fix_count": 1}],
-  "caveats": ["single language; vendored trees not indexed"],
-}}
-
-problems = check(recon, contract)
-print(f"conformance check: {len(problems)} problem(s)")
-for p in problems:
-    print("   ", p)
-assert not problems, problems
-print("\\nThe map satisfies the contract, so Phase 2 can consume it without")
-print("negotiating a format.")
-'''),
-
-  ("md", "## 8 · Where it breaks — conformance is not accuracy\n\n"
-         "A contract check is cheap to pass and easy to over-read. Watch what "
-         "else satisfies it."),
-  ("py", '''# An empty map. Every required key present, every type correct.
-hollow = {"architecture_map": {
-    "entry_points": [], "sinks": [], "flows": [], "boundaries": [],
-    "reachable": [], "hotspots": [], "caveats": [],
-}}
-print(f"hollow map, conformance problems: {len(check(hollow, contract))}")
-print(f"real map,   conformance problems: {len(check(recon, contract))}")
-print()
-print("Both conform. One of them found nothing at all.")
-print()
-print("Conformance is a statement about the serialiser: it is close to free by")
-print("construction, and an empty result scores perfectly. Accuracy is the")
-print("expensive part and the contract cannot measure it. Any pipeline that")
-print("reports '100% schema-valid' as a quality metric is reporting this number.")
-print()
-print(f"what the contract can tell you : shape is right ({len(check(recon, contract))} problems)")
-print(f"what only the map can tell you : {len(recon['architecture_map']['reachable'])} "
-      f"reachable entry->sink pairs, {len(recon['architecture_map']['boundaries'])} "
-      f"boundary crossings")
-assert not check(hollow, contract), "the hollow map conforms - that is the point"
-'''),
-
-  ("md", "## 9 · The control — route by description, and refuse a tie\n\n"
-         "An agent picks a skill by reading descriptions. That makes the "
-         "description a piece of security-relevant configuration: route wrong "
-         "and you run the wrong procedure with the wrong tools."),
-  ("py", '''# Four skills from this repository, by description alone.
-CATALOGUE = {
- "appsec-repo-recon": {"description":
-   "Build the structural and historical map of a codebase before any security "
-   "analysis. Use at the start of an application security review, when asked to "
-   "find entry points, sinks, trust boundaries or attack surface."},
- "appsec-threat-model": {"description":
-   "Turn an architecture map into a ranked, testable threat model and an audit "
-   "plan. Use after repository reconnaissance, when asked what could go wrong."},
- "appsec-vuln-audit": {"description":
-   "Audit code for vulnerabilities against a threat model, then deduplicate, "
-   "verify in context, and filter to what is actually reachable. Use when asked "
-   "to review code for security bugs or check whether a finding is a false positive."},
- "detection-triage": {"description":
-   "Triage security alerts with the context needed to reach a defensible verdict. "
-   "Use when working an alert queue or deciding whether an alert is a true positive."},
-}
-
-for task in ["map the attack surface of this repo before we review it",
-             "what could go wrong with this architecture",
-             "is this alert a false positive"]:
-    pick, scores, margin = route(task, CATALOGUE)
-    verdict = f"-> {pick}" if margin > 0 else f"-> AMBIGUOUS (tie at {scores[pick]})"
-    print(f"{task[:44]:46s} {verdict}  margin={margin}")
-
-print()
-print("The third routes with margin 0. 'false positive' appears in the audit")
-print("skill's description and 'alert' in the triage skill's, so both score the")
-print("same and the winner is whichever sorted first alphabetically - an")
-print("arbitrary answer wearing a confident face.")
-print()
-print("That is why route() returns the margin. A tie is a configuration bug in")
-print("the descriptions, and the fix is to make them disjoint, not to let the")
-print("sort decide which procedure runs.")
-assert route("is this alert a false positive", CATALOGUE)[2] == 0
-'''),
  ],
- "expect": "Three components summarise with their entry points, outbound calls "
-           "and the resources they touch. The architecture map lists two HTTP "
-           "entry points, the data flows between units, and three sinks. Two "
-           "trust-boundary crossings are identified, both from `src/web` into "
-           "`src/data`, and both database and filesystem sinks are reachable from "
-           "an entry point. Adding one handler introduces a new entry point and "
-           "extends the flow graph.",
- "challenge": "Draw the trust-boundary edges for one service you own. The "
-              "interesting output is not the diagram — it is the count of sinks "
-              "reachable from an untrusted entry point, which is the number Phase "
-              "3 will spend its budget on.",
+ "expect": "Four of ten commits match the security markers, and `src/api/"
+           "bookings.py` ranks highest on decayed risk purely from history — "
+           "with the most recent security commit scoring nothing, because it "
+           "matches no marker. The structural index extracts five functions and "
+           "identifies two entry points. Component summaries name what each "
+           "directory touches, and the synthesised map shows both entry points "
+           "reaching the database and the filesystem across a trust boundary. "
+           "Adding one function adds a third entry point and two more boundary "
+           "crossings.",
+ "challenge": "Run stage 1 against a repository you own: `git log --name-only "
+              "--grep='CVE\\|security\\|injection'`, then rank the files by how "
+              "often they appear. That list usually surprises people, and it is "
+              "free. Then check how many of your recent security fixes your "
+              "markers would have missed.",
 },
 
-"B1.3": {
+"B1.2": {
  "concept": """
 Phase 2 opens with the stage everyone claims to do and almost nobody re-runs.
 
-**Stage 5 — Threat modelling.** Read the architecture map from stage 4 and
-derive, mechanically: high-value assets, untrusted entry points, and the attack
-vectors that connect them.
+**Stage 5 — Threat modelling.** Derive, mechanically: high-value assets,
+untrusted entry points, and the attack vectors that connect them.
 
 The word doing the work is *mechanically*. A threat model produced by hand in a
 workshop is a snapshot; it is stale the moment an entry point is added, and
-adding an entry point is a Tuesday. A threat model **derived from the map** is
-regenerated whenever the map changes, so the useful artefact is not the model —
-it is the **diff between two models**.
+adding an entry point is a Tuesday. A model **derived** is regenerated whenever
+its inputs change, so the useful artefact is not the model — it is the **diff
+between two models**.
 
-That reframing is what makes threat modelling a pipeline stage rather than a
-document. It also means the output has to be data: ranked, machine-readable, and
-consumable by stage 6, which allocates the analysis budget against it.
+### Derived from what, exactly
+
+The architecture map from stage 4 is the first input and it is not sufficient.
+It tells you what the code *could* reach. It says nothing about whether that
+path is exposed, what identity walks it, or whether anything could leave at the
+end of it — and those three questions are the difference between a finding and
+a fire.
+
+Every one of the answers is already written down somewhere in the estate, as
+configuration, in a machine-readable file. The stage's job is to read all of it:
+
+| Input | What only it can tell you |
+|---|---|
+| **Code analysis** — the stage-4 map | which sinks an entry point reaches |
+| **CSPM findings** | that the bucket behind that sink is public, today |
+| **Cloud security policy** — security groups, ingress, WAF | whether the entry point is reachable from the internet at all |
+| **Entitlement and role access** | what the caller's role may do once it is through |
+| **IAM** — trust policies, assume-role chains | who can become that role, and from where |
+| **Egress policy** — NetworkPolicy, firewall rules | whether anything can leave once it is in |
+
+Read only the code and you produce a threat model that is identical for two
+deployments of the same repository, one of which is behind a private load
+balancer with no egress and one of which is not. That model is wrong about both.
+
+The output has to be data — ranked, machine-readable, diffable — because the
+next stage prioritises against it and CI gates on the delta.
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
-  ("md", "## 2 · Stage 5 — derive threats from the map"),
-  ("py", '''from dataclasses import dataclass, field
-from collections import defaultdict
+  ("md", "## 2 · The six inputs, and what each one contributes"),
+  ("html", D.flow(
+    [D.column("code", [
+       D.card("&#128269;", "stage-4 map", "entry points, flows, sinks, trust "
+              "boundaries", colour=D.DEFEND, note="WHAT COULD BE REACHED"),
+     ]),
+     D.column("exposure", [
+       D.card("&#9729;&#65039;", "cloud security policy", "security groups, "
+              "ingress, WAF — is this entry point on the internet",
+              colour=D.SECURE),
+       D.card("&#128680;", "CSPM findings", "the bucket behind that sink is "
+              "public, today", colour=D.BAD),
+     ]),
+     D.column("identity", [
+       D.card("&#128273;", "entitlement and roles", "what the caller may do "
+              "once it is through", colour=D.SECURE),
+       D.card("&#128100;", "IAM trust policy", "who can assume that role, and "
+              "from where", colour=D.SECURE, note="A2.3"),
+     ]),
+     D.column("exfiltration", [
+       D.card("&#128683;", "egress policy", "NetworkPolicy and firewall rules "
+              "— can anything leave at the end of the path", colour=D.GOOD,
+              note="A3.2"),
+     ]),
+     D.column("output", [
+       D.card("&#128202;", "ranked threats", "scored, machine-readable, and "
+              "diffed against the last run", colour=D.DEFEND),
+     ])],
+    caption="Read only the first column and you get a threat model that is "
+            "identical for two deployments of the same repository — one behind "
+            "a private load balancer with no egress, one not. It is wrong about "
+            "both.")),
+  ("md", "## 3 · Stage 5 — derive threats from all six"),
+  ("py", '''from collections import defaultdict
 
-# The stage-4 output, as data.
+# --- input 1: the stage-4 architecture map ---------------------------------
 ARCH = {
  "entry_points": [
-   {"unit": "get_report",   "component": "src/web", "auth": "session"},
-   {"unit": "upload_doc",   "component": "src/web", "auth": "session"},
-   {"unit": "health",       "component": "src/web", "auth": "none"},
+   {"unit": "get_booking",    "component": "src/api", "auth": "session"},
+   {"unit": "upload_voucher", "component": "src/api", "auth": "session"},
+   {"unit": "health",         "component": "src/api", "auth": "none"},
  ],
- "flows": [("get_report", "load_report"), ("get_report", "render"),
-           ("upload_doc", "store"), ("load_report", "execute"),
+ "flows": [("get_booking", "load_booking"), ("get_booking", "render"),
+           ("upload_voucher", "store"), ("load_booking", "execute"),
            ("store", "open")],
- "sinks": [{"unit": "load_report", "sink": "execute", "resource": "database"},
-           {"unit": "store", "sink": "open", "resource": "filesystem"}],
- "assets": {"database": {"data": ("customer", "financial"), "value": 5},
-            "filesystem": {"data": ("documents",), "value": 3},
-            "session_store": {"data": ("credentials",), "value": 5}},
+ "sinks": [{"unit": "load_booking", "sink": "execute", "resource": "database"},
+           {"unit": "store", "sink": "open", "resource": "voucher_bucket"}],
+ "assets": {"database":       {"data": ("customer", "financial"), "value": 5},
+            "voucher_bucket": {"data": ("documents",),            "value": 3}},
+}
+
+# --- inputs 2-6: what the rest of the estate already knows -----------------
+CLOUD_POLICY = {           # security groups / ingress: is it on the internet?
+ "get_booking":    {"exposed": "internet", "waf": True},
+ "upload_voucher": {"exposed": "internet", "waf": False},
+ "health":         {"exposed": "vpc-only", "waf": False},
+}
+CSPM = [                   # live posture findings, not code
+ {"resource": "voucher_bucket", "finding": "bucket policy allows public read",
+  "severity": 4},
+]
+ENTITLEMENTS = {           # what the running role may do
+ "src/api": {"db:select", "db:update", "s3:GetObject", "s3:PutObject"},
+}
+IAM = {                    # who can become that role
+ "src/api": {"assumable_by": ["ci-deploy-role"], "mfa_required": True},
+}
+EGRESS = {                 # NetworkPolicy / firewall: can anything leave?
+ "src/api": {"default_deny": True, "allowed": ["db.prod:5432"]},
 }
 
 VECTOR_FOR = {
- "database":   [("CWE-89",  "SQL injection", 5)],
- "filesystem": [("CWE-22",  "path traversal", 4), ("CWE-434", "unrestricted upload", 4)],
- "shell":      [("CWE-78",  "command injection", 5)],
+ "database":       [("CWE-89", "SQL injection", 5)],
+ "voucher_bucket": [("CWE-22", "path traversal", 4),
+                    ("CWE-434", "unrestricted upload", 4)],
 }
 
 def reachable(entry, flows):
     adj = defaultdict(list)
-    for a, b in flows: adj[a].append(b)
+    for a, b in flows:
+        adj[a].append(b)
     seen, stack = set(), [entry]
     while stack:
-        n = stack.pop()
-        for m in adj[n]:
-            if m not in seen: seen.add(m); stack.append(m)
+        for m in adj[stack.pop()]:
+            if m not in seen:
+                seen.add(m); stack.append(m)
     return seen
 
-def threat_model(arch):
+def threat_model(arch, cloud, cspm, entitlements, iam, egress):
     threats = []
+    cspm_by_resource = defaultdict(int)
+    for f in cspm:
+        cspm_by_resource[f["resource"]] += f["severity"]
     for ep in arch["entry_points"]:
         reach = reachable(ep["unit"], arch["flows"])
+        exposure = cloud.get(ep["unit"], {})
         for sink in arch["sinks"]:
-            if sink["unit"] not in reach: continue
-            asset = arch["assets"].get(sink["resource"], {"value": 1, "data": ()})
+            if sink["unit"] not in reach:
+                continue
+            asset = arch["assets"][sink["resource"]]
+            comp = ep["component"]
             for cwe, name, base in VECTOR_FOR.get(sink["resource"], []):
-                score = base + asset["value"] + (2 if ep["auth"] == "none" else 0)
+                why, score = [], base + asset["value"]
+                if ep["auth"] == "none":
+                    score += 2; why.append("unauthenticated")
+                # exposure: the single biggest correction the map cannot make
+                if exposure.get("exposed") == "internet":
+                    score += 2; why.append("internet-facing")
+                else:
+                    score -= 3; why.append("vpc-only")
+                if exposure.get("exposed") == "internet" and not exposure.get("waf"):
+                    score += 1; why.append("no WAF")
+                score += cspm_by_resource[sink["resource"]]
+                if cspm_by_resource[sink["resource"]]:
+                    why.append("live CSPM finding")
+                # entitlement: write beats read, and the role decides which
+                if {"db:update", "s3:PutObject"} & entitlements.get(comp, set()):
+                    score += 1; why.append("role holds write")
+                if "*" in iam.get(comp, {}).get("assumable_by", []):
+                    score += 2; why.append("role assumable by *")
+                if not egress.get(comp, {}).get("default_deny", True):
+                    score += 2; why.append("egress open")
                 threats.append({
-                    "entry": ep["unit"], "auth": ep["auth"],
-                    "sink": sink["unit"], "resource": sink["resource"],
-                    "cwe": cwe, "vector": name, "score": score,
-                    "path": f"{ep['unit']} → … → {sink['unit']}",
-                    "data_at_risk": list(asset["data"])})
-    # deterministic on every machine: score first, then a stable tiebreak
-    return sorted(threats, key=lambda t: (-t["score"], t["cwe"], t["entry"], t["sink"]))
+                  "entry": ep["unit"], "sink": sink["unit"], "cwe": cwe,
+                  "vector": name, "score": score, "why": why,
+                  "path": f"{ep['unit']} -> ... -> {sink['unit']}"})
+    # score first, then a full tiebreak, so two machines agree
+    return sorted(threats,
+                  key=lambda t: (-t["score"], t["cwe"], t["entry"], t["sink"]))
 
-TM = threat_model(ARCH)
-print(f"{'entry':13s}{'sink':13s}{'cwe':9s}{'vector':22s}{'score':>6}  data at risk")
-print("-" * 88)
+TM = threat_model(ARCH, CLOUD_POLICY, CSPM, ENTITLEMENTS, IAM, EGRESS)
+print(f"{'entry':16s}{'sink':14s}{'cwe':9s}{'score':>6}  why")
+print("-" * 92)
 for t in TM:
-    print(f"{t['entry']:13s}{t['sink']:13s}{t['cwe']:9s}{t['vector']:22s}"
-          f"{t['score']:>6}  {t['data_at_risk']}")
-print(f"\\n{len(TM)} threats derived. No human wrote this; it fell out of the map.")
-'''),
-  ("md", "## 3 · Where it breaks — the model that was true last quarter\n\n"
+    print(f"{t['entry']:16s}{t['sink']:14s}{t['cwe']:9s}{t['score']:>6}  "
+          f"{', '.join(t['why'])}")
+print(f"\\n{len(TM)} threats. Nobody wrote this; it fell out of six files that")
+print("already existed in the estate.")'''),
+  ("md", "## 4 · The same code, two estates\n\n"
+         "This is the argument for reading past the map. Nothing below changes "
+         "a line of the repository — only the configuration around it."),
+  ("py", '''# Same repository. Private load balancer, default-deny egress, no wildcard
+# trust policy, and the CSPM finding remediated.
+HARDENED = threat_model(
+  ARCH,
+  {k: {"exposed": "vpc-only", "waf": True} for k in CLOUD_POLICY},
+  [],                                                        # CSPM clean
+  {"src/api": {"db:select", "s3:GetObject"}},                # read-only role
+  {"src/api": {"assumable_by": ["ci-deploy-role"], "mfa_required": True}},
+  {"src/api": {"default_deny": True, "allowed": ["db.prod:5432"]}},
+)
+
+print(f"{'threat':38s}{'as deployed':>13}{'hardened':>11}")
+print("-" * 62)
+by_key = {(t["entry"], t["sink"], t["cwe"]): t["score"] for t in HARDENED}
+for t in TM:
+    k = (t["entry"], t["sink"], t["cwe"])
+    print(f"{t['cwe'] + '  ' + t['path']:38s}{t['score']:>13}{by_key[k]:>11}")
+
+print(f"\\nmax severity  {max(t['score'] for t in TM)} -> "
+      f"{max(t['score'] for t in HARDENED)}")
+print()
+print("Identical code. A model derived from the map alone would have scored")
+print("these two deployments the same, and it would have been wrong about the")
+print("first by understating it and wrong about the second by crying wolf.")
+assert max(t["score"] for t in HARDENED) < max(t["score"] for t in TM)'''),
+  ("md", "## 5 · Where it breaks — the model that was true last quarter\n\n"
          "Add one entry point. The hand-written threat model does not change, "
          "because documents do not change themselves."),
   ("py", '''ARCH_V2 = {**ARCH,
  "entry_points": ARCH["entry_points"] + [
-   {"unit": "admin_export", "component": "src/web", "auth": "none"}],
- "flows": ARCH["flows"] + [("admin_export", "load_report"),
+   {"unit": "admin_export", "component": "src/api", "auth": "none"}],
+ "flows": ARCH["flows"] + [("admin_export", "load_booking"),
                            ("admin_export", "store")]}
+CLOUD_V2 = {**CLOUD_POLICY,
+            "admin_export": {"exposed": "internet", "waf": False}}
 
-TM2 = threat_model(ARCH_V2)
+TM2 = threat_model(ARCH_V2, CLOUD_V2, CSPM, ENTITLEMENTS, IAM, EGRESS)
 
 def diff(before, after):
     key = lambda t: (t["entry"], t["sink"], t["cwe"])
@@ -726,272 +610,100 @@ def diff(before, after):
             "max_after": max(t["score"] for t in after)}
 
 d = diff(TM, TM2)
-print(f"threats before {len(TM)} → after {len(TM2)}")
-print(f"max severity   {d['max_before']} → {d['max_after']}")
+print(f"threats before {len(TM)} -> after {len(TM2)}")
+print(f"max severity   {d['max_before']} -> {d['max_after']}")
 print("\\nNEW THREATS:")
-# full tiebreak, so equal scores order the same way on every machine
-for t in sorted(d["new"], key=lambda t: (-t["score"], t["cwe"], t["entry"], t["sink"])):
-    print(f"   [{t['score']:>2}] {t['cwe']:9s}{t['path']:34s}auth={t['auth']}")
-print("\\nOne unauthenticated handler introduced 3 new threats, two of them")
-print("higher-scoring than anything in the original model.")
-assert d["new"] and d["max_after"] >= d["max_before"]
-'''),
-  ("md", "## 4 · The control — regenerate on every map change, and gate on the delta"),
-  ("py", '''def threat_gate(before, after, max_new_critical=0, critical_at=11):
+for t in sorted(d["new"], key=lambda t: (-t["score"], t["cwe"], t["entry"])):
+    print(f"   [{t['score']:>2}] {t['cwe']:9s}{t['path']:38s}{', '.join(t['why'])}")
+assert d["new"] and d["max_after"] >= d["max_before"]'''),
+  ("md", "## 6 · The control — and the gate that is not enough\n\n"
+         "Regenerate on every change to *any* input, and gate on the delta. "
+         "The obvious gate counts new threats. Watch what it does with a pull "
+         "request that adds none."),
+  ("py", '''def gate_new_only(before, after, critical_at=16):
+    """The obvious gate: refuse a pull request that introduces a new critical."""
     d = diff(before, after)
+    crit = [t for t in d["new"] if t["score"] >= critical_at]
+    return not crit, {"new": len(d["new"]), "new_critical": len(crit)}
+
+ok, info = gate_new_only(TM, TM2)
+print(f"PR 1 - adds an unauthenticated handler   -> "
+      f"{'PASS' if ok else 'FAIL'}  {info}")
+
+# PR 2 touches no application code at all. It widens the IAM trust policy and
+# removes the default-deny egress rule - two lines of terraform.
+TM_TF = threat_model(ARCH, CLOUD_POLICY, CSPM, ENTITLEMENTS,
+                     {"src/api": {"assumable_by": ["ci-deploy-role", "*"],
+                                  "mfa_required": False}},
+                     {"src/api": {"default_deny": False,
+                                  "allowed": ["0.0.0.0/0"]}})
+ok2, info2 = gate_new_only(TM, TM_TF)
+print(f"PR 2 - two lines of terraform            -> "
+      f"{'PASS' if ok2 else 'FAIL'}  {info2}")
+print()
+print("PR 2 introduced no new threat, so a gate that counts new threats waves")
+print("it through. Every existing threat got worse:")
+by_key = {(t["entry"], t["sink"], t["cwe"]): t["score"] for t in TM_TF}
+for t in TM:
+    k = (t["entry"], t["sink"], t["cwe"])
+    print(f"   {t['cwe']:9s}{t['path']:38s}{t['score']:>3} -> {by_key[k]}")'''),
+  ("md", "## 7 · The gate that is\n\nCount escalation as well as arrival. A "
+         "threat that was medium and is now critical is a regression, and the "
+         "pull request that caused it did not touch a line of application code."),
+  ("py", '''def threat_gate(before, after, critical_at=16, max_escalation=2):
+    d = diff(before, after)
+    prev = {(t["entry"], t["sink"], t["cwe"]): t["score"] for t in before}
     new_crit = [t for t in d["new"] if t["score"] >= critical_at]
-    ok = len(new_crit) <= max_new_critical
-    return ok, {"new_threats": len(d["new"]), "new_critical": len(new_crit),
-                "detail": [f"{t['cwe']} via {t['path']} (score {t['score']})"
-                           for t in new_crit]}
+    escalated = [t for t in after
+                 if (k := (t["entry"], t["sink"], t["cwe"])) in prev
+                 and t["score"] - prev[k] > max_escalation]
+    return (not new_crit and not escalated,
+            {"new_critical": len(new_crit), "escalated": len(escalated),
+             "detail": [f"{t['cwe']} via {t['path']}: "
+                        f"{prev[(t['entry'], t['sink'], t['cwe'])]} -> {t['score']}"
+                        for t in escalated]})
 
-ok, info = threat_gate(TM, TM2)
-print(f"CI gate: {'PASS' if ok else 'FAIL'}")
-for k, v in info.items(): print(f"   {k:14s}{v}")
+for label, model in (("PR 1 - unauthenticated handler", TM2),
+                     ("PR 2 - two lines of terraform ", TM_TF)):
+    ok, info = threat_gate(TM, model)
+    print(f"{label} -> {'PASS' if ok else 'FAIL'}")
+    print(f"   new_critical={info['new_critical']}  escalated={info['escalated']}")
+    for line in info["detail"]:
+        print(f"      {line}")
 
-print("\\nafter requiring auth on the new handler:")
-ARCH_V3 = {**ARCH_V2,
- "entry_points": [{**e, "auth": "session"} if e["unit"] == "admin_export" else e
-                  for e in ARCH_V2["entry_points"]]}
-TM3 = threat_model(ARCH_V3)
-ok3, info3 = threat_gate(TM, TM3)
-print(f"CI gate: {'PASS' if ok3 else 'FAIL'}   new_critical={info3['new_critical']}")
-print("\\nThe gate did not ask anyone to write a document. It compared two")
-print("generated models and refused a specific, named regression.")
-'''),
+# And the fix for PR 1: require a session and put it behind the WAF.
+ARCH_FIXED = {**ARCH_V2, "entry_points": [
+  {**e, "auth": "session"} if e["unit"] == "admin_export" else e
+  for e in ARCH_V2["entry_points"]]}
+CLOUD_FIXED = {**CLOUD_V2, "admin_export": {"exposed": "internet", "waf": True}}
+ok_fixed, info_fixed = threat_gate(
+    TM, threat_model(ARCH_FIXED, CLOUD_FIXED, CSPM, ENTITLEMENTS, IAM, EGRESS))
+print(f"\\nPR 1, after requiring auth and adding the WAF -> "
+      f"{'PASS' if ok_fixed else 'FAIL'}  {info_fixed['new_critical']} critical")
+
+print()
+print("Nobody wrote a document. The gate compared generated models and refused")
+print("two named regressions - and the one it would have missed is the one")
+print("that changed no code, which is the majority of how estates get worse.")
+assert gate_new_only(TM, TM_TF)[0]          # v1 waves the terraform PR through
+assert not threat_gate(TM, TM_TF)[0]       # v2 does not
+assert not threat_gate(TM, TM2)[0] and ok_fixed'''),
  ],
- "expect": "Six threats are derived from the map, ranked by combined vector, "
-           "asset value and authentication, with SQL injection against customer "
-           "and financial data scoring highest. Adding one unauthenticated "
-           "handler produces three new threats and raises the maximum score. The "
-           "CI gate fails on the new criticals and passes once the handler "
-           "requires a session.",
- "challenge": "Wire the threat diff into CI for one service: regenerate on every "
-              "merge and fail when a new critical path appears. It is the "
-              "cheapest form of continuous threat modelling that exists, and it "
-              "needs no workshop.",
+ "expect": "Six threats are derived from six static inputs, each carrying the "
+           "reasons its score moved — internet-facing, no WAF, live CSPM "
+           "finding, role holds write, role assumable by `*`, egress open. The "
+           "same repository deployed behind a private load balancer with "
+           "default-deny egress and a read-only role scores materially lower on "
+           "every row. Adding an unauthenticated handler fails the CI gate, and "
+           "so does a pull request that changes only terraform.",
+ "challenge": "Take one service and write down where each of the six inputs "
+              "lives — the repository, the CSPM console, the terraform, the IAM "
+              "policy, the NetworkPolicy. If any of them is \"in somebody's "
+              "head\", that is the input your threat model is currently "
+              "guessing at, and the guess is always the optimistic one.",
 },
 
-"B1.4": {
- "concept": """
-**Stage 6 — Strategic planning.** You now have a ranked threat model. This stage
-decides *where to spend the analysis budget* and *which tool or agent to point at
-each target*.
-
-The default is a uniform sweep: run every rule over every file. It is simple,
-and it scales cost with repository size rather than with risk — so on a large
-monorepo the deep, expensive analysis gets turned off for everything, including
-the parts that needed it.
-
-Allocation makes the trade explicit. Three inputs:
-
-- **threat rank** from stage 5,
-- **historical risk** from stage 1,
-- **tool fit** — rules are cheap and precise on known patterns; model review is
-  expensive and finds what rules cannot express (B1.5 measures both).
-
-The output is an assignment: which analyser runs against which boundary, with
-what budget. And the honest measure of a good allocation is not coverage — it is
-**threat-weighted coverage**, because covering the health endpoint thoroughly is
-not an achievement.
-""",
- "steps": [
-  ("md", PIPELINE_NOTE),
-  ("md", "## 2 · Stage 6 — the budget, and two ways to spend it"),
-  ("py", '''from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Target:
-    name: str; file: str; threat_score: int; historical_risk: float; loc: int
-
-TARGETS = [
- Target("load_report → execute", "src/data/reports.py", 12, 0.82, 40),
- Target("store → open",          "src/data/docs.py",     9, 0.91, 30),
- Target("render",                "src/util/render.py",   2, 0.05, 15),
- Target("health",                "src/web/health.py",    1, 0.00, 10),
- Target("upload_doc",            "src/web/handlers.py",  9, 0.30, 60),
- Target("get_report",            "src/web/handlers.py", 11, 0.30, 60),
-]
-
-ANALYSERS = {
- # name          cost/100 LOC   finds                         precision
- "grep rules":   (1,   {"CWE-798"},                          0.50),
- "taint rules":  (4,   {"CWE-89", "CWE-78", "CWE-22"},       1.00),
- "model review": (40,  {"CWE-89","CWE-78","CWE-22","CWE-863","CWE-434"}, 0.85),
-}
-BUDGET = 30         # arbitrary units for one CI run — deliberately tight,
-                    # because an unconstrained budget hides the whole problem
-
-def uniform(targets, analyser, budget):
-    cost_per = ANALYSERS[analyser][0]
-    spend, covered = 0, []
-    for t in sorted(targets, key=lambda t: t.name):
-        c = cost_per * t.loc / 100
-        if spend + c > budget: break
-        spend += c; covered.append(t)
-    return {"strategy": f"uniform · {analyser}", "spend": round(spend, 1),
-            "covered": covered}
-
-def allocated(targets, budget):
-    """Deep analysis on high-threat targets, cheap rules everywhere else."""
-    ranked = sorted(targets, key=lambda t: -(t.threat_score + t.historical_risk * 3))
-    spend, plan = 0.0, []
-    for t in ranked:
-        for analyser in ("model review", "taint rules", "grep rules"):
-            c = ANALYSERS[analyser][0] * t.loc / 100
-            wants_deep = (t.threat_score + t.historical_risk * 3) >= 9
-            if analyser == "model review" and not wants_deep: continue
-            if spend + c <= budget:
-                spend += c; plan.append((t, analyser)); break
-    return {"strategy": "allocated by threat rank", "spend": round(spend, 1),
-            "plan": plan}
-
-u = uniform(TARGETS, "model review", BUDGET)
-a = allocated(TARGETS, BUDGET)
-print(f"{u['strategy']:34s}spend {u['spend']:>6}  covered {len(u['covered'])}/{len(TARGETS)}")
-for t in u["covered"]: print(f"      {t.name}")
-print(f"\\n{a['strategy']:34s}spend {a['spend']:>6}  covered {len(a['plan'])}/{len(TARGETS)}")
-for t, an in a["plan"]: print(f"      {t.name:24s}{an}")
-'''),
-  ("md", "## 3 · Where it breaks — coverage is the wrong metric"),
-  ("py", '''def coverage(plan_targets, targets):
-    return len(plan_targets) / len(targets)
-
-def threat_weighted_coverage(plan_targets, targets):
-    total = sum(t.threat_score for t in targets)
-    got = sum(t.threat_score for t in plan_targets)
-    return got / total
-
-u_targets = u["covered"]
-a_targets = [t for t, _ in a["plan"]]
-
-print(f"{'strategy':34s}{'coverage':>10}{'threat-weighted':>18}")
-print("-" * 64)
-for label, ts in (("uniform · model review", u_targets),
-                  ("allocated by threat rank", a_targets)):
-    print(f"{label:34s}{coverage(ts, TARGETS):>10.0%}{threat_weighted_coverage(ts, TARGETS):>18.0%}")
-
-print("\\nThe uniform sweep spent its whole budget alphabetically and covered")
-print("the health endpoint before it reached the SQL sink.")
-missed = [t.name for t in TARGETS if t not in u_targets and t.threat_score >= 9]
-print(f"high-threat targets the uniform sweep never reached: {missed}")
-assert missed
-'''),
-  ("md", "## 4 · The control — allocate, then prove the allocation was right"),
-  ("py", '''def plan_report(plan, targets, budget):
-    spend = sum(ANALYSERS[an][0] * t.loc / 100 for t, an in plan)
-    covered = [t for t, _ in plan]
-    deep = [t.name for t, an in plan if an == "model review"]
-    uncovered_high = [t.name for t in targets
-                      if t not in covered and t.threat_score >= 9]
-    return {"budget": budget, "spend": round(spend, 1),
-            "threat_weighted_coverage": round(threat_weighted_coverage(covered, targets), 3),
-            "deep_analysis_on": deep,
-            "uncovered_high_threat": uncovered_high,
-            "acceptable": not uncovered_high}
-
-r = plan_report(a["plan"], TARGETS, BUDGET)
-for k, v in r.items(): print(f"{k:26s}{v}")
-assert r["acceptable"]
-
-print("\\nsame budget, if someone doubles the repo with low-risk code:")
-BLOAT = TARGETS + [Target(f"vendor_{i}", f"vendor/{i}.py", 1, 0.0, 200)
-                   for i in range(1, 9)]
-a2 = allocated(BLOAT, BUDGET)
-r2 = plan_report(a2["plan"], BLOAT, BUDGET)
-print(f"   threat-weighted coverage {r['threat_weighted_coverage']:.0%} → "
-      f"{r2['threat_weighted_coverage']:.0%}")
-print(f"   uncovered high-threat targets: {r2['uncovered_high_threat'] or 'none'}")
-print("\\nAllocation is what stops repository growth from silently degrading")
-print("the analysis of the parts that matter.")
-'''),
-
-  ("md", "## 6 · The skill that carries Phase 2\n\n"
-         "Stages 5 and 6 are now a procedure rather than a one-off. The skill "
-         "below is the version an agent runs, and its contract is the reason "
-         "the plan can be handed to Phase 3 without a conversation.\n\n"
-         "Note what the contract insists on: `score_inputs` alongside every "
-         "score. A severity you cannot decompose is a severity nobody can "
-         "argue with — and an unarguable severity is one nobody fixes."),
-  ("py", SKILL_RUNTIME),
-  ("skill", "appsec/appsec-threat-model"),
-
-  ("py", '''contract = contract_of(body)
-
-# The weakness class each target would be, named rather than implied — the
-# contract needs it and "distinct CWEs covered" is meaningless without it.
-CWE_OF = {"load_report → execute": "CWE-89", "store → open": "CWE-22",
-          "render": "CWE-79", "health": "CWE-200",
-          "upload_doc": "CWE-434", "get_report": "CWE-22"}
-
-def cost_of(target, analyser):
-    return ANALYSERS[analyser][0] * target.loc / 100
-
-# The plan this lesson produced, in the shape the skill promises.
-# threat_index points into `threat_model` below, which is TARGETS order.
-# a["plan"] is in *ranked* order, so enumerating it would number the threats
-# by rank and every index in the contract would point at the wrong threat.
-IDX = {t.name: i for i, t in enumerate(TARGETS)}
-sel = [{"threat_index": IDX[t.name], "cost": cost_of(t, analyser),
-        "why": analyser}
-       for t, analyser in a["plan"]]
-chosen = {t.name for t, _ in a["plan"]}
-plan = {
- "threat_model": [
-   {"cwe": CWE_OF[t.name], "entry": t.name.split(" ")[0], "sink": t.name.split(" ")[-1],
-    "path": t.name.split(" → "), "crosses_boundary": t.threat_score >= 6,
-    "auth": "none" if t.threat_score >= 8 else "user",
-    "score": t.threat_score,
-    "score_inputs": {"exposure": t.threat_score,
-                     "resource": round(t.historical_risk, 2),
-                     "boundary": 2 if t.threat_score >= 6 else 1}}
-   for t in TARGETS],
- # What the budget deferred is *depth*, not targets: everything gets some
- # analyser, but the ones that wanted model review and got taint rules are
- # exactly the gap the report must disclose.
- "plan": {"budget": float(BUDGET), "selected": sel,
-          "deferred": [{"threat_index": IDX[t.name],
-                        "why": f"wanted model review, budget allowed {analyser}"}
-                       for t, analyser in a["plan"]
-                       if (t.threat_score + t.historical_risk * 3) >= 9
-                       and analyser != "model review"],
-          "coverage": {"threat_weighted": float(r2["threat_weighted_coverage"]),
-                       "distinct_cwes": len({CWE_OF[t.name] for t, _ in a["plan"]})}},
-}
-problems = check(plan, contract)
-print(f"conformance: {len(problems)} problem(s)")
-for p in problems: print("   ", p)
-assert not problems, problems
-
-print(f"\\nselected {len(sel)} of {len(TARGETS)} threats; "
-      f"{len(plan['plan']['deferred'])} of them wanted deep review and did not get it")
-print(f"distinct CWEs covered: {plan['plan']['coverage']['distinct_cwes']}")
-print()
-for d in plan["plan"]["deferred"]:
-    print(f"   deferred: {TARGETS[d['threat_index']].name:22s} {d['why']}")
-print()
-print("`deferred` is not bookkeeping. Every target got *an* analyser, so a")
-print("coverage number counting targets would read 100%. What the budget")
-print("actually cut was depth, on three of the four highest-threat targets.")
-print("That distinction travels to the report as the scope statement, and a")
-print("plan that drops it produces a report that overclaims.")
-assert plan["plan"]["deferred"], "a budget that defers nothing proves nothing"
-'''),
- ],
- "expect": "On a tight budget the uniform model-review sweep covers only 2 of 6 "
-           "targets — alphabetically, so it reaches the health endpoint before the "
-           "SQL sink — giving 33% coverage but only 27% threat-weighted coverage, "
-           "and missing all three high-threat targets. The allocated plan covers "
-           "all six within the same budget at 100% threat-weighted coverage, puts "
-           "deep model review on the SQL sink, and still holds 90% when the "
-           "repository doubles in size with low-risk code.",
- "challenge": "Compute threat-weighted coverage for your current scanning setup. "
-              "If you scan everything uniformly, the number equals your raw "
-              "coverage — which means you have no allocation strategy, only a "
-              "budget that will eventually be cut.",
-},
-
-"B1.5": {
+"B1.3": {
  "concept": """
 **Stage 7 — Vulnerability auditing.** The deep-dive analysis stage, and the one
 people think of as "SAST". It has had three generations, and knowing what each
@@ -1160,51 +872,179 @@ for fname in ("authz.py", "db.py"):
 print("\\nIt found the authorization bug neither earlier generation can see.")
 print("It also invented a SQL injection in a function with a constant string.")
 '''),
-  ("py", '''# Stage 7 output: rules + gated model hypotheses. Confirmation is stages 8-12.
-GATE = 0.70
-def stage7(code, rule, model, gate=GATE):
-    findings, suppressed = [], []
-    for fname, src in code.items():
-        for cwe, name, f, i, snip in rule.scan(fname, src):
-            findings.append({"src":"rules","cwe":cwe,"file":f,"line":i,
-                             "confidence":1.0,"status":"confirmed-by-rule"})
-        for m in model.review(fname, src):
-            row = {"src":"model","cwe":m["cwe"],"file":fname,"line":m["line"],
-                   "confidence":m["confidence"],"status":"HYPOTHESIS"}
-            (findings if m["confidence"] >= gate else suppressed).append(row)
-    seen, dedup = set(), []
-    for f in sorted(findings, key=lambda r: r["src"]):
-        k = (f["cwe"], f["file"], f["line"])
-        if k in seen: continue
-        seen.add(k); dedup.append(f)
-    return dedup, suppressed
+  ("md", """## 5 · Generation 2, as the tool you would actually run
 
-final, suppressed = stage7(CODE, rule, model)
-print(f"stage 7 emits {len(final)} findings, {len(suppressed)} suppressed below {GATE}")
+The taint engine above is forty lines so it fits in a lesson. In production
+generation 2 is Semgrep, CodeQL or OpenGrep, and a rule is a file. This is the
+Semgrep rule for the same taint property the engine above implements:
+
+```yaml
+rules:
+  - id: cybertravels-sql-concat
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Traveller-controlled input is concatenated into a SQL string. Use a
+      parameterised query.
+    mode: taint
+    pattern-sources:
+      - pattern: $REQ.args[...]
+      - pattern: $REQ.files[...]
+    pattern-sinks:
+      - pattern: $CONN.execute(...)
+    pattern-sanitizers:
+      - pattern: sqlite3.paramstyle
+```
+
+[`labs/tools/semgrep-sast/`](https://github.com/spbreed/cyber-commons/tree/main/labs/tools/semgrep-sast)
+installs Semgrep 1.176.0 and runs it against a pull request from the Coding
+Agent. Two things came out of that run and both matter here.
+
+**Coverage is a configuration decision, and it is invisible.** The same file,
+two ruleset widths:
+
+```
+  p/python + p/secrets: 1 finding
+    line  17  ERROR   subprocess-shell-true
+
+  seven packs: 4 findings
+    line   9  ERROR   sqlalchemy-execute-raw-query
+    line  14  WARNING eval-detected
+    line  17  ERROR   subprocess-shell-true
+    line  20  ERROR   disabled-cert-validation
+```
+
+Nothing about the file changed. On the narrow setting three real defects were
+simply not looked for, and the scan exits 0 either way.
+
+**And two defects survived both widths:**
+
+```
+  line  22  MISSED a live-looking API key on a module-level constant
+  line   7  MISSED find_booking performs no authorisation check of any kind
+```
+
+The first is lexical — `p/secrets` was enabled and did not fire, because the
+string matches no known provider's format. A rule could catch it, once someone
+writes that rule. The second cannot be caught by any rule, because the defect is
+the **absence** of a call in a function whose caller holds payments scope. That
+is the boundary generation 3 exists to cross, and it is why the answer is
+"both" rather than "the newer one"."""),
+  ("md", """## 6 · An agent drives both, because you cannot afford to run both everywhere
+
+Generation 2 is cheap enough to run over the whole repository. Generation 3 is
+not — at four million lines the model pass costs more than the finding is
+worth, and a model asked to review everything reviews nothing carefully.
+
+So neither generation is the interesting part. **The allocation is.** An agent
+sits above both, and its policy is three rules:
+
+1. run the deterministic scanner everywhere, with the widest ruleset that is
+   not noisy, because it is nearly free;
+2. spend the model pass only where stage 1 said risk lives **and** the rules
+   were silent — silence in a high-risk zone is the signal, not the noise;
+3. mark everything the model says as a hypothesis, never a finding, because
+   stages 8 to 12 are what turn one into the other."""),
+  ("py", '''# What stage 1 said, and what generation 2 found. The agent has both.
+HISTORICAL_RISK = {"db.py": 0.53, "authz.py": 0.48, "ops.py": 0.19,
+                   "safe.py": 0.02}
+MODEL_COST_PER_FILE = 0.031      # dollars, measured on a small open-weight model
+
+def audit_agent(code, rule, model, risk, gate=0.70, risk_floor=0.30):
+    """Stage 7, allocated. Rules everywhere; the model where rules went quiet."""
+    findings, suppressed, plan = [], [], []
+    rule_hits = {f: rule.scan(f, s) for f, s in sorted(code.items())}
+
+    for fname, hits in rule_hits.items():
+        for cwe, name, f, i, snip in hits:
+            findings.append({"src": "rules", "cwe": cwe, "file": f, "line": i,
+                             "confidence": 1.0, "status": "confirmed-by-rule"})
+
+    for fname in sorted(code):
+        r = risk.get(fname, 0.0)
+        quiet = not rule_hits[fname]
+        if r >= risk_floor and quiet:
+            plan.append((fname, r, "high risk, rules silent -> REVIEW"))
+        elif r >= risk_floor:
+            plan.append((fname, r, "high risk, rules already fired -> skip"))
+        else:
+            plan.append((fname, r, "low historical risk -> skip"))
+
+    reviewed = [f for f, _, why in plan if why.endswith("REVIEW")]
+    for fname in reviewed:
+        for m in model.review(fname, code[fname]):
+            row = {"src": "model", "cwe": m["cwe"], "file": fname,
+                   "line": m["line"], "confidence": m["confidence"],
+                   "status": "HYPOTHESIS"}
+            (findings if m["confidence"] >= gate else suppressed).append(row)
+
+    seen, dedup = set(), []
+    for f in sorted(findings, key=lambda r: (r["src"], r["file"], r["line"])):
+        k = (f["cwe"], f["file"], f["line"])
+        if k not in seen:
+            seen.add(k); dedup.append(f)
+    return dedup, suppressed, plan, reviewed
+
+final, suppressed, plan, reviewed = audit_agent(CODE, rule, model, HISTORICAL_RISK)
+
+print("the agent's allocation:")
+for fname, r, why in plan:
+    print(f"   {fname:12s}risk {r:.2f}   {why}")
+print(f"\\nmodel pass on {len(reviewed)} of {len(CODE)} files "
+      f"(${len(reviewed) * MODEL_COST_PER_FILE:.3f} rather than "
+      f"${len(CODE) * MODEL_COST_PER_FILE:.3f})")
+
+print(f"\\nstage 7 emits {len(final)}, {len(suppressed)} suppressed below 0.70")
 for f in final:
     print(f"   [{f['src']:5s}] {f['cwe']:9s}{f['file']}:{f['line']:<3} "
           f"conf={f['confidence']:.2f}  {f['status']}")
-TRUTH_FULL = TRUTH | {("CWE-863","authz.py",4)}
+
+TRUTH_FULL = TRUTH | {("CWE-863", "authz.py", 4)}
 got = {(f["cwe"], f["file"], f["line"]) for f in final}
-print(f"\\ntp={len(got & TRUTH_FULL)} fp={len(got - TRUTH_FULL)} fn={len(TRUTH_FULL - got)}")
-assert not (got - TRUTH_FULL) and not (TRUTH_FULL - got)
-print("Every model finding is marked HYPOTHESIS. Stages 8-12 decide.")
-'''),
+print(f"\\ntp={len(got & TRUTH_FULL)} fp={len(got - TRUTH_FULL)} "
+      f"fn={len(TRUTH_FULL - got)}")
+assert not (got - TRUTH_FULL) and not (TRUTH_FULL - got)'''),
+  ("py", '''# The allocation is a bet, so measure what it costs when it loses. Move the
+# authorisation bug into a file with LOW historical risk and re-run.
+print("the same corpus, with authz.py carrying no history:")
+_, _, plan_b, reviewed_b = audit_agent(CODE, rule, model,
+                                       {**HISTORICAL_RISK, "authz.py": 0.04})
+final_b, _, _, _ = audit_agent(CODE, rule, model,
+                               {**HISTORICAL_RISK, "authz.py": 0.04})
+got_b = {(f["cwe"], f["file"], f["line"]) for f in final_b}
+missed = TRUTH_FULL - got_b
+print(f"   model pass on {len(reviewed_b)} file(s): {reviewed_b}")
+print(f"   MISSED: {sorted(missed)}")
+print()
+print("A new file with no history is invisible to the allocator, and the")
+print("allocator is what makes generation 3 affordable. The mitigation is not")
+print("subtle - review everything a pull request touched regardless of history,")
+print("and let the risk floor decide only where to spend the SECOND pass.")
+assert missed == {("CWE-863", "authz.py", 4)}
+print()
+print("Every model finding above is marked HYPOTHESIS. Stages 8 to 12 decide.")'''),
  ],
  "expect": "Grep produces 6 findings at 50% precision, flagging the parameterised "
            "query, the constant insert and the safe subprocess call. Taint rules "
            "find exactly the 3 real injection bugs at 100% precision and recall "
            "and find nothing in `authz.py`. The model finds the authorization bug "
-           "at 0.82 confidence and hallucinates one SQL injection at 0.41. Stage 7 "
-           "emits 4 findings with zero false positives, every model finding "
-           "marked as a hypothesis.",
- "challenge": "Point the stand-in at a real GLM-4.6 or Kimi K2 through Ollama and "
-              "run it on `authz.py` ten times. The variance in what it reports — "
-              "and in its confidence — decides whether you can gate on confidence "
-              "at all.",
+           "at 0.82 confidence and hallucinates one SQL injection at 0.41. The "
+           "audit agent then runs the rules everywhere and spends the model pass "
+           "on one file of four — the one where history says risk lives and the "
+           "rules were silent — emitting 4 findings with zero false positives, "
+           "every model finding marked as a hypothesis. The last cell shows what "
+           "the allocation costs when it loses: give `authz.py` no history and "
+           "the authorization bug is never reviewed.",
+ "challenge": "Two things, and the second is the one people skip. Point the "
+              "stand-in at a real GLM-4.6 or Kimi K2 through Ollama and run it on "
+              "`authz.py` ten times — the variance in what it reports, and in its "
+              "confidence, decides whether you can gate on confidence at all. "
+              "Then run Semgrep against one of your own repositories at your "
+              "current ruleset and at seven packs, and count the difference. "
+              "Whatever that number is, it has been the number all year.",
 },
 
-"B1.6": {
+"B1.4": {
  "concept": """
 Stage 7 ran several analysers in parallel. That produces two problems this stage
 exists to solve, and they are different problems.
@@ -1380,7 +1220,7 @@ print("no judgement, no cost — just the AST disagreeing with the claim.")
               "mislabelled, and that check costs nothing to run.",
 },
 
-"B1.7": {
+"B1.5": {
  "concept": """
 **Stage 10 — Feasibility filtering.** The last stage of Phase 3, and the one
 that decides whether anyone gets paged.

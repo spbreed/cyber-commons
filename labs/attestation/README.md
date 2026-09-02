@@ -5,7 +5,7 @@ document into a signed statement about a specific deployment — plus a working
 analyser for the part of it that can be done from source alone, and the results
 of running that analyser against ten widely-deployed open-source repositories.
 
-Taught in **[B1.16](../notebooks/B1.16.ipynb)**.
+Taught in **[B1.14](../notebooks/B1.14.ipynb)**.
 
 ## The distinction the whole thing rests on
 

@@ -152,7 +152,7 @@ REGISTER = [
   "engine.",
   "Scan MCP client and server configs before install, SBOM and hash validation, "
   "run third-party MCP servers jailed, and audit their behaviour continuously.",
-  "C2.5, A3.8, B1.16"),
+  "C2.5, A3.8, B1.14"),
  ("R5", "Insecure protocols and authentication",
   "CyberTravels talks over a WebSocket using long-lived bearer tokens held in "
   "plaintext. One compromised endpoint gives an attacker the whole session.",
@@ -165,21 +165,21 @@ REGISTER = [
   "roadmaps.",
   "Scoped sandbox access to one folder, an explainable action before access, "
   "and host-based monitoring of what the agent actually reads.",
-  "A3.2, A1.8, B1.15"),
+  "A3.2, A1.8, B1.13"),
  ("R7", "CI/CD pipeline exploitation",
   "The Coding Agent can open pull requests and approve its own. A commit adds a "
   "postInstall script that runs arbitrary code in the CI runner and leaks "
   "secrets.",
   "Protected branches needing two human reviewers, no self-approval, "
   "pre-deploy SAST and DAST, signed commits and reproducible builds.",
-  "B1.15, B1.11, A3.6"),
+  "B1.13, B1.9, A3.6"),
  ("R8", "Uncontrolled AI-generated code",
   "A single pull request touches 100+ files. Alex approves without reading "
   "every diff. Hidden inside is an IDOR that exposes card details by booking "
   "ID.",
   "Cap pull-request size per agent, anomaly diff scanning, a second reviewer "
   "and fuzzing on sensitive APIs, and a sandboxed staging environment.",
-  "B1.7, B1.11, B1.12"),
+  "B1.5, B1.9, B1.10"),
  ("R9", "Lateral movement and blast radius",
   "An attacker who reaches CyberTravels moves on into CRM, payroll and the cloud "
   "resource manager — all reachable through interconnected workflows.",
@@ -213,9 +213,9 @@ REGISTER = [
 FAMILIES = [
  ("Prompt injection and instruction hijacking", "R3", "A1.2 · A1.3 · A2.6"),
  ("Identity and authorisation", "R1, R5, R11", "A2.1 · A2.3 · A2.4 · A2.7"),
- ("Software supply chain and execution", "R4", "C2.5 · A3.8 · B1.16"),
- ("Local filesystem manipulation", "R6", "A3.2 · B1.15"),
- ("Code and CI/CD pipeline", "R7, R8", "B1.11 · B1.15 · B1.7"),
+ ("Software supply chain and execution", "R4", "C2.5 · A3.8 · B1.14"),
+ ("Local filesystem manipulation", "R6", "A3.2 · B1.13"),
+ ("Code and CI/CD pipeline", "R7, R8", "B1.9 · B1.13 · B1.5"),
  ("RAG misconfiguration and data exposure", "R12", "A1.4 · E1.3"),
 ]
 
@@ -362,52 +362,46 @@ GROUNDING: dict[str, str] = {
 "B1.1": "CyberTravels' repository is four services and a shared library. Structure "
         "is what decides whether the pipeline reads the booking handlers or the "
         "vendored SDK first.",
-"B1.2": "Every later stage inherits this map. Summarise the payments service "
-        "wrongly and the threat model misses the refund path — which is R1 "
-        "arriving through the review pipeline rather than through the agent.",
-"B1.3": "The threat model that said “CyberTravels answers questions” is still on "
+"B1.2": "The threat model that said “CyberTravels answers questions” is still on "
         "file. Deriving it from the architecture on every release is what would "
         "have caught the refund endpoint appearing.",
-"B1.4": "CyberTravels has finite review budget and four services. Spending it "
-        "on the payments path rather than the vendored SDK is the highest-"
-        "leverage decision in the whole pipeline.",
-"B1.5": "The IDOR that exposed card details by booking ID (R8) is exactly the "
+"B1.3": "The IDOR that exposed card details by booking ID (R8) is exactly the "
         "class each generation of SAST handles differently — and the class the "
         "third generation will also confidently invent.",
-"B1.6": "Three analysers found the same booking-handler defect four times. The "
+"B1.4": "Three analysers found the same booking-handler defect four times. The "
         "queue Alex will actually read is the deduplicated one.",
-"B1.7": "The finding is real and the code is unreachable from any traveller "
+"B1.5": "The finding is real and the code is unreachable from any traveller "
         "input. Reachability is what stops CyberTravels' queue becoming "
         "something engineers learn to ignore.",
-"B1.8": "You cannot confirm the IDOR by exploiting it in production. The replica "
+"B1.6": "You cannot confirm the IDOR by exploiting it in production. The replica "
         "is where the booking API can be attacked safely, and its fidelity "
         "decides which findings are confirmable at all.",
-"B1.9": "A finding becomes a fact when something other than a model says so — "
+"B1.7": "A finding becomes a fact when something other than a model says so — "
         "here, a request to the replica's booking endpoint that returns another "
         "traveller's card details.",
-"B1.10": "Verbose errors, an open redirect and a path traversal are each low on "
+"B1.8": "Verbose errors, an open redirect and a path traversal are each low on "
          "their own. Chained against CyberTravels they read a config file and end the "
          "conversation about severity. R9.",
-"B1.11": "The Coding Agent's fix must not break booking behaviour. A patch that "
+"B1.9": "The Coding Agent's fix must not break booking behaviour. A patch that "
          "passes the tests and changes what travellers experience is a second "
          "incident with a pull request attached. R8.",
-"B1.12": "CVSS scores the vulnerability. CyberTravels' engineers are asking "
+"B1.10": "CVSS scores the vulnerability. CyberTravels' engineers are asking "
          "about this booking API, with card data, behind this gateway — and the "
          "number that answers them is not on the badge.",
-"B1.13": "Give the review agent CyberTravels' whole repository and it gets worse, "
+"B1.11": "Give the review agent CyberTravels' whole repository and it gets worse, "
          "not better. The cliff arrives earlier than anyone expects and you pay "
          "more per token for it.",
-"B1.14": "The pipeline reads CyberTravels' code, and that code includes what "
+"B1.12": "The pipeline reads CyberTravels' code, and that code includes what "
          "the Coding Agent wrote. A comment in a diff is the cheapest way anyone "
          "will find to instruct CyberTravels' security tooling. R7.",
-"B1.15": "The Coding Agent on Alex's laptop holds repository write, a cloud "
+"B1.13": "The Coding Agent on Alex's laptop holds repository write, a cloud "
          "credential and whatever MCP servers were convenient. It is the "
          "highest-privilege agent at CyberTravels and the least governed. R6, "
          "R7.",
-"B1.16": "“CyberTravels enforces least privilege” is true of some "
+"B1.14": "“CyberTravels enforces least privilege” is true of some "
          "deployment at some time. An attestation is what binds it to the one "
          "running now — and refuses to claim more than it can show.",
-"B1.17": "Somebody else has already built this pipeline and published what "
+"B1.15": "Somebody else has already built this pipeline and published what "
          "happened. Adopting it without scoring it against a held-out key is how "
          "a reference implementation becomes a dependency CyberTravels cannot "
          "evaluate.",

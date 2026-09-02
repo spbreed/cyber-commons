@@ -395,12 +395,12 @@
    ],
    "expect": "The bundle wins on accuracy and costs fewer tokens. Both numbers printed."
   },
-  "B1.3": {
+  "B1.2": {
    "goal": "Never raise a PR for a patch you did not build and test.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B1.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b1-appsec",
@@ -425,12 +425,12 @@
    ],
    "expect": "Three buckets: SAST-only, DAST-only, both. The DAST-only bucket is why pentest is not redundant."
   },
-  "B1.5": {
+  "B1.3": {
    "goal": "Watch your own review harness obey an injected instruction, then close it.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.5.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.5   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b1-appsec",
@@ -440,12 +440,12 @@
    ],
    "expect": "The unprotected run emits the attacker's verdict; the tagged run does not."
   },
-  "B1.6": {
+  "B1.4": {
    "goal": "Find live secrets in your own agent's footprint.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.6.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.6   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "pip install detect-secrets && cd labs/b1-appsec",
@@ -455,12 +455,12 @@
    ],
    "expect": "Secrets in prompts/transcripts/memory files surface, and the pre-commit hook stops the next one."
   },
-  "B1.7": {
+  "B1.5": {
    "goal": "Publish the four numbers that let a review workflow earn its next rung.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.7.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.7   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B1.5.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.5   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b1-appsec",
@@ -469,96 +469,96 @@
    ],
    "expect": "Four numbers with denominators. Without these, promotion to L2.5 is a vibe."
   },
-  "B1.8": {
+  "B1.6": {
    "goal": "Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.6.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.6   # run it headless and check it"
+   ],
+   "expect": "The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state."
+  },
+  "B1.7": {
+   "goal": "Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.7.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.7   # run it headless and check it"
+   ],
+   "expect": "The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe."
+  },
+  "B1.8": {
+   "goal": "Chain individually-medium findings into a critical path and show the severity the chain earns.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.8.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.8   # run it headless and check it"
    ],
-   "expect": "The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state."
+   "expect": "Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains."
   },
   "B1.9": {
-   "goal": "Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.",
+   "goal": "Validate four candidate patches on three axes and show which of them only made the scanner green.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.9.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.9   # run it headless and check it"
    ],
-   "expect": "The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe."
+   "expect": "The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new."
   },
   "B1.10": {
-   "goal": "Chain individually-medium findings into a critical path and show the severity the chain earns.",
+   "goal": "Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.10.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.10   # run it headless and check it"
    ],
-   "expect": "Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains."
+   "expect": "Calibration moves several findings off their rule severity: the confirmed reachable CWE-89 that chains into account takeover becomes critical, while the unreachable and unvalidated ones fall. The top-3 by rule severity and by calibration disagree. The stage table shows review with the worst precision and highest minutes per finding, and design carrying the highest escape cost despite only two findings."
   },
   "B1.11": {
-   "goal": "Validate four candidate patches on three axes and show which of them only made the scanner green.",
+   "goal": "Compare four context strategies against one bug and measure which are decidable and at what size.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.11.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.11   # run it headless and check it"
    ],
-   "expect": "The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new."
+   "expect": "The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file."
   },
   "B1.12": {
-   "goal": "Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.",
+   "goal": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.12.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.12   # run it headless and check it"
    ],
-   "expect": "Calibration moves several findings off their rule severity: the confirmed reachable CWE-89 that chains into account takeover becomes critical, while the unreachable and unvalidated ones fall. The top-3 by rule severity and by calibration disagree. The stage table shows review with the worst precision and highest minutes per finding, and design carrying the highest escape cost despite only two findings."
+   "expect": "The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked."
   },
   "B1.13": {
-   "goal": "Compare four context strategies against one bug and measure which are decidable and at what size.",
+   "goal": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it"
    ],
-   "expect": "The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file."
-  },
-  "B1.14": {
-   "goal": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it"
-   ],
-   "expect": "The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked."
-  },
-  "B1.15": {
-   "goal": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.15.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.15   # run it headless and check it"
-   ],
    "expect": "The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop."
   },
-  "B1.16": {
+  "B1.14": {
    "goal": "Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.16.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.16   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it",
     "",
     "# --- the full variant, against real repositories ---",
     "python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json"
    ],
    "expect": "Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification's destructive, open-world default."
   },
-  "B1.17": {
+  "B1.15": {
    "goal": "Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.16.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.16   # run it headless and check it"
+    "jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it"
    ],
    "expect": "The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones."
   },

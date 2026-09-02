@@ -12,7 +12,7 @@ from this account is a **base** model and base models complete text rather than
 obey instructions. Prompted as a base model — priming the output shape — it
 produced **contract-conforming output that is substantively wrong**: the right
 JSON, the wrong CWE, and the contract's own type placeholders copied in as
-values. That second result is now teaching material in B1.7.
+values. That second result is now teaching material in B1.5.
 
 ## What is reachable, and what is not
 
@@ -118,7 +118,7 @@ Now read it:
 Three defects, zero schema violations. This is **conformance ≠ accuracy** —
 the thesis the curriculum keeps asserting — demonstrated by a real open-weight
 model on real hardware rather than by a constructed example. It is now the
-closing section of [B1.7](../notebooks/B1.7.ipynb), quoted verbatim.
+closing section of [B1.5](../notebooks/B1.5.ipynb), quoted verbatim.
 
 Worth noting which invariant catches it. Monotonicity passes: `[0,0,0,0]` is
 non-increasing. The check that fires is `counts.verified == len(findings)`, and

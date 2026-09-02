@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.6 — Deduplication and contextual verification | Cyber Commons</title><meta name="description" content="Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B1.6</div><h1>Deduplication and contextual verification</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Find live secrets in your own agent&#x27;s footprint.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.6 · Deduplication and contextual verification</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.5.html">B1.5 · Vulnerability auditing: three generations of SAST</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.6 — Sandbox replication | Cyber Commons</title><meta name="description" content="Stage 11: replicate the application in an isolated, disposable runtime with no path to production."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B1.6</div><h1>Sandbox replication</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Dynamic testing is run against staging, so a destructive probe becomes an incident.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 11: replicate the application in an isolated, disposable runtime with no path to production.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.6 · Sandbox replication</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.5.html">B1.5 · Feasibility filtering and reachability</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,176 +11,152 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>OpenGrep, tree-sitter, GLM-4.6, Claude Haiku 4.5</td>
+<td>Docker, gVisor, Cilium, GLM-4.6, Claude Haiku 4.5</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Three analysers found the same defect and reported it four times, in three vocabularies, at two severities. A queue that inflates by 3x is not a queue — it is a landfill with a ticket number.</p>
+<p>You cannot exploit a finding to confirm it without somewhere safe to do it. The replica is that place, and the fidelity you give it decides which findings you are able to confirm at all.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> Three analysers found the same booking-handler defect four times. The queue Alex will actually read is the deduplicated one.</p>
+<p><strong>At CyberTravels.</strong> You cannot confirm the IDOR by exploiting it in production. The replica is where the booking API can be attacked safely, and its fidelity decides which findings are confirmable at all.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   raw findings                        after dedup + context
-   +---------------------------+       +--------------------+
-   | analyser A: SQLI in q()   |       | SQLI in q()        |
-   | analyser B: CWE-89 q()    | ----&gt; |   3 analysers      |
-   | analyser C: taint -&gt; q()  |       |   1 ticket         |
-   | analyser A: SQLI in q()   |       +--------------------+
-   +---------------------------+
-        3x inflation                   the queue a human will read
+<pre><code>   production            replica
+   +-----------+         +------------------+
+   | real data |   --&gt;   | stubbed data     |
+   | real deps |         | recorded deps    |
+   | real users|         | nobody           |
+   +-----------+         +------------------+
+                                 |
+                        exploit here, safely, on purpose
+
+   fidelity decides which findings you can confirm at all
 </code></pre>
-<p>Stage 7 ran several analysers in parallel. That produces two problems this stage
-exists to solve, and they are different problems.</p>
-<p><strong>Stage 8 — Deduplication.</strong> Three analysers find the same bug and report it
-three times. Worse, they report it at slightly different line numbers with
-different CWE labels, so naive matching does not collapse them. An engineer who
-sees the same bug three times stops trusting the count.</p>
-<p><strong>Stage 9 — Contextual verification.</strong> Cross-reference each finding against the
-actual syntax and imports to weed out hallucinations. This is the cheapest,
-highest-yield filter in the whole pipeline, because a model finding that
-references a function that does not exist, or a module that was never imported,
-is <em>provably</em> wrong — no judgement required.</p>
-<p>The order matters: deduplicate first, then verify, or you spend verification
-effort on three copies of the same claim.</p></div><div class="nbmd"><blockquote>
+<p>Phase 4 turns hypotheses into facts by running the application. That is only
+safe if the thing you run it against cannot hurt anyone.</p>
+<p><strong>Stage 11 — Sandbox replication.</strong> Deploy the application in an isolated,
+disposable runtime: its own container, its own synthetic data, no route to
+production, no real credentials.</p>
+<p>The reason this is a <em>stage</em> rather than a footnote is that the obvious shortcut
+— point the dynamic tests at staging — converts every destructive probe into an
+incident. Staging usually shares an identity provider, a message bus, sometimes
+a database replica, and always someone's on-call rota.</p>
+<p>Four isolation properties, and you need all four:</p>
+<ul>
+<li><strong>network</strong> — no egress except to the replica itself,</li>
+<li><strong>credentials</strong> — synthetic secrets, so a leak is worthless,</li>
+<li><strong>data</strong> — synthetic records, so an exfiltration test exfiltrates nothing,</li>
+<li><strong>lifetime</strong> — destroyed after the run, so state cannot leak between tests.</li>
+</ul></div><div class="nbmd"><blockquote>
 <p><strong>Where you are in the pipeline.</strong></p>
 <p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · The raw output of three parallel tracks</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
+</blockquote></div><div class="nbmd"><h2>3 · Stage 11 — model the replica and its isolation</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import re
+from dataclasses import dataclass, field
+from urllib.parse import urlparse
 
-SOURCE = {
-&quot;billing.py&quot;: &#x27;&#x27;&#x27;
-import sqlite3
-
-def build_filter(owner):
-    return &quot;WHERE owner = &#x27;&quot; + owner + &quot;&#x27;&quot;
-
-def list_reports(conn, owner):
-    return conn.execute(&quot;SELECT * FROM reports &quot; + build_filter(owner))
-
-def total(conn):
-    return conn.execute(&quot;SELECT SUM(amount) FROM reports&quot;).fetchone()
-&#x27;&#x27;&#x27;
-}
+PRIVATE = [re.compile(p) for p in (r&quot;^127\.&quot;, r&quot;^10\.&quot;, r&quot;^169\.254\.&quot;,
+                                   r&quot;^192\.168\.&quot;, r&quot;^localhost$&quot;)]
 
 @dataclass
-class Finding:
-    src: str; cwe: str; file: str; line: int; symbol: str
-    rationale: str; confidence: float = 1.0
+class Sandbox:
+    name: str
+    allow_hosts: set = field(default_factory=set)
+    credentials: dict = field(default_factory=dict)
+    data: dict = field(default_factory=dict)
+    ephemeral: bool = True
+    destroyed: bool = False
+    log: list = field(default_factory=list)
 
-RAW = [
- Finding(&quot;grep&quot;,   &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
-         &quot;execute() with string concatenation&quot;, 0.5),
- Finding(&quot;taint&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
-         &quot;owner flows into the query via build_filter&quot;, 1.0),
- Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 8,  &quot;execute&quot;,
-         &quot;user-controlled owner is interpolated into SQL&quot;, 0.93),
- Finding(&quot;model&quot;,  &quot;CWE-943&quot;,&quot;billing.py&quot;, 7,  &quot;execute&quot;,
-         &quot;query language injection&quot;, 0.71),
- Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 11, &quot;execute&quot;,
-         &quot;total() builds a query from input&quot;, 0.44),
- Finding(&quot;model&quot;,  &quot;CWE-798&quot;,&quot;billing.py&quot;, 3,  &quot;DB_PASSWORD&quot;,
-         &quot;hardcoded database password in DB_PASSWORD&quot;, 0.88),
- Finding(&quot;model&quot;,  &quot;CWE-78&quot;, &quot;billing.py&quot;, 6,  &quot;os.system&quot;,
-         &quot;shell invocation with user data&quot;, 0.67),
+    def egress(self, url):
+        host = (urlparse(url).hostname or &quot;&quot;).lower()
+        if host in self.allow_hosts:
+            d = (True, &quot;replica-internal&quot;)
+        elif any(p.match(host) for p in PRIVATE):
+            d = (False, &quot;private address outside the replica — blocked&quot;)
+        else:
+            d = (False, &quot;not on the replica allowlist&quot;)
+        self.log.append((url, d[0], d[1])); return d
+
+    def destroy(self):
+        self.credentials.clear(); self.data.clear(); self.destroyed = True
+        return &quot;replica destroyed; state cannot leak into the next run&quot;
+
+REPLICA = Sandbox(&quot;appsec-replica-8812&quot;,
+                  allow_hosts={&quot;replica.local&quot;, &quot;db.replica.local&quot;},
+                  credentials={&quot;DB_PASSWORD&quot;: &quot;synthetic-not-real-0000&quot;,
+                               &quot;API_TOKEN&quot;: &quot;synthetic-not-real-1111&quot;},
+                  data={&quot;users&quot;: [{&quot;id&quot;: 1, &quot;name&quot;: &quot;test-user-a&quot;,
+                                   &quot;card&quot;: &quot;4000000000000000&quot;}]})
+
+for url in [&quot;http://replica.local/reports&quot;,
+            &quot;http://db.replica.local:5432/&quot;,
+            &quot;https://api.github.com/&quot;,
+            &quot;http://169.254.169.254/latest/meta-data/&quot;,
+            &quot;http://10.0.3.14:9200/_search&quot;]:
+    ok, why = REPLICA.egress(url)
+    print(f&quot;{&#x27;ALLOW&#x27; if ok else &#x27;DENY &#x27;:5s} {url[:44]:46s} {why}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the same probes against staging</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>STAGING = Sandbox(&quot;staging&quot;,
+                  allow_hosts={&quot;staging.internal&quot;, &quot;db.staging.internal&quot;,
+                               &quot;sso.corp&quot;, &quot;bus.corp&quot;, &quot;api.github.com&quot;},
+                  credentials={&quot;DB_PASSWORD&quot;: &quot;real-staging-password&quot;,
+                               &quot;API_TOKEN&quot;: &quot;ghp_real_staging_token&quot;},
+                  data={&quot;users&quot;: [{&quot;id&quot;: 4471, &quot;name&quot;: &quot;dana@corp&quot;,
+                                   &quot;card&quot;: &quot;4111111111111111&quot;}]},
+                  ephemeral=False)
+
+DESTRUCTIVE_PROBES = [
+ (&quot;drop a table&quot;,        &quot;db.staging.internal&quot;, &quot;db.replica.local&quot;),
+ (&quot;exfiltrate user rows&quot;,&quot;api.github.com&quot;,      &quot;replica.local&quot;),
+ (&quot;brute-force login&quot;,   &quot;sso.corp&quot;,            &quot;replica.local&quot;),
 ]
-print(f&quot;{len(RAW)} raw findings from 3 tracks&quot;)
-for f in RAW:
-    print(f&quot;   {f.src:6s}{f.cwe:9s}{f.file}:{f.line:&lt;3}{f.symbol:14s}conf={f.confidence:.2f}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Stage 8 — deduplicate on the defect, not the report</h2>
-<p>Two findings are the same defect if they name the same sink in the same function, even at different lines and under different CWE labels. Cluster on that, and keep the <em>best-evidenced</em> member.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import ast
+print(f&quot;{&#x27;probe&#x27;:24s}{&#x27;on staging&#x27;:&gt;14}{&#x27;on replica&#x27;:&gt;14}&quot;)
+print(&quot;-&quot; * 56)
+for probe, staging_target, replica_target in DESTRUCTIVE_PROBES:
+    s_ok, _ = STAGING.egress(f&quot;http://{staging_target}/&quot;)
+    r_ok, _ = REPLICA.egress(f&quot;http://{replica_target}/&quot;)
+    print(f&quot;{probe:24s}{&#x27;REACHES&#x27;:&gt;14}{&#x27;contained&#x27;:&gt;14}&quot; if s_ok
+          else f&quot;{probe:24s}{&#x27;blocked&#x27;:&gt;14}{&#x27;contained&#x27;:&gt;14}&quot;)
 
-def enclosing_function(src, line):
-    tree = ast.parse(src)
-    best = None
-    for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
-        end = max((getattr(n, &quot;lineno&quot;, fn.lineno) for n in ast.walk(fn)),
-                  default=fn.lineno)
-        if fn.lineno &lt;= line &lt;= end + 1:
-            if best is None or fn.lineno &gt; best.lineno: best = fn
-    return best.name if best else None
+print(&quot;\nwhat a leaked credential is worth:&quot;)
+for name, box in ((&quot;staging&quot;, STAGING), (&quot;replica&quot;, REPLICA)):
+    creds = list(box.credentials.values())
+    synthetic = all(&quot;synthetic&quot; in c for c in creds)
+    print(f&quot;   {name:10s}{&#x27;worthless — synthetic&#x27; if synthetic else &#x27;REAL — usable against real systems&#x27;}&quot;)
 
-CWE_ALIASES = {&quot;CWE-943&quot;: &quot;CWE-89&quot;, &quot;CWE-89&quot;: &quot;CWE-89&quot;}
+print(&quot;\nwhat an exfiltrated record is worth:&quot;)
+for name, box in ((&quot;staging&quot;, STAGING), (&quot;replica&quot;, REPLICA)):
+    rec = box.data[&quot;users&quot;][0]
+    real = not rec[&quot;name&quot;].startswith(&quot;test-&quot;)
+    print(f&quot;   {name:10s}{&#x27;REAL customer data&#x27; if real else &#x27;synthetic&#x27;}  {rec[&#x27;name&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — the four isolation properties, checked</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def isolation_report(box):
+    checks = {
+      &quot;network&quot;: all(not ok for url, ok, _ in box.log
+                     if urlparse(url).hostname not in box.allow_hosts),
+      &quot;credentials&quot;: all(&quot;synthetic&quot; in v for v in box.credentials.values()) if box.credentials else True,
+      &quot;data&quot;: all(u[&quot;name&quot;].startswith(&quot;test-&quot;) for u in box.data.get(&quot;users&quot;, [])),
+      &quot;lifetime&quot;: box.ephemeral,
+    }
+    return checks, all(checks.values())
 
-def defect_key(f, src):
-    fn = enclosing_function(src, f.line)
-    cwe = CWE_ALIASES.get(f.cwe, f.cwe)
-    return (f.file, fn, f.symbol, cwe)
+for box in (REPLICA, STAGING):
+    checks, ok = isolation_report(box)
+    print(f&quot;{box.name}&quot;)
+    for k, v in checks.items():
+        print(f&quot;   {&#x27;PASS&#x27; if v else &#x27;FAIL&#x27;:5s} {k}&quot;)
+    print(f&quot;   → suitable for dynamic testing: {ok}\n&quot;)
 
-SRC = SOURCE[&quot;billing.py&quot;]
-clusters = {}
-for f in RAW:
-    clusters.setdefault(defect_key(f, SRC), []).append(f)
+_, replica_ok = isolation_report(REPLICA)
+_, staging_ok = isolation_report(STAGING)
+assert replica_ok and not staging_ok
 
-RANK = {&quot;taint&quot;: 3, &quot;grep&quot;: 1, &quot;model&quot;: 2}
-deduped = []
-for key, group in clusters.items():
-    best = max(group, key=lambda f: (RANK[f.src], f.confidence))
-    deduped.append({&quot;key&quot;: key, &quot;keep&quot;: best, &quot;merged&quot;: len(group),
-                    &quot;sources&quot;: sorted({g.src for g in group})})
-
-print(f&quot;{len(RAW)} findings → {len(deduped)} distinct defects\n&quot;)
-for d in deduped:
-    file, fn, sym, cwe = d[&quot;key&quot;]
-    print(f&quot;   {cwe:8s}{str(fn):14s}{sym:14s}merged {d[&#x27;merged&#x27;]} &quot;
-          f&quot;from {d[&#x27;sources&#x27;]}  (kept {d[&#x27;keep&#x27;].src})&quot;)</code></pre></div><div class="nbmd"><h2>5 · Stage 9 — contextual verification against the real syntax</h2>
-<p>Now check each surviving claim against the code. Three checks, all mechanical, none requiring judgement.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def verify(finding, src):
-    tree = ast.parse(src)
-    problems = []
-
-    # check 1 — does the referenced symbol exist at all?
-    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
-    names |= {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
-    names |= {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
-    root = finding.symbol.split(&quot;.&quot;)[0]
-    if finding.symbol not in names and root not in names:
-        problems.append(f&quot;symbol {finding.symbol!r} does not appear in the file&quot;)
-
-    # check 2 — is the module it implies actually imported?
-    imports = {a.name.split(&quot;.&quot;)[0] for n in ast.walk(tree)
-               if isinstance(n, ast.Import) for a in n.names}
-    imports |= {n.module.split(&quot;.&quot;)[0] for n in ast.walk(tree)
-                if isinstance(n, ast.ImportFrom) and n.module}
-    if &quot;.&quot; in finding.symbol and root not in imports:
-        problems.append(f&quot;module {root!r} is never imported&quot;)
-
-    # check 3 — is the line inside a function at all?
-    if enclosing_function(src, finding.line) is None:
-        problems.append(f&quot;line {finding.line} is not inside any function&quot;)
-
-    return (not problems), problems
-
-print(f&quot;{&#x27;cwe&#x27;:9s}{&#x27;symbol&#x27;:14s}{&#x27;line&#x27;:&gt;5}  verdict&quot;)
-print(&quot;-&quot; * 74)
-verified, rejected = [], []
-for d in deduped:
-    f = d[&quot;keep&quot;]
-    ok, problems = verify(f, SRC)
-    (verified if ok else rejected).append((f, problems))
-    print(f&quot;{f.cwe:9s}{f.symbol:14s}{f.line:&gt;5}  &quot;
-          f&quot;{&#x27;verified&#x27; if ok else &#x27;REJECTED — &#x27; + problems[0]}&quot;)
-print(f&quot;\n{len(verified)} verified, {len(rejected)} rejected as hallucinations&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify the stage pays for itself.
-STAGE7_COUNT = len(RAW)
-after8 = len(deduped)
-after9 = len(verified)
-print(f&quot;stage 7 emitted        {STAGE7_COUNT}&quot;)
-print(f&quot;after stage 8 (dedup)  {after8}   ({1-after8/STAGE7_COUNT:.0%} removed)&quot;)
-print(f&quot;after stage 9 (verify) {after9}   ({1-after9/STAGE7_COUNT:.0%} removed overall)&quot;)
-
-TRUE_DEFECTS = {(&quot;billing.py&quot;, &quot;list_reports&quot;, &quot;execute&quot;, &quot;CWE-89&quot;)}
-found = {d[&quot;key&quot;] for d in deduped if any(d[&quot;keep&quot;] is f for f, _ in verified)}
-tp = len(found &amp; TRUE_DEFECTS); fp = len(found - TRUE_DEFECTS)
-print(f&quot;\nsurviving: tp={tp} fp={fp}&quot;)
-for f, _ in rejected:
-    print(f&quot;   rejected {f.cwe} on {f.symbol!r} — provably not in the code&quot;)
-assert any(&quot;DB_PASSWORD&quot; in f.symbol for f, _ in rejected)
-assert any(&quot;os.system&quot; in f.symbol for f, _ in rejected)
-print(&quot;\nBoth hallucinations named things that are not in the file. No model,&quot;)
-print(&quot;no judgement, no cost — just the AST disagreeing with the claim.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Seven raw findings collapse to four distinct defects, with the CWE-943 alias merging into CWE-89 and the taint result kept over grep and model duplicates. Contextual verification then rejects the hallucinated <code>DB_PASSWORD</code> and <code>os.system</code> findings because neither symbol appears in the file and <code>os</code> is never imported, leaving the real SQL injection.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Add a fourth verification check: does the CWE class match the sink type? A CWE-22 finding on a <code>conn.execute</code> call is provably mislabelled, and that check costs nothing to run.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.7.html">B1.7 · Feasibility filtering and reachability</a></strong></p>
+print(REPLICA.destroy())
+print(f&quot;credentials after destroy: {REPLICA.credentials or &#x27;cleared&#x27;}&quot;)
+print(f&quot;data after destroy:        {REPLICA.data or &#x27;cleared&#x27;}&quot;)
+assert REPLICA.destroyed and not REPLICA.credentials</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Check whether your dynamic testing currently runs against staging. If it does, list what staging shares with production — identity provider, message bus, data replica. Each shared component is a path from a test probe to a real incident.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.7.html">B1.7 · Dynamic exploitation (DAST)</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.6.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Secrets in prompts/transcripts/memory files surface, and the pre-commit hook stops the next one.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenGrep</span><span>tree-sitter</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.6.ipynb</code></p></div><div class="pager"><a href="B1.5.html"><span class="k">← Previous</span><span class="t">B1.5 · Vulnerability auditing: three generations of SAST</span></a><a class="next" href="B1.7.html"><span class="k">Next →</span><span class="t">B1.7 · Feasibility filtering and reachability</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Docker</span><span>gVisor</span><span>Cilium</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.6.ipynb</code></p></div><div class="pager"><a href="B1.5.html"><span class="k">← Previous</span><span class="t">B1.5 · Feasibility filtering and reachability</span></a><a class="next" href="B1.7.html"><span class="k">Next →</span><span class="t">B1.7 · Dynamic exploitation (DAST)</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

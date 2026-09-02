@@ -62,7 +62,7 @@ statement about the serialiser; accuracy is the expensive part.
 | | |
 |---|---|
 | [`skills/appsec/`](skills/appsec) | 6 — repo recon, threat model, vuln audit, exploit validation, triage report, coding-agent hardening |
-| [`skills/attestation/`](skills/attestation) | 11 — turn a control claim into a signed statement bound to one deployment ([B1.16](labs/notebooks/B1.16.ipynb), run against 10 real OSS agent/MCP repos) |
+| [`skills/attestation/`](skills/attestation) | 11 — turn a control claim into a signed statement bound to one deployment ([B1.14](labs/notebooks/B1.14.ipynb), run against 10 real OSS agent/MCP repos) |
 | [`skills/architecture/`](skills/architecture) · [`identity/`](skills/identity) · [`secops/`](skills/secops) · [`grc/`](skills/grc) | 5 — blast radius, delegation chains, alert triage, incident scoping, control evidence |
 
 ## The programme
@@ -105,8 +105,8 @@ Two chapters carry a single artefact end to end:
   and 3 are those controls.
 - **[B1](curriculum/track-b1.md)** is the AI SDLC itself — a five-phase,
   fifteen-stage agentic AppSec pipeline built over seventeen sessions, attested in
-  [B1.16](labs/notebooks/B1.16.ipynb) and closed in
-  [B1.17](labs/notebooks/B1.17.ipynb) by scoring Google's Mantis against a
+  [B1.14](labs/notebooks/B1.14.ipynb) and closed in
+  [B1.15](labs/notebooks/B1.15.ipynb) by scoring Google's Mantis against a
   held-out key — a reference implementation is something you evaluate, not
   something you trust.
 

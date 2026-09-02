@@ -39,7 +39,7 @@ ROOT = Path(__file__).resolve().parent.parent
 NB = ROOT / "labs" / "notebooks"
 
 # The lessons carrying a live model section.
-LESSONS = ["B1.2", "B1.5", "B1.11", "B2.1", "B2.4", "B2.7", "C1.1", "D1.1", "D1.3"]
+LESSONS = ["B1.2", "B1.3", "B1.9", "B2.1", "B2.4", "B2.7", "C1.1", "D1.1", "D1.3"]
 
 KEY_FILES = [Path.home() / ".anthropic" / "key", Path.home() / ".anthropic_key"]
 

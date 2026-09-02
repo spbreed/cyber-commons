@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.4 — Strategic planning and agent allocation | Cyber Commons</title><meta name="description" content="Stage 6: allocate specialised agents and tools to specific trust boundaries, budgeted by threat rank."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B1.4</div><h1>Strategic planning and agent allocation</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Every scanner is pointed at every file, so cost scales with the repo instead of with the risk.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 6: allocate specialised agents and tools to specific trust boundaries, budgeted by threat rank.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Chart honestly what only SAST found, and what only DAST found.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.4 · Strategic planning and agent allocation</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.4 — Deduplication and contextual verification | Cyber Commons</title><meta name="description" content="Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B1.4</div><h1>Deduplication and contextual verification</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Find live secrets in your own agent&#x27;s footprint.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.4 · Deduplication and contextual verification</h1>
 <p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.3.html">B1.3 · Threat modelling from the architecture map</a></strong>.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.3.html">B1.3 · Vulnerability auditing: three generations of SAST</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,425 +11,176 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Semgrep OSS, CodeQL, GLM-4.6, Llama 3.3, Claude Haiku 4.5</td>
+<td>OpenGrep, tree-sitter, GLM-4.6, Claude Haiku 4.5</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>You have four hundred thousand lines and a budget that covers perhaps thirty thousand. Where the effort goes is the single decision with the most leverage in the whole pipeline, and it is usually made by whoever opened the repository first.</p>
+<p>Three analysers found the same defect and reported it four times, in three vocabularies, at two severities. A queue that inflates by 3x is not a queue — it is a landfill with a ticket number.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> CyberTravels has finite review budget and four services. Spending it on the payments path rather than the vendored SDK is the highest-leverage decision in the whole pipeline.</p>
+<p><strong>At CyberTravels.</strong> Three analysers found the same booking-handler defect four times. The queue Alex will actually read is the deduplicated one.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   finite effort, unequal value
-
-   +----------------------+----------+----------+
-   | area                 | reachable| changed  |
-   +----------------------+----------+----------+
-   | request handling     |   yes    |   yes    |  &lt;- spend here
-   | internal utils       |   yes    |   no     |
-   | vendored third party |   no     |   no     |  &lt;- and not here
-   +----------------------+----------+----------+
-
-   allocation is the highest-leverage decision in the pipeline
+<pre><code>   raw findings                        after dedup + context
+   +---------------------------+       +--------------------+
+   | analyser A: SQLI in q()   |       | SQLI in q()        |
+   | analyser B: CWE-89 q()    | ----&gt; |   3 analysers      |
+   | analyser C: taint -&gt; q()  |       |   1 ticket         |
+   | analyser A: SQLI in q()   |       +--------------------+
+   +---------------------------+
+        3x inflation                   the queue a human will read
 </code></pre>
-<p><strong>Stage 6 — Strategic planning.</strong> You now have a ranked threat model. This stage
-decides <em>where to spend the analysis budget</em> and <em>which tool or agent to point at
-each target</em>.</p>
-<p>The default is a uniform sweep: run every rule over every file. It is simple,
-and it scales cost with repository size rather than with risk — so on a large
-monorepo the deep, expensive analysis gets turned off for everything, including
-the parts that needed it.</p>
-<p>Allocation makes the trade explicit. Three inputs:</p>
-<ul>
-<li><strong>threat rank</strong> from stage 5,</li>
-<li><strong>historical risk</strong> from stage 1,</li>
-<li><strong>tool fit</strong> — rules are cheap and precise on known patterns; model review is
-  expensive and finds what rules cannot express (B1.5 measures both).</li>
-</ul>
-<p>The output is an assignment: which analyser runs against which boundary, with
-what budget. And the honest measure of a good allocation is not coverage — it is
-<strong>threat-weighted coverage</strong>, because covering the health endpoint thoroughly is
-not an achievement.</p></div><div class="nbmd"><blockquote>
+<p>Stage 7 ran several analysers in parallel. That produces two problems this stage
+exists to solve, and they are different problems.</p>
+<p><strong>Stage 8 — Deduplication.</strong> Three analysers find the same bug and report it
+three times. Worse, they report it at slightly different line numbers with
+different CWE labels, so naive matching does not collapse them. An engineer who
+sees the same bug three times stops trusting the count.</p>
+<p><strong>Stage 9 — Contextual verification.</strong> Cross-reference each finding against the
+actual syntax and imports to weed out hallucinations. This is the cheapest,
+highest-yield filter in the whole pipeline, because a model finding that
+references a function that does not exist, or a module that was never imported,
+is <em>provably</em> wrong — no judgement required.</p>
+<p>The order matters: deduplicate first, then verify, or you spend verification
+effort on three copies of the same claim.</p></div><div class="nbmd"><blockquote>
 <p><strong>Where you are in the pipeline.</strong></p>
 <p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · Stage 6 — the budget, and two ways to spend it</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass
+</blockquote></div><div class="nbmd"><h2>3 · The raw output of three parallel tracks</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
 
-@dataclass(frozen=True)
-class Target:
-    name: str; file: str; threat_score: int; historical_risk: float; loc: int
+SOURCE = {
+&quot;billing.py&quot;: &#x27;&#x27;&#x27;
+import sqlite3
 
-TARGETS = [
- Target(&quot;load_report → execute&quot;, &quot;src/data/reports.py&quot;, 12, 0.82, 40),
- Target(&quot;store → open&quot;,          &quot;src/data/docs.py&quot;,     9, 0.91, 30),
- Target(&quot;render&quot;,                &quot;src/util/render.py&quot;,   2, 0.05, 15),
- Target(&quot;health&quot;,                &quot;src/web/health.py&quot;,    1, 0.00, 10),
- Target(&quot;upload_doc&quot;,            &quot;src/web/handlers.py&quot;,  9, 0.30, 60),
- Target(&quot;get_report&quot;,            &quot;src/web/handlers.py&quot;, 11, 0.30, 60),
+def build_filter(owner):
+    return &quot;WHERE owner = &#x27;&quot; + owner + &quot;&#x27;&quot;
+
+def list_reports(conn, owner):
+    return conn.execute(&quot;SELECT * FROM reports &quot; + build_filter(owner))
+
+def total(conn):
+    return conn.execute(&quot;SELECT SUM(amount) FROM reports&quot;).fetchone()
+&#x27;&#x27;&#x27;
+}
+
+@dataclass
+class Finding:
+    src: str; cwe: str; file: str; line: int; symbol: str
+    rationale: str; confidence: float = 1.0
+
+RAW = [
+ Finding(&quot;grep&quot;,   &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
+         &quot;execute() with string concatenation&quot;, 0.5),
+ Finding(&quot;taint&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
+         &quot;owner flows into the query via build_filter&quot;, 1.0),
+ Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 8,  &quot;execute&quot;,
+         &quot;user-controlled owner is interpolated into SQL&quot;, 0.93),
+ Finding(&quot;model&quot;,  &quot;CWE-943&quot;,&quot;billing.py&quot;, 7,  &quot;execute&quot;,
+         &quot;query language injection&quot;, 0.71),
+ Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 11, &quot;execute&quot;,
+         &quot;total() builds a query from input&quot;, 0.44),
+ Finding(&quot;model&quot;,  &quot;CWE-798&quot;,&quot;billing.py&quot;, 3,  &quot;DB_PASSWORD&quot;,
+         &quot;hardcoded database password in DB_PASSWORD&quot;, 0.88),
+ Finding(&quot;model&quot;,  &quot;CWE-78&quot;, &quot;billing.py&quot;, 6,  &quot;os.system&quot;,
+         &quot;shell invocation with user data&quot;, 0.67),
 ]
+print(f&quot;{len(RAW)} raw findings from 3 tracks&quot;)
+for f in RAW:
+    print(f&quot;   {f.src:6s}{f.cwe:9s}{f.file}:{f.line:&lt;3}{f.symbol:14s}conf={f.confidence:.2f}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Stage 8 — deduplicate on the defect, not the report</h2>
+<p>Two findings are the same defect if they name the same sink in the same function, even at different lines and under different CWE labels. Cluster on that, and keep the <em>best-evidenced</em> member.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import ast
 
-ANALYSERS = {
- # name          cost/100 LOC   finds                         precision
- &quot;grep rules&quot;:   (1,   {&quot;CWE-798&quot;},                          0.50),
- &quot;taint rules&quot;:  (4,   {&quot;CWE-89&quot;, &quot;CWE-78&quot;, &quot;CWE-22&quot;},       1.00),
- &quot;model review&quot;: (40,  {&quot;CWE-89&quot;,&quot;CWE-78&quot;,&quot;CWE-22&quot;,&quot;CWE-863&quot;,&quot;CWE-434&quot;}, 0.85),
-}
-BUDGET = 30         # arbitrary units for one CI run — deliberately tight,
-                    # because an unconstrained budget hides the whole problem
+def enclosing_function(src, line):
+    tree = ast.parse(src)
+    best = None
+    for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
+        end = max((getattr(n, &quot;lineno&quot;, fn.lineno) for n in ast.walk(fn)),
+                  default=fn.lineno)
+        if fn.lineno &lt;= line &lt;= end + 1:
+            if best is None or fn.lineno &gt; best.lineno: best = fn
+    return best.name if best else None
 
-def uniform(targets, analyser, budget):
-    cost_per = ANALYSERS[analyser][0]
-    spend, covered = 0, []
-    for t in sorted(targets, key=lambda t: t.name):
-        c = cost_per * t.loc / 100
-        if spend + c &gt; budget: break
-        spend += c; covered.append(t)
-    return {&quot;strategy&quot;: f&quot;uniform · {analyser}&quot;, &quot;spend&quot;: round(spend, 1),
-            &quot;covered&quot;: covered}
+CWE_ALIASES = {&quot;CWE-943&quot;: &quot;CWE-89&quot;, &quot;CWE-89&quot;: &quot;CWE-89&quot;}
 
-def allocated(targets, budget):
-    &quot;&quot;&quot;Deep analysis on high-threat targets, cheap rules everywhere else.&quot;&quot;&quot;
-    ranked = sorted(targets, key=lambda t: -(t.threat_score + t.historical_risk * 3))
-    spend, plan = 0.0, []
-    for t in ranked:
-        for analyser in (&quot;model review&quot;, &quot;taint rules&quot;, &quot;grep rules&quot;):
-            c = ANALYSERS[analyser][0] * t.loc / 100
-            wants_deep = (t.threat_score + t.historical_risk * 3) &gt;= 9
-            if analyser == &quot;model review&quot; and not wants_deep: continue
-            if spend + c &lt;= budget:
-                spend += c; plan.append((t, analyser)); break
-    return {&quot;strategy&quot;: &quot;allocated by threat rank&quot;, &quot;spend&quot;: round(spend, 1),
-            &quot;plan&quot;: plan}
+def defect_key(f, src):
+    fn = enclosing_function(src, f.line)
+    cwe = CWE_ALIASES.get(f.cwe, f.cwe)
+    return (f.file, fn, f.symbol, cwe)
 
-u = uniform(TARGETS, &quot;model review&quot;, BUDGET)
-a = allocated(TARGETS, BUDGET)
-print(f&quot;{u[&#x27;strategy&#x27;]:34s}spend {u[&#x27;spend&#x27;]:&gt;6}  covered {len(u[&#x27;covered&#x27;])}/{len(TARGETS)}&quot;)
-for t in u[&quot;covered&quot;]: print(f&quot;      {t.name}&quot;)
-print(f&quot;\n{a[&#x27;strategy&#x27;]:34s}spend {a[&#x27;spend&#x27;]:&gt;6}  covered {len(a[&#x27;plan&#x27;])}/{len(TARGETS)}&quot;)
-for t, an in a[&quot;plan&quot;]: print(f&quot;      {t.name:24s}{an}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — coverage is the wrong metric</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def coverage(plan_targets, targets):
-    return len(plan_targets) / len(targets)
+SRC = SOURCE[&quot;billing.py&quot;]
+clusters = {}
+for f in RAW:
+    clusters.setdefault(defect_key(f, SRC), []).append(f)
 
-def threat_weighted_coverage(plan_targets, targets):
-    total = sum(t.threat_score for t in targets)
-    got = sum(t.threat_score for t in plan_targets)
-    return got / total
+RANK = {&quot;taint&quot;: 3, &quot;grep&quot;: 1, &quot;model&quot;: 2}
+deduped = []
+for key, group in clusters.items():
+    best = max(group, key=lambda f: (RANK[f.src], f.confidence))
+    deduped.append({&quot;key&quot;: key, &quot;keep&quot;: best, &quot;merged&quot;: len(group),
+                    &quot;sources&quot;: sorted({g.src for g in group})})
 
-u_targets = u[&quot;covered&quot;]
-a_targets = [t for t, _ in a[&quot;plan&quot;]]
-
-print(f&quot;{&#x27;strategy&#x27;:34s}{&#x27;coverage&#x27;:&gt;10}{&#x27;threat-weighted&#x27;:&gt;18}&quot;)
-print(&quot;-&quot; * 64)
-for label, ts in ((&quot;uniform · model review&quot;, u_targets),
-                  (&quot;allocated by threat rank&quot;, a_targets)):
-    print(f&quot;{label:34s}{coverage(ts, TARGETS):&gt;10.0%}{threat_weighted_coverage(ts, TARGETS):&gt;18.0%}&quot;)
-
-print(&quot;\nThe uniform sweep spent its whole budget alphabetically and covered&quot;)
-print(&quot;the health endpoint before it reached the SQL sink.&quot;)
-missed = [t.name for t in TARGETS if t not in u_targets and t.threat_score &gt;= 9]
-print(f&quot;high-threat targets the uniform sweep never reached: {missed}&quot;)
-assert missed</code></pre></div><div class="nbmd"><h2>5 · The control — allocate, then prove the allocation was right</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def plan_report(plan, targets, budget):
-    spend = sum(ANALYSERS[an][0] * t.loc / 100 for t, an in plan)
-    covered = [t for t, _ in plan]
-    deep = [t.name for t, an in plan if an == &quot;model review&quot;]
-    uncovered_high = [t.name for t in targets
-                      if t not in covered and t.threat_score &gt;= 9]
-    return {&quot;budget&quot;: budget, &quot;spend&quot;: round(spend, 1),
-            &quot;threat_weighted_coverage&quot;: round(threat_weighted_coverage(covered, targets), 3),
-            &quot;deep_analysis_on&quot;: deep,
-            &quot;uncovered_high_threat&quot;: uncovered_high,
-            &quot;acceptable&quot;: not uncovered_high}
-
-r = plan_report(a[&quot;plan&quot;], TARGETS, BUDGET)
-for k, v in r.items(): print(f&quot;{k:26s}{v}&quot;)
-assert r[&quot;acceptable&quot;]
-
-print(&quot;\nsame budget, if someone doubles the repo with low-risk code:&quot;)
-BLOAT = TARGETS + [Target(f&quot;vendor_{i}&quot;, f&quot;vendor/{i}.py&quot;, 1, 0.0, 200)
-                   for i in range(1, 9)]
-a2 = allocated(BLOAT, BUDGET)
-r2 = plan_report(a2[&quot;plan&quot;], BLOAT, BUDGET)
-print(f&quot;   threat-weighted coverage {r[&#x27;threat_weighted_coverage&#x27;]:.0%} → &quot;
-      f&quot;{r2[&#x27;threat_weighted_coverage&#x27;]:.0%}&quot;)
-print(f&quot;   uncovered high-threat targets: {r2[&#x27;uncovered_high_threat&#x27;] or &#x27;none&#x27;}&quot;)
-print(&quot;\nAllocation is what stops repository growth from silently degrading&quot;)
-print(&quot;the analysis of the parts that matter.&quot;)</code></pre></div><div class="nbmd"><h2>6 · The skill that carries Phase 2</h2>
-<p>Stages 5 and 6 are now a procedure rather than a one-off. The skill below is the version an agent runs, and its contract is the reason the plan can be handed to Phase 3 without a conversation.</p>
-<p>Note what the contract insists on: <code>score_inputs</code> alongside every score. A severity you cannot decompose is a severity nobody can argue with — and an unarguable severity is one nobody fixes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
-
-def parse_skill(md):
-    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
-
-    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
-    scalars (`description: &gt;-`) whose continuation lines are indented. That is
-    all a skill needs, and parsing it directly means no dependency.
-    &quot;&quot;&quot;
-    if not md.startswith(&quot;---&quot;):
-        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
-    _, front, body = md.split(&quot;---&quot;, 2)
-    meta, key = {}, None
-    for line in front.strip().splitlines():
-        if not line.strip():
-            continue
-        if not line[0].isspace() and &quot;:&quot; in line:
-            key, val = line.split(&quot;:&quot;, 1)
-            key, val = key.strip(), val.strip()
-            # `&gt;-` and `|` open a folded block; the value is on the next lines
-            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
-        elif key is not None:
-            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
-    if &quot;allowed-tools&quot; in meta:
-        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
-                                 if t.strip()]
-    for required in (&quot;name&quot;, &quot;description&quot;):
-        if not meta.get(required):
-            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
-    return meta, body.strip()
-
-_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
-
-def route(task, skills):
-    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
-
-    The description is not documentation — it is the routing key. An agent
-    decides whether to load a skill by reading it, so a vague description means
-    the skill never fires when it should, and two overlapping descriptions mean
-    the wrong one fires.
-
-    Returns (pick, scores, margin). A margin of 0 means the top two scored the
-    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
-    wearing a confident face. Callers should refuse to auto-route on margin 0
-    rather than pretend the tiebreak meant something.
-    &quot;&quot;&quot;
-    want = set(_WORD.findall(task.lower()))
-    def score(meta):
-        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
-    scores = {n: score(skills[n]) for n in sorted(skills)}
-    # sort names first, then by score: ties must break identically on every
-    # machine or the same task routes differently on two runs
-    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
-    top = scores[ranked[0]]
-    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
-    return ranked[0], scores, margin
-
-def contract_of(body):
-    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
-    # non-greedy across any prose between the heading and the fence
-    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
-    if not m:
-        raise ValueError(&quot;skill declares no output contract&quot;)
-    return json.loads(m.group(1))
-
-def check(instance, contract, path=&quot;$&quot;):
-    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
-
-    Returns the list of problems. An empty list means the shape is right — and
-    that is *all* it means. Conformance is not accuracy: an empty findings list
-    conforms perfectly and tells you nothing.
-    &quot;&quot;&quot;
+print(f&quot;{len(RAW)} findings → {len(deduped)} distinct defects\n&quot;)
+for d in deduped:
+    file, fn, sym, cwe = d[&quot;key&quot;]
+    print(f&quot;   {cwe:8s}{str(fn):14s}{sym:14s}merged {d[&#x27;merged&#x27;]} &quot;
+          f&quot;from {d[&#x27;sources&#x27;]}  (kept {d[&#x27;keep&#x27;].src})&quot;)</code></pre></div><div class="nbmd"><h2>5 · Stage 9 — contextual verification against the real syntax</h2>
+<p>Now check each surviving claim against the code. Three checks, all mechanical, none requiring judgement.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def verify(finding, src):
+    tree = ast.parse(src)
     problems = []
-    if isinstance(contract, dict):
-        if not isinstance(instance, dict):
-            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
-        for k, v in sorted(contract.items()):
-            if k not in instance:
-                problems.append(f&quot;{path}.{k}: missing&quot;)
-            else:
-                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
-    elif isinstance(contract, list):
-        if not isinstance(instance, list):
-            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
-        for i, item in enumerate(instance):          # every element, same template
-            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
-    elif isinstance(contract, str) and &quot;|&quot; in contract:
-        if instance not in contract.split(&quot;|&quot;):
-            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
-    elif isinstance(contract, bool):                  # before the numeric case:
-        if not isinstance(instance, bool):            # bool is a subclass of int
-            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
-    elif isinstance(contract, (int, float)):
-        # JSON has one number type. A contract written `0` must accept 0.4, or
-        # every cost and rate in the pipeline has to be rounded to satisfy a
-        # checker rather than to be correct.
-        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
-            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
-    elif not isinstance(instance, type(contract)):
-        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
-                        f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-threat-model/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: appsec-threat-model
-description: &gt;-
-  Turn an architecture map into a ranked, testable threat model and an audit
-  plan. Use after repository reconnaissance, when asked what could go wrong in
-  a system, which CWEs apply, where to spend review effort, or how to allocate
-  a fixed analysis budget across a codebase.
-allowed-tools: Read, Grep, Glob
----
 
-# AppSec pipeline · Phase 2 — Threat modelling and strategy
+    # check 1 — does the referenced symbol exist at all?
+    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+    names |= {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+    names |= {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+    root = finding.symbol.split(&quot;.&quot;)[0]
+    if finding.symbol not in names and root not in names:
+        problems.append(f&quot;symbol {finding.symbol!r} does not appear in the file&quot;)
 
-Covers **stages 5–6**. Consumes `architecture_map` from **appsec-repo-recon**
-and produces a ranked threat list plus the plan that spends the audit budget.
+    # check 2 — is the module it implies actually imported?
+    imports = {a.name.split(&quot;.&quot;)[0] for n in ast.walk(tree)
+               if isinstance(n, ast.Import) for a in n.names}
+    imports |= {n.module.split(&quot;.&quot;)[0] for n in ast.walk(tree)
+                if isinstance(n, ast.ImportFrom) and n.module}
+    if &quot;.&quot; in finding.symbol and root not in imports:
+        problems.append(f&quot;module {root!r} is never imported&quot;)
 
-A threat model that lists everything is a list, not a model. The output of this
-phase is an *ordering*: what to look at first, and what to knowingly skip.
+    # check 3 — is the line inside a function at all?
+    if enclosing_function(src, finding.line) is None:
+        problems.append(f&quot;line {finding.line} is not inside any function&quot;)
 
-## When to use this
+    return (not problems), problems
 
-After Phase 1, before any auditing. If asked to &quot;threat model&quot; a system with no
-architecture map, run **appsec-repo-recon** first — a threat model built from
-file names is fiction.
+print(f&quot;{&#x27;cwe&#x27;:9s}{&#x27;symbol&#x27;:14s}{&#x27;line&#x27;:&gt;5}  verdict&quot;)
+print(&quot;-&quot; * 74)
+verified, rejected = [], []
+for d in deduped:
+    f = d[&quot;keep&quot;]
+    ok, problems = verify(f, SRC)
+    (verified if ok else rejected).append((f, problems))
+    print(f&quot;{f.cwe:9s}{f.symbol:14s}{f.line:&gt;5}  &quot;
+          f&quot;{&#x27;verified&#x27; if ok else &#x27;REJECTED — &#x27; + problems[0]}&quot;)
+print(f&quot;\n{len(verified)} verified, {len(rejected)} rejected as hallucinations&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify the stage pays for itself.
+STAGE7_COUNT = len(RAW)
+after8 = len(deduped)
+after9 = len(verified)
+print(f&quot;stage 7 emitted        {STAGE7_COUNT}&quot;)
+print(f&quot;after stage 8 (dedup)  {after8}   ({1-after8/STAGE7_COUNT:.0%} removed)&quot;)
+print(f&quot;after stage 9 (verify) {after9}   ({1-after9/STAGE7_COUNT:.0%} removed overall)&quot;)
 
-## Inputs
-
-| Input | Required | Notes |
-|---|---|---|
-| `architecture_map` | yes | from appsec-repo-recon |
-| Audit budget | yes | units of analysis you can actually afford |
-| Deployment context | optional | internet-facing vs internal changes exposure |
-
-## Procedure
-
-**Stage 5 — Threat modelling.** For every `reachable` entry→sink pair, ask what
-an attacker controlling the entry can do to the sink. Record a threat with:
-
-- the **CWE** it would be, concretely (CWE-89, CWE-22, CWE-78, CWE-502, …)
-- the **entry** and **sink** identities, and the path between them
-- whether the path crosses a **trust boundary**
-- the **authentication** required to reach the entry
-- a **score**, computed — never asserted
-
-Score from properties you already have, so the number is reproducible:
-
-```
-score = exposure_weight(entry)      # public 3, authenticated 2, internal 1
-      × resource_weight(sink)       # subprocess/deserialisation 3, db/fs 2, network 1
-      × boundary_multiplier         # 2 if the path crosses a trust boundary
-```
-
-A model that outputs a severity without showing the inputs cannot be argued
-with, and an unarguable severity is one nobody fixes.
-
-**Stage 6 — Strategic planning.** Spend the budget. Rank threats by score, then
-by a **full tiebreak** — `(-score, cwe, entry, sink)` — so equal scores order
-identically on every machine. Then allocate:
-
-- Cover the highest-scoring threats first.
-- Prefer **breadth across distinct CWEs** over depth on one: three different
-  weakness classes found beats three instances of the same one.
-- Record what the budget did **not** cover, in `deferred`. An audit plan that
-  hides its own gaps produces a report that overclaims.
-
-## Output contract
-
-```json
-{
-  &quot;threat_model&quot;: [
-    {&quot;cwe&quot;: &quot;CWE-89&quot;, &quot;entry&quot;: &quot;str&quot;, &quot;sink&quot;: &quot;str&quot;, &quot;path&quot;: [&quot;unit&quot;],
-     &quot;crosses_boundary&quot;: true, &quot;auth&quot;: &quot;none|user|admin&quot;,
-     &quot;score&quot;: 0, &quot;score_inputs&quot;: {&quot;exposure&quot;: 0, &quot;resource&quot;: 0, &quot;boundary&quot;: 0}}
-  ],
-  &quot;plan&quot;: {
-    &quot;budget&quot;: 0,
-    &quot;selected&quot;: [{&quot;threat_index&quot;: 0, &quot;cost&quot;: 0, &quot;why&quot;: &quot;str&quot;}],
-    &quot;deferred&quot;: [{&quot;threat_index&quot;: 0, &quot;why&quot;: &quot;str&quot;}],
-    &quot;coverage&quot;: {&quot;threat_weighted&quot;: 0.0, &quot;distinct_cwes&quot;: 0}
-  }
-}
-```
-
-`score_inputs` is not optional. It is what makes the ranking reviewable.
-
-## Failure modes
-
-- **Scoring by vibes.** If you cannot show the multiplication, do not emit the
-  score.
-- **A budget that covers everything.** Then the plan proves nothing — the
-  interesting behaviour of an allocator only appears under scarcity. If the
-  budget genuinely covers all targets, say so rather than claiming a strategy
-  worked.
-- **Ranking instability.** Equal scores must not reorder between runs. Sort
-  keys first; never iterate a set into a stable sort.
-- **Treating &quot;no auth&quot; as the only risk.** An authenticated path to a
-  subprocess sink usually outranks an anonymous path to a read-only one.
-
-## Handoff
-
-Pass `threat_model` and `plan.selected` to **appsec-vuln-audit**. Carry
-`deferred` all the way to the report — it is the honest scope statement.
-&quot;&quot;&quot;
-
-meta, body = parse_skill(SKILL_MD)
-print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
-print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
-print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>contract = contract_of(body)
-
-# The weakness class each target would be, named rather than implied — the
-# contract needs it and &quot;distinct CWEs covered&quot; is meaningless without it.
-CWE_OF = {&quot;load_report → execute&quot;: &quot;CWE-89&quot;, &quot;store → open&quot;: &quot;CWE-22&quot;,
-          &quot;render&quot;: &quot;CWE-79&quot;, &quot;health&quot;: &quot;CWE-200&quot;,
-          &quot;upload_doc&quot;: &quot;CWE-434&quot;, &quot;get_report&quot;: &quot;CWE-22&quot;}
-
-def cost_of(target, analyser):
-    return ANALYSERS[analyser][0] * target.loc / 100
-
-# The plan this lesson produced, in the shape the skill promises.
-# threat_index points into `threat_model` below, which is TARGETS order.
-# a[&quot;plan&quot;] is in *ranked* order, so enumerating it would number the threats
-# by rank and every index in the contract would point at the wrong threat.
-IDX = {t.name: i for i, t in enumerate(TARGETS)}
-sel = [{&quot;threat_index&quot;: IDX[t.name], &quot;cost&quot;: cost_of(t, analyser),
-        &quot;why&quot;: analyser}
-       for t, analyser in a[&quot;plan&quot;]]
-chosen = {t.name for t, _ in a[&quot;plan&quot;]}
-plan = {
- &quot;threat_model&quot;: [
-   {&quot;cwe&quot;: CWE_OF[t.name], &quot;entry&quot;: t.name.split(&quot; &quot;)[0], &quot;sink&quot;: t.name.split(&quot; &quot;)[-1],
-    &quot;path&quot;: t.name.split(&quot; → &quot;), &quot;crosses_boundary&quot;: t.threat_score &gt;= 6,
-    &quot;auth&quot;: &quot;none&quot; if t.threat_score &gt;= 8 else &quot;user&quot;,
-    &quot;score&quot;: t.threat_score,
-    &quot;score_inputs&quot;: {&quot;exposure&quot;: t.threat_score,
-                     &quot;resource&quot;: round(t.historical_risk, 2),
-                     &quot;boundary&quot;: 2 if t.threat_score &gt;= 6 else 1}}
-   for t in TARGETS],
- # What the budget deferred is *depth*, not targets: everything gets some
- # analyser, but the ones that wanted model review and got taint rules are
- # exactly the gap the report must disclose.
- &quot;plan&quot;: {&quot;budget&quot;: float(BUDGET), &quot;selected&quot;: sel,
-          &quot;deferred&quot;: [{&quot;threat_index&quot;: IDX[t.name],
-                        &quot;why&quot;: f&quot;wanted model review, budget allowed {analyser}&quot;}
-                       for t, analyser in a[&quot;plan&quot;]
-                       if (t.threat_score + t.historical_risk * 3) &gt;= 9
-                       and analyser != &quot;model review&quot;],
-          &quot;coverage&quot;: {&quot;threat_weighted&quot;: float(r2[&quot;threat_weighted_coverage&quot;]),
-                       &quot;distinct_cwes&quot;: len({CWE_OF[t.name] for t, _ in a[&quot;plan&quot;]})}},
-}
-problems = check(plan, contract)
-print(f&quot;conformance: {len(problems)} problem(s)&quot;)
-for p in problems: print(&quot;   &quot;, p)
-assert not problems, problems
-
-print(f&quot;\nselected {len(sel)} of {len(TARGETS)} threats; &quot;
-      f&quot;{len(plan[&#x27;plan&#x27;][&#x27;deferred&#x27;])} of them wanted deep review and did not get it&quot;)
-print(f&quot;distinct CWEs covered: {plan[&#x27;plan&#x27;][&#x27;coverage&#x27;][&#x27;distinct_cwes&#x27;]}&quot;)
-print()
-for d in plan[&quot;plan&quot;][&quot;deferred&quot;]:
-    print(f&quot;   deferred: {TARGETS[d[&#x27;threat_index&#x27;]].name:22s} {d[&#x27;why&#x27;]}&quot;)
-print()
-print(&quot;`deferred` is not bookkeeping. Every target got *an* analyser, so a&quot;)
-print(&quot;coverage number counting targets would read 100%. What the budget&quot;)
-print(&quot;actually cut was depth, on three of the four highest-threat targets.&quot;)
-print(&quot;That distinction travels to the report as the scope statement, and a&quot;)
-print(&quot;plan that drops it produces a report that overclaims.&quot;)
-assert plan[&quot;plan&quot;][&quot;deferred&quot;], &quot;a budget that defers nothing proves nothing&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>On a tight budget the uniform model-review sweep covers only 2 of 6 targets — alphabetically, so it reaches the health endpoint before the SQL sink — giving 33% coverage but only 27% threat-weighted coverage, and missing all three high-threat targets. The allocated plan covers all six within the same budget at 100% threat-weighted coverage, puts deep model review on the SQL sink, and still holds 90% when the repository doubles in size with low-risk code.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Compute threat-weighted coverage for your current scanning setup. If you scan everything uniformly, the number equals your raw coverage — which means you have no allocation strategy, only a budget that will eventually be cut.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.5.html">B1.5 · Vulnerability auditing: three generations of SAST</a></strong></p>
+TRUE_DEFECTS = {(&quot;billing.py&quot;, &quot;list_reports&quot;, &quot;execute&quot;, &quot;CWE-89&quot;)}
+found = {d[&quot;key&quot;] for d in deduped if any(d[&quot;keep&quot;] is f for f, _ in verified)}
+tp = len(found &amp; TRUE_DEFECTS); fp = len(found - TRUE_DEFECTS)
+print(f&quot;\nsurviving: tp={tp} fp={fp}&quot;)
+for f, _ in rejected:
+    print(f&quot;   rejected {f.cwe} on {f.symbol!r} — provably not in the code&quot;)
+assert any(&quot;DB_PASSWORD&quot; in f.symbol for f, _ in rejected)
+assert any(&quot;os.system&quot; in f.symbol for f, _ in rejected)
+print(&quot;\nBoth hallucinations named things that are not in the file. No model,&quot;)
+print(&quot;no judgement, no cost — just the AST disagreeing with the claim.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Seven raw findings collapse to four distinct defects, with the CWE-943 alias merging into CWE-89 and the taint result kept over grep and model duplicates. Contextual verification then rejects the hallucinated <code>DB_PASSWORD</code> and <code>os.system</code> findings because neither symbol appears in the file and <code>os</code> is never imported, leaving the real SQL injection.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Add a fourth verification check: does the CWE class match the sink type? A CWE-22 finding on a <code>conn.execute</code> call is provably mislabelled, and that check costs nothing to run.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.5.html">B1.5 · Feasibility filtering and reachability</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.4.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Three buckets: SAST-only, DAST-only, both. The DAST-only bucket is why pentest is not redundant.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Semgrep OSS</span><span>CodeQL</span><span>GLM-4.6</span><span>Llama 3.3</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.4.ipynb</code></p></div><div class="pager"><a href="B1.3.html"><span class="k">← Previous</span><span class="t">B1.3 · Threat modelling from the architecture map</span></a><a class="next" href="B1.5.html"><span class="k">Next →</span><span class="t">B1.5 · Vulnerability auditing: three generations of SAST</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Secrets in prompts/transcripts/memory files surface, and the pre-commit hook stops the next one.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenGrep</span><span>tree-sitter</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.4.ipynb</code></p></div><div class="pager"><a href="B1.3.html"><span class="k">← Previous</span><span class="t">B1.3 · Vulnerability auditing: three generations of SAST</span></a><a class="next" href="B1.5.html"><span class="k">Next →</span><span class="t">B1.5 · Feasibility filtering and reachability</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

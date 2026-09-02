@@ -185,11 +185,11 @@ The order it is taught in is the order you have to build it:
   ("md", "## 3 · Chapter 4 — the lifecycle, with agents doing the work"),
   ("html", D.svg(D.DEFS
     + D.box(2, 26, 96, 46, "ingest", sub="B1.1-2", colour=D.DEFEND)
-    + D.box(112, 26, 116, 46, "threat model", sub="B1.3-4", colour=D.DEFEND)
-    + D.box(242, 26, 92, 46, "audit", sub="B1.5-7", colour=D.DEFEND)
-    + D.box(348, 26, 104, 46, "confirm", sub="B1.8-10", colour=D.DEFEND)
-    + D.box(466, 26, 108, 46, "remediate", sub="B1.11", colour=D.DEFEND)
-    + D.box(588, 26, 96, 46, "report", sub="B1.12", colour=D.DEFEND)
+    + D.box(112, 26, 116, 46, "threat model", sub="B1.2-4", colour=D.DEFEND)
+    + D.box(242, 26, 92, 46, "audit", sub="B1.3-7", colour=D.DEFEND)
+    + D.box(348, 26, 104, 46, "confirm", sub="B1.6-10", colour=D.DEFEND)
+    + D.box(466, 26, 108, 46, "remediate", sub="B1.9", colour=D.DEFEND)
+    + D.box(588, 26, 96, 46, "report", sub="B1.10", colour=D.DEFEND)
     + "".join(D.arrow(a, 49, a + 12) for a in (99, 229, 335, 453, 575))
     + D.box(2, 108, 682, 52, "", colour=D.INK, dashed=True)
     + D.label(343, 130, "chapter 5 — the harness underneath every one of those stages",

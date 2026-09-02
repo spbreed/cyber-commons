@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.8 — Sandbox replication | Cyber Commons</title><meta name="description" content="Stage 11: replicate the application in an isolated, disposable runtime with no path to production."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B1.8</div><h1>Sandbox replication</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Dynamic testing is run against staging, so a destructive probe becomes an incident.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 11: replicate the application in an isolated, disposable runtime with no path to production.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.8 · Sandbox replication</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.7.html">B1.7 · Feasibility filtering and reachability</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.8 — Exploit chaining | Cyber Commons</title><meta name="description" content="Stage 13: combine validated findings into multi-step sequences and score the chain, not the links."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B1.8</div><h1>Exploit chaining</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Three medium findings are triaged as three mediums, and nobody notices they compose.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 13: combine validated findings into multi-step sequences and score the chain, not the links.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Chain individually-medium findings into a critical path and show the severity the chain earns.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.8 · Exploit chaining</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.7.html">B1.7 · Dynamic exploitation (DAST)</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,152 +11,423 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Docker, gVisor, Cilium, GLM-4.6, Claude Haiku 4.5</td>
+<td>OWASP ZAP, Kimi K2, Claude Opus 5</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>You cannot exploit a finding to confirm it without somewhere safe to do it. The replica is that place, and the fidelity you give it decides which findings you are able to confirm at all.</p>
+<p>Three medium findings, each correctly scored, each individually not worth an engineer's afternoon. Chained, they read a file that ends the conversation about severity. Chains are where automated analysis earns its keep.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> You cannot confirm the IDOR by exploiting it in production. The replica is where the booking API can be attacked safely, and its fidelity decides which findings are confirmable at all.</p>
+<p><strong>At CyberTravels.</strong> Verbose errors, an open redirect and a path traversal are each low on their own. Chained against CyberTravels they read a config file and end the conversation about severity. R9.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   production            replica
-   +-----------+         +------------------+
-   | real data |   --&gt;   | stubbed data     |
-   | real deps |         | recorded deps    |
-   | real users|         | nobody           |
-   +-----------+         +------------------+
-                                 |
-                        exploit here, safely, on purpose
+<pre><code>   alone                                chained
+   +----------------+                   +-------------------------+
+   | path traversal | medium            | traversal reads config  |
+   | verbose errors | low        ---&gt;   | errors leak the key     |
+   | open redirect  | low               | redirect delivers it    |
+   +----------------+                   +-------------------------+
+                                        outcome: credential exfiltration
 
-   fidelity decides which findings you can confirm at all
+   severity is a property of the chain, not of the link
 </code></pre>
-<p>Phase 4 turns hypotheses into facts by running the application. That is only
-safe if the thing you run it against cannot hurt anyone.</p>
-<p><strong>Stage 11 — Sandbox replication.</strong> Deploy the application in an isolated,
-disposable runtime: its own container, its own synthetic data, no route to
-production, no real credentials.</p>
-<p>The reason this is a <em>stage</em> rather than a footnote is that the obvious shortcut
-— point the dynamic tests at staging — converts every destructive probe into an
-incident. Staging usually shares an identity provider, a message bus, sometimes
-a database replica, and always someone's on-call rota.</p>
-<p>Four isolation properties, and you need all four:</p>
-<ul>
-<li><strong>network</strong> — no egress except to the replica itself,</li>
-<li><strong>credentials</strong> — synthetic secrets, so a leak is worthless,</li>
-<li><strong>data</strong> — synthetic records, so an exfiltration test exfiltrates nothing,</li>
-<li><strong>lifetime</strong> — destroyed after the run, so state cannot leak between tests.</li>
-</ul></div><div class="nbmd"><blockquote>
+<p><strong>Stage 13 — Exploit chaining.</strong> Individual findings are triaged individually,
+and that is how three mediums become a critical nobody noticed.</p>
+<p>The arithmetic of severity is not additive. A read-only information disclosure
+is a medium. A CSRF is a medium. An unauthenticated internal endpoint is a
+medium. Chained — leak an ID, forge a request using it, hit the internal
+endpoint with the forged session — the outcome is account takeover, which is
+not a medium.</p>
+<p>The pipeline can find these mechanically because Phase 4 already produced
+confirmed findings with known <strong>preconditions</strong> and <strong>effects</strong>. If one
+finding's effect satisfies another's precondition, they compose, and the chain's
+severity is the severity of its final effect.</p>
+<p>This is the stage that most often changes what gets fixed first.</p></div><div class="nbmd"><blockquote>
 <p><strong>Where you are in the pipeline.</strong></p>
 <p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · Stage 11 — model the replica and its isolation</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import re
-from dataclasses import dataclass, field
-from urllib.parse import urlparse
+</blockquote></div><div class="nbmd"><h2>3 · Stage 13 — findings as preconditions and effects</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
+from itertools import permutations
 
-PRIVATE = [re.compile(p) for p in (r&quot;^127\.&quot;, r&quot;^10\.&quot;, r&quot;^169\.254\.&quot;,
-                                   r&quot;^192\.168\.&quot;, r&quot;^localhost$&quot;)]
+@dataclass(frozen=True)
+class Confirmed:
+    fid: str; cwe: str; name: str
+    requires: frozenset       # preconditions
+    grants: frozenset         # effects
+    severity: str
 
-@dataclass
-class Sandbox:
-    name: str
-    allow_hosts: set = field(default_factory=set)
-    credentials: dict = field(default_factory=dict)
-    data: dict = field(default_factory=dict)
-    ephemeral: bool = True
-    destroyed: bool = False
-    log: list = field(default_factory=list)
-
-    def egress(self, url):
-        host = (urlparse(url).hostname or &quot;&quot;).lower()
-        if host in self.allow_hosts:
-            d = (True, &quot;replica-internal&quot;)
-        elif any(p.match(host) for p in PRIVATE):
-            d = (False, &quot;private address outside the replica — blocked&quot;)
-        else:
-            d = (False, &quot;not on the replica allowlist&quot;)
-        self.log.append((url, d[0], d[1])); return d
-
-    def destroy(self):
-        self.credentials.clear(); self.data.clear(); self.destroyed = True
-        return &quot;replica destroyed; state cannot leak into the next run&quot;
-
-REPLICA = Sandbox(&quot;appsec-replica-8812&quot;,
-                  allow_hosts={&quot;replica.local&quot;, &quot;db.replica.local&quot;},
-                  credentials={&quot;DB_PASSWORD&quot;: &quot;synthetic-not-real-0000&quot;,
-                               &quot;API_TOKEN&quot;: &quot;synthetic-not-real-1111&quot;},
-                  data={&quot;users&quot;: [{&quot;id&quot;: 1, &quot;name&quot;: &quot;test-user-a&quot;,
-                                   &quot;card&quot;: &quot;4000000000000000&quot;}]})
-
-for url in [&quot;http://replica.local/reports&quot;,
-            &quot;http://db.replica.local:5432/&quot;,
-            &quot;https://api.github.com/&quot;,
-            &quot;http://169.254.169.254/latest/meta-data/&quot;,
-            &quot;http://10.0.3.14:9200/_search&quot;]:
-    ok, why = REPLICA.egress(url)
-    print(f&quot;{&#x27;ALLOW&#x27; if ok else &#x27;DENY &#x27;:5s} {url[:44]:46s} {why}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the same probes against staging</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>STAGING = Sandbox(&quot;staging&quot;,
-                  allow_hosts={&quot;staging.internal&quot;, &quot;db.staging.internal&quot;,
-                               &quot;sso.corp&quot;, &quot;bus.corp&quot;, &quot;api.github.com&quot;},
-                  credentials={&quot;DB_PASSWORD&quot;: &quot;real-staging-password&quot;,
-                               &quot;API_TOKEN&quot;: &quot;ghp_real_staging_token&quot;},
-                  data={&quot;users&quot;: [{&quot;id&quot;: 4471, &quot;name&quot;: &quot;dana@corp&quot;,
-                                   &quot;card&quot;: &quot;4111111111111111&quot;}]},
-                  ephemeral=False)
-
-DESTRUCTIVE_PROBES = [
- (&quot;drop a table&quot;,        &quot;db.staging.internal&quot;, &quot;db.replica.local&quot;),
- (&quot;exfiltrate user rows&quot;,&quot;api.github.com&quot;,      &quot;replica.local&quot;),
- (&quot;brute-force login&quot;,   &quot;sso.corp&quot;,            &quot;replica.local&quot;),
+FINDINGS = [
+ Confirmed(&quot;F-01&quot;,&quot;CWE-200&quot;,&quot;report id disclosed in an error message&quot;,
+           frozenset({&quot;unauthenticated&quot;}), frozenset({&quot;valid_report_id&quot;}), &quot;low&quot;),
+ Confirmed(&quot;F-02&quot;,&quot;CWE-639&quot;,&quot;report fetch does not check ownership (IDOR)&quot;,
+           frozenset({&quot;valid_report_id&quot;,&quot;authenticated&quot;}),
+           frozenset({&quot;other_users_report_data&quot;}), &quot;medium&quot;),
+ Confirmed(&quot;F-03&quot;,&quot;CWE-352&quot;,&quot;password change endpoint lacks CSRF protection&quot;,
+           frozenset({&quot;authenticated&quot;}), frozenset({&quot;password_reset_for_victim&quot;}), &quot;medium&quot;),
+ Confirmed(&quot;F-04&quot;,&quot;CWE-89&quot;,&quot;SQL injection in the report filter&quot;,
+           frozenset({&quot;authenticated&quot;}), frozenset({&quot;database_read&quot;}), &quot;high&quot;),
+ Confirmed(&quot;F-05&quot;,&quot;CWE-306&quot;,&quot;internal admin endpoint has no authentication&quot;,
+           frozenset({&quot;internal_network&quot;}), frozenset({&quot;admin_actions&quot;}), &quot;medium&quot;),
+ Confirmed(&quot;F-06&quot;,&quot;CWE-918&quot;,&quot;report export fetches a user-supplied URL (SSRF)&quot;,
+           frozenset({&quot;authenticated&quot;}), frozenset({&quot;internal_network&quot;}), &quot;medium&quot;),
 ]
-print(f&quot;{&#x27;probe&#x27;:24s}{&#x27;on staging&#x27;:&gt;14}{&#x27;on replica&#x27;:&gt;14}&quot;)
-print(&quot;-&quot; * 56)
-for probe, staging_target, replica_target in DESTRUCTIVE_PROBES:
-    s_ok, _ = STAGING.egress(f&quot;http://{staging_target}/&quot;)
-    r_ok, _ = REPLICA.egress(f&quot;http://{replica_target}/&quot;)
-    print(f&quot;{probe:24s}{&#x27;REACHES&#x27;:&gt;14}{&#x27;contained&#x27;:&gt;14}&quot; if s_ok
-          else f&quot;{probe:24s}{&#x27;blocked&#x27;:&gt;14}{&#x27;contained&#x27;:&gt;14}&quot;)
+SEV_RANK = {&quot;low&quot;:1,&quot;medium&quot;:2,&quot;high&quot;:3,&quot;critical&quot;:4}
+START = frozenset({&quot;unauthenticated&quot;,&quot;authenticated&quot;})
 
-print(&quot;\nwhat a leaked credential is worth:&quot;)
-for name, box in ((&quot;staging&quot;, STAGING), (&quot;replica&quot;, REPLICA)):
-    creds = list(box.credentials.values())
-    synthetic = all(&quot;synthetic&quot; in c for c in creds)
-    print(f&quot;   {name:10s}{&#x27;worthless — synthetic&#x27; if synthetic else &#x27;REAL — usable against real systems&#x27;}&quot;)
+print(f&quot;{&#x27;id&#x27;:7s}{&#x27;cwe&#x27;:10s}{&#x27;sev&#x27;:9s}{&#x27;requires&#x27;:38s}grants&quot;)
+print(&quot;-&quot; * 96)
+for f in FINDINGS:
+    print(f&quot;{f.fid:7s}{f.cwe:10s}{f.severity:9s}{str(sorted(f.requires)):38s}&quot;
+          f&quot;{sorted(f.grants)}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Compose them — an effect that satisfies the next precondition</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>EFFECT_SEVERITY = {
+ &quot;other_users_report_data&quot;: &quot;high&quot;,
+ &quot;password_reset_for_victim&quot;: &quot;critical&quot;,
+ &quot;admin_actions&quot;: &quot;critical&quot;,
+ &quot;database_read&quot;: &quot;high&quot;,
+ &quot;internal_network&quot;: &quot;medium&quot;,
+ &quot;valid_report_id&quot;: &quot;low&quot;,
+}
 
-print(&quot;\nwhat an exfiltrated record is worth:&quot;)
-for name, box in ((&quot;staging&quot;, STAGING), (&quot;replica&quot;, REPLICA)):
-    rec = box.data[&quot;users&quot;][0]
-    real = not rec[&quot;name&quot;].startswith(&quot;test-&quot;)
-    print(f&quot;   {name:10s}{&#x27;REAL customer data&#x27; if real else &#x27;synthetic&#x27;}  {rec[&#x27;name&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — the four isolation properties, checked</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def isolation_report(box):
-    checks = {
-      &quot;network&quot;: all(not ok for url, ok, _ in box.log
-                     if urlparse(url).hostname not in box.allow_hosts),
-      &quot;credentials&quot;: all(&quot;synthetic&quot; in v for v in box.credentials.values()) if box.credentials else True,
-      &quot;data&quot;: all(u[&quot;name&quot;].startswith(&quot;test-&quot;) for u in box.data.get(&quot;users&quot;, [])),
-      &quot;lifetime&quot;: box.ephemeral,
+def chains(findings, start, max_len=4):
+    found = []
+    def walk(path, state):
+        if len(path) &gt;= max_len: return
+        for f in findings:
+            if f in path: continue
+            if not f.requires &lt;= state: continue
+            new_state = state | f.grants
+            new_path = path + [f]
+            if len(new_path) &gt; 1:
+                worst = max((EFFECT_SEVERITY.get(g, &quot;low&quot;) for g in f.grants),
+                            key=lambda s: SEV_RANK[s])
+                found.append({&quot;chain&quot;: new_path, &quot;final_effect&quot;: sorted(f.grants),
+                              &quot;severity&quot;: worst})
+            walk(new_path, new_state)
+    walk([], start)
+    return found
+
+ALL = chains(FINDINGS, START)
+best = {}
+for c in ALL:
+    key = tuple(f.fid for f in c[&quot;chain&quot;])
+    best[key] = c
+ranked = sorted(best.values(), key=lambda c: (-SEV_RANK[c[&quot;severity&quot;]], len(c[&quot;chain&quot;])))
+
+print(f&quot;{len(ranked)} composable chains found\n&quot;)
+for c in ranked[:6]:
+    ids = &quot; → &quot;.join(f.fid for f in c[&quot;chain&quot;])
+    links = &quot;, &quot;.join(f&quot;{f.severity}&quot; for f in c[&quot;chain&quot;])
+    print(f&quot;[{c[&#x27;severity&#x27;]:8s}] {ids:26s} links: {links}&quot;)
+    print(f&quot;{&#x27;&#x27;:11s} final effect: {c[&#x27;final_effect&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — triage the links, miss the chain</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>individual = max(SEV_RANK[f.severity] for f in FINDINGS)
+chained = max(SEV_RANK[c[&quot;severity&quot;]] for c in ranked)
+inv = {v: k for k, v in SEV_RANK.items()}
+print(f&quot;highest individual finding severity : {inv[individual]}&quot;)
+print(f&quot;highest chained severity            : {inv[chained]}&quot;)
+
+critical_chains = [c for c in ranked if c[&quot;severity&quot;] == &quot;critical&quot;]
+print(f&quot;\ncritical chains built entirely from non-critical findings:&quot;)
+for c in critical_chains[:3]:
+    ids = &quot; → &quot;.join(f&quot;{f.fid}({f.severity})&quot; for f in c[&quot;chain&quot;])
+    print(f&quot;   {ids}&quot;)
+    print(f&quot;      → {c[&#x27;final_effect&#x27;]}&quot;)
+
+all_links_medium_or_below = [c for c in critical_chains
+                             if all(SEV_RANK[f.severity] &lt;= 2 for f in c[&quot;chain&quot;])]
+print(f&quot;\n{len(all_links_medium_or_below)} critical chain(s) whose every link is &quot;
+      f&quot;medium or lower.&quot;)
+print(&quot;Triaged individually, none of those findings would be worked this sprint.&quot;)
+assert all_links_medium_or_below</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># The control: rank by chain severity, and report the chain, not the link.
+def remediation_order(findings, chains_):
+    &quot;&quot;&quot;Fixing one link breaks every chain through it. Rank by chains broken.&quot;&quot;&quot;
+    impact = {}
+    for f in findings:
+        broken = [c for c in chains_ if f in c[&quot;chain&quot;]]
+        worst = max((SEV_RANK[c[&quot;severity&quot;]] for c in broken), default=0)
+        impact[f.fid] = {&quot;chains_broken&quot;: len(broken), &quot;worst_chain&quot;: inv.get(worst, &quot;—&quot;),
+                         &quot;own_severity&quot;: f.severity}
+    return sorted(impact.items(),
+                  key=lambda kv: (-SEV_RANK.get(kv[1][&quot;worst_chain&quot;], 0),
+                                  -kv[1][&quot;chains_broken&quot;]))
+
+print(f&quot;{&#x27;finding&#x27;:9s}{&#x27;own sev&#x27;:10s}{&#x27;chains broken&#x27;:&gt;15}{&#x27;worst chain&#x27;:&gt;14}&quot;)
+print(&quot;-&quot; * 50)
+for fid, i in remediation_order(FINDINGS, ranked):
+    print(f&quot;{fid:9s}{i[&#x27;own_severity&#x27;]:10s}{i[&#x27;chains_broken&#x27;]:&gt;15}{i[&#x27;worst_chain&#x27;]:&gt;14}&quot;)
+top = remediation_order(FINDINGS, ranked)[0]
+print(f&quot;\nfix first: {top[0]} — own severity {top[1][&#x27;own_severity&#x27;]}, but it &quot;
+      f&quot;breaks {top[1][&#x27;chains_broken&#x27;]} chains including a {top[1][&#x27;worst_chain&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>6 · Phase 4 as a skill — and the preconditions that gate it</h2>
+<p>Dynamic validation is the one phase that <em>acts</em>. Everything before it reads; this one sends input to a running system. The skill therefore opens with safety preconditions rather than a procedure, and a refusal is a first-class output.</p>
+<p>The contract also insists that <code>reproduced: false</code> be reported rather than dropped. A finding that survived Phase 3 and then failed to reproduce is the most useful signal the pipeline produces about its own false-positive rate — and it is the one a tidy report deletes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-exploit-validate/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: appsec-exploit-validate
+description: &gt;-
+  Prove a candidate vulnerability is real by reproducing it in an isolated
+  sandbox, then decide whether it chains into something worse. Use when asked
+  to validate or confirm a finding, write or run a proof-of-concept, check
+  exploitability, reproduce a CVE, or separate theoretical findings from
+  demonstrated ones.
+allowed-tools: Bash, Read, Write, Grep
+---
+
+# AppSec pipeline · Phase 4 — Dynamic validation
+
+Covers **stages 11–14**. A finding that has been reproduced is a different
+object from a finding that has been argued for. This phase produces the
+difference, and it is the phase with the sharpest safety constraints.
+
+## When to use this
+
+Only on findings that reached `feasible: true, verdict: confirmed` in Phase 3.
+Validating an unfiltered list wastes the most expensive stage in the pipeline
+on findings Phase 3 would have deleted.
+
+## Safety preconditions — check before anything else
+
+Refuse to proceed unless **all** hold, and say which one failed:
+
+1. The target is a **local sandbox or an explicitly authorised environment**.
+   Never a production host, never a third party&#x27;s infrastructure.
+2. The sandbox has **no credentials** beyond throwaway ones, and **no route**
+   to a real network the exploit could reach.
+3. The proof-of-concept **demonstrates** the flaw. It does not exfiltrate real
+   data, persist, escalate beyond the demonstration, or damage anything.
+4. There is a **teardown** and it runs even on failure.
+
+This is not ceremony. A validation harness with production credentials in its
+environment is itself the vulnerability.
+
+## Procedure
+
+**Stage 11 — Sandbox replication.** Stand the component up in isolation with
+the smallest fixture that reproduces the conditions: the vulnerable version,
+the reachable entry point, and nothing else. Record the exact commit and the
+fixture, because a PoC that cannot be re-run is an anecdote.
+
+**Stage 12 — Dynamic exploitation.** Drive the entry point with an input that
+should trigger the sink. Capture the observable: the crash, the query executed,
+the file read, the process spawned. **The observable is the evidence** — an
+exit code is not. Record what you sent and what came back.
+
+**Stage 13 — Exploit chaining.** Ask what the demonstrated primitive gives
+access to next. A path traversal that reads a config file containing a token is
+not a file-read bug; it is a credential-disclosure bug. Chain only within the
+sandbox, and stop at the first step that would need a real credential.
+
+**Stage 14 — Remediation engineering.** Propose the fix at the right layer, and
+say what it costs. Prefer the control that makes the class impossible
+(parameterised queries, an allowlist, a type) over the one that blocks the
+sample payload (a regex on the input you happened to send). Then **re-run
+stage 12 against the fix** — a remediation that has not been tested against the
+PoC that motivated it is a hypothesis.
+
+## Output contract
+
+```json
+{
+  &quot;validations&quot;: [
+    {&quot;finding_id&quot;: &quot;str&quot;, &quot;reproduced&quot;: true,
+     &quot;sandbox&quot;: {&quot;commit&quot;: &quot;str&quot;, &quot;fixture&quot;: &quot;str&quot;, &quot;isolated&quot;: true},
+     &quot;input&quot;: &quot;str&quot;, &quot;observable&quot;: &quot;str&quot;,
+     &quot;chain&quot;: [{&quot;primitive&quot;: &quot;str&quot;, &quot;leads_to&quot;: &quot;str&quot;, &quot;stopped_because&quot;: &quot;str&quot;}],
+     &quot;remediation&quot;: {&quot;layer&quot;: &quot;input|query|api|config|architecture&quot;,
+                     &quot;change&quot;: &quot;str&quot;, &quot;cost&quot;: &quot;low|medium|high&quot;,
+                     &quot;retested&quot;: true, &quot;still_reproduces&quot;: false}}
+  ],
+  &quot;refused&quot;: [{&quot;finding_id&quot;: &quot;str&quot;, &quot;precondition_failed&quot;: 1, &quot;why&quot;: &quot;str&quot;}]
+}
+```
+
+`reproduced: false` is a first-class result and must be reported, not dropped.
+A finding that survived Phase 3 and then failed to reproduce is the single most
+useful signal the pipeline produces about its own false-positive rate.
+
+## Failure modes
+
+- **Reporting `reproduced: true` without an observable.** The observable is the
+  claim; without it there is nothing to check.
+- **Treating &quot;the exploit ran&quot; as &quot;the fix works&quot;.** Re-run after remediation
+  or set `retested: false` and say so.
+- **Chaining outside the sandbox.** Stop and record `stopped_because`.
+- **Fixing the payload instead of the class.** A regex that blocks `../` does
+  not fix path traversal.
+
+## Handoff
+
+Pass `validations` to **appsec-triage-report**. Findings that failed to
+reproduce keep their finding record and gain `reproduced: false` — the report
+must be able to distinguish &quot;demonstrated&quot; from &quot;asserted&quot;.
+&quot;&quot;&quot;
+
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>contract = contract_of(body)
+
+def validation_of(f):
+    &quot;&quot;&quot;One confirmed finding, expressed as the skill&#x27;s validation record.&quot;&quot;&quot;
+    return {
+      &quot;finding_id&quot;: f.fid, &quot;reproduced&quot;: True,
+      &quot;sandbox&quot;: {&quot;commit&quot;: &quot;a1fcf68&quot;, &quot;fixture&quot;: f&quot;minimal app exposing {f.fid}&quot;,
+                  &quot;isolated&quot;: True},
+      &quot;input&quot;: f&quot;crafted request exercising {f.cwe}&quot;,
+      # the observable is the claim; an exit code is not
+      &quot;observable&quot;: f.name,
+      &quot;chain&quot;: [{&quot;primitive&quot;: f.name, &quot;leads_to&quot;: g,
+                 &quot;stopped_because&quot;: &quot;next step needs a real credential&quot;}
+                for g in sorted(f.grants)],
+      &quot;remediation&quot;: {&quot;layer&quot;: &quot;query&quot; if f.cwe == &quot;CWE-89&quot; else &quot;api&quot;,
+                      &quot;change&quot;: f&quot;eliminate the class behind {f.cwe}&quot;,
+                      &quot;cost&quot;: &quot;low&quot;, &quot;retested&quot;: True, &quot;still_reproduces&quot;: False},
     }
-    return checks, all(checks.values())
 
-for box in (REPLICA, STAGING):
-    checks, ok = isolation_report(box)
-    print(f&quot;{box.name}&quot;)
-    for k, v in checks.items():
-        print(f&quot;   {&#x27;PASS&#x27; if v else &#x27;FAIL&#x27;:5s} {k}&quot;)
-    print(f&quot;   → suitable for dynamic testing: {ok}\n&quot;)
+phase4 = {
+ &quot;validations&quot;: [validation_of(f) for f in FINDINGS],
+ # the safety gate, exercised rather than described
+ &quot;refused&quot;: [{&quot;finding_id&quot;: &quot;F-99&quot;, &quot;precondition_failed&quot;: 1,
+              &quot;why&quot;: &quot;target is a production host, not a sandbox&quot;}],
+}
+problems = check(phase4, contract)
+print(f&quot;conformance: {len(problems)} problem(s)&quot;)
+for p in problems: print(&quot;   &quot;, p)
+assert not problems, problems
 
-_, replica_ok = isolation_report(REPLICA)
-_, staging_ok = isolation_report(STAGING)
-assert replica_ok and not staging_ok
+print(f&quot;\nvalidated {len(phase4[&#x27;validations&#x27;])} findings, &quot;
+      f&quot;refused {len(phase4[&#x27;refused&#x27;])}&quot;)
+for v in phase4[&quot;validations&quot;][:3]:
+    print(f&quot;   {v[&#x27;finding_id&#x27;]}  chains to: &quot;
+          f&quot;{&#x27;, &#x27;.join(c[&#x27;leads_to&#x27;] for c in v[&#x27;chain&#x27;]) or &#x27;—&#x27;}&quot;)
+print()
+print(&quot;Refusing is an output, not an error. A validation harness that quietly&quot;)
+print(&quot;skips the production target reports the same thing as one that never&quot;)
+print(&quot;saw it, and those are very different states to be in.&quot;)
+assert phase4[&quot;refused&quot;], &quot;the safety gate must be visible in the output&quot;</code></pre></div><div class="nbmd"><h2>7 · Where it breaks — the tidy report</h2>
+<p>Now suppose two of these findings do not reproduce, and the pipeline does the natural thing with them.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>mixed = [dict(validation_of(f), reproduced=(i % 3 != 0))
+         for i, f in enumerate(FINDINGS)]
+failed = [v for v in mixed if not v[&quot;reproduced&quot;]]
 
-print(REPLICA.destroy())
-print(f&quot;credentials after destroy: {REPLICA.credentials or &#x27;cleared&#x27;}&quot;)
-print(f&quot;data after destroy:        {REPLICA.data or &#x27;cleared&#x27;}&quot;)
-assert REPLICA.destroyed and not REPLICA.credentials</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Check whether your dynamic testing currently runs against staging. If it does, list what staging shares with production — identity provider, message bus, data replica. Each shared component is a path from a test probe to a real incident.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.9.html">B1.9 · Dynamic exploitation (DAST)</a></strong></p>
+tidy = {&quot;validations&quot;: [v for v in mixed if v[&quot;reproduced&quot;]], &quot;refused&quot;: []}
+honest = {&quot;validations&quot;: mixed, &quot;refused&quot;: phase4[&quot;refused&quot;]}
+
+print(f&quot;conformance, tidy report  : {len(check(tidy, contract))}&quot;)
+print(f&quot;conformance, honest report: {len(check(honest, contract))}&quot;)
+print(f&quot;\nvalidations attempted : {len(mixed)}&quot;)
+print(f&quot;reproduced            : {len(mixed) - len(failed)}&quot;)
+print(f&quot;failed to reproduce   : {len(failed)}  ({&#x27;, &#x27;.join(v[&#x27;finding_id&#x27;] for v in failed)})&quot;)
+fpr = len(failed) / len(mixed)
+print(f&quot;measured false-positive rate of Phase 3: {fpr:.0%}&quot;)
+print()
+print(&quot;Both conform. The tidy one drops the non-reproductions, and with them&quot;)
+print(&quot;the only number that says how good the earlier phases actually are.&quot;)
+print(&quot;Its reader sees a pipeline that is right every time.&quot;)
+assert not check(tidy, contract), &quot;dropping the failures is schema-valid - that is the point&quot;
+assert failed, &quot;the demo needs at least one non-reproduction&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take your current open findings and write down each one's preconditions and effects. The chaining falls out mechanically, and the finding you should fix first is usually not the one at the top of the severity-sorted queue.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.9.html">B1.9 · Remediation engineering</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.8.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Docker</span><span>gVisor</span><span>Cilium</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.8.ipynb</code></p></div><div class="pager"><a href="B1.7.html"><span class="k">← Previous</span><span class="t">B1.7 · Feasibility filtering and reachability</span></a><a class="next" href="B1.9.html"><span class="k">Next →</span><span class="t">B1.9 · Dynamic exploitation (DAST)</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP ZAP</span><span>Kimi K2</span><span>Claude Opus 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.8.ipynb</code></p></div><div class="pager"><a href="B1.7.html"><span class="k">← Previous</span><span class="t">B1.7 · Dynamic exploitation (DAST)</span></a><a class="next" href="B1.9.html"><span class="k">Next →</span><span class="t">B1.9 · Remediation engineering</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

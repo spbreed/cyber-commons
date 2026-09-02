@@ -35,7 +35,7 @@ python3 scripts/run_notebooks.py --session B1.0   # run it headless and check it
 
 ---
 
-### B1.1 — Historical parsing and structural indexing
+### B1.1 — Reading the repository: history, index, components, map
 
 `AI for Security`
 
@@ -65,36 +65,7 @@ python3 score.py --against ground-truth.json
 
 ---
 
-### B1.2 — Component summarisation and architecture synthesis
-
-`AI for Security`
-
-- **Risk** — The model is handed files and asked about a system, so it invents the parts it cannot see.
-- **Control** — Stages 3–4: summarise each module, then compile a global map of data flows, entry points and trust boundaries.
-- **Lab** — Generate per-directory summaries and synthesise them into an architecture map with entry points and trust boundaries.
-- **Tools** — `tree-sitter`, `Graphviz`
-- **Open-weight models** — `GLM-4.6`, `Kimi K2`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Beat context stuffing with tool-mediated retrieval.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b1-appsec
-python3 triage.py --strategy stuff  --finding F-102 --model $MODEL
-python3 triage.py --strategy bundle --finding F-102 --model $MODEL   # canonical triage bundle
-python3 compare_strategies.py
-```
-
-*Expect:* The bundle wins on accuracy and costs fewer tokens. Both numbers printed.
-
----
-
-### B1.3 — Threat modelling from the architecture map
+### B1.2 — Threat modelling from what the estate already knows
 
 `Security of AI`
 
@@ -109,8 +80,8 @@ python3 compare_strategies.py
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it
+jupyter notebook labs/notebooks/B1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b1-appsec
@@ -122,37 +93,7 @@ python3 patch.py --finding F-102 --model $MODEL --validate-locally
 
 ---
 
-### B1.4 — Strategic planning and agent allocation
-
-`AI for Security`
-
-- **Risk** — Every scanner is pointed at every file, so cost scales with the repo instead of with the risk.
-- **Control** — Stage 6: allocate specialised agents and tools to specific trust boundaries, budgeted by threat rank.
-- **Lab** — Allocate a fixed analysis budget across boundaries and compare coverage against a uniform sweep.
-- **Tools** — `Semgrep OSS`, `CodeQL`
-- **Open-weight models** — `GLM-4.6`, `Llama 3.3`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Chart honestly what only SAST found, and what only DAST found.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b1-appsec
-docker compose up -d juice-shop
-python3 triage.py --all > sast.json
-zap-cli quick-scan http://localhost:3000 -o dast.json
-python3 venn.py --sast sast.json --dast dast.json
-```
-
-*Expect:* Three buckets: SAST-only, DAST-only, both. The DAST-only bucket is why pentest is not redundant.
-
----
-
-### B1.5 — Vulnerability auditing: three generations of SAST
+### B1.3 — Vulnerability auditing: three generations of SAST
 
 `AI for Security`
 
@@ -167,8 +108,8 @@ python3 venn.py --sast sast.json --dast dast.json
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.5   # run it headless and check it
+jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b1-appsec
@@ -181,7 +122,7 @@ python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   
 
 ---
 
-### B1.6 — Deduplication and contextual verification
+### B1.4 — Deduplication and contextual verification
 
 `AI for Security`
 
@@ -196,8 +137,8 @@ python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.6   # run it headless and check it
+jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 pip install detect-secrets && cd labs/b1-appsec
@@ -210,7 +151,7 @@ cp hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit
 
 ---
 
-### B1.7 — Feasibility filtering and reachability
+### B1.5 — Feasibility filtering and reachability
 
 `AI for Security`
 
@@ -225,8 +166,8 @@ cp hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.7   # run it headless and check it
+jupyter notebook labs/notebooks/B1.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.5   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b1-appsec
@@ -238,7 +179,7 @@ python3 metrics.py --precision --time-to-triage --patch-acceptance --escape-rate
 
 ---
 
-### B1.8 — Sandbox replication
+### B1.6 — Sandbox replication
 
 `Security of AI`
 
@@ -253,15 +194,15 @@ python3 metrics.py --precision --time-to-triage --patch-acceptance --escape-rate
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.8   # run it headless and check it
+jupyter notebook labs/notebooks/B1.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.6   # run it headless and check it
 ```
 
 *Expect:* The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.
 
 ---
 
-### B1.9 — Dynamic exploitation (DAST)
+### B1.7 — Dynamic exploitation (DAST)
 
 `AI for Security`
 
@@ -276,15 +217,15 @@ python3 scripts/run_notebooks.py --session B1.8   # run it headless and check it
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.9   # run it headless and check it
+jupyter notebook labs/notebooks/B1.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.7   # run it headless and check it
 ```
 
 *Expect:* The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe.
 
 ---
 
-### B1.10 — Exploit chaining
+### B1.8 — Exploit chaining
 
 `AI for Security`
 
@@ -299,15 +240,15 @@ python3 scripts/run_notebooks.py --session B1.9   # run it headless and check it
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.10   # run it headless and check it
+jupyter notebook labs/notebooks/B1.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.8   # run it headless and check it
 ```
 
 *Expect:* Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains.
 
 ---
 
-### B1.11 — Remediation engineering
+### B1.9 — Remediation engineering
 
 `AI for Security`
 
@@ -322,15 +263,15 @@ python3 scripts/run_notebooks.py --session B1.10   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.11   # run it headless and check it
+jupyter notebook labs/notebooks/B1.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.9   # run it headless and check it
 ```
 
 *Expect:* The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new.
 
 ---
 
-### B1.12 — Severity calibration and reporting
+### B1.10 — Severity calibration and reporting
 
 `AI for Security`
 
@@ -345,15 +286,15 @@ python3 scripts/run_notebooks.py --session B1.11   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.12   # run it headless and check it
+jupyter notebook labs/notebooks/B1.10.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.10   # run it headless and check it
 ```
 
 *Expect:* Calibration moves several findings off their rule severity: the confirmed reachable CWE-89 that chains into account takeover becomes critical, while the unreachable and unvalidated ones fall. The top-3 by rule severity and by calibration disagree. The stage table shows review with the worst precision and highest minutes per finding, and design carrying the highest escape cost despite only two findings.
 
 ---
 
-### B1.13 — Context engineering for the pipeline
+### B1.11 — Context engineering for the pipeline
 
 `AI for Security`
 
@@ -368,15 +309,15 @@ python3 scripts/run_notebooks.py --session B1.12   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it
+jupyter notebook labs/notebooks/B1.11.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.11   # run it headless and check it
 ```
 
 *Expect:* The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.
 
 ---
 
-### B1.14 — Injection in your own pipeline
+### B1.12 — Injection in your own pipeline
 
 `Security of AI`
 
@@ -391,15 +332,15 @@ python3 scripts/run_notebooks.py --session B1.13   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it
+jupyter notebook labs/notebooks/B1.12.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.12   # run it headless and check it
 ```
 
 *Expect:* The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked.
 
 ---
 
-### B1.15 — Securing the developers' coding agents
+### B1.13 — Securing the developers' coding agents
 
 `Security of AI`
 
@@ -414,15 +355,15 @@ python3 scripts/run_notebooks.py --session B1.14   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.15.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.15   # run it headless and check it
+jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it
 ```
 
 *Expect:* The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.
 
 ---
 
-### B1.16 — Attesting control intent for agents and MCP servers
+### B1.14 — Attesting control intent for agents and MCP servers
 
 `Security of AI`
 
@@ -437,8 +378,8 @@ python3 scripts/run_notebooks.py --session B1.15   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.16.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.16   # run it headless and check it
+jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it
 
 # --- the full variant, against real repositories ---
 python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json
@@ -448,7 +389,7 @@ python3 labs/attestation/control_intent.py --corpus /path/to/clones --out result
 
 ---
 
-### B1.17 — Bonus — Google Mantis, the pipeline in production
+### B1.15 — Bonus — Google Mantis, the pipeline in production
 
 `AI for Security`
 
@@ -463,8 +404,8 @@ python3 labs/attestation/control_intent.py --corpus /path/to/clones --out result
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.16.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.16   # run it headless and check it
+jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it
 ```
 
 *Expect:* The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones.

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.11 — Remediation engineering | Cyber Commons</title><meta name="description" content="Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B1.11</div><h1>Remediation engineering</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A patch that silences the scanner is indistinguishable from a patch that fixes the bug.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Validate four candidate patches on three axes and show which of them only made the scanner green.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.11 · Remediation engineering</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.11 — Context engineering for the pipeline | Cyber Commons</title><meta name="description" content="Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B1.11</div><h1>Context engineering for the pipeline</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The model is given the repository and asked to be thorough, so the relevant line falls out of the window.</p></div><div class="ctrl"><div class="lab">Control</div><p>Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Compare four context strategies against one bug and measure which are decidable and at what size.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.11 · Context engineering for the pipeline</h1>
 <p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.10.html">B1.10 · Exploit chaining</a></strong>.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.10.html">B1.10 · Severity calibration and reporting</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,290 +11,132 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Semgrep OSS, pytest, GLM-4.6, Kimi K2, Claude Sonnet 5</td>
+<td>tree-sitter, GLM-4.6, Llama 3.3, Claude Haiku 4.5</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>A patch that passes the tests and changes the behaviour is not a fix, it is a second incident with a pull request attached. Remediation is the stage where the pipeline stops finding things and starts touching them.</p>
+<p>Give an agent more context and it gets better, until it gets worse. The cliff is real, it arrives earlier than anyone expects, and past it you are paying more per token for a worse answer.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The Coding Agent's fix must not break booking behaviour. A patch that passes the tests and changes what travellers experience is a second incident with a pull request attached. R8.</p>
+<p><strong>At CyberTravels.</strong> Give the review agent CyberTravels' whole repository and it gets worse, not better. The cliff arrives earlier than anyone expects and you pay more per token for it.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   patch                    what has to be true
-   +----------------+       +-----------------------------+
-   | fixes the bug  |  and  | behaviour unchanged         |
-   |                |       | tests still pass            |
-   |                |       | reviewer can follow the why |
-   +----------------+       +-----------------------------+
+<pre><code>   accuracy
+     ^
+     |          .-----.
+     |        .'       `.
+     |      .'           `.       &lt;- the cliff
+     |    .'               `--....
+     |  .'
+     +--------------------------------&gt; context tokens
+        too little        enough      too much
 
-   a patch that passes the tests and changes the behaviour is
-   a second incident with a pull request attached
+   past the peak you pay more per token for a worse answer
 </code></pre>
-<p><strong>Stage 14 — Remediation engineering.</strong> Generate the fix, then prove it.</p>
-<p>A model that finds bugs is useful. A model that fixes them is only useful if you
-can tell a real fix from a plausible one, and plausible is exactly what language
-models are optimised to produce.</p>
-<p>There are three ways to make a finding stop firing:</p>
-<ol>
-<li><strong>Fix the vulnerability</strong> — behaviour preserved, bug gone.</li>
-<li><strong>Remove the code</strong> — finding gone, so is the feature.</li>
-<li><strong>Evade the detector</strong> — rewrite until the pattern misses.</li>
-</ol>
-<p>All three make the scanner green, and an autonomous loop optimising for a green
-scan will find options 2 and 3 on its own because they are cheaper.</p>
-<p>The pipeline has an advantage a static workflow does not: Phase 4 already built
-a working exploit. So the acceptance test is not "does the scanner still fire?"
-It is <strong>"does the exploit still work against the patched build?"</strong> — which is
-the only question that cannot be gamed by editing the code around the detector.</p></div><div class="nbmd"><blockquote>
-<p><strong>Where you are in the pipeline.</strong></p>
-<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
-         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
-                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
-                             └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · The model backend, and the patch it proposes</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- model backend: replay by default, real model when you configure one ----
-# Nothing here is Anthropic- or vendor-specific beyond one URL and one header
-# shape. Standard library only, so the notebook stays self-contained.
-import json, os, urllib.error, urllib.request
+<p>Cross-cutting, and it applies to every stage that calls a model: stages 3, 4, 5,
+7 and 14.</p>
+<p>The instinct when a model misses something is to give it more context. Usually
+the opposite is correct.</p>
+<p>To find a vulnerability, a model needs three things: the <strong>sink</strong>, the
+<strong>source</strong>, and the <strong>path</strong> between them. Everything else competes for
+attention and for window. A repository dumped into a prompt does not produce a
+thorough review — it produces a review of whatever survived truncation, and you
+cannot tell which parts those were.</p>
+<p>So context engineering is mostly subtraction, with one exception you must not
+subtract: the <strong>enclosing signature</strong>, because that is where reachability is
+decided. The identical concatenation is critical inside an HTTP handler and
+irrelevant inside a migration script that takes a constant.</p></div><div class="nbmd"><h2>3 · Demo — four strategies over one bug</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SOURCE = &#x27;&#x27;&#x27;&quot;&quot;&quot;Reporting service.&quot;&quot;&quot;
+import logging, os, json, datetime
 
-# The cheapest current model on each side, which is what a lesson needs.
-FRONTIER_DEFAULT   = &quot;claude-haiku-4-5-20251001&quot;
-OPEN_WEIGHT_DEFAULT = &quot;glm-4.6&quot;
-TIMEOUT = 60
+log = logging.getLogger(__name__)
+DEFAULT_LIMIT = 100
+CACHE = {}
 
-def _kaggle_secret(name):
-    &quot;&quot;&quot;On Kaggle, a key lives in Add-ons -&gt; Secrets rather than the environment.
+def _format_row(row):
+    return {&quot;id&quot;: row[0], &quot;name&quot;: row[1], &quot;created&quot;: str(row[2])}
 
-    kaggle_secrets is pre-installed in the Kaggle image and absent everywhere
-    else, so the import is guarded and the notebook needs no dependency. It also
-    requires the notebook to have internet enabled, which on Kaggle requires a
-    phone-verified account - see the note printed below.
-    &quot;&quot;&quot;
-    try:
-        from kaggle_secrets import UserSecretsClient
-        return UserSecretsClient().get_secret(name)
-    except Exception:
-        return None
+def _cache_key(*parts):
+    return &quot;:&quot;.join(str(p) for p in parts)
 
-def backend():
-    &quot;&quot;&quot;(kind, model). Configuration comes from the environment, never a literal.&quot;&quot;&quot;
-    if os.environ.get(&quot;ANTHROPIC_API_KEY&quot;) or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;):
-        os.environ.setdefault(&quot;ANTHROPIC_API_KEY&quot;,
-                              os.environ.get(&quot;ANTHROPIC_API_KEY&quot;)
-                              or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;) or &quot;&quot;)
-        return &quot;frontier&quot;, os.environ.get(&quot;MODEL&quot;, FRONTIER_DEFAULT)
-    if os.environ.get(&quot;OPENAI_BASE_URL&quot;):
-        return &quot;open-weight&quot;, os.environ.get(&quot;MODEL&quot;, OPEN_WEIGHT_DEFAULT)
-    return &quot;replay&quot;, &quot;deterministic stand-in (no backend configured)&quot;
+def healthcheck():
+    return {&quot;status&quot;: &quot;ok&quot;, &quot;ts&quot;: datetime.datetime.utcnow().isoformat()}
 
-def _post(url, payload, headers):
-    req = urllib.request.Request(url, data=json.dumps(payload).encode(),
-                                 headers={&quot;content-type&quot;: &quot;application/json&quot;, **headers})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        return json.loads(r.read().decode())
+def list_reports(conn, owner, limit=DEFAULT_LIMIT):
+    &quot;&quot;&quot;Called from GET /reports?owner=... — owner is user-controlled.&quot;&quot;&quot;
+    key = _cache_key(&quot;reports&quot;, owner, limit)
+    if key in CACHE:
+        return CACHE[key]
+    rows = conn.execute(&quot;SELECT * FROM reports WHERE owner = &#x27;&quot; + owner + &quot;&#x27; LIMIT &quot; + str(limit))
+    out = [_format_row(r) for r in rows]
+    CACHE[key] = out
+    return out
 
-def _anthropic(prompt, system, model, max_tokens, temperature):
-    body = {&quot;model&quot;: model, &quot;max_tokens&quot;: max_tokens, &quot;temperature&quot;: temperature,
-            &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]}
-    if system:
-        body[&quot;system&quot;] = system
-    out = _post(&quot;https://api.anthropic.com/v1/messages&quot;, body,
-                {&quot;x-api-key&quot;: os.environ[&quot;ANTHROPIC_API_KEY&quot;],
-                 &quot;anthropic-version&quot;: &quot;2023-06-01&quot;})
-    return &quot;&quot;.join(b.get(&quot;text&quot;, &quot;&quot;) for b in out.get(&quot;content&quot;, [])).strip()
-
-def _openai_compatible(prompt, system, model, max_tokens, temperature):
-    msgs = ([{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: system}] if system else []) + \
-           [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]
-    base = os.environ[&quot;OPENAI_BASE_URL&quot;].rstrip(&quot;/&quot;)
-    key = os.environ.get(&quot;OPENAI_API_KEY&quot;, &quot;not-needed&quot;)
-    out = _post(f&quot;{base}/chat/completions&quot;,
-                {&quot;model&quot;: model, &quot;messages&quot;: msgs, &quot;max_tokens&quot;: max_tokens,
-                 &quot;temperature&quot;: temperature},
-                {&quot;authorization&quot;: f&quot;Bearer {key}&quot;})
-    return out[&quot;choices&quot;][0][&quot;message&quot;][&quot;content&quot;].strip()
-
-def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
-    &quot;&quot;&quot;Answer `prompt` with the configured backend, or return `replay`.
-
-    `replay` is required, not optional: a lesson must be able to run offline,
-    and the answer it falls back to has to be visible in the source rather than
-    invented at runtime.
-    &quot;&quot;&quot;
-    kind, model = backend()
-    if kind == &quot;replay&quot;:
-        return replay, kind, model
-    try:
-        fn = _anthropic if kind == &quot;frontier&quot; else _openai_compatible
-        return fn(prompt, system, model, max_tokens, temperature), kind, model
-    except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
-        detail = getattr(e, &quot;code&quot;, None) or type(e).__name__
-        print(f&quot;   !! {kind} backend ({model}) failed: {detail} - using the replay,&quot;)
-        print(&quot;      which is a replay and is labelled as one. No model answered.&quot;)
-        return replay, &quot;replay&quot;, f&quot;{model} unreachable&quot;
-
-_kind, _model = backend()
-print(f&quot;model backend : {_kind}&quot;)
-print(f&quot;model         : {_model}&quot;)
-if _kind == &quot;replay&quot;:
-    print()
-    print(&quot;This lesson runs offline against a deterministic replay, which is why&quot;)
-    print(&quot;it works on a Kaggle kernel with the internet switched off. To run the&quot;)
-    print(&quot;identical code against a real model, set one of:&quot;)
-    print()
-    print(&quot;   frontier     export ANTHROPIC_API_KEY=...   # cheapest: &quot; + FRONTIER_DEFAULT)
-    print(&quot;   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \\&quot;)
-    print(&quot;                       OPENAI_API_KEY=ollama MODEL=glm-4.6&quot;)
-    print()
-    print(&quot;   On Kaggle: Add-ons -&gt; Secrets, add ANTHROPIC_API_KEY, and switch&quot;)
-    print(&quot;   Internet on in the notebook settings. Internet requires a&quot;)
-    print(&quot;   phone-verified Kaggle account; without it DNS fails in the kernel&quot;)
-    print(&quot;   and this lesson correctly stays on the replay.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The same lesson, against a real model</h2>
-<p>Everything below this point runs identically on three backends. Offline it uses
-a deterministic replay that is labelled as a replay wherever it appears — never
-presented as a model's output. With <code>ANTHROPIC_API_KEY</code> set it calls a frontier
-model; with <code>OPENAI_BASE_URL</code> set it calls any OpenAI-compatible endpoint,
-which covers Ollama, vLLM and the hosted open-weight providers.</p>
-<p>The point of running it both ways is not that the answers match. It is that
-<strong>the lesson's assertion holds either way</strong> — if it only holds against the
-replay, the lesson was testing the replay.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TASK = &#x27;Fix this without changing the function\&#x27;s behaviour for valid input. Return only the patched function.\n\ndef report(request):\n    q = &quot;SELECT * FROM orders WHERE ref = \&#x27;&quot; + request.args[\&#x27;ref\&#x27;] + &quot;\&#x27;&quot;\n    return db.execute(q)&#x27;
-
-REPLAY = &#x27;def report(request):\n    q = &quot;SELECT * FROM orders WHERE ref = ?&quot;\n    return db.execute(q, (request.args[\&#x27;ref\&#x27;],))&#x27;
-
-answer, used, model = ask(TASK, replay=REPLAY,
-            system=&#x27;You are a remediation engineer. Output code only, no explanation.&#x27;,
-            max_tokens=300)
-
-print(f&quot;backend used : {used}&quot;)
-print(f&quot;model        : {model}&quot;)
-print(f&quot;prompt       : {TASK[:66]}...&quot;)
-print()
-print(&quot;answer:&quot;)
-for line in (answer.splitlines() or [answer]):
-    print(f&quot;   {line}&quot;)
-
-# Two assertions that must hold on every backend, and one property that is
-# reported rather than asserted - a real model failing it is a finding about
-# the model, not a broken notebook.
-assert answer.strip(), &quot;the configured backend returned nothing&quot;
-if used == &quot;replay&quot;:
-    assert answer == REPLAY, &quot;the offline path must return the replay verbatim&quot;
-
-label, held = (&quot;parameterises the query&quot;, &quot;?&quot; in answer or &quot;%s&quot; in answer or &quot;:ref&quot; in answer)
-print()
-print(f&quot;property checked : {label}&quot;)
-print(f&quot;held on {used:12s} : {held}&quot;)
-print()
-print(&quot;Same code, same assertions, three possible backends. Offline the answer&quot;)
-print(&quot;is the replay and is labelled as one; with a key it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The confirmed finding, with its working exploit</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import re, sqlite3
-
-VULNERABLE = &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    return conn.execute(&quot;SELECT id, name FROM users WHERE name = &#x27;&quot; + name + &quot;&#x27;&quot;).fetchall()
+def purge_cache():
+    CACHE.clear()
+    log.info(&quot;cache purged&quot;)
 &#x27;&#x27;&#x27;
+lines = SOURCE.splitlines()
+BUG_LINE = next(i for i, l in enumerate(lines, 1) if &quot;SELECT * FROM reports&quot; in l)
+print(f&quot;the bug is on line {BUG_LINE}&quot;)
 
-def build_db():
-    conn = sqlite3.connect(&quot;:memory:&quot;)
-    conn.execute(&quot;CREATE TABLE users(id INTEGER, name TEXT)&quot;)
-    conn.executemany(&quot;INSERT INTO users VALUES (?,?)&quot;,
-                     [(1,&quot;dana&quot;),(2,&quot;sam&quot;),(3,&quot;o&#x27;brien&quot;)])
-    return conn
+def whole_file(_):     return SOURCE
+def window(n, radius): return &quot;\n&quot;.join(lines[max(n-radius-1,0):n+radius])
 
-def load(src):
-    ns = {}; exec(compile(src, &quot;&lt;patch&gt;&quot;, &quot;exec&quot;), ns); return ns[&quot;get_user&quot;]
+STRATEGIES = {&quot;whole file&quot;: whole_file(BUG_LINE),
+              &quot;±2 line window&quot;: window(BUG_LINE, 2),
+              &quot;±6 line window&quot;: window(BUG_LINE, 6)}
+for name, ctx in STRATEGIES.items():
+    print(f&quot;{name:20s}{len(ctx):&gt;6} chars{len(ctx.splitlines()):&gt;5} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def decidable(ctx):
+    &quot;&quot;&quot;Can a reviewer judge exploitability from this context alone?&quot;&quot;&quot;
+    return {&quot;sink&quot;: &quot;conn.execute&quot; in ctx,
+            &quot;concatenation&quot;: &quot;&#x27; + owner +&quot; in ctx or &quot;+ owner +&quot; in ctx,
+            &quot;source (signature)&quot;: &quot;def list_reports&quot; in ctx,
+            &quot;intent (docstring)&quot;: &quot;user-controlled&quot; in ctx}
 
-BEHAVIOUR = [(&quot;dana&quot;,[(1,&quot;dana&quot;)]), (&quot;sam&quot;,[(2,&quot;sam&quot;)]),
-             (&quot;nobody&quot;,[]), (&quot;o&#x27;brien&quot;,[(3,&quot;o&#x27;brien&quot;)])]
+print(f&quot;{&#x27;strategy&#x27;:20s}{&#x27;sink&#x27;:7s}{&#x27;concat&#x27;:8s}{&#x27;source&#x27;:8s}{&#x27;intent&#x27;:8s}decidable&quot;)
+print(&quot;-&quot; * 64)
+for name, ctx in STRATEGIES.items():
+    d = decidable(ctx)
+    ok = d[&quot;sink&quot;] and d[&quot;concatenation&quot;] and d[&quot;source (signature)&quot;]
+    print(f&quot;{name:20s}{str(d[&#x27;sink&#x27;]):7s}{str(d[&#x27;concatenation&#x27;]):8s}&quot;
+          f&quot;{str(d[&#x27;source (signature)&#x27;]):8s}{str(d[&#x27;intent (docstring)&#x27;]):8s}{ok}&quot;)
+print(&quot;\nThe ±2 window has the sink and the concatenation but not the signature,&quot;)
+print(&quot;so you cannot tell whether owner is user-controlled — which is the&quot;)
+print(&quot;difference between critical and won&#x27;t-fix.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — slice on the source-sink path</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def path_slice(source, bug_line):
+    ls = source.splitlines()
+    start = max(i for i in range(bug_line) if ls[i-1].startswith(&quot;def &quot;))
+    end = next((i for i in range(start, len(ls)) if i &gt; start and ls[i].startswith(&quot;def &quot;)),
+               len(ls))
+    return &quot;\n&quot;.join(ls[start-1:end])
 
-def behaviour_ok(fn):
-    conn = build_db(); rows = []
-    for name, expected in BEHAVIOUR:
-        try: got = fn(conn, name)
-        except Exception as e: rows.append((name, f&quot;raised {type(e).__name__}&quot;, False)); continue
-        rows.append((name, got, got == expected))
-    return rows
+sliced = path_slice(SOURCE, BUG_LINE)
+print(sliced)
+d = decidable(sliced)
+print(f&quot;\n{len(sliced)} chars ({len(sliced)/len(SOURCE):.0%} of the file), &quot;
+      f&quot;decidable={d[&#x27;sink&#x27;] and d[&#x27;concatenation&#x27;] and d[&#x27;source (signature)&#x27;]}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def evaluate(name, ctx):
+    d = decidable(ctx)
+    return {&quot;strategy&quot;: name, &quot;chars&quot;: len(ctx),
+            &quot;share&quot;: round(len(ctx)/len(SOURCE), 3),
+            &quot;decidable&quot;: d[&quot;sink&quot;] and d[&quot;concatenation&quot;] and d[&quot;source (signature)&quot;],
+            &quot;noise_fns&quot;: max(ctx.count(&quot;def &quot;) - 1, 0)}
 
-def exploit_works(fn):
-    &quot;&quot;&quot;The stage-12 probe, reused as the acceptance test.&quot;&quot;&quot;
-    conn = build_db()
-    try: rows = fn(conn, &quot;x&#x27; OR &#x27;1&#x27;=&#x27;1&quot;)
-    except Exception: return False, &quot;probe raised — not exploitable this way&quot;
-    return len(rows) &gt; 1, f&quot;probe returned {len(rows)} rows&quot;
+rows = [evaluate(n, c) for n, c in STRATEGIES.items()] + [evaluate(&quot;path slice&quot;, sliced)]
+print(f&quot;{&#x27;strategy&#x27;:20s}{&#x27;chars&#x27;:&gt;7}{&#x27;share&#x27;:&gt;8}{&#x27;decidable&#x27;:&gt;11}{&#x27;noise fns&#x27;:&gt;11}&quot;)
+print(&quot;-&quot; * 58)
+for r in rows:
+    print(f&quot;{r[&#x27;strategy&#x27;]:20s}{r[&#x27;chars&#x27;]:&gt;7}{r[&#x27;share&#x27;]:&gt;8.0%}&quot;
+          f&quot;{str(r[&#x27;decidable&#x27;]):&gt;11}{r[&#x27;noise_fns&#x27;]:&gt;11}&quot;)
 
-def scanner_fires(src):
-    return bool(re.search(r&quot;execute\(\s*[\&quot;\&#x27;][^\&quot;\&#x27;]*[\&quot;\&#x27;]\s*\+&quot;, src))
-
-fn = load(VULNERABLE)
-print(&quot;behaviour of the vulnerable build:&quot;)
-for name, got, ok in behaviour_ok(fn):
-    print(f&quot;   get_user({name!r:10s}) → {str(got):18s} {&#x27;ok&#x27; if ok else &#x27;FAILS&#x27;}&quot;)
-ex, why = exploit_works(fn)
-print(f&quot;\nexploit works: {ex} — {why}&quot;)
-print(f&quot;scanner fires: {scanner_fires(VULNERABLE)}&quot;)</code></pre></div><div class="nbmd"><h2>6 · Four candidate patches, three of which make CI green</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CANDIDATES = {
- &quot;A · parameterise (the real fix)&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    return conn.execute(&quot;SELECT id, name FROM users WHERE name = ?&quot;, (name,)).fetchall()
-&#x27;&#x27;&#x27;,
- &quot;B · delete the feature&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    return []
-&#x27;&#x27;&#x27;,
- &quot;C · evade the scanner&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    q = &quot;SELECT id, name FROM users WHERE name = &#x27;%s&#x27;&quot; % name
-    return conn.execute(q).fetchall()
-&#x27;&#x27;&#x27;,
- &quot;D · escape by hand&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    safe = name.replace(&quot;&#x27;&quot;, &quot;&#x27;&#x27;&quot;)
-    return conn.execute(&quot;SELECT id, name FROM users WHERE name = &#x27;&quot; + safe + &quot;&#x27;&quot;).fetchall()
-&#x27;&#x27;&#x27;,
-}
-print(f&quot;{&#x27;candidate&#x27;:34s}{&#x27;scanner green&#x27;:&gt;15}&quot;)
-print(&quot;-&quot; * 50)
-for name, src in CANDIDATES.items():
-    print(f&quot;{name:34s}{str(not scanner_fires(src)):&gt;15}&quot;)
-print(&quot;\nThree of four are green. Only one of those is a fix.&quot;)</code></pre></div><div class="nbmd"><h2>7 · The control — validate on three axes, exploit first</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def validate(src):
-    fn = load(src)
-    green = not scanner_fires(src)
-    beh = behaviour_ok(fn)
-    preserved = all(ok for _, _, ok in beh)
-    still_exploitable, _ = exploit_works(fn)
-    reasons = []
-    if not green:            reasons.append(&quot;scanner still fires&quot;)
-    if not preserved:        reasons.append(&quot;behaviour changed&quot;)
-    if still_exploitable:    reasons.append(&quot;STILL EXPLOITABLE (stage-12 probe passes)&quot;)
-    return (not reasons), green, preserved, still_exploitable, reasons
-
-print(f&quot;{&#x27;candidate&#x27;:34s}{&#x27;scan&#x27;:6s}{&#x27;behaviour&#x27;:11s}{&#x27;exploitable&#x27;:13s}verdict&quot;)
-print(&quot;-&quot; * 84)
-accepted = []
-for name, src in CANDIDATES.items():
-    ok, g, b, x, reasons = validate(src)
-    if ok: accepted.append(name)
-    print(f&quot;{name:34s}{str(g):6s}{str(b):11s}{str(x):13s}&quot;
-          f&quot;{&#x27;ACCEPT&#x27; if ok else &#x27;REJECT — &#x27; + &#x27;, &#x27;.join(reasons)}&quot;)
-print(f&quot;\naccepted: {accepted}&quot;)
-assert &quot;A · parameterise (the real fix)&quot; in accepted
-assert &quot;B · delete the feature&quot; not in accepted
-assert &quot;C · evade the scanner&quot; not in accepted</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># The proof-of-fix clause: the exploit must fail on the new build and
-# succeed on the old one. Without both halves, &quot;fixed&quot; is a claim.
-def proof_of_fix(old_src, new_src):
-    old_ex, _ = exploit_works(load(old_src))
-    new_ex, _ = exploit_works(load(new_src))
-    return (old_ex and not new_ex), f&quot;exploit on old={old_ex}, on new={new_ex}&quot;
-
-for name in accepted:
-    ok, detail = proof_of_fix(VULNERABLE, CANDIDATES[name])
-    print(f&quot;{name:34s} proof of fix: {ok}  ({detail})&quot;)
-
-print(&quot;\nCandidate D passes every automated check and is still the wrong answer:&quot;)
-print(&quot;it reimplements the driver&#x27;s escaping and will be wrong for the next&quot;)
-print(&quot;input class or the next database. Nothing except a rule about MECHANISM&quot;)
-print(&quot;catches that — which is the part of remediation that does not automate.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Candidate D passes every automated gate and is still wrong. Write the rule that rejects it. You will find it has to be about which <em>mechanism</em> is acceptable, not about outcomes — and that rule belongs in your secure coding standard, not in the pipeline.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.12.html">B1.12 · Severity calibration and reporting</a></strong></p>
+best = sorted((r for r in rows if r[&quot;decidable&quot;]), key=lambda r: r[&quot;chars&quot;])[0]
+whole = next(r for r in rows if r[&quot;strategy&quot;] == &quot;whole file&quot;)
+print(f&quot;\nsmallest decidable context: {best[&#x27;strategy&#x27;]} &quot;
+      f&quot;({best[&#x27;share&#x27;]:.0%} of the file, {best[&#x27;noise_fns&#x27;]} unrelated functions)&quot;)
+print(f&quot;vs whole file: {1 - best[&#x27;chars&#x27;]/whole[&#x27;chars&#x27;]:.0%} smaller, &quot;
+      f&quot;{whole[&#x27;noise_fns&#x27;]}→{best[&#x27;noise_fns&#x27;]} unrelated functions&quot;)
+assert best[&quot;strategy&quot;] == &quot;path slice&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Apply the path-slice rule where the source is three functions away from the sink. That is the case where text windows break down entirely and the call graph from B1.1 earns its keep.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.12.html">B1.12 · Injection in your own pipeline</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.11.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.11.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Semgrep OSS</span><span>pytest</span><span>GLM-4.6</span><span>Kimi K2</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.11.ipynb</code></p></div><div class="pager"><a href="B1.10.html"><span class="k">← Previous</span><span class="t">B1.10 · Exploit chaining</span></a><a class="next" href="B1.12.html"><span class="k">Next →</span><span class="t">B1.12 · Severity calibration and reporting</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>tree-sitter</span><span>GLM-4.6</span><span>Llama 3.3</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.11.ipynb</code></p></div><div class="pager"><a href="B1.10.html"><span class="k">← Previous</span><span class="t">B1.10 · Severity calibration and reporting</span></a><a class="next" href="B1.12.html"><span class="k">Next →</span><span class="t">B1.12 · Injection in your own pipeline</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

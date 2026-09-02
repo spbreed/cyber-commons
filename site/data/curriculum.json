@@ -687,7 +687,7 @@
       },
       {
        "id": "B1.1",
-       "title": "Historical parsing and structural indexing",
+       "title": "Reading the repository: history, index, components, map",
        "track": "defend",
        "summary": "Turn a large codebase into a machine-navigable structure agents can reason over. Parsing, symbol graphs and repository indexing as the foundation layer.",
        "risk": "Review starts at the diff, so the pipeline never learns which parts of the repo keep breaking.",
@@ -707,27 +707,7 @@
       },
       {
        "id": "B1.2",
-       "title": "Component summarisation and architecture synthesis",
-       "track": "defend",
-       "summary": "Compress components into accurate summaries and rebuild system architecture from source. Everything downstream inherits the quality of this map.",
-       "risk": "The model is handed files and asked about a system, so it invents the parts it cannot see.",
-       "control": "Stages 3–4: summarise each module, then compile a global map of data flows, entry points and trust boundaries.",
-       "lab": "Generate per-directory summaries and synthesise them into an architecture map with entry points and trust boundaries.",
-       "tools": [
-        "tree-sitter",
-        "Graphviz"
-       ],
-       "open_weight": [
-        "GLM-4.6",
-        "Kimi K2"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      },
-      {
-       "id": "B1.3",
-       "title": "Threat modelling from the architecture map",
+       "title": "Threat modelling from what the estate already knows",
        "track": "secure",
        "summary": "Derive trust boundaries, assets and attacker goals from the synthesized architecture. Automate the tedious half while keeping human judgement on the rest.",
        "risk": "Threat models are written once, by hand, against a system that has since changed.",
@@ -744,27 +724,7 @@
        ]
       },
       {
-       "id": "B1.4",
-       "title": "Strategic planning and agent allocation",
-       "track": "defend",
-       "summary": "Decide where to spend finite agent effort across a very large codebase. Prioritisation, budget allocation and parallelisation strategy.",
-       "risk": "Every scanner is pointed at every file, so cost scales with the repo instead of with the risk.",
-       "control": "Stage 6: allocate specialised agents and tools to specific trust boundaries, budgeted by threat rank.",
-       "lab": "Allocate a fixed analysis budget across boundaries and compare coverage against a uniform sweep.",
-       "tools": [
-        "Semgrep OSS",
-        "CodeQL"
-       ],
-       "open_weight": [
-        "GLM-4.6",
-        "Llama 3.3"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      },
-      {
-       "id": "B1.5",
+       "id": "B1.3",
        "title": "Vulnerability auditing: three generations of SAST",
        "track": "defend",
        "summary": "Pattern matching, dataflow analysis and LLM-driven reasoning compared honestly. What each generation finds, and what each one structurally cannot.",
@@ -785,7 +745,7 @@
        ]
       },
       {
-       "id": "B1.6",
+       "id": "B1.4",
        "title": "Deduplication and contextual verification",
        "track": "defend",
        "summary": "Collapse duplicate findings and verify each against real code context. The step that converts raw noise into a queue a human will actually read.",
@@ -804,7 +764,7 @@
        ]
       },
       {
-       "id": "B1.7",
+       "id": "B1.5",
        "title": "Feasibility filtering and reachability",
        "track": "defend",
        "summary": "Prove a finding is genuinely reachable from untrusted input. Reachability analysis as the primary false-positive killer in the pipeline.",
@@ -823,7 +783,7 @@
        ]
       },
       {
-       "id": "B1.8",
+       "id": "B1.6",
        "title": "Sandbox replication",
        "track": "secure",
        "summary": "Stand up a runnable replica of the target so findings can be tested safely. Environment fidelity, data stubs and orchestration.",
@@ -843,7 +803,7 @@
        ]
       },
       {
-       "id": "B1.9",
+       "id": "B1.7",
        "title": "Dynamic exploitation (DAST)",
        "track": "defend",
        "summary": "Drive the running application to confirm a vulnerability empirically. Payload generation, oracle design and evidence capture.",
@@ -863,7 +823,7 @@
        ]
       },
       {
-       "id": "B1.10",
+       "id": "B1.8",
        "title": "Exploit chaining",
        "track": "defend",
        "summary": "Combine individually low-severity findings into a materially damaging path. How agents search chain space, and why chains rewrite severity.",
@@ -881,7 +841,7 @@
        ]
       },
       {
-       "id": "B1.11",
+       "id": "B1.9",
        "title": "Remediation engineering",
        "track": "defend",
        "summary": "Generate fixes that survive review and do not break behaviour. Patch generation, regression testing and clean developer handoff.",
@@ -901,7 +861,7 @@
        ]
       },
       {
-       "id": "B1.12",
+       "id": "B1.10",
        "title": "Severity calibration and reporting",
        "track": "defend",
        "summary": "Score findings against real exploitability and business impact rather than CVSS alone. Write reports engineers will actually act on.",
@@ -919,7 +879,7 @@
        ]
       },
       {
-       "id": "B1.13",
+       "id": "B1.11",
        "title": "Context engineering for the pipeline",
        "track": "defend",
        "summary": "Decide what each agent sees, when, and at what token cost. Context budgets, retrieval strategy and the accuracy cliff past which more context hurts.",
@@ -938,7 +898,7 @@
        ]
       },
       {
-       "id": "B1.14",
+       "id": "B1.12",
        "title": "Injection in your own pipeline",
        "track": "secure",
        "summary": "Your analysis agents read attacker-controlled code — and can be instructed by it. Isolation, sanitisation and rules for trusting agent output.",
@@ -956,7 +916,7 @@
        ]
       },
       {
-       "id": "B1.15",
+       "id": "B1.13",
        "title": "Securing the developers' coding agents",
        "track": "secure",
        "summary": "Guardrails for IDE and CLI coding agents holding repo and credential access. Policy, telemetry and safe defaults for engineering teams at scale.",
@@ -975,7 +935,7 @@
        ]
       },
       {
-       "id": "B1.16",
+       "id": "B1.14",
        "title": "Attesting control intent for agents and MCP servers",
        "track": "secure",
        "summary": "Decompose real-time control attestation into eleven deployment-scoped skills joined by a deployment_id, then run the static half against ten widely-deployed open-source agent and MCP repositories. Produces a signed-shaped in-toto attestation with per-control verdicts, evidence pointers and the confidence ceilings that stop it overclaiming.",
@@ -996,7 +956,7 @@
        ]
       },
       {
-       "id": "B1.17",
+       "id": "B1.15",
        "title": "Bonus — Google Mantis, the pipeline in production",
        "track": "defend",
        "summary": "A worked case study of an agentic security pipeline operating at real scale. What held up, what broke, and which lessons transfer to your estate.",

@@ -217,84 +217,75 @@ HOOKS: dict[str, str] = {
  "something other than luck.",
 
 "B1.2":
- "Every stage after this one inherits this map. A component summarised wrongly "
- "here becomes a threat model that misses a boundary, an audit that looks in the "
- "wrong file, and a report that is confidently about the wrong system.",
+ "A threat model produced in a workshop describes the system as it was on the "
+ "day of the workshop, and it is derived from the code alone — so two "
+ "deployments of the same repository, one behind a private load balancer with "
+ "no egress and one on the internet with a wildcard trust policy, get the same "
+ "model. It is wrong about both.",
 
 "B1.3":
- "A threat model produced in a workshop describes the system as it was on the "
- "day of the workshop. By the second sprint it describes something that no "
- "longer exists, and nobody notices, because nothing re-reads it.",
-
-"B1.4":
- "You have four hundred thousand lines and a budget that covers perhaps thirty "
- "thousand. Where the effort goes is the single decision with the most leverage "
- "in the whole pipeline, and it is usually made by whoever opened the repository "
- "first.",
-
-"B1.5":
  "Three generations of static analysis are on the market and all three are sold "
  "with the same word. Pattern matching cannot follow a value; dataflow cannot "
  "read intent; a model can do both and will also tell you about a vulnerability "
  "that is not there.",
 
-"B1.6":
+"B1.4":
  "Three analysers found the same defect and reported it four times, in three "
  "vocabularies, at two severities. A queue that inflates by 3x is not a queue — "
  "it is a landfill with a ticket number.",
 
-"B1.7":
+"B1.5":
  "The finding is real. The code is dead. Reachability is the difference between "
  "a queue an engineer works and a queue an engineer learns to ignore, and it is "
  "the single largest false-positive killer in the pipeline.",
 
-"B1.8":
+"B1.6":
  "You cannot exploit a finding to confirm it without somewhere safe to do it. "
  "The replica is that place, and the fidelity you give it decides which findings "
  "you are able to confirm at all.",
 
-"B1.9":
+"B1.7":
  "A finding becomes a fact the moment something other than a model says so. "
  "Driving the running application is how you get that second opinion — and the "
  "oracle you choose is what makes it worth having.",
 
-"B1.10":
+"B1.8":
  "Three medium findings, each correctly scored, each individually not worth an "
  "engineer's afternoon. Chained, they read a file that ends the conversation "
  "about severity. Chains are where automated analysis earns its keep.",
 
-"B1.11":
+"B1.9":
  "A patch that passes the tests and changes the behaviour is not a fix, it is a "
  "second incident with a pull request attached. Remediation is the stage where "
  "the pipeline stops finding things and starts touching them.",
 
-"B1.12":
+"B1.10":
  "CVSS scores the vulnerability. Your engineers are asking about this system, "
  "with this data, behind this control, and the number that answers them is not "
  "the one on the badge.",
 
-"B1.13":
+"B1.11":
  "Give an agent more context and it gets better, until it gets worse. The cliff "
  "is real, it arrives earlier than anyone expects, and past it you are paying "
  "more per token for a worse answer.",
 
-"B1.14":
+"B1.12":
  "Your analysis agents read attacker-controlled code. That is not a risk of the "
  "pipeline, it is the definition of the pipeline — and a comment in a diff is "
  "the cheapest way anyone will ever find to instruct your security tooling.",
 
-"B1.15":
+"B1.13":
  "The coding agent on an engineer's laptop holds repository write access, a "
  "cloud credential, and whatever MCP servers were convenient. It is the "
  "highest-privilege agent in most organisations and the least governed.",
 
-"B1.16":
+"B1.14":
  "\"We enforce least privilege\" is true of some deployment, at some time, and "
  "nothing binds it to the system running right now. An attestation is the "
  "binding — and the discipline is that it must refuse to say more than it can "
  "show.",
 
-"B1.17":
+"B1.15":
  "Somebody has already built this pipeline and published what happened. Reading "
  "it is worth an afternoon; adopting it without scoring it against a held-out "
  "key is how a reference implementation becomes a dependency you cannot "
@@ -1174,7 +1165,7 @@ DIAGRAMS: dict[str, str] = {
    chapter 4 — the SDLC, with agents doing the work (AI for security)
 
    [ingest] -> [threat model] -> [audit] -> [confirm] -> [remediate] -> [report]
-      B1.1-2       B1.3-4        B1.5-7     B1.8-10       B1.11         B1.12
+      B1.1-2       B1.2-4        B1.3-7     B1.6-10       B1.9         B1.10
 
    chapter 5 — the harness underneath every one of those stages
    +---------------------------------------------------------------+
@@ -1200,48 +1191,26 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 "B1.2": """
-   files -> components -> architecture
+   six static inputs, all already in the estate
 
-   auth/*.py    --+
-   session/*.py --+--> "session issuance"  --+
-   token/*.py   --+                          |
-                                             +--> trust boundary map
-   api/*.py     --+--> "public HTTP surface"-+
-   admin/*.py   --+
-
-   every later stage reads the right-hand box, never the left one
-   -> an error here is invisible downstream and fatal to the report
+   code analysis      what the code COULD reach     (stage 4)
+   cloud policy       is it on the internet         (security groups, WAF)
+   CSPM               is the bucket public TODAY
+   entitlements       what the role may do
+   IAM                who can become that role
+   egress policy      can anything leave
+          |
+          v  derive, mechanically
+   +---------------------------+
+   | ranked threats, as data   |
+   +---------------------------+
+          |
+        DIFFED against the last run - and the diff has to count
+        ESCALATION, not only arrival, or a terraform-only pull
+        request raises every score and passes the gate
 """,
 
 "B1.3": """
-   architecture map            threat model
-   +----------------+          +---------------------------+
-   | components     |  derive  | entry points              |
-   | flows          | -------> | trust boundaries crossed  |
-   | trust levels   |          | assets reachable          |
-   | sinks          |          | abuse cases               |
-   +----------------+          +---------------------------+
-           |                              |
-        regenerated per release      DIFFED against the last one
-
-   the diff is the product: "what did this pull request just introduce"
-""",
-
-"B1.4": """
-   finite effort, unequal value
-
-   +----------------------+----------+----------+
-   | area                 | reachable| changed  |
-   +----------------------+----------+----------+
-   | request handling     |   yes    |   yes    |  <- spend here
-   | internal utils       |   yes    |   no     |
-   | vendored third party |   no     |   no     |  <- and not here
-   +----------------------+----------+----------+
-
-   allocation is the highest-leverage decision in the pipeline
-""",
-
-"B1.5": """
    gen 1  pattern      grep-shaped     finds: the literal string
                                        misses: the same bug spelled differently
 
@@ -1254,7 +1223,7 @@ DIAGRAMS: dict[str, str] = {
    the third generation does not replace the second. it needs it as an oracle.
 """,
 
-"B1.6": """
+"B1.4": """
    raw findings                        after dedup + context
    +---------------------------+       +--------------------+
    | analyser A: SQLI in q()   |       | SQLI in q()        |
@@ -1265,7 +1234,7 @@ DIAGRAMS: dict[str, str] = {
         3x inflation                   the queue a human will read
 """,
 
-"B1.7": """
+"B1.5": """
    is there a path from untrusted input to this line?
 
    HTTP handler --> parse() --> validate() --> build_query() --> DB
@@ -1278,7 +1247,7 @@ DIAGRAMS: dict[str, str] = {
    the largest single false-positive killer in the pipeline
 """,
 
-"B1.8": """
+"B1.6": """
    production            replica
    +-----------+         +------------------+
    | real data |   -->   | stubbed data     |
@@ -1291,7 +1260,7 @@ DIAGRAMS: dict[str, str] = {
    fidelity decides which findings you can confirm at all
 """,
 
-"B1.9": """
+"B1.7": """
    candidate finding
         |
         v
@@ -1308,7 +1277,7 @@ DIAGRAMS: dict[str, str] = {
    the oracle is the whole value. "the model thinks so" is not one.
 """,
 
-"B1.10": """
+"B1.8": """
    alone                                chained
    +----------------+                   +-------------------------+
    | path traversal | medium            | traversal reads config  |
@@ -1320,7 +1289,7 @@ DIAGRAMS: dict[str, str] = {
    severity is a property of the chain, not of the link
 """,
 
-"B1.11": """
+"B1.9": """
    patch                    what has to be true
    +----------------+       +-----------------------------+
    | fixes the bug  |  and  | behaviour unchanged         |
@@ -1332,7 +1301,7 @@ DIAGRAMS: dict[str, str] = {
    a second incident with a pull request attached
 """,
 
-"B1.12": """
+"B1.10": """
    CVSS 9.8                    your system
    +----------------+          +---------------------------+
    | network        |          | internal only             |
@@ -1345,7 +1314,7 @@ DIAGRAMS: dict[str, str] = {
    confirmed-by-exploitation beats both
 """,
 
-"B1.13": """
+"B1.11": """
    accuracy
      ^
      |          .-----.
@@ -1359,7 +1328,7 @@ DIAGRAMS: dict[str, str] = {
    past the peak you pay more per token for a worse answer
 """,
 
-"B1.14": """
+"B1.12": """
    the code under review IS the untrusted input
 
    diff --git a/x.py
@@ -1371,7 +1340,7 @@ DIAGRAMS: dict[str, str] = {
    provenance: everything from the repository is [data], never [principal]
 """,
 
-"B1.15": """
+"B1.13": """
    the highest-privilege agent in most organisations
 
    +--------------------------------------------+
@@ -1385,7 +1354,7 @@ DIAGRAMS: dict[str, str] = {
    governed by: whatever the engineer clicked
 """,
 
-"B1.16": """
+"B1.14": """
    claim                          attestation
    "we enforce least privilege"   subject: deployment_id @ digest
             |                     predicate: per-control verdicts + evidence
@@ -1399,7 +1368,7 @@ DIAGRAMS: dict[str, str] = {
    +------------------------------------------------+
 """,
 
-"B1.17": """
+"B1.15": """
    published pipeline            your pipeline
    +------------------+          +------------------+
    | stages 1..15     |  map ->  | stages 1..15     |

@@ -5,7 +5,7 @@ A lesson is only evidence if the reader's run matches the one on the page. Two
 notebooks shipped that did not, and neither failed locally, because a single
 local pass runs every notebook under one interpreter with one hash seed:
 
-  * B1.3 iterated a set difference into a stable sort. With tied scores the
+  * B1.2 iterated a set difference into a stable sort. With tied scores the
     sort preserved set-iteration order, which PYTHONHASHSEED randomises.
   * D1.1 seeded a sampling RNG from hash(str), which PYTHONHASHSEED also
     randomises.
@@ -15,7 +15,7 @@ makes that a local, cheap check instead: run each notebook under several
 deliberately different hash seeds and require byte-identical stdout.
 
     python3 scripts/check_determinism.py            # all notebooks
-    python3 scripts/check_determinism.py --session B1.3 --seeds 8
+    python3 scripts/check_determinism.py --session B1.2 --seeds 8
 
 Exit status is non-zero if any notebook varies, so CI can gate on it.
 """
@@ -70,7 +70,7 @@ def first_difference(a: str, b: str) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--session", help="check a single session id, e.g. B1.3")
+    ap.add_argument("--session", help="check a single session id, e.g. B1.2")
     ap.add_argument("--seeds", type=int, default=4,
                     help=f"how many hash seeds to try (max {len(SEEDS)}, default 4)")
     ap.add_argument("--timeout", type=int, default=120, help="seconds per run")
