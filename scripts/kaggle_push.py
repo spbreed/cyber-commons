@@ -36,6 +36,7 @@ so rather than pretending the push happened.
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import os
 import sys
@@ -50,11 +51,28 @@ API = "https://www.kaggle.com/api/v1"
 
 
 # --------------------------------------------------------------- credentials
+CONFIG_DIR = Path(os.environ.get("KAGGLE_CONFIG_DIR") or (Path.home() / ".kaggle"))
+
+
+@functools.lru_cache(maxsize=1)
 def credentials() -> tuple[str, str]:
     """(username, key) from the environment or a config file outside the repo."""
     user, key = os.environ.get("KAGGLE_USERNAME"), os.environ.get("KAGGLE_KEY")
-    if user and key:
-        return user, key
+    if key:
+        # Resolved once per process — the lru_cache above is load-bearing, not
+        # an optimisation. credentials() is called on every request, pushes run
+        # four at a time, and the probe below creates a kernel by title: four
+        # concurrent probes race for the same title and three come back HTTP
+        # 409, which looks exactly like the bug this resolution exists to fix.
+        #
+        # The username is resolved from the token rather than trusted, because
+        # getting it wrong does not look like an authentication problem. The
+        # slug is `<username>/<kernel>`, so a wrong username names somebody
+        # else's namespace and every push comes back HTTP 409 "the requested
+        # title is already in use" — which reads like a naming collision in
+        # your own account and is not one. Cost an hour once; not twice.
+        return (os.environ.get("KAGGLE_RESOLVED_USERNAME")
+                or resolve_username(key, user)), key
 
     candidates = []
     if cfg := os.environ.get("KAGGLE_CONFIG_DIR"):
@@ -78,6 +96,67 @@ def credentials() -> tuple[str, str]:
     sys.exit("no Kaggle credentials found.\n"
              "Set KAGGLE_USERNAME + KAGGLE_KEY, or place kaggle.json at "
              "~/.kaggle/kaggle.json (chmod 600). Never commit it.")
+
+
+def resolve_username(key: str, claimed: str | None) -> str:
+    """Ask Kaggle which account this token belongs to, and remember the answer.
+
+    There is no whoami endpoint. The only reliable way to learn the owner is to
+    push a kernel with an empty slug and read the account out of the returned
+    `ref` — so this does that once, then caches it next to the credentials
+    (outside the repository) and never probes again.
+
+    Two details are load-bearing:
+
+      * **The probe title must be unique.** A fixed title collides with the
+        probe kernel left by the previous run and comes back HTTP 409, which is
+        the exact error this function exists to prevent.
+      * **A failed probe must not fall back silently.** Returning `claimed`
+        when the probe fails reintroduces the wrong-username bug wearing a
+        different mask: every subsequent push 409s with a message about titles
+        and nothing mentions the account.
+    """
+    cache = CONFIG_DIR / ".resolved-username"
+    try:
+        cached = cache.read_text().strip()
+        if cached:
+            return cached
+    except OSError:
+        pass
+
+    body = {"slug": "", "text": "pass", "language": "python",
+            "kernelType": "script", "isPrivate": True,
+            "newTitle": f"cyber commons auth probe {int(time.time())}",
+            "enableGpu": False, "enableInternet": False,
+            "datasetDataSources": [], "kernelDataSources": [],
+            "competitionDataSources": [], "categoryIds": []}
+    req = urllib.request.Request(
+        f"{API}/kernels/push", data=json.dumps(body).encode(),
+        headers={"Authorization": f"Bearer {key}",
+                 "Content-Type": "application/json",
+                 "User-Agent": "cyber-commons-lab-push"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            ref = json.loads(r.read().decode()).get("ref", "")
+    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError) as e:
+        sys.exit(f"could not determine the Kaggle account for this token: {e}\n"
+                 f"Set KAGGLE_RESOLVED_USERNAME, or write the account name to "
+                 f"{cache}.")
+    parts = [p for p in ref.split("/") if p]
+    owner = parts[1] if len(parts) >= 2 else None
+    if not owner:
+        sys.exit(f"Kaggle returned no owner in {ref!r} — cannot qualify the "
+                 f"kernel slug.")
+    if claimed and owner != claimed:
+        print(f"note: KAGGLE_USERNAME says {claimed!r}; this token belongs to "
+              f"{owner!r}. Using {owner!r} — a wrong account here surfaces as "
+              f"HTTP 409 about titles, not as an auth error.", file=sys.stderr)
+    try:
+        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+        cache.write_text(owner + "\n")
+    except OSError:
+        pass
+    return owner
 
 
 def call(path: str, payload: dict | None = None, timeout: int = 120) -> dict:

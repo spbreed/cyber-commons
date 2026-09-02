@@ -208,13 +208,73 @@ own health check reports healthy.
 
 ---
 
+## Kaggle — three traps in one afternoon
+
+Not a tool lab, but the same shape of finding and worth recording next to them.
+`scripts/kaggle_push.py` pushes every notebook to Kaggle so "it runs on a
+Kaggle kernel" is checked rather than assumed. Getting 121 notebooks up hit
+three failures that all present as the same misleading HTTP 409:
+
+```
+ERROR HTTP 409 {"code":409,"message":"The requested title \u0022Cyber Commons A1.4\u0022 ...
+```
+
+**The username was wrong, and nothing said so.** A kernel is addressed as
+`<username>/<slug>`. `KAGGLE_USERNAME` had been set from the GitHub
+organisation rather than the Kaggle account, so every push named a namespace
+belonging to somebody else — and Kaggle reports that as a *title* conflict, not
+as an authentication or authorisation error. Auth succeeds, the account name is
+never mentioned, and the message points at the one thing that is not the
+problem.
+
+**There is no whoami endpoint.** The only reliable way to learn which account a
+token belongs to is to push a kernel with an empty slug and read the owner out
+of the returned `ref`. The script now does that once and caches the answer next
+to the credentials.
+
+**The probe collides with itself, twice over.** A probe with a fixed title
+409s on the second run against the kernel the first run left behind. And
+because `credentials()` was called per request while pushes run four at a
+time, four concurrent probes raced for the same title and three came back
+409 — reproducing the exact error the resolution was added to prevent. The
+title is now unique per run, the resolution is memoised, and a failed probe
+exits loudly rather than falling back to the claimed username, which is what
+made the first version of this fix look like it had not worked.
+
+The general lesson is the one the Keycloak section makes too: **the error a
+service returns is about the request it could not satisfy, not about the
+mistake you made.** A 409 about titles was, in order, a wrong account, a stale
+probe kernel, and a concurrency race.
+
+---
+
 ## What was not run
 
-**No model API call was made against a billed endpoint.** There is no
-`ANTHROPIC_API_KEY` in this environment, so the gateway lab uses
-`mock_response` and the lessons that call a model fall back to their recorded
-replay. `scripts/live_model_test.py` performs the real call when a key is
-present; it has not been run here.
+**No model API call has completed against a billed endpoint yet.** Two keys
+were tried and both were blocked before any inference happened:
+
+- **Anthropic** — the key is *identity-linked*, so the Messages API refuses
+  every call with `anthropic-workspace-id is required when authenticating with
+  an identity-linked API key`. The workspace id cannot be discovered from the
+  key itself (`/v1/organizations/workspaces` needs an admin key and returns
+  `permission_error`). The adapter now sends the header when
+  `ANTHROPIC_WORKSPACE_ID` is set, verified by watching the error change from
+  "is required" to "must be a valid workspace ID" — so the plumbing is
+  confirmed and only the value is missing.
+- **OpenAI** — authenticates fine and returns `credit_balance_exhausted`: the
+  account has no credits.
+
+So the gateway lab still uses `mock_response` and the model lessons still fall
+back to their recorded replay, which is the designed behaviour and is labelled
+as a replay everywhere it appears. `scripts/live_model_test.py` performs the
+real calls the moment either is resolved.
+
+That attempt was not wasted: holding real keys is what found the hole in
+`scripts/check_secrets.py`. Its `sk-` rule was anchored on alphanumerics, which
+matches the classic OpenAI key and silently misses both `sk-ant-api03-…` and
+`sk-proj-…`, because those carry hyphens in the body. The scanner had been
+reporting "no credentials" while being unable to detect the two key formats
+actually issued today. It now has a self-test that runs on every invocation.
 
 **No Docker.** There is no daemon in this environment, so Keycloak runs from
 its distribution zip rather than a container. That is why `run.sh` needs Java.
