@@ -1,0 +1,31 @@
+day  12  disable cyber-classifier    ALLOW via EX-118
+day  44  disable cyber-classifier    REFUSE - no approved exemption
+day  12  disable transcript-signing  REFUSE - no approved exemption
+
+The record is the mechanism, not a wiki page describing one. An
+exemption the platform cannot express is an exemption you cannot grant.
+checked one decision at a time:
+   exemption valid : True
+   launch approved : True  (50,000 agents)
+
+Both answers are correct. Turning the classifier off was justified and
+approved; launching at scale was a normal request. Nothing in the path
+required the two to be considered in the same sentence, and the report
+assesses the classifier would likely have blocked many of the actions
+that followed.
+all controls on   class=none              cap=50,000 agents  LAUNCH
+classifier off    class=one-detective-off cap=   200 agents  REFUSED: agents,runtime_hours,egress
+
+same exemption, 200 agents for 8h on an allowlist: LAUNCH
+
+The exemption did not become unavailable. Its price became visible, and
+the orchestrator charges it rather than asking someone to remember.
+state                       class                agent cap  runtime
+classifiers on              none                    50,000      72h
+classifier off              one-detective-off          200       8h
+classifier + signing off    two-or-more-off             25       2h
+
+50,000 -> 200 -> 25. The second exemption costs an order of magnitude
+more than the first, which is the correct shape: compounding is where
+the incident's risk sat, and it is the case a human reviewer is worst at
+holding in their head.

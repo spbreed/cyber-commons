@@ -1,34 +1,52 @@
-the bug is on line 22
-whole file             839 chars   29 lines
-±2 line window         207 chars    5 lines
-±6 line window         432 chars   13 lines
-strategy            sink   concat  source  intent  decidable
-----------------------------------------------------------------
-whole file          True   True    True    True    True
-±2 line window      True   True    False   False   False
-±6 line window      True   True    True    True    True
-
-The ±2 window has the sink and the concatenation but not the signature,
-so you cannot tell whether owner is user-controlled — which is the
-difference between critical and won't-fix.
-def list_reports(conn, owner, limit=DEFAULT_LIMIT):
-    """Called from GET /reports?owner=... — owner is user-controlled."""
-    key = _cache_key("reports", owner, limit)
-    if key in CACHE:
-        return CACHE[key]
-    rows = conn.execute("SELECT * FROM reports WHERE owner = '" + owner + "' LIMIT " + str(limit))
-    out = [_format_row(r) for r in rows]
-    CACHE[key] = out
-    return out
-
-
-394 chars (47% of the file), decidable=True
-strategy              chars   share  decidable  noise fns
+tool          writes  scope    reversible  inner loop?
 ----------------------------------------------------------
-whole file              839    100%       True          4
-±2 line window          207     25%      False          0
-±6 line window          432     52%       True          1
-path slice              394     47%       True          0
+read_file     False   self     True        True
+write_file    True    project  True        True
+run_tests     True    self     True        True
+run_shell     True    tenant   False       True
+git_commit    True    project  True        True
+git_push      True    project  False       False
+read_env      False   org      True        False
+http_get      False   self     True        True
 
-smallest decidable context: path slice (47% of the file, 0 unrelated functions)
-vs whole file: 53% smaller, 4→0 unrelated functions
+default blast radius: 29
+path                                                            default  contained
+------------------------------------------------------------------------------------
+/home/dana/work/monorepo/src/app.py                             True     True
+/home/dana/work/monorepo/.env                                   True     False
+/home/dana/work/other-team-repo/secrets.yaml                    True     False
+/home/dana/.aws/credentials                                     True     False
+/home/dana/.ssh/id_ed25519                                      True     False
+/home/dana/.config/gcloud/application_default_credentials.json  True     False
+/home/dana/Downloads/customer-export-2026.csv                   True     False
+
+credential files reachable by default: 4
+credential files reachable when contained: 0
+blast radius      29 →  23
+reachable files    7 →   1
+credentials        4 →   0
+friction added   0.4 of 1.0 — one confirmation before a push
+
+No cloud or SSH credential is reachable, the inner loop is unchanged,
+and the only thing a developer notices is a prompt before pushing.
+loaded skill: coding-agent-hardening
+  tools it may use: Read, Grep, Glob
+  routing description: 53 words
+  procedure: 79 lines
+conformance: 0 problem(s)
+
+auto-loaded, content-controlled inputs: ['README.md', 'docs/CONTRIBUTING.md', 'package.json']
+most powerful pre-approved tool      : read_env (org scope)
+
+allowlist:
+   write_file  project scope, reversible         bounded=True
+   run_tests   self scope, reversible            bounded=True
+   run_shell   tenant scope, IRREVERSIBLE        bounded=False
+   git_commit  project scope, reversible         bounded=True
+   git_push    project scope, IRREVERSIBLE       bounded=False
+
+unbounded pre-approved tools: ['run_shell', 'git_push']
+
+The injection finding is Critical not because the README says anything
+clever, but because a directive path exists to a tool that cannot be
+undone. Rewrite the payload and the severity does not move.

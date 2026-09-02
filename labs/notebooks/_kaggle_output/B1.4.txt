@@ -1,50 +1,32 @@
-uniform · model review            spend   28.0  covered 2/6
-      get_report
-      health
+7 raw findings from 3 tracks
+   grep  CWE-89   billing.py:7  execute       conf=0.50
+   taint CWE-89   billing.py:7  execute       conf=1.00
+   model CWE-89   billing.py:8  execute       conf=0.93
+   model CWE-943  billing.py:7  execute       conf=0.71
+   model CWE-89   billing.py:11 execute       conf=0.44
+   model CWE-798  billing.py:3  DB_PASSWORD   conf=0.88
+   model CWE-78   billing.py:6  os.system     conf=0.67
+7 findings → 4 distinct defects
 
-allocated by threat rank          spend   23.0  covered 6/6
-      load_report → execute   model review
-      get_report              taint rules
-      store → open            taint rules
-      upload_doc              taint rules
-      render                  taint rules
-      health                  taint rules
-strategy                            coverage   threat-weighted
-----------------------------------------------------------------
-uniform · model review                   33%               27%
-allocated by threat rank                100%              100%
+   CWE-89  list_reports  execute       merged 4 from ['grep', 'model', 'taint']  (kept taint)
+   CWE-89  total         execute       merged 1 from ['model']  (kept model)
+   CWE-798 None          DB_PASSWORD   merged 1 from ['model']  (kept model)
+   CWE-78  build_filter  os.system     merged 1 from ['model']  (kept model)
+cwe      symbol         line  verdict
+--------------------------------------------------------------------------
+CWE-89   execute           7  verified
+CWE-89   execute          11  verified
+CWE-798  DB_PASSWORD       3  REJECTED — symbol 'DB_PASSWORD' does not appear in the file
+CWE-78   os.system         6  REJECTED — symbol 'os.system' does not appear in the file
 
-The uniform sweep spent its whole budget alphabetically and covered
-the health endpoint before it reached the SQL sink.
-high-threat targets the uniform sweep never reached: ['load_report → execute', 'store → open', 'upload_doc']
-budget                    30
-spend                     23.0
-threat_weighted_coverage  1.0
-deep_analysis_on          ['load_report → execute']
-uncovered_high_threat     []
-acceptable                True
+2 verified, 2 rejected as hallucinations
+stage 7 emitted        7
+after stage 8 (dedup)  4   (43% removed)
+after stage 9 (verify) 2   (71% removed overall)
 
-same budget, if someone doubles the repo with low-risk code:
-   threat-weighted coverage 100% → 90%
-   uncovered high-threat targets: none
+surviving: tp=1 fp=1
+   rejected CWE-798 on 'DB_PASSWORD' — provably not in the code
+   rejected CWE-78 on 'os.system' — provably not in the code
 
-Allocation is what stops repository growth from silently degrading
-the analysis of the parts that matter.
-loaded skill: appsec-threat-model
-  tools it may use: Read, Grep, Glob
-  routing description: 46 words
-  procedure: 91 lines
-conformance: 0 problem(s)
-
-selected 6 of 6 threats; 3 of them wanted deep review and did not get it
-distinct CWEs covered: 5
-
-   deferred: get_report             wanted model review, budget allowed taint rules
-   deferred: store → open           wanted model review, budget allowed taint rules
-   deferred: upload_doc             wanted model review, budget allowed taint rules
-
-`deferred` is not bookkeeping. Every target got *an* analyser, so a
-coverage number counting targets would read 100%. What the budget
-actually cut was depth, on three of the four highest-threat targets.
-That distinction travels to the report as the scope statement, and a
-plan that drops it produces a report that overclaims.
+Both hallucinations named things that are not in the file. No model,
+no judgement, no cost — just the AST disagreeing with the claim.

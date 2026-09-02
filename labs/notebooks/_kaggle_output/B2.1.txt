@@ -1,25 +1,65 @@
-step  ok    proposal                                    detail
-----  ------------------------------------------------------------------------------
-   1  False def is_expired(cert): return cert.days_left is_expired(days_left=0) → Fa
-   2  True  def is_expired(cert): return cert.days_left all 4 cases pass
+model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-stopped by: verifier satisfied    succeeded: True
-step  ok    proposal                                    detail
-----  ------------------------------------------------------------------------------
-   1  True  def is_expired(cert): return cert.days_left judge: looks like a valid fi
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, set one of:
 
-stopped by: verifier satisfied    succeeded: True
+   frontier     export ANTHROPIC_API_KEY=...   # cheapest: claude-haiku-4-5-20251001
+                (an identity-linked key also needs
+                 ANTHROPIC_WORKSPACE_ID=...)
+   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \
+                       OPENAI_API_KEY=ollama MODEL=glm-4.6
 
-the accepted code says a cert with 0 days left is expired: False
-It is not. A certificate expiring today is still valid today, and this
-harness just shipped that. The trace above is clean and reports success.
-verifier                          succeeded  steps  stopped by
-----------------------------------------------------------------------------
-behavioural (executes the code)   True       2      verifier satisfied
-self-grading (asks the model)     True       1      verifier satisfied
-none                              False      4      step budget (4 steps)
+   On Kaggle: Add-ons -> Secrets, add ANTHROPIC_API_KEY, and switch
+   Internet on in the notebook settings. Internet requires a
+   phone-verified Kaggle account; without it DNS fails in the kernel
+   and this lesson correctly stays on the replay.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Review this function and report any security vulnerability as JSON...
 
-what each one accepted:
-   behavioural (executes the code)   def is_expired(cert): return cert.days_left <= 0
-   self-grading (asks the model)     def is_expired(cert): return cert.days_left < 0
-   none                              —
+answer:
+   {"cwe": "CWE-89", "file": "src/data/reports.py", "line": 2, "rationale": "ref and owner are concatenated into the SQL string, so a traveller-supplied booking reference can terminate the literal and append arbitrary SQL"}
+
+property checked : reports CWE-89
+held on replay       : True
+
+Same code, same assertions, three possible backends. Offline the answer
+is the replay and is labelled as one; with a key it is the model's.
+q1: conforming
+q2: conforming
+q3: conforming
+q4: non-conforming: not JSON (Expecting value)
+pair                              basename match   path_key match
+------------------------------------------------------------------
+CWE-89/1.py  vs  CWE-79/1.py      True             False
+a/CWE-22/3.c  vs  b/CWE-78/3.c    True             False
+
+q3 answered about CWE-89/1.py when the truth is CWE-22/3.c.
+   basename says match: False
+   path_key says match: False
+  questions            4
+  conformance          0.7500   ← schema validity. Structural. NOT quality.
+  expert accuracy      0.3750   ← correctness
+  judge accuracy (MIN) 0.2500
+  failures             3
+
+failures:
+   q2  [3-expert]  right file, wrong class (said CWE-89, truth CWE-78)
+   q3  [3-expert]  wrong file
+   q4  [1-ingest]  non-conforming: not JSON (Expecting value)
+after adding structured output:
+  questions            4
+  conformance          1.0000   ← schema validity. Structural. NOT quality.
+  expert accuracy      0.6250   ← correctness
+  judge accuracy (MIN) 0.3750
+  failures             2
+
+conformance  0.75 → 1.00   (+0.25)
+expert acc   0.38 → 0.62   (+0.25)
+
+A press release could truthfully say 'conformance improved to 100%'.
+The harness still gets half the questions wrong.
+
+without any capability at all: {'conformance': 1.0, 'majority_class': 'CWE-89', 'accuracy_by_always_guessing_majority': 0.5}

@@ -1,62 +1,50 @@
-tool          writes  scope    reversible  inner loop?
-----------------------------------------------------------
-read_file     False   self     True        True
-write_file    True    project  True        True
-run_tests     True    self     True        True
-run_shell     True    tenant   False       True
-git_commit    True    project  True        True
-git_push      True    project  False       False
-read_env      False   org      True        False
-http_get      False   self     True        True
-
-default blast radius: 29
-path                                                            default  contained
-------------------------------------------------------------------------------------
-/home/dana/work/monorepo/src/app.py                             True     True
-/home/dana/work/monorepo/.env                                   True     False
-/home/dana/work/other-team-repo/secrets.yaml                    True     False
-/home/dana/.aws/credentials                                     True     False
-/home/dana/.ssh/id_ed25519                                      True     False
-/home/dana/.config/gcloud/application_default_credentials.json  True     False
-/home/dana/Downloads/customer-export-2026.csv                   True     False
-
-credential files reachable by default: 4
-credential files reachable when contained: 0
-control                        friction  effect
+stage  name                              mantis    note
 ------------------------------------------------------------------------------------------------
-deny-list credential paths          0.0             agent cannot read ~/.aws, ~/.ssh, ~/.env. Developers never noticed.
-workspace confinement               0.1  █          agent sees the open repo only. Occasionally annoying for monorepo hops.
-egress allowlist                    0.2  ██         package registries + your VCS. Breaks the odd curl in a generated script.
-gate git_push                       0.4  ████       one confirmation before code leaves the machine. Noticed, usually accepted.
-gate every write                    0.9  █████████  confirmation per file write. Abandoned within a week, every time.
-no shell at all                     1.0  ██████████ removes the inner loop. Nobody will use the agent.
+  1  historical parsing                yes       historical_learnings.jsonl is read on subsequent runs
+  2  structural indexing               partial   operates over the agent's code-reading tools
+  3  component summarisation           partial   context assembled per review target
+  4  architecture synthesis            no        assumes you supply the architecture context
+  5  threat modelling                  partial   review skills encode threat patterns rather than deriving them
+  6  strategic planning                no        you decide what to point it at
+  7  vulnerability auditing            yes       the core: security-review skills emitting finding objects
+  8  deduplication                     partial   findings are structured, so dedup is possible downstream
+  9  contextual verification           partial   structured output aids verification; you still run the checks
+ 10  feasibility filtering             no        reachability is yours
+ 11  sandbox replication               no        no sandbox — it is a review harness, not a DAST
+ 12  dynamic exploitation              no        static review only
+ 13  exploit chaining                  no        no chaining
+ 14  remediation engineering           partial   can propose fixes; validation is yours (B1.9)
+ 15  severity calibration and reportingpartial   emits severity; calibration against confirmation is yours
 
-ship now (friction ≤ 0.4): ['deny-list credential paths', 'workspace confinement', 'egress allowlist', 'gate git_push']
-blast radius      29 →  23
-reachable files    7 →   1
-credentials        4 →   0
-friction added   0.4 of 1.0 — one confirmation before a push
+coverage: {'yes': 2, 'partial': 7, 'no': 6}
+→ Mantis is a strong Phase 3 stage-7 implementation with a stage-1 loop.
+  Phases 4 and 5 remain yours, which is exactly what B1.6-B1.10 built.
+conforming                                                {"type":"learning_entry","title":"owner filt…
+conforming                                                {"type":"finding","title":"SQL injection in …
+non-conforming: learning_entry missing ['history']        {"type":"learning_entry","title":"path join …
+non-conforming: finding missing ['cwe']                   {"type":"finding","title":"traversal","sever…
+non-conforming: not JSON (Expecting value)                I found a SQL injection in the reports modul…
 
-No cloud or SSH credential is reachable, the inner loop is unchanged,
-and the only thing a developer notices is a prompt before pushing.
-loaded skill: coding-agent-hardening
-  tools it may use: Read, Grep, Glob
-  routing description: 53 words
-  procedure: 79 lines
-conformance: 0 problem(s)
+conformance: 2/5 = 0.40
+file                      result                                score
+--------------------------------------------------------------------------
+src/data/reports.py       correct                               1.0
+src/data/docs.py          right file, wrong class (None)        0.5
+src/web/handlers.py       MISSED                                0.0
 
-auto-loaded, content-controlled inputs: ['README.md', 'docs/CONTRIBUTING.md', 'package.json']
-most powerful pre-approved tool      : read_env (org scope)
+conformance       0.4000   ← structural. NOT quality.
+expert accuracy   0.5000   ← the adoption number
+1 learning entry/entries carried into the next run:
+   owner filter built by concatenation
+      history: introduced in c3d4e5f, fixed once in 2025 and reintroduced
 
-allowlist:
-   write_file  project scope, reversible         bounded=True
-   run_tests   self scope, reversible            bounded=True
-   run_shell   tenant scope, IRREVERSIBLE        bounded=False
-   git_commit  project scope, reversible         bounded=True
-   git_push    project scope, IRREVERSIBLE       bounded=False
+stage 1 input for the next run (Phase 5 → Phase 1):
+   src/data/reports.py        weight 3
+   src/data/docs.py           weight 1
 
-unbounded pre-approved tools: ['run_shell', 'git_push']
-
-The injection finding is Critical not because the README says anything
-clever, but because a directive path exists to a tool that cannot be
-undone. Rewrite the payload and the severity does not move.
+ADOPTION CHECKLIST
+   · map its stages onto your fifteen — know what it does NOT do
+   · score it against YOUR held-out key before trusting a single finding
+   · report conformance and accuracy separately, always
+   · keep Phase 4 — a static reviewer cannot confirm exploitability
+   · feed learning entries back into stage 1, or the loop does not close

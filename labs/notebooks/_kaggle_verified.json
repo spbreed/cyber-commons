@@ -1,19 +1,25 @@
 {
  "generated_by": "scripts/kaggle_verify.py",
  "account": "cybercommons",
- "verified": 121,
- "checked": 121,
+ "verified": 54,
+ "checked": 59,
  "empty_output": [],
- "line_count_mismatch": [],
+ "line_count_mismatch": [
+  "B1.1",
+  "B1.3",
+  "B1.9",
+  "B2.1",
+  "C1.1"
+ ],
  "note": "A kernel status of 'complete' only means Kaggle finished running it \u2014 a notebook printing nothing also completes. Each row here compares the kernel's remote stdout against a fresh local run of the same notebook, after identical normalisation. 'identical: true' means both machines printed exactly the same thing.",
  "results": [
   {
    "session": "A1.0",
    "ok": true,
    "identical": true,
-   "runs_code": true,
-   "remote_lines": 18,
-   "local_lines": 18,
+   "runs_code": false,
+   "remote_lines": 0,
+   "local_lines": 0,
    "first_differing_line": null
   },
   {
@@ -86,6 +92,15 @@
    "runs_code": true,
    "remote_lines": 15,
    "local_lines": 15,
+   "first_differing_line": null
+  },
+  {
+   "session": "A1.17",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 39,
+   "local_lines": 39,
    "first_differing_line": null
   },
   {
@@ -183,8 +198,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 9,
-   "local_lines": 9,
+   "remote_lines": 26,
+   "local_lines": 26,
    "first_differing_line": null
   },
   {
@@ -201,8 +216,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 12,
-   "local_lines": 12,
+   "remote_lines": 53,
+   "local_lines": 53,
    "first_differing_line": null
   },
   {
@@ -224,12 +239,30 @@
    "first_differing_line": null
   },
   {
+   "session": "A2.8",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 24,
+   "local_lines": 24,
+   "first_differing_line": null
+  },
+  {
    "session": "A3.1",
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 19,
-   "local_lines": 19,
+   "remote_lines": 23,
+   "local_lines": 23,
+   "first_differing_line": null
+  },
+  {
+   "session": "A3.10",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 29,
+   "local_lines": 29,
    "first_differing_line": null
   },
   {
@@ -237,8 +270,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 21,
-   "local_lines": 21,
+   "remote_lines": 40,
+   "local_lines": 40,
    "first_differing_line": null
   },
   {
@@ -287,43 +320,43 @@
    "first_differing_line": null
   },
   {
-   "session": "B1.0",
+   "session": "A3.8",
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 22,
-   "local_lines": 22,
+   "remote_lines": 23,
+   "local_lines": 23,
+   "first_differing_line": null
+  },
+  {
+   "session": "A3.9",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 26,
+   "local_lines": 26,
+   "first_differing_line": null
+  },
+  {
+   "session": "B1.0",
+   "ok": true,
+   "identical": true,
+   "runs_code": false,
+   "remote_lines": 0,
+   "local_lines": 0,
    "first_differing_line": null
   },
   {
    "session": "B1.1",
-   "ok": true,
-   "identical": true,
+   "ok": false,
+   "identical": false,
    "runs_code": true,
-   "remote_lines": 52,
-   "local_lines": 52,
-   "first_differing_line": null
+   "remote_lines": 89,
+   "local_lines": 79,
+   "first_differing_line": 24
   },
   {
    "session": "B1.10",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 62,
-   "local_lines": 62,
-   "first_differing_line": null
-  },
-  {
-   "session": "B1.11",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 27,
-   "local_lines": 27,
-   "first_differing_line": null
-  },
-  {
-   "session": "B1.12",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -332,7 +365,7 @@
    "first_differing_line": null
   },
   {
-   "session": "B1.13",
+   "session": "B1.11",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -341,7 +374,7 @@
    "first_differing_line": null
   },
   {
-   "session": "B1.14",
+   "session": "B1.12",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -350,16 +383,16 @@
    "first_differing_line": null
   },
   {
-   "session": "B1.15",
+   "session": "B1.13",
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 54,
-   "local_lines": 54,
+   "remote_lines": 45,
+   "local_lines": 45,
    "first_differing_line": null
   },
   {
-   "session": "B1.16",
+   "session": "B1.14",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -368,7 +401,7 @@
    "first_differing_line": null
   },
   {
-   "session": "B1.17",
+   "session": "B1.15",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -381,39 +414,21 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 66,
-   "local_lines": 66,
+   "remote_lines": 40,
+   "local_lines": 40,
    "first_differing_line": null
   },
   {
    "session": "B1.3",
-   "ok": true,
-   "identical": true,
+   "ok": false,
+   "identical": false,
    "runs_code": true,
-   "remote_lines": 22,
-   "local_lines": 22,
-   "first_differing_line": null
+   "remote_lines": 70,
+   "local_lines": 60,
+   "first_differing_line": 0
   },
   {
    "session": "B1.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 43,
-   "local_lines": 43,
-   "first_differing_line": null
-  },
-  {
-   "session": "B1.5",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 34,
-   "local_lines": 34,
-   "first_differing_line": null
-  },
-  {
-   "session": "B1.6",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -422,7 +437,7 @@
    "first_differing_line": null
   },
   {
-   "session": "B1.7",
+   "session": "B1.5",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -431,7 +446,7 @@
    "first_differing_line": null
   },
   {
-   "session": "B1.8",
+   "session": "B1.6",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -440,13 +455,31 @@
    "first_differing_line": null
   },
   {
-   "session": "B1.9",
+   "session": "B1.7",
    "ok": true,
    "identical": true,
    "runs_code": true,
    "remote_lines": 21,
    "local_lines": 21,
    "first_differing_line": null
+  },
+  {
+   "session": "B1.8",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 62,
+   "local_lines": 62,
+   "first_differing_line": null
+  },
+  {
+   "session": "B1.9",
+   "ok": false,
+   "identical": false,
+   "runs_code": true,
+   "remote_lines": 52,
+   "local_lines": 42,
+   "first_differing_line": 0
   },
   {
    "session": "B2.0",
@@ -459,33 +492,15 @@
   },
   {
    "session": "B2.1",
-   "ok": true,
-   "identical": true,
+   "ok": false,
+   "identical": false,
    "runs_code": true,
-   "remote_lines": 21,
-   "local_lines": 21,
-   "first_differing_line": null
+   "remote_lines": 54,
+   "local_lines": 44,
+   "first_differing_line": 0
   },
   {
-   "session": "B2.10",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 34,
-   "local_lines": 34,
-   "first_differing_line": null
-  },
-  {
-   "session": "B2.11",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 31,
-   "local_lines": 31,
-   "first_differing_line": null
-  },
-  {
-   "session": "B2.12",
+   "session": "B2.2",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -494,94 +509,31 @@
    "first_differing_line": null
   },
   {
-   "session": "B2.2",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 34,
-   "local_lines": 34,
-   "first_differing_line": null
-  },
-  {
    "session": "B2.3",
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 26,
-   "local_lines": 26,
-   "first_differing_line": null
-  },
-  {
-   "session": "B2.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 34,
-   "local_lines": 34,
-   "first_differing_line": null
-  },
-  {
-   "session": "B2.5",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 16,
-   "local_lines": 16,
-   "first_differing_line": null
-  },
-  {
-   "session": "B2.6",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 30,
-   "local_lines": 30,
-   "first_differing_line": null
-  },
-  {
-   "session": "B2.7",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 32,
-   "local_lines": 32,
-   "first_differing_line": null
-  },
-  {
-   "session": "B2.8",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 36,
-   "local_lines": 36,
-   "first_differing_line": null
-  },
-  {
-   "session": "B2.9",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 30,
-   "local_lines": 30,
+   "remote_lines": 35,
+   "local_lines": 35,
    "first_differing_line": null
   },
   {
    "session": "C1.0",
    "ok": true,
    "identical": true,
-   "runs_code": true,
-   "remote_lines": 12,
-   "local_lines": 12,
+   "runs_code": false,
+   "remote_lines": 0,
+   "local_lines": 0,
    "first_differing_line": null
   },
   {
    "session": "C1.1",
-   "ok": true,
-   "identical": true,
+   "ok": false,
+   "identical": false,
    "runs_code": true,
-   "remote_lines": 37,
-   "local_lines": 37,
-   "first_differing_line": null
+   "remote_lines": 62,
+   "local_lines": 52,
+   "first_differing_line": 0
   },
   {
    "session": "C1.2",
@@ -590,510 +542,6 @@
    "runs_code": true,
    "remote_lines": 45,
    "local_lines": 45,
-   "first_differing_line": null
-  },
-  {
-   "session": "C1.3",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 30,
-   "local_lines": 30,
-   "first_differing_line": null
-  },
-  {
-   "session": "C1.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 33,
-   "local_lines": 33,
-   "first_differing_line": null
-  },
-  {
-   "session": "C2.1",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 40,
-   "local_lines": 40,
-   "first_differing_line": null
-  },
-  {
-   "session": "C2.2",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 30,
-   "local_lines": 30,
-   "first_differing_line": null
-  },
-  {
-   "session": "C2.3",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 36,
-   "local_lines": 36,
-   "first_differing_line": null
-  },
-  {
-   "session": "C2.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 28,
-   "local_lines": 28,
-   "first_differing_line": null
-  },
-  {
-   "session": "C2.5",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 42,
-   "local_lines": 42,
-   "first_differing_line": null
-  },
-  {
-   "session": "C2.6",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 43,
-   "local_lines": 43,
-   "first_differing_line": null
-  },
-  {
-   "session": "C2.7",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 40,
-   "local_lines": 40,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.0",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 14,
-   "local_lines": 14,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.1",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 46,
-   "local_lines": 46,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.2",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 46,
-   "local_lines": 46,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.3",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 25,
-   "local_lines": 25,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 20,
-   "local_lines": 20,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.5",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 28,
-   "local_lines": 28,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.6",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 33,
-   "local_lines": 33,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.7",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 24,
-   "local_lines": 24,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.8",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 36,
-   "local_lines": 36,
-   "first_differing_line": null
-  },
-  {
-   "session": "D2.1",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 42,
-   "local_lines": 42,
-   "first_differing_line": null
-  },
-  {
-   "session": "D2.2",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 38,
-   "local_lines": 38,
-   "first_differing_line": null
-  },
-  {
-   "session": "D2.3",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 44,
-   "local_lines": 44,
-   "first_differing_line": null
-  },
-  {
-   "session": "D2.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 29,
-   "local_lines": 29,
-   "first_differing_line": null
-  },
-  {
-   "session": "D2.5",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 35,
-   "local_lines": 35,
-   "first_differing_line": null
-  },
-  {
-   "session": "D2.6",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 29,
-   "local_lines": 29,
-   "first_differing_line": null
-  },
-  {
-   "session": "D2.7",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 36,
-   "local_lines": 36,
-   "first_differing_line": null
-  },
-  {
-   "session": "D2.8",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 31,
-   "local_lines": 31,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.0",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 18,
-   "local_lines": 18,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.1",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 28,
-   "local_lines": 28,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.10",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 57,
-   "local_lines": 57,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.11",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 47,
-   "local_lines": 47,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.12",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 43,
-   "local_lines": 43,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.2",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 31,
-   "local_lines": 31,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.3",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 45,
-   "local_lines": 45,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 70,
-   "local_lines": 70,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.5",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 42,
-   "local_lines": 42,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.6",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 27,
-   "local_lines": 27,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.7",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 25,
-   "local_lines": 25,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.8",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 32,
-   "local_lines": 32,
-   "first_differing_line": null
-  },
-  {
-   "session": "E1.9",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 26,
-   "local_lines": 26,
-   "first_differing_line": null
-  },
-  {
-   "session": "E2.1",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 34,
-   "local_lines": 34,
-   "first_differing_line": null
-  },
-  {
-   "session": "E2.2",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 38,
-   "local_lines": 38,
-   "first_differing_line": null
-  },
-  {
-   "session": "E2.3",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 33,
-   "local_lines": 33,
-   "first_differing_line": null
-  },
-  {
-   "session": "E2.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 38,
-   "local_lines": 38,
-   "first_differing_line": null
-  },
-  {
-   "session": "E2.5",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 39,
-   "local_lines": 39,
-   "first_differing_line": null
-  },
-  {
-   "session": "E2.6",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 34,
-   "local_lines": 34,
-   "first_differing_line": null
-  },
-  {
-   "session": "E2.7",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 34,
-   "local_lines": 34,
-   "first_differing_line": null
-  },
-  {
-   "session": "E2.8",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 27,
-   "local_lines": 27,
-   "first_differing_line": null
-  },
-  {
-   "session": "E2.9",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 35,
-   "local_lines": 35,
-   "first_differing_line": null
-  },
-  {
-   "session": "E3.1",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 34,
-   "local_lines": 34,
-   "first_differing_line": null
-  },
-  {
-   "session": "E3.2",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 35,
-   "local_lines": 35,
-   "first_differing_line": null
-  },
-  {
-   "session": "E3.3",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 45,
-   "local_lines": 45,
-   "first_differing_line": null
-  },
-  {
-   "session": "E3.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 37,
-   "local_lines": 37,
-   "first_differing_line": null
-  },
-  {
-   "session": "E3.5",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 31,
-   "local_lines": 31,
-   "first_differing_line": null
-  },
-  {
-   "session": "E3.6",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 40,
-   "local_lines": 40,
-   "first_differing_line": null
-  },
-  {
-   "session": "E3.7",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 31,
-   "local_lines": 31,
-   "first_differing_line": null
-  },
-  {
-   "session": "E3.8",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 39,
-   "local_lines": 39,
    "first_differing_line": null
   }
  ]

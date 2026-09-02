@@ -1,0 +1,46 @@
+family                                       risks  ids
+identity and authorisation                       3  R1, R5, R11
+code and CI/CD pipeline                          2  R7, R8
+lateral movement and logging                     2  R9, R10
+RAG misconfiguration and data exposure           1  R12
+guardrail tampering                              1  R2
+local filesystem manipulation                    1  R6
+prompt injection and instruction hijacking       1  R3
+software supply chain and execution              1  R4
+
+risks: 12   families: 8
+largest family: identity and authorisation (3 of 12)
+
+Identity carries a quarter of the register on its own - over-privileged
+execution, plaintext long-lived tokens, and no lineage from a human to an
+action. None of the three is exotic, and all three are closed by the same
+chapter. That is why chapter 2 is identity and not something more
+interesting.
+agent        risks
+all four         5
+advisor          2
+coding           2
+workflow         2
+files            1
+
+risks that belong to no single agent : 5 of 12
+
+Five of twelve are not any one agent's problem. They are properties of
+how the four are wired together - ingress, transport, identity, logging,
+and what a held agent can reach. Assign those to an agent owner and they
+will be nobody's, which is the failure E1.10 is entirely about.
+risks with at least one owning lesson : 12/12
+distinct lessons doing the work       : 29
+
+function   lessons
+A               19
+B                5
+C                1
+D                2
+E                2
+
+risks with no owner: none
+
+Twelve risks, twenty-odd lessons, four functions. A register that fits on
+one page and points at everything else is the artefact this chapter was
+for - and the thing to re-run whenever CyberTravels grows a fifth agent.

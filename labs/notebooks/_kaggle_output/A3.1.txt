@@ -1,22 +1,26 @@
+   charge_card payments:booking          ['CHARGE']
+   run_query   table:bookings            ['SELECT', 'UPDATE']
+   send_email  domain:cybertravels.com   ['*']
 allow-by-default:
-   run_query  table:reports         SELECT ALLOW rule reports-agent/run_query/table:reports
-   run_query  table:secrets         SELECT ALLOW allowed by default
-   run_query  table:reports         DELETE deny  verb DELETE not permitted on table:reports
-   send_email domain:evil.example   *      ALLOW allowed by default
-   drop_table table:reports         *      ALLOW allowed by default
+   run_query   table:bookings                SELECT ALLOW run_query on table:bookings permits SELECT
+   run_query   table:customer_pii            SELECT ALLOW allowed by default
+   charge_card payments:booking              REFUND deny  REFUND not permitted on payments:booking (only ['CHARGE'])
+   send_email  domain:archive.evil.example   *      ALLOW allowed by default
+   drop_table  table:bookings                *      ALLOW allowed by default
    -> 4/5 permitted
 
 DEFAULT-DENY:
-   run_query  table:reports         SELECT ALLOW rule reports-agent/run_query/table:reports
-   run_query  table:secrets         SELECT deny  no rule matches - default deny
-   run_query  table:reports         DELETE deny  verb DELETE not permitted on table:reports
-   send_email domain:evil.example   *      deny  no rule matches - default deny
-   drop_table table:reports         *      deny  no rule matches - default deny
+   run_query   table:bookings                SELECT ALLOW run_query on table:bookings permits SELECT
+   run_query   table:customer_pii            SELECT deny  resource outside the entitlement
+   charge_card payments:booking              REFUND deny  REFUND not permitted on payments:booking (only ['CHARGE'])
+   send_email  domain:archive.evil.example   *      deny  resource outside the entitlement
+   drop_table  table:bookings                *      deny  no entitlement for this identity+tool
    -> 1/5 permitted
 
-The only call that should succeed is the first. Under allow-by-default
-four do, and each one is a real risk from Chapter 1 walking through.
+Only the first call should succeed. Under allow-by-default four do, and
+each one is a real risk from Chapter 1 walking through.
 
-Note the third row: same identity, same tool, same resource, refused on
-the verb. Authorization attached to the tool instead of the call cannot
-express that distinction at all.
+Row three is the one to sit with: same identity, same tool, same
+resource, refused on the VERB. An entitlement attached to the tool
+instead of the call cannot express that distinction at all - and the
+distance between CHARGE and REFUND is the whole of R1.

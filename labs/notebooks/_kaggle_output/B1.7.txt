@@ -1,86 +1,23 @@
-call graph:
-   http_get_report   → ['load_report']
-   http_health       → —
-   load_report       → —
-   legacy_export     → —
-   debug_dump        → —
-   dispatch          → —
+normal use:
+   list_reports('test-user-a') → [(1, 'test-user-a', 100), (2, 'test-user-a', 250)]
+   fetch_doc('readme.txt')     → public readme
+probe  cwe      exploited  observation
+--------------------------------------------------------------------------
+P-01   CWE-89   True       4 rows, owners=['test-user-a', 'test-user-b', 'test-user-c']
+P-02   CWE-22   True       returned 'synthetic-not-real-9999'
+P-03   CWE-89   False      2 rows, owners=['test-user-a']
+probe  weak assertion   effect assertion  agreement
+------------------------------------------------------------------
+P-01   True             True              
+P-02   True             True              
+P-03   True             False             ← DISAGREE
 
-entry points: ['http_get_report', 'http_health', 'dispatch']
-dynamic dispatch present in: ['dispatch']
-finding         cwe      verdict      why
---------------------------------------------------------------------------------------------
-load_report     CWE-89   reachable    path exists from ['http_get_report']
-legacy_export   CWE-89   unknown      no static path, but dispatch() resolves handlers at 
-debug_dump      CWE-22   unknown      no static path, but dispatch() resolves handlers at 
+The weak assertion confirms all three, including the control probe.
+A pipeline built on it reports 100% confirmation and means nothing by it.
+F-01  CWE-89   CONFIRMED   exploit achieved the asserted effect on the replica
+F-02  CWE-22   CONFIRMED   exploit achieved the asserted effect on the replica
+F-03  CWE-89   UNVALIDATED no probe generated — cannot confirm or refute
 
-{'reachable': ['load_report'], 'unknown': ['legacy_export', 'debug_dump']}
-finding         3-bucket     2-bucket (naive)  
-----------------------------------------------------
-load_report     reachable    reachable         
-legacy_export   unknown      unreachable          ← DROPPED
-debug_dump      unknown      unreachable          ← DROPPED
-
-findings silently dropped by two-bucket filtering: ['legacy_export', 'debug_dump']
-legacy_export is reachable through the runtime handler registry in this
-application. Static analysis cannot see that, and 'unreachable' is a lie.
-reachable     1 finding(s) → page / block the merge      confirmed exploit path — goes to Phase 4
-               load_report
-unknown       2 finding(s) → queue for dynamic validationPhase 4 decides it empirically
-               legacy_export
-               debug_dump
-unreachable   0 finding(s) → record, do not page         revisit only if an entry point is added
-
-{'pages_a_human': 1, 'sent_to_phase_4': 3, 'recorded_only': 0, 'human_load_reduction': 0.67}
-
-The unknown bucket is not a failure of the analysis. It is the handover
-to Phase 4, which answers reachability by running the thing.
-loaded skill: appsec-vuln-audit
-  tools it may use: Read, Grep, Glob, Bash
-  routing description: 54 words
-  procedure: 94 lines
-conformance: 0 problem(s)
-
-counts raw->deduped->verified->feasible : [9, 3, 3, 1]
-monotonically non-increasing            : True
-raw findings from three analysers: 9
-deduped on defect identity : 3
-deduped on message text    : 9
-
-conformance problems: 0   <- still zero
-counts               : [9, 9, 9, 3]
-
-Three defects became 9 findings, and every one of them is
-schema-valid. Each analyser words the same defect differently, so the
-message is a unique key by construction - it deduplicates nothing while
-looking like it deduplicates everything.
-
-The queue triples. Nobody reads the third page. The defect that gets
-fixed is whichever one happened to sort first.
-conformance problems: 0
-
-evidence it cited : open('/var/reports/' + request.args['name'])
-CWE it assigned   : CWE-89  (SQL injection)
-CWE it actually is: CWE-22  (path traversal - it is open(), not a query)
-missing_control   : 'str'
-verdict_reason    : 'str'
-counts            : {'raw': 0, 'deduped': 0, 'verified': 0, 'feasible': 0}  while findings has 1
-What a schema check can see:
-   every required field present, every type correct -> 0 problems
-
-What it cannot see:
-   1. the CWE is wrong. open() on a caller-supplied path is CWE-22,
-      not CWE-89. The second sink, os.system(), is CWE-78 - and the
-      model gave that one CWE-89 as well.
-   2. `missing_control` and `verdict_reason` are the literal string
-      'str' - the model copied the contract's TYPE PLACEHOLDER into
-      the value. A schema saying a field must be a string is
-      perfectly satisfied by the word 'str'.
-   3. counts says 0 findings. The findings array has 1.
-
-counts non-increasing?      True  <- passes
-counts.verified == len(findings)?  False  <- catches it
-
-Three defects, zero schema violations. That is what a headline of
-'100% schema-valid' actually means as a quality metric, and it is why
-accuracy has to be measured against a key the model never sees.
+2 confirmed by execution — these go to stages 13-15.
+UNVALIDATED is not a pass. It is a gap in probe generation, and it should
+appear in the report as one.

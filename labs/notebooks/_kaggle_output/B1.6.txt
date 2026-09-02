@@ -1,32 +1,35 @@
-7 raw findings from 3 tracks
-   grep  CWE-89   billing.py:7  execute       conf=0.50
-   taint CWE-89   billing.py:7  execute       conf=1.00
-   model CWE-89   billing.py:8  execute       conf=0.93
-   model CWE-943  billing.py:7  execute       conf=0.71
-   model CWE-89   billing.py:11 execute       conf=0.44
-   model CWE-798  billing.py:3  DB_PASSWORD   conf=0.88
-   model CWE-78   billing.py:6  os.system     conf=0.67
-7 findings → 4 distinct defects
+ALLOW http://replica.local/reports                   replica-internal
+ALLOW http://db.replica.local:5432/                  replica-internal
+DENY  https://api.github.com/                        not on the replica allowlist
+DENY  http://169.254.169.254/latest/meta-data/       private address outside the replica — blocked
+DENY  http://10.0.3.14:9200/_search                  private address outside the replica — blocked
+probe                       on staging    on replica
+--------------------------------------------------------
+drop a table                   REACHES     contained
+exfiltrate user rows           REACHES     contained
+brute-force login              REACHES     contained
 
-   CWE-89  list_reports  execute       merged 4 from ['grep', 'model', 'taint']  (kept taint)
-   CWE-89  total         execute       merged 1 from ['model']  (kept model)
-   CWE-798 None          DB_PASSWORD   merged 1 from ['model']  (kept model)
-   CWE-78  build_filter  os.system     merged 1 from ['model']  (kept model)
-cwe      symbol         line  verdict
---------------------------------------------------------------------------
-CWE-89   execute           7  verified
-CWE-89   execute          11  verified
-CWE-798  DB_PASSWORD       3  REJECTED — symbol 'DB_PASSWORD' does not appear in the file
-CWE-78   os.system         6  REJECTED — symbol 'os.system' does not appear in the file
+what a leaked credential is worth:
+   staging   REAL — usable against real systems
+   replica   worthless — synthetic
 
-2 verified, 2 rejected as hallucinations
-stage 7 emitted        7
-after stage 8 (dedup)  4   (43% removed)
-after stage 9 (verify) 2   (71% removed overall)
+what an exfiltrated record is worth:
+   staging   REAL customer data  dana@corp
+   replica   synthetic  test-user-a
+appsec-replica-8812
+   PASS  network
+   PASS  credentials
+   PASS  data
+   PASS  lifetime
+   → suitable for dynamic testing: True
 
-surviving: tp=1 fp=1
-   rejected CWE-798 on 'DB_PASSWORD' — provably not in the code
-   rejected CWE-78 on 'os.system' — provably not in the code
+staging
+   PASS  network
+   FAIL  credentials
+   FAIL  data
+   FAIL  lifetime
+   → suitable for dynamic testing: False
 
-Both hallucinations named things that are not in the file. No model,
-no judgement, no cost — just the AST disagreeing with the claim.
+replica destroyed; state cannot leak into the next run
+credentials after destroy: cleared
+data after destroy:        cleared

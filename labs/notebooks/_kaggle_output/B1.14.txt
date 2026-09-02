@@ -1,43 +1,77 @@
-normal pipeline run:
-   {'tool': 'read_diff', 'executed': True}
-   {'tool': 'index_repo', 'executed': True}
-   {'tool': 'post_comment', 'executed': True}
-   {'tool': 'approve_pr', 'executed': True}
-carrier                   blocklist flags it?   reaches approve_pr?
-------------------------------------------------------------------------
-code comment              False                 True
-PR description            False                 True
-test fixture              False                 True
-commit message            False                 True
-README (read in stage 3)  False                 True
+loaded skill: agent-code-surface-analyzer
+  tools it may use: Read, Grep, Glob, Bash
+  routing description: 51 words
+  procedure: 66 lines
+C1_default_deny_least_privilege   INTENT_EVIDENCED  runtime verdict needs observed usage and the
+C2_sandbox_no_egress              PARTIAL           absence of a covert channel is not provable 
+C3_identity_chain_obo             INTENT_EVIDENCED  4 signals; enforcement not shown
+C4_gateway_guardrails             INTENT_EVIDENCED  runtime verdict needs reachability testing f
+C5_injection_screening            PARTIAL           detector presence is verifiable; robustness 
 
-Zero of five contain blocklist vocabulary. Five of five approve the PR.
-same payloads, provenance enforced:
-   code comment               executed=False  privileged tool requested by 'code comment', not by the principal
-   PR description             executed=False  privileged tool requested by 'PR description', not by the principal
-   test fixture               executed=False  privileged tool requested by 'test fixture', not by the principal
-   commit message             executed=False  privileged tool requested by 'commit message', not by the principal
-   README (read in stage 3)   executed=False  privileged tool requested by 'README (read in stage 3)', not by the principal
+PASS is not in the vocabulary. The strongest static verdict is
+INTENT_EVIDENCED, and two controls cannot exceed PARTIAL at all.
+repository                          kind    files  tools sinks  C1   C2   C3   C4   C5
+awslabs_mcp                         mcp      2616    140     5  INT PART  INT  INT PART
+crewAIInc_crewAI                    agent    2105     35     5  INT PART  INT  INT PART
+github_github-mcp-server            mcp       258     41     3  INT PART  INT  INT PART
+langchain-ai_langchain              agent    2673     99     5  INT PART  INT  INT PART
+langchain-ai_langgraph              agent     538     20     4  INT    -  INT  INT PART
+microsoft_autogen                   agent     707     49     5  INT PART  INT  INT PART
+modelcontextprotocol_python-sdk     mcp       894    710     4  INT PART  INT  INT PART
+modelcontextprotocol_servers        mcp       100      9     3  INT    -  INT  INT    -
+modelcontextprotocol_typescript-sdk mcp       957     58     2  INT    -  INT  INT PART
+openai_openai-agents-python         agent     998    182     5  INT PART  INT  INT PART
 
-legitimate flow, untouched:
-   read_diff      executed=True
-   index_repo     executed=True
-   post_comment   executed=True
-   approve_pr     executed=True
-read_diff       privileged=False
-                   read-only  reads the PR
-index_repo      privileged=False
-                   read-only  reads the repository
-post_comment    privileged=True
-                   read-only  adds a comment
-                 → STATE CHANGE  CI listens for /retest and /deploy in comments
-dismiss_finding privileged=True
-                 → STATE CHANGE  removes a finding from the report
-approve_pr      privileged=True
-                 → STATE CHANGE  satisfies a required review
+control evaluations : 50
+   INTENT_EVIDENCED    30
+   PARTIAL             16
+   NO_INTENT_FOUND     4
+   PASS                0   <- static evidence cannot prove enforcement
+1. MCP servers shipping NO tool annotations:
+   github_github-mcp-server            41 tool declaration sites
+   The specification is explicit that annotations are hints, not
+   guarantees - and that an UNANNOTATED tool must be assumed
+   destructiveHint=true and openWorldHint=true. Every one of those
+   tool sites inherits that pessimistic default.
 
-privileged set derived from effects: ['approve_pr', 'dismiss_finding', 'post_comment']
-content-driven comment: executed=False — privileged tool requested by 'PR description', not by the principal
+2. Controls with no intent anywhere in the source: 4
+   langchain-ai_langgraph              C2
+   modelcontextprotocol_servers        C2
+   modelcontextprotocol_servers        C5
+   modelcontextprotocol_typescript-sdk C2
 
-post_comment IS privileged here, because CI listens to comments. It
-would not have been last year. Re-derive it whenever CI changes.
+3. Verdicts capped at PARTIAL by the ceiling rule: 16
+   Not because the evidence was weak - because the claim is not
+   provable. An attestation that reported PASS here would be a
+   signed, tamper-evident overstatement, which is worse than none.
+{
+ "_type": "https://in-toto.io/Statement/v1",
+ "subject": [
+  {
+   "name": "awslabs_mcp",
+   "digest": {
+    "gitCommit": "c9e71f7"
+   }
+  }
+ ],
+ "predicateType": "https://cyber-commons/attestations/ai-control-intent/v1",
+ "predicate": {
+  "deployment_id": "awslabs_mcp",
+  "scope": "static source analysis only",
+  "controls": [
+   {
+    "id": "C1_default_deny_least_privilege",
+    "verdict": "INTENT_EVIDENCED",
+    "confidence": "STATIC",
+    "evidence": [
+     {
+      "skill": "agent-code-surface-analyzer",
+      "uri": "labs/attestation/oss-corpus-results.json#awslabs_mcp"
+     }
+    ]
+   }
+   ...
+
+`signatures` is empty and says so. A relying party MUST fail closed on a
+missing or unsigned attestation: a signed file can be deleted, and
+absence must never be read as a pass.

@@ -6,13 +6,13 @@ no sandbox                      reached 8
       env:DATABASE_URL
       net:0.0.0.0/0
       net:169.254.169.254:80
-      net:prod-db:5432
+      net:bookings-db.prod:5432
 
 sandbox, prod creds mounted     reached 4
       file:/sandbox/work/data.csv
       env:AWS_ACCESS_KEY_ID
       env:DATABASE_URL
-      net:prod-db:5432
+      net:bookings-db.prod:5432
 
 sandbox, no ambient creds       reached 1
       file:/sandbox/work/data.csv
@@ -23,3 +23,24 @@ credential that reaches production over a network hop the sandbox allows.
 
 Isolation of the wrong dimension is not a weaker control. It is the
 appearance of one.
+both objects applied:
+   workflow-agent  bookings-db.prod      5432  ALLOW allowed by workflow-agent-egress
+   workflow-agent  kube-dns              53    ALLOW allowed by workflow-agent-egress
+   workflow-agent  169.254.169.254       80    deny  no selecting policy permits it - denied
+   workflow-agent  archive.evil.example  443   deny  no selecting policy permits it - denied
+   coding-agent    archive.evil.example  443   deny  no selecting policy permits it - denied
+   -> 2/5 connections permitted
+
+default-deny-all deleted, the narrow policy kept:
+   workflow-agent  bookings-db.prod      5432  ALLOW allowed by workflow-agent-egress
+   workflow-agent  kube-dns              53    ALLOW allowed by workflow-agent-egress
+   workflow-agent  169.254.169.254       80    deny  no selecting policy permits it - denied
+   workflow-agent  archive.evil.example  443   deny  no selecting policy permits it - denied
+   coding-agent    archive.evil.example  443   ALLOW no policy selects this pod - unrestricted
+   -> 3/5 connections permitted
+
+Deleting the deny changed nothing about workflow-agent - its own policy
+still selects it. What it changed is every OTHER pod in the namespace,
+including coding-agent, which now reaches the internet because no
+object mentions it. Nothing failed, nothing alerted, and the namespace
+went from default-deny to default-allow in one commit.

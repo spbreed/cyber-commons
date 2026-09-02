@@ -1,15 +1,60 @@
-presented identity                  admitted  why
-spiffe://corp/pricing-agent         yes       owner sam@corp
-spiffe://corp/billing-agent         NO        registration lapsed
-spiffe://corp/legacy-agent          NO        no accountable owner
-spiffe://corp/reporting-agent-v2    NO        not registered
-
-admitted 1 of 4
-
-revoke exactly one agent:
-   spiffe://corp/pricing-agent         refused  (registration lapsed)
-   spiffe://corp/billing-agent         refused  (registration lapsed)
+POST /scim/v2/Agents
+{
+ "active": true,
+ "displayName": "pricing-agent",
+ "externalId": "spiffe://cybertravels.com/ns/prod/sa/pricing-agent",
+ "id": "b7f3a1c2",
+ "meta": {
+  "created": "2026-01-14T09:02:00Z",
+  "lastModified": "2026-01-14T09:02:00Z",
+  "resourceType": "Agent",
+  "version": "W/\"1\""
+ },
+ "owner": {
+  "$ref": "https://idp.cybertravels.com/scim/v2/Users/sam-2291",
+  "display": "sam@cybertravels.com",
+  "value": "sam-2291"
+ },
+ "registrationExpires": 9000,
+ "schemas": [
+  "urn:cybertravels:params:scim:schemas:extension:agent:2.0:Agent"
+ ]
+}
+presenting at the orchestrator:
+   pricing-agent         admitted  owner sam@cybertravels.com
+   billing-agent         REFUSED   registration lapsed
+   legacy-agent          REFUSED   no accountable owner
+   reporting-agent-v2    REFUSED   not registered
+   -> 1 of 4 admitted
 
 reporting-agent-v2 is A1.10's rogue: a real process, answering the
-protocol, refused because nothing registered it. legacy-agent is the
-more common case - registered, running, and owned by nobody.
+protocol correctly, refused because nothing registered it. legacy-agent
+is the more common case - registered, running, owned by nobody.
+PATCH /scim/v2/Users/sam-2291
+   {'status': 200, 'id': 'sam-2291', 'active': False}
+
+owner stored as a string  -> still admitted: ['pricing-agent']
+   Sam left this afternoon. His agent holds bookings scope tomorrow,
+   next quarter, and until somebody runs an access review.
+
+owner stored as a $ref -> resolved at admission:
+   pricing-agent         REFUSED   owner sam@cybertravels.com has left
+   billing-agent         REFUSED   registration lapsed
+   legacy-agent          REFUSED   no accountable owner
+   reporting-agent-v2    REFUSED   not registered
+   -> 0 of 4 admitted
+
+pricing-agent was admitted an hour ago and is refused now, on the
+strength of an HR event nobody forwarded to the agent platform.
+
+GET /scim/v2/Agents?filter=active eq true and owner pr false
+   1 result(s): ['legacy-agent']
+
+PATCH /scim/v2/Agents/billing-agent
+after retiring exactly one agent:
+   pricing-agent         REFUSED   owner sam@cybertravels.com has left
+   billing-agent         REFUSED   deprovisioned (active: false)
+   legacy-agent          REFUSED   no accountable owner
+   reporting-agent-v2    REFUSED   not registered
+   -> 0 of 4 admitted
+

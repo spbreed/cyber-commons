@@ -1,79 +1,47 @@
-src/data
-   units       ['load_report', 'store']
-   entry pts   —
-   talks to    —
-   touches     ['database', 'filesystem']
+entry           sink          cwe       score  why
+--------------------------------------------------------------------------------------------
+upload_voucher  store         CWE-22       15  internet-facing, no WAF, live CSPM finding, role holds write
+upload_voucher  store         CWE-434      15  internet-facing, no WAF, live CSPM finding, role holds write
+get_booking     load_booking  CWE-89       13  internet-facing, role holds write
 
-src/util
-   units       ['render']
-   entry pts   —
-   talks to    —
-   touches     —
+3 threats. Nobody wrote this; it fell out of six files that
+already existed in the estate.
+threat                                  as deployed   hardened
+--------------------------------------------------------------
+CWE-22  upload_voucher -> ... -> store           15          4
+CWE-434  upload_voucher -> ... -> store           15          4
+CWE-89  get_booking -> ... -> load_booking           13          7
 
-src/web
-   units       ['get_report', 'upload_doc']
-   entry pts   ['get_report', 'upload_doc']
-   talks to    ['load_report', 'render', 'store']
-   touches     —
+max severity  15 -> 7
 
-ENTRY POINTS (untrusted input arrives here)
-   get_report     src/web                HTTP request (untrusted)
-   upload_doc     src/web                HTTP request (untrusted)
+Identical code. A model derived from the map alone would have scored
+these two deployments the same, and it would have been wrong about the
+first by understating it and wrong about the second by crying wolf.
+threats before 3 -> after 6
+max severity   15 -> 17
 
-DATA FLOWS
-   get_report → load_report
-   get_report → render
-   upload_doc → store
+NEW THREATS:
+   [17] CWE-22   admin_export -> ... -> store          unauthenticated, internet-facing, no WAF, live CSPM finding, role holds write
+   [17] CWE-434  admin_export -> ... -> store          unauthenticated, internet-facing, no WAF, live CSPM finding, role holds write
+   [16] CWE-89   admin_export -> ... -> load_booking   unauthenticated, internet-facing, no WAF, role holds write
+PR 1 - adds an unauthenticated handler   -> FAIL  {'new': 3, 'new_critical': 3}
+PR 2 - two lines of terraform            -> PASS  {'new': 0, 'new_critical': 0}
 
-SINKS (state changes / external resources)
-   load_report    execute    database
-   store          open       filesystem
-   store          write      filesystem
-TRUST BOUNDARY CROSSINGS
-   get_report → load_report    src/web    → src/data   (trust 0 → 2)
-   get_report → render         src/web    → src/util   (trust 0 → 1)
-   upload_doc → store          src/web    → src/data   (trust 0 → 2)
+PR 2 introduced no new threat, so a gate that counts new threats waves
+it through. Every existing threat got worse:
+   CWE-22   upload_voucher -> ... -> store         15 -> 19
+   CWE-434  upload_voucher -> ... -> store         15 -> 19
+   CWE-89   get_booking -> ... -> load_booking     13 -> 17
+PR 1 - unauthenticated handler -> FAIL
+   new_critical=3  escalated=0
+PR 2 - two lines of terraform  -> FAIL
+   new_critical=0  escalated=3
+      CWE-22 via upload_voucher -> ... -> store: 15 -> 19
+      CWE-434 via upload_voucher -> ... -> store: 15 -> 19
+      CWE-89 via get_booking -> ... -> load_booking: 13 -> 17
 
-SINKS REACHABLE FROM AN ENTRY POINT
-   get_report     → load_report    touches database
-   upload_doc     → store          touches filesystem
-   upload_doc     → store          touches filesystem
-entry points before: ['get_report', 'upload_doc']
-entry points after : ['admin_export', 'get_report', 'upload_doc']
-NEW ENTRY POINT    : ['admin_export']
-flows before 3 → after 5
+PR 1, after requiring auth and adding the WAF -> PASS  0 critical
 
-One function added. A new untrusted entry point now reaches both the
-database and the filesystem. That delta is what B1.3 threat-models.
-loaded skill: appsec-repo-recon
-  tools it may use: Read, Grep, Glob, Bash
-  routing description: 53 words
-  procedure: 88 lines
-conformance check: 0 problem(s)
-
-The map satisfies the contract, so Phase 2 can consume it without
-negotiating a format.
-hollow map, conformance problems: 0
-real map,   conformance problems: 0
-
-Both conform. One of them found nothing at all.
-
-Conformance is a statement about the serialiser: it is close to free by
-construction, and an empty result scores perfectly. Accuracy is the
-expensive part and the contract cannot measure it. Any pipeline that
-reports '100% schema-valid' as a quality metric is reporting this number.
-
-what the contract can tell you : shape is right (0 problems)
-what only the map can tell you : 3 reachable entry->sink pairs, 3 boundary crossings
-map the attack surface of this repo before w   -> appsec-repo-recon  margin=3
-what could go wrong with this architecture     -> appsec-threat-model  margin=3
-is this alert a false positive                 -> AMBIGUOUS (tie at 2)  margin=0
-
-The third routes with margin 0. 'false positive' appears in the audit
-skill's description and 'alert' in the triage skill's, so both score the
-same and the winner is whichever sorted first alphabetically - an
-arbitrary answer wearing a confident face.
-
-That is why route() returns the margin. A tie is a configuration bug in
-the descriptions, and the fix is to make them disjoint, not to let the
-sort decide which procedure runs.
+Nobody wrote a document. The gate compared generated models and refused
+two named regressions - and the one it would have missed is the one
+that changed no code, which is the majority of how estates get worse.

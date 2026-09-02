@@ -1,23 +1,62 @@
-normal use:
-   list_reports('test-user-a') → [(1, 'test-user-a', 100), (2, 'test-user-a', 250)]
-   fetch_doc('readme.txt')     → public readme
-probe  cwe      exploited  observation
---------------------------------------------------------------------------
-P-01   CWE-89   True       4 rows, owners=['test-user-a', 'test-user-b', 'test-user-c']
-P-02   CWE-22   True       returned 'synthetic-not-real-9999'
-P-03   CWE-89   False      2 rows, owners=['test-user-a']
-probe  weak assertion   effect assertion  agreement
-------------------------------------------------------------------
-P-01   True             True              
-P-02   True             True              
-P-03   True             False             ← DISAGREE
+model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-The weak assertion confirms all three, including the control probe.
-A pipeline built on it reports 100% confirmation and means nothing by it.
-F-01  CWE-89   CONFIRMED   exploit achieved the asserted effect on the replica
-F-02  CWE-22   CONFIRMED   exploit achieved the asserted effect on the replica
-F-03  CWE-89   UNVALIDATED no probe generated — cannot confirm or refute
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, set one of:
 
-2 confirmed by execution — these go to stages 13-15.
-UNVALIDATED is not a pass. It is a gap in probe generation, and it should
-appear in the report as one.
+   frontier     export ANTHROPIC_API_KEY=...   # cheapest: claude-haiku-4-5-20251001
+                (an identity-linked key also needs
+                 ANTHROPIC_WORKSPACE_ID=...)
+   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \
+                       OPENAI_API_KEY=ollama MODEL=glm-4.6
+
+   On Kaggle: Add-ons -> Secrets, add ANTHROPIC_API_KEY, and switch
+   Internet on in the notebook settings. Internet requires a
+   phone-verified Kaggle account; without it DNS fails in the kernel
+   and this lesson correctly stays on the replay.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Fix this without changing the function's behaviour for valid input...
+
+answer:
+   def report(request):
+       q = "SELECT * FROM orders WHERE ref = ?"
+       return db.execute(q, (request.args['ref'],))
+
+property checked : parameterises the query
+held on replay       : True
+
+Same code, same assertions, three possible backends. Offline the answer
+is the replay and is labelled as one; with a key it is the model's.
+behaviour of the vulnerable build:
+   get_user('dana'    ) → [(1, 'dana')]      ok
+   get_user('sam'     ) → [(2, 'sam')]       ok
+   get_user('nobody'  ) → []                 ok
+   get_user("o'brien" ) → raised OperationalError FAILS
+
+exploit works: True — probe returned 3 rows
+scanner fires: False
+candidate                           scanner green
+--------------------------------------------------
+A · parameterise (the real fix)              True
+B · delete the feature                       True
+C · evade the scanner                        True
+D · escape by hand                           True
+
+Three of four are green. Only one of those is a fix.
+candidate                         scan  behaviour  exploitable  verdict
+------------------------------------------------------------------------------------
+A · parameterise (the real fix)   True  True       False        ACCEPT
+B · delete the feature            True  False      False        REJECT — behaviour changed
+C · evade the scanner             True  False      True         REJECT — behaviour changed, STILL EXPLOITABLE (stage-12 probe passes)
+D · escape by hand                True  True       False        ACCEPT
+
+accepted: ['A · parameterise (the real fix)', 'D · escape by hand']
+A · parameterise (the real fix)    proof of fix: True  (exploit on old=True, on new=False)
+D · escape by hand                 proof of fix: True  (exploit on old=True, on new=False)
+
+Candidate D passes every automated check and is still the wrong answer:
+it reimplements the driver's escaping and will be wrong for the next
+input class or the next database. Nothing except a rule about MECHANISM
+catches that — which is the part of remediation that does not automate.
