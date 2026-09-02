@@ -26,12 +26,12 @@
   {
    "id": "A",
    "title": "Securing AI Architectures",
-   "blurb": "TripBot as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.",
+   "blurb": "CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.",
    "tracks": [
     {
      "id": "A1",
      "chapter": 1,
-     "title": "TripBot's Architecture, and Every Risk It Carries",
+     "title": "CyberTravels' Architecture, and Every Risk It Carries",
      "titles": "Security Architect, Principal Security Engineer, Head of Security Architecture",
      "changes": "CyberTravels as built, then one lesson per risk that architecture makes possible — mapped to the OWASP Agentic AI threat taxonomy and closed by a register. 18 lessons.",
      "autonomy": "Read the architecture once; every risk after it names the component it attacks.",
@@ -58,17 +58,7 @@
        "risk": "Without a shared picture, 'secure the agent' has no referent and every later risk lands nowhere in particular.",
        "control": "One component map and five topologies, named once and reused by every lesson that follows.",
        "lab": "Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.",
-       "tools": [
-        "kagent",
-        "OpenTelemetry"
-       ],
-       "open_weight": [
-        "Llama 3.3",
-        "GLM-4.6"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
+       "tools": []
       },
       {
        "id": "A1.2",
@@ -186,7 +176,7 @@
       },
       {
        "id": "A1.8",
-       "title": "Unexpected code execution",
+       "title": "Malicious code execution",
        "track": "secure",
        "kind": "risk",
        "summary": "Many agents write and run code as a tool. The agent runtime component then executes model-authored text on a host, with whatever the process can reach.",
@@ -337,8 +327,8 @@
        "title": "The CyberTravels risk register",
        "track": "secure",
        "kind": "risk",
-       "summary": "Fifteen risks stop being a list and become a register: each one a scene rather than a mechanism, named against a component of TripBot, with the control that closes it and the lesson where that control is taught, tested and evidenced.",
-       "risk": "A list of risks is read once. Without a component, a control and an owner against each row, nothing in it is actionable and nothing in it is re-checkable when TripBot grows a fifth agent.",
+       "summary": "Fifteen risks stop being a list and become a register: each one a scene rather than a mechanism, named against a component of CyberTravels, with the control that closes it and the lesson where that control is taught, tested and evidenced.",
+       "risk": "A list of risks is read once. Without a component, a control and an owner against each row, nothing in it is actionable and nothing in it is re-checkable when CyberTravels grows a fifth agent.",
        "control": "Four columns — scene, component, control, owning lesson — and a rule that no row ships without the fourth.",
        "lab": "Roll the twelve risks up into families, find which agent carries each, and check that every row has an owner.",
        "tools": [],
@@ -1024,7 +1014,7 @@
     {
      "id": "B2",
      "chapter": 5,
-     "title": "The Harnesses that Test TripBot",
+     "title": "The Harnesses that Test CyberTravels",
      "titles": "Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet",
      "changes": "Build the loop once, then the SAST, DAST, triage, code-fix, skills and harness evaluations CyberTravels needs — in the order each one becomes possible. 14 lessons.",
      "autonomy": "You are the person who builds the L2.5 boundary everyone else operates inside.",
@@ -1298,7 +1288,7 @@
   {
    "id": "C",
    "title": "Red Teaming and Security Research with AI",
-   "blurb": "Break TripBot before somebody else does: the offensive workflow, a campaign across its three attack surfaces, and research that reproduces.",
+   "blurb": "Break CyberTravels before somebody else does: the offensive workflow, a campaign across its three attack surfaces, and research that reproduces.",
    "tracks": [
     {
      "id": "C1",
@@ -1573,14 +1563,14 @@
   {
    "id": "D",
    "title": "The Agentic SOC",
-   "blurb": "Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like TripBot's.",
+   "blurb": "Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.",
    "tracks": [
     {
      "id": "D1",
      "chapter": 8,
      "title": "The Agentic SOC — Detection",
      "titles": "SOC Analyst (T1–T3), Detection Engineer, Threat Hunter, Threat Intelligence Analyst",
-     "changes": "Detecting an actor that is not a person, on TripBot's telemetry. 11 lessons.",
+     "changes": "Detecting an actor that is not a person, on CyberTravels' telemetry. 11 lessons.",
      "autonomy": "Triage and enrichment reach L2.5 quickly; containment actions stay L2.",
      "deliverable": "A triage loop in production plus five detections covering agent misbehaviour.",
      "sessions": [
@@ -1776,7 +1766,7 @@
      "chapter": 9,
      "title": "The Agentic SOC — Response",
      "titles": "Incident Responder, DFIR Analyst, CSIRT Lead",
-     "changes": "Responding at machine speed when the actor is one of TripBot's agents. 9 lessons.",
+     "changes": "Responding at machine speed when the actor is one of CyberTravels' agents. 9 lessons.",
      "autonomy": "Response tooling at L2.5; containment authority never leaves human hands.",
      "deliverable": "A tabletop exercise for an agentic incident, with a replayed trace and a named stop-authority holder.",
      "sessions": [

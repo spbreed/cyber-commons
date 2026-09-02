@@ -17,7 +17,7 @@ is two lessons.
 | Part | Field | What it is |
 |---|---|---|
 | **Hook** | `hook` | 20–90 words. Why this matters, as a consequence. |
-| **Grounding** | `GROUNDING[id]` | One or two sentences: what this looks like in TripBot. |
+| **Grounding** | `GROUNDING[id]` | One or two sentences: what this looks like in CyberTravels. |
 | **Framework** | `diagram` + `concept` | The picture, then the idea it names. |
 | **Practical application** | `steps` | The idea working, where it breaks, the control. |
 
@@ -32,7 +32,7 @@ Never open with "in this lesson we will". The reader can see the title.
 ## 1b · Grounded in CyberTravels
 
 Every lesson says, in one or two sentences under the hook, what its idea looks
-like in **TripBot** — the agentic travel platform the whole commons is taught
+like in **CyberTravels** — the agentic travel platform the whole commons is taught
 on. It lives in `GROUNDING` in
 [`scripts/exercises/cybertravels.py`](scripts/exercises/cybertravels.py), and
 the build refuses a lesson without one.

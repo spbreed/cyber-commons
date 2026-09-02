@@ -12,7 +12,7 @@ Four rules, and each one exists because breaking it made a lesson worse:
    "why" is the most common way a good lesson lands badly.
 
 3. **Grounded in CyberTravels.** Every lesson says what its idea looks like in
-   TripBot — the one system the whole commons is taught on — so a reader is
+   CyberTravels — the one system the whole commons is taught on — so a reader is
    never asked to hold a fresh example per lesson.
 
 4. **A bridge out of every chapter.** The last lesson of each chapter names the

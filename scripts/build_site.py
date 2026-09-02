@@ -41,23 +41,10 @@ REPO = "https://github.com/spbreed/cyber-commons"
 BRANCH = "claude/vulnbench-setup-scheduling-81aqov"
 RAW = f"https://raw.githubusercontent.com/spbreed/cyber-commons/{BRANCH}"
 
-# Execution evidence, written by scripts/run_notebooks.py. Absent on a fresh
-# checkout, in which case the page simply omits the badge rather than lying.
-try:
-    RESULTS = {r["session"]: r for r in
-               json.loads((NB_DIR / "_results.json").read_text())["results"]}
-except (OSError, KeyError, json.JSONDecodeError):
-    RESULTS = {}
-
-# Remote confirmation, written by scripts/kaggle_verify.py: the same notebook
-# run on Kaggle's machines printed the same thing. Also absent on a fresh
-# checkout — the badge then claims only what _results.json can support.
-try:
-    KAGGLE = {r["session"]: r for r in
-              json.loads((NB_DIR / "_kaggle_verified.json").read_text())["results"]
-              if r.get("identical")}
-except (OSError, KeyError, json.JSONDecodeError):
-    KAGGLE = {}
+# Execution evidence still gates CI — scripts/run_notebooks.py and
+# scripts/kaggle_verify.py must both pass — but it is no longer printed on the
+# page. A badge on every lesson saying the notebook ran is a claim the reader
+# cannot check and stops reading after the third time.
 
 DIRECTION = {"defend": ("d", "AI for Security"), "secure": ("s", "Security of AI"),
              "both": ("b", "Both directions")}
@@ -171,28 +158,19 @@ def notebook_block(sid: str) -> str:
     return "".join(parts)
 
 
-def verified_badge(sid: str) -> str:
-    """State the execution evidence, or say nothing at all."""
-    r = RESULTS.get(sid)
-    if not r or not r.get("ok"):
-        return ""
-    # Two separate claims, and the second is only made when it was earned.
-    # "It ran here" is weaker than "it printed the same thing somewhere else",
-    # so the badge never merges them into one vague assurance.
-    k = KAGGLE.get(sid)
-    # Deliberately no second line count here: the local figure counts blank
-    # lines and the remote one is normalised, so printing both side by side
-    # reads as a contradiction rather than as the agreement it actually is.
-    remote = (' It was run again on Kaggle, on a different machine, and printed '
-              'exactly the same output — so what you see below is reproducible, '
-              'not a recording.' if k else '')
-    evidence = ('labs/notebooks/_results.json'
-                + (' · labs/notebooks/_kaggle_verified.json' if k else ''))
-    return (f'<div class="verified">✓ <b>Executed{" and reproduced" if k else ""}</b> '
-            f'— this notebook runs top to bottom on Python {"3.11+"}, producing '
-            f'{r["stdout_lines"]} lines of output in {r["seconds"]:.2f}s. No network, '
-            f'no API key, no installs.{remote} '
-            f'<span>Evidence: <code>{evidence}</code></span></div>')
+def has_code(sid: str) -> bool:
+    """Does this lesson actually have something to run?
+
+    Several lessons — the function introductions, the architecture map — are
+    diagrams and prose end to end. Offering "Run on Kaggle" on those sends the
+    reader to a kernel with nothing in it to execute, which teaches them the
+    button is decorative everywhere else too.
+    """
+    path = NB_DIR / f"{sid}.ipynb"
+    if not path.is_file():
+        return False
+    return any(c.get("cell_type") == "code" and "".join(c.get("source", [])).strip()
+               for c in json.loads(path.read_text()).get("cells", []))
 
 
 def video_block(sid: str, title: str) -> str:
@@ -280,21 +258,24 @@ def lesson_page(entry, prev, nxt) -> str:
         parts.append(f'<p class="sub">{html.escape(s["lab"])}</p>')
 
     # The buttons come first: the point of the page is that you can run it.
-    parts.append('<div class="cta-row">'
-                 f'<a class="btn k" href="{kaggle_url(sid)}" target="_blank" rel="noopener">'
-                 f'▶ Run on Kaggle</a>'
-                 f'<a class="btn p" href="{ex_url}" target="_blank" rel="noopener">'
-                 f'↗ Open the notebook on GitHub</a>'
-                 f'<a class="btn" href="{REPO}/blob/{BRANCH}/MODELS.md" target="_blank" '
-                 f'rel="noopener">Get a model free</a>'
-                 '</div>')
-    parts.append('<p class="sub kagnote">“Run on Kaggle” opens the notebook in '
-                 '<b>your own</b> Kaggle account as a new kernel. It carries '
-                 'every line of code it runs — nothing to clone, nothing to '
-                 'install — so it works with the internet switched off, and the '
-                 'copy is yours to edit and re-run. Nothing is written back '
-                 'here.</p>')
-    parts.append(verified_badge(sid))
+    # Two buttons, and only on a lesson that has code — a reading lesson gets
+    # neither, because there is nothing on the other end of them.
+    if has_code(sid):
+        parts.append('<div class="cta-row">'
+                     f'<a class="btn k" href="{kaggle_url(sid)}" target="_blank" rel="noopener">'
+                     f'▶ Run on Kaggle</a>'
+                     f'<a class="btn p" href="{ex_url}" target="_blank" rel="noopener">'
+                     f'↗ Open the notebook on GitHub</a>'
+                     '</div>')
+        parts.append('<p class="sub kagnote">“Run on Kaggle” opens the notebook in '
+                     '<b>your own</b> Kaggle account as a new kernel. It carries '
+                     'every line of code it runs — nothing to clone, nothing to '
+                     'install — so it works with the internet switched off, and the '
+                     'copy is yours to edit and re-run. Nothing is written back '
+                     'here.</p>')
+    else:
+        parts.append('<p class="sub kagnote">This lesson is a reading lesson — '
+                     'diagrams and prose, no code to run.</p>')
 
     nb = notebook_block(sid)
     if nb:
@@ -306,13 +287,15 @@ def lesson_page(entry, prev, nxt) -> str:
     if lab.get("expect"):
         parts.append(f'<div class="expect"><b>Expect</b>{html.escape(lab["expect"])}</div>')
 
-    chips = "".join(f'<span>{html.escape(t)}</span>' for t in s.get("tools", []))
-    chips += "".join(f'<span class="m">{html.escape(m)}</span>'
-                     for m in s.get("open_weight", []))
-    chips += "".join(f'<span class="f">{html.escape(m)}</span>'
-                     for m in s.get("frontier", []))
-    if chips:
-        parts.append(f'<div class="chips">{chips}</div>')
+    # One list — packages and models together, in the order they appear in the
+    # lesson. The reader wants to know what is in front of them, not which
+    # procurement category each item belongs to.
+    used = list(dict.fromkeys([*s.get("tools", []), *s.get("open_weight", []),
+                               *s.get("frontier", [])]))
+    if used:
+        chips = "".join(f'<span>{html.escape(t)}</span>' for t in used)
+        parts.append(f'<p class="sub toolslab">Tools used</p>'
+                     f'<div class="chips">{chips}</div>')
 
     parts.append(f'<p class="sub" style="margin-top:10px">Notebook source: '
                  f'<code>{html.escape(ex_label)}</code></p>'

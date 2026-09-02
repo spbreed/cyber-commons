@@ -1,4 +1,4 @@
-# Track B2 — The Harnesses that Test TripBot
+# Track B2 — The Harnesses that Test CyberTravels
 
 **Function B · Application Security with an AI SDLC**  
 *The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*

@@ -156,9 +156,14 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
         if not ex.get(field):
             raise KeyError(f"{sid} has no {field!r} — {why}")
 
-    tools = ", ".join(s.get("tools", [])) or "—"
-    open_weight = ", ".join(s.get("open_weight", [])) or "—"
-    frontier = ", ".join(s.get("frontier", [])) or "—"
+    # One line, not three. A reader opening a lesson wants to know what it puts
+    # in front of them — open-source packages and models together, in the order
+    # they appear. Splitting them across "tooling", "open-weight" and "frontier"
+    # rows made the same short list look like three separate prerequisites.
+    used = list(dict.fromkeys(
+        [*s.get("tools", []), *s.get("open_weight", []), *s.get("frontier", [])]
+    ))
+    tools_used = ", ".join(used) or "standard library only"
 
     # ---- header ----------------------------------------------------------
     where = f"**{entry['fn']} → {entry['track']}**  ·  " \
@@ -169,9 +174,7 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     cells = [md(
         f"# {sid} · {s['title']}\n\n{where}\n\n"
         f"| | |\n|---|---|\n"
-        f"| Open-source tooling | {tools} |\n"
-        f"| Open-weight models | {open_weight} |\n"
-        f"| Frontier models | {frontier} |\n\n"
+        f"| Tools used | {tools_used} |\n\n"
         f"> **Runs anywhere.** Every line of code is in this notebook — nothing to "
         f"install, nothing to clone, no API key, no network. Standard library only, "
         f"so it works on a Kaggle kernel with the internet switched off — and where "

@@ -1,7 +1,7 @@
-# Track A1 — TripBot's Architecture, and Every Risk It Carries
+# Track A1 — CyberTravels' Architecture, and Every Risk It Carries
 
 **Function A · Securing AI Architectures**  
-*TripBot as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
+*CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.*
 
 **Job titles:** Security Architect, Principal Security Engineer, Head of Security Architecture
 
@@ -192,7 +192,7 @@ python3 scripts/run_notebooks.py --session A1.7   # run it headless and check it
 
 ---
 
-### A1.8 — Unexpected code execution
+### A1.8 — Malicious code execution
 
 `Security of AI`
 
@@ -389,7 +389,7 @@ python3 scripts/run_notebooks.py --session A1.16   # run it headless and check i
 
 `Security of AI`
 
-- **Risk** — A list of risks is read once. Without a component, a control and an owner against each row, nothing in it is actionable and nothing in it is re-checkable when TripBot grows a fifth agent.
+- **Risk** — A list of risks is read once. Without a component, a control and an owner against each row, nothing in it is actionable and nothing in it is re-checkable when CyberTravels grows a fifth agent.
 - **Control** — Four columns — scene, component, control, owning lesson — and a rule that no row ships without the fourth.
 - **Lab** — Roll the twelve risks up into families, find which agent carries each, and check that every row has an owner.
 

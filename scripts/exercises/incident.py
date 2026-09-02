@@ -244,7 +244,7 @@ assert not orphans and len(by_fn) == 4
   ("md", "## 6 · The same incident, at CyberTravels\\n\\n"
          "This happened to an AI lab running an evaluation, which is easy to "
          "read as somebody else's problem. It is not. Every precondition it "
-         "needed is present in TripBot, and most of them are present because of "
+         "needed is present in CyberTravels, and most of them are present because of "
          "a decision that was reasonable at the time."),
   ("html", D.table(
     ["what the incident needed", "where CyberTravels already has it",
@@ -257,14 +257,14 @@ assert not orphans and len(by_fn) == 4
      ["agents able to read each other's output",
       "agent-to-agent messaging between the workflow and advisor agents", "R3"],
      ["a transcript the workload itself could write",
-      "TripBot's own application logs are the only record of what it did",
+      "CyberTravels' own application logs are the only record of what it did",
       "R10, R11"],
      ["credentials reachable from the workload",
       "long-lived bearer tokens, held in plaintext by the agent", "R5"],
      ["a third party who could be reached from inside",
       "the third-party MCP server, and every downstream travel API", "R4, R9"],
      ["no way for an agent to report what it found",
-      "no <code>report_to_human</code> tool exists in TripBot at all", "—"],
+      "no <code>report_to_human</code> tool exists in CyberTravels at all", "—"],
      ["a detective control switched off for a deadline",
       "guardrails disabled for the demo", "R2"]],
     emphasise=2,

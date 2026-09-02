@@ -1,11 +1,11 @@
 # Track D1 — The Agentic SOC — Detection
 
 **Function D · The Agentic SOC**  
-*Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like TripBot's.*
+*Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
 **Job titles:** SOC Analyst (T1–T3), Detection Engineer, Threat Hunter, Threat Intelligence Analyst
 
-**What changes:** Detecting an actor that is not a person, on TripBot's telemetry. 11 lessons.
+**What changes:** Detecting an actor that is not a person, on CyberTravels' telemetry. 11 lessons.
 
 **Autonomy focus:** Triage and enrichment reach L2.5 quickly; containment actions stay L2.
 

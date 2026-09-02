@@ -113,3 +113,67 @@ def label(x: int, y: int, text: str, *, colour: str = DIM, size: float = 11,
 DEFS = ('<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" '
         'markerWidth="6" markerHeight="6" orient="auto-start-reverse">'
         f'<path d="M 0 0 L 10 5 L 0 10 z" fill="{LINE}"/></marker></defs>')
+
+
+# --------------------------------------------------------------- HTML flow
+# A monochrome box-and-arrow drawing is right for a mechanism — one idea, no
+# colour to decode. It is the wrong shape for an architecture, where the reader
+# is being asked to hold a dozen components at once and the *kind* of each one
+# is the point: this is an agent, that is a third-party server nobody at
+# CyberTravels operates, that is money. Colour and an icon do that work faster
+# than a legend, and they survive the notebook, Kaggle and the dark lesson page
+# because every rule here is an inline style on the element it applies to.
+
+def _tint(colour: str, alpha: str) -> str:
+    """`#rrggbb` at an alpha — inline, because no stylesheet is guaranteed."""
+    if not colour.startswith("#"):
+        return "transparent"
+    r, g, b = (int(colour[i:i + 2], 16) for i in (1, 3, 5))
+    return f"rgba({r},{g},{b},{alpha})"
+
+
+def card(icon: str, label: str, sub: str = "", *, colour: str = DEFEND,
+         note: str = "") -> str:
+    """One component: an icon, what it is, and what it does.
+
+    `note` is for the thing that makes a component interesting — "nobody here
+    operates it", "no MCP in the path". It sits under the card in its own
+    colour so it reads as an annotation rather than part of the description.
+    """
+    tag = (f'<div style="font-size:10px;color:{colour};margin-top:5px;'
+           f'font-weight:600;letter-spacing:.02em">{_html.escape(note)}</div>'
+           if note else "")
+    return (f'<div style="border:1px solid {_tint(colour, ".55")};'
+            f'border-left:3px solid {colour};border-radius:8px;'
+            f'background:{_tint(colour, ".10")};padding:8px 11px;margin:5px 0;'
+            f'min-width:132px">'
+            f'<div style="font-size:13px;font-weight:600">'
+            f'<span style="font-size:15px">{icon}</span> '
+            f'{_html.escape(label)}</div>'
+            f'<div style="font-size:11px;color:{DIM};margin-top:2px;'
+            f'line-height:1.35">{_html.escape(sub)}</div>{tag}</div>')
+
+
+def column(title: str, cards: list[str]) -> str:
+    """A stage of the flow — the cards that sit at the same depth."""
+    return (f'<div style="flex:1 1 150px;min-width:150px">'
+            f'<div style="font-size:10px;text-transform:uppercase;'
+            f'letter-spacing:.09em;color:{DIM};font-weight:600;'
+            f'padding-bottom:5px;border-bottom:1px solid {_tint(LINE, ".4")};'
+            f'margin-bottom:3px">{_html.escape(title)}</div>'
+            + "".join(cards) + "</div>")
+
+
+def flow(columns: list[str], *, caption: str = "", legend: str = "") -> str:
+    """Left-to-right stages, chevroned, wrapping on a narrow screen."""
+    chev = (f'<div style="align-self:center;color:{_tint(LINE, ".8")};'
+            f'font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div>')
+    inner = chev.join(columns)
+    cap = (f'<div style="font-size:12px;color:{DIM};margin-top:8px;'
+           f'line-height:1.5">{caption}</div>' if caption else "")
+    leg = (f'<div style="font-size:11px;color:{DIM};margin-top:8px">{legend}</div>'
+           if legend else "")
+    return (f'<div style="display:flex;gap:6px;align-items:stretch;'
+            f'flex-wrap:wrap;font-family:ui-sans-serif,system-ui,-apple-system,'
+            f'Segoe UI,Roboto,sans-serif;margin:6px 0 2px">{inner}</div>'
+            f"{leg}{cap}")

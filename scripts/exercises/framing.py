@@ -2420,7 +2420,7 @@ DIAGRAMS: dict[str, str] = {
    ...                                   control   : provenance + default-deny
                                          taught in : A1.2 A1.3 A2.6 A3.1
 
-   read once                         re-checked when TripBot grows a 5th agent
+   read once                         re-checked when CyberTravels grows a 5th agent
 
    where the weight sits
    identity and authorisation    3 of 12    R1  R5  R11
