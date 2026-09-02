@@ -22,7 +22,7 @@
 - **Risk** — Allow-by-default authorization is defeated by any argument the model can be persuaded to produce.
 - **Control** — Policy evaluated per call on (identity, tool, arguments, resource), denying unless a rule permits.
 - **Lab** — Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.
-- **Tools** — `OPA`, `kmcp`
+- **Tools** — `OPA / Rego`, `SPIFFE/SPIRE`
 
 **Run it** — Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.
 
@@ -43,7 +43,7 @@ python3 scripts/run_notebooks.py --session A3.1   # run it headless and check it
 - **Risk** — Model-authored code inherits the runtime's reach, including any credential mounted into the environment.
 - **Control** — Execution in an isolate with no ambient credentials, a bounded filesystem and no default network.
 - **Lab** — Run the same code inside and outside the sandbox and enumerate what each could reach.
-- **Tools** — `gVisor`, `Falco`
+- **Tools** — `Kubernetes NetworkPolicy`, `seccomp`, `Terraform`, `gVisor`
 
 **Run it** — Run the same code inside and outside the sandbox and enumerate what each could reach.
 

@@ -132,9 +132,11 @@ HOOKS: dict[str, str] = {
  "estate exists because somebody resolved that circle by giving up.",
 
 "A2.3":
- "Delegation that widens is not delegation, it is escalation with paperwork. "
- "The rule is simple to state and almost never enforced: what is issued must be "
- "a subset of what was presented, and inside the recipient's own ceiling.",
+ "The access token your agent holds is a password: whoever reads it out of a "
+ "log can spend it. Three published standards fix that — an SVID says which "
+ "workload is calling, RFC 8693 says on whose authority, and RFC 8705 binds "
+ "the token to the certificate that earned it. Most estates implement the "
+ "middle one and stop.",
 
 "A2.4":
  "Standing authority means a successful injection always finds a live "
@@ -145,7 +147,8 @@ HOOKS: dict[str, str] = {
 "A2.5":
  "Non-human identities already outnumber humans in most estates, and they sit "
  "outside joiner-mover-leaver entirely. Nobody ever leaves, so nothing is ever "
- "revoked, and last year's proof-of-concept still holds production write.",
+ "revoked, and last year's proof-of-concept still holds production write. The "
+ "protocol that fixes it is one you already run for humans.",
 
 "A2.6":
  "By the time the model sees it, the context window is one flat string. The "
@@ -161,13 +164,16 @@ HOOKS: dict[str, str] = {
 "A3.1":
  "Identity has already failed. Something untrusted is in the context and the "
  "agent has decided to call a tool. The tool call is the last place a decision "
- "can still be made on facts rather than on intent, and it is where default-deny "
- "belongs.",
+ "can still be made on facts rather than intent — this SPIFFE ID, this tool, "
+ "this resource, this verb — and a policy written one notch vaguer than that "
+ "cannot express the distinction the attack turns on.",
 
 "A3.2":
- "\"It runs in a sandbox\" is not a control until somebody says what the sandbox "
- "contains. A container with the host network and a mounted socket is a "
- "deployment convenience wearing the word.",
+ "\"It runs in a sandbox\" is not a control until a manifest says what the "
+ "sandbox contains. A container with the host network and a mounted socket is "
+ "a deployment convenience wearing the word — and a namespace with no "
+ "default-deny NetworkPolicy is default-allow, however many narrow policies "
+ "you wrote.",
 
 "A3.3":
  "Every exfiltration path in the architecture ends at the same place: a packet "
@@ -989,13 +995,20 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 "A2.3": """
-   presented                issued
-   {repo:read, repo:write}  ---> {repo:read}        OK   subset
-   {repo:read}              ---> {repo:read, write} NO   widening
-   {repo:write}             ---> {repo:write}       NO   above the
-                                 to triage-agent         recipient's ceiling
-
-   two rules, checked at every hop, and the chain recorded for the audit
+   AI agent pod                authorization         downstream
+                                  server              service
+   +-------------+            +-------------+     +-------------+
+   | X.509 SVID  | --mTLS-->  | RFC 8693    | --> | re-derives  |
+   | spiffe://.. |  layer 1   | exchange    |     | x5t#S256    |
+   |             |            |             |     | from ITS    |
+   | user token  | ---------> | sub = user  |     | own TLS     |
+   +-------------+  layer 2   | act = agent |     | connection  |
+                              | cnf = x5t   |     +-------------+
+                              +------+------+        layer 3
+                                     |
+                     scope issued = requested
+                                  & presented       (subset)
+                                  & actor ceiling   (never-exceed)
 """,
 
 "A2.4": """
@@ -1016,7 +1029,14 @@ DIAGRAMS: dict[str, str] = {
    HR system drives it            nothing drives it
    revocation is automatic        nobody ever leaves
 
-   registration . ownership . expiry . revocation  <- the missing four
+   the fix is to run ONE protocol over both:
+
+     HR/IdP --SCIM--> POST   /Users     a person joins
+                      POST   /Agents    an agent is deployed
+                      PATCH  active:false   a leaver, or a retirement
+
+   owner is a $ref to a User, not a string, so the leaver
+   event that already exists is the one that retires the agent
 """,
 
 "A2.6": """
@@ -1064,9 +1084,18 @@ DIAGRAMS: dict[str, str] = {
    network      none, allowlist, or the host's network namespace?
    sockets      is the container runtime socket mounted in?
    syscalls     full kernel surface, or a filtered one?
-   time/CPU     bounded, or until it stops?
+   credentials  is a production token mounted inside it?
 
-   a container with host network and a mounted socket is not a boundary
+   and the network answer is two Kubernetes objects, not one:
+
+     NetworkPolicy default-deny-all   podSelector: {}     <- makes
+       policyTypes: [Ingress, Egress]                        every pod
+                                                             RESTRICTED
+     NetworkPolicy workflow-agent-egress                   <- adds back
+       egress: bookings-db:5432, kube-dns:53                  two hops
+
+   policies are additive allow-lists. delete the first and the
+   second stops being a restriction, silently, with nothing failing
 """,
 
 "A3.3": """

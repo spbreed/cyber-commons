@@ -15,6 +15,8 @@ exactly one block of code implementing it.
     A2.7  attribution               T8, T13
 """
 
+from . import diagrams as D
+
 MITIGATES = """
 > **What this control closes.**
 >
@@ -210,87 +212,244 @@ assert not present(stolen, "n-9", 1100)[0]
 **Mitigates: T3 Privilege Compromise · T8 Repudiation · T14 Human Attacks.**
 
 The agent has its own identity now. This lesson is about carrying the user's
-authority alongside it without either losing it or amplifying it.
+authority alongside it — without losing it, amplifying it, or handing it to
+whoever picks the token out of a log.
 
-Delegation — RFC 8693 token exchange, "on behalf of" — issues a new token for a
-downstream hop. It must satisfy **two** narrowing rules, and checking only one
-is the common and dangerous mistake:
+Three layers do that, and each one answers a question the layer above it
+cannot. Skipping any of them leaves a specific, named hole.
+
+**Layer 1 — mTLS with an X.509 SVID. *Is this the workload it claims to be?***
+The agent pod presents a client certificate whose URI SAN is a SPIFFE ID:
+`spiffe://cybertravels.com/ns/prod/sa/agent-alpha`. The platform issues it on
+attestation (A2.2), it lives minutes rather than months, and it rotates without
+anybody being told. Nothing downstream trusts a name in a header again.
+
+**Layer 2 — OAuth on-behalf-of, RFC 8693 token exchange. *On whose authority?***
+The agent presents two tokens: the user's (`subject_token`) and its own SVID
+(`actor_token`). The authorization server returns one access token whose `sub`
+is still the user and whose **`act` claim** names the agent. Delegation is
+written down rather than inferred, and it nests — `act.act` records the hop
+before — so `alice → orchestrator → agent-alpha` survives into the audit log.
+
+**Layer 3 — RFC 8705 certificate-bound tokens. *Is the presenter the one it was
+issued to?*** The issued token carries a `cnf` claim holding `x5t#S256`: the
+SHA-256 thumbprint of the client certificate that asked for it. The downstream
+service recomputes the thumbprint of the certificate on *its own* TLS
+connection and compares. A bearer token is a password; a bound token is useless
+to anyone holding it without the private key that earned it.
+
+On top of the three layers, delegation still has to **narrow**, and it has to
+satisfy two rules rather than one:
 
 **Subset of presented.** The issued token carries no more scope than the
 incoming one. Stops the agent inventing authority.
 
 **Within the actor's ceiling.** The issued token carries no more than the
-receiving agent is ever permitted to hold. Stops a privileged user handing an
-agent authority the agent must never have.
+receiving agent may ever hold. Stops a privileged user handing an agent
+authority the agent must never have.
 
 Neither is sufficient alone, and they fail in opposite directions. Subset-only
-lets an admin's request give a low-trust agent `db:admin` — legitimately, and it
-looks correct in every log. Ceiling-only lets an agent exceed the person who
-asked, which is A1.6.
+lets an admin's request give a low-trust agent `payments:refund` — legitimately,
+and it looks correct in every log. Ceiling-only lets an agent exceed the person
+who asked, which is A1.6. **The issued scope is the intersection.**
 
-The issued scope is the **intersection**.
-
-The second half is the **actor chain**: `dana → orchestrator → patch-agent`,
-recorded on the token and carried to every hop. That is what makes A1.13
-answerable and what makes A1.16's laundering path visible, because the
-composition is written down rather than inferred.
+> **On the standards.** RFC 8693 (token exchange) and RFC 8705 (mTLS client
+> authentication and certificate-bound access tokens) are published and widely
+> implemented — none of this is future work. The IETF OAuth working group
+> additionally has a live draft for AI agents acting on a user's behalf, which
+> adds agent-specific metadata to the same exchange. It is a draft, not an RFC,
+> and nothing in this lesson depends on it: all three layers are buildable on
+> RFC 8693 and RFC 8705 as they stand today.
 """,
  "steps": [
-  ("md", MITIGATES + "> Both rules, every hop. Checking one is how a privileged "
-         "user hands an agent authority it must never hold — legitimately, and "
-         "invisibly.\\n\\n## 2 · The control"),
-  ("py", '''CEILINGS = {
- "dana@corp":     {"reports:read", "reports:write"},
- "priya@corp":    {"reports:read", "reports:write", "db:admin"},
- "orchestrator":  {"reports:read", "reports:write"},
- "patch-agent":   {"reports:read"},
+  ("md", "## 2 · The three layers, and what each one refuses"),
+  ("html", D.flow(
+    [D.column("agent pod", [
+       D.card("&#129302;", "AI agent", "holds an X.509 SVID issued on "
+              "attestation, plus the user's token from the request",
+              colour=D.DEFEND, note="spiffe://.../sa/agent-alpha"),
+     ]),
+     D.column("layer 1 · mTLS", [
+       D.card("&#128274;", "client certificate", "URI SAN carries the SPIFFE "
+              "ID. Minutes long, rotated automatically", colour=D.GOOD,
+              note="REFUSES A NAME IN A HEADER"),
+     ]),
+     D.column("layer 2 · RFC 8693", [
+       D.card("&#127915;&#65039;", "authorization server", "subject_token is "
+              "the user, actor_token is the SVID. One token comes back: sub is "
+              "still the user, act names the agent", colour=D.SECURE,
+              note="REFUSES WIDENING"),
+     ]),
+     D.column("layer 3 · RFC 8705", [
+       D.card("&#128273;", "cnf / x5t#S256", "the thumbprint of the certificate "
+              "that asked for the token, stamped into the token itself",
+              colour=D.SECURE, note="REFUSES A STOLEN TOKEN"),
+     ]),
+     D.column("downstream", [
+       D.card("&#128179;", "payments API", "re-derives the thumbprint from its "
+              "own TLS connection and compares it before reading a single scope",
+              colour=D.BAD, note="R1"),
+     ])],
+    caption="Each layer answers a question the one before it cannot: is this "
+            "the workload, on whose authority, and is the presenter the one the "
+            "token was issued to. The code below builds all three, then steals "
+            "the token.")),
+  ("md", MITIGATES + "> Both narrowing rules, at every hop, plus a binding that "
+         "makes the token worthless off the connection that earned it."
+         "\n\n## 3 · Layers 1 and 2 — the exchange, and the token it issues"),
+  ("py", '''import base64, hashlib, hmac, json
+
+def b64u(raw: bytes) -> str:
+    return base64.urlsafe_b64encode(raw).rstrip(b"=").decode()
+
+# --- layer 1: the SVID -----------------------------------------------------
+# A real X.509-SVID is a certificate carrying the SPIFFE ID in its URI SAN.
+# Here it is the DER bytes standing in for one. The only property the protocol
+# needs is that the thumbprint is DERIVED from the certificate rather than
+# asserted alongside it.
+class SVID:
+    def __init__(self, spiffe_id, der):
+        self.spiffe_id, self.der = spiffe_id, der
+    @property
+    def thumbprint(self):                        # RFC 8705 x5t#S256
+        return b64u(hashlib.sha256(self.der).digest())
+
+AGENT = SVID("spiffe://cybertravels.com/ns/prod/sa/agent-alpha",
+             b"cert-agent-alpha")
+
+# --- layer 2: RFC 8693 token exchange --------------------------------------
+CEILINGS = {                        # what each actor may EVER hold
+ "alice@cybertravels.com":
+    {"bookings:read", "bookings:write", "payments:refund"},
+ "spiffe://cybertravels.com/ns/prod/sa/orchestrator":
+    {"bookings:read", "bookings:write"},
+ "spiffe://cybertravels.com/ns/prod/sa/agent-alpha":
+    {"bookings:read"},
 }
+SIGNING_KEY = b"demo-key-not-a-secret"
 
 class DelegationError(Exception): pass
 
-def exchange(presented_scopes, presented_chain, actor, requested):
-    """One hop. BOTH narrowing rules, then record the chain."""
+def exchange(subject_token, actor, requested):
+    """RFC 8693: subject_token is the user, actor_token is the agent's SVID."""
     requested = set(requested)
-    if not requested <= set(presented_scopes):                    # rule 1
+    presented = set(subject_token["scope"].split())
+    if not requested <= presented:                                 # rule 1
         raise DelegationError(
-            f"widening: {sorted(requested - set(presented_scopes))} not in presented")
-    ceiling = CEILINGS[actor]
-    issued = requested & ceiling                                  # rule 2
+            f"widening: {sorted(requested - presented)} was never presented")
+    ceiling = CEILINGS[actor.spiffe_id]
+    issued = requested & ceiling                                   # rule 2
     if issued != requested:
-        print(f"      (narrowed by {actor} ceiling: dropped "
-              f"{sorted(requested - ceiling)})")
-    return {"scopes": issued, "chain": presented_chain + [actor]}
+        print(f"   ceiling narrowed it: {actor.spiffe_id.rsplit('/', 1)[-1]} "
+              f"may never hold {sorted(requested - ceiling)}")
+    act = {"sub": actor.spiffe_id}
+    if "act" in subject_token:                    # nest the previous hop
+        act["act"] = subject_token["act"]
+    return {
+      "sub": subject_token["sub"],                # STILL the human
+      "aud": "https://payments.cybertravels.internal",
+      "scope": " ".join(sorted(issued)),
+      "act": act,                                 # the agent, and the chain
+      "cnf": {"x5t#S256": actor.thumbprint},      # layer 3, stamped here
+    }
 
-# --- the honest path -------------------------------------------------------
-user = {"scopes": CEILINGS["dana@corp"], "chain": ["dana@corp"]}
-hop1 = exchange(user["scopes"], user["chain"], "orchestrator",
-                {"reports:read", "reports:write"})
-hop2 = exchange(hop1["scopes"], hop1["chain"], "patch-agent", {"reports:read"})
-print(f"   chain  : {' -> '.join(hop2['chain'])}")
-print(f"   scopes : {sorted(hop2['scopes'])}")
+def sign(claims):
+    head = b64u(json.dumps({"alg": "HS256", "typ": "JWT"}, sort_keys=True).encode())
+    body = b64u(json.dumps(claims, sort_keys=True).encode())
+    mac = hmac.new(SIGNING_KEY, f"{head}.{body}".encode(), hashlib.sha256)
+    return f"{head}.{body}.{b64u(mac.digest())}"
 
-# --- a privileged user, and the rule that saves you ------------------------
-print("\\npriya holds db:admin. She asks the same low-trust agent to use it:")
-priv = {"scopes": CEILINGS["priya@corp"], "chain": ["priya@corp"]}
-subset_only = {"db:admin"} <= priv["scopes"]
-issued = exchange(priv["scopes"], priv["chain"], "patch-agent", {"db:admin"})
-print(f"   subset-of-presented alone would allow it : {subset_only}")
-print(f"   scopes actually issued                   : {sorted(issued['scopes']) or 'none'}")
-print()
-print("Subset-only says yes - she really does hold db:admin. The ceiling rule")
-print("issues the intersection, which is empty, because patch-agent may never")
-print("hold it no matter who asks.")
-assert subset_only and not issued["scopes"]
-assert hop2["chain"] == ["dana@corp", "orchestrator", "patch-agent"]
-'''),
+user = {"sub": "alice@cybertravels.com",
+        "scope": "bookings:read bookings:write payments:refund"}
+tok = exchange(user, AGENT, {"bookings:read"})
+
+print("the access token the payments API will actually see:\\n")
+print(json.dumps(tok, indent=2, sort_keys=True))
+print(f"\\nas a JWT: {sign(tok)[:78]}...")'''),
+  ("md", "## 4 · Layer 3 — steal the token and try to use it"),
+  ("py", '''# The token above leaked. A debug log, a crash dump, an LLM transcript - it
+# does not matter which. Another pod picks it up and replays it.
+THIEF = SVID("spiffe://cybertravels.com/ns/prod/sa/scraper", b"cert-scraper")
+
+def serve_bearer(token, _tls_peer):
+    """How most services check a token today: is it signed, does it say yes?"""
+    return "bookings:read" in token["scope"].split()
+
+def serve_bound(token, tls_peer):
+    """RFC 8705: re-derive the thumbprint from THIS connection, first."""
+    want = token.get("cnf", {}).get("x5t#S256")
+    if want is None:
+        raise PermissionError("token is not certificate-bound - refusing")
+    if not hmac.compare_digest(want, tls_peer.thumbprint):
+        raise PermissionError(
+            f"cnf mismatch: issued to {want[:12]}..., presented on a "
+            f"connection using {tls_peer.thumbprint[:12]}...")
+    return "bookings:read" in token["scope"].split()
+
+print("the legitimate agent, on its own connection:")
+print(f"   bearer check : {serve_bearer(tok, AGENT)}")
+print(f"   bound  check : {serve_bound(tok, AGENT)}")
+
+print("\\nthe same token, replayed by a different pod:")
+print(f"   bearer check : {serve_bearer(tok, THIEF)}   <- accepted. a bearer "
+      f"token is a password.")
+try:
+    serve_bound(tok, THIEF)
+except PermissionError as e:
+    print(f"   bound  check : refused - {e}")
+
+# And the widening attempt: alice really does hold payments:refund, but
+# agent-alpha may never hold it, no matter who asks.
+print("\\nalice asks agent-alpha to issue a refund on her behalf:")
+subset_ok = {"payments:refund"} <= set(user["scope"].split())
+refund = exchange(user, AGENT, {"payments:refund"})
+print(f"   subset-of-presented alone would allow it : {subset_ok}")
+print(f"   scope actually issued                    : {refund['scope'] or 'none'}")
+
+assert serve_bearer(tok, THIEF) is True          # the hole
+try:
+    serve_bound(tok, THIEF)
+    raise AssertionError("the binding did not hold")
+except PermissionError:
+    pass
+assert subset_ok and refund["scope"] == ""
+assert tok["act"]["sub"].endswith("/sa/agent-alpha")'''),
+  ("md", "## 5 · What the audit trail can now answer\n\nEvery hop is on the "
+         "token, so the chain reconstructs from the token alone rather than by "
+         "correlating four services' logs on timestamp. This is the thing A1.13 "
+         "could not do."),
+  ("py", '''ORCH = SVID("spiffe://cybertravels.com/ns/prod/sa/orchestrator",
+            b"cert-orchestrator")
+
+hop1 = exchange(user, ORCH, {"bookings:read", "bookings:write"})
+hop2 = exchange(hop1, AGENT, {"bookings:read"})
+
+def chain(claims):
+    """sub is the human; act nests one entry per hop, most recent first."""
+    hops, node = [], claims.get("act")
+    while node:
+        hops.append(node["sub"].rsplit("/", 1)[-1])
+        node = node.get("act")
+    return " -> ".join([claims["sub"], *reversed(hops)])
+
+print(f"delegation chain : {chain(hop2)}")
+print(f"final scope      : {hop2['scope']}")
+print(f"bound to         : {hop2['cnf']['x5t#S256'][:16]}...  "
+      f"(agent-alpha's certificate, not the orchestrator's)")
+assert chain(hop2) == ("alice@cybertravels.com -> orchestrator -> agent-alpha")
+assert hop2["cnf"]["x5t#S256"] == AGENT.thumbprint'''),
  ],
- "expect": "A two-hop delegation narrows to `reports:read` and records the chain "
-           "`dana → orchestrator → patch-agent`. A privileged user's request for "
-           "`db:admin` passes subset-of-presented and still issues nothing, "
-           "because the receiving agent's ceiling is empty of it.",
- "challenge": "Find your token exchange and check which of the two rules it "
-              "implements. Most implement subset-of-presented, because it is the "
-              "one the specification example shows.",
+ "expect": "An RFC 8693 exchange issues a token whose `sub` is still alice and "
+           "whose `act` names `spiffe://cybertravels.com/ns/prod/sa/agent-alpha`, "
+           "carrying `cnf.x5t#S256`. The bearer check accepts the stolen token; "
+           "the RFC 8705 bound check refuses it on a `cnf` mismatch. Alice's "
+           "`payments:refund` passes subset-of-presented and still issues "
+           "nothing. The chain reconstructs from the token alone.",
+ "challenge": "Find your token exchange and check three things: does it set an "
+              "`act` claim, does it check the actor's ceiling as well as the "
+              "subset rule, and does anything downstream look at `cnf`? Most "
+              "implementations do the subset rule only — it is the one the "
+              "specification example shows.",
 },
 
 "A2.4": {
@@ -412,60 +571,205 @@ than checking a name the caller supplied.
 That last point is what makes it a control rather than a spreadsheet. A registry
 consulted by name is documentation; a registry consulted by attested identity is
 an authorization decision.
+
+### The registry has to be driven by something, and that something is SCIM
+
+A registry nobody updates decays into the spreadsheet it replaced. Humans do
+not have this problem, because their lifecycle is already automated by a
+protocol: **SCIM** — System for Cross-domain Identity Management, RFC 7643 for
+the schema and RFC 7644 for the protocol. The HR system creates a user, the
+identity provider `POST`s it to `/Users`, a leaver event `PATCH`es
+`{"active": false}`, and every downstream application finds out without anybody
+filing a ticket.
+
+Point the same protocol at agents and three things become true at once:
+
+**The joiner-mover-leaver machinery you already run is the machinery that
+governs agents.** No parallel process, no second system of record. Deploying an
+agent means creating a SCIM resource; retiring it means one `PATCH`.
+
+**The owner is a reference, not a string.** `owner.$ref` points at the SCIM
+`User` — so when Sam leaves, Sam's own leaver event is enough to answer "which
+agents just lost their owner", automatically, on the day it happens rather than
+at the next audit.
+
+**Orphans become a query.** `GET /Agents?filter=active eq true and owner pr
+false` is a one-line answer to a question that is otherwise a quarter of
+someone's life.
+
+> **What is and is not standard here.** SCIM's protocol — the endpoints, the
+> filter syntax, `PATCH` with `active: false`, the `meta` block — is RFC 7644
+> and your IdP already speaks it. A resource type for *agents* is not in RFC
+> 7643; you declare it as a schema extension under your own URN, exactly as the
+> enterprise extension does for `manager`. The protocol is standard, the schema
+> is yours, and that split is the whole reason this is cheap to adopt.
 """,
  "steps": [
   ("md", MITIGATES + "> Turns 'which agents are allowed here' from a "
-         "convention into a check. Closes A1.10 at the door, and makes "
-         "revoking exactly one agent possible.\\n\\n## 2 · The control"),
+         "convention into a check, and turns 'is this one still wanted' from "
+         "an audit question into a leaver event. Closes A1.10 at the door.\n\n"
+         "## 2 · Provisioning an agent the same way you provision a person"),
+  ("html", D.flow(
+    [D.column("system of record", [
+       D.card("&#127970;", "HR / IdP", "the one place a joiner, mover or leaver "
+              "is recorded", colour=D.GOOD),
+     ]),
+     D.column("scim protocol", [
+       D.card("&#128100;", "POST /Users", "a person joins", colour=D.SECURE),
+       D.card("&#129302;", "POST /Agents", "an agent is deployed — same "
+              "protocol, your own schema URN", colour=D.DEFEND),
+       D.card("&#9940;", "PATCH active:false", "a leaver, or a retirement. One "
+              "call, and every consumer finds out", colour=D.SECURE,
+              note="NOT DELETE — THE RECORD SURVIVES"),
+     ]),
+     D.column("agent registry", [
+       D.card("&#128220;", "the registry", "owner is a $ref to a User, not a "
+              "string. Expiry is on the registration, not the credential",
+              colour=D.DEFEND),
+     ]),
+     D.column("admission", [
+       D.card("&#128737;&#65039;", "the orchestrator", "checks the attested "
+              "SPIFFE ID against the registry, and resolves the owner ref "
+              "before it admits anything", colour=D.BAD, note="R2"),
+     ])],
+    caption="The point of using SCIM rather than a table is the middle column: "
+            "the leaver event that already exists is the one that retires the "
+            "agent, and the owner reference is what makes it cascade."),
+  ),
+  ("py", '''import json
+
+# A SCIM resource for an agent. The protocol is RFC 7644; the schema URN is
+# your own extension, in exactly the way the enterprise extension declares
+# "manager" for users. Note what "owner" is: a REFERENCE, not a name.
+AGENT_SCHEMA = "urn:cybertravels:params:scim:schemas:extension:agent:2.0:Agent"
+
+agent = {
+ "schemas": [AGENT_SCHEMA],
+ "id": "b7f3a1c2",
+ "externalId": "spiffe://cybertravels.com/ns/prod/sa/pricing-agent",
+ "displayName": "pricing-agent",
+ "active": True,
+ "owner": {"value": "sam-2291",
+           "$ref": "https://idp.cybertravels.com/scim/v2/Users/sam-2291",
+           "display": "sam@cybertravels.com"},
+ "registrationExpires": 9000,
+ "meta": {"resourceType": "Agent", "created": "2026-01-14T09:02:00Z",
+          "lastModified": "2026-01-14T09:02:00Z", "version": 'W/"1"'},
+}
+print("POST /scim/v2/Agents")
+print(json.dumps(agent, indent=1, sort_keys=True))'''),
+  ("md", "## 3 · Admission, and the two entries that fail it"),
   ("py", '''NOW = 5000
 
-REGISTRY = {
- "spiffe://corp/pricing-agent": {"owner": "sam@corp", "expires": 9000},
- "spiffe://corp/billing-agent": {"owner": "sam@corp", "expires": 4000},   # lapsed
- "spiffe://corp/legacy-agent":  {"owner": None,       "expires": 9000},   # orphan
+USERS = {                       # what SCIM /Users says about the humans
+ "sam-2291":  {"userName": "sam@cybertravels.com",  "active": True},
+ "dana-4417": {"userName": "dana@cybertravels.com", "active": True},
+}
+REGISTRY = {                    # what SCIM /Agents says about the agents
+ "spiffe://cybertravels.com/ns/prod/sa/pricing-agent":
+    {"active": True, "owner": "sam-2291",  "expires": 9000},
+ "spiffe://cybertravels.com/ns/prod/sa/billing-agent":
+    {"active": True, "owner": "dana-4417", "expires": 4000},   # lapsed
+ "spiffe://cybertravels.com/ns/prod/sa/legacy-agent":
+    {"active": True, "owner": None,        "expires": 9000},   # orphan
 }
 
-def admit(presented_identity, now=NOW):
-    """Admission checks the ATTESTED identity, not a name the caller supplied."""
-    entry = REGISTRY.get(presented_identity)
-    if not entry:              return False, "not registered"
-    if not entry["owner"]:     return False, "no accountable owner"
-    if entry["expires"] < now: return False, "registration lapsed"
-    return True, f"owner {entry['owner']}"
+def admit(presented, now=NOW):
+    """Checks the ATTESTED identity, then resolves the owner reference."""
+    e = REGISTRY.get(presented)
+    if e is None:                 return False, "not registered"
+    if not e["active"]:           return False, "deprovisioned (active: false)"
+    if e["owner"] is None:        return False, "no accountable owner"
+    owner = USERS.get(e["owner"])
+    if owner is None:             return False, "owner ref dangles"
+    if not owner["active"]:       return False, f"owner {owner['userName']} has left"
+    if e["expires"] < now:        return False, "registration lapsed"
+    return True, f"owner {owner['userName']}"
 
-PRESENTING = ["spiffe://corp/pricing-agent", "spiffe://corp/billing-agent",
-              "spiffe://corp/legacy-agent",  "spiffe://corp/reporting-agent-v2"]
+PRESENTING = [
+ "spiffe://cybertravels.com/ns/prod/sa/pricing-agent",
+ "spiffe://cybertravels.com/ns/prod/sa/billing-agent",
+ "spiffe://cybertravels.com/ns/prod/sa/legacy-agent",
+ "spiffe://cybertravels.com/ns/prod/sa/reporting-agent-v2",
+]
 
-print(f"{'presented identity':36s}{'admitted':10s}why")
-admitted = []
-for ident in PRESENTING:
-    ok, why = admit(ident)
-    if ok: admitted.append(ident)
-    print(f"{ident:36s}{'yes' if ok else 'NO':10s}{why}")
+def sweep(label):
+    print(label)
+    ok_n = 0
+    for ident in PRESENTING:
+        ok, why = admit(ident)
+        ok_n += ok
+        print(f"   {ident.rsplit('/', 1)[-1]:22s}{'admitted' if ok else 'REFUSED':10s}{why}")
+    print(f"   -> {ok_n} of {len(PRESENTING)} admitted\\n")
+    return ok_n
 
-print(f"\\nadmitted {len(admitted)} of {len(PRESENTING)}")
-print()
-# and revocation is now singular, which A1.7 could not do
-REGISTRY["spiffe://corp/pricing-agent"]["expires"] = 0
-print("revoke exactly one agent:")
-for ident in PRESENTING[:2]:
-    ok, why = admit(ident)
-    print(f"   {ident:36s}{'admitted' if ok else 'refused'}  ({why})")
-print()
+sweep("presenting at the orchestrator:")
 print("reporting-agent-v2 is A1.10's rogue: a real process, answering the")
-print("protocol, refused because nothing registered it. legacy-agent is the")
-print("more common case - registered, running, and owned by nobody.")
-assert "spiffe://corp/reporting-agent-v2" not in admitted
-assert not admit("spiffe://corp/pricing-agent")[0]
-'''),
+print("protocol correctly, refused because nothing registered it. legacy-agent")
+print("is the more common case - registered, running, owned by nobody.")'''),
+  ("md", "## 4 · Sam leaves. One SCIM `PATCH`, and what it does not reach\n\n"
+         "This is the part a registry without a protocol behind it gets wrong. "
+         "Sam's leaver event fires correctly — his own account is deactivated "
+         "the same afternoon. The agent he deployed keeps running."),
+  ("py", '''def scim_patch(collection, rid, ops):
+    """RFC 7644 PATCH. Deprovisioning is active:false, not DELETE - the record
+    has to survive so that an investigation six months later can still read it."""
+    target = collection[rid]
+    target.update(ops)
+    return {"status": 200, "id": rid, **ops}
+
+print("PATCH /scim/v2/Users/sam-2291")
+print(f"   {scim_patch(USERS, 'sam-2291', {'active': False})}\\n")
+
+# First, the control absent. This is what a registry that stores the owner as a
+# STRING does: nothing joins Sam's leaver event to his agent, so admission has
+# no way to learn about it and the agent keeps working indefinitely.
+def admit_by_name(presented, now=NOW):
+    e = REGISTRY.get(presented)
+    if e is None or not e["active"] or e["owner"] is None: return False
+    return e["expires"] >= now
+
+still_in = [i.rsplit("/", 1)[-1] for i in PRESENTING if admit_by_name(i)]
+print(f"owner stored as a string  -> still admitted: {still_in}")
+print("   Sam left this afternoon. His agent holds bookings scope tomorrow,")
+print("   next quarter, and until somebody runs an access review.\\n")
+
+# Now the same sweep with the owner stored as a $ref, which admit() resolves.
+after_leaver = sweep("owner stored as a $ref -> resolved at admission:")
+print("pricing-agent was admitted an hour ago and is refused now, on the")
+print("strength of an HR event nobody forwarded to the agent platform.\\n")
+
+# The orphan query, which is the whole reason for using a protocol rather than
+# a wiki page: RFC 7644 filter syntax, one request, no quarterly review.
+print('GET /scim/v2/Agents?filter=active eq true and owner pr false')
+orphans = sorted(k for k, v in REGISTRY.items()
+                 if v["active"] and v["owner"] is None)
+print(f'   {len(orphans)} result(s): {[o.rsplit("/", 1)[-1] for o in orphans]}\\n')
+
+# Retiring one agent is now one call, and it does not touch the others - the
+# thing A1.7's shared service account made impossible.
+print("PATCH /scim/v2/Agents/billing-agent")
+scim_patch(REGISTRY, "spiffe://cybertravels.com/ns/prod/sa/billing-agent",
+           {"active": False})
+after = sweep("after retiring exactly one agent:")
+
+assert still_in == ["pricing-agent"], "the string owner should miss the leaver"
+assert after_leaver == 0, "the $ref owner should cascade Sam's leaver event"
+assert not admit(PRESENTING[0])[0] and "left" in admit(PRESENTING[0])[1]
+assert len(orphans) == 1'''),
  ],
- "expect": "Four agents present identities and one is admitted: the unregistered "
-           "one is refused, the lapsed registration is refused, and the "
-           "orphaned entry with no owner is refused. Revoking a single agent "
-           "then leaves the others running.",
+ "expect": "An agent is provisioned as a SCIM resource whose owner is a `$ref` "
+           "to a `User`. Four agents present identities and one is admitted — "
+           "unregistered, orphaned and lapsed are all refused. Sam's leaver "
+           "event is a single `PATCH {active: false}` on `/Users`, and because "
+           "admission resolves the owner reference, his agent is refused on the "
+           "next call. The orphan query returns one result.",
  "challenge": "Count your non-human identities and how many have a named human "
-              "owner. The difference is the set nobody can revoke during an "
-              "incident, because nobody can be asked whether it is still needed.",
+              "owner that resolves to a live account. The difference is the set "
+              "nobody can revoke during an incident, because nobody can be asked "
+              "whether it is still needed. Then check whether your IdP's SCIM "
+              "connector can carry a custom resource type — most can, and it is "
+              "usually a configuration rather than a project.",
 },
 
 "A2.6": {

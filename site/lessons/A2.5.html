@@ -11,14 +11,14 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>SPIFFE/SPIRE, kagent</td>
+<td>SCIM 2.0 (RFC 7643/7644), Keycloak, SPIFFE/SPIRE</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Non-human identities already outnumber humans in most estates, and they sit outside joiner-mover-leaver entirely. Nobody ever leaves, so nothing is ever revoked, and last year's proof-of-concept still holds production write.</p>
+<p>Non-human identities already outnumber humans in most estates, and they sit outside joiner-mover-leaver entirely. Nobody ever leaves, so nothing is ever revoked, and last year's proof-of-concept still holds production write. The protocol that fixes it is one you already run for humans.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> <code>cybertravels-svc</code> was created for a proof of concept in March. The proof of concept was cancelled. The identity still holds payments scope, because nothing in CyberTravels' joiner-mover-leaver process describes an agent.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
@@ -28,7 +28,14 @@
    HR system drives it            nothing drives it
    revocation is automatic        nobody ever leaves
 
-   registration . ownership . expiry . revocation  &lt;- the missing four
+   the fix is to run ONE protocol over both:
+
+     HR/IdP --SCIM--&gt; POST   /Users     a person joins
+                      POST   /Agents    an agent is deployed
+                      PATCH  active:false   a leaver, or a retirement
+
+   owner is a $ref to a User, not a string, so the leaver
+   event that already exists is the one that retires the agent
 </code></pre>
 <p><strong>Mitigates: T9 Identity Spoofing · T13 Rogue Agents · T3 Privilege Compromise.</strong></p>
 <p>Human identities have a lifecycle: someone joins, moves team, leaves, and an HR
@@ -48,52 +55,155 @@ A2.2. Admission then checks the presented identity against the registry rather
 than checking a name the caller supplied.</p>
 <p>That last point is what makes it a control rather than a spreadsheet. A registry
 consulted by name is documentation; a registry consulted by attested identity is
-an authorization decision.</p></div><div class="nbmd"><blockquote>
+an authorization decision.</p>
+<h3>The registry has to be driven by something, and that something is SCIM</h3>
+<p>A registry nobody updates decays into the spreadsheet it replaced. Humans do
+not have this problem, because their lifecycle is already automated by a
+protocol: <strong>SCIM</strong> — System for Cross-domain Identity Management, RFC 7643 for
+the schema and RFC 7644 for the protocol. The HR system creates a user, the
+identity provider <code>POST</code>s it to <code>/Users</code>, a leaver event <code>PATCH</code>es
+<code>{"active": false}</code>, and every downstream application finds out without anybody
+filing a ticket.</p>
+<p>Point the same protocol at agents and three things become true at once:</p>
+<p><strong>The joiner-mover-leaver machinery you already run is the machinery that
+governs agents.</strong> No parallel process, no second system of record. Deploying an
+agent means creating a SCIM resource; retiring it means one <code>PATCH</code>.</p>
+<p><strong>The owner is a reference, not a string.</strong> <code>owner.$ref</code> points at the SCIM
+<code>User</code> — so when Sam leaves, Sam's own leaver event is enough to answer "which
+agents just lost their owner", automatically, on the day it happens rather than
+at the next audit.</p>
+<p><strong>Orphans become a query.</strong> <code>GET /Agents?filter=active eq true and owner pr
+false</code> is a one-line answer to a question that is otherwise a quarter of
+someone's life.</p>
+<blockquote>
+<p><strong>What is and is not standard here.</strong> SCIM's protocol — the endpoints, the
+filter syntax, <code>PATCH</code> with <code>active: false</code>, the <code>meta</code> block — is RFC 7644
+and your IdP already speaks it. A resource type for <em>agents</em> is not in RFC
+7643; you declare it as a schema extension under your own URN, exactly as the
+enterprise extension does for <code>manager</code>. The protocol is standard, the schema
+is yours, and that split is the whole reason this is cheap to adopt.</p>
+</blockquote></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
-<p>Turns 'which agents are allowed here' from a convention into a check. Closes A1.10 at the door, and makes revoking exactly one agent possible.</p>
+<p>Turns 'which agents are allowed here' from a convention into a check, and turns 'is this one still wanted' from an audit question into a leaver event. Closes A1.10 at the door.</p>
 </blockquote>
-<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>NOW = 5000
+<h2>3 · Provisioning an agent the same way you provision a person</h2></div><div class="nbmd"><div style="display:flex;gap:6px;align-items:stretch;flex-wrap:wrap;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:6px 0 2px"><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">system of record</div><div style="border:1px solid rgba(63,160,107,.55);border-left:3px solid #3FA06B;border-radius:8px;background:rgba(63,160,107,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#127970;</span> HR / IdP</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">the one place a joiner, mover or leaver is recorded</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">scim protocol</div><div style="border:1px solid rgba(224,145,47,.55);border-left:3px solid #E0912F;border-radius:8px;background:rgba(224,145,47,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128100;</span> POST /Users</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">a person joins</div></div><div style="border:1px solid rgba(77,155,255,.55);border-left:3px solid #4D9BFF;border-radius:8px;background:rgba(77,155,255,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#129302;</span> POST /Agents</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">an agent is deployed — same protocol, your own schema URN</div></div><div style="border:1px solid rgba(224,145,47,.55);border-left:3px solid #E0912F;border-radius:8px;background:rgba(224,145,47,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#9940;</span> PATCH active:false</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">a leaver, or a retirement. One call, and every consumer finds out</div><div style="font-size:10px;color:#E0912F;margin-top:5px;font-weight:600;letter-spacing:.02em">NOT DELETE — THE RECORD SURVIVES</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">agent registry</div><div style="border:1px solid rgba(77,155,255,.55);border-left:3px solid #4D9BFF;border-radius:8px;background:rgba(77,155,255,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128220;</span> the registry</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">owner is a $ref to a User, not a string. Expiry is on the registration, not the credential</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">admission</div><div style="border:1px solid rgba(224,92,75,.55);border-left:3px solid #E05C4B;border-radius:8px;background:rgba(224,92,75,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128737;&#65039;</span> the orchestrator</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">checks the attested SPIFFE ID against the registry, and resolves the owner ref before it admits anything</div><div style="font-size:10px;color:#E05C4B;margin-top:5px;font-weight:600;letter-spacing:.02em">R2</div></div></div></div>
+<div style="font-size:12px;color:#8A93A6;margin-top:8px;line-height:1.5">The point of using SCIM rather than a table is the middle column: the leaver event that already exists is the one that retires the agent, and the owner reference is what makes it cascade.</div></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json
 
-REGISTRY = {
- &quot;spiffe://corp/pricing-agent&quot;: {&quot;owner&quot;: &quot;sam@corp&quot;, &quot;expires&quot;: 9000},
- &quot;spiffe://corp/billing-agent&quot;: {&quot;owner&quot;: &quot;sam@corp&quot;, &quot;expires&quot;: 4000},   # lapsed
- &quot;spiffe://corp/legacy-agent&quot;:  {&quot;owner&quot;: None,       &quot;expires&quot;: 9000},   # orphan
+# A SCIM resource for an agent. The protocol is RFC 7644; the schema URN is
+# your own extension, in exactly the way the enterprise extension declares
+# &quot;manager&quot; for users. Note what &quot;owner&quot; is: a REFERENCE, not a name.
+AGENT_SCHEMA = &quot;urn:cybertravels:params:scim:schemas:extension:agent:2.0:Agent&quot;
+
+agent = {
+ &quot;schemas&quot;: [AGENT_SCHEMA],
+ &quot;id&quot;: &quot;b7f3a1c2&quot;,
+ &quot;externalId&quot;: &quot;spiffe://cybertravels.com/ns/prod/sa/pricing-agent&quot;,
+ &quot;displayName&quot;: &quot;pricing-agent&quot;,
+ &quot;active&quot;: True,
+ &quot;owner&quot;: {&quot;value&quot;: &quot;sam-2291&quot;,
+           &quot;$ref&quot;: &quot;https://idp.cybertravels.com/scim/v2/Users/sam-2291&quot;,
+           &quot;display&quot;: &quot;sam@cybertravels.com&quot;},
+ &quot;registrationExpires&quot;: 9000,
+ &quot;meta&quot;: {&quot;resourceType&quot;: &quot;Agent&quot;, &quot;created&quot;: &quot;2026-01-14T09:02:00Z&quot;,
+          &quot;lastModified&quot;: &quot;2026-01-14T09:02:00Z&quot;, &quot;version&quot;: &#x27;W/&quot;1&quot;&#x27;},
+}
+print(&quot;POST /scim/v2/Agents&quot;)
+print(json.dumps(agent, indent=1, sort_keys=True))</code></pre></div><div class="nbmd"><h2>4 · Admission, and the two entries that fail it</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>NOW = 5000
+
+USERS = {                       # what SCIM /Users says about the humans
+ &quot;sam-2291&quot;:  {&quot;userName&quot;: &quot;sam@cybertravels.com&quot;,  &quot;active&quot;: True},
+ &quot;dana-4417&quot;: {&quot;userName&quot;: &quot;dana@cybertravels.com&quot;, &quot;active&quot;: True},
+}
+REGISTRY = {                    # what SCIM /Agents says about the agents
+ &quot;spiffe://cybertravels.com/ns/prod/sa/pricing-agent&quot;:
+    {&quot;active&quot;: True, &quot;owner&quot;: &quot;sam-2291&quot;,  &quot;expires&quot;: 9000},
+ &quot;spiffe://cybertravels.com/ns/prod/sa/billing-agent&quot;:
+    {&quot;active&quot;: True, &quot;owner&quot;: &quot;dana-4417&quot;, &quot;expires&quot;: 4000},   # lapsed
+ &quot;spiffe://cybertravels.com/ns/prod/sa/legacy-agent&quot;:
+    {&quot;active&quot;: True, &quot;owner&quot;: None,        &quot;expires&quot;: 9000},   # orphan
 }
 
-def admit(presented_identity, now=NOW):
-    &quot;&quot;&quot;Admission checks the ATTESTED identity, not a name the caller supplied.&quot;&quot;&quot;
-    entry = REGISTRY.get(presented_identity)
-    if not entry:              return False, &quot;not registered&quot;
-    if not entry[&quot;owner&quot;]:     return False, &quot;no accountable owner&quot;
-    if entry[&quot;expires&quot;] &lt; now: return False, &quot;registration lapsed&quot;
-    return True, f&quot;owner {entry[&#x27;owner&#x27;]}&quot;
+def admit(presented, now=NOW):
+    &quot;&quot;&quot;Checks the ATTESTED identity, then resolves the owner reference.&quot;&quot;&quot;
+    e = REGISTRY.get(presented)
+    if e is None:                 return False, &quot;not registered&quot;
+    if not e[&quot;active&quot;]:           return False, &quot;deprovisioned (active: false)&quot;
+    if e[&quot;owner&quot;] is None:        return False, &quot;no accountable owner&quot;
+    owner = USERS.get(e[&quot;owner&quot;])
+    if owner is None:             return False, &quot;owner ref dangles&quot;
+    if not owner[&quot;active&quot;]:       return False, f&quot;owner {owner[&#x27;userName&#x27;]} has left&quot;
+    if e[&quot;expires&quot;] &lt; now:        return False, &quot;registration lapsed&quot;
+    return True, f&quot;owner {owner[&#x27;userName&#x27;]}&quot;
 
-PRESENTING = [&quot;spiffe://corp/pricing-agent&quot;, &quot;spiffe://corp/billing-agent&quot;,
-              &quot;spiffe://corp/legacy-agent&quot;,  &quot;spiffe://corp/reporting-agent-v2&quot;]
+PRESENTING = [
+ &quot;spiffe://cybertravels.com/ns/prod/sa/pricing-agent&quot;,
+ &quot;spiffe://cybertravels.com/ns/prod/sa/billing-agent&quot;,
+ &quot;spiffe://cybertravels.com/ns/prod/sa/legacy-agent&quot;,
+ &quot;spiffe://cybertravels.com/ns/prod/sa/reporting-agent-v2&quot;,
+]
 
-print(f&quot;{&#x27;presented identity&#x27;:36s}{&#x27;admitted&#x27;:10s}why&quot;)
-admitted = []
-for ident in PRESENTING:
-    ok, why = admit(ident)
-    if ok: admitted.append(ident)
-    print(f&quot;{ident:36s}{&#x27;yes&#x27; if ok else &#x27;NO&#x27;:10s}{why}&quot;)
+def sweep(label):
+    print(label)
+    ok_n = 0
+    for ident in PRESENTING:
+        ok, why = admit(ident)
+        ok_n += ok
+        print(f&quot;   {ident.rsplit(&#x27;/&#x27;, 1)[-1]:22s}{&#x27;admitted&#x27; if ok else &#x27;REFUSED&#x27;:10s}{why}&quot;)
+    print(f&quot;   -&gt; {ok_n} of {len(PRESENTING)} admitted\n&quot;)
+    return ok_n
 
-print(f&quot;\nadmitted {len(admitted)} of {len(PRESENTING)}&quot;)
-print()
-# and revocation is now singular, which A1.7 could not do
-REGISTRY[&quot;spiffe://corp/pricing-agent&quot;][&quot;expires&quot;] = 0
-print(&quot;revoke exactly one agent:&quot;)
-for ident in PRESENTING[:2]:
-    ok, why = admit(ident)
-    print(f&quot;   {ident:36s}{&#x27;admitted&#x27; if ok else &#x27;refused&#x27;}  ({why})&quot;)
-print()
+sweep(&quot;presenting at the orchestrator:&quot;)
 print(&quot;reporting-agent-v2 is A1.10&#x27;s rogue: a real process, answering the&quot;)
-print(&quot;protocol, refused because nothing registered it. legacy-agent is the&quot;)
-print(&quot;more common case - registered, running, and owned by nobody.&quot;)
-assert &quot;spiffe://corp/reporting-agent-v2&quot; not in admitted
-assert not admit(&quot;spiffe://corp/pricing-agent&quot;)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Four agents present identities and one is admitted: the unregistered one is refused, the lapsed registration is refused, and the orphaned entry with no owner is refused. Revoking a single agent then leaves the others running.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Count your non-human identities and how many have a named human owner. The difference is the set nobody can revoke during an incident, because nobody can be asked whether it is still needed.</p></div><div class="nbmd"><hr />
+print(&quot;protocol correctly, refused because nothing registered it. legacy-agent&quot;)
+print(&quot;is the more common case - registered, running, owned by nobody.&quot;)</code></pre></div><div class="nbmd"><h2>5 · Sam leaves. One SCIM <code>PATCH</code>, and what it does not reach</h2>
+<p>This is the part a registry without a protocol behind it gets wrong. Sam's leaver event fires correctly — his own account is deactivated the same afternoon. The agent he deployed keeps running.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def scim_patch(collection, rid, ops):
+    &quot;&quot;&quot;RFC 7644 PATCH. Deprovisioning is active:false, not DELETE - the record
+    has to survive so that an investigation six months later can still read it.&quot;&quot;&quot;
+    target = collection[rid]
+    target.update(ops)
+    return {&quot;status&quot;: 200, &quot;id&quot;: rid, **ops}
+
+print(&quot;PATCH /scim/v2/Users/sam-2291&quot;)
+print(f&quot;   {scim_patch(USERS, &#x27;sam-2291&#x27;, {&#x27;active&#x27;: False})}\n&quot;)
+
+# First, the control absent. This is what a registry that stores the owner as a
+# STRING does: nothing joins Sam&#x27;s leaver event to his agent, so admission has
+# no way to learn about it and the agent keeps working indefinitely.
+def admit_by_name(presented, now=NOW):
+    e = REGISTRY.get(presented)
+    if e is None or not e[&quot;active&quot;] or e[&quot;owner&quot;] is None: return False
+    return e[&quot;expires&quot;] &gt;= now
+
+still_in = [i.rsplit(&quot;/&quot;, 1)[-1] for i in PRESENTING if admit_by_name(i)]
+print(f&quot;owner stored as a string  -&gt; still admitted: {still_in}&quot;)
+print(&quot;   Sam left this afternoon. His agent holds bookings scope tomorrow,&quot;)
+print(&quot;   next quarter, and until somebody runs an access review.\n&quot;)
+
+# Now the same sweep with the owner stored as a $ref, which admit() resolves.
+after_leaver = sweep(&quot;owner stored as a $ref -&gt; resolved at admission:&quot;)
+print(&quot;pricing-agent was admitted an hour ago and is refused now, on the&quot;)
+print(&quot;strength of an HR event nobody forwarded to the agent platform.\n&quot;)
+
+# The orphan query, which is the whole reason for using a protocol rather than
+# a wiki page: RFC 7644 filter syntax, one request, no quarterly review.
+print(&#x27;GET /scim/v2/Agents?filter=active eq true and owner pr false&#x27;)
+orphans = sorted(k for k, v in REGISTRY.items()
+                 if v[&quot;active&quot;] and v[&quot;owner&quot;] is None)
+print(f&#x27;   {len(orphans)} result(s): {[o.rsplit(&quot;/&quot;, 1)[-1] for o in orphans]}\n&#x27;)
+
+# Retiring one agent is now one call, and it does not touch the others - the
+# thing A1.7&#x27;s shared service account made impossible.
+print(&quot;PATCH /scim/v2/Agents/billing-agent&quot;)
+scim_patch(REGISTRY, &quot;spiffe://cybertravels.com/ns/prod/sa/billing-agent&quot;,
+           {&quot;active&quot;: False})
+after = sweep(&quot;after retiring exactly one agent:&quot;)
+
+assert still_in == [&quot;pricing-agent&quot;], &quot;the string owner should miss the leaver&quot;
+assert after_leaver == 0, &quot;the $ref owner should cascade Sam&#x27;s leaver event&quot;
+assert not admit(PRESENTING[0])[0] and &quot;left&quot; in admit(PRESENTING[0])[1]
+assert len(orphans) == 1</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>An agent is provisioned as a SCIM resource whose owner is a <code>$ref</code> to a <code>User</code>. Four agents present identities and one is admitted — unregistered, orphaned and lapsed are all refused. Sam's leaver event is a single <code>PATCH {active: false}</code> on <code>/Users</code>, and because admission resolves the owner reference, his agent is refused on the next call. The orphan query returns one result.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Count your non-human identities and how many have a named human owner that resolves to a live account. The difference is the set nobody can revoke during an incident, because nobody can be asked whether it is still needed. Then check whether your IdP's SCIM connector can carry a custom resource type — most can, and it is usually a configuration rather than a project.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.6.html">A2.6 · Ingress: marking untrusted content at the door</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.5.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Four agents present identities and one is admitted: the unregistered one is refused, the lapsed registration is refused, and the orphaned entry with no owner is refused. Revoking a single agent then leaves the others running.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>SPIFFE/SPIRE</span><span>kagent</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.5.ipynb</code></p></div><div class="pager"><a href="A2.4.html"><span class="k">← Previous</span><span class="t">A2.4 · Just-in-time authority</span></a><a class="next" href="A2.6.html"><span class="k">Next →</span><span class="t">A2.6 · Ingress: marking untrusted content at the door</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Four agents present identities and one is admitted: the unregistered one is refused, the lapsed registration is refused, and the orphaned entry with no owner is refused. Revoking a single agent then leaves the others running.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>SCIM 2.0 (RFC 7643/7644)</span><span>Keycloak</span><span>SPIFFE/SPIRE</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.5.ipynb</code></p></div><div class="pager"><a href="A2.4.html"><span class="k">← Previous</span><span class="t">A2.4 · Just-in-time authority</span></a><a class="next" href="A2.6.html"><span class="k">Next →</span><span class="t">A2.6 · Ingress: marking untrusted content at the door</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

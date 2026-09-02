@@ -64,7 +64,7 @@ python3 scripts/run_notebooks.py --session A2.2   # run it headless and check it
 - **Risk** — Subset-only lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked.
 - **Control** — Token exchange that intersects presented scope with the actor's ceiling, and records the chain.
 - **Lab** — Run both narrowing rules against a request that passes one and fails the other.
-- **Tools** — `Keycloak`
+- **Tools** — `SPIFFE/SPIRE`, `Keycloak`, `RFC 8693 token exchange`, `RFC 8705 mTLS binding`
 
 **Run it** — Run both narrowing rules against a request that passes one and fails the other.
 
@@ -106,7 +106,7 @@ python3 scripts/run_notebooks.py --session A2.4   # run it headless and check it
 - **Risk** — Agents accumulate with no owner and no expiry, and an unregistered agent joins a topology as a peer.
 - **Control** — A registry with a named owner, an expiry, and admission bound to a registered identity.
 - **Lab** — Admit agents against a registry and show an unregistered one refused at the door.
-- **Tools** — `SPIFFE/SPIRE`, `kagent`
+- **Tools** — `SCIM 2.0 (RFC 7643/7644)`, `Keycloak`, `SPIFFE/SPIRE`
 
 **Run it** — Admit agents against a registry and show an unregistered one refused at the door.
 

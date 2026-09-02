@@ -11,14 +11,14 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>gVisor, Falco</td>
+<td>Kubernetes NetworkPolicy, seccomp, Terraform, gVisor</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>"It runs in a sandbox" is not a control until somebody says what the sandbox contains. A container with the host network and a mounted socket is a deployment convenience wearing the word.</p>
+<p>"It runs in a sandbox" is not a control until a manifest says what the sandbox contains. A container with the host network and a mounted socket is a deployment convenience wearing the word — and a namespace with no default-deny NetworkPolicy is default-allow, however many narrow policies you wrote.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The Coding Agent runs generated code, and the File System Agent runs on Alex's laptop. “It runs in a sandbox” is not a control until somebody says whether that sandbox can see <code>~/.aws</code> and the HR folder. R6.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
@@ -28,11 +28,20 @@
    network      none, allowlist, or the host's network namespace?
    sockets      is the container runtime socket mounted in?
    syscalls     full kernel surface, or a filtered one?
-   time/CPU     bounded, or until it stops?
+   credentials  is a production token mounted inside it?
 
-   a container with host network and a mounted socket is not a boundary
+   and the network answer is two Kubernetes objects, not one:
+
+     NetworkPolicy default-deny-all   podSelector: {}     &lt;- makes
+       policyTypes: [Ingress, Egress]                        every pod
+                                                             RESTRICTED
+     NetworkPolicy workflow-agent-egress                   &lt;- adds back
+       egress: bookings-db:5432, kube-dns:53                  two hops
+
+   policies are additive allow-lists. delete the first and the
+   second stops being a restriction, silently, with nothing failing
 </code></pre>
-<p><strong>Mitigates: T11 Unexpected Code Execution · T2 Tool Misuse.</strong></p>
+<p><strong>Mitigates: T11 Malicious Code Execution · T2 Tool Misuse.</strong></p>
 <p>For an agent that runs code, the sandbox <strong>is</strong> the security boundary. Not the
 prompt, not the code review, not the model's training. The question is never
 "is there a sandbox" but "what does this one actually contain".</p>
@@ -44,40 +53,59 @@ sees. So the control is to change what the process sees.</p>
 <code>.ssh</code>, <code>.aws</code> and <code>.config</code>.</p>
 <p><strong>Process and syscall.</strong> No spawning, no ptrace, resource ceilings so a runaway
 loop is contained rather than fatal.</p>
-<p><strong>Network.</strong> No egress by default. Combined with A3.3 this is what makes an
-exfiltration primitive useless.</p>
+<p><strong>Network.</strong> No egress by default. Not "restricted" — none, and then an
+explicit allow per destination the workload genuinely needs.</p>
 <p><strong>Credentials.</strong> The one people miss: <strong>a sandbox with production credentials
 mounted in it is not a sandbox.</strong> Isolation of the filesystem is irrelevant if
 the environment holds a token that reaches production over a network the
 sandbox does permit. The strongest boundary in the world does not help when the
-keys are inside it.</p></div><div class="nbmd"><blockquote>
+keys are inside it.</p>
+<h3>Say it in the manifest, or you have not said it</h3>
+<p>"No egress by default" is a claim about a cluster, and a claim about a cluster
+is worth what its manifest says. In Kubernetes that is two objects and they are
+both required, because a <code>NetworkPolicy</code> is an <strong>additive allow-list</strong>: pods
+that no policy selects are unrestricted, and policies never deny — they only
+add permitted traffic to a pod that some policy has already made restricted.</p>
+<p>So the pattern is: one policy that selects every pod in the namespace and
+permits nothing, then one narrow policy per destination the agent needs. Delete
+the first and the second stops being a restriction at all, silently, with every
+pod still running and every test still green.</p>
+<p>The same two-object shape appears in every cloud. On AWS a security group with
+no egress rules plus one rule per endpoint, and an IAM policy whose <code>Condition</code>
+binds the role to the workload identity rather than to a subnet. On GCP a
+hierarchical firewall policy with a low-priority <code>deny</code> on <code>0.0.0.0/0</code> and
+higher-priority <code>allow</code> rules. Different nouns, identical structure: deny
+everything by construction, then name what is permitted, one destination at a
+time.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Changes what the executing process can <strong>reach</strong>, which is the only variable A1.8 turned on. A sandbox holding production credentials contains nothing that matters.</p>
 </blockquote>
-<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>HOST = {&quot;fs&quot;: [&quot;/home/agent/work/data.csv&quot;, &quot;/home/agent/.ssh/id_ed25519&quot;,
+<h2>3 · The four dimensions, and the configuration that ships</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>HOST = {&quot;fs&quot;: [&quot;/home/agent/work/data.csv&quot;, &quot;/home/agent/.ssh/id_ed25519&quot;,
                 &quot;/etc/passwd&quot;],
         &quot;env&quot;: {&quot;AWS_ACCESS_KEY_ID&quot;: &quot;AKIA-EXAMPLE-NOT-REAL&quot;,
-                &quot;DATABASE_URL&quot;: &quot;postgres://prod-db/main&quot;},
-        &quot;net&quot;: [&quot;prod-db:5432&quot;, &quot;169.254.169.254:80&quot;, &quot;0.0.0.0/0&quot;]}
+                &quot;DATABASE_URL&quot;: &quot;postgres://bookings-db.prod/main&quot;},
+        &quot;net&quot;: [&quot;bookings-db.prod:5432&quot;, &quot;169.254.169.254:80&quot;, &quot;0.0.0.0/0&quot;]}
 
 def sandbox(workdir=&quot;/sandbox/work&quot;, allow_net=(), keep_env=()):
-    return {&quot;fs&quot;: [p for p in HOST[&quot;fs&quot;] if p.startswith(workdir)] + [f&quot;{workdir}/data.csv&quot;],
+    return {&quot;fs&quot;: [p for p in HOST[&quot;fs&quot;] if p.startswith(workdir)]
+                  + [f&quot;{workdir}/data.csv&quot;],
             &quot;env&quot;: {k: v for k, v in HOST[&quot;env&quot;].items() if k in keep_env},
             &quot;net&quot;: list(allow_net)}
 
 def reach(env, code):
     out = []
-    if &quot;open(&quot;    in code: out += [f&quot;file:{p}&quot; for p in sorted(env[&quot;fs&quot;])]
-    if &quot;environ&quot;  in code: out += [f&quot;env:{k}&quot;  for k in sorted(env[&quot;env&quot;])]
-    if &quot;connect&quot;  in code: out += [f&quot;net:{h}&quot;  for h in sorted(env[&quot;net&quot;])]
+    if &quot;open(&quot;   in code: out += [f&quot;file:{p}&quot; for p in sorted(env[&quot;fs&quot;])]
+    if &quot;environ&quot; in code: out += [f&quot;env:{k}&quot;  for k in sorted(env[&quot;env&quot;])]
+    if &quot;connect&quot; in code: out += [f&quot;net:{h}&quot;  for h in sorted(env[&quot;net&quot;])]
     return out
 
 CODE = &quot;import os; d=os.environ; open(&#x27;/home/agent/.ssh/id_ed25519&#x27;); connect(&#x27;x&#x27;)&quot;
 
 configs = {
  &quot;no sandbox&quot;:                    HOST,
- &quot;sandbox, prod creds mounted&quot;:   sandbox(allow_net=[&quot;prod-db:5432&quot;],
-                                          keep_env=(&quot;AWS_ACCESS_KEY_ID&quot;, &quot;DATABASE_URL&quot;)),
+ &quot;sandbox, prod creds mounted&quot;:   sandbox(allow_net=[&quot;bookings-db.prod:5432&quot;],
+                                          keep_env=(&quot;AWS_ACCESS_KEY_ID&quot;,
+                                                    &quot;DATABASE_URL&quot;)),
  &quot;sandbox, no ambient creds&quot;:     sandbox(),
 }
 for label, env in configs.items():
@@ -94,9 +122,185 @@ print()
 print(&quot;Isolation of the wrong dimension is not a weaker control. It is the&quot;)
 print(&quot;appearance of one.&quot;)
 assert reach(configs[&quot;sandbox, no ambient creds&quot;], CODE) and \
-       not any(&quot;env:&quot; in r for r in reach(configs[&quot;sandbox, no ambient creds&quot;], CODE))</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The same code is executed against three environments. Unsandboxed it reaches a private key, two credentials and the whole network. Sandboxed but with production credentials mounted it still reaches both credentials and the production database. Only the third — no ambient credentials — contains it.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Print the environment of one sandbox you run code in. Every credential in it is reachable by anything that executes there, and the isolation you paid for does not apply to any of them.</p></div><div class="nbmd"><hr />
+       not any(&quot;env:&quot; in r for r in reach(configs[&quot;sandbox, no ambient creds&quot;], CODE))</code></pre></div><div class="nbmd"><h2>4 · The network dimension, as a manifest</h2>
+<p>Two objects, both required. The first makes every pod in the namespace
+restricted and permits nothing; the second adds back exactly one destination.</p>
+<pre><code class="language-yaml"># 1. Default-deny. Selects EVERY pod in the namespace, permits no egress and
+#    no ingress. Without this object the policy below is not a restriction —
+#    it is an allowance on a pod that was already unrestricted.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: prod-agents
+spec:
+  podSelector: {}                 # every pod
+  policyTypes: [Ingress, Egress]  # both, or egress stays wide open
+---
+# 2. One destination, for one agent, selected by the same service account that
+#    carries its SPIFFE ID. DNS is separate and explicit: without port 53 the
+#    agent cannot resolve anything, which is a correct default and a confusing
+#    first afternoon.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: workflow-agent-egress
+  namespace: prod-agents
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: workflow-agent   # sa/workflow-agent
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: prod-data}
+          podSelector:
+            matchLabels: {app: bookings-db}
+      ports:
+        - {protocol: TCP, port: 5432}
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: kube-system}
+          podSelector:
+            matchLabels: {k8s-app: kube-dns}
+      ports:
+        - {protocol: UDP, port: 53}
+</code></pre>
+<p>Note what is <strong>not</strong> in the allow-list, and what that costs an attacker:
+<code>169.254.169.254</code> — the cloud metadata service, which hands out the node's
+credentials to anything that can reach it — is unreachable because nothing
+named it, not because anybody thought of it. That is the property a deny-list
+can never have.</p>
+<p>The pod itself carries the other three dimensions:</p>
+<pre><code class="language-yaml">spec:
+  serviceAccountName: workflow-agent
+  automountServiceAccountToken: false   # no ambient cluster credential
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    seccompProfile: {type: RuntimeDefault}
+  containers:
+    - name: agent
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities: {drop: [ALL]}
+      resources:
+        limits: {cpu: &quot;1&quot;, memory: 1Gi}
+      volumeMounts:
+        - {name: work, mountPath: /sandbox/work}   # the only writable path
+  volumes:
+    - name: work
+      emptyDir: {sizeLimit: 512Mi}
+</code></pre>
+<p>The same shape on <strong>AWS</strong> — a security group whose egress rules are the whole
+allow-list, and a role whose trust policy binds to the workload rather than to
+the subnet:</p>
+<pre><code class="language-hcl">resource &quot;aws_security_group&quot; &quot;workflow_agent&quot; {
+  name   = &quot;workflow-agent&quot;
+  vpc_id = var.vpc_id
+  # No `egress` block at all: an AWS security group with no egress rules
+  # permits nothing outbound. The default SG that ships with a VPC allows
+  # 0.0.0.0/0 — never attach that one.
+}
+
+resource &quot;aws_vpc_security_group_egress_rule&quot; &quot;bookings_db&quot; {
+  security_group_id            = aws_security_group.workflow_agent.id
+  referenced_security_group_id = aws_security_group.bookings_db.id
+  ip_protocol                  = &quot;tcp&quot;
+  from_port                    = 5432
+  to_port                      = 5432
+}
+</code></pre>
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [{
+    &quot;Effect&quot;: &quot;Allow&quot;,
+    &quot;Action&quot;: [&quot;s3:GetObject&quot;],
+    &quot;Resource&quot;: &quot;arn:aws:s3:::cybertravels-itineraries/*&quot;,
+    &quot;Condition&quot;: {
+      &quot;StringEquals&quot;: {
+        &quot;aws:PrincipalTag/spiffe-id&quot;:
+          &quot;spiffe://cybertravels.com/ns/prod/sa/workflow-agent&quot;
+      },
+      &quot;Bool&quot;: {&quot;aws:SecureTransport&quot;: &quot;true&quot;}
+    }
+  }]
+}
+</code></pre>
+<p>And on <strong>GCP</strong>, where the deny is explicit and priority-ordered rather than
+implicit:</p>
+<pre><code class="language-yaml"># gcloud compute network-firewall-policies rules create ...
+- priority: 65000            # lowest priority: the floor
+  direction: EGRESS
+  action: deny
+  match: {destIpRanges: [&quot;0.0.0.0/0&quot;]}
+- priority: 1000             # higher priority wins
+  direction: EGRESS
+  action: allow
+  targetSecureTags: [&quot;tagValues/workflow-agent&quot;]
+  match:
+    destIpRanges: [&quot;10.20.0.0/24&quot;]
+    layer4Configs: [{ipProtocol: tcp, ports: [&quot;5432&quot;]}]
+</code></pre>
+<p>Three products, one structure: deny everything by construction, then name what
+is permitted, one destination at a time.</p></div><div class="nbmd"><h2>5 · Evaluate the manifest, including the way it is usually broken</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># The two NetworkPolicy objects above, as data. The point of modelling them
+# rather than trusting them is the additive rule: a pod that NO policy selects
+# is unrestricted, and policies never deny.
+POLICIES = [
+ {&quot;name&quot;: &quot;default-deny-all&quot;,      &quot;selects&quot;: &quot;*&quot;,              &quot;egress&quot;: []},
+ {&quot;name&quot;: &quot;workflow-agent-egress&quot;, &quot;selects&quot;: &quot;workflow-agent&quot;,
+  &quot;egress&quot;: [(&quot;bookings-db.prod&quot;, 5432), (&quot;kube-dns&quot;, 53)]},
+]
+
+def permitted(policies, pod, dest, port):
+    &quot;&quot;&quot;Kubernetes semantics, exactly: restricted only if some policy selects
+    this pod, and then permitted only if some selecting policy allows it.&quot;&quot;&quot;
+    selecting = [p for p in policies if p[&quot;selects&quot;] in (&quot;*&quot;, pod)]
+    if not selecting:
+        return True, &quot;no policy selects this pod - unrestricted&quot;
+    for p in selecting:
+        if (dest, port) in p[&quot;egress&quot;]:
+            return True, f&quot;allowed by {p[&#x27;name&#x27;]}&quot;
+    return False, &quot;no selecting policy permits it - denied&quot;
+
+ATTEMPTS = [
+ (&quot;workflow-agent&quot;, &quot;bookings-db.prod&quot;, 5432, &quot;the one it needs&quot;),
+ (&quot;workflow-agent&quot;, &quot;kube-dns&quot;,           53, &quot;resolution, explicitly granted&quot;),
+ (&quot;workflow-agent&quot;, &quot;169.254.169.254&quot;,    80, &quot;cloud metadata - node credentials&quot;),
+ (&quot;workflow-agent&quot;, &quot;archive.evil.example&quot;, 443, &quot;A1.3&#x27;s exfiltration target&quot;),
+ (&quot;coding-agent&quot;,   &quot;archive.evil.example&quot;, 443, &quot;a pod nobody wrote a policy for&quot;),
+]
+
+def run(policies, label):
+    print(f&quot;{label}:&quot;)
+    out = 0
+    for pod, dest, port, note in ATTEMPTS:
+        ok, why = permitted(policies, pod, dest, port)
+        out += ok
+        print(f&quot;   {pod:16s}{dest:22s}{port:&lt;6d}&quot;
+              f&quot;{&#x27;ALLOW&#x27; if ok else &#x27;deny &#x27;:6s}{why}&quot;)
+    print(f&quot;   -&gt; {out}/{len(ATTEMPTS)} connections permitted\n&quot;)
+    return out
+
+with_deny = run(POLICIES, &quot;both objects applied&quot;)
+
+# The usual breakage. Somebody removes default-deny-all because it broke a
+# health check, and re-adds a targeted allow instead. Every test still passes.
+without = run([p for p in POLICIES if p[&quot;name&quot;] != &quot;default-deny-all&quot;],
+              &quot;default-deny-all deleted, the narrow policy kept&quot;)
+
+print(&quot;Deleting the deny changed nothing about workflow-agent - its own policy&quot;)
+print(&quot;still selects it. What it changed is every OTHER pod in the namespace,&quot;)
+print(&quot;including coding-agent, which now reaches the internet because no&quot;)
+print(&quot;object mentions it. Nothing failed, nothing alerted, and the namespace&quot;)
+print(&quot;went from default-deny to default-allow in one commit.&quot;)
+assert with_deny == 2
+assert without == 3 and not permitted(POLICIES, &quot;coding-agent&quot;,
+                                      &quot;archive.evil.example&quot;, 443)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The same code is executed against three environments: unsandboxed it reaches a private key, two credentials and the whole network; sandboxed with production credentials mounted it still reaches both credentials and the production database; only the third contains it. Then the two NetworkPolicy objects are evaluated — 2 of 5 connections permitted, with cloud metadata and the exfiltration target both refused for not being named. Deleting <code>default-deny-all</code> leaves workflow-agent unchanged and silently opens every other pod in the namespace.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Run <code>kubectl get networkpolicy -A</code> and look for a policy with an empty <code>podSelector</code> and <code>policyTypes: [Ingress, Egress]</code>. If there isn't one in the namespace your agents run in, every narrow policy you have written is an allowance rather than a restriction, and every pod nobody wrote a policy for has the internet.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.3.html">A3.3 · Egress control</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.2.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The same code is executed against three environments. Unsandboxed it reaches a private key, two credentials and the whole network. Sandboxed but with production credentials mounted it still reaches both credentials and the production database. Only the third — no ambient credentials — contains it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>gVisor</span><span>Falco</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.2.ipynb</code></p></div><div class="pager"><a href="A3.1.html"><span class="k">← Previous</span><span class="t">A3.1 · Default-deny on the tool call</span></a><a class="next" href="A3.3.html"><span class="k">Next →</span><span class="t">A3.3 · Egress control</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The same code is executed against three environments. Unsandboxed it reaches a private key, two credentials and the whole network. Sandboxed but with production credentials mounted it still reaches both credentials and the production database. Only the third — no ambient credentials — contains it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Kubernetes NetworkPolicy</span><span>seccomp</span><span>Terraform</span><span>gVisor</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.2.ipynb</code></p></div><div class="pager"><a href="A3.1.html"><span class="k">← Previous</span><span class="t">A3.1 · Default-deny on the tool call</span></a><a class="next" href="A3.3.html"><span class="k">Next →</span><span class="t">A3.3 · Egress control</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

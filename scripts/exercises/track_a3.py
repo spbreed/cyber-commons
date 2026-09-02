@@ -33,7 +33,16 @@ The tool call is the moment text becomes consequence. It is also the last point
 where a decision can be made on **facts** — this identity, this tool, these
 arguments, this resource — rather than on intent, which nobody can read.
 
-Default-deny means the absence of a rule is a refusal. That sounds like a
+**Start from the identity, and be very specific about it.** Not "the Workflow
+Agent"; the SPIFFE ID A2.3 issued —
+`spiffe://cybertravels.com/ns/prod/sa/workflow-agent` — and against it, an
+entitlement written at full resolution: which tools, on which resources, with
+which verbs. Everything else in this lesson is a consequence of writing the
+entitlement down at that resolution. A policy phrased one notch vaguer cannot
+express the distinction the attack turns on, and the vagueness is invisible
+until it is exploited.
+
+Default-deny then means the absence of a rule is a refusal. That sounds like a
 detail and it is the entire control, because it changes what a mistake costs.
 Under allow-by-default, a permission somebody forgot to restrict is available to
 an attacker. Under deny-by-default, a permission somebody forgot to grant is a
@@ -42,14 +51,16 @@ harms nobody.
 
 The policy takes four inputs and all four matter:
 
-- **identity** — the workload, from A2.1
+- **identity** — the attested workload identity, from A2.3
 - **tool** — which capability
 - **arguments** — the actual values, not the schema
 - **resource** — which specific thing
 
 Dropping the fourth is the most common weakening. `run_query` permitted for the
-reports agent is not the same as `run_query` permitted *on the reports table*,
-and A1.5 was the difference between those two sentences.
+Workflow Agent is not the same as `run_query` permitted *on the bookings table*,
+and A1.5 was the difference between those two sentences. The verb is the second
+most common: `charge_card` entitled for payments is not `refund` entitled for
+payments, and R1 is the entire distance between them.
 
 This does not stop the agent being persuaded. It stops persuasion mattering,
 which is a better place to stand.
@@ -57,29 +68,48 @@ which is a better place to stand.
  "steps": [
   ("md", MITIGATES + "> Stands on the edge every topology shares: "
          "`agent_runtime -> tools`. Persuasion still happens; it just stops "
-         "reaching anything.\\n\\n## 2 · The control"),
-  ("py", '''POLICY = [
- # (identity,        tool,        resource-prefix,   allowed-args)
- ("reports-agent", "run_query",  "table:reports",   {"SELECT"}),
- ("reports-agent", "send_email", "domain:corp.example", {"*"}),
- ("billing-agent", "run_query",  "table:invoices",  {"SELECT", "UPDATE"}),
-]
+         "reaching anything.\n\n## 2 · The entitlement, at full resolution"),
+  ("py", '''# One agent's entire entitlement. Not "the Workflow Agent may query" - this
+# SPIFFE ID, these tools, these resources, these verbs. Anything not written
+# here is refused, so the file is also the complete answer to "what can this
+# agent do", which no amount of reading the code will give you.
+ENTITLEMENTS = {
+ "spiffe://cybertravels.com/ns/prod/sa/workflow-agent": {
+   "run_query":   {"table:bookings":        {"SELECT", "UPDATE"}},
+   "charge_card": {"payments:booking":      {"CHARGE"}},   # CHARGE, not REFUND
+   "send_email":  {"domain:cybertravels.com": {"*"}},
+ },
+ "spiffe://cybertravels.com/ns/prod/sa/advisor-agent": {
+   "run_query":   {"table:itineraries":     {"SELECT"}},
+ },
+}
+
+WF = "spiffe://cybertravels.com/ns/prod/sa/workflow-agent"
 
 def decide(identity, tool, resource, verb, default_deny=True):
     """Four inputs. No matching rule means refuse."""
-    for ident, t, res_prefix, verbs in POLICY:
-        if ident == identity and t == tool and resource.startswith(res_prefix):
+    resources = ENTITLEMENTS.get(identity, {}).get(tool)
+    if resources is None:
+        return (False, "no entitlement for this identity+tool") if default_deny \\
+               else (True, "allowed by default")
+    for res_prefix in sorted(resources):
+        if resource.startswith(res_prefix):
+            verbs = resources[res_prefix]
             if "*" in verbs or verb in verbs:
-                return True, f"rule {ident}/{t}/{res_prefix}"
-            return False, f"verb {verb} not permitted on {res_prefix}"
-    return (False, "no rule matches - default deny") if default_deny else (True, "allowed by default")
+                return True, f"{tool} on {res_prefix} permits {verb}"
+            return False, f"{verb} not permitted on {res_prefix} (only {sorted(verbs)})"
+    return (False, "resource outside the entitlement") if default_deny \\
+           else (True, "allowed by default")
 
-CALLS = [
- ("reports-agent", "run_query",  "table:reports",  "SELECT"),   # intended
- ("reports-agent", "run_query",  "table:secrets",  "SELECT"),   # A1.5, resource
- ("reports-agent", "run_query",  "table:reports",  "DELETE"),   # A1.5, verb
- ("reports-agent", "send_email", "domain:evil.example", "*"),   # A1.3, exfil
- ("reports-agent", "drop_table", "table:reports",  "*"),        # tool never granted
+for tool, res in sorted((t, r) for t, rs in ENTITLEMENTS[WF].items() for r in rs):
+    print(f"   {tool:12s}{res:26s}{sorted(ENTITLEMENTS[WF][tool][res])}")'''),
+  ("md", "## 3 · The same five calls, evaluated both ways"),
+  ("py", '''CALLS = [
+ (WF, "run_query",   "table:bookings",           "SELECT"),  # intended
+ (WF, "run_query",   "table:customer_pii",       "SELECT"),  # A1.5, resource
+ (WF, "charge_card", "payments:booking",         "REFUND"),  # R1, verb
+ (WF, "send_email",  "domain:archive.evil.example", "*"),    # A1.3, exfiltration
+ (WF, "drop_table",  "table:bookings",           "*"),       # tool never granted
 ]
 
 for mode in (False, True):
@@ -89,30 +119,35 @@ for mode in (False, True):
     for identity, tool, resource, verb in CALLS:
         ok, why = decide(identity, tool, resource, verb, default_deny=mode)
         allowed += ok
-        print(f"   {tool:11s}{resource:22s}{verb:7s}{'ALLOW' if ok else 'deny ':6s}{why}")
+        print(f"   {tool:12s}{resource:30s}{verb:7s}"
+              f"{'ALLOW' if ok else 'deny ':6s}{why}")
     print(f"   -> {allowed}/{len(CALLS)} permitted\\n")
 
-print("The only call that should succeed is the first. Under allow-by-default")
-print("four do, and each one is a real risk from Chapter 1 walking through.")
+print("Only the first call should succeed. Under allow-by-default four do, and")
+print("each one is a real risk from Chapter 1 walking through.")
 print()
-print("Note the third row: same identity, same tool, same resource, refused on")
-print("the verb. Authorization attached to the tool instead of the call cannot")
-print("express that distinction at all.")
+print("Row three is the one to sit with: same identity, same tool, same")
+print("resource, refused on the VERB. An entitlement attached to the tool")
+print("instead of the call cannot express that distinction at all - and the")
+print("distance between CHARGE and REFUND is the whole of R1.")
 assert sum(decide(*c, default_deny=True)[0] for c in CALLS) == 1
-'''),
+assert not decide(WF, "charge_card", "payments:booking", "REFUND")[0]'''),
  ],
- "expect": "Five tool calls are evaluated twice. Under allow-by-default four "
-           "succeed, each one a Chapter 1 risk walking through. Under "
-           "default-deny only the intended call survives — including a refusal "
-           "on the verb for an otherwise-permitted identity, tool and resource.",
+ "expect": "The Workflow Agent's entitlement prints at full resolution — three "
+           "tools, three resources, explicit verbs. Five tool calls are then "
+           "evaluated twice: under allow-by-default four succeed, each one a "
+           "Chapter 1 risk walking through; under default-deny only the intended "
+           "call survives, including a refusal on the verb `REFUND` for an "
+           "identity, tool and resource that are all otherwise permitted.",
  "challenge": "Take one tool policy you have and check whether it names the "
-              "resource. If it grants `run_query` rather than `run_query on "
-              "these tables`, it cannot express the difference that A1.5 turned on.",
+              "resource *and* the verb. If it grants `run_query` rather than "
+              "`SELECT on these tables`, it cannot express the difference that "
+              "A1.5 and R1 both turn on.",
 },
 
 "A3.2": {
  "concept": """
-**Mitigates: T11 Unexpected Code Execution · T2 Tool Misuse.**
+**Mitigates: T11 Malicious Code Execution · T2 Tool Misuse.**
 
 For an agent that runs code, the sandbox **is** the security boundary. Not the
 prompt, not the code review, not the model's training. The question is never
@@ -130,43 +165,67 @@ Four dimensions, and the fourth is the one teams get wrong:
 **Process and syscall.** No spawning, no ptrace, resource ceilings so a runaway
 loop is contained rather than fatal.
 
-**Network.** No egress by default. Combined with A3.3 this is what makes an
-exfiltration primitive useless.
+**Network.** No egress by default. Not "restricted" — none, and then an
+explicit allow per destination the workload genuinely needs.
 
 **Credentials.** The one people miss: **a sandbox with production credentials
 mounted in it is not a sandbox.** Isolation of the filesystem is irrelevant if
 the environment holds a token that reaches production over a network the
 sandbox does permit. The strongest boundary in the world does not help when the
 keys are inside it.
+
+### Say it in the manifest, or you have not said it
+
+"No egress by default" is a claim about a cluster, and a claim about a cluster
+is worth what its manifest says. In Kubernetes that is two objects and they are
+both required, because a `NetworkPolicy` is an **additive allow-list**: pods
+that no policy selects are unrestricted, and policies never deny — they only
+add permitted traffic to a pod that some policy has already made restricted.
+
+So the pattern is: one policy that selects every pod in the namespace and
+permits nothing, then one narrow policy per destination the agent needs. Delete
+the first and the second stops being a restriction at all, silently, with every
+pod still running and every test still green.
+
+The same two-object shape appears in every cloud. On AWS a security group with
+no egress rules plus one rule per endpoint, and an IAM policy whose `Condition`
+binds the role to the workload identity rather than to a subnet. On GCP a
+hierarchical firewall policy with a low-priority `deny` on `0.0.0.0/0` and
+higher-priority `allow` rules. Different nouns, identical structure: deny
+everything by construction, then name what is permitted, one destination at a
+time.
 """,
  "steps": [
   ("md", MITIGATES + "> Changes what the executing process can **reach**, which "
          "is the only variable A1.8 turned on. A sandbox holding production "
-         "credentials contains nothing that matters.\\n\\n## 2 · The control"),
+         "credentials contains nothing that matters.\n\n"
+         "## 2 · The four dimensions, and the configuration that ships"),
   ("py", '''HOST = {"fs": ["/home/agent/work/data.csv", "/home/agent/.ssh/id_ed25519",
                 "/etc/passwd"],
         "env": {"AWS_ACCESS_KEY_ID": "AKIA-EXAMPLE-NOT-REAL",
-                "DATABASE_URL": "postgres://prod-db/main"},
-        "net": ["prod-db:5432", "169.254.169.254:80", "0.0.0.0/0"]}
+                "DATABASE_URL": "postgres://bookings-db.prod/main"},
+        "net": ["bookings-db.prod:5432", "169.254.169.254:80", "0.0.0.0/0"]}
 
 def sandbox(workdir="/sandbox/work", allow_net=(), keep_env=()):
-    return {"fs": [p for p in HOST["fs"] if p.startswith(workdir)] + [f"{workdir}/data.csv"],
+    return {"fs": [p for p in HOST["fs"] if p.startswith(workdir)]
+                  + [f"{workdir}/data.csv"],
             "env": {k: v for k, v in HOST["env"].items() if k in keep_env},
             "net": list(allow_net)}
 
 def reach(env, code):
     out = []
-    if "open("    in code: out += [f"file:{p}" for p in sorted(env["fs"])]
-    if "environ"  in code: out += [f"env:{k}"  for k in sorted(env["env"])]
-    if "connect"  in code: out += [f"net:{h}"  for h in sorted(env["net"])]
+    if "open("   in code: out += [f"file:{p}" for p in sorted(env["fs"])]
+    if "environ" in code: out += [f"env:{k}"  for k in sorted(env["env"])]
+    if "connect" in code: out += [f"net:{h}"  for h in sorted(env["net"])]
     return out
 
 CODE = "import os; d=os.environ; open('/home/agent/.ssh/id_ed25519'); connect('x')"
 
 configs = {
  "no sandbox":                    HOST,
- "sandbox, prod creds mounted":   sandbox(allow_net=["prod-db:5432"],
-                                          keep_env=("AWS_ACCESS_KEY_ID", "DATABASE_URL")),
+ "sandbox, prod creds mounted":   sandbox(allow_net=["bookings-db.prod:5432"],
+                                          keep_env=("AWS_ACCESS_KEY_ID",
+                                                    "DATABASE_URL")),
  "sandbox, no ambient creds":     sandbox(),
 }
 for label, env in configs.items():
@@ -183,17 +242,218 @@ print()
 print("Isolation of the wrong dimension is not a weaker control. It is the")
 print("appearance of one.")
 assert reach(configs["sandbox, no ambient creds"], CODE) and \\
-       not any("env:" in r for r in reach(configs["sandbox, no ambient creds"], CODE))
-'''),
+       not any("env:" in r for r in reach(configs["sandbox, no ambient creds"], CODE))'''),
+  ("md", """## 3 · The network dimension, as a manifest
+
+Two objects, both required. The first makes every pod in the namespace
+restricted and permits nothing; the second adds back exactly one destination.
+
+```yaml
+# 1. Default-deny. Selects EVERY pod in the namespace, permits no egress and
+#    no ingress. Without this object the policy below is not a restriction —
+#    it is an allowance on a pod that was already unrestricted.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: prod-agents
+spec:
+  podSelector: {}                 # every pod
+  policyTypes: [Ingress, Egress]  # both, or egress stays wide open
+---
+# 2. One destination, for one agent, selected by the same service account that
+#    carries its SPIFFE ID. DNS is separate and explicit: without port 53 the
+#    agent cannot resolve anything, which is a correct default and a confusing
+#    first afternoon.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: workflow-agent-egress
+  namespace: prod-agents
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: workflow-agent   # sa/workflow-agent
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: prod-data}
+          podSelector:
+            matchLabels: {app: bookings-db}
+      ports:
+        - {protocol: TCP, port: 5432}
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: kube-system}
+          podSelector:
+            matchLabels: {k8s-app: kube-dns}
+      ports:
+        - {protocol: UDP, port: 53}
+```
+
+Note what is **not** in the allow-list, and what that costs an attacker:
+`169.254.169.254` — the cloud metadata service, which hands out the node's
+credentials to anything that can reach it — is unreachable because nothing
+named it, not because anybody thought of it. That is the property a deny-list
+can never have.
+
+The pod itself carries the other three dimensions:
+
+```yaml
+spec:
+  serviceAccountName: workflow-agent
+  automountServiceAccountToken: false   # no ambient cluster credential
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    seccompProfile: {type: RuntimeDefault}
+  containers:
+    - name: agent
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities: {drop: [ALL]}
+      resources:
+        limits: {cpu: "1", memory: 1Gi}
+      volumeMounts:
+        - {name: work, mountPath: /sandbox/work}   # the only writable path
+  volumes:
+    - name: work
+      emptyDir: {sizeLimit: 512Mi}
+```
+
+The same shape on **AWS** — a security group whose egress rules are the whole
+allow-list, and a role whose trust policy binds to the workload rather than to
+the subnet:
+
+```hcl
+resource "aws_security_group" "workflow_agent" {
+  name   = "workflow-agent"
+  vpc_id = var.vpc_id
+  # No `egress` block at all: an AWS security group with no egress rules
+  # permits nothing outbound. The default SG that ships with a VPC allows
+  # 0.0.0.0/0 — never attach that one.
+}
+
+resource "aws_vpc_security_group_egress_rule" "bookings_db" {
+  security_group_id            = aws_security_group.workflow_agent.id
+  referenced_security_group_id = aws_security_group.bookings_db.id
+  ip_protocol                  = "tcp"
+  from_port                    = 5432
+  to_port                      = 5432
+}
+```
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": ["s3:GetObject"],
+    "Resource": "arn:aws:s3:::cybertravels-itineraries/*",
+    "Condition": {
+      "StringEquals": {
+        "aws:PrincipalTag/spiffe-id":
+          "spiffe://cybertravels.com/ns/prod/sa/workflow-agent"
+      },
+      "Bool": {"aws:SecureTransport": "true"}
+    }
+  }]
+}
+```
+
+And on **GCP**, where the deny is explicit and priority-ordered rather than
+implicit:
+
+```yaml
+# gcloud compute network-firewall-policies rules create ...
+- priority: 65000            # lowest priority: the floor
+  direction: EGRESS
+  action: deny
+  match: {destIpRanges: ["0.0.0.0/0"]}
+- priority: 1000             # higher priority wins
+  direction: EGRESS
+  action: allow
+  targetSecureTags: ["tagValues/workflow-agent"]
+  match:
+    destIpRanges: ["10.20.0.0/24"]
+    layer4Configs: [{ipProtocol: tcp, ports: ["5432"]}]
+```
+
+Three products, one structure: deny everything by construction, then name what
+is permitted, one destination at a time."""),
+  ("md", "## 4 · Evaluate the manifest, including the way it is usually broken"),
+  ("py", '''# The two NetworkPolicy objects above, as data. The point of modelling them
+# rather than trusting them is the additive rule: a pod that NO policy selects
+# is unrestricted, and policies never deny.
+POLICIES = [
+ {"name": "default-deny-all",      "selects": "*",              "egress": []},
+ {"name": "workflow-agent-egress", "selects": "workflow-agent",
+  "egress": [("bookings-db.prod", 5432), ("kube-dns", 53)]},
+]
+
+def permitted(policies, pod, dest, port):
+    """Kubernetes semantics, exactly: restricted only if some policy selects
+    this pod, and then permitted only if some selecting policy allows it."""
+    selecting = [p for p in policies if p["selects"] in ("*", pod)]
+    if not selecting:
+        return True, "no policy selects this pod - unrestricted"
+    for p in selecting:
+        if (dest, port) in p["egress"]:
+            return True, f"allowed by {p['name']}"
+    return False, "no selecting policy permits it - denied"
+
+ATTEMPTS = [
+ ("workflow-agent", "bookings-db.prod", 5432, "the one it needs"),
+ ("workflow-agent", "kube-dns",           53, "resolution, explicitly granted"),
+ ("workflow-agent", "169.254.169.254",    80, "cloud metadata - node credentials"),
+ ("workflow-agent", "archive.evil.example", 443, "A1.3's exfiltration target"),
+ ("coding-agent",   "archive.evil.example", 443, "a pod nobody wrote a policy for"),
+]
+
+def run(policies, label):
+    print(f"{label}:")
+    out = 0
+    for pod, dest, port, note in ATTEMPTS:
+        ok, why = permitted(policies, pod, dest, port)
+        out += ok
+        print(f"   {pod:16s}{dest:22s}{port:<6d}"
+              f"{'ALLOW' if ok else 'deny ':6s}{why}")
+    print(f"   -> {out}/{len(ATTEMPTS)} connections permitted\\n")
+    return out
+
+with_deny = run(POLICIES, "both objects applied")
+
+# The usual breakage. Somebody removes default-deny-all because it broke a
+# health check, and re-adds a targeted allow instead. Every test still passes.
+without = run([p for p in POLICIES if p["name"] != "default-deny-all"],
+              "default-deny-all deleted, the narrow policy kept")
+
+print("Deleting the deny changed nothing about workflow-agent - its own policy")
+print("still selects it. What it changed is every OTHER pod in the namespace,")
+print("including coding-agent, which now reaches the internet because no")
+print("object mentions it. Nothing failed, nothing alerted, and the namespace")
+print("went from default-deny to default-allow in one commit.")
+assert with_deny == 2
+assert without == 3 and not permitted(POLICIES, "coding-agent",
+                                      "archive.evil.example", 443)[0]'''),
  ],
- "expect": "The same code is executed against three environments. Unsandboxed it "
-           "reaches a private key, two credentials and the whole network. "
-           "Sandboxed but with production credentials mounted it still reaches "
-           "both credentials and the production database. Only the third — no "
-           "ambient credentials — contains it.",
- "challenge": "Print the environment of one sandbox you run code in. Every "
-              "credential in it is reachable by anything that executes there, "
-              "and the isolation you paid for does not apply to any of them.",
+ "expect": "The same code is executed against three environments: unsandboxed it "
+           "reaches a private key, two credentials and the whole network; "
+           "sandboxed with production credentials mounted it still reaches both "
+           "credentials and the production database; only the third contains it. "
+           "Then the two NetworkPolicy objects are evaluated — 2 of 5 connections "
+           "permitted, with cloud metadata and the exfiltration target both "
+           "refused for not being named. Deleting `default-deny-all` leaves "
+           "workflow-agent unchanged and silently opens every other pod in the "
+           "namespace.",
+ "challenge": "Run `kubectl get networkpolicy -A` and look for a policy with an "
+              "empty `podSelector` and `policyTypes: [Ingress, Egress]`. If "
+              "there isn't one in the namespace your agents run in, every "
+              "narrow policy you have written is an allowance rather than a "
+              "restriction, and every pod nobody wrote a policy for has the "
+              "internet.",
 },
 
 "A3.3": {

@@ -11,93 +11,216 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Keycloak</td>
+<td>SPIFFE/SPIRE, Keycloak, RFC 8693 token exchange, RFC 8705 mTLS binding</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Delegation that widens is not delegation, it is escalation with paperwork. The rule is simple to state and almost never enforced: what is issued must be a subset of what was presented, and inside the recipient's own ceiling.</p>
+<p>The access token your agent holds is a password: whoever reads it out of a log can spend it. Three published standards fix that — an SVID says which workload is calling, RFC 8693 says on whose authority, and RFC 8705 binds the token to the certificate that earned it. Most estates implement the middle one and stop.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Alex can issue refunds; the triage agent must never be able to. Delegation from Alex to CyberTravels has to narrow to a subset of what he presented AND stay inside the receiving agent's own ceiling. R1.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   presented                issued
-   {repo:read, repo:write}  ---&gt; {repo:read}        OK   subset
-   {repo:read}              ---&gt; {repo:read, write} NO   widening
-   {repo:write}             ---&gt; {repo:write}       NO   above the
-                                 to triage-agent         recipient's ceiling
-
-   two rules, checked at every hop, and the chain recorded for the audit
+<pre><code>   AI agent pod                authorization         downstream
+                                  server              service
+   +-------------+            +-------------+     +-------------+
+   | X.509 SVID  | --mTLS--&gt;  | RFC 8693    | --&gt; | re-derives  |
+   | spiffe://.. |  layer 1   | exchange    |     | x5t#S256    |
+   |             |            |             |     | from ITS    |
+   | user token  | ---------&gt; | sub = user  |     | own TLS     |
+   +-------------+  layer 2   | act = agent |     | connection  |
+                              | cnf = x5t   |     +-------------+
+                              +------+------+        layer 3
+                                     |
+                     scope issued = requested
+                                  &amp; presented       (subset)
+                                  &amp; actor ceiling   (never-exceed)
 </code></pre>
 <p><strong>Mitigates: T3 Privilege Compromise · T8 Repudiation · T14 Human Attacks.</strong></p>
 <p>The agent has its own identity now. This lesson is about carrying the user's
-authority alongside it without either losing it or amplifying it.</p>
-<p>Delegation — RFC 8693 token exchange, "on behalf of" — issues a new token for a
-downstream hop. It must satisfy <strong>two</strong> narrowing rules, and checking only one
-is the common and dangerous mistake:</p>
+authority alongside it — without losing it, amplifying it, or handing it to
+whoever picks the token out of a log.</p>
+<p>Three layers do that, and each one answers a question the layer above it
+cannot. Skipping any of them leaves a specific, named hole.</p>
+<p><strong>Layer 1 — mTLS with an X.509 SVID. <em>Is this the workload it claims to be?</em></strong>
+The agent pod presents a client certificate whose URI SAN is a SPIFFE ID:
+<code>spiffe://cybertravels.com/ns/prod/sa/agent-alpha</code>. The platform issues it on
+attestation (A2.2), it lives minutes rather than months, and it rotates without
+anybody being told. Nothing downstream trusts a name in a header again.</p>
+<p><strong>Layer 2 — OAuth on-behalf-of, RFC 8693 token exchange. <em>On whose authority?</em></strong>
+The agent presents two tokens: the user's (<code>subject_token</code>) and its own SVID
+(<code>actor_token</code>). The authorization server returns one access token whose <code>sub</code>
+is still the user and whose <strong><code>act</code> claim</strong> names the agent. Delegation is
+written down rather than inferred, and it nests — <code>act.act</code> records the hop
+before — so <code>alice → orchestrator → agent-alpha</code> survives into the audit log.</p>
+<p><strong>Layer 3 — RFC 8705 certificate-bound tokens. <em>Is the presenter the one it was
+issued to?</em></strong> The issued token carries a <code>cnf</code> claim holding <code>x5t#S256</code>: the
+SHA-256 thumbprint of the client certificate that asked for it. The downstream
+service recomputes the thumbprint of the certificate on <em>its own</em> TLS
+connection and compares. A bearer token is a password; a bound token is useless
+to anyone holding it without the private key that earned it.</p>
+<p>On top of the three layers, delegation still has to <strong>narrow</strong>, and it has to
+satisfy two rules rather than one:</p>
 <p><strong>Subset of presented.</strong> The issued token carries no more scope than the
 incoming one. Stops the agent inventing authority.</p>
 <p><strong>Within the actor's ceiling.</strong> The issued token carries no more than the
-receiving agent is ever permitted to hold. Stops a privileged user handing an
-agent authority the agent must never have.</p>
+receiving agent may ever hold. Stops a privileged user handing an agent
+authority the agent must never have.</p>
 <p>Neither is sufficient alone, and they fail in opposite directions. Subset-only
-lets an admin's request give a low-trust agent <code>db:admin</code> — legitimately, and it
-looks correct in every log. Ceiling-only lets an agent exceed the person who
-asked, which is A1.6.</p>
-<p>The issued scope is the <strong>intersection</strong>.</p>
-<p>The second half is the <strong>actor chain</strong>: <code>dana → orchestrator → patch-agent</code>,
-recorded on the token and carried to every hop. That is what makes A1.13
-answerable and what makes A1.16's laundering path visible, because the
-composition is written down rather than inferred.</p></div><div class="nbmd"><blockquote>
+lets an admin's request give a low-trust agent <code>payments:refund</code> — legitimately,
+and it looks correct in every log. Ceiling-only lets an agent exceed the person
+who asked, which is A1.6. <strong>The issued scope is the intersection.</strong></p>
+<blockquote>
+<p><strong>On the standards.</strong> RFC 8693 (token exchange) and RFC 8705 (mTLS client
+authentication and certificate-bound access tokens) are published and widely
+implemented — none of this is future work. The IETF OAuth working group
+additionally has a live draft for AI agents acting on a user's behalf, which
+adds agent-specific metadata to the same exchange. It is a draft, not an RFC,
+and nothing in this lesson depends on it: all three layers are buildable on
+RFC 8693 and RFC 8705 as they stand today.</p>
+</blockquote></div><div class="nbmd"><h2>3 · The three layers, and what each one refuses</h2></div><div class="nbmd"><div style="display:flex;gap:6px;align-items:stretch;flex-wrap:wrap;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:6px 0 2px"><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">agent pod</div><div style="border:1px solid rgba(77,155,255,.55);border-left:3px solid #4D9BFF;border-radius:8px;background:rgba(77,155,255,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#129302;</span> AI agent</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">holds an X.509 SVID issued on attestation, plus the user&#x27;s token from the request</div><div style="font-size:10px;color:#4D9BFF;margin-top:5px;font-weight:600;letter-spacing:.02em">spiffe://.../sa/agent-alpha</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">layer 1 · mTLS</div><div style="border:1px solid rgba(63,160,107,.55);border-left:3px solid #3FA06B;border-radius:8px;background:rgba(63,160,107,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128274;</span> client certificate</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">URI SAN carries the SPIFFE ID. Minutes long, rotated automatically</div><div style="font-size:10px;color:#3FA06B;margin-top:5px;font-weight:600;letter-spacing:.02em">REFUSES A NAME IN A HEADER</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">layer 2 · RFC 8693</div><div style="border:1px solid rgba(224,145,47,.55);border-left:3px solid #E0912F;border-radius:8px;background:rgba(224,145,47,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#127915;&#65039;</span> authorization server</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">subject_token is the user, actor_token is the SVID. One token comes back: sub is still the user, act names the agent</div><div style="font-size:10px;color:#E0912F;margin-top:5px;font-weight:600;letter-spacing:.02em">REFUSES WIDENING</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">layer 3 · RFC 8705</div><div style="border:1px solid rgba(224,145,47,.55);border-left:3px solid #E0912F;border-radius:8px;background:rgba(224,145,47,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128273;</span> cnf / x5t#S256</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">the thumbprint of the certificate that asked for the token, stamped into the token itself</div><div style="font-size:10px;color:#E0912F;margin-top:5px;font-weight:600;letter-spacing:.02em">REFUSES A STOLEN TOKEN</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">downstream</div><div style="border:1px solid rgba(224,92,75,.55);border-left:3px solid #E05C4B;border-radius:8px;background:rgba(224,92,75,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128179;</span> payments API</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">re-derives the thumbprint from its own TLS connection and compares it before reading a single scope</div><div style="font-size:10px;color:#E05C4B;margin-top:5px;font-weight:600;letter-spacing:.02em">R1</div></div></div></div>
+<div style="font-size:12px;color:#8A93A6;margin-top:8px;line-height:1.5">Each layer answers a question the one before it cannot: is this the workload, on whose authority, and is the presenter the one the token was issued to. The code below builds all three, then steals the token.</div></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
-<p>Both rules, every hop. Checking one is how a privileged user hands an agent authority it must never hold — legitimately, and invisibly.</p>
+<p>Both narrowing rules, at every hop, plus a binding that makes the token worthless off the connection that earned it.</p>
 </blockquote>
-<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CEILINGS = {
- &quot;dana@corp&quot;:     {&quot;reports:read&quot;, &quot;reports:write&quot;},
- &quot;priya@corp&quot;:    {&quot;reports:read&quot;, &quot;reports:write&quot;, &quot;db:admin&quot;},
- &quot;orchestrator&quot;:  {&quot;reports:read&quot;, &quot;reports:write&quot;},
- &quot;patch-agent&quot;:   {&quot;reports:read&quot;},
+<h2>4 · Layers 1 and 2 — the exchange, and the token it issues</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import base64, hashlib, hmac, json
+
+def b64u(raw: bytes) -&gt; str:
+    return base64.urlsafe_b64encode(raw).rstrip(b&quot;=&quot;).decode()
+
+# --- layer 1: the SVID -----------------------------------------------------
+# A real X.509-SVID is a certificate carrying the SPIFFE ID in its URI SAN.
+# Here it is the DER bytes standing in for one. The only property the protocol
+# needs is that the thumbprint is DERIVED from the certificate rather than
+# asserted alongside it.
+class SVID:
+    def __init__(self, spiffe_id, der):
+        self.spiffe_id, self.der = spiffe_id, der
+    @property
+    def thumbprint(self):                        # RFC 8705 x5t#S256
+        return b64u(hashlib.sha256(self.der).digest())
+
+AGENT = SVID(&quot;spiffe://cybertravels.com/ns/prod/sa/agent-alpha&quot;,
+             b&quot;cert-agent-alpha&quot;)
+
+# --- layer 2: RFC 8693 token exchange --------------------------------------
+CEILINGS = {                        # what each actor may EVER hold
+ &quot;alice@cybertravels.com&quot;:
+    {&quot;bookings:read&quot;, &quot;bookings:write&quot;, &quot;payments:refund&quot;},
+ &quot;spiffe://cybertravels.com/ns/prod/sa/orchestrator&quot;:
+    {&quot;bookings:read&quot;, &quot;bookings:write&quot;},
+ &quot;spiffe://cybertravels.com/ns/prod/sa/agent-alpha&quot;:
+    {&quot;bookings:read&quot;},
 }
+SIGNING_KEY = b&quot;demo-key-not-a-secret&quot;
 
 class DelegationError(Exception): pass
 
-def exchange(presented_scopes, presented_chain, actor, requested):
-    &quot;&quot;&quot;One hop. BOTH narrowing rules, then record the chain.&quot;&quot;&quot;
+def exchange(subject_token, actor, requested):
+    &quot;&quot;&quot;RFC 8693: subject_token is the user, actor_token is the agent&#x27;s SVID.&quot;&quot;&quot;
     requested = set(requested)
-    if not requested &lt;= set(presented_scopes):                    # rule 1
+    presented = set(subject_token[&quot;scope&quot;].split())
+    if not requested &lt;= presented:                                 # rule 1
         raise DelegationError(
-            f&quot;widening: {sorted(requested - set(presented_scopes))} not in presented&quot;)
-    ceiling = CEILINGS[actor]
-    issued = requested &amp; ceiling                                  # rule 2
+            f&quot;widening: {sorted(requested - presented)} was never presented&quot;)
+    ceiling = CEILINGS[actor.spiffe_id]
+    issued = requested &amp; ceiling                                   # rule 2
     if issued != requested:
-        print(f&quot;      (narrowed by {actor} ceiling: dropped &quot;
-              f&quot;{sorted(requested - ceiling)})&quot;)
-    return {&quot;scopes&quot;: issued, &quot;chain&quot;: presented_chain + [actor]}
+        print(f&quot;   ceiling narrowed it: {actor.spiffe_id.rsplit(&#x27;/&#x27;, 1)[-1]} &quot;
+              f&quot;may never hold {sorted(requested - ceiling)}&quot;)
+    act = {&quot;sub&quot;: actor.spiffe_id}
+    if &quot;act&quot; in subject_token:                    # nest the previous hop
+        act[&quot;act&quot;] = subject_token[&quot;act&quot;]
+    return {
+      &quot;sub&quot;: subject_token[&quot;sub&quot;],                # STILL the human
+      &quot;aud&quot;: &quot;https://payments.cybertravels.internal&quot;,
+      &quot;scope&quot;: &quot; &quot;.join(sorted(issued)),
+      &quot;act&quot;: act,                                 # the agent, and the chain
+      &quot;cnf&quot;: {&quot;x5t#S256&quot;: actor.thumbprint},      # layer 3, stamped here
+    }
 
-# --- the honest path -------------------------------------------------------
-user = {&quot;scopes&quot;: CEILINGS[&quot;dana@corp&quot;], &quot;chain&quot;: [&quot;dana@corp&quot;]}
-hop1 = exchange(user[&quot;scopes&quot;], user[&quot;chain&quot;], &quot;orchestrator&quot;,
-                {&quot;reports:read&quot;, &quot;reports:write&quot;})
-hop2 = exchange(hop1[&quot;scopes&quot;], hop1[&quot;chain&quot;], &quot;patch-agent&quot;, {&quot;reports:read&quot;})
-print(f&quot;   chain  : {&#x27; -&gt; &#x27;.join(hop2[&#x27;chain&#x27;])}&quot;)
-print(f&quot;   scopes : {sorted(hop2[&#x27;scopes&#x27;])}&quot;)
+def sign(claims):
+    head = b64u(json.dumps({&quot;alg&quot;: &quot;HS256&quot;, &quot;typ&quot;: &quot;JWT&quot;}, sort_keys=True).encode())
+    body = b64u(json.dumps(claims, sort_keys=True).encode())
+    mac = hmac.new(SIGNING_KEY, f&quot;{head}.{body}&quot;.encode(), hashlib.sha256)
+    return f&quot;{head}.{body}.{b64u(mac.digest())}&quot;
 
-# --- a privileged user, and the rule that saves you ------------------------
-print(&quot;\npriya holds db:admin. She asks the same low-trust agent to use it:&quot;)
-priv = {&quot;scopes&quot;: CEILINGS[&quot;priya@corp&quot;], &quot;chain&quot;: [&quot;priya@corp&quot;]}
-subset_only = {&quot;db:admin&quot;} &lt;= priv[&quot;scopes&quot;]
-issued = exchange(priv[&quot;scopes&quot;], priv[&quot;chain&quot;], &quot;patch-agent&quot;, {&quot;db:admin&quot;})
-print(f&quot;   subset-of-presented alone would allow it : {subset_only}&quot;)
-print(f&quot;   scopes actually issued                   : {sorted(issued[&#x27;scopes&#x27;]) or &#x27;none&#x27;}&quot;)
-print()
-print(&quot;Subset-only says yes - she really does hold db:admin. The ceiling rule&quot;)
-print(&quot;issues the intersection, which is empty, because patch-agent may never&quot;)
-print(&quot;hold it no matter who asks.&quot;)
-assert subset_only and not issued[&quot;scopes&quot;]
-assert hop2[&quot;chain&quot;] == [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>A two-hop delegation narrows to <code>reports:read</code> and records the chain <code>dana → orchestrator → patch-agent</code>. A privileged user's request for <code>db:admin</code> passes subset-of-presented and still issues nothing, because the receiving agent's ceiling is empty of it.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Find your token exchange and check which of the two rules it implements. Most implement subset-of-presented, because it is the one the specification example shows.</p></div><div class="nbmd"><hr />
+user = {&quot;sub&quot;: &quot;alice@cybertravels.com&quot;,
+        &quot;scope&quot;: &quot;bookings:read bookings:write payments:refund&quot;}
+tok = exchange(user, AGENT, {&quot;bookings:read&quot;})
+
+print(&quot;the access token the payments API will actually see:\n&quot;)
+print(json.dumps(tok, indent=2, sort_keys=True))
+print(f&quot;\nas a JWT: {sign(tok)[:78]}...&quot;)</code></pre></div><div class="nbmd"><h2>5 · Layer 3 — steal the token and try to use it</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># The token above leaked. A debug log, a crash dump, an LLM transcript - it
+# does not matter which. Another pod picks it up and replays it.
+THIEF = SVID(&quot;spiffe://cybertravels.com/ns/prod/sa/scraper&quot;, b&quot;cert-scraper&quot;)
+
+def serve_bearer(token, _tls_peer):
+    &quot;&quot;&quot;How most services check a token today: is it signed, does it say yes?&quot;&quot;&quot;
+    return &quot;bookings:read&quot; in token[&quot;scope&quot;].split()
+
+def serve_bound(token, tls_peer):
+    &quot;&quot;&quot;RFC 8705: re-derive the thumbprint from THIS connection, first.&quot;&quot;&quot;
+    want = token.get(&quot;cnf&quot;, {}).get(&quot;x5t#S256&quot;)
+    if want is None:
+        raise PermissionError(&quot;token is not certificate-bound - refusing&quot;)
+    if not hmac.compare_digest(want, tls_peer.thumbprint):
+        raise PermissionError(
+            f&quot;cnf mismatch: issued to {want[:12]}..., presented on a &quot;
+            f&quot;connection using {tls_peer.thumbprint[:12]}...&quot;)
+    return &quot;bookings:read&quot; in token[&quot;scope&quot;].split()
+
+print(&quot;the legitimate agent, on its own connection:&quot;)
+print(f&quot;   bearer check : {serve_bearer(tok, AGENT)}&quot;)
+print(f&quot;   bound  check : {serve_bound(tok, AGENT)}&quot;)
+
+print(&quot;\nthe same token, replayed by a different pod:&quot;)
+print(f&quot;   bearer check : {serve_bearer(tok, THIEF)}   &lt;- accepted. a bearer &quot;
+      f&quot;token is a password.&quot;)
+try:
+    serve_bound(tok, THIEF)
+except PermissionError as e:
+    print(f&quot;   bound  check : refused - {e}&quot;)
+
+# And the widening attempt: alice really does hold payments:refund, but
+# agent-alpha may never hold it, no matter who asks.
+print(&quot;\nalice asks agent-alpha to issue a refund on her behalf:&quot;)
+subset_ok = {&quot;payments:refund&quot;} &lt;= set(user[&quot;scope&quot;].split())
+refund = exchange(user, AGENT, {&quot;payments:refund&quot;})
+print(f&quot;   subset-of-presented alone would allow it : {subset_ok}&quot;)
+print(f&quot;   scope actually issued                    : {refund[&#x27;scope&#x27;] or &#x27;none&#x27;}&quot;)
+
+assert serve_bearer(tok, THIEF) is True          # the hole
+try:
+    serve_bound(tok, THIEF)
+    raise AssertionError(&quot;the binding did not hold&quot;)
+except PermissionError:
+    pass
+assert subset_ok and refund[&quot;scope&quot;] == &quot;&quot;
+assert tok[&quot;act&quot;][&quot;sub&quot;].endswith(&quot;/sa/agent-alpha&quot;)</code></pre></div><div class="nbmd"><h2>6 · What the audit trail can now answer</h2>
+<p>Every hop is on the token, so the chain reconstructs from the token alone rather than by correlating four services' logs on timestamp. This is the thing A1.13 could not do.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ORCH = SVID(&quot;spiffe://cybertravels.com/ns/prod/sa/orchestrator&quot;,
+            b&quot;cert-orchestrator&quot;)
+
+hop1 = exchange(user, ORCH, {&quot;bookings:read&quot;, &quot;bookings:write&quot;})
+hop2 = exchange(hop1, AGENT, {&quot;bookings:read&quot;})
+
+def chain(claims):
+    &quot;&quot;&quot;sub is the human; act nests one entry per hop, most recent first.&quot;&quot;&quot;
+    hops, node = [], claims.get(&quot;act&quot;)
+    while node:
+        hops.append(node[&quot;sub&quot;].rsplit(&quot;/&quot;, 1)[-1])
+        node = node.get(&quot;act&quot;)
+    return &quot; -&gt; &quot;.join([claims[&quot;sub&quot;], *reversed(hops)])
+
+print(f&quot;delegation chain : {chain(hop2)}&quot;)
+print(f&quot;final scope      : {hop2[&#x27;scope&#x27;]}&quot;)
+print(f&quot;bound to         : {hop2[&#x27;cnf&#x27;][&#x27;x5t#S256&#x27;][:16]}...  &quot;
+      f&quot;(agent-alpha&#x27;s certificate, not the orchestrator&#x27;s)&quot;)
+assert chain(hop2) == (&quot;alice@cybertravels.com -&gt; orchestrator -&gt; agent-alpha&quot;)
+assert hop2[&quot;cnf&quot;][&quot;x5t#S256&quot;] == AGENT.thumbprint</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>An RFC 8693 exchange issues a token whose <code>sub</code> is still alice and whose <code>act</code> names <code>spiffe://cybertravels.com/ns/prod/sa/agent-alpha</code>, carrying <code>cnf.x5t#S256</code>. The bearer check accepts the stolen token; the RFC 8705 bound check refuses it on a <code>cnf</code> mismatch. Alice's <code>payments:refund</code> passes subset-of-presented and still issues nothing. The chain reconstructs from the token alone.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Find your token exchange and check three things: does it set an <code>act</code> claim, does it check the actor's ceiling as well as the subset rule, and does anything downstream look at <code>cnf</code>? Most implementations do the subset rule only — it is the one the specification example shows.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.4.html">A2.4 · Just-in-time authority</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.3.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A two-hop delegation narrows to `reports:read` and records the chain `dana → orchestrator → patch-agent`. A privileged user&#x27;s request for `db:admin` passes subset-of-presented and still issues nothing, because the receiving agent&#x27;s ceiling is empty of it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.3.ipynb</code></p></div><div class="pager"><a href="A2.2.html"><span class="k">← Previous</span><span class="t">A2.2 · Bootstrapping the first credential</span></a><a class="next" href="A2.4.html"><span class="k">Next →</span><span class="t">A2.4 · Just-in-time authority</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A two-hop delegation narrows to `reports:read` and records the chain `dana → orchestrator → patch-agent`. A privileged user&#x27;s request for `db:admin` passes subset-of-presented and still issues nothing, because the receiving agent&#x27;s ceiling is empty of it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>SPIFFE/SPIRE</span><span>Keycloak</span><span>RFC 8693 token exchange</span><span>RFC 8705 mTLS binding</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A2.3.ipynb</code></p></div><div class="pager"><a href="A2.2.html"><span class="k">← Previous</span><span class="t">A2.2 · Bootstrapping the first credential</span></a><a class="next" href="A2.4.html"><span class="k">Next →</span><span class="t">A2.4 · Just-in-time authority</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

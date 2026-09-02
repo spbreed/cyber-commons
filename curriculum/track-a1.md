@@ -42,9 +42,6 @@ python3 scripts/run_notebooks.py --session A1.0   # run it headless and check it
 - **Risk** — Without a shared picture, 'secure the agent' has no referent and every later risk lands nowhere in particular.
 - **Control** — One component map and five topologies, named once and reused by every lesson that follows.
 - **Lab** — Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
-- **Tools** — `kagent`, `OpenTelemetry`
-- **Open-weight models** — `Llama 3.3`, `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
 **Run it** — Draw the thirteen components, the five patterns they compose into, and the one edge that exists in all five.
 

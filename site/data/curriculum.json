@@ -386,7 +386,10 @@
        "control": "Token exchange that intersects presented scope with the actor's ceiling, and records the chain.",
        "lab": "Run both narrowing rules against a request that passes one and fails the other.",
        "tools": [
-        "Keycloak"
+        "SPIFFE/SPIRE",
+        "Keycloak",
+        "RFC 8693 token exchange",
+        "RFC 8705 mTLS binding"
        ],
        "models": [],
        "mitigates": "T3 Privilege Compromise · T8 Repudiation · T14 Human Attacks"
@@ -417,8 +420,9 @@
        "control": "A registry with a named owner, an expiry, and admission bound to a registered identity.",
        "lab": "Admit agents against a registry and show an unregistered one refused at the door.",
        "tools": [
-        "SPIFFE/SPIRE",
-        "kagent"
+        "SCIM 2.0 (RFC 7643/7644)",
+        "Keycloak",
+        "SPIFFE/SPIRE"
        ],
        "models": [],
        "mitigates": "T9 Identity Spoofing · T13 Rogue Agents · T3 Privilege Compromise"
@@ -498,8 +502,8 @@
        "control": "Policy evaluated per call on (identity, tool, arguments, resource), denying unless a rule permits.",
        "lab": "Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.",
        "tools": [
-        "OPA",
-        "kmcp"
+        "OPA / Rego",
+        "SPIFFE/SPIRE"
        ],
        "models": [],
        "mitigates": "T2 Tool Misuse · T3 Privilege Compromise · T6 Intent Breaking"
@@ -514,8 +518,10 @@
        "control": "Execution in an isolate with no ambient credentials, a bounded filesystem and no default network.",
        "lab": "Run the same code inside and outside the sandbox and enumerate what each could reach.",
        "tools": [
-        "gVisor",
-        "Falco"
+        "Kubernetes NetworkPolicy",
+        "seccomp",
+        "Terraform",
+        "gVisor"
        ],
        "models": [],
        "mitigates": "T11 Unexpected Code Execution · T2 Tool Misuse"
