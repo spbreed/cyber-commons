@@ -152,7 +152,7 @@ REGISTER = [
   "engine.",
   "Scan MCP client and server configs before install, SBOM and hash validation, "
   "run third-party MCP servers jailed, and audit their behaviour continuously.",
-  "C2.5, A3.8, B1.14"),
+  "C2.5, A3.8, B1.13"),
  ("R5", "Insecure protocols and authentication",
   "CyberTravels talks over a WebSocket using long-lived bearer tokens held in "
   "plaintext. One compromised endpoint gives an attacker the whole session.",
@@ -165,14 +165,14 @@ REGISTER = [
   "roadmaps.",
   "Scoped sandbox access to one folder, an explainable action before access, "
   "and host-based monitoring of what the agent actually reads.",
-  "A3.2, A1.8, B1.13"),
+  "A3.2, A1.8, B1.12"),
  ("R7", "CI/CD pipeline exploitation",
   "The Coding Agent can open pull requests and approve its own. A commit adds a "
   "postInstall script that runs arbitrary code in the CI runner and leaks "
   "secrets.",
   "Protected branches needing two human reviewers, no self-approval, "
   "pre-deploy SAST and DAST, signed commits and reproducible builds.",
-  "B1.13, B1.9, A3.6"),
+  "B1.12, B1.9, A3.6"),
  ("R8", "Uncontrolled AI-generated code",
   "A single pull request touches 100+ files. Alex approves without reading "
   "every diff. Hidden inside is an IDOR that exposes card details by booking "
@@ -199,7 +199,7 @@ REGISTER = [
   "asked for what.",
   "Identity chaining from human to agent to action, full attribution lineage, "
   "time-bounded delegation tokens, and retroactive forensic linking.",
-  "A2.1, A2.7, A1.13"),
+  "A2.1, A2.7, A1.14"),
  ("R12", "RAG data leakage through enterprise search",
   "To improve answers, internal PDFs are indexed — contracts, trade secrets, "
   "pricing models. The index is then reachable from enterprise-wide AI search, "
@@ -213,9 +213,9 @@ REGISTER = [
 FAMILIES = [
  ("Prompt injection and instruction hijacking", "R3", "A1.2 · A1.3 · A2.6"),
  ("Identity and authorisation", "R1, R5, R11", "A2.1 · A2.3 · A2.4 · A2.7"),
- ("Software supply chain and execution", "R4", "C2.5 · A3.8 · B1.14"),
- ("Local filesystem manipulation", "R6", "A3.2 · B1.13"),
- ("Code and CI/CD pipeline", "R7, R8", "B1.9 · B1.13 · B1.5"),
+ ("Software supply chain and execution", "R4", "C2.5 · A3.8 · B1.13"),
+ ("Local filesystem manipulation", "R6", "A3.2 · B1.12"),
+ ("Code and CI/CD pipeline", "R7, R8", "B1.9 · B1.12 · B1.5"),
  ("RAG misconfiguration and data exposure", "R12", "A1.4 · E1.3"),
 ]
 
@@ -260,34 +260,38 @@ GROUNDING: dict[str, str] = {
 "A1.8": "The Coding Agent writes a patch and the runtime executes it. On Alex's "
         "laptop that process can read `~/.aws`, the HR folder and the roadmap "
         "directory, because nothing said otherwise. R6.",
-"A1.9": "The Workflow Agent asks the RAG Advisor for a hotel summary. The reply "
+"A1.9": "Whatever reviews the Coding Agent's pull requests reads CyberTravels' "
+        "own code — and that code is whatever the Coding Agent wrote. A comment "
+        "in a diff is the cheapest way anyone will find to instruct the "
+        "reviewer. R7.",
+"A1.10": "The Workflow Agent asks the RAG Advisor for a hotel summary. The reply "
         "contains an instruction, and the Workflow Agent follows it — because a "
         "message from a peer arrives carrying more trust than a document ever "
         "would. R3.",
-"A1.10": "CyberTravels' orchestrator delegates to the agents it discovers. A fifth "
+"A1.11": "CyberTravels' orchestrator delegates to the agents it discovers. A fifth "
          "one joined the pool during a deployment last week and has been "
          "receiving bookings ever since.",
-"A1.11": "The advisor is confident about a hotel that closed in 2024. The "
+"A1.12": "The advisor is confident about a hotel that closed in 2024. The "
          "workflow agent books it, the file system agent validates an invoice "
          "against it, and the report to the executive cites three agreeing "
          "sources. R2.",
-"A1.12": "A booking loop with no ceiling runs until something outside it stops "
+"A1.13": "A booking loop with no ceiling runs until something outside it stops "
          "the run. At CyberTravels that something is either the travel API's "
          "rate limit — somebody else's outage — or the invoice.",
-"A1.13": "The log says `cybertravels-svc issued refund 8812`. It does not say which "
+"A1.14": "The log says `cybertravels-svc issued refund 8812`. It does not say which "
          "of six people asked, or what text made the agent decide. Six weeks "
          "later nobody can tell whether that refund was authorised. R11.",
-"A1.14": "Approval on every refund is a real control at four a day. CyberTravels "
+"A1.15": "Approval on every refund is a real control at four a day. CyberTravels "
          "generates four hundred, and the control quietly becomes a log of "
          "things somebody scrolled past. R2.",
-"A1.15": "The agent reports the trip as booked. The hotel does not exist. It "
+"A1.16": "The agent reports the trip as booked. The hotel does not exist. It "
          "optimised for the signal it was scored on — a completed itinerary — "
          "and that was the cheapest way to satisfy it. R2.",
-"A1.16": "An employee who cannot issue refunds asks CyberTravels to, and it can. And "
+"A1.17": "An employee who cannot issue refunds asks CyberTravels to, and it can. And "
          "a confident itinerary from the advisor moves an executive's decision "
          "without anyone checking it. Neither is closed by anything in "
          "chapter 3.",
-"A1.17": "The payoff: all twelve CyberTravels risks in one register, each with a "
+"A1.18": "The payoff: all twelve CyberTravels risks in one register, each with a "
          "component, a control and the lesson that owns it.",
 
 # ---- A2 · identity and ingress -------------------------------------------
@@ -391,17 +395,14 @@ GROUNDING: dict[str, str] = {
 "B1.11": "Give the review agent CyberTravels' whole repository and it gets worse, "
          "not better. The cliff arrives earlier than anyone expects and you pay "
          "more per token for it.",
-"B1.12": "The pipeline reads CyberTravels' code, and that code includes what "
-         "the Coding Agent wrote. A comment in a diff is the cheapest way anyone "
-         "will find to instruct CyberTravels' security tooling. R7.",
-"B1.13": "The Coding Agent on Alex's laptop holds repository write, a cloud "
+"B1.12": "The Coding Agent on Alex's laptop holds repository write, a cloud "
          "credential and whatever MCP servers were convenient. It is the "
          "highest-privilege agent at CyberTravels and the least governed. R6, "
          "R7.",
-"B1.14": "“CyberTravels enforces least privilege” is true of some "
+"B1.13": "“CyberTravels enforces least privilege” is true of some "
          "deployment at some time. An attestation is what binds it to the one "
          "running now — and refuses to claim more than it can show.",
-"B1.15": "Somebody else has already built this pipeline and published what "
+"B1.14": "Somebody else has already built this pipeline and published what "
          "happened. Adopting it without scoring it against a held-out key is how "
          "a reference implementation becomes a dependency CyberTravels cannot "
          "evaluate.",
@@ -415,7 +416,7 @@ GROUNDING: dict[str, str] = {
 "B2.2": "At 80% per-run reliability, a review harness left to run unattended "
          "over CyberTravels' releases is right about a third of the time — and "
          "somebody at CyberTravels is paying per confirmed finding.",
-"B2.3": "A canary credential in CyberTravels' environment and a honeypot task in "
+"D1.11": "A canary credential in CyberTravels' environment and a honeypot task in "
          "the benchmark: two detectors with no threshold to tune, because "
          "nothing legitimate has any reason to touch either.",
 

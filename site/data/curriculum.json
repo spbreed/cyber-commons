@@ -197,6 +197,24 @@
       },
       {
        "id": "A1.9",
+       "title": "Injection through content the agent was asked to read",
+       "track": "secure",
+       "summary": "Your analysis agents read attacker-controlled code — and can be instructed by it. Isolation, sanitisation and rules for trusting agent output.",
+       "risk": "The pipeline reads attacker-controlled code and then takes actions — a confused deputy you built yourself.",
+       "control": "Instruction/data provenance: content the pipeline read may never drive a state-changing tool.",
+       "lab": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
+       "tools": [
+        "OpenGrep"
+       ],
+       "open_weight": [
+        "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
+      },
+      {
+       "id": "A1.10",
        "title": "Agent communication poisoning",
        "track": "secure",
        "kind": "risk",
@@ -211,7 +229,7 @@
        "owasp": "T12 Agent Communication Poisoning"
       },
       {
-       "id": "A1.10",
+       "id": "A1.11",
        "title": "Rogue agents in a multi-agent system",
        "track": "secure",
        "kind": "risk",
@@ -227,7 +245,7 @@
        "owasp": "T13 Rogue Agents in Multi-Agent Systems"
       },
       {
-       "id": "A1.11",
+       "id": "A1.12",
        "title": "Cascading hallucination",
        "track": "secure",
        "kind": "risk",
@@ -247,7 +265,7 @@
        ]
       },
       {
-       "id": "A1.12",
+       "id": "A1.13",
        "title": "Resource overload",
        "track": "secure",
        "kind": "risk",
@@ -262,7 +280,7 @@
        "owasp": "T4 Resource Overload · LLM10"
       },
       {
-       "id": "A1.13",
+       "id": "A1.14",
        "title": "Repudiation and untraceability",
        "track": "secure",
        "kind": "risk",
@@ -277,7 +295,7 @@
        "owasp": "T8 Repudiation & Untraceability"
       },
       {
-       "id": "A1.14",
+       "id": "A1.15",
        "title": "Overwhelming the human in the loop",
        "track": "secure",
        "kind": "risk",
@@ -290,7 +308,7 @@
        "owasp": "T10 Overwhelming Human-in-the-Loop"
       },
       {
-       "id": "A1.15",
+       "id": "A1.16",
        "title": "Misaligned and deceptive behaviour",
        "track": "secure",
        "kind": "risk",
@@ -310,7 +328,7 @@
        ]
       },
       {
-       "id": "A1.16",
+       "id": "A1.17",
        "title": "Attacks that target the humans",
        "track": "secure",
        "kind": "risk",
@@ -323,7 +341,7 @@
        "owasp": "T14 Human Attacks on Multi-Agent Systems · T15 Human Manipulation"
       },
       {
-       "id": "A1.17",
+       "id": "A1.18",
        "title": "The CyberTravels risk register",
        "track": "secure",
        "kind": "risk",
@@ -899,24 +917,6 @@
       },
       {
        "id": "B1.12",
-       "title": "Injection in your own pipeline",
-       "track": "secure",
-       "summary": "Your analysis agents read attacker-controlled code — and can be instructed by it. Isolation, sanitisation and rules for trusting agent output.",
-       "risk": "The pipeline reads attacker-controlled code and then takes actions — a confused deputy you built yourself.",
-       "control": "Instruction/data provenance: content the pipeline read may never drive a state-changing tool.",
-       "lab": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
-       "tools": [
-        "OpenGrep"
-       ],
-       "open_weight": [
-        "GLM-4.6"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      },
-      {
-       "id": "B1.13",
        "title": "Securing the developers' coding agents",
        "track": "secure",
        "summary": "Guardrails for IDE and CLI coding agents holding repo and credential access. Policy, telemetry and safe defaults for engineering teams at scale.",
@@ -935,7 +935,7 @@
        ]
       },
       {
-       "id": "B1.14",
+       "id": "B1.13",
        "title": "Attesting control intent for agents and MCP servers",
        "track": "secure",
        "summary": "Decompose real-time control attestation into eleven deployment-scoped skills joined by a deployment_id, then run the static half against ten widely-deployed open-source agent and MCP repositories. Produces a signed-shaped in-toto attestation with per-control verdicts, evidence pointers and the confidence ceilings that stop it overclaiming.",
@@ -956,7 +956,7 @@
        ]
       },
       {
-       "id": "B1.15",
+       "id": "B1.14",
        "title": "Bonus — Google Mantis, the pipeline in production",
        "track": "defend",
        "summary": "A worked case study of an agentic security pipeline operating at real scale. What held up, what broke, and which lessons transfer to your estate.",
@@ -1042,27 +1042,6 @@
         "promptfoo",
         "CyberGym"
        ],
-       "open_weight": [
-        "GLM-4.6"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      },
-      {
-       "id": "B2.3",
-       "title": "Honeypots, canaries and deception in the agent's environment",
-       "track": "defend",
-       "kind": "control",
-       "summary": "Two deception controls with a property nothing else in this chapter has: a false-positive rate of zero by construction. A canary credential nobody legitimate will ever use, and a benchmark task whose shortcut is instrumented rather than functional.",
-       "risk": "Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.",
-       "control": "Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).",
-       "lab": "Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.",
-       "tools": [
-        "Canarytokens",
-        "Inspect"
-       ],
-       "mitigates": "C4.4 SI-4 · C10.3 RA-5",
        "open_weight": [
         "GLM-4.6"
        ],
@@ -1547,6 +1526,27 @@
        ],
        "models": [],
        "mitigates": "C2.3 SC-31 · C2.4 SI-4 · C7.4 AU-2 · C8.1 SI-4 · C8.4 SI-4 · C9.2 IR-3 · C9.3 SI-4"
+      },
+      {
+       "id": "D1.11",
+       "title": "Honeypots, canaries and deception in the agent's environment",
+       "track": "defend",
+       "kind": "control",
+       "summary": "Two deception controls with a property nothing else in this chapter has: a false-positive rate of zero by construction. A canary credential nobody legitimate will ever use, and a benchmark task whose shortcut is instrumented rather than functional.",
+       "risk": "Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.",
+       "control": "Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).",
+       "lab": "Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.",
+       "tools": [
+        "Canarytokens",
+        "Inspect"
+       ],
+       "mitigates": "C4.4 SI-4 · C10.3 RA-5",
+       "open_weight": [
+        "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       }
      ]
     },

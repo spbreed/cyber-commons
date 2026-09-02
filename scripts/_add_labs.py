@@ -132,7 +132,7 @@ NEW = {
           "  --runs runs/ --out metrics.json && cat metrics.json"],
   "expect": "Four numbers with denominators. Without these, promotion to L2.5 is a vibe."},
  # ---------------- B2 Harness ----------------
- "B2.3": {"goal": "Refactor a shell tool into three narrow, structured tools.",
+ "D1.11": {"goal": "Refactor a shell tool into three narrow, structured tools.",
   "run": ["cd labs/m0-agent-loop",
           "python3 loop.py --tools shell   --task fix-tests   # can do anything",
           "python3 loop.py --tools narrow  --task fix-tests   # read_file/list_dir/apply_patch only",

@@ -37,7 +37,7 @@
 </code></pre>
 <p><strong>Mitigates: T5 Cascading Hallucination · T12 Communication Poisoning · T7 Misaligned Behaviour.</strong></p>
 <p>Everything that comes back into the context is an input: tool results, peer
-messages, retrieved documents, a sub-agent's summary. A1.9 and A1.11 both
+messages, retrieved documents, a sub-agent's summary. A1.10 and A1.12 both
 happened because those inputs were trusted in proportion to how internal they
 looked rather than to how checked they were.</p>
 <p>Two different checks, and conflating them is the mistake:</p>
@@ -51,10 +51,10 @@ re-run. A file that exists. A signature that checks.</p>
 <p>The rule that follows: <strong>a claim may not propagate past the hop that produced
 it without a verification result attached.</strong> Not "was it plausible" — was it
 checked, by what, and what did that return.</p>
-<p>That single field is what stops A1.11's cascade, because confidence can no
+<p>That single field is what stops A1.12's cascade, because confidence can no
 longer rise as evidence disappears: the evidence field travels with the claim,
 and an empty one is visible at every hop.</p>
-<p>It is also the answer to A1.15, which is why "ask the model whether it
+<p>It is also the answer to A1.16, which is why "ask the model whether it
 succeeded" is not a verifier — it is the same component grading its own work.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Stops a claim propagating without evidence attached. Schema validity is not truth: a well-formed object can assert anything.</p>
@@ -99,7 +99,7 @@ print(&quot;validation passed it; the oracle refuted it.&quot;)
 print()
 print(&quot;The third is unverifiable - no oracle exists. That is a legitimate&quot;)
 print(&quot;outcome and it must not silently become &#x27;true&#x27;. It stops here with a&quot;)
-print(&quot;reason, which is what A1.11&#x27;s cascade never had.&quot;)
+print(&quot;reason, which is what A1.12&#x27;s cascade never had.&quot;)
 assert propagate(MESSAGES[0])[&quot;stopped&quot;] == &quot;refuted&quot;
 assert propagate(MESSAGES[2])[&quot;stopped&quot;] == &quot;unverifiable&quot;
 assert &quot;propagated&quot; in propagate(MESSAGES[1])</code></pre></div><div class="nbmd"><h2>What you just proved</h2>

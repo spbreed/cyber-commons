@@ -85,7 +85,7 @@ independently reproduced in this notebook. The register it produces is in
  (&quot;C4.1&quot;,  &quot;secret scanning, automated revocation&quot;, &quot;D/C&quot;, &quot;IA-5&quot;,  &quot;D1.9&quot;),
  (&quot;C4.2&quot;,  &quot;short-lived workload credentials&quot;,      &quot;P&quot;,   &quot;IA-5&quot;,  &quot;A2.4&quot;),
  (&quot;C4.3&quot;,  &quot;scope minimisation&quot;,                    &quot;P&quot;,   &quot;AC-6&quot;,  &quot;A2.3&quot;),
- (&quot;C4.4&quot;,  &quot;credential canaries&quot;,                   &quot;D&quot;,   &quot;SI-4&quot;,  &quot;B2.3&quot;),
+ (&quot;C4.4&quot;,  &quot;credential canaries&quot;,                   &quot;D&quot;,   &quot;SI-4&quot;,  &quot;D1.11&quot;),
  (&quot;C5.1&quot;,  &quot;artifact signing verified at pull&quot;,     &quot;P&quot;,   &quot;SR-11&quot;, &quot;A3.8&quot;),
  (&quot;C5.2&quot;,  &quot;provenance attestation&quot;,                &quot;P&quot;,   &quot;SR-4&quot;,  &quot;A3.8&quot;),
  (&quot;C5.3&quot;,  &quot;admin-plane separation, JIT elevation&quot;, &quot;P/D&quot;, &quot;AC-6&quot;,  &quot;A3.8&quot;),
@@ -108,7 +108,7 @@ independently reproduced in this notebook. The register it produces is in
  (&quot;C9.4&quot;,  &quot;mandatory HITL checkpoint on discovery&quot;,&quot;P&quot;,   &quot;AC-3&quot;,  &quot;A3.10&quot;),
  (&quot;C10.1&quot;, &quot;cheat-surface red team&quot;,                &quot;P&quot;,   &quot;SA-11&quot;, &quot;C1.2&quot;),
  (&quot;C10.2&quot;, &quot;explicit abstain affordance&quot;,           &quot;P&quot;,   &quot;SA-8&quot;,  &quot;A3.10&quot;),
- (&quot;C10.3&quot;, &quot;honeypot and canary tasks&quot;,             &quot;D&quot;,   &quot;RA-5&quot;,  &quot;B2.3&quot;),
+ (&quot;C10.3&quot;, &quot;honeypot and canary tasks&quot;,             &quot;D&quot;,   &quot;RA-5&quot;,  &quot;D1.11&quot;),
  (&quot;C10.4&quot;, &quot;scorer integrity separation&quot;,           &quot;P&quot;,   &quot;SC-7&quot;,  &quot;A3.8&quot;),
 ]
 
@@ -160,10 +160,10 @@ print(&quot;repository stays a shared mutable surface. Filed as one chain, the&q
 print(&quot;remediation is a single workstream - which is why the register keeps&quot;)
 print(&quot;the note rather than the tidy row numbering.&quot;)
 assert chain == [&quot;artifact repository&quot;]</code></pre></div><div class="nbmd"><h2>6 · Give every control an owner</h2>
-<p>The last move, and the one that makes the register a plan. Each control names the lesson in this commons that teaches, tests and evidences it — preventive controls to Function A, detective to Function D, deception to Function B, and the analysis itself here in Function C.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from collections import Counter
+<p>The last move, and the one that makes the register a plan. Each control names the lesson in this commons that teaches, tests and evidences it — preventive controls to Function A, detective and deceptive controls to Function D, and the analysis itself here in Function C.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from collections import Counter
 
-FUNCTION = {&quot;A&quot;: &quot;securing the architecture&quot;, &quot;B&quot;: &quot;the AI SDLC and its harness&quot;,
-            &quot;C&quot;: &quot;red teaming and research&quot;, &quot;D&quot;: &quot;SecOps&quot;}
+FUNCTION = {&quot;A&quot;: &quot;securing the architecture&quot;, &quot;C&quot;: &quot;red teaming and research&quot;,
+            &quot;D&quot;: &quot;the agentic SOC&quot;}
 
 by_fn = Counter(c[4][0] for c in REGISTER)
 print(f&quot;{&#x27;function&#x27;:10s}{&#x27;controls&#x27;:&gt;9}  what it owns&quot;)
@@ -171,7 +171,7 @@ for f in sorted(by_fn):
     print(f&quot;{f:10s}{by_fn[f]:&gt;9}  {FUNCTION[f]}&quot;)
 
 print()
-new = {&quot;A2.8&quot;, &quot;A3.8&quot;, &quot;A3.9&quot;, &quot;A3.10&quot;, &quot;B2.3&quot;, &quot;C1.2&quot;, &quot;D1.9&quot;, &quot;D1.10&quot;, &quot;D2.9&quot;}
+new = {&quot;A2.8&quot;, &quot;A3.8&quot;, &quot;A3.9&quot;, &quot;A3.10&quot;, &quot;D1.11&quot;, &quot;C1.2&quot;, &quot;D1.9&quot;, &quot;D1.10&quot;, &quot;D2.9&quot;}
 existing = sorted({c[4] for c in REGISTER} - new)
 print(f&quot;controls landing on lessons that already existed: &quot;
       f&quot;{sum(1 for c in REGISTER if c[4] in existing)}&quot;)
@@ -182,11 +182,16 @@ for lesson in existing:
 orphans = [c[0] for c in REGISTER if not c[4]]
 print(f&quot;\ncontrols with no owning lesson: {len(orphans)}&quot;)
 print()
-print(&quot;Nothing is unowned, and six of the forty needed no new lesson at all -&quot;)
+print(&quot;Nothing is unowned. Note which functions do NOT appear: the register&quot;)
+print(&quot;is preventive, detective and investigative, and none of its forty&quot;)
+print(&quot;controls is a code-review control - the pipeline in Function B reviews&quot;)
+print(&quot;code, and no amount of code review would have caught any of this.&quot;)
+print()
+print(&quot;Six of the forty needed no new lesson at all -&quot;)
 print(&quot;parser sandboxing was already A3.2, micro-segmentation A3.3, short-lived&quot;)
 print(&quot;credentials A2.4. A register that duplicates what you have is worse than&quot;)
 print(&quot;one that maps onto it.&quot;)
-assert not orphans and len(by_fn) == 4</code></pre></div><div class="nbmd"><h2>7 · The same incident, at CyberTravels</h2>
+assert not orphans and set(by_fn) == {&quot;A&quot;, &quot;C&quot;, &quot;D&quot;}</code></pre></div><div class="nbmd"><h2>7 · The same incident, at CyberTravels</h2>
 <p>This happened to an AI lab running an evaluation, which is easy to read as somebody else's problem. It is not. Every precondition it needed is present in CyberTravels, and most of them are present because of a decision that was reasonable at the time.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what the incident needed</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">where CyberTravels already has it</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the register row</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">many agents running the same task in parallel</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the Coding Agent fans out across services on every release</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R8</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a shared mutable surface between runs</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the package cache and artifact repository the CI runner shares</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R4, R7</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agents able to read each other&#x27;s output</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent-to-agent messaging between the workflow and advisor agents</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a transcript the workload itself could write</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">CyberTravels&#x27; own application logs are the only record of what it did</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R10, R11</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">credentials reachable from the workload</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">long-lived bearer tokens, held in plaintext by the agent</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R5</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a third party who could be reached from inside</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the third-party MCP server, and every downstream travel API</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R4, R9</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no way for an agent to report what it found</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no &lt;code&gt;report_to_human&lt;/code&gt; tool exists in CyberTravels at all</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">—</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a detective control switched off for a deadline</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">guardrails disabled for the demo</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R2</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Eight preconditions, seven of them already true at CyberTravels. The one that is not — thousands of agents launched at once — is a matter of scale rather than of design, and scale is the variable that changes fastest.</div></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PRECONDITIONS = {
  &quot;parallel agents on one task&quot;:        (&quot;present&quot;, &quot;R8&quot;),

@@ -181,9 +181,9 @@ assert len(platform_can_fix) == 2
     [["credential store readable by anyone",
       "<b>used — this was the breach</b>", "A3.8, and the Supabase pattern in C2.10"],
      ["agents ingest and act on other agents' posts",
-      "present, untouched", "A1.3 indirect prompt injection, A1.9 comms poisoning"],
+      "present, untouched", "A1.3 indirect prompt injection, A1.10 comms poisoning"],
      ["agents coordinating at population scale",
-      "present, untouched", "A1.10, D1.10 fleet correlation"]],
+      "present, untouched", "A1.11, D1.10 fleet correlation"]],
     caption="An architecture can hold two novel risks and still be undone by a "
             "missing row policy. Novelty is not the same as likelihood.")),
  ],
@@ -353,7 +353,7 @@ assert exposed_sensitive == ["profiles", "sessions"]
      ["a schema check no application test expresses",
       "D1.9 — detections whose subject is the platform"],
      ["73% of generated apps carrying at least one issue",
-      "B1.13 — securing the developers' coding agents"]],
+      "B1.12 — securing the developers' coding agents"]],
     caption="Every row is a control that already exists in this curriculum. The "
             "case study's job was to show you why it is there.")),
  ],

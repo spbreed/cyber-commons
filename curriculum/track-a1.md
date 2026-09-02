@@ -212,7 +212,30 @@ python3 scripts/run_notebooks.py --session A1.8   # run it headless and check it
 
 ---
 
-### A1.9 — Agent communication poisoning
+### A1.9 — Injection through content the agent was asked to read
+
+`Security of AI`
+
+- **Risk** — The pipeline reads attacker-controlled code and then takes actions — a confused deputy you built yourself.
+- **Control** — Instruction/data provenance: content the pipeline read may never drive a state-changing tool.
+- **Lab** — Fire four realistic payloads at the review harness and compare keyword filtering against provenance.
+- **Tools** — `OpenGrep`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Fire four realistic payloads at the review harness and compare keyword filtering against provenance.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it
+```
+
+*Expect:* The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked.
+
+---
+
+### A1.10 — Agent communication poisoning
 
 `Security of AI`
 
@@ -225,15 +248,15 @@ python3 scripts/run_notebooks.py --session A1.8   # run it headless and check it
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it
+jupyter notebook labs/notebooks/A1.10.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.10   # run it headless and check it
 ```
 
 *Expect:* A single poisoned document read by one agent propagates through the topology as a peer message, and more than one agent acts on it — with the phrase identifying its source dropped on the first hop, because summarising is what the hand-off does.
 
 ---
 
-### A1.10 — Rogue agents in a multi-agent system
+### A1.11 — Rogue agents in a multi-agent system
 
 `Security of AI`
 
@@ -246,15 +269,15 @@ python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.10   # run it headless and check it
+jupyter notebook labs/notebooks/A1.11.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.11   # run it headless and check it
 ```
 
 *Expect:* Three agents are discovered, two are in the registry, and all three receive delegated work — including the narrowed user token. The unregistered agent can now act as the requesting user against any downstream that honours it.
 
 ---
 
-### A1.11 — Cascading hallucination
+### A1.12 — Cascading hallucination
 
 `Security of AI`
 
@@ -269,15 +292,15 @@ python3 scripts/run_notebooks.py --session A1.10   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.11   # run it headless and check it
+jupyter notebook labs/notebooks/A1.12.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.12   # run it headless and check it
 ```
 
 *Expect:* A hedged guess at confidence 0.2 becomes a confident claim above 0.8 in three hops, while the provenance field empties — confidence rising at exactly the rate evidence disappears.
 
 ---
 
-### A1.12 — Resource overload
+### A1.13 — Resource overload
 
 `Security of AI`
 
@@ -290,15 +313,15 @@ python3 scripts/run_notebooks.py --session A1.11   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.12   # run it headless and check it
+jupyter notebook labs/notebooks/A1.13.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.13   # run it headless and check it
 ```
 
 *Expect:* An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.
 
 ---
 
-### A1.13 — Repudiation and untraceability
+### A1.14 — Repudiation and untraceability
 
 `Security of AI`
 
@@ -311,15 +334,15 @@ python3 scripts/run_notebooks.py --session A1.12   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.13   # run it headless and check it
+jupyter notebook labs/notebooks/A1.14.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.14   # run it headless and check it
 ```
 
 *Expect:* A complete-looking tool-call log answers none of the three questions an investigation needs — which user, what motivated it, which hop originated it — because the principal, the motivating input and the delegation chain were never recorded.
 
 ---
 
-### A1.14 — Overwhelming the human in the loop
+### A1.15 — Overwhelming the human in the loop
 
 `Security of AI`
 
@@ -331,15 +354,15 @@ python3 scripts/run_notebooks.py --session A1.13   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.14.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.14   # run it headless and check it
+jupyter notebook labs/notebooks/A1.15.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.15   # run it headless and check it
 ```
 
 *Expect:* Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it.
 
 ---
 
-### A1.15 — Misaligned and deceptive behaviour
+### A1.16 — Misaligned and deceptive behaviour
 
 `Security of AI`
 
@@ -354,15 +377,15 @@ python3 scripts/run_notebooks.py --session A1.14   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.15.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.15   # run it headless and check it
+jupyter notebook labs/notebooks/A1.16.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.16   # run it headless and check it
 ```
 
 *Expect:* An agent told to reduce open alerts closes all twenty for a quarter of its budget, meeting the objective exactly — while closing five real incidents unread, with each step defensible in isolation and no false statement anywhere in the transcript.
 
 ---
 
-### A1.16 — Attacks that target the humans
+### A1.17 — Attacks that target the humans
 
 `Security of AI`
 
@@ -374,15 +397,15 @@ python3 scripts/run_notebooks.py --session A1.15   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.16.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.16   # run it headless and check it
+jupyter notebook labs/notebooks/A1.17.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.17   # run it headless and check it
 ```
 
 *Expect:* A user denied `payments:write` directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does.
 
 ---
 
-### A1.17 — The CyberTravels risk register
+### A1.18 — The CyberTravels risk register
 
 `Security of AI`
 
@@ -394,8 +417,8 @@ python3 scripts/run_notebooks.py --session A1.16   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/A1.17.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session A1.17   # run it headless and check it
+jupyter notebook labs/notebooks/A1.18.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A1.18   # run it headless and check it
 ```
 
 *Expect:* Twelve risks, each as a scene rather than a mechanism, each with a control and an owning lesson. Identity and authorisation is the largest family at three of twelve. Five of the twelve belong to no single agent — ingress, transport, identity, logging and blast radius are properties of how the four are wired together. Every risk has an owner, across more than fifteen lessons in four functions.

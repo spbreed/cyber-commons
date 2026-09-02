@@ -170,7 +170,7 @@ and four things decide whether Alex can leave it running:
 Then the awkward part: **that pipeline is itself an agentic system with all of
 CyberTravels' risks.** It reads untrusted input by definition and holds a
 credential that can write to the default branch. Chapter 4 closes on exactly
-that (B1.12, B1.13), because being a security tool grants no exemption.
+that (A1.9, B1.12), because being a security tool grants no exemption.
 """,
  "steps": [
   ("md", "## 2 · What Alex is actually up against"),
@@ -223,7 +223,7 @@ that (B1.12, B1.13), because being a security tool grants no exemption.
       "B2.2"],
      ["would you know if it were attacked",
       "canaries and honeypot tasks in CyberTravels' own environment — the "
-      "detection with no false positives", "B2.3"]],
+      "detection with no false positives", "D1.11"]],
     emphasise=2,
     caption="Skip to evaluation and you will measure a harness whose verifier "
             "you never built. That is the most common way this goes wrong.")),

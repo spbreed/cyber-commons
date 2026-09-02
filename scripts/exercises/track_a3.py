@@ -543,7 +543,7 @@ assert len(leaked) == 3 and len([h for h, _ in DESTINATIONS if by_allowlist(h)])
 
 A budget is what makes "autonomous" a bounded word.
 
-A1.12's loop had no exit condition, so it ran until something outside it
+A1.13's loop had no exit condition, so it ran until something outside it
 intervened. A ceiling turns that into a defined worst case — and a worst case is
 the thing you can actually put in a design document, an incident plan or a risk
 register.
@@ -558,7 +558,7 @@ Four ceilings, because they bound different failures:
 Twenty tool calls is a very different blast radius from two thousand, whatever
 either costs.
 
-**Downstream calls per target.** Bounds harm to other people. A1.12's damage was
+**Downstream calls per target.** Bounds harm to other people. A1.13's damage was
 not the token spend, it was the capacity taken from everybody else.
 
 Two design rules:
@@ -568,7 +568,7 @@ smaller model or a shorter context has not been bounded, it has been redirected.
 
 **Make the ceiling visible in the output.** `stopped_by: action_budget` is a
 signal to a human that this run is incomplete. Silent truncation is how a
-partial result becomes a reported success, which is A1.15 arriving through a
+partial result becomes a reported success, which is A1.16 arriving through a
 different door.
 """,
  "steps": [
@@ -595,7 +595,7 @@ different door.
         return True, None
 
 def loop(budget):
-    """A task that cannot succeed - A1.12's exact scenario, now bounded."""
+    """A task that cannot succeed - A1.13's exact scenario, now bounded."""
     steps = 0
     while True:
         steps += 1
@@ -620,11 +620,11 @@ print("action budget. That is the ceiling that protects everyone else, and it is
 print("the one most budgets do not have.")
 print()
 print("`complete: False` is the other half. A run that stops silently and")
-print("reports what it managed becomes A1.15 with extra steps.")
+print("reports what it managed becomes A1.16 with extra steps.")
 assert r["stopped_by"].startswith("per_target") and not r["complete"]
 '''),
  ],
- "expect": "The impossible task from A1.12 now stops after six steps, halted by "
+ "expect": "The impossible task from A1.13 now stops after six steps, halted by "
            "the per-target ceiling — before the token or action budgets are "
            "anywhere near exhausted — and the result carries `complete: False` "
            "rather than reporting what it managed.",
@@ -638,7 +638,7 @@ assert r["stopped_by"].startswith("per_target") and not r["complete"]
 **Mitigates: T5 Cascading Hallucination · T12 Communication Poisoning · T7 Misaligned Behaviour.**
 
 Everything that comes back into the context is an input: tool results, peer
-messages, retrieved documents, a sub-agent's summary. A1.9 and A1.11 both
+messages, retrieved documents, a sub-agent's summary. A1.10 and A1.12 both
 happened because those inputs were trusted in proportion to how internal they
 looked rather than to how checked they were.
 
@@ -657,11 +657,11 @@ The rule that follows: **a claim may not propagate past the hop that produced
 it without a verification result attached.** Not "was it plausible" — was it
 checked, by what, and what did that return.
 
-That single field is what stops A1.11's cascade, because confidence can no
+That single field is what stops A1.12's cascade, because confidence can no
 longer rise as evidence disappears: the evidence field travels with the claim,
 and an empty one is visible at every hop.
 
-It is also the answer to A1.15, which is why "ask the model whether it
+It is also the answer to A1.16, which is why "ask the model whether it
 succeeded" is not a verifier — it is the same component grading its own work.
 """,
  "steps": [
@@ -708,7 +708,7 @@ print("validation passed it; the oracle refuted it.")
 print()
 print("The third is unverifiable - no oracle exists. That is a legitimate")
 print("outcome and it must not silently become 'true'. It stops here with a")
-print("reason, which is what A1.11's cascade never had.")
+print("reason, which is what A1.12's cascade never had.")
 assert propagate(MESSAGES[0])["stopped"] == "refuted"
 assert propagate(MESSAGES[2])["stopped"] == "unverifiable"
 assert "propagated" in propagate(MESSAGES[1])
@@ -728,7 +728,7 @@ assert "propagated" in propagate(MESSAGES[1])
  "concept": """
 **Mitigates: T10 Overwhelming Human-in-the-Loop · T15 Human Manipulation.**
 
-A1.14 showed approval collapsing under volume while still reporting 100%
+A1.15 showed approval collapsing under volume while still reporting 100%
 coverage. The fix is not a better reviewer or a nicer queue. It is **sending
 fewer things**.
 

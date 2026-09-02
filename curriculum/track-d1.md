@@ -312,4 +312,31 @@ python3 fleet_graph.py --signatures vocab,pivot,role
 
 ---
 
+### D1.11 — Honeypots, canaries and deception in the agent's environment
+
+`AI for Security`
+
+- **Risk** — Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.
+- **Control** — Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).
+- **Lab** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
+- **Tools** — `Canarytokens`, `Inspect`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.11.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.11   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+python3 canary.py --place worker-env,docs,artifact-metadata
+python3 honeypot.py --salt benchmark/ --ratio 0.15 --rotate-days 21
+```
+
+*Expect:* Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.
+
+---
+
 **Adjacency requirement:** also complete A2.3–A2.4 — the failures happen in the seams.

@@ -43,7 +43,7 @@ REGISTER = '''REGISTER = [
  ("C4.1",  "secret scanning, automated revocation", "D/C", "IA-5",  "D1.9"),
  ("C4.2",  "short-lived workload credentials",      "P",   "IA-5",  "A2.4"),
  ("C4.3",  "scope minimisation",                    "P",   "AC-6",  "A2.3"),
- ("C4.4",  "credential canaries",                   "D",   "SI-4",  "B2.3"),
+ ("C4.4",  "credential canaries",                   "D",   "SI-4",  "D1.11"),
  ("C5.1",  "artifact signing verified at pull",     "P",   "SR-11", "A3.8"),
  ("C5.2",  "provenance attestation",                "P",   "SR-4",  "A3.8"),
  ("C5.3",  "admin-plane separation, JIT elevation", "P/D", "AC-6",  "A3.8"),
@@ -66,7 +66,7 @@ REGISTER = '''REGISTER = [
  ("C9.4",  "mandatory HITL checkpoint on discovery","P",   "AC-3",  "A3.10"),
  ("C10.1", "cheat-surface red team",                "P",   "SA-11", "C1.2"),
  ("C10.2", "explicit abstain affordance",           "P",   "SA-8",  "A3.10"),
- ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "B2.3"),
+ ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "D1.11"),
  ("C10.4", "scorer integrity separation",           "P",   "SC-7",  "A3.8"),
 ]
 '''
@@ -209,13 +209,13 @@ assert chain == ["artifact repository"]
   ("md", "## 5 · Give every control an owner\\n\\n"
          "The last move, and the one that makes the register a plan. Each "
          "control names the lesson in this commons that teaches, tests and "
-         "evidences it — preventive controls to Function A, detective to "
-         "Function D, deception to Function B, and the analysis itself here in "
+         "evidences it — preventive controls to Function A, detective and "
+         "deceptive controls to Function D, and the analysis itself here in "
          "Function C."),
   ("py", '''from collections import Counter
 
-FUNCTION = {"A": "securing the architecture", "B": "the AI SDLC and its harness",
-            "C": "red teaming and research", "D": "SecOps"}
+FUNCTION = {"A": "securing the architecture", "C": "red teaming and research",
+            "D": "the agentic SOC"}
 
 by_fn = Counter(c[4][0] for c in REGISTER)
 print(f"{'function':10s}{'controls':>9}  what it owns")
@@ -223,7 +223,7 @@ for f in sorted(by_fn):
     print(f"{f:10s}{by_fn[f]:>9}  {FUNCTION[f]}")
 
 print()
-new = {"A2.8", "A3.8", "A3.9", "A3.10", "B2.3", "C1.2", "D1.9", "D1.10", "D2.9"}
+new = {"A2.8", "A3.8", "A3.9", "A3.10", "D1.11", "C1.2", "D1.9", "D1.10", "D2.9"}
 existing = sorted({c[4] for c in REGISTER} - new)
 print(f"controls landing on lessons that already existed: "
       f"{sum(1 for c in REGISTER if c[4] in existing)}")
@@ -234,11 +234,16 @@ for lesson in existing:
 orphans = [c[0] for c in REGISTER if not c[4]]
 print(f"\\ncontrols with no owning lesson: {len(orphans)}")
 print()
-print("Nothing is unowned, and six of the forty needed no new lesson at all -")
+print("Nothing is unowned. Note which functions do NOT appear: the register")
+print("is preventive, detective and investigative, and none of its forty")
+print("controls is a code-review control - the pipeline in Function B reviews")
+print("code, and no amount of code review would have caught any of this.")
+print()
+print("Six of the forty needed no new lesson at all -")
 print("parser sandboxing was already A3.2, micro-segmentation A3.3, short-lived")
 print("credentials A2.4. A register that duplicates what you have is worse than")
 print("one that maps onto it.")
-assert not orphans and len(by_fn) == 4
+assert not orphans and set(by_fn) == {"A", "C", "D"}
 '''),
 
   ("md", "## 6 · The same incident, at CyberTravels\\n\\n"
@@ -1030,7 +1035,7 @@ assert abstain > attempt
 },
 
 # ---------------------------------------------------------------- Function B
-"B2.3": {
+"D1.11": {
  "concept": """
 Every detector in this chapter has needed a threshold, and every threshold is a
 trade between missing things and crying wolf. Deception is the exception:

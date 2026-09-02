@@ -86,84 +86,84 @@
    ],
    "expect": "Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address."
   },
-  "A1.9": {
-   "goal": "Send one poisoned inter-agent message and watch it propagate through the topology.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it"
-   ],
-   "expect": "A single poisoned document read by one agent propagates through the topology as a peer message, and more than one agent acts on it — with the phrase identifying its source dropped on the first hop, because summarising is what the hand-off does."
-  },
   "A1.10": {
-   "goal": "Introduce an unregistered agent into the topology and have it receive delegated work.",
+   "goal": "Send one poisoned inter-agent message and watch it propagate through the topology.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.10.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A1.10   # run it headless and check it"
    ],
-   "expect": "Three agents are discovered, two are in the registry, and all three receive delegated work — including the narrowed user token. The unregistered agent can now act as the requesting user against any downstream that honours it."
+   "expect": "A single poisoned document read by one agent propagates through the topology as a peer message, and more than one agent acts on it — with the phrase identifying its source dropped on the first hop, because summarising is what the hand-off does."
   },
   "A1.11": {
-   "goal": "Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.",
+   "goal": "Introduce an unregistered agent into the topology and have it receive delegated work.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.11.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A1.11   # run it headless and check it"
    ],
-   "expect": "A hedged guess at confidence 0.2 becomes a confident claim above 0.8 in three hops, while the provenance field empties — confidence rising at exactly the rate evidence disappears."
+   "expect": "Three agents are discovered, two are in the registry, and all three receive delegated work — including the narrowed user token. The unregistered agent can now act as the requesting user against any downstream that honours it."
   },
   "A1.12": {
-   "goal": "Run a loop with no ceiling and count what it consumes before anything notices.",
+   "goal": "Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.12.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A1.12   # run it headless and check it"
    ],
-   "expect": "An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service."
+   "expect": "A hedged guess at confidence 0.2 becomes a confident claim above 0.8 in three hops, while the provenance field empties — confidence rising at exactly the rate evidence disappears."
   },
   "A1.13": {
-   "goal": "Reconstruct who caused a deletion from a log that records only tool calls.",
+   "goal": "Run a loop with no ceiling and count what it consumes before anything notices.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.13.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A1.13   # run it headless and check it"
    ],
-   "expect": "A complete-looking tool-call log answers none of the three questions an investigation needs — which user, what motivated it, which hop originated it — because the principal, the motivating input and the delegation chain were never recorded."
+   "expect": "An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service."
   },
   "A1.14": {
-   "goal": "Push approval volume up and measure the point at which review quality collapses.",
+   "goal": "Reconstruct who caused a deletion from a log that records only tool calls.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.14.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A1.14   # run it headless and check it"
    ],
-   "expect": "Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it."
+   "expect": "A complete-looking tool-call log answers none of the three questions an investigation needs — which user, what motivated it, which hop originated it — because the principal, the motivating input and the delegation chain were never recorded."
   },
   "A1.15": {
-   "goal": "Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.",
+   "goal": "Push approval volume up and measure the point at which review quality collapses.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.15.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A1.15   # run it headless and check it"
    ],
-   "expect": "An agent told to reduce open alerts closes all twenty for a quarter of its budget, meeting the objective exactly — while closing five real incidents unread, with each step defensible in isolation and no false statement anywhere in the transcript."
+   "expect": "Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it."
   },
   "A1.16": {
-   "goal": "Launder a request through a delegation chain to reach something the requester was denied.",
+   "goal": "Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.16.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A1.16   # run it headless and check it"
    ],
-   "expect": "A user denied `payments:write` directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does."
+   "expect": "An agent told to reduce open alerts closes all twenty for a quarter of its budget, meeting the objective exactly — while closing five real incidents unread, with each step defensible in isolation and no false statement anywhere in the transcript."
   },
   "A1.17": {
-   "goal": "Roll the twelve CyberTravels risks up into families, find which agent carries each, and check that every row has an owning lesson.",
+   "goal": "Launder a request through a delegation chain to reach something the requester was denied.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.17.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A1.17   # run it headless and check it"
+   ],
+   "expect": "A user denied `payments:write` directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does."
+  },
+  "A1.18": {
+   "goal": "Roll the twelve CyberTravels risks up into families, find which agent carries each, and check that every row has an owning lesson.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.18.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.18   # run it headless and check it"
    ],
    "expect": "Twelve risks, each as a scene rather than a mechanism, each with a control and an owning lesson. Identity and authorisation is the largest family at three of twelve. Five of the twelve belong to no single agent — ingress, transport, identity, logging and blast radius are properties of how the four are wired together. Every risk has an owner, across more than fifteen lessons in four functions."
   },
@@ -492,42 +492,42 @@
    ],
    "expect": "The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file."
   },
-  "B1.12": {
+  "A1.9": {
    "goal": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it"
+   ],
+   "expect": "The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked."
+  },
+  "B1.12": {
+   "goal": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.12.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.12   # run it headless and check it"
    ],
-   "expect": "The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked."
-  },
-  "B1.13": {
-   "goal": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it"
-   ],
    "expect": "The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop."
   },
-  "B1.14": {
+  "B1.13": {
    "goal": "Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it",
     "",
     "# --- the full variant, against real repositories ---",
     "python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json"
    ],
    "expect": "Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification's destructive, open-world default."
   },
-  "B1.15": {
+  "B1.14": {
    "goal": "Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it"
+    "jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it"
    ],
    "expect": "The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones."
   },
@@ -570,12 +570,12 @@
    ],
    "expect": "The oracle and the same-family judge disagree in a specific, reproducible direction."
   },
-  "B2.3": {
+  "D1.11": {
    "goal": "Refactor a shell tool into three narrow, structured tools.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.3.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.3   # run it headless and check it",
+    "jupyter notebook labs/notebooks/D1.11.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.11   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/m0-agent-loop",
@@ -710,12 +710,12 @@
    ],
    "expect": "pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand."
   },
-  "B2.3": {
+  "D1.11": {
    "goal": "Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.3.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.3   # run it headless and check it",
+    "jupyter notebook labs/notebooks/D1.11.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.11   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "python3 canary.py --place worker-env,docs,artifact-metadata",

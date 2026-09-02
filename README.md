@@ -62,7 +62,7 @@ statement about the serialiser; accuracy is the expensive part.
 | | |
 |---|---|
 | [`skills/appsec/`](skills/appsec) | 6 — repo recon, threat model, vuln audit, exploit validation, triage report, coding-agent hardening |
-| [`skills/attestation/`](skills/attestation) | 11 — turn a control claim into a signed statement bound to one deployment ([B1.14](labs/notebooks/B1.14.ipynb), run against 10 real OSS agent/MCP repos) |
+| [`skills/attestation/`](skills/attestation) | 11 — turn a control claim into a signed statement bound to one deployment ([B1.13](labs/notebooks/B1.13.ipynb), run against 10 real OSS agent/MCP repos) |
 | [`skills/architecture/`](skills/architecture) · [`identity/`](skills/identity) · [`secops/`](skills/secops) · [`grc/`](skills/grc) | 5 — blast radius, delegation chains, alert triage, incident scoping, control evidence |
 
 ## The programme
@@ -91,7 +91,7 @@ lessons, in order, that carry the vocabulary the rest runs on. Then the chapters
 for the chair you sit in, then one adjacent chapter, because the failures happen
 in the seams.
 
-> **Spine:** A1.0 → A1.1 → A1.2 → A1.5 → **A1.9** → **A1.11** → A2.1 → A2.3 →
+> **Spine:** A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 → A2.3 →
 > A2.4 → A3.1 → A3.2 → A3.5 → **B1.0** → **B2.0** → B2.1 → **D1.0** →
 > D1.5 → **E1.0** → E1.10
 
@@ -105,8 +105,8 @@ Two chapters carry a single artefact end to end:
   and 3 are those controls.
 - **[B1](curriculum/track-b1.md)** is the AI SDLC itself — a five-phase,
   fifteen-stage agentic AppSec pipeline built over seventeen sessions, attested in
-  [B1.14](labs/notebooks/B1.14.ipynb) and closed in
-  [B1.15](labs/notebooks/B1.15.ipynb) by scoring Google's Mantis against a
+  [B1.13](labs/notebooks/B1.13.ipynb) and closed in
+  [B1.14](labs/notebooks/B1.14.ipynb) by scoring Google's Mantis against a
   held-out key — a reference implementation is something you evaluate, not
   something you trust.
 

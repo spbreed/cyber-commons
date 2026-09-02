@@ -13,7 +13,7 @@ from . import diagrams as D
 
 EXERCISES: dict[str, dict] = {
 
-"A1.17": {
+"A1.18": {
  "concept": """
 Fifteen lessons, fifteen risks, each one named against a component of CyberTravels.
 This is the lesson where they stop being a list and become a register.
@@ -130,11 +130,11 @@ assert shared == 5
   ("md", "## 6 · The register as a working document"),
   ("py", '''OWNED_BY_LESSON = {
  "R1": ["A2.3", "A2.4", "A3.1"], "R2": ["A3.5", "A3.6", "A3.9"],
- "R3": ["A1.2", "A1.3", "A2.6", "A3.1"], "R4": ["C2.5", "A3.8", "B1.14"],
- "R5": ["A2.1", "A2.2", "A2.4"], "R6": ["A3.2", "A1.8", "B1.13"],
- "R7": ["B1.13", "B1.9", "A3.6"], "R8": ["B1.5", "B1.9", "B1.10"],
+ "R3": ["A1.2", "A1.3", "A2.6", "A3.1"], "R4": ["C2.5", "A3.8", "B1.13"],
+ "R5": ["A2.1", "A2.2", "A2.4"], "R6": ["A3.2", "A1.8", "B1.12"],
+ "R7": ["B1.12", "B1.9", "A3.6"], "R8": ["B1.5", "B1.9", "B1.10"],
  "R9": ["A3.3", "A3.7", "D2.3"], "R10": ["D1.5", "E2.5", "A2.7"],
- "R11": ["A2.1", "A2.7", "A1.13"], "R12": ["A1.3", "A1.4", "E1.3"],
+ "R11": ["A2.1", "A2.7", "A1.14"], "R12": ["A1.3", "A1.4", "E1.3"],
 }
 lessons = sorted({l for ls in OWNED_BY_LESSON.values() for l in ls})
 by_function = Counter(l[0] for l in lessons)

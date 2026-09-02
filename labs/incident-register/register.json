@@ -273,7 +273,7 @@
    "name": "Credential canaries",
    "type": "D",
    "nist": "SI-4",
-   "lesson": "B2.3"
+   "lesson": "D1.11"
   },
   {
    "id": "C5.1",
@@ -434,7 +434,7 @@
    "name": "Honeypot and canary tasks",
    "type": "D",
    "nist": "RA-5",
-   "lesson": "B2.3"
+   "lesson": "D1.11"
   },
   {
    "id": "C10.4",

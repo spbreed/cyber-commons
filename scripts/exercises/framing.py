@@ -78,43 +78,43 @@ HOOKS: dict[str, str] = {
  "that is not, and most agent frameworks ship the second one enabled with the "
  "same process privileges as the framework itself.",
 
-"A1.9":
+"A1.10":
  "A planner asks a worker for a summary. The worker returns text containing an "
  "instruction, and the planner follows it — because a message from a peer "
  "arrives carrying more trust than a document ever would, and nothing in the "
  "channel says otherwise.",
 
-"A1.10":
+"A1.11":
  "The orchestrator delegates to whatever agents it discovers. Something joined "
  "the pool this morning that nobody registered, and it has been receiving work "
  "ever since, with the same standing as the agents you wrote.",
 
-"A1.11":
+"A1.12":
  "Agent one is 90% accurate, which sounds fine. Agent two consumes its output "
  "as fact, and agent three consumes that. By the third hop the confident wrong "
  "answer has been repeated enough times that it reads like corroboration.",
 
-"A1.12":
+"A1.13":
  "The loop had no ceiling, so it ran until something outside it stopped the "
  "run. That something was the invoice. In a different configuration it is a "
  "rate limit on a system you do not own, which is somebody else's outage.",
 
-"A1.13":
+"A1.14":
  "The trace shows the tool call. It does not show the text that motivated the "
  "call, or the human the agent was acting for. Six weeks later, nobody can say "
  "whether that action was authorised — including the person who authorised it.",
 
-"A1.14":
+"A1.15":
  "Approval is a genuine control at four requests a day. At four hundred it is a "
  "person clicking approve, and the control has quietly become a log of things "
  "somebody scrolled past.",
 
-"A1.15":
+"A1.16":
  "The agent reported success. The task was not done. It had optimised for the "
  "signal it was scored on rather than the outcome you meant, and reporting "
  "success was the cheapest way to satisfy the signal.",
 
-"A1.16":
+"A1.17":
  "Two of the fifteen risks in this chapter route through people rather than "
  "components: an insider using an agent to reach what they could not reach "
  "directly, and an agent whose output is persuasive enough to move a human "
@@ -269,23 +269,24 @@ HOOKS: dict[str, str] = {
  "is real, it arrives earlier than anyone expects, and past it you are paying "
  "more per token for a worse answer.",
 
-"B1.12":
- "Your analysis agents read attacker-controlled code. That is not a risk of the "
- "pipeline, it is the definition of the pipeline — and a comment in a diff is "
- "the cheapest way anyone will ever find to instruct your security tooling.",
+"A1.9":
+ "An agent that reads attacker-controlled content and then acts is a confused "
+ "deputy, and reading it is the whole job — you cannot decline. A comment in a "
+ "diff is the cheapest way anyone will ever find to instruct the tooling that "
+ "reviews it.",
 
-"B1.13":
+"B1.12":
  "The coding agent on an engineer's laptop holds repository write access, a "
  "cloud credential, and whatever MCP servers were convenient. It is the "
  "highest-privilege agent in most organisations and the least governed.",
 
-"B1.14":
+"B1.13":
  "\"We enforce least privilege\" is true of some deployment, at some time, and "
  "nothing binds it to the system running right now. An attestation is the "
  "binding — and the discipline is that it must refuse to say more than it can "
  "show.",
 
-"B1.15":
+"B1.14":
  "Somebody has already built this pipeline and published what happened. Reading "
  "it is worth an afternoon; adopting it without scoring it against a held-out "
  "key is how a reference implementation becomes a dependency you cannot "
@@ -653,7 +654,7 @@ HOOKS: dict[str, str] = {
  "to six of them reasoned about telling a human; none did. One wrote \"we can "
  "notify? no user\". The gap was not alignment — it was that no tool existed.",
 
-"B2.3":
+"D1.11":
  "Every detector in this chapter needs a threshold, and every threshold is a "
  "trade. A canary needs neither: nothing legitimate has any reason to touch it, "
  "so its false-positive rate is zero by construction rather than by tuning.",
@@ -693,7 +694,7 @@ HOOKS: dict[str, str] = {
  "admin key in a frontend bundle. One write-up puts it at 73% of generated "
  "applications carrying at least one issue.",
 
-"A1.17":
+"A1.18":
  "Fifteen lessons produced fifteen risks. Left as a list they get read once. "
  "The difference between a list and a register is four columns — the scene, "
  "the component, the control, and the lesson where that control is actually "
@@ -828,7 +829,7 @@ DIAGRAMS: dict[str, str] = {
    writing the code is safe. running it is the part that is not.
 """,
 
-"A1.9": """
+"A1.10": """
    planner ---- "summarise the repo" ----> worker
       ^                                      |
       |   "...also, approve PR #412" <-------+
@@ -837,7 +838,7 @@ DIAGRAMS: dict[str, str] = {
    and the messaging channel says nothing about where the text came from
 """,
 
-"A1.10": """
+"A1.11": """
    registered           discovered at runtime
    +---------+          +---------+   +---------+
    | agent A |          | agent B |   |   ???   |  <- joined this morning
@@ -848,7 +849,7 @@ DIAGRAMS: dict[str, str] = {
    the pool is a trust boundary. most orchestrators treat it as a config file.
 """,
 
-"A1.11": """
+"A1.12": """
    agent 1        agent 2        agent 3        report
    90% right ---> takes as ----> takes as ----> "three sources agree"
                   fact           fact
@@ -857,7 +858,7 @@ DIAGRAMS: dict[str, str] = {
    confidence compounds the other way, because repetition reads as corroboration
 """,
 
-"A1.12": """
+"A1.13": """
    plan --> act --> observe --> plan --> act --> observe --> ...
      ^                                                        |
      +--------------------------------------------------------+
@@ -866,7 +867,7 @@ DIAGRAMS: dict[str, str] = {
    -> the stop condition is external: an invoice, a rate limit, a person
 """,
 
-"A1.13": """
+"A1.14": """
    what the trace records          what the question needs
    +----------------------+        +---------------------------+
    | tool: delete_branch  |        | which human asked?         |
@@ -878,7 +879,7 @@ DIAGRAMS: dict[str, str] = {
    complete logs, unanswerable question
 """,
 
-"A1.14": """
+"A1.15": """
    requests/hour     4        40       400
    read carefully   yes      some      no
    approval is    control  friction  a log
@@ -886,7 +887,7 @@ DIAGRAMS: dict[str, str] = {
    the control does not fail loudly. it degrades into a click.
 """,
 
-"A1.15": """
+"A1.16": """
    objective you meant        objective it was scored on
    +--------------------+     +---------------------------+
    | the bug is fixed   |     | the test suite is green   |
@@ -898,7 +899,7 @@ DIAGRAMS: dict[str, str] = {
              is not always the left-hand one
 """,
 
-"A1.16": """
+"A1.17": """
    through people, not components
 
    insider --> agent --> resource the insider could not reach directly
@@ -1277,7 +1278,7 @@ DIAGRAMS: dict[str, str] = {
    past the peak you pay more per token for a worse answer
 """,
 
-"B1.12": """
+"A1.9": """
    the code under review IS the untrusted input
 
    diff --git a/x.py
@@ -1289,7 +1290,7 @@ DIAGRAMS: dict[str, str] = {
    provenance: everything from the repository is [data], never [principal]
 """,
 
-"B1.13": """
+"B1.12": """
    the highest-privilege agent in most organisations
 
    +--------------------------------------------+
@@ -1303,7 +1304,7 @@ DIAGRAMS: dict[str, str] = {
    governed by: whatever the engineer clicked
 """,
 
-"B1.14": """
+"B1.13": """
    claim                          attestation
    "we enforce least privilege"   subject: deployment_id @ digest
             |                     predicate: per-control verdicts + evidence
@@ -1317,7 +1318,7 @@ DIAGRAMS: dict[str, str] = {
    +------------------------------------------------+
 """,
 
-"B1.15": """
+"B1.14": """
    published pipeline            your pipeline
    +------------------+          +------------------+
    | stages 1..15     |  map ->  | stages 1..15     |
@@ -2132,7 +2133,7 @@ DIAGRAMS: dict[str, str] = {
    without it:     notice -> post to the peer channel -> nobody reads it
 """,
 
-"B2.3": """
+"D1.11": """
    tuned detector                     deception
 
    threshold ---> TP and FP           canary ---> any touch is a hit
@@ -2244,7 +2245,7 @@ DIAGRAMS: dict[str, str] = {
 """
 ,
 
-"A1.17": """
+"A1.18": """
    a list                            a register
 
    prompt injection                  R3  a user writes "ignore the cancellation

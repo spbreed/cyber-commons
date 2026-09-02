@@ -23,7 +23,7 @@ none, so it is taught where the money actually goes: the audit agent in B1.3
 decides where to run the model pass, and B1.5 decides what is worth
 reproducing.
 
-Phases 4 and 5 continue in track_b1b.py, and B1.15 closes the track with Google
+Phases 4 and 5 continue in track_b1b.py, and B1.14 closes the track with Google
 Mantis as a bonus: a real implementation of this pipeline, mapped stage by stage
 onto what you built.
 """

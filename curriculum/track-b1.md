@@ -317,30 +317,7 @@ python3 scripts/run_notebooks.py --session B1.11   # run it headless and check i
 
 ---
 
-### B1.12 — Injection in your own pipeline
-
-`Security of AI`
-
-- **Risk** — The pipeline reads attacker-controlled code and then takes actions — a confused deputy you built yourself.
-- **Control** — Instruction/data provenance: content the pipeline read may never drive a state-changing tool.
-- **Lab** — Fire four realistic payloads at the review harness and compare keyword filtering against provenance.
-- **Tools** — `OpenGrep`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Fire four realistic payloads at the review harness and compare keyword filtering against provenance.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.12   # run it headless and check it
-```
-
-*Expect:* The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked.
-
----
-
-### B1.13 — Securing the developers' coding agents
+### B1.12 — Securing the developers' coding agents
 
 `Security of AI`
 
@@ -355,15 +332,15 @@ python3 scripts/run_notebooks.py --session B1.12   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it
+jupyter notebook labs/notebooks/B1.12.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.12   # run it headless and check it
 ```
 
 *Expect:* The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.
 
 ---
 
-### B1.14 — Attesting control intent for agents and MCP servers
+### B1.13 — Attesting control intent for agents and MCP servers
 
 `Security of AI`
 
@@ -378,8 +355,8 @@ python3 scripts/run_notebooks.py --session B1.13   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it
+jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it
 
 # --- the full variant, against real repositories ---
 python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json
@@ -389,7 +366,7 @@ python3 labs/attestation/control_intent.py --corpus /path/to/clones --out result
 
 ---
 
-### B1.15 — Bonus — Google Mantis, the pipeline in production
+### B1.14 — Bonus — Google Mantis, the pipeline in production
 
 `AI for Security`
 
@@ -404,8 +381,8 @@ python3 labs/attestation/control_intent.py --corpus /path/to/clones --out result
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.14.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.14   # run it headless and check it
+jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it
 ```
 
 *Expect:* The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones.

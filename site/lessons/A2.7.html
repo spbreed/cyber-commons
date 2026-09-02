@@ -32,14 +32,14 @@
    a trace with 1-3 and not 4 cannot distinguish authorised from injected
 </code></pre>
 <p><strong>Mitigates: T8 Repudiation &amp; Untraceability · T13 Rogue Agents.</strong></p>
-<p>A1.13 showed a log that was complete for debugging and empty for investigation.
+<p>A1.14 showed a log that was complete for debugging and empty for investigation.
 This is the record that is not.</p>
 <p>Four fields, each answering a question the tool-call log could not:</p>
 <p><strong>The human principal</strong> — who caused this. From A2.1.</p>
 <p><strong>The agent identity and instance</strong> — what performed it, and which run. From
 A2.2, so it is attested rather than claimed.</p>
 <p><strong>The delegation chain</strong> — how authority got from the human to this action. From
-A2.3, which is also what makes A1.16's laundering path visible.</p>
+A2.3, which is also what makes A1.17's laundering path visible.</p>
 <p><strong>The motivating input, with its origin</strong> — what made the agent decide. From
 A2.6. This is the field that establishes root cause, and the one most often
 missing, because logging tool calls feels like logging decisions.</p>

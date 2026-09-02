@@ -8,7 +8,7 @@ acting on, which is a different question and the one nobody asks.
     B2.1  evaluation         on a corpus with known answers, because a
                              hallucinated finding looks exactly like a real one
     B2.2  reliability + cost pass^k, variance, and dollars per confirmed finding
-    B2.3  deception          canaries and honeypots in the agent's own
+    D1.11  deception          canaries and honeypots in the agent's own
                              environment — the detection with no false positives
 
 Budgets and stop conditions are A3.4. The loop, tools, routing, delegation

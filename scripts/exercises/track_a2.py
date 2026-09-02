@@ -45,7 +45,7 @@ The control is to keep all three, and to use them for different things:
 - **Authorize on the workload.** What may this agent ever do? That is its
   ceiling, and it does not change per request.
 - **Attribute to the user.** Who caused this? That is what the audit trail needs
-  and what A1.13 could not answer.
+  and what A1.14 could not answer.
 - **Scope memory and state to the instance or the user**, never to the workload
   alone — which is the write that made A1.4 spread across sessions.
 
@@ -98,7 +98,7 @@ print(f"   shared? {memory_key(dana, 'acme') == memory_key(priya, 'acme')}")
 print()
 print("db:admin is refused because the WORKLOAD never held it - so no user can")
 print("borrow it through the agent, which is A1.6 closed. The audit line names")
-print("dana, which is A1.13 closed. And a note written in dana's session cannot")
+print("dana, which is A1.14 closed. And a note written in dana's session cannot")
 print("be read back in priya's, which is A1.4 closed.")
 assert not authorize(dana, "db:admin")
 assert memory_key(dana, "acme") != memory_key(priya, "acme")
@@ -462,7 +462,7 @@ Neither is a reason not to build this. Both are reasons to check your own
 deployment rather than assume the control is on because the feature exists."""),
   ("md", "## 5 · What the audit trail can now answer\n\nEvery hop is on the "
          "token, so the chain reconstructs from the token alone rather than by "
-         "correlating four services' logs on timestamp. This is the thing A1.13 "
+         "correlating four services' logs on timestamp. This is the thing A1.14 "
          "could not do."),
   ("py", '''ORCH = SVID("spiffe://cybertravels.com/ns/prod/sa/orchestrator",
             b"cert-orchestrator")
@@ -599,7 +599,7 @@ created by whoever needed one, owned by nobody in particular, and removed never.
 
 They also outnumber humans, often by a large multiple.
 
-A1.10's rogue agent was admitted because the orchestrator had no notion of an
+A1.11's rogue agent was admitted because the orchestrator had no notion of an
 approved agent. The control is a registry, and a registry is only useful if it
 carries three fields:
 
@@ -653,7 +653,7 @@ someone's life.
  "steps": [
   ("md", MITIGATES + "> Turns 'which agents are allowed here' from a "
          "convention into a check, and turns 'is this one still wanted' from "
-         "an audit question into a leaver event. Closes A1.10 at the door.\n\n"
+         "an audit question into a leaver event. Closes A1.11 at the door.\n\n"
          "## 2 · Provisioning an agent the same way you provision a person"),
   ("html", D.flow(
     [D.column("system of record", [
@@ -750,7 +750,7 @@ def sweep(label):
     return ok_n
 
 sweep("presenting at the orchestrator:")
-print("reporting-agent-v2 is A1.10's rogue: a real process, answering the")
+print("reporting-agent-v2 is A1.11's rogue: a real process, answering the")
 print("protocol correctly, refused because nothing registered it. legacy-agent")
 print("is the more common case - registered, running, owned by nobody.")'''),
   ("md", "## 4 · Sam leaves. One SCIM `PATCH`, and what it does not reach\n\n"
@@ -924,7 +924,7 @@ assert agent(assemble(span("user", "send it to lead@corp.example")))[0] == "forw
  "concept": """
 **Mitigates: T8 Repudiation & Untraceability · T13 Rogue Agents.**
 
-A1.13 showed a log that was complete for debugging and empty for investigation.
+A1.14 showed a log that was complete for debugging and empty for investigation.
 This is the record that is not.
 
 Four fields, each answering a question the tool-call log could not:
@@ -935,7 +935,7 @@ Four fields, each answering a question the tool-call log could not:
 A2.2, so it is attested rather than claimed.
 
 **The delegation chain** — how authority got from the human to this action. From
-A2.3, which is also what makes A1.16's laundering path visible.
+A2.3, which is also what makes A1.17's laundering path visible.
 
 **The motivating input, with its origin** — what made the agent decide. From
 A2.6. This is the field that establishes root cause, and the one most often

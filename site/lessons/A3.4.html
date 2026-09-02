@@ -35,7 +35,7 @@
 </code></pre>
 <p><strong>Mitigates: T4 Resource Overload · T10 Overwhelming Human-in-the-Loop.</strong></p>
 <p>A budget is what makes "autonomous" a bounded word.</p>
-<p>A1.12's loop had no exit condition, so it ran until something outside it
+<p>A1.13's loop had no exit condition, so it ran until something outside it
 intervened. A ceiling turns that into a defined worst case — and a worst case is
 the thing you can actually put in a design document, an incident plan or a risk
 register.</p>
@@ -45,14 +45,14 @@ register.</p>
 <p><strong>Actions.</strong> Bounds <em>consequence</em>, and it is the one that matters for security.
 Twenty tool calls is a very different blast radius from two thousand, whatever
 either costs.</p>
-<p><strong>Downstream calls per target.</strong> Bounds harm to other people. A1.12's damage was
+<p><strong>Downstream calls per target.</strong> Bounds harm to other people. A1.13's damage was
 not the token spend, it was the capacity taken from everybody else.</p>
 <p>Two design rules:</p>
 <p><strong>Terminate, do not degrade.</strong> A loop that hits a ceiling and keeps going with a
 smaller model or a shorter context has not been bounded, it has been redirected.</p>
 <p><strong>Make the ceiling visible in the output.</strong> <code>stopped_by: action_budget</code> is a
 signal to a human that this run is incomplete. Silent truncation is how a
-partial result becomes a reported success, which is A1.15 arriving through a
+partial result becomes a reported success, which is A1.16 arriving through a
 different door.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Turns an unbounded loop into a defined worst case, and bounds the harm to <strong>other people's</strong> capacity, not just your bill.</p>
@@ -77,7 +77,7 @@ different door.</p></div><div class="nbmd"><blockquote>
         return True, None
 
 def loop(budget):
-    &quot;&quot;&quot;A task that cannot succeed - A1.12&#x27;s exact scenario, now bounded.&quot;&quot;&quot;
+    &quot;&quot;&quot;A task that cannot succeed - A1.13&#x27;s exact scenario, now bounded.&quot;&quot;&quot;
     steps = 0
     while True:
         steps += 1
@@ -102,9 +102,9 @@ print(&quot;action budget. That is the ceiling that protects everyone else, and 
 print(&quot;the one most budgets do not have.&quot;)
 print()
 print(&quot;`complete: False` is the other half. A run that stops silently and&quot;)
-print(&quot;reports what it managed becomes A1.15 with extra steps.&quot;)
+print(&quot;reports what it managed becomes A1.16 with extra steps.&quot;)
 assert r[&quot;stopped_by&quot;].startswith(&quot;per_target&quot;) and not r[&quot;complete&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The impossible task from A1.12 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries <code>complete: False</code> rather than reporting what it managed.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>The impossible task from A1.13 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries <code>complete: False</code> rather than reporting what it managed.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check whether your agent's budget bounds calls per downstream target. If it only bounds tokens, your cost is protected and the service your agent hammers is not.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.5.html">A3.5 · Validating what comes back</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.4.ipynb">Source</a></p>

@@ -235,7 +235,7 @@ one issued for acting on alice's behalf, is a bearer token again, and the theft
 the binding was bought to prevent is back.</p>
 <p>Neither is a reason not to build this. Both are reasons to check your own
 deployment rather than assume the control is on because the feature exists.</p></div><div class="nbmd"><h2>7 · What the audit trail can now answer</h2>
-<p>Every hop is on the token, so the chain reconstructs from the token alone rather than by correlating four services' logs on timestamp. This is the thing A1.13 could not do.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ORCH = SVID(&quot;spiffe://cybertravels.com/ns/prod/sa/orchestrator&quot;,
+<p>Every hop is on the token, so the chain reconstructs from the token alone rather than by correlating four services' logs on timestamp. This is the thing A1.14 could not do.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ORCH = SVID(&quot;spiffe://cybertravels.com/ns/prod/sa/orchestrator&quot;,
             b&quot;cert-orchestrator&quot;)
 
 hop1 = exchange(user, ORCH, {&quot;bookings:read&quot;, &quot;bookings:write&quot;})
