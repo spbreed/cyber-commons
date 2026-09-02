@@ -1,29 +1,3 @@
-change surface        in change mgmt?   what happens today
-----------------------------------------------------------------------------
-application code      yes               PR, review, CI, deploy
-agent prompt          no                edited in a console, no diff retained
-tool manifest         no                config change; no threat-model diff (A1.1)
-model version         no                provider-side; you may not be told
-policy (in git)       yes               if it is in git — often it is not
-approval settings     no                a toggle in an admin UI
-egress allowlist      sometimes         depends whether it is IaC or a console
-
-4/7 bypass change management: ['agent prompt', 'tool manifest', 'model version', 'approval settings']
-action                                          landed in           verifiable in 6 weeks?
---------------------------------------------------------------------------------------------
-revoke the compromised agent identity           identity provider   True
-add collect.example.com to the egress denylist  console             False
-remove read access to /home/app/.aws            tool manifest       False
-require approval for http_post                  admin toggle        False
-add a regression test for the credential read   code                True
-update the prompt to warn about credential filesconsole             False
-
-2/6 post-incident actions can be verified later.
-The other four exist only in the incident document.
-
-Also note action 6: 'update the prompt to warn about credential files'.
-That is a request for the model to behave better. It is not a control,
-and it will be silently reverted by the next prompt edit.
 blast before 44  after 4
 the manifest diff records the change even though no PR was raised.
 

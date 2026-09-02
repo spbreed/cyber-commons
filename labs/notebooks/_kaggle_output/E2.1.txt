@@ -1,18 +1,3 @@
-1 · horizontal AI regulation
-   EU AI Act, national AI acts in progress
-   triggered by : the system being AI, and its risk classification
-   lead time    : months to years of transition periods
-
-2 · sector overlays
-   DORA (financial), HIPAA (health), PCI DSS (cards), NIS2 (CNI)
-   triggered by : what your organisation does — already in force
-   lead time    : none: already applies
-
-3 · cross-cutting
-   GDPR / privacy law, consumer protection, incident reporting
-   triggered by : the data processed and the outcome produced
-   lead time    : none: already applies
-
 claims-triage-agent — autonomy L2.5, data ['customer', 'health', 'regulated']
 
 instrument             layer  obligation

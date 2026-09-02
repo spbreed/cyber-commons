@@ -28,13 +28,3 @@ the three numbers that matter:
    alerts actioned     : 2  (67%)
 
 The third number is the one that decides whether the subscription renews.
-source                  conversion  note
-----------------------------------------------------------------------------
-your own incidents            100%  the technique that worked against YOU
-your red team (C1)             90%  attack suite results become detections directly
-your drift monitor             80%  D1.7 baseline changes are leading indicators
-vendor advisories              50%  useful for supply chain (C2.5)
-commercial feed                30%  generic IOCs; little agent-specific content yet
-
-The highest-converting sources are all internal. For agentic threats the
-intel programme is mostly a feedback loop from C1 and D1.7, not a purchase.

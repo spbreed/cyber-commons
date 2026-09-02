@@ -13,18 +13,6 @@ DR-1     NO EVIDENCE
 ST-1     NO EVIDENCE   
 
 coverage: 4/8 = 50%
-conformance quoted as quality
-   "Our harness scores 100%."
-   → the follow-up 'against what key?' ends the credibility of the meeting
-
-counts stale and untested as passing
-   "We have full coverage of our AI controls."
-   → one date request exposes it
-
-both numbers, honestly
-   "Conformance is 100%; expert accuracy is 50% against a held-out key of 20…"
-   → nothing left for them to discover — the conversation moves to the plan
-
 1. Two numbers, and they measure different things.
    conformance 100% — schema validity, structural, not a quality claim.
    expert accuracy 75% against a held-out key of 20 questions. That is the number that means something.

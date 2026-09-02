@@ -1,13 +1,3 @@
-lifecycle event               ticketed?   why it matters
---------------------------------------------------------------------------------------
-new agent deployed            usually     existing change process catches it
-tool added to the manifest    no          changes blast radius; no PR raised
-prompt edited in a console    no          changes behaviour, not code
-provider upgrades the model   no          you may not be told at all
-scope widened in IAM          sometimes   depends on your access review cadence
-agent decommissioned          rarely      the IDENTITY usually outlives the agent
-
-4/6 events generate no reliable record.
 identity            last auth (d)   service running       owner  finding
 --------------------------------------------------------------------------------------------
 triage-agent                    0              True      appsec  

@@ -30,14 +30,3 @@ TIME TO EFFECT, measured:
    kill the agent process              2s  supervisor restarts it; token still valid
    revoke the agent identity          12s  agent cannot act, even after restart
    rotate the shared credential      420s  works, and breaks every other consumer
-OLD RUNBOOK
-   1. disable the user account
-   2. interview the user
-   3. review the user's recent activity
-
-NEW RUNBOOK
-   1. identify the ACTING identity from the act chain (A2.5)
-   2. revoke that identity — no approval needed for a non-human (A3.6)
-   3. scope by walking the delegation chain, not the host list (D2.3)
-   4. preserve the run trace before anything restarts (D2.5)
-   5. only then consider the human's account, and say why

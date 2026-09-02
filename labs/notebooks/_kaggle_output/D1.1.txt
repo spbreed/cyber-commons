@@ -1,3 +1,32 @@
+model backend : replay
+model         : deterministic stand-in (no backend configured)
+
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, set one of:
+
+   frontier     export ANTHROPIC_API_KEY=...   # cheapest: claude-haiku-4-5-20251001
+                (an identity-linked key also needs
+                 ANTHROPIC_WORKSPACE_ID=...)
+   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \
+                       OPENAI_API_KEY=ollama MODEL=glm-4.6
+
+   On Kaggle: Add-ons -> Secrets, add ANTHROPIC_API_KEY, and switch
+   Internet on in the notebook settings. Internet requires a
+   phone-verified Kaggle account; without it DNS fails in the kernel
+   and this lesson correctly stays on the replay.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Triage this alert to one of: escalate, close-benign, needs-context...
+
+answer:
+   escalate - the source range and the breadth of the list call are both outside this account's established pattern.
+
+property checked : returned one of the three dispositions
+held on replay       : True
+
+Same code, same assertions, three possible backends. Offline the answer
+is the replay and is labelled as one; with a key it is the model's.
 queue: 8 alerts, 4 true positives
    A-01 medium   impossible travel        dana@corp
    A-02 critical metadata service access  patch-agent

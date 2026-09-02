@@ -17,15 +17,6 @@ refuses widening; regressio
 policy in git; 90-day denial log attached
 
 C = names a control · A = names an artefact · D = carries a date
-follow-up question                                               answerable?
-------------------------------------------------------------------------------
-'appropriate oversight' — show me the last time it operated.              NO
-'reviewed periodically' — what period, and when was the last one?          NO
-'comprehensive logging' — produce one action's full record.               NO
-'act chain for every action' — produce the August sample.                yes
-
-Three of four cannot be answered from the document, and the person
-asking now doubts the fourth as well.
 controls cited in the document: ['AC-1', 'AC-2', 'SB-2']
 
 control  state now     document claim still true?

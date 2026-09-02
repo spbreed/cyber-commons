@@ -1,3 +1,34 @@
+model backend : replay
+model         : deterministic stand-in (no backend configured)
+
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, set one of:
+
+   frontier     export ANTHROPIC_API_KEY=...   # cheapest: claude-haiku-4-5-20251001
+                (an identity-linked key also needs
+                 ANTHROPIC_WORKSPACE_ID=...)
+   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \
+                       OPENAI_API_KEY=ollama MODEL=glm-4.6
+
+   On Kaggle: Add-ons -> Secrets, add ANTHROPIC_API_KEY, and switch
+   Internet on in the notebook settings. Internet requires a
+   phone-verified Kaggle account; without it DNS fails in the kernel
+   and this lesson correctly stays on the replay.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Write the detection condition for: a non-human identity listing mo...
+
+answer:
+   actor.type == 'service_account'
+   and count_distinct(event.bucket, window='5m') > 20
+   and not cidr_match(source.ip, actor.baseline_cidr)
+
+property checked : expresses a threshold
+held on replay       : True
+
+Same code, same assertions, three possible backends. Offline the answer
+is the replay and is labelled as one; with a key it is the model's.
 history: 522 events, 2 true positives
 rule                                 alerts   prec  recall  alerts/TP
 ----------------------------------------------------------------------

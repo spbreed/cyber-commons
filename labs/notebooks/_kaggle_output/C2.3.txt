@@ -1,13 +1,3 @@
-capability                hosted API  local weights
-----------------------------------------------------
-unlimited probing              False           True
-no abuse signal                False           True
-can remove refusals            False           True
-controls own version           False           True
-activation access              False           True
-
-an attacker gains: ['unlimited probing', 'no abuse signal', 'can remove refusals', 'controls own version', 'activation access']
-a defender gains exactly the same list — which is why the commons works.
 setting                              attempts in 24h
 ------------------------------------------------------
 hosted API, 20 req/min                        28,800

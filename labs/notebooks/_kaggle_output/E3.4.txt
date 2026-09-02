@@ -23,20 +23,3 @@ if every seam were owned: 1.5 hours (24× faster)
 
 The two unowned steps account for 96% of the elapsed time, and both are
 decisions rather than work.
-role                  track    unblocks  owns
-------------------------------------------------------------------------------------
-identity engineer     A2              3  owns agent identity and delegation
-                                       delivers: revocation, attribution, act chains
-detection engineer    D1              2  owns agent telemetry and drift
-                                       delivers: drift alerts, agent detections
-GRC practitioner      E1              2  owns tiering, evidence, continuous verification
-                                       delivers: inventory, control coverage
-harness engineer      B2              1  owns the loop, the verifier, the eval
-                                       delivers: evaluation, stop conditions
-
-most commonly hired first : harness engineer
-unblocks the most others  : identity engineer
-
-The identity engineer is the one who makes revocation, attribution and
-act chains possible — which E3.3 showed are prerequisites for evidence,
-evaluation and continuous verification. Hiring them second costs a quarter.

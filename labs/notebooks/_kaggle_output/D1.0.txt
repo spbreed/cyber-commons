@@ -1,16 +1,12 @@
-signal                         person    agent    ratio
-actions taken                      12     1400     117x
-distinct resources                  5      260      52x
-median gap between calls          180        2       0x
-sessions                            1       96      96x
-typo/retry events                   3        0       0x
+   Alex                12 actions/hour -> silent
+   workflow agent    1400 actions/hour -> ALERT
 
-rule 'more than 60 actions in an hour'
-   person      12 actions -> silent
-   agent     1400 actions -> ALERT
+the agent crosses the threshold after 154 seconds
+and keeps going for the remaining 3446.
 
-That rule fires. The problem is the next one: at 1400 actions an hour the
-alert arrives after roughly 150 seconds of activity, and everything the
-actor was going to do is already done. Chapter 8 is about detections that
-fire on shape rather than volume; chapter 9 is about who can pull the
-stop lever without asking permission first.
+So the rule fires, about two and a half minutes into a sixty-minute run -
+by which point most of what the actor was going to do is done. If those
+were refunds, the alert arrives after the money has moved.
+
+Chapter 8 is about detections that fire on shape rather than volume.
+Chapter 9 is about who can pull the stop lever without asking.

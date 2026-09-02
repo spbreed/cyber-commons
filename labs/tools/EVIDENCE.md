@@ -208,7 +208,24 @@ own health check reports healthy.
 
 ---
 
-## Kaggle — three traps in one afternoon
+## Kaggle — 121/121 reproduced, after six traps
+
+**The result first.** Every one of the 121 notebooks was pushed to Kaggle, run
+on Kaggle's machines, and its stdout compared line for line against a fresh
+local run:
+
+```
+121/121 kernels printed exactly what the local run printed
+```
+
+That is the strong form of the claim this repository makes. Not "it completed"
+— a kernel that prints nothing completes — but *the same notebook produced the
+same output on two independent machines*, which is only possible because the
+notebooks are deterministic and carry every line they run. The remote logs are
+committed under `labs/notebooks/_kaggle_output/` so the comparison can be
+repeated by anyone.
+
+## Getting there — six failures, none of which said what was wrong
 
 Not a tool lab, but the same shape of finding and worth recording next to them.
 `scripts/kaggle_push.py` pushes every notebook to Kaggle so "it runs on a
@@ -241,10 +258,36 @@ title is now unique per run, the resolution is memoised, and a failed probe
 exits loudly rather than falling back to the claimed username, which is what
 made the first version of this fix look like it had not worked.
 
+**The verifier was verifying nothing.** It selected kernels with
+`v == "complete"`, but the push ledger stores the kernel *URL* after a plain
+`--all` push and the string `"complete"` only after `--all --wait`. So it
+matched nothing, exited before checking a single kernel, and phrased its own
+empty selection as a fact about Kaggle: "no kernels reported 'complete'".
+
+**A throttle was recorded as a verdict.** `/kernels/status` returns HTTP 429
+well before 121 sequential calls finish. The pre-check caught every exception
+as `unknown` and skipped anything not `"complete"`, so 62 kernels were dropped
+and the smaller denominator was reported as though it were the real one. Status
+reads now retry with backoff — 12 retries were needed in the successful run —
+and *complete*, *still running* and *unreadable* are kept distinct, with
+unreadable counted as neither pass nor fail.
+
+**The test harness caused a mismatch and blamed the notebooks.** The first
+clean pass reported 54/59 identical, with the five "failures" being exactly the
+five model lessons. A Kaggle kernel has no model credentials, so a lesson takes
+its offline replay path there — but the local comparison run inherited the
+operator's environment, and with `ANTHROPIC_API_KEY` exported it took the
+frontier path instead. The difference was real and was entirely about the
+shell. `local_output()` is now hermetic, which also means the claim no longer
+depends on who runs it.
+
 The general lesson is the one the Keycloak section makes too: **the error a
 service returns is about the request it could not satisfy, not about the
-mistake you made.** A 409 about titles was, in order, a wrong account, a stale
-probe kernel, and a concurrency race.
+mistake you made.** Six failures in a row, each a confident statement about
+something other than the cause — a wrong account reported as a title
+collision, a stale probe kernel, a concurrency race, an empty selection
+reported as an empty world, a throttle reported as incompletion, and a harness
+bug reported as a notebook difference.
 
 ---
 
