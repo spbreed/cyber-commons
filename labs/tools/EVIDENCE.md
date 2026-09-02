@@ -293,24 +293,41 @@ bug reported as a notebook difference.
 
 ## What was not run
 
-**No model API call has completed against a billed endpoint yet.** Two keys
-were tried and both were blocked before any inference happened:
+**No model API call has completed against a billed endpoint.** Three keys were
+tried across two providers, and every one was blocked before inference:
 
-- **Anthropic** — the key is *identity-linked*, so the Messages API refuses
-  every call with `anthropic-workspace-id is required when authenticating with
-  an identity-linked API key`. The workspace id cannot be discovered from the
-  key itself (`/v1/organizations/workspaces` needs an admin key and returns
-  `permission_error`). The adapter now sends the header when
-  `ANTHROPIC_WORKSPACE_ID` is set, verified by watching the error change from
-  "is required" to "must be a valid workspace ID" — so the plumbing is
-  confirmed and only the value is missing.
+- **Anthropic, identity-linked key.** The Messages API refuses every call with
+  `anthropic-workspace-id is required when authenticating with an
+  identity-linked API key`. The workspace id cannot be discovered from the key
+  itself — `/v1/organizations/workspaces` needs an admin key and returns
+  `permission_error`. The adapter now sends the header when
+  `ANTHROPIC_WORKSPACE_ID` is set, confirmed by watching the error change from
+  "is required" to "must be a valid workspace ID".
+- **Anthropic, default-workspace key.** Correctly scoped — the workspace error
+  is gone. `GET /v1/models`, which costs nothing, authenticates and returns 11
+  models including the adapter's default `claude-haiku-4-5-20251001`. Every
+  inference call, down to `max_tokens: 1`, returns
+  `Your credit balance is too low to access the Anthropic API`. So the key,
+  the scoping, the model id and the adapter are all correct, and the only
+  missing input is a funded balance.
 - **OpenAI** — authenticates fine and returns `credit_balance_exhausted`: the
   account has no credits.
 
-So the gateway lab still uses `mock_response` and the model lessons still fall
-back to their recorded replay, which is the designed behaviour and is labelled
-as a replay everywhere it appears. `scripts/live_model_test.py` performs the
-real calls the moment either is resolved.
+Both accounts are simply out of credit. The gateway lab therefore still uses
+`mock_response` and the model lessons still fall back to their recorded replay
+— the designed behaviour, labelled as a replay everywhere it appears, and the
+reason the offline path is the default rather than a fallback bolted on.
+
+Nothing further is needed in code. `scripts/live_model_test.py` runs the seven
+model lessons against the real API the moment either account has a balance:
+
+    export ANTHROPIC_API_KEY=...
+    export ANTHROPIC_WORKSPACE_ID=...   # only for an identity-linked key
+    python3 scripts/live_model_test.py --backend frontier --save
+
+That this ran end to end against `claude-haiku-4-5-20251001` and stopped at a
+billing check rather than at a bug is itself worth recording: the failure is
+outside the code.
 
 That attempt was not wasted: holding real keys is what found the hole in
 `scripts/check_secrets.py`. Its `sk-` rule was anchored on alphanumerics, which

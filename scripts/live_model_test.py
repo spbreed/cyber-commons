@@ -142,9 +142,16 @@ def main() -> int:
                      if ln.startswith("property checked")), "?")
         answer = out.split("answer:\n", 1)[-1].split("\n\nproperty", 1)[0].strip()
 
-        # A lesson that fell back to the replay has not been tested live.
+        # A lesson that fell back to the replay has not been tested live. Carry
+        # the adapter's own reason into the report: "fell back to replay" on
+        # its own sends whoever reads it looking for a bug in the harness, when
+        # the cause is usually one line further up and is about the account.
+        why = next((ln.split("failed:", 1)[1].strip()
+                    for ln in out.splitlines() if "failed:" in ln), "")
         if ok and used != a.backend:
-            ok, err = False, f"fell back to {used!r} instead of calling the backend"
+            ok = False
+            err = (f"fell back to {used!r} instead of calling the backend"
+                   + (f" — {why}" if why else ""))
         if not ok:
             failed.append(sid)
 
