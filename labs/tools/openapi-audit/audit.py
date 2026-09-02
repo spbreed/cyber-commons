@@ -1,6 +1,6 @@
 """Validate the CyberTravels bookings spec, then ask it the security question.
 
-An OpenAPI document is one of the static components B1.2 builds the threat
+An OpenAPI document is one of the static components B2.2 builds the threat
 model from, and it is the most useful one, because the agent's tool surface is
 generated from it: every operation in this file becomes a tool the Workflow
 Agent can call, carrying whatever scope the spec says it needs.

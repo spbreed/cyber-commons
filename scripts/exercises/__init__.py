@@ -27,9 +27,9 @@ from .intros import EXERCISES as _intro
 from .track_a1 import EXERCISES as _a1
 from .track_a2 import EXERCISES as _a2
 from .track_a3 import EXERCISES as _a3
-from .track_b1 import EXERCISES as _b1
-from .track_b1b import EXERCISES as _b1b
-from .track_b2 import EXERCISES as _b2
+from .track_b1 import EXERCISES as _b1        # the harness chapter
+from .track_b2a import EXERCISES as _b2a      # the SDLC pipeline, part 1
+from .track_b2b import EXERCISES as _b2b      # the SDLC pipeline, part 2
 from .track_c1 import EXERCISES as _c1
 from .track_c2 import EXERCISES as _c2
 from .track_d1 import EXERCISES as _d1
@@ -43,7 +43,7 @@ EXERCISES: dict[str, dict] = {
     **_incident,
     **_cases,
     **_register,
-    **_a1, **_a2, **_a3, **_b1, **_b1b, **_b2,
+    **_a1, **_a2, **_a3, **_b1, **_b2a, **_b2b,
     **_c1, **_c2, **_d1, **_d2, **_e1, **_e2, **_e3,
 }
 

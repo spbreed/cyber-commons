@@ -128,7 +128,7 @@ So this function is one picture and its consequences, in three chapters:
               "find the component you forgot you had.",
 },
 
-"B1.0": {
+"B2.0": {
  "concept": """
 CyberTravels has a problem that is not about its users. It is about its own
 code.
@@ -170,7 +170,7 @@ and four things decide whether Alex can leave it running:
 Then the awkward part: **that pipeline is itself an agentic system with all of
 CyberTravels' risks.** It reads untrusted input by definition and holds a
 credential that can write to the default branch. Chapter 4 closes on exactly
-that (A1.9, B1.12), because being a security tool grants no exemption.
+that (A1.9, B2.12), because being a security tool grants no exemption.
 """,
  "steps": [
   ("md", "## 2 · What Alex is actually up against"),
@@ -189,12 +189,12 @@ that (A1.9, B1.12), because being a security tool grants no exemption.
 
   ("md", "## 3 · Chapter 4 — the lifecycle, with agents doing the work"),
   ("html", D.svg(D.DEFS
-    + D.box(2, 26, 96, 46, "ingest", sub="B1.1-2", colour=D.DEFEND)
-    + D.box(112, 26, 116, 46, "threat model", sub="B1.2-4", colour=D.DEFEND)
-    + D.box(242, 26, 92, 46, "audit", sub="B1.3-7", colour=D.DEFEND)
-    + D.box(348, 26, 104, 46, "confirm", sub="B1.6-10", colour=D.DEFEND)
-    + D.box(466, 26, 108, 46, "remediate", sub="B1.9", colour=D.DEFEND)
-    + D.box(588, 26, 96, 46, "report", sub="B1.10", colour=D.DEFEND)
+    + D.box(2, 26, 96, 46, "ingest", sub="B2.1-2", colour=D.DEFEND)
+    + D.box(112, 26, 116, 46, "threat model", sub="B2.2-4", colour=D.DEFEND)
+    + D.box(242, 26, 92, 46, "audit", sub="B2.3-7", colour=D.DEFEND)
+    + D.box(348, 26, 104, 46, "confirm", sub="B2.6-10", colour=D.DEFEND)
+    + D.box(466, 26, 108, 46, "remediate", sub="B2.9", colour=D.DEFEND)
+    + D.box(588, 26, 96, 46, "report", sub="B2.10", colour=D.DEFEND)
     + "".join(D.arrow(a, 49, a + 12) for a in (99, 229, 335, 453, 575))
     + D.box(2, 108, 682, 52, "", colour=D.INK, dashed=True)
     + D.label(343, 130, "chapter 5 — the harness underneath every one of those stages",
@@ -214,18 +214,21 @@ that (A1.9, B1.12), because being a security tool grants no exemption.
     ["question", "what it decides for CyberTravels", "answered in"],
     [["what a harness even is",
       "which of the eight parts the pipeline actually has — and the one nobody "
-      "can name is almost always the verifier", "B2.0"],
-     ["is its output true",
-      "recall and precision against a corpus whose answers you already know, "
-      "because a hallucinated finding looks exactly like a real one", "B2.1"],
-     ["can it be left alone",
-      "pass^k across a run nobody watched, and dollars per confirmed finding",
-      "B2.2"],
-     ["would you know if it were attacked",
-      "canaries and honeypot tasks in CyberTravels' own environment — the "
-      "detection with no false positives", "D1.11"]],
+      "can name is almost always the verifier", "B1.0"],
+     ["what may it conclude",
+      "the verifier, ranked against the three weaker kinds — two of which are "
+      "the only two available everywhere", "B1.1"],
+     ["what may it touch",
+      "tool signatures, delegation depth, and whether doing it twice is an "
+      "incident", "B1.2"],
+     ["which model runs it",
+      "routing inside the loop, a backbone you could swap this week, and a "
+      "signal the scaffold cannot see", "B1.3"],
+     ["is any of it true",
+      "conformance against accuracy, pass^k against pass@k, and cost per "
+      "confirmed finding", "B1.4"]],
     emphasise=2,
-    caption="Skip to evaluation and you will measure a harness whose verifier "
+    caption="Skip to the last row and you will measure a harness whose verifier "
             "you never built. That is the most common way this goes wrong.")),
 
   ("md", "## 5 · The same pipeline, read as an agentic system\n\n"

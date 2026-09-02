@@ -3,7 +3,7 @@
 **A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.**
 
-**121 lessons across 12 chapters.** Every lesson is a self-contained Python
+**123 lessons across 12 chapters.** Every lesson is a self-contained Python
 notebook that runs in a browser on the standard library alone, and is executed
 in CI before it ships. No licence, no vendor, no frontier-lab account.
 
@@ -62,7 +62,7 @@ statement about the serialiser; accuracy is the expensive part.
 | | |
 |---|---|
 | [`skills/appsec/`](skills/appsec) | 6 — repo recon, threat model, vuln audit, exploit validation, triage report, coding-agent hardening |
-| [`skills/attestation/`](skills/attestation) | 11 — turn a control claim into a signed statement bound to one deployment ([B1.13](labs/notebooks/B1.13.ipynb), run against 10 real OSS agent/MCP repos) |
+| [`skills/attestation/`](skills/attestation) | 11 — turn a control claim into a signed statement bound to one deployment ([B2.13](labs/notebooks/B2.13.ipynb), run against 10 real OSS agent/MCP repos) |
 | [`skills/architecture/`](skills/architecture) · [`identity/`](skills/identity) · [`secops/`](skills/secops) · [`grc/`](skills/grc) | 5 — blast radius, delegation chains, alert triage, incident scoping, control evidence |
 
 ## The programme
@@ -79,12 +79,12 @@ lesson** that meets CyberTravels and asks its own question of it.
 
 | Function | The question it asks of CyberTravels | Chapters | Lessons |
 |---|---|---|---|
-| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [1](curriculum/track-a1.md) CyberTravels' architecture and every risk it carries · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 36 |
-| **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [4](curriculum/track-b1.md) The AI SDLC pipeline · [5](curriculum/track-b2.md) Trusting the harness that tests CyberTravels | 20 |
+| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [1](curriculum/track-a1.md) CyberTravels' architecture and every risk it carries · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 37 |
+| **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [4](curriculum/track-b1.md) The agentic harness · [5](curriculum/track-b2.md) The AI SDLC pipeline | 20 |
 | **C · Red Teaming and Security Research with AI** | can we break it before somebody else does | [6](curriculum/track-c1.md) Red teaming with AI · [7](curriculum/track-c2.md) Security research with AI | 15 |
-| **D · The Agentic SOC** | would we see it happening, and could we stop it | [8](curriculum/track-d1.md) Detection · [9](curriculum/track-d2.md) Response | 20 |
+| **D · The Agentic SOC** | would we see it happening, and could we stop it | [8](curriculum/track-d1.md) Detection · [9](curriculum/track-d2.md) Response | 21 |
 | **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [10](curriculum/track-e1.md) The governance framework · [11](curriculum/track-e2.md) The governance platform · [12](curriculum/track-e3.md) Running the programme | 30 |
-| | | **12 chapters** | **121** |
+| | | **12 chapters** | **123** |
 
 Nobody takes all of it. Everyone takes the **common spine** first — twenty
 lessons, in order, that carry the vocabulary the rest runs on. Then the chapters
@@ -92,7 +92,7 @@ for the chair you sit in, then one adjacent chapter, because the failures happen
 in the seams.
 
 > **Spine:** A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 → A2.3 →
-> A2.4 → A3.1 → A3.2 → A3.5 → **B1.0** → **B2.0** → B2.1 → **D1.0** →
+> A2.4 → A3.1 → A3.2 → A3.5 → **B1.0** → B1.1 → **B2.0** → B2.2 → **D1.0** →
 > D1.5 → **E1.0** → E1.10
 
 Two chapters carry a single artefact end to end:
@@ -105,8 +105,8 @@ Two chapters carry a single artefact end to end:
   and 3 are those controls.
 - **[B1](curriculum/track-b1.md)** is the AI SDLC itself — a five-phase,
   fifteen-stage agentic AppSec pipeline built over seventeen sessions, attested in
-  [B1.13](labs/notebooks/B1.13.ipynb) and closed in
-  [B1.14](labs/notebooks/B1.14.ipynb) by scoring Google's Mantis against a
+  [B2.13](labs/notebooks/B2.13.ipynb) and closed in
+  [B2.14](labs/notebooks/B2.14.ipynb) by scoring Google's Mantis against a
   held-out key — a reference implementation is something you evaluate, not
   something you trust.
 
@@ -116,7 +116,7 @@ only one produces a practitioner who gets surprised.
 
 ## Why you can trust the output
 
-**Every one of the 121 notebooks has been run twice — here, and again on Kaggle
+**Every one of the 123 notebooks has been run twice — here, and again on Kaggle
 on a different machine — and printed exactly the same bytes.**
 
 That second run is the claim worth making, because a kernel that prints nothing
@@ -126,7 +126,7 @@ remote stdout line-for-line against a fresh local run
 ([evidence](labs/notebooks/_kaggle_verified.json)). It caught two lessons whose
 output depended on `PYTHONHASHSEED`; both are fixed, and
 [`check_determinism.py`](scripts/check_determinism.py) now gates CI so the next
-one is caught in nine seconds instead of after 121 remote pushes.
+one is caught in nine seconds instead of after 123 remote pushes.
 
 Two properties make that possible, and both are enforced by the build:
 
@@ -189,7 +189,7 @@ python3 scripts/build_site.py
 git add -A && git commit -m "lesson: A2.5" && git push
 ```
 
-CI re-runs all of it with `--check` — secret scan, 121 notebooks, determinism
+CI re-runs all of it with `--check` — secret scan, 123 notebooks, determinism
 gate, skill contracts — and fails on drift, so the notebook you read on the site
 is always the notebook that ran. Pushing deploys the site.
 
@@ -204,11 +204,11 @@ refuses to read a credential file inside the repo. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 121 sessions, 12 chapters
+site/data/curriculum.json   source of truth: 123 sessions, 12 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
 skills/                     22 agent skills, embedded verbatim into notebooks
-labs/notebooks/             121 generated notebooks + execution and Kaggle evidence
+labs/notebooks/             123 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · run_notebooks · check_{lessons,skills,secrets,determinism,register} · kaggle_*

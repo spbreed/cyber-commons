@@ -1,29 +1,28 @@
-# Track B1 — The AI SDLC: an Agentic AppSec Pipeline
+# Track B1 — The Agentic Harness
 
 **Function B · Application Security with an AI SDLC**  
 *The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*
 
-**Job titles:** AppSec Engineer, Product Security Engineer, Secure Code Reviewer
+**Job titles:** 
 
-**What changes:** The secure development lifecycle as one artefact, built stage by stage: ingest, model, audit, confirm, remediate, report. 18 lessons.
+**What changes:** 
 
-**Autonomy focus:** Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.
+**Autonomy focus:** 
 
-**Deliverable:** A five-phase AppSec pipeline running as a CI gate, with confirmed-by-exploitation severity and published precision and escape metrics.
+**Deliverable:** 
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### B1.0 — Start here — what an AI SDLC means
+### B1.0 — What an agentic harness is
 
 `both directions`
 
-- **Risk** — A security pipeline built as if it were exempt from the risks it exists to find.
-- **Control** — Build the pipeline and the harness as one system, and hold both to the same evidence standard.
-- **Lab** — Trace one finding from ingestion to a signed report and name the stage that decides whether it is true.
+- **Lab** — Name the eight components, then name which one just failed.
+- **Tools** — `OpenTelemetry`
 
-**Run it** — Read the AppSec pipeline twice: once as five phases, and once as an agentic system with five Function A components.
+**Run it** — Name the eight components, then name which one just failed.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -31,361 +30,83 @@ jupyter notebook labs/notebooks/B1.0.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session B1.0   # run it headless and check it
 ```
 
-*Expect:* The five pipeline phases print against the lessons that build them, the harness capabilities underneath them print as a list, and the same pipeline reads back as an agentic system with five Function A components — ingress, knowledge, tools, identity and egress.
+*Expect:* The smallest harness that is still a harness runs its loop, and then the same loop with a verifier added refuses the work it previously accepted. The budget stops a looping model. The harness's own identity, scopes and logging show it is an actor like any other. Eight incidents then classify into seven failure classes, and the two that look identical from outside — capability and verification — separate on one rule: did the harness accept it.
 
 ---
 
-### B1.1 — Reading the repository: history, index, components, map
+### B1.1 — The loop, and the verifier that decides what it may conclude
 
-`AI for Security`
+`both directions`
 
-- **Risk** — Review starts at the diff, so the pipeline never learns which parts of the repo keep breaking.
-- **Control** — Stages 1–2: mine commit and advisory history for repeat risk zones, then index the codebase into semantic units.
-- **Lab** — Parse a repo's vulnerability history into risk zones, then build a function/class index and rank files by prior-defect density.
-- **Tools** — `git`, `OpenGrep`, `tree-sitter`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+- **Lab** — Same model, same proposals, opposite outcomes — the verifier is the difference.
+- **Tools** — `pytest`
 
-**Run it** — Cut the false-positive rate with reachability reasoning, and measure it.
+**Run it** — Same model, same proposals, opposite outcomes — the verifier is the difference.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/B1.1.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session B1.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-pip install semgrep
-cd labs/b1-appsec
-opengrep --config auto --json target/ > candidates.json
-python3 triage.py --candidates candidates.json --model $MODEL
-python3 score.py --against ground-truth.json
 ```
 
-*Expect:* Prints precision before/after triage. The FP rate — not the detection rate — is the number that moved.
+*Expect:* The loop fixes a refund-eligibility check in two attempts and stops when the behavioural verifier is satisfied. The identical model and proposals, with only the verifier swapped for one that asks the model whether it is done, accept the off-by-one on the first attempt and report success with a clean trace. Four verifiers are then run against one malformed output: the shape check and the judge both approve it, the exact-match oracle is itself wrong, and a correct verifier reading stale bytecode passes code that is no longer on disk.
 
 ---
 
-### B1.2 — Threat modelling from what the estate already knows
+### B1.2 — What the loop may touch: tools, depth and doing it twice
 
-`Security of AI`
+`both directions`
 
-- **Risk** — Threat models are written once, by hand, against a system that has since changed.
-- **Control** — Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.
-- **Lab** — Turn an architecture map into a ranked threat model, then diff it after one entry point is added.
-- **Tools** — `OWASP Threat Dragon`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
+- **Lab** — Signatures bound what can be asked for, depth bounds how far it travels, keys bound how often it lands.
+- **Tools** — `JSON Schema`
 
-**Run it** — Never raise a PR for a patch you did not build and test.
+**Run it** — Signatures bound what can be asked for, depth bounds how far it travels, keys bound how often it lands.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/B1.2.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b1-appsec
-python3 patch.py --finding F-102 --model $MODEL --validate-locally
-# generates -> compiles -> runs tests -> only then writes patch.diff
 ```
 
-*Expect:* Patches failing the local build are discarded before a human ever sees them; acceptance rate is printed.
+*Expect:* The same capability behind three signatures: the free-text one presents a traversal surface the enumerated one cannot express, and introducing one bug in the shared guard breaks only the tools that expose the argument. A depth-3 delegation chain narrows correctly, then the same chain widens when the check lives in the compromised orchestrator rather than at the issuer. Finally the same action is classified three ways, and an idempotency key containing a timestamp makes every retry a new refund.
 
 ---
 
-### B1.3 — Vulnerability auditing: three generations of SAST
+### B1.3 — Which model runs it, and who checks the checker
 
-`AI for Security`
+`both directions`
 
-- **Risk** — Pattern matching floods the queue; the false-positive rate is what actually changed.
-- **Control** — Stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express.
-- **Lab** — Score grep, taint rules and model review against the same corpus, then combine them behind a confidence gate.
-- **Tools** — `OpenGrep`, `Semgrep OSS`, `CodeQL`
-- **Open-weight models** — `GLM-4.6`, `Kimi K2`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
+- **Lab** — Routing inside the loop, the backbone behind an interface, and a signal the scaffold cannot see.
+- **Tools** — `Ollama`, `vLLM`, `Claude Haiku 4.5`, `GLM-4.6`
 
-**Run it** — Watch your own review harness obey an injected instruction, then close it.
+**Run it** — Routing inside the loop, the backbone behind an interface, and a signal the scaffold cannot see.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b1-appsec
-git apply injected-pr.diff       # a PR containing an instruction to the reviewer
-python3 triage.py --candidates candidates.json --model $MODEL   # obeys it
-python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   # ignores it
 ```
 
-*Expect:* The unprotected run emits the attacker's verdict; the tagged run does not.
+*Expect:* Tiered routing sends trivial steps to the small model and escalates the hard one, then the same router is driven onto the largest model for every task by an attacker who can cause verification failures — carrying more authority with it. The backbone is scored on CyberTravels' own corpus rather than a vendor chart, and substituted behind an unchanged interface. A self-improving scaffold's own metric then climbs monotonically while its held-out accuracy falls.
 
 ---
 
-### B1.4 — Deduplication and contextual verification
+### B1.4 — One skeleton, four oracles — and whether any of it is true
 
-`AI for Security`
+`both directions`
 
-- **Risk** — Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.
-- **Control** — Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.
-- **Lab** — Deduplicate findings across three analysis tracks, then verify each against the AST and drop the ones that reference code that is not there.
-- **Tools** — `OpenGrep`, `tree-sitter`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+- **Lab** — Conformance is not accuracy, pass@k is not pass^k, and cost per run is not cost per finding.
+- **Tools** — `Semgrep`
 
-**Run it** — Find live secrets in your own agent's footprint.
+**Run it** — Conformance is not accuracy, pass@k is not pass^k, and cost per run is not cost per finding.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-pip install detect-secrets && cd labs/b1-appsec
-gitleaks detect --source ~/.claude --no-git --report-path agent-secrets.json || true
-python3 scan_transcripts.py --dir ~/.claude/projects --report
-cp hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit
 ```
 
-*Expect:* Secrets in prompts/transcripts/memory files surface, and the pre-commit hook stops the next one.
-
----
-
-### B1.5 — Feasibility filtering and reachability
-
-`AI for Security`
-
-- **Risk** — A finding in dead code costs the same to triage as one on the login path.
-- **Control** — Stage 10: decide whether an external caller can actually reach the sink before anyone is paged.
-- **Lab** — Build a call graph from entry points and partition findings into reachable, unreachable and unknown.
-- **Tools** — `CodeQL`, `tree-sitter`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Publish the four numbers that let a review workflow earn its next rung.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.5   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b1-appsec
-python3 metrics.py --precision --time-to-triage --patch-acceptance --escape-rate \
-  --runs runs/ --out metrics.json && cat metrics.json
-```
-
-*Expect:* Four numbers with denominators. Without these, promotion to L2.5 is a vibe.
-
----
-
-### B1.6 — Sandbox replication
-
-`Security of AI`
-
-- **Risk** — Dynamic testing is run against staging, so a destructive probe becomes an incident.
-- **Control** — Stage 11: replicate the application in an isolated, disposable runtime with no path to production.
-- **Lab** — Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.
-- **Tools** — `Docker`, `gVisor`, `Cilium`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.6   # run it headless and check it
-```
-
-*Expect:* The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.
-
----
-
-### B1.7 — Dynamic exploitation (DAST)
-
-`AI for Security`
-
-- **Risk** — A SAST finding is a hypothesis, and hypotheses get argued about instead of fixed.
-- **Control** — Stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped.
-- **Lab** — Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.
-- **Tools** — `OWASP ZAP`, `Nuclei`
-- **Open-weight models** — `GLM-4.6`, `Kimi K2`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.7   # run it headless and check it
-```
-
-*Expect:* The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe.
-
----
-
-### B1.8 — Exploit chaining
-
-`AI for Security`
-
-- **Risk** — Three medium findings are triaged as three mediums, and nobody notices they compose.
-- **Control** — Stage 13: combine validated findings into multi-step sequences and score the chain, not the links.
-- **Lab** — Chain individually-medium findings into a critical path and show the severity the chain earns.
-- **Tools** — `OWASP ZAP`
-- **Open-weight models** — `Kimi K2`
-- **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Chain individually-medium findings into a critical path and show the severity the chain earns.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.8   # run it headless and check it
-```
-
-*Expect:* Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains.
-
----
-
-### B1.9 — Remediation engineering
-
-`AI for Security`
-
-- **Risk** — A patch that silences the scanner is indistinguishable from a patch that fixes the bug.
-- **Control** — Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.
-- **Lab** — Validate four candidate patches on three axes and show which of them only made the scanner green.
-- **Tools** — `Semgrep OSS`, `pytest`
-- **Open-weight models** — `GLM-4.6`, `Kimi K2`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Validate four candidate patches on three axes and show which of them only made the scanner green.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.9   # run it headless and check it
-```
-
-*Expect:* The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new.
-
----
-
-### B1.10 — Severity calibration and reporting
-
-`AI for Security`
-
-- **Risk** — Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing.
-- **Control** — Stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.
-- **Lab** — Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.
-- **Tools** — `OpenGrep`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.10   # run it headless and check it
-```
-
-*Expect:* Calibration moves several findings off their rule severity: the confirmed reachable CWE-89 that chains into account takeover becomes critical, while the unreachable and unvalidated ones fall. The top-3 by rule severity and by calibration disagree. The stage table shows review with the worst precision and highest minutes per finding, and design carrying the highest escape cost despite only two findings.
-
----
-
-### B1.11 — Context engineering for the pipeline
-
-`AI for Security`
-
-- **Risk** — The model is given the repository and asked to be thorough, so the relevant line falls out of the window.
-- **Control** — Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.
-- **Lab** — Compare four context strategies against one bug and measure which are decidable and at what size.
-- **Tools** — `tree-sitter`
-- **Open-weight models** — `GLM-4.6`, `Llama 3.3`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Compare four context strategies against one bug and measure which are decidable and at what size.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.11   # run it headless and check it
-```
-
-*Expect:* The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.
-
----
-
-### B1.12 — Securing the developers' coding agents
-
-`Security of AI`
-
-- **Risk** — The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment.
-- **Control** — The strongest containment a developer does not notice: credential deny-lists and workspace confinement first.
-- **Lab** — Measure the default agent's blast radius and reachable credentials, then rank controls by friction.
-- **Tools** — `Docker`, `Cilium`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Measure the default agent's blast radius and reachable credentials, then rank controls by friction.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.12   # run it headless and check it
-```
-
-*Expect:* The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.
-
----
-
-### B1.13 — Attesting control intent for agents and MCP servers
-
-`Security of AI`
-
-- **Risk** — Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change.
-- **Control** — Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.
-- **Lab** — Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.
-- **Tools** — `in-toto`, `Sigstore`, `OSCAL`, `OPA`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it
-
-# --- the full variant, against real repositories ---
-python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json
-```
-
-*Expect:* Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification's destructive, open-world default.
-
----
-
-### B1.14 — Bonus — Google Mantis, the pipeline in production
-
-`AI for Security`
-
-- **Risk** — A reference implementation is adopted as a product, and its outputs are trusted without an eval.
-- **Control** — Map Mantis's stages onto the pipeline you built, then score it with your own held-out key before trusting it.
-- **Lab** — Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.
-- **Tools** — `Google Mantis`, `OpenGrep`
-- **Open-weight models** — `GLM-4.6`, `Kimi K2`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it
-```
-
-*Expect:* The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones.
+*Expect:* Four security domains run through one skeleton, differing only in the oracle and the blast radius, and the oracle everyone reaches for — the model's own agreement — is the one that cannot gate an action. Evaluation then separates conformance from accuracy: a harness scoring 100% on schema validity scores far lower on correctness, and matching findings on bare filename rather than parent-plus-filename silently randomises the result. Finally a harness at 80% per-run reliability shows pass@5 of 99.97% and pass^5 of 33%, and the cost per confirmed finding lands well above the cost per run.
 
 ---
 

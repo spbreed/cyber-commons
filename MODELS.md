@@ -149,7 +149,7 @@ what to reach for if you have a key and want the ceiling.
 | Offensive planning (C1) | **Kimi K2** or GLM-4.6 | Claude Sonnet 5 | multi-step planning |
 | Guardrails / classification | **Llama Guard** | Claude Haiku 4.5 | purpose-built, and cheap at volume |
 | SOC triage (D1) | **GLM-4.6** or Llama 3.3 | Claude Haiku 4.5 | cheap, high volume |
-| Exploit chaining, research (B1.8, C2) | Kimi K2 | Claude Opus 5 | multi-file adversarial reasoning |
+| Exploit chaining, research (B2.8, C2) | Kimi K2 | Claude Opus 5 | multi-file adversarial reasoning |
 | Multi-backbone benchmarking (C2.6) | **all three** | any | separating model effects from harness effects *is* the lab |
 
 Start with **Claude Haiku 4.5** on the frontier side. It is the cheapest current

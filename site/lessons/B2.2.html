@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.2 — Reliability and cost under non-determinism | Cyber Commons</title><meta name="description" content="pass^k alongside pass@k on a seeded corpus, plus cost per confirmed finding and analyst minutes per accepted finding, tracked as first-class metrics beside accuracy."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › Trusting the Harness that Tests CyberTravels</div><div class="sid">B2.2</div><h1>Reliability and cost under non-determinism</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A single lucky run published as a result, and cost per finding never computed at all, so nobody notices the tool moved work instead of removing it.</p></div><div class="ctrl"><div class="lab">Control</div><p>pass^k alongside pass@k on a seeded corpus, plus cost per confirmed finding and analyst minutes per accepted finding, tracked as first-class metrics beside accuracy.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.2 · Reliability and cost under non-determinism</h1>
-<p><strong>Function B — Application Security with an AI SDLC → Trusting the Harness that Tests CyberTravels</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.1.html">B2.1 · Evaluating a security harness</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.2 — Threat modelling from what the estate already knows | Cyber Commons</title><meta name="description" content="Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B2.2</div><h1>Threat modelling from what the estate already knows</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Threat models are written once, by hand, against a system that has since changed.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.2 · Threat modelling from what the estate already knows</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.1.html">B2.1 · Reading the repository: history, index, components, map</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,205 +11,322 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Inspect, promptfoo, CyberGym, GLM-4.6, Claude Haiku 4.5</td>
+<td>OWASP Threat Dragon, GLM-4.6, Claude Sonnet 5</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>At 80% per-run reliability a harness is 99.9% reliable with a human picking the good answer, and 33% reliable unattended. Both numbers are true. Quoting the first for a system that runs unattended is where most harness claims quietly go wrong.</p>
+<p>A threat model produced in a workshop describes the system as it was on the day of the workshop, and it is derived from the code alone — so two deployments of the same repository, one behind a private load balancer with no egress and one on the internet with a wildcard trust policy, get the same model. It is wrong about both.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> At 80% per-run reliability, a review harness left to run unattended over CyberTravels' releases is right about a third of the time — and somebody at CyberTravels is paying per confirmed finding.</p>
+<p><strong>At CyberTravels.</strong> The threat model that said “CyberTravels answers questions” is still on file. Deriving it from the architecture on every release is what would have caught the refund endpoint appearing.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   per-run reliability 80%
+<pre><code>   six static inputs, all already in the estate
 
-   pass@5  = at least one of five worked   -&gt; 99.97%   (a human picks)
-   pass^5  = all five worked               -&gt; 32.8%    (unattended)
-
-   both numbers are true. the honest one depends on who is watching.
-
-   plus the two nobody computes: $ per confirmed finding,
-   and analyst minutes per accepted finding
+   code analysis      what the code COULD reach     (stage 4)
+   cloud policy       is it on the internet         (security groups, WAF)
+   CSPM               is the bucket public TODAY
+   entitlements       what the role may do
+   IAM                who can become that role
+   egress policy      can anything leave
+          |
+          v  derive, mechanically
+   +---------------------------+
+   | ranked threats, as data   |
+   +---------------------------+
+          |
+        DIFFED against the last run - and the diff has to count
+        ESCALATION, not only arrival, or a terraform-only pull
+        request raises every score and passes the gate
 </code></pre>
-<p>A single run tells you almost nothing about a stochastic system, and almost
-every published harness result is a single run.</p>
-<p>Two metrics, and the gap between them is the whole lesson:</p>
-<p><strong>pass@k</strong> — succeeded <em>at least once</em> in k attempts. This is the right metric
-when you can cheaply check which attempt was correct and keep it. A code
-generator whose output you compile and test is a pass@k system: five tries and
-one good answer is a good day.</p>
-<p><strong>pass^k</strong> — succeeded <em>every time</em>, k out of k. This is the right metric when
-the run is autonomous and nobody is checking, which describes every security
-harness that files tickets, gates a merge or closes an alert.</p>
-<p>A harness at 80% per-run reliability has a pass@5 of 99.97% and a pass^5 of
-33%. Both numbers are true. Quoting the first one for a system that runs
-unattended is where most harness claims quietly go wrong.</p>
-<p>The other half is <strong>run-to-run variance.</strong> If the same input produces eleven
-findings one day and four the next, the average is not a description of
-anything, and any change you make afterwards is being measured against noise.</p>
-<p>Reliability is one of three numbers that decide whether a harness is worth
-running, and most teams measure only the first:</p>
-<ul>
-<li><strong>Accuracy</strong>, usually against whatever the tool happened to find, which is
-  circular. A <strong>seeded corpus</strong> of deliberately planted defects turns recall
-  into a fraction with a real denominator.</li>
-<li><strong>Money</strong>, per unit of value. Total spend is on the invoice; <em>cost per
-  confirmed finding</em> is what changes when someone switches model tier.</li>
-<li><strong>Human time</strong>, which is almost never measured and decides whether the tool
-  survives. Four hundred findings a week at nine minutes each has not removed
-  work. It has moved the work, renamed it triage, and made it somebody else's.</li>
-</ul></div><div class="nbmd"><h2>3 · The two metrics, from the same runs</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import random
+<p>Phase 2 opens with the stage everyone claims to do and almost nobody re-runs.</p>
+<p><strong>Stage 5 — Threat modelling.</strong> Derive, mechanically: high-value assets,
+untrusted entry points, and the attack vectors that connect them.</p>
+<p>The word doing the work is <em>mechanically</em>. A threat model produced by hand in a
+workshop is a snapshot; it is stale the moment an entry point is added, and
+adding an entry point is a Tuesday. A model <strong>derived</strong> is regenerated whenever
+its inputs change, so the useful artefact is not the model — it is the <strong>diff
+between two models</strong>.</p>
+<h3>Derived from what, exactly</h3>
+<p>The architecture map from stage 4 is the first input and it is not sufficient.
+It tells you what the code <em>could</em> reach. It says nothing about whether that
+path is exposed, what identity walks it, or whether anything could leave at the
+end of it — and those three questions are the difference between a finding and
+a fire.</p>
+<p>Every one of the answers is already written down somewhere in the estate, as
+configuration, in a machine-readable file. The stage's job is to read all of it:</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>What only it can tell you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Code analysis</strong> — the stage-4 map</td>
+<td>which sinks an entry point reaches</td>
+</tr>
+<tr>
+<td><strong>CSPM findings</strong></td>
+<td>that the bucket behind that sink is public, today</td>
+</tr>
+<tr>
+<td><strong>Cloud security policy</strong> — security groups, ingress, WAF</td>
+<td>whether the entry point is reachable from the internet at all</td>
+</tr>
+<tr>
+<td><strong>Entitlement and role access</strong></td>
+<td>what the caller's role may do once it is through</td>
+</tr>
+<tr>
+<td><strong>IAM</strong> — trust policies, assume-role chains</td>
+<td>who can become that role, and from where</td>
+</tr>
+<tr>
+<td><strong>Egress policy</strong> — NetworkPolicy, firewall rules</td>
+<td>whether anything can leave once it is in</td>
+</tr>
+</tbody>
+</table>
+<p>Read only the code and you produce a threat model that is identical for two
+deployments of the same repository, one of which is behind a private load
+balancer with no egress and one of which is not. That model is wrong about both.</p>
+<p>The output has to be data — ranked, machine-readable, diffable — because the
+next stage prioritises against it and CI gates on the delta.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote></div><div class="nbmd"><h2>3 · The six inputs, and what each one contributes</h2></div><div class="nbmd"><div style="display:flex;gap:6px;align-items:stretch;flex-wrap:wrap;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:6px 0 2px"><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">code</div><div style="border:1px solid rgba(77,155,255,.55);border-left:3px solid #4D9BFF;border-radius:8px;background:rgba(77,155,255,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128269;</span> stage-4 map</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">entry points, flows, sinks, trust boundaries</div><div style="font-size:10px;color:#4D9BFF;margin-top:5px;font-weight:600;letter-spacing:.02em">WHAT COULD BE REACHED</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">exposure</div><div style="border:1px solid rgba(224,145,47,.55);border-left:3px solid #E0912F;border-radius:8px;background:rgba(224,145,47,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#9729;&#65039;</span> cloud security policy</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">security groups, ingress, WAF — is this entry point on the internet</div></div><div style="border:1px solid rgba(224,92,75,.55);border-left:3px solid #E05C4B;border-radius:8px;background:rgba(224,92,75,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128680;</span> CSPM findings</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">the bucket behind that sink is public, today</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">identity</div><div style="border:1px solid rgba(224,145,47,.55);border-left:3px solid #E0912F;border-radius:8px;background:rgba(224,145,47,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128273;</span> entitlement and roles</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">what the caller may do once it is through</div></div><div style="border:1px solid rgba(224,145,47,.55);border-left:3px solid #E0912F;border-radius:8px;background:rgba(224,145,47,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128100;</span> IAM trust policy</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">who can assume that role, and from where</div><div style="font-size:10px;color:#E0912F;margin-top:5px;font-weight:600;letter-spacing:.02em">A2.3</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">exfiltration</div><div style="border:1px solid rgba(63,160,107,.55);border-left:3px solid #3FA06B;border-radius:8px;background:rgba(63,160,107,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128683;</span> egress policy</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">NetworkPolicy and firewall rules — can anything leave at the end of the path</div><div style="font-size:10px;color:#3FA06B;margin-top:5px;font-weight:600;letter-spacing:.02em">A3.2</div></div></div><div style="align-self:center;color:rgba(138,147,166,.8);font-size:20px;padding:0 2px;flex:0 0 auto">&#8250;</div><div style="flex:1 1 150px;min-width:150px"><div style="font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:#8A93A6;font-weight:600;padding-bottom:5px;border-bottom:1px solid rgba(138,147,166,.4);margin-bottom:3px">output</div><div style="border:1px solid rgba(77,155,255,.55);border-left:3px solid #4D9BFF;border-radius:8px;background:rgba(77,155,255,.10);padding:8px 11px;margin:5px 0;min-width:132px"><div style="font-size:13px;font-weight:600"><span style="font-size:15px">&#128202;</span> ranked threats</div><div style="font-size:11px;color:#8A93A6;margin-top:2px;line-height:1.35">scored, machine-readable, and diffed against the last run</div></div></div></div>
+<div style="font-size:12px;color:#8A93A6;margin-top:8px;line-height:1.5">Read only the first column and you get a threat model that is identical for two deployments of the same repository — one behind a private load balancer with no egress, one not. It is wrong about both.</div></div><div class="nbmd"><h2>4 · Stage 5 — derive threats from all six</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from collections import defaultdict
 
-def run_once(reliability, rng):
-    return rng.random() &lt; reliability
-
-def measure(reliability, k=5, trials=2000, seed=3):
-    rng = random.Random(seed)                  # seeded: identical every run
-    at_least_one = every_time = 0
-    for _ in range(trials):
-        outcomes = [run_once(reliability, rng) for _ in range(k)]
-        at_least_one += any(outcomes)
-        every_time   += all(outcomes)
-    return at_least_one / trials, every_time / trials
-
-print(f&quot;{&#x27;per-run&#x27;:&gt;9}{&#x27;pass@5&#x27;:&gt;10}{&#x27;pass^5&#x27;:&gt;10}  what it means unattended&quot;)
-for r in (0.95, 0.90, 0.80, 0.60, 0.50):
-    at_k, pow_k = measure(r)
-    note = (&quot;dependable&quot; if pow_k &gt; .8 else
-            &quot;coin flip&quot; if pow_k &gt; .3 else &quot;fails most nights&quot;)
-    print(f&quot;{r:&gt;8.0%}{at_k:&gt;10.1%}{pow_k:&gt;10.1%}  {note}&quot;)
-print()
-print(&quot;At 80% per-run the same harness is 99.9% reliable if a human picks the&quot;)
-print(&quot;good answer, and 33% reliable if nobody is looking.&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the demo that was a lucky run</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def one_demo(reliability, seed):
-    return run_once(reliability, random.Random(seed))
-
-demos = [one_demo(0.6, s) for s in range(12)]
-print(&quot;twelve single-run demos of the same 60% harness:&quot;)
-print(&quot;   &quot; + &quot; &quot;.join(&quot;PASS&quot; if d else &quot;fail&quot; for d in demos))
-print(f&quot;   -&gt; {demos.count(True)} passed&quot;)
-print()
-print(&quot;Publish any of the passes. Every one is an honest single run. None of&quot;)
-print(&quot;them is a measurement, and the reader has no way to tell which they got.&quot;)
-assert demos.count(True) and demos.count(False)</code></pre></div><div class="nbmd"><h2>5 · Variance, and why it precedes every other question</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def findings_per_run(base, noise, rng):
-    return max(0, int(rng.gauss(base, noise)))
-
-def variance_profile(base, noise, runs=30, seed=11):
-    rng = random.Random(seed)
-    xs = [findings_per_run(base, noise, rng) for _ in range(runs)]
-    mean = sum(xs) / len(xs)
-    sd = (sum((x - mean) ** 2 for x in xs) / len(xs)) ** 0.5
-    return xs, mean, sd
-
-for noise in (0.5, 3.0):
-    xs, mean, sd = variance_profile(8, noise)
-    print(f&quot;noise sd={noise}:  mean {mean:.1f}  sd {sd:.2f}  &quot;
-          f&quot;range {min(xs)}-{max(xs)}&quot;)
-    print(f&quot;   runs: {xs[:12]} ...&quot;)
-
-_, m_stable, sd_stable = variance_profile(8, 0.5)
-_, m_noisy,  sd_noisy   = variance_profile(8, 3.0)
-improvement = 1.5
-print()
-print(f&quot;suppose a change adds {improvement} findings on average.&quot;)
-print(f&quot;   against sd {sd_stable:.2f}: visible after a handful of runs&quot;)
-print(f&quot;   against sd {sd_noisy:.2f}: indistinguishable from a quiet Tuesday&quot;)
-print()
-print(&quot;Until variance is characterised, every A/B comparison you run is&quot;)
-print(&quot;measuring the dice.&quot;)
-assert sd_noisy &gt; sd_stable</code></pre></div><div class="nbmd"><h2>6 · The control — separate harness failure from model failure</h2>
-<p>Before changing either one, find out which is moving.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def attribute(runs_same_model_same_harness, runs_same_model_new_harness):
-    &quot;&quot;&quot;If output changes when only the harness changed, it was the harness.&quot;&quot;&quot;
-    a = sum(runs_same_model_same_harness) / len(runs_same_model_same_harness)
-    b = sum(runs_same_model_new_harness) / len(runs_same_model_new_harness)
-    return a, b, (&quot;harness&quot; if abs(b - a) &gt; 0.15 else &quot;not the harness&quot;)
-
-rng = random.Random(5)
-baseline = [run_once(0.6, rng) for _ in range(200)]
-better_harness = [run_once(0.85, rng) for _ in range(200)]   # same model, better verifier
-a, b, verdict = attribute(baseline, better_harness)
-print(f&quot;same model, original harness : {a:.0%}&quot;)
-print(f&quot;same model, better verifier  : {b:.0%}&quot;)
-print(f&quot;attribution                  : {verdict}&quot;)
-print()
-print(&quot;Twenty-five points of reliability, no model change. Teams routinely&quot;)
-print(&quot;spend that budget on a bigger backbone instead, because the harness&quot;)
-print(&quot;was never measured separately.&quot;)
-assert verdict == &quot;harness&quot;</code></pre></div><div class="nbmd"><h2>7 · Verify — the scorecard line that has to be published</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>k = 5
-rel = 0.85
-at_k, pow_k = measure(rel, k=k)
-xs, mean, sd = variance_profile(8, 0.9)
-card = {
-  &quot;per_run_reliability&quot;: rel,
-  &quot;k&quot;: k,
-  &quot;pass_at_k&quot;: round(at_k, 4),
-  &quot;pass_pow_k&quot;: round(pow_k, 4),
-  &quot;runs_measured&quot;: 2000,
-  &quot;findings_mean&quot;: round(mean, 2),
-  &quot;findings_sd&quot;: round(sd, 2),
-  &quot;seed&quot;: 3,
-  &quot;unattended&quot;: True,
-  &quot;headline_metric&quot;: &quot;pass^k&quot;,       # because unattended is True
+# --- input 1: the stage-4 architecture map ---------------------------------
+ARCH = {
+ &quot;entry_points&quot;: [
+   {&quot;unit&quot;: &quot;get_booking&quot;,    &quot;component&quot;: &quot;src/api&quot;, &quot;auth&quot;: &quot;session&quot;},
+   {&quot;unit&quot;: &quot;upload_voucher&quot;, &quot;component&quot;: &quot;src/api&quot;, &quot;auth&quot;: &quot;session&quot;},
+   {&quot;unit&quot;: &quot;health&quot;,         &quot;component&quot;: &quot;src/api&quot;, &quot;auth&quot;: &quot;none&quot;},
+ ],
+ &quot;flows&quot;: [(&quot;get_booking&quot;, &quot;load_booking&quot;), (&quot;get_booking&quot;, &quot;render&quot;),
+           (&quot;upload_voucher&quot;, &quot;store&quot;), (&quot;load_booking&quot;, &quot;execute&quot;),
+           (&quot;store&quot;, &quot;open&quot;)],
+ &quot;sinks&quot;: [{&quot;unit&quot;: &quot;load_booking&quot;, &quot;sink&quot;: &quot;execute&quot;, &quot;resource&quot;: &quot;database&quot;},
+           {&quot;unit&quot;: &quot;store&quot;, &quot;sink&quot;: &quot;open&quot;, &quot;resource&quot;: &quot;voucher_bucket&quot;}],
+ &quot;assets&quot;: {&quot;database&quot;:       {&quot;data&quot;: (&quot;customer&quot;, &quot;financial&quot;), &quot;value&quot;: 5},
+            &quot;voucher_bucket&quot;: {&quot;data&quot;: (&quot;documents&quot;,),            &quot;value&quot;: 3}},
 }
-for kk, vv in card.items():
-    print(f&quot;   {kk:22s}{vv}&quot;)
-print()
-print(&quot;The headline metric is chosen by how the harness runs, not by which&quot;)
-print(&quot;number is larger. An unattended harness that reports pass@k is&quot;)
-print(&quot;reporting the reliability of a system it is not.&quot;)
-assert card[&quot;headline_metric&quot;] == &quot;pass^k&quot; and card[&quot;pass_pow_k&quot;] &lt; card[&quot;pass_at_k&quot;]</code></pre></div><div class="nbmd"><h2>8 · The other two numbers — money, and somebody's afternoon</h2>
-<p>Reliability says whether the harness can be left alone. Cost per confirmed finding and analyst minutes per accepted finding say whether leaving it alone is worth doing. Both need a corpus whose defects you planted, so recall has a real denominator.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SEEDED_CORPUS = {
- f&quot;unit_{i:02d}&quot;: (i % 4 == 0, [&quot;CWE-22&quot;, &quot;CWE-78&quot;, &quot;CWE-89&quot;, &quot;CWE-79&quot;][i % 4])
- for i in range(40)
+
+# --- inputs 2-6: what the rest of the estate already knows -----------------
+CLOUD_POLICY = {           # security groups / ingress: is it on the internet?
+ &quot;get_booking&quot;:    {&quot;exposed&quot;: &quot;internet&quot;, &quot;waf&quot;: True},
+ &quot;upload_voucher&quot;: {&quot;exposed&quot;: &quot;internet&quot;, &quot;waf&quot;: False},
+ &quot;health&quot;:         {&quot;exposed&quot;: &quot;vpc-only&quot;, &quot;waf&quot;: False},
 }
-planted = sorted(u for u, (is_bug, _) in SEEDED_CORPUS.items() if is_bug)
-print(f&quot;units in corpus : {len(SEEDED_CORPUS)}&quot;)
-print(f&quot;planted defects : {len(planted)}   &lt;- the denominator is now a fact&quot;)
+CSPM = [                   # live posture findings, not code
+ {&quot;resource&quot;: &quot;voucher_bucket&quot;, &quot;finding&quot;: &quot;bucket policy allows public read&quot;,
+  &quot;severity&quot;: 4},
+]
+ENTITLEMENTS = {           # what the running role may do
+ &quot;src/api&quot;: {&quot;db:select&quot;, &quot;db:update&quot;, &quot;s3:GetObject&quot;, &quot;s3:PutObject&quot;},
+}
+IAM = {                    # who can become that role
+ &quot;src/api&quot;: {&quot;assumable_by&quot;: [&quot;ci-deploy-role&quot;], &quot;mfa_required&quot;: True},
+}
+EGRESS = {                 # NetworkPolicy / firewall: can anything leave?
+ &quot;src/api&quot;: {&quot;default_deny&quot;: True, &quot;allowed&quot;: [&quot;db.prod:5432&quot;]},
+}
 
-def harness_run(corpus, sensitivity, seed=2):
-    &quot;&quot;&quot;Higher sensitivity finds more real defects, and more false ones.&quot;&quot;&quot;
-    rng = random.Random(seed)
-    out = []
-    for unit, (is_bug, cwe) in sorted(corpus.items()):
-        if is_bug and rng.random() &lt; sensitivity:
-            out.append((unit, cwe, True))
-        elif not is_bug and rng.random() &lt; sensitivity * 0.35:
-            out.append((unit, cwe, False))
-    return out
+VECTOR_FOR = {
+ &quot;database&quot;:       [(&quot;CWE-89&quot;, &quot;SQL injection&quot;, 5)],
+ &quot;voucher_bucket&quot;: [(&quot;CWE-22&quot;, &quot;path traversal&quot;, 4),
+                    (&quot;CWE-434&quot;, &quot;unrestricted upload&quot;, 4)],
+}
 
-def scorecard(found, corpus, tokens_per_unit=1800, usd_per_1k=0.002,
-              analyst_minutes=9):
-    tp = [f for f in found if f[2]]
-    planted_n = sum(1 for _, (b, _) in corpus.items() if b)
-    spend = len(corpus) * tokens_per_unit / 1000 * usd_per_1k
-    return {&quot;recall&quot;: len(tp) / planted_n,
-            &quot;precision&quot;: len(tp) / len(found) if found else 0.0,
-            &quot;usd_per_finding&quot;: spend / len(tp) if tp else None,
-            &quot;analyst_minutes&quot;: len(found) * analyst_minutes,
-            &quot;minutes_per_accepted&quot;: len(found) * analyst_minutes / len(tp) if tp else None}
+def reachable(entry, flows):
+    adj = defaultdict(list)
+    for a, b in flows:
+        adj[a].append(b)
+    seen, stack = set(), [entry]
+    while stack:
+        for m in adj[stack.pop()]:
+            if m not in seen:
+                seen.add(m); stack.append(m)
+    return seen
 
-MANUAL_MINUTES = 40 * 4          # a human reading the same forty units
-print(f&quot;\n{&#x27;sens&#x27;:&gt;6}{&#x27;recall&#x27;:&gt;9}{&#x27;prec&#x27;:&gt;7}{&#x27;$/find&#x27;:&gt;9}{&#x27;min/accepted&#x27;:&gt;14}&quot;
-      f&quot;{&#x27;review load&#x27;:&gt;13}&quot;)
-for s in (0.4, 0.7, 0.95):
-    c = scorecard(harness_run(SEEDED_CORPUS, s), SEEDED_CORPUS)
-    verdict = &quot;saves time&quot; if c[&quot;analyst_minutes&quot;] &lt; MANUAL_MINUTES else &quot;COSTS MORE&quot;
-    print(f&quot;{s:&gt;6.2f}{c[&#x27;recall&#x27;]:&gt;9.0%}{c[&#x27;precision&#x27;]:&gt;7.0%}&quot;
-          f&quot;{c[&#x27;usd_per_finding&#x27;]:&gt;9.3f}{c[&#x27;minutes_per_accepted&#x27;]:&gt;14.1f}&quot;
-          f&quot;{verdict:&gt;13}&quot;)
+def threat_model(arch, cloud, cspm, entitlements, iam, egress):
+    threats = []
+    cspm_by_resource = defaultdict(int)
+    for f in cspm:
+        cspm_by_resource[f[&quot;resource&quot;]] += f[&quot;severity&quot;]
+    for ep in arch[&quot;entry_points&quot;]:
+        reach = reachable(ep[&quot;unit&quot;], arch[&quot;flows&quot;])
+        exposure = cloud.get(ep[&quot;unit&quot;], {})
+        for sink in arch[&quot;sinks&quot;]:
+            if sink[&quot;unit&quot;] not in reach:
+                continue
+            asset = arch[&quot;assets&quot;][sink[&quot;resource&quot;]]
+            comp = ep[&quot;component&quot;]
+            for cwe, name, base in VECTOR_FOR.get(sink[&quot;resource&quot;], []):
+                why, score = [], base + asset[&quot;value&quot;]
+                if ep[&quot;auth&quot;] == &quot;none&quot;:
+                    score += 2; why.append(&quot;unauthenticated&quot;)
+                # exposure: the single biggest correction the map cannot make
+                if exposure.get(&quot;exposed&quot;) == &quot;internet&quot;:
+                    score += 2; why.append(&quot;internet-facing&quot;)
+                else:
+                    score -= 3; why.append(&quot;vpc-only&quot;)
+                if exposure.get(&quot;exposed&quot;) == &quot;internet&quot; and not exposure.get(&quot;waf&quot;):
+                    score += 1; why.append(&quot;no WAF&quot;)
+                score += cspm_by_resource[sink[&quot;resource&quot;]]
+                if cspm_by_resource[sink[&quot;resource&quot;]]:
+                    why.append(&quot;live CSPM finding&quot;)
+                # entitlement: write beats read, and the role decides which
+                if {&quot;db:update&quot;, &quot;s3:PutObject&quot;} &amp; entitlements.get(comp, set()):
+                    score += 1; why.append(&quot;role holds write&quot;)
+                if &quot;*&quot; in iam.get(comp, {}).get(&quot;assumable_by&quot;, []):
+                    score += 2; why.append(&quot;role assumable by *&quot;)
+                if not egress.get(comp, {}).get(&quot;default_deny&quot;, True):
+                    score += 2; why.append(&quot;egress open&quot;)
+                threats.append({
+                  &quot;entry&quot;: ep[&quot;unit&quot;], &quot;sink&quot;: sink[&quot;unit&quot;], &quot;cwe&quot;: cwe,
+                  &quot;vector&quot;: name, &quot;score&quot;: score, &quot;why&quot;: why,
+                  &quot;path&quot;: f&quot;{ep[&#x27;unit&#x27;]} -&gt; ... -&gt; {sink[&#x27;unit&#x27;]}&quot;})
+    # score first, then a full tiebreak, so two machines agree
+    return sorted(threats,
+                  key=lambda t: (-t[&quot;score&quot;], t[&quot;cwe&quot;], t[&quot;entry&quot;], t[&quot;sink&quot;]))
 
-best_recall = scorecard(harness_run(SEEDED_CORPUS, 0.95), SEEDED_CORPUS)
+TM = threat_model(ARCH, CLOUD_POLICY, CSPM, ENTITLEMENTS, IAM, EGRESS)
+print(f&quot;{&#x27;entry&#x27;:16s}{&#x27;sink&#x27;:14s}{&#x27;cwe&#x27;:9s}{&#x27;score&#x27;:&gt;6}  why&quot;)
+print(&quot;-&quot; * 92)
+for t in TM:
+    print(f&quot;{t[&#x27;entry&#x27;]:16s}{t[&#x27;sink&#x27;]:14s}{t[&#x27;cwe&#x27;]:9s}{t[&#x27;score&#x27;]:&gt;6}  &quot;
+          f&quot;{&#x27;, &#x27;.join(t[&#x27;why&#x27;])}&quot;)
+print(f&quot;\n{len(TM)} threats. Nobody wrote this; it fell out of six files that&quot;)
+print(&quot;already existed in the estate.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The same code, two estates</h2>
+<p>This is the argument for reading past the map. Nothing below changes a line of the repository — only the configuration around it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Same repository. Private load balancer, default-deny egress, no wildcard
+# trust policy, and the CSPM finding remediated.
+HARDENED = threat_model(
+  ARCH,
+  {k: {&quot;exposed&quot;: &quot;vpc-only&quot;, &quot;waf&quot;: True} for k in CLOUD_POLICY},
+  [],                                                        # CSPM clean
+  {&quot;src/api&quot;: {&quot;db:select&quot;, &quot;s3:GetObject&quot;}},                # read-only role
+  {&quot;src/api&quot;: {&quot;assumable_by&quot;: [&quot;ci-deploy-role&quot;], &quot;mfa_required&quot;: True}},
+  {&quot;src/api&quot;: {&quot;default_deny&quot;: True, &quot;allowed&quot;: [&quot;db.prod:5432&quot;]}},
+)
+
+print(f&quot;{&#x27;threat&#x27;:38s}{&#x27;as deployed&#x27;:&gt;13}{&#x27;hardened&#x27;:&gt;11}&quot;)
+print(&quot;-&quot; * 62)
+by_key = {(t[&quot;entry&quot;], t[&quot;sink&quot;], t[&quot;cwe&quot;]): t[&quot;score&quot;] for t in HARDENED}
+for t in TM:
+    k = (t[&quot;entry&quot;], t[&quot;sink&quot;], t[&quot;cwe&quot;])
+    print(f&quot;{t[&#x27;cwe&#x27;] + &#x27;  &#x27; + t[&#x27;path&#x27;]:38s}{t[&#x27;score&#x27;]:&gt;13}{by_key[k]:&gt;11}&quot;)
+
+print(f&quot;\nmax severity  {max(t[&#x27;score&#x27;] for t in TM)} -&gt; &quot;
+      f&quot;{max(t[&#x27;score&#x27;] for t in HARDENED)}&quot;)
 print()
-print(f&quot;At the highest sensitivity recall is {best_recall[&#x27;recall&#x27;]:.0%} and the review&quot;)
-print(f&quot;queue is {best_recall[&#x27;analyst_minutes&#x27;]} minutes against {MANUAL_MINUTES} for reading the code by&quot;)
-print(&quot;hand. The accuracy metric improved and the thing got worse - which stays&quot;)
-print(&quot;invisible unless review load is a first-class number beside it.&quot;)
-assert best_recall[&quot;analyst_minutes&quot;] &gt; MANUAL_MINUTES</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Run your harness on one fixed task five times and count how many times it fully succeeded. That integer, out of five, is the number to put in front of anyone deciding whether to let it run unattended. Then divide last month's spend by the findings anyone actually accepted, and compare that to an hour of the reviewer's time.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
-<p><strong>What you can do now.</strong> A harness you can name the eight parts of, evaluate on a corpus with known answers rather than on how confident it sounds, price per confirmed finding across a run nobody watched, and salt with bait that has no false positives.</p>
-<p><strong>What you still cannot do.</strong> Everything you have built so far is defensive and cooperative: it runs against systems that are not trying to defeat it. You have no evidence about how any of it behaves against someone who is — including the evaluation you have been trusting.</p>
-<p><strong>Function C attacks it, starting with the loop pointed the other way round. Next → C1.0, what red teaming and research with AI means.</strong></p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.0.html">C1.0 · Start here — what red teaming and research with AI means</a></strong></p>
+print(&quot;Identical code. A model derived from the map alone would have scored&quot;)
+print(&quot;these two deployments the same, and it would have been wrong about the&quot;)
+print(&quot;first by understating it and wrong about the second by crying wolf.&quot;)
+assert max(t[&quot;score&quot;] for t in HARDENED) &lt; max(t[&quot;score&quot;] for t in TM)</code></pre></div><div class="nbmd"><h2>6 · Where it breaks — the model that was true last quarter</h2>
+<p>Add one entry point. The hand-written threat model does not change, because documents do not change themselves.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ARCH_V2 = {**ARCH,
+ &quot;entry_points&quot;: ARCH[&quot;entry_points&quot;] + [
+   {&quot;unit&quot;: &quot;admin_export&quot;, &quot;component&quot;: &quot;src/api&quot;, &quot;auth&quot;: &quot;none&quot;}],
+ &quot;flows&quot;: ARCH[&quot;flows&quot;] + [(&quot;admin_export&quot;, &quot;load_booking&quot;),
+                           (&quot;admin_export&quot;, &quot;store&quot;)]}
+CLOUD_V2 = {**CLOUD_POLICY,
+            &quot;admin_export&quot;: {&quot;exposed&quot;: &quot;internet&quot;, &quot;waf&quot;: False}}
+
+TM2 = threat_model(ARCH_V2, CLOUD_V2, CSPM, ENTITLEMENTS, IAM, EGRESS)
+
+def diff(before, after):
+    key = lambda t: (t[&quot;entry&quot;], t[&quot;sink&quot;], t[&quot;cwe&quot;])
+    b = {key(t): t for t in before}
+    a = {key(t): t for t in after}
+    # sorted() over a set difference is NOT deterministic across processes:
+    # set iteration order depends on PYTHONHASHSEED, and a stable sort then
+    # preserves that order for equal scores. Sort the keys first.
+    return {&quot;new&quot;: [a[k] for k in sorted(a.keys() - b.keys())],
+            &quot;removed&quot;: [b[k] for k in sorted(b.keys() - a.keys())],
+            &quot;max_before&quot;: max(t[&quot;score&quot;] for t in before),
+            &quot;max_after&quot;: max(t[&quot;score&quot;] for t in after)}
+
+d = diff(TM, TM2)
+print(f&quot;threats before {len(TM)} -&gt; after {len(TM2)}&quot;)
+print(f&quot;max severity   {d[&#x27;max_before&#x27;]} -&gt; {d[&#x27;max_after&#x27;]}&quot;)
+print(&quot;\nNEW THREATS:&quot;)
+for t in sorted(d[&quot;new&quot;], key=lambda t: (-t[&quot;score&quot;], t[&quot;cwe&quot;], t[&quot;entry&quot;])):
+    print(f&quot;   [{t[&#x27;score&#x27;]:&gt;2}] {t[&#x27;cwe&#x27;]:9s}{t[&#x27;path&#x27;]:38s}{&#x27;, &#x27;.join(t[&#x27;why&#x27;])}&quot;)
+assert d[&quot;new&quot;] and d[&quot;max_after&quot;] &gt;= d[&quot;max_before&quot;]</code></pre></div><div class="nbmd"><h2>7 · The control — and the gate that is not enough</h2>
+<p>Regenerate on every change to <em>any</em> input, and gate on the delta. The obvious gate counts new threats. Watch what it does with a pull request that adds none.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def gate_new_only(before, after, critical_at=16):
+    &quot;&quot;&quot;The obvious gate: refuse a pull request that introduces a new critical.&quot;&quot;&quot;
+    d = diff(before, after)
+    crit = [t for t in d[&quot;new&quot;] if t[&quot;score&quot;] &gt;= critical_at]
+    return not crit, {&quot;new&quot;: len(d[&quot;new&quot;]), &quot;new_critical&quot;: len(crit)}
+
+ok, info = gate_new_only(TM, TM2)
+print(f&quot;PR 1 - adds an unauthenticated handler   -&gt; &quot;
+      f&quot;{&#x27;PASS&#x27; if ok else &#x27;FAIL&#x27;}  {info}&quot;)
+
+# PR 2 touches no application code at all. It widens the IAM trust policy and
+# removes the default-deny egress rule - two lines of terraform.
+TM_TF = threat_model(ARCH, CLOUD_POLICY, CSPM, ENTITLEMENTS,
+                     {&quot;src/api&quot;: {&quot;assumable_by&quot;: [&quot;ci-deploy-role&quot;, &quot;*&quot;],
+                                  &quot;mfa_required&quot;: False}},
+                     {&quot;src/api&quot;: {&quot;default_deny&quot;: False,
+                                  &quot;allowed&quot;: [&quot;0.0.0.0/0&quot;]}})
+ok2, info2 = gate_new_only(TM, TM_TF)
+print(f&quot;PR 2 - two lines of terraform            -&gt; &quot;
+      f&quot;{&#x27;PASS&#x27; if ok2 else &#x27;FAIL&#x27;}  {info2}&quot;)
+print()
+print(&quot;PR 2 introduced no new threat, so a gate that counts new threats waves&quot;)
+print(&quot;it through. Every existing threat got worse:&quot;)
+by_key = {(t[&quot;entry&quot;], t[&quot;sink&quot;], t[&quot;cwe&quot;]): t[&quot;score&quot;] for t in TM_TF}
+for t in TM:
+    k = (t[&quot;entry&quot;], t[&quot;sink&quot;], t[&quot;cwe&quot;])
+    print(f&quot;   {t[&#x27;cwe&#x27;]:9s}{t[&#x27;path&#x27;]:38s}{t[&#x27;score&#x27;]:&gt;3} -&gt; {by_key[k]}&quot;)</code></pre></div><div class="nbmd"><h2>8 · The gate that is</h2>
+<p>Count escalation as well as arrival. A threat that was medium and is now critical is a regression, and the pull request that caused it did not touch a line of application code.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def threat_gate(before, after, critical_at=16, max_escalation=2):
+    d = diff(before, after)
+    prev = {(t[&quot;entry&quot;], t[&quot;sink&quot;], t[&quot;cwe&quot;]): t[&quot;score&quot;] for t in before}
+    new_crit = [t for t in d[&quot;new&quot;] if t[&quot;score&quot;] &gt;= critical_at]
+    escalated = [t for t in after
+                 if (k := (t[&quot;entry&quot;], t[&quot;sink&quot;], t[&quot;cwe&quot;])) in prev
+                 and t[&quot;score&quot;] - prev[k] &gt; max_escalation]
+    return (not new_crit and not escalated,
+            {&quot;new_critical&quot;: len(new_crit), &quot;escalated&quot;: len(escalated),
+             &quot;detail&quot;: [f&quot;{t[&#x27;cwe&#x27;]} via {t[&#x27;path&#x27;]}: &quot;
+                        f&quot;{prev[(t[&#x27;entry&#x27;], t[&#x27;sink&#x27;], t[&#x27;cwe&#x27;])]} -&gt; {t[&#x27;score&#x27;]}&quot;
+                        for t in escalated]})
+
+for label, model in ((&quot;PR 1 - unauthenticated handler&quot;, TM2),
+                     (&quot;PR 2 - two lines of terraform &quot;, TM_TF)):
+    ok, info = threat_gate(TM, model)
+    print(f&quot;{label} -&gt; {&#x27;PASS&#x27; if ok else &#x27;FAIL&#x27;}&quot;)
+    print(f&quot;   new_critical={info[&#x27;new_critical&#x27;]}  escalated={info[&#x27;escalated&#x27;]}&quot;)
+    for line in info[&quot;detail&quot;]:
+        print(f&quot;      {line}&quot;)
+
+# And the fix for PR 1: require a session and put it behind the WAF.
+ARCH_FIXED = {**ARCH_V2, &quot;entry_points&quot;: [
+  {**e, &quot;auth&quot;: &quot;session&quot;} if e[&quot;unit&quot;] == &quot;admin_export&quot; else e
+  for e in ARCH_V2[&quot;entry_points&quot;]]}
+CLOUD_FIXED = {**CLOUD_V2, &quot;admin_export&quot;: {&quot;exposed&quot;: &quot;internet&quot;, &quot;waf&quot;: True}}
+ok_fixed, info_fixed = threat_gate(
+    TM, threat_model(ARCH_FIXED, CLOUD_FIXED, CSPM, ENTITLEMENTS, IAM, EGRESS))
+print(f&quot;\nPR 1, after requiring auth and adding the WAF -&gt; &quot;
+      f&quot;{&#x27;PASS&#x27; if ok_fixed else &#x27;FAIL&#x27;}  {info_fixed[&#x27;new_critical&#x27;]} critical&quot;)
+
+print()
+print(&quot;Nobody wrote a document. The gate compared generated models and refused&quot;)
+print(&quot;two named regressions - and the one it would have missed is the one&quot;)
+print(&quot;that changed no code, which is the majority of how estates get worse.&quot;)
+assert gate_new_only(TM, TM_TF)[0]          # v1 waves the terraform PR through
+assert not threat_gate(TM, TM_TF)[0]       # v2 does not
+assert not threat_gate(TM, TM2)[0] and ok_fixed</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Six threats are derived from six static inputs, each carrying the reasons its score moved — internet-facing, no WAF, live CSPM finding, role holds write, role assumable by <code>*</code>, egress open. The same repository deployed behind a private load balancer with default-deny egress and a read-only role scores materially lower on every row. Adding an unauthenticated handler fails the CI gate, and so does a pull request that changes only terraform.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take one service and write down where each of the six inputs lives — the repository, the CSPM console, the terraform, the IAM policy, the NetworkPolicy. If any of them is "in somebody's head", that is the input your threat model is currently guessing at, and the guess is always the optimistic one.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">B2.3 · Vulnerability auditing: three generations of SAST</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from &#x27;saves time&#x27; to 180 analyst minutes against 160 for reading the code by hand.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Inspect</span><span>promptfoo</span><span>CyberGym</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.2.ipynb</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · Evaluating a security harness</span></a><a class="next" href="C1.0.html"><span class="k">Next →</span><span class="t">C1.0 · Start here — what red teaming and research with AI means</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from &#x27;saves time&#x27; to 180 analyst minutes against 160 for reading the code by hand.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP Threat Dragon</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.2.ipynb</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · Reading the repository: history, index, components, map</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · Vulnerability auditing: three generations of SAST</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

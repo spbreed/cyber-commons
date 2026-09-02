@@ -1,21 +1,21 @@
 """B1 (part 2) — The AppSec pipeline, phases 4 and 5, plus the bonus.
 
     Phase 4 · Dynamic Validation & Remediation
-       11 sandbox replication                                      → B1.6
-       12 dynamic exploitation (DAST)                              → B1.7
-       13 exploit chaining                                         → B1.8
-       14 remediation engineering                                  → B1.9
+       11 sandbox replication                                      → B2.6
+       12 dynamic exploitation (DAST)                              → B2.7
+       13 exploit chaining                                         → B2.8
+       14 remediation engineering                                  → B2.9
     Phase 5 · Governance & Reporting
-       15 severity calibration and reporting                       → B1.10
+       15 severity calibration and reporting                       → B2.10
 
     Cross-cutting
-       context engineering for the pipeline                        → B1.11
+       context engineering for the pipeline                        → B2.11
        injection in your own pipeline                              → A1.9
-       securing the developers' coding agents                      → B1.12
-       attesting control intent for agents and MCP servers         → B1.13
+       securing the developers' coding agents                      → B2.12
+       attesting control intent for agents and MCP servers         → B2.13
 
     Bonus
-       Google Mantis — the pipeline in production                  → B1.14
+       Google Mantis — the pipeline in production                  → B2.14
 """
 
 PIPELINE_NOTE = """
@@ -47,7 +47,7 @@ from . import diagrams as D
 
 EXERCISES: dict[str, dict] = {
 
-"B1.6": {
+"B2.6": {
  "concept": """
 Phase 4 turns hypotheses into facts by running the application. That is only
 safe if the thing you run it against cannot hurt anyone.
@@ -192,7 +192,7 @@ assert REPLICA.destroyed and not REPLICA.credentials
               "path from a test probe to a real incident.",
 },
 
-"B1.7": {
+"B2.7": {
  "concept": """
 **Stage 12 — Dynamic exploitation.** The stage that converts an argument into a
 fact.
@@ -348,7 +348,7 @@ print("appear in the report as one.")
               "and the control probe above is how you prove that in five minutes.",
 },
 
-"B1.8": {
+"B2.8": {
  "concept": """
 **Stage 13 — Exploit chaining.** Individual findings are triaged individually,
 and that is how three mediums become a critical nobody noticed.
@@ -579,7 +579,7 @@ assert failed, "the demo needs at least one non-reproduction"
               "top of the severity-sorted queue.",
 },
 
-"B1.9": {
+"B2.9": {
  "concept": """
 **Stage 14 — Remediation engineering.** Generate the fix, then prove it.
 
@@ -737,7 +737,7 @@ print("catches that — which is the part of remediation that does not automate.
               "belongs in your secure coding standard, not in the pipeline.",
 },
 
-"B1.10": {
+"B2.10": {
  "concept": """
 **Stage 15 — Severity calibration and reporting.** The pipeline's output, and
 the stage where its credibility is won or lost.
@@ -990,7 +990,7 @@ assert summary["high"] < raw_summary["high"]
               "usually the ones people have been arguing about.",
 },
 
-"B1.11": {
+"B2.11": {
  "concept": """
 Cross-cutting, and it applies to every stage that calls a model: stages 3, 4, 5,
 7 and 14.
@@ -1117,10 +1117,10 @@ assert best["strategy"] == "path slice"
            "than the whole file.",
  "challenge": "Apply the path-slice rule where the source is three functions away "
               "from the sink. That is the case where text windows break down "
-              "entirely and the call graph from B1.1 earns its keep.",
+              "entirely and the call graph from B2.1 earns its keep.",
 },
 
-"B1.12": {
+"B2.12": {
  "concept": """
 The coding agent in a developer's IDE is the most privileged agent in most
 organisations and the least governed. It sits upstream of everything this track
@@ -1309,7 +1309,7 @@ assert unbounded, "an unbounded pre-approved tool should be visible here"
               "yesterday.",
 },
 
-"B1.13": {
+"B2.13": {
  "concept": """
 Every control claim in this pipeline has the same weakness: it is a sentence in
 a document, and nothing binds it to a running system. "We enforce least
@@ -1643,7 +1643,7 @@ assert a["signatures"] == [] and a["predicate"]["scope"].startswith("static")
               "ones nobody has started.",
 },
 
-"B1.14": {
+"B2.14": {
  "concept": """
 **Bonus.** You have now built all fifteen stages. This lesson looks at a real
 implementation of the same pipeline — **[Google Mantis](https://github.com/google/mantis)**
@@ -1702,7 +1702,7 @@ MANTIS = {
  11: ("no",      "no sandbox — it is a review harness, not a DAST"),
  12: ("no",      "static review only"),
  13: ("no",      "no chaining"),
- 14: ("partial", "can propose fixes; validation is yours (B1.9)"),
+ 14: ("partial", "can propose fixes; validation is yours (B2.9)"),
  15: ("partial", "emits severity; calibration against confirmation is yours"),
 }
 print(f"{'stage':>3}  {'name':34s}{'mantis':10s}note")
@@ -1714,7 +1714,7 @@ from collections import Counter
 c = Counter(v[0] for v in MANTIS.values())
 print(f"\\ncoverage: {dict(c)}")
 print(f"→ Mantis is a strong Phase 3 stage-7 implementation with a stage-1 loop.")
-print(f"  Phases 4 and 5 remain yours, which is exactly what B1.6-B1.10 built.")
+print(f"  Phases 4 and 5 remain yours, which is exactly what B2.6-B2.10 built.")
 '''),
   ("md", "## 3 · Parse the two output shapes\n\n"
          "Before scoring anything you have to ingest it. Both shapes are JSON; "

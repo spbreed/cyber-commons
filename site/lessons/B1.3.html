@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.3 — Vulnerability auditing: three generations of SAST | Cyber Commons</title><meta name="description" content="Stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline</div><div class="sid">B1.3</div><h1>Vulnerability auditing: three generations of SAST</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Pattern matching floods the queue; the false-positive rate is what actually changed.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Watch your own review harness obey an injected instruction, then close it.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.3 · Vulnerability auditing: three generations of SAST</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.2.html">B1.2 · Threat modelling from what the estate already knows</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B1.3 — Which model runs it, and who checks the checker | Cyber Commons</title><meta name="description" content=""><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The Agentic Harness</div><div class="sid">B1.3</div><h1>Which model runs it, and who checks the checker</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">B1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B1.3.mp4</code></span></div></div><div class="sec"><h2>The lab</h2><p class="sub">Routing inside the loop, the backbone behind an interface, and a signal the scaffold cannot see.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B1.3 · Which model runs it, and who checks the checker</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The Agentic Harness</strong>  ·  <em>Both directions</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B1.2.html">B1.2 · What the loop may touch: tools, depth and doing it twice</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,51 +11,82 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>OpenGrep, Semgrep OSS, CodeQL, GLM-4.6, Kimi K2, Claude Sonnet 5</td>
+<td>Ollama, vLLM, Claude Haiku 4.5, GLM-4.6</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Three generations of static analysis are on the market and all three are sold with the same word. Pattern matching cannot follow a value; dataflow cannot read intent; a model can do both and will also tell you about a vulnerability that is not there.</p>
+<p>If the loop retries with a bigger model whenever the small one fails verification, anyone who can cause a failure can force every task onto your most capable model — and onto whatever authority came with it. Escalate capability; never escalate authority.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The IDOR that exposed card details by booking ID (R8) is exactly the class each generation of SAST handles differently — and the class the third generation will also confidently invent.</p>
+<p><strong>At CyberTravels.</strong> CyberTravels routes cheap steps to a small model to keep the bill sane. If a failed verification escalates to the larger model, a traveller who can cause failures chooses which model — and what authority it runs with. R5.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   gen 1  pattern      grep-shaped     finds: the literal string
-                                       misses: the same bug spelled differently
+<pre><code>   routing INSIDE the loop
 
-   gen 2  dataflow     source -&gt; sink  finds: the value that reaches
-                                       misses: intent, framework magic
+     trivial step  -&gt; small model   (tools: read-only)
+     hard step     -&gt; large model   (tools: read-only)
 
-   gen 3  reasoning    reads it        finds: both of the above
-                                       adds:  confident findings that are not real
+   the failure nobody plans for:
 
-   the third generation does not replace the second. it needs it as an oracle.
+     verification fails -&gt; retry on a BIGGER model
+        -&gt; anyone who can cause a failure picks your model
+        -&gt; and the escalation path carried more authority
+
+     escalate capability.  never escalate authority.
+
+   the backbone, behind an interface
+
+     harness -&gt; [ adapter ] -&gt; kimi | glm | frontier
+     swap = a measurement, not a rewrite
+     score on YOUR corpus; the chart measures someone else's
+
+   and if the harness tunes itself
+
+     metric = its own verifier  -&gt;  it optimises the verifier
+     the dashboard is monotone, green, and about nothing
+     the control is a signal it cannot see, train on, or reach
 </code></pre>
-<p><strong>Stage 7 — Vulnerability auditing.</strong> The deep-dive analysis stage, and the one
-people think of as "SAST". It has had three generations, and knowing what each
-can and cannot see is what stops you buying the wrong one.</p>
-<p><strong>Generation 1 — grep.</strong> Pattern-match dangerous constructs. Fast, zero setup,
-fires on every occurrence whether reachable or not. Precision is poor, so it gets
-muted.</p>
-<p><strong>Generation 2 — rules with dataflow.</strong> Semgrep, CodeQL, OpenGrep. Parse to an
-AST or graph and track <em>taint</em>: does untrusted input reach a dangerous sink?
-Precision improves enormously. The cost is that a rule only finds the pattern
-someone wrote it for.</p>
-<p><strong>Generation 3 — model review.</strong> An open-weight model reads the code and reasons.
-No rule needs to exist first, which is exactly its value — and it also invents
-bugs that are not there, confidently.</p>
-<p>The mistake is treating generation 3 as a replacement for generation 2. The
-combination that works: rules for what rules do well, deterministically; the
-model for what rules cannot express; and everything the model says treated as a
-<strong>hypothesis</strong> until stages 8–12 confirm it.</p></div><div class="nbmd"><blockquote>
-<p><strong>Where you are in the pipeline.</strong></p>
-<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
-         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
-                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
-                             └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · The model backend, and the third generation of SAST</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- model backend: replay by default, real model when you configure one ----
+<p>Three decisions about the model, and the order matters: which one runs this
+step, which one is the backbone at all, and what stops the harness from
+grading its own homework.</p>
+<h3>Routing, inside the loop</h3>
+<p>A large model on every iteration of a 50-step loop is slow and expensive, and
+most iterations are trivial. So teams route dynamically — small model by
+default, escalate when the task looks hard. Two rules keep that safe, and they
+are A1.7's rules applied per call:</p>
+<ol>
+<li><strong>A model may only invoke tools within its tier's blast-radius budget.</strong></li>
+<li><strong>The verifier is never weaker than the actor.</strong></li>
+</ol>
+<p>The failure specific to in-loop routing is subtler than either: <strong>escalation on
+failure.</strong> If the loop retries with a bigger model whenever the small one fails
+verification, an attacker who can cause failures can force every task onto the
+most capable model — and the escalation path usually carries more authority
+too. Escalate capability; never escalate authority.</p>
+<h3>The backbone</h3>
+<p>Two questions get confused here and only one is worth your time. The first is
+<em>which model is best for security work right now</em>, which will be wrong within a
+quarter and take anything built on it down with it. The second lasts: <strong>can you
+substitute the backbone without rewriting the harness?</strong> If swapping a model
+means touching prompt assembly, tool schemas, parsing and retry logic, you did
+not choose a model — you married one.</p>
+<p>So: evaluate on <strong>your</strong> corpus rather than a vendor chart, because the chart
+measures a distribution that is not yours on tasks that are not yours; put the
+backbone behind an interface; and keep the eval, so a substitution is a
+measurement rather than an argument.</p>
+<h3>And if the harness tunes itself</h3>
+<p>A self-improving scaffold edits its own prompts, tools or routing based on how
+well it is doing. It is genuinely effective, and it makes evaluation
+non-optional rather than good practice — because optimisation moves toward
+whatever the metric rewards. If the metric is the scaffold's own verifier, it
+converges on <strong>satisfying the verifier</strong>, which is the same thing as doing the
+job only if the verifier is perfect. B1.1 established that yours is not.</p>
+<p>The loop is: the scaffold changes itself, its own metric improves, actual
+capability does not, and the dashboard is monotone and green. The control is a
+<strong>held-out signal</strong> — cases the scaffold cannot see, cannot train on and cannot
+reach, including through its logs. The hard part is not building it. It is
+keeping it held out.</p></div><div class="nbmd"><h2>3 · The model backend, and the routing decision</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- model backend: replay by default, real model when you configure one ----
 # Nothing here is Anthropic- or vendor-specific beyond one URL and one header
 # shape. Standard library only, so the notebook stays self-contained.
 import json, os, urllib.error, urllib.request
@@ -179,12 +210,12 @@ model; with <code>OPENAI_BASE_URL</code> set it calls any OpenAI-compatible endp
 which covers Ollama, vLLM and the hosted open-weight providers.</p>
 <p>The point of running it both ways is not that the answers match. It is that
 <strong>the lesson's assertion holds either way</strong> — if it only holds against the
-replay, the lesson was testing the replay.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TASK = &#x27;Is this function vulnerable? Name the CWE if so, and say which value reaches the sink.\n\ndef report(request):\n    q = &quot;SELECT * FROM orders WHERE ref = \&#x27;&quot; + request.args[\&#x27;ref\&#x27;] + &quot;\&#x27;&quot;\n    return db.execute(q)&#x27;
+replay, the lesson was testing the replay.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TASK = &#x27;Classify this task as CHEAP or ESCALATE for a two-tier security harness, and give one clause of reasoning.\n\nTask: decide whether a 4,000-line authentication module correctly invalidates sessions on password change.&#x27;
 
-REPLAY = &quot;Yes - CWE-89, SQL injection. request.args[&#x27;ref&#x27;] is concatenated directly into the query string and reaches db.execute unsanitised.&quot;
+REPLAY = &#x27;ESCALATE - multi-file state reasoning about session lifetime, which is where a cheap model produces a confident wrong answer.&#x27;
 
 answer, used, model = ask(TASK, replay=REPLAY,
-            system=&#x27;You are a code reviewer. Answer in at most three lines.&#x27;,
+            system=&#x27;You route tasks between a cheap and a strong model. One line.&#x27;,
             max_tokens=300)
 
 print(f&quot;backend used : {used}&quot;)
@@ -202,270 +233,285 @@ assert answer.strip(), &quot;the configured backend returned nothing&quot;
 if used == &quot;replay&quot;:
     assert answer == REPLAY, &quot;the offline path must return the replay verbatim&quot;
 
-label, held = (&quot;names the CWE identifier&quot;, &quot;CWE-89&quot; in answer.upper() or &quot;SQL INJECT&quot; in answer.upper())
+label, held = (&quot;returned a routing decision&quot;, &quot;ESCALATE&quot; in answer.upper() or &quot;CHEAP&quot; in answer.upper())
 print()
 print(f&quot;property checked : {label}&quot;)
 print(f&quot;held on {used:12s} : {held}&quot;)
 print()
 print(&quot;Same code, same assertions, three possible backends. Offline the answer&quot;)
-print(&quot;is the replay and is labelled as one; with a key it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>5 · Generation 1 — grep, and why it gets muted</h2>
-<p>The safe functions in this corpus matter more than the buggy ones: a scanner that fires on parameterised SQL is one nobody runs twice.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CODE = {
-&quot;db.py&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    # BUG: user input concatenated into SQL
-    return conn.execute(&quot;SELECT * FROM users WHERE name = \&#x27;&quot; + name + &quot;\&#x27;&quot;)
-
-def get_user_safe(conn, name):
-    # parameterised — the driver escapes it
-    return conn.execute(&quot;SELECT * FROM users WHERE name = ?&quot;, (name,))
-
-def audit_note(conn, msg):
-    # a constant string. No user input anywhere.
-    return conn.execute(&quot;INSERT INTO audit(msg) VALUES (\&#x27;startup\&#x27;)&quot;)
-&#x27;&#x27;&#x27;,
-&quot;ops.py&quot;: &#x27;&#x27;&#x27;
-import os, subprocess
-
-def ping(host):
-    # BUG: shell string built from user input
-    os.system(&quot;ping -c1 &quot; + host)
-
-def ping_safe(host):
-    subprocess.run([&quot;ping&quot;, &quot;-c1&quot;, host], check=True)
-&#x27;&#x27;&#x27;,
-&quot;files.py&quot;: &#x27;&#x27;&#x27;
-def read_doc(base, filename):
-    # BUG: path joined from untrusted input
-    return open(base + &quot;/&quot; + filename).read()
-&#x27;&#x27;&#x27;,
+print(&quot;is the replay and is labelled as one; with a key it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>5 · Demo — tiered routing that works</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TIERS = {
+ &quot;llama3.2:1b&quot;:  {&quot;tier&quot;: 0, &quot;ms&quot;: 40,   &quot;solves&quot;: 0.2},
+ &quot;llama3.3:8b&quot;:  {&quot;tier&quot;: 1, &quot;ms&quot;: 220,  &quot;solves&quot;: 0.55},
+ &quot;glm-4.6&quot;:      {&quot;tier&quot;: 2, &quot;ms&quot;: 900,  &quot;solves&quot;: 0.85},
+ &quot;kimi-k2&quot;:      {&quot;tier&quot;: 3, &quot;ms&quot;: 2400, &quot;solves&quot;: 0.93},
 }
-import re
-GREP_RULES = [(&quot;CWE-89&quot;,&quot;SQL injection&quot;,r&quot;execute\(&quot;),
-              (&quot;CWE-78&quot;,&quot;command injection&quot;,r&quot;os\.system|subprocess&quot;),
-              (&quot;CWE-22&quot;,&quot;path traversal&quot;,r&quot;open\(&quot;)]
-def gen1(code):
-    return [(cwe, name, f, i, ln.strip())
-            for f, src in code.items()
-            for i, ln in enumerate(src.splitlines(), 1)
-            for cwe, name, pat in GREP_RULES if re.search(pat, ln)]
+TIER_BUDGET = {0: 0, 1: 3, 2: 20, 3: 60}     # max blast radius a tier may hold
+SCOPE = {&quot;read_file&quot;: 0, &quot;search&quot;: 0, &quot;write_file&quot;: 3, &quot;open_pr&quot;: 3,
+         &quot;merge_pr&quot;: 6, &quot;deploy&quot;: 40}
 
-g1 = gen1(CODE)
-print(f&quot;generation 1 (grep): {len(g1)} findings&quot;)
-for cwe, name, f, i, ln in g1:
-    print(f&quot;   {cwe:8s}{f}:{i:&lt;3} {ln[:52]}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TRUTH = {(&quot;CWE-89&quot;,&quot;db.py&quot;,4), (&quot;CWE-78&quot;,&quot;ops.py&quot;,6), (&quot;CWE-22&quot;,&quot;files.py&quot;,4)}
-def score(findings, label):
-    got = {(c, f, i) for c, _, f, i, _ in findings}
-    tp, fp, fn = len(got &amp; TRUTH), len(got - TRUTH), len(TRUTH - got)
-    prec = tp/(tp+fp) if tp+fp else 0.0
-    rec  = tp/(tp+fn) if tp+fn else 0.0
-    print(f&quot;{label:32s} tp={tp} fp={fp} fn={fn}  precision={prec:.2f} recall={rec:.2f}&quot;)
-    return prec, rec
-score(g1, &quot;generation 1 · grep&quot;)
-print(&quot;\nfalse positives:&quot;)
-for cwe, name, f, i, ln in g1:
-    if (cwe, f, i) not in TRUTH: print(f&quot;   {f}:{i:&lt;3} {ln[:56]}&quot;)</code></pre></div><div class="nbmd"><h2>6 · Generation 2 — taint rules</h2>
-<p>The improvement is not a better pattern. It is a different question: <em>does untrusted input reach this sink?</em> A function parameter is untrusted; a string literal is not.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import ast
-class TaintRule:
-    SINKS = {&quot;execute&quot;: (&quot;CWE-89&quot;,&quot;SQL injection&quot;),
-             &quot;system&quot;:  (&quot;CWE-78&quot;,&quot;command injection&quot;),
-             &quot;open&quot;:    (&quot;CWE-22&quot;,&quot;path traversal&quot;)}
-    def scan(self, fname, src):
-        out = []
-        for fn in [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef)]:
-            tainted = {a.arg for a in fn.args.args}
-            for call in [n for n in ast.walk(fn) if isinstance(n, ast.Call)]:
-                sink = (call.func.attr if isinstance(call.func, ast.Attribute)
-                        else getattr(call.func, &quot;id&quot;, &quot;&quot;))
-                if sink not in self.SINKS: continue
-                cwe, name = self.SINKS[sink]
-                for arg in call.args:
-                    if self._concat_taint(arg, tainted):
-                        out.append((cwe, name, fname, call.lineno,
-                                    ast.get_source_segment(src, call) or &quot;&quot;))
-                        break
-        return out
-    @staticmethod
-    def _concat_taint(node, tainted):
-        for n in ast.walk(node):
-            if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Add):
-                if {x.id for x in ast.walk(n) if isinstance(x, ast.Name)} &amp; tainted:
-                    return True
-        return False
+def may_invoke(model, tool):
+    return SCOPE[tool] &lt;= TIER_BUDGET[TIERS[model][&quot;tier&quot;]]
 
-rule = TaintRule()
-g2 = [f for n, s in CODE.items() for f in rule.scan(n, s)]
-print(f&quot;generation 2 (taint rules): {len(g2)} findings&quot;)
-for cwe, name, f, i, snip in g2: print(f&quot;   {cwe:8s}{f}:{i:&lt;3} {snip[:52]}&quot;)
+print(f&quot;{&#x27;model&#x27;:14s}{&#x27;tier&#x27;:&gt;5}  tools it may invoke&quot;)
+print(&quot;-&quot; * 70)
+for m in TIERS:
+    allowed = [t for t in SCOPE if may_invoke(m, t)]
+    print(f&quot;{m:14s}{TIERS[m][&#x27;tier&#x27;]:&gt;5}  {allowed}&quot;)</code></pre></div><div class="nbmd"><h2>6 · Where it breaks — escalation on failure</h2>
+<p>The natural retry policy: if the small model fails, try a bigger one. Watch what an attacker who can force failures gets.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>LADDER = [&quot;llama3.2:1b&quot;, &quot;llama3.3:8b&quot;, &quot;glm-4.6&quot;, &quot;kimi-k2&quot;]
+
+def loop_with_escalation(task_fails_always, max_steps=4, escalate_authority=True):
+    &quot;&quot;&quot;The common pattern: harder task → bigger model → and, usually, more tools.&quot;&quot;&quot;
+    trace = []
+    for i in range(max_steps):
+        model = LADDER[min(i, len(LADDER)-1)]
+        tools = [t for t in SCOPE if may_invoke(model, t)] if escalate_authority \
+                else [t for t in SCOPE if may_invoke(LADDER[0], t)]
+        trace.append({&quot;step&quot;: i+1, &quot;model&quot;: model, &quot;tier&quot;: TIERS[model][&quot;tier&quot;],
+                      &quot;ms&quot;: TIERS[model][&quot;ms&quot;], &quot;tools&quot;: tools})
+        if not task_fails_always:
+            break
+    return trace
+
+print(&quot;a task that keeps failing verification:&quot;)
+tr = loop_with_escalation(task_fails_always=True)
+for s in tr:
+    print(f&quot;   step {s[&#x27;step&#x27;]}  {s[&#x27;model&#x27;]:14s} tier {s[&#x27;tier&#x27;]}  &quot;
+          f&quot;{s[&#x27;ms&#x27;]:&gt;5}ms  may invoke {s[&#x27;tools&#x27;]}&quot;)
+total_ms = sum(s[&quot;ms&quot;] for s in tr)
+print(f&quot;\ncost of one forced escalation: {total_ms}ms and the final step could &quot;
+      f&quot;invoke {tr[-1][&#x27;tools&#x27;]}&quot;)
+print(&quot;An attacker who can make verification fail has just promoted the loop to&quot;)
+print(&quot;the most capable model AND the widest tool set. Both, for free.&quot;)</code></pre></div><div class="nbmd"><h2>7 · The control — escalate capability, never authority</h2>
+<p>The fix separates two things that are usually coupled: how <em>smart</em> the model is, and what it is <em>allowed to do</em>. Escalating the first is fine. Escalating the second must require a fresh decision.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def loop_capability_only(task_fails_always, max_steps=4, task_budget=TIER_BUDGET[1]):
+    &quot;&quot;&quot;Authority is fixed by the TASK, not by which model happens to be running.
+
+    The ladder starts at the lowest tier whose budget covers the task&#x27;s
+    authority. Routing a tool-holding step to a model below that would hand the
+    weakest model in the system tools its tier is not trusted with — which is
+    the same mistake as escalating authority, in the other direction.
+    &quot;&quot;&quot;
+    ladder = [m for m in LADDER if TIER_BUDGET[TIERS[m][&quot;tier&quot;]] &gt;= task_budget]
+    trace = []
+    for i in range(max_steps):
+        model = ladder[min(i, len(ladder)-1)]
+        tools = [t for t in SCOPE if SCOPE[t] &lt;= task_budget]
+        trace.append({&quot;step&quot;: i+1, &quot;model&quot;: model, &quot;tools&quot;: tools})
+        if not task_fails_always:
+            break
+    return trace
+
+tr2 = loop_capability_only(task_fails_always=True)
+print(f&quot;   task authority budget: {TIER_BUDGET[1]}  → ladder starts at the lowest &quot;
+      f&quot;tier that covers it&quot;)
+for s in tr2:
+    print(f&quot;   step {s[&#x27;step&#x27;]}  {s[&#x27;model&#x27;]:14s} may invoke {s[&#x27;tools&#x27;]}&quot;)
+print(&quot;\nThe model gets smarter. The authority does not move.&quot;)
+
+escalated = set(tr[-1][&quot;tools&quot;]) - set(tr2[-1][&quot;tools&quot;])
+print(f&quot;tools the attacker gained under the naive policy: {sorted(escalated)}&quot;)
+assert escalated</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: both rules, checked over every step of both policies.
+def review(trace, verifier_model):
+    problems = []
+    for s in trace:
+        model = s[&quot;model&quot;]
+        for t in s[&quot;tools&quot;]:
+            if SCOPE[t] &gt; TIER_BUDGET[TIERS[model][&quot;tier&quot;]]:
+                problems.append(f&quot;step {s[&#x27;step&#x27;]}: {model} may invoke {t} &quot;
+                                f&quot;(blast {SCOPE[t]} &gt; budget &quot;
+                                f&quot;{TIER_BUDGET[TIERS[model][&#x27;tier&#x27;]]})&quot;)
+        if TIERS[verifier_model][&quot;tier&quot;] &lt; TIERS[model][&quot;tier&quot;]:
+            problems.append(f&quot;step {s[&#x27;step&#x27;]}: verifier {verifier_model} is weaker &quot;
+                            f&quot;than actor {model}&quot;)
+    return problems
+
+for label, trace, verifier in ((&quot;escalate authority too&quot;,   tr,  &quot;llama3.3:8b&quot;),
+                               (&quot;capability only, glm verifier&quot;, tr2, &quot;glm-4.6&quot;),
+                               (&quot;capability only, kimi verifier&quot;, tr2, &quot;kimi-k2&quot;)):
+    p = review(trace, verifier)
+    print(f&quot;{label:32s} {&#x27;PASS&#x27; if not p else f&#x27;{len(p)} FINDING(S)&#x27;}&quot;)
+    for x in p[:4]:
+        print(f&quot;      ⚠ {x}&quot;)
+
+print(&quot;\nRead the middle row. Fixing the authority leak was not enough:&quot;)
+print(&quot;once the ladder can reach kimi-k2, a glm-4.6 verifier is weaker than the&quot;)
+print(&quot;actor on the final step, and rule 2 fires. Escalating capability forces&quot;)
+print(&quot;the verifier&#x27;s tier up with it — a second-order cost of dynamic routing&quot;)
+print(&quot;that cost models never include.&quot;)
+
+assert review(tr2, &quot;glm-4.6&quot;), &quot;the weaker-verifier finding must be reported&quot;
+assert review(tr2, &quot;kimi-k2&quot;) == [], &quot;top-tier verifier should satisfy both rules&quot;
+top = max(TIERS[s[&quot;model&quot;]][&quot;tier&quot;] for s in tr2)
+print(f&quot;\nrule: verifier tier must be ≥ {top} (the highest tier the ladder reaches)&quot;)</code></pre></div><div class="nbmd"><h2>8 · The backbone, behind an interface</h2>
+<p>Routing decides which model runs a step. This decides whether you can change your mind later — and it is the question that outlives every model comparison you will read.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CORPUS = [
+ # (unit, true_cwe)
+ (&quot;get_report&quot;,   &quot;CWE-22&quot;), (&quot;run_export&quot;, &quot;CWE-78&quot;), (&quot;safe_query&quot;, None),
+ (&quot;legacy_dump&quot;,  &quot;CWE-89&quot;), (&quot;render_row&quot;, None),     (&quot;admin_purge&quot;, &quot;CWE-78&quot;),
+]
+
+def backbone_a(unit):                 # strong on injection, misses traversal
+    return {&quot;run_export&quot;: &quot;CWE-78&quot;, &quot;legacy_dump&quot;: &quot;CWE-89&quot;,
+            &quot;admin_purge&quot;: &quot;CWE-78&quot;}.get(unit)
+def backbone_b(unit):                 # broad recall, some false positives
+    return {&quot;get_report&quot;: &quot;CWE-22&quot;, &quot;run_export&quot;: &quot;CWE-78&quot;, &quot;legacy_dump&quot;: &quot;CWE-89&quot;,
+            &quot;admin_purge&quot;: &quot;CWE-78&quot;, &quot;render_row&quot;: &quot;CWE-79&quot;}.get(unit)
+def backbone_c(unit):                 # conservative
+    return {&quot;run_export&quot;: &quot;CWE-78&quot;}.get(unit)
+
+BACKBONES = {&quot;kimi-k2.6-stand-in&quot;: backbone_a,
+             &quot;glm-5.2-stand-in&quot;:   backbone_b,
+             &quot;small-local-stand-in&quot;: backbone_c}
+
+def harness(find, corpus):
+    &quot;&quot;&quot;The harness. Note it takes `find` as an argument - that is the point.&quot;&quot;&quot;
+    return [(u, find(u)) for u, _ in corpus if find(u)]
+
+for name in sorted(BACKBONES):
+    out = harness(BACKBONES[name], CORPUS)
+    print(f&quot;{name:22s}{len(out)} findings&quot;)</code></pre></div><div class="nbmd"><h2>9 · Score them on your corpus, not on a chart</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def score(find, corpus, cost_per_call=0.004):
+    truth = dict(corpus)
+    found = harness(find, corpus)
+    tp = [u for u, c in found if truth.get(u) == c]
+    fp = [u for u, c in found if truth.get(u) != c]
+    planted = [u for u, c in corpus if c]
+    fn = [u for u in planted if u not in [x for x, _ in found]]
+    recall = len(tp) / len(planted)
+    prec = len(tp) / len(found) if found else 0.0
+    spend = len(corpus) * cost_per_call
+    return {&quot;recall&quot;: recall, &quot;precision&quot;: prec, &quot;tp&quot;: len(tp), &quot;fp&quot;: len(fp),
+            &quot;fn&quot;: len(fn), &quot;spend&quot;: spend,
+            &quot;cost_per_tp&quot;: (spend / len(tp)) if tp else float(&quot;inf&quot;)}
+
+print(f&quot;{&#x27;backbone&#x27;:22s}{&#x27;recall&#x27;:&gt;8}{&#x27;prec&#x27;:&gt;7}{&#x27;tp&#x27;:&gt;4}{&#x27;fp&#x27;:&gt;4}{&#x27;fn&#x27;:&gt;4}{&#x27;$/finding&#x27;:&gt;11}&quot;)
+results = {}
+for name in sorted(BACKBONES):
+    s = score(BACKBONES[name], CORPUS)
+    results[name] = s
+    print(f&quot;{name:22s}{s[&#x27;recall&#x27;]:&gt;7.0%}{s[&#x27;precision&#x27;]:&gt;7.0%}&quot;
+          f&quot;{s[&#x27;tp&#x27;]:&gt;4}{s[&#x27;fp&#x27;]:&gt;4}{s[&#x27;fn&#x27;]:&gt;4}{s[&#x27;cost_per_tp&#x27;]:&gt;10.3f}&quot;)
+best_recall = max(results, key=lambda n: (results[n][&quot;recall&quot;], n))
+best_cost = min(results, key=lambda n: (results[n][&quot;cost_per_tp&quot;], n))
+print(f&quot;\nbest recall        : {best_recall}&quot;)
+print(f&quot;best cost/finding  : {best_cost}&quot;)
+print(&quot;They are not the same backbone, and which one you want depends on&quot;)
+print(&quot;whether an analyst reviews the output or a ticket is opened from it.&quot;)</code></pre></div><div class="nbmd"><h2>10 · Where it breaks — the harness that married its model</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def coupled_harness(unit, backbone_name):
+    &quot;&quot;&quot;Prompt assembly, parsing and retry all keyed to one vendor&#x27;s quirks.&quot;&quot;&quot;
+    if backbone_name == &quot;kimi-k2.6-stand-in&quot;:
+        raw = backbone_a(unit)
+        return raw                                   # returns a bare CWE
+    if backbone_name == &quot;glm-5.2-stand-in&quot;:
+        raw = backbone_b(unit)
+        return {&quot;cwe&quot;: raw} if raw else None         # returns an object
+    raise KeyError(f&quot;no parsing branch for {backbone_name}&quot;)
+
+for name in sorted(BACKBONES):
+    try:
+        out = [u for u, _ in CORPUS if coupled_harness(u, name)]
+        print(f&quot;   {name:22s}{len(out)} findings&quot;)
+    except KeyError as e:
+        print(f&quot;   {name:22s}FAILS: {e}&quot;)
 print()
-score(g2, &quot;generation 2 · taint rules&quot;)</code></pre></div><div class="nbmd"><h2>7 · Generation 3 — what rules structurally cannot see</h2>
-<p>Generation 2 is perfect on this corpus. So why involve a model? Because a rule only finds what someone wrote it for. Here is a bug with no rule: an authorization check that is <em>present</em> and wrong.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CODE[&quot;authz.py&quot;] = &#x27;&#x27;&#x27;
-def can_delete(user, doc):
-    # Reads &quot;or&quot; where it means &quot;and&quot;. No sink, no taint, no pattern.
-    if user.is_admin or user.id == doc.owner_id or doc.is_public:
-        return True
-    return False
-&#x27;&#x27;&#x27;
-print(&quot;generation 1 on authz.py:&quot;, gen1({&quot;authz.py&quot;: CODE[&quot;authz.py&quot;]}) or &quot;nothing&quot;)
-print(&quot;generation 2 on authz.py:&quot;, rule.scan(&quot;authz.py&quot;, CODE[&quot;authz.py&quot;]) or &quot;nothing&quot;)
+print(&quot;Adding a third backbone to the coupled harness is a code change in the&quot;)
+print(&quot;parser, the prompt and the retry path. Adding it to the harness above is&quot;)
+print(&quot;a dictionary entry. Same models, same corpus - the difference is where&quot;)
+print(&quot;the vendor&#x27;s shape was allowed to leak to.&quot;)</code></pre></div><div class="nbmd"><h2>11 · And if the harness tunes itself, the metric must be held out</h2>
+<p>A scaffold that edits its own prompts, tools or routing moves toward whatever its metric rewards. If that metric is its own verifier, it converges on satisfying the verifier — and B1.1 established that yours is not perfect.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import random
 
-class StandIn:
-    &quot;&quot;&quot;DETERMINISTIC STAND-IN — not a language model. See the note above.&quot;&quot;&quot;
-    KNOWN = {
-     &quot;authz.py&quot;: [{&quot;cwe&quot;:&quot;CWE-863&quot;,&quot;line&quot;:4,&quot;confidence&quot;:0.82,
-                   &quot;rationale&quot;:&quot;disjunctive permission check: a non-public document &quot;
-                               &quot;owned by another user is deletable whenever is_public &quot;
-                               &quot;is true, and delete rights are never checked&quot;}],
-     &quot;db.py&quot;: [{&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;line&quot;:4,&quot;confidence&quot;:0.95,
-                &quot;rationale&quot;:&quot;name is concatenated into the query string&quot;},
-               {&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;line&quot;:12,&quot;confidence&quot;:0.41,
-                &quot;rationale&quot;:&quot;audit_note also calls execute&quot;}],     # HALLUCINATION
-    }
-    def review(self, fname, src): return self.KNOWN.get(fname, [])
+TASKS = [{&quot;id&quot;: i, &quot;input&quot;: i, &quot;correct&quot;: i * 2} for i in range(1, 21)]
 
-model = StandIn()
-print(&quot;\ngeneration 3 (model review):&quot;)
-for fname in (&quot;authz.py&quot;, &quot;db.py&quot;):
-    for f in model.review(fname, CODE[fname]):
-        print(f&quot;   {f[&#x27;cwe&#x27;]:9s}{fname}:{f[&#x27;line&#x27;]:&lt;3} conf={f[&#x27;confidence&#x27;]:.2f}  &quot;
-              f&quot;{f[&#x27;rationale&#x27;][:52]}&quot;)
-print(&quot;\nIt found the authorization bug neither earlier generation can see.&quot;)
-print(&quot;It also invented a SQL injection in a function with a constant string.&quot;)</code></pre></div><div class="nbmd"><h2>8 · Generation 2, as the tool you would actually run</h2>
-<p>The taint engine above is forty lines so it fits in a lesson. In production
-generation 2 is Semgrep, CodeQL or OpenGrep, and a rule is a file. This is the
-Semgrep rule for the same taint property the engine above implements:</p>
-<pre><code class="language-yaml">rules:
-  - id: cybertravels-sql-concat
-    languages: [python]
-    severity: ERROR
-    message: &gt;-
-      Traveller-controlled input is concatenated into a SQL string. Use a
-      parameterised query.
-    mode: taint
-    pattern-sources:
-      - pattern: $REQ.args[...]
-      - pattern: $REQ.files[...]
-    pattern-sinks:
-      - pattern: $CONN.execute(...)
-    pattern-sanitizers:
-      - pattern: sqlite3.paramstyle
-</code></pre>
-<p><a href="https://github.com/spbreed/cyber-commons/tree/main/labs/tools/semgrep-sast"><code>labs/tools/semgrep-sast/</code></a>
-installs Semgrep 1.176.0 and runs it against a pull request from the Coding
-Agent. Two things came out of that run and both matter here.</p>
-<p><strong>Coverage is a configuration decision, and it is invisible.</strong> The same file,
-two ruleset widths:</p>
-<pre><code>  p/python + p/secrets: 1 finding
-    line  17  ERROR   subprocess-shell-true
+class Scaffold:
+    &quot;&quot;&quot;Adjusts its own strategy based on feedback. DETERMINISTIC — not a model.&quot;&quot;&quot;
+    def __init__(self):
+        self.strategy = &quot;double&quot;        # starts correct
+        self.history = []
 
-  seven packs: 4 findings
-    line   9  ERROR   sqlalchemy-execute-raw-query
-    line  14  WARNING eval-detected
-    line  17  ERROR   subprocess-shell-true
-    line  20  ERROR   disabled-cert-validation
-</code></pre>
-<p>Nothing about the file changed. On the narrow setting three real defects were
-simply not looked for, and the scan exits 0 either way.</p>
-<p><strong>And two defects survived both widths:</strong></p>
-<pre><code>  line  22  MISSED a live-looking API key on a module-level constant
-  line   7  MISSED find_booking performs no authorisation check of any kind
-</code></pre>
-<p>The first is lexical — <code>p/secrets</code> was enabled and did not fire, because the
-string matches no known provider's format. A rule could catch it, once someone
-writes that rule. The second cannot be caught by any rule, because the defect is
-the <strong>absence</strong> of a call in a function whose caller holds payments scope. That
-is the boundary generation 3 exists to cross, and it is why the answer is
-"both" rather than "the newer one".</p></div><div class="nbmd"><h2>9 · An agent drives both, because you cannot afford to run both everywhere</h2>
-<p>Generation 2 is cheap enough to run over the whole repository. Generation 3 is
-not — at four million lines the model pass costs more than the finding is
-worth, and a model asked to review everything reviews nothing carefully.</p>
-<p>So neither generation is the interesting part. <strong>The allocation is.</strong> An agent
-sits above both, and its policy is three rules:</p>
-<ol>
-<li>run the deterministic scanner everywhere, with the widest ruleset that is
-   not noisy, because it is nearly free;</li>
-<li>spend the model pass only where stage 1 said risk lives <strong>and</strong> the rules
-   were silent — silence in a high-risk zone is the signal, not the noise;</li>
-<li>mark everything the model says as a hypothesis, never a finding, because
-   stages 8 to 12 are what turn one into the other.</li>
-</ol></div><div class="nbcode"><span class="nbtag">In</span><pre><code># What stage 1 said, and what generation 2 found. The agent has both.
-HISTORICAL_RISK = {&quot;db.py&quot;: 0.53, &quot;authz.py&quot;: 0.48, &quot;ops.py&quot;: 0.19,
-                   &quot;safe.py&quot;: 0.02}
-MODEL_COST_PER_FILE = 0.031      # dollars, measured on a small open-weight model
+    def solve(self, task):
+        if self.strategy == &quot;double&quot;:     return task[&quot;input&quot;] * 2
+        if self.strategy == &quot;constant&quot;:   return 42
+        return task[&quot;input&quot;]
 
-def audit_agent(code, rule, model, risk, gate=0.70, risk_floor=0.30):
-    &quot;&quot;&quot;Stage 7, allocated. Rules everywhere; the model where rules went quiet.&quot;&quot;&quot;
-    findings, suppressed, plan = [], [], []
-    rule_hits = {f: rule.scan(f, s) for f, s in sorted(code.items())}
+    def improve(self, score):
+        &quot;&quot;&quot;Move toward whatever scored better last round.&quot;&quot;&quot;
+        self.history.append((self.strategy, score))
+        if len(self.history) &gt;= 2 and self.history[-1][1] &lt;= self.history[-2][1]:
+            order = [&quot;double&quot;, &quot;constant&quot;, &quot;identity&quot;]
+            self.strategy = order[(order.index(self.strategy) + 1) % 3]
 
-    for fname, hits in rule_hits.items():
-        for cwe, name, f, i, snip in hits:
-            findings.append({&quot;src&quot;: &quot;rules&quot;, &quot;cwe&quot;: cwe, &quot;file&quot;: f, &quot;line&quot;: i,
-                             &quot;confidence&quot;: 1.0, &quot;status&quot;: &quot;confirmed-by-rule&quot;})
+def own_judge(task, answer):
+    &quot;&quot;&quot;The scaffold&#x27;s own verifier: is the answer a plausible-looking number?&quot;&quot;&quot;
+    return isinstance(answer, int) and answer &gt; 0
 
-    for fname in sorted(code):
-        r = risk.get(fname, 0.0)
-        quiet = not rule_hits[fname]
-        if r &gt;= risk_floor and quiet:
-            plan.append((fname, r, &quot;high risk, rules silent -&gt; REVIEW&quot;))
-        elif r &gt;= risk_floor:
-            plan.append((fname, r, &quot;high risk, rules already fired -&gt; skip&quot;))
-        else:
-            plan.append((fname, r, &quot;low historical risk -&gt; skip&quot;))
+def held_out_oracle(task, answer):
+    &quot;&quot;&quot;The truth. The scaffold never sees this.&quot;&quot;&quot;
+    return answer == task[&quot;correct&quot;]
 
-    reviewed = [f for f, _, why in plan if why.endswith(&quot;REVIEW&quot;)]
-    for fname in reviewed:
-        for m in model.review(fname, code[fname]):
-            row = {&quot;src&quot;: &quot;model&quot;, &quot;cwe&quot;: m[&quot;cwe&quot;], &quot;file&quot;: fname,
-                   &quot;line&quot;: m[&quot;line&quot;], &quot;confidence&quot;: m[&quot;confidence&quot;],
-                   &quot;status&quot;: &quot;HYPOTHESIS&quot;}
-            (findings if m[&quot;confidence&quot;] &gt;= gate else suppressed).append(row)
+def evaluate(scaffold, verifier, tasks):
+    return sum(verifier(t, scaffold.solve(t)) for t in tasks) / len(tasks)
 
-    seen, dedup = set(), []
-    for f in sorted(findings, key=lambda r: (r[&quot;src&quot;], r[&quot;file&quot;], r[&quot;line&quot;])):
-        k = (f[&quot;cwe&quot;], f[&quot;file&quot;], f[&quot;line&quot;])
-        if k not in seen:
-            seen.add(k); dedup.append(f)
-    return dedup, suppressed, plan, reviewed
+s = Scaffold()
+print(f&quot;{&#x27;round&#x27;:6s}{&#x27;strategy&#x27;:11s}{&#x27;own judge&#x27;:11s}{&#x27;held-out truth&#x27;:15s}&quot;)
+print(&quot;-&quot; * 46)
+for r in range(1, 7):
+    own = evaluate(s, own_judge, TASKS)
+    truth = evaluate(s, held_out_oracle, TASKS)
+    print(f&quot;{r:&lt;6}{s.strategy:11s}{own:&lt;11.2f}{truth:&lt;15.2f}&quot;)
+    s.improve(own)</code></pre></div><div class="nbmd"><h2>12 · Where it breaks — the self-metric cannot fall</h2>
+<p>The judge scores 1.00 for every strategy, including <code>constant</code>, which returns 42 for everything. There is no gradient for the scaffold to follow toward correctness, and no signal that anything is wrong. The dashboard is green in every round.</p>
+<p>Now let the scaffold drift, and watch the two curves separate.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>s2 = Scaffold()
+s2.strategy = &quot;constant&quot;            # a drift that the judge cannot penalise
+print(f&quot;{&#x27;round&#x27;:6s}{&#x27;strategy&#x27;:11s}{&#x27;own judge&#x27;:11s}{&#x27;held-out truth&#x27;:15s}verdict&quot;)
+print(&quot;-&quot; * 62)
+for r in range(1, 5):
+    own = evaluate(s2, own_judge, TASKS)
+    truth = evaluate(s2, held_out_oracle, TASKS)
+    verdict = &quot;looks fine&quot; if own &gt; 0.9 else &quot;alert&quot;
+    real = &quot;BROKEN&quot; if truth &lt; 0.9 else &quot;ok&quot;
+    print(f&quot;{r:&lt;6}{s2.strategy:11s}{own:&lt;11.2f}{truth:&lt;15.2f}{verdict} / actually {real}&quot;)
+    s2.improve(own)</code></pre></div><div class="nbmd"><h2>13 · The control — a held-out set, and keeping it held out</h2>
+<p>Building the set is easy. The three ways it leaks are not obvious, and each one silently converts your held-out signal into another self-metric.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>LEAKS = [
+ (&quot;the scaffold reads its own logs, which contain held-out failures&quot;,
+  &quot;it optimises against them without anyone deciding to&quot;),
+ (&quot;held-out cases are added to the prompt as &#x27;examples of hard tasks&#x27;&quot;,
+  &quot;the most common leak, and it looks like good engineering&quot;),
+ (&quot;the same corpus is used for both tuning and evaluation&quot;,
+  &quot;the number becomes a training metric and rises forever&quot;),
+ (&quot;a human adjusts the scaffold after reading held-out results&quot;,
+  &quot;slower leak, same effect — the human is the gradient&quot;),
+]
+for how, why in LEAKS:
+    print(f&quot;✗ {how}\n    → {why}\n&quot;)
 
-final, suppressed, plan, reviewed = audit_agent(CODE, rule, model, HISTORICAL_RISK)
+def evaluation_is_sound(scaffold_can_read_logs, cases_in_prompt,
+                        same_corpus, human_tunes_on_results):
+    problems = []
+    if scaffold_can_read_logs:    problems.append(&quot;scaffold can read held-out outcomes&quot;)
+    if cases_in_prompt:           problems.append(&quot;held-out cases appear in the prompt&quot;)
+    if same_corpus:               problems.append(&quot;tuning and eval share a corpus&quot;)
+    if human_tunes_on_results:    problems.append(&quot;human closes the loop manually&quot;)
+    return (not problems), problems
 
-print(&quot;the agent&#x27;s allocation:&quot;)
-for fname, r, why in plan:
-    print(f&quot;   {fname:12s}risk {r:.2f}   {why}&quot;)
-print(f&quot;\nmodel pass on {len(reviewed)} of {len(CODE)} files &quot;
-      f&quot;(${len(reviewed) * MODEL_COST_PER_FILE:.3f} rather than &quot;
-      f&quot;${len(CODE) * MODEL_COST_PER_FILE:.3f})&quot;)
+for label, args in ((&quot;as usually built&quot;, (True, True, True, True)),
+                    (&quot;after the fix&quot;,    (False, False, False, False))):
+    ok, problems = evaluation_is_sound(*args)
+    print(f&quot;{label:18s} sound={ok}&quot;)
+    for p in problems: print(f&quot;      ⚠ {p}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: gate the scaffold on the held-out signal, not its own.
+def gated_improve(scaffold, tasks, holdout_tasks):
+    before = evaluate(scaffold, held_out_oracle, holdout_tasks)
+    candidate = Scaffold(); candidate.strategy = &quot;constant&quot;
+    after = evaluate(candidate, held_out_oracle, holdout_tasks)
+    if after &lt; before:
+        return scaffold, f&quot;REJECTED change: held-out {before:.2f} → {after:.2f}&quot;
+    return candidate, f&quot;accepted: held-out {before:.2f} → {after:.2f}&quot;
 
-print(f&quot;\nstage 7 emits {len(final)}, {len(suppressed)} suppressed below 0.70&quot;)
-for f in final:
-    print(f&quot;   [{f[&#x27;src&#x27;]:5s}] {f[&#x27;cwe&#x27;]:9s}{f[&#x27;file&#x27;]}:{f[&#x27;line&#x27;]:&lt;3} &quot;
-          f&quot;conf={f[&#x27;confidence&#x27;]:.2f}  {f[&#x27;status&#x27;]}&quot;)
-
-TRUTH_FULL = TRUTH | {(&quot;CWE-863&quot;, &quot;authz.py&quot;, 4)}
-got = {(f[&quot;cwe&quot;], f[&quot;file&quot;], f[&quot;line&quot;]) for f in final}
-print(f&quot;\ntp={len(got &amp; TRUTH_FULL)} fp={len(got - TRUTH_FULL)} &quot;
-      f&quot;fn={len(TRUTH_FULL - got)}&quot;)
-assert not (got - TRUTH_FULL) and not (TRUTH_FULL - got)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># The allocation is a bet, so measure what it costs when it loses. Move the
-# authorisation bug into a file with LOW historical risk and re-run.
-print(&quot;the same corpus, with authz.py carrying no history:&quot;)
-_, _, plan_b, reviewed_b = audit_agent(CODE, rule, model,
-                                       {**HISTORICAL_RISK, &quot;authz.py&quot;: 0.04})
-final_b, _, _, _ = audit_agent(CODE, rule, model,
-                               {**HISTORICAL_RISK, &quot;authz.py&quot;: 0.04})
-got_b = {(f[&quot;cwe&quot;], f[&quot;file&quot;], f[&quot;line&quot;]) for f in final_b}
-missed = TRUTH_FULL - got_b
-print(f&quot;   model pass on {len(reviewed_b)} file(s): {reviewed_b}&quot;)
-print(f&quot;   MISSED: {sorted(missed)}&quot;)
-print()
-print(&quot;A new file with no history is invisible to the allocator, and the&quot;)
-print(&quot;allocator is what makes generation 3 affordable. The mitigation is not&quot;)
-print(&quot;subtle - review everything a pull request touched regardless of history,&quot;)
-print(&quot;and let the risk floor decide only where to spend the SECOND pass.&quot;)
-assert missed == {(&quot;CWE-863&quot;, &quot;authz.py&quot;, 4)}
-print()
-print(&quot;Every model finding above is marked HYPOTHESIS. Stages 8 to 12 decide.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Grep produces 6 findings at 50% precision, flagging the parameterised query, the constant insert and the safe subprocess call. Taint rules find exactly the 3 real injection bugs at 100% precision and recall and find nothing in <code>authz.py</code>. The model finds the authorization bug at 0.82 confidence and hallucinates one SQL injection at 0.41. The audit agent then runs the rules everywhere and spends the model pass on one file of four — the one where history says risk lives and the rules were silent — emitting 4 findings with zero false positives, every model finding marked as a hypothesis. The last cell shows what the allocation costs when it loses: give <code>authz.py</code> no history and the authorization bug is never reviewed.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Two things, and the second is the one people skip. Point the stand-in at a real GLM-4.6 or Kimi K2 through Ollama and run it on <code>authz.py</code> ten times — the variance in what it reports, and in its confidence, decides whether you can gate on confidence at all. Then run Semgrep against one of your own repositories at your current ruleset and at seven packs, and count the difference. Whatever that number is, it has been the number all year.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.4.html">B1.4 · Deduplication and contextual verification</a></strong></p>
+HOLDOUT = [{&quot;id&quot;: 100+i, &quot;input&quot;: 100+i, &quot;correct&quot;: (100+i)*2} for i in range(10)]
+good = Scaffold()
+kept, why = gated_improve(good, TASKS, HOLDOUT)
+print(why)
+print(&quot;final strategy:&quot;, kept.strategy)
+assert kept.strategy == &quot;double&quot;
+print(&quot;\nThe scaffold&#x27;s own judge would have accepted the change. The held-out&quot;)
+print(&quot;oracle rejected it, which is the only reason the system still works.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Tiered routing sends trivial steps to the small model and escalates the hard one, then the same router is driven onto the largest model for every task by an attacker who can cause verification failures — carrying more authority with it. The backbone is scored on CyberTravels' own corpus rather than a vendor chart, and substituted behind an unchanged interface. A self-improving scaffold's own metric then climbs monotonically while its held-out accuracy falls.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Two questions. Could you swap your backbone model this week, and what would you have to touch? And if your harness tunes anything about itself, name the signal it cannot see — if you cannot, its dashboard is measuring its own opinion.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B1.4.html">B1.4 · One skeleton, four oracles — and whether any of it is true</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B1.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B1.3.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The unprotected run emits the attacker&#x27;s verdict; the tagged run does not.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenGrep</span><span>Semgrep OSS</span><span>CodeQL</span><span>GLM-4.6</span><span>Kimi K2</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.3.ipynb</code></p></div><div class="pager"><a href="B1.2.html"><span class="k">← Previous</span><span class="t">B1.2 · Threat modelling from what the estate already knows</span></a><a class="next" href="B1.4.html"><span class="k">Next →</span><span class="t">B1.4 · Deduplication and contextual verification</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Tiered routing sends trivial steps to the small model and escalates the hard one, then the same router is driven onto the largest model for every task by an attacker who can cause verification failures — carrying more authority with it. The backbone is scored on CyberTravels&#x27; own corpus rather than a vendor chart, and substituted behind an unchanged interface. A self-improving scaffold&#x27;s own metric then climbs monotonically while its held-out accuracy falls.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Ollama</span><span>vLLM</span><span>Claude Haiku 4.5</span><span>GLM-4.6</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B1.3.ipynb</code></p></div><div class="pager"><a href="B1.2.html"><span class="k">← Previous</span><span class="t">B1.2 · What the loop may touch: tools, depth and doing it twice</span></a><a class="next" href="B1.4.html"><span class="k">Next →</span><span class="t">B1.4 · One skeleton, four oracles — and whether any of it is true</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

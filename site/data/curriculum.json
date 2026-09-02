@@ -684,6 +684,65 @@
    "tracks": [
     {
      "id": "B1",
+     "title": "The Agentic Harness",
+     "sessions": [
+      {
+       "id": "B1.0",
+       "title": "What an agentic harness is",
+       "kind": "control",
+       "track": "both",
+       "lab": "Name the eight components, then name which one just failed.",
+       "tools": [
+        "OpenTelemetry"
+       ]
+      },
+      {
+       "id": "B1.1",
+       "title": "The loop, and the verifier that decides what it may conclude",
+       "kind": "control",
+       "track": "both",
+       "lab": "Same model, same proposals, opposite outcomes — the verifier is the difference.",
+       "tools": [
+        "pytest"
+       ]
+      },
+      {
+       "id": "B1.2",
+       "title": "What the loop may touch: tools, depth and doing it twice",
+       "kind": "control",
+       "track": "both",
+       "lab": "Signatures bound what can be asked for, depth bounds how far it travels, keys bound how often it lands.",
+       "tools": [
+        "JSON Schema"
+       ]
+      },
+      {
+       "id": "B1.3",
+       "title": "Which model runs it, and who checks the checker",
+       "kind": "control",
+       "track": "both",
+       "lab": "Routing inside the loop, the backbone behind an interface, and a signal the scaffold cannot see.",
+       "tools": [
+        "Ollama",
+        "vLLM",
+        "Claude Haiku 4.5",
+        "GLM-4.6"
+       ]
+      },
+      {
+       "id": "B1.4",
+       "title": "One skeleton, four oracles — and whether any of it is true",
+       "kind": "control",
+       "track": "both",
+       "lab": "Conformance is not accuracy, pass@k is not pass^k, and cost per run is not cost per finding.",
+       "tools": [
+        "Semgrep"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "B2",
      "chapter": 4,
      "title": "The AI SDLC: an Agentic AppSec Pipeline",
      "titles": "AppSec Engineer, Product Security Engineer, Secure Code Reviewer",
@@ -692,7 +751,7 @@
      "deliverable": "A five-phase AppSec pipeline running as a CI gate, with confirmed-by-exploitation severity and published precision and escape metrics.",
      "sessions": [
       {
-       "id": "B1.0",
+       "id": "B2.0",
        "title": "Start here — what an AI SDLC means",
        "track": "both",
        "kind": "introduction",
@@ -704,7 +763,7 @@
        "models": []
       },
       {
-       "id": "B1.1",
+       "id": "B2.1",
        "title": "Reading the repository: history, index, components, map",
        "track": "defend",
        "summary": "Turn a large codebase into a machine-navigable structure agents can reason over. Parsing, symbol graphs and repository indexing as the foundation layer.",
@@ -724,7 +783,7 @@
        ]
       },
       {
-       "id": "B1.2",
+       "id": "B2.2",
        "title": "Threat modelling from what the estate already knows",
        "track": "secure",
        "summary": "Derive trust boundaries, assets and attacker goals from the synthesized architecture. Automate the tedious half while keeping human judgement on the rest.",
@@ -742,7 +801,7 @@
        ]
       },
       {
-       "id": "B1.3",
+       "id": "B2.3",
        "title": "Vulnerability auditing: three generations of SAST",
        "track": "defend",
        "summary": "Pattern matching, dataflow analysis and LLM-driven reasoning compared honestly. What each generation finds, and what each one structurally cannot.",
@@ -763,7 +822,7 @@
        ]
       },
       {
-       "id": "B1.4",
+       "id": "B2.4",
        "title": "Deduplication and contextual verification",
        "track": "defend",
        "summary": "Collapse duplicate findings and verify each against real code context. The step that converts raw noise into a queue a human will actually read.",
@@ -782,7 +841,7 @@
        ]
       },
       {
-       "id": "B1.5",
+       "id": "B2.5",
        "title": "Feasibility filtering and reachability",
        "track": "defend",
        "summary": "Prove a finding is genuinely reachable from untrusted input. Reachability analysis as the primary false-positive killer in the pipeline.",
@@ -801,7 +860,7 @@
        ]
       },
       {
-       "id": "B1.6",
+       "id": "B2.6",
        "title": "Sandbox replication",
        "track": "secure",
        "summary": "Stand up a runnable replica of the target so findings can be tested safely. Environment fidelity, data stubs and orchestration.",
@@ -821,7 +880,7 @@
        ]
       },
       {
-       "id": "B1.7",
+       "id": "B2.7",
        "title": "Dynamic exploitation (DAST)",
        "track": "defend",
        "summary": "Drive the running application to confirm a vulnerability empirically. Payload generation, oracle design and evidence capture.",
@@ -841,7 +900,7 @@
        ]
       },
       {
-       "id": "B1.8",
+       "id": "B2.8",
        "title": "Exploit chaining",
        "track": "defend",
        "summary": "Combine individually low-severity findings into a materially damaging path. How agents search chain space, and why chains rewrite severity.",
@@ -859,7 +918,7 @@
        ]
       },
       {
-       "id": "B1.9",
+       "id": "B2.9",
        "title": "Remediation engineering",
        "track": "defend",
        "summary": "Generate fixes that survive review and do not break behaviour. Patch generation, regression testing and clean developer handoff.",
@@ -879,7 +938,7 @@
        ]
       },
       {
-       "id": "B1.10",
+       "id": "B2.10",
        "title": "Severity calibration and reporting",
        "track": "defend",
        "summary": "Score findings against real exploitability and business impact rather than CVSS alone. Write reports engineers will actually act on.",
@@ -897,7 +956,7 @@
        ]
       },
       {
-       "id": "B1.11",
+       "id": "B2.11",
        "title": "Context engineering for the pipeline",
        "track": "defend",
        "summary": "Decide what each agent sees, when, and at what token cost. Context budgets, retrieval strategy and the accuracy cliff past which more context hurts.",
@@ -916,7 +975,7 @@
        ]
       },
       {
-       "id": "B1.12",
+       "id": "B2.12",
        "title": "Securing the developers' coding agents",
        "track": "secure",
        "summary": "Guardrails for IDE and CLI coding agents holding repo and credential access. Policy, telemetry and safe defaults for engineering teams at scale.",
@@ -935,7 +994,7 @@
        ]
       },
       {
-       "id": "B1.13",
+       "id": "B2.13",
        "title": "Attesting control intent for agents and MCP servers",
        "track": "secure",
        "summary": "Decompose real-time control attestation into eleven deployment-scoped skills joined by a deployment_id, then run the static half against ten widely-deployed open-source agent and MCP repositories. Produces a signed-shaped in-toto attestation with per-control verdicts, evidence pointers and the confidence ceilings that stop it overclaiming.",
@@ -956,7 +1015,7 @@
        ]
       },
       {
-       "id": "B1.14",
+       "id": "B2.14",
        "title": "Bonus — Google Mantis, the pipeline in production",
        "track": "defend",
        "summary": "A worked case study of an agentic security pipeline operating at real scale. What held up, what broke, and which lessons transfer to your estate.",
@@ -970,80 +1029,6 @@
        "open_weight": [
         "GLM-4.6",
         "Kimi K2"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      }
-     ]
-    },
-    {
-     "id": "B2",
-     "chapter": 5,
-     "title": "Trusting the Harness that Tests CyberTravels",
-     "titles": "Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet",
-     "changes": "Build the loop once, then the SAST, DAST, triage, code-fix, skills and harness evaluations CyberTravels needs — in the order each one becomes possible. 14 lessons.",
-     "autonomy": "You are the person who builds the L2.5 boundary everyone else operates inside.",
-     "deliverable": "A reusable harness scaffold adopted by at least two other tracks.",
-     "sessions": [
-      {
-       "id": "B2.0",
-       "title": "What an agentic harness actually is",
-       "track": "defend",
-       "summary": "Separate model, loop, tools, context, verifier, budgets and orchestrator, and build a minimal working harness from scratch. Establishes the reference architecture that every later lesson in this chapter builds on.",
-       "risk": "Capability gets attributed to the model when it comes from the scaffold. Two teams handed the identical model routinely differ by an order of magnitude on harness design alone.",
-       "control": "Separate model, loop, tools, context, verifier, budgets and orchestrator — and treat the harness itself as an autonomous actor holding credentials, which must be governed like one.",
-       "lab": "Build a minimal working harness from scratch, naming each component as it appears, then show what breaks when the verifier is removed.",
-       "tools": [
-        "LiteLLM",
-        "OpenTelemetry"
-       ],
-       "open_weight": [
-        "Llama 3.3",
-        "GLM-4.6"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      },
-      {
-       "id": "B2.1",
-       "title": "Evaluating a security harness",
-       "track": "defend",
-       "summary": "Measure recall, precision, cost and time-to-finding on a corpus with known answers. Benchmarks, regression suites and reporting that does not flatter the person who built it.",
-       "risk": "A single successful run hides how unreliable an agent really is; a hallucinated finding looks exactly like a real one.",
-       "control": "Ground truth + blind protocol + execution-verified scoring; report reliability (pass^k) not just capability (pass@k); never quote schema conformance as accuracy.",
-       "lab": "The full Cyber Commons eval harness: build 552-row ground truth from SecLLMHolmes + TerraGoat/Checkov, run a blind model audit, score with expert-proxy + dual judges, and compare Llama / GLM / Kimi as the backing model.",
-       "tools": [
-        "Cyber Commons eval harness",
-        "Checkov",
-        "CyberGym",
-        "Inspect"
-       ],
-       "open_weight": [
-        "Llama 3.3",
-        "GLM-4.6",
-        "Kimi K2"
-       ],
-       "frontier": [
-        "Claude Sonnet 5"
-       ]
-      },
-      {
-       "id": "B2.2",
-       "title": "Reliability and cost under non-determinism",
-       "track": "defend",
-       "summary": "One run tells you almost nothing about a stochastic system. Measure pass^k beside pass@k, run-to-run variance on a fixed corpus, and cost per confirmed finding — the three numbers that decide whether autonomy is worth running.",
-       "risk": "A single lucky run published as a result, and cost per finding never computed at all, so nobody notices the tool moved work instead of removing it.",
-       "control": "pass^k alongside pass@k on a seeded corpus, plus cost per confirmed finding and analyst minutes per accepted finding, tracked as first-class metrics beside accuracy.",
-       "lab": "Run one task k times, compute pass@k and pass^k from the same runs, then price the result.",
-       "tools": [
-        "Inspect",
-        "promptfoo",
-        "CyberGym"
-       ],
-       "open_weight": [
-        "GLM-4.6"
        ],
        "frontier": [
         "Claude Haiku 4.5"

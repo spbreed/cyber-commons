@@ -86,6 +86,15 @@
    ],
    "expect": "Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address."
   },
+  "A1.9": {
+   "goal": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it"
+   ],
+   "expect": "The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked."
+  },
   "A1.10": {
    "goal": "Send one poisoned inter-agent message and watch it propagate through the topology.",
    "run": [
@@ -356,180 +365,49 @@
    "expect": "The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt."
   },
   "B1.0": {
-   "goal": "Read the AppSec pipeline twice: once as five phases, and once as an agentic system with five Function A components.",
+   "goal": "Name the eight components, then name which one just failed.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.0.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.0   # run it headless and check it"
    ],
-   "expect": "The five pipeline phases print against the lessons that build them, the harness capabilities underneath them print as a list, and the same pipeline reads back as an agentic system with five Function A components — ingress, knowledge, tools, identity and egress."
+   "expect": "The smallest harness that is still a harness runs its loop, and then the same loop with a verifier added refuses the work it previously accepted. The budget stops a looping model. The harness's own identity, scopes and logging show it is an actor like any other. Eight incidents then classify into seven failure classes, and the two that look identical from outside — capability and verification — separate on one rule: did the harness accept it."
   },
   "B1.1": {
-   "goal": "Cut the false-positive rate with reachability reasoning, and measure it.",
+   "goal": "Same model, same proposals, opposite outcomes — the verifier is the difference.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.1.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.1   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "pip install semgrep",
-    "cd labs/b1-appsec",
-    "opengrep --config auto --json target/ > candidates.json",
-    "python3 triage.py --candidates candidates.json --model $MODEL",
-    "python3 score.py --against ground-truth.json"
+    "python3 scripts/run_notebooks.py --session B1.1   # run it headless and check it"
    ],
-   "expect": "Prints precision before/after triage. The FP rate — not the detection rate — is the number that moved."
+   "expect": "The loop fixes a refund-eligibility check in two attempts and stops when the behavioural verifier is satisfied. The identical model and proposals, with only the verifier swapped for one that asks the model whether it is done, accept the off-by-one on the first attempt and report success with a clean trace. Four verifiers are then run against one malformed output: the shape check and the judge both approve it, the exact-match oracle is itself wrong, and a correct verifier reading stale bytecode passes code that is no longer on disk."
   },
   "B1.2": {
-   "goal": "Never raise a PR for a patch you did not build and test.",
+   "goal": "Signatures bound what can be asked for, depth bounds how far it travels, keys bound how often it lands.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.2.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b1-appsec",
-    "python3 patch.py --finding F-102 --model $MODEL --validate-locally",
-    "# generates -> compiles -> runs tests -> only then writes patch.diff"
+    "python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it"
    ],
-   "expect": "Patches failing the local build are discarded before a human ever sees them; acceptance rate is printed."
-  },
-  "B1.4": {
-   "goal": "Find live secrets in your own agent's footprint.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "pip install detect-secrets && cd labs/b1-appsec",
-    "gitleaks detect --source ~/.claude --no-git --report-path agent-secrets.json || true",
-    "python3 scan_transcripts.py --dir ~/.claude/projects --report",
-    "cp hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit"
-   ],
-   "expect": "Secrets in prompts/transcripts/memory files surface, and the pre-commit hook stops the next one."
+   "expect": "The same capability behind three signatures: the free-text one presents a traversal surface the enumerated one cannot express, and introducing one bug in the shared guard breaks only the tools that expose the argument. A depth-3 delegation chain narrows correctly, then the same chain widens when the check lives in the compromised orchestrator rather than at the issuer. Finally the same action is classified three ways, and an idempotency key containing a timestamp makes every retry a new refund."
   },
   "B1.3": {
-   "goal": "Watch your own review harness obey an injected instruction, then close it.",
+   "goal": "Routing inside the loop, the backbone behind an interface, and a signal the scaffold cannot see.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b1-appsec",
-    "git apply injected-pr.diff       # a PR containing an instruction to the reviewer",
-    "python3 triage.py --candidates candidates.json --model $MODEL   # obeys it",
-    "python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   # ignores it"
+    "python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it"
    ],
-   "expect": "The unprotected run emits the attacker's verdict; the tagged run does not."
+   "expect": "Tiered routing sends trivial steps to the small model and escalates the hard one, then the same router is driven onto the largest model for every task by an attacker who can cause verification failures — carrying more authority with it. The backbone is scored on CyberTravels' own corpus rather than a vendor chart, and substituted behind an unchanged interface. A self-improving scaffold's own metric then climbs monotonically while its held-out accuracy falls."
   },
-  "B1.5": {
-   "goal": "Publish the four numbers that let a review workflow earn its next rung.",
+  "B1.4": {
+   "goal": "Conformance is not accuracy, pass@k is not pass^k, and cost per run is not cost per finding.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.5.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.5   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b1-appsec",
-    "python3 metrics.py --precision --time-to-triage --patch-acceptance --escape-rate \\",
-    "  --runs runs/ --out metrics.json && cat metrics.json"
+    "jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it"
    ],
-   "expect": "Four numbers with denominators. Without these, promotion to L2.5 is a vibe."
-  },
-  "B1.6": {
-   "goal": "Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.6.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.6   # run it headless and check it"
-   ],
-   "expect": "The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state."
-  },
-  "B1.7": {
-   "goal": "Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.7.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.7   # run it headless and check it"
-   ],
-   "expect": "The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe."
-  },
-  "B1.8": {
-   "goal": "Chain individually-medium findings into a critical path and show the severity the chain earns.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.8.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.8   # run it headless and check it"
-   ],
-   "expect": "Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains."
-  },
-  "B1.9": {
-   "goal": "Validate four candidate patches on three axes and show which of them only made the scanner green.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.9.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.9   # run it headless and check it"
-   ],
-   "expect": "The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new."
-  },
-  "B1.10": {
-   "goal": "Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.10.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.10   # run it headless and check it"
-   ],
-   "expect": "Calibration moves several findings off their rule severity: the confirmed reachable CWE-89 that chains into account takeover becomes critical, while the unreachable and unvalidated ones fall. The top-3 by rule severity and by calibration disagree. The stage table shows review with the worst precision and highest minutes per finding, and design carrying the highest escape cost despite only two findings."
-  },
-  "B1.11": {
-   "goal": "Compare four context strategies against one bug and measure which are decidable and at what size.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.11.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.11   # run it headless and check it"
-   ],
-   "expect": "The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file."
-  },
-  "A1.9": {
-   "goal": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it"
-   ],
-   "expect": "The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked."
-  },
-  "B1.12": {
-   "goal": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.12.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.12   # run it headless and check it"
-   ],
-   "expect": "The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop."
-  },
-  "B1.13": {
-   "goal": "Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it",
-    "",
-    "# --- the full variant, against real repositories ---",
-    "python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json"
-   ],
-   "expect": "Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification's destructive, open-world default."
-  },
-  "B1.14": {
-   "goal": "Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.13.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.13   # run it headless and check it"
-   ],
-   "expect": "The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones."
+   "expect": "Four security domains run through one skeleton, differing only in the oracle and the blast radius, and the oracle everyone reaches for — the model's own agreement — is the one that cannot gate an action. Evaluation then separates conformance from accuracy: a harness scoring 100% on schema validity scores far lower on correctness, and matching findings on bare filename rather than parent-plus-filename silently randomises the result. Finally a harness at 80% per-run reliability shows pass@5 of 99.97% and pass^5 of 33%, and the cost per confirmed finding lands well above the cost per run."
   },
   "B2.0": {
    "goal": "Build a minimal working harness from scratch, naming each component as it appears, then show what breaks when the verifier is removed.",
@@ -541,22 +419,24 @@
    "expect": "The minimal harness runs and reports success while the tests still fail. Adding one component — a verifier that reads ground truth rather than the agent's own claim — flips `verified` to False on the same run and to True only when the fix genuinely works. A four-step budget stops a looping model. The harness then scores itself as a non-human identity holding repo:write and running unattended."
   },
   "B2.1": {
-   "goal": "One scaffold, swappable model, unchanged loop.",
+   "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/m0-agent-loop",
-    "MODEL=llama3.3 python3 loop.py --task fix-tests",
-    "MODEL=glm-4.6  python3 loop.py --task fix-tests",
-    "MODEL=kimi-k2  python3 loop.py --task fix-tests"
+    "cd labs/b2.10-eval-harness",
+    "./scripts/vulnbench.sh doctor && ./scripts/vulnbench.sh setup",
+    "./scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov",
+    "./scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479",
+    "./scripts/vulnbench.sh compare    # blind model comparison across backbones",
+    "./scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?"
    ],
-   "expect": "Identical loop code, three backbones, comparable traces — the prerequisite for C2.6 multi-backbone benchmarking."
+   "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
   },
   "B2.2": {
-   "goal": "Show a same-family judge grading its own homework.",
+   "goal": "Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page",
@@ -564,26 +444,25 @@
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
-    "./scripts/vulnbench.sh score --findings data/mantis_findings.sample.jsonl \\",
-    "  --gt-source secllmholmes-handcrafted   # deterministic oracle",
-    "# then compare with a judge drawn from the same family as the generator"
+    "python3 reliability.py --task fix-cwe-89 --k 5 --repeat 200",
+    "python3 cost.py --corpus seeded --analyst-minutes 9"
    ],
-   "expect": "The oracle and the same-family judge disagree in a specific, reproducible direction."
+   "expect": "pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand."
   },
-  "D1.11": {
-   "goal": "Refactor a shell tool into three narrow, structured tools.",
+  "B2.3": {
+   "goal": "Watch your own review harness obey an injected instruction, then close it.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/D1.11.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session D1.11   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B2.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.3   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/m0-agent-loop",
-    "python3 loop.py --tools shell   --task fix-tests   # can do anything",
-    "python3 loop.py --tools narrow  --task fix-tests   # read_file/list_dir/apply_patch only",
-    "python3 tool_audit.py --compare shell narrow"
+    "cd labs/b1-appsec",
+    "git apply injected-pr.diff       # a PR containing an instruction to the reviewer",
+    "python3 triage.py --candidates candidates.json --model $MODEL   # obeys it",
+    "python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   # ignores it"
    ],
-   "expect": "Same task completed; the arbitrary-execution capability is absent rather than blocked."
+   "expect": "The unprotected run emits the attacker's verdict; the tagged run does not."
   },
   "B2.4": {
    "goal": "Route cheap executor to escalated reasoner and attribute spend.",
@@ -679,49 +558,44 @@
    ],
    "expect": "Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely."
   },
-  "B2.1": {
-   "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
+  "B2.11": {
+   "goal": "Compare four context strategies against one bug and measure which are decidable and at what size.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b2.10-eval-harness",
-    "./scripts/vulnbench.sh doctor && ./scripts/vulnbench.sh setup",
-    "./scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov",
-    "./scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479",
-    "./scripts/vulnbench.sh compare    # blind model comparison across backbones",
-    "./scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?"
+    "jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it"
    ],
-   "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
+   "expect": "The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file."
   },
-  "B2.2": {
-   "goal": "Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.",
+  "B2.12": {
+   "goal": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b2.10-eval-harness",
-    "python3 reliability.py --task fix-cwe-89 --k 5 --repeat 200",
-    "python3 cost.py --corpus seeded --analyst-minutes 9"
+    "jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it"
    ],
-   "expect": "pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand."
+   "expect": "The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop."
   },
-  "D1.11": {
-   "goal": "Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.",
+  "B2.13": {
+   "goal": "Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/D1.11.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session D1.11   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it",
     "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "python3 canary.py --place worker-env,docs,artifact-metadata",
-    "python3 honeypot.py --salt benchmark/ --ratio 0.15 --rotate-days 21"
+    "# --- the full variant, against real repositories ---",
+    "python3 labs/attestation/control_intent.py --corpus /path/to/clones --out results.json"
    ],
-   "expect": "Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00."
+   "expect": "Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification's destructive, open-world default."
+  },
+  "B2.14": {
+   "goal": "Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it"
+   ],
+   "expect": "The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones."
   },
   "C1.0": {
    "goal": "Score the same claim at four standards of proof and find where the line between an anecdote and a result actually sits.",
@@ -1079,6 +953,19 @@
     "python3 fleet_graph.py --signatures vocab,pivot,role"
    ],
    "expect": "Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human."
+  },
+  "D1.11": {
+   "goal": "Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/D1.11.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session D1.11   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "python3 canary.py --place worker-env,docs,artifact-metadata",
+    "python3 honeypot.py --salt benchmark/ --ratio 0.15 --rotate-days 21"
+   ],
+   "expect": "Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00."
   },
   "D2.1": {
    "goal": "Pre-load the agent so it reasons as a partner, not a tool you reach for late.",

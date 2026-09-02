@@ -12,8 +12,8 @@ runs it, and tests the claim the corresponding lesson makes.
 | Lab | Product | Tests the claim in | Needs |
 |---|---|---|---|
 | [`keycloak-obo/`](keycloak-obo) | Keycloak 26.0.7 | [A2.3](../notebooks/A2.3.ipynb) — on-behalf-of tokens, RFC 8693, RFC 8705 | Java 21+, openssl, ~1 GB |
-| [`semgrep-sast/`](semgrep-sast) | Semgrep 1.176.0 | [B1.3](../notebooks/B1.3.ipynb) — deterministic SAST, and what it misses | python3 |
-| [`openapi-audit/`](openapi-audit) | openapi-spec-validator | [B1.2](../notebooks/B1.2.ipynb) — the threat model's static inputs | python3 |
+| [`semgrep-sast/`](semgrep-sast) | Semgrep 1.176.0 | [B2.3](../notebooks/B2.3.ipynb) — deterministic SAST, and what it misses | python3 |
+| [`openapi-audit/`](openapi-audit) | openapi-spec-validator | [B2.2](../notebooks/B2.2.ipynb) — the threat model's static inputs | python3 |
 | [`litellm-gateway/`](litellm-gateway) | LiteLLM 1.99.0 | [A3.7](../notebooks/A3.7.ipynb) — the agent gateway as a choke point | python3 |
 
 ```bash

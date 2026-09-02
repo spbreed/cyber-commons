@@ -1,1550 +1,1827 @@
-"""B1 (part 1) — The AppSec pipeline, phases 1 to 3. Sessions B1.1–B1.5.
+"""B1 — The agentic harness. Five lessons, at the start of Function B.
 
-The whole track is one artefact built in order: a five-phase, fifteen-stage
-automated application-security pipeline, and the lessons run in exactly the
-order the stages do.
+Chapter 5 builds a pipeline that reviews CyberTravels' code. This chapter is
+what that pipeline *is*: a model with a loop, tools, a context, a verifier,
+state, budgets, an orchestrator and telemetry wrapped around it.
 
-    [Ingestion & Mapping] → [Threat Modelling] → [Discovery]
-        → [Dynamic Validation] → [Reporting]
+It comes first because every stage of the pipeline is an instance of it, and
+because the parts people leave out are the parts that decide whether its output
+is worth acting on.
 
-    Phase 1 · Ingestion & Structural Mapping
-        1 historical parsing        2 structural indexing
-        3 component summarisation   4 architecture synthesis       → B1.1
-    Phase 2 · Threat Modelling
-        5 threat modelling, from six static inputs                 → B1.2
-    Phase 3 · Analysis & Filtering
-        7 vulnerability auditing, three generations of SAST        → B1.3
-        8 deduplication             9 contextual verification      → B1.4
-       10 feasibility filtering                                    → B1.5
+    B1.0  the eight parts    what a harness is, and which part just failed
+    B1.1  loop and verifier  the single highest-value hour in Function B
+    B1.2  what it may touch  tool signatures, delegation depth, doing it twice
+    B1.3  which model        routing, the backbone, and the held-out signal
+    B1.4  does it work       one skeleton four oracles, accuracy, pass^k, cost
 
-Stage 6 (strategic planning) is not a lesson of its own. Allocation is a
-property of the stage that spends the budget rather than a stage that spends
-none, so it is taught where the money actually goes: the audit agent in B1.3
-decides where to run the model pass, and B1.5 decides what is worth
-reproducing.
-
-Phases 4 and 5 continue in track_b1b.py, and B1.14 closes the track with Google
-Mantis as a bonus: a real implementation of this pipeline, mapped stage by stage
-onto what you built.
+Budgets and stop conditions are A3.4 and are not repeated here.
 """
 
-from .skills import SKILL_RUNTIME, runtime_step
-
-RUNTIME_STEP = runtime_step()
-
-PIPELINE_NOTE = """
-> **Where you are in the pipeline.**
->
-> ```
-> [Ingestion & Mapping] ──> [Threat Modelling] ──> [Discovery]
->          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
->                    ──> [Dynamic Validation] ──> [Reporting]
->                              └─ stages 11-14        └─ stage 15
-> ```
-"""
-
-MODEL_NOTE = """
-> **About the model in this notebook.** It runs offline against a deterministic
-> stand-in so the lesson executes on a Kaggle kernel with no network. The
-> stand-in is not a language model and is labelled as such wherever it appears.
-> To run the identical pipeline stage against a real open-weight model:
->
-> ```bash
-> ollama pull glm-4.6            # or kimi-k2, llama3.3
-> export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6
-> ```
-"""
-
-from . import diagrams as D
+from . import diagrams as D                                   # noqa: F401
 
 EXERCISES: dict[str, dict] = {
 
-"B1.1": {
+
+"B1.0": {
  "concept": """
-Most review starts at the diff. That is the smallest possible context, and it
-throws away the single best predictor you have: **this repository has already
-told you where it breaks.**
+**The model is not the system.**
 
-Phase 1 is four stages, and they run before any analysis. They take a
-repository and produce the one artefact everything downstream consumes — a map.
+A model is a text generator. Give it tokens, get tokens back. It has no memory
+between calls, no ability to act, and no notion of whether it succeeded. Left
+alone it cannot read a file, run a scanner or open a pull request.
 
-**Stage 1 — Historical parsing.** Extract prior vulnerabilities, the commits
-that fixed them, and pull-request history. Files that have been fixed for
-security reasons before are dramatically more likely to be fixed again. It is
-one of the oldest empirical results in software engineering, and almost nobody
-wires it into a scanner.
+> **A harness is everything wrapped around a model that turns generating text
+> into getting work done.** It decides what the model sees, what it is allowed
+> to do, whether what it did worked, when to stop, and what is written down
+> afterwards.
 
-**Stage 2 — Structural indexing.** Break the code into *semantic units* —
-functions, classes, modules — and index how they call each other. Not lines,
-not files. A scanner that reasons over lines cannot answer "who reaches this?",
-and every later stage needs that answer.
+That is the definition, and it is worth being pedantic about, because "agent",
+"scaffold", "framework" and "harness" get used interchangeably and the
+substitution hides the question that matters: *which of these eight parts do
+you actually have?*
 
-**Stage 3 — Component summarisation.** One short summary per directory: what it
-is for, what it talks to, what data passes through it. *Local* is the important
-word — summarise the whole repository at once and you get a paragraph that is
-true of every repository.
+| Component | What it does |
+|---|---|
+| **The loop** | Decides what happens next — plan, act, observe, decide again — and when to stop |
+| **Tools** | The only way the model touches the world |
+| **Context management** | What the model sees at each step, assembled from a world much larger than the window |
+| **The verifier** | The independent check on whether a step actually succeeded |
+| **State & memory** | What survives between steps and between runs |
+| **Budgets & stop conditions** | Token, time, cost and action ceilings that bound autonomy |
+| **Orchestrator** | Sub-agent spawning, parallelism, delegation depth |
+| **Telemetry** | The record that makes a run auditable, replayable and debuggable |
 
-**Stage 4 — Architecture synthesis.** Compile the summaries into a single map
-carrying three things: **entry points** where untrusted input arrives, **data
-flows** between components, and **trust boundaries** where data crosses from
-less trusted to more trusted.
+**CyberTravels already runs four of these and calls them agents.** The Workflow
+Agent is a loop over booking tools with a verifier nobody specified. The Coding
+Agent is a loop over a repository with repository write. Chapter 5 adds a fifth
+— the pipeline that reviews the Coding Agent's pull requests — and every stage
+of it is another instance of this same eight-part shape.
 
-The map is the artefact. Stage 5 reads its boundaries, stage 7 prioritises
-against them, stage 10 walks its flows. And because it is derived rather than
-drawn, it changes when the code changes — which is the property the last cell
-in this lesson demonstrates and the reason the next lesson works at all.
+Two teams given the **identical model** routinely differ by an order of
+magnitude in output quality, purely on harness design. Most of the capability
+you attribute to a model is the scaffold around it.
+
+And the security consequence is direct, which is why this chapter sits in
+Function B rather than in a tooling appendix: a harness is itself an autonomous
+actor holding credentials and tools. Every risk in Function A applies to it.
 """,
  "steps": [
-  ("md", PIPELINE_NOTE),
-  ("md", "## 2 · Stage 1 — historical parsing\n\n"
-         "A slice of the CyberTravels bookings repository: commits, their "
-         "subjects, and which of them were security fixes. Nothing has been "
-         "scanned yet."),
-  ("py", '''import ast, math, re
-from collections import Counter, defaultdict
-from dataclasses import dataclass
+  ("md", "## 2 · Build the smallest harness that is still a harness\\n\\n"
+         "Eight components, none optional. The model here is a deterministic "
+         "stand-in — labelled as one — so the scaffold is what you can see."),
+  ("py", '''from dataclasses import dataclass, field
 
-@dataclass(frozen=True)
-class Commit:
-    sha: str; subject: str; files: tuple; days_ago: int
+def stand_in_model(prompt):
+    """NOT a language model. A deterministic stub, so the harness is visible.
 
-HISTORY = [
- Commit("a1b2c3d", "fix(api): reject empty session tokens (CVE-2025-0091)",
-        ("src/api/bookings.py",), 420),
- Commit("b2c3d4e", "refactor: extract render helper", ("src/util/render.py",), 400),
- Commit("c3d4e5f", "fix(data): SQL injection in the booking filter (CVE-2025-1188)",
-        ("src/data/reports.py",), 300),
- Commit("d4e5f6a", "feat: CSV export of itineraries",
-        ("src/data/reports.py", "src/util/render.py"), 260),
- Commit("e5f6a7b", "security: patch path traversal in the voucher store",
-        ("src/data/docs.py",), 210),
- Commit("f6a7b8c", "chore: bump deps", ("requirements.txt",), 180),
- Commit("a7b8c9d", "fix(api): timing leak in the token compare",
-        ("src/api/bookings.py",), 150),
- Commit("b8c9d0e", "feat: pagination on bookings", ("src/data/reports.py",), 120),
- Commit("c9d0e1f", "fix: harden the voucher path join after the report",
-        ("src/data/docs.py",), 60),
- Commit("d0e1f2a", "style: formatting", ("src/util/render.py",), 30),
-]
+    It reads the transcript so far to decide what is left to do - which is all
+    any agent loop does, minus the part that is hard."""
+    if "write_patch" not in prompt:
+        return {"tool": "write_patch", "args": {"file": "auth.py"}}
+    if "run_tests" not in prompt:
+        return {"tool": "run_tests", "args": {}}
+    return {"tool": "done", "args": {"claim": "fixed it"}}
 
-MARKERS = re.compile(
-    r"\\b(cve-\\d{4}-\\d+|security|injection|traversal|xss|ssrf|auth|hardcoded|"
-    r"leak|sanitis|sanitiz|escap)\\w*", re.I)
+WORLD = {"tests_pass": False, "patched": False}
 
-def is_security_fix(c):
-    return bool(MARKERS.search(c.subject))
+def run_tests(**_):
+    # the patch this stub writes does not actually fix the bug
+    return {"passed": WORLD["tests_pass"], "failing": [] if WORLD["tests_pass"] else ["test_login"]}
+def write_patch(file, **_):
+    WORLD["patched"] = True
+    return {"wrote": file}
+def done(claim, **_):
+    return {"claim": claim}
 
-def risk_zones(history, half_life_days=180):
-    """Prior-defect density, decayed by age. A recent security fix weighs more."""
-    score, fixes, churn = defaultdict(float), defaultdict(int), Counter()
-    for c in history:
-        for f in c.files:
-            churn[f] += 1
-            if is_security_fix(c):
-                fixes[f] += 1
-                score[f] += math.exp(-c.days_ago / half_life_days)
-    return sorted(
-        ({"file": f, "commits": churn[f], "security_fixes": fixes[f],
-          "risk": round(score[f], 3)} for f in churn),
-        key=lambda r: (-r["risk"], r["file"]))
+TOOLS = {"run_tests": run_tests, "write_patch": write_patch, "done": done}
 
-zones = risk_zones(HISTORY)
-print(f"{'file':24s}{'commits':>9}{'sec fixes':>11}{'risk':>8}")
-print("-" * 52)
-for r in zones:
-    print(f"{r['file']:24s}{r['commits']:>9}{r['security_fixes']:>11}{r['risk']:>8}")
+@dataclass
+class Budget:
+    steps: int = 6
+    used: int = 0
+    def spend(self):
+        self.used += 1
+        return self.used <= self.steps
 
-print("\\nsrc/api/bookings.py and src/data/docs.py are the repeat zones, and the")
-print("ordering comes entirely from history - no rule has run.")
-print("Note what stage 1 missed: 'harden the voucher path join' is the most")
-print("recent security commit in the list and matches no marker, so it scores")
-print("nothing. Marker quality IS the accuracy of this stage.")'''),
-  ("md", "## 3 · Stage 2 — structural indexing\n\n"
-         "Index the code into semantic units. `ast` does the work here; in a "
-         "polyglot repository this is what tree-sitter is for."),
-  ("py", '''SOURCES = {
- "src/api/bookings.py": \'\'\'
-def get_booking(request):
-    """HTTP GET /bookings/<ref> - request.args is traveller-controlled."""
-    return render(load_booking(request.args["ref"], request.args["owner"]))
+def harness(task, verifier=None, budget=None, telemetry=None):
+    """loop + tools + context + verifier + state + budget + telemetry."""
+    budget = budget or Budget()
+    telemetry = telemetry if telemetry is not None else []
+    context = [f"TASK: {task}"]                       # context management
+    state = {"steps": 0}                              # state
+    while budget.spend():                             # budgets / stop conditions
+        step = stand_in_model("\\n".join(context))     # the model
+        tool, args = step["tool"], step["args"]
+        result = TOOLS[tool](**args)                  # tools
+        state["steps"] += 1
+        telemetry.append({"step": state["steps"], "tool": tool, "result": result})
+        context.append(f"{tool} -> {result}")
+        if tool == "done":
+            ok = verifier() if verifier else True     # the verifier
+            return {"claimed": True, "verified": ok, "steps": state["steps"],
+                    "telemetry": telemetry}
+    return {"claimed": False, "verified": False, "steps": state["steps"],
+            "telemetry": telemetry}
 
-def upload_voucher(request):
-    """HTTP POST /vouchers - the multipart body is traveller-controlled."""
-    return store(request.files["doc"], request.args["name"])
-\'\'\',
- "src/data/reports.py": \'\'\'
-def load_booking(ref, owner):
-    return DB.execute("SELECT * FROM bookings WHERE ref=" + ref +
-                      " AND owner='" + owner + "'")
-\'\'\',
- "src/data/docs.py": \'\'\'
-def store(blob, name):
-    path = "/srv/vouchers/" + name
-    open(path, "wb").write(blob)
-    return path
-\'\'\',
- "src/util/render.py": \'\'\'
-def render(rows):
-    return "\\\\n".join(str(r) for r in rows)
-\'\'\',
-}
-
-DANGEROUS = {"execute": "database", "open": "filesystem", "write": "filesystem"}
-
-def units_of(src, path):
-    out = []
-    for fn in [n for n in ast.walk(ast.parse(src))
-               if isinstance(n, ast.FunctionDef)]:
-        calls = sorted({(c.func.id if isinstance(c.func, ast.Name)
-                         else getattr(c.func, "attr", ""))
-                        for c in ast.walk(fn) if isinstance(c, ast.Call)} - {""})
-        # file AND line, never a bare name: two functions called `handler` in
-        # two files are two units, and merging them loses a finding
-        out.append({"name": fn.name, "file": path, "line": fn.lineno,
-                    "params": [a.arg for a in fn.args.args], "calls": calls,
-                    "doc": ast.get_docstring(fn) or ""})
-    return out
-
-UNITS = [u for p, s in sorted(SOURCES.items()) for u in units_of(s, p)]
-NAMES = {u["name"] for u in UNITS}
-
-print(f"{'unit':16s}{'file':24s}{'line':>5}  params -> calls")
-print("-" * 78)
-for u in UNITS:
-    print(f"{u['name']:16s}{u['file']:24s}{u['line']:>5}  "
-          f"{u['params']} -> {u['calls']}")
-
-# The question every later stage asks, and what each kind of index can say.
-def callers_of(name):
-    return sorted(u["name"] for u in UNITS if name in u["calls"])
-
-print("\\n\\"who reaches store(), and with what?\\"")
-print("   line-based index : cannot answer - the token appears in two places")
-print("   file-based index : \\"it is in src/data/docs.py\\"")
-print(f"   semantic index   : callers = {callers_of('store')}, and its input is "
-      f"a traveller-supplied filename")
-entries = sorted(u["name"] for u in UNITS if not callers_of(u["name"]))
-print(f"\\nentry points (nothing in the repository calls them): {entries}")'''),
-  ("model", {
-   "title": "Stage 3, with a model actually doing the summarising",
-   "task": ("Summarise what this component does in one sentence, then name its "
-            "trust boundary.\n\nFiles: src/api/bookings.py\nExports: "
-            "get_booking(request), upload_voucher(request)\nCallers: the public "
-            "HTTP router. Calls into: src/data/reports.py, src/data/docs.py"),
-   "replay": ("Accepts traveller HTTP requests for bookings and voucher "
-              "uploads, passing both straight into the data layer.\nTrust "
-              "boundary: every parameter here arrives from the public internet, "
-              "so the edge between src/api and src/data is where untrusted "
-              "input crosses into a component that reaches the database and "
-              "the filesystem."),
-   "system": ("You summarise code components for a security architecture map. "
-              "Two sentences, no preamble."),
-   "check": ('("names a trust boundary", "trust" in answer.lower() '
-             'or "boundary" in answer.lower())')}),
-  ("md", "## 5 · Stage 3 — summarise each component, locally\n\n"
-         "The model call above is what stage 3 looks like in production. Below "
-         "is the deterministic version, so the rest of the lesson has a fixed "
-         "input to work from."),
-  ("py", '''def summarise(component, units):
-    """Stage 3 - a LOCAL summary. One component, not the repository."""
-    names = [u["name"] for u in units]
-    return {
-      "component": component,
-      "units": names,
-      "entry_points": [u["name"] for u in units if u["doc"].startswith("HTTP")],
-      "talks_to": sorted({c for u in units for c in u["calls"]
-                          if c in NAMES and c not in names}),
-      "touches": sorted({DANGEROUS[c] for u in units for c in u["calls"]
-                         if c in DANGEROUS}),
-    }
-
-by_dir = defaultdict(list)
-for u in UNITS:
-    by_dir[u["file"].rsplit("/", 1)[0]].append(u)
-
-SUMMARIES = [summarise(d, us) for d, us in sorted(by_dir.items())]
-for s in SUMMARIES:
-    print(s["component"])
-    print(f"   units       {s['units']}")
-    print(f"   entry pts   {s['entry_points'] or '-'}")
-    print(f"   talks to    {s['talks_to'] or '-'}")
-    print(f"   touches     {s['touches'] or '-'}\\n")'''),
-  ("md", "## 6 · Stage 4 — synthesise the map, and find the boundaries\n\n"
-         "A trust boundary is any edge where data crosses from a less-trusted "
-         "component into a more-trusted one. Those edges are where every "
-         "finding in the rest of the pipeline turns out to live."),
-  ("py", '''TRUST = {"src/api": 0, "src/util": 1, "src/data": 2}   # 0 = untrusted edge
-
-def synthesise(summaries, units):
-    comp = {u["name"]: u["file"].rsplit("/", 1)[0] for u in units}
-    flows = sorted({(u["name"], c) for u in units for c in u["calls"]
-                    if c in NAMES})
-    return {
-      "entry_points": sorted(e for s in summaries for e in s["entry_points"]),
-      "flows": flows,
-      "sinks": sorted({(u["name"], DANGEROUS[c]) for u in units
-                       for c in u["calls"] if c in DANGEROUS}),
-      "boundaries": [(a, b, comp[a], comp[b]) for a, b in flows
-                     if TRUST[comp[a]] < TRUST[comp[b]]],
-    }
-
-MAP = synthesise(SUMMARIES, UNITS)
-print("ENTRY POINTS   ", MAP["entry_points"])
-print("DATA FLOWS")
-for a, b in MAP["flows"]:
-    print(f"   {a} -> {b}")
-print("SINKS")
-for u, res in MAP["sinks"]:
-    print(f"   {u:16s}touches the {res}")
-print("TRUST BOUNDARY CROSSINGS")
-for a, b, ca, cb in MAP["boundaries"]:
-    print(f"   {a + ' -> ' + b:34s}{ca} (trust {TRUST[ca]}) -> "
-          f"{cb} (trust {TRUST[cb]})")
-
-adj = defaultdict(list)
-for a, b in MAP["flows"]:
-    adj[a].append(b)
-
-def reaches(start, seen=None):
-    seen = seen or set()
-    if start in seen:
-        return set()
-    out = {start}
-    for n in adj[start]:
-        out |= reaches(n, seen | {start})
-    return out
-
-# sorted(), not the set: a reachability report that lists the same entry points
-# in a different order on every machine cannot be diffed between two scans, and
-# diffing scans is the whole point of deriving the map rather than drawing it.
-print("\\nSINKS REACHABLE FROM AN ENTRY POINT")
-for e in MAP["entry_points"]:
-    for u, res in MAP["sinks"]:
-        if u in reaches(e):
-            print(f"   {e:16s} -> {u:16s} touches the {res}")'''),
-  ("md", "## 7 · The map changes when the code changes\n\n"
-         "This is the whole reason for deriving it. One function is added; the "
-         "map is regenerated; the delta is the thing the next lesson threat-models."),
-  ("py", '''SOURCES_V2 = dict(SOURCES)
-SOURCES_V2["src/api/bookings.py"] += \'\'\'
-def admin_export(request):
-    """HTTP GET /admin/export - was internal-only until this morning."""
-    return store(load_booking(request.args["ref"], request.args["owner"]),
-                 request.args["name"])
-\'\'\'
-
-units2 = [u for p, s in sorted(SOURCES_V2.items()) for u in units_of(s, p)]
-NAMES = {u["name"] for u in units2}
-by_dir2 = defaultdict(list)
-for u in units2:
-    by_dir2[u["file"].rsplit("/", 1)[0]].append(u)
-map2 = synthesise([summarise(d, us) for d, us in sorted(by_dir2.items())], units2)
-
-before, after = set(MAP["entry_points"]), set(map2["entry_points"])
-print(f"entry points before : {sorted(before)}")
-print(f"entry points after  : {sorted(after)}")
-print(f"NEW                 : {sorted(after - before)}")
-print(f"flows {len(MAP['flows'])} -> {len(map2['flows'])}, "
-      f"boundary crossings {len(MAP['boundaries'])} -> {len(map2['boundaries'])}")
+print("components wired:", ["loop","tools","context","verifier","state",
+                            "budget","orchestrator","telemetry"])
+'''),
+  ("md", "## 3 · Run it once with no verifier"),
+  ("py", '''WORLD.update(tests_pass=False, patched=False)
+r = harness("fix the failing test_login", verifier=None)
+print(f"agent claimed success : {r['claimed']}")
+print(f"independently checked : {r['verified']}")
+print(f"steps                 : {r['steps']}")
+for t in r["telemetry"]:
+    print(f"   {t['step']}. {t['tool']:12s}{t['result']}")
 print()
-print("One function. A new untrusted entry point now reaches both the database")
-print("and the filesystem, and two new edges cross a trust boundary. A threat")
-print("model drawn in a workshop last quarter says nothing about any of it.")
-assert after - before == {"admin_export"}
-assert len(map2["boundaries"]) > len(MAP["boundaries"])
-assert MAP["entry_points"] == ["get_booking", "upload_voucher"]'''),
-  ("md", "## 8 · Write the four stages down as an agent skill\n\n"
-         "You have just run Phase 1 by hand. The next repository needs the same "
-         "four stages and so does the next agent, so the procedure belongs in a "
-         "file rather than in your head. This is the one in this repository:"),
-  RUNTIME_STEP,
-  ("skill", "appsec/appsec-repo-recon"),
+print("It reported success. The tests still fail. Nothing in that transcript")
+print("is a lie - the agent did write a patch, and then it said it was done.")
+assert r["claimed"] and not WORLD["tests_pass"]
+'''),
+  ("md", "## 4 · Where it breaks — the component people leave out\\n\\n"
+         "Add the verifier and change nothing else."),
+  ("py", '''def real_verifier():
+    """Ground truth, not self-assessment: run the tests and read the result."""
+    return run_tests()["passed"]
+
+WORLD.update(tests_pass=False, patched=False)
+r2 = harness("fix the failing test_login", verifier=real_verifier)
+print(f"claimed {r2['claimed']}  verified {r2['verified']}")
+
+WORLD.update(tests_pass=True)          # now the fix actually works
+r3 = harness("fix the failing test_login", verifier=real_verifier)
+print(f"claimed {r3['claimed']}  verified {r3['verified']}")
+print()
+print("Same model. Same loop. Same tools. The only difference between a harness")
+print("that reports the truth and one that reports its own optimism is one")
+print("component - and it is the cheapest one in the table.")
+assert not r2["verified"] and r3["verified"]
+'''),
+  ("md", "## 5 · The budget is a security control, not a cost control"),
+  ("py", '''def looping_model(prompt):
+    return {"tool": "run_tests", "args": {}}          # never finishes
+
+import builtins
+_orig = stand_in_model
+try:
+    globals()["stand_in_model"] = looping_model
+    WORLD.update(tests_pass=False)
+    r4 = harness("fix it", verifier=real_verifier, budget=Budget(steps=4))
+finally:
+    globals()["stand_in_model"] = _orig
+
+print(f"ran {r4['steps']} steps, then stopped: claimed={r4['claimed']}")
+print()
+print("Without the ceiling this runs until something else stops it - a bill, a")
+print("rate limit, or an on-call engineer. The budget is what makes 'autonomous'")
+print("a bounded word.")
+assert r4["steps"] == 4 and not r4["claimed"]
+'''),
+  ("md", "## 6 · Verify — the harness is itself an actor\\n\\n"
+         "It holds credentials and calls tools. Score it the way you would "
+         "score any other non-human identity."),
+  ("py", '''HARNESS_ACTOR = {
+ "identity": "ci-sast-harness",
+ "tools": sorted(TOOLS),
+ "writes": ["write_patch"],
+ "credentials": ["repo:write"],
+ "runs_unattended": True,
+ "telemetry": True,
+}
+irreversible = [t for t in HARNESS_ACTOR["writes"]]
+print(f"{'property':22s}value")
+for k, v in HARNESS_ACTOR.items():
+    print(f"{k:22s}{v}")
+print()
+print(f"tools that change state : {irreversible}")
+print(f"unattended              : {HARNESS_ACTOR['runs_unattended']}")
+print(f"auditable               : {HARNESS_ACTOR['telemetry']}")
+print()
+print("Every question you would ask of an agent applies to the thing you just")
+print("built to review agents. A harness with repo:write running unattended is")
+print("a non-human identity, and it belongs in the inventory in A2 and E1.2.")
+assert HARNESS_ACTOR["telemetry"], "an unauditable harness cannot be governed"
+'''),
+    ("md", '## 7 · When it goes wrong, which of the eight failed?\n\n"The agent messed up" is not a defect report: it routes to nobody, and every incident feels novel. Naming the part that failed turns an incident into a ticket with an owner.'),
+  ("py", '''INCIDENTS = [
+ ("agent's patch did not compile; the loop retried and fixed it", None),
+ ("agent's patch passed CI and introduced a SQL injection", None),
+ ("agent deleted a production table it should never have had access to", None),
+ ("agent posted the contents of .env to a public issue", None),
+ ("agent approved a PR because a code comment told it to", None),
+ ("agent looped for 6 hours re-running the same failing test", None),
+ ("agent opened the same pull request 14 times", None),
+ ("agent could not solve the task and correctly reported failure", None),
+]
+TAXONOMY = {
+ "capability":   ("the model could not do it",              "better model / better context"),
+ "verification": ("it did it wrong and we believed it",     "harness engineer — B1.1"),
+ "authority":    ("it did what it should not be able to do","identity — A2"),
+ "containment":  ("the action reached further than intended","platform — A3"),
+ "injection":    ("untrusted content drove it",             "provenance — A2.6"),
+ "budget":       ("it never stopped",                       "harness engineer — A3.4"),
+ "idempotency":  ("it did the right thing twice",           "harness engineer — B1.2"),
+}
+LABELS = ["capability", "verification", "authority", "containment",
+          "injection", "budget", "idempotency", "capability"]
+
+for (text, _), label in zip(INCIDENTS, LABELS):
+    what, owner = TAXONOMY[label]
+    print(f"{label:13s} {text}")
+    print(f"{'':13s} → {owner}")
+'''),
+  ("md", "## 3 · Where it breaks — the two that get confused\n\n"
+         "Incidents 1 and 2 both start \"the agent's patch was wrong\". They are "
+         "different defects with different owners, and conflating them is how a "
+         "team spends a quarter upgrading models to fix a verifier."),
+  ("py", '''def classify(produced_wrong_output, harness_accepted_it, action_taken):
+    """The decision rule that separates capability from verification."""
+    if not produced_wrong_output:
+        return "not a model failure"
+    if not harness_accepted_it:
+        return "capability — the harness caught it, the loop worked"
+    if action_taken:
+        return "VERIFICATION — the harness shipped wrong work"
+    return "verification (contained) — accepted but nothing acted on it"
+
+CASES = [
+ ("patch did not compile, loop retried",  True,  False, False),
+ ("patch passed CI, shipped SQLi",        True,  True,  True),
+ ("patch wrong, accepted, never merged",  True,  True,  False),
+ ("patch correct",                        False, True,  True),
+]
+for name, wrong, accepted, acted in CASES:
+    print(f"{name:38s} → {classify(wrong, accepted, acted)}")
+print("\\nThe model was equally wrong in the first three. Only one is YOUR defect.")
+'''),
+  ("md", "## 4 · The control — classify automatically from the trace\n\n"
+         "The taxonomy is only useful if applying it is cheap. Most of the "
+         "classification is derivable from what the harness already records."),
+  ("py", '''def classify_from_trace(trace):
+    """trace: dict of facts the harness already has."""
+    if trace.get("denied_by_policy"):        return "authority"
+    if trace.get("denied_by_sandbox"):       return "containment"
+    if trace.get("instruction_source") not in (None, "principal"):
+        return "injection"
+    if trace.get("stopped_by", "").startswith(("step budget", "time budget")):
+        return "budget"
+    if trace.get("duplicate_effect"):        return "idempotency"
+    if trace.get("verifier_passed") and trace.get("outcome_wrong"):
+        return "verification"
+    if trace.get("outcome_wrong"):           return "capability"
+    return "success"
+
+TRACES = [
+ {"verifier_passed": False, "outcome_wrong": True, "stopped_by": "step budget (5 steps)"},
+ {"verifier_passed": True,  "outcome_wrong": True},
+ {"denied_by_policy": True},
+ {"denied_by_sandbox": True},
+ {"instruction_source": "pull-request-diff"},
+ {"stopped_by": "time budget (300s)"},
+ {"duplicate_effect": True},
+ {"verifier_passed": True,  "outcome_wrong": False},
+]
+for t in TRACES:
+    cls = classify_from_trace(t)
+    owner = TAXONOMY.get(cls, ("", "—"))[1]
+    print(f"{cls:14s} {owner:32s} {t}")
+
+counts = {}
+for t in TRACES:
+    c = classify_from_trace(t); counts[c] = counts.get(c, 0) + 1
+print(f"\\ndistribution: {counts}")
+assert classify_from_trace(TRACES[1]) == "verification"
+'''),
  ],
- "expect": "Four of ten commits match the security markers, and `src/api/"
-           "bookings.py` ranks highest on decayed risk purely from history — "
-           "with the most recent security commit scoring nothing, because it "
-           "matches no marker. The structural index extracts five functions and "
-           "identifies two entry points. Component summaries name what each "
-           "directory touches, and the synthesised map shows both entry points "
-           "reaching the database and the filesystem across a trust boundary. "
-           "Adding one function adds a third entry point and two more boundary "
-           "crossings.",
- "challenge": "Run stage 1 against a repository you own: `git log --name-only "
-              "--grep='CVE\\|security\\|injection'`, then rank the files by how "
-              "often they appear. That list usually surprises people, and it is "
-              "free. Then check how many of your recent security fixes your "
-              "markers would have missed.",
+ "expect": "The smallest harness that is still a harness runs its loop, and then the same loop with a verifier added refuses the work it previously accepted. The budget stops a looping model. The harness's own identity, scopes and logging show it is an actor like any other. Eight incidents then classify into seven failure classes, and the two that look identical from outside — capability and verification — separate on one rule: did the harness accept it.",
+ "challenge": 'Take your last agent incident and name which of the eight components failed. If the answer is "the model", check whether the harness accepted the output — if it did, the defect is yours, not the model\'s.',
+},
+
+"B1.1": {
+ "concept": """
+A harness is four moves in a loop:
+
+1. **Plan** — the model proposes what to do next.
+2. **Act** — the harness executes that proposal against a tool.
+3. **Verify** — something decides whether the result is acceptable.
+4. **Stop** — either verification succeeded, or a budget ran out.
+
+That is the whole architecture. Everything that makes a harness safe or unsafe
+lives in moves 3 and 4, and this chapter spends most of its time there.
+
+The reason to build it explicitly rather than adopt a framework is that
+frameworks make moves 1 and 2 easy and leave 3 and 4 as your problem — usually
+with a default of "the model says it's done" and "loop forever". You need to
+know exactly what yours does.
+
+### The verifier decides what the harness is allowed to believe
+
+State it plainly, because the rest of Function B depends on it. A harness with
+a weak verifier does not fail loudly. It **succeeds incorrectly**, produces a
+clean trace, and the failure is discovered downstream — in CyberTravels' case,
+by a traveller who was refunded twice.
+
+Verifiers form a hierarchy, ordered by what it takes to fool them:
+
+| Verifier | Fooled by | Available when |
+|---|---|---|
+| **Behavioural test** | changing real behaviour | you can execute the thing |
+| **Exact-match oracle** | nothing, but needs the answer up front | rarely |
+| **Shape check** | any well-formed output | always |
+| **LLM judge** | confident prose | always |
+
+The trap is that the two available-everywhere options are the two weakest, and
+they fail in the worst possible direction: they do not error, they **approve**.
+
+There is also a subtler failure worth seeing rather than reading about: a
+verifier that is *correct* but reads stale state. A test runner importing cached
+bytecode reports on code that is no longer on disk. A lying oracle is worse than
+no oracle, because you stop looking.
+
+The demo below fixes a refund-eligibility check for the Workflow Agent, and then
+changes exactly one thing — the verifier — so the same model, the same
+proposals and the same order produce opposite outcomes.
+""",
+ "steps": [
+  ("model", {
+   "title": 'The model backend, and the plan it produces',
+   "task": 'Plan how to determine whether a reported SQL injection in orders/report.py is reachable from an unauthenticated HTTP request. Give at most four numbered steps, each one an action, not a thought.',
+   "replay": "1. Locate the HTTP route that reaches orders/report.py.\n2. Check whether that route requires authentication.\n3. Trace request.args['ref'] from the handler to db.execute.\n4. Send one request with a benign marker and observe the query log.",
+   "system": 'You produce plans for a security harness. Numbered actions only.',
+   "check": '("produced numbered steps", any(answer.strip().startswith(p) for p in ("1.", "1)", "- 1")))'}),
+  ("md", "## 2 · Demo — the loop, with a task that has a right answer\n\n"
+         "The task: fix a function that mis-computes a security-relevant value. "
+         "The model produces three attempts, the last of which is correct."),
+  ("py", '''import time
+from dataclasses import dataclass, field
+
+class ReplayModel:
+    """DETERMINISTIC REPLAY — not a language model.
+    Emits a fixed sequence so the loop's control flow is the thing under test."""
+    def __init__(self, proposals, name="replay"):
+        self.proposals, self.name, self.calls = list(proposals), name, 0
+    def propose(self, _prompt):
+        # after the script runs out it repeats — exactly what a stuck loop does
+        p = self.proposals[min(self.calls, len(self.proposals) - 1)]
+        self.calls += 1
+        return p
+
+@dataclass
+class Step:
+    n: int; proposal: str; ok: bool; detail: str; ms: float = 0.0
+
+@dataclass
+class Trace:
+    steps: list = field(default_factory=list)
+    stopped_by: str = ""
+    succeeded: bool = False
+    def table(self):
+        rows = [f"{'step':>4}  {'ok':<6}{'proposal':<44}detail",
+                f"{'-'*4}  {'-'*6}{'-'*44}{'-'*28}"]
+        for s in self.steps:
+            rows.append(f"{s.n:>4}  {str(s.ok):<6}{s.proposal[:44]:<44}{s.detail[:28]}")
+        rows.append(f"\\nstopped by: {self.stopped_by}    succeeded: {self.succeeded}")
+        return "\\n".join(rows)
+
+def run(model, verifier, goal="", max_steps=5, max_seconds=10.0):
+    tr, started = Trace(), time.monotonic()
+    for n in range(1, max_steps + 1):
+        t0 = time.monotonic()
+        proposal = model.propose(f"{goal} (attempt {n})")      # PLAN
+        ok, detail = verifier(proposal)                        # ACT + VERIFY
+        tr.steps.append(Step(n, proposal, ok, detail, (time.monotonic()-t0)*1000))
+        if ok:                                                 # STOP
+            tr.stopped_by, tr.succeeded = "verifier satisfied", True
+            return tr
+        if time.monotonic() - started > max_seconds:
+            tr.stopped_by = f"time budget ({max_seconds}s)"
+            return tr
+    tr.stopped_by = f"step budget ({max_steps} steps)"
+    return tr
+
+ATTEMPTS = [
+ "def is_expired(cert): return cert.days_left < 0",     # off-by-one: 0 is expired
+ "def is_expired(cert): return cert.days_left <= 0",    # correct
+]
+'''),
+  ("py", '''# The verifier: execute the proposal against known-good cases.
+CASES = [(-5, True), (0, True), (1, False), (30, False)]
+
+class Cert:
+    def __init__(self, d): self.days_left = d
+
+def behavioural_verifier(src):
+    ns = {}
+    try:
+        exec(compile(src, "<proposal>", "exec"), ns)
+        fn = ns["is_expired"]
+    except Exception as e:
+        return False, f"did not compile: {type(e).__name__}"
+    for days, expected in CASES:
+        got = fn(Cert(days))
+        if got != expected:
+            return False, f"is_expired(days_left={days}) → {got}, want {expected}"
+    return True, f"all {len(CASES)} cases pass"
+
+tr = run(ReplayModel(ATTEMPTS), behavioural_verifier,
+         goal="fix certificate expiry check", max_steps=5)
+print(tr.table())
+'''),
+  ("md", "## 3 · Where it breaks — change only the verifier\n\n"
+         "Same model. Same proposals. Same order. The only difference is what the "
+         "loop believes when it decides it has succeeded."),
+  ("py", '''def self_grading_verifier(src):
+    """The model judges its own work. Ships in a lot of harnesses."""
+    looks_done = bool(src.strip()) and src.strip().startswith("def ")
+    return looks_done, "judge: looks like a valid fix, approving"
+
+tr2 = run(ReplayModel(ATTEMPTS), self_grading_verifier,
+          goal="fix certificate expiry check", max_steps=5)
+print(tr2.table())
+
+ns = {}; exec(compile(tr2.steps[-1].proposal, "<x>", "exec"), ns)
+print(f"\\nthe accepted code says a cert with 0 days left is expired: "
+      f"{ns['is_expired'](Cert(0))}")
+print("It is not. A certificate expiring today is still valid today, and this")
+print("harness just shipped that. The trace above is clean and reports success.")
+'''),
+  ("md", "## 4 · The control — the verifier is a security control\n\n"
+         "State it plainly, because the rest of the track depends on it: **the "
+         "verifier decides what the harness is allowed to believe.** A harness "
+         "with a weak verifier does not fail loudly. It succeeds incorrectly, "
+         "produces a clean trace, and the failure is discovered downstream."),
+  ("py", '''def compare(model_factory, verifiers, **kw):
+    out = {}
+    for name, v in verifiers.items():
+        tr = run(model_factory(), v, **kw)
+        out[name] = {"succeeded": tr.succeeded, "steps": len(tr.steps),
+                     "stopped_by": tr.stopped_by,
+                     "accepted": tr.steps[-1].proposal if tr.succeeded else None}
+    return out
+
+def no_verifier(_src):
+    return False, "no verifier configured"
+
+results = compare(lambda: ReplayModel(ATTEMPTS),
+                  {"behavioural (executes the code)": behavioural_verifier,
+                   "self-grading (asks the model)":   self_grading_verifier,
+                   "none":                            no_verifier},
+                  goal="fix expiry check", max_steps=4)
+print(f"{'verifier':34s}{'succeeded':11s}{'steps':7s}stopped by")
+print("-" * 76)
+for name, r in results.items():
+    print(f"{name:34s}{str(r['succeeded']):11s}{r['steps']:<7}{r['stopped_by']}")
+
+print("\\nwhat each one accepted:")
+for name, r in results.items():
+    print(f"   {name:34s}{r['accepted'] or '—'}")
+assert results["behavioural (executes the code)"]["accepted"] == ATTEMPTS[1]
+assert results["self-grading (asks the model)"]["accepted"] == ATTEMPTS[0]
+'''),
+    ("md", '## 7 · Four verifiers, ranked by what it takes to fool them\\n\\nThe loop above used the strongest kind available. Most harnesses cannot, so it is worth seeing all four against the same input, and seeing which two are available everywhere.'),
+  ("py", '''BROKEN  = "def parse_port(s): return int(s)"          # accepts 0, 99999, -1
+CORRECT = ("def parse_port(s):\\n"
+           "    p = int(s)\\n"
+           "    if not (1 <= p <= 65535): raise ValueError('port out of range')\\n"
+           "    return p")
+
+def behavioural(src):
+    ns = {}
+    try:
+        exec(compile(src, "<p>", "exec"), ns); fn = ns["parse_port"]
+    except Exception as e:
+        return False, f"compile failed: {e}"
+    for bad in ("0", "70000", "-1"):
+        try:
+            fn(bad)
+            return False, f"accepted out-of-range port {bad!r}"
+        except ValueError:
+            pass
+    try:
+        if fn("443") != 443:
+            return False, "rejected a valid port"
+    except Exception as e:
+        return False, f"valid port raised {e}"
+    return True, "rejects out-of-range, accepts valid"
+
+def exact_match(expected):
+    return lambda src: (src.strip() == expected.strip(),
+                        "exact match" if src.strip() == expected.strip()
+                        else "differs from the reference implementation")
+
+def shape_check(src):
+    ok = src.strip().startswith("def parse_port")
+    return ok, "defines parse_port" if ok else "wrong shape"
+
+def llm_judge(src):
+    ok = bool(src.strip()) and not src.lower().startswith("i cannot")
+    return ok, "judge: this looks like a correct implementation"
+
+VERIFIERS = {"behavioural (executes it)": behavioural,
+             "exact-match oracle":        exact_match(CORRECT),
+             "shape check":               shape_check,
+             "llm judge":                 llm_judge}
+
+print(f"{'verifier':28s}{'on BROKEN':12s}{'on CORRECT':12s}detail (broken)")
+print("-" * 84)
+for name, v in VERIFIERS.items():
+    b_ok, b_why = v(BROKEN)
+    c_ok, _     = v(CORRECT)
+    print(f"{name:28s}{str(b_ok):12s}{str(c_ok):12s}{b_why[:32]}")
+'''),
+  ("md", "## 3 · Where it breaks — the exact-match oracle is also wrong\n\n"
+         "Look at the `on CORRECT` column. The behavioural verifier is the only "
+         "one that gets *both* right. The exact-match oracle rejects a correct "
+         "implementation that differs from its reference — which is why nobody "
+         "uses it, and why teams fall back to the two weak options."),
+  ("py", '''ALTERNATIVE = ("def parse_port(s):\\n"
+               "    p = int(s)\\n"
+               "    if p < 1 or p > 65535:\\n"
+               "        raise ValueError('bad port')\\n"
+               "    return p")
+print("a correct implementation, written differently:")
+for name, v in VERIFIERS.items():
+    ok, why = v(ALTERNATIVE)
+    print(f"   {name:28s}{str(ok):7s}{why[:44]}")
+print("\\nThe oracle says no. Behavioural says yes. Only one of those is useful")
+print("on code you did not write in advance.")
+'''),
+  ("md", "## 4 · The subtler failure — a correct verifier reading stale state\n\n"
+         "This one is not about weak checks. The check is right; the *input* to "
+         "it is stale. Python's bytecode cache reproduces it faithfully."),
+  ("py", '''import os, sys, tempfile, subprocess, textwrap, shutil, pathlib
+
+work = pathlib.Path(tempfile.mkdtemp())
+(work / "mod.py").write_text("def check(x):\\n    return True   # broken: always passes\\n")
+(work / "test_mod.py").write_text(textwrap.dedent("""
+    from mod import check
+    def test_rejects_bad():
+        assert check(-1) is False
+"""))
+
+def run_check(workdir, clear_cache):
+    if clear_cache:
+        shutil.rmtree(workdir / "__pycache__", ignore_errors=True)
+    env = {**os.environ, "PYTHONPATH": str(workdir)}
+    if clear_cache:
+        env["PYTHONDONTWRITEBYTECODE"] = "1"
+    r = subprocess.run([sys.executable, "-c",
+                        "import mod; print('PASS' if mod.check(-1) is False else 'FAIL')"],
+                       cwd=workdir, env=env, capture_output=True, text=True)
+    return r.stdout.strip()
+
+print("1. verifier on the broken code:      ", run_check(work, clear_cache=True))
+# the agent "fixes" it
+(work / "mod.py").write_text("def check(x):\\n    return x >= 0\\n")
+print("2. after a real fix, cache cleared:  ", run_check(work, clear_cache=True))
+# now put the broken version back, but leave a stale cache in place
+import py_compile
+(work / "mod.py").write_text("def check(x):\\n    return True   # broken again\\n")
+py_compile.compile(str(work / "mod.py"), doraise=True)
+(work / "mod.py").write_text("def check(x):\\n    return x >= 0\\n")
+os.utime(work / "mod.py", (0, 0))          # make the source look older than the cache
+print("3. source fixed, STALE cache honoured:", run_check(work, clear_cache=False),
+      " ← the verifier is reading code that is not on disk")
+shutil.rmtree(work, ignore_errors=True)
+'''),
+  ("md", "## 5 · The control — rank verifiers and always clear derived state"),
+  ("py", '''RANKING = [
+ (1, "behavioural / property test", "must change observable behaviour",
+     "execute the artefact against facts that must hold"),
+ (2, "differential test",           "must match a trusted second implementation",
+     "run old and new against the same inputs"),
+ (3, "exact-match oracle",          "nothing — but needs the answer in advance",
+     "only usable on a fixed corpus"),
+ (4, "shape / schema check",        "any well-formed output",
+     "use for conformance ONLY, never for quality — see B1.4"),
+ (5, "llm judge",                   "confident prose",
+     "acceptable only as a filter before a real check, never as the last word"),
+]
+print(f"{'rank':5s}{'verifier':30s}{'fooled by':44s}")
+print("-" * 80)
+for r, name, fooled, use in RANKING:
+    print(f"{r:<5}{name:30s}{fooled:44s}")
+    print(f"{'':35s}{use}")
+
+CHECKLIST = [
+ "does it EXECUTE the artefact, or only inspect it?",
+ "would it fail if the artefact were subtly wrong?",
+ "does it clear caches / derived state before reading?",
+ "is its own correctness tested (does it fail on known-bad input)?",
+]
+print("\\nverifier review checklist:")
+for c in CHECKLIST:
+    print("   ·", c)
+
+# the fourth item, applied to our own verifier
+assert behavioural(BROKEN)[0] is False, "verifier must fail on known-bad"
+assert behavioural(CORRECT)[0] is True, "verifier must pass on known-good"
+assert behavioural(ALTERNATIVE)[0] is True, "verifier must accept alternatives"
+print("\\nour behavioural verifier passes its own test: fails broken, accepts both correct forms.")
+'''),
+ ],
+ "expect": 'The loop fixes a refund-eligibility check in two attempts and stops when the behavioural verifier is satisfied. The identical model and proposals, with only the verifier swapped for one that asks the model whether it is done, accept the off-by-one on the first attempt and report success with a clean trace. Four verifiers are then run against one malformed output: the shape check and the judge both approve it, the exact-match oracle is itself wrong, and a correct verifier reading stale bytecode passes code that is no longer on disk.',
+ "challenge": 'Name your harness\'s verifier out loud. If the sentence contains "the model checks" or "it looks right", you have a judge, and a judge approves confident prose. Then check the second thing: does anything clear derived state between attempts?',
 },
 
 "B1.2": {
  "concept": """
-Phase 2 opens with the stage everyone claims to do and almost nobody re-runs.
+The loop is bounded by three things, and none of them is the prompt.
 
-**Stage 5 — Threat modelling.** Derive, mechanically: high-value assets,
-untrusted entry points, and the attack vectors that connect them.
+**What a tool's signature lets the model ask for.** Tool design is security
+design, and it is stronger than anything you can put in a prompt, because a
+signature decides what is *expressible*:
 
-The word doing the work is *mechanically*. A threat model produced by hand in a
-workshop is a snapshot; it is stale the moment an entry point is added, and
-adding an entry point is a Tuesday. A model **derived** is regenerated whenever
-its inputs change, so the useful artefact is not the model — it is the **diff
-between two models**.
+```python
+read_voucher(path: str)                    # any path on the box
+read_voucher(booking_ref: Literal[...])    # one of five bookings
+```
 
-### Derived from what, exactly
+Both may be safe if a path guard sits underneath. The difference appears when
+the guard has a bug: the first tool *presents* the vulnerable surface, the
+second never expresses it. Three rules follow, and they compose — enumerate
+rather than accept free text, take the narrowest type that works, and return the
+least that satisfies the caller.
 
-The architecture map from stage 4 is the first input and it is not sufficient.
-It tells you what the code *could* reach. It says nothing about whether that
-path is exposed, what identity walks it, or whether anything could leave at the
-end of it — and those three questions are the difference between a finding and
-a fire.
+**How far it may delegate.** Sub-agents buy specialisation. What they also buy,
+and what is never on the roadmap, is **delegation depth**. Two things grow with
+it: authority composition, since each hop is a place authority could widen if
+the narrowing rules from A2.3 are not enforced at *every* hop; and attribution
+distance, since by hop four the action is five identities from the human who
+asked and no single reviewer has seen the whole path. The control is a depth
+limit, and the interesting question is where to enforce it — the orchestrator is
+the obvious choice and the wrong one, because when the orchestrator is the
+compromised component its own check is worth nothing.
 
-Every one of the answers is already written down somewhere in the estate, as
-configuration, in a machine-readable file. The stage's job is to read all of it:
+**Whether doing it twice matters.** Your agent will repeat an action. Retries,
+restarts, a duplicated webhook, a loop that lost track — the cause varies and
+the outcome does not. Whether it matters depends entirely on the action: setting
+a config value twice is setting it once; posting a comment twice is noise;
+**issuing a refund twice is an incident**, and the Workflow Agent issues
+refunds. The mechanism is an idempotency key derived from the *intent*, and the
+subtlety is what goes into it. Include a timestamp and every retry is a new
+operation.
 
-| Input | What only it can tell you |
-|---|---|
-| **Code analysis** — the stage-4 map | which sinks an entry point reaches |
-| **CSPM findings** | that the bucket behind that sink is public, today |
-| **Cloud security policy** — security groups, ingress, WAF | whether the entry point is reachable from the internet at all |
-| **Entitlement and role access** | what the caller's role may do once it is through |
-| **IAM** — trust policies, assume-role chains | who can become that role, and from where |
-| **Egress policy** — NetworkPolicy, firewall rules | whether anything can leave once it is in |
-
-Read only the code and you produce a threat model that is identical for two
-deployments of the same repository, one of which is behind a private load
-balancer with no egress and one of which is not. That model is wrong about both.
-
-The output has to be data — ranked, machine-readable, diffable — because the
-next stage prioritises against it and CI gates on the delta.
+The second half of that is **replay**, the same property seen from forensics: a
+run you cannot deterministically replay is a run you can describe but not
+demonstrate, and D2.5 depends on this being right.
 """,
  "steps": [
-  ("md", PIPELINE_NOTE),
-  ("md", "## 2 · The six inputs, and what each one contributes"),
-  ("html", D.flow(
-    [D.column("code", [
-       D.card("&#128269;", "stage-4 map", "entry points, flows, sinks, trust "
-              "boundaries", colour=D.DEFEND, note="WHAT COULD BE REACHED"),
-     ]),
-     D.column("exposure", [
-       D.card("&#9729;&#65039;", "cloud security policy", "security groups, "
-              "ingress, WAF — is this entry point on the internet",
-              colour=D.SECURE),
-       D.card("&#128680;", "CSPM findings", "the bucket behind that sink is "
-              "public, today", colour=D.BAD),
-     ]),
-     D.column("identity", [
-       D.card("&#128273;", "entitlement and roles", "what the caller may do "
-              "once it is through", colour=D.SECURE),
-       D.card("&#128100;", "IAM trust policy", "who can assume that role, and "
-              "from where", colour=D.SECURE, note="A2.3"),
-     ]),
-     D.column("exfiltration", [
-       D.card("&#128683;", "egress policy", "NetworkPolicy and firewall rules "
-              "— can anything leave at the end of the path", colour=D.GOOD,
-              note="A3.2"),
-     ]),
-     D.column("output", [
-       D.card("&#128202;", "ranked threats", "scored, machine-readable, and "
-              "diffed against the last run", colour=D.DEFEND),
-     ])],
-    caption="Read only the first column and you get a threat model that is "
-            "identical for two deployments of the same repository — one behind "
-            "a private load balancer with no egress, one not. It is wrong about "
-            "both.")),
-  ("md", "## 3 · Stage 5 — derive threats from all six"),
-  ("py", '''from collections import defaultdict
+  ("md", "## 2 · Demo — the same capability, three signatures"),
+  ("py", '''import fnmatch
+from typing import Literal
 
-# --- input 1: the stage-4 architecture map ---------------------------------
-ARCH = {
- "entry_points": [
-   {"unit": "get_booking",    "component": "src/api", "auth": "session"},
-   {"unit": "upload_voucher", "component": "src/api", "auth": "session"},
-   {"unit": "health",         "component": "src/api", "auth": "none"},
- ],
- "flows": [("get_booking", "load_booking"), ("get_booking", "render"),
-           ("upload_voucher", "store"), ("load_booking", "execute"),
-           ("store", "open")],
- "sinks": [{"unit": "load_booking", "sink": "execute", "resource": "database"},
-           {"unit": "store", "sink": "open", "resource": "voucher_bucket"}],
- "assets": {"database":       {"data": ("customer", "financial"), "value": 5},
-            "voucher_bucket": {"data": ("documents",),            "value": 3}},
-}
+DOCS = {"runbook": "/srv/docs/runbook.md", "policy": "/srv/docs/policy.md",
+        "oncall":  "/srv/docs/oncall.md"}
+FILESYSTEM = {**{p: f"contents of {k}" for k, p in DOCS.items()},
+              "/home/app/.aws/credentials": "AKIA…SECRET",
+              "/etc/shadow": "root:$6$…"}
 
-# --- inputs 2-6: what the rest of the estate already knows -----------------
-CLOUD_POLICY = {           # security groups / ingress: is it on the internet?
- "get_booking":    {"exposed": "internet", "waf": True},
- "upload_voucher": {"exposed": "internet", "waf": False},
- "health":         {"exposed": "vpc-only", "waf": False},
-}
-CSPM = [                   # live posture findings, not code
- {"resource": "voucher_bucket", "finding": "bucket policy allows public read",
-  "severity": 4},
-]
-ENTITLEMENTS = {           # what the running role may do
- "src/api": {"db:select", "db:update", "s3:GetObject", "s3:PutObject"},
-}
-IAM = {                    # who can become that role
- "src/api": {"assumable_by": ["ci-deploy-role"], "mfa_required": True},
-}
-EGRESS = {                 # NetworkPolicy / firewall: can anything leave?
- "src/api": {"default_deny": True, "allowed": ["db.prod:5432"]},
-}
+def normalise(p):
+    parts = []
+    for seg in p.split("/"):
+        if seg in ("", "."): continue
+        if seg == "..":
+            if parts: parts.pop()
+            continue
+        parts.append(seg)
+    return "/" + "/".join(parts)
 
-VECTOR_FOR = {
- "database":       [("CWE-89", "SQL injection", 5)],
- "voucher_bucket": [("CWE-22", "path traversal", 4),
-                    ("CWE-434", "unrestricted upload", 4)],
-}
+def guard(path, workspace="/srv/docs"):
+    real = normalise(path)
+    if fnmatch.fnmatch(real, "*/.aws/*") or fnmatch.fnmatch(real, "*/etc/shadow"):
+        return False
+    return real.startswith(workspace + "/")
 
-def reachable(entry, flows):
-    adj = defaultdict(list)
-    for a, b in flows:
-        adj[a].append(b)
-    seen, stack = set(), [entry]
-    while stack:
-        for m in adj[stack.pop()]:
-            if m not in seen:
-                seen.add(m); stack.append(m)
-    return seen
+# --- signature A: free-form path -------------------------------------
+def read_file_freeform(path: str):
+    if not guard(path):
+        return {"error": "denied by path guard"}
+    return {"content": FILESYSTEM.get(normalise(path), "not found")}
 
-def threat_model(arch, cloud, cspm, entitlements, iam, egress):
-    threats = []
-    cspm_by_resource = defaultdict(int)
-    for f in cspm:
-        cspm_by_resource[f["resource"]] += f["severity"]
-    for ep in arch["entry_points"]:
-        reach = reachable(ep["unit"], arch["flows"])
-        exposure = cloud.get(ep["unit"], {})
-        for sink in arch["sinks"]:
-            if sink["unit"] not in reach:
-                continue
-            asset = arch["assets"][sink["resource"]]
-            comp = ep["component"]
-            for cwe, name, base in VECTOR_FOR.get(sink["resource"], []):
-                why, score = [], base + asset["value"]
-                if ep["auth"] == "none":
-                    score += 2; why.append("unauthenticated")
-                # exposure: the single biggest correction the map cannot make
-                if exposure.get("exposed") == "internet":
-                    score += 2; why.append("internet-facing")
-                else:
-                    score -= 3; why.append("vpc-only")
-                if exposure.get("exposed") == "internet" and not exposure.get("waf"):
-                    score += 1; why.append("no WAF")
-                score += cspm_by_resource[sink["resource"]]
-                if cspm_by_resource[sink["resource"]]:
-                    why.append("live CSPM finding")
-                # entitlement: write beats read, and the role decides which
-                if {"db:update", "s3:PutObject"} & entitlements.get(comp, set()):
-                    score += 1; why.append("role holds write")
-                if "*" in iam.get(comp, {}).get("assumable_by", []):
-                    score += 2; why.append("role assumable by *")
-                if not egress.get(comp, {}).get("default_deny", True):
-                    score += 2; why.append("egress open")
-                threats.append({
-                  "entry": ep["unit"], "sink": sink["unit"], "cwe": cwe,
-                  "vector": name, "score": score, "why": why,
-                  "path": f"{ep['unit']} -> ... -> {sink['unit']}"})
-    # score first, then a full tiebreak, so two machines agree
-    return sorted(threats,
-                  key=lambda t: (-t["score"], t["cwe"], t["entry"], t["sink"]))
+# --- signature B: enumerated document id ------------------------------
+def read_file_enumerated(doc_id: str):
+    if doc_id not in DOCS:
+        return {"error": f"unknown doc_id; valid: {sorted(DOCS)}"}
+    return {"content": FILESYSTEM[DOCS[doc_id]]}
 
-TM = threat_model(ARCH, CLOUD_POLICY, CSPM, ENTITLEMENTS, IAM, EGRESS)
-print(f"{'entry':16s}{'sink':14s}{'cwe':9s}{'score':>6}  why")
+REQUESTS = ["runbook", "/srv/docs/runbook.md",
+            "/srv/docs/../../home/app/.aws/credentials", "/etc/shadow"]
+print(f"{'request':46s}{'free-form':28s}enumerated")
 print("-" * 92)
-for t in TM:
-    print(f"{t['entry']:16s}{t['sink']:14s}{t['cwe']:9s}{t['score']:>6}  "
-          f"{', '.join(t['why'])}")
-print(f"\\n{len(TM)} threats. Nobody wrote this; it fell out of six files that")
-print("already existed in the estate.")'''),
-  ("md", "## 4 · The same code, two estates\n\n"
-         "This is the argument for reading past the map. Nothing below changes "
-         "a line of the repository — only the configuration around it."),
-  ("py", '''# Same repository. Private load balancer, default-deny egress, no wildcard
-# trust policy, and the CSPM finding remediated.
-HARDENED = threat_model(
-  ARCH,
-  {k: {"exposed": "vpc-only", "waf": True} for k in CLOUD_POLICY},
-  [],                                                        # CSPM clean
-  {"src/api": {"db:select", "s3:GetObject"}},                # read-only role
-  {"src/api": {"assumable_by": ["ci-deploy-role"], "mfa_required": True}},
-  {"src/api": {"default_deny": True, "allowed": ["db.prod:5432"]}},
-)
+for r in REQUESTS:
+    a = read_file_freeform(r) if r.startswith("/") else {"error": "not a path"}
+    b = read_file_enumerated(r)
+    print(f"{r:46s}{str(a)[:26]:28s}{str(b)[:34]}")
+'''),
+  ("md", "## 3 · Where it breaks — introduce one bug in the guard\n\n"
+         "Both signatures were safe above, because the guard worked. Now make the "
+         "guard wrong in the ordinary way (A3.3's bug: prefix check before "
+         "normalisation) and re-run. Only one signature is affected."),
+  ("py", '''def guard_buggy(path, workspace="/srv/docs"):
+    return path.startswith(workspace)          # the classic bug
 
-print(f"{'threat':38s}{'as deployed':>13}{'hardened':>11}")
-print("-" * 62)
-by_key = {(t["entry"], t["sink"], t["cwe"]): t["score"] for t in HARDENED}
-for t in TM:
-    k = (t["entry"], t["sink"], t["cwe"])
-    print(f"{t['cwe'] + '  ' + t['path']:38s}{t['score']:>13}{by_key[k]:>11}")
+def read_file_freeform_buggy(path: str):
+    if not guard_buggy(path):
+        return {"error": "denied"}
+    return {"content": FILESYSTEM.get(normalise(path), "not found")}
 
-print(f"\\nmax severity  {max(t['score'] for t in TM)} -> "
-      f"{max(t['score'] for t in HARDENED)}")
-print()
-print("Identical code. A model derived from the map alone would have scored")
-print("these two deployments the same, and it would have been wrong about the")
-print("first by understating it and wrong about the second by crying wolf.")
-assert max(t["score"] for t in HARDENED) < max(t["score"] for t in TM)'''),
-  ("md", "## 5 · Where it breaks — the model that was true last quarter\n\n"
-         "Add one entry point. The hand-written threat model does not change, "
-         "because documents do not change themselves."),
-  ("py", '''ARCH_V2 = {**ARCH,
- "entry_points": ARCH["entry_points"] + [
-   {"unit": "admin_export", "component": "src/api", "auth": "none"}],
- "flows": ARCH["flows"] + [("admin_export", "load_booking"),
-                           ("admin_export", "store")]}
-CLOUD_V2 = {**CLOUD_POLICY,
-            "admin_export": {"exposed": "internet", "waf": False}}
+attack = "/srv/docs/../../home/app/.aws/credentials"
+print("with a buggy path guard:")
+print(f"   free-form  : {read_file_freeform_buggy(attack)}")
+print(f"   enumerated : {read_file_enumerated(attack)}")
+print("\\nThe enumerated tool is unaffected by a filesystem bug it never touches.")
+print("It cannot express the request, so the guard's correctness stops mattering.")
+'''),
+  ("py", '''USER_RECORD = {"id": 4471, "email": "dana@corp", "name": "Dana",
+               "ssn": "123-45-6789", "salary": 145000,
+               "mfa_secret": "JBSWY3DPEHPK3PXP", "role": "engineer"}
 
-TM2 = threat_model(ARCH_V2, CLOUD_V2, CSPM, ENTITLEMENTS, IAM, EGRESS)
+def get_user_wide(user_id):            return USER_RECORD
+def get_user_narrow(user_id, fields):
+    allowed = {"id", "name", "email", "role"}
+    bad = set(fields) - allowed
+    if bad:
+        return {"error": f"fields not exposed by this tool: {sorted(bad)}"}
+    return {k: USER_RECORD[k] for k in fields}
 
-def diff(before, after):
-    key = lambda t: (t["entry"], t["sink"], t["cwe"])
-    b = {key(t): t for t in before}
-    a = {key(t): t for t in after}
-    # sorted() over a set difference is NOT deterministic across processes:
-    # set iteration order depends on PYTHONHASHSEED, and a stable sort then
-    # preserves that order for equal scores. Sort the keys first.
-    return {"new": [a[k] for k in sorted(a.keys() - b.keys())],
-            "removed": [b[k] for k in sorted(b.keys() - a.keys())],
-            "max_before": max(t["score"] for t in before),
-            "max_after": max(t["score"] for t in after)}
+print("wide tool returns  :", sorted(get_user_wide(4471)))
+print("narrow, legitimate :", get_user_narrow(4471, ["name", "role"]))
+print("narrow, overreach  :", get_user_narrow(4471, ["name", "ssn", "mfa_secret"]))
 
-d = diff(TM, TM2)
-print(f"threats before {len(TM)} -> after {len(TM2)}")
-print(f"max severity   {d['max_before']} -> {d['max_after']}")
-print("\\nNEW THREATS:")
-for t in sorted(d["new"], key=lambda t: (-t["score"], t["cwe"], t["entry"])):
-    print(f"   [{t['score']:>2}] {t['cwe']:9s}{t['path']:38s}{', '.join(t['why'])}")
-assert d["new"] and d["max_after"] >= d["max_before"]'''),
-  ("md", "## 6 · The control — and the gate that is not enough\n\n"
-         "Regenerate on every change to *any* input, and gate on the delta. "
-         "The obvious gate counts new threats. Watch what it does with a pull "
-         "request that adds none."),
-  ("py", '''def gate_new_only(before, after, critical_at=16):
-    """The obvious gate: refuse a pull request that introduces a new critical."""
-    d = diff(before, after)
-    crit = [t for t in d["new"] if t["score"] >= critical_at]
-    return not crit, {"new": len(d["new"]), "new_critical": len(crit)}
+leaked = set(get_user_wide(4471)) & {"ssn", "mfa_secret", "salary"}
+print(f"\\nsensitive fields placed in the model's context by the wide tool: {sorted(leaked)}")
+assert not (set(get_user_narrow(4471, ["name", "role"])) & leaked)
+'''),
+  ("py", '''# Verify: score a tool signature against the three rules.
+def review_signature(name, accepts_free_text, bounded_types, returns_minimum):
+    score = sum([not accepts_free_text, bounded_types, returns_minimum])
+    problems = []
+    if accepts_free_text:
+        problems.append("accepts free text where an enumeration would do")
+    if not bounded_types:
+        problems.append("unbounded types — parse errors become the guard's problem")
+    if not returns_minimum:
+        problems.append("returns more than the caller needs")
+    return {"tool": name, "score": f"{score}/3", "problems": problems}
 
-ok, info = gate_new_only(TM, TM2)
-print(f"PR 1 - adds an unauthenticated handler   -> "
-      f"{'PASS' if ok else 'FAIL'}  {info}")
+TOOLS = [
+ ("read_file(path: str)",                   True,  False, True),
+ ("read_file(doc_id: Literal[...])",        False, True,  True),
+ ("get_user(user_id: int)",                 False, True,  False),
+ ("get_user(user_id: int, fields: list)",   False, True,  True),
+ ("run_shell(cmd: str)",                    True,  False, False),
+]
+for name, free, bounded, minimal in TOOLS:
+    r = review_signature(name, free, bounded, minimal)
+    print(f"{r['score']}  {r['tool']}")
+    for p in r["problems"]:
+        print(f"        ⚠ {p}")
+'''),
+    ("md", '## 6 · Depth — every hop is a place authority can widen\\n\\nA tool signature bounds one call. Sub-agents multiply the calls, and delegation depth is the axis nobody puts on the roadmap.'),
+  ("py", '''from dataclasses import dataclass, field
 
-# PR 2 touches no application code at all. It widens the IAM trust policy and
-# removes the default-deny egress rule - two lines of terraform.
-TM_TF = threat_model(ARCH, CLOUD_POLICY, CSPM, ENTITLEMENTS,
-                     {"src/api": {"assumable_by": ["ci-deploy-role", "*"],
-                                  "mfa_required": False}},
-                     {"src/api": {"default_deny": False,
-                                  "allowed": ["0.0.0.0/0"]}})
-ok2, info2 = gate_new_only(TM, TM_TF)
-print(f"PR 2 - two lines of terraform            -> "
-      f"{'PASS' if ok2 else 'FAIL'}  {info2}")
-print()
-print("PR 2 introduced no new threat, so a gate that counts new threats waves")
-print("it through. Every existing threat got worse:")
-by_key = {(t["entry"], t["sink"], t["cwe"]): t["score"] for t in TM_TF}
-for t in TM:
-    k = (t["entry"], t["sink"], t["cwe"])
-    print(f"   {t['cwe']:9s}{t['path']:38s}{t['score']:>3} -> {by_key[k]}")'''),
-  ("md", "## 7 · The gate that is\n\nCount escalation as well as arrival. A "
-         "threat that was medium and is now critical is a regression, and the "
-         "pull request that caused it did not touch a line of application code."),
-  ("py", '''def threat_gate(before, after, critical_at=16, max_escalation=2):
-    d = diff(before, after)
-    prev = {(t["entry"], t["sink"], t["cwe"]): t["score"] for t in before}
-    new_crit = [t for t in d["new"] if t["score"] >= critical_at]
-    escalated = [t for t in after
-                 if (k := (t["entry"], t["sink"], t["cwe"])) in prev
-                 and t["score"] - prev[k] > max_escalation]
-    return (not new_crit and not escalated,
-            {"new_critical": len(new_crit), "escalated": len(escalated),
-             "detail": [f"{t['cwe']} via {t['path']}: "
-                        f"{prev[(t['entry'], t['sink'], t['cwe'])]} -> {t['score']}"
-                        for t in escalated]})
+CEILINGS = {"dana@corp": {"repo:read","repo:write","deploy:prod"},
+            "orchestrator": {"repo:read","repo:write","deploy:prod"},
+            "planner":   {"repo:read"},
+            "coder":     {"repo:read","repo:write"},
+            "reviewer":  {"repo:read"},
+            "shipper":   {"repo:read","deploy:prod"}}
 
-for label, model in (("PR 1 - unauthenticated handler", TM2),
-                     ("PR 2 - two lines of terraform ", TM_TF)):
-    ok, info = threat_gate(TM, model)
-    print(f"{label} -> {'PASS' if ok else 'FAIL'}")
-    print(f"   new_critical={info['new_critical']}  escalated={info['escalated']}")
-    for line in info["detail"]:
-        print(f"      {line}")
+class DelegationError(Exception): pass
 
-# And the fix for PR 1: require a session and put it behind the WAF.
-ARCH_FIXED = {**ARCH_V2, "entry_points": [
-  {**e, "auth": "session"} if e["unit"] == "admin_export" else e
-  for e in ARCH_V2["entry_points"]]}
-CLOUD_FIXED = {**CLOUD_V2, "admin_export": {"exposed": "internet", "waf": True}}
-ok_fixed, info_fixed = threat_gate(
-    TM, threat_model(ARCH_FIXED, CLOUD_FIXED, CSPM, ENTITLEMENTS, IAM, EGRESS))
-print(f"\\nPR 1, after requiring auth and adding the WAF -> "
-      f"{'PASS' if ok_fixed else 'FAIL'}  {info_fixed['new_critical']} critical")
+@dataclass
+class Token:
+    sub: str; actor: str; scopes: set; act: dict = None
+    def chain(self):
+        out, node = [], self.act
+        while node: out.append(node["actor"]); node = node.get("act")
+        c = list(reversed(out)) + [self.actor]
+        if c[0] != self.sub: c.insert(0, self.sub)
+        return c
+    @property
+    def depth(self): return len(self.chain())
 
-print()
-print("Nobody wrote a document. The gate compared generated models and refused")
-print("two named regressions - and the one it would have missed is the one")
-print("that changed no code, which is the majority of how estates get worse.")
-assert gate_new_only(TM, TM_TF)[0]          # v1 waves the terraform PR through
-assert not threat_gate(TM, TM_TF)[0]       # v2 does not
-assert not threat_gate(TM, TM2)[0] and ok_fixed'''),
+def exchange(pres, actor, scopes):
+    scopes = set(scopes)
+    if not scopes <= pres.scopes:
+        raise DelegationError(f"widening: {sorted(scopes - pres.scopes)}")
+    if not scopes <= CEILINGS.get(actor, set()):
+        raise DelegationError(f"above {actor}'s ceiling")
+    return Token(pres.sub, actor, scopes, {"actor": pres.actor, "act": pres.act})
+
+root  = Token("dana@corp", "dana@corp", set(CEILINGS["dana@corp"]))
+orch  = exchange(root, "orchestrator", {"repo:read","repo:write","deploy:prod"})
+coder = exchange(orch, "coder", {"repo:read","repo:write"})
+rev   = exchange(coder, "reviewer", {"repo:read"})
+
+for t in (root, orch, coder, rev):
+    print(f"depth {t.depth}  {' → '.join(t.chain()):52s} {sorted(t.scopes)}")
+'''),
+  ("md", "## 3 · Where it breaks — the check in the wrong place\n\n"
+         "The orchestrator enforces `MAX_DEPTH`. Now assume the orchestrator is "
+         "the compromised component, which is the realistic case: it is the one "
+         "processing untrusted task descriptions."),
+  ("py", '''MAX_DEPTH = 3
+
+def orchestrator_enforced(chain_token, new_actor, scopes, honest=True):
+    """The limit lives inside the orchestrator's own code."""
+    if honest and chain_token.depth + 1 > MAX_DEPTH:
+        raise DelegationError(f"depth {chain_token.depth+1} > {MAX_DEPTH}")
+    return exchange(chain_token, new_actor, scopes)
+
+print("honest orchestrator:")
+try:
+    t = orchestrator_enforced(rev, "shipper", {"repo:read"}, honest=True)
+    print("   granted:", t.chain())
+except DelegationError as e:
+    print("   refused:", e)
+
+print("\\ncompromised orchestrator (simply does not run its own check):")
+t = orchestrator_enforced(rev, "shipper", {"repo:read"}, honest=False)
+print(f"   granted: depth {t.depth}  {' → '.join(t.chain())}")
+print("   The limit was a line of code inside the component we no longer trust.")
+'''),
+  ("md", "## 4 · The control — enforce at the issuer and the resource server\n\n"
+         "Both of these are outside the orchestrator's control, so a compromised "
+         "orchestrator cannot skip them."),
+  ("py", '''def issuer_exchange(pres, actor, scopes, max_depth=MAX_DEPTH):
+    """The token issuer counts the act chain it is being asked to extend."""
+    if pres.depth + 1 > max_depth:
+        raise DelegationError(f"issuer refuses: depth {pres.depth+1} > {max_depth}")
+    return exchange(pres, actor, scopes)
+
+def resource_server(token, scope, max_depth=MAX_DEPTH):
+    """Independent second check, at the point the action actually happens."""
+    if token.depth > max_depth:
+        return False, f"resource server refuses: depth {token.depth} > {max_depth}"
+    if scope not in token.scopes:
+        return False, f"missing scope {scope}"
+    return True, f"allowed for {' → '.join(token.chain())}"
+
+print("issuer enforcement:")
+try:
+    issuer_exchange(rev, "shipper", {"repo:read"})
+except DelegationError as e:
+    print("   ", e)
+
+print("\\nresource server enforcement (even if a deep token somehow exists):")
+deep = Token("dana@corp", "shipper", {"repo:read"},
+             {"actor":"reviewer","act":{"actor":"coder",
+              "act":{"actor":"orchestrator","act":None}}})
+print(f"   depth {deep.depth}: {resource_server(deep, 'repo:read')}")
+print(f"   depth {rev.depth}: {resource_server(rev, 'repo:read')}")
+'''),
+  ("py", '''# Verify: no chain the compromised orchestrator can build is ever honoured.
+import random
+random.seed(9)
+actors = ["planner","coder","reviewer","shipper"]
+honoured_too_deep = 0
+for _ in range(3000):
+    tok = Token("dana@corp","dana@corp", set(CEILINGS["dana@corp"]))
+    for _ in range(random.randint(1,6)):
+        a = random.choice(actors)
+        want = set(random.sample(sorted(tok.scopes),
+                                 k=random.randint(0,len(tok.scopes))))
+        try:
+            tok = exchange(tok, a, want)      # compromised: no depth check
+        except DelegationError:
+            break
+    ok, _ = resource_server(tok, "repo:read")
+    if ok and tok.depth > MAX_DEPTH:
+        honoured_too_deep += 1
+print(f"3000 chains built without any orchestrator-side limit — "
+      f"over-deep chains honoured by the resource server: {honoured_too_deep}")
+assert honoured_too_deep == 0
+print("The limit holds because it is enforced where the orchestrator cannot reach.")
+'''),
+    ("md", '## 10 · And it will all happen twice\\n\\nRetries, restarts, a duplicated webhook, a loop that lost track. Whether that matters depends entirely on the action.'),
+  ("py", '''import hashlib, json
+from dataclasses import dataclass, field
+
+@dataclass
+class Ledger:
+    applied: dict = field(default_factory=dict)
+    effects: list = field(default_factory=list)
+
+    def apply(self, key, op, **args):
+        if key in self.applied:
+            self.effects.append(f"SKIP  {op} (key {key[:8]} already applied)")
+            return False
+        self.applied[key] = (op, args)
+        self.effects.append(f"APPLY {op} {args}")
+        return True
+
+def idem_key(op, **args):
+    """Derived from INTENT. No timestamp, no attempt number."""
+    blob = json.dumps({"op": op, "args": args}, sort_keys=True)
+    return hashlib.sha256(blob.encode()).hexdigest()
+
+led = Ledger()
+# the agent retries the same refund three times
+for attempt in range(3):
+    k = idem_key("issue_refund", order="ORD-4471", amount=250)
+    led.apply(k, "issue_refund", order="ORD-4471", amount=250)
+# a genuinely different refund
+led.apply(idem_key("issue_refund", order="ORD-4472", amount=90),
+          "issue_refund", order="ORD-4472", amount=90)
+
+print("\\n".join(led.effects))
+print(f"\\n4 calls → {len(led.applied)} effects")
+'''),
+  ("md", "## 3 · Where it breaks — a key that includes the wrong thing"),
+  ("py", '''import time
+
+def bad_key_timestamp(op, **args):
+    return hashlib.sha256(f"{op}{args}{time.time()}".encode()).hexdigest()
+
+def bad_key_too_narrow(op, **args):
+    return hashlib.sha256(op.encode()).hexdigest()          # op only!
+
+led2 = Ledger()
+for attempt in range(3):
+    led2.apply(bad_key_timestamp("issue_refund", order="ORD-4471", amount=250),
+               "issue_refund", order="ORD-4471", amount=250)
+print("key includes a timestamp — every retry is a new operation:")
+print("\\n".join(led2.effects))
+print(f"→ refunded {sum(1 for e in led2.effects if e.startswith('APPLY')) * 250} "
+      f"instead of 250\\n")
+
+led3 = Ledger()
+led3.apply(bad_key_too_narrow("issue_refund", order="ORD-4471", amount=250),
+           "issue_refund", order="ORD-4471", amount=250)
+led3.apply(bad_key_too_narrow("issue_refund", order="ORD-9999", amount=800),
+           "issue_refund", order="ORD-9999", amount=800)
+print("key includes only the op — different refunds collide:")
+print("\\n".join(led3.effects))
+print("→ the second customer never got their money")
+'''),
+  ("md", "## 4 · The control — classify the action, then key on intent"),
+  ("py", '''ACTIONS = {
+ "set_config":     ("naturally idempotent", False),
+ "add_label":      ("naturally idempotent", False),
+ "post_comment":   ("accumulating",         True),
+ "send_email":     ("accumulating",         True),
+ "issue_refund":   ("dangerous",            True),
+ "rotate_secret":  ("dangerous",            True),
+ "scale_cluster":  ("dangerous",            True),
+}
+print(f"{'action':16s}{'nature':22s}needs a key")
+print("-" * 52)
+for a, (nature, needs) in ACTIONS.items():
+    print(f"{a:16s}{nature:22s}{needs}")
+
+def guarded_call(led, op, **args):
+    nature, needs_key = ACTIONS[op]
+    if not needs_key:
+        led.effects.append(f"APPLY {op} {args} (idempotent by nature)")
+        return True
+    return led.apply(idem_key(op, **args), op, **args)
+
+led4 = Ledger()
+for _ in range(2):
+    guarded_call(led4, "set_config", key="tls_min", value="1.2")
+    guarded_call(led4, "issue_refund", order="ORD-4471", amount=250)
+print("\\n" + "\\n".join(led4.effects))
+'''),
+  ("py", '''# Verify — replay: the forensic half of the same property.
+@dataclass
+class Replay:
+    prompts: list = field(default_factory=list)
+    tool_results: list = field(default_factory=list)
+    model_version: str = ""
+    seed: object = None
+    def replayable(self):
+        missing = []
+        if not self.prompts:      missing.append("prompts not recorded")
+        if not self.tool_results: missing.append("tool results not recorded — "
+                                                 "the agent saw a world you cannot rebuild")
+        if not self.model_version: missing.append("model version not pinned — "
+                                                  "a silent upgrade changes the output")
+        if self.seed is None:     missing.append("no seed — sampling makes it unrepeatable")
+        return (not missing), missing
+
+for name, r in (("fully instrumented", Replay(["p"], ["tool out"], "glm-4.6@2026-07", 42)),
+                ("typical production", Replay(["p"], ["tool out"], "", None)),
+                ("actions only",       Replay([], [], "", None))):
+    ok, missing = r.replayable()
+    print(f"{name:22s} replayable={ok}")
+    for m in missing: print(f"      ✗ {m}")
+assert Replay(["p"], ["t"], "m", 1).replayable()[0]
+'''),
  ],
- "expect": "Six threats are derived from six static inputs, each carrying the "
-           "reasons its score moved — internet-facing, no WAF, live CSPM "
-           "finding, role holds write, role assumable by `*`, egress open. The "
-           "same repository deployed behind a private load balancer with "
-           "default-deny egress and a read-only role scores materially lower on "
-           "every row. Adding an unauthenticated handler fails the CI gate, and "
-           "so does a pull request that changes only terraform.",
- "challenge": "Take one service and write down where each of the six inputs "
-              "lives — the repository, the CSPM console, the terraform, the IAM "
-              "policy, the NetworkPolicy. If any of them is \"in somebody's "
-              "head\", that is the input your threat model is currently "
-              "guessing at, and the guess is always the optimistic one.",
+ "expect": 'The same capability behind three signatures: the free-text one presents a traversal surface the enumerated one cannot express, and introducing one bug in the shared guard breaks only the tools that expose the argument. A depth-3 delegation chain narrows correctly, then the same chain widens when the check lives in the compromised orchestrator rather than at the issuer. Finally the same action is classified three ways, and an idempotency key containing a timestamp makes every retry a new refund.',
+ "challenge": 'Take one tool your agent can call and write its signature as a type. If a parameter is `str` where the real requirement is a choice from a known set, narrowing it costs an afternoon and removes a class of bug permanently. Then check where your delegation-depth limit is enforced — if it is in the orchestrator, it protects you from everything except the orchestrator.',
 },
 
 "B1.3": {
  "concept": """
-**Stage 7 — Vulnerability auditing.** The deep-dive analysis stage, and the one
-people think of as "SAST". It has had three generations, and knowing what each
-can and cannot see is what stops you buying the wrong one.
+Three decisions about the model, and the order matters: which one runs this
+step, which one is the backbone at all, and what stops the harness from
+grading its own homework.
 
-**Generation 1 — grep.** Pattern-match dangerous constructs. Fast, zero setup,
-fires on every occurrence whether reachable or not. Precision is poor, so it gets
-muted.
+### Routing, inside the loop
 
-**Generation 2 — rules with dataflow.** Semgrep, CodeQL, OpenGrep. Parse to an
-AST or graph and track *taint*: does untrusted input reach a dangerous sink?
-Precision improves enormously. The cost is that a rule only finds the pattern
-someone wrote it for.
+A large model on every iteration of a 50-step loop is slow and expensive, and
+most iterations are trivial. So teams route dynamically — small model by
+default, escalate when the task looks hard. Two rules keep that safe, and they
+are A1.7's rules applied per call:
 
-**Generation 3 — model review.** An open-weight model reads the code and reasons.
-No rule needs to exist first, which is exactly its value — and it also invents
-bugs that are not there, confidently.
+1. **A model may only invoke tools within its tier's blast-radius budget.**
+2. **The verifier is never weaker than the actor.**
 
-The mistake is treating generation 3 as a replacement for generation 2. The
-combination that works: rules for what rules do well, deterministically; the
-model for what rules cannot express; and everything the model says treated as a
-**hypothesis** until stages 8–12 confirm it.
+The failure specific to in-loop routing is subtler than either: **escalation on
+failure.** If the loop retries with a bigger model whenever the small one fails
+verification, an attacker who can cause failures can force every task onto the
+most capable model — and the escalation path usually carries more authority
+too. Escalate capability; never escalate authority.
+
+### The backbone
+
+Two questions get confused here and only one is worth your time. The first is
+*which model is best for security work right now*, which will be wrong within a
+quarter and take anything built on it down with it. The second lasts: **can you
+substitute the backbone without rewriting the harness?** If swapping a model
+means touching prompt assembly, tool schemas, parsing and retry logic, you did
+not choose a model — you married one.
+
+So: evaluate on **your** corpus rather than a vendor chart, because the chart
+measures a distribution that is not yours on tasks that are not yours; put the
+backbone behind an interface; and keep the eval, so a substitution is a
+measurement rather than an argument.
+
+### And if the harness tunes itself
+
+A self-improving scaffold edits its own prompts, tools or routing based on how
+well it is doing. It is genuinely effective, and it makes evaluation
+non-optional rather than good practice — because optimisation moves toward
+whatever the metric rewards. If the metric is the scaffold's own verifier, it
+converges on **satisfying the verifier**, which is the same thing as doing the
+job only if the verifier is perfect. B1.1 established that yours is not.
+
+The loop is: the scaffold changes itself, its own metric improves, actual
+capability does not, and the dashboard is monotone and green. The control is a
+**held-out signal** — cases the scaffold cannot see, cannot train on and cannot
+reach, including through its logs. The hard part is not building it. It is
+keeping it held out.
 """,
  "steps": [
-  ("md", PIPELINE_NOTE),
   ("model", {
-   "title": 'The model backend, and the third generation of SAST',
-   "task": 'Is this function vulnerable? Name the CWE if so, and say which value reaches the sink.\n\ndef report(request):\n    q = "SELECT * FROM orders WHERE ref = \'" + request.args[\'ref\'] + "\'"\n    return db.execute(q)',
-   "replay": "Yes - CWE-89, SQL injection. request.args['ref'] is concatenated directly into the query string and reaches db.execute unsanitised.",
-   "system": 'You are a code reviewer. Answer in at most three lines.',
-   "check": '("names the CWE identifier", "CWE-89" in answer.upper() or "SQL INJECT" in answer.upper())'}),
-  ("md", "## 2 · Generation 1 — grep, and why it gets muted\n\n"
-         "The safe functions in this corpus matter more than the buggy ones: a "
-         "scanner that fires on parameterised SQL is one nobody runs twice."),
-  ("py", '''CODE = {
-"db.py": \'\'\'
-def get_user(conn, name):
-    # BUG: user input concatenated into SQL
-    return conn.execute("SELECT * FROM users WHERE name = \\'" + name + "\\'")
-
-def get_user_safe(conn, name):
-    # parameterised — the driver escapes it
-    return conn.execute("SELECT * FROM users WHERE name = ?", (name,))
-
-def audit_note(conn, msg):
-    # a constant string. No user input anywhere.
-    return conn.execute("INSERT INTO audit(msg) VALUES (\\'startup\\')")
-\'\'\',
-"ops.py": \'\'\'
-import os, subprocess
-
-def ping(host):
-    # BUG: shell string built from user input
-    os.system("ping -c1 " + host)
-
-def ping_safe(host):
-    subprocess.run(["ping", "-c1", host], check=True)
-\'\'\',
-"files.py": \'\'\'
-def read_doc(base, filename):
-    # BUG: path joined from untrusted input
-    return open(base + "/" + filename).read()
-\'\'\',
+   "title": 'The model backend, and the routing decision',
+   "task": 'Classify this task as CHEAP or ESCALATE for a two-tier security harness, and give one clause of reasoning.\n\nTask: decide whether a 4,000-line authentication module correctly invalidates sessions on password change.',
+   "replay": 'ESCALATE - multi-file state reasoning about session lifetime, which is where a cheap model produces a confident wrong answer.',
+   "system": 'You route tasks between a cheap and a strong model. One line.',
+   "check": '("returned a routing decision", "ESCALATE" in answer.upper() or "CHEAP" in answer.upper())'}),
+  ("md", "## 2 · Demo — tiered routing that works"),
+  ("py", '''TIERS = {
+ "llama3.2:1b":  {"tier": 0, "ms": 40,   "solves": 0.2},
+ "llama3.3:8b":  {"tier": 1, "ms": 220,  "solves": 0.55},
+ "glm-4.6":      {"tier": 2, "ms": 900,  "solves": 0.85},
+ "kimi-k2":      {"tier": 3, "ms": 2400, "solves": 0.93},
 }
-import re
-GREP_RULES = [("CWE-89","SQL injection",r"execute\\("),
-              ("CWE-78","command injection",r"os\\.system|subprocess"),
-              ("CWE-22","path traversal",r"open\\(")]
-def gen1(code):
-    return [(cwe, name, f, i, ln.strip())
-            for f, src in code.items()
-            for i, ln in enumerate(src.splitlines(), 1)
-            for cwe, name, pat in GREP_RULES if re.search(pat, ln)]
+TIER_BUDGET = {0: 0, 1: 3, 2: 20, 3: 60}     # max blast radius a tier may hold
+SCOPE = {"read_file": 0, "search": 0, "write_file": 3, "open_pr": 3,
+         "merge_pr": 6, "deploy": 40}
 
-g1 = gen1(CODE)
-print(f"generation 1 (grep): {len(g1)} findings")
-for cwe, name, f, i, ln in g1:
-    print(f"   {cwe:8s}{f}:{i:<3} {ln[:52]}")
-'''),
-  ("py", '''TRUTH = {("CWE-89","db.py",4), ("CWE-78","ops.py",6), ("CWE-22","files.py",4)}
-def score(findings, label):
-    got = {(c, f, i) for c, _, f, i, _ in findings}
-    tp, fp, fn = len(got & TRUTH), len(got - TRUTH), len(TRUTH - got)
-    prec = tp/(tp+fp) if tp+fp else 0.0
-    rec  = tp/(tp+fn) if tp+fn else 0.0
-    print(f"{label:32s} tp={tp} fp={fp} fn={fn}  precision={prec:.2f} recall={rec:.2f}")
-    return prec, rec
-score(g1, "generation 1 · grep")
-print("\\nfalse positives:")
-for cwe, name, f, i, ln in g1:
-    if (cwe, f, i) not in TRUTH: print(f"   {f}:{i:<3} {ln[:56]}")
-'''),
-  ("md", "## 3 · Generation 2 — taint rules\n\n"
-         "The improvement is not a better pattern. It is a different question: "
-         "*does untrusted input reach this sink?* A function parameter is "
-         "untrusted; a string literal is not."),
-  ("py", '''import ast
-class TaintRule:
-    SINKS = {"execute": ("CWE-89","SQL injection"),
-             "system":  ("CWE-78","command injection"),
-             "open":    ("CWE-22","path traversal")}
-    def scan(self, fname, src):
-        out = []
-        for fn in [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef)]:
-            tainted = {a.arg for a in fn.args.args}
-            for call in [n for n in ast.walk(fn) if isinstance(n, ast.Call)]:
-                sink = (call.func.attr if isinstance(call.func, ast.Attribute)
-                        else getattr(call.func, "id", ""))
-                if sink not in self.SINKS: continue
-                cwe, name = self.SINKS[sink]
-                for arg in call.args:
-                    if self._concat_taint(arg, tainted):
-                        out.append((cwe, name, fname, call.lineno,
-                                    ast.get_source_segment(src, call) or ""))
-                        break
-        return out
-    @staticmethod
-    def _concat_taint(node, tainted):
-        for n in ast.walk(node):
-            if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Add):
-                if {x.id for x in ast.walk(n) if isinstance(x, ast.Name)} & tainted:
-                    return True
-        return False
+def may_invoke(model, tool):
+    return SCOPE[tool] <= TIER_BUDGET[TIERS[model]["tier"]]
 
-rule = TaintRule()
-g2 = [f for n, s in CODE.items() for f in rule.scan(n, s)]
-print(f"generation 2 (taint rules): {len(g2)} findings")
-for cwe, name, f, i, snip in g2: print(f"   {cwe:8s}{f}:{i:<3} {snip[:52]}")
+print(f"{'model':14s}{'tier':>5}  tools it may invoke")
+print("-" * 70)
+for m in TIERS:
+    allowed = [t for t in SCOPE if may_invoke(m, t)]
+    print(f"{m:14s}{TIERS[m]['tier']:>5}  {allowed}")
+'''),
+  ("md", "## 3 · Where it breaks — escalation on failure\n\n"
+         "The natural retry policy: if the small model fails, try a bigger one. "
+         "Watch what an attacker who can force failures gets."),
+  ("py", '''LADDER = ["llama3.2:1b", "llama3.3:8b", "glm-4.6", "kimi-k2"]
+
+def loop_with_escalation(task_fails_always, max_steps=4, escalate_authority=True):
+    """The common pattern: harder task → bigger model → and, usually, more tools."""
+    trace = []
+    for i in range(max_steps):
+        model = LADDER[min(i, len(LADDER)-1)]
+        tools = [t for t in SCOPE if may_invoke(model, t)] if escalate_authority \\
+                else [t for t in SCOPE if may_invoke(LADDER[0], t)]
+        trace.append({"step": i+1, "model": model, "tier": TIERS[model]["tier"],
+                      "ms": TIERS[model]["ms"], "tools": tools})
+        if not task_fails_always:
+            break
+    return trace
+
+print("a task that keeps failing verification:")
+tr = loop_with_escalation(task_fails_always=True)
+for s in tr:
+    print(f"   step {s['step']}  {s['model']:14s} tier {s['tier']}  "
+          f"{s['ms']:>5}ms  may invoke {s['tools']}")
+total_ms = sum(s["ms"] for s in tr)
+print(f"\\ncost of one forced escalation: {total_ms}ms and the final step could "
+      f"invoke {tr[-1]['tools']}")
+print("An attacker who can make verification fail has just promoted the loop to")
+print("the most capable model AND the widest tool set. Both, for free.")
+'''),
+  ("md", "## 4 · The control — escalate capability, never authority\n\n"
+         "The fix separates two things that are usually coupled: how *smart* the "
+         "model is, and what it is *allowed to do*. Escalating the first is fine. "
+         "Escalating the second must require a fresh decision."),
+  ("py", '''def loop_capability_only(task_fails_always, max_steps=4, task_budget=TIER_BUDGET[1]):
+    """Authority is fixed by the TASK, not by which model happens to be running.
+
+    The ladder starts at the lowest tier whose budget covers the task's
+    authority. Routing a tool-holding step to a model below that would hand the
+    weakest model in the system tools its tier is not trusted with — which is
+    the same mistake as escalating authority, in the other direction.
+    """
+    ladder = [m for m in LADDER if TIER_BUDGET[TIERS[m]["tier"]] >= task_budget]
+    trace = []
+    for i in range(max_steps):
+        model = ladder[min(i, len(ladder)-1)]
+        tools = [t for t in SCOPE if SCOPE[t] <= task_budget]
+        trace.append({"step": i+1, "model": model, "tools": tools})
+        if not task_fails_always:
+            break
+    return trace
+
+tr2 = loop_capability_only(task_fails_always=True)
+print(f"   task authority budget: {TIER_BUDGET[1]}  → ladder starts at the lowest "
+      f"tier that covers it")
+for s in tr2:
+    print(f"   step {s['step']}  {s['model']:14s} may invoke {s['tools']}")
+print("\\nThe model gets smarter. The authority does not move.")
+
+escalated = set(tr[-1]["tools"]) - set(tr2[-1]["tools"])
+print(f"tools the attacker gained under the naive policy: {sorted(escalated)}")
+assert escalated
+'''),
+  ("py", '''# Verify: both rules, checked over every step of both policies.
+def review(trace, verifier_model):
+    problems = []
+    for s in trace:
+        model = s["model"]
+        for t in s["tools"]:
+            if SCOPE[t] > TIER_BUDGET[TIERS[model]["tier"]]:
+                problems.append(f"step {s['step']}: {model} may invoke {t} "
+                                f"(blast {SCOPE[t]} > budget "
+                                f"{TIER_BUDGET[TIERS[model]['tier']]})")
+        if TIERS[verifier_model]["tier"] < TIERS[model]["tier"]:
+            problems.append(f"step {s['step']}: verifier {verifier_model} is weaker "
+                            f"than actor {model}")
+    return problems
+
+for label, trace, verifier in (("escalate authority too",   tr,  "llama3.3:8b"),
+                               ("capability only, glm verifier", tr2, "glm-4.6"),
+                               ("capability only, kimi verifier", tr2, "kimi-k2")):
+    p = review(trace, verifier)
+    print(f"{label:32s} {'PASS' if not p else f'{len(p)} FINDING(S)'}")
+    for x in p[:4]:
+        print(f"      ⚠ {x}")
+
+print("\\nRead the middle row. Fixing the authority leak was not enough:")
+print("once the ladder can reach kimi-k2, a glm-4.6 verifier is weaker than the")
+print("actor on the final step, and rule 2 fires. Escalating capability forces")
+print("the verifier's tier up with it — a second-order cost of dynamic routing")
+print("that cost models never include.")
+
+assert review(tr2, "glm-4.6"), "the weaker-verifier finding must be reported"
+assert review(tr2, "kimi-k2") == [], "top-tier verifier should satisfy both rules"
+top = max(TIERS[s["model"]]["tier"] for s in tr2)
+print(f"\\nrule: verifier tier must be ≥ {top} (the highest tier the ladder reaches)")
+'''),
+    ("md", '## 8 · The backbone, behind an interface\\n\\nRouting decides which model runs a step. This decides whether you can change your mind later — and it is the question that outlives every model comparison you will read.'),
+  ("py", '''CORPUS = [
+ # (unit, true_cwe)
+ ("get_report",   "CWE-22"), ("run_export", "CWE-78"), ("safe_query", None),
+ ("legacy_dump",  "CWE-89"), ("render_row", None),     ("admin_purge", "CWE-78"),
+]
+
+def backbone_a(unit):                 # strong on injection, misses traversal
+    return {"run_export": "CWE-78", "legacy_dump": "CWE-89",
+            "admin_purge": "CWE-78"}.get(unit)
+def backbone_b(unit):                 # broad recall, some false positives
+    return {"get_report": "CWE-22", "run_export": "CWE-78", "legacy_dump": "CWE-89",
+            "admin_purge": "CWE-78", "render_row": "CWE-79"}.get(unit)
+def backbone_c(unit):                 # conservative
+    return {"run_export": "CWE-78"}.get(unit)
+
+BACKBONES = {"kimi-k2.6-stand-in": backbone_a,
+             "glm-5.2-stand-in":   backbone_b,
+             "small-local-stand-in": backbone_c}
+
+def harness(find, corpus):
+    """The harness. Note it takes `find` as an argument - that is the point."""
+    return [(u, find(u)) for u, _ in corpus if find(u)]
+
+for name in sorted(BACKBONES):
+    out = harness(BACKBONES[name], CORPUS)
+    print(f"{name:22s}{len(out)} findings")
+'''),
+  ("md", "## 3 · Score them on your corpus, not on a chart"),
+  ("py", '''def score(find, corpus, cost_per_call=0.004):
+    truth = dict(corpus)
+    found = harness(find, corpus)
+    tp = [u for u, c in found if truth.get(u) == c]
+    fp = [u for u, c in found if truth.get(u) != c]
+    planted = [u for u, c in corpus if c]
+    fn = [u for u in planted if u not in [x for x, _ in found]]
+    recall = len(tp) / len(planted)
+    prec = len(tp) / len(found) if found else 0.0
+    spend = len(corpus) * cost_per_call
+    return {"recall": recall, "precision": prec, "tp": len(tp), "fp": len(fp),
+            "fn": len(fn), "spend": spend,
+            "cost_per_tp": (spend / len(tp)) if tp else float("inf")}
+
+print(f"{'backbone':22s}{'recall':>8}{'prec':>7}{'tp':>4}{'fp':>4}{'fn':>4}{'$/finding':>11}")
+results = {}
+for name in sorted(BACKBONES):
+    s = score(BACKBONES[name], CORPUS)
+    results[name] = s
+    print(f"{name:22s}{s['recall']:>7.0%}{s['precision']:>7.0%}"
+          f"{s['tp']:>4}{s['fp']:>4}{s['fn']:>4}{s['cost_per_tp']:>10.3f}")
+best_recall = max(results, key=lambda n: (results[n]["recall"], n))
+best_cost = min(results, key=lambda n: (results[n]["cost_per_tp"], n))
+print(f"\\nbest recall        : {best_recall}")
+print(f"best cost/finding  : {best_cost}")
+print("They are not the same backbone, and which one you want depends on")
+print("whether an analyst reviews the output or a ticket is opened from it.")
+'''),
+  ("md", "## 4 · Where it breaks — the harness that married its model"),
+  ("py", '''def coupled_harness(unit, backbone_name):
+    """Prompt assembly, parsing and retry all keyed to one vendor's quirks."""
+    if backbone_name == "kimi-k2.6-stand-in":
+        raw = backbone_a(unit)
+        return raw                                   # returns a bare CWE
+    if backbone_name == "glm-5.2-stand-in":
+        raw = backbone_b(unit)
+        return {"cwe": raw} if raw else None         # returns an object
+    raise KeyError(f"no parsing branch for {backbone_name}")
+
+for name in sorted(BACKBONES):
+    try:
+        out = [u for u, _ in CORPUS if coupled_harness(u, name)]
+        print(f"   {name:22s}{len(out)} findings")
+    except KeyError as e:
+        print(f"   {name:22s}FAILS: {e}")
 print()
-score(g2, "generation 2 · taint rules")
+print("Adding a third backbone to the coupled harness is a code change in the")
+print("parser, the prompt and the retry path. Adding it to the harness above is")
+print("a dictionary entry. Same models, same corpus - the difference is where")
+print("the vendor's shape was allowed to leak to.")
 '''),
-  ("md", "## 4 · Generation 3 — what rules structurally cannot see\n\n"
-         "Generation 2 is perfect on this corpus. So why involve a model? Because "
-         "a rule only finds what someone wrote it for. Here is a bug with no "
-         "rule: an authorization check that is *present* and wrong."),
-  ("py", '''CODE["authz.py"] = \'\'\'
-def can_delete(user, doc):
-    # Reads "or" where it means "and". No sink, no taint, no pattern.
-    if user.is_admin or user.id == doc.owner_id or doc.is_public:
-        return True
-    return False
-\'\'\'
-print("generation 1 on authz.py:", gen1({"authz.py": CODE["authz.py"]}) or "nothing")
-print("generation 2 on authz.py:", rule.scan("authz.py", CODE["authz.py"]) or "nothing")
+    ("md", '## 13 · And if the harness tunes itself, the metric must be held out\\n\\nA scaffold that edits its own prompts, tools or routing moves toward whatever its metric rewards. If that metric is its own verifier, it converges on satisfying the verifier — and B1.1 established that yours is not perfect.'),
+  ("py", '''import random
 
-class StandIn:
-    """DETERMINISTIC STAND-IN — not a language model. See the note above."""
-    KNOWN = {
-     "authz.py": [{"cwe":"CWE-863","line":4,"confidence":0.82,
-                   "rationale":"disjunctive permission check: a non-public document "
-                               "owned by another user is deletable whenever is_public "
-                               "is true, and delete rights are never checked"}],
-     "db.py": [{"cwe":"CWE-89","line":4,"confidence":0.95,
-                "rationale":"name is concatenated into the query string"},
-               {"cwe":"CWE-89","line":12,"confidence":0.41,
-                "rationale":"audit_note also calls execute"}],     # HALLUCINATION
-    }
-    def review(self, fname, src): return self.KNOWN.get(fname, [])
+TASKS = [{"id": i, "input": i, "correct": i * 2} for i in range(1, 21)]
 
-model = StandIn()
-print("\\ngeneration 3 (model review):")
-for fname in ("authz.py", "db.py"):
-    for f in model.review(fname, CODE[fname]):
-        print(f"   {f['cwe']:9s}{fname}:{f['line']:<3} conf={f['confidence']:.2f}  "
-              f"{f['rationale'][:52]}")
-print("\\nIt found the authorization bug neither earlier generation can see.")
-print("It also invented a SQL injection in a function with a constant string.")
+class Scaffold:
+    """Adjusts its own strategy based on feedback. DETERMINISTIC — not a model."""
+    def __init__(self):
+        self.strategy = "double"        # starts correct
+        self.history = []
+
+    def solve(self, task):
+        if self.strategy == "double":     return task["input"] * 2
+        if self.strategy == "constant":   return 42
+        return task["input"]
+
+    def improve(self, score):
+        """Move toward whatever scored better last round."""
+        self.history.append((self.strategy, score))
+        if len(self.history) >= 2 and self.history[-1][1] <= self.history[-2][1]:
+            order = ["double", "constant", "identity"]
+            self.strategy = order[(order.index(self.strategy) + 1) % 3]
+
+def own_judge(task, answer):
+    """The scaffold's own verifier: is the answer a plausible-looking number?"""
+    return isinstance(answer, int) and answer > 0
+
+def held_out_oracle(task, answer):
+    """The truth. The scaffold never sees this."""
+    return answer == task["correct"]
+
+def evaluate(scaffold, verifier, tasks):
+    return sum(verifier(t, scaffold.solve(t)) for t in tasks) / len(tasks)
+
+s = Scaffold()
+print(f"{'round':6s}{'strategy':11s}{'own judge':11s}{'held-out truth':15s}")
+print("-" * 46)
+for r in range(1, 7):
+    own = evaluate(s, own_judge, TASKS)
+    truth = evaluate(s, held_out_oracle, TASKS)
+    print(f"{r:<6}{s.strategy:11s}{own:<11.2f}{truth:<15.2f}")
+    s.improve(own)
 '''),
-  ("md", """## 5 · Generation 2, as the tool you would actually run
+  ("md", "## 3 · Where it breaks — the self-metric cannot fall\n\n"
+         "The judge scores 1.00 for every strategy, including `constant`, which "
+         "returns 42 for everything. There is no gradient for the scaffold to "
+         "follow toward correctness, and no signal that anything is wrong. The "
+         "dashboard is green in every round.\n\n"
+         "Now let the scaffold drift, and watch the two curves separate."),
+  ("py", '''s2 = Scaffold()
+s2.strategy = "constant"            # a drift that the judge cannot penalise
+print(f"{'round':6s}{'strategy':11s}{'own judge':11s}{'held-out truth':15s}verdict")
+print("-" * 62)
+for r in range(1, 5):
+    own = evaluate(s2, own_judge, TASKS)
+    truth = evaluate(s2, held_out_oracle, TASKS)
+    verdict = "looks fine" if own > 0.9 else "alert"
+    real = "BROKEN" if truth < 0.9 else "ok"
+    print(f"{r:<6}{s2.strategy:11s}{own:<11.2f}{truth:<15.2f}{verdict} / actually {real}")
+    s2.improve(own)
+'''),
+  ("md", "## 4 · The control — a held-out set, and keeping it held out\n\n"
+         "Building the set is easy. The three ways it leaks are not obvious, and "
+         "each one silently converts your held-out signal into another self-metric."),
+  ("py", '''LEAKS = [
+ ("the scaffold reads its own logs, which contain held-out failures",
+  "it optimises against them without anyone deciding to"),
+ ("held-out cases are added to the prompt as 'examples of hard tasks'",
+  "the most common leak, and it looks like good engineering"),
+ ("the same corpus is used for both tuning and evaluation",
+  "the number becomes a training metric and rises forever"),
+ ("a human adjusts the scaffold after reading held-out results",
+  "slower leak, same effect — the human is the gradient"),
+]
+for how, why in LEAKS:
+    print(f"✗ {how}\\n    → {why}\\n")
 
-The taint engine above is forty lines so it fits in a lesson. In production
-generation 2 is Semgrep, CodeQL or OpenGrep, and a rule is a file. This is the
-Semgrep rule for the same taint property the engine above implements:
+def evaluation_is_sound(scaffold_can_read_logs, cases_in_prompt,
+                        same_corpus, human_tunes_on_results):
+    problems = []
+    if scaffold_can_read_logs:    problems.append("scaffold can read held-out outcomes")
+    if cases_in_prompt:           problems.append("held-out cases appear in the prompt")
+    if same_corpus:               problems.append("tuning and eval share a corpus")
+    if human_tunes_on_results:    problems.append("human closes the loop manually")
+    return (not problems), problems
 
-```yaml
-rules:
-  - id: cybertravels-sql-concat
-    languages: [python]
-    severity: ERROR
-    message: >-
-      Traveller-controlled input is concatenated into a SQL string. Use a
-      parameterised query.
-    mode: taint
-    pattern-sources:
-      - pattern: $REQ.args[...]
-      - pattern: $REQ.files[...]
-    pattern-sinks:
-      - pattern: $CONN.execute(...)
-    pattern-sanitizers:
-      - pattern: sqlite3.paramstyle
-```
+for label, args in (("as usually built", (True, True, True, True)),
+                    ("after the fix",    (False, False, False, False))):
+    ok, problems = evaluation_is_sound(*args)
+    print(f"{label:18s} sound={ok}")
+    for p in problems: print(f"      ⚠ {p}")
+'''),
+  ("py", '''# Verify: gate the scaffold on the held-out signal, not its own.
+def gated_improve(scaffold, tasks, holdout_tasks):
+    before = evaluate(scaffold, held_out_oracle, holdout_tasks)
+    candidate = Scaffold(); candidate.strategy = "constant"
+    after = evaluate(candidate, held_out_oracle, holdout_tasks)
+    if after < before:
+        return scaffold, f"REJECTED change: held-out {before:.2f} → {after:.2f}"
+    return candidate, f"accepted: held-out {before:.2f} → {after:.2f}"
 
-[`labs/tools/semgrep-sast/`](https://github.com/spbreed/cyber-commons/tree/main/labs/tools/semgrep-sast)
-installs Semgrep 1.176.0 and runs it against a pull request from the Coding
-Agent. Two things came out of that run and both matter here.
-
-**Coverage is a configuration decision, and it is invisible.** The same file,
-two ruleset widths:
-
-```
-  p/python + p/secrets: 1 finding
-    line  17  ERROR   subprocess-shell-true
-
-  seven packs: 4 findings
-    line   9  ERROR   sqlalchemy-execute-raw-query
-    line  14  WARNING eval-detected
-    line  17  ERROR   subprocess-shell-true
-    line  20  ERROR   disabled-cert-validation
-```
-
-Nothing about the file changed. On the narrow setting three real defects were
-simply not looked for, and the scan exits 0 either way.
-
-**And two defects survived both widths:**
-
-```
-  line  22  MISSED a live-looking API key on a module-level constant
-  line   7  MISSED find_booking performs no authorisation check of any kind
-```
-
-The first is lexical — `p/secrets` was enabled and did not fire, because the
-string matches no known provider's format. A rule could catch it, once someone
-writes that rule. The second cannot be caught by any rule, because the defect is
-the **absence** of a call in a function whose caller holds payments scope. That
-is the boundary generation 3 exists to cross, and it is why the answer is
-"both" rather than "the newer one"."""),
-  ("md", """## 6 · An agent drives both, because you cannot afford to run both everywhere
-
-Generation 2 is cheap enough to run over the whole repository. Generation 3 is
-not — at four million lines the model pass costs more than the finding is
-worth, and a model asked to review everything reviews nothing carefully.
-
-So neither generation is the interesting part. **The allocation is.** An agent
-sits above both, and its policy is three rules:
-
-1. run the deterministic scanner everywhere, with the widest ruleset that is
-   not noisy, because it is nearly free;
-2. spend the model pass only where stage 1 said risk lives **and** the rules
-   were silent — silence in a high-risk zone is the signal, not the noise;
-3. mark everything the model says as a hypothesis, never a finding, because
-   stages 8 to 12 are what turn one into the other."""),
-  ("py", '''# What stage 1 said, and what generation 2 found. The agent has both.
-HISTORICAL_RISK = {"db.py": 0.53, "authz.py": 0.48, "ops.py": 0.19,
-                   "safe.py": 0.02}
-MODEL_COST_PER_FILE = 0.031      # dollars, measured on a small open-weight model
-
-def audit_agent(code, rule, model, risk, gate=0.70, risk_floor=0.30):
-    """Stage 7, allocated. Rules everywhere; the model where rules went quiet."""
-    findings, suppressed, plan = [], [], []
-    rule_hits = {f: rule.scan(f, s) for f, s in sorted(code.items())}
-
-    for fname, hits in rule_hits.items():
-        for cwe, name, f, i, snip in hits:
-            findings.append({"src": "rules", "cwe": cwe, "file": f, "line": i,
-                             "confidence": 1.0, "status": "confirmed-by-rule"})
-
-    for fname in sorted(code):
-        r = risk.get(fname, 0.0)
-        quiet = not rule_hits[fname]
-        if r >= risk_floor and quiet:
-            plan.append((fname, r, "high risk, rules silent -> REVIEW"))
-        elif r >= risk_floor:
-            plan.append((fname, r, "high risk, rules already fired -> skip"))
-        else:
-            plan.append((fname, r, "low historical risk -> skip"))
-
-    reviewed = [f for f, _, why in plan if why.endswith("REVIEW")]
-    for fname in reviewed:
-        for m in model.review(fname, code[fname]):
-            row = {"src": "model", "cwe": m["cwe"], "file": fname,
-                   "line": m["line"], "confidence": m["confidence"],
-                   "status": "HYPOTHESIS"}
-            (findings if m["confidence"] >= gate else suppressed).append(row)
-
-    seen, dedup = set(), []
-    for f in sorted(findings, key=lambda r: (r["src"], r["file"], r["line"])):
-        k = (f["cwe"], f["file"], f["line"])
-        if k not in seen:
-            seen.add(k); dedup.append(f)
-    return dedup, suppressed, plan, reviewed
-
-final, suppressed, plan, reviewed = audit_agent(CODE, rule, model, HISTORICAL_RISK)
-
-print("the agent's allocation:")
-for fname, r, why in plan:
-    print(f"   {fname:12s}risk {r:.2f}   {why}")
-print(f"\\nmodel pass on {len(reviewed)} of {len(CODE)} files "
-      f"(${len(reviewed) * MODEL_COST_PER_FILE:.3f} rather than "
-      f"${len(CODE) * MODEL_COST_PER_FILE:.3f})")
-
-print(f"\\nstage 7 emits {len(final)}, {len(suppressed)} suppressed below 0.70")
-for f in final:
-    print(f"   [{f['src']:5s}] {f['cwe']:9s}{f['file']}:{f['line']:<3} "
-          f"conf={f['confidence']:.2f}  {f['status']}")
-
-TRUTH_FULL = TRUTH | {("CWE-863", "authz.py", 4)}
-got = {(f["cwe"], f["file"], f["line"]) for f in final}
-print(f"\\ntp={len(got & TRUTH_FULL)} fp={len(got - TRUTH_FULL)} "
-      f"fn={len(TRUTH_FULL - got)}")
-assert not (got - TRUTH_FULL) and not (TRUTH_FULL - got)'''),
-  ("py", '''# The allocation is a bet, so measure what it costs when it loses. Move the
-# authorisation bug into a file with LOW historical risk and re-run.
-print("the same corpus, with authz.py carrying no history:")
-_, _, plan_b, reviewed_b = audit_agent(CODE, rule, model,
-                                       {**HISTORICAL_RISK, "authz.py": 0.04})
-final_b, _, _, _ = audit_agent(CODE, rule, model,
-                               {**HISTORICAL_RISK, "authz.py": 0.04})
-got_b = {(f["cwe"], f["file"], f["line"]) for f in final_b}
-missed = TRUTH_FULL - got_b
-print(f"   model pass on {len(reviewed_b)} file(s): {reviewed_b}")
-print(f"   MISSED: {sorted(missed)}")
-print()
-print("A new file with no history is invisible to the allocator, and the")
-print("allocator is what makes generation 3 affordable. The mitigation is not")
-print("subtle - review everything a pull request touched regardless of history,")
-print("and let the risk floor decide only where to spend the SECOND pass.")
-assert missed == {("CWE-863", "authz.py", 4)}
-print()
-print("Every model finding above is marked HYPOTHESIS. Stages 8 to 12 decide.")'''),
+HOLDOUT = [{"id": 100+i, "input": 100+i, "correct": (100+i)*2} for i in range(10)]
+good = Scaffold()
+kept, why = gated_improve(good, TASKS, HOLDOUT)
+print(why)
+print("final strategy:", kept.strategy)
+assert kept.strategy == "double"
+print("\\nThe scaffold's own judge would have accepted the change. The held-out")
+print("oracle rejected it, which is the only reason the system still works.")
+'''),
  ],
- "expect": "Grep produces 6 findings at 50% precision, flagging the parameterised "
-           "query, the constant insert and the safe subprocess call. Taint rules "
-           "find exactly the 3 real injection bugs at 100% precision and recall "
-           "and find nothing in `authz.py`. The model finds the authorization bug "
-           "at 0.82 confidence and hallucinates one SQL injection at 0.41. The "
-           "audit agent then runs the rules everywhere and spends the model pass "
-           "on one file of four — the one where history says risk lives and the "
-           "rules were silent — emitting 4 findings with zero false positives, "
-           "every model finding marked as a hypothesis. The last cell shows what "
-           "the allocation costs when it loses: give `authz.py` no history and "
-           "the authorization bug is never reviewed.",
- "challenge": "Two things, and the second is the one people skip. Point the "
-              "stand-in at a real GLM-4.6 or Kimi K2 through Ollama and run it on "
-              "`authz.py` ten times — the variance in what it reports, and in its "
-              "confidence, decides whether you can gate on confidence at all. "
-              "Then run Semgrep against one of your own repositories at your "
-              "current ruleset and at seven packs, and count the difference. "
-              "Whatever that number is, it has been the number all year.",
+ "expect": "Tiered routing sends trivial steps to the small model and escalates the hard one, then the same router is driven onto the largest model for every task by an attacker who can cause verification failures — carrying more authority with it. The backbone is scored on CyberTravels' own corpus rather than a vendor chart, and substituted behind an unchanged interface. A self-improving scaffold's own metric then climbs monotonically while its held-out accuracy falls.",
+ "challenge": 'Two questions. Could you swap your backbone model this week, and what would you have to touch? And if your harness tunes anything about itself, name the signal it cannot see — if you cannot, its dashboard is measuring its own opinion.',
 },
 
 "B1.4": {
  "concept": """
-Stage 7 ran several analysers in parallel. That produces two problems this stage
-exists to solve, and they are different problems.
+### One skeleton, four oracles
 
-**Stage 8 — Deduplication.** Three analysers find the same bug and report it
-three times. Worse, they report it at slightly different line numbers with
-different CWE labels, so naive matching does not collapse them. An engineer who
-sees the same bug three times stops trusting the count.
+Teams build a SAST harness, then a threat-modelling harness, then a DAST
+harness, then a pentest harness — and re-decide loop control, budgets, retries
+and verification four times. The loops end up nearly identical and the four
+teams each get one thing wrong in their own way.
 
-**Stage 9 — Contextual verification.** Cross-reference each finding against the
-actual syntax and imports to weed out hallucinations. This is the cheapest,
-highest-yield filter in the whole pipeline, because a model finding that
-references a function that does not exist, or a module that was never imported,
-is *provably* wrong — no judgement required.
+They are the same skeleton: plan a candidate, act on it, verify it, stop. Two
+things differ, and both belong to the domain rather than to the loop:
 
-The order matters: deduplicate first, then verify, or you spend verification
-effort on three copies of the same claim.
+**The oracle** — what decides a candidate is real. Reachability plus a failing
+test for static analysis. A diff against the previous model for threat
+modelling. An observed change in a response for DAST. A shell, a row or a file
+for a pentest. The oracle is the whole value of the harness; everything else is
+plumbing you have already built.
+
+**The blast radius** — what acting costs if the candidate is wrong. Reading
+CyberTravels' source costs nothing. A request to a replica costs a little.
+Running an exploit against the live booking API costs an incident, so it needs
+an authorisation the loop cannot grant itself.
+
+### Then the question the chapter has been walking towards
+
+Four stages decide whether the output is worth acting on: **ingest** (did it
+parse), **path matching** (is the finding about the file we asked about),
+**expert proxy** (is it right, scored 0 / 0.5 / 1), and **dual judges** (is the
+reasoning sound, aggregated by MIN).
+
+> **Conformance** is schema validity. With structured output it is ~100% by
+> construction. It is a build-health signal.
+>
+> **Accuracy** is correctness. It is the number that means something.
+
+Quoting conformance as quality — "our harness scores 100%" — is the single most
+common way a security evaluation misleads its own sponsors. And one
+implementation detail silently randomises everybody's results: **file matching
+must use parent directory plus filename, never the bare basename**, because
+public corpora reuse `1.py` and `3.c` across every CWE directory.
+
+### And one run tells you nothing
+
+**pass@k** — succeeded at least once in k attempts. Right when you can cheaply
+check which attempt was correct and keep it.
+
+**pass^k** — succeeded every time, k out of k. Right when the run is autonomous
+and nobody is checking, which describes every harness that files a ticket, gates
+a merge or closes an alert.
+
+A harness at 80% per-run reliability has a pass@5 of 99.97% and a pass^5 of
+33%. Both numbers are true. Quoting the first for a system that runs unattended
+is where most harness claims quietly go wrong — and the cost that matters is not
+per run but **per confirmed finding**, which is the only figure that survives
+contact with a finance conversation.
 """,
  "steps": [
-  ("md", PIPELINE_NOTE),
-  ("md", "## 2 · The raw output of three parallel tracks"),
-  ("py", '''from dataclasses import dataclass, field
-
-SOURCE = {
-"billing.py": \'\'\'
-import sqlite3
-
-def build_filter(owner):
-    return "WHERE owner = '" + owner + "'"
-
-def list_reports(conn, owner):
-    return conn.execute("SELECT * FROM reports " + build_filter(owner))
-
-def total(conn):
-    return conn.execute("SELECT SUM(amount) FROM reports").fetchone()
-\'\'\'
+  ("md", "## 2 · One skeleton, and the two things a domain supplies"),
+  ("py", '''DOMAINS = {
+ "sast":         {"reads": "source at a commit",     "blast": "read-only"},
+ "threat model": {"reads": "architecture and IaC",   "blast": "read-only"},
+ "dast":         {"reads": "a running replica",      "blast": "replica-write"},
+ "pentest":      {"reads": "an owned host in scope", "blast": "live-action"},
 }
+ORACLES = {
+ "sast":         ("reachable from an entrypoint AND a failing test",
+                  lambda e: e["reachable"] and e["failing_test"]),
+ "threat model": ("present in the new model and absent from the old",
+                  lambda e: e["in_new"] and not e["in_old"]),
+ "dast":         ("response differs from the control request",
+                  lambda e: e["response_differs"]),
+ "pentest":      ("an artefact that should not have been obtainable",
+                  lambda e: e["artefact"] is not None),
+}
+AUTHORISED = {"read-only", "replica-write"}      # live-action needs a signed scope
+
+def harness(domain, candidates, oracle, budget=6, scope_signed=False):
+    """The skeleton. Identical for all four domains."""
+    blast = DOMAINS[domain]["blast"]
+    if blast not in AUTHORISED and not scope_signed:
+        return {"domain": domain, "refused": "live action without a signed scope",
+                "confirmed": [], "steps": 0}
+    confirmed, steps = [], 0
+    for c in sorted(candidates, key=lambda c: c["id"]):
+        if steps >= budget:
+            break
+        steps += 1
+        if oracle(c["evidence"]):
+            confirmed.append(c)
+    return {"domain": domain, "refused": None, "confirmed": confirmed, "steps": steps}
+
+for d in sorted(DOMAINS):
+    print(f"{d:14s}{DOMAINS[d]['blast']:14s}oracle: {ORACLES[d][0]}")
+'''),
+  ("md", "## 3 · Four domains through the same loop"),
+  ("py", '''CANDIDATES = {
+ "sast": [
+  {"id": "unit_07 CWE-89 in build_query", "real": True,
+   "evidence": {"reachable": True,  "failing_test": True}},
+  {"id": "unit_12 CWE-89 in log_line",    "real": False,
+   "evidence": {"reachable": False, "failing_test": False}},
+  {"id": "unit_31 CWE-22 in export_path", "real": True,
+   "evidence": {"reachable": True,  "failing_test": True}}],
+ "threat model": [
+  {"id": "worker -> db crosses trust 0 to 2", "real": True,
+   "evidence": {"in_new": True,  "in_old": False}},
+  {"id": "component web renamed to frontend", "real": False,
+   "evidence": {"in_new": True,  "in_old": True}},
+  {"id": "/admin/export on an untrusted entry", "real": True,
+   "evidence": {"in_new": True,  "in_old": False}}],
+ "dast": [
+  {"id": "GET /v1/users returns 200 unauthenticated", "real": True,
+   "evidence": {"response_differs": True}},
+  {"id": "banner discloses framework version",        "real": False,
+   "evidence": {"response_differs": False}},
+  {"id": "POST /report reflects payload unencoded",   "real": True,
+   "evidence": {"response_differs": True}}],
+ "pentest": [
+  {"id": "password auth permits spraying, no lockout", "real": True,
+   "evidence": {"artefact": "session as svc-reports"}},
+  {"id": "expired certificate on the partner CDN",     "real": False,
+   "evidence": {"artefact": None}},
+  {"id": "/backup listing exposes a database dump",    "real": True,
+   "evidence": {"artefact": "orders.sql, 41 MB"}}],
+}
+
+def precision(result, candidates):
+    if not result["confirmed"]:
+        return None
+    return sum(c["real"] for c in result["confirmed"]) / len(result["confirmed"])
+
+print(f"{'domain':14s}{'confirmed':>10}{'precision':>11}  note")
+for d in sorted(DOMAINS):
+    r = harness(d, CANDIDATES[d], ORACLES[d][1], scope_signed=True)
+    p = precision(r, CANDIDATES[d])
+    print(f"{d:14s}{len(r['confirmed']):>10}{p:>11.2f}  {ORACLES[d][0][:38]}")
+
+r = harness("pentest", CANDIDATES["pentest"], ORACLES["pentest"][1])
+print(f"\\npentest without a signed scope: {r['refused']}")
+assert r["confirmed"] == []
+'''),
+  ("md", "## 4 · Where it breaks — the oracle everyone reaches for\\n\\n"
+         "Every one of those four oracles is a fact about the target. The "
+         "tempting fifth is the model's own opinion, because it is the only one "
+         "that works in every domain without being built."),
+  ("py", '''def model_oracle(evidence):
+    """The model read the evidence and is confident. Confidence is not an oracle."""
+    return True
+
+print(f"{'domain':14s}{'confirmed':>10}{'precision':>11}")
+for d in sorted(DOMAINS):
+    r = harness(d, CANDIDATES[d], model_oracle, scope_signed=True)
+    print(f"{d:14s}{len(r['confirmed']):>10}{precision(r, CANDIDATES[d]):>11.2f}")
+
+total = sum(len(CANDIDATES[d]) for d in CANDIDATES)
+real = sum(c["real"] for d in CANDIDATES for c in CANDIDATES[d])
+print(f"\\nevery one of {total} candidates confirmed; {real} of them are real.")
+print("Precision 0.67 in every domain, and it looks like 1.00 from inside the")
+print("harness, because the thing producing the finding is also the thing")
+print("agreeing with it.")
+assert all(precision(harness(d, CANDIDATES[d], model_oracle, scope_signed=True),
+                     CANDIDATES[d]) < 1.0 for d in DOMAINS)
+'''),
+  ("md", "## 5 · The control — classify the oracle, gate on the class"),
+  ("py", '''ORACLE_CLASS = {
+ "sast":         "deterministic",   # re-runs to the same answer on the same commit
+ "threat model": "deterministic",
+ "dast":         "observational",   # a real observation, but of a system that moves
+ "pentest":      "observational",
+ "model":        "judgement",       # not re-checkable, not falsifiable
+}
+MAY_FILE = {"deterministic", "observational"}
+
+def dispatch(domain, oracle_name, result):
+    cls = ORACLE_CLASS[oracle_name]
+    return {"domain": domain, "oracle_class": cls,
+            "action": "file the finding" if cls in MAY_FILE else "queue for a human",
+            "count": len(result["confirmed"])}
+
+for d in sorted(DOMAINS):
+    good = harness(d, CANDIDATES[d], ORACLES[d][1], scope_signed=True)
+    bad  = harness(d, CANDIDATES[d], model_oracle, scope_signed=True)
+    print(dispatch(d, d, good))
+    print(dispatch(d, "model", bad))
+
+print()
+print("The skeleton did not change once across four domains. What changed was")
+print("the oracle and the blast radius - which is the whole argument for")
+print("building the loop once and never again.")
+assert dispatch("sast", "model", harness("sast", CANDIDATES["sast"], model_oracle,
+                scope_signed=True))["action"] == "queue for a human"
+'''),
+    ("md", '## 9 · Grading it — conformance is not accuracy\\n\\nFour oracles, one skeleton. Now the question the whole chapter has been walking towards: is any of what it produces true?'),
+  ("py", '''import json
+from dataclasses import dataclass, field
 
 @dataclass
-class Finding:
-    src: str; cwe: str; file: str; line: int; symbol: str
-    rationale: str; confidence: float = 1.0
+class Answer:
+    qid: str; cwe: str = ""; file: str = ""; line: int = 0; rationale: str = ""
+    REQUIRED = ("qid", "cwe", "file", "rationale")
 
-RAW = [
- Finding("grep",   "CWE-89", "billing.py", 7,  "execute",
-         "execute() with string concatenation", 0.5),
- Finding("taint",  "CWE-89", "billing.py", 7,  "execute",
-         "owner flows into the query via build_filter", 1.0),
- Finding("model",  "CWE-89", "billing.py", 8,  "execute",
-         "user-controlled owner is interpolated into SQL", 0.93),
- Finding("model",  "CWE-943","billing.py", 7,  "execute",
-         "query language injection", 0.71),
- Finding("model",  "CWE-89", "billing.py", 11, "execute",
-         "total() builds a query from input", 0.44),
- Finding("model",  "CWE-798","billing.py", 3,  "DB_PASSWORD",
-         "hardcoded database password in DB_PASSWORD", 0.88),
- Finding("model",  "CWE-78", "billing.py", 6,  "os.system",
-         "shell invocation with user data", 0.67),
-]
-print(f"{len(RAW)} raw findings from 3 tracks")
-for f in RAW:
-    print(f"   {f.src:6s}{f.cwe:9s}{f.file}:{f.line:<3}{f.symbol:14s}conf={f.confidence:.2f}")
+    @classmethod
+    def parse(cls, raw):
+        try:
+            d = json.loads(raw)
+        except json.JSONDecodeError as e:
+            return None, f"non-conforming: not JSON ({e.msg})"
+        missing = [k for k in cls.REQUIRED if not d.get(k)]
+        if missing:
+            return None, f"non-conforming: missing {missing}"
+        return cls(str(d["qid"]), str(d["cwe"]).upper(), str(d["file"]),
+                   int(d.get("line", 0)), str(d["rationale"])), "conforming"
+
+@dataclass
+class Truth:
+    qid: str; cwe: str; file: str; line: int = 0
+
+TRUTHS = {
+ "q1": Truth("q1", "CWE-89",  "CWE-89/1.py"),
+ "q2": Truth("q2", "CWE-78",  "CWE-78/1.py"),
+ "q3": Truth("q3", "CWE-22",  "CWE-22/3.c"),
+ "q4": Truth("q4", "CWE-798", "CWE-798/2.py"),
+}
+ANSWERS = {
+ "q1": '{"qid":"q1","cwe":"CWE-89","file":"CWE-89/1.py","line":2,'
+       '"rationale":"user input is concatenated into the query string"}',
+ "q2": '{"qid":"q2","cwe":"CWE-89","file":"CWE-78/1.py","line":3,'
+       '"rationale":"untrusted input reaches a shell"}',
+ "q3": '{"qid":"q3","cwe":"CWE-22","file":"CWE-89/1.py","line":1,'
+       '"rationale":"path built from user input"}',
+ "q4": 'I think this file contains a hardcoded credential.',
+}
+for qid, raw in ANSWERS.items():
+    _, note = Answer.parse(raw)
+    print(f"{qid}: {note}")
 '''),
-  ("md", "## 3 · Stage 8 — deduplicate on the defect, not the report\n\n"
-         "Two findings are the same defect if they name the same sink in the same "
-         "function, even at different lines and under different CWE labels. "
-         "Cluster on that, and keep the *best-evidenced* member."),
-  ("py", '''import ast
+  ("md", "## 3 · Stage 2 — the one line that decides whether this is a benchmark\n\n"
+         "Public corpora reuse filenames across directories. Match on the "
+         "basename and you score an answer about CWE-79 against the ground truth "
+         "for CWE-89 — and your accuracy becomes a random variable."),
+  ("py", '''def path_key(path):
+    """Parent directory + filename. NEVER the bare basename."""
+    parts = [p for p in path.replace("\\\\", "/").split("/") if p not in ("", ".")]
+    return "/".join(parts[-2:]) if len(parts) > 1 else (parts[-1] if parts else "")
 
-def enclosing_function(src, line):
-    tree = ast.parse(src)
-    best = None
-    for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
-        end = max((getattr(n, "lineno", fn.lineno) for n in ast.walk(fn)),
-                  default=fn.lineno)
-        if fn.lineno <= line <= end + 1:
-            if best is None or fn.lineno > best.lineno: best = fn
-    return best.name if best else None
+def basename(path):
+    return path.replace("\\\\", "/").split("/")[-1]
 
-CWE_ALIASES = {"CWE-943": "CWE-89", "CWE-89": "CWE-89"}
-
-def defect_key(f, src):
-    fn = enclosing_function(src, f.line)
-    cwe = CWE_ALIASES.get(f.cwe, f.cwe)
-    return (f.file, fn, f.symbol, cwe)
-
-SRC = SOURCE["billing.py"]
-clusters = {}
-for f in RAW:
-    clusters.setdefault(defect_key(f, SRC), []).append(f)
-
-RANK = {"taint": 3, "grep": 1, "model": 2}
-deduped = []
-for key, group in clusters.items():
-    best = max(group, key=lambda f: (RANK[f.src], f.confidence))
-    deduped.append({"key": key, "keep": best, "merged": len(group),
-                    "sources": sorted({g.src for g in group})})
-
-print(f"{len(RAW)} findings → {len(deduped)} distinct defects\\n")
-for d in deduped:
-    file, fn, sym, cwe = d["key"]
-    print(f"   {cwe:8s}{str(fn):14s}{sym:14s}merged {d['merged']} "
-          f"from {d['sources']}  (kept {d['keep'].src})")
+pairs = [("CWE-89/1.py", "CWE-79/1.py"), ("a/CWE-22/3.c", "b/CWE-78/3.c")]
+print(f"{'pair':34s}{'basename match':17s}path_key match")
+print("-" * 66)
+for a, b in pairs:
+    print(f"{a + '  vs  ' + b:34s}{str(basename(a)==basename(b)):17s}"
+          f"{path_key(a)==path_key(b)}")
+print("\\nq3 answered about CWE-89/1.py when the truth is CWE-22/3.c.")
+print(f"   basename says match: {basename('CWE-89/1.py') == basename('CWE-22/3.c')}")
+print(f"   path_key says match: {path_key('CWE-89/1.py') == path_key('CWE-22/3.c')}")
 '''),
-  ("md", "## 4 · Stage 9 — contextual verification against the real syntax\n\n"
-         "Now check each surviving claim against the code. Three checks, all "
-         "mechanical, none requiring judgement."),
-  ("py", '''def verify(finding, src):
-    tree = ast.parse(src)
-    problems = []
+  ("md", "## 4 · Stages 3 and 4 — expert proxy and two judges\n\n"
+         "Half credit is not politeness. \"Right file, wrong vulnerability class\" "
+         "is a genuinely different failure from \"wrong file entirely\", and "
+         "averaging them away hides which one your harness is making.\n\n"
+         "Two judges aggregated by **MIN**, not mean — judges exist to catch each "
+         "other, and averaging lets the lenient one carry the strict one's failures."),
+  ("py", '''def path_match(a, t): return path_key(a.file) == path_key(t.file)
+def cwe_match(a, t):  return a.cwe == t.cwe.upper()
 
-    # check 1 — does the referenced symbol exist at all?
-    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
-    names |= {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
-    names |= {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
-    root = finding.symbol.split(".")[0]
-    if finding.symbol not in names and root not in names:
-        problems.append(f"symbol {finding.symbol!r} does not appear in the file")
+def expert_proxy(a, t):
+    if not path_match(a, t): return 0.0
+    return 1.0 if cwe_match(a, t) else 0.5
 
-    # check 2 — is the module it implies actually imported?
-    imports = {a.name.split(".")[0] for n in ast.walk(tree)
-               if isinstance(n, ast.Import) for a in n.names}
-    imports |= {n.module.split(".")[0] for n in ast.walk(tree)
-                if isinstance(n, ast.ImportFrom) and n.module}
-    if "." in finding.symbol and root not in imports:
-        problems.append(f"module {root!r} is never imported")
+MECHANISM = ("concatenat", "unsanitis", "unsanitiz", "untrusted", "user input",
+             "interpolat", "taint", "unvalidated")
+def judge_strict(a, t):
+    if expert_proxy(a, t) < 1.0: return 0.0
+    return 1.0 if any(w in a.rationale.lower() for w in MECHANISM) else 0.5
+def judge_lenient(a, t):
+    return 1.0 if cwe_match(a, t) else 0.0
 
-    # check 3 — is the line inside a function at all?
-    if enclosing_function(src, finding.line) is None:
-        problems.append(f"line {finding.line} is not inside any function")
+@dataclass
+class Report:
+    total: int = 0; conforming: int = 0
+    expert_sum: float = 0.0; judge_sum: float = 0.0
+    failures: list = field(default_factory=list)
+    @property
+    def conformance(self): return self.conforming / self.total if self.total else 0
+    @property
+    def expert_accuracy(self): return self.expert_sum / self.total if self.total else 0
+    @property
+    def judge_accuracy(self): return self.judge_sum / self.total if self.total else 0
+    def render(self):
+        return (f"  questions            {self.total}\\n"
+                f"  conformance          {self.conformance:.4f}   "
+                f"← schema validity. Structural. NOT quality.\\n"
+                f"  expert accuracy      {self.expert_accuracy:.4f}   ← correctness\\n"
+                f"  judge accuracy (MIN) {self.judge_accuracy:.4f}\\n"
+                f"  failures             {len(self.failures)}")
 
-    return (not problems), problems
+def evaluate(answers, truths):
+    rep = Report(total=len(truths))
+    for qid, t in truths.items():
+        a, note = Answer.parse(answers.get(qid, ""))
+        if a is None:
+            rep.failures.append((qid, "1-ingest", note)); continue
+        rep.conforming += 1
+        e = expert_proxy(a, t)
+        j = min(judge_strict(a, t), judge_lenient(a, t))
+        rep.expert_sum += e; rep.judge_sum += j
+        if e < 1.0:
+            why = ("wrong file" if not path_match(a, t)
+                   else f"right file, wrong class (said {a.cwe}, truth {t.cwe})")
+            rep.failures.append((qid, "3-expert", why))
+    return rep
 
-print(f"{'cwe':9s}{'symbol':14s}{'line':>5}  verdict")
-print("-" * 74)
-verified, rejected = [], []
-for d in deduped:
-    f = d["keep"]
-    ok, problems = verify(f, SRC)
-    (verified if ok else rejected).append((f, problems))
-    print(f"{f.cwe:9s}{f.symbol:14s}{f.line:>5}  "
-          f"{'verified' if ok else 'REJECTED — ' + problems[0]}")
-print(f"\\n{len(verified)} verified, {len(rejected)} rejected as hallucinations")
+rep = evaluate(ANSWERS, TRUTHS)
+print(rep.render())
+print("\\nfailures:")
+for qid, stage, why in rep.failures:
+    print(f"   {qid}  [{stage}]  {why}")
 '''),
-  ("py", '''# Verify the stage pays for itself.
-STAGE7_COUNT = len(RAW)
-after8 = len(deduped)
-after9 = len(verified)
-print(f"stage 7 emitted        {STAGE7_COUNT}")
-print(f"after stage 8 (dedup)  {after8}   ({1-after8/STAGE7_COUNT:.0%} removed)")
-print(f"after stage 9 (verify) {after9}   ({1-after9/STAGE7_COUNT:.0%} removed overall)")
+  ("md", "## 5 · The control — never report one number\n\n"
+         "Here is what happens when the harness is upgraded to emit structured "
+         "output. Conformance goes to 1.0. Nothing about its capability changed."),
+  ("py", '''STRUCTURED = dict(ANSWERS)
+STRUCTURED["q4"] = ('{"qid":"q4","cwe":"CWE-798","file":"CWE-798/2.py","line":1,'
+                    '"rationale":"a credential is hardcoded"}')
+rep2 = evaluate(STRUCTURED, TRUTHS)
+print("after adding structured output:")
+print(rep2.render())
+print(f"\\nconformance  {rep.conformance:.2f} → {rep2.conformance:.2f}   "
+      f"(+{rep2.conformance-rep.conformance:.2f})")
+print(f"expert acc   {rep.expert_accuracy:.2f} → {rep2.expert_accuracy:.2f}   "
+      f"(+{rep2.expert_accuracy-rep.expert_accuracy:.2f})")
+print("\\nA press release could truthfully say 'conformance improved to 100%'.")
+print("The harness still gets half the questions wrong.")
 
-TRUE_DEFECTS = {("billing.py", "list_reports", "execute", "CWE-89")}
-found = {d["key"] for d in deduped if any(d["keep"] is f for f, _ in verified)}
-tp = len(found & TRUE_DEFECTS); fp = len(found - TRUE_DEFECTS)
-print(f"\\nsurviving: tp={tp} fp={fp}")
-for f, _ in rejected:
-    print(f"   rejected {f.cwe} on {f.symbol!r} — provably not in the code")
-assert any("DB_PASSWORD" in f.symbol for f, _ in rejected)
-assert any("os.system" in f.symbol for f, _ in rejected)
-print("\\nBoth hallucinations named things that are not in the file. No model,")
-print("no judgement, no cost — just the AST disagreeing with the claim.")
+def gameable(answers):
+    parsed = [Answer.parse(r)[0] for r in answers.values()]
+    ok = [p for p in parsed if p]
+    cwes = [p.cwe for p in ok]
+    maj = max(set(cwes), key=cwes.count) if cwes else ""
+    return {"conformance": round(len(ok)/len(answers), 3),
+            "majority_class": maj,
+            "accuracy_by_always_guessing_majority":
+                round(cwes.count(maj)/len(cwes), 3) if cwes else 0}
+print("\\nwithout any capability at all:", gameable(STRUCTURED))
+assert rep2.conformance == 1.0 and rep2.expert_accuracy < 0.7
+'''),
+    ("md", '## 14 · And one run tells you almost nothing\\n\\nAlmost every published harness result is a single run of a stochastic system.'),
+  ("py", '''import random
+
+def run_once(reliability, rng):
+    return rng.random() < reliability
+
+def measure(reliability, k=5, trials=2000, seed=3):
+    rng = random.Random(seed)                  # seeded: identical every run
+    at_least_one = every_time = 0
+    for _ in range(trials):
+        outcomes = [run_once(reliability, rng) for _ in range(k)]
+        at_least_one += any(outcomes)
+        every_time   += all(outcomes)
+    return at_least_one / trials, every_time / trials
+
+print(f"{'per-run':>9}{'pass@5':>10}{'pass^5':>10}  what it means unattended")
+for r in (0.95, 0.90, 0.80, 0.60, 0.50):
+    at_k, pow_k = measure(r)
+    note = ("dependable" if pow_k > .8 else
+            "coin flip" if pow_k > .3 else "fails most nights")
+    print(f"{r:>8.0%}{at_k:>10.1%}{pow_k:>10.1%}  {note}")
+print()
+print("At 80% per-run the same harness is 99.9% reliable if a human picks the")
+print("good answer, and 33% reliable if nobody is looking.")
+'''),
+  ("md", "## 3 · Where it breaks — the demo that was a lucky run"),
+  ("py", '''def one_demo(reliability, seed):
+    return run_once(reliability, random.Random(seed))
+
+demos = [one_demo(0.6, s) for s in range(12)]
+print("twelve single-run demos of the same 60% harness:")
+print("   " + " ".join("PASS" if d else "fail" for d in demos))
+print(f"   -> {demos.count(True)} passed")
+print()
+print("Publish any of the passes. Every one is an honest single run. None of")
+print("them is a measurement, and the reader has no way to tell which they got.")
+assert demos.count(True) and demos.count(False)
+'''),
+  ("md", "## 4 · Variance, and why it precedes every other question"),
+  ("py", '''def findings_per_run(base, noise, rng):
+    return max(0, int(rng.gauss(base, noise)))
+
+def variance_profile(base, noise, runs=30, seed=11):
+    rng = random.Random(seed)
+    xs = [findings_per_run(base, noise, rng) for _ in range(runs)]
+    mean = sum(xs) / len(xs)
+    sd = (sum((x - mean) ** 2 for x in xs) / len(xs)) ** 0.5
+    return xs, mean, sd
+
+for noise in (0.5, 3.0):
+    xs, mean, sd = variance_profile(8, noise)
+    print(f"noise sd={noise}:  mean {mean:.1f}  sd {sd:.2f}  "
+          f"range {min(xs)}-{max(xs)}")
+    print(f"   runs: {xs[:12]} ...")
+
+_, m_stable, sd_stable = variance_profile(8, 0.5)
+_, m_noisy,  sd_noisy   = variance_profile(8, 3.0)
+improvement = 1.5
+print()
+print(f"suppose a change adds {improvement} findings on average.")
+print(f"   against sd {sd_stable:.2f}: visible after a handful of runs")
+print(f"   against sd {sd_noisy:.2f}: indistinguishable from a quiet Tuesday")
+print()
+print("Until variance is characterised, every A/B comparison you run is")
+print("measuring the dice.")
+assert sd_noisy > sd_stable
+'''),
+  ("md", "## 5 · The control — separate harness failure from model failure\\n\\n"
+         "Before changing either one, find out which is moving."),
+  ("py", '''def attribute(runs_same_model_same_harness, runs_same_model_new_harness):
+    """If output changes when only the harness changed, it was the harness."""
+    a = sum(runs_same_model_same_harness) / len(runs_same_model_same_harness)
+    b = sum(runs_same_model_new_harness) / len(runs_same_model_new_harness)
+    return a, b, ("harness" if abs(b - a) > 0.15 else "not the harness")
+
+rng = random.Random(5)
+baseline = [run_once(0.6, rng) for _ in range(200)]
+better_harness = [run_once(0.85, rng) for _ in range(200)]   # same model, better verifier
+a, b, verdict = attribute(baseline, better_harness)
+print(f"same model, original harness : {a:.0%}")
+print(f"same model, better verifier  : {b:.0%}")
+print(f"attribution                  : {verdict}")
+print()
+print("Twenty-five points of reliability, no model change. Teams routinely")
+print("spend that budget on a bigger backbone instead, because the harness")
+print("was never measured separately.")
+assert verdict == "harness"
 '''),
  ],
- "expect": "Seven raw findings collapse to four distinct defects, with the "
-           "CWE-943 alias merging into CWE-89 and the taint result kept over grep "
-           "and model duplicates. Contextual verification then rejects the "
-           "hallucinated `DB_PASSWORD` and `os.system` findings because neither "
-           "symbol appears in the file and `os` is never imported, leaving the "
-           "real SQL injection.",
- "challenge": "Add a fourth verification check: does the CWE class match the sink "
-              "type? A CWE-22 finding on a `conn.execute` call is provably "
-              "mislabelled, and that check costs nothing to run.",
-},
-
-"B1.5": {
- "concept": """
-**Stage 10 — Feasibility filtering.** The last stage of Phase 3, and the one
-that decides whether anyone gets paged.
-
-A verified finding is a real bug in the code. It is not necessarily a real risk,
-because the code may be unreachable: dead code, a test fixture, an internal
-function no external caller can drive, a branch behind a feature flag that has
-been off for two years.
-
-Triaging an unreachable finding costs exactly as much as triaging one on the
-login path, and there are usually far more of them. So this stage partitions
-findings into three buckets — and the third bucket is the honest one:
-
-- **reachable** — a path exists from an untrusted entry point to the sink,
-- **unreachable** — no path exists,
-- **unknown** — the analysis cannot decide, usually because of dynamic dispatch,
-  reflection, or a framework that wires callers at runtime.
-
-Reporting `unknown` as `unreachable` is how a pipeline quietly drops real bugs.
-""",
- "steps": [
-  ("md", PIPELINE_NOTE),
-  ("md", "## 2 · Stage 10 — build the call graph from entry points"),
-  ("py", '''import ast
-from collections import defaultdict
-
-SOURCE = \'\'\'
-import handlers_registry
-
-def http_get_report(request):
-    """ENTRY: GET /reports"""
-    return load_report(request.args["id"])
-
-def http_health(request):
-    """ENTRY: GET /health"""
-    return "ok"
-
-def load_report(report_id):
-    return DB.execute("SELECT * FROM reports WHERE id=" + report_id)
-
-def legacy_export(report_id):
-    # nothing calls this any more; kept for a migration that finished in 2023
-    return DB.execute("SELECT * FROM reports WHERE id=" + report_id)
-
-def debug_dump(name):
-    return open("/tmp/" + name).read()
-
-def dispatch(request):
-    """ENTRY: dynamic dispatch — the framework resolves the handler at runtime"""
-    handler = handlers_registry.lookup(request.path)
-    return handler(request)
-\'\'\'
-
-tree = ast.parse(SOURCE)
-FUNCS = {fn.name: fn for fn in ast.walk(tree) if isinstance(fn, ast.FunctionDef)}
-
-def calls_in(fn):
-    return {(c.func.id if isinstance(c.func, ast.Name) else getattr(c.func, "attr", ""))
-            for c in ast.walk(fn) if isinstance(c, ast.Call)} - {""}
-
-GRAPH = {name: sorted(calls_in(fn) & set(FUNCS)) for name, fn in FUNCS.items()}
-ENTRY = [n for n, fn in FUNCS.items() if (ast.get_docstring(fn) or "").startswith("ENTRY")]
-DYNAMIC = [n for n, fn in FUNCS.items()
-           if "dynamic dispatch" in (ast.get_docstring(fn) or "")]
-
-print("call graph:")
-for n, cs in GRAPH.items(): print(f"   {n:18s}→ {cs or '—'}")
-print(f"\\nentry points: {ENTRY}")
-print(f"dynamic dispatch present in: {DYNAMIC}")
-'''),
-  ("py", '''SINKS = {"load_report": ("CWE-89", "DB.execute"),
-         "legacy_export": ("CWE-89", "DB.execute"),
-         "debug_dump":   ("CWE-22", "open")}
-
-def reachable_from(entry, graph):
-    seen, stack = set(), [entry]
-    while stack:
-        n = stack.pop()
-        for m in graph.get(n, []):
-            if m not in seen: seen.add(m); stack.append(m)
-    return seen
-
-REACHED = set()
-for e in ENTRY: REACHED |= reachable_from(e, GRAPH) | {e}
-
-def feasibility(unit):
-    if unit in REACHED:
-        return "reachable", f"path exists from {[e for e in ENTRY if unit in reachable_from(e, GRAPH) | {e}]}"
-    if DYNAMIC:
-        return "unknown", (f"no static path, but {DYNAMIC[0]}() resolves handlers at "
-                           f"runtime — cannot prove unreachable")
-    return "unreachable", "no path from any entry point"
-
-print(f"{'finding':16s}{'cwe':9s}{'verdict':13s}why")
-print("-" * 92)
-buckets = defaultdict(list)
-for unit, (cwe, sink) in SINKS.items():
-    verdict, why = feasibility(unit)
-    buckets[verdict].append(unit)
-    print(f"{unit:16s}{cwe:9s}{verdict:13s}{why[:52]}")
-print(f"\\n{ {k: v for k, v in buckets.items()} }")
-'''),
-  ("md", "## 3 · Where it breaks — collapsing `unknown` into `unreachable`\n\n"
-         "The tempting simplification. It makes the queue shorter and it is how "
-         "real bugs get dropped, because dynamic dispatch is exactly where "
-         "framework-wired handlers live."),
-  ("py", '''def naive_filter(sinks, reached):
-    """Two buckets. Anything not statically reached is discarded."""
-    return {u: ("reachable" if u in reached else "unreachable") for u in sinks}
-
-naive = naive_filter(SINKS, REACHED)
-print(f"{'finding':16s}{'3-bucket':13s}{'2-bucket (naive)':18s}")
-print("-" * 52)
-for u in SINKS:
-    v, _ = feasibility(u)
-    print(f"{u:16s}{v:13s}{naive[u]:18s}"
-          f"{'   ← DROPPED' if v == 'unknown' and naive[u] == 'unreachable' else ''}")
-
-dropped = [u for u in SINKS if feasibility(u)[0] == "unknown"
-           and naive[u] == "unreachable"]
-print(f"\\nfindings silently dropped by two-bucket filtering: {dropped}")
-print("legacy_export is reachable through the runtime handler registry in this")
-print("application. Static analysis cannot see that, and 'unreachable' is a lie.")
-assert dropped
-'''),
-  ("md", "## 4 · The control — route each bucket to a different place"),
-  ("py", '''ROUTING = {
- "reachable":   ("page / block the merge", "confirmed exploit path — goes to Phase 4"),
- "unknown":     ("queue for dynamic validation", "Phase 4 decides it empirically"),
- "unreachable": ("record, do not page", "revisit only if an entry point is added"),
-}
-for bucket, (action, why) in ROUTING.items():
-    items = buckets.get(bucket, [])
-    print(f"{bucket:13s}{len(items):>2} finding(s) → {action:28s}{why}")
-    for i in items: print(f"{'':15s}{i}")
-
-def queue_load(buckets, routing):
-    paged = len(buckets.get("reachable", []))
-    validated = len(buckets.get("unknown", []))
-    silent = len(buckets.get("unreachable", []))
-    return {"pages_a_human": paged, "sent_to_phase_4": paged + validated,
-            "recorded_only": silent,
-            "human_load_reduction": round(1 - paged / max(sum(map(len, buckets.values())), 1), 2)}
-
-print(f"\\n{queue_load(buckets, ROUTING)}")
-print("\\nThe unknown bucket is not a failure of the analysis. It is the handover")
-print("to Phase 4, which answers reachability by running the thing.")
-'''),
-
-  ("md", "## 6 · Phase 3 as a skill — and the counts that police it\n\n"
-         "Stages 7 to 10 only ever *shrink* the list. That is a property worth "
-         "enforcing rather than trusting, so the skill's contract carries a "
-         "`counts` object and the rule that it must never increase.\n\n"
-         "A pipeline whose `verified` count exceeds its `deduped` count has "
-         "invented findings somewhere after the audit stage — and that is far "
-         "easier to do by accident than it sounds, because a verification step "
-         "that expands one finding per code path looks perfectly reasonable "
-         "from the inside."),
-  ("py", SKILL_RUNTIME),
-  ("skill", "appsec/appsec-vuln-audit"),
-
-  ("py", '''contract = contract_of(body)
-
-FILE_OF = {"load_report": "src/data/reports.py", "legacy_export": "src/data/legacy.py",
-           "debug_dump": "src/util/debug.py"}
-MISSING = {"CWE-89": "parameterised query", "CWE-22": "path normalisation"}
-
-findings = []
-for unit, (cwe, sink) in sorted(SINKS.items()):
-    verdict, why = feasibility(unit)
-    findings.append({
-        "id": f"F-{unit}", "cwe": cwe, "file": FILE_OF[unit], "line": 1,
-        "unit": unit, "evidence": f"{sink} reached with caller-supplied input",
-        "missing_control": MISSING[cwe], "occurrences": 1,
-        # a finding we cannot prove reachable is not "confirmed" - it is the
-        # one honest use of needs_human in the whole pipeline
-        "verdict": "confirmed" if verdict == "reachable" else "needs_human",
-        "verdict_reason": why,
-        "feasible": verdict == "reachable",
-        "confidence": 0.9 if verdict == "reachable" else 0.4})
-
-audit = {
- "findings": findings,
- "dropped": [{"id": f"F-{u}", "stage": 10, "why": "no path from any entry point"}
-             for u in sorted(buckets.get("unreachable", []))],
- # three analysers each reported every defect, so the raw count is 3x the
- # number of real defects. That is the normal case, not a bad day.
- "counts": {"raw": len(SINKS) * 3, "deduped": len(SINKS),
-            "verified": len(findings),
-            "feasible": sum(1 for f in findings if f["feasible"])},
-}
-
-problems = check(audit, contract)
-print(f"conformance: {len(problems)} problem(s)")
-for p in problems: print("   ", p)
-assert not problems, problems
-
-c = audit["counts"]
-seq = [c["raw"], c["deduped"], c["verified"], c["feasible"]]
-print(f"\\ncounts raw->deduped->verified->feasible : {seq}")
-print(f"monotonically non-increasing            : {all(x >= y for x, y in zip(seq, seq[1:]))}")
-assert all(x >= y for x, y in zip(seq, seq[1:])), seq
-'''),
-
-  ("md", "## 7 · Where it breaks — deduplicating on the wrong key\n\n"
-         "The skill says to collapse on the **defect identity**, "
-         "`(cwe, file, unit, sink_expression)`, and never on the message text. "
-         "Here is why that sentence is in the procedure."),
-  ("py", '''# The same three defects, as three analysers actually report them.
-ANALYSER_WORDING = {
- "grep rules":  "possible {cwe} near {unit}",
- "taint rules": "tainted input reaches {unit} ({cwe})",
- "model review":"{unit} appears to pass user input to a dangerous sink; likely {cwe}",
-}
-raw = [dict(f, id=f"{f['id']}/{tool}",
-            message=w.format(cwe=f["cwe"], unit=f["unit"]))
-       for f in findings for tool, w in sorted(ANALYSER_WORDING.items())]
-print(f"raw findings from three analysers: {len(raw)}")
-
-def dedup(rows, key):
-    seen = {}
-    for r in rows:
-        seen.setdefault(key(r), r)
-    return sorted(seen.values(), key=lambda r: r["id"])
-
-by_identity = dedup(raw, lambda r: (r["cwe"], r["file"], r["unit"], r["evidence"]))
-by_message  = dedup(raw, lambda r: r["message"])
-print(f"deduped on defect identity : {len(by_identity)}")
-print(f"deduped on message text    : {len(by_message)}")
-
-bad = dict(audit, findings=by_message,
-           counts=dict(audit["counts"], deduped=len(by_message),
-                       verified=len(by_message),
-                       feasible=sum(1 for f in by_message if f["feasible"])))
-print(f"\\nconformance problems: {len(check(bad, contract))}   <- still zero")
-seq2 = [bad["counts"][k] for k in ("raw", "deduped", "verified", "feasible")]
-print(f"counts               : {seq2}")
-print()
-print(f"Three defects became {len(by_message)} findings, and every one of them is")
-print("schema-valid. Each analyser words the same defect differently, so the")
-print("message is a unique key by construction - it deduplicates nothing while")
-print("looking like it deduplicates everything.")
-print()
-print("The queue triples. Nobody reads the third page. The defect that gets")
-print("fixed is whichever one happened to sort first.")
-assert not check(bad, contract), "the broken pipeline still conforms - that is the point"
-assert len(by_message) > len(by_identity), "message-keyed dedup must inflate the list"
-assert len(by_identity) == len(SINKS)
-'''),
-
-  ("md", "## 8 · The same failure, from a real model\n\n"
-         "Everything above is constructed. Here is the identical failure "
-         "produced by an actual open-weight model — **Moonlight-16B-A3B**, "
-         "Moonshot AI's MoE from the Kimi team — run on a Kaggle CPU kernel "
-         "against this skill's output contract.\n\n"
-         "It was given the contract and two vulnerable functions: an `open()` "
-         "on a caller-supplied path, and an `os.system()` on a caller-supplied "
-         "argument. Its answer is reproduced verbatim below "
-         "([full run](https://github.com/spbreed/cyber-commons/blob/"
-         "claude/vulnbench-setup-scheduling-81aqov/labs/kimi/"
-         "moonlight-16b-completion-prompt.txt))."),
-  ("py", '''# Verbatim output from Moonlight-16B-A3B on Kaggle, 2026-08-17.
-# Not a paraphrase and not a stand-in: this is what the model emitted.
-MODEL_OUTPUT = \'\'\'{"findings": [{"id": "F-01", "cwe": "CWE-89", "file": "report_api.py",
-"line": 22, "unit": "get_report",
-"evidence": "open(\'/var/reports/\' + request.args[\'name\'])",
-"missing_control": "str", "occurrences": 1, "verdict": "confirmed",
-"verdict_reason": "str", "feasible": true, "confidence": 0.0}],
-"dropped": [], "counts": {"raw": 0, "deduped": 0, "verified": 0, "feasible": 0}}\'\'\'
-
-model = json.loads(MODEL_OUTPUT)
-problems = check(model, contract)
-print(f"conformance problems: {len(problems)}")
-print()
-f = model["findings"][0]
-print(f"evidence it cited : {f[\'evidence\']}")
-print(f"CWE it assigned   : {f[\'cwe\']}  (SQL injection)")
-print(f"CWE it actually is: CWE-22  (path traversal - it is open(), not a query)")
-print(f"missing_control   : {f[\'missing_control\']!r}")
-print(f"verdict_reason    : {f[\'verdict_reason\']!r}")
-print(f"counts            : {model[\'counts\']}  while findings has {len(model[\'findings\'])}")
-assert not problems, "the real model's output conforms - that is the point"
-'''),
-
-  ("md", "## 9 · Read that output again\n\n"
-         "It passes the contract with zero problems, and almost nothing in it "
-         "is true."),
-  ("py", '''print("What a schema check can see:")
-print(f"   every required field present, every type correct -> {len(check(model, contract))} problems")
-print()
-print("What it cannot see:")
-print("   1. the CWE is wrong. open() on a caller-supplied path is CWE-22,")
-print("      not CWE-89. The second sink, os.system(), is CWE-78 - and the")
-print("      model gave that one CWE-89 as well.")
-print("   2. `missing_control` and `verdict_reason` are the literal string")
-print("      'str' - the model copied the contract's TYPE PLACEHOLDER into")
-print("      the value. A schema saying a field must be a string is")
-print("      perfectly satisfied by the word 'str'.")
-print("   3. counts says 0 findings. The findings array has 1.")
-print()
-# monotonicity alone passes here: [0,0,0,0] is non-increasing. The invariant
-# that catches this one is different, and cheap.
-seq = [model["counts"][k] for k in ("raw", "deduped", "verified", "feasible")]
-print(f"counts non-increasing?      {all(x >= y for x, y in zip(seq, seq[1:]))}  <- passes")
-print(f"counts.verified == len(findings)?  "
-      f"{model[\'counts\'][\'verified\'] == len(model[\'findings\'])}  <- catches it")
-print()
-print("Three defects, zero schema violations. That is what a headline of")
-print("'100% schema-valid' actually means as a quality metric, and it is why")
-print("accuracy has to be measured against a key the model never sees.")
-assert model["counts"]["verified"] != len(model["findings"])
-assert f["cwe"] != "CWE-22", "the model got the weakness class wrong"
-assert f["missing_control"] == "str", "the model copied the type placeholder"
-'''),
- ],
- "expect": "The call graph identifies three entry points, one of which uses "
-           "dynamic dispatch. `load_report` is reachable, `debug_dump` and "
-           "`legacy_export` are unknown rather than unreachable because runtime "
-           "handler resolution cannot be ruled out. Two-bucket filtering silently "
-           "drops both, and the three-bucket routing sends the unknowns to Phase 4 "
-           "instead of paging or discarding them.",
- "challenge": "Count how many `unknown` cases your own reachability analysis "
-              "produces, and find out what your tooling does with them. If it "
-              "reports them as clean, the number of real bugs you are dropping is "
-              "the size of that bucket.",
+ "expect": "Four security domains run through one skeleton, differing only in the oracle and the blast radius, and the oracle everyone reaches for — the model's own agreement — is the one that cannot gate an action. Evaluation then separates conformance from accuracy: a harness scoring 100% on schema validity scores far lower on correctness, and matching findings on bare filename rather than parent-plus-filename silently randomises the result. Finally a harness at 80% per-run reliability shows pass@5 of 99.97% and pass^5 of 33%, and the cost per confirmed finding lands well above the cost per run.",
+ "challenge": 'Compute pass^k for one harness you run unattended, using k = the number of runs between human reviews. If you have never measured per-run reliability, that is the measurement to take first, because every other number you quote is conditioned on it.',
 },
 }

@@ -205,66 +205,96 @@ HOOKS: dict[str, str] = {
 # Function B — application security with an AI SDLC
 # ----------------------------------------------------------------------
 "B1.0":
+ "Almost everyone running agents cannot name their harness's verifier, and "
+ "\"the model tells us\" means there isn't one. Eight components, named once — "
+ "and most arguments about agent reliability turn out to be arguments about "
+ "which of the eight is missing.",
+
+"B1.1":
+ "The same model, the same three proposals, the same order. Swap only the "
+ "verifier and one run fixes the refund check while the other ships an "
+ "off-by-one that refunds a traveller twice — with a clean trace, reporting "
+ "success. A weak verifier does not fail loudly; it succeeds incorrectly.",
+
+"B1.2":
+ "A tool's signature decides what the model is able to ask for, which is a "
+ "stronger control than anything in a prompt. Two tools with identical "
+ "capability differ entirely when the guard underneath them has a bug: one "
+ "presents the vulnerable surface, the other cannot express it.",
+
+"B1.3":
+ "If the loop retries with a bigger model whenever the small one fails "
+ "verification, anyone who can cause a failure can force every task onto your "
+ "most capable model — and onto whatever authority came with it. Escalate "
+ "capability; never escalate authority.",
+
+"B1.4":
+ "A harness that is right 80% of the time has a pass@5 of 99.97% and a pass^5 "
+ "of 33%. Both are true. Quoting the first for something that runs unattended "
+ "is where most harness claims quietly go wrong, and the number nobody quotes "
+ "at all is cost per confirmed finding.",
+
+"B2.0":
  "The SDLC you are about to build reads code you do not trust, holds "
  "credentials, and writes to your repository. It is a security tool, and that "
  "grants it no exemption whatsoever from the risks in Function A. Both "
  "directions of this commons run through the same system here.",
 
-"B1.1":
+"B2.1":
  "An agent with a two-million-token context and a four-million-line repository "
  "has the same problem as an analyst with a week: it cannot read everything, so "
  "the question is what it reads first. Structure is what makes that choice "
  "something other than luck.",
 
-"B1.2":
+"B2.2":
  "A threat model produced in a workshop describes the system as it was on the "
  "day of the workshop, and it is derived from the code alone — so two "
  "deployments of the same repository, one behind a private load balancer with "
  "no egress and one on the internet with a wildcard trust policy, get the same "
  "model. It is wrong about both.",
 
-"B1.3":
+"B2.3":
  "Three generations of static analysis are on the market and all three are sold "
  "with the same word. Pattern matching cannot follow a value; dataflow cannot "
  "read intent; a model can do both and will also tell you about a vulnerability "
  "that is not there.",
 
-"B1.4":
+"B2.4":
  "Three analysers found the same defect and reported it four times, in three "
  "vocabularies, at two severities. A queue that inflates by 3x is not a queue — "
  "it is a landfill with a ticket number.",
 
-"B1.5":
+"B2.5":
  "The finding is real. The code is dead. Reachability is the difference between "
  "a queue an engineer works and a queue an engineer learns to ignore, and it is "
  "the single largest false-positive killer in the pipeline.",
 
-"B1.6":
+"B2.6":
  "You cannot exploit a finding to confirm it without somewhere safe to do it. "
  "The replica is that place, and the fidelity you give it decides which findings "
  "you are able to confirm at all.",
 
-"B1.7":
+"B2.7":
  "A finding becomes a fact the moment something other than a model says so. "
  "Driving the running application is how you get that second opinion — and the "
  "oracle you choose is what makes it worth having.",
 
-"B1.8":
+"B2.8":
  "Three medium findings, each correctly scored, each individually not worth an "
  "engineer's afternoon. Chained, they read a file that ends the conversation "
  "about severity. Chains are where automated analysis earns its keep.",
 
-"B1.9":
+"B2.9":
  "A patch that passes the tests and changes the behaviour is not a fix, it is a "
  "second incident with a pull request attached. Remediation is the stage where "
  "the pipeline stops finding things and starts touching them.",
 
-"B1.10":
+"B2.10":
  "CVSS scores the vulnerability. Your engineers are asking about this system, "
  "with this data, behind this control, and the number that answers them is not "
  "the one on the badge.",
 
-"B1.11":
+"B2.11":
  "Give an agent more context and it gets better, until it gets worse. The cliff "
  "is real, it arrives earlier than anyone expects, and past it you are paying "
  "more per token for a worse answer.",
@@ -275,44 +305,23 @@ HOOKS: dict[str, str] = {
  "diff is the cheapest way anyone will ever find to instruct the tooling that "
  "reviews it.",
 
-"B1.12":
+"B2.12":
  "The coding agent on an engineer's laptop holds repository write access, a "
  "cloud credential, and whatever MCP servers were convenient. It is the "
  "highest-privilege agent in most organisations and the least governed.",
 
-"B1.13":
+"B2.13":
  "\"We enforce least privilege\" is true of some deployment, at some time, and "
  "nothing binds it to the system running right now. An attestation is the "
  "binding — and the discipline is that it must refuse to say more than it can "
  "show.",
 
-"B1.14":
+"B2.14":
  "Somebody has already built this pipeline and published what happened. Reading "
  "it is worth an afternoon; adopting it without scoring it against a held-out "
  "key is how a reference implementation becomes a dependency you cannot "
  "evaluate.",
 
-"B2.0":
- "Almost everyone using agents cannot name their harness's verifier, and the "
- "answer \"the model tells us\" means there isn't one. Eight components, named "
- "once, and most arguments about agent reliability turn out to be arguments "
- "about which of the eight is missing.",
-
-"B2.1":
- "A single successful run hides how unreliable an agent is, and a hallucinated "
- "finding is indistinguishable from a real one until something checks. "
- "Evaluation is the only part of this chapter that tells you whether the rest "
- "of it worked.",
-
-"B2.2":
- "At 80% per-run reliability a harness is 99.9% reliable with a human picking "
- "the good answer, and 33% reliable unattended. Both numbers are true. Quoting "
- "the first for a system that runs unattended is where most harness claims "
- "quietly go wrong.",
-
-# ----------------------------------------------------------------------
-# Function C — red teaming and security research with AI
-# ----------------------------------------------------------------------
 "C1.0":
  "\"It worked when I tried it\" is the most common security claim about agents "
  "and the least useful. This function is about the difference between that "
@@ -1112,10 +1121,111 @@ DIAGRAMS: dict[str, str] = {
 # Function B — product and application security with AI
 # ----------------------------------------------------------------------
 "B1.0": """
+   the eight components of any harness
+
+   +-----------+   +--------+   +---------+   +-----------+
+   |   model   |   |  loop  |   |  tools  |   |  context  |
+   +-----------+   +--------+   +---------+   +-----------+
+   +-----------+   +--------+   +---------+   +-----------+
+   | verifier  |   | budget |   | memory  |   |orchestrator|
+   +-----------+   +--------+   +---------+   +-----------+
+                                              (+ telemetry)
+
+   the one people cannot name is almost always the verifier
+   -- and when something goes wrong, the class of failure
+      is just "which of these eight did it"
+""",
+
+"B1.1": """
+   plan  ---> act  ---> verify ---> stop
+     ^                     |
+     +---------------------+  (not verified: go again, within budget)
+
+   swap ONLY the verifier and the same proposals give:
+
+     behavioural test   ->  attempt 2 accepted, refund check correct
+     "the model says"   ->  attempt 1 accepted, off-by-one shipped
+
+   fooled by:            available:
+     behavioural test    changing real behaviour     when executable
+     exact-match oracle  nothing (needs the answer)  rarely
+     shape check         any well-formed output      ALWAYS
+     LLM judge           confident prose             ALWAYS
+
+   the two available everywhere are the two weakest,
+   and they do not error -- they APPROVE
+""",
+
+"B1.2": """
+   three bounds, none of them the prompt
+
+   1  signature      read_voucher(path: str)
+                        -> the model may ask for any path
+                     read_voucher(ref: Literal[...])
+                        -> the surface is not expressible
+
+   2  depth          traveller -> workflow -> sub -> sub -> sub
+                     each hop may widen authority; by hop 4
+                     nobody has seen the whole path
+                     enforce at the ISSUER, not the orchestrator
+
+   3  idempotency    set a config twice  = once
+                     post a comment twice = noise
+                     issue a REFUND twice = an incident
+""",
+
+"B1.3": """
+   routing INSIDE the loop
+
+     trivial step  -> small model   (tools: read-only)
+     hard step     -> large model   (tools: read-only)
+
+   the failure nobody plans for:
+
+     verification fails -> retry on a BIGGER model
+        -> anyone who can cause a failure picks your model
+        -> and the escalation path carried more authority
+
+     escalate capability.  never escalate authority.
+
+   the backbone, behind an interface
+
+     harness -> [ adapter ] -> kimi | glm | frontier
+     swap = a measurement, not a rewrite
+     score on YOUR corpus; the chart measures someone else's
+
+   and if the harness tunes itself
+
+     metric = its own verifier  ->  it optimises the verifier
+     the dashboard is monotone, green, and about nothing
+     the control is a signal it cannot see, train on, or reach
+""",
+
+"B1.4": """
+   one skeleton                       supplied by the domain
+   +---------------------------+      +----------------------+
+   | plan -> act -> verify     | <--- | the ORACLE           |
+   |            -> stop        |      | the BLAST RADIUS     |
+   +---------------------------+      +----------------------+
+
+     SAST     reachability + failing test      read source: free
+     threat   diff against the last model      read config: free
+     DAST     observed change in a response    hit a replica: small
+     pentest  a shell, a row, a file           hit prod: an incident
+
+   then grade it:
+     conformance  ~100% by construction   <- build health
+     accuracy     the number that means something
+
+     pass@k  succeeded at least once   <- someone is checking
+     pass^k  succeeded k out of k      <- nobody is
+""",
+
+"B2.0": """
    chapter 4 — the SDLC, with agents doing the work (AI for security)
 
    [ingest] -> [threat model] -> [audit] -> [confirm] -> [remediate] -> [report]
-      B1.1-2       B1.2-4        B1.3-7     B1.6-10       B1.9         B1.10
+      B2.1-2       B2.2-4        B2.3-7     B2.6-10       B2.9         B2.10
 
    chapter 5 — the harness underneath every one of those stages
    +---------------------------------------------------------------+
@@ -1127,7 +1237,7 @@ DIAGRAMS: dict[str, str] = {
    tools   = tests, sandbox      identity  = a bot that can write your branch
 """,
 
-"B1.1": """
+"B2.1": """
    4,000,000 lines            context budget: ~30,000 lines
    +-------------------+      +----------------+
    |  the repository   | ---> |  what it reads |
@@ -1140,7 +1250,7 @@ DIAGRAMS: dict[str, str] = {
       in the last year" is a choice. "the first 30k lines" is not.
 """,
 
-"B1.2": """
+"B2.2": """
    six static inputs, all already in the estate
 
    code analysis      what the code COULD reach     (stage 4)
@@ -1160,7 +1270,7 @@ DIAGRAMS: dict[str, str] = {
         request raises every score and passes the gate
 """,
 
-"B1.3": """
+"B2.3": """
    gen 1  pattern      grep-shaped     finds: the literal string
                                        misses: the same bug spelled differently
 
@@ -1173,7 +1283,7 @@ DIAGRAMS: dict[str, str] = {
    the third generation does not replace the second. it needs it as an oracle.
 """,
 
-"B1.4": """
+"B2.4": """
    raw findings                        after dedup + context
    +---------------------------+       +--------------------+
    | analyser A: SQLI in q()   |       | SQLI in q()        |
@@ -1184,7 +1294,7 @@ DIAGRAMS: dict[str, str] = {
         3x inflation                   the queue a human will read
 """,
 
-"B1.5": """
+"B2.5": """
    is there a path from untrusted input to this line?
 
    HTTP handler --> parse() --> validate() --> build_query() --> DB
@@ -1197,7 +1307,7 @@ DIAGRAMS: dict[str, str] = {
    the largest single false-positive killer in the pipeline
 """,
 
-"B1.6": """
+"B2.6": """
    production            replica
    +-----------+         +------------------+
    | real data |   -->   | stubbed data     |
@@ -1210,7 +1320,7 @@ DIAGRAMS: dict[str, str] = {
    fidelity decides which findings you can confirm at all
 """,
 
-"B1.7": """
+"B2.7": """
    candidate finding
         |
         v
@@ -1227,7 +1337,7 @@ DIAGRAMS: dict[str, str] = {
    the oracle is the whole value. "the model thinks so" is not one.
 """,
 
-"B1.8": """
+"B2.8": """
    alone                                chained
    +----------------+                   +-------------------------+
    | path traversal | medium            | traversal reads config  |
@@ -1239,7 +1349,7 @@ DIAGRAMS: dict[str, str] = {
    severity is a property of the chain, not of the link
 """,
 
-"B1.9": """
+"B2.9": """
    patch                    what has to be true
    +----------------+       +-----------------------------+
    | fixes the bug  |  and  | behaviour unchanged         |
@@ -1251,7 +1361,7 @@ DIAGRAMS: dict[str, str] = {
    a second incident with a pull request attached
 """,
 
-"B1.10": """
+"B2.10": """
    CVSS 9.8                    your system
    +----------------+          +---------------------------+
    | network        |          | internal only             |
@@ -1264,7 +1374,7 @@ DIAGRAMS: dict[str, str] = {
    confirmed-by-exploitation beats both
 """,
 
-"B1.11": """
+"B2.11": """
    accuracy
      ^
      |          .-----.
@@ -1290,7 +1400,7 @@ DIAGRAMS: dict[str, str] = {
    provenance: everything from the repository is [data], never [principal]
 """,
 
-"B1.12": """
+"B2.12": """
    the highest-privilege agent in most organisations
 
    +--------------------------------------------+
@@ -1304,7 +1414,7 @@ DIAGRAMS: dict[str, str] = {
    governed by: whatever the engineer clicked
 """,
 
-"B1.13": """
+"B2.13": """
    claim                          attestation
    "we enforce least privilege"   subject: deployment_id @ digest
             |                     predicate: per-control verdicts + evidence
@@ -1318,7 +1428,7 @@ DIAGRAMS: dict[str, str] = {
    +------------------------------------------------+
 """,
 
-"B1.14": """
+"B2.14": """
    published pipeline            your pipeline
    +------------------+          +------------------+
    | stages 1..15     |  map ->  | stages 1..15     |
@@ -1334,48 +1444,6 @@ DIAGRAMS: dict[str, str] = {
    a reference implementation is a starting point you evaluate
 """,
 
-"B2.0": """
-   the eight components of any harness
-
-   +-----------+   +--------+   +---------+   +-----------+
-   |   model   |   |  loop  |   |  tools  |   |  context  |
-   +-----------+   +--------+   +---------+   +-----------+
-   +-----------+   +--------+   +---------+   +-----------+
-   | verifier  |   | budget |   | memory  |   |orchestrator|
-   +-----------+   +--------+   +---------+   +-----------+
-
-   the one people cannot name is almost always the verifier
-""",
-
-"B2.1": """
-   corpus with known answers
-        |
-        v
-   harness run --> findings --> scored against the key
-                                     |
-                    +----------------+----------------+
-                    | recall  precision  cost  time   |
-                    +---------------------------------+
-
-   a hallucinated finding looks exactly like a real one
-   until something with the answers checks
-""",
-
-"B2.2": """
-   per-run reliability 80%
-
-   pass@5  = at least one of five worked   -> 99.97%   (a human picks)
-   pass^5  = all five worked               -> 32.8%    (unattended)
-
-   both numbers are true. the honest one depends on who is watching.
-
-   plus the two nobody computes: $ per confirmed finding,
-   and analyst minutes per accepted finding
-""",
-
-# ----------------------------------------------------------------------
-# Function C — AI for security research
-# ----------------------------------------------------------------------
 "C1.0": """
    chapter 6 — red teaming        chapter 7 — research
    +---------------------+        +--------------------------+
@@ -2314,7 +2382,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "operates, and the first agentic system most organisations run is a "
         "security tool that reads untrusted code all day.",
  "next": "Function B builds that system as an SDLC, and holds it to every rule "
-         "in this chapter. Next → B1.0, what an AI SDLC means.",
+         "in this chapter. Next → B2.0, what an AI SDLC means.",
 },
 
 "B1": {
@@ -2329,6 +2397,22 @@ BRIDGES: dict[str, dict[str, str]] = {
  "next": "Chapter 5 opens it. Same pipeline, one level down, starting from the "
          "eight components every harness has. Next → B2.0, what an agentic "
          "harness actually is.",
+},
+
+"B1": {
+ "gained": "A harness you can name the eight parts of, a verifier you can rank "
+           "against the three weaker kinds, tool signatures that cannot express "
+           "the question you do not want asked, a delegation depth enforced "
+           "where the orchestrator cannot lie about it, a backbone you could "
+           "swap this week, and the two numbers that decide whether any of it "
+           "can be left alone.",
+ "gap": "You have built the thing that does work, and nothing that decides "
+        "what work to do. Pointed at CyberTravels' repository it would review "
+        "whatever it happened to open first — which for a four-million-line "
+        "estate is the same as reviewing nothing.",
+ "next": "Chapter 5 is the pipeline that decides: fifteen stages, in order, "
+         "from git history to a severity somebody acts on. Next → B2.0, what "
+         "an AI SDLC means.",
 },
 
 "B2": {

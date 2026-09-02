@@ -143,7 +143,7 @@ The first is lexical and a rule could catch it — `p/secrets` was enabled and
 did not, because the string does not match a known provider's format. The
 second is not expressible as a pattern at all: the defect is the *absence* of a
 call, in a function whose caller holds payments scope. That is the boundary
-B1.3's second generation exists to cross, and it is why the argument there is
+B2.3's second generation exists to cross, and it is why the argument there is
 "both", not "the newer one".
 
 ---
