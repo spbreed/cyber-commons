@@ -33,7 +33,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 NB_DIR = ROOT / "labs" / "notebooks"
 API = "https://www.kaggle.com/api/v1"
 
-from kaggle_push import credentials  # noqa: E402  — same credential rules
+from kaggle_push import credentials, status  # noqa: E402  — same credential rules
 
 
 def fetch_output(user: str, session: str, timeout: int = 90, attempts: int = 5) -> str:
@@ -118,10 +118,35 @@ def main() -> int:
     except OSError:
         sys.exit("no labs/notebooks/_kaggle_push.json — run scripts/kaggle_push.py first")
 
+    # Everything the push ledger did not record as an error. The ledger's value
+    # is the kernel URL after a plain `--all` push and the string "complete"
+    # only after `--all --wait`, so filtering on "complete" silently verified
+    # nothing whenever the push had not waited — and reported that as "no
+    # kernels to verify" rather than as the bug it was.
     todo = ([a.session] if a.session
-            else sorted(s for s, v in pushed.items() if v == "complete"))
+            else sorted(s for s, v in pushed.items()
+                        if not str(v).startswith("ERROR")))
     if not todo:
-        sys.exit("no kernels reported 'complete' — nothing to verify")
+        sys.exit("no successfully pushed kernels in the ledger — "
+                 "run scripts/kaggle_push.py first")
+
+    # Kaggle is the authority on whether a kernel finished, not the ledger.
+    if not a.session:
+        pending = []
+        for sid in list(todo):
+            try:
+                st = status(sid, user).get("status")
+            except Exception:                     # noqa: BLE001 — reported below
+                st = "unknown"
+            if st != "complete":
+                pending.append((sid, st))
+                todo.remove(sid)
+        if pending:
+            print(f"{len(pending)} kernel(s) not complete yet, skipped: "
+                  f"{', '.join(f'{s} ({k})' for s, k in pending[:8])}"
+                  f"{' …' if len(pending) > 8 else ''}\n")
+    if not todo:
+        sys.exit("no kernels have finished running yet — try again in a minute")
 
     print(f"verifying {len(todo)} kernel(s) against the local run\n")
     rows, mismatched, empty = [], [], []
