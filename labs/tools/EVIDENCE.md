@@ -303,13 +303,18 @@ tried across two providers, and every one was blocked before inference:
   `permission_error`. The adapter now sends the header when
   `ANTHROPIC_WORKSPACE_ID` is set, confirmed by watching the error change from
   "is required" to "must be a valid workspace ID".
-- **Anthropic, default-workspace key.** Correctly scoped — the workspace error
-  is gone. `GET /v1/models`, which costs nothing, authenticates and returns 11
-  models including the adapter's default `claude-haiku-4-5-20251001`. Every
-  inference call, down to `max_tokens: 1`, returns
-  `Your credit balance is too low to access the Anthropic API`. So the key,
-  the scoping, the model id and the adapter are all correct, and the only
-  missing input is a funded balance.
+- **Anthropic, two separate default-workspace keys.** Correctly scoped — the
+  workspace error is gone. `GET /v1/models`, which costs nothing,
+  authenticates on both and returns the same 11 models, including the
+  adapter's default `claude-haiku-4-5-20251001`. Every inference call, down to
+  `max_tokens: 1` and across two different models, returns `Your credit
+  balance is too low to access the Anthropic API`.
+
+  Two independently issued keys behaving identically, against an identical
+  model list, is the account answering rather than the key: the balance is an
+  organisation-level property, so issuing further keys from the same
+  organisation cannot change it. The key, the scoping, the model id and the
+  adapter are all correct; the missing input is credit.
 - **OpenAI** — authenticates fine and returns `credit_balance_exhausted`: the
   account has no credits.
 
