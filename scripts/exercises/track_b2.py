@@ -58,6 +58,27 @@ filename, never the bare basename.** Public corpora reuse `1.py` and `3.c` acros
 every CWE directory.
 """,
  "steps": [
+  ("model", {
+   "title": "The harness under evaluation, actually answering",
+   "task": ("Review this function and report any security vulnerability as "
+            "JSON: {\"cwe\": ..., \"file\": ..., \"line\": ..., "
+            "\"rationale\": ...}. Report nothing else.\n\n"
+            "# src/data/reports.py\n"
+            "def load_booking(ref, owner):\n"
+            "    return DB.execute(\"SELECT * FROM bookings WHERE ref=\" + ref +\n"
+            "                      \" AND owner='\" + owner + \"'\")"),
+   "replay": ('{"cwe": "CWE-89", "file": "src/data/reports.py", "line": 2, '
+              '"rationale": "ref and owner are concatenated into the SQL string, '
+              'so a traveller-supplied booking reference can terminate the '
+              'literal and append arbitrary SQL"}'),
+   "system": ("You are a security code reviewer. Reply with one JSON object and "
+              "nothing else."),
+   "check": ('("reports CWE-89", "89" in answer)')}),
+  ("md", "## 3 · The four stages that decide whether that answer counts\n\n"
+         "The cell above is the harness producing one finding. Everything below "
+         "is the machinery that decides whether it was right — and the point of "
+         "the lesson is that stage 1 says yes to plenty of answers that stages "
+         "2 to 4 then reject."),
   ("md", "## 2 · Stage 1 — ingest, where conformance is decided"),
   ("py", '''import json
 from dataclasses import dataclass, field

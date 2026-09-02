@@ -54,7 +54,142 @@ common way a security evaluation misleads its own sponsors.</p>
 <p>There is also one implementation detail that silently randomises everyone's
 results, and it is a single line: <strong>file matching must use parent directory plus
 filename, never the bare basename.</strong> Public corpora reuse <code>1.py</code> and <code>3.c</code> across
-every CWE directory.</p></div><div class="nbmd"><h2>3 · Stage 1 — ingest, where conformance is decided</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json
+every CWE directory.</p></div><div class="nbmd"><h2>3 · The harness under evaluation, actually answering</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- model backend: replay by default, real model when you configure one ----
+# Nothing here is Anthropic- or vendor-specific beyond one URL and one header
+# shape. Standard library only, so the notebook stays self-contained.
+import json, os, urllib.error, urllib.request
+
+# The cheapest current model on each side, which is what a lesson needs.
+FRONTIER_DEFAULT   = &quot;claude-haiku-4-5-20251001&quot;
+OPEN_WEIGHT_DEFAULT = &quot;glm-4.6&quot;
+TIMEOUT = 60
+
+def _kaggle_secret(name):
+    &quot;&quot;&quot;On Kaggle, a key lives in Add-ons -&gt; Secrets rather than the environment.
+
+    kaggle_secrets is pre-installed in the Kaggle image and absent everywhere
+    else, so the import is guarded and the notebook needs no dependency. It also
+    requires the notebook to have internet enabled, which on Kaggle requires a
+    phone-verified account - see the note printed below.
+    &quot;&quot;&quot;
+    try:
+        from kaggle_secrets import UserSecretsClient
+        return UserSecretsClient().get_secret(name)
+    except Exception:
+        return None
+
+def backend():
+    &quot;&quot;&quot;(kind, model). Configuration comes from the environment, never a literal.&quot;&quot;&quot;
+    if os.environ.get(&quot;ANTHROPIC_API_KEY&quot;) or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;):
+        os.environ.setdefault(&quot;ANTHROPIC_API_KEY&quot;,
+                              os.environ.get(&quot;ANTHROPIC_API_KEY&quot;)
+                              or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;) or &quot;&quot;)
+        return &quot;frontier&quot;, os.environ.get(&quot;MODEL&quot;, FRONTIER_DEFAULT)
+    if os.environ.get(&quot;OPENAI_BASE_URL&quot;):
+        return &quot;open-weight&quot;, os.environ.get(&quot;MODEL&quot;, OPEN_WEIGHT_DEFAULT)
+    return &quot;replay&quot;, &quot;deterministic stand-in (no backend configured)&quot;
+
+def _post(url, payload, headers):
+    req = urllib.request.Request(url, data=json.dumps(payload).encode(),
+                                 headers={&quot;content-type&quot;: &quot;application/json&quot;, **headers})
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+        return json.loads(r.read().decode())
+
+def _anthropic(prompt, system, model, max_tokens, temperature):
+    body = {&quot;model&quot;: model, &quot;max_tokens&quot;: max_tokens, &quot;temperature&quot;: temperature,
+            &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]}
+    if system:
+        body[&quot;system&quot;] = system
+    out = _post(&quot;https://api.anthropic.com/v1/messages&quot;, body,
+                {&quot;x-api-key&quot;: os.environ[&quot;ANTHROPIC_API_KEY&quot;],
+                 &quot;anthropic-version&quot;: &quot;2023-06-01&quot;})
+    return &quot;&quot;.join(b.get(&quot;text&quot;, &quot;&quot;) for b in out.get(&quot;content&quot;, [])).strip()
+
+def _openai_compatible(prompt, system, model, max_tokens, temperature):
+    msgs = ([{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: system}] if system else []) + \
+           [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]
+    base = os.environ[&quot;OPENAI_BASE_URL&quot;].rstrip(&quot;/&quot;)
+    key = os.environ.get(&quot;OPENAI_API_KEY&quot;, &quot;not-needed&quot;)
+    out = _post(f&quot;{base}/chat/completions&quot;,
+                {&quot;model&quot;: model, &quot;messages&quot;: msgs, &quot;max_tokens&quot;: max_tokens,
+                 &quot;temperature&quot;: temperature},
+                {&quot;authorization&quot;: f&quot;Bearer {key}&quot;})
+    return out[&quot;choices&quot;][0][&quot;message&quot;][&quot;content&quot;].strip()
+
+def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
+    &quot;&quot;&quot;Answer `prompt` with the configured backend, or return `replay`.
+
+    `replay` is required, not optional: a lesson must be able to run offline,
+    and the answer it falls back to has to be visible in the source rather than
+    invented at runtime.
+    &quot;&quot;&quot;
+    kind, model = backend()
+    if kind == &quot;replay&quot;:
+        return replay, kind, model
+    try:
+        fn = _anthropic if kind == &quot;frontier&quot; else _openai_compatible
+        return fn(prompt, system, model, max_tokens, temperature), kind, model
+    except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
+        detail = getattr(e, &quot;code&quot;, None) or type(e).__name__
+        print(f&quot;   !! {kind} backend ({model}) failed: {detail} - using the replay,&quot;)
+        print(&quot;      which is a replay and is labelled as one. No model answered.&quot;)
+        return replay, &quot;replay&quot;, f&quot;{model} unreachable&quot;
+
+_kind, _model = backend()
+print(f&quot;model backend : {_kind}&quot;)
+print(f&quot;model         : {_model}&quot;)
+if _kind == &quot;replay&quot;:
+    print()
+    print(&quot;This lesson runs offline against a deterministic replay, which is why&quot;)
+    print(&quot;it works on a Kaggle kernel with the internet switched off. To run the&quot;)
+    print(&quot;identical code against a real model, set one of:&quot;)
+    print()
+    print(&quot;   frontier     export ANTHROPIC_API_KEY=...   # cheapest: &quot; + FRONTIER_DEFAULT)
+    print(&quot;   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \\&quot;)
+    print(&quot;                       OPENAI_API_KEY=ollama MODEL=glm-4.6&quot;)
+    print()
+    print(&quot;   On Kaggle: Add-ons -&gt; Secrets, add ANTHROPIC_API_KEY, and switch&quot;)
+    print(&quot;   Internet on in the notebook settings. Internet requires a&quot;)
+    print(&quot;   phone-verified Kaggle account; without it DNS fails in the kernel&quot;)
+    print(&quot;   and this lesson correctly stays on the replay.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The same lesson, against a real model</h2>
+<p>Everything below this point runs identically on three backends. Offline it uses
+a deterministic replay that is labelled as a replay wherever it appears — never
+presented as a model's output. With <code>ANTHROPIC_API_KEY</code> set it calls a frontier
+model; with <code>OPENAI_BASE_URL</code> set it calls any OpenAI-compatible endpoint,
+which covers Ollama, vLLM and the hosted open-weight providers.</p>
+<p>The point of running it both ways is not that the answers match. It is that
+<strong>the lesson's assertion holds either way</strong> — if it only holds against the
+replay, the lesson was testing the replay.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TASK = &#x27;Review this function and report any security vulnerability as JSON: {&quot;cwe&quot;: ..., &quot;file&quot;: ..., &quot;line&quot;: ..., &quot;rationale&quot;: ...}. Report nothing else.\n\n# src/data/reports.py\ndef load_booking(ref, owner):\n    return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + ref +\n                      &quot; AND owner=\&#x27;&quot; + owner + &quot;\&#x27;&quot;)&#x27;
+
+REPLAY = &#x27;{&quot;cwe&quot;: &quot;CWE-89&quot;, &quot;file&quot;: &quot;src/data/reports.py&quot;, &quot;line&quot;: 2, &quot;rationale&quot;: &quot;ref and owner are concatenated into the SQL string, so a traveller-supplied booking reference can terminate the literal and append arbitrary SQL&quot;}&#x27;
+
+answer, used, model = ask(TASK, replay=REPLAY,
+            system=&#x27;You are a security code reviewer. Reply with one JSON object and nothing else.&#x27;,
+            max_tokens=300)
+
+print(f&quot;backend used : {used}&quot;)
+print(f&quot;model        : {model}&quot;)
+print(f&quot;prompt       : {TASK[:66]}...&quot;)
+print()
+print(&quot;answer:&quot;)
+for line in (answer.splitlines() or [answer]):
+    print(f&quot;   {line}&quot;)
+
+# Two assertions that must hold on every backend, and one property that is
+# reported rather than asserted - a real model failing it is a finding about
+# the model, not a broken notebook.
+assert answer.strip(), &quot;the configured backend returned nothing&quot;
+if used == &quot;replay&quot;:
+    assert answer == REPLAY, &quot;the offline path must return the replay verbatim&quot;
+
+label, held = (&quot;reports CWE-89&quot;, &quot;89&quot; in answer)
+print()
+print(f&quot;property checked : {label}&quot;)
+print(f&quot;held on {used:12s} : {held}&quot;)
+print()
+print(&quot;Same code, same assertions, three possible backends. Offline the answer&quot;)
+print(&quot;is the replay and is labelled as one; with a key it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The four stages that decide whether that answer counts</h2>
+<p>The cell above is the harness producing one finding. Everything below is the machinery that decides whether it was right — and the point of the lesson is that stage 1 says yes to plenty of answers that stages 2 to 4 then reject.</p></div><div class="nbmd"><h2>6 · Stage 1 — ingest, where conformance is decided</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json
 from dataclasses import dataclass, field
 
 @dataclass
@@ -95,7 +230,7 @@ ANSWERS = {
 }
 for qid, raw in ANSWERS.items():
     _, note = Answer.parse(raw)
-    print(f&quot;{qid}: {note}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Stage 2 — the one line that decides whether this is a benchmark</h2>
+    print(f&quot;{qid}: {note}&quot;)</code></pre></div><div class="nbmd"><h2>7 · Stage 2 — the one line that decides whether this is a benchmark</h2>
 <p>Public corpora reuse filenames across directories. Match on the basename and you score an answer about CWE-79 against the ground truth for CWE-89 — and your accuracy becomes a random variable.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def path_key(path):
     &quot;&quot;&quot;Parent directory + filename. NEVER the bare basename.&quot;&quot;&quot;
     parts = [p for p in path.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;) if p not in (&quot;&quot;, &quot;.&quot;)]
@@ -112,7 +247,7 @@ for a, b in pairs:
           f&quot;{path_key(a)==path_key(b)}&quot;)
 print(&quot;\nq3 answered about CWE-89/1.py when the truth is CWE-22/3.c.&quot;)
 print(f&quot;   basename says match: {basename(&#x27;CWE-89/1.py&#x27;) == basename(&#x27;CWE-22/3.c&#x27;)}&quot;)
-print(f&quot;   path_key says match: {path_key(&#x27;CWE-89/1.py&#x27;) == path_key(&#x27;CWE-22/3.c&#x27;)}&quot;)</code></pre></div><div class="nbmd"><h2>5 · Stages 3 and 4 — expert proxy and two judges</h2>
+print(f&quot;   path_key says match: {path_key(&#x27;CWE-89/1.py&#x27;) == path_key(&#x27;CWE-22/3.c&#x27;)}&quot;)</code></pre></div><div class="nbmd"><h2>8 · Stages 3 and 4 — expert proxy and two judges</h2>
 <p>Half credit is not politeness. "Right file, wrong vulnerability class" is a genuinely different failure from "wrong file entirely", and averaging them away hides which one your harness is making.</p>
 <p>Two judges aggregated by <strong>MIN</strong>, not mean — judges exist to catch each other, and averaging lets the lenient one carry the strict one's failures.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def path_match(a, t): return path_key(a.file) == path_key(t.file)
 def cwe_match(a, t):  return a.cwe == t.cwe.upper()
@@ -168,7 +303,7 @@ rep = evaluate(ANSWERS, TRUTHS)
 print(rep.render())
 print(&quot;\nfailures:&quot;)
 for qid, stage, why in rep.failures:
-    print(f&quot;   {qid}  [{stage}]  {why}&quot;)</code></pre></div><div class="nbmd"><h2>6 · The control — never report one number</h2>
+    print(f&quot;   {qid}  [{stage}]  {why}&quot;)</code></pre></div><div class="nbmd"><h2>9 · The control — never report one number</h2>
 <p>Here is what happens when the harness is upgraded to emit structured output. Conformance goes to 1.0. Nothing about its capability changed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>STRUCTURED = dict(ANSWERS)
 STRUCTURED[&quot;q4&quot;] = (&#x27;{&quot;qid&quot;:&quot;q4&quot;,&quot;cwe&quot;:&quot;CWE-798&quot;,&quot;file&quot;:&quot;CWE-798/2.py&quot;,&quot;line&quot;:1,&#x27;
                     &#x27;&quot;rationale&quot;:&quot;a credential is hardcoded&quot;}&#x27;)

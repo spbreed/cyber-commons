@@ -59,15 +59,31 @@ The "why" and the "what" belong to a diagram. Only the "how" belongs to a
 terminal. Leading with the terminal produces a reader who can reproduce your
 keystrokes and cannot say what they were for.
 
-Diagrams are **plain ASCII**, monospace, roughly 60 columns. Box-drawing
-characters and colour do not survive every renderer; `+--+` does. A good
+The `diagram` field is **plain ASCII**, monospace, roughly 60 columns.
+Box-drawing characters do not survive every renderer; `+--+` does. A good
 diagram fits on a screen and has at most one idea in it — if it needs a legend,
 it is two diagrams.
+
+That constraint is right for a *mechanism*: one idea, no colour to decode. It
+is wrong for anything where the reader has to hold a dozen components at once
+and the **kind** of each one is the point. For those, use the HTML vocabulary
+in [`scripts/exercises/diagrams.py`](scripts/exercises/diagrams.py) as an
+`("html", …)` step — `table()` for a comparison, `svg()` for a structural
+picture, `flow()`/`column()`/`card()` for an architecture — and let colour and
+an icon do the work a legend would otherwise do. Every rule there is an inline
+style on the element it applies to, because a `<style>` block does not survive
+Jupyter, Kaggle and the dark lesson page alike; the palette leans on
+`currentColor` for the same reason.
 
 Hooks, diagrams and chapter bridges all live in
 [`scripts/exercises/framing.py`](scripts/exercises/framing.py), apart from the
 lesson bodies, because keeping all 121 of each in one file is the only way to
 see whether they are consistent with one another.
+
+**A lesson with no code cell gets no Kaggle button.** The site suppresses both
+buttons when the built notebook contains nothing executable, and the lesson
+says plainly that it is a reading lesson. Offering "Run on Kaggle" on a page of
+diagrams teaches the reader that the button is decorative everywhere else too.
 
 ## 3 · Sections are renumbered by the build
 
