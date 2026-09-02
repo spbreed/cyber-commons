@@ -86,9 +86,16 @@ def _anthropic(prompt, system, model, max_tokens, temperature):
             &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]}
     if system:
         body[&quot;system&quot;] = system
-    out = _post(&quot;https://api.anthropic.com/v1/messages&quot;, body,
-                {&quot;x-api-key&quot;: os.environ[&quot;ANTHROPIC_API_KEY&quot;],
-                 &quot;anthropic-version&quot;: &quot;2023-06-01&quot;})
+    headers = {&quot;x-api-key&quot;: os.environ[&quot;ANTHROPIC_API_KEY&quot;],
+               &quot;anthropic-version&quot;: &quot;2023-06-01&quot;}
+    # An identity-linked key is scoped to a workspace and the API refuses the
+    # call without being told which one. A plain organisation key needs nothing
+    # here, so the header is only sent when it is set.
+    ws = os.environ.get(&quot;ANTHROPIC_WORKSPACE_ID&quot;)
+    if ws:
+        headers[&quot;anthropic-workspace-id&quot;] = ws
+    base = os.environ.get(&quot;ANTHROPIC_BASE_URL&quot;, &quot;https://api.anthropic.com&quot;).rstrip(&quot;/&quot;)
+    out = _post(f&quot;{base}/v1/messages&quot;, body, headers)
     return &quot;&quot;.join(b.get(&quot;text&quot;, &quot;&quot;) for b in out.get(&quot;content&quot;, [])).strip()
 
 def _openai_compatible(prompt, system, model, max_tokens, temperature):
@@ -116,9 +123,19 @@ def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
         fn = _anthropic if kind == &quot;frontier&quot; else _openai_compatible
         return fn(prompt, system, model, max_tokens, temperature), kind, model
     except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
+        # Print what the API actually said. &quot;failed: 400&quot; costs whoever hits
+        # this an hour; the body usually names the exact missing header or
+        # parameter, and it never contains the key.
         detail = getattr(e, &quot;code&quot;, None) or type(e).__name__
-        print(f&quot;   !! {kind} backend ({model}) failed: {detail} - using the replay,&quot;)
-        print(&quot;      which is a replay and is labelled as one. No model answered.&quot;)
+        why = &quot;&quot;
+        if hasattr(e, &quot;read&quot;):
+            try:
+                why = json.loads(e.read().decode()).get(&quot;error&quot;, {}).get(&quot;message&quot;, &quot;&quot;)
+            except Exception:
+                why = &quot;&quot;
+        print(f&quot;   !! {kind} backend ({model}) failed: {detail}&quot;
+              f&quot;{&#x27; - &#x27; + why if why else &#x27;&#x27;}&quot;)
+        print(&quot;      Using the replay, which is labelled as one. No model answered.&quot;)
         return replay, &quot;replay&quot;, f&quot;{model} unreachable&quot;
 
 _kind, _model = backend()
@@ -131,6 +148,8 @@ if _kind == &quot;replay&quot;:
     print(&quot;identical code against a real model, set one of:&quot;)
     print()
     print(&quot;   frontier     export ANTHROPIC_API_KEY=...   # cheapest: &quot; + FRONTIER_DEFAULT)
+    print(&quot;                (an identity-linked key also needs&quot;)
+    print(&quot;                 ANTHROPIC_WORKSPACE_ID=...)&quot;)
     print(&quot;   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \\&quot;)
     print(&quot;                       OPENAI_API_KEY=ollama MODEL=glm-4.6&quot;)
     print()

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Run the model-facing lessons against a real backend and report what happened.
 
-Every lesson in the commons runs offline against a deterministic replay. Nine of
+Every lesson in the commons runs offline against a deterministic replay. Some of
 them also carry a live section that calls a real model through the same code
-path. This runs those nine for real, so "the labs work with a frontier model" is
-an evidenced statement rather than a design intention.
+path. This runs those for real, so "the labs work with a frontier model" is an
+evidenced statement rather than a design intention.
 
     # frontier — cheapest current Claude model
     export ANTHROPIC_API_KEY=...          # or put it in ~/.anthropic/key
@@ -38,8 +38,17 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 NB = ROOT / "labs" / "notebooks"
 
-# The lessons carrying a live model section.
-LESSONS = ["B1.2", "B1.3", "B1.9", "B2.1", "B2.4", "B2.7", "C1.1", "D1.1", "D1.3"]
+# The lessons carrying a live model section, derived rather than listed. A
+# hardcoded list goes stale the first time a chapter is renumbered, and it goes
+# stale silently — the script keeps passing while testing fewer lessons than it
+# claims to.
+sys.path.insert(0, str(ROOT / "scripts"))
+from exercises import EXERCISES  # noqa: E402
+
+LESSONS = sorted(
+    (sid for sid, ex in EXERCISES.items()
+     if any(kind == "model" for kind, _ in ex["steps"])),
+    key=lambda s: (s[0], int(s[1]), [int(p) for p in s[2:].split(".") if p]))
 
 KEY_FILES = [Path.home() / ".anthropic" / "key", Path.home() / ".anthropic_key"]
 
@@ -66,12 +75,15 @@ def live_cells(sid: str) -> str:
     keeps the rest of the lesson (which needs no model) out of the bill.
     """
     nb = json.loads((NB / f"{sid}.ipynb").read_text())
-    code = [c for c in nb["cells"] if c["cell_type"] == "code"]
-    src = ["".join(c["source"]) for c in code]
-    keep = [s for s in src[:2] if "model backend" in s or "answer, used, model" in s]
-    if len(keep) != 2:
+    src = ["".join(c["source"]) for c in nb["cells"] if c["cell_type"] == "code"]
+    # Search every code cell, not the first two: a lesson may introduce its
+    # model section part-way through, and a positional assumption here fails
+    # the moment one does.
+    adapter = next((s for s in src if "model backend" in s), None)
+    live = next((s for s in src if "answer, used, model" in s), None)
+    if adapter is None or live is None:
         raise SystemExit(f"{sid}: expected an adapter cell and a live cell")
-    return "\n\n".join(keep)
+    return f"{adapter}\n\n{live}"
 
 
 def main() -> int:

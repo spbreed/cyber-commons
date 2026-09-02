@@ -73,9 +73,16 @@ def _anthropic(prompt, system, model, max_tokens, temperature):
             "messages": [{"role": "user", "content": prompt}]}
     if system:
         body["system"] = system
-    out = _post("https://api.anthropic.com/v1/messages", body,
-                {"x-api-key": os.environ["ANTHROPIC_API_KEY"],
-                 "anthropic-version": "2023-06-01"})
+    headers = {"x-api-key": os.environ["ANTHROPIC_API_KEY"],
+               "anthropic-version": "2023-06-01"}
+    # An identity-linked key is scoped to a workspace and the API refuses the
+    # call without being told which one. A plain organisation key needs nothing
+    # here, so the header is only sent when it is set.
+    ws = os.environ.get("ANTHROPIC_WORKSPACE_ID")
+    if ws:
+        headers["anthropic-workspace-id"] = ws
+    base = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com").rstrip("/")
+    out = _post(f"{base}/v1/messages", body, headers)
     return "".join(b.get("text", "") for b in out.get("content", [])).strip()
 
 def _openai_compatible(prompt, system, model, max_tokens, temperature):
@@ -103,9 +110,19 @@ def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
         fn = _anthropic if kind == "frontier" else _openai_compatible
         return fn(prompt, system, model, max_tokens, temperature), kind, model
     except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
+        # Print what the API actually said. "failed: 400" costs whoever hits
+        # this an hour; the body usually names the exact missing header or
+        # parameter, and it never contains the key.
         detail = getattr(e, "code", None) or type(e).__name__
-        print(f"   !! {kind} backend ({model}) failed: {detail} - using the replay,")
-        print("      which is a replay and is labelled as one. No model answered.")
+        why = ""
+        if hasattr(e, "read"):
+            try:
+                why = json.loads(e.read().decode()).get("error", {}).get("message", "")
+            except Exception:
+                why = ""
+        print(f"   !! {kind} backend ({model}) failed: {detail}"
+              f"{' - ' + why if why else ''}")
+        print("      Using the replay, which is labelled as one. No model answered.")
         return replay, "replay", f"{model} unreachable"
 
 _kind, _model = backend()
@@ -118,6 +135,8 @@ if _kind == "replay":
     print("identical code against a real model, set one of:")
     print()
     print("   frontier     export ANTHROPIC_API_KEY=...   # cheapest: " + FRONTIER_DEFAULT)
+    print("                (an identity-linked key also needs")
+    print("                 ANTHROPIC_WORKSPACE_ID=...)")
     print("   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \\\\")
     print("                       OPENAI_API_KEY=ollama MODEL=glm-4.6")
     print()
