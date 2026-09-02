@@ -72,6 +72,34 @@ def fetch_output(user: str, session: str, timeout: int = 90, attempts: int = 5) 
                    if isinstance(e, dict) and e.get("stream_name") == "stdout")
 
 
+# Anything that would move a lesson off its offline path. Kaggle has none of
+# these, so neither may the local comparison run.
+MODEL_ENV = {"ANTHROPIC_API_KEY", "ANTHROPIC_WORKSPACE_ID", "ANTHROPIC_BASE_URL",
+             "OPENAI_API_KEY", "OPENAI_BASE_URL", "MODEL"}
+
+
+def kernel_status(session: str, user: str, tries: int = 5) -> str:
+    """Kaggle's status for one kernel, retrying through rate limits.
+
+    `/kernels/status` returns HTTP 429 "TooManyRequests" well before 121
+    sequential calls are done. Treating a 429 as "not complete" turns a
+    transient throttle into a permanent skip, and the run then reports a
+    smaller denominator as though that were the real one.
+    """
+    delay = 2.0
+    for attempt in range(tries):
+        try:
+            return status(session, user).get("status", "unknown")
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or attempt == tries - 1:
+                return "unknown"
+            time.sleep(delay)
+            delay *= 2
+        except Exception:                         # noqa: BLE001 — reported by caller
+            return "unknown"
+    return "unknown"
+
+
 def local_output(session: str) -> str:
     """Re-run the notebook locally, now, so both sides are compared identically.
 
@@ -79,11 +107,20 @@ def local_output(session: str) -> str:
     that count includes blank lines, while Kaggle's log stream is normalised
     below. Re-running costs a tenth of a second and removes the discrepancy.
     """
+    import os
     import subprocess
     nb = json.loads((NB_DIR / f"{session}.ipynb").read_text())
     src = "\n\n".join("".join(c["source"]) for c in nb["cells"]
                        if c["cell_type"] == "code")
-    p = subprocess.run([sys.executable, "-c", src], cwd=ROOT,
+    # Hermetic, deliberately. A Kaggle kernel has no model credentials, so the
+    # lesson takes the replay path there. If the operator happens to have
+    # ANTHROPIC_API_KEY exported, the local side takes the frontier path
+    # instead and every model lesson "mismatches" — which is a fact about the
+    # shell, not about the notebook, and it makes the whole claim of this
+    # script ("the same thing on two machines") depend on who ran it.
+    env = {k: v for k, v in os.environ.items()
+           if k not in MODEL_ENV and not k.startswith("KAGGLE_")}
+    p = subprocess.run([sys.executable, "-c", src], cwd=ROOT, env=env,
                        capture_output=True, text=True, timeout=180)
     return p.stdout
 
@@ -132,19 +169,24 @@ def main() -> int:
 
     # Kaggle is the authority on whether a kernel finished, not the ledger.
     if not a.session:
-        pending = []
+        pending, unknown = [], []
         for sid in list(todo):
-            try:
-                st = status(sid, user).get("status")
-            except Exception:                     # noqa: BLE001 — reported below
-                st = "unknown"
-            if st != "complete":
-                pending.append((sid, st))
-                todo.remove(sid)
+            st = kernel_status(sid, user)
+            if st == "complete":
+                continue
+            (unknown if st == "unknown" else pending).append((sid, st))
+            todo.remove(sid)
         if pending:
-            print(f"{len(pending)} kernel(s) not complete yet, skipped: "
+            print(f"{len(pending)} kernel(s) still running, skipped: "
                   f"{', '.join(f'{s} ({k})' for s, k in pending[:8])}"
                   f"{' …' if len(pending) > 8 else ''}\n")
+        if unknown:
+            # Never silently. A status this script could not read is a gap in
+            # the evidence, not a kernel that failed and not one that passed.
+            print(f"{len(unknown)} kernel(s) whose status could not be read "
+                  f"even after retries — NOT verified, and not counted as "
+                  f"either pass or fail: {', '.join(s for s, _ in unknown)}\n",
+                  file=sys.stderr)
     if not todo:
         sys.exit("no kernels have finished running yet — try again in a minute")
 
