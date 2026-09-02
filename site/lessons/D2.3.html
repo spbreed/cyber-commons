@@ -38,7 +38,7 @@ you scope only that actor, you miss everything the earlier actors reached — an
 because authority narrows down the chain, the earlier actors typically had
 <em>more</em> access, not less.</p>
 <p>The undercount is systematic and it grows with delegation depth, which is the
-operational reason B2.5 bounds depth in the first place.</p></div><div class="nbmd"><h2>3 · Demo — scope the chain, not the actor</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>REACHED = {
+operational reason B2.0 bounds delegation depth in the first place.</p></div><div class="nbmd"><h2>3 · Demo — scope the chain, not the actor</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>REACHED = {
  &quot;dana@corp&quot;:    [&quot;repo-core&quot;, &quot;repo-infra&quot;, &quot;vault-dev&quot;],
  &quot;orchestrator&quot;: [&quot;repo-core&quot;, &quot;queue-tasks&quot;],
  &quot;patch-agent&quot;:  [&quot;repo-core&quot;, &quot;repo-payments&quot;],
@@ -66,7 +66,7 @@ for d in range(1, 5):
     print(f&quot;{d:&gt;6}{len(r[&#x27;scoped_last_actor_only&#x27;]):&gt;19}&quot;
           f&quot;{len(r[&#x27;scoped_whole_chain&#x27;]):&gt;14}&quot;
           f&quot;{str(r[&#x27;undercount_factor&#x27;]):&gt;12}&quot;)
-print(&quot;\nEach hop adds resources the last actor never touched. This is why B2.5&quot;)
+print(&quot;\nEach hop adds resources the last actor never touched. This is why B2.0&quot;)
 print(&quot;bounds delegation depth: depth is an incident-scope multiplier.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — scope from the act chain, then widen by shared resources</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SHARED = {&quot;repo-core&quot;: [&quot;build-agent&quot;, &quot;test-agent&quot;],
           &quot;cluster-prod&quot;: [&quot;deploy-agent&quot;, &quot;monitor-agent&quot;],
           &quot;repo-payments&quot;: [&quot;finance-agent&quot;]}

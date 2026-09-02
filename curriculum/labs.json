@@ -381,21 +381,6 @@
    "expect": "Prints precision before/after triage. The FP rate — not the detection rate — is the number that moved."
   },
   "B1.2": {
-   "goal": "Beat context stuffing with tool-mediated retrieval.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.2.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b1-appsec",
-    "python3 triage.py --strategy stuff  --finding F-102 --model $MODEL",
-    "python3 triage.py --strategy bundle --finding F-102 --model $MODEL   # canonical triage bundle",
-    "python3 compare_strategies.py"
-   ],
-   "expect": "The bundle wins on accuracy and costs fewer tokens. Both numbers printed."
-  },
-  "B1.2": {
    "goal": "Never raise a PR for a patch you did not build and test.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -408,37 +393,6 @@
     "# generates -> compiles -> runs tests -> only then writes patch.diff"
    ],
    "expect": "Patches failing the local build are discarded before a human ever sees them; acceptance rate is printed."
-  },
-  "B1.4": {
-   "goal": "Chart honestly what only SAST found, and what only DAST found.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b1-appsec",
-    "docker compose up -d juice-shop",
-    "python3 triage.py --all > sast.json",
-    "zap-cli quick-scan http://localhost:3000 -o dast.json",
-    "python3 venn.py --sast sast.json --dast dast.json"
-   ],
-   "expect": "Three buckets: SAST-only, DAST-only, both. The DAST-only bucket is why pentest is not redundant."
-  },
-  "B1.3": {
-   "goal": "Watch your own review harness obey an injected instruction, then close it.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b1-appsec",
-    "git apply injected-pr.diff       # a PR containing an instruction to the reviewer",
-    "python3 triage.py --candidates candidates.json --model $MODEL   # obeys it",
-    "python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   # ignores it"
-   ],
-   "expect": "The unprotected run emits the attacker's verdict; the tagged run does not."
   },
   "B1.4": {
    "goal": "Find live secrets in your own agent's footprint.",
@@ -454,6 +408,21 @@
     "cp hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit"
    ],
    "expect": "Secrets in prompts/transcripts/memory files surface, and the pre-commit hook stops the next one."
+  },
+  "B1.3": {
+   "goal": "Watch your own review harness obey an injected instruction, then close it.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
+    "cd labs/b1-appsec",
+    "git apply injected-pr.diff       # a PR containing an instruction to the reviewer",
+    "python3 triage.py --candidates candidates.json --model $MODEL   # obeys it",
+    "python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   # ignores it"
+   ],
+   "expect": "The unprotected run emits the attacker's verdict; the tagged run does not."
   },
   "B1.5": {
    "goal": "Publish the four numbers that let a review workflow earn its next rung.",
@@ -710,12 +679,12 @@
    ],
    "expect": "Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely."
   },
-  "B2.11": {
+  "B2.1": {
    "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
@@ -727,12 +696,12 @@
    ],
    "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
   },
-  "B2.12": {
+  "B2.2": {
    "goal": "Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "cd labs/b2.10-eval-harness",
@@ -741,12 +710,12 @@
    ],
    "expect": "pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand."
   },
-  "B2.13": {
+  "B2.3": {
    "goal": "Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it",
+    "jupyter notebook labs/notebooks/B2.3.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session B2.3   # run it headless and check it",
     "",
     "# --- the full variant, against the real tooling (needs a container registry) ---",
     "python3 canary.py --place worker-env,docs,artifact-metadata",

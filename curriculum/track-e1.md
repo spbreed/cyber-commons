@@ -144,7 +144,7 @@ python3 map_controls.py --new agent-controls.yaml --existing control-library.yam
 
 - **Risk** — Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy.
 - **Control** — Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.
-- **Lab** — Take the B2.11 harness output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
+- **Lab** — Take the B2.1 harness output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 - **Tools** — `Cyber Commons eval harness`, `OSCAL`
 
 **Run it** — Turn an eval report into audit evidence — and find how it could mislead you.

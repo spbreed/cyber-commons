@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.2 — Verify signals that don&#x27;t lie | Cyber Commons</title><meta name="description" content="Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The Harnesses that Test CyberTravels</div><div class="sid">B2.2</div><h1>Verify signals that don&#x27;t lie</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>LLM-as-judge from the same family as the generator — the loop grades its own homework.</p></div><div class="ctrl"><div class="lab">Control</div><p>Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Show a same-family judge grading its own homework.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.2 · Verify signals that don't lie</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The Harnesses that Test CyberTravels</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.1.html">B2.1 · Plan–act–verify</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.2 — Reliability and cost under non-determinism | Cyber Commons</title><meta name="description" content="pass^k alongside pass@k on a seeded corpus, plus cost per confirmed finding and analyst minutes per accepted finding, tracked as first-class metrics beside accuracy."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › Trusting the Harness that Tests CyberTravels</div><div class="sid">B2.2</div><h1>Reliability and cost under non-determinism</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A single lucky run published as a result, and cost per finding never computed at all, so nobody notices the tool moved work instead of removing it.</p></div><div class="ctrl"><div class="lab">Control</div><p>pass^k alongside pass@k on a seeded corpus, plus cost per confirmed finding and analyst minutes per accepted finding, tracked as first-class metrics beside accuracy.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.2 · Reliability and cost under non-determinism</h1>
+<p><strong>Function B — Application Security with an AI SDLC → Trusting the Harness that Tests CyberTravels</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.1.html">B2.1 · Evaluating a security harness</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,196 +11,202 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>pytest, Checkov, GLM-4.6, Claude Sonnet 5</td>
+<td>Inspect, promptfoo, CyberGym, GLM-4.6, Claude Haiku 4.5</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>A test that passes, an exploit that fires, a compiler that accepts — these cannot be talked into agreeing with you. Model self-assessment can, and it will, because agreeing is cheaper than being right.</p>
+<p>At 80% per-run reliability a harness is 99.9% reliable with a human picking the good answer, and 33% reliable unattended. Both numbers are true. Quoting the first for a system that runs unattended is where most harness claims quietly go wrong.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> A failing test against the booking replica cannot be talked into agreeing. The model's own assessment of its patch can, and will.</p>
+<p><strong>At CyberTravels.</strong> At 80% per-run reliability, a review harness left to run unattended over CyberTravels' releases is right about a third of the time — and somebody at CyberTravels is paying per confirmed finding.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   signals that cannot be talked into agreeing
+<pre><code>   per-run reliability 80%
 
-   test suite exit code      compiler output      exploit fires
-   +----------------+        +-------------+      +-----------+
-   |  0 / non-zero  |        | ok / error  |      | yes / no  |
-   +----------------+        +-------------+      +-----------+
+   pass@5  = at least one of five worked   -&gt; 99.97%   (a human picks)
+   pass^5  = all five worked               -&gt; 32.8%    (unattended)
 
-   signals that can
-   +------------------------------------------------+
-   | &quot;I have verified the fix is correct.&quot;  (rating) |
-   +------------------------------------------------+
+   both numbers are true. the honest one depends on who is watching.
+
+   plus the two nobody computes: $ per confirmed finding,
+   and analyst minutes per accepted finding
 </code></pre>
-<p>This is the highest-value lesson in the track, because every other control
-assumes the verifier is honest.</p>
-<p>Verifiers form a hierarchy, ordered by <strong>what it takes to fool them</strong>:</p>
-<table>
-<thead>
-<tr>
-<th>Verifier</th>
-<th>Fooled by</th>
-<th>Available when</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Behavioural test</strong></td>
-<td>changing real behaviour</td>
-<td>you can execute the thing</td>
-</tr>
-<tr>
-<td><strong>Exact-match oracle</strong></td>
-<td>nothing, but needs the answer up front</td>
-<td>rarely</td>
-</tr>
-<tr>
-<td><strong>Shape check</strong></td>
-<td>any well-formed output</td>
-<td>always</td>
-</tr>
-<tr>
-<td><strong>LLM judge</strong></td>
-<td>confident prose</td>
-<td>always</td>
-</tr>
-</tbody>
-</table>
-<p>The trap is that the two available-everywhere options are the two weakest, and
-they fail in the worst possible direction: they do not error, they <strong>approve</strong>.</p>
-<p>There is also a subtler failure that is worth seeing rather than reading about:
-a verifier that is <em>correct</em> but reads stale state. A test runner that imports
-cached bytecode reports on code that is no longer on disk. A lying oracle is
-worse than no oracle, because you stop looking.</p></div><div class="nbmd"><h2>3 · Demo — four verifiers, one broken input</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>BROKEN  = &quot;def parse_port(s): return int(s)&quot;          # accepts 0, 99999, -1
-CORRECT = (&quot;def parse_port(s):\n&quot;
-           &quot;    p = int(s)\n&quot;
-           &quot;    if not (1 &lt;= p &lt;= 65535): raise ValueError(&#x27;port out of range&#x27;)\n&quot;
-           &quot;    return p&quot;)
+<p>A single run tells you almost nothing about a stochastic system, and almost
+every published harness result is a single run.</p>
+<p>Two metrics, and the gap between them is the whole lesson:</p>
+<p><strong>pass@k</strong> — succeeded <em>at least once</em> in k attempts. This is the right metric
+when you can cheaply check which attempt was correct and keep it. A code
+generator whose output you compile and test is a pass@k system: five tries and
+one good answer is a good day.</p>
+<p><strong>pass^k</strong> — succeeded <em>every time</em>, k out of k. This is the right metric when
+the run is autonomous and nobody is checking, which describes every security
+harness that files tickets, gates a merge or closes an alert.</p>
+<p>A harness at 80% per-run reliability has a pass@5 of 99.97% and a pass^5 of
+33%. Both numbers are true. Quoting the first one for a system that runs
+unattended is where most harness claims quietly go wrong.</p>
+<p>The other half is <strong>run-to-run variance.</strong> If the same input produces eleven
+findings one day and four the next, the average is not a description of
+anything, and any change you make afterwards is being measured against noise.</p>
+<p>Reliability is one of three numbers that decide whether a harness is worth
+running, and most teams measure only the first:</p>
+<ul>
+<li><strong>Accuracy</strong>, usually against whatever the tool happened to find, which is
+  circular. A <strong>seeded corpus</strong> of deliberately planted defects turns recall
+  into a fraction with a real denominator.</li>
+<li><strong>Money</strong>, per unit of value. Total spend is on the invoice; <em>cost per
+  confirmed finding</em> is what changes when someone switches model tier.</li>
+<li><strong>Human time</strong>, which is almost never measured and decides whether the tool
+  survives. Four hundred findings a week at nine minutes each has not removed
+  work. It has moved the work, renamed it triage, and made it somebody else's.</li>
+</ul></div><div class="nbmd"><h2>3 · The two metrics, from the same runs</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import random
 
-def behavioural(src):
-    ns = {}
-    try:
-        exec(compile(src, &quot;&lt;p&gt;&quot;, &quot;exec&quot;), ns); fn = ns[&quot;parse_port&quot;]
-    except Exception as e:
-        return False, f&quot;compile failed: {e}&quot;
-    for bad in (&quot;0&quot;, &quot;70000&quot;, &quot;-1&quot;):
-        try:
-            fn(bad)
-            return False, f&quot;accepted out-of-range port {bad!r}&quot;
-        except ValueError:
-            pass
-    try:
-        if fn(&quot;443&quot;) != 443:
-            return False, &quot;rejected a valid port&quot;
-    except Exception as e:
-        return False, f&quot;valid port raised {e}&quot;
-    return True, &quot;rejects out-of-range, accepts valid&quot;
+def run_once(reliability, rng):
+    return rng.random() &lt; reliability
 
-def exact_match(expected):
-    return lambda src: (src.strip() == expected.strip(),
-                        &quot;exact match&quot; if src.strip() == expected.strip()
-                        else &quot;differs from the reference implementation&quot;)
+def measure(reliability, k=5, trials=2000, seed=3):
+    rng = random.Random(seed)                  # seeded: identical every run
+    at_least_one = every_time = 0
+    for _ in range(trials):
+        outcomes = [run_once(reliability, rng) for _ in range(k)]
+        at_least_one += any(outcomes)
+        every_time   += all(outcomes)
+    return at_least_one / trials, every_time / trials
 
-def shape_check(src):
-    ok = src.strip().startswith(&quot;def parse_port&quot;)
-    return ok, &quot;defines parse_port&quot; if ok else &quot;wrong shape&quot;
+print(f&quot;{&#x27;per-run&#x27;:&gt;9}{&#x27;pass@5&#x27;:&gt;10}{&#x27;pass^5&#x27;:&gt;10}  what it means unattended&quot;)
+for r in (0.95, 0.90, 0.80, 0.60, 0.50):
+    at_k, pow_k = measure(r)
+    note = (&quot;dependable&quot; if pow_k &gt; .8 else
+            &quot;coin flip&quot; if pow_k &gt; .3 else &quot;fails most nights&quot;)
+    print(f&quot;{r:&gt;8.0%}{at_k:&gt;10.1%}{pow_k:&gt;10.1%}  {note}&quot;)
+print()
+print(&quot;At 80% per-run the same harness is 99.9% reliable if a human picks the&quot;)
+print(&quot;good answer, and 33% reliable if nobody is looking.&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the demo that was a lucky run</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def one_demo(reliability, seed):
+    return run_once(reliability, random.Random(seed))
 
-def llm_judge(src):
-    ok = bool(src.strip()) and not src.lower().startswith(&quot;i cannot&quot;)
-    return ok, &quot;judge: this looks like a correct implementation&quot;
+demos = [one_demo(0.6, s) for s in range(12)]
+print(&quot;twelve single-run demos of the same 60% harness:&quot;)
+print(&quot;   &quot; + &quot; &quot;.join(&quot;PASS&quot; if d else &quot;fail&quot; for d in demos))
+print(f&quot;   -&gt; {demos.count(True)} passed&quot;)
+print()
+print(&quot;Publish any of the passes. Every one is an honest single run. None of&quot;)
+print(&quot;them is a measurement, and the reader has no way to tell which they got.&quot;)
+assert demos.count(True) and demos.count(False)</code></pre></div><div class="nbmd"><h2>5 · Variance, and why it precedes every other question</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def findings_per_run(base, noise, rng):
+    return max(0, int(rng.gauss(base, noise)))
 
-VERIFIERS = {&quot;behavioural (executes it)&quot;: behavioural,
-             &quot;exact-match oracle&quot;:        exact_match(CORRECT),
-             &quot;shape check&quot;:               shape_check,
-             &quot;llm judge&quot;:                 llm_judge}
+def variance_profile(base, noise, runs=30, seed=11):
+    rng = random.Random(seed)
+    xs = [findings_per_run(base, noise, rng) for _ in range(runs)]
+    mean = sum(xs) / len(xs)
+    sd = (sum((x - mean) ** 2 for x in xs) / len(xs)) ** 0.5
+    return xs, mean, sd
 
-print(f&quot;{&#x27;verifier&#x27;:28s}{&#x27;on BROKEN&#x27;:12s}{&#x27;on CORRECT&#x27;:12s}detail (broken)&quot;)
-print(&quot;-&quot; * 84)
-for name, v in VERIFIERS.items():
-    b_ok, b_why = v(BROKEN)
-    c_ok, _     = v(CORRECT)
-    print(f&quot;{name:28s}{str(b_ok):12s}{str(c_ok):12s}{b_why[:32]}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the exact-match oracle is also wrong</h2>
-<p>Look at the <code>on CORRECT</code> column. The behavioural verifier is the only one that gets <em>both</em> right. The exact-match oracle rejects a correct implementation that differs from its reference — which is why nobody uses it, and why teams fall back to the two weak options.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ALTERNATIVE = (&quot;def parse_port(s):\n&quot;
-               &quot;    p = int(s)\n&quot;
-               &quot;    if p &lt; 1 or p &gt; 65535:\n&quot;
-               &quot;        raise ValueError(&#x27;bad port&#x27;)\n&quot;
-               &quot;    return p&quot;)
-print(&quot;a correct implementation, written differently:&quot;)
-for name, v in VERIFIERS.items():
-    ok, why = v(ALTERNATIVE)
-    print(f&quot;   {name:28s}{str(ok):7s}{why[:44]}&quot;)
-print(&quot;\nThe oracle says no. Behavioural says yes. Only one of those is useful&quot;)
-print(&quot;on code you did not write in advance.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The subtler failure — a correct verifier reading stale state</h2>
-<p>This one is not about weak checks. The check is right; the <em>input</em> to it is stale. Python's bytecode cache reproduces it faithfully.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import os, sys, tempfile, subprocess, textwrap, shutil, pathlib
+for noise in (0.5, 3.0):
+    xs, mean, sd = variance_profile(8, noise)
+    print(f&quot;noise sd={noise}:  mean {mean:.1f}  sd {sd:.2f}  &quot;
+          f&quot;range {min(xs)}-{max(xs)}&quot;)
+    print(f&quot;   runs: {xs[:12]} ...&quot;)
 
-work = pathlib.Path(tempfile.mkdtemp())
-(work / &quot;mod.py&quot;).write_text(&quot;def check(x):\n    return True   # broken: always passes\n&quot;)
-(work / &quot;test_mod.py&quot;).write_text(textwrap.dedent(&quot;&quot;&quot;
-    from mod import check
-    def test_rejects_bad():
-        assert check(-1) is False
-&quot;&quot;&quot;))
+_, m_stable, sd_stable = variance_profile(8, 0.5)
+_, m_noisy,  sd_noisy   = variance_profile(8, 3.0)
+improvement = 1.5
+print()
+print(f&quot;suppose a change adds {improvement} findings on average.&quot;)
+print(f&quot;   against sd {sd_stable:.2f}: visible after a handful of runs&quot;)
+print(f&quot;   against sd {sd_noisy:.2f}: indistinguishable from a quiet Tuesday&quot;)
+print()
+print(&quot;Until variance is characterised, every A/B comparison you run is&quot;)
+print(&quot;measuring the dice.&quot;)
+assert sd_noisy &gt; sd_stable</code></pre></div><div class="nbmd"><h2>6 · The control — separate harness failure from model failure</h2>
+<p>Before changing either one, find out which is moving.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def attribute(runs_same_model_same_harness, runs_same_model_new_harness):
+    &quot;&quot;&quot;If output changes when only the harness changed, it was the harness.&quot;&quot;&quot;
+    a = sum(runs_same_model_same_harness) / len(runs_same_model_same_harness)
+    b = sum(runs_same_model_new_harness) / len(runs_same_model_new_harness)
+    return a, b, (&quot;harness&quot; if abs(b - a) &gt; 0.15 else &quot;not the harness&quot;)
 
-def run_check(workdir, clear_cache):
-    if clear_cache:
-        shutil.rmtree(workdir / &quot;__pycache__&quot;, ignore_errors=True)
-    env = {**os.environ, &quot;PYTHONPATH&quot;: str(workdir)}
-    if clear_cache:
-        env[&quot;PYTHONDONTWRITEBYTECODE&quot;] = &quot;1&quot;
-    r = subprocess.run([sys.executable, &quot;-c&quot;,
-                        &quot;import mod; print(&#x27;PASS&#x27; if mod.check(-1) is False else &#x27;FAIL&#x27;)&quot;],
-                       cwd=workdir, env=env, capture_output=True, text=True)
-    return r.stdout.strip()
+rng = random.Random(5)
+baseline = [run_once(0.6, rng) for _ in range(200)]
+better_harness = [run_once(0.85, rng) for _ in range(200)]   # same model, better verifier
+a, b, verdict = attribute(baseline, better_harness)
+print(f&quot;same model, original harness : {a:.0%}&quot;)
+print(f&quot;same model, better verifier  : {b:.0%}&quot;)
+print(f&quot;attribution                  : {verdict}&quot;)
+print()
+print(&quot;Twenty-five points of reliability, no model change. Teams routinely&quot;)
+print(&quot;spend that budget on a bigger backbone instead, because the harness&quot;)
+print(&quot;was never measured separately.&quot;)
+assert verdict == &quot;harness&quot;</code></pre></div><div class="nbmd"><h2>7 · Verify — the scorecard line that has to be published</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>k = 5
+rel = 0.85
+at_k, pow_k = measure(rel, k=k)
+xs, mean, sd = variance_profile(8, 0.9)
+card = {
+  &quot;per_run_reliability&quot;: rel,
+  &quot;k&quot;: k,
+  &quot;pass_at_k&quot;: round(at_k, 4),
+  &quot;pass_pow_k&quot;: round(pow_k, 4),
+  &quot;runs_measured&quot;: 2000,
+  &quot;findings_mean&quot;: round(mean, 2),
+  &quot;findings_sd&quot;: round(sd, 2),
+  &quot;seed&quot;: 3,
+  &quot;unattended&quot;: True,
+  &quot;headline_metric&quot;: &quot;pass^k&quot;,       # because unattended is True
+}
+for kk, vv in card.items():
+    print(f&quot;   {kk:22s}{vv}&quot;)
+print()
+print(&quot;The headline metric is chosen by how the harness runs, not by which&quot;)
+print(&quot;number is larger. An unattended harness that reports pass@k is&quot;)
+print(&quot;reporting the reliability of a system it is not.&quot;)
+assert card[&quot;headline_metric&quot;] == &quot;pass^k&quot; and card[&quot;pass_pow_k&quot;] &lt; card[&quot;pass_at_k&quot;]</code></pre></div><div class="nbmd"><h2>8 · The other two numbers — money, and somebody's afternoon</h2>
+<p>Reliability says whether the harness can be left alone. Cost per confirmed finding and analyst minutes per accepted finding say whether leaving it alone is worth doing. Both need a corpus whose defects you planted, so recall has a real denominator.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SEEDED_CORPUS = {
+ f&quot;unit_{i:02d}&quot;: (i % 4 == 0, [&quot;CWE-22&quot;, &quot;CWE-78&quot;, &quot;CWE-89&quot;, &quot;CWE-79&quot;][i % 4])
+ for i in range(40)
+}
+planted = sorted(u for u, (is_bug, _) in SEEDED_CORPUS.items() if is_bug)
+print(f&quot;units in corpus : {len(SEEDED_CORPUS)}&quot;)
+print(f&quot;planted defects : {len(planted)}   &lt;- the denominator is now a fact&quot;)
 
-print(&quot;1. verifier on the broken code:      &quot;, run_check(work, clear_cache=True))
-# the agent &quot;fixes&quot; it
-(work / &quot;mod.py&quot;).write_text(&quot;def check(x):\n    return x &gt;= 0\n&quot;)
-print(&quot;2. after a real fix, cache cleared:  &quot;, run_check(work, clear_cache=True))
-# now put the broken version back, but leave a stale cache in place
-import py_compile
-(work / &quot;mod.py&quot;).write_text(&quot;def check(x):\n    return True   # broken again\n&quot;)
-py_compile.compile(str(work / &quot;mod.py&quot;), doraise=True)
-(work / &quot;mod.py&quot;).write_text(&quot;def check(x):\n    return x &gt;= 0\n&quot;)
-os.utime(work / &quot;mod.py&quot;, (0, 0))          # make the source look older than the cache
-print(&quot;3. source fixed, STALE cache honoured:&quot;, run_check(work, clear_cache=False),
-      &quot; ← the verifier is reading code that is not on disk&quot;)
-shutil.rmtree(work, ignore_errors=True)</code></pre></div><div class="nbmd"><h2>6 · The control — rank verifiers and always clear derived state</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>RANKING = [
- (1, &quot;behavioural / property test&quot;, &quot;must change observable behaviour&quot;,
-     &quot;execute the artefact against facts that must hold&quot;),
- (2, &quot;differential test&quot;,           &quot;must match a trusted second implementation&quot;,
-     &quot;run old and new against the same inputs&quot;),
- (3, &quot;exact-match oracle&quot;,          &quot;nothing — but needs the answer in advance&quot;,
-     &quot;only usable on a fixed corpus&quot;),
- (4, &quot;shape / schema check&quot;,        &quot;any well-formed output&quot;,
-     &quot;use for conformance ONLY, never for quality — see B2.11&quot;),
- (5, &quot;llm judge&quot;,                   &quot;confident prose&quot;,
-     &quot;acceptable only as a filter before a real check, never as the last word&quot;),
-]
-print(f&quot;{&#x27;rank&#x27;:5s}{&#x27;verifier&#x27;:30s}{&#x27;fooled by&#x27;:44s}&quot;)
-print(&quot;-&quot; * 80)
-for r, name, fooled, use in RANKING:
-    print(f&quot;{r:&lt;5}{name:30s}{fooled:44s}&quot;)
-    print(f&quot;{&#x27;&#x27;:35s}{use}&quot;)
+def harness_run(corpus, sensitivity, seed=2):
+    &quot;&quot;&quot;Higher sensitivity finds more real defects, and more false ones.&quot;&quot;&quot;
+    rng = random.Random(seed)
+    out = []
+    for unit, (is_bug, cwe) in sorted(corpus.items()):
+        if is_bug and rng.random() &lt; sensitivity:
+            out.append((unit, cwe, True))
+        elif not is_bug and rng.random() &lt; sensitivity * 0.35:
+            out.append((unit, cwe, False))
+    return out
 
-CHECKLIST = [
- &quot;does it EXECUTE the artefact, or only inspect it?&quot;,
- &quot;would it fail if the artefact were subtly wrong?&quot;,
- &quot;does it clear caches / derived state before reading?&quot;,
- &quot;is its own correctness tested (does it fail on known-bad input)?&quot;,
-]
-print(&quot;\nverifier review checklist:&quot;)
-for c in CHECKLIST:
-    print(&quot;   ·&quot;, c)
+def scorecard(found, corpus, tokens_per_unit=1800, usd_per_1k=0.002,
+              analyst_minutes=9):
+    tp = [f for f in found if f[2]]
+    planted_n = sum(1 for _, (b, _) in corpus.items() if b)
+    spend = len(corpus) * tokens_per_unit / 1000 * usd_per_1k
+    return {&quot;recall&quot;: len(tp) / planted_n,
+            &quot;precision&quot;: len(tp) / len(found) if found else 0.0,
+            &quot;usd_per_finding&quot;: spend / len(tp) if tp else None,
+            &quot;analyst_minutes&quot;: len(found) * analyst_minutes,
+            &quot;minutes_per_accepted&quot;: len(found) * analyst_minutes / len(tp) if tp else None}
 
-# the fourth item, applied to our own verifier
-assert behavioural(BROKEN)[0] is False, &quot;verifier must fail on known-bad&quot;
-assert behavioural(CORRECT)[0] is True, &quot;verifier must pass on known-good&quot;
-assert behavioural(ALTERNATIVE)[0] is True, &quot;verifier must accept alternatives&quot;
-print(&quot;\nour behavioural verifier passes its own test: fails broken, accepts both correct forms.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Only the behavioural verifier gets both the broken and correct inputs right; the shape check and judge accept the broken port parser, and the exact-match oracle rejects a correct alternative implementation. The stale-cache demo shows the verifier reporting PASS while reading bytecode for code no longer on disk. The verifier's own test confirms it fails on known-bad and accepts both correct forms.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Find one check in your pipeline that is a shape check wearing an oracle's name — "the build passed", "the JSON validated", "no errors in the log". Then ask the fourth checklist question about it: has anyone ever confirmed it fails on known-bad input?</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">B2.3 · Tool design</a></strong></p>
+MANUAL_MINUTES = 40 * 4          # a human reading the same forty units
+print(f&quot;\n{&#x27;sens&#x27;:&gt;6}{&#x27;recall&#x27;:&gt;9}{&#x27;prec&#x27;:&gt;7}{&#x27;$/find&#x27;:&gt;9}{&#x27;min/accepted&#x27;:&gt;14}&quot;
+      f&quot;{&#x27;review load&#x27;:&gt;13}&quot;)
+for s in (0.4, 0.7, 0.95):
+    c = scorecard(harness_run(SEEDED_CORPUS, s), SEEDED_CORPUS)
+    verdict = &quot;saves time&quot; if c[&quot;analyst_minutes&quot;] &lt; MANUAL_MINUTES else &quot;COSTS MORE&quot;
+    print(f&quot;{s:&gt;6.2f}{c[&#x27;recall&#x27;]:&gt;9.0%}{c[&#x27;precision&#x27;]:&gt;7.0%}&quot;
+          f&quot;{c[&#x27;usd_per_finding&#x27;]:&gt;9.3f}{c[&#x27;minutes_per_accepted&#x27;]:&gt;14.1f}&quot;
+          f&quot;{verdict:&gt;13}&quot;)
+
+best_recall = scorecard(harness_run(SEEDED_CORPUS, 0.95), SEEDED_CORPUS)
+print()
+print(f&quot;At the highest sensitivity recall is {best_recall[&#x27;recall&#x27;]:.0%} and the review&quot;)
+print(f&quot;queue is {best_recall[&#x27;analyst_minutes&#x27;]} minutes against {MANUAL_MINUTES} for reading the code by&quot;)
+print(&quot;hand. The accuracy metric improved and the thing got worse - which stays&quot;)
+print(&quot;invisible unless review load is a first-class number beside it.&quot;)
+assert best_recall[&quot;analyst_minutes&quot;] &gt; MANUAL_MINUTES</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Run your harness on one fixed task five times and count how many times it fully succeeded. That integer, out of five, is the number to put in front of anyone deciding whether to let it run unattended. Then divide last month's spend by the findings anyone actually accepted, and compare that to an hour of the reviewer's time.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">B2.3 · Honeypots, canaries and deception in the agent's environment</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The oracle and the same-family judge disagree in a specific, reproducible direction.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>pytest</span><span>Checkov</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.2.ipynb</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · Plan–act–verify</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · Tool design</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from &#x27;saves time&#x27; to 180 analyst minutes against 160 for reading the code by hand.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Inspect</span><span>promptfoo</span><span>CyberGym</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.2.ipynb</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · Evaluating a security harness</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · Honeypots, canaries and deception in the agent&#x27;s environment</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

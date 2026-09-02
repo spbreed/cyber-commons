@@ -1,4 +1,4 @@
-# Track B2 — The Harnesses that Test CyberTravels
+# Track B2 — Trusting the Harness that Tests CyberTravels
 
 **Function B · Application Security with an AI SDLC**  
 *The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*
@@ -38,278 +38,7 @@ python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it
 
 ---
 
-### B2.1 — Plan–act–verify
-
-`AI for Security`
-
-- **Risk** — Writing the code instead of writing the loop.
-- **Control** — The minimum viable security harness: context, toolset, verifier, budget.
-- **Lab** — Build the scaffold; swap the model underneath without touching the loop.
-- **Tools** — `Python`, `LiteLLM`
-- **Open-weight models** — `GLM-4.6`, `Llama 3.3`, `Kimi K2`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — One scaffold, swappable model, unchanged loop.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop
-MODEL=llama3.3 python3 loop.py --task fix-tests
-MODEL=glm-4.6  python3 loop.py --task fix-tests
-MODEL=kimi-k2  python3 loop.py --task fix-tests
-```
-
-*Expect:* Identical loop code, three backbones, comparable traces — the prerequisite for C2.6 multi-backbone benchmarking.
-
----
-
-### B2.2 — Verify signals that don't lie
-
-`AI for Security`
-
-- **Risk** — LLM-as-judge from the same family as the generator — the loop grades its own homework.
-- **Control** — Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists.
-- **Lab** — Score the same findings with a compiler oracle and with a same-family judge; show the gap.
-- **Tools** — `pytest`, `Checkov`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Show a same-family judge grading its own homework.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b2.10-eval-harness
-./scripts/vulnbench.sh score --findings data/mantis_findings.sample.jsonl \
-  --gt-source secllmholmes-handcrafted   # deterministic oracle
-# then compare with a judge drawn from the same family as the generator
-```
-
-*Expect:* The oracle and the same-family judge disagree in a specific, reproducible direction.
-
----
-
-### B2.3 — Tool design
-
-`Security of AI`
-
-- **Risk** — The dangerous call exists and is merely blocked.
-- **Control** — Read-only defaults, structured output contracts, allowlisted actions — design it out.
-- **Lab** — Refactor a shell tool into three narrow, structured tools.
-- **Tools** — `kmcp`
-
-**Run it** — Refactor a shell tool into three narrow, structured tools.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop
-python3 loop.py --tools shell   --task fix-tests   # can do anything
-python3 loop.py --tools narrow  --task fix-tests   # read_file/list_dir/apply_patch only
-python3 tool_audit.py --compare shell narrow
-```
-
-*Expect:* Same task completed; the arbitrary-execution capability is absent rather than blocked.
-
----
-
-### B2.4 — Model tiering and routing inside the loop
-
-`AI for Security`
-
-- **Risk** — Paying frontier prices for executor-grade steps.
-- **Control** — Cheap executor, escalated reasoner, advisor at decision points.
-- **Lab** — Route Llama-executor → GLM-reasoner with LiteLLM and attribute spend per run.
-- **Tools** — `LiteLLM`, `vLLM`
-- **Open-weight models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Route cheap executor to escalated reasoner and attribute spend.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-pip install 'litellm[proxy]' && cd labs/shared
-litellm --config litellm.config.yaml &   # llama executor, glm reasoner, kimi advisor
-cd ../m0-agent-loop && MODEL=router python3 loop.py --task fix-tests --json | jq '.tokens'
-python3 ../shared/spend_report.py --by-run
-```
-
-*Expect:* Per-run, per-tier spend attribution. Escalation happens only at decision points.
-
----
-
-### B2.5 — Sub-agents and delegation depth
-
-`Security of AI`
-
-- **Risk** — Authority inherited silently from parent to child agent.
-- **Control** — Fan-out control, recursion budgets, explicit authority inheritance.
-- **Lab** — Cap delegation depth and prove a grandchild agent cannot exceed its parent.
-- **Tools** — `kagent`, `SPIRE`
-
-**Run it** — Prove a grandchild agent cannot exceed its parent.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.5   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/a2-delegation
-python3 subagent.py --depth 3 --parent-scope repo:read
-python3 subagent.py --depth 3 --parent-scope repo:read --attempt-escalate
-```
-
-*Expect:* Recursion budget caps depth; the escalation attempt is refused by the token, not by a check.
-
----
-
-### B2.6 — Failure taxonomy
-
-`AI for Security`
-
-- **Risk** — Loop divergence, objective drift, reward hacking, silent truncation, tool thrash.
-- **Control** — Recognise each from a trace.
-- **Lab** — Read five real traces and name the failure in each.
-- **Tools** — `OpenTelemetry`
-
-**Run it** — Name the failure from the trace alone.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.6   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop/traces
-python3 ../classify_failure.py --trace divergence.jsonl
-for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t --quiet; done
-```
-
-*Expect:* Loop divergence, objective drift, reward hacking, silent truncation, tool thrash — one per trace.
-
----
-
-### B2.7 — Self-improving scaffolds
-
-`Security of AI`
-
-- **Risk** — A harness that rewrites its own config makes the fitness function the security control.
-- **Control** — Sandbox the mutation, keep only measured gains, pin the fitness function.
-- **Lab** — Let a scaffold mutate itself in a sandbox and keep only what the oracle confirms.
-- **Tools** — `Python`, `Docker`
-- **Open-weight models** — `Kimi K2`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Let a scaffold mutate itself, and keep only measured gains.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.7   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop
-python3 evolve.py --generations 5 --sandbox docker --fitness pytest-pass-rate
-python3 evolve.py --show-lineage   # what changed, what was kept, what was reverted
-```
-
-*Expect:* Only mutations the deterministic oracle confirms survive. Pin the fitness function — it is now the security control.
-
----
-
-### B2.8 — Idempotency, replay and rollback
-
-`AI for Security`
-
-- **Risk** — Any agent action you cannot replay you cannot investigate.
-- **Control** — Design requirements, not afterthoughts.
-- **Lab** — Replay a full agent run from the trace and reproduce its decision.
-- **Tools** — `OpenTelemetry`
-
-**Run it** — Replay an agent run from its trace.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.8   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/m0-agent-loop
-python3 loop.py --task fix-tests --json > run.json
-python3 replay.py --trace run.json --assert-identical
-```
-
-*Expect:* Either it reproduces, or the tool names the field you failed to log. Anything you cannot replay you cannot investigate.
-
----
-
-### B2.9 — Building a domain harness: one skeleton, four oracles
-
-`AI for Security`
-
-- **Risk** — Four teams build four harnesses, each re-deciding loop control, budgets and verification — and each getting the oracle wrong in its own way.
-- **Control** — One skeleton with a pluggable oracle and a declared blast radius. The domain supplies the oracle, not a new loop.
-- **Lab** — Run one skeleton across four domains and watch the oracle, not the loop, decide what the harness is worth.
-- **Tools** — `OpenGrep`, `OWASP ZAP`, `OWASP Threat Dragon`, `CAI`
-- **Open-weight models** — `GLM-4.6`, `Kimi K2`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.9   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b2-harness
-python3 domain_harness.py --domain sast   --oracle reachability+test
-python3 domain_harness.py --domain pentest --require-signed-scope
-```
-
-*Expect:* One skeleton runs all four domains unchanged. With each domain's own oracle every confirmed finding is real — precision 1.00 across sast, threat model, dast and pentest — and the pentest run refuses outright without a signed scope, because its blast radius is live action. Swapping in the model's own confidence as the oracle confirms all 12 candidates, 8 of which are real: precision 0.67 in every domain, invisible from inside the harness.
-
----
-
-### B2.10 — Choosing the model backbone
-
-`AI for Security`
-
-- **Risk** — A backbone chosen on a vendor chart, then wired in so deeply that substituting it means rewriting the harness.
-- **Control** — Evaluate candidates on your own corpus, and above all design for backbone substitution — any list of best models is stale within a quarter.
-- **Lab** — Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.
-- **Tools** — `LiteLLM`, `vLLM`, `Ollama`
-- **Open-weight models** — `Kimi K2.7-Code`, `GLM-5.2`, `Llama 4`
-- **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.10   # run it headless and check it
-```
-
-*Expect:* Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely.
-
----
-
-### B2.11 — Evaluating a security harness
+### B2.1 — Evaluating a security harness
 
 `AI for Security`
 
@@ -324,8 +53,8 @@ python3 scripts/run_notebooks.py --session B2.10   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it
+jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b2.10-eval-harness
@@ -340,7 +69,7 @@ cd labs/b2.10-eval-harness
 
 ---
 
-### B2.12 — Reliability and cost under non-determinism
+### B2.2 — Reliability and cost under non-determinism
 
 `AI for Security`
 
@@ -355,8 +84,8 @@ cd labs/b2.10-eval-harness
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it
+jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/b2.10-eval-harness
@@ -368,7 +97,7 @@ python3 cost.py --corpus seeded --analyst-minutes 9
 
 ---
 
-### B2.13 — Honeypots, canaries and deception in the agent's environment
+### B2.3 — Honeypots, canaries and deception in the agent's environment
 
 `AI for Security`
 
@@ -383,8 +112,8 @@ python3 cost.py --corpus seeded --analyst-minutes 9
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.13   # run it headless and check it
+jupyter notebook labs/notebooks/B2.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.3   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 python3 canary.py --place worker-env,docs,artifact-metadata

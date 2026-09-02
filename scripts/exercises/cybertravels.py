@@ -410,40 +410,12 @@ GROUNDING: dict[str, str] = {
 "B2.0": "Before Alex can trust a finding about CyberTravels he has to be able to name "
         "the part of the harness that decided it was true. That part is usually "
         "the missing one.",
-"B2.1": "Plan and act are what CyberTravels' review harness obviously does. "
-        "Verify is what decides whether its output is worth an engineer's "
-        "afternoon.",
-"B2.2": "A failing test against the booking replica cannot be talked into "
-        "agreeing. The model's own assessment of its patch can, and will.",
-"B2.3": "A tool called `run(cmd)` with a friendly error message is how the "
-        "review harness ends up doing something nobody scoped. Narrow contracts "
-        "are a security control at CyberTravels, not an ergonomics one.",
-"B2.4": "Reviewing all four CyberTravels services on the strongest model is how the "
-        "pipeline becomes too expensive to run. Routing is what makes breadth "
-        "affordable without making it wrong.",
-"B2.5": "A sub-agent reviewing the payments service is a second loop holding a "
-        "share of CyberTravels' repository credentials. Sometimes that halves "
-        "the problem; sometimes it multiplies the blast radius three levels "
-        "down.",
-"B2.6": "When the review harness reports a fix that did not fix anything, the "
-        "useful question is which of six named failure modes it was — not "
-        "whether the model is any good.",
-"B2.7": "A harness that rewrites its own prompts is a change to CyberTravels' "
-        "security tooling with no pull request, no reviewer and no record.",
-"B2.8": "The review run failed after opening two of five tickets. Whether it is "
-        "safe to re-run was decided when the ticket tool was designed, not now.",
-"B2.9": "CyberTravels needs SAST, DAST, a threat model and a pentest against "
-        "CyberTravels. They are one skeleton with four different oracles, and "
-        "building four harnesses is how four teams each get the oracle wrong "
-        "differently.",
-"B2.10": "The vendor chart was not run on CyberTravels' repository, at its "
-         "context length, with its tools.",
-"B2.11": "A hallucinated finding about the booking API looks exactly like a real "
+"B2.1": "A hallucinated finding about the booking API looks exactly like a real "
          "one until something with the answers checks. This is that something.",
-"B2.12": "At 80% per-run reliability, a review harness left to run unattended "
+"B2.2": "At 80% per-run reliability, a review harness left to run unattended "
          "over CyberTravels' releases is right about a third of the time — and "
          "somebody at CyberTravels is paying per confirmed finding.",
-"B2.13": "A canary credential in CyberTravels' environment and a honeypot task in "
+"B2.3": "A canary credential in CyberTravels' environment and a honeypot task in "
          "the benchmark: two detectors with no threshold to tune, because "
          "nothing legitimate has any reason to touch either.",
 

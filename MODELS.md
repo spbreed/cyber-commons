@@ -125,8 +125,9 @@ export OPENAI_BASE_URL=http://your-host:8000/v1 OPENAI_API_KEY=commons MODEL=zai
 ```
 
 Put **[LiteLLM](https://github.com/BerriAI/litellm)** in front to give everyone
-one endpoint, per-user keys and spend attribution (used directly in labs A1.7
-and B2.5, where routing is itself the security topic):
+one endpoint, per-user keys and spend attribution. `labs/tools/litellm-gateway/`
+stands one up and tests what it does and does not enforce — the model allow-list
+holds on a config file alone; the key checks need the database:
 
 ```bash
 pip install 'litellm[proxy]'

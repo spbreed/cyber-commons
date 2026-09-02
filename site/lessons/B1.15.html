@@ -56,7 +56,7 @@ frontier account.</p>
 Phase 1, which is the property that turns a pipeline into something that
 improves.</p>
 <p>The bonus framing is deliberate: a reference implementation is a <strong>starting
-point you evaluate</strong>, not a product you trust. B2.11 and C2.6 gave you the tools;
+point you evaluate</strong>, not a product you trust. B2.1 and C2.6 gave you the tools;
 this is where you point them at someone else's pipeline.</p></div><div class="nbmd"><blockquote>
 <p><strong>Where you are in the pipeline.</strong></p>
 <p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
@@ -148,7 +148,7 @@ for raw in SAMPLE:
     if obj: conforming.append(obj)
     print(f&quot;{note:58s}{raw[:44]}…&quot;)
 print(f&quot;\nconformance: {len(conforming)}/{len(SAMPLE)} = {len(conforming)/len(SAMPLE):.2f}&quot;)</code></pre></div><div class="nbmd"><h2>5 · Score it against a held-out key</h2>
-<p>This is the whole point of the bonus. Conformance is structural — with structured output it goes to 1.00 and says nothing about quality. The number that decides adoption is expert accuracy against a key the tool never saw, matched on <strong>parent directory plus filename</strong> (B2.11).</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def path_key(p):
+<p>This is the whole point of the bonus. Conformance is structural — with structured output it goes to 1.00 and says nothing about quality. The number that decides adoption is expert accuracy against a key the tool never saw, matched on <strong>parent directory plus filename</strong> (B2.1).</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def path_key(p):
     parts = [x for x in (p or &quot;&quot;).replace(&quot;\\&quot;,&quot;/&quot;).split(&quot;/&quot;) if x not in (&quot;&quot;,&quot;.&quot;)]
     return &quot;/&quot;.join(parts[-2:]) if len(parts) &gt; 1 else (parts[-1] if parts else &quot;&quot;)
 
@@ -217,7 +217,7 @@ for item in [
 ]:
     print(f&quot;   · {item}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required <code>history</code> field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Run the real thing: clone <code>google/mantis</code>, point it at a repository you have ground truth for, and score its output with the harness from B2.11. The gap between its conformance and its expert accuracy on <em>your</em> code is the only number that should decide whether you adopt it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
+<p>Run the real thing: clone <code>google/mantis</code>, point it at a repository you have ground truth for, and score its output with the harness from B2.1. The gap between its conformance and its expert accuracy on <em>your</em> code is the only number that should decide whether you adopt it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> A five-phase pipeline that ingests a codebase, models its threats, audits it, confirms findings by exploiting them in a replica, engineers the fix and reports a severity somebody acts on — attested, and benchmarked against a real reference implementation.</p>
 <p><strong>What you still cannot do.</strong> Every stage of it was described as a stage. What actually runs each one is a loop, and this chapter never opened that loop: how it decides to stop, what happens when a tool half-succeeds, how you know the loop is reliable rather than lucky.</p>
 <p><strong>Chapter 5 opens it. Same pipeline, one level down, starting from the eight components every harness has. Next → B2.0, what an agentic harness actually is.</strong></p></div><div class="nbmd"><hr />

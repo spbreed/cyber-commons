@@ -152,20 +152,25 @@ the code nobody trusts yet. It holds a credential that can write to the default
 branch. Every risk in Function A applies to it, and being a security tool grants
 no exemption.
 
-Chapter 5 is what sits underneath: **the harness**. One loop — plan, act,
-verify, stop — and the engineering that makes it reliable enough to leave alone.
-The order it is taught in is the order you have to build it:
+Chapter 5 asks the question chapter 4 cannot ask of itself: **is any of this
+worth acting on?** The pipeline is a harness — a model with a loop, tools, a
+context, a verifier, state, budgets, an orchestrator and telemetry around it —
+and four things decide whether Alex can leave it running:
 
-1. **the loop and its verifier**, because a harness whose verifier is the model
-   agreeing with itself produces confident nonsense at scale;
-2. **tools, budgets, sub-agents and replay**, because the loop meets the real
-   world through them;
-3. **one skeleton, four oracles** — SAST, DAST, threat modelling and pentest are
-   the same loop with a different thing deciding what is true;
-4. **evaluation**, on a corpus with known answers, because a hallucinated
-   finding looks exactly like a real one until something checks;
-5. **reliability and cost**, because a harness that is right 80% of the time is
-   33% reliable across five unattended runs, and somebody is paying per finding.
+1. **what a harness actually is**, because most arguments about agent
+   reliability turn out to be arguments about which of those eight parts is
+   missing, and the missing one is almost always the verifier;
+2. **evaluation**, on a corpus whose answers you already know, because a
+   hallucinated finding looks exactly like a real one until something checks;
+3. **reliability and cost**, because a harness that is right 80% of the time is
+   33% reliable across five unattended runs, and somebody is paying per finding;
+4. **deception**, because a canary in the pipeline's own environment is the one
+   detection with no false positives — nothing legitimate ever touches it.
+
+Then the awkward part: **that pipeline is itself an agentic system with all of
+CyberTravels' risks.** It reads untrusted input by definition and holds a
+credential that can write to the default branch. Chapter 4 closes on exactly
+that (B1.12, B1.13), because being a security tool grants no exemption.
 """,
  "steps": [
   ("md", "## 2 · What Alex is actually up against"),
@@ -206,26 +211,19 @@ The order it is taught in is the order you have to build it:
          "builds it. The order is not preference — each one is unusable without "
          "the one above it."),
   ("html", D.table(
-    ["harness", "what it decides for CyberTravels", "built in"],
-    [["the loop and its verifier",
-      "whether a finding about CyberTravels is true, on evidence rather than the "
-      "model's own agreement", "B2.0 – B2.3"],
-     ["tools, budgets, sub-agents, replay",
-      "what the loop may touch, how long it may run, and whether a half-finished "
-      "run is safe to repeat", "B2.4 – B2.8"],
-     ["SAST · DAST · threat model · pentest",
-      "the same skeleton with four different oracles — reachability, an observed "
-      "response, a diff, a shell", "B2.9"],
-     ["the model backbone",
-      "which model, chosen on CyberTravels' own corpus rather than a vendor chart",
-      "B2.10"],
-     ["evaluation",
-      "recall and precision against a corpus whose answers you already know",
-      "B2.11"],
-     ["reliability and cost",
-      "pass^k unattended, and dollars per confirmed finding", "B2.12"],
-     ["deception",
-      "canaries and honeypot tasks in CyberTravels' own environment", "B2.13"]],
+    ["question", "what it decides for CyberTravels", "answered in"],
+    [["what a harness even is",
+      "which of the eight parts the pipeline actually has — and the one nobody "
+      "can name is almost always the verifier", "B2.0"],
+     ["is its output true",
+      "recall and precision against a corpus whose answers you already know, "
+      "because a hallucinated finding looks exactly like a real one", "B2.1"],
+     ["can it be left alone",
+      "pass^k across a run nobody watched, and dollars per confirmed finding",
+      "B2.2"],
+     ["would you know if it were attacked",
+      "canaries and honeypot tasks in CyberTravels' own environment — the "
+      "detection with no false positives", "B2.3"]],
     emphasise=2,
     caption="Skip to evaluation and you will measure a harness whose verifier "
             "you never built. That is the most common way this goes wrong.")),
@@ -493,7 +491,7 @@ contractors.
   ("md", "## 2 · Seven properties, and who at CyberTravels owns each"),
   ("html", D.table(
     ["trustworthy-AI property", "who owns it at CyberTravels", "security's share"],
-    [["valid and reliable", "engineering + the eval harness (B2.11)",
+    [["valid and reliable", "engineering + the eval harness (B2.1)",
       "contributes evidence"],
      ["safe", "the CyberTravels product owner + risk", "contributes evidence"],
      ["secure and resilient", "security", "<b>owns it</b>"],

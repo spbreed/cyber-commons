@@ -298,63 +298,12 @@ HOOKS: dict[str, str] = {
  "about which of the eight is missing.",
 
 "B2.1":
- "Plan and act are the parts everyone builds. Verify is the part that decides "
- "whether the output is worth anything, and it is the phase most often "
- "implemented as the model marking its own homework.",
-
-"B2.2":
- "A test that passes, an exploit that fires, a compiler that accepts — these "
- "cannot be talked into agreeing with you. Model self-assessment can, and it "
- "will, because agreeing is cheaper than being right.",
-
-"B2.3":
- "A tool with a vague contract and a friendly error message is a security "
- "defect. Agents do not read documentation; they read the signature and the last "
- "error, and they will use whatever latitude either one leaves them.",
-
-"B2.4":
- "Running every step on your best model is how a harness becomes too expensive "
- "to run and therefore not run. Routing is what makes breadth affordable — and "
- "an escalation rule is what stops it becoming cheap and wrong.",
-
-"B2.5":
- "A sub-agent is a second loop with its own context and its own share of your "
- "privileges. Sometimes that halves the problem. Sometimes it multiplies the "
- "error rate and the blast radius at the same time, three levels deep.",
-
-"B2.6":
- "Harnesses fail in a small number of recognisable ways, and every one of them "
- "has a signature you can detect. Without the catalogue, each failure looks like "
- "a new and mysterious problem with the model.",
-
-"B2.7":
- "A harness that rewrites its own prompts is a system that changes without a "
- "pull request. The improvement is real; so is the fact that nobody reviewed it, "
- "and that last week's evidence no longer describes what is running.",
-
-"B2.8":
- "The run failed halfway through. Half the actions happened. Whether that is "
- "recoverable was decided when the tools were designed, not now, and 'retry the "
- "whole thing' is only safe if somebody made it so.",
-
-"B2.9":
- "Four teams build four harnesses and each re-decides loop control, budgets and "
- "verification from scratch. The loops end up nearly identical. What actually "
- "differs is the oracle and the blast radius — which belong to the domain, not "
- "to the loop.",
-
-"B2.10":
- "The vendor chart was not run on your corpus, at your context length, with your "
- "tools. Choosing the backbone on someone else's benchmark is choosing on "
- "evidence about a different system.",
-
-"B2.11":
  "A single successful run hides how unreliable an agent is, and a hallucinated "
  "finding is indistinguishable from a real one until something checks. "
  "Evaluation is the only part of this chapter that tells you whether the rest "
  "of it worked.",
 
-"B2.12":
+"B2.2":
  "At 80% per-run reliability a harness is 99.9% reliable with a human picking "
  "the good answer, and 33% reliable unattended. Both numbers are true. Quoting "
  "the first for a system that runs unattended is where most harness claims "
@@ -704,7 +653,7 @@ HOOKS: dict[str, str] = {
  "to six of them reasoned about telling a human; none did. One wrote \"we can "
  "notify? no user\". The gap was not alignment — it was that no tool existed.",
 
-"B2.13":
+"B2.3":
  "Every detector in this chapter needs a threshold, and every threshold is a "
  "trade. A canary needs neither: nothing legitimate has any reason to touch it, "
  "so its false-positive rate is zero by construction rather than by tuning.",
@@ -1398,120 +1347,6 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 "B2.1": """
-        +--------+      +-------+      +----------+
-        |  plan  | ---> |  act  | ---> |  verify  |
-        +--------+      +-------+      +----+-----+
-             ^                              |
-             +---------- not done ----------+
-                                            |
-                                          done
-
-   plan and act are the parts everyone builds
-   verify is the part that decides whether the output is worth anything
-""",
-
-"B2.2": """
-   signals that cannot be talked into agreeing
-
-   test suite exit code      compiler output      exploit fires
-   +----------------+        +-------------+      +-----------+
-   |  0 / non-zero  |        | ok / error  |      | yes / no  |
-   +----------------+        +-------------+      +-----------+
-
-   signals that can
-   +------------------------------------------------+
-   | "I have verified the fix is correct."  (rating) |
-   +------------------------------------------------+
-""",
-
-"B2.3": """
-   bad tool                         good tool
-   run(cmd: str)                    read_file(path: str, max_bytes: int)
-   -> "something went wrong"        -> FileTooLarge(path, size, limit)
-
-   the agent reads the signature and the last error, never the docs.
-   whatever latitude either one leaves, it will use.
-""",
-
-"B2.4": """
-   breadth                                 judgement
-   +---------------+                       +----------------+
-   | cheap model   |  escalate on:         | strong model   |
-   | 3,000 files   |  - low confidence     | 40 candidates  |
-   | $0.40         |  - security-relevant  | $6.00          |
-   +---------------+  - disagreement       +----------------+
-
-   without an escalation rule, routing is just "cheap and wrong"
-""",
-
-"B2.5": """
-   depth 0   orchestrator          budget 100%   privileges P
-   depth 1     +-- sub-agent       budget  40%   privileges <= P
-   depth 2         +-- sub-agent   budget  15%   privileges <= P
-   depth 3             +-- ???     budget   ?    privileges   ?
-
-   error compounds down the tree. so does authority, unless it narrows.
-""",
-
-"B2.6": """
-   failure                signature you can detect
-   +--------------------+ +----------------------------------+
-   | loop               | | same action repeated, no progress |
-   | drift              | | later steps stop citing the goal  |
-   | hallucinated succes| | claims done, verifier never ran   |
-   | silent truncation  | | context at limit, no error raised |
-   +--------------------+ +----------------------------------+
-
-   without the catalogue, every failure looks like a new mystery
-""",
-
-"B2.7": """
-   run history --> proposed change --> prompt / tool / routing
-                          |
-                   +------v-------+
-                   |  guardrail   |  eval suite must not regress
-                   |  human diff  |  the change is a reviewable artefact
-                   +--------------+
-
-   a harness that rewrites itself is a system that changes with no pull request
-""",
-
-"B2.8": """
-   run fails at step 4 of 7
-
-   steps 1-3 already happened.  retry from the start?
-   +-------------------+   +--------------------------+
-   | idempotent tool   |   | non-idempotent tool      |
-   | safe to repeat    |   | second ticket, second PR |
-   +-------------------+   +--------------------------+
-
-   decided when the tools were designed, not during the incident
-""",
-
-"B2.9": """
-   one skeleton                       four oracles
-   +---------------------+            sast   reachable + failing test
-   | plan . act . verify |  <-------  tmodel present in new, absent in old
-   | budget . stop       |            dast   response differs from control
-   +---------------------+            ptest  a shell, a row, a file
-             |
-      blast radius, per domain
-      read-only -> replica-write -> live action (needs a signed scope)
-""",
-
-"B2.10": """
-   the vendor chart                  your decision
-   +--------------------+            +---------------------------+
-   | someone's corpus   |            | your corpus               |
-   | their context len  |    vs      | your context length       |
-   | their tools        |            | your tools, your budget   |
-   +--------------------+            +---------------------------+
-
-   frontier | open-weight hosted | self-hosted open-weight
-   the axis that usually decides is not capability, it is where data may go
-""",
-
-"B2.11": """
    corpus with known answers
         |
         v
@@ -1525,7 +1360,7 @@ DIAGRAMS: dict[str, str] = {
    until something with the answers checks
 """,
 
-"B2.12": """
+"B2.2": """
    per-run reliability 80%
 
    pass@5  = at least one of five worked   -> 99.97%   (a human picks)
@@ -2297,7 +2132,7 @@ DIAGRAMS: dict[str, str] = {
    without it:     notice -> post to the peer channel -> nobody reads it
 """,
 
-"B2.13": """
+"B2.3": """
    tuned detector                     deception
 
    threshold ---> TP and FP           canary ---> any touch is a hit
@@ -2496,10 +2331,10 @@ BRIDGES: dict[str, dict[str, str]] = {
 },
 
 "B2": {
- "gained": "A harness you can name the parts of, verify with signals that cannot "
-           "be talked into agreeing, bound with a budget, replay after a failure, "
-           "point at four different domains by swapping the oracle, price per "
-           "confirmed finding, and salt with bait that has no false positives.",
+ "gained": "A harness you can name the eight parts of, evaluate on a corpus "
+           "with known answers rather than on how confident it sounds, price per "
+           "confirmed finding across a run nobody watched, and salt with bait "
+           "that has no false positives.",
  "gap": "Everything you have built so far is defensive and cooperative: it runs "
         "against systems that are not trying to defeat it. You have no evidence "
         "about how any of it behaves against someone who is — including the "

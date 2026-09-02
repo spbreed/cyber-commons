@@ -980,7 +980,7 @@
     {
      "id": "B2",
      "chapter": 5,
-     "title": "The Harnesses that Test CyberTravels",
+     "title": "Trusting the Harness that Tests CyberTravels",
      "titles": "Security Automation Engineer, Detection & Response Engineer (platform side), Security Tooling Lead — and the role most orgs haven't created yet",
      "changes": "Build the loop once, then the SAST, DAST, triage, code-fix, skills and harness evaluations CyberTravels needs — in the order each one becomes possible. 14 lessons.",
      "autonomy": "You are the person who builds the L2.5 boundary everyone else operates inside.",
@@ -1008,183 +1008,6 @@
       },
       {
        "id": "B2.1",
-       "title": "Plan–act–verify",
-       "track": "defend",
-       "summary": "The core agentic loop, and why verification is the phase that determines output quality. Designing each phase to be inspectable rather than magical.",
-       "risk": "Writing the code instead of writing the loop.",
-       "control": "The minimum viable security harness: context, toolset, verifier, budget.",
-       "lab": "Build the scaffold; swap the model underneath without touching the loop.",
-       "tools": [
-        "Python",
-        "LiteLLM"
-       ],
-       "open_weight": [
-        "GLM-4.6",
-        "Llama 3.3",
-        "Kimi K2"
-       ],
-       "frontier": [
-        "Claude Sonnet 5"
-       ]
-      },
-      {
-       "id": "B2.2",
-       "title": "Verify signals that don't lie",
-       "track": "defend",
-       "summary": "Choose ground-truth signals — tests, working exploits, compiler output — over model self-assessment. Building oracles that resist being gamed.",
-       "risk": "LLM-as-judge from the same family as the generator — the loop grades its own homework.",
-       "control": "Deterministic oracles: compilers, tests, scanners. Judges only where no oracle exists.",
-       "lab": "Score the same findings with a compiler oracle and with a same-family judge; show the gap.",
-       "tools": [
-        "pytest",
-        "Checkov"
-       ],
-       "open_weight": [
-        "GLM-4.6"
-       ],
-       "frontier": [
-        "Claude Sonnet 5"
-       ]
-      },
-      {
-       "id": "B2.3",
-       "title": "Tool design",
-       "track": "secure",
-       "summary": "Write tools agents use correctly: narrow contracts, clear errors, safe defaults. Poor tool ergonomics is a security defect, not a usability one.",
-       "risk": "The dangerous call exists and is merely blocked.",
-       "control": "Read-only defaults, structured output contracts, allowlisted actions — design it out.",
-       "lab": "Refactor a shell tool into three narrow, structured tools.",
-       "tools": [
-        "kmcp"
-       ],
-       "models": []
-      },
-      {
-       "id": "B2.4",
-       "title": "Model tiering and routing inside the loop",
-       "track": "defend",
-       "summary": "Cheap models for breadth, strong models for judgement. Routing rules, escalation triggers and enforceable quality floors.",
-       "risk": "Paying frontier prices for executor-grade steps.",
-       "control": "Cheap executor, escalated reasoner, advisor at decision points.",
-       "lab": "Route Llama-executor → GLM-reasoner with LiteLLM and attribute spend per run.",
-       "tools": [
-        "LiteLLM",
-        "vLLM"
-       ],
-       "open_weight": [
-        "Llama 3.3",
-        "GLM-4.6",
-        "Kimi K2"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      },
-      {
-       "id": "B2.5",
-       "title": "Sub-agents and delegation depth",
-       "track": "secure",
-       "summary": "When spawning sub-agents helps, and when it multiplies both error and privilege. Depth limits and disciplined context handoff.",
-       "risk": "Authority inherited silently from parent to child agent.",
-       "control": "Fan-out control, recursion budgets, explicit authority inheritance.",
-       "lab": "Cap delegation depth and prove a grandchild agent cannot exceed its parent.",
-       "tools": [
-        "kagent",
-        "SPIRE"
-       ],
-       "models": []
-      },
-      {
-       "id": "B2.6",
-       "title": "Failure taxonomy",
-       "track": "defend",
-       "summary": "A named catalogue of how harnesses fail: loops, drift, hallucinated success, silent truncation. Detection signature for each failure mode.",
-       "risk": "Loop divergence, objective drift, reward hacking, silent truncation, tool thrash.",
-       "control": "Recognise each from a trace.",
-       "lab": "Read five real traces and name the failure in each.",
-       "tools": [
-        "OpenTelemetry"
-       ],
-       "models": []
-      },
-      {
-       "id": "B2.7",
-       "title": "Self-improving scaffolds",
-       "track": "secure",
-       "summary": "Harnesses that learn from run history and adjust prompts, tools or routing. Guardrails so improvement never becomes uncontrolled change.",
-       "risk": "A harness that rewrites its own config makes the fitness function the security control.",
-       "control": "Sandbox the mutation, keep only measured gains, pin the fitness function.",
-       "lab": "Let a scaffold mutate itself in a sandbox and keep only what the oracle confirms.",
-       "tools": [
-        "Python",
-        "Docker"
-       ],
-       "open_weight": [
-        "Kimi K2"
-       ],
-       "frontier": [
-        "Claude Sonnet 5"
-       ]
-      },
-      {
-       "id": "B2.8",
-       "title": "Idempotency, replay and rollback",
-       "track": "defend",
-       "summary": "Make agent actions safe to repeat, replay and undo. Transaction design for systems that act on the real world.",
-       "risk": "Any agent action you cannot replay you cannot investigate.",
-       "control": "Design requirements, not afterthoughts.",
-       "lab": "Replay a full agent run from the trace and reproduce its decision.",
-       "tools": [
-        "OpenTelemetry"
-       ],
-       "models": []
-      },
-      {
-       "id": "B2.9",
-       "title": "Building a domain harness: one skeleton, four oracles",
-       "track": "defend",
-       "summary": "The SAST, DAST, threat-modelling and pentest harnesses are the same plan-act-verify skeleton. What differs is the oracle that decides a finding is real, and the blast radius of acting on it. Build the skeleton once; the domain supplies the oracle.",
-       "risk": "Four teams build four harnesses, each re-deciding loop control, budgets and verification — and each getting the oracle wrong in its own way.",
-       "control": "One skeleton with a pluggable oracle and a declared blast radius. The domain supplies the oracle, not a new loop.",
-       "lab": "Run one skeleton across four domains and watch the oracle, not the loop, decide what the harness is worth.",
-       "tools": [
-        "OpenGrep",
-        "OWASP ZAP",
-        "OWASP Threat Dragon",
-        "CAI"
-       ],
-       "open_weight": [
-        "GLM-4.6",
-        "Kimi K2"
-       ],
-       "frontier": [
-        "Claude Sonnet 5"
-       ]
-      },
-      {
-       "id": "B2.10",
-       "title": "Choosing the model backbone",
-       "track": "defend",
-       "summary": "Frontier vs open-weight vs self-hosted for security work, evaluated on your corpus rather than on a vendor chart. The current field: Kimi K2.6 / K2.7-Code for long-horizon repository work, the GLM-5.x line for vulnerability discovery, frontier models for deep exploitation chains — with data sovereignty, cost-per-finding and, above all, designing for backbone substitution, since this list will be stale within a quarter.",
-       "risk": "A backbone chosen on a vendor chart, then wired in so deeply that substituting it means rewriting the harness.",
-       "control": "Evaluate candidates on your own corpus, and above all design for backbone substitution — any list of best models is stale within a quarter.",
-       "lab": "Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.",
-       "tools": [
-        "LiteLLM",
-        "vLLM",
-        "Ollama"
-       ],
-       "open_weight": [
-        "Kimi K2.7-Code",
-        "GLM-5.2",
-        "Llama 4"
-       ],
-       "frontier": [
-        "Claude Opus 5"
-       ]
-      },
-      {
-       "id": "B2.11",
        "title": "Evaluating a security harness",
        "track": "defend",
        "summary": "Measure recall, precision, cost and time-to-finding on a corpus with known answers. Benchmarks, regression suites and reporting that does not flatter the person who built it.",
@@ -1207,7 +1030,7 @@
        ]
       },
       {
-       "id": "B2.12",
+       "id": "B2.2",
        "title": "Reliability and cost under non-determinism",
        "track": "defend",
        "summary": "One run tells you almost nothing about a stochastic system. Measure pass^k beside pass@k, run-to-run variance on a fixed corpus, and cost per confirmed finding — the three numbers that decide whether autonomy is worth running.",
@@ -1227,7 +1050,7 @@
        ]
       },
       {
-       "id": "B2.13",
+       "id": "B2.3",
        "title": "Honeypots, canaries and deception in the agent's environment",
        "track": "defend",
        "kind": "control",
@@ -1326,7 +1149,7 @@
        "summary": "Gaming benchmarks, poisoning eval data and exploiting scoring oracles. An unattacked evaluation is an unreliable control.",
        "risk": "If the eval can be fooled, the assurance is theatre.",
        "control": "Eval gaming, sandbagging, contamination and judge manipulation as test cases.",
-       "lab": "Game the B2.11 harness deliberately, then close the hole you used.",
+       "lab": "Game the B2.1 harness deliberately, then close the hole you used.",
        "tools": [
         "Cyber Commons eval harness"
        ],
@@ -1953,7 +1776,7 @@
        "summary": "Turn eval and red-team results into evidence auditors will accept. Provenance, retention and reproducibility requirements.",
        "risk": "Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy.",
        "control": "Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.",
-       "lab": "Take the B2.11 harness output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.",
+       "lab": "Take the B2.1 harness output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.",
        "tools": [
         "Cyber Commons eval harness",
         "OSCAL"

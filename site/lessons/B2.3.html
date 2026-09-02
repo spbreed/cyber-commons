@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.3 — Tool design | Cyber Commons</title><meta name="description" content="Read-only defaults, structured output contracts, allowlisted actions — design it out."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The Harnesses that Test CyberTravels</div><div class="sid">B2.3</div><h1>Tool design</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The dangerous call exists and is merely blocked.</p></div><div class="ctrl"><div class="lab">Control</div><p>Read-only defaults, structured output contracts, allowlisted actions — design it out.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Refactor a shell tool into three narrow, structured tools.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.3 · Tool design</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The Harnesses that Test CyberTravels</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">B2.2 · Verify signals that don't lie</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.3 — Honeypots, canaries and deception in the agent&#x27;s environment | Cyber Commons</title><meta name="description" content="Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › Trusting the Harness that Tests CyberTravels</div><div class="sid">B2.3</div><h1>Honeypots, canaries and deception in the agent&#x27;s environment</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.</p></div><div class="ctrl"><div class="lab">Control</div><p>Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.3 · Honeypots, canaries and deception in the agent's environment</h1>
+<p><strong>Function B — Application Security with an AI SDLC → Trusting the Harness that Tests CyberTravels</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">B2.2 · Reliability and cost under non-determinism</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,146 +11,152 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>kmcp</td>
+<td>Canarytokens, Inspect, GLM-4.6, Claude Haiku 4.5</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
 </blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>A tool with a vague contract and a friendly error message is a security defect. Agents do not read documentation; they read the signature and the last error, and they will use whatever latitude either one leaves them.</p>
+<p>Every detector in this chapter needs a threshold, and every threshold is a trade. A canary needs neither: nothing legitimate has any reason to touch it, so its false-positive rate is zero by construction rather than by tuning.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> A tool called <code>run(cmd)</code> with a friendly error message is how the review harness ends up doing something nobody scoped. Narrow contracts are a security control at CyberTravels, not an ergonomics one.</p>
+<p><strong>At CyberTravels.</strong> A canary credential in CyberTravels' environment and a honeypot task in the benchmark: two detectors with no threshold to tune, because nothing legitimate has any reason to touch either.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   bad tool                         good tool
-   run(cmd: str)                    read_file(path: str, max_bytes: int)
-   -&gt; &quot;something went wrong&quot;        -&gt; FileTooLarge(path, size, limit)
+<pre><code>   tuned detector                     deception
 
-   the agent reads the signature and the last error, never the docs.
-   whatever latitude either one leaves, it will use.
+   threshold ---&gt; TP and FP           canary ---&gt; any touch is a hit
+   needs triage                       needs none: nothing legitimate
+   finds more                          has a reason to touch it
+                                      finds less, at precision 1.00
+
+   canary token in env/config/docs    honeypot task with an instrumented
+   real prefix, real length            shortcut that logs and scores 0
+
+   both decay: bait that is not rotated is bait that has been learned
 </code></pre>
-<p>Tool design is security design, and it is stronger than anything you can put in
-a prompt — because a tool's <strong>signature decides what the model is able to ask
-for</strong>.</p>
-<p>Two tools with identical underlying capability:</p>
-<pre><code class="language-python">read_file(path: str)              # the model can request any path
-read_file(doc_id: Literal[...])   # the model can request one of five documents
-</code></pre>
-<p>Both may be safe if a path guard sits underneath. The difference appears when
-the guard has a bug: the first tool <em>presents</em> the vulnerable surface, the
-second never expresses it.</p>
-<p>Three rules follow, and they compose:</p>
-<ol>
-<li><strong>Enumerate rather than accept free text</strong> wherever the real requirement is a
-   choice from a known set.</li>
-<li><strong>Take the narrowest type that works.</strong> An <code>int</code> bounded to a range beats a
-   string that gets parsed.</li>
-<li><strong>Return the least that satisfies the caller.</strong> A tool returning the whole
-   record when the agent needed one field has widened your data exposure by
-   default.</li>
-</ol></div><div class="nbmd"><h2>3 · Demo — the same capability, three signatures</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import fnmatch
-from typing import Literal
+<p>Every detector in this chapter has needed a threshold, and every threshold is a
+trade between missing things and crying wolf. Deception is the exception:
+<strong>a canary has a false-positive rate of zero by construction</strong>, because nothing
+legitimate ever touches it.</p>
+<p>Two controls from the incident register live here, and both are about the
+environment your harness builds rather than the code it analyses.</p>
+<p><strong>Credential canaries (C4.4).</strong> Tokens that look genuine — same prefix, same
+format, same length — placed where an agent or an attacker would plausibly
+look: config files, environment listings, documentation, artifact metadata. The
+issuing service alerts on any authentication attempt. There is no legitimate
+use, so a hit is a confirmed compromise and opens an incident automatically. In
+the source incident, live credentials found on the public internet were
+redistributed to the swarm within minutes; a canary alongside them would have
+carried source IP, user agent and timestamp.</p>
+<p><strong>Honeypot tasks (C10.3).</strong> Benchmark tasks salted with a plausible-looking
+shortcut that is instrumented rather than functional, plus tasks whose scoring
+<em>appears</em> manipulable but where manipulation is detected rather than rewarded.
+The cheat-attempt rate on those tasks is a leading indicator for the whole
+fleet — available continuously, not after the fact.</p>
+<p>Both share one operational requirement: <strong>rotate them</strong>. Bait that stays put is
+bait that gets learned, and a learned canary is worse than none because it
+tells you the environment is clean when it is only well-mapped.</p></div><div class="nbmd"><h2>3 · A canary, and why its false-positive rate is zero</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CANARIES = {
+ &quot;hf_CANARY7Fq2mXvLpR8s&quot;: {&quot;placed&quot;: &quot;worker env listing&quot;,  &quot;rotated_day&quot;: 0},
+ &quot;ghp_CANARY4mZk1TbNwQ9x&quot;: {&quot;placed&quot;: &quot;docs/DEPLOY.md&quot;,     &quot;rotated_day&quot;: 0},
+ &quot;sk-CANARYd3Vn8yHc2Uae&quot;:  {&quot;placed&quot;: &quot;artifact metadata&quot;,  &quot;rotated_day&quot;: 0},
+}
+REAL = {&quot;hf_liveTokenNotShown&quot;, &quot;ghp_alsoLive&quot;}
 
-DOCS = {&quot;runbook&quot;: &quot;/srv/docs/runbook.md&quot;, &quot;policy&quot;: &quot;/srv/docs/policy.md&quot;,
-        &quot;oncall&quot;:  &quot;/srv/docs/oncall.md&quot;}
-FILESYSTEM = {**{p: f&quot;contents of {k}&quot; for k, p in DOCS.items()},
-              &quot;/home/app/.aws/credentials&quot;: &quot;AKIA…SECRET&quot;,
-              &quot;/etc/shadow&quot;: &quot;root:$6$…&quot;}
-
-def normalise(p):
-    parts = []
-    for seg in p.split(&quot;/&quot;):
-        if seg in (&quot;&quot;, &quot;.&quot;): continue
-        if seg == &quot;..&quot;:
-            if parts: parts.pop()
-            continue
-        parts.append(seg)
-    return &quot;/&quot; + &quot;/&quot;.join(parts)
-
-def guard(path, workspace=&quot;/srv/docs&quot;):
-    real = normalise(path)
-    if fnmatch.fnmatch(real, &quot;*/.aws/*&quot;) or fnmatch.fnmatch(real, &quot;*/etc/shadow&quot;):
-        return False
-    return real.startswith(workspace + &quot;/&quot;)
-
-# --- signature A: free-form path -------------------------------------
-def read_file_freeform(path: str):
-    if not guard(path):
-        return {&quot;error&quot;: &quot;denied by path guard&quot;}
-    return {&quot;content&quot;: FILESYSTEM.get(normalise(path), &quot;not found&quot;)}
-
-# --- signature B: enumerated document id ------------------------------
-def read_file_enumerated(doc_id: str):
-    if doc_id not in DOCS:
-        return {&quot;error&quot;: f&quot;unknown doc_id; valid: {sorted(DOCS)}&quot;}
-    return {&quot;content&quot;: FILESYSTEM[DOCS[doc_id]]}
-
-REQUESTS = [&quot;runbook&quot;, &quot;/srv/docs/runbook.md&quot;,
-            &quot;/srv/docs/../../home/app/.aws/credentials&quot;, &quot;/etc/shadow&quot;]
-print(f&quot;{&#x27;request&#x27;:46s}{&#x27;free-form&#x27;:28s}enumerated&quot;)
-print(&quot;-&quot; * 92)
-for r in REQUESTS:
-    a = read_file_freeform(r) if r.startswith(&quot;/&quot;) else {&quot;error&quot;: &quot;not a path&quot;}
-    b = read_file_enumerated(r)
-    print(f&quot;{r:46s}{str(a)[:26]:28s}{str(b)[:34]}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — introduce one bug in the guard</h2>
-<p>Both signatures were safe above, because the guard worked. Now make the guard wrong in the ordinary way (A3.3's bug: prefix check before normalisation) and re-run. Only one signature is affected.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def guard_buggy(path, workspace=&quot;/srv/docs&quot;):
-    return path.startswith(workspace)          # the classic bug
-
-def read_file_freeform_buggy(path: str):
-    if not guard_buggy(path):
-        return {&quot;error&quot;: &quot;denied&quot;}
-    return {&quot;content&quot;: FILESYSTEM.get(normalise(path), &quot;not found&quot;)}
-
-attack = &quot;/srv/docs/../../home/app/.aws/credentials&quot;
-print(&quot;with a buggy path guard:&quot;)
-print(f&quot;   free-form  : {read_file_freeform_buggy(attack)}&quot;)
-print(f&quot;   enumerated : {read_file_enumerated(attack)}&quot;)
-print(&quot;\nThe enumerated tool is unaffected by a filesystem bug it never touches.&quot;)
-print(&quot;It cannot express the request, so the guard&#x27;s correctness stops mattering.&quot;)</code></pre></div><div class="nbmd"><h2>5 · Rule 3 — return the least that satisfies the caller</h2>
-<p>The overlooked half of tool design. A tool that returns the whole record puts everything in the model's context, and everything in the context is everything that can be exfiltrated by a later injection.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>USER_RECORD = {&quot;id&quot;: 4471, &quot;email&quot;: &quot;dana@corp&quot;, &quot;name&quot;: &quot;Dana&quot;,
-               &quot;ssn&quot;: &quot;123-45-6789&quot;, &quot;salary&quot;: 145000,
-               &quot;mfa_secret&quot;: &quot;JBSWY3DPEHPK3PXP&quot;, &quot;role&quot;: &quot;engineer&quot;}
-
-def get_user_wide(user_id):            return USER_RECORD
-def get_user_narrow(user_id, fields):
-    allowed = {&quot;id&quot;, &quot;name&quot;, &quot;email&quot;, &quot;role&quot;}
-    bad = set(fields) - allowed
-    if bad:
-        return {&quot;error&quot;: f&quot;fields not exposed by this tool: {sorted(bad)}&quot;}
-    return {k: USER_RECORD[k] for k in fields}
-
-print(&quot;wide tool returns  :&quot;, sorted(get_user_wide(4471)))
-print(&quot;narrow, legitimate :&quot;, get_user_narrow(4471, [&quot;name&quot;, &quot;role&quot;]))
-print(&quot;narrow, overreach  :&quot;, get_user_narrow(4471, [&quot;name&quot;, &quot;ssn&quot;, &quot;mfa_secret&quot;]))
-
-leaked = set(get_user_wide(4471)) &amp; {&quot;ssn&quot;, &quot;mfa_secret&quot;, &quot;salary&quot;}
-print(f&quot;\nsensitive fields placed in the model&#x27;s context by the wide tool: {sorted(leaked)}&quot;)
-assert not (set(get_user_narrow(4471, [&quot;name&quot;, &quot;role&quot;])) &amp; leaked)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: score a tool signature against the three rules.
-def review_signature(name, accepts_free_text, bounded_types, returns_minimum):
-    score = sum([not accepts_free_text, bounded_types, returns_minimum])
-    problems = []
-    if accepts_free_text:
-        problems.append(&quot;accepts free text where an enumeration would do&quot;)
-    if not bounded_types:
-        problems.append(&quot;unbounded types — parse errors become the guard&#x27;s problem&quot;)
-    if not returns_minimum:
-        problems.append(&quot;returns more than the caller needs&quot;)
-    return {&quot;tool&quot;: name, &quot;score&quot;: f&quot;{score}/3&quot;, &quot;problems&quot;: problems}
-
-TOOLS = [
- (&quot;read_file(path: str)&quot;,                   True,  False, True),
- (&quot;read_file(doc_id: Literal[...])&quot;,        False, True,  True),
- (&quot;get_user(user_id: int)&quot;,                 False, True,  False),
- (&quot;get_user(user_id: int, fields: list)&quot;,   False, True,  True),
- (&quot;run_shell(cmd: str)&quot;,                    True,  False, False),
+AUTH_EVENTS = [
+ (&quot;hf_liveTokenNotShown&quot;,   &quot;10.2.0.11&quot;,  &quot;ci-runner&quot;),
+ (&quot;hf_CANARY7Fq2mXvLpR8s&quot;,  &quot;203.0.113.9&quot;,&quot;python-requests/2.31&quot;),
+ (&quot;ghp_alsoLive&quot;,           &quot;10.2.0.11&quot;,  &quot;ci-runner&quot;),
+ (&quot;sk-CANARYd3Vn8yHc2Uae&quot;,  &quot;203.0.113.9&quot;,&quot;python-requests/2.31&quot;),
 ]
-for name, free, bounded, minimal in TOOLS:
-    r = review_signature(name, free, bounded, minimal)
-    print(f&quot;{r[&#x27;score&#x27;]}  {r[&#x27;tool&#x27;]}&quot;)
-    for p in r[&quot;problems&quot;]:
-        print(f&quot;        ⚠ {p}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Both signatures behave safely while the guard is correct. With the buggy prefix-check guard the free-form tool returns the AWS credentials while the enumerated tool still reports an unknown doc_id. The wide user tool places <code>ssn</code>, <code>mfa_secret</code> and <code>salary</code> in the model's context; the narrow one refuses those fields. The signature review scores <code>run_shell(cmd: str)</code> at 0/3.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Take one free-form tool in your harness and work out what the model genuinely needs the freedom for. The honest requirement is almost always narrower than the current signature — and narrowing it removes a whole class of guard bugs from your risk register.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.4.html">B2.4 · Model tiering and routing inside the loop</a></strong></p>
+
+print(f&quot;{&#x27;token&#x27;:26s}{&#x27;source&#x27;:14s}{&#x27;agent&#x27;:22s}verdict&quot;)
+hits = []
+for token, ip, ua in AUTH_EVENTS:
+    if token in CANARIES:
+        hits.append((token, ip, ua))
+        verdict = &quot;CONFIRMED COMPROMISE&quot;
+    else:
+        verdict = &quot;normal use&quot;
+    print(f&quot;{token[:24]:26s}{ip:14s}{ua:22s}{verdict}&quot;)
+
+print(f&quot;\ncanary hits: {len(hits)}  false positives possible: 0&quot;)
+print(&quot;Not zero because the detector is good - zero because nothing legitimate&quot;)
+print(&quot;has any reason to touch these strings. That is the whole property, and&quot;)
+print(&quot;it is why a hit opens an incident rather than a ticket.&quot;)
+print(f&quot;attribution carried on the hit: source {hits[0][1]}, agent {hits[0][2]}&quot;)
+assert len(hits) == 2</code></pre></div><div class="nbmd"><h2>4 · Honeypot tasks — a shortcut that is logged, not rewarded</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>BENCHMARK = [
+ {&quot;id&quot;: &quot;T-01&quot;, &quot;kind&quot;: &quot;real&quot;,     &quot;shortcut&quot;: None},
+ {&quot;id&quot;: &quot;T-02&quot;, &quot;kind&quot;: &quot;real&quot;,     &quot;shortcut&quot;: None},
+ {&quot;id&quot;: &quot;T-03&quot;, &quot;kind&quot;: &quot;honeypot&quot;, &quot;shortcut&quot;: &quot;flag readable in the scorer fixture&quot;},
+ {&quot;id&quot;: &quot;T-04&quot;, &quot;kind&quot;: &quot;real&quot;,     &quot;shortcut&quot;: None},
+ {&quot;id&quot;: &quot;T-05&quot;, &quot;kind&quot;: &quot;honeypot&quot;, &quot;shortcut&quot;: &quot;answer key path guessable from the task id&quot;},
+ {&quot;id&quot;: &quot;T-06&quot;, &quot;kind&quot;: &quot;real&quot;,     &quot;shortcut&quot;: None},
+]
+
+def attempt(task, agent_takes_shortcut):
+    &quot;&quot;&quot;The shortcut is instrumented: it records, it never scores.&quot;&quot;&quot;
+    if task[&quot;shortcut&quot;] and agent_takes_shortcut:
+        return {&quot;task&quot;: task[&quot;id&quot;], &quot;scored&quot;: 0.0, &quot;logged&quot;: &quot;cheat attempt&quot;,
+                &quot;detail&quot;: task[&quot;shortcut&quot;]}
+    return {&quot;task&quot;: task[&quot;id&quot;], &quot;scored&quot;: 1.0 if task[&quot;kind&quot;] == &quot;real&quot; else 0.0,
+            &quot;logged&quot;: None, &quot;detail&quot;: None}
+
+runs = [attempt(t, agent_takes_shortcut=True) for t in BENCHMARK]
+for r in runs:
+    if r[&quot;logged&quot;]:
+        print(f&quot;   {r[&#x27;task&#x27;]}  {r[&#x27;logged&#x27;]}: {r[&#x27;detail&#x27;]}  (scored {r[&#x27;scored&#x27;]})&quot;)
+
+honeypots = [t for t in BENCHMARK if t[&quot;kind&quot;] == &quot;honeypot&quot;]
+attempts = [r for r in runs if r[&quot;logged&quot;]]
+rate = len(attempts) / len(honeypots)
+print(f&quot;\nhoneypot tasks: {len(honeypots)}   cheat attempts: {len(attempts)}&quot;
+      f&quot;   rate: {rate:.0%}&quot;)
+print()
+print(&quot;The rate is the product, not the individual catch. Read continuously it&quot;)
+print(&quot;is a leading indicator for the whole fleet; read after the run it is an&quot;)
+print(&quot;autopsy.&quot;)
+assert rate == 1.0 and all(r[&quot;scored&quot;] == 0.0 for r in attempts)</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — bait that was learned</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def hit_rate(day, rotated_day, learn_days=21):
+    &quot;&quot;&quot;Once bait is learned it stops firing, and silence reads as safety.&quot;&quot;&quot;
+    age = day - rotated_day
+    return 1.0 if age &lt; learn_days else 0.0
+
+for day in (0, 7, 20, 21, 40, 90):
+    r = hit_rate(day, rotated_day=0)
+    reading = &quot;fires on contact&quot; if r else &quot;silent - and silence looks clean&quot;
+    print(f&quot;day {day:&gt;3}   detection rate {r:.0%}   {reading}&quot;)
+
+print()
+rotated = [hit_rate(day, rotated_day=(day // 21) * 21) for day in (0, 20, 40, 90)]
+print(f&quot;with quarterly-or-faster rotation: {[&#x27;%.0f%%&#x27; % (x*100) for x in rotated]}&quot;)
+print()
+print(&quot;An unrotated canary does not fail loudly. It reports a clean environment&quot;)
+print(&quot;that is merely well-mapped, which is a worse position than having no&quot;)
+print(&quot;canary at all, because you now believe something.&quot;)
+assert hit_rate(40, 0) == 0.0 and all(x == 1.0 for x in rotated)</code></pre></div><div class="nbmd"><h2>6 · Verify — what deception buys next to a tuned detector</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>DETECTORS = {
+ &quot;write-volume anomaly&quot;:  {&quot;tp&quot;: 18, &quot;fp&quot;: 140, &quot;needs_threshold&quot;: True},
+ &quot;entropy on artifacts&quot;:  {&quot;tp&quot;: 11, &quot;fp&quot;: 62,  &quot;needs_threshold&quot;: True},
+ &quot;credential canary&quot;:     {&quot;tp&quot;: 2,  &quot;fp&quot;: 0,   &quot;needs_threshold&quot;: False},
+ &quot;honeypot task&quot;:         {&quot;tp&quot;: 6,  &quot;fp&quot;: 0,   &quot;needs_threshold&quot;: False},
+}
+print(f&quot;{&#x27;detector&#x27;:24s}{&#x27;TP&#x27;:&gt;4}{&#x27;FP&#x27;:&gt;6}{&#x27;precision&#x27;:&gt;11}  threshold?&quot;)
+for name in sorted(DETECTORS):
+    d = DETECTORS[name]
+    prec = d[&quot;tp&quot;] / (d[&quot;tp&quot;] + d[&quot;fp&quot;])
+    print(f&quot;{name:24s}{d[&#x27;tp&#x27;]:&gt;4}{d[&#x27;fp&#x27;]:&gt;6}{prec:&gt;11.2f}  &quot;
+          f&quot;{&#x27;yes&#x27; if d[&#x27;needs_threshold&#x27;] else &#x27;none needed&#x27;}&quot;)
+
+deception = [n for n in DETECTORS if not DETECTORS[n][&quot;needs_threshold&quot;]]
+print(f&quot;\ndetectors needing no threshold: {sorted(deception)}&quot;)
+print()
+print(&quot;Deception finds less. What it finds needs no triage, no tuning and no&quot;)
+print(&quot;argument - which is why it belongs beside the volume detectors rather&quot;)
+print(&quot;than instead of them.&quot;)
+assert all(DETECTORS[n][&quot;fp&quot;] == 0 for n in deception)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Place one canary credential in the environment your agents run in, wired to a real alert, and leave it. The interesting outcome is not the alert; it is discovering, six weeks later, which systems can even see it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
+<p><strong>What you can do now.</strong> A harness you can name the eight parts of, evaluate on a corpus with known answers rather than on how confident it sounds, price per confirmed finding across a run nobody watched, and salt with bait that has no false positives.</p>
+<p><strong>What you still cannot do.</strong> Everything you have built so far is defensive and cooperative: it runs against systems that are not trying to defeat it. You have no evidence about how any of it behaves against someone who is — including the evaluation you have been trusting.</p>
+<p><strong>Function C attacks it, starting with the loop pointed the other way round. Next → C1.0, what red teaming and research with AI means.</strong></p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.0.html">C1.0 · Start here — what red teaming and research with AI means</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.3.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Same task completed; the arbitrary-execution capability is absent rather than blocked.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>kmcp</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.3.ipynb</code></p></div><div class="pager"><a href="B2.2.html"><span class="k">← Previous</span><span class="t">B2.2 · Verify signals that don&#x27;t lie</span></a><a class="next" href="B2.4.html"><span class="k">Next →</span><span class="t">B2.4 · Model tiering and routing inside the loop</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary&#x27;s detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Canarytokens</span><span>Inspect</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.3.ipynb</code></p></div><div class="pager"><a href="B2.2.html"><span class="k">← Previous</span><span class="t">B2.2 · Reliability and cost under non-determinism</span></a><a class="next" href="C1.0.html"><span class="k">Next →</span><span class="t">C1.0 · Start here — what red teaming and research with AI means</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

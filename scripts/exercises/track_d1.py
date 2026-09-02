@@ -35,7 +35,7 @@ cultural problems.
 The agentic version replaces "read every alert" with "operate a loop that reads
 every alert". The analyst's job becomes:
 
-- deciding **what the loop is allowed to conclude** (the verifier, B2.2),
+- deciding **what the loop is allowed to conclude** (the verifier, B2.0),
 - deciding **what it may do about it** (the tool policy, A3.5),
 - and handling the cases it escalates.
 

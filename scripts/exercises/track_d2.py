@@ -289,7 +289,7 @@ because authority narrows down the chain, the earlier actors typically had
 *more* access, not less.
 
 The undercount is systematic and it grows with delegation depth, which is the
-operational reason B2.5 bounds depth in the first place.
+operational reason B2.0 bounds delegation depth in the first place.
 """,
  "steps": [
   ("md", "## 2 · Demo — scope the chain, not the actor"),
@@ -324,7 +324,7 @@ for d in range(1, 5):
     print(f"{d:>6}{len(r['scoped_last_actor_only']):>19}"
           f"{len(r['scoped_whole_chain']):>14}"
           f"{str(r['undercount_factor']):>12}")
-print("\\nEach hop adds resources the last actor never touched. This is why B2.5")
+print("\\nEach hop adds resources the last actor never touched. This is why B2.0")
 print("bounds delegation depth: depth is an incident-scope multiplier.")
 '''),
   ("md", "## 4 · The control — scope from the act chain, then widen by shared resources"),

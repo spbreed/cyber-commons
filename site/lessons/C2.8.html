@@ -85,7 +85,7 @@ independently reproduced in this notebook. The register it produces is in
  (&quot;C4.1&quot;,  &quot;secret scanning, automated revocation&quot;, &quot;D/C&quot;, &quot;IA-5&quot;,  &quot;D1.9&quot;),
  (&quot;C4.2&quot;,  &quot;short-lived workload credentials&quot;,      &quot;P&quot;,   &quot;IA-5&quot;,  &quot;A2.4&quot;),
  (&quot;C4.3&quot;,  &quot;scope minimisation&quot;,                    &quot;P&quot;,   &quot;AC-6&quot;,  &quot;A2.3&quot;),
- (&quot;C4.4&quot;,  &quot;credential canaries&quot;,                   &quot;D&quot;,   &quot;SI-4&quot;,  &quot;B2.13&quot;),
+ (&quot;C4.4&quot;,  &quot;credential canaries&quot;,                   &quot;D&quot;,   &quot;SI-4&quot;,  &quot;B2.3&quot;),
  (&quot;C5.1&quot;,  &quot;artifact signing verified at pull&quot;,     &quot;P&quot;,   &quot;SR-11&quot;, &quot;A3.8&quot;),
  (&quot;C5.2&quot;,  &quot;provenance attestation&quot;,                &quot;P&quot;,   &quot;SR-4&quot;,  &quot;A3.8&quot;),
  (&quot;C5.3&quot;,  &quot;admin-plane separation, JIT elevation&quot;, &quot;P/D&quot;, &quot;AC-6&quot;,  &quot;A3.8&quot;),
@@ -108,7 +108,7 @@ independently reproduced in this notebook. The register it produces is in
  (&quot;C9.4&quot;,  &quot;mandatory HITL checkpoint on discovery&quot;,&quot;P&quot;,   &quot;AC-3&quot;,  &quot;A3.10&quot;),
  (&quot;C10.1&quot;, &quot;cheat-surface red team&quot;,                &quot;P&quot;,   &quot;SA-11&quot;, &quot;C1.2&quot;),
  (&quot;C10.2&quot;, &quot;explicit abstain affordance&quot;,           &quot;P&quot;,   &quot;SA-8&quot;,  &quot;A3.10&quot;),
- (&quot;C10.3&quot;, &quot;honeypot and canary tasks&quot;,             &quot;D&quot;,   &quot;RA-5&quot;,  &quot;B2.13&quot;),
+ (&quot;C10.3&quot;, &quot;honeypot and canary tasks&quot;,             &quot;D&quot;,   &quot;RA-5&quot;,  &quot;B2.3&quot;),
  (&quot;C10.4&quot;, &quot;scorer integrity separation&quot;,           &quot;P&quot;,   &quot;SC-7&quot;,  &quot;A3.8&quot;),
 ]
 
@@ -171,7 +171,7 @@ for f in sorted(by_fn):
     print(f&quot;{f:10s}{by_fn[f]:&gt;9}  {FUNCTION[f]}&quot;)
 
 print()
-new = {&quot;A2.8&quot;, &quot;A3.8&quot;, &quot;A3.9&quot;, &quot;A3.10&quot;, &quot;B2.13&quot;, &quot;C1.2&quot;, &quot;D1.9&quot;, &quot;D1.10&quot;, &quot;D2.9&quot;}
+new = {&quot;A2.8&quot;, &quot;A3.8&quot;, &quot;A3.9&quot;, &quot;A3.10&quot;, &quot;B2.3&quot;, &quot;C1.2&quot;, &quot;D1.9&quot;, &quot;D1.10&quot;, &quot;D2.9&quot;}
 existing = sorted({c[4] for c in REGISTER} - new)
 print(f&quot;controls landing on lessons that already existed: &quot;
       f&quot;{sum(1 for c in REGISTER if c[4] in existing)}&quot;)

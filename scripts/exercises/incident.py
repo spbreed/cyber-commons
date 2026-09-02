@@ -43,7 +43,7 @@ REGISTER = '''REGISTER = [
  ("C4.1",  "secret scanning, automated revocation", "D/C", "IA-5",  "D1.9"),
  ("C4.2",  "short-lived workload credentials",      "P",   "IA-5",  "A2.4"),
  ("C4.3",  "scope minimisation",                    "P",   "AC-6",  "A2.3"),
- ("C4.4",  "credential canaries",                   "D",   "SI-4",  "B2.13"),
+ ("C4.4",  "credential canaries",                   "D",   "SI-4",  "B2.3"),
  ("C5.1",  "artifact signing verified at pull",     "P",   "SR-11", "A3.8"),
  ("C5.2",  "provenance attestation",                "P",   "SR-4",  "A3.8"),
  ("C5.3",  "admin-plane separation, JIT elevation", "P/D", "AC-6",  "A3.8"),
@@ -66,7 +66,7 @@ REGISTER = '''REGISTER = [
  ("C9.4",  "mandatory HITL checkpoint on discovery","P",   "AC-3",  "A3.10"),
  ("C10.1", "cheat-surface red team",                "P",   "SA-11", "C1.2"),
  ("C10.2", "explicit abstain affordance",           "P",   "SA-8",  "A3.10"),
- ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "B2.13"),
+ ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "B2.3"),
  ("C10.4", "scorer integrity separation",           "P",   "SC-7",  "A3.8"),
 ]
 '''
@@ -223,7 +223,7 @@ for f in sorted(by_fn):
     print(f"{f:10s}{by_fn[f]:>9}  {FUNCTION[f]}")
 
 print()
-new = {"A2.8", "A3.8", "A3.9", "A3.10", "B2.13", "C1.2", "D1.9", "D1.10", "D2.9"}
+new = {"A2.8", "A3.8", "A3.9", "A3.10", "B2.3", "C1.2", "D1.9", "D1.10", "D2.9"}
 existing = sorted({c[4] for c in REGISTER} - new)
 print(f"controls landing on lessons that already existed: "
       f"{sum(1 for c in REGISTER if c[4] in existing)}")
@@ -1030,7 +1030,7 @@ assert abstain > attempt
 },
 
 # ---------------------------------------------------------------- Function B
-"B2.13": {
+"B2.3": {
  "concept": """
 Every detector in this chapter has needed a threshold, and every threshold is a
 trade between missing things and crying wolf. Deception is the exception:

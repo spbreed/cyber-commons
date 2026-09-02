@@ -1,7 +1,7 @@
 # Lab A2.5 — delegation that survives audit
 
 **Chapter:** [Track A2 — Identity & NHI Engineer](../../curriculum/track-a2.md) ·
-also backs A2.3 (Shadow Autonomy), A2.4 (revocation), B2.6 (sub-agent depth),
+also backs A2.3 (Shadow Autonomy), A2.4 (revocation), B2.0 (delegation depth),
 C1.4 (attacking the chain)
 
 The question every agentic incident starts with is *"who is calling?"* — and the
@@ -78,7 +78,7 @@ by a policy, it cannot be written down.
   fails, and the failure is visible in the token rather than in a log you'd have
   to go looking for.
 - Chain to depth 5 and ask where you would cap it — that's
-  [B2.6](../../curriculum/track-b2.md), delegation-depth budgets.
+  [B2.0](../../curriculum/track-b2.md), delegation-depth budgets.
 
 > **Not production crypto.** HMAC with a hard-coded lab key, and no JWKS, `aud`,
 > `nonce` or replay window. The point is the *claim structure*; real deployments
