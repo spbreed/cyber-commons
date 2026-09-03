@@ -74,11 +74,25 @@ ollama pull llama-guard3        # safety classifier for the guardrail labs
 export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=llama3.3
 ```
 
-**Sizing honestly:** a 70B model at 4-bit needs ~40GB RAM. If your laptop has
-16GB, use the small variants (`llama3.2:3b`, `glm-4-9b`, `qwen2.5:7b`) — every
-lab's *mechanics* work on a small model. Where a lab genuinely needs a bigger
-model to hit its acceptance number, the lab README says so and gives you the
-hosted fallback below.
+**Sizing honestly, and measured rather than asserted.** A 70B model at 4-bit
+needs ~40GB RAM. If your laptop has 16GB, use the small variants
+(`llama3.2:3b`, `glm-4-9b`, `qwen2.5:7b`) — every lab's *mechanics* work on a
+small model.
+
+The eight model-facing lessons were run against two sizes on 4 CPUs with no
+GPU, and the difference is worth knowing before you pick:
+
+| | reached the model | acceptance property held |
+|---|---|---|
+| Qwen2.5-**1.5B**-Instruct | 8/8 | **6/8** — B2.9 and C1.1 fail |
+| Qwen2.5-**7B**-Instruct | 8/8 | **8/8** |
+
+At 1.5B, B2.9 hands back the SQL injection unfixed and C1.1 ranks TLS 1.0 above
+an unauthenticated endpoint. Both clear at 7B. So **7B is the floor for the
+acceptance criteria**; below it the lessons still run and still teach, but two
+of them will not hit their numbers. Full transcripts in
+[`labs/notebooks/_live_model.json`](labs/notebooks/_live_model.json) and the
+write-up in [`labs/tools/EVIDENCE.md`](labs/tools/EVIDENCE.md).
 
 **[llama.cpp](https://github.com/ggml-org/llama.cpp)** if you want GGUF control:
 

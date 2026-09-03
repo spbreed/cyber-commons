@@ -249,14 +249,34 @@ The two failures are honest and specific:
   unauthenticated `/v1/users` endpoint second. A judgement failure, and a
   defensible-sounding one, which is what makes it worth showing.
 
-This is exactly the claim MODELS.md makes — every lab's *mechanics* work on a
-small model, and where a lab needs a bigger one to hit its acceptance number it
-should say so. Now two labs are named rather than the claim being made in
+### The same eight lessons on Qwen2.5-7B-Instruct
+
+Same machine, same adapter, same prompts, one variable changed:
+
+| | reached the model | acceptance property held |
+|---|---|---|
+| **Qwen2.5-1.5B-Instruct** | 8/8 | **6/8** — B2.9, C1.1 failed |
+| **Qwen2.5-7B-Instruct** | 8/8 | **8/8** |
+
+Both of the 1.5B failures clear at 7B. At 7B, B2.9 returns a parameterised
+query and C1.1 ranks the unauthenticated endpoint first. Re-running 1.5B
+afterwards reproduced exactly the same two failures, so this is a size effect
+and not run-to-run variance.
+
+That is the answer the curriculum actually needed. The lessons are not broken
+and the harness is not broken: **the mechanics run on a 1.5B model, and two of
+the eight acceptance properties need roughly 7B.** MODELS.md has always claimed
+the first half and promised that a lab needing a bigger model would say so —
+B2.9 and C1.1 are now the named cases rather than the claim being made in
 general.
+
+Cost of establishing it: a 1.1 GB and a 4.7 GB download from Kaggle, CPU-only,
+about 7 s and 14 s per lesson respectively. No GPU, no API credit.
 
 Evidence is in `labs/notebooks/_live_model.json`, keyed by backend **and**
 model so a second run does not delete the first — comparing two models is the
-reason to run it twice.
+reason to run it twice, and keying on the backend alone lost the 1.5B result
+the first time.
 
 ---
 
