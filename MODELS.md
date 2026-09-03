@@ -86,6 +86,31 @@ hosted fallback below.
 llama-server -hf unsloth/GLM-4.6-GGUF --port 11434 -c 8192
 ```
 
+### Weights from Kaggle, if you already have a Kaggle account
+
+Kaggle hosts the open-weight families as **Models**, including GGUF builds, and
+the API will serve a single file rather than the whole instance — which matters,
+because a GGUF instance bundles every quantisation and the Qwen2.5-1.5B one is
+13 GB for what you actually want at 1.1 GB.
+
+```bash
+# list what a family ships, with sizes
+curl -sH "authorization: Bearer $KAGGLE_KEY" \
+  https://www.kaggle.com/api/v1/models/qwen-lm/qwen2.5/gguf/1.5b-instruct/1/files
+
+# pull exactly one quantisation
+curl -sSL -H "authorization: Bearer $KAGGLE_KEY" -o qwen2.5-1.5b-instruct-q4_k_m.gguf \
+  https://www.kaggle.com/api/v1/models/qwen-lm/qwen2.5/gguf/1.5b-instruct/1/download/qwen2.5-1.5b-instruct-q4_k_m.gguf
+
+# serve it OpenAI-compatibly, CPU only
+python3 -m llama_cpp.server --model qwen2.5-1.5b-instruct-q4_k_m.gguf --port 11434
+export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=none MODEL=qwen2.5-1.5b-instruct
+```
+
+The `framework` segment is lower-case in the API path (`gguf`) and capitalised
+in the web URL (`Gguf`); the API returns 404 for the capitalised form, which
+reads like the model does not exist.
+
 ## Option 2 — Free hosted tiers (when your laptop can't hold it)
 
 Several providers host **open-weight** models on rate-limited free tiers. They
