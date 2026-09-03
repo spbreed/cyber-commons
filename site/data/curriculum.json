@@ -684,59 +684,29 @@
    "tracks": [
     {
      "id": "B1",
-     "title": "The Agentic Harness",
+     "title": "What Runs the Pipeline",
      "sessions": [
       {
        "id": "B1.0",
-       "title": "What an agentic harness is",
+       "title": "What a harness is, and the loop it runs",
        "kind": "control",
        "track": "both",
-       "lab": "Name the eight components, then name which one just failed.",
+       "lab": "Build the smallest thing that is still a harness, then add the one component that was missing.",
        "tools": [
         "OpenTelemetry"
        ]
       },
       {
        "id": "B1.1",
-       "title": "The loop, and the verifier that decides what it may conclude",
+       "title": "Who chooses the next tool call — you, the model, or a server",
        "kind": "control",
        "track": "both",
-       "lab": "Same model, same proposals, opposite outcomes — the verifier is the difference.",
+       "lab": "Enumerate every path a deterministic graph can take, then watch an MCP server edit an instruction into your context overnight.",
        "tools": [
-        "pytest"
-       ]
-      },
-      {
-       "id": "B1.2",
-       "title": "What the loop may touch: tools, depth and doing it twice",
-       "kind": "control",
-       "track": "both",
-       "lab": "Signatures bound what can be asked for, depth bounds how far it travels, keys bound how often it lands.",
-       "tools": [
-        "JSON Schema"
-       ]
-      },
-      {
-       "id": "B1.3",
-       "title": "Which model runs it, and who checks the checker",
-       "kind": "control",
-       "track": "both",
-       "lab": "Routing inside the loop, the backbone behind an interface, and a signal the scaffold cannot see.",
-       "tools": [
-        "Ollama",
-        "vLLM",
+        "LangGraph",
+        "MCP",
         "Claude Haiku 4.5",
-        "GLM-4.6"
-       ]
-      },
-      {
-       "id": "B1.4",
-       "title": "One skeleton, four oracles — and whether any of it is true",
-       "kind": "control",
-       "track": "both",
-       "lab": "Conformance is not accuracy, pass@k is not pass^k, and cost per run is not cost per finding.",
-       "tools": [
-        "Semgrep"
+        "Qwen2.5-7B"
        ]
       }
      ]

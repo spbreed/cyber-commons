@@ -364,19 +364,11 @@ GROUNDING: dict[str, str] = {
 "B1.0": "CyberTravels already runs four harnesses and calls them agents. The "
         "Workflow Agent is a loop over booking tools whose verifier nobody ever "
         "specified — which is the answer to why it refunded twice.",
-"B1.1": "The Coding Agent is asked to fix the refund-eligibility check. Whether "
-        "the fix ships depends entirely on what the loop is allowed to believe "
-        "about it, and \"the model said it was done\" is not a check. R7.",
-"B1.2": "`read_voucher(path)` lets the File System Agent ask for any file on "
-        "the box; `read_voucher(booking_ref)` cannot express the question. And "
-        "the Workflow Agent issues refunds, so doing it twice is R1, not noise.",
-"B1.3": "CyberTravels routes cheap steps to a small model to keep the bill "
-        "sane. If a failed verification escalates to the larger model, a "
-        "traveller who can cause failures chooses which model — and what "
-        "authority it runs with. R5.",
-"B1.4": "Alex has to tell someone whether the review pipeline can be left "
-        "running unattended over a weekend. That is a pass^k question, and the "
-        "number he has is pass@k.",
+"B1.1": "CyberTravels reaches its tools three ways at once: an internal MCP "
+        "server, a third-party MCP server it does not operate, and direct API "
+        "calls with no MCP in the path. Three different answers to \"who "
+        "chooses\", in one architecture diagram. R3.",
+
 "B2.0": "Alex's Coding Agent turned six pull requests a week into forty, some "
         "touching a hundred and twenty files. This chapter is what he builds "
         "instead of scrolling.",

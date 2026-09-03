@@ -365,49 +365,22 @@
    "expect": "The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt."
   },
   "B1.0": {
-   "goal": "Name the eight components, then name which one just failed.",
+   "goal": "Build the smallest thing that is still a harness, then add the one component that was missing.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.0.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.0   # run it headless and check it"
    ],
-   "expect": "The smallest harness that is still a harness runs its loop, and then the same loop with a verifier added refuses the work it previously accepted. The budget stops a looping model. The harness's own identity, scopes and logging show it is an actor like any other. Eight incidents then classify into seven failure classes, and the two that look identical from outside — capability and verification — separate on one rule: did the harness accept it."
+   "expect": "The minimal harness reports success while the tests still fail. Adding one component — a verifier that reads ground truth rather than the agent's claim — reports the same run as unverified, and verifies the run where the patch genuinely works. A budget of four stops a model that never emits `done`. Against a finding whose rationale contradicts the finding itself, the shape check and the LLM judge both accept it. The pipeline's own identity holds `repo:comment` and not `repo:write`."
   },
   "B1.1": {
-   "goal": "Same model, same proposals, opposite outcomes — the verifier is the difference.",
+   "goal": "Enumerate every path a deterministic graph can take, then watch an MCP server edit an instruction into your context overnight.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B1.1.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B1.1   # run it headless and check it"
    ],
-   "expect": "The loop fixes a refund-eligibility check in two attempts and stops when the behavioural verifier is satisfied. The identical model and proposals, with only the verifier swapped for one that asks the model whether it is done, accept the off-by-one on the first attempt and report success with a clean trace. Four verifiers are then run against one malformed output: the shape check and the judge both approve it, the exact-match oracle is itself wrong, and a correct verifier reading stale bytecode passes code that is no longer on disk."
-  },
-  "B1.2": {
-   "goal": "Signatures bound what can be asked for, depth bounds how far it travels, keys bound how often it lands.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.2.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.2   # run it headless and check it"
-   ],
-   "expect": "The same capability behind three signatures: the free-text one presents a traversal surface the enumerated one cannot express, and introducing one bug in the shared guard breaks only the tools that expose the argument. A depth-3 delegation chain narrows correctly, then the same chain widens when the check lives in the compromised orchestrator rather than at the issuer. Finally the same action is classified three ways, and an idempotency key containing a timestamp makes every retry a new refund."
-  },
-  "B1.3": {
-   "goal": "Routing inside the loop, the backbone behind an interface, and a signal the scaffold cannot see.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.3.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.3   # run it headless and check it"
-   ],
-   "expect": "Tiered routing sends trivial steps to the small model and escalates the hard one, then the same router is driven onto the largest model for every task by an attacker who can cause verification failures — carrying more authority with it. The backbone is scored on CyberTravels' own corpus rather than a vendor chart, and substituted behind an unchanged interface. A self-improving scaffold's own metric then climbs monotonically while its held-out accuracy falls."
-  },
-  "B1.4": {
-   "goal": "Conformance is not accuracy, pass@k is not pass^k, and cost per run is not cost per finding.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.4.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.4   # run it headless and check it"
-   ],
-   "expect": "Four security domains run through one skeleton, differing only in the oracle and the blast radius, and the oracle everyone reaches for — the model's own agreement — is the one that cannot gate an action. Evaluation then separates conformance from accuracy: a harness scoring 100% on schema validity scores far lower on correctness, and matching findings on bare filename rather than parent-plus-filename silently randomises the result. Finally a harness at 80% per-run reliability shows pass@5 of 99.97% and pass^5 of 33%, and the cost per confirmed finding lands well above the cost per run."
+   "expect": "The deterministic graph runs two different inputs down two different paths, and then enumerates every path it can ever take — two. The same four capabilities under model-chosen tool calling reach over 50,000 sequences at eight calls and are unbounded in principle, so blast radius replaces path review. An MCP server CyberTravels does not operate then edits one tool description overnight and injects an instruction into the model's context with no client change; pinning the digest of the whole surface — description included — refuses it."
   },
   "B2.0": {
    "goal": "Build a minimal working harness from scratch, naming each component as it appears, then show what breaks when the verifier is removed.",

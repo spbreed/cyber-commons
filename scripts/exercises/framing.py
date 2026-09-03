@@ -205,34 +205,16 @@ HOOKS: dict[str, str] = {
 # Function B — application security with an AI SDLC
 # ----------------------------------------------------------------------
 "B1.0":
- "Almost everyone running agents cannot name their harness's verifier, and "
- "\"the model tells us\" means there isn't one. Eight components, named once — "
- "and most arguments about agent reliability turn out to be arguments about "
- "which of the eight is missing.",
+ "A pipeline whose verifier is the model agreeing with itself does not fail "
+ "loudly — it succeeds incorrectly, files a clean trace, and the bug is found "
+ "by whoever merged the patch. Seven components, four moves, and the one "
+ "nobody can name is almost always the verifier.",
 
 "B1.1":
- "The same model, the same three proposals, the same order. Swap only the "
- "verifier and one run fixes the refund check while the other ships an "
- "off-by-one that refunds a traveller twice — with a clean trace, reporting "
- "success. A weak verifier does not fail loudly; it succeeds incorrectly.",
-
-"B1.2":
- "A tool's signature decides what the model is able to ask for, which is a "
- "stronger control than anything in a prompt. Two tools with identical "
- "capability differ entirely when the guard underneath them has a bug: one "
- "presents the vulnerable surface, the other cannot express it.",
-
-"B1.3":
- "If the loop retries with a bigger model whenever the small one fails "
- "verification, anyone who can cause a failure can force every task onto your "
- "most capable model — and onto whatever authority came with it. Escalate "
- "capability; never escalate authority.",
-
-"B1.4":
- "A harness that is right 80% of the time has a pass@5 of 99.97% and a pass^5 "
- "of 33%. Both are true. Quoting the first for something that runs unattended "
- "is where most harness claims quietly go wrong, and the number nobody quotes "
- "at all is cost per confirmed finding.",
+ "Three answers to one question — who picks the next tool call. Write the "
+ "graph yourself and you can list every execution before you ship. Let the "
+ "model pick and the list is unbounded. Let an MCP server pick and the tool "
+ "descriptions reaching your model are written by somebody who is not you.",
 
 "B2.0":
  "The SDLC you are about to build reads code you do not trust, holds "
@@ -1137,88 +1119,25 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 "B1.1": """
-   plan  ---> act  ---> verify ---> stop
-     ^                     |
-     +---------------------+  (not verified: go again, within budget)
+   who chooses the next tool call?
 
-   swap ONLY the verifier and the same proposals give:
+   1  YOU            StateGraph: nodes + edges you wrote
+                     index -> model -> audit -> report -> END
+                     paths this graph can take: 2, and you can list them
 
-     behavioural test   ->  attempt 2 accepted, refund check correct
-     "the model says"   ->  attempt 1 accepted, off-by-one shipped
+   2  THE MODEL      tool schemas in, the model picks
+                     sequences of <=8 calls over 4 tools: 65,536+
+                     unbounded in principle -> stop reviewing paths,
+                     bound the blast radius of one call instead
 
-   fooled by:            available:
-     behavioural test    changing real behaviour     when executable
-     exact-match oracle  nothing (needs the answer)  rarely
-     shape check         any well-formed output      ALWAYS
-     LLM judge           confident prose             ALWAYS
+   3  A SERVER       MCP tools/list at runtime
+                     which tools exist    <- not yours
+                     what they do         <- not yours
+                     how they DESCRIBE    <- not yours, and it lands
+                       themselves            in your model's context
 
-   the two available everywhere are the two weakest,
-   and they do not error -- they APPROVE
-""",
-
-"B1.2": """
-   three bounds, none of them the prompt
-
-   1  signature      read_voucher(path: str)
-                        -> the model may ask for any path
-                     read_voucher(ref: Literal[...])
-                        -> the surface is not expressible
-
-   2  depth          traveller -> workflow -> sub -> sub -> sub
-                     each hop may widen authority; by hop 4
-                     nobody has seen the whole path
-                     enforce at the ISSUER, not the orchestrator
-
-   3  idempotency    set a config twice  = once
-                     post a comment twice = noise
-                     issue a REFUND twice = an incident
-""",
-
-"B1.3": """
-   routing INSIDE the loop
-
-     trivial step  -> small model   (tools: read-only)
-     hard step     -> large model   (tools: read-only)
-
-   the failure nobody plans for:
-
-     verification fails -> retry on a BIGGER model
-        -> anyone who can cause a failure picks your model
-        -> and the escalation path carried more authority
-
-     escalate capability.  never escalate authority.
-
-   the backbone, behind an interface
-
-     harness -> [ adapter ] -> kimi | glm | frontier
-     swap = a measurement, not a rewrite
-     score on YOUR corpus; the chart measures someone else's
-
-   and if the harness tunes itself
-
-     metric = its own verifier  ->  it optimises the verifier
-     the dashboard is monotone, green, and about nothing
-     the control is a signal it cannot see, train on, or reach
-""",
-
-"B1.4": """
-   one skeleton                       supplied by the domain
-   +---------------------------+      +----------------------+
-   | plan -> act -> verify     | <--- | the ORACLE           |
-   |            -> stop        |      | the BLAST RADIUS     |
-   +---------------------------+      +----------------------+
-
-     SAST     reachability + failing test      read source: free
-     threat   diff against the last model      read config: free
-     DAST     observed change in a response    hit a replica: small
-     pentest  a shell, a row, a file           hit prod: an incident
-
-   then grade it:
-     conformance  ~100% by construction   <- build health
-     accuracy     the number that means something
-
-     pass@k  succeeded at least once   <- someone is checking
-     pass^k  succeeded k out of k      <- nobody is
+   deterministic where the output is EVIDENCE
+   probabilistic where the output is a HYPOTHESIS
 """,
 
 "B2.0": """
@@ -2400,19 +2319,19 @@ BRIDGES: dict[str, dict[str, str]] = {
 },
 
 "B1": {
- "gained": "A harness you can name the eight parts of, a verifier you can rank "
-           "against the three weaker kinds, tool signatures that cannot express "
-           "the question you do not want asked, a delegation depth enforced "
-           "where the orchestrator cannot lie about it, a backbone you could "
-           "swap this week, and the two numbers that decide whether any of it "
-           "can be left alone.",
- "gap": "You have built the thing that does work, and nothing that decides "
-        "what work to do. Pointed at CyberTravels' repository it would review "
-        "whatever it happened to open first — which for a four-million-line "
-        "estate is the same as reviewing nothing.",
+ "gained": "A harness you can name the parts of, a verifier you can rank "
+           "against the three weaker kinds, and a decision you can defend for "
+           "every stage you are about to build — whether you draw the path, the "
+           "model picks it, or a server you do not operate decides what is even "
+           "callable.",
+ "gap": "You have the machinery and no pipeline. Pointed at CyberTravels' "
+        "repository it would review whatever it happened to open first, which "
+        "for a four-million-line estate is the same as reviewing nothing — and "
+        "nothing so far says which techniques belong before a deploy and which "
+        "only work after one.",
  "next": "Chapter 5 is the pipeline that decides: fifteen stages, in order, "
          "from git history to a severity somebody acts on. Next → B2.0, what "
-         "an AI SDLC means.",
+         "an AI SDLC means, and what applies where.",
 },
 
 "B2": {

@@ -152,20 +152,35 @@ the code nobody trusts yet. It holds a credential that can write to the default
 branch. Every risk in Function A applies to it, and being a security tool grants
 no exemption.
 
-Chapter 5 asks the question chapter 4 cannot ask of itself: **is any of this
-worth acting on?** The pipeline is a harness — a model with a loop, tools, a
-context, a verifier, state, budgets, an orchestrator and telemetry around it —
-and four things decide whether Alex can leave it running:
+Chapter 4 comes first, and it is the two decisions every stage rests on: **what
+a harness is** — a model with a loop, tools, a context, a verifier, state, a
+budget and telemetry around it — and **who chooses the next tool call**, which
+is you, the model, or a server you do not operate. Get the second wrong and a
+stage whose output gates a merge is executing a path nobody can name.
 
-1. **what a harness actually is**, because most arguments about agent
-   reliability turn out to be arguments about which of those eight parts is
-   missing, and the missing one is almost always the verifier;
-2. **evaluation**, on a corpus whose answers you already know, because a
-   hallucinated finding looks exactly like a real one until something checks;
-3. **reliability and cost**, because a harness that is right 80% of the time is
-   33% reliable across five unattended runs, and somebody is paying per finding;
-4. **deception**, because a canary in the pipeline's own environment is the one
-   detection with no false positives — nothing legitimate ever touches it.
+Chapter 5 is then the pipeline itself: fifteen stages, in order.
+
+### And the question that decides where each technique goes
+
+Half of what gets called "AI security tooling" cannot run before a deploy, and
+half of it tells you nothing after one. The split is not about the tool — it is
+about **what exists yet**:
+
+**Pre-deployment** works on artefacts that are sitting still: source, a
+dependency manifest, an IaC plan, a prompt template, an OpenAPI spec, a tool
+schema. Cheap, repeatable, diffable, and it can block a merge. It is blind to
+everything that only exists at runtime — the identity the workload actually
+gets, the traffic it really makes, what the third-party MCP server returns this
+morning.
+
+**Post-deployment** works on a running system: an agent holding a token, a real
+egress path, a live tool surface. It sees what actually happens, and it cannot
+block the merge that caused it, because the merge already happened.
+
+Be precise about this, because the same words appear on both sides. "Scanning"
+means SAST before a deploy and runtime posture after one. "Testing" means a unit
+test before and an attack simulation after. A programme that owns only one side
+has a specific, nameable blind spot rather than a general shortfall.
 
 Then the awkward part: **that pipeline is itself an agentic system with all of
 CyberTravels' risks.** It reads untrusted input by definition and holds a
@@ -213,25 +228,53 @@ that (A1.9, B2.12), because being a security tool grants no exemption.
   ("html", D.table(
     ["question", "what it decides for CyberTravels", "answered in"],
     [["what a harness even is",
-      "which of the eight parts the pipeline actually has — and the one nobody "
-      "can name is almost always the verifier", "B1.0"],
+      "which parts the pipeline actually has — and the one nobody can name is "
+      "almost always the verifier", "B1.0"],
      ["what may it conclude",
       "the verifier, ranked against the three weaker kinds — two of which are "
-      "the only two available everywhere", "B1.1"],
-     ["what may it touch",
-      "tool signatures, delegation depth, and whether doing it twice is an "
-      "incident", "B1.2"],
-     ["which model runs it",
-      "routing inside the loop, a backbone you could swap this week, and a "
-      "signal the scaffold cannot see", "B1.3"],
-     ["is any of it true",
-      "conformance against accuracy, pass^k against pass@k, and cost per "
-      "confirmed finding", "B1.4"]],
+      "the only two available everywhere", "B1.0"],
+     ["who chooses the next tool call",
+      "you draw the graph and can list every path, the model picks and you "
+      "bound the blast radius instead, or an MCP server decides what is even "
+      "callable", "B1.1"],
+     ["which stages get which",
+      "deterministic where the output is evidence, probabilistic where it is a "
+      "hypothesis", "B1.1"]],
     emphasise=2,
-    caption="Skip to the last row and you will measure a harness whose verifier "
-            "you never built. That is the most common way this goes wrong.")),
+    caption="Two decisions, and every one of chapter 5's fifteen stages rests "
+            "on both. A stage whose output gates a merge and whose path nobody "
+            "can name is the one to look at first.")),
 
-  ("md", "## 5 · The same pipeline, read as an agentic system\n\n"
+  ("md", "## 5 · What applies where\n\nThe same word on both sides of the "
+         "deploy usually means two different techniques with two different "
+         "owners. The middle column is the one to argue about."),
+  ("html", D.table(
+    ["technique", "pre-deploy", "post-deploy", "what only the other side sees"],
+    [["SAST / code analysis", "<b>yes</b>", "no",
+      "whether the vulnerable path is ever reached with real traffic"],
+     ["Dependency and SBOM scanning", "<b>yes</b>", "partly",
+      "what actually loaded, versus what the manifest pinned"],
+     ["IaC and policy-as-code", "<b>yes</b>", "no",
+      "the identity and network the workload really got"],
+     ["Threat modelling", "<b>yes</b>", "re-run on drift",
+      "entry points added by a config change, not a commit"],
+     ["Tool-schema and MCP surface review", "<b>yes</b>", "<b>yes</b>",
+      "a description edited by a server after review — B1.1"],
+     ["DAST / attack simulation", "against a replica", "<b>yes</b>",
+      "responses only a live system produces"],
+     ["Guardrails and egress enforcement", "config only", "<b>yes</b>",
+      "the request that was actually attempted"],
+     ["Runtime posture and drift", "no", "<b>yes</b>",
+      "a guardrail switched off after the demo — A3.9"],
+     ["Detection and canaries", "no", "<b>yes</b>",
+      "somebody using a credential nothing legitimate touches"],
+     ["Attestation", "signs the claim", "re-checks it",
+      "whether the deployment still matches what was signed"]],
+    emphasise=1,
+    caption="Pre-deployment is cheap, repeatable and can block a merge. "
+            "Post-deployment sees what actually happened and cannot. Chapter 5 "
+            "is mostly the first column; Function D is the third.")),
+  ("md", "## 6 · The same pipeline, read as an agentic system\n\n"
          "Every stage above runs inside something that has an identity, reads "
          "untrusted input and writes to CyberTravels' repository. These are "
          "Function A's components, and a security tool gets no exemption."),
