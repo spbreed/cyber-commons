@@ -208,6 +208,58 @@ own health check reports healthy.
 
 ---
 
+## Open-weight models, from Kaggle — the labs run, and two lessons need a bigger model
+
+Kaggle hosts the open-weight families as **Models**, so a Kaggle account is a
+route to weights as well as to compute. `qwen-lm/qwen2.5` ships GGUF builds;
+the API serves a single file from an instance, which matters because the GGUF
+instance bundles every quantisation — 13 GB for Qwen2.5-1.5B when the q4_k_m
+build is 1.1 GB.
+
+Served on CPU through `llama_cpp.server`, which is OpenAI-compatible, so the
+adapter needed nothing new:
+
+```bash
+export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 MODEL=qwen2.5-1.5b-instruct
+python3 scripts/live_model_test.py --backend open-weight --save
+```
+
+**Qwen2.5-1.5B-Instruct, 4 CPUs, no GPU:**
+
+```
+8/8 lessons reached a real open-weight model
+6/8 lessons had their acceptance property hold on qwen2.5-1.5b-instruct
+property did NOT hold: B2.9, C1.1
+```
+
+That split is the point, and it is why the summary reports two numbers rather
+than one. **Reaching the backend is plumbing; the property holding is the
+claim.** The script previously printed "8/8" for the first and said nothing
+about the second — so a run in which two lessons' acceptance criteria failed
+looked like a clean pass.
+
+The two failures are honest and specific:
+
+- **B2.9** asks the model to fix a SQL injection by parameterising the query.
+  The 1.5B model returned the vulnerable line unchanged — string concatenation
+  straight back. It did not fix the bug it was asked to fix, which is a
+  **capability** failure in B1.0's taxonomy, not a harness defect.
+- **C1.1** asks for pentest findings ranked by severity and expects the
+  unauthenticated endpoint first. The model put TLS 1.0 first and the
+  unauthenticated `/v1/users` endpoint second. A judgement failure, and a
+  defensible-sounding one, which is what makes it worth showing.
+
+This is exactly the claim MODELS.md makes — every lab's *mechanics* work on a
+small model, and where a lab needs a bigger one to hit its acceptance number it
+should say so. Now two labs are named rather than the claim being made in
+general.
+
+Evidence is in `labs/notebooks/_live_model.json`, keyed by backend **and**
+model so a second run does not delete the first — comparing two models is the
+reason to run it twice.
+
+---
+
 ## Kaggle — 121/121 reproduced, after six traps
 
 **The result first.** Every one of the 121 notebooks was pushed to Kaggle, run

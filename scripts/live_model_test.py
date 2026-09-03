@@ -164,26 +164,49 @@ def main() -> int:
                      "seconds": round(took, 2), "error": err,
                      "answer": answer})
 
-    print(f"\n{len(rows) - len(failed)}/{len(rows)} lessons ran against a real "
+    # Two different questions, and conflating them is how this script would
+    # report "8/8" while two lessons' acceptance properties did not hold.
+    # Reaching the backend is plumbing; the property holding is the claim.
+    held = [r for r in rows if r["property_held"] == "True"]
+    broke = [r["session"] for r in rows if r["property_held"] != "True"]
+    print(f"\n{len(rows) - len(failed)}/{len(rows)} lessons reached a real "
           f"{a.backend} model")
+    print(f"{len(held)}/{len(rows)} lessons had their acceptance property hold "
+          f"on {rows[0]['model'] if rows else '?'}")
+    if broke:
+        print(f"property did NOT hold: {', '.join(broke)} — the lesson ran, the "
+              f"model's answer did not satisfy it")
     if failed:
-        print(f"failed: {failed}", file=sys.stderr)
+        print(f"never reached the backend: {failed}", file=sys.stderr)
 
     if a.save:
         out = NB / "_live_model.json"
         prev = {}
         if out.is_file():
             prev = json.loads(out.read_text()).get("runs", {})
-        prev[a.backend] = {
+        # Keyed by backend AND model, because comparing two models is the whole
+        # reason to run this twice. Keying on the backend alone means the second
+        # run silently deletes the first, and the interesting result — which
+        # lessons a smaller model cannot satisfy — is exactly what gets lost.
+        key = f"{a.backend}:{rows[0]['model']}" if rows else a.backend
+        prev[key] = {
             "model": rows[0]["model"] if rows else None,
-            "checked": len(rows), "passed": len(rows) - len(failed),
+            "checked": len(rows),
+            "reached_backend": len(rows) - len(failed),
+            "property_held": sum(1 for r in rows if r["property_held"] == "True"),
+            "property_failed": [r["session"] for r in rows
+                                if r["property_held"] != "True"],
             "note": ("Each row is one real API call through the same adapter the "
                      "notebook uses. The offline path is unchanged and remains "
                      "the default; no credential appears in this file."),
             "results": rows,
         }
-        out.write_text(json.dumps({"generated_by": "scripts/live_model_test.py",
-                                   "runs": prev}, indent=1) + "\n")
+        out.write_text(json.dumps(
+            {"generated_by": "scripts/live_model_test.py",
+             "note": ("Each row is one real API call through the same adapter the "
+                      "notebook uses. `reached_backend` is plumbing; "
+                      "`property_held` is the claim. No credential appears here."),
+             "runs": prev}, indent=1) + "\n")
         print(f"wrote {out.relative_to(ROOT)}")
     return 1 if failed else 0
 

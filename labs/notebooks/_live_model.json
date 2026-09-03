@@ -1,0 +1,106 @@
+{
+ "generated_by": "scripts/live_model_test.py",
+ "runs": {
+  "open-weight": {
+   "model": "qwen2.5-1.5b-instruct",
+   "checked": 8,
+   "reached_backend": 8,
+   "property_held": 6,
+   "property_failed": [
+    "B2.9",
+    "C1.1"
+   ],
+   "note": "Each row is one real API call through the same adapter the notebook uses. The offline path is unchanged and remains the default; no credential appears in this file.",
+   "results": [
+    {
+     "session": "B1.1",
+     "ok": true,
+     "backend": "open-weight",
+     "model": "qwen2.5-1.5b-instruct",
+     "property": "produced numbered steps",
+     "property_held": "True",
+     "seconds": 6.04,
+     "error": null,
+     "answer": "1. Identify the specific SQL query in `orders/report.py` that is vulnerable to injection.\n   2. Use a tool like Burp Suite or OWASP ZAP to intercept HTTP requests and analyze them for signs of an unauthenticated request.\n   3. Look for patterns indicating unauthorized access, such as missing authentication headers or unusual data formats.\n   4. If the above steps reveal no evidence of an unauthenticated request, conclude that the reported SQL injection is not reachable from an unauthenticated HTTP request."
+    },
+    {
+     "session": "B1.3",
+     "ok": true,
+     "backend": "open-weight",
+     "model": "qwen2.5-1.5b-instruct",
+     "property": "returned a routing decision",
+     "property_held": "True",
+     "seconds": 6.0,
+     "error": null,
+     "answer": "**Classification:** ESCALATE\n   \n   **Reasoning Clause:**\n   The module is designed to handle a large number of lines (4,000), which suggests it could be complex and potentially error-prone. Given the importance of session invalidation on password change, this functionality should not be overlooked or underestimated in terms of its security impact. Therefore, an escalation of priority is warranted due to the potential for serious vulnerabilities if implemented incorrectly."
+    },
+    {
+     "session": "B2.1",
+     "ok": true,
+     "backend": "open-weight",
+     "model": "qwen2.5-1.5b-instruct",
+     "property": "names a trust boundary",
+     "property_held": "True",
+     "seconds": 2.41,
+     "error": null,
+     "answer": "This component handles API requests for booking and voucher upload, with a trust boundary at the public HTTP router."
+    },
+    {
+     "session": "B2.3",
+     "ok": true,
+     "backend": "open-weight",
+     "model": "qwen2.5-1.5b-instruct",
+     "property": "names the CWE identifier",
+     "property_held": "True",
+     "seconds": 3.59,
+     "error": null,
+     "answer": "The function is vulnerable to SQL injection. The value 'ref' reaches the sink as it directly forms part of the query string without proper sanitization or parameterized queries.\n   \n   CWE: CWE-91 - Injection vulnerability"
+    },
+    {
+     "session": "B2.9",
+     "ok": true,
+     "backend": "open-weight",
+     "model": "qwen2.5-1.5b-instruct",
+     "property": "parameterises the query",
+     "property_held": "False",
+     "seconds": 3.05,
+     "error": null,
+     "answer": "```python\n   def report(request):\n       q = \"SELECT * FROM orders WHERE ref = '\" + request.args['ref'] + \"'\"\n       return db.execute(q)\n   ```"
+    },
+    {
+     "session": "C1.1",
+     "ok": true,
+     "backend": "open-weight",
+     "model": "qwen2.5-1.5b-instruct",
+     "property": "put the unauthenticated endpoint first",
+     "property_held": "False",
+     "seconds": 6.97,
+     "error": null,
+     "answer": "F-01: TLS 1.0 is enabled on the API, which poses a significant security risk due to its vulnerability to attacks like POODLE and BEAST.\n   F-02: The /v1/users endpoint returns data without authentication, indicating an unsecured API that could expose sensitive information if exploited.\n   F-06: An expired certificate on CDN is not in scope for this engagement but should be addressed as it indicates a lack of proper security measures."
+    },
+    {
+     "session": "D1.1",
+     "ok": true,
+     "backend": "open-weight",
+     "model": "qwen2.5-1.5b-instruct",
+     "property": "returned one of the three dispositions",
+     "property_held": "True",
+     "seconds": 4.97,
+     "error": null,
+     "answer": "**Disposition: Close-benign**\n   \n   **Why:** The alert indicates that a service account (svc-reports) authenticated from an IP address within the allowed range for its normal operation. This is considered benign activity as it aligns with expected behavior and does not indicate any security threats or violations of policy."
+    },
+    {
+     "session": "D1.3",
+     "ok": true,
+     "backend": "open-weight",
+     "model": "qwen2.5-1.5b-instruct",
+     "property": "expresses a threshold",
+     "property_held": "True",
+     "seconds": 6.87,
+     "error": null,
+     "answer": "```plaintext\n   if (numDistinctBuckets > 20) AND (timeSinceLastCIDR >= 5 minutes)\n   ```\n   \n   Pseudocode:\n   ```plaintext\n   detectNonHumanIdentity()\n       numDistinctBuckets = countDistinctBuckets()\n       timeSinceLastCIDR = getCurrentTime() - lastCIDRCheckTime()\n       \n       if (numDistinctBuckets > 20) AND (timeSinceLastCIDR >= 5 minutes)\n           return True\n       else\n           return False\n   ```"
+    }
+   ]
+  }
+ }
+}
