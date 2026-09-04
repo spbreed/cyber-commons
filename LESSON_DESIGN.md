@@ -177,9 +177,18 @@ A lesson carries a code cell for exactly two reasons:
    embeds that skill's own script. The lesson executes the file in the
    repository, never a paraphrase of it, so editing the skill makes the
    notebook stale and CI says so.
+
+   **The file comes first.** A skill step emits two cells in a fixed order —
+   the `SKILL.md` itself, then the Python that parses and executes it. The
+   runtime is emitted by the skill step rather than written as a step of its
+   own, because a lesson that opens on sixty lines of parser has put the
+   machinery above the procedure. A `("py", SKILL_RUNTIME)` step placed before
+   a skill is dropped at build time for that reason.
 2. **It calls a model.** The `("model", …)` step emits one adapter and one
    round trip — a labelled replay offline, a real frontier or open-weight call
-   when one is configured.
+   when one is configured. A lesson may also drive the adapter itself from a
+   `py` cell when its subject is the loop rather than one round trip; B2.0 is
+   the only one, and `live_model_test.py` recognises that shape too.
 
 Anything else is Python teaching Python. Code cells are **standard library
 only** and must be **deterministic**: seed from `zlib.crc32` rather than
