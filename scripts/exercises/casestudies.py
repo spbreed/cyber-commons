@@ -31,6 +31,8 @@ SOURCES_SUPABASE = """
 > vendor.
 """
 
+from .skills import skill_steps
+
 EXERCISES: dict[str, dict] = {
 
 "C2.9": {
@@ -124,7 +126,9 @@ The fix was two SQL statements.
       "present, untouched", "A1.11, D1.10 fleet correlation"]],
     caption="An architecture can hold two novel risks and still be undone by a "
             "missing row policy. Novelty is not the same as likelihood.")),
- ],
+   *skill_steps('research/row-level-policy-check',
+               '## 2 · The procedure, as a skill\n\nThe publishable key is meant to ship in a client; the rows are not. The skill queries every table anonymously with row-level policy off and on, and counts the provider credentials a leaked key returns — along with who can revoke them.'),
+],
  "expect": "With RLS disabled the anon key returns all three agent rows, secret "
            "provider keys included; with RLS enabled and no signed-in user it "
            "returns none, and one row for the owner. Reported scale spans "
@@ -233,7 +237,9 @@ call (A3.1), arriving at a database.
       "B2.12 — securing the developers' coding agents"]],
     caption="Every row is a control that already exists in this curriculum. The "
             "case study's job was to show you why it is there.")),
- ],
+   *skill_steps('research/generated-schema-audit',
+               '## 2 · The procedure, as a skill\n\nEvery feature of the application works and two tables are open. The skill audits the scaffold statement by statement, then enumerates from the catalogue rather than the application — because the application only knows about the tables it uses.'),
+],
  "expect": "An audit of a four-statement scaffold finds a critical issue: the "
            "`profiles` table holds an api_key column and has no RLS at all, "
            "while every feature of the application works. The catalogue query "

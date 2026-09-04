@@ -211,7 +211,9 @@ you write assurance arguments:
     caption="Three of four do not survive one report. The practical consequence "
             "is narrow and worth writing down: threat model what the agent "
             "believes about your controls, not only what your controls do.")),
- ],
+   *skill_steps('research/incident-control-mapping',
+               '## 2 · The procedure, as a skill\n\nA published incident hands you a sequence of control failures for free. The skill pairs each with the control that would have closed it, counts preventive against detective, and finds the shared surface that turns three findings into one chain.'),
+],
  "expect": "Ten control failures, each paired with the mitigating control it "
            "calls for, carrying 34 threats and 40 evidence items. 22 of the 40 "
            "controls are purely preventive against 12 that are detective at all. "

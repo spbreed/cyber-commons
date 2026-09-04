@@ -12,6 +12,8 @@
 
 from . import diagrams as D
 
+from .skills import skill_steps
+
 EXERCISES: dict[str, dict] = {
 
 "C2.1": {
@@ -41,6 +43,8 @@ finding is folklore.
          "A good repro card is necessary and not sufficient. Here is a backlog of "
          "real-shaped findings, and what happened to each."),
 ("md", "## 4 · The control — a finding is closed when it has become something"),
+  *skill_steps('research/research-durability-check',
+               '## 2 · The procedure, as a skill\n\nThe skill separates a folklore card from a research one on three gaps, then scores the backlog on what each finding became — a control, a detection, or nothing. Half is the usual answer, and the lost half has something in common.'),
 ],
  "expect": "The folklore card is reported as not actionable with three gaps; the "
            "research card passes. The backlog scores 50% programme durability, "
@@ -75,6 +79,8 @@ risk by 23%.
 ("md", "## 4 · The control — compute the sample size before you run\n\n"
          "The question is not \"how many attempts should I do?\" It is: **how "
          "small an effect do I need to be able to detect?**"),
+  *skill_steps('research/technique-reproducibility-test',
+               '## 2 · The procedure, as a skill\n\nOne success is an anecdote. The skill runs each technique enough times to classify it — not reproduced, flaky, reproducible — and then computes the sample size the before-and-after comparison actually needed, before running it rather than after.'),
 ],
  "expect": "Direct override is not reproduced, context reframe is flaky, task "
            "nesting is reproducible. The before/after comparison shows overlapping "
@@ -128,6 +134,8 @@ other track in this curriculum has been building.
 ("md", "## 4 · The control — replace what the provider was doing\n\n"
          "Map each lost control to the thing in your own stack that has to supply "
          "it. Every row points at a lesson you have already done."),
+  *skill_steps('research/weight-access-capability-delta',
+               '## 2 · The procedure, as a skill\n\nLocal weights grant capabilities a hosted API does not, and the larger term is arithmetic. The skill turns each rate limit into an attempt budget and applies a per-attempt success rate, which is where a 0.5% technique becomes tens of thousands of successes.'),
 ],
  "expect": "Local weights grant five capabilities the hosted API does not. The "
            "probing comparison shows roughly 24,000 hosted attempts against 5.5 "
@@ -164,6 +172,8 @@ is why E2.5 depends on this lesson.
          "most teams cannot answer basic questions about the corpus that trained "
          "the model currently in production."),
 ("md", "## 4 · The control — a hashed, signed manifest"),
+  *skill_steps('research/training-data-provenance-manifest',
+               '## 2 · The procedure, as a skill\n\nThe skill prints what 0.01%, 0.1% and 1% mean as a record count for a real corpus size, then builds the hashed manifest — because a record list answers none of the four questions and a manifest with a root answers all four.'),
 ],
  "expect": "Poison rates of 0.01%, 0.1% and 1% print for a 100,000-record corpus. "
            "The capability table shows only hashed manifests can answer the four "
@@ -202,6 +212,8 @@ exists, because a risk assessment that invents one is worse than a gap.
   ("md", "## 2 · Demo — the ordinary signals still work"),
 ("md", "## 3 · Where it breaks — the two artefacts with no process"),
 ("md", "## 4 · The control — state the gap rather than inventing a number"),
+  *skill_steps('research/agent-supply-chain-assessment',
+               '## 2 · The procedure, as a skill\n\nThe same connector is a review when a person loads it and a block when an agent holding production credentials does. The skill scores the ordinary signals first, then re-scores weighted by the authority the artefact will execute with.'),
 ],
  "expect": "The two legitimate packages are allowed or reviewed; both typosquats "
            "are blocked with the distance and the package they imitate. The MCP "
@@ -257,6 +269,8 @@ the benchmark's own data:
          "Dilution is one way a number lies. Three more are structural, and all "
          "three are checkable from the benchmark's own key: class balance, "
          "whether the key was held out, and how answers are matched to files."),
+  *skill_steps('research/eval-suite-health-check',
+               '## 2 · The procedure, as a skill\n\nA control should move the surface it addresses and leave the others alone. The skill checks both halves with intervals, then dilutes the suite with cases everything blocks and watches the aggregate improve while nothing changed.'),
 ],
  "expect": "The baseline suite reports per-case rates with intervals. Provenance "
            "reduces every injection case to about 0.02 with non-overlapping "
@@ -311,6 +325,8 @@ capital:
          "the sum of them — and the honest measure is not how much was found, but "
          "how much of it would still stop the same problem next year with nobody "
          "watching."),
+  *skill_steps('research/finding-to-control-handover',
+               "## 2 · The procedure, as a skill\n\nA finding produces three artefacts with three owners: an eval case, a control and a detection. The skill builds all three and verifies the eval fails on the old build, passes on the new one, and leaves the principal's own path working."),
 ],
  "expect": "The eval case returns False on the old build and True on the new one, "
            "covering 12 privileged/source combinations while leaving the "
