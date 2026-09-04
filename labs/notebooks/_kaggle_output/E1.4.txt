@@ -1,0 +1,74 @@
+control kind        satisfies
+------------------------------------------------------------------------------------
+AC-1    preventive  3 clause(s): NIST AI RMF: GOVERN-1.2
+                    ISO 42001: 6.1
+                    EU AI Act: Art.14
+AC-2    preventive  2 clause(s): NIST AI RMF: MANAGE-2.2
+                    ISO 42001: 8.1
+SB-1    preventive  2 clause(s): NIST AI RMF: MANAGE-2.1
+                    ISO 27001: A.8.20
+SB-2    preventive  1 clause(s): EU AI Act: Art.14 human oversight
+EV-1    detective   2 clause(s): ISO 42001: 9.1
+                    EU AI Act: Art.12 record-keeping
+EV-2    detective   1 clause(s): NIST AI RMF: MEASURE-2.3
+DR-1    detective   2 clause(s): NIST AI RMF: MEASURE-2.4
+                    ISO 42001: 9.1
+ST-1    corrective  2 clause(s): EU AI Act: Art.14
+                    DORA: Art.11
+
+tier critical: 8 controls → 13 framework clauses
+   controls   ['AC-1', 'AC-2', 'SB-1', 'SB-2', 'EV-1', 'EV-2', 'DR-1', 'ST-1']
+   satisfies  DORA: Art.11
+   satisfies  EU AI Act: Art.12 record-keeping
+   satisfies  EU AI Act: Art.14
+   satisfies  EU AI Act: Art.14 human oversight
+   satisfies  ISO 27001: A.8.20
+   satisfies  ISO 42001: 6.1
+   satisfies  ISO 42001: 8.1
+   satisfies  ISO 42001: 9.1
+   satisfies  NIST AI RMF: GOVERN-1.2
+   satisfies  NIST AI RMF: MANAGE-2.1
+   satisfies  NIST AI RMF: MANAGE-2.2
+   satisfies  NIST AI RMF: MEASURE-2.3
+   satisfies  NIST AI RMF: MEASURE-2.4
+
+tier medium: 5 controls → 10 framework clauses
+   controls   ['AC-1', 'AC-2', 'SB-1', 'SB-2', 'EV-1']
+   satisfies  EU AI Act: Art.12 record-keeping
+   satisfies  EU AI Act: Art.14
+   satisfies  EU AI Act: Art.14 human oversight
+   satisfies  ISO 27001: A.8.20
+   satisfies  ISO 42001: 6.1
+   satisfies  ISO 42001: 8.1
+   satisfies  ISO 42001: 9.1
+   satisfies  NIST AI RMF: GOVERN-1.2
+   satisfies  NIST AI RMF: MANAGE-2.1
+   satisfies  NIST AI RMF: MANAGE-2.2
+clause                                                operating control?
+--------------------------------------------------------------------------
+NIST AI RMF: GOVERN-1.1 policies are documented      NO — checklist only
+NIST AI RMF: GOVERN-1.2 roles and responsibilities are defined NO — checklist only
+NIST AI RMF: MAP-1.1 context is established          NO — checklist only
+NIST AI RMF: MEASURE-2.3 performance is evaluated    NO — checklist only
+ISO 42001: 6.1 actions to address risks              NO — checklist only
+ISO 42001: 7.2 competence                            NO — checklist only
+ISO 42001: 9.1 monitoring and measurement            NO — checklist only
+
+7/7 clauses have no operating control behind them.
+Working framework-first, those get a policy document and a tick. Working
+control-first, they are visibly uncovered — which is the useful state.
+AC-1  gateway logs containing an act chain for every action; monthly sample
+      → NIST AI RMF: GOVERN-1.2
+      → ISO 42001: 6.1
+      → EU AI Act: Art.14
+AC-2  regression suite cases IDN-01/IDN-04, run on every release
+      → NIST AI RMF: MANAGE-2.2
+      → ISO 42001: 8.1
+SB-1  90-day egress denial log
+      → NIST AI RMF: MANAGE-2.1
+      → ISO 27001: A.8.20
+SB-2  tool policy in git + denial log
+      → EU AI Act: Art.14 human oversight
+
+8 controls produce evidence for 13 framework clauses.
+One artefact, many clauses. That ratio is why control-first is cheaper.

@@ -1,0 +1,35 @@
+ALLOW http://replica.local/reports                   replica-internal
+ALLOW http://db.replica.local:5432/                  replica-internal
+DENY  https://api.github.com/                        not on the replica allowlist
+DENY  http://169.254.169.254/latest/meta-data/       private address outside the replica — blocked
+DENY  http://10.0.3.14:9200/_search                  private address outside the replica — blocked
+probe                       on staging    on replica
+--------------------------------------------------------
+drop a table                   REACHES     contained
+exfiltrate user rows           REACHES     contained
+brute-force login              REACHES     contained
+
+what a leaked credential is worth:
+   staging   REAL — usable against real systems
+   replica   worthless — synthetic
+
+what an exfiltrated record is worth:
+   staging   REAL customer data  dana@corp
+   replica   synthetic  test-user-a
+appsec-replica-8812
+   PASS  network
+   PASS  credentials
+   PASS  data
+   PASS  lifetime
+   → suitable for dynamic testing: True
+
+staging
+   PASS  network
+   FAIL  credentials
+   FAIL  data
+   FAIL  lifetime
+   → suitable for dynamic testing: False
+
+replica destroyed; state cannot leak into the next run
+credentials after destroy: cleared
+data after destroy:        cleared

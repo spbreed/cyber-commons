@@ -1,0 +1,51 @@
+MRM validation -> security evidence
+   artefact  : validation report with tool surface and autonomy
+   owner     : model_risk
+   consumers : cyber, compliance, internal_audit
+
+legal position -> system prompt
+   artefact  : approved language and refusal set
+   owner     : legal
+   consumers : cyber, business_owner
+
+privacy assessment -> control design
+   artefact  : DPIA with a control annex
+   owner     : privacy
+   consumers : cyber, model_risk
+
+MRM validation -> security evidence           NOT DELIVERED to cyber, internal_audit
+legal position -> system prompt               complete
+privacy assessment -> control design          NOT DELIVERED to model_risk
+
+undelivered handoffs: 3
+   cyber          is assuming: the validated unit matches what is deployed
+                  and has not received: validation report with tool surface and autonomy
+   internal_audit is assuming: the validated unit matches what is deployed
+                  and has not received: validation report with tool surface and autonomy
+   model_risk     is assuming: the data classes and retention limits are settled
+                  and has not received: DPIA with a control annex
+   cyber           security cannot see the validated tool surface, so scope creep is undetectable
+   internal_audit  third line cannot test the second line's assurance; it audits the artefact it has
+   model_risk      validation runs on data the DPIA restricted; the restriction is invisible to it
+
+None of these is a control failing. Each is a control that was built,
+works, and is invisible to the function whose decision depends on it.
+seam                                          owner        delivered to
+MRM validation -> security evidence           model_risk   compliance, cyber, internal_audit
+legal position -> system prompt               legal        business_owner, cyber
+privacy assessment -> control design          privacy      cyber, model_risk
+
+undelivered handoffs remaining: 0
+
+One owner per artefact, every consumer named, and delivery recorded
+rather than assumed. The delivery record is the part people skip, and it
+is the only part that makes the seam auditable a year later.
+before: 2 problem(s)
+    MRM validation -> security evidence: undelivered to ['cyber', 'internal_audit']
+    privacy assessment -> control design: undelivered to ['model_risk']
+after : 0 problem(s)
+
+Four properties, checked mechanically: an artefact exists, one owner is
+accountable, consumers are named, delivery is recorded. A governance
+programme that can run this check on its own seams is doing something
+more useful than another policy document.

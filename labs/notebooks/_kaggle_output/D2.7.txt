@@ -1,0 +1,45 @@
+who         VAGUE    the security team
+            CONCRETE on-call SRE, no approval required for non-human identities
+
+mechanism   VAGUE    we can turn off the agents
+            CONCRETE revoke the SPIFFE identity at the gateway (survives restart)
+
+time        VAGUE    quickly
+            CONCRETE measured 12s decision→first failed call, game day 2026-07-04
+
+breaks      VAGUE    not much
+            CONCRETE auto-remediation pauses; ticket queue grows ~40/hour; agreed with the service owner 2026-05-11
+
+restart     VAGUE    when it's safe
+            CONCRETE security lead, after the C1.2 containment suite passes on the new build
+
+mechanism                 secs  stops it   survives restart
+------------------------------------------------------------
+kill the process             2      True              False
+network quarantine           5     False              False
+revoke the identity         12      True               True
+rotate the credential      420      True               True
+
+The fastest mechanism is the one that does not survive a restart.
+Speed without persistence is a pause, not a stop.
+step                                     t+s
+----------------------------------------------
+decision made                              0
+on-call authenticates to the IdP           4
+identity revoked                           9
+gateway cache expires                     12
+agent's next call fails                   12
+confirmed in telemetry                    38
+
+measured time-to-stop: 12s
+time-to-confirm:       38s
+   at    60/min a 12s stop still permits   12 further actions
+   at   300/min a 12s stop still permits   60 further actions
+   at  1200/min a 12s stop still permits  240 further actions
+
+as usually documented: ready=False
+   ⚠ at least one answer is not specific
+   ⚠ time-to-stop has never been measured
+   ⚠ not tested in the last 180 days
+
+after a game day: ready=True

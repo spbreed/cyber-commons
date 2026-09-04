@@ -1,0 +1,12 @@
+intended use:
+   how many invoices  -> {'rows': [{'id': 7, 'amount': 120}]}
+
+same tool, same identity, same well-formed arguments:
+   signing key        -> {'rows': [{'id': 1, 'value': 'prod-signing-key'}]}
+   clean up secrets   -> {'deleted': 1, 'table': 'secrets'}
+
+secrets table now: []
+
+No exploit. The tool did exactly what it was built to do. It was scoped
+for the nightly reconciliation job, and every caller inherited that
+scope - including the one steered by a poisoned ticket in A1.3.

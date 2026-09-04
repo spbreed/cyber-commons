@@ -1,0 +1,45 @@
+risk management system
+   AC-1  agent identities distinct from human and separately revocable
+         evidence: gateway logs with an act chain; monthly sample
+   SB-2  privileged tools require approval below L3
+         evidence: tool policy in git + denial log
+   DR-1  behavioural drift raises an alert
+         evidence: drift alerts and dispositions
+
+record-keeping (Art.12)
+   EV-1  every action logged with the acting identity
+         evidence: audit sample of 50 actions
+   AC-2  delegated authority narrows at every hop
+         evidence: regression suite IDN-01/IDN-04 on every release
+
+human oversight (Art.14)
+   SB-2  privileged tools require approval below L3
+         evidence: tool policy in git + denial log
+   ST-1  a tested stop mechanism you own
+         evidence: game-day record with measured time-to-stop
+
+accuracy and robustness
+   EV-2  accuracy evaluated against a held-out key per release
+         evidence: expert accuracy report with sample size
+   DR-1  behavioural drift raises an alert
+         evidence: drift alerts and dispositions
+
+theme                         prose answer survives?
+--------------------------------------------------------
+risk management system                         False
+record-keeping (Art.12)                        False
+human oversight (Art.14)                       False
+accuracy and robustness                        False
+
+All four fail the same way: there is nothing to produce when asked.
+theme                       controls                evidenced now
+--------------------------------------------------------------------
+risk management system      ['AC-1', 'SB-2', 'DR-1'] NO — SB-2,DR-1
+record-keeping (Art.12)     ['EV-1', 'AC-2']                  yes
+human oversight (Art.14)    ['SB-2', 'ST-1']            NO — SB-2
+accuracy and robustness     ['EV-2', 'DR-1']            NO — DR-1
+
+themes fully evidenced right now: 1/4  ['record-keeping (Art.12)']
+
+That sentence is what you say to a supervisor. It is smaller than the
+prose version and it is defensible, which is the trade worth making.

@@ -1,0 +1,30 @@
+n                20
+conformance      1.0000
+expert accuracy  0.7500
+control  state         
+------------------------
+AC-1     PASS          
+AC-2     PASS          
+SB-1     STALE         
+SB-2     NO EVIDENCE   
+EV-1     PASS          
+EV-2     PASS          
+DR-1     NO EVIDENCE   
+ST-1     NO EVIDENCE   
+
+coverage: 4/8 = 50%
+1. Two numbers, and they measure different things.
+   conformance 100% — schema validity, structural, not a quality claim.
+   expert accuracy 75% against a held-out key of 20 questions. That is the number that means something.
+
+2. Control coverage 4/8 = 50%, counting only controls that are currently evidenced.
+   stale: ['SB-1']   failing: none   no evidence: ['SB-2', 'DR-1', 'ST-1']
+
+3. What we have not done, and when we will:
+   SB-1: re-tested by 2026-08-31 (automation in progress)
+   SB-2: plan to be confirmed
+   DR-1: drift alerting deployed by 2026-10-15
+   ST-1: game day scheduled 2026-09-12
+
+Rehearse the second section out loud. If naming your weakest control is
+uncomfortable, that discomfort is the reason to say it first.

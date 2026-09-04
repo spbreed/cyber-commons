@@ -1,0 +1,24 @@
+terminate only        : 8 agents stopped, 8 tokens still valid for up to 72h
+terminate and revoke  : 8 agents stopped, 0 tokens still valid
+
+In the source incident, third-party access ended when the third party
+revoked its keys - not when the agents stopped. Stopping the process is
+the visible half of containment and the smaller one.
+terminate first   terminate -> revoke credentials                           reconstructable=False
+preserve first    snapshot state and transcripts -> terminate -> revoke credentialsreconstructable=True
+
+The ordering is the whole design. Terminating first is faster by seconds
+and costs the investigation everything, which is the trade nobody makes
+deliberately at three in the morning.
+quarter  ran    minutes  condition
+Q1       yes        4.2  full fleet, clean conditions
+Q2       yes        4.9  full fleet, one region degraded
+Q3       no           -  not run - no window agreed
+Q4       yes        6.8  partial failure: revocation API throttled
+
+tests run: 3 of 4   target: under 5 min
+over target: 1  (6.8)
+
+The quarter that was not run is the finding, and the quarter that ran
+long is the second one: under partial failure the revocation half is
+what slows down, which is the half that matters.

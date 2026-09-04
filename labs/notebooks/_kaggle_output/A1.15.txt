@@ -1,0 +1,11 @@
+ daily volume  considered  stamped  caught  missed
+           10          10        0       1       0
+           25          25        0       1       0
+          100          25       75       0       1
+          500          25      475       0       1
+
+At every volume the audit trail shows a human approval on 100% of
+actions. The control reports full coverage in all four rows.
+
+The attacker does not need to defeat the reviewer. They need to arrive
+at position 173 of 200, and generating positions 1 to 172 is free.

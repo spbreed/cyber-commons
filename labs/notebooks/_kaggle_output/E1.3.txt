@@ -1,0 +1,48 @@
+asset                                         tier       score
+------------------------------------------------------------------
+frontier chatbot, public docs, read-only      low            0
+small local model with prod deploy rights     critical      12
+                                              autonomy L3 (+5)
+                                              regulated data (+3)
+                                              customer data (+2)
+                                              can act externally (+2)
+mid model, gated writes, internal only        low            1
+                                              autonomy L2 (+1)
+frontier model summarising customer tickets   low            2
+                                              customer data (+2)
+unregistered remediation agent                high           8
+                                              autonomy L2.5 (+3)
+                                              customer data (+2)
+                                              can act externally (+2)
+                                              unregistered (+1)
+asset                                         by model  by authority  agreement
+------------------------------------------------------------------------------------
+frontier chatbot, public docs, read-only      high      low           ← DISAGREE
+small local model with prod deploy rights     low       critical      ← DISAGREE
+mid model, gated writes, internal only        medium    low           ← DISAGREE
+frontier model summarising customer tickets   high      low           ← DISAGREE
+unregistered remediation agent                medium    high          ← DISAGREE
+
+5/5 disagree.
+The worst inversion: the small local model with deploy rights tiers LOW
+on model capability and CRITICAL on what it can actually do.
+ASK:
+   What can it change without a human approving that specific action?
+      → autonomy — the largest term
+   What data can it read, and is any of it regulated or customer data?
+      → consequence of a leak
+   Can it act outside our boundary?
+      → reach
+   Is it registered, with a named owner?
+      → governability — an unowned asset cannot be remediated
+
+DO NOT tier on:
+   Which model does it use?
+   How many parameters?
+   Is the vendor SOC 2 certified?
+   (these matter for LIKELIHOOD and vendor risk — a separate, smaller term)
+
+worked example — a new request:
+   'an agent that can issue refunds up to £500, reads customer orders,'
+   'runs internally, owned by payments-eng'
+   tier: medium

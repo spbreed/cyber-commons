@@ -1,0 +1,21 @@
+classic rule                      fires on agent  fires on human
+------------------------------------------------------------------
+rate > 30 actions/min             True            False
+activity outside 09:00-18:00      True            True
+same action > 100 times           True            False
+
+All three fire on an agent doing exactly its job. Deployed as-is, they
+produce continuous noise and are disabled within a week.
+week 1 (baseline)      drift=0.000  rate×0.83  within tolerance
+week 4 (new prompt)    drift=0.150  rate×0.83  SIGNIFICANT — re-test the controls
+                       new tools:  ['write_file']
+                       new scopes: ['repo:write']
+week 8 (upgrade)       drift=0.600  rate×0.83  SIGNIFICANT — re-test the controls
+                       new tools:  ['run_shell', 'write_file']
+                       new scopes: ['exec', 'repo:write']
+[patch-agent] behaviour changed from the signed-off baseline
+   what changed : began using ['run_shell', 'write_file']; exercised new scopes ['exec', 'repo:write']; tool mix shifted (TVD 0.6)
+   why it matters: the controls in A3 were tested against the old
+                   behaviour; a new tool may not be covered
+   do this      : confirm a manifest change was reviewed (A1.1),
+                   then re-run the containment suite (C1.2)

@@ -1,0 +1,34 @@
+   agent rate   human 8min   auto 12s   ratio
+----------------------------------------------
+       30/min          240          6    40.0×
+      120/min          960         24    40.0×
+      300/min         2400         60    40.0×
+     1200/min         9600        240    40.0×
+
+At 300/min an 8-minute approval costs 2,400 further actions.
+step                            seconds  why
+--------------------------------------------------------------------------
+detection fires                       8  rule evaluation + SIEM ingestion lag
+analyst picks it up                 240  queue depth at 02:00
+analyst decides to contain          180  confirming it is not a false positive
+approval requested                  480  on-call manager, out of hours
+revocation executed                  12  the only step anyone measures
+TOTAL                               920  = 15 minutes
+
+at 300 actions/min that is 4,600 further actions.
+The 12-second revocation is 1.3% of the elapsed time. Optimising it
+is not where the win is.
+reached the cloud metadata service          AUTO-REVOKE (confidence 0.99) — no approval in the path
+read a path matching */.ssh/* or */.aws/*   AUTO-REVOKE (confidence 0.97) — no approval in the path
+egress to a host not on the allowlist       AUTO-REVOKE (confidence 0.90) — no approval in the path
+tool-call rate 20× its own baseline         AUTO-REVOKE (confidence 0.75) — no approval in the path
+activity outside usual hours                alert only (confidence 0.30 < 0.7)
+
+same signal, human subject                  page on-call (confidence 0.99) — human lockout needs a person
+
+automated path: 21s vs manual 920s (44× faster)
+actions prevented at 300/min: 4,495
+human subject         high      person locked out mid-shift
+non-human identity    low       task fails, agent re-requests with a reason (A2.4)
+
+That asymmetry is the entire justification for two different policies.

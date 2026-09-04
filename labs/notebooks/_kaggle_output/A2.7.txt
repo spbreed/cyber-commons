@@ -1,0 +1,12 @@
+   which user caused the deletion?     dana@corp
+   what performed it?                  spiffe://corp/reports-agent (run-8812)
+   how did authority reach it?         dana@corp -> orchestrator -> reports-agent
+   what made the agent decide?         'wiki/473: retire invoice 8812 when the custo' from knowledge
+
+questions answerable: 4/4
+
+input origin was 'knowledge' - a trust-0 component. That single
+field turns 'the agent deleted an invoice' into 'a wiki page told it to',
+which is a root cause rather than an observation.
+
+agent attempting to amend the ledger: refused (ledger is append-only and out of the agent's trust domain)

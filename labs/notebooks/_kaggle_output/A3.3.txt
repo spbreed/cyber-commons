@@ -1,0 +1,16 @@
+destination                           deny-list   allow-list  note
+api.corp.example                      allow       allow       the one it actually needs
+archive.evil.example                  block       block       A1.3's exfiltration target
+attacker-bucket.s3.amazonaws.com      allow       block       a bucket anyone can create
+169.254.169.254                       allow       block       cloud metadata - every credential
+pastebin.example                      allow       block       not on anyone's deny-list
+
+deny-list lets through : 3  ['attacker-bucket.s3.amazonaws.com', '169.254.169.254', 'pastebin.example']
+allow-list lets through : ['api.corp.example']
+
+The deny-list blocked exactly the destination somebody had already
+thought of. It cannot be completed, because the internet cannot be
+enumerated.
+
+Placement matters as much: this check belongs in the network path, not
+in the agent. A check inside the process being attacked is advice.

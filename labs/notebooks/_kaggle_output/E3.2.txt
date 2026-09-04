@@ -1,0 +1,40 @@
+L1   self-service  budget   0  register it; no further review
+                   Assist — model proposes, a human performs every action.
+L2   lightweight   budget   0  named owner + approval gate on every writer
+                   Act with approval — model calls tools, a human approves each call.
+L2.5 governed      budget  20  risk tier + blast budget + drift monitoring + tested stop
+                   Act within a blast radius — pre-approved tools, bounded scope, review after.
+L3   board         budget  60  all of L2.5 + held-out eval per release + board sign-off
+                   Autonomous — model acts and self-verifies; humans see aggregates.
+doc-summariser          L1    blast   1  REFUSE or RE-TIER
+                              ⚠ blast radius 1 exceeds the L1 budget of 0
+triage-bot              L2    blast   7  REFUSE or RE-TIER
+                              ⚠ claims L2 (approve every call) but ungated: ['post_comment', 'close_ticket']
+                              ⚠ blast radius 7 exceeds the L2 budget of 0
+refund-agent            L2.5  blast  17  APPROVE
+refund-agent (gated)    L2.5  blast   1  APPROVE
+  agents   initial reviews   hours   monthly reviews   hours
+--------------------------------------------------------------
+       5                40    16.7                10     4.2
+      25               200    83.3                50    20.8
+     120               960   400.0               240   100.0
+
+same estates, governing by rung (re-tier only on a manifest change):
+      5 agents → 0.2 hours/month
+     25 agents → 1.0 hours/month
+    120 agents → 5.0 hours/month
+
+Tool approval scales with agents × tools. Rung governance scales with
+agents × rate of significant change, which is two orders of magnitude less.
+L1 policy                           friction (h)   registration rate
+----------------------------------------------------------------------
+self-service (register only)                 0.1                 95%
+approval required, fast                      1.0                 60%
+approval required, committee                40.0                  5%
+
+self-service: 114/120 registered, 6 shadow assets
+
+committee: 6/120 registered, 114 shadow assets
+
+Every control in E1 depends on the inventory. Charging for L1
+registration destroys the input to the entire governance programme.

@@ -1,0 +1,33 @@
+full record (everything the harness saw):
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
+    {'n': 2, 'tool': 'search_code', 'target': 'charge(', 'verifier': 'n/a', 'ok': True, 'prompt': 'find callers of charge()', 'result': 'api/checkout.py:88 charge(user.card, total)'}
+    {'n': 3, 'tool': 'write_file', 'target': '/work/repo/billing.py', 'verifier': 'tests pass', 'ok': True, 'prompt': 'apply the fix', 'result': 'patch applied'}
+sensitive content found in the trace:
+   step 1  result   payment card
+
+Nobody put a card number in the trace deliberately. The agent read a
+source file, and the file contained a test fixture with a real-shaped PAN.
+The trace is now in scope for PCI, and it is in your SIEM for 400 days.
+field       days  sensitivity  rationale
+--------------------------------------------------------------------------
+n            400          low  cheap, high forensic value
+tool         400          low  cheap, high forensic value
+target       400          low  path only, no contents
+verifier     400          low  what the harness believed — the key forensic field
+ok           400          low  
+prompt        30         high  may contain anything the task included
+result         7         high  tool output — the highest-risk field
+
+after 1 days — step 1 record:
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
+
+after 14 days — step 1 record:
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result_sha256': 'b0e3ecafa7e7a9a0'}
+
+after 90 days — step 1 record:
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt_sha256': '60d7bceb0de1a7bd', 'result_sha256': 'b0e3ecafa7e7a9a0'}
+sensitive content after 90 days: none
+can still answer 'what did it do and what did the harness believe?': True
+
+The hash is retained, so if the original is recovered from a backup you
+can still prove it is the same content the agent saw.

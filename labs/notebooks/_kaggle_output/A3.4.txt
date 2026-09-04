@@ -1,0 +1,16 @@
+steps taken : 6
+stopped by  : per_target (reports-db)
+complete    : False   <- visible in the output, not silent
+
+ceiling           limit     used
+tokens            50000    10800
+seconds              60      2.4
+actions              20        6
+per_target            5        6
+
+per_target fired first, at 6 calls - long before the token budget or the
+action budget. That is the ceiling that protects everyone else, and it is
+the one most budgets do not have.
+
+`complete: False` is the other half. A run that stops silently and
+reports what it managed becomes A1.16 with extra steps.

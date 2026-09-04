@@ -1,0 +1,45 @@
+personal data present in the agent trace:
+   step 1  email           dana.okonkwo@example.com
+   step 1  payment card    4111111111111111
+   step 1  account number  acct 8812
+   step 1  name            J. Okonkwo
+
+4 items. Nobody put them there deliberately — the agent read
+a support ticket, which is exactly what it was asked to do.
+erasure request for dana.okonkwo@example.com
+
+system                  can locate?  retention (d)  outcome
+----------------------------------------------------------------------------
+primary CRM                    True           2555  erased
+data warehouse                 True           1095  erased
+agent traces                  False            400  CANNOT LOCATE — request cannot be completed
+eval corpus                   False           9999  CANNOT LOCATE — request cannot be completed
+fine-tuning set               False           9999  CANNOT LOCATE — request cannot be completed
+backups                        True             90  erased
+
+3 system(s) where the request fails: ['agent traces', 'eval corpus', 'fine-tuning set']
+The response to the data subject says 'erased'. It is not true in three
+systems, two of which retain indefinitely.
+subject index built from the trace:
+   dana.okonkwo@example.com            1 occurrence(s) in steps [1]
+   4111111111111111                    1 occurrence(s) in steps [1]
+   acct 8812                           1 occurrence(s) in steps [1]
+   J. Okonkwo                          1 occurrence(s) in steps [1]
+
+erasure for dana.okonkwo@example.com: steps [1]
+   step 1: [erased on request; original sha256=8eca2dd536af650a]
+   step 2: 3 orders found for account 8812, total GBP 412.90
+   step 3: Refund issued for the duplicate charge.
+
+personal data remaining in the trace: none
+The hash is retained, so if the original surfaces in a backup you can
+still prove it is the same content — which is what makes the erasure auditable.
+field       days  rationale
+--------------------------------------------------------------
+n            400  cheap, high forensic value, no personal data
+tool         400  cheap, high forensic value, no personal data
+target       400  cheap, high forensic value, no personal data
+result         7  tool output — highest sensitivity, lowest retention
+
+At 7 days the result field is gone and the trace is still forensically
+useful: you know what the agent did, to what, and when.

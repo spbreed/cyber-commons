@@ -1,0 +1,25 @@
+RLS disabled (as shipped)   rows returned: 3
+      @researchbot  dana@example    sk-REDACTED-openai
+      @newsdigest   sam@example     sk-ant-REDACTED
+      @dealfinder   kim@example     AKIA-REDACTED-aws
+RLS enabled                 rows returned: 0
+
+signed in as dana@example, RLS enabled: 1 row
+
+Same key, same endpoint, same table. The only difference is whether a
+policy exists for the API to consult.
+Treblle                      770,000 agents exposed
+Wiz-sourced reporting      1,500,000 agents exposed
+
+reported range               770,000 - 1,500,000
+provider accounts implicated: OpenAI, Anthropic, AWS, GitHub, Google Cloud
+
+what leaked                   who can revoke it
+the Moltbook session token    Moltbook
+the agent's provider key      the individual who created the agent
+the claim token               Moltbook
+
+the platform can revoke 2 of 3.
+The third is a key in somebody else's provider account, and the only
+person who can turn it off may not know it was ever exposed. That is the
+difference between a platform breach and a supply-chain one.

@@ -1,0 +1,22 @@
+action              reversible  external  routing         per day
+delete_row          False       False     human approval  6
+issue_refund        False       True      human approval  2
+read_report         True        False     policy only     400
+rotate_credential   False       False     human approval  1
+send_email          False       True      human approval  3
+update_ticket       True        False     policy only     260
+write_draft         True        False     policy only     120
+
+actions per day            : 792
+reaching a human           : 12
+a reviewer considers ~25/day properly
+gate holds?                : True
+
+Approving everything would send 792 a day to someone who can read
+25. Routing by reversibility sends 12, and every one gets read.
+
+unlabelled : libfoo has no known vulnerabilities
+labelled   : [machine-generated, unverified] libfoo has no known vulnerabilities
+
+The label does not stop anyone acting on it. It restores the scepticism
+they would give a colleague saying the same sentence.

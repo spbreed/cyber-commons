@@ -1,0 +1,30 @@
+the access token the payments API will actually see:
+
+{
+  "act": {
+    "sub": "spiffe://cybertravels.com/ns/prod/sa/agent-alpha"
+  },
+  "aud": "https://payments.cybertravels.internal",
+  "cnf": {
+    "x5t#S256": "jj1fnE1HHlRSE7neeRr5SAXlFSCngmHlLz_34axiTFU"
+  },
+  "scope": "bookings:read",
+  "sub": "alice@cybertravels.com"
+}
+
+as a JWT: eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJhY3QiOiB7InN1YiI6ICJzcGlmZmU6Ly9je...
+the legitimate agent, on its own connection:
+   bearer check : True
+   bound  check : True
+
+the same token, replayed by a different pod:
+   bearer check : True   <- accepted. a bearer token is a password.
+   bound  check : refused - cnf mismatch: issued to jj1fnE1HHlRS..., presented on a connection using LRovnEkv-Pz2...
+
+alice asks agent-alpha to issue a refund on her behalf:
+   ceiling narrowed it: agent-alpha may never hold ['payments:refund']
+   subset-of-presented alone would allow it : True
+   scope actually issued                    : none
+delegation chain : alice@cybertravels.com -> orchestrator -> agent-alpha
+final scope      : bookings:read
+bound to         : jj1fnE1HHlRSE7ne...  (agent-alpha's certificate, not the orchestrator's)

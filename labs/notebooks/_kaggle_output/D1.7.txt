@@ -1,0 +1,17 @@
+    when  event                       drift  new tools
+------------------------------------------------------------------
+    90d  control signed off          0.000  []
+    60d  prompt edited               0.100  []
+    30d  tool added (no PR)          0.330  ['run_shell']
+     5d  model upgraded by vendor    0.550  ['run_shell']
+observed drift rate  0.00647 TVD/day
+tolerance            0.25
+→ freshness window   38 days (a control test older than this is unevidenced, not passing)
+
+control     age (d)     state
+------------------------------
+SB-1             90     STALE
+SB-2             10      PASS
+DR-1              0      FAIL
+
+currently evidenced: 1/3

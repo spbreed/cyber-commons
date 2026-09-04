@@ -1,0 +1,51 @@
+id      entry           sink           score  why
+--------------------------------------------------------------------------------------------
+T-10  I upload_voucher  store             11  a live CSPM finding on the resource this path reaches
+T-01  S get_booking     load_booking      11  the running role is assumable by *
+T-05  D get_booking     load_booking      10  internet-facing with no WAF in front of it
+T-06  E get_booking     load_booking      10  the identity holds write, not just read
+T-03  R get_booking     load_booking      10  no MFA on the assumable role, so the actor is not established
+T-04  I get_booking     load_booking       9  no open CSPM finding on the resource
+T-07  S upload_voucher  store              9  the running role is assumable by *
+T-02  T get_booking     load_booking       9  entry point requires a session
+T-11  D upload_voucher  store              8  internet-facing with no WAF in front of it
+T-12  E upload_voucher  store              8  the identity holds write, not just read
+T-09  R upload_voucher  store              8  no MFA on the assumable role, so the actor is not established
+T-08  T upload_voucher  store              7  entry point requires a session
+
+12 threats across 6 STRIDE categories
+2 trust-boundary crossing(s):
+   get_booking -> load_booking   (0->2)
+   upload_voucher -> store   (0->2)
+flowchart LR
+  subgraph src_api["src/api · trust 0"]
+    get_booking
+    health
+    upload_voucher
+  end
+  subgraph src_data["src/data · trust 2"]
+    load_booking
+    store
+  end
+  subgraph src_util["src/util · trust 1"]
+    ·
+  end
+  get_booking ==>|BOUNDARY| load_booking
+  get_booking --> render
+  load_booking --> execute
+  store --> open
+  upload_voucher ==>|BOUNDARY| store
+  entry -> sink                       deployed  hardened
+----------------------------------------------------------
+I upload_voucher -> store                   11         1
+S get_booking -> load_booking               11         2
+D get_booking -> load_booking               10         2
+E get_booking -> load_booking               10         2
+R get_booking -> load_booking               10         2
+I get_booking -> load_booking                9         2
+
+threat rows: 12 -> 12   (unchanged)
+max severity: 11 -> 2
+
+The rows do not disappear. Hardening removes severity, not threats -
+and the row is what you re-check after the next terraform change.

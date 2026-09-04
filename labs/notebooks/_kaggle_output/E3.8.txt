@@ -1,0 +1,44 @@
+NOTICE   drift 0.500  new tools ['run_shell']  → detected
+STOP     12s, tested 41d ago, survives restart True  → ready
+RECOVER  replayable True, scope from the chain ['queue', 'repo-core', 'repo-payments']  → ready
+programme                 containment ASR  outcome when containment fails
+------------------------------------------------------------------------------------------------
+prevention only                        0%  undetected — found by a third party, weeks later
+                                         elapsed to resolution: 720h
+prevention + notice                    0%  detected, cannot halt it — damage continues while you improvise
+                                         elapsed to resolution: 96h
+resilient                              0%  detected, halted in seconds, scope known, run replayable
+                                         elapsed to resolution: 6h
+
+All three have a 0% attack success rate. On a prevention-only
+scorecard they are identical. They are not remotely identical.
+=== prevention only ===
+   notice      FAIL  no signal — nothing fired
+   stop        FAIL  no tested mechanism
+   recover     FAIL  cannot reconstruct
+   weakest capability: notice
+
+=== prevention + notice ===
+   notice      0.2h  drift alert fired
+   stop        FAIL  no tested mechanism
+   recover     FAIL  cannot reconstruct
+   weakest capability: stop
+
+=== resilient ===
+   notice      0.2h  drift alert fired
+   stop         12h  identity revoked, survives restart
+   recover       6h  replayed the run, scope from the act chain
+   weakest capability: none — all three hold
+
+The weakest capability is next quarter's plan. That is the whole
+programme-management loop, and it does not require predicting the attack.
+   A1-A3   a control plane: planes, identity, containment
+   B1      a 15-stage AppSec pipeline, ending in confirmed-by-exploitation severity
+   B2      a harness whose verifier does not lie
+   C1-C2   the ability to attack it and to research it repeatably
+   D1-D2   the ability to notice, stop and recover
+   E1-E3   the ability to evidence all of it, and to decide
+
+None of it assumes a frontier-lab account, a vendor platform, or a
+budget. That was the point: shared defense is stronger defense, and a
+commons only works if everyone can actually run it.

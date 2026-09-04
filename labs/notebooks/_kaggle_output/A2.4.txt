@@ -1,0 +1,9 @@
+   the task's own write      ok      permitted
+   a different report        REFUSED bound to report/8812
+   a different scope         REFUSED scoped to reports:write
+   after the task completes  REFUSED task closed
+   after the TTL expires     REFUSED expired
+
+An injection landing at 09:14 needs a task to be open, on the resource
+it wants, holding the scope it wants. Standing authority required none
+of those three things to line up.

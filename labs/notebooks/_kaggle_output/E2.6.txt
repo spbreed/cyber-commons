@@ -1,0 +1,41 @@
+scenario                          contain   report   met   margin
+------------------------------------------------------------------
+attribution sound                     2.0     20.0  True     52.0
+attribution broken, 3d scope          6.0     92.0 False    -20.0
+fast containment, slow scope          1.0     80.0 False     -8.0
+
+The third row contained in ONE HOUR and missed by 8 hours.
+phase                                   hours  cumulative  note
+----------------------------------------------------------------------------------
+alert fires → analyst picks it up           3           3  queue depth
+confirm an incident                         6           9  is this real?
+establish WHO acted                        48          57  logs name the human; agents hidden
+scope what was touched                     24          81  ← DEADLINE PASSED  must walk the delegation chain (D2.3)
+legal determines reportability              8          89  ← DEADLINE PASSED  needs the scope
+draft and send                              3          92  ← DEADLINE PASSED  
+
+total 92h against a 72h deadline
+the attribution phase alone is 48h — 67% of the entire deadline
+with act chains recorded (A2.5 + EV-1): 44.5h vs 92h
+deadline met: True
+
+PRE-DRAFTED DISCLOSURE (write this now, not during the incident):
+
+We are notifying you of an incident under [instrument], first identified at
+[awareness timestamp].
+
+An automated system operating within our environment performed actions that may
+have affected [scope]. Our logging currently attributes these actions to the
+authenticated principal on whose behalf the system was acting; we are working to
+establish which specific automated component performed them.
+
+Containment: [action] completed at [time].
+We will provide an update within [period], including the completed attribution.
+
+It is honest, it starts the notification, and it does not claim an
+attribution you cannot yet support.
+as usually written     sound=False
+   ⚠ one owner for both workstreams — they compete under time pressure
+   ⚠ clock starts at 'confirmation'; a regulator will use awareness
+   ⚠ no pre-drafted disclosure for incomplete attribution
+corrected              sound=True

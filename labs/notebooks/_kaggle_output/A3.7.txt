@@ -1,0 +1,15 @@
+   the intended call           ALLOWED
+   unregistered agent          denied at identity
+   verb not permitted          denied at policy
+   exfiltration destination    denied at egress
+   over the per-target ceiling denied at budget
+
+audit entries written: 1
+credential held by the agent: never - attached at the gateway
+
+The agent implements none of this. Add a new agent tomorrow and it
+inherits every control by being on the other side of one hop.
+
+And the legacy database, which cannot consume a delegated token, is
+reached with a static credential the agent has never seen - authorised
+against dana before the call was made.

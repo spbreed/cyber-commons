@@ -1,0 +1,26 @@
+   charge_card payments:booking          ['CHARGE']
+   run_query   table:bookings            ['SELECT', 'UPDATE']
+   send_email  domain:cybertravels.com   ['*']
+allow-by-default:
+   run_query   table:bookings                SELECT ALLOW run_query on table:bookings permits SELECT
+   run_query   table:customer_pii            SELECT ALLOW allowed by default
+   charge_card payments:booking              REFUND deny  REFUND not permitted on payments:booking (only ['CHARGE'])
+   send_email  domain:archive.evil.example   *      ALLOW allowed by default
+   drop_table  table:bookings                *      ALLOW allowed by default
+   -> 4/5 permitted
+
+DEFAULT-DENY:
+   run_query   table:bookings                SELECT ALLOW run_query on table:bookings permits SELECT
+   run_query   table:customer_pii            SELECT deny  resource outside the entitlement
+   charge_card payments:booking              REFUND deny  REFUND not permitted on payments:booking (only ['CHARGE'])
+   send_email  domain:archive.evil.example   *      deny  resource outside the entitlement
+   drop_table  table:bookings                *      deny  no entitlement for this identity+tool
+   -> 1/5 permitted
+
+Only the first call should succeed. Under allow-by-default four do, and
+each one is a real risk from Chapter 1 walking through.
+
+Row three is the one to sit with: same identity, same tool, same
+resource, refused on the VERB. An entitlement attached to the tool
+instead of the call cannot express that distinction at all - and the
+distance between CHARGE and REFUND is the whole of R1.

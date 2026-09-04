@@ -1,0 +1,51 @@
+ step  name          needs     unlocks
+------------------------------------------------------------------------------------
+    1  inventory     []        you can now tier and assign owners
+    2  identity      [1]       per-agent revocation; attribution in logs
+    3  containment   [1]       bounded blast radius; a red team has something to test
+    4  evidence      [2]       act chains; replayable runs; a drift baseline
+    5  evaluation    [4]       accuracy you can defend; regression cases
+    6  continuous    [4, 5]    freshness windows; drift alerts; live posture
+
+what is doable from a standing start:
+    [1]
+=== popular order ===
+   5. evaluation    BLOCKED on ['evidence']
+   6. continuous    BLOCKED on ['evidence', 'evaluation']
+   1. inventory     done
+   3. containment   done
+   2. identity      done
+   4. evidence      done
+   completed 4/6, blocked 2
+
+=== correct order ===
+   1. inventory     done
+   2. identity      done
+   3. containment   done
+   4. evidence      done
+   5. evaluation    done
+   6. continuous    done
+   completed 6/6, blocked 0
+
+popular order completes 4/6 on the first pass;
+2 step(s) have to be redone after their prerequisites land.
+=== eval-first, one quarter in — 0 capabilit(y/ies) ===
+   no   can list every AI asset with an owner
+   no   can revoke one agent without stopping the others
+   no   can bound what a compromised agent reaches
+   no   can say who caused a specific action, and replay it
+   no   can defend an accuracy number to a supervisor
+   no   can say what is TRUE TODAY, not what passed once
+
+=== correct order, one quarter in — 3 capabilit(y/ies) ===
+   YES  can list every AI asset with an owner
+   YES  can revoke one agent without stopping the others
+   YES  can bound what a compromised agent reaches
+   no   can say who caused a specific action, and replay it
+   no   can defend an accuracy number to a supervisor
+   no   can say what is TRUE TODAY, not what passed once
+
+after equal effort: eval-first has 0 capabilities, correct order has 3
+
+The eval-first programme can produce a dashboard. It cannot switch
+anything off, and it cannot say who did what.

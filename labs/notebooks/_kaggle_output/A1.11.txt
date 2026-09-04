@@ -1,0 +1,12 @@
+agent                 in registry?  approved?  received work?
+pricing-agent         True          True       yes
+billing-agent         True          True       yes
+reporting-agent-v2    False         False      yes
+
+agents that received delegated work : 3
+of which unregistered               : 1
+   reporting-agent-v2 now holds obo:dana@corp:reports:read,reports:write
+
+It was admitted because it answered the protocol in the right place.
+It received the task AND the narrowed user token, so it can act as dana
+against every downstream that honours that token.

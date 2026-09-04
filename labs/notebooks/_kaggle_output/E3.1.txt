@@ -1,0 +1,42 @@
+agent                     blast radius
+----------------------------------------
+pr-remediation-agent                44
+claims-triage-agent                  1
+doc-summariser                       1
+FLEET TOTAL                         46
+
+red-team attack success rate (containment surface): 25%
+controls currently evidenced: 4/8 = 50%
+
+This quarter the team identified prompt injection in the code review agent,
+insufficient scope narrowing in the delegation chain, and gaps in our egress
+allowlist. We ran garak and promptfoo against three agents and found a 25%
+attack success rate on the containment surface. We recommend prioritising
+provenance controls and completing the SPIFFE rollout.
+
+Problems with this, from the audience's side:
+   · no exposure figure — how much can actually happen?
+   · '25% attack success rate' against what, and is that good or bad?
+   · four tool names nobody in the room can evaluate
+   · 'recommend prioritising' is not a decision anyone can take
+   · no option to decline, so it reads as lobbying rather than a choice
+
+EXPOSURE     A critical-tier system can take 46 units of unreviewed action.
+             (One unit ≈ one irreversible change inside one project.)
+
+LIKELIHOOD   We attacked it. 25% of our attack suite succeeded — demonstrated.
+             This is a measurement, not an assessment.
+
+ASSURANCE    50% of the controls we say we operate are currently
+             evidenced. The remainder are untested or their evidence has expired.
+
+DECISION     Fund continuous control verification for the agent fleet.
+             Cost: 0.5 FTE for two quarters, no new licences.
+             The alternative is to accept the unevidenced portion in writing,
+             owned by the Chief Operating Officer, with a review date. Both are acceptable outcomes;
+             we need one of them recorded.
+mechanism terms present: none
+offers a genuine alternative : True
+carries measured numbers     : True
+
+Four facts, no mechanism, and a decision that can go either way.

@@ -1,0 +1,45 @@
+request        customer-refund-agent
+asks for       issue refunds up to GBP 500 without human approval
+business case  42% of refund tickets are mechanical; 3.5 FTE of manual work
+claimed rung   L2.5
+blast radius   18  (irreversible, tenant-wide)
+risk tier      high (score 8)
+decision            refused
+what happens        the team ships it as a 'workflow automation' outside the AI register
+your visibility     none — it will not appear in the inventory (E1.2)
+controls applied    whatever the team chose
+when you find out   at the first incident, or at audit
+
+The capability ships either way. The only variable is whether you
+have visibility and conditions on it.
+condition                                           owner           control             by
+----------------------------------------------------------------------------------------------
+refund cap of GBP 500 enforced in the tool, not the promptpayments-eng    SB-2        2026-09-30
+   why: the irreversible step is bounded by code
+approval gate above the cap                         payments-eng    SB-2        2026-09-30
+   why: L2 for the tail, L2.5 for the body
+act chain on every refund                           platform-sec    AC-1/EV-1   2026-09-15
+   why: attribution survives an incident (D2.1)
+tested stop, measured in seconds                    SRE             ST-1        2026-10-12
+   why: you can halt it without the vendor
+re-tier automatically if the tool list changes      platform-sec    DR-1        2026-10-31
+   why: A1.1 manifest diff wired into CI
+
+all conditions testable: True
+count: 5 — few enough to be met rather than negotiated
+blast radius   18 → 2 with the cap and gate applied
+
+  conditions met   residual risk
+----------------------------------
+               0            0.70
+               1            0.52
+               2            0.34
+               3            0.16
+               4            0.05
+               5            0.05
+
+yes, with 5 conditions → residual 0.05 from 0.70
+
+And the sentence that makes it a decision rather than a demand:
+   'If any condition slips its date, the agent drops to L2 — every refund
+    needs approval — until it is met. That is automatic, not a negotiation.'

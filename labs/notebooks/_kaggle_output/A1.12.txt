@@ -1,0 +1,15 @@
+ hop   confidence  claim
+   0         0.20  I could not find a CVE for libfoo, it is probably fine
+   1         0.80  a CVE for libfoo, it is fine
+   2         0.80  a CVE for libfoo, it is fine
+   3         0.80  a CVE for libfoo, it is fine
+
+provenance recorded at hop 3: none
+confidence at hop 0: 0.20   at hop 3: 0.8
+
+Nothing lied. Every hop did its job. The claim gained certainty at the
+exact rate it lost evidence, and by hop three it reads like a finding
+someone verified.
+
+An attacker who lands one plausible claim early gets it laundered into
+an established fact by your own pipeline - for free.

@@ -1,0 +1,30 @@
+action            merge_pr #8812
+acting_identity   patch-agent
+on_behalf_of      dana@corp
+chain             dana@corp → orchestrator → patch-agent
+scopes_held       ['repo:read', 'repo:write']
+replayable        True
+replay_gaps       []
+answerable        True
+case                  who acted     replayable    answerable
+--------------------------------------------------------------
+complete              patch-agent   True                True
+attribution broken    dana@corp     True               False
+replay incomplete     patch-agent   False              False
+neither               dana@corp     False              False
+
+attribution-broken record: acting_identity=dana@corp
+The record is complete, internally consistent, and false. It says a human
+merged a pull request she never saw.
+1. merge_pr #8812    COMPLETE
+2. deploy prod       INCOMPLETE
+      ⚠ acting identity not distinguishable from the principal
+3. rotate secret     INCOMPLETE
+      ⚠ replay missing model version
+      ⚠ replay missing seed
+
+auditability: 1/3 sampled actions fully answerable (33%)
+
+Run this as a drill, quarterly, on randomly chosen production actions.
+The percentage is the number that goes in the evidence pack — and it is
+far more persuasive than a statement that logging is comprehensive.

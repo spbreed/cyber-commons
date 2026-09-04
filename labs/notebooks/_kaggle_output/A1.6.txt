@@ -1,0 +1,15 @@
+requestertheir scopes                                asked for       allowed?
+dana    ['reports:read']                            db:admin        True
+priya   ['db:admin', 'reports:read', 'reports:write']db:admin        True
+
+AUDIT TRAIL
+   actor=agent-svc  tool=drop_table   allowed=True
+   actor=agent-svc  tool=drop_table   allowed=True
+
+dana holds reports:read only, and her request reached db:admin.
+The authorization decision was made about the agent, not about her.
+
+Now answer 'which user caused the table to be dropped' from that trail.
+You cannot: every row says agent-svc. Privilege and attribution failed
+in the same step, which is what makes this different from a human with
+too much access.

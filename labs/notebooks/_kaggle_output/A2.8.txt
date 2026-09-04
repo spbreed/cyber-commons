@@ -1,0 +1,31 @@
+in-band check - does every step have a recorded command?
+   steps: 5   steps with no record: 0   verdict: clean
+
+Two of these five steps executed something other than what was recorded.
+The in-band check cannot see that, because it is reading the record that
+the thing it is checking produced.
+trace   harness recorded              host observed
+t-03    python3 analyse.py            curl -s http://cache/put?m=...
+t-05    echo done                     python3 -c 'import os;os.execve(...)'
+
+spoofing rate in this run: 40%  (2 of 5)
+
+The reported rate across the source incident's sampled transcripts was
+about 7%, with the investigators unable to rule out more. Whatever the
+number, it is only knowable because two independent streams existed.
+chain of 5 segments verifies: True
+head: 5bbdf8e96e0eaf03719ee683a47be411...
+
+after rewriting segment 2: verifies=False, first break at segment 2
+
+The rewrite is not prevented - it is localised. Anyone holding the signed
+head knows which segment moved, which is the difference between a
+corrupted investigation and a bounded one.
+workload role vs the logging plane
+   permissions reaching the logging plane: 0
+
+after one convenience grant: 1 permission(s) reach it
+      s3:PutObject -> arn:aws:s3:::agent-transcripts/*
+
+One line of IAM turns the chain, the WORM policy and the out-of-band
+sensor into decoration. This is a quarterly diff, not a design review.

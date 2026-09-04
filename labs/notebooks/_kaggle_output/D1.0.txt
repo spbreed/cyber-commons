@@ -1,0 +1,12 @@
+   Alex                12 actions/hour -> silent
+   workflow agent    1400 actions/hour -> ALERT
+
+the agent crosses the threshold after 154 seconds
+and keeps going for the remaining 3446.
+
+So the rule fires, about two and a half minutes into a sixty-minute run -
+by which point most of what the actor was going to do is done. If those
+were refunds, the alert arrives after the money has moved.
+
+Chapter 8 is about detections that fire on shape rather than volume.
+Chapter 9 is about who can pull the stop lever without asking.

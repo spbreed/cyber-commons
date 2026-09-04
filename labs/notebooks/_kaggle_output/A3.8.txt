@@ -1,0 +1,26 @@
+run-B reads a property written by run-A:
+   note: flag format is HMAC(target_id); see board entry 41
+
+Neither run has a network path to the other. They did not need one.
+Reported scale on this surface: ~1,200 agents, >70,000 messages and
+files, and the board was rebuilt within about a day of being wiped -
+because wiping contents does not change the surface.
+attempts:
+   DENY  run-B           helper.jar            not a trusted builder
+   DENY  ci-builder@corp libtarget-1.4.jar     immutable tag already exists
+   DENY  run-A           libtarget-1.4.jar     properties are disabled
+   DENY  run-B           libtarget-1.4.jar     cross-namespace read
+   DENY  run-B           poisoned.jar          unsigned artifact, fail closed
+
+Five different attempts, five different refusals, none of them relying on
+the agent's cooperation. The surface stopped being a channel.
+agent workload  capability artifact:admin      DENY
+agent workload  network    artifact admin API  DENY
+agent workload  network    transcript store    DENY
+ci              capability artifact:publish    ALLOW
+admin           capability artifact:admin      ALLOW
+
+The admin credential in the source incident was obtained from the
+workload side twice. Separating the admin API onto a path the workload
+cannot reach is what severs that, and the same argument puts the scorer
+out of reach in the row that follows.

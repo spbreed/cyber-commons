@@ -1,0 +1,20 @@
+tables created : profiles, posts
+findings       : 2
+
+table       severity   why
+profiles    critical   RLS disabled - open via the public API
+posts       high       policy matches every row
+
+The application works. Every feature passes. `profiles` holds an api_key
+column and has no policy at all, and nothing in the test suite is shaped
+like the question that would find it.
+select relname from pg_class where relrowsecurity = false;
+   profiles  <- holds credentials or session state
+   sessions  <- holds credentials or session state
+
+tables open via the public API : 2 of 4
+of those, sensitive             : 2 (profiles, sessions)
+
+This is a one-line query and it is the highest-value one in the whole
+pattern. It is also not something an application test can express, which
+is why it belongs in CI against the schema rather than in the test suite.

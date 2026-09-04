@@ -1,0 +1,34 @@
+the bug is on line 22
+whole file             839 chars   29 lines
+±2 line window         207 chars    5 lines
+±6 line window         432 chars   13 lines
+strategy            sink   concat  source  intent  decidable
+----------------------------------------------------------------
+whole file          True   True    True    True    True
+±2 line window      True   True    False   False   False
+±6 line window      True   True    True    True    True
+
+The ±2 window has the sink and the concatenation but not the signature,
+so you cannot tell whether owner is user-controlled — which is the
+difference between critical and won't-fix.
+def list_reports(conn, owner, limit=DEFAULT_LIMIT):
+    """Called from GET /reports?owner=... — owner is user-controlled."""
+    key = _cache_key("reports", owner, limit)
+    if key in CACHE:
+        return CACHE[key]
+    rows = conn.execute("SELECT * FROM reports WHERE owner = '" + owner + "' LIMIT " + str(limit))
+    out = [_format_row(r) for r in rows]
+    CACHE[key] = out
+    return out
+
+
+394 chars (47% of the file), decidable=True
+strategy              chars   share  decidable  noise fns
+----------------------------------------------------------
+whole file              839    100%       True          4
+±2 line window          207     25%      False          0
+±6 line window          432     52%       True          1
+path slice              394     47%       True          0
+
+smallest decidable context: path slice (47% of the file, 0 unrelated functions)
+vs whole file: 53% smaller, 4→0 unrelated functions
