@@ -185,6 +185,34 @@ def call(path: str, payload: dict | None = None, timeout: int = 120) -> dict:
 
 
 # ------------------------------------------------------------------- pushing
+RUNTIME_SLUG = "cyber-commons-skill-runtime"
+RUNTIME_FILE = ROOT / "skills" / "_runtime" / "cyber_commons_skill_runtime.py"
+
+
+def push_runtime(username: str, private: bool = True) -> dict:
+    """Push the shared skill runtime as a Kaggle **utility script**.
+
+    Kaggle's mechanism for a library shared between notebooks is a script
+    kernel attached to them as a source. Every lesson then imports it instead
+    of carrying its own copy of the same two hundred lines — which is the whole
+    reason this exists.
+    """
+    return call("/kernels/push", {
+        "slug": f"{username}/{RUNTIME_SLUG}",
+        "newTitle": "Cyber Commons skill runtime",
+        "text": RUNTIME_FILE.read_text(),
+        "language": "python",
+        "kernelType": "script",
+        "isPrivate": private,
+        "enableInternet": False,
+        "enableGpu": False,
+        "datasetDataSources": [],
+        "competitionDataSources": [],
+        "kernelDataSources": [],
+        "categoryIds": ["cybersecurity"],
+    })
+
+
 def push(session: str, username: str, private: bool = True) -> dict:
     """Create/update the kernel for one session. Kaggle runs it on push."""
     nb = NB_DIR / f"{session}.ipynb"
@@ -210,7 +238,10 @@ def push(session: str, username: str, private: bool = True) -> dict:
         "enableGpu": False,
         "datasetDataSources": [],
         "competitionDataSources": [],
-        "kernelDataSources": [],
+        # The shared runtime, attached as a utility script. Without it the
+        # notebook's `from cyber_commons_skill_runtime import ...` fails on
+        # Kaggle with a bare ImportError.
+        "kernelDataSources": [f"{username}/{RUNTIME_SLUG}"],
         "categoryIds": ["cybersecurity"],
     })
 
@@ -234,6 +265,8 @@ def main() -> int:
     ap.add_argument("--session", help="one session id, e.g. A2.5")
     ap.add_argument("--all", action="store_true", help="every notebook in labs/notebooks")
     ap.add_argument("--check", action="store_true", help="verify auth + reachability, push nothing")
+    ap.add_argument("--runtime", action="store_true",
+                    help="push the shared skill runtime utility script and stop")
     ap.add_argument("--wait", action="store_true", help="poll until each kernel finishes")
     ap.add_argument("--public", action="store_true",
                     help="publish the kernels publicly (requires a phone-verified "
@@ -262,6 +295,11 @@ def main() -> int:
             return 1
         print(f"ok: credentials valid as '{user}', API reachable "
               f"({len(me)} kernel(s) visible)")
+        return 0
+
+    if a.runtime:
+        out = push_runtime(user, private=not a.public)
+        print(f"skill runtime -> {out.get('url', 'pushed')}")
         return 0
 
     todo = sessions(a.session, a.all)

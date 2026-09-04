@@ -48,7 +48,12 @@ def outputs(path: Path, seeds: list[str], timeout: int) -> list[str]:
     src = code_of(path)
     out = []
     for seed in seeds:
-        env = dict(os.environ, PYTHONHASHSEED=seed)
+        # PYTHONPATH carries the shared skill runtime, which Kaggle supplies as
+        # an attached utility script and a local run has to point at.
+        runtime = str(ROOT / "skills" / "_runtime")
+        prev = os.environ.get("PYTHONPATH", "")
+        env = dict(os.environ, PYTHONHASHSEED=seed,
+                   PYTHONPATH=f"{runtime}{os.pathsep}{prev}" if prev else runtime)
         p = subprocess.run([sys.executable, "-c", src], cwd=ROOT, env=env,
                            capture_output=True, text=True, timeout=timeout)
         if p.returncode != 0:

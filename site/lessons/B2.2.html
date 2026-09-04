@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.2 — Threat modelling from what the estate already knows | Cyber Commons</title><meta name="description" content="Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.2</div><h1>Threat modelling from what the estate already knows</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Threat models are written once, by hand, against a system that has since changed.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Turn an architecture map into a ranked threat model, then diff it after one entry point is added.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.2 · Threat modelling from what the estate already knows</h1>
 <p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: Harnesses and an Agentic AppSec Pipeline</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.1.html">B2.1 · Reading the repository: history, index, components, map</a></strong>.</p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.0.html">B2.0 · What a harness is, and why you are the one building it</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -229,117 +229,39 @@ through.
   agent with no state has no meaningful tampering row.
 - **Scoring without recording why.** A score nobody can argue with is a score
   nobody will act on.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
+import glob, importlib.util, os, sys
 
-def parse_skill(md):
-    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+# Kaggle mounts an attached kernel under /kaggle/input, and it uses two
+# different layouts — /kaggle/input/&lt;slug&gt;/ on some kernels and
+# /kaggle/input/notebooks/&lt;user&gt;/&lt;slug&gt;/ on others. Both were observed on the
+# same account in the same hour, so match either. The recursive glob is cheap
+# here because /kaggle/input holds only what is attached; globbing the working
+# tree instead cost eleven seconds a notebook.
+_WHERE = (sorted(glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;,
+                           recursive=True))
+          + [os.path.join(p, &quot;skills/_runtime/cyber_commons_skill_runtime.py&quot;)
+             for p in (&quot;.&quot;, &quot;..&quot;, &quot;../..&quot;)])
+_found = next((p for p in _WHERE if os.path.isfile(p)), None)
+if _found is None:
+    # Say what was looked for and what is actually there. &quot;The runtime is
+    # missing&quot; on its own costs whoever hits it an afternoon.
+    raise SystemExit(&quot;The shared skill runtime is missing.&quot;
+                     &quot;  looked at: &quot; + repr(_WHERE) +
+                     &quot;  /kaggle/input holds: &quot; +
+                     repr(glob.glob(&quot;/kaggle/input/**&quot;, recursive=True)[:20]) +
+                     &quot;  cwd: &quot; + os.getcwd() +
+                     &quot;. On Kaggle it is attached to this notebook as a &quot;
+                     &quot;source; locally it is skills/_runtime/ in the repository.&quot;)
+_spec = importlib.util.spec_from_file_location(&quot;cyber_commons_skill_runtime&quot;, _found)
+cyber_commons_skill_runtime = importlib.util.module_from_spec(_spec)
+sys.modules[&quot;cyber_commons_skill_runtime&quot;] = cyber_commons_skill_runtime
+_spec.loader.exec_module(cyber_commons_skill_runtime)
+from cyber_commons_skill_runtime import run_skill
 
-    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
-    scalars (`description: &gt;-`) whose continuation lines are indented. That is
-    all a skill needs, and parsing it directly means no dependency.
-    &quot;&quot;&quot;
-    if not md.startswith(&quot;---&quot;):
-        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
-    _, front, body = md.split(&quot;---&quot;, 2)
-    meta, key = {}, None
-    for line in front.strip().splitlines():
-        if not line.strip():
-            continue
-        if not line[0].isspace() and &quot;:&quot; in line:
-            key, val = line.split(&quot;:&quot;, 1)
-            key, val = key.strip(), val.strip()
-            # `&gt;-` and `|` open a folded block; the value is on the next lines
-            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
-        elif key is not None:
-            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
-    if &quot;allowed-tools&quot; in meta:
-        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
-                                 if t.strip()]
-    for required in (&quot;name&quot;, &quot;description&quot;):
-        if not meta.get(required):
-            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
-    return meta, body.strip()
-
-_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
-
-def route(task, skills):
-    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
-
-    The description is not documentation — it is the routing key. An agent
-    decides whether to load a skill by reading it, so a vague description means
-    the skill never fires when it should, and two overlapping descriptions mean
-    the wrong one fires.
-
-    Returns (pick, scores, margin). A margin of 0 means the top two scored the
-    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
-    wearing a confident face. Callers should refuse to auto-route on margin 0
-    rather than pretend the tiebreak meant something.
-    &quot;&quot;&quot;
-    want = set(_WORD.findall(task.lower()))
-    def score(meta):
-        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
-    scores = {n: score(skills[n]) for n in sorted(skills)}
-    # sort names first, then by score: ties must break identically on every
-    # machine or the same task routes differently on two runs
-    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
-    top = scores[ranked[0]]
-    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
-    return ranked[0], scores, margin
-
-def contract_of(body):
-    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
-    # non-greedy across any prose between the heading and the fence
-    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
-    if not m:
-        raise ValueError(&quot;skill declares no output contract&quot;)
-    return json.loads(m.group(1))
-
-def check(instance, contract, path=&quot;$&quot;):
-    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
-
-    Returns the list of problems. An empty list means the shape is right — and
-    that is *all* it means. Conformance is not accuracy: an empty findings list
-    conforms perfectly and tells you nothing.
-    &quot;&quot;&quot;
-    problems = []
-    if isinstance(contract, dict):
-        if not isinstance(instance, dict):
-            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
-        for k, v in sorted(contract.items()):
-            if k not in instance:
-                problems.append(f&quot;{path}.{k}: missing&quot;)
-            else:
-                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
-    elif isinstance(contract, list):
-        if not isinstance(instance, list):
-            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
-        for i, item in enumerate(instance):          # every element, same template
-            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
-    elif isinstance(contract, str) and &quot;|&quot; in contract:
-        if instance not in contract.split(&quot;|&quot;):
-            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
-    elif isinstance(contract, bool):                  # before the numeric case:
-        if not isinstance(instance, bool):            # bool is a subclass of int
-            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
-    elif isinstance(contract, (int, float)):
-        # JSON has one number type. A contract written `0` must accept 0.4, or
-        # every cost and rate in the pipeline has to be rounded to satisfy a
-        # checker rather than to be correct.
-        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
-            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
-    elif not isinstance(instance, type(contract)):
-        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
-                        f&quot;got {type(instance).__name__}&quot;)
-    return problems
-
-# Execute the skill above: parse skills/appsec/threat-model-stride/SKILL.md into the two
-# halves an agent uses — the frontmatter it routes on, and the body
-# it follows.
-meta, body = parse_skill(SKILL_MD)
-print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
-print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
-print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>4 · Its script</h2>
+# Split skills/appsec/threat-model-stride/SKILL.md into the two halves an agent uses —
+# the frontmatter it routes on, and the body it follows.
+meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbmd"><h2>4 · Its script</h2>
 <p>The deterministic half of the skill — the part that has to give the same answer twice so two runs can be diffed. Embedded from <code>skills/appsec/threat-model-stride/scripts/</code>.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/threat-model-stride/scripts/threat_model.py — embedded verbatim from the repository.
 # This is the skill&#x27;s own script, not a paraphrase of it.
 #!/usr/bin/env python3
@@ -349,16 +271,20 @@ This is the executable half of the `threat-model-stride` skill. The SKILL.md
 next to it is the procedure a model follows; this is the deterministic part it
 calls, so the scoring is reproducible and two runs can be diffed.
 
-    python3 threat_model.py                 # synthetic CyberTravels estate
-    python3 threat_model.py --hardened      # same code, hardened estate
-    python3 threat_model.py --json          # the output contract, as JSON
+    python3 threat_model.py     # the synthetic CyberTravels estate, then the
+                                # same estate hardened, then the diff
+
+There is no CLI. The module prints its demonstration at import, because it is
+embedded into a notebook cell where `__name__` is `__main__` and `sys.argv`
+belongs to the kernel — an `if __name__ == &quot;__main__&quot;` block guarded on
+arguments ran argparse against a Kaggle kernel&#x27;s argv and failed the notebook.
+Call `model()`, `boundaries()` and `diagram()` directly for the JSON contract.
 
 Standard library only, so it runs on a Kaggle kernel with the internet off.
 &quot;&quot;&quot;
 
-import argparse
+import ast
 import json
-import sys
 from collections import defaultdict
 
 # ---------------------------------------------------------------- the inputs
@@ -366,25 +292,85 @@ from collections import defaultdict
 # real estate already holds, and the point of the lesson is that all five are
 # read rather than just the first.
 
-ARCHITECTURE = {
-    &quot;components&quot;: {&quot;src/api&quot;: 0, &quot;src/util&quot;: 1, &quot;src/data&quot;: 2},   # trust level
-    &quot;entry_points&quot;: [
-        {&quot;unit&quot;: &quot;get_booking&quot;, &quot;component&quot;: &quot;src/api&quot;, &quot;auth&quot;: &quot;session&quot;},
-        {&quot;unit&quot;: &quot;upload_voucher&quot;, &quot;component&quot;: &quot;src/api&quot;, &quot;auth&quot;: &quot;session&quot;},
-        {&quot;unit&quot;: &quot;health&quot;, &quot;component&quot;: &quot;src/api&quot;, &quot;auth&quot;: &quot;none&quot;},
-    ],
-    &quot;flows&quot;: [(&quot;get_booking&quot;, &quot;load_booking&quot;), (&quot;get_booking&quot;, &quot;render&quot;),
-              (&quot;upload_voucher&quot;, &quot;store&quot;), (&quot;load_booking&quot;, &quot;execute&quot;),
-              (&quot;store&quot;, &quot;open&quot;)],
-    &quot;sinks&quot;: [
-        {&quot;unit&quot;: &quot;load_booking&quot;, &quot;component&quot;: &quot;src/data&quot;,
-         &quot;resource&quot;: &quot;bookings_db&quot;, &quot;sink&quot;: &quot;execute&quot;},
-        {&quot;unit&quot;: &quot;store&quot;, &quot;component&quot;: &quot;src/data&quot;,
-         &quot;resource&quot;: &quot;voucher_bucket&quot;, &quot;sink&quot;: &quot;open&quot;},
-    ],
-    &quot;assets&quot;: {&quot;bookings_db&quot;: {&quot;data&quot;: [&quot;customer&quot;, &quot;financial&quot;], &quot;value&quot;: 5},
-               &quot;voucher_bucket&quot;: {&quot;data&quot;: [&quot;documents&quot;], &quot;value&quot;: 3}},
+# ------------------------------------------------- the architecture, derived
+# B2.1 used to draw this map in its own lesson and this file used to retype the
+# result. Retyping is the failure the lesson warns about: a threat model that
+# describes the system as somebody once described it, rather than as the code
+# is now. So the minimum of the recon stage lives here — parse the sources,
+# take the units nothing calls as entry points, take a call into a dangerous
+# builtin as a sink — and the model below is built from what that returns.
+
+SOURCES = {
+ &quot;src/api/bookings.py&quot;: &#x27;&#x27;&#x27;
+def get_booking(request):
+    &quot;&quot;&quot;HTTP GET /bookings/&lt;ref&gt; - request.args is traveller-controlled.&quot;&quot;&quot;
+    return render(load_booking(request.args[&quot;ref&quot;], request.args[&quot;owner&quot;]))
+
+def upload_voucher(request):
+    &quot;&quot;&quot;HTTP POST /vouchers - the multipart body is traveller-controlled.&quot;&quot;&quot;
+    return store(request.files[&quot;doc&quot;], request.args[&quot;name&quot;])
+
+def health(request):
+    &quot;&quot;&quot;HTTP GET /health - no session required.&quot;&quot;&quot;
+    return &quot;ok&quot;
+&#x27;&#x27;&#x27;,
+ &quot;src/data/reports.py&quot;: &#x27;&#x27;&#x27;
+def load_booking(ref, owner):
+    return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + ref)
+&#x27;&#x27;&#x27;,
+ &quot;src/data/docs.py&quot;: &#x27;&#x27;&#x27;
+def store(blob, name):
+    open(&quot;/srv/vouchers/&quot; + name, &quot;wb&quot;).write(blob)
+&#x27;&#x27;&#x27;,
+ &quot;src/util/render.py&quot;: &#x27;&#x27;&#x27;
+def render(rows):
+    return &quot;\\n&quot;.join(str(r) for r in rows)
+&#x27;&#x27;&#x27;,
 }
+
+TRUST = {&quot;src/api&quot;: 0, &quot;src/util&quot;: 1, &quot;src/data&quot;: 2}   # 0 = the untrusted edge
+DANGEROUS = {&quot;execute&quot;: &quot;bookings_db&quot;, &quot;open&quot;: &quot;voucher_bucket&quot;}
+UNAUTHENTICATED = {&quot;health&quot;}          # what the router leaves open
+ASSETS = {&quot;bookings_db&quot;: {&quot;data&quot;: [&quot;customer&quot;, &quot;financial&quot;], &quot;value&quot;: 5},
+          &quot;voucher_bucket&quot;: {&quot;data&quot;: [&quot;documents&quot;], &quot;value&quot;: 3}}
+
+
+def units_of(src, path):
+    &quot;&quot;&quot;Semantic units and what each one calls. Not lines, not files.&quot;&quot;&quot;
+    out = []
+    for fn in [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef)]:
+        calls = sorted({(c.func.id if isinstance(c.func, ast.Name)
+                         else getattr(c.func, &quot;attr&quot;, &quot;&quot;))
+                        for c in ast.walk(fn) if isinstance(c, ast.Call)} - {&quot;&quot;})
+        out.append({&quot;name&quot;: fn.name, &quot;component&quot;: path.rsplit(&quot;/&quot;, 1)[0],
+                    &quot;calls&quot;: calls})
+    return out
+
+
+def derive(sources):
+    &quot;&quot;&quot;The map: entry points, flows, sinks, and the trust level per component.
+
+    An entry point is a unit nothing in the repository calls — which is what
+    makes it reachable from outside. Deriving it beats declaring it, because
+    adding a function changes the answer and nobody has to remember to.
+    &quot;&quot;&quot;
+    units = [u for p, s in sorted(sources.items()) for u in units_of(s, p)]
+    names = {u[&quot;name&quot;] for u in units}
+    called = {c for u in units for c in u[&quot;calls&quot;] if c in names}
+    entries = [{&quot;unit&quot;: u[&quot;name&quot;], &quot;component&quot;: u[&quot;component&quot;],
+                &quot;auth&quot;: &quot;none&quot; if u[&quot;name&quot;] in UNAUTHENTICATED else &quot;session&quot;}
+               for u in units if u[&quot;name&quot;] not in called]
+    flows = sorted({(u[&quot;name&quot;], c) for u in units for c in u[&quot;calls&quot;]
+                    if c in names or c in DANGEROUS})
+    sinks = [{&quot;unit&quot;: u[&quot;name&quot;], &quot;component&quot;: u[&quot;component&quot;],
+              &quot;resource&quot;: DANGEROUS[c], &quot;sink&quot;: c}
+             for u in units for c in u[&quot;calls&quot;] if c in DANGEROUS]
+    return {&quot;components&quot;: TRUST, &quot;entry_points&quot;: sorted(entries, key=lambda e: e[&quot;unit&quot;]),
+            &quot;flows&quot;: flows, &quot;sinks&quot;: sorted(sinks, key=lambda s: s[&quot;unit&quot;]),
+            &quot;assets&quot;: ASSETS}
+
+
+ARCHITECTURE = derive(SOURCES)
 
 CSPM = [
     {&quot;resource&quot;: &quot;voucher_bucket&quot;, &quot;finding&quot;: &quot;bucket policy allows public read&quot;,
@@ -585,46 +571,7 @@ print()
 print(&quot;The rows do not disappear. Hardening removes severity, not threats -&quot;)
 print(&quot;and the row is what you re-check after the next terraform change.&quot;)
 assert len(hard) == len(threats)
-assert max(t[&quot;score&quot;] for t in hard) &lt; max(t[&quot;score&quot;] for t in threats)
-
-
-def main() -&gt; int:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument(&quot;--hardened&quot;, action=&quot;store_true&quot;)
-    ap.add_argument(&quot;--json&quot;, action=&quot;store_true&quot;)
-    a = ap.parse_args()
-
-    inputs = dict(cspm=CSPM, iam=IAM, network=NETWORK, entitlements=ENTITLEMENTS)
-    if a.hardened:
-        inputs.update(HARDENED)
-    threats = model(ARCHITECTURE, **inputs)
-    bnds = boundaries(ARCHITECTURE)
-    out = {
-        &quot;inputs_present&quot;: [&quot;architecture&quot;, &quot;cspm&quot;, &quot;iam&quot;, &quot;network&quot;,
-                           &quot;entitlements&quot;],
-        &quot;threats&quot;: threats,
-        &quot;boundaries&quot;: bnds,
-        &quot;diagram&quot;: diagram(ARCHITECTURE, bnds),
-    }
-    if a.json:
-        print(json.dumps(out, indent=1))
-        return 0
-
-    print(f&quot;{&#x27;id&#x27;:6s}{&#x27;&#x27;:2s}{&#x27;entry&#x27;:16s}{&#x27;sink&#x27;:14s}{&#x27;score&#x27;:&gt;6}  why&quot;)
-    print(&quot;-&quot; * 92)
-    for t in threats:
-        print(f&quot;{t[&#x27;id&#x27;]:6s}{t[&#x27;stride&#x27;]:2s}{t[&#x27;entry&#x27;]:16s}{t[&#x27;sink&#x27;]:14s}&quot;
-              f&quot;{t[&#x27;score&#x27;]:&gt;6}  {&#x27;, &#x27;.join(t[&#x27;reasons&#x27;])}&quot;)
-    print(f&quot;\n{len(threats)} threats across &quot;
-          f&quot;{len({t[&#x27;stride&#x27;] for t in threats})} STRIDE categories&quot;)
-    print(f&quot;{len(bnds)} trust-boundary crossing(s):&quot;)
-    for b in bnds:
-        print(f&quot;   {b[&#x27;from&#x27;]} -&gt; {b[&#x27;to&#x27;]}   ({b[&#x27;trust&#x27;]})&quot;)
-    return 0
-
-
-if __name__ == &quot;__main__&quot; and sys.argv[1:]:
-    raise SystemExit(main())</code></pre></div><div class="nbmd"><h2>5 · Execute it against CyberTravels</h2>
+assert max(t[&quot;score&quot;] for t in hard) &lt; max(t[&quot;score&quot;] for t in threats)</code></pre></div><div class="nbmd"><h2>5 · Execute it against CyberTravels</h2>
 <p>Five synthetic inputs, standing in for what a real estate already holds.</p></div><div class="nbmd"><h2>6 · The diagram it emits</h2>
 <p>Mermaid, so it renders here and on the lesson page without a library. Double arrows are trust-boundary crossings — the edges every finding turned out to live on.</p></div><div class="nbmd"><h2>7 · The same code, a hardened estate</h2>
 <p>Not one line of CyberTravels' source changes. Only the four evidence inputs around it do.</p></div><div class="nbmd"><h2>What you just proved</h2>
@@ -632,4 +579,4 @@ if __name__ == &quot;__main__&quot; and sys.argv[1:]:
 <p>Point the skill at one of your own services. The work is not the model, it is collecting the five inputs: if any of them is "in somebody's head", that is the input your threat model is currently guessing at, and the guess is always the optimistic one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">B2.3 · Vulnerability auditing: three generations of SAST</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.2.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP Threat Dragon</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.2.ipynb</code></p></div><div class="pager"><a href="B2.1.html"><span class="k">← Previous</span><span class="t">B2.1 · Reading the repository: history, index, components, map</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · Vulnerability auditing: three generations of SAST</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP Threat Dragon</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.2.ipynb</code></p></div><div class="pager"><a href="B2.0.html"><span class="k">← Previous</span><span class="t">B2.0 · What a harness is, and why you are the one building it</span></a><a class="next" href="B2.3.html"><span class="k">Next →</span><span class="t">B2.3 · Vulnerability auditing: three generations of SAST</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

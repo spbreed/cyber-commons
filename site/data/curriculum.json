@@ -707,26 +707,6 @@
        "models": []
       },
       {
-       "id": "B2.1",
-       "title": "Reading the repository: history, index, components, map",
-       "track": "defend",
-       "summary": "Turn a large codebase into a machine-navigable structure agents can reason over. Parsing, symbol graphs and repository indexing as the foundation layer.",
-       "risk": "Review starts at the diff, so the pipeline never learns which parts of the repo keep breaking.",
-       "control": "Stages 1–2: mine commit and advisory history for repeat risk zones, then index the codebase into semantic units.",
-       "lab": "Parse a repo's vulnerability history into risk zones, then build a function/class index and rank files by prior-defect density.",
-       "tools": [
-        "git",
-        "OpenGrep",
-        "tree-sitter"
-       ],
-       "open_weight": [
-        "GLM-4.6"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      },
-      {
        "id": "B2.2",
        "title": "Threat modelling from what the estate already knows",
        "track": "secure",

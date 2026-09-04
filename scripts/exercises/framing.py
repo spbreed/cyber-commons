@@ -217,11 +217,6 @@ HOOKS: dict[str, str] = {
  "decision, and nobody else in the building is going to notice that the "
  "verifier is a shape check.",
 
-"B2.1":
- "An agent with a two-million-token context and a four-million-line repository "
- "has the same problem as an analyst with a week: it cannot read everything, so "
- "the question is what it reads first. Structure is what makes that choice "
- "something other than luck.",
 
 "B2.2":
  "A threat model produced in a workshop describes the system as it was on the "
@@ -1130,18 +1125,6 @@ DIAGRAMS: dict[str, str] = {
                     concatenation
 """,
 
-"B2.1": """
-   4,000,000 lines            context budget: ~30,000 lines
-   +-------------------+      +----------------+
-   |  the repository   | ---> |  what it reads |
-   +-------------------+      +----------------+
-              |
-        structure decides the arrow
-
-   symbol graph . call edges . entrypoints . change history
-   -> "start at the functions reachable from an HTTP handler and changed
-      in the last year" is a choice. "the first 30k lines" is not.
-""",
 
 "B2.2": """
    six static inputs, all already in the estate

@@ -117,117 +117,39 @@ which ones the vendor declined; that list is the assessment.
   model.
 - **Missing embedded AI features.** They arrived with a product you already
   own.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
+import glob, importlib.util, os, sys
 
-def parse_skill(md):
-    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+# Kaggle mounts an attached kernel under /kaggle/input, and it uses two
+# different layouts — /kaggle/input/&lt;slug&gt;/ on some kernels and
+# /kaggle/input/notebooks/&lt;user&gt;/&lt;slug&gt;/ on others. Both were observed on the
+# same account in the same hour, so match either. The recursive glob is cheap
+# here because /kaggle/input holds only what is attached; globbing the working
+# tree instead cost eleven seconds a notebook.
+_WHERE = (sorted(glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;,
+                           recursive=True))
+          + [os.path.join(p, &quot;skills/_runtime/cyber_commons_skill_runtime.py&quot;)
+             for p in (&quot;.&quot;, &quot;..&quot;, &quot;../..&quot;)])
+_found = next((p for p in _WHERE if os.path.isfile(p)), None)
+if _found is None:
+    # Say what was looked for and what is actually there. &quot;The runtime is
+    # missing&quot; on its own costs whoever hits it an afternoon.
+    raise SystemExit(&quot;The shared skill runtime is missing.&quot;
+                     &quot;  looked at: &quot; + repr(_WHERE) +
+                     &quot;  /kaggle/input holds: &quot; +
+                     repr(glob.glob(&quot;/kaggle/input/**&quot;, recursive=True)[:20]) +
+                     &quot;  cwd: &quot; + os.getcwd() +
+                     &quot;. On Kaggle it is attached to this notebook as a &quot;
+                     &quot;source; locally it is skills/_runtime/ in the repository.&quot;)
+_spec = importlib.util.spec_from_file_location(&quot;cyber_commons_skill_runtime&quot;, _found)
+cyber_commons_skill_runtime = importlib.util.module_from_spec(_spec)
+sys.modules[&quot;cyber_commons_skill_runtime&quot;] = cyber_commons_skill_runtime
+_spec.loader.exec_module(cyber_commons_skill_runtime)
+from cyber_commons_skill_runtime import run_skill
 
-    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
-    scalars (`description: &gt;-`) whose continuation lines are indented. That is
-    all a skill needs, and parsing it directly means no dependency.
-    &quot;&quot;&quot;
-    if not md.startswith(&quot;---&quot;):
-        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
-    _, front, body = md.split(&quot;---&quot;, 2)
-    meta, key = {}, None
-    for line in front.strip().splitlines():
-        if not line.strip():
-            continue
-        if not line[0].isspace() and &quot;:&quot; in line:
-            key, val = line.split(&quot;:&quot;, 1)
-            key, val = key.strip(), val.strip()
-            # `&gt;-` and `|` open a folded block; the value is on the next lines
-            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
-        elif key is not None:
-            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
-    if &quot;allowed-tools&quot; in meta:
-        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
-                                 if t.strip()]
-    for required in (&quot;name&quot;, &quot;description&quot;):
-        if not meta.get(required):
-            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
-    return meta, body.strip()
-
-_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
-
-def route(task, skills):
-    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
-
-    The description is not documentation — it is the routing key. An agent
-    decides whether to load a skill by reading it, so a vague description means
-    the skill never fires when it should, and two overlapping descriptions mean
-    the wrong one fires.
-
-    Returns (pick, scores, margin). A margin of 0 means the top two scored the
-    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
-    wearing a confident face. Callers should refuse to auto-route on margin 0
-    rather than pretend the tiebreak meant something.
-    &quot;&quot;&quot;
-    want = set(_WORD.findall(task.lower()))
-    def score(meta):
-        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
-    scores = {n: score(skills[n]) for n in sorted(skills)}
-    # sort names first, then by score: ties must break identically on every
-    # machine or the same task routes differently on two runs
-    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
-    top = scores[ranked[0]]
-    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
-    return ranked[0], scores, margin
-
-def contract_of(body):
-    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
-    # non-greedy across any prose between the heading and the fence
-    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
-    if not m:
-        raise ValueError(&quot;skill declares no output contract&quot;)
-    return json.loads(m.group(1))
-
-def check(instance, contract, path=&quot;$&quot;):
-    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
-
-    Returns the list of problems. An empty list means the shape is right — and
-    that is *all* it means. Conformance is not accuracy: an empty findings list
-    conforms perfectly and tells you nothing.
-    &quot;&quot;&quot;
-    problems = []
-    if isinstance(contract, dict):
-        if not isinstance(instance, dict):
-            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
-        for k, v in sorted(contract.items()):
-            if k not in instance:
-                problems.append(f&quot;{path}.{k}: missing&quot;)
-            else:
-                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
-    elif isinstance(contract, list):
-        if not isinstance(instance, list):
-            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
-        for i, item in enumerate(instance):          # every element, same template
-            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
-    elif isinstance(contract, str) and &quot;|&quot; in contract:
-        if instance not in contract.split(&quot;|&quot;):
-            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
-    elif isinstance(contract, bool):                  # before the numeric case:
-        if not isinstance(instance, bool):            # bool is a subclass of int
-            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
-    elif isinstance(contract, (int, float)):
-        # JSON has one number type. A contract written `0` must accept 0.4, or
-        # every cost and rate in the pipeline has to be rounded to satisfy a
-        # checker rather than to be correct.
-        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
-            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
-    elif not isinstance(instance, type(contract)):
-        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
-                        f&quot;got {type(instance).__name__}&quot;)
-    return problems
-
-# Execute the skill above: parse skills/grc/third-party-ai-assessment/SKILL.md into the two
-# halves an agent uses — the frontmatter it routes on, and the body
-# it follows.
-meta, body = parse_skill(SKILL_MD)
-print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
-print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
-print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/third-party-ai-assessment/scripts/third_party_ai_assessment.py — embedded verbatim from the repository.
+# Split skills/grc/third-party-ai-assessment/SKILL.md into the two halves an agent uses —
+# the frontmatter it routes on, and the body it follows.
+meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/third-party-ai-assessment/scripts/third_party_ai_assessment.py — embedded verbatim from the repository.
 # This is the skill&#x27;s own script, not a paraphrase of it.
 #!/usr/bin/env python3
 &quot;&quot;&quot;Assess AI components of a supply chain for silent change and agent authority, and invalidate the control tests taken before a model changed.

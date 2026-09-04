@@ -36,37 +36,6 @@ python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it
 
 ---
 
-### B2.1 — Reading the repository: history, index, components, map
-
-`AI for Security`
-
-- **Risk** — Review starts at the diff, so the pipeline never learns which parts of the repo keep breaking.
-- **Control** — Stages 1–2: mine commit and advisory history for repeat risk zones, then index the codebase into semantic units.
-- **Lab** — Parse a repo's vulnerability history into risk zones, then build a function/class index and rank files by prior-defect density.
-- **Tools** — `git`, `OpenGrep`, `tree-sitter`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b2.10-eval-harness
-./scripts/vulnbench.sh doctor && ./scripts/vulnbench.sh setup
-./scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov
-./scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479
-./scripts/vulnbench.sh compare    # blind model comparison across backbones
-./scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?
-```
-
-*Expect:* Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results.
-
----
-
 ### B2.2 — Threat modelling from what the estate already knows
 
 `Security of AI`

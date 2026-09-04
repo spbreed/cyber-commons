@@ -8,11 +8,15 @@ Inputs (the same single source of truth the site builds from):
     curriculum/labs.json          the goal and expected-output line
     scripts/exercises/            the per-session exercise body (code + prose)
 
-**Self-contained by design.** A notebook carries every line of code it runs —
-there is no shared library to import and nothing to clone. That is what makes
-it work on a Kaggle kernel with the internet switched off, and it means a
-reader can copy one cell into their own repository without inheriting a
-dependency. Standard library only.
+**One shared library, everything else carried.** A notebook carries the skill
+it teaches and that skill's own script, verbatim. What it does *not* carry is
+the runtime that parses a SKILL.md and calls a model: that lives once in
+`skills/_runtime/` and is loaded — on Kaggle from the kernel attached as a
+source, locally from the repository. Carrying it in each notebook was 13,000
+lines of identical code that could only be fixed by rebuilding all of them.
+
+Still standard library only, and still runs on a Kaggle kernel with the
+internet switched off.
 
 **One concept, in one order.** Each lesson is built the same way and only that
 way — see LESSON_DESIGN.md for the authoring contract:
@@ -87,22 +91,59 @@ def skill_file(ref: str) -> str:
             f'SKILL_MD = r"""{text}"""')
 
 
+# The shared runtime, found rather than carried. On Kaggle an attached kernel
+# is mounted under /kaggle/input/notebooks/<user>/<slug>/__script__.py — it is
+# not on sys.path and it is not named after the kernel, which is why this is a
+# loader rather than an import. Locally it is the file in the repository.
+#
+# Eight lines per notebook instead of two hundred, and one place to fix.
+RUNTIME_BOOTSTRAP = """import glob, importlib.util, os, sys
+
+# Kaggle mounts an attached kernel under /kaggle/input, and it uses two
+# different layouts — /kaggle/input/<slug>/ on some kernels and
+# /kaggle/input/notebooks/<user>/<slug>/ on others. Both were observed on the
+# same account in the same hour, so match either. The recursive glob is cheap
+# here because /kaggle/input holds only what is attached; globbing the working
+# tree instead cost eleven seconds a notebook.
+_WHERE = (sorted(glob.glob("/kaggle/input/**/cyber-commons-skill-runtime/__script__.py",
+                           recursive=True))
+          + [os.path.join(p, "skills/_runtime/cyber_commons_skill_runtime.py")
+             for p in (".", "..", "../..")])
+_found = next((p for p in _WHERE if os.path.isfile(p)), None)
+if _found is None:
+    # Say what was looked for and what is actually there. "The runtime is
+    # missing" on its own costs whoever hits it an afternoon.
+    raise SystemExit("The shared skill runtime is missing."
+                     "  looked at: " + repr(_WHERE) +
+                     "  /kaggle/input holds: " +
+                     repr(glob.glob("/kaggle/input/**", recursive=True)[:20]) +
+                     "  cwd: " + os.getcwd() +
+                     ". On Kaggle it is attached to this notebook as a "
+                     "source; locally it is skills/_runtime/ in the repository.")
+_spec = importlib.util.spec_from_file_location("cyber_commons_skill_runtime", _found)
+cyber_commons_skill_runtime = importlib.util.module_from_spec(_spec)
+sys.modules["cyber_commons_skill_runtime"] = cyber_commons_skill_runtime
+_spec.loader.exec_module(cyber_commons_skill_runtime)
+from cyber_commons_skill_runtime import run_skill"""
+
+
 def skill_exec(ref: str) -> str:
-    """The Python that executes the skill above: parse it, then report it.
+    """The Python that executes the skill above: load the runtime, then parse.
 
     Second of the two cells, and deliberately after the file rather than before
-    it. The runtime is emitted here rather than as a step of its own so a lesson
-    cannot put sixty lines of parser between the reader and the procedure.
+    it.
+
+    The parser, the router, the contract checker and the model adapter live in
+    `skills/_runtime/` and are loaded from there. Carrying a copy in each of 117
+    notebooks was 13,000 lines of identical code that could only be fixed by
+    rebuilding all of them.
     """
-    return (f"{SKILL_RUNTIME}\n\n"
-            f"# Execute the skill above: parse skills/{ref}/SKILL.md into the two\n"
-            f"# halves an agent uses — the frontmatter it routes on, and the body\n"
-            f"# it follows.\n"
-            f'meta, body = parse_skill(SKILL_MD)\n'
-            f'print(f"loaded skill: {{meta[\'name\']}}")\n'
-            f'print(f"  tools it may use: {{\', \'.join(meta.get(\'allowed-tools\', [])) or \'—\'}}")\n'
-            f'print(f"  routing description: {{len(meta[\'description\'].split())}} words")\n'
-            f'print(f"  procedure: {{len(body.splitlines())}} lines")')
+    return (f"# Execute the skill above, using the shared runtime rather than a copy.\n"
+            f"{RUNTIME_BOOTSTRAP}\n\n"
+            f"# Split skills/{ref}/SKILL.md into the two halves an agent uses —\n"
+            f"# the frontmatter it routes on, and the body it follows.\n"
+            f"meta, body = run_skill(SKILL_MD)")
+
 
 def skill_script(ref: str) -> str:
     """Embed a skill's own script verbatim, so the notebook runs the real file.

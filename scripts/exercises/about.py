@@ -329,13 +329,6 @@ This is the **opening** lesson of the chapter: it also sets out which techniques
 belong before a deploy and which only work after one.
 """,
 
-"B2.1": """
-**What it covers.** Parse a repo's vulnerability history into risk zones, then build a function/class index and rank files by prior-defect density.
-
-**Why a security engineer needs it.** Review starts at the diff, so the pipeline never learns which parts of the repo keep breaking. The control it builds is: stages 1–2: mine commit and advisory history for repeat risk zones, then index the codebase into semantic units.
-
-This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
-""",
 
 "B2.2": """
 **What it covers.** Turn an architecture map into a ranked threat model, then diff it after one entry point is added.

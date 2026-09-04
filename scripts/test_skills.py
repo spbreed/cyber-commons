@@ -51,6 +51,12 @@ STRIP = ("OPENAI_BASE_URL", "OPENAI_API_KEY", "MODEL", "ANTHROPIC_API_KEY",
 def clean_env() -> dict:
     env = {k: v for k, v in os.environ.items() if k not in STRIP}
     env["PYTHONHASHSEED"] = "0"
+    # The shared runtime, the way Kaggle supplies it to a notebook. A script
+    # that calls a model imports the adapter from there rather than carrying a
+    # copy, so a standalone run has to be able to find it too.
+    runtime = str(ROOT / "skills" / "_runtime")
+    prev = env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = f"{runtime}{os.pathsep}{prev}" if prev else runtime
     return env
 
 

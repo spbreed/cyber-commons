@@ -12,82 +12,27 @@ kernel with the internet switched off.
 # --- model backend: replay by default, a Kaggle open-weight model when served -
 # One URL and one header shape, no vendor SDK. Standard library only, so the
 # notebook stays self-contained.
-import json, os, urllib.error, urllib.request
+# The model adapter comes from the shared runtime, not from a copy in this
+# file. In a lesson notebook the cell above has already loaded it; standalone,
+# find it the same way that cell does.
+import glob as _glob, importlib.util as _ilu, os as _os, sys as _sys
 
-# Qwen2.5-7B-Instruct is the floor established in MODELS.md: below it two of
-# the lessons' acceptance properties stop holding.
-OPEN_WEIGHT_DEFAULT = "qwen2.5-7b-instruct"
-TIMEOUT = 60
+if "cyber_commons_skill_runtime" not in _sys.modules:
+    _where = (sorted(_glob.glob("/kaggle/input/**/cyber-commons-skill-runtime/__script__.py",
+                                recursive=True))
+              + [_os.path.join(p, "skills/_runtime/cyber_commons_skill_runtime.py")
+                 for p in (".", "..", "../..", _os.path.join(_os.path.dirname(__file__), "../../../_runtime"))])
+    _found = next((p for p in _where if _os.path.isfile(p)), None)
+    if _found is None:
+        raise SystemExit("shared skill runtime not found; looked at " + repr(_where))
+    _spec = _ilu.spec_from_file_location("cyber_commons_skill_runtime", _found)
+    _mod = _ilu.module_from_spec(_spec)
+    _sys.modules["cyber_commons_skill_runtime"] = _mod
+    _spec.loader.exec_module(_mod)
 
-def backend():
-    """(kind, model). Configuration comes from the environment, never a literal."""
-    if os.environ.get("OPENAI_BASE_URL"):
-        return "open-weight", os.environ.get("MODEL", OPEN_WEIGHT_DEFAULT)
-    return "replay", "deterministic stand-in (no backend configured)"
+from cyber_commons_skill_runtime import announce_backend, ask
 
-def _post(url, payload, headers):
-    req = urllib.request.Request(url, data=json.dumps(payload).encode(),
-                                 headers={"content-type": "application/json", **headers})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        return json.loads(r.read().decode())
-
-def _openai_compatible(prompt, system, model, max_tokens, temperature):
-    msgs = ([{"role": "system", "content": system}] if system else []) + \
-           [{"role": "user", "content": prompt}]
-    base = os.environ["OPENAI_BASE_URL"].rstrip("/")
-    key = os.environ.get("OPENAI_API_KEY", "not-needed")
-    out = _post(f"{base}/chat/completions",
-                {"model": model, "messages": msgs, "max_tokens": max_tokens,
-                 "temperature": temperature},
-                {"authorization": f"Bearer {key}"})
-    return out["choices"][0]["message"]["content"].strip()
-
-def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
-    """Answer `prompt` with the configured backend, or return `replay`.
-
-    `replay` is required, not optional: a lesson must be able to run offline,
-    and the answer it falls back to has to be visible in the source rather than
-    invented at runtime.
-    """
-    kind, model = backend()
-    if kind == "replay":
-        return replay, kind, model
-    try:
-        return _openai_compatible(prompt, system, model, max_tokens,
-                                  temperature), kind, model
-    except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
-        # Print what the server actually said. "failed: 400" costs whoever hits
-        # this an hour; the body usually names the exact missing parameter, and
-        # it never contains a key.
-        detail = getattr(e, "code", None) or type(e).__name__
-        why = ""
-        if hasattr(e, "read"):
-            try:
-                why = json.loads(e.read().decode()).get("error", {}).get("message", "")
-            except Exception:
-                why = ""
-        print(f"   !! {kind} backend ({model}) failed: {detail}"
-              f"{' - ' + why if why else ''}")
-        print("      Using the replay, which is labelled as one. No model answered.")
-        return replay, "replay", f"{model} unreachable"
-
-_kind, _model = backend()
-print(f"model backend : {_kind}")
-print(f"model         : {_model}")
-if _kind == "replay":
-    print()
-    print("This lesson runs offline against a deterministic replay, which is why")
-    print("it works on a Kaggle kernel with the internet switched off. To run the")
-    print("identical code against a real model, serve an open-weight model from")
-    print("Kaggle Models and point the adapter at it:")
-    print()
-    print("   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \\")
-    print("           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen")
-    print("   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \\")
-    print("          MODEL=qwen2.5-7b-instruct")
-    print()
-    print("   MODELS.md has the exact Kaggle download. There is no paid backend:")
-    print("   every model result in this repository was produced this way.")
+announce_backend()
 
 
 import time

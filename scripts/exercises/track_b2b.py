@@ -315,7 +315,7 @@ irrelevant inside a migration script that takes a constant.
            "than the whole file.",
  "challenge": "Apply the path-slice rule where the source is three functions away "
               "from the sink. That is the case where text windows break down "
-              "entirely and the call graph from B2.1 earns its keep.",
+              "entirely and the call graph the threat model derives (B2.2) earns its keep.",
 },
 
 "B2.12": {
@@ -505,7 +505,7 @@ this is where you point them at someone else's pipeline.
          "This is the whole point of the bonus. Conformance is structural — with "
          "structured output it goes to 1.00 and says nothing about quality. The "
          "number that decides adoption is expert accuracy against a key the tool "
-         "never saw, matched on **parent directory plus filename** (B2.1)."),
+         "never saw, matched on **parent directory plus filename**."),
   *skill_steps('appsec/reference-pipeline-scoring',
                "## 2 · The stage, as a skill\n\nGoogle's Mantis is a set of claims: these stages, this output shape, this accuracy. The skill checks all three — maps it onto the stage model, conformance-checks its published samples, and scores its findings against a held-out key."),
 ],

@@ -367,9 +367,7 @@ GROUNDING: dict[str, str] = {
 "B2.0": "Alex reviews 40 pull requests a week against 6 before the Coding "
         "Agent existed, with the same one reviewer. The reviewer becomes a "
         "harness, and the harness becomes something he has to secure.",
-"B2.1": "CyberTravels' repository is four services and a shared library. Structure "
-        "is what decides whether the pipeline reads the booking handlers or the "
-        "vendored SDK first.",
+
 "B2.2": "The threat model that said “CyberTravels answers questions” is still on "
         "file. Deriving it from the architecture on every release is what would "
         "have caught the refund endpoint appearing.",

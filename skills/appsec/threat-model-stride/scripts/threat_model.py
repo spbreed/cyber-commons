@@ -18,6 +18,7 @@ Standard library only, so it runs on a Kaggle kernel with the internet off.
 """
 from __future__ import annotations
 
+import ast
 import json
 from collections import defaultdict
 
@@ -26,25 +27,85 @@ from collections import defaultdict
 # real estate already holds, and the point of the lesson is that all five are
 # read rather than just the first.
 
-ARCHITECTURE = {
-    "components": {"src/api": 0, "src/util": 1, "src/data": 2},   # trust level
-    "entry_points": [
-        {"unit": "get_booking", "component": "src/api", "auth": "session"},
-        {"unit": "upload_voucher", "component": "src/api", "auth": "session"},
-        {"unit": "health", "component": "src/api", "auth": "none"},
-    ],
-    "flows": [("get_booking", "load_booking"), ("get_booking", "render"),
-              ("upload_voucher", "store"), ("load_booking", "execute"),
-              ("store", "open")],
-    "sinks": [
-        {"unit": "load_booking", "component": "src/data",
-         "resource": "bookings_db", "sink": "execute"},
-        {"unit": "store", "component": "src/data",
-         "resource": "voucher_bucket", "sink": "open"},
-    ],
-    "assets": {"bookings_db": {"data": ["customer", "financial"], "value": 5},
-               "voucher_bucket": {"data": ["documents"], "value": 3}},
+# ------------------------------------------------- the architecture, derived
+# B2.1 used to draw this map in its own lesson and this file used to retype the
+# result. Retyping is the failure the lesson warns about: a threat model that
+# describes the system as somebody once described it, rather than as the code
+# is now. So the minimum of the recon stage lives here — parse the sources,
+# take the units nothing calls as entry points, take a call into a dangerous
+# builtin as a sink — and the model below is built from what that returns.
+
+SOURCES = {
+ "src/api/bookings.py": '''
+def get_booking(request):
+    """HTTP GET /bookings/<ref> - request.args is traveller-controlled."""
+    return render(load_booking(request.args["ref"], request.args["owner"]))
+
+def upload_voucher(request):
+    """HTTP POST /vouchers - the multipart body is traveller-controlled."""
+    return store(request.files["doc"], request.args["name"])
+
+def health(request):
+    """HTTP GET /health - no session required."""
+    return "ok"
+''',
+ "src/data/reports.py": '''
+def load_booking(ref, owner):
+    return DB.execute("SELECT * FROM bookings WHERE ref=" + ref)
+''',
+ "src/data/docs.py": '''
+def store(blob, name):
+    open("/srv/vouchers/" + name, "wb").write(blob)
+''',
+ "src/util/render.py": '''
+def render(rows):
+    return "\\n".join(str(r) for r in rows)
+''',
 }
+
+TRUST = {"src/api": 0, "src/util": 1, "src/data": 2}   # 0 = the untrusted edge
+DANGEROUS = {"execute": "bookings_db", "open": "voucher_bucket"}
+UNAUTHENTICATED = {"health"}          # what the router leaves open
+ASSETS = {"bookings_db": {"data": ["customer", "financial"], "value": 5},
+          "voucher_bucket": {"data": ["documents"], "value": 3}}
+
+
+def units_of(src, path):
+    """Semantic units and what each one calls. Not lines, not files."""
+    out = []
+    for fn in [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef)]:
+        calls = sorted({(c.func.id if isinstance(c.func, ast.Name)
+                         else getattr(c.func, "attr", ""))
+                        for c in ast.walk(fn) if isinstance(c, ast.Call)} - {""})
+        out.append({"name": fn.name, "component": path.rsplit("/", 1)[0],
+                    "calls": calls})
+    return out
+
+
+def derive(sources):
+    """The map: entry points, flows, sinks, and the trust level per component.
+
+    An entry point is a unit nothing in the repository calls — which is what
+    makes it reachable from outside. Deriving it beats declaring it, because
+    adding a function changes the answer and nobody has to remember to.
+    """
+    units = [u for p, s in sorted(sources.items()) for u in units_of(s, p)]
+    names = {u["name"] for u in units}
+    called = {c for u in units for c in u["calls"] if c in names}
+    entries = [{"unit": u["name"], "component": u["component"],
+                "auth": "none" if u["name"] in UNAUTHENTICATED else "session"}
+               for u in units if u["name"] not in called]
+    flows = sorted({(u["name"], c) for u in units for c in u["calls"]
+                    if c in names or c in DANGEROUS})
+    sinks = [{"unit": u["name"], "component": u["component"],
+              "resource": DANGEROUS[c], "sink": c}
+             for u in units for c in u["calls"] if c in DANGEROUS]
+    return {"components": TRUST, "entry_points": sorted(entries, key=lambda e: e["unit"]),
+            "flows": flows, "sinks": sorted(sinks, key=lambda s: s["unit"]),
+            "assets": ASSETS}
+
+
+ARCHITECTURE = derive(SOURCES)
 
 CSPM = [
     {"resource": "voucher_bucket", "finding": "bucket policy allows public read",

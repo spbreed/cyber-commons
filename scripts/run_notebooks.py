@@ -41,11 +41,24 @@ def code_of(nb: dict) -> str:
     return "\n\n".join(out)
 
 
+# The shared skill runtime, the way Kaggle provides it. On Kaggle it is an
+# attached utility script already on the path; locally it is a file in the
+# repository, so put it there before the notebook imports it.
+RUNTIME_DIR = ROOT / "skills" / "_runtime"
+
+
+def _env() -> dict:
+    import os
+    path = os.environ.get("PYTHONPATH", "")
+    return dict(os.environ,
+                PYTHONPATH=f"{RUNTIME_DIR}{os.pathsep}{path}" if path else str(RUNTIME_DIR))
+
+
 def run_one(path: Path, timeout: int = 120) -> dict:
     nb = json.loads(path.read_text())
     src = code_of(nb)
     t0 = time.monotonic()
-    p = subprocess.run([sys.executable, "-c", src], cwd=ROOT,
+    p = subprocess.run([sys.executable, "-c", src], cwd=ROOT, env=_env(),
                        capture_output=True, text=True, timeout=timeout)
     elapsed = time.monotonic() - t0
     return {
