@@ -33,6 +33,7 @@ import os
 import contextlib
 import sys
 import time
+import traceback
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -128,9 +129,19 @@ def main() -> int:
         real_env, os.environ = os.environ, env
         try:
             with contextlib.redirect_stdout(buf):
-                exec(compile(src, sid, "exec"), {"__name__": "__live__"})
+                # "__main__", not a private name: @dataclass resolves
+                # sys.modules[cls.__module__] at class creation, and a module
+                # name nothing registered makes that None. A notebook and a
+                # Kaggle kernel are both __main__, so this also runs the cells
+                # in the module context they were built for.
+                exec(compile(src, sid, "exec"), {"__name__": "__main__"})
         except Exception as e:                       # noqa: BLE001 - reported, not raised
-            ok, err = False, f"{type(e).__name__}: {e}"
+            # With the location. A bare "AttributeError: 'NoneType' object has
+            # no attribute '__dict__'" costs whoever hits it an hour; the frame
+            # says which lesson's cell and which line.
+            frame = traceback.extract_tb(e.__traceback__)[-1]
+            ok, err = False, (f"{type(e).__name__}: {e}  "
+                              f"[{frame.filename}:{frame.lineno} {frame.line}]")
         finally:
             os.environ = real_env
         out = buf.getvalue()
