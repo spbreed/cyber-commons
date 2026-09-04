@@ -79,9 +79,11 @@ needs ~40GB RAM. If your laptop has 16GB, use the small variants
 (`llama3.2:3b`, `glm-4-9b`, `qwen2.5:7b`) — every lab's *mechanics* work on a
 small model.
 
-The seven model-facing lessons — six one-shot sections plus B2.0's agentic
-loop — were run against two sizes on 4 CPUs with no GPU, on weights pulled from
-Kaggle Models. The difference is worth knowing before you pick:
+The seven model-facing lessons were run against two sizes on 4 CPUs with no
+GPU, on weights pulled from Kaggle Models. Each of them calls the model from
+inside its **skill's own script** — there is no adapter in a lesson — so what is
+being tested here is the same file `scripts/test_skills.py` runs offline. The
+difference between the sizes is worth knowing before you pick:
 
 | | reached the model | acceptance property held |
 |---|---|---|

@@ -20,7 +20,7 @@
      "model": "qwen2.5-1.5b-instruct",
      "property": "the verified loop returns a parameterised query, and the unverified one does not have to",
      "property_held": "True",
-     "seconds": 4.56,
+     "seconds": 5.26,
      "error": null,
      "answer": "return DB.execute(\"SELECT * FROM bookings WHERE ref=?\")"
     },
@@ -31,7 +31,7 @@
      "model": "qwen2.5-1.5b-instruct",
      "property": "names a trust boundary",
      "property_held": "True",
-     "seconds": 2.52,
+     "seconds": 2.87,
      "error": null,
      "answer": "This component handles API requests for booking and voucher upload, with a trust boundary at the public HTTP router."
     },
@@ -42,7 +42,7 @@
      "model": "qwen2.5-1.5b-instruct",
      "property": "names the CWE identifier",
      "property_held": "True",
-     "seconds": 3.64,
+     "seconds": 4.73,
      "error": null,
      "answer": "The function is vulnerable to SQL injection. The value 'ref' reaches the sink as it directly forms part of the query string without proper sanitization or parameterized queries.\n   \n   CWE: CWE-91 - Injection vulnerability"
     },
@@ -53,9 +53,9 @@
      "model": "qwen2.5-1.5b-instruct",
      "property": "parameterises the query",
      "property_held": "False",
-     "seconds": 3.02,
+     "seconds": 3.49,
      "error": null,
-     "answer": "```python\n   def report(request):\n       q = \"SELECT * FROM orders WHERE ref = '\" + request.args['ref'] + \"'\"\n       return db.execute(q)\n   ```"
+     "answer": "it reimplements the driver's escaping and will be wrong for the next\ninput class or the next database. Nothing except a rule about MECHANISM\ncatches that \u2014 which is the part of remediation that does not automate.\nbackend used : open-weight\nmodel        : qwen2.5-1.5b-instruct\nprompt       : Fix this without changing the function's behaviour for valid input...\n\nanswer:\n   ```python\n   def report(request):\n       q = \"SELECT * FROM orders WHERE ref = '\" + request.args['ref'] + \"'\"\n       return db.execute(q)\n   ```"
     },
     {
      "session": "C1.1",
@@ -64,7 +64,7 @@
      "model": "qwen2.5-1.5b-instruct",
      "property": "put the unauthenticated endpoint first",
      "property_held": "False",
-     "seconds": 7.44,
+     "seconds": 13.88,
      "error": null,
      "answer": "F-01: TLS 1.0 is enabled on the API, which poses a significant security risk due to its vulnerability to attacks like POODLE and BEAST.\n   F-02: The /v1/users endpoint returns data without authentication, indicating an unsecured API that could expose sensitive information if exploited.\n   F-06: An expired certificate on CDN is not in scope for this engagement but should be addressed as it indicates a lack of proper security measures."
     },
@@ -75,7 +75,7 @@
      "model": "qwen2.5-1.5b-instruct",
      "property": "returned one of the three dispositions",
      "property_held": "True",
-     "seconds": 5.4,
+     "seconds": 10.71,
      "error": null,
      "answer": "**Disposition: Close-benign**\n   \n   **Why:** The alert indicates that a service account (svc-reports) authenticated from an IP address within the allowed range for its normal operation. This is considered benign activity as it aligns with expected behavior and does not indicate any security threats or violations of policy."
     },
@@ -86,7 +86,7 @@
      "model": "qwen2.5-1.5b-instruct",
      "property": "expresses a threshold",
      "property_held": "True",
-     "seconds": 7.24,
+     "seconds": 8.68,
      "error": null,
      "answer": "```plaintext\n   if (numDistinctBuckets > 20) AND (timeSinceLastCIDR >= 5 minutes)\n   ```\n   \n   Pseudocode:\n   ```plaintext\n   detectNonHumanIdentity()\n       numDistinctBuckets = countDistinctBuckets()\n       timeSinceLastCIDR = getCurrentTime() - lastCIDRCheckTime()\n       \n       if (numDistinctBuckets > 20) AND (timeSinceLastCIDR >= 5 minutes)\n           return True\n       else\n           return False\n   ```"
     }

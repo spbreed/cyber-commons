@@ -232,7 +232,9 @@ export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 MODEL=qwen2.5-7b-instruct
 python3 scripts/live_model_test.py --backend open-weight --save
 ```
 
-**Seven model-facing lessons, two model sizes, 4 CPUs, no GPU:**
+**Seven model-facing skills, two model sizes, 4 CPUs, no GPU.** Each lesson
+calls the model from inside the skill script it executes, so this measures the
+same file that runs offline in CI:
 
 | | reached the model | acceptance property held |
 |---|---|---|
