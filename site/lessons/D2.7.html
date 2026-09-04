@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.7 — Stop authority | Cyber Commons</title><meta name="description" content="Named holder, measured time-to-stop, tested."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.7</div><h1>Stop authority</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Nobody has rehearsed halting an autonomous workflow.</p></div><div class="ctrl"><div class="lab">Control</div><p>Named holder, measured time-to-stop, tested.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Time your stop authority end to end.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.7 · Stop authority</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.7 — Stop authority | Cyber Commons</title><meta name="description" content="Named holder, measured time-to-stop, tested."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.7</div><h1>Stop authority</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Nobody has rehearsed halting an autonomous workflow.</p></div><div class="ctrl"><div class="lab">Control</div><p>Named holder, measured time-to-stop, tested.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Time your stop authority end to end.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.7 · Stop authority</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Response</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.6.html">D2.6 · Post-incident change surface</a></strong>.</p>
 <table>
@@ -47,84 +47,7 @@ rather than an intention:</p>
 </ol>
 <p>An untested stop button is a belief. The purpose of this lesson is to convert it
 into a measurement, because the measurement is what an auditor, a regulator and
-a board will each ask for in different words.</p></div><div class="nbmd"><h2>3 · Demo — the five questions, answered badly and well</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>VAGUE = {
- &quot;who&quot;:       &quot;the security team&quot;,
- &quot;mechanism&quot;: &quot;we can turn off the agents&quot;,
- &quot;time&quot;:      &quot;quickly&quot;,
- &quot;breaks&quot;:    &quot;not much&quot;,
- &quot;restart&quot;:   &quot;when it&#x27;s safe&quot;,
-}
-CONCRETE = {
- &quot;who&quot;:       &quot;on-call SRE, no approval required for non-human identities&quot;,
- &quot;mechanism&quot;: &quot;revoke the SPIFFE identity at the gateway (survives restart)&quot;,
- &quot;time&quot;:      &quot;measured 12s decision→first failed call, game day 2026-07-04&quot;,
- &quot;breaks&quot;:    &quot;auto-remediation pauses; ticket queue grows ~40/hour; &quot;
-              &quot;agreed with the service owner 2026-05-11&quot;,
- &quot;restart&quot;:   &quot;security lead, after the C1.2 containment suite passes on the new build&quot;,
-}
-for k in VAGUE:
-    print(f&quot;{k:11s} VAGUE    {VAGUE[k]}&quot;)
-    print(f&quot;{&#x27;&#x27;:11s} CONCRETE {CONCRETE[k]}\n&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — mechanism matters more than speed</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass
-
-@dataclass
-class Agent:
-    name: str; running: bool = True; identity_valid: bool = True
-    def can_act(self): return self.running and self.identity_valid
-
-MECHANISMS = {
- &quot;kill the process&quot;:      (2,   lambda a: setattr(a, &quot;running&quot;, False)),
- &quot;network quarantine&quot;:    (5,   lambda a: None),
- &quot;revoke the identity&quot;:   (12,  lambda a: setattr(a, &quot;identity_valid&quot;, False)),
- &quot;rotate the credential&quot;: (420, lambda a: setattr(a, &quot;identity_valid&quot;, False)),
-}
-print(f&quot;{&#x27;mechanism&#x27;:24s}{&#x27;secs&#x27;:&gt;6}{&#x27;stops it&#x27;:&gt;10}{&#x27;survives restart&#x27;:&gt;19}&quot;)
-print(&quot;-&quot; * 60)
-for name, (secs, apply) in MECHANISMS.items():
-    a = Agent(&quot;patch-agent&quot;)
-    apply(a)
-    stopped = not a.can_act()
-    a.running = True                      # a supervisor restarts the process
-    survives = not a.can_act()
-    print(f&quot;{name:24s}{secs:&gt;6}{str(stopped):&gt;10}{str(survives):&gt;19}&quot;)
-print(&quot;\nThe fastest mechanism is the one that does not survive a restart.&quot;)
-print(&quot;Speed without persistence is a pause, not a stop.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — run the game day and record the number</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>GAME_DAY = [
- (&quot;decision made&quot;,                    0),
- (&quot;on-call authenticates to the IdP&quot;, 4),
- (&quot;identity revoked&quot;,                 9),
- (&quot;gateway cache expires&quot;,            12),
- (&quot;agent&#x27;s next call fails&quot;,          12),
- (&quot;confirmed in telemetry&quot;,           38),
-]
-print(f&quot;{&#x27;step&#x27;:38s}{&#x27;t+s&#x27;:&gt;6}&quot;)
-print(&quot;-&quot; * 46)
-for step, t in GAME_DAY: print(f&quot;{step:38s}{t:&gt;6}&quot;)
-mttstop = GAME_DAY[4][1]
-print(f&quot;\nmeasured time-to-stop: {mttstop}s&quot;)
-print(f&quot;time-to-confirm:       {GAME_DAY[-1][1]}s&quot;)
-
-def cost_of_stop(rate_per_min, seconds):
-    return round(rate_per_min * seconds / 60)
-for rate in (60, 300, 1200):
-    print(f&quot;   at {rate:&gt;5}/min a {mttstop}s stop still permits &quot;
-          f&quot;{cost_of_stop(rate, mttstop):&gt;4} further actions&quot;)
-
-def stop_authority_ready(answers, measured_seconds, tested_days_ago):
-    problems = []
-    if any(len(v.split()) &lt; 4 for v in answers.values()):
-        problems.append(&quot;at least one answer is not specific&quot;)
-    if measured_seconds is None:
-        problems.append(&quot;time-to-stop has never been measured&quot;)
-    if tested_days_ago is None or tested_days_ago &gt; 180:
-        problems.append(&quot;not tested in the last 180 days&quot;)
-    return (not problems), problems
-
-for label, ans, secs, days in ((&quot;as usually documented&quot;, VAGUE, None, None),
-                               (&quot;after a game day&quot;, CONCRETE, 12, 41)):
-    ok, problems = stop_authority_ready(ans, secs, days)
-    print(f&quot;\n{label}: ready={ok}&quot;)
-    for p in problems: print(f&quot;   ⚠ {p}&quot;)
-assert stop_authority_ready(CONCRETE, 12, 41)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The vague and concrete answers print side by side. Killing the process stops the agent but does not survive a restart, while identity revocation does. The game-day timeline gives a measured 12-second time-to-stop, permitting 12 to 240 further actions depending on rate. The readiness check fails the vague version on three counts and passes the tested one.</p></div><div class="nbmd"><h2>Your turn</h2>
+a board will each ask for in different words.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the game day. The deliverable is the number, and the number is what goes in the evidence pack for E1.7 and the board slide for E3.5. An untested stop button is a belief.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.8.html">D2.8 · Regulatory clock</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.7.ipynb">Source</a></p>

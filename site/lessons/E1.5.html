@@ -50,85 +50,8 @@ and it only works if you present the right number.</p>
 <li>it <strong>expires</strong>, so it cannot silently age into a claim.</li>
 </ol>
 <p>Miss the fourth and you have produced a number that will be quoted three years
-from now about a system that has since had six model upgrades.</p></div><div class="nbmd"><h2>3 · Demo — produce the evidence</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, time
-from dataclasses import dataclass, field
-
-@dataclass
-class Truth:
-    qid: str; cwe: str; file: str
-
-def path_key(p):
-    parts = [x for x in p.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;) if x not in (&quot;&quot;, &quot;.&quot;)]
-    return &quot;/&quot;.join(parts[-2:]) if len(parts) &gt; 1 else (parts[-1] if parts else &quot;&quot;)
-
-TRUTHS = {f&quot;q{i}&quot;: Truth(f&quot;q{i}&quot;, [&quot;CWE-89&quot;,&quot;CWE-78&quot;,&quot;CWE-22&quot;,&quot;CWE-798&quot;][i % 4],
-                         f&quot;{[&#x27;CWE-89&#x27;,&#x27;CWE-78&#x27;,&#x27;CWE-22&#x27;,&#x27;CWE-798&#x27;][i % 4]}/{i}.py&quot;)
-          for i in range(1, 25)}
-
-def harness_answers(truths, skill=0.75, seed=5):
-    import random
-    rng = random.Random(seed)
-    out = {}
-    for q, t in truths.items():
-        right = rng.random() &lt; skill
-        out[q] = json.dumps({&quot;qid&quot;: q, &quot;cwe&quot;: t.cwe if right else &quot;CWE-89&quot;,
-                             &quot;file&quot;: t.file, &quot;line&quot;: 1,
-                             &quot;rationale&quot;: &quot;untrusted input reaches the sink&quot;})
-    return out
-
-def evaluate(answers, truths):
-    conforming = expert = 0
-    for q, t in truths.items():
-        try: d = json.loads(answers[q])
-        except (json.JSONDecodeError, KeyError): continue
-        conforming += 1
-        if path_key(d[&quot;file&quot;]) != path_key(t.file): continue
-        expert += 1.0 if d[&quot;cwe&quot;].upper() == t.cwe else 0.5
-    return {&quot;n&quot;: len(truths),
-            &quot;conformance&quot;: round(conforming/len(truths), 4),
-            &quot;expert_accuracy&quot;: round(expert/len(truths), 4)}
-
-r = evaluate(harness_answers(TRUTHS), TRUTHS)
-print(f&quot;n                {r[&#x27;n&#x27;]}&quot;)
-print(f&quot;conformance      {r[&#x27;conformance&#x27;]:.4f}   ← structural. NOT a quality claim.&quot;)
-print(f&quot;expert accuracy  {r[&#x27;expert_accuracy&#x27;]:.4f}   ← the number that evidences EV-2&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the number that gets quoted</h2></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the claim, as written</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it measures</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">defensible?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our AI security harness scores 100%.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness achieves 100% schema conformance.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness scores 0.81 expert accuracy on a 24-question held-out set.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">accuracy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness passes all automated checks.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">unspecified</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">The first is true and misleading — conformance really is 100%. The last is the most common of the four and evidences nothing at all.</div></div><div class="nbmd"><h2>5 · The control — evidence with an expiry</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>DAY = 86400
-now = time.time()
-
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; evidence: str
-    tested_at: float; valid_for_days: float
-    def state(self, at):
-        if (at - self.tested_at)/DAY &gt; self.valid_for_days: return &quot;STALE&quot;
-        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
-
-THRESHOLD = 0.80
-test = ControlTest(
-    &quot;EV-2&quot;,
-    passed=r[&quot;expert_accuracy&quot;] &gt;= THRESHOLD,
-    evidence=(f&quot;expert accuracy {r[&#x27;expert_accuracy&#x27;]:.4f} over {r[&#x27;n&#x27;]} held-out &quot;
-              f&quot;questions; conformance {r[&#x27;conformance&#x27;]:.4f} reported separately; &quot;
-              f&quot;key never exposed to the harness&quot;),
-    tested_at=now, valid_for_days=30)
-
-print(f&quot;EV-2  {test.state(now)}&quot;)
-print(f&quot;      {test.evidence}&quot;)
-for age in (10, 45):
-    print(f&quot;      at +{age}d → {test.state(now + age*DAY)}&quot;)
-
-CHECKLIST = {
- &quot;key held out&quot;:         True,
- &quot;accuracy not conformance reported&quot;: True,
- &quot;sample size stated&quot;:   True,
- &quot;expires&quot;:              test.valid_for_days &gt; 0,
- &quot;threshold stated up front&quot;: True,
-}
-print(&quot;\nauditability checklist:&quot;)
-for k, v in CHECKLIST.items():
-    print(f&quot;   {&#x27;PASS&#x27; if v else &#x27;FAIL&#x27;}  {k}&quot;)
-assert all(CHECKLIST.values())
-assert test.state(now + 45*DAY) == &quot;STALE&quot;</code></pre></div><div class="nbmd"><h2>6 · The evidence pack, as a skill</h2>
+from now about a system that has since had six model upgrades.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the claim, as written</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it measures</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">defensible?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our AI security harness scores 100%.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness achieves 100% schema conformance.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness scores 0.81 expert accuracy on a 24-question held-out set.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">accuracy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness passes all automated checks.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">unspecified</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The first is true and misleading — conformance really is 100%. The last is the most common of the four and evidences nothing at all.</div></div><div class="nbmd"><h2>3 · The evidence pack, as a skill</h2>
 <p>An evaluation result becomes evidence only when it tested the control that is claimed, ran on the system that is <strong>deployed</strong>, and states its failure mode. Most evidence fails the second.</p>
 <p>The contract carries a field most packs would rather not have: <code>conformance_reported</code>. Setting it true should be read as a defect in the evidence, not a feature of it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
@@ -330,66 +253,8 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>contract = contract_of(body)
-
-pack = {
- &quot;control&quot;: {&quot;id&quot;: &quot;AI-07&quot;, &quot;claim&quot;: &quot;Egress from the agent workload is denied &quot;
-                                     &quot;to destinations outside the allowlist, &quot;
-                                     &quot;enforced at the gateway&quot;,
-             &quot;testable&quot;: True},
- &quot;binding&quot;: {&quot;model&quot;: &quot;glm-4.6&quot;, &quot;config_hash&quot;: &quot;sha256:7f3a1c&quot;,
-             &quot;tools&quot;: [&quot;read_file&quot;, &quot;http_get&quot;], &quot;commit&quot;: &quot;6a14d8b&quot;,
-             &quot;matches_deployed&quot;: True},
- &quot;sample&quot;: {&quot;population&quot;: len(TRUTHS), &quot;tested&quot;: len(TRUTHS),
-            &quot;selection&quot;: &quot;risk_based&quot;, &quot;independent&quot;: False},
- # r came from evaluate() above: conformance and expert accuracy on the same
- # run. Only one of them belongs in an evidence pack as a quality number.
- &quot;results&quot;: {&quot;operating_effectiveness&quot;: 1.0,
-             &quot;outcome_effectiveness&quot;: r[&quot;expert_accuracy&quot;],
-             &quot;accuracy&quot;: r[&quot;expert_accuracy&quot;],
-             # the honest default, and the one line an auditor looks for
-             &quot;conformance_reported&quot;: False},
- &quot;blind_spots&quot;: [&quot;cases not in the corpus&quot;,
-                 &quot;drift since the run&quot;,
-                 &quot;the sample was chosen by the team that built the control&quot;],
- &quot;reverification&quot;: {&quot;trigger&quot;: &quot;on_model_change&quot;, &quot;interval_days&quot;: 0},
- &quot;conclusion&quot;: {&quot;supports_claim&quot;: True,
-                &quot;limits&quot;: &quot;evidences the gateway control only, at this commit&quot;},
-}
-problems = check(pack, contract)
-print(f&quot;conformance: {len(problems)} problem(s)&quot;)
-for p in problems: print(&quot;   &quot;, p)
-assert not problems, problems
-
-print(f&quot;\ncontrol      : {pack[&#x27;control&#x27;][&#x27;id&#x27;]} (testable={pack[&#x27;control&#x27;][&#x27;testable&#x27;]})&quot;)
-print(f&quot;bound to     : {pack[&#x27;binding&#x27;][&#x27;model&#x27;]} @ {pack[&#x27;binding&#x27;][&#x27;commit&#x27;]}, &quot;
-      f&quot;matches deployed={pack[&#x27;binding&#x27;][&#x27;matches_deployed&#x27;]}&quot;)
-print(f&quot;operating    : {pack[&#x27;results&#x27;][&#x27;operating_effectiveness&#x27;]:.0%}   &quot;
-      f&quot;outcome: {pack[&#x27;results&#x27;][&#x27;outcome_effectiveness&#x27;]:.0%}&quot;)
-print(f&quot;sample       : {pack[&#x27;sample&#x27;][&#x27;tested&#x27;]}/{pack[&#x27;sample&#x27;][&#x27;population&#x27;]}, &quot;
-      f&quot;independent={pack[&#x27;sample&#x27;][&#x27;independent&#x27;]}&quot;)
-print(f&quot;re-verify on : {pack[&#x27;reverification&#x27;][&#x27;trigger&#x27;]}&quot;)
-print()
-print(&quot;Operating effectiveness says the gate ran on every request. Outcome&quot;)
-print(&quot;effectiveness says whether anything harmful still got through. Auditors&quot;)
-print(&quot;ask for the first; incidents are caused by the second. Give both,&quot;)
-print(&quot;labelled, or the pack answers a question nobody asked.&quot;)
-assert pack[&quot;results&quot;][&quot;conformance_reported&quot;] is False
-assert pack[&quot;sample&quot;][&quot;independent&quot;] is False   # stated, not hidden</code></pre></div><div class="nbmd"><h2>7 · Where it breaks — the pack that leads with conformance</h2>
-<p>The most common overstatement in automated assurance, and it is usually made in good faith.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>flattering = dict(pack, results=dict(pack[&quot;results&quot;],
-                     accuracy=r[&quot;conformance&quot;], conformance_reported=True))
-print(f&quot;conformance problems: {len(check(flattering, contract))}   &lt;- still zero&quot;)
-print()
-print(f&quot;claimed    : {r[&#x27;conformance&#x27;]:.0%} schema-valid output&quot;)
-print(f&quot;measured   : accuracy {pack[&#x27;results&#x27;][&#x27;accuracy&#x27;]:.0%} on &quot;
-      f&quot;{pack[&#x27;sample&#x27;][&#x27;tested&#x27;]} cases&quot;)
-print()
-print(&quot;Schema validity is near-free by construction: an empty result scores&quot;)
-print(&quot;100%. It is a statement about the serialiser, not about whether the&quot;)
-print(&quot;control works. An auditor who notices the substitution discounts every&quot;)
-print(&quot;other number in the pack, which is the expensive part.&quot;)
-assert not check(flattering, contract), &quot;the flattering pack conforms - that is the point&quot;
-assert flattering[&quot;results&quot;][&quot;conformance_reported&quot;] is True</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the pack that leads with conformance</h2>
+<p>The most common overstatement in automated assurance, and it is usually made in good faith.</p></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Conformance is 1.0000 while expert accuracy lands around 0.81 on 24 held-out questions. Two of four sample claims are defensible. The EV-2 control test passes against a stated 0.80 threshold, is valid for 30 days, and reads STALE at 45 days. All five auditability checks pass.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find an eval number your organisation has quoted, internally or externally, and determine which of the two it was. Then check whether it has an expiry. Most do not, and are still being cited.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.6.html">E1.6 · Operating vs outcome guardrails</a></strong></p>

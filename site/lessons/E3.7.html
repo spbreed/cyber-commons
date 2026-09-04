@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.7 — Building the capability | Cyber Commons</title><meta name="description" content="Interview questions that separate the two; internal transition paths."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.7</div><h1>Building the capability</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Hiring for conceptual familiarity instead of practice.</p></div><div class="ctrl"><div class="lab">Control</div><p>Interview questions that separate the two; internal transition paths.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Write an interview loop that separates familiarity from practice.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.7 · Building the capability</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.7 — Building the capability | Cyber Commons</title><meta name="description" content="Interview questions that separate the two; internal transition paths."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.7</div><h1>Building the capability</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Hiring for conceptual familiarity instead of practice.</p></div><div class="ctrl"><div class="lab">Control</div><p>Interview questions that separate the two; internal transition paths.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Write an interview loop that separates familiarity from practice.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.7 · Building the capability</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Running the Programme — the CISO Office</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E3.6.html">E3.6 · Saying no, and saying yes with conditions</a></strong>.</p>
 <table>
@@ -41,83 +41,7 @@ numbers early and then spend a year discovering they cannot switch anything off
 fails its first real incident.</p>
 <p>The four roles from E3.4 map onto the quarters, and the hire that unblocks the
 most others is the identity engineer — which is not the one most teams hire
-first.</p></div><div class="nbmd"><h2>3 · Demo — four quarters, measured by evidenced coverage</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-now = time.time(); DAY = 86400
-REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
-
-QUARTERS = {
- &quot;Q1 · inventory + identity&quot;: [&quot;AC-1&quot;,&quot;AC-2&quot;],
- &quot;Q2 · containment&quot;:          [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;],
- &quot;Q3 · evidence + evaluation&quot;:[&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;],
- &quot;Q4 · continuous + stop&quot;:    REQUIRED,
-}
-DEMOABLE = {&quot;AC-1&quot;: False, &quot;AC-2&quot;: False, &quot;SB-1&quot;: False, &quot;SB-2&quot;: False,
-            &quot;EV-1&quot;: False, &quot;EV-2&quot;: True, &quot;DR-1&quot;: True, &quot;ST-1&quot;: True}
-
-print(f&quot;{&#x27;quarter&#x27;:30s}{&#x27;coverage&#x27;:&gt;10}{&#x27;demoable&#x27;:&gt;11}&quot;)
-print(&quot;-&quot; * 54)
-for q, done in QUARTERS.items():
-    cov = len(done)/len(REQUIRED)
-    demo = sum(1 for c in done if DEMOABLE[c])
-    print(f&quot;{q:30s}{cov:&gt;10.0%}{demo:&gt;11}&quot;)
-print(&quot;\nQ1 and Q2 produce nothing demoable. That is the political problem, and&quot;)
-print(&quot;it is why the inverted order keeps getting chosen.&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the fundable order</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>INVERTED = {
- &quot;Q1 · evaluation + dashboard&quot;: [&quot;EV-2&quot;,&quot;DR-1&quot;],
- &quot;Q2 · more evaluation&quot;:        [&quot;EV-2&quot;,&quot;DR-1&quot;],
- &quot;Q3 · identity (finally)&quot;:     [&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;AC-1&quot;,&quot;AC-2&quot;],
- &quot;Q4 · containment&quot;:            [&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;],
-}
-CAPABILITY_AT = {
- &quot;can revoke one agent&quot;:            {&quot;AC-1&quot;},
- &quot;can attribute an action&quot;:         {&quot;AC-1&quot;,&quot;EV-1&quot;},
- &quot;can bound a compromised agent&quot;:   {&quot;SB-1&quot;,&quot;SB-2&quot;},
- &quot;can halt the fleet&quot;:              {&quot;ST-1&quot;},
- &quot;can defend an accuracy number&quot;:   {&quot;EV-2&quot;},
-}
-def capabilities(done):
-    return [c for c, need in CAPABILITY_AT.items() if need &lt;= set(done)]
-
-print(f&quot;{&#x27;quarter&#x27;:30s}{&#x27;coverage&#x27;:&gt;10}  capabilities&quot;)
-print(&quot;-&quot; * 90)
-for q, done in INVERTED.items():
-    print(f&quot;{q:30s}{len(done)/len(REQUIRED):&gt;10.0%}  {capabilities(done) or &#x27;—&#x27;}&quot;)
-
-end_inverted = capabilities(INVERTED[&quot;Q4 · containment&quot;])
-end_correct  = capabilities(QUARTERS[&quot;Q4 · continuous + stop&quot;])
-print(f&quot;\nafter four quarters:&quot;)
-print(f&quot;   inverted order: {len(end_inverted)} capabilities  {end_inverted}&quot;)
-print(f&quot;   correct order : {len(end_correct)} capabilities&quot;)
-print(&quot;\nThe inverted programme spent a year and still cannot halt the fleet.&quot;)
-assert len(end_correct) &gt; len(end_inverted)</code></pre></div><div class="nbmd"><h2>5 · The control — hire for the bottleneck, not the demo</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ROLES = {
- &quot;harness engineer&quot;:   (&quot;B2&quot;, {&quot;EV-2&quot;},                 &quot;loop, verifier, eval&quot;),
- &quot;identity engineer&quot;:  (&quot;A2&quot;, {&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;EV-1&quot;},   &quot;identity, delegation, act chains&quot;),
- &quot;detection engineer&quot;: (&quot;D1&quot;, {&quot;DR-1&quot;},                 &quot;agent telemetry and drift&quot;),
- &quot;GRC practitioner&quot;:   (&quot;E1&quot;, {&quot;SB-2&quot;,&quot;ST-1&quot;},          &quot;tiering, evidence, verification&quot;),
-}
-def unblocks(role):
-    delivered = ROLES[role][1]
-    return [c for c, need in CAPABILITY_AT.items() if need &amp; delivered]
-
-print(f&quot;{&#x27;role&#x27;:22s}{&#x27;track&#x27;:7s}{&#x27;controls&#x27;:28s}unblocks&quot;)
-print(&quot;-&quot; * 92)
-for role, (track, controls, what) in sorted(
-        ROLES.items(), key=lambda kv: -len(unblocks(kv[0]))):
-    print(f&quot;{role:22s}{track:7s}{str(sorted(controls)):28s}{unblocks(role)}&quot;)
-
-first = max(ROLES, key=lambda r: len(unblocks(r)))
-print(f&quot;\nhire first (unblocks the most): {first}&quot;)
-print(f&quot;hired first most often        : harness engineer&quot;)
-assert first == &quot;identity engineer&quot;
-
-print(&quot;\nplan that survives contact:&quot;)
-for q, hire, deliver in [
- (&quot;Q1&quot;, &quot;identity engineer&quot;, &quot;inventory + agent identities (AC-1, AC-2)&quot;),
- (&quot;Q2&quot;, &quot;GRC practitioner&quot;,  &quot;containment + tiering (SB-1, SB-2)&quot;),
- (&quot;Q3&quot;, &quot;harness engineer&quot;,  &quot;evidence + held-out evaluation (EV-1, EV-2)&quot;),
- (&quot;Q4&quot;, &quot;detection engineer&quot;,&quot;drift + tested stop (DR-1, ST-1)&quot;),
-]:
-    print(f&quot;   {q}  hire {hire:20s}deliver {deliver}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The correct order climbs 25% → 50% → 75% → 100% coverage with nothing demoable until Q3. The inverted order reaches 75% after four quarters with 3 capabilities against the correct order's 5, and still cannot halt the fleet. The identity engineer unblocks the most capabilities and is named as the first hire.</p></div><div class="nbmd"><h2>Your turn</h2>
+first.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Map your existing team onto the four roles. Most organisations have three of them under other names and are missing the identity one entirely — which is also the one that unblocks everything else.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E3.8.html">E3.8 · Resilience over perfection</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E3.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.7.ipynb">Source</a></p>

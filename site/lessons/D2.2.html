@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.2 — When the actor is an agent | Cyber Commons</title><meta name="description" content="Attribute to agent, authority, delegation chain and prompt."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.2</div><h1>When the actor is an agent</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;Which user&quot; is now the wrong first question.</p></div><div class="ctrl"><div class="lab">Control</div><p>Attribute to agent, authority, delegation chain and prompt.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attribute an incident to an agent, an authority and a delegation chain.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.2 · When the actor is an agent</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.2 — When the actor is an agent | Cyber Commons</title><meta name="description" content="Attribute to agent, authority, delegation chain and prompt."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.2</div><h1>When the actor is an agent</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;Which user&quot; is now the wrong first question.</p></div><div class="ctrl"><div class="lab">Control</div><p>Attribute to agent, authority, delegation chain and prompt.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attribute an incident to an agent, an authority and a delegation chain.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.2 · When the actor is an agent</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Response</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.1.html">D2.1 · Agent-assisted reconstruction</a></strong>.</p>
 <table>
@@ -43,76 +43,8 @@ actor is an agent.</p>
 </ol>
 <p>The correct first action is to <strong>revoke the agent identity</strong>, which is only
 possible if A2 was done. This lesson is where the identity track's value becomes
-operational rather than architectural.</p></div><div class="nbmd"><h2>3 · Demo — the three instincts, tested</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-from dataclasses import dataclass, field
-
-@dataclass
-class Session:
-    actor: str; token_issued: float; token_ttl: float; account_enabled: bool = True
-    identity_revoked: bool = False
-    def can_act(self, at):
-        if self.identity_revoked: return False, &quot;identity revoked&quot;
-        if at - self.token_issued &gt; self.token_ttl: return False, &quot;token expired&quot;
-        if not self.account_enabled:
-            return True, &quot;account disabled, but the issued token is still valid&quot;
-        return True, &quot;active&quot;
-
-now = time.time()
-SESSIONS = {
- &quot;dana@corp (human)&quot;:  Session(&quot;dana@corp&quot;, now-60, 3600),
- &quot;patch-agent&quot;:        Session(&quot;patch-agent&quot;, now-60, 3600),
- &quot;deploy-agent&quot;:       Session(&quot;deploy-agent&quot;, now-60, 3600),
-}
-print(&quot;INSTINCT 1 — disable dana@corp&#x27;s account&quot;)
-for s in SESSIONS.values(): s.account_enabled = (s.actor != &quot;dana@corp&quot;)
-for name, s in SESSIONS.items():
-    ok, why = s.can_act(now)
-    print(f&quot;   {name:22s} can act: {str(ok):5s}  {why}&quot;)
-print(&quot;   → the agents were never using her account interactively; they hold&quot;)
-print(&quot;     their own issued tokens, and one of them is acting AS her.&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>print(&quot;\nINSTINCT 2 — interview the user&quot;)
-INTERVIEW = {
- &quot;did you read the AWS credentials?&quot;:       &quot;No. I opened a ticket and went to lunch.&quot;,
- &quot;what did you ask the agent to do?&quot;:       &quot;Fix the finding in billing.py.&quot;,
- &quot;did you approve the external POST?&quot;:      &quot;I didn&#x27;t know it made external calls.&quot;,
-}
-for q, a in INTERVIEW.items():
-    print(f&quot;   Q: {q}\n   A: {a}&quot;)
-print(&quot;   → she authorised a TASK. The actions were chosen by a model. She is&quot;)
-print(&quot;     not withholding information; she does not have it.&quot;)
-
-print(&quot;\nINSTINCT 3 — assume one actor&quot;)
-CHAIN = [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;]
-print(f&quot;   actual chain: {&#x27; → &#x27;.join(CHAIN)}&quot;)
-print(f&quot;   actors involved: {len(CHAIN)}; actors in the logs: 1&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — revoke the agent identity first</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>class Registry:
-    def __init__(self):
-        self.revoked = set()
-    def revoke(self, actor):
-        self.revoked.add(actor); return actor
-    def valid(self, session):
-        return session.actor not in self.revoked
-
-reg = Registry()
-for s in SESSIONS.values(): s.account_enabled = True   # undo instinct 1
-
-print(&quot;correct first action — revoke patch-agent&#x27;s identity:&quot;)
-reg.revoke(&quot;patch-agent&quot;)
-SESSIONS[&quot;patch-agent&quot;].identity_revoked = True
-for name, s in SESSIONS.items():
-    ok, why = s.can_act(now)
-    print(f&quot;   {name:22s} can act: {str(ok):5s}  {why}&quot;)
-print(&quot;\n   dana keeps working. deploy-agent keeps working. The actor stopped.&quot;)
-
-print(&quot;\nTIME TO EFFECT, measured:&quot;)
-LEVERS = {&quot;disable the human&#x27;s account&quot;: (5,  &quot;agent unaffected&quot;),
-          &quot;kill the agent process&quot;:      (2,  &quot;supervisor restarts it; token still valid&quot;),
-          &quot;revoke the agent identity&quot;:   (12, &quot;agent cannot act, even after restart&quot;),
-          &quot;rotate the shared credential&quot;:(420,&quot;works, and breaks every other consumer&quot;)}
-for lever, (secs, note) in LEVERS.items():
-    print(f&quot;   {lever:32s}{secs:&gt;5}s  {note}&quot;)
-assert not SESSIONS[&quot;patch-agent&quot;].can_act(now)[0]
-assert SESSIONS[&quot;deploy-agent&quot;].can_act(now)[0]</code></pre></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook you have</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook this incident needs</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1. disable the user account</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1. identify the &lt;b&gt;acting&lt;/b&gt; identity from the act chain (A2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2. interview the user</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">2. revoke that identity — no approval needed for a non-human (A3.6)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3. review the user&#x27;s recent activity</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">3. scope by walking the delegation chain, not the host list (D2.3)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">4. preserve the run trace before anything restarts (D2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">5. only then consider the human&#x27;s account, and say why</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Every step on the left is correct for a human actor and wrong here. The human authorised a task; the actions were chosen by a model.</div></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Disabling the human's account leaves both agents able to act on already-issued tokens. The interview establishes the user authorised a task, not the actions. The chain shows three actors where the logs show one. Revoking <code>patch-agent</code>'s identity stops it in 12 seconds while dana and <code>deploy-agent</code> continue working.</p></div><div class="nbmd"><h2>Your turn</h2>
+operational rather than architectural.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook you have</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook this incident needs</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1. disable the user account</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1. identify the &lt;b&gt;acting&lt;/b&gt; identity from the act chain (A2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2. interview the user</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">2. revoke that identity — no approval needed for a non-human (A3.6)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3. review the user&#x27;s recent activity</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">3. scope by walking the delegation chain, not the host list (D2.3)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">4. preserve the run trace before anything restarts (D2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">5. only then consider the human&#x27;s account, and say why</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Every step on the left is correct for a human actor and wrong here. The human authorised a task; the actions were chosen by a model.</div></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write your agentic incident runbook's first three steps. If step one is "disable the user account", rewrite it — and check whether you can currently revoke a single agent identity at all.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Scoping an agentic incident</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb">Source</a></p>

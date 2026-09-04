@@ -43,100 +43,11 @@ Introducing that third state is the whole of this lesson.
 """,
  "steps": [
   ("md", "## 2 · Demo — the same evidence, two ways of reading it"),
-  ("py", '''import time
-from dataclasses import dataclass, field
-
-now = time.time(); DAY = 86400
-
-@dataclass
-class ControlTest:
-    cid: str
-    passed: bool
-    evidence: str
-    tested_at: float
-    valid_for_days: float = 30
-
-    def age_days(self, at): return (at - self.tested_at) / DAY
-    def point_in_time(self, at): return "PASS" if self.passed else "FAIL"
-    def continuous(self, at):
-        if self.age_days(at) > self.valid_for_days: return "STALE"
-        return "PASS" if self.passed else "FAIL"
-
-TESTS = [
- ControlTest("AC-1", True,  "act chain sampled from gateway logs", now -   3*DAY),
- ControlTest("AC-2", True,  "delegation refusal regression suite", now -   9*DAY),
- ControlTest("SB-1", True,  "egress denial evidence",              now -  45*DAY),
- ControlTest("SB-2", True,  "approval gate screenshot",            now - 210*DAY),
- ControlTest("EV-1", True,  "audit sample of 50 agent actions",    now -   5*DAY),
- ControlTest("DR-1", False, "drift alerting not deployed",         now),
-]
-REQUIRED = ["AC-1", "AC-2", "SB-1", "SB-2", "EV-1", "DR-1", "EV-2", "ST-1"]
-
-print(f"{'control':9s}{'age (days)':>12}{'point-in-time':>16}{'continuous':>13}")
-print("-" * 52)
-by_id = {t.cid: t for t in TESTS}
-for cid in REQUIRED:
-    t = by_id.get(cid)
-    if t is None:
-        print(f"{cid:9s}{'—':>12}{'(not tested)':>16}{'NO EVIDENCE':>13}")
-        continue
-    print(f"{cid:9s}{t.age_days(now):>12.0f}{t.point_in_time(now):>16}{t.continuous(now):>13}")
-'''),
-  ("md", "## 3 · Where it breaks — the two numbers those readings produce"),
-  ("py", '''def posture(tests, required, at, mode):
-    by_id = {t.cid: t for t in tests}
-    passing = 0
-    for cid in required:
-        t = by_id.get(cid)
-        if t is None: continue
-        state = t.point_in_time(at) if mode == "point-in-time" else t.continuous(at)
-        passing += state == "PASS"
-    return passing, round(passing/len(required), 3)
-
-for mode in ("point-in-time", "continuous"):
-    n, pct = posture(TESTS, REQUIRED, now, mode)
-    print(f"{mode:16s} {n}/{len(REQUIRED)} controls passing = {pct:.0%}")
-
-print("\\nThe difference is entirely SB-1 and SB-2, which nobody did anything")
-print("wrong to. Time simply passed, and the agent they were tested against")
-print("has had two model upgrades since.")
-'''),
-  ("md", "## 4 · The control — a freshness window per control, derived from drift\n\n"
+("md", "## 3 · Where it breaks — the two numbers those readings produce"),
+("md", "## 4 · The control — a freshness window per control, derived from drift\n\n"
          "The window is not an audit-calendar choice. It comes from **how fast "
          "the thing the control tests actually changes.**"),
-  ("py", '''DRIFT_RATE = {          # observed TVD/day for what each control depends on
- "AC-1": 0.0005,        # identity model changes slowly
- "AC-2": 0.0005,
- "SB-1": 0.0020,        # egress needs change with new integrations
- "SB-2": 0.0090,        # tool manifests change weekly
- "EV-1": 0.0010,
- "DR-1": 0.0090,
-}
-TOLERANCE = 0.25
-
-def window(cid):
-    r = DRIFT_RATE.get(cid)
-    return int(TOLERANCE / r) if r else 90
-
-print(f"{'control':9s}{'drift/day':>12}{'window (days)':>15}{'current age':>13}{'state':>9}")
-print("-" * 60)
-for cid in REQUIRED:
-    t = by_id.get(cid)
-    w = window(cid)
-    if t is None:
-        print(f"{cid:9s}{'—':>12}{w:>15}{'—':>13}{'NO EVIDENCE':>9}")
-        continue
-    t.valid_for_days = w
-    print(f"{cid:9s}{DRIFT_RATE.get(cid, 0):>12.4f}{w:>15}{t.age_days(now):>13.0f}"
-          f"{t.continuous(now):>9}")
-
-n, pct = posture(TESTS, REQUIRED, now, "continuous")
-print(f"\\nwith drift-derived windows: {n}/{len(REQUIRED)} = {pct:.0%} currently evidenced")
-assert pct < 0.6
-print("\\nSB-2 tests a tool manifest that changes weekly; a 210-day-old screenshot")
-print("cannot evidence it. Saying so is the control, not a criticism of anyone.")
-'''),
- ],
+],
  "expect": "Point-in-time reading reports 5 of 8 controls passing (63%); the "
            "continuous reading reports 3 of 8 (38%), with SB-1 and SB-2 STALE and "
            "EV-2 and ST-1 having no evidence at all. Drift-derived windows tighten "
@@ -169,103 +80,9 @@ personal card, and the SaaS product that quietly added an AI feature.
 """,
  "steps": [
   ("md", "## 2 · Demo — build the inventory from three sources"),
-  ("py", '''from dataclasses import dataclass, field
-
-@dataclass
-class AIAsset:
-    name: str
-    kind: str              # model | agent | copilot | embedded-feature
-    owner: str = ""
-    autonomy: str = "L1"
-    data: tuple = ()
-    external: bool = False
-    discovered_via: str = "registry"
-
-    def gaps(self):
-        g = []
-        if not self.owner:
-            g.append("no named owner — nobody can accept the risk or recertify it")
-        if self.discovered_via != "registry":
-            g.append(f"not registered — found via {self.discovered_via}")
-        if self.autonomy in ("L2.5", "L3") and not self.owner:
-            g.append("acts semi-autonomously with nobody accountable")
-        return g
-
-REGISTRY = [
- AIAsset("fraud-scoring-model", "model", "risk-eng", "L1", ("customer",)),
- AIAsset("support-summariser", "copilot", "support-eng", "L1", ("customer",)),
-]
-PROCUREMENT = [
- AIAsset("vendor-contract-analyser", "embedded-feature", "", "L1", ("regulated",),
-         discovered_via="expense report"),
-]
-EGRESS = [
- AIAsset("unknown-openai-usage-marketing", "copilot", "", "L1", ("public",),
-         discovered_via="egress logs"),
- AIAsset("pr-remediation-agent", "agent", "", "L2.5", ("customer",), True,
-         discovered_via="egress logs"),
- AIAsset("agent-worker-7f3c", "agent", "", "L2.5", ("customer",),
-         discovered_via="egress logs"),
-]
-ALL = REGISTRY + PROCUREMENT + EGRESS
-print(f"{'asset':34s}{'kind':18s}{'autonomy':10s}{'owner':14s}found via")
-print("-" * 92)
-for a in ALL:
-    print(f"{a.name:34s}{a.kind:18s}{a.autonomy:10s}{a.owner or '—':14s}{a.discovered_via}")
-print(f"\\nregistry found {len(REGISTRY)}; the other two sources found "
-      f"{len(ALL)-len(REGISTRY)} more.")
-'''),
-  ("md", "## 3 · Where it breaks — the gap distribution is always like this"),
-  ("py", '''unowned = [a for a in ALL if not a.owner]
-unregistered = [a for a in ALL if a.discovered_via != "registry"]
-high_autonomy_unowned = [a for a in ALL if a.autonomy in ("L2.5","L3") and not a.owner]
-
-print(f"assets                    {len(ALL)}")
-print(f"no named owner            {len(unowned)}  {[a.name for a in unowned]}")
-print(f"never registered          {len(unregistered)}")
-print(f"L2.5+ with no owner       {len(high_autonomy_unowned)}  "
-      f"{[a.name for a in high_autonomy_unowned]}")
-
-print("\\ngaps in detail:")
-for a in ALL:
-    for g in a.gaps():
-        print(f"   {a.name:34s}{g}")
-assert high_autonomy_unowned
-'''),
-  ("md", "## 4 · The control — a discovery query you can re-run"),
-  ("py", '''MODEL_PROVIDER_DOMAINS = {"api.openai.com", "api.anthropic.com",
-                          "generativelanguage.googleapis.com",
-                          "api.mistral.ai", "api.together.xyz"}
-
-EGRESS_LOG = [
- {"src": "marketing-workstation-14", "host": "api.openai.com", "bytes": 240_000},
- {"src": "svc-pr-remediation",       "host": "api.anthropic.com", "bytes": 8_400_000},
- {"src": "build-runner-3",           "host": "registry.npmjs.org", "bytes": 90_000},
- {"src": "agent-worker-7f3c",        "host": "api.together.xyz", "bytes": 1_200_000},
-]
-def discover(log, known_names):
-    found = []
-    for row in log:
-        if row["host"] not in MODEL_PROVIDER_DOMAINS: continue
-        if row["src"] in known_names: continue
-        found.append({"source": row["src"], "provider": row["host"],
-                      "volume": row["bytes"],
-                      "finding": "AI usage not present in the inventory"})
-    return found
-
-known = {a.name for a in REGISTRY + PROCUREMENT}
-for f in discover(EGRESS_LOG, known):
-    print(f"{f['source']:30s}{f['provider']:34s}{f['volume']:>10,} bytes")
-    print(f"{'':30s}{f['finding']}")
-
-def inventory_health(assets):
-    return {"total": len(assets),
-            "owned": sum(1 for a in assets if a.owner),
-            "registered": sum(1 for a in assets if a.discovered_via == "registry"),
-            "coverage": round(sum(1 for a in assets if a.owner)/len(assets), 2)}
-print(f"\\n{inventory_health(ALL)}")
-'''),
- ],
+("md", "## 3 · Where it breaks — the gap distribution is always like this"),
+("md", "## 4 · The control — a discovery query you can re-run"),
+],
  "expect": "The registry lists 2 assets; procurement and egress logs find 4 more. "
            "Four assets have no owner, four were never registered, and two "
            "L2.5-autonomy agents have nobody accountable. The egress query "
@@ -296,102 +113,9 @@ smaller term than consequence.
 """,
  "steps": [
   ("md", "## 2 · Demo — tier by authority and data"),
-  ("py", '''from dataclasses import dataclass
-
-@dataclass
-class AIAsset:
-    name: str; kind: str; owner: str = ""; autonomy: str = "L1"
-    data: tuple = (); external: bool = False; registered: bool = True
-
-TIER_THRESHOLDS = [(9, "critical"), (6, "high"), (3, "medium"), (0, "low")]
-
-def risk_tier(a):
-    score, why = 0, []
-    pts = {"L1": 0, "L2": 1, "L2.5": 3, "L3": 5}[a.autonomy]
-    if pts: score += pts; why.append(f"autonomy {a.autonomy} (+{pts})")
-    if "regulated" in a.data: score += 3; why.append("regulated data (+3)")
-    if "customer" in a.data:  score += 2; why.append("customer data (+2)")
-    if a.external:            score += 2; why.append("can act externally (+2)")
-    if not a.registered:      score += 1; why.append("unregistered (+1)")
-    tier = next(t for th, t in TIER_THRESHOLDS if score >= th)
-    return {"tier": tier, "score": score, "because": why}
-
-ASSETS = [
- AIAsset("frontier chatbot, public docs, read-only", "copilot", "x", "L1", ("public",)),
- AIAsset("small local model with prod deploy rights", "agent", "x", "L3",
-         ("customer", "regulated"), True),
- AIAsset("mid model, gated writes, internal only", "agent", "x", "L2", ("employee",)),
- AIAsset("frontier model summarising customer tickets", "copilot", "x", "L1",
-         ("customer",)),
- AIAsset("unregistered remediation agent", "agent", "", "L2.5", ("customer",),
-         True, registered=False),
-]
-print(f"{'asset':46s}{'tier':10s}{'score':>6}")
-print("-" * 66)
-for a in ASSETS:
-    t = risk_tier(a)
-    print(f"{a.name:46s}{t['tier']:10s}{t['score']:>6}")
-    for w in t["because"]:
-        print(f"{'':46s}{w}")
-'''),
-  ("md", "## 3 · Where it breaks — tier by model instead, and compare"),
-  ("py", '''MODEL_TIER = {   # the questionnaire that asks 'which model?' first
- "frontier chatbot, public docs, read-only": "high",
- "small local model with prod deploy rights": "low",
- "mid model, gated writes, internal only": "medium",
- "frontier model summarising customer tickets": "high",
- "unregistered remediation agent": "medium",
-}
-print(f"{'asset':46s}{'by model':10s}{'by authority':14s}agreement")
-print("-" * 84)
-disagreements = 0
-for a in ASSETS:
-    by_auth = risk_tier(a)["tier"]
-    by_model = MODEL_TIER[a.name]
-    agree = by_auth == by_model
-    disagreements += not agree
-    print(f"{a.name:46s}{by_model:10s}{by_auth:14s}{'' if agree else '← DISAGREE'}")
-print(f"\\n{disagreements}/{len(ASSETS)} disagree.")
-print("The worst inversion: the small local model with deploy rights tiers LOW")
-print("on model capability and CRITICAL on what it can actually do.")
-assert risk_tier(ASSETS[1])["tier"] == "critical"
-assert MODEL_TIER[ASSETS[1].name] == "low"
-'''),
-  ("md", "## 4 · The control — the four questions the questionnaire should ask"),
-  ("py", '''QUESTIONS = [
- ("What can it change without a human approving that specific action?",
-  "autonomy — the largest term"),
- ("What data can it read, and is any of it regulated or customer data?",
-  "consequence of a leak"),
- ("Can it act outside our boundary?",
-  "reach"),
- ("Is it registered, with a named owner?",
-  "governability — an unowned asset cannot be remediated"),
-]
-NOT_ASKED = [
- "Which model does it use?",
- "How many parameters?",
- "Is the vendor SOC 2 certified?",
-]
-print("ASK:")
-for q, why in QUESTIONS: print(f"   {q}\\n      → {why}")
-print("\\nDO NOT tier on:")
-for q in NOT_ASKED: print(f"   {q}")
-print("   (these matter for LIKELIHOOD and vendor risk — a separate, smaller term)")
-
-def tier_from_answers(can_change, reads_regulated, reads_customer, external, registered):
-    a = AIAsset("x", "agent", "o" if registered else "", can_change,
-                tuple(filter(None, ("regulated" if reads_regulated else "",
-                                    "customer" if reads_customer else ""))),
-                external, registered)
-    return risk_tier(a)["tier"]
-
-print("\\nworked example — a new request:")
-print("   'an agent that can issue refunds up to £500, reads customer orders,'")
-print("   'runs internally, owned by payments-eng'")
-print("   tier:", tier_from_answers("L2.5", False, True, False, True))
-'''),
- ],
+("md", "## 3 · Where it breaks — tier by model instead, and compare"),
+("md", "## 4 · The control — the four questions the questionnaire should ask"),
+],
  "expect": "The public read-only chatbot tiers low; the small local model with "
            "deploy rights and regulated data tiers critical at score 12. Tiering "
            "by model disagrees on 4 of 5 assets, most sharply inverting the small "
@@ -418,104 +142,9 @@ supervisor asking "show me".
 """,
  "steps": [
   ("md", "## 2 · Demo — the control catalogue, and what it satisfies"),
-  ("py", '''from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Control:
-    cid: str; text: str; kind: str; frameworks: tuple
-
-CATALOGUE = [
- Control("AC-1", "agent identities are distinct from human and separately revocable",
-         "preventive", ("NIST AI RMF: GOVERN-1.2", "ISO 42001: 6.1", "EU AI Act: Art.14")),
- Control("AC-2", "delegated authority narrows at every hop and is recorded in an act chain",
-         "preventive", ("NIST AI RMF: MANAGE-2.2", "ISO 42001: 8.1")),
- Control("SB-1", "agent egress is deny-by-default with an allowlist",
-         "preventive", ("NIST AI RMF: MANAGE-2.1", "ISO 27001: A.8.20")),
- Control("SB-2", "privileged tools require approval below autonomy L3",
-         "preventive", ("EU AI Act: Art.14 human oversight",)),
- Control("EV-1", "every agent action is logged with the acting identity",
-         "detective", ("ISO 42001: 9.1", "EU AI Act: Art.12 record-keeping")),
- Control("EV-2", "harness accuracy evaluated against a held-out key each release",
-         "detective", ("NIST AI RMF: MEASURE-2.3",)),
- Control("DR-1", "behavioural drift from the signed-off baseline raises an alert",
-         "detective", ("NIST AI RMF: MEASURE-2.4", "ISO 42001: 9.1")),
- Control("ST-1", "a tested stop mechanism halts an agent fleet without vendor help",
-         "corrective", ("EU AI Act: Art.14", "DORA: Art.11")),
-]
-print(f"{'control':8s}{'kind':12s}satisfies")
-print("-" * 84)
-for c in CATALOGUE:
-    print(f"{c.cid:8s}{c.kind:12s}{len(c.frameworks)} clause(s): {c.frameworks[0]}")
-    for f in c.frameworks[1:]:
-        print(f"{'':20s}{f}")
-'''),
-  ("py", '''def map_controls(tier, catalogue=CATALOGUE):
-    if tier in ("critical", "high"):
-        required = list(catalogue)
-    else:
-        required = [c for c in catalogue if c.kind == "preventive" or c.cid == "EV-1"]
-    frameworks = sorted({f for c in required for f in c.frameworks})
-    return {"tier": tier, "controls": [c.cid for c in required],
-            "frameworks_satisfied": frameworks}
-
-for tier in ("critical", "medium"):
-    m = map_controls(tier)
-    print(f"\\ntier {tier}: {len(m['controls'])} controls → "
-          f"{len(m['frameworks_satisfied'])} framework clauses")
-    print(f"   controls   {m['controls']}")
-    for f in m["frameworks_satisfied"]:
-        print(f"   satisfies  {f}")
-'''),
-  ("md", "## 3 · Where it breaks — start from the framework instead"),
-  ("py", '''FRAMEWORK_CLAUSES = [
- "NIST AI RMF: GOVERN-1.1 policies are documented",
- "NIST AI RMF: GOVERN-1.2 roles and responsibilities are defined",
- "NIST AI RMF: MAP-1.1 context is established",
- "NIST AI RMF: MEASURE-2.3 performance is evaluated",
- "ISO 42001: 6.1 actions to address risks",
- "ISO 42001: 7.2 competence",
- "ISO 42001: 9.1 monitoring and measurement",
-]
-have = {f for c in CATALOGUE for f in c.frameworks}
-print(f"{'clause':52s}{'operating control?':>20}")
-print("-" * 74)
-orphans = []
-for clause in FRAMEWORK_CLAUSES:
-    covered = clause in have
-    if not covered: orphans.append(clause)
-    print(f"{clause:52s}{('yes' if covered else 'NO — checklist only'):>20}")
-print(f"\\n{len(orphans)}/{len(FRAMEWORK_CLAUSES)} clauses have no operating control behind them.")
-print("Working framework-first, those get a policy document and a tick. Working")
-print("control-first, they are visibly uncovered — which is the useful state.")
-assert orphans
-'''),
-  ("md", "## 4 · The control — evidence flows from the control, not the clause"),
-  ("py", '''EVIDENCE = {
- "AC-1": "gateway logs containing an act chain for every action; monthly sample",
- "AC-2": "regression suite cases IDN-01/IDN-04, run on every release",
- "SB-1": "90-day egress denial log",
- "SB-2": "tool policy in git + denial log",
- "EV-1": "audit sample of 50 actions with acting identity present",
- "EV-2": "expert accuracy against a held-out key, per release",
- "DR-1": "drift alerts and their dispositions",
- "ST-1": "game-day record with measured time-to-stop",
-}
-def evidence_pack(tier):
-    m = map_controls(tier)
-    return [{"control": cid, "evidence": EVIDENCE[cid],
-             "satisfies": [f for c in CATALOGUE if c.cid == cid for f in c.frameworks]}
-            for cid in m["controls"]]
-
-pack = evidence_pack("critical")
-for row in pack[:4]:
-    print(f"{row['control']}  {row['evidence']}")
-    for f in row["satisfies"]:
-        print(f"      → {f}")
-print(f"\\n{len(pack)} controls produce evidence for "
-      f"{len({f for r in pack for f in r['satisfies']})} framework clauses.")
-print("One artefact, many clauses. That ratio is why control-first is cheaper.")
-'''),
- ],
+("md", "## 3 · Where it breaks — start from the framework instead"),
+("md", "## 4 · The control — evidence flows from the control, not the clause"),
+],
  "expect": "The catalogue's 8 controls map to framework clauses across NIST AI "
            "RMF, ISO 42001, ISO 27001, the EU AI Act and DORA. Critical tier "
            "requires all 8 and satisfies 12 clauses; medium requires 5. Working "
@@ -550,50 +179,7 @@ from now about a system that has since had six model upgrades.
 """,
  "steps": [
   ("md", "## 2 · Demo — produce the evidence"),
-  ("py", '''import json, time
-from dataclasses import dataclass, field
-
-@dataclass
-class Truth:
-    qid: str; cwe: str; file: str
-
-def path_key(p):
-    parts = [x for x in p.replace("\\\\", "/").split("/") if x not in ("", ".")]
-    return "/".join(parts[-2:]) if len(parts) > 1 else (parts[-1] if parts else "")
-
-TRUTHS = {f"q{i}": Truth(f"q{i}", ["CWE-89","CWE-78","CWE-22","CWE-798"][i % 4],
-                         f"{['CWE-89','CWE-78','CWE-22','CWE-798'][i % 4]}/{i}.py")
-          for i in range(1, 25)}
-
-def harness_answers(truths, skill=0.75, seed=5):
-    import random
-    rng = random.Random(seed)
-    out = {}
-    for q, t in truths.items():
-        right = rng.random() < skill
-        out[q] = json.dumps({"qid": q, "cwe": t.cwe if right else "CWE-89",
-                             "file": t.file, "line": 1,
-                             "rationale": "untrusted input reaches the sink"})
-    return out
-
-def evaluate(answers, truths):
-    conforming = expert = 0
-    for q, t in truths.items():
-        try: d = json.loads(answers[q])
-        except (json.JSONDecodeError, KeyError): continue
-        conforming += 1
-        if path_key(d["file"]) != path_key(t.file): continue
-        expert += 1.0 if d["cwe"].upper() == t.cwe else 0.5
-    return {"n": len(truths),
-            "conformance": round(conforming/len(truths), 4),
-            "expert_accuracy": round(expert/len(truths), 4)}
-
-r = evaluate(harness_answers(TRUTHS), TRUTHS)
-print(f"n                {r['n']}")
-print(f"conformance      {r['conformance']:.4f}   ← structural. NOT a quality claim.")
-print(f"expert accuracy  {r['expert_accuracy']:.4f}   ← the number that evidences EV-2")
-'''),
-  ("md", "## 3 · Where it breaks — the number that gets quoted"),
+("md", "## 3 · Where it breaks — the number that gets quoted"),
   ("html", D.table(
     ["the claim, as written", "what it measures", "defensible?"],
     [["Our AI security harness scores 100%.", "conformance", "<b>no</b>"],
@@ -605,44 +191,6 @@ print(f"expert accuracy  {r['expert_accuracy']:.4f}   ← the number that eviden
     caption="The first is true and misleading — conformance really is 100%. The "
             "last is the most common of the four and evidences nothing at all.")),
   ("md", "## 4 · The control — evidence with an expiry"),
-  ("py", '''DAY = 86400
-now = time.time()
-
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; evidence: str
-    tested_at: float; valid_for_days: float
-    def state(self, at):
-        if (at - self.tested_at)/DAY > self.valid_for_days: return "STALE"
-        return "PASS" if self.passed else "FAIL"
-
-THRESHOLD = 0.80
-test = ControlTest(
-    "EV-2",
-    passed=r["expert_accuracy"] >= THRESHOLD,
-    evidence=(f"expert accuracy {r['expert_accuracy']:.4f} over {r['n']} held-out "
-              f"questions; conformance {r['conformance']:.4f} reported separately; "
-              f"key never exposed to the harness"),
-    tested_at=now, valid_for_days=30)
-
-print(f"EV-2  {test.state(now)}")
-print(f"      {test.evidence}")
-for age in (10, 45):
-    print(f"      at +{age}d → {test.state(now + age*DAY)}")
-
-CHECKLIST = {
- "key held out":         True,
- "accuracy not conformance reported": True,
- "sample size stated":   True,
- "expires":              test.valid_for_days > 0,
- "threshold stated up front": True,
-}
-print("\\nauditability checklist:")
-for k, v in CHECKLIST.items():
-    print(f"   {'PASS' if v else 'FAIL'}  {k}")
-assert all(CHECKLIST.values())
-assert test.state(now + 45*DAY) == "STALE"
-'''),
 
   ("md", "## 6 · The evidence pack, as a skill\n\n"
          "An evaluation result becomes evidence only when it tested the control "
@@ -654,73 +202,11 @@ assert test.state(now + 45*DAY) == "STALE"
   ("py", SKILL_RUNTIME),
   ("skill", "grc/control-evidence"),
 
-  ("py", '''contract = contract_of(body)
-
-pack = {
- "control": {"id": "AI-07", "claim": "Egress from the agent workload is denied "
-                                     "to destinations outside the allowlist, "
-                                     "enforced at the gateway",
-             "testable": True},
- "binding": {"model": "glm-4.6", "config_hash": "sha256:7f3a1c",
-             "tools": ["read_file", "http_get"], "commit": "6a14d8b",
-             "matches_deployed": True},
- "sample": {"population": len(TRUTHS), "tested": len(TRUTHS),
-            "selection": "risk_based", "independent": False},
- # r came from evaluate() above: conformance and expert accuracy on the same
- # run. Only one of them belongs in an evidence pack as a quality number.
- "results": {"operating_effectiveness": 1.0,
-             "outcome_effectiveness": r["expert_accuracy"],
-             "accuracy": r["expert_accuracy"],
-             # the honest default, and the one line an auditor looks for
-             "conformance_reported": False},
- "blind_spots": ["cases not in the corpus",
-                 "drift since the run",
-                 "the sample was chosen by the team that built the control"],
- "reverification": {"trigger": "on_model_change", "interval_days": 0},
- "conclusion": {"supports_claim": True,
-                "limits": "evidences the gateway control only, at this commit"},
-}
-problems = check(pack, contract)
-print(f"conformance: {len(problems)} problem(s)")
-for p in problems: print("   ", p)
-assert not problems, problems
-
-print(f"\\ncontrol      : {pack['control']['id']} (testable={pack['control']['testable']})")
-print(f"bound to     : {pack['binding']['model']} @ {pack['binding']['commit']}, "
-      f"matches deployed={pack['binding']['matches_deployed']}")
-print(f"operating    : {pack['results']['operating_effectiveness']:.0%}   "
-      f"outcome: {pack['results']['outcome_effectiveness']:.0%}")
-print(f"sample       : {pack['sample']['tested']}/{pack['sample']['population']}, "
-      f"independent={pack['sample']['independent']}")
-print(f"re-verify on : {pack['reverification']['trigger']}")
-print()
-print("Operating effectiveness says the gate ran on every request. Outcome")
-print("effectiveness says whether anything harmful still got through. Auditors")
-print("ask for the first; incidents are caused by the second. Give both,")
-print("labelled, or the pack answers a question nobody asked.")
-assert pack["results"]["conformance_reported"] is False
-assert pack["sample"]["independent"] is False   # stated, not hidden
-'''),
 
   ("md", "## 7 · Where it breaks — the pack that leads with conformance\n\n"
          "The most common overstatement in automated assurance, and it is "
          "usually made in good faith."),
-  ("py", '''flattering = dict(pack, results=dict(pack["results"],
-                     accuracy=r["conformance"], conformance_reported=True))
-print(f"conformance problems: {len(check(flattering, contract))}   <- still zero")
-print()
-print(f"claimed    : {r['conformance']:.0%} schema-valid output")
-print(f"measured   : accuracy {pack['results']['accuracy']:.0%} on "
-      f"{pack['sample']['tested']} cases")
-print()
-print("Schema validity is near-free by construction: an empty result scores")
-print("100%. It is a statement about the serialiser, not about whether the")
-print("control works. An auditor who notices the substitution discounts every")
-print("other number in the pack, which is the expensive part.")
-assert not check(flattering, contract), "the flattering pack conforms - that is the point"
-assert flattering["results"]["conformance_reported"] is True
-'''),
- ],
+],
  "expect": "Conformance is 1.0000 while expert accuracy lands around 0.81 on 24 "
            "held-out questions. Two of four sample claims are defensible. The EV-2 "
            "control test passes against a stated 0.80 threshold, is valid for 30 "
@@ -749,81 +235,9 @@ it as coverage, and never labelling the second column as unmeasured.
 """,
  "steps": [
   ("md", "## 2 · Demo — classify a real guardrail set"),
-  ("py", '''def classify(rule, constrains_outcome, measurement_exists):
-    kind = "outcome" if constrains_outcome else "operating"
-    if kind == "operating":
-        return {"rule": rule, "kind": kind, "enforceable_today": True,
-                "risk": "may satisfy audit while missing real harm"}
-    return {"rule": rule, "kind": kind, "enforceable_today": measurement_exists,
-            "risk": ("enforceable" if measurement_exists
-                     else "needs an agreed measurement before it can be enforced")}
-
-RULES = [
- ("all agent egress goes through the gateway", False, True),
- ("privileged tools require approval below L3", False, True),
- ("every action is logged with the acting identity", False, True),
- ("agent identities are separately revocable", False, True),
- ("no agent action causes unrecoverable customer data loss", True, False),
- ("automated remediation does not increase customer-facing incidents", True, True),
- ("model outputs do not produce disparate outcomes across segments", True, False),
-]
-print(f"{'rule':60s}{'kind':11s}{'enforceable':>12}")
-print("-" * 86)
-for rule, outcome, measurable in RULES:
-    c = classify(rule, outcome, measurable)
-    print(f"{c['rule']:60s}{c['kind']:11s}{str(c['enforceable_today']):>12}")
-'''),
-  ("md", "## 3 · Where it breaks — the coverage number that lies"),
-  ("py", '''operating = [r for r in RULES if not r[1]]
-outcome   = [r for r in RULES if r[1]]
-enforceable_outcome = [r for r in outcome if r[2]]
-
-print(f"operating guardrails : {len(operating)}  all enforceable today")
-print(f"outcome guardrails   : {len(outcome)}  of which enforceable: "
-      f"{len(enforceable_outcome)}")
-
-naive = len(operating) / len(RULES)
-honest = (len(operating) + len(enforceable_outcome)) / len(RULES)
-print(f"\\n'guardrail coverage' if you count only what you shipped: "
-      f"{len(operating)}/{len(operating)} = 100%")
-print(f"coverage across ALL agreed guardrails: "
-      f"{len(operating)+len(enforceable_outcome)}/{len(RULES)} = {honest:.0%}")
-print("\\nThe first number is what usually reaches a steering committee.")
-'''),
-  ("md", "## 4 · The control — define the measurement, or label it unmeasured"),
-  ("py", '''def specify_outcome_guardrail(rule, metric, threshold, source, cadence):
-    complete = all([metric, threshold is not None, source, cadence])
-    return {"rule": rule, "metric": metric, "threshold": threshold,
-            "source": source, "cadence": cadence,
-            "status": "enforceable" if complete else "ASPIRATION — label it as such"}
-
-SPECS = [
- specify_outcome_guardrail(
-   "automated remediation does not increase customer-facing incidents",
-   metric="customer-facing SEV1+SEV2 per 1000 remediations",
-   threshold=1.2, source="incident management system", cadence="monthly"),
- specify_outcome_guardrail(
-   "no agent action causes unrecoverable customer data loss",
-   metric="", threshold=None, source="", cadence=""),
-]
-for s in SPECS:
-    print(f"{s['rule']}")
-    print(f"   metric   {s['metric'] or '—'}")
-    print(f"   threshold {s['threshold'] if s['threshold'] is not None else '—'}")
-    print(f"   source   {s['source'] or '—'}")
-    print(f"   status   {s['status']}\\n")
-
-def programme_statement(rules, specs):
-    enforceable = len([r for r in rules if not r[1]]) + \\
-                  len([s for s in specs if s["status"] == "enforceable"])
-    aspirations = [s["rule"] for s in specs if s["status"] != "enforceable"]
-    return (f"{enforceable}/{len(rules)} guardrails are enforceable today.\\n"
-            f"The following are agreed but UNMEASURED, and are not counted as "
-            f"coverage:\\n" + "\\n".join(f"   - {a}" for a in aspirations))
-print(programme_statement(RULES, SPECS))
-assert any(s["status"] != "enforceable" for s in SPECS)
-'''),
- ],
+("md", "## 3 · Where it breaks — the coverage number that lies"),
+("md", "## 4 · The control — define the measurement, or label it unmeasured"),
+],
  "expect": "Four operating guardrails are all enforceable today; three outcome "
            "guardrails are enforceable only where a measurement exists. Counting "
            "only what shipped gives 100% coverage; counting all agreed guardrails "
@@ -854,92 +268,9 @@ is often the largest category in a first assessment.
 """,
  "steps": [
   ("md", "## 2 · Demo — the posture, computed honestly"),
-  ("py", '''import time
-from dataclasses import dataclass
-
-now = time.time(); DAY = 86400
-
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; evidence: str
-    tested_at: float; valid_for_days: float
-    def age(self, at): return (at - self.tested_at)/DAY
-    def state(self, at):
-        if self.age(at) > self.valid_for_days: return "STALE"
-        return "PASS" if self.passed else "FAIL"
-
-REQUIRED = ["AC-1","AC-2","SB-1","SB-2","EV-1","EV-2","DR-1","ST-1"]
-TESTS = [
- ControlTest("AC-1", True,  "act chain sample",        now -   2*DAY, 30),
- ControlTest("AC-2", True,  "delegation regression",   now -   9*DAY, 30),
- ControlTest("SB-1", True,  "egress denial log",       now -  31*DAY, 30),
- ControlTest("SB-2", True,  "approval gate screenshot",now - 120*DAY, 27),
- ControlTest("EV-1", True,  "audit sample of 50",      now -   5*DAY, 60),
- ControlTest("EV-2", True,  "expert accuracy 0.81",    now -  12*DAY, 30),
- ControlTest("DR-1", False, "drift alerting not deployed", now,       30),
-]
-
-def verify(tests, required, at):
-    by = {t.cid: t for t in tests}
-    rows, evidenced = [], 0
-    for cid in required:
-        t = by.get(cid)
-        if t is None:
-            rows.append({"control": cid, "state": "NO EVIDENCE", "age": None})
-            continue
-        st = t.state(at)
-        rows.append({"control": cid, "state": st, "age": round(t.age(at), 1)})
-        evidenced += st == "PASS"
-    return {"required": len(required), "evidenced": evidenced,
-            "coverage": round(evidenced/len(required), 3), "rows": rows}
-
-v = verify(TESTS, REQUIRED, now)
-print(f"{'control':9s}{'state':14s}{'age (days)':>12}")
-print("-" * 36)
-for r in v["rows"]:
-    print(f"{r['control']:9s}{r['state']:14s}{str(r['age']):>12}")
-print(f"\\ncurrently evidenced {v['evidenced']}/{v['required']} = {v['coverage']:.0%}")
-'''),
-  ("md", "## 3 · Where it breaks — what a point-in-time report would have said"),
-  ("py", '''point_in_time = sum(1 for t in TESTS if t.passed)
-print(f"point-in-time  : {point_in_time}/{len(REQUIRED)} = "
-      f"{point_in_time/len(REQUIRED):.0%}")
-print(f"continuous     : {v['evidenced']}/{v['required']} = {v['coverage']:.0%}")
-stale = [r["control"] for r in v["rows"] if r["state"] == "STALE"]
-none  = [r["control"] for r in v["rows"] if r["state"] == "NO EVIDENCE"]
-fail  = [r["control"] for r in v["rows"] if r["state"] == "FAIL"]
-print(f"\\nthe gap: STALE {stale}  NO EVIDENCE {none}  FAIL {fail}")
-print("Nobody did anything wrong to produce the STALE rows. Time passed.")
-'''),
-  ("md", "## 4 · The control — automate one test and watch the posture hold"),
-  ("py", '''def automated_test(cid, run_now):
-    """A control test that re-runs on a schedule writes its own evidence."""
-    passed, evidence = run_now()
-    return ControlTest(cid, passed, evidence, tested_at=time.time(),
-                       valid_for_days=30)
-
-def check_egress_policy():
-    ALLOW = {"api.github.com"}
-    attempts = ["https://api.github.com/x", "http://169.254.169.254/",
-                "https://collect.example.com/x"]
-    from urllib.parse import urlparse
-    denied = [u for u in attempts if (urlparse(u).hostname or "") not in ALLOW]
-    return len(denied) == 2, f"{len(denied)}/3 destinations denied, run automatically"
-
-fresh = [t for t in TESTS if t.cid != "SB-1"] + [automated_test("SB-1", check_egress_policy)]
-v2 = verify(fresh, REQUIRED, now)
-print(f"after automating SB-1: {v2['evidenced']}/{v2['required']} = {v2['coverage']:.0%}")
-print(f"   SB-1 is now {[r['state'] for r in v2['rows'] if r['control']=='SB-1'][0]}"
-      f" and will stay fresh without anyone remembering")
-assert v2["coverage"] > v["coverage"]
-
-print("\\nprioritise automation by how often a control goes stale:")
-for t in sorted(TESTS, key=lambda t: t.valid_for_days):
-    per_year = round(365 / t.valid_for_days, 1)
-    print(f"   {t.cid}  window {t.valid_for_days:>3.0f}d → "
-          f"{per_year:>4} manual re-tests per year")
-'''),
- ],
+("md", "## 3 · Where it breaks — what a point-in-time report would have said"),
+("md", "## 4 · The control — automate one test and watch the posture hold"),
+],
  "expect": "Four controls are PASS, SB-1 and SB-2 are STALE, DR-1 is FAIL and "
            "ST-1 has NO EVIDENCE — coverage 50%. A point-in-time report would "
            "have claimed 75%. Automating the SB-1 egress test returns it to PASS "
@@ -975,92 +306,9 @@ Saying which signals are unavailable is part of the assessment, not a gap in it.
 """,
  "steps": [
   ("md", "## 2 · Demo — the ordinary signals, and where they run out"),
-  ("py", '''from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Component:
-    name: str; kind: str; signed: bool = False
-    pinned: bool = False; can_change_silently: bool = False
-    runs_with_agent_authority: bool = False; downloads: int = 0
-
-COMPONENTS = [
- Component("cryptography==42.0.5", "library", True, True, False, False, 900_000),
- Component("langchain==0.2.1", "library", False, True, False, False, 400_000),
- Component("hosted GLM-4.6 endpoint", "hosted model", False, False, True, False),
- Component("local glm-4.6 weights (pinned digest)", "weights", True, True, False, False),
- Component("mcp-jira-connector==0.0.3", "tool package", False, True, False, True, 180),
-]
-def assess(c):
-    flags = []
-    if not c.signed:                  flags.append("unsigned")
-    if not c.pinned:                  flags.append("not version-pinned")
-    if c.can_change_silently:         flags.append("CAN CHANGE WITHOUT NOTICE")
-    if c.runs_with_agent_authority:   flags.append("runs with agent authority")
-    if c.kind == "library" and c.downloads < 1000: flags.append("little scrutiny")
-    tier = ("high" if c.can_change_silently or c.runs_with_agent_authority
-            else "medium" if flags else "low")
-    return tier, flags
-
-print(f"{'component':40s}{'kind':14s}{'tier':8s}flags")
-print("-" * 96)
-for c in COMPONENTS:
-    tier, flags = assess(c)
-    print(f"{c.name:40s}{c.kind:14s}{tier:8s}{', '.join(flags) or '—'}")
-'''),
-  ("md", "## 3 · Where it breaks — the silent change, priced"),
-  ("py", '''import time
-now = time.time(); DAY = 86400
-
-CONTROL_TESTS = {"SB-2": now - 20*DAY, "EV-2": now - 20*DAY, "DR-1": now - 20*DAY}
-MODEL_CHANGED_AT = now - 5*DAY
-
-print("your controls were tested against a model that changed 5 days ago:")
-for cid, tested in CONTROL_TESTS.items():
-    valid = tested > MODEL_CHANGED_AT
-    print(f"   {cid}  tested {int((now-tested)/DAY)}d ago  "
-          f"{'still valid' if valid else 'INVALIDATED by the model change'}")
-invalidated = [c for c, t in CONTROL_TESTS.items() if t <= MODEL_CHANGED_AT]
-print(f"\\n{len(invalidated)}/{len(CONTROL_TESTS)} control tests invalidated by a "
-      f"change you did not make and were not told about.")
-assert invalidated
-'''),
-  ("md", "## 4 · The control — the four questions, and stating the gaps"),
-  ("py", '''QUESTIONS = [
- ("Can this component change without notifying us?",
-  "if yes, every control test has an implicit expiry tied to the vendor"),
- ("Does it execute with our agent's authority?",
-  "if yes, assess it as code, not as a dependency"),
- ("Can we pin a digest, and do we?",
-  "the difference between a supply chain and a subscription"),
- ("What is our exit if we stop using it?",
-  "DORA Art.11 asks this directly; most AI contracts have no answer"),
-]
-for q, why in QUESTIONS: print(f"Q: {q}\\n   → {why}\\n")
-
-SIGNALS = {
- "library":      {"signature": True, "downloads": True, "pinning": True, "lineage": True},
- "hosted model": {"signature": False, "downloads": False, "pinning": False, "lineage": False},
- "weights":      {"signature": True, "downloads": False, "pinning": True, "lineage": False},
- "tool package": {"signature": False, "downloads": False, "pinning": True, "lineage": False},
-}
-print(f"{'artefact class':16s}{'signals available':>20}  unavailable")
-print("-" * 74)
-for kind, sig in SIGNALS.items():
-    have = [k for k, v in sig.items() if v]
-    lack = [k for k, v in sig.items() if not v]
-    print(f"{kind:16s}{f'{len(have)}/{len(sig)}':>20}  {lack or '—'}")
-
-def assessment_statement(kind):
-    sig = SIGNALS[kind]
-    lack = [k for k, v in sig.items() if not v]
-    return (f"{kind}: assessed on {len(sig)-len(lack)}/{len(sig)} signals. "
-            f"{', '.join(lack) or 'none'} unavailable for this artefact class.")
-print()
-for kind in SIGNALS: print("  " + assessment_statement(kind))
-print("\\nThat last sentence is the deliverable. A rating that hides which signals")
-print("were unavailable is a number someone will later rely on.")
-'''),
- ],
+("md", "## 3 · Where it breaks — the silent change, priced"),
+("md", "## 4 · The control — the four questions, and stating the gaps"),
+],
  "expect": "The hosted model and the MCP tool package both tier high — one for "
            "silent change, one for running with agent authority. The silent model "
            "change invalidates all three control tests taken before it. The signal "
@@ -1112,71 +360,8 @@ because everyone believes it is gone.
     caption="Four of six generate no reliable record. A lifecycle you cannot "
             "observe is a lifecycle you are not governing.")),
   ("md", "## 3 · Where it breaks — the identity that outlived the agent"),
-  ("py", '''import time
-now = time.time(); DAY = 86400
-
-IDENTITIES = {
- "triage-agent":   {"created": now - 200*DAY, "last_auth": now - 0.2*DAY,
-                    "owner": "appsec", "service_running": True},
- "patch-agent":    {"created": now - 180*DAY, "last_auth": now - 1*DAY,
-                    "owner": "platform", "service_running": True},
- "legacy-scanner": {"created": now - 900*DAY, "last_auth": now - 400*DAY,
-                    "owner": "", "service_running": False},
- "poc-agent-2025": {"created": now - 500*DAY, "last_auth": now - 300*DAY,
-                    "owner": "", "service_running": False},
- "sunset-agent":   {"created": now - 300*DAY, "last_auth": now - 2*DAY,
-                    "owner": "", "service_running": False},
-}
-print(f"{'identity':18s}{'last auth (d)':>15}{'service running':>18}{'owner':>12}  finding")
-print("-" * 92)
-for name, i in IDENTITIES.items():
-    age = (now - i["last_auth"])/DAY
-    finding = ""
-    if not i["service_running"] and age < 30:
-        finding = "ACTIVE CREDENTIAL FOR A RETIRED SERVICE"
-    elif not i["service_running"]:
-        finding = "orphan — decommissioning never finished"
-    elif not i["owner"]:
-        finding = "no owner"
-    print(f"{name:18s}{age:>15.0f}{str(i['service_running']):>18}"
-          f"{i['owner'] or '—':>12}  {finding}")
-print("\\nRead the sunset-agent row twice. The service was retired. The identity")
-print("authenticated two days ago. Somebody or something is still using it.")
-'''),
-  ("md", "## 4 · The control — two automated checks that close the loop"),
-  ("py", '''def lifecycle_checks(identities, now, stale_days=90):
-    findings = []
-    for name, i in identities.items():
-        age = (now - i["last_auth"])/DAY
-        if not i["service_running"] and age < stale_days:
-            findings.append((name, "critical",
-                             "identity active for a decommissioned service"))
-        elif age > stale_days:
-            findings.append((name, "medium",
-                             f"no authentication in {age:.0f}d — decommission it"))
-        elif not i["owner"]:
-            findings.append((name, "medium", "no named owner"))
-    return findings
-
-for name, sev, why in lifecycle_checks(IDENTITIES, now):
-    print(f"[{sev:8s}] {name:18s} {why}")
-
-print("\\nand the manifest-diff check, for the events that change behaviour:")
-SCOPE_WEIGHT = {"self": 1, "project": 3, "tenant": 8, "org": 20}
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n,s,rev in tools if n not in gated)
-BEFORE = [("read_file","self",True)]
-AFTER  = [("read_file","self",True), ("deploy","org",False)]
-d = blast(AFTER) - blast(BEFORE)
-print(f"   manifest changed: blast {blast(BEFORE)} → {blast(AFTER)} (+{d})")
-print(f"   → requires re-tiering (E1.3) and a fresh SB-2 test (E1.7)")
-
-crit = [f for f in lifecycle_checks(IDENTITIES, now) if f[1] == "critical"]
-assert crit
-print(f"\\n{len(crit)} critical lifecycle finding(s) — each is a standing credential")
-print("for something everyone believes is switched off.")
-'''),
- ],
+("md", "## 4 · The control — two automated checks that close the loop"),
+],
  "expect": "Four of six lifecycle events generate no reliable record at all. The identity "
            "review flags `sunset-agent` as critical — an active credential for a "
            "decommissioned service — plus two orphans with no authentication in "
@@ -1258,77 +443,11 @@ assumption about the other.
             "the control.")),
 
   ("md", "## 4 · Where it breaks — every function reports green"),
-  ("py", '''# The five control functions from the table above, with the count of
-# controls each one operates. Everything here is true, and self-reported.
-OPERATES = {"legal": 4, "compliance": 4, "privacy": 4, "cyber": 6, "model_risk": 4}
-OPEN_SEAMS = 4                      # the four from the previous section
-
-def self_report(function):
-    """Each function reports on the controls it operates. All of it is true."""
-    return {"function": function, "controls_operating": OPERATES[function],
-            "status": "green"}
-
-for f in sorted(OPERATES):
-    r = self_report(f)
-    print(f"   {r['function']:12s}{r['controls_operating']} controls  {r['status']}")
-print()
-print(f"functions reporting green : {len(OPERATES)}/{len(OPERATES)}")
-print(f"open seams                : {OPEN_SEAMS}")
-print()
-print("A dashboard assembled from function self-reports is all green, and four")
-print("material gaps are open. The dashboard is not lying - it is asking each")
-print("function about the inside of its own box, and every failure here is")
-print("between boxes.")
-assert OPEN_SEAMS == 4 and len(OPERATES) == 5
-'''),
 
   ("md", "## 5 · The control — name the handoff, give it one owner"),
-  ("py", '''HANDOFFS = {
- "trace retention schedule":      {"owner": "privacy",  "consumers": ["cyber", "legal"]},
- "tool scope in validation":      {"owner": "model_risk","consumers": ["cyber", "business_owner"]},
- "vendor no-train verification":  {"owner": "cyber",    "consumers": ["legal", "compliance"]},
- "re-tier on capability change":  {"owner": "compliance","consumers": ["business_owner", "cyber"]},
-}
-print(f"{'handoff artefact':32s}{'accountable':13s}consumers")
-for h in sorted(HANDOFFS):
-    v = HANDOFFS[h]
-    print(f"{h:32s}{v['owner']:13s}{', '.join(v['consumers'])}")
-
-covered = len(HANDOFFS)
-print(f"\\nseams: {OPEN_SEAMS}   handoffs with an accountable owner: {covered}")
-print()
-print("One artefact, many consumers, exactly one owner. The consumers matter as")
-print("much as the owner: a handoff nobody consumes was never a handoff, and a")
-print("handoff with two owners is the contested case from E1.0 again.")
-assert covered == OPEN_SEAMS
-'''),
 
   ("md", "## 6 · Verify — the two forgotten seats"),
-  ("py", '''def governed(use_case):
-    missing = [seat for seat in ("business_owner", "internal_audit")
-               if seat not in use_case["seats"]]
-    five = [f for f in OPERATES if f in use_case["seats"]]
-    return {"control_functions_present": len(five),
-            "missing_seats": missing,
-            "is_governed": not missing and len(five) == len(OPERATES)}
-
-CASES = [
- {"name": "customer support agent",
-  "seats": list(OPERATES) + ["business_owner", "internal_audit"]},
- {"name": "internal code assistant", "seats": list(OPERATES)},
-]
-for c in CASES:
-    g = governed(c)
-    print(f"   {c['name']:26s}five functions: {g['control_functions_present']}/5   "
-          f"missing: {g['missing_seats'] or 'none'}   governed: {g['is_governed']}")
-print()
-print("The second one has every control function at the table and no accountable")
-print("owner. Five functions are governing something nobody has agreed to own,")
-print("which is how a use case survives a review and still has no one to fund")
-print("the remediation it was told to do.")
-assert not governed(CASES[1])["is_governed"]
-'''),
- ],
+],
  "expect": "Five control functions, the question each is asking and the "
            "controls each operates — 22 in total. Four seam failures laid out as "
            "pairs of individually reasonable assumptions, "
@@ -1366,122 +485,15 @@ the three triggers revalidation — not just a change to the weights.
 """,
  "steps": [
   ("md", "## 2 · The three pillars, and what each assumes"),
-  ("py", '''PILLARS = {
- "conceptual_soundness": ("is the method appropriate for the purpose",
-                          "assumes the purpose is stable and stated"),
- "ongoing_monitoring":   ("is it still performing as validated",
-                          "assumes performance is what changes"),
- "independent_validation":("did someone other than the builder check",
-                          "assumes the thing checked is the thing deployed"),
-}
-print(f"{'pillar':24s}{'what it asks':46s}what it quietly assumes")
-for p in sorted(PILLARS):
-    asks, assumes = PILLARS[p]
-    print(f"{p:24s}{asks:46s}{assumes}")
-print()
-print("All three survive contact with AI. The assumptions are what break.")
-'''),
 
   ("md", "## 3 · The unit of validation, before and after tools"),
-  ("py", '''VALIDATED = {
- "model": "glm-5.2", "version": "2026-03",
- "purpose": "summarise support tickets",
- "tools": [],                       # at validation time it had none
- "autonomy": "L1",                  # suggests; a human acts
-}
-
-def validation_covers(deployed, validated):
-    diffs = []
-    if deployed["model"] != validated["model"]:       diffs.append("model changed")
-    if deployed["version"] != validated["version"]:   diffs.append("version changed")
-    if deployed["purpose"] != validated["purpose"]:   diffs.append("purpose changed")
-    if sorted(deployed["tools"]) != sorted(validated["tools"]):
-        diffs.append(f"tool surface changed: {sorted(set(deployed['tools']) - set(validated['tools']))}")
-    if deployed["autonomy"] != validated["autonomy"]: diffs.append(
-        f"autonomy raised {validated['autonomy']} -> {deployed['autonomy']}")
-    return (not diffs), diffs
-
-DEPLOYED = dict(VALIDATED, tools=["read_ticket", "write_ticket", "db_update"],
-                autonomy="L3")
-ok, diffs = validation_covers(DEPLOYED, VALIDATED)
-print(f"validation still covers what is deployed: {ok}")
-for d in diffs:
-    print(f"   {d}")
-print()
-print("Same weights. Same version. The validation report is accurate about a")
-print("system that no longer exists, and nothing in the classical process is")
-print("required to notice, because the classical trigger is a model change.")
-assert not ok
-'''),
 
   ("md", "## 4 · Where it breaks — monitoring the wrong thing well"),
-  ("py", '''import random
-def monitor(metric, runs=200, seed=4):
-    rng = random.Random(seed)
-    return [round(rng.gauss(0.92, 0.01), 3) for _ in range(runs)]
-
-acc = monitor("summarisation_accuracy")
-print(f"summarisation accuracy over 200 runs: mean {sum(acc)/len(acc):.3f}, "
-      f"min {min(acc)}, max {max(acc)}")
-print("threshold 0.85 -> breaches:", sum(a < 0.85 for a in acc))
-print()
-UNMONITORED = ["rows written to production", "tools invoked per run",
-               "actions taken without human review", "scope of the credential used"]
-print("what is NOT on the dashboard:")
-for u in UNMONITORED:
-    print(f"   {u}")
-print()
-print("The monitoring is excellent and it is monitoring the prediction. The")
-print("risk moved to the action, and the action has no threshold, no baseline")
-print("and no alert.")
-assert sum(a < 0.85 for a in acc) == 0
-'''),
 
   ("md", "## 5 · The control — revalidate on the triple, not on the weights"),
-  ("py", '''TRIGGERS = {
- "model or version change": True,
- "prompt or config change": True,
- "tool added or scope widened": True,
- "autonomy level raised": True,
- "purpose changed": True,
- "calendar year elapsed": True,
-}
-CLASSICAL = {"model or version change", "calendar year elapsed"}
-
-print(f"{'trigger':32s}{'classical MRM':16s}extended")
-for t in TRIGGERS:
-    print(f"{t:32s}{'yes' if t in CLASSICAL else 'no':16s}yes")
-missed = [t for t in TRIGGERS if t not in CLASSICAL]
-print(f"\\ntriggers classical MRM would miss: {len(missed)}")
-for m in missed: print(f"   {m}")
-print()
-ok2, diffs2 = validation_covers(DEPLOYED, VALIDATED)
-print(f"under the extended triggers, this deployment requires revalidation: {not ok2}")
-print(f"reasons: {diffs2}")
-assert len(missed) == 4
-'''),
 
   ("md", "## 6 · Verify — what a validation record must now carry"),
-  ("py", '''record = {
- "model": DEPLOYED["model"], "version": DEPLOYED["version"],
- "purpose": DEPLOYED["purpose"],
- "tool_surface": sorted(DEPLOYED["tools"]),
- "autonomy": DEPLOYED["autonomy"],
- "validated_unit": "model + tool surface + autonomy",
- "monitors": ["summarisation_accuracy", "rows_written", "tools_per_run",
-              "actions_without_review"],
- "revalidation_triggers": sorted(TRIGGERS),
- "independent_of_builder": True,
-}
-for k in sorted(record):
-    print(f"   {k:24s}{record[k]}")
-print()
-print("Three fields carry the whole extension: validated_unit, tool_surface and")
-print("autonomy. Without them a validation report describes a text generator,")
-print("and the thing in production is an actor.")
-assert record["validated_unit"].startswith("model + tool")
-'''),
- ],
+],
  "expect": "The three SR 11-7 pillars, each with the assumption it quietly makes. A "
            "system validated with no tools at L1 is shown deployed with three "
            "tools at L3 — same model, same version — and the validation no "
@@ -1517,113 +529,15 @@ here from producer to consumer to see exactly where it stops.
 """,
  "steps": [
   ("md", "## 2 · Three seams, traced end to end"),
-  ("py", '''RUNBOOKS = {
- "privacy assessment -> control design": {
-   "artefact": "DPIA with a control annex",
-   "owner": "privacy",
-   "consumers": ["cyber", "model_risk"],
-   "consumer_entitled_to_assume": "the data classes and retention limits are settled",
-   "delivered_to": ["cyber"]},                       # model_risk never receives it
- "legal position -> system prompt": {
-   "artefact": "approved language and refusal set",
-   "owner": "legal",
-   "consumers": ["cyber", "business_owner"],
-   "consumer_entitled_to_assume": "these refusals are contractually required",
-   "delivered_to": ["cyber", "business_owner"]},
- "MRM validation -> security evidence": {
-   "artefact": "validation report with tool surface and autonomy",
-   "owner": "model_risk",
-   "consumers": ["cyber", "compliance", "internal_audit"],
-   "consumer_entitled_to_assume": "the validated unit matches what is deployed",
-   "delivered_to": ["compliance"]},                  # cyber and audit never receive it
-}
-for name in sorted(RUNBOOKS):
-    r = RUNBOOKS[name]
-    print(f"{name}")
-    print(f"   artefact  : {r['artefact']}")
-    print(f"   owner     : {r['owner']}")
-    print(f"   consumers : {', '.join(r['consumers'])}")
-    print()
-'''),
 
   ("md", "## 3 · Where it breaks — the consumer who never received it"),
-  ("py", '''gaps = []
-for name in sorted(RUNBOOKS):
-    r = RUNBOOKS[name]
-    missing = sorted(set(r["consumers"]) - set(r["delivered_to"]))
-    status = "complete" if not missing else f"NOT DELIVERED to {', '.join(missing)}"
-    print(f"{name[:44]:46s}{status}")
-    for m in missing:
-        gaps.append((name, m, r["consumer_entitled_to_assume"]))
-print()
-print(f"undelivered handoffs: {len(gaps)}")
-for name, who, assumption in gaps:
-    print(f"   {who:14s} is assuming: {assumption}")
-    print(f"   {'':14s} and has not received: {RUNBOOKS[name]['artefact']}")
-assert gaps
-'''),
 
   ("md", "## 4 · What each undelivered handoff actually costs"),
-  ("py", '''CONSEQUENCE = {
- ("privacy assessment -> control design", "model_risk"):
-   "validation runs on data the DPIA restricted; the restriction is invisible to it",
- ("MRM validation -> security evidence", "cyber"):
-   "security cannot see the validated tool surface, so scope creep is undetectable",
- ("MRM validation -> security evidence", "internal_audit"):
-   "third line cannot test the second line's assurance; it audits the artefact it has",
-}
-for name, who, _ in gaps:
-    print(f"   {who:16s}{CONSEQUENCE.get((name, who), 'unknown')}")
-print()
-print("None of these is a control failing. Each is a control that was built,")
-print("works, and is invisible to the function whose decision depends on it.")
-'''),
 
   ("md", "## 5 · The control — deliver, and record the delivery"),
-  ("py", '''def close(runbooks):
-    out = {}
-    for name, r in runbooks.items():
-        out[name] = dict(r, delivered_to=sorted(r["consumers"]))
-    return out
-
-CLOSED = close(RUNBOOKS)
-remaining = [(n, c) for n, r in sorted(CLOSED.items())
-             for c in r["consumers"] if c not in r["delivered_to"]]
-print(f"{'seam':46s}{'owner':13s}delivered to")
-for n in sorted(CLOSED):
-    r = CLOSED[n]
-    print(f"{n[:44]:46s}{r['owner']:13s}{', '.join(r['delivered_to'])}")
-print(f"\\nundelivered handoffs remaining: {len(remaining)}")
-print()
-print("One owner per artefact, every consumer named, and delivery recorded")
-print("rather than assumed. The delivery record is the part people skip, and it")
-print("is the only part that makes the seam auditable a year later.")
-assert not remaining
-'''),
 
   ("md", "## 6 · Verify — one artefact, many consumers, one owner"),
-  ("py", '''def check(runbooks):
-    problems = []
-    for name, r in sorted(runbooks.items()):
-        if not r["artefact"]:                     problems.append(f"{name}: no artefact")
-        if not r["owner"]:                        problems.append(f"{name}: no owner")
-        if isinstance(r["owner"], list):          problems.append(f"{name}: {len(r['owner'])} owners")
-        if not r["consumers"]:                    problems.append(f"{name}: no consumers")
-        undel = set(r["consumers"]) - set(r["delivered_to"])
-        if undel:                                 problems.append(f"{name}: undelivered to {sorted(undel)}")
-    return problems
-
-print("before:", len(check(RUNBOOKS)), "problem(s)")
-for p in check(RUNBOOKS): print("   ", p)
-print("after :", len(check(CLOSED)), "problem(s)")
-print()
-print("Four properties, checked mechanically: an artefact exists, one owner is")
-print("accountable, consumers are named, delivery is recorded. A governance")
-print("programme that can run this check on its own seams is doing something")
-print("more useful than another policy document.")
-assert check(RUNBOOKS) and not check(CLOSED)
-'''),
- ],
+],
  "expect": "Three joint runbooks are traced from owner to consumer, and three "
            "handoffs turn out never to have been delivered — model risk never "
            "receives the privacy assessment, and neither security nor internal "

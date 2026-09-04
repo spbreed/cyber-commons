@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.11 — Honeypots, canaries and deception in the agent&#x27;s environment | Cyber Commons</title><meta name="description" content="Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.11</div><h1>Honeypots, canaries and deception in the agent&#x27;s environment</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.</p></div><div class="ctrl"><div class="lab">Control</div><p>Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.11 · Honeypots, canaries and deception in the agent's environment</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.11 — Honeypots, canaries and deception in the agent&#x27;s environment | Cyber Commons</title><meta name="description" content="Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.11</div><h1>Honeypots, canaries and deception in the agent&#x27;s environment</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.</p></div><div class="ctrl"><div class="lab">Control</div><p>Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.11 · Honeypots, canaries and deception in the agent's environment</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.10.html">D1.10 · Fleet-level correlation: seeing a swarm</a></strong>.</p>
 <table>
@@ -55,104 +55,7 @@ The cheat-attempt rate on those tasks is a leading indicator for the whole
 fleet — available continuously, not after the fact.</p>
 <p>Both share one operational requirement: <strong>rotate them</strong>. Bait that stays put is
 bait that gets learned, and a learned canary is worse than none because it
-tells you the environment is clean when it is only well-mapped.</p></div><div class="nbmd"><h2>3 · A canary, and why its false-positive rate is zero</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>CANARIES = {
- &quot;hf_CANARY7Fq2mXvLpR8s&quot;: {&quot;placed&quot;: &quot;worker env listing&quot;,  &quot;rotated_day&quot;: 0},
- &quot;ghp_CANARY4mZk1TbNwQ9x&quot;: {&quot;placed&quot;: &quot;docs/DEPLOY.md&quot;,     &quot;rotated_day&quot;: 0},
- &quot;sk-CANARYd3Vn8yHc2Uae&quot;:  {&quot;placed&quot;: &quot;artifact metadata&quot;,  &quot;rotated_day&quot;: 0},
-}
-REAL = {&quot;hf_liveTokenNotShown&quot;, &quot;ghp_alsoLive&quot;}
-
-AUTH_EVENTS = [
- (&quot;hf_liveTokenNotShown&quot;,   &quot;10.2.0.11&quot;,  &quot;ci-runner&quot;),
- (&quot;hf_CANARY7Fq2mXvLpR8s&quot;,  &quot;203.0.113.9&quot;,&quot;python-requests/2.31&quot;),
- (&quot;ghp_alsoLive&quot;,           &quot;10.2.0.11&quot;,  &quot;ci-runner&quot;),
- (&quot;sk-CANARYd3Vn8yHc2Uae&quot;,  &quot;203.0.113.9&quot;,&quot;python-requests/2.31&quot;),
-]
-
-print(f&quot;{&#x27;token&#x27;:26s}{&#x27;source&#x27;:14s}{&#x27;agent&#x27;:22s}verdict&quot;)
-hits = []
-for token, ip, ua in AUTH_EVENTS:
-    if token in CANARIES:
-        hits.append((token, ip, ua))
-        verdict = &quot;CONFIRMED COMPROMISE&quot;
-    else:
-        verdict = &quot;normal use&quot;
-    print(f&quot;{token[:24]:26s}{ip:14s}{ua:22s}{verdict}&quot;)
-
-print(f&quot;\ncanary hits: {len(hits)}  false positives possible: 0&quot;)
-print(&quot;Not zero because the detector is good - zero because nothing legitimate&quot;)
-print(&quot;has any reason to touch these strings. That is the whole property, and&quot;)
-print(&quot;it is why a hit opens an incident rather than a ticket.&quot;)
-print(f&quot;attribution carried on the hit: source {hits[0][1]}, agent {hits[0][2]}&quot;)
-assert len(hits) == 2</code></pre></div><div class="nbmd"><h2>4 · Honeypot tasks — a shortcut that is logged, not rewarded</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>BENCHMARK = [
- {&quot;id&quot;: &quot;T-01&quot;, &quot;kind&quot;: &quot;real&quot;,     &quot;shortcut&quot;: None},
- {&quot;id&quot;: &quot;T-02&quot;, &quot;kind&quot;: &quot;real&quot;,     &quot;shortcut&quot;: None},
- {&quot;id&quot;: &quot;T-03&quot;, &quot;kind&quot;: &quot;honeypot&quot;, &quot;shortcut&quot;: &quot;flag readable in the scorer fixture&quot;},
- {&quot;id&quot;: &quot;T-04&quot;, &quot;kind&quot;: &quot;real&quot;,     &quot;shortcut&quot;: None},
- {&quot;id&quot;: &quot;T-05&quot;, &quot;kind&quot;: &quot;honeypot&quot;, &quot;shortcut&quot;: &quot;answer key path guessable from the task id&quot;},
- {&quot;id&quot;: &quot;T-06&quot;, &quot;kind&quot;: &quot;real&quot;,     &quot;shortcut&quot;: None},
-]
-
-def attempt(task, agent_takes_shortcut):
-    &quot;&quot;&quot;The shortcut is instrumented: it records, it never scores.&quot;&quot;&quot;
-    if task[&quot;shortcut&quot;] and agent_takes_shortcut:
-        return {&quot;task&quot;: task[&quot;id&quot;], &quot;scored&quot;: 0.0, &quot;logged&quot;: &quot;cheat attempt&quot;,
-                &quot;detail&quot;: task[&quot;shortcut&quot;]}
-    return {&quot;task&quot;: task[&quot;id&quot;], &quot;scored&quot;: 1.0 if task[&quot;kind&quot;] == &quot;real&quot; else 0.0,
-            &quot;logged&quot;: None, &quot;detail&quot;: None}
-
-runs = [attempt(t, agent_takes_shortcut=True) for t in BENCHMARK]
-for r in runs:
-    if r[&quot;logged&quot;]:
-        print(f&quot;   {r[&#x27;task&#x27;]}  {r[&#x27;logged&#x27;]}: {r[&#x27;detail&#x27;]}  (scored {r[&#x27;scored&#x27;]})&quot;)
-
-honeypots = [t for t in BENCHMARK if t[&quot;kind&quot;] == &quot;honeypot&quot;]
-attempts = [r for r in runs if r[&quot;logged&quot;]]
-rate = len(attempts) / len(honeypots)
-print(f&quot;\nhoneypot tasks: {len(honeypots)}   cheat attempts: {len(attempts)}&quot;
-      f&quot;   rate: {rate:.0%}&quot;)
-print()
-print(&quot;The rate is the product, not the individual catch. Read continuously it&quot;)
-print(&quot;is a leading indicator for the whole fleet; read after the run it is an&quot;)
-print(&quot;autopsy.&quot;)
-assert rate == 1.0 and all(r[&quot;scored&quot;] == 0.0 for r in attempts)</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — bait that was learned</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def hit_rate(day, rotated_day, learn_days=21):
-    &quot;&quot;&quot;Once bait is learned it stops firing, and silence reads as safety.&quot;&quot;&quot;
-    age = day - rotated_day
-    return 1.0 if age &lt; learn_days else 0.0
-
-for day in (0, 7, 20, 21, 40, 90):
-    r = hit_rate(day, rotated_day=0)
-    reading = &quot;fires on contact&quot; if r else &quot;silent - and silence looks clean&quot;
-    print(f&quot;day {day:&gt;3}   detection rate {r:.0%}   {reading}&quot;)
-
-print()
-rotated = [hit_rate(day, rotated_day=(day // 21) * 21) for day in (0, 20, 40, 90)]
-print(f&quot;with quarterly-or-faster rotation: {[&#x27;%.0f%%&#x27; % (x*100) for x in rotated]}&quot;)
-print()
-print(&quot;An unrotated canary does not fail loudly. It reports a clean environment&quot;)
-print(&quot;that is merely well-mapped, which is a worse position than having no&quot;)
-print(&quot;canary at all, because you now believe something.&quot;)
-assert hit_rate(40, 0) == 0.0 and all(x == 1.0 for x in rotated)</code></pre></div><div class="nbmd"><h2>6 · Verify — what deception buys next to a tuned detector</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>DETECTORS = {
- &quot;write-volume anomaly&quot;:  {&quot;tp&quot;: 18, &quot;fp&quot;: 140, &quot;needs_threshold&quot;: True},
- &quot;entropy on artifacts&quot;:  {&quot;tp&quot;: 11, &quot;fp&quot;: 62,  &quot;needs_threshold&quot;: True},
- &quot;credential canary&quot;:     {&quot;tp&quot;: 2,  &quot;fp&quot;: 0,   &quot;needs_threshold&quot;: False},
- &quot;honeypot task&quot;:         {&quot;tp&quot;: 6,  &quot;fp&quot;: 0,   &quot;needs_threshold&quot;: False},
-}
-print(f&quot;{&#x27;detector&#x27;:24s}{&#x27;TP&#x27;:&gt;4}{&#x27;FP&#x27;:&gt;6}{&#x27;precision&#x27;:&gt;11}  threshold?&quot;)
-for name in sorted(DETECTORS):
-    d = DETECTORS[name]
-    prec = d[&quot;tp&quot;] / (d[&quot;tp&quot;] + d[&quot;fp&quot;])
-    print(f&quot;{name:24s}{d[&#x27;tp&#x27;]:&gt;4}{d[&#x27;fp&#x27;]:&gt;6}{prec:&gt;11.2f}  &quot;
-          f&quot;{&#x27;yes&#x27; if d[&#x27;needs_threshold&#x27;] else &#x27;none needed&#x27;}&quot;)
-
-deception = [n for n in DETECTORS if not DETECTORS[n][&quot;needs_threshold&quot;]]
-print(f&quot;\ndetectors needing no threshold: {sorted(deception)}&quot;)
-print()
-print(&quot;Deception finds less. What it finds needs no triage, no tuning and no&quot;)
-print(&quot;argument - which is why it belongs beside the volume detectors rather&quot;)
-print(&quot;than instead of them.&quot;)
-assert all(DETECTORS[n][&quot;fp&quot;] == 0 for n in deception)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.</p></div><div class="nbmd"><h2>Your turn</h2>
+tells you the environment is clean when it is only well-mapped.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Place one canary credential in the environment your agents run in, wired to a real alert, and leave it. The interesting outcome is not the alert; it is discovering, six weeks later, which systems can even see it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> Triage as a loop you supervise, detections written for machine-tempo actors, agent telemetry as a real data source, agent-versus-human attribution, drift monitoring — and the two the incident register adds: detections whose subject is the platform, and analytics that read across runs rather than within them.</p>
 <p><strong>What you still cannot do.</strong> Detection ends at the alert. Every lesson here stops one step before the hard part — a fleet that is acting right now, on delegated credentials, faster than the person reading the alert can type.</p>

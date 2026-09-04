@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.3 — Risk tiering agentic use cases | Cyber Commons</title><meta name="description" content="Autonomy level × action class × data sensitivity."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.3</div><h1>Risk tiering agentic use cases</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Tiering by model name instead of by what the thing can do.</p></div><div class="ctrl"><div class="lab">Control</div><p>Autonomy level × action class × data sensitivity.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Tier by what the thing can do, not by model name.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.3 · Risk tiering agentic use cases</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.3 — Risk tiering agentic use cases | Cyber Commons</title><meta name="description" content="Autonomy level × action class × data sensitivity."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.3</div><h1>Risk tiering agentic use cases</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Tiering by model name instead of by what the thing can do.</p></div><div class="ctrl"><div class="lab">Control</div><p>Autonomy level × action class × data sensitivity.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Tier by what the thing can do, not by model name.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.3 · Risk tiering agentic use cases</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Framework — Risk and Control</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.2.html">E1.2 · Building the AI and agent inventory</a></strong>.</p>
 <table>
@@ -43,95 +43,7 @@ a small local model with production deploy rights and regulated data.</p>
 <li><strong>Reach</strong> — whether it can act externally.</li>
 </ul>
 <p>The model matters for <em>likelihood</em> of a bad output, which is a different and
-smaller term than consequence.</p></div><div class="nbmd"><h2>3 · Demo — tier by authority and data</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass
-
-@dataclass
-class AIAsset:
-    name: str; kind: str; owner: str = &quot;&quot;; autonomy: str = &quot;L1&quot;
-    data: tuple = (); external: bool = False; registered: bool = True
-
-TIER_THRESHOLDS = [(9, &quot;critical&quot;), (6, &quot;high&quot;), (3, &quot;medium&quot;), (0, &quot;low&quot;)]
-
-def risk_tier(a):
-    score, why = 0, []
-    pts = {&quot;L1&quot;: 0, &quot;L2&quot;: 1, &quot;L2.5&quot;: 3, &quot;L3&quot;: 5}[a.autonomy]
-    if pts: score += pts; why.append(f&quot;autonomy {a.autonomy} (+{pts})&quot;)
-    if &quot;regulated&quot; in a.data: score += 3; why.append(&quot;regulated data (+3)&quot;)
-    if &quot;customer&quot; in a.data:  score += 2; why.append(&quot;customer data (+2)&quot;)
-    if a.external:            score += 2; why.append(&quot;can act externally (+2)&quot;)
-    if not a.registered:      score += 1; why.append(&quot;unregistered (+1)&quot;)
-    tier = next(t for th, t in TIER_THRESHOLDS if score &gt;= th)
-    return {&quot;tier&quot;: tier, &quot;score&quot;: score, &quot;because&quot;: why}
-
-ASSETS = [
- AIAsset(&quot;frontier chatbot, public docs, read-only&quot;, &quot;copilot&quot;, &quot;x&quot;, &quot;L1&quot;, (&quot;public&quot;,)),
- AIAsset(&quot;small local model with prod deploy rights&quot;, &quot;agent&quot;, &quot;x&quot;, &quot;L3&quot;,
-         (&quot;customer&quot;, &quot;regulated&quot;), True),
- AIAsset(&quot;mid model, gated writes, internal only&quot;, &quot;agent&quot;, &quot;x&quot;, &quot;L2&quot;, (&quot;employee&quot;,)),
- AIAsset(&quot;frontier model summarising customer tickets&quot;, &quot;copilot&quot;, &quot;x&quot;, &quot;L1&quot;,
-         (&quot;customer&quot;,)),
- AIAsset(&quot;unregistered remediation agent&quot;, &quot;agent&quot;, &quot;&quot;, &quot;L2.5&quot;, (&quot;customer&quot;,),
-         True, registered=False),
-]
-print(f&quot;{&#x27;asset&#x27;:46s}{&#x27;tier&#x27;:10s}{&#x27;score&#x27;:&gt;6}&quot;)
-print(&quot;-&quot; * 66)
-for a in ASSETS:
-    t = risk_tier(a)
-    print(f&quot;{a.name:46s}{t[&#x27;tier&#x27;]:10s}{t[&#x27;score&#x27;]:&gt;6}&quot;)
-    for w in t[&quot;because&quot;]:
-        print(f&quot;{&#x27;&#x27;:46s}{w}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — tier by model instead, and compare</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>MODEL_TIER = {   # the questionnaire that asks &#x27;which model?&#x27; first
- &quot;frontier chatbot, public docs, read-only&quot;: &quot;high&quot;,
- &quot;small local model with prod deploy rights&quot;: &quot;low&quot;,
- &quot;mid model, gated writes, internal only&quot;: &quot;medium&quot;,
- &quot;frontier model summarising customer tickets&quot;: &quot;high&quot;,
- &quot;unregistered remediation agent&quot;: &quot;medium&quot;,
-}
-print(f&quot;{&#x27;asset&#x27;:46s}{&#x27;by model&#x27;:10s}{&#x27;by authority&#x27;:14s}agreement&quot;)
-print(&quot;-&quot; * 84)
-disagreements = 0
-for a in ASSETS:
-    by_auth = risk_tier(a)[&quot;tier&quot;]
-    by_model = MODEL_TIER[a.name]
-    agree = by_auth == by_model
-    disagreements += not agree
-    print(f&quot;{a.name:46s}{by_model:10s}{by_auth:14s}{&#x27;&#x27; if agree else &#x27;← DISAGREE&#x27;}&quot;)
-print(f&quot;\n{disagreements}/{len(ASSETS)} disagree.&quot;)
-print(&quot;The worst inversion: the small local model with deploy rights tiers LOW&quot;)
-print(&quot;on model capability and CRITICAL on what it can actually do.&quot;)
-assert risk_tier(ASSETS[1])[&quot;tier&quot;] == &quot;critical&quot;
-assert MODEL_TIER[ASSETS[1].name] == &quot;low&quot;</code></pre></div><div class="nbmd"><h2>5 · The control — the four questions the questionnaire should ask</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>QUESTIONS = [
- (&quot;What can it change without a human approving that specific action?&quot;,
-  &quot;autonomy — the largest term&quot;),
- (&quot;What data can it read, and is any of it regulated or customer data?&quot;,
-  &quot;consequence of a leak&quot;),
- (&quot;Can it act outside our boundary?&quot;,
-  &quot;reach&quot;),
- (&quot;Is it registered, with a named owner?&quot;,
-  &quot;governability — an unowned asset cannot be remediated&quot;),
-]
-NOT_ASKED = [
- &quot;Which model does it use?&quot;,
- &quot;How many parameters?&quot;,
- &quot;Is the vendor SOC 2 certified?&quot;,
-]
-print(&quot;ASK:&quot;)
-for q, why in QUESTIONS: print(f&quot;   {q}\n      → {why}&quot;)
-print(&quot;\nDO NOT tier on:&quot;)
-for q in NOT_ASKED: print(f&quot;   {q}&quot;)
-print(&quot;   (these matter for LIKELIHOOD and vendor risk — a separate, smaller term)&quot;)
-
-def tier_from_answers(can_change, reads_regulated, reads_customer, external, registered):
-    a = AIAsset(&quot;x&quot;, &quot;agent&quot;, &quot;o&quot; if registered else &quot;&quot;, can_change,
-                tuple(filter(None, (&quot;regulated&quot; if reads_regulated else &quot;&quot;,
-                                    &quot;customer&quot; if reads_customer else &quot;&quot;))),
-                external, registered)
-    return risk_tier(a)[&quot;tier&quot;]
-
-print(&quot;\nworked example — a new request:&quot;)
-print(&quot;   &#x27;an agent that can issue refunds up to £500, reads customer orders,&#x27;&quot;)
-print(&quot;   &#x27;runs internally, owned by payments-eng&#x27;&quot;)
-print(&quot;   tier:&quot;, tier_from_answers(&quot;L2.5&quot;, False, True, False, True))</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The public read-only chatbot tiers low; the small local model with deploy rights and regulated data tiers critical at score 12. Tiering by model disagrees on 4 of 5 assets, most sharply inverting the small local model from low to critical. The worked example tiers the refund agent as high.</p></div><div class="nbmd"><h2>Your turn</h2>
+smaller term than consequence.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Re-tier your top ten AI use cases using only the four questions. Note which ones move, and be ready to explain the movement to whoever wrote the original questionnaire — the model question is usually question one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.4.html">E1.4 · Control mapping for agents</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.3.ipynb">Source</a></p>

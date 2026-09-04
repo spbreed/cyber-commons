@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.1 — Agent identity: user, workload, agent | Cyber Commons</title><meta name="description" content="A distinct identity per workload, carrying the human principal alongside it, asserted on every call."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Identity and Ingress</div><div class="sid">A2.1</div><h1>Agent identity: user, workload, agent</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A shared service account answers &#x27;what ran&#x27; and destroys &#x27;for whom&#x27; — so no later control can be conditioned on the caller.</p></div><div class="ctrl"><div class="lab">Control</div><p>A distinct identity per workload, carrying the human principal alongside it, asserted on every call.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Separate the three identities and show a downstream service authorising on the agent while attributing to the human.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.1 · Agent identity: user, workload, agent</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.1 — Agent identity: user, workload, agent | Cyber Commons</title><meta name="description" content="A distinct identity per workload, carrying the human principal alongside it, asserted on every call."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Identity and Ingress</div><div class="sid">A2.1</div><h1>Agent identity: user, workload, agent</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A shared service account answers &#x27;what ran&#x27; and destroys &#x27;for whom&#x27; — so no later control can be conditioned on the caller.</p></div><div class="ctrl"><div class="lab">Control</div><p>A distinct identity per workload, carrying the human principal alongside it, asserted on every call.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Separate the three identities and show a downstream service authorising on the agent while attributing to the human.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.1 · Agent identity: user, workload, agent</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Identity and Ingress</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.18.html">A1.18 · The CyberTravels risk register</a></strong>.</p>
 <table>
@@ -54,53 +54,7 @@ particular task. It is what you revoke when one agent misbehaves.</p>
 forgets the human, because it produces logs that are complete and useless.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Answers <strong>who is calling</strong>, so every later control has a subject. Without it, default-deny has nothing to deny and the audit trail has nobody to name.</p>
-</blockquote>
-<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass, field
-
-@dataclass(frozen=True)
-class Principal:
-    user: str            # the human who asked
-    workload: str        # the process, from platform attestation
-    instance: str        # this run of this agent
-    scopes: frozenset    # the workload&#x27;s ceiling
-
-def authorize(p, required):
-    &quot;&quot;&quot;Authorization is about the WORKLOAD: what may this agent ever do.&quot;&quot;&quot;
-    return required in p.scopes
-
-def attribute(p, action):
-    &quot;&quot;&quot;Attribution is about the USER: who caused this.&quot;&quot;&quot;
-    return {&quot;action&quot;: action, &quot;caused_by&quot;: p.user,
-            &quot;performed_by&quot;: p.workload, &quot;run&quot;: p.instance}
-
-def memory_key(p, workspace):
-    &quot;&quot;&quot;Memory is scoped to the USER, not the workspace - this is the write that
-    let A1.4 leak a poisoned note between people.&quot;&quot;&quot;
-    return f&quot;{workspace}:{p.user}&quot;
-
-dana = Principal(&quot;dana@corp&quot;, &quot;reports-agent&quot;, &quot;run-8812&quot;,
-                 frozenset({&quot;reports:read&quot;}))
-priya = Principal(&quot;priya@corp&quot;, &quot;reports-agent&quot;, &quot;run-8813&quot;,
-                  frozenset({&quot;reports:read&quot;}))
-
-print(f&quot;{&#x27;request&#x27;:28s}{&#x27;authorized?&#x27;:13s}attributed to&quot;)
-for p, need in ((dana, &quot;reports:read&quot;), (dana, &quot;db:admin&quot;)):
-    ok = authorize(p, need)
-    rec = attribute(p, need)
-    print(f&quot;{p.user + &#x27; -&gt; &#x27; + need:28s}{str(ok):13s}{rec[&#x27;caused_by&#x27;]} via {rec[&#x27;performed_by&#x27;]}&quot;)
-
-print(&quot;\nmemory keys - the same workspace, two users:&quot;)
-print(f&quot;   dana  -&gt; {memory_key(dana, &#x27;acme&#x27;)}&quot;)
-print(f&quot;   priya -&gt; {memory_key(priya, &#x27;acme&#x27;)}&quot;)
-print(f&quot;   shared? {memory_key(dana, &#x27;acme&#x27;) == memory_key(priya, &#x27;acme&#x27;)}&quot;)
-print()
-print(&quot;db:admin is refused because the WORKLOAD never held it - so no user can&quot;)
-print(&quot;borrow it through the agent, which is A1.6 closed. The audit line names&quot;)
-print(&quot;dana, which is A1.14 closed. And a note written in dana&#x27;s session cannot&quot;)
-print(&quot;be read back in priya&#x27;s, which is A1.4 closed.&quot;)
-assert not authorize(dana, &quot;db:admin&quot;)
-assert memory_key(dana, &quot;acme&quot;) != memory_key(priya, &quot;acme&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Authorization resolves against the workload ceiling and refuses <code>db:admin</code> no matter who asks, attribution names the human on every action, and memory keys differ per user so a note written in one session cannot be read back in another's.</p></div><div class="nbmd"><h2>Your turn</h2>
+</blockquote></div><div class="nbmd"><h2>Your turn</h2>
 <p>For one agent, write down its three identities. If the workload and the user are the same value, you have inherited credentials; if the instance does not exist, you cannot revoke one run.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">A2.2 · Bootstrapping the first credential</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.1.ipynb">Source</a></p>

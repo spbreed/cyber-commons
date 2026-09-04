@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.8 — Malicious code execution | Cyber Commons</title><meta name="description" content="Sandboxed execution (A3.2) and egress control (A3.3)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › CyberTravels&#x27; Architecture, and Every Risk It Carries</div><div class="sid">A1.8</div><h1>Malicious code execution</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model-authored code runs with the runtime&#x27;s privileges — reaching the filesystem, the network and any credential in the environment.</p></div><div class="ctrl"><div class="lab">Control</div><p>Sandboxed execution (A3.2) and egress control (A3.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Execute model-authored code and enumerate what the process could touch.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.8 · Malicious code execution</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.8 — Malicious code execution | Cyber Commons</title><meta name="description" content="Sandboxed execution (A3.2) and egress control (A3.3)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › CyberTravels&#x27; Architecture, and Every Risk It Carries</div><div class="sid">A1.8</div><h1>Malicious code execution</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model-authored code runs with the runtime&#x27;s privileges — reaching the filesystem, the network and any credential in the environment.</p></div><div class="ctrl"><div class="lab">Control</div><p>Sandboxed execution (A3.2) and egress control (A3.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Execute model-authored code and enumerate what the process could touch.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.8 · Malicious code execution</h1>
 <p><strong>Function A — Securing AI Architectures → CyberTravels' Architecture, and Every Risk It Carries</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.7.html">A1.7 · Identity spoofing and impersonation</a></strong>.</p>
 <table>
@@ -59,47 +59,7 @@ can <em>reach</em>, not about what the model can be persuaded to <em>write</em>.
            identity + policy wrap every call · observability records it</code></p>
 </blockquote>
 <h2>3 · The risk, realised</h2>
-<p>What the executing process can reach, enumerated rather than assumed. Nothing below actually touches your machine — the environment is a fixture, so the lesson runs anywhere.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># a stand-in for the process the agent&#x27;s code runs inside
-PROCESS_ENV = {
- &quot;AWS_ACCESS_KEY_ID&quot;: &quot;AKIA-EXAMPLE-NOT-REAL&quot;,
- &quot;DATABASE_URL&quot;: &quot;postgres://app:pw@prod-db/main&quot;,
- &quot;HOME&quot;: &quot;/home/agent&quot;,
-}
-FILESYSTEM = {&quot;/home/agent/work/data.csv&quot;: &quot;id,amount&quot;,
-              &quot;/home/agent/.ssh/id_ed25519&quot;: &quot;PRIVATE KEY MATERIAL&quot;,
-              &quot;/etc/passwd&quot;: &quot;root:x:0:0&quot;}
-NETWORK_REACHABLE = [&quot;prod-db:5432&quot;, &quot;169.254.169.254:80&quot;, &quot;0.0.0.0/0&quot;]
-
-def execute(code):
-    &quot;&quot;&quot;The runtime runs model-authored text. Reach is decided by the process,
-    not by the code&#x27;s intent.&quot;&quot;&quot;
-    reached = []
-    if &quot;environ&quot; in code:  reached += [f&quot;env:{k}&quot; for k in sorted(PROCESS_ENV)]
-    if &quot;open(&quot; in code:    reached += [f&quot;file:{p}&quot; for p in sorted(FILESYSTEM)]
-    if &quot;connect&quot; in code:  reached += [f&quot;net:{h}&quot; for h in NETWORK_REACHABLE]
-    return reached
-
-BENIGN = &quot;rows = open(&#x27;/home/agent/work/data.csv&#x27;).read()&quot;     # nobody attacked anything
-STEERED = &quot;import os; d=os.environ; connect(&#x27;169.254.169.254&#x27;)&quot;
-
-for label, code in ((&quot;ordinary bug / benign task&quot;, BENIGN),
-                    (&quot;steered by an injection&quot;, STEERED)):
-    reach = execute(code)
-    print(f&quot;{label}:&quot;)
-    print(f&quot;   code   : {code[:58]}&quot;)
-    print(f&quot;   reached: {len(reach)} things&quot;)
-    for r in reach[:6]:
-        print(f&quot;      {r}&quot;)
-    print()
-
-print(&quot;The benign task reached every file the process can see, including a&quot;)
-print(&quot;private key it had no reason to touch. It was not attacked - the code&quot;)
-print(&quot;used open(), and open() sees what the process sees.&quot;)
-print()
-print(&quot;Blast radius here is a property of the environment. A3.2 changes the&quot;)
-print(&quot;environment; no amount of instruction changes it.&quot;)
-assert any(&quot;id_ed25519&quot; in r for r in execute(BENIGN))</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>What the executing process can reach, enumerated rather than assumed. Nothing below actually touches your machine — the environment is a fixture, so the lesson runs anywhere.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>For one agent that executes code, list what is in its process environment right now. The credentials in that list are the blast radius of the next ordinary bug, not of the next attack.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.9.html">A1.9 · Injection through content the agent was asked to read</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.8.ipynb">Source</a></p>

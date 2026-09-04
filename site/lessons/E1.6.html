@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.6 — Operating vs outcome guardrails | Cyber Commons</title><meta name="description" content="Constrain both, and know which evidence answers which question."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.6</div><h1>Operating vs outcome guardrails</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Frameworks specify how the system works; regulators care what it produced.</p></div><div class="ctrl"><div class="lab">Control</div><p>Constrain both, and know which evidence answers which question.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Sort your guardrails into operating vs outcome.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.6 · Operating vs outcome guardrails</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.6 — Operating vs outcome guardrails | Cyber Commons</title><meta name="description" content="Constrain both, and know which evidence answers which question."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.6</div><h1>Operating vs outcome guardrails</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Frameworks specify how the system works; regulators care what it produced.</p></div><div class="ctrl"><div class="lab">Control</div><p>Constrain both, and know which evidence answers which question.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Sort your guardrails into operating vs outcome.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.6 · Operating vs outcome guardrails</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Framework — Risk and Control</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.5.html">E1.5 · Evaluation output as audit evidence</a></strong>.</p>
 <table>
@@ -43,74 +43,7 @@ customer data loss, no increase in customer-facing incidents, no disparate
 outcomes across segments. They matter more and most need a measurement you do
 not yet have.</p>
 <p>The failure is not choosing one. It is shipping only the first column, reporting
-it as coverage, and never labelling the second column as unmeasured.</p></div><div class="nbmd"><h2>3 · Demo — classify a real guardrail set</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def classify(rule, constrains_outcome, measurement_exists):
-    kind = &quot;outcome&quot; if constrains_outcome else &quot;operating&quot;
-    if kind == &quot;operating&quot;:
-        return {&quot;rule&quot;: rule, &quot;kind&quot;: kind, &quot;enforceable_today&quot;: True,
-                &quot;risk&quot;: &quot;may satisfy audit while missing real harm&quot;}
-    return {&quot;rule&quot;: rule, &quot;kind&quot;: kind, &quot;enforceable_today&quot;: measurement_exists,
-            &quot;risk&quot;: (&quot;enforceable&quot; if measurement_exists
-                     else &quot;needs an agreed measurement before it can be enforced&quot;)}
-
-RULES = [
- (&quot;all agent egress goes through the gateway&quot;, False, True),
- (&quot;privileged tools require approval below L3&quot;, False, True),
- (&quot;every action is logged with the acting identity&quot;, False, True),
- (&quot;agent identities are separately revocable&quot;, False, True),
- (&quot;no agent action causes unrecoverable customer data loss&quot;, True, False),
- (&quot;automated remediation does not increase customer-facing incidents&quot;, True, True),
- (&quot;model outputs do not produce disparate outcomes across segments&quot;, True, False),
-]
-print(f&quot;{&#x27;rule&#x27;:60s}{&#x27;kind&#x27;:11s}{&#x27;enforceable&#x27;:&gt;12}&quot;)
-print(&quot;-&quot; * 86)
-for rule, outcome, measurable in RULES:
-    c = classify(rule, outcome, measurable)
-    print(f&quot;{c[&#x27;rule&#x27;]:60s}{c[&#x27;kind&#x27;]:11s}{str(c[&#x27;enforceable_today&#x27;]):&gt;12}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the coverage number that lies</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>operating = [r for r in RULES if not r[1]]
-outcome   = [r for r in RULES if r[1]]
-enforceable_outcome = [r for r in outcome if r[2]]
-
-print(f&quot;operating guardrails : {len(operating)}  all enforceable today&quot;)
-print(f&quot;outcome guardrails   : {len(outcome)}  of which enforceable: &quot;
-      f&quot;{len(enforceable_outcome)}&quot;)
-
-naive = len(operating) / len(RULES)
-honest = (len(operating) + len(enforceable_outcome)) / len(RULES)
-print(f&quot;\n&#x27;guardrail coverage&#x27; if you count only what you shipped: &quot;
-      f&quot;{len(operating)}/{len(operating)} = 100%&quot;)
-print(f&quot;coverage across ALL agreed guardrails: &quot;
-      f&quot;{len(operating)+len(enforceable_outcome)}/{len(RULES)} = {honest:.0%}&quot;)
-print(&quot;\nThe first number is what usually reaches a steering committee.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — define the measurement, or label it unmeasured</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def specify_outcome_guardrail(rule, metric, threshold, source, cadence):
-    complete = all([metric, threshold is not None, source, cadence])
-    return {&quot;rule&quot;: rule, &quot;metric&quot;: metric, &quot;threshold&quot;: threshold,
-            &quot;source&quot;: source, &quot;cadence&quot;: cadence,
-            &quot;status&quot;: &quot;enforceable&quot; if complete else &quot;ASPIRATION — label it as such&quot;}
-
-SPECS = [
- specify_outcome_guardrail(
-   &quot;automated remediation does not increase customer-facing incidents&quot;,
-   metric=&quot;customer-facing SEV1+SEV2 per 1000 remediations&quot;,
-   threshold=1.2, source=&quot;incident management system&quot;, cadence=&quot;monthly&quot;),
- specify_outcome_guardrail(
-   &quot;no agent action causes unrecoverable customer data loss&quot;,
-   metric=&quot;&quot;, threshold=None, source=&quot;&quot;, cadence=&quot;&quot;),
-]
-for s in SPECS:
-    print(f&quot;{s[&#x27;rule&#x27;]}&quot;)
-    print(f&quot;   metric   {s[&#x27;metric&#x27;] or &#x27;—&#x27;}&quot;)
-    print(f&quot;   threshold {s[&#x27;threshold&#x27;] if s[&#x27;threshold&#x27;] is not None else &#x27;—&#x27;}&quot;)
-    print(f&quot;   source   {s[&#x27;source&#x27;] or &#x27;—&#x27;}&quot;)
-    print(f&quot;   status   {s[&#x27;status&#x27;]}\n&quot;)
-
-def programme_statement(rules, specs):
-    enforceable = len([r for r in rules if not r[1]]) + \
-                  len([s for s in specs if s[&quot;status&quot;] == &quot;enforceable&quot;])
-    aspirations = [s[&quot;rule&quot;] for s in specs if s[&quot;status&quot;] != &quot;enforceable&quot;]
-    return (f&quot;{enforceable}/{len(rules)} guardrails are enforceable today.\n&quot;
-            f&quot;The following are agreed but UNMEASURED, and are not counted as &quot;
-            f&quot;coverage:\n&quot; + &quot;\n&quot;.join(f&quot;   - {a}&quot; for a in aspirations))
-print(programme_statement(RULES, SPECS))
-assert any(s[&quot;status&quot;] != &quot;enforceable&quot; for s in SPECS)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Four operating guardrails are all enforceable today; three outcome guardrails are enforceable only where a measurement exists. Counting only what shipped gives 100% coverage; counting all agreed guardrails gives 71%. One outcome guardrail is fully specified and enforceable; the other is labelled an aspiration and excluded from coverage.</p></div><div class="nbmd"><h2>Your turn</h2>
+it as coverage, and never labelling the second column as unmeasured.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick one outcome guardrail your programme has agreed and specify its metric, threshold, source and cadence precisely enough that someone could dispute the result. If you cannot, say so in the coverage report rather than counting it.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.7.html">E1.7 · Continuous control verification</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.6.ipynb">Source</a></p>

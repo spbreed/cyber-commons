@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.8 — Auditability of autonomous action | Cyber Commons</title><meta name="description" content="The delegation chain *is* the audit trail."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.8</div><h1>Auditability of autonomous action</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>No trail showing under whose authority the agent acted.</p></div><div class="ctrl"><div class="lab">Control</div><p>The delegation chain *is* the audit trail.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build the audit trail out of the delegation chain itself.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.8 · Auditability of autonomous action</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.8 — Auditability of autonomous action | Cyber Commons</title><meta name="description" content="The delegation chain *is* the audit trail."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.8</div><h1>Auditability of autonomous action</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>No trail showing under whose authority the agent acted.</p></div><div class="ctrl"><div class="lab">Control</div><p>The delegation chain *is* the audit trail.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build the audit trail out of the delegation chain itself.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.8 · Auditability of autonomous action</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Platform — Regulatory and Compliance</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E2.7.html">E2.7 · Documentation that survives supervision</a></strong>.</p>
 <table>
@@ -47,97 +47,7 @@ action happens, because neither can be reconstructed afterwards:</p>
 </ul>
 <p>Attribution without replay tells you who acted but not why. Replay without
 attribution tells you what happened but not on whose authority. Regulators and
-auditors ask both, usually in that order.</p></div><div class="nbmd"><h2>3 · Demo — the record, complete and incomplete</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-from dataclasses import dataclass, field
-
-@dataclass
-class Token:
-    sub: str; actor: str; scopes: set; act: dict = None
-    def chain(self):
-        out, node = [], self.act
-        while node: out.append(node[&quot;actor&quot;]); node = node.get(&quot;act&quot;)
-        c = list(reversed(out)) + [self.actor]
-        if c[0] != self.sub: c.insert(0, self.sub)
-        return c
-
-@dataclass
-class Replay:
-    prompts: list = field(default_factory=list)
-    tool_results: list = field(default_factory=list)
-    model_version: str = &quot;&quot;
-    seed: object = None
-    def replayable(self):
-        missing = [n for n, v in ((&quot;prompts&quot;, self.prompts),
-                                  (&quot;tool results&quot;, self.tool_results),
-                                  (&quot;model version&quot;, self.model_version),
-                                  (&quot;seed&quot;, self.seed is not None)) if not v]
-        return (not missing), missing
-
-def audit_record(action, token, replay):
-    ok, missing = replay.replayable()
-    return {&quot;action&quot;: action,
-            &quot;acting_identity&quot;: token.actor,
-            &quot;on_behalf_of&quot;: token.sub,
-            &quot;chain&quot;: &quot; → &quot;.join(token.chain()),
-            &quot;scopes_held&quot;: sorted(token.scopes),
-            &quot;replayable&quot;: ok,
-            &quot;replay_gaps&quot;: missing,
-            &quot;answerable&quot;: token.actor != token.sub and ok}
-
-GOOD_TOKEN = Token(&quot;dana@corp&quot;, &quot;patch-agent&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;},
-                   {&quot;actor&quot;: &quot;orchestrator&quot;, &quot;act&quot;: None})
-GOOD_REPLAY = Replay([&quot;fix SEC-4471&quot;], [&quot;file contents…&quot;], &quot;glm-4.6@2026-07-14&quot;, 42)
-
-r = audit_record(&quot;merge_pr #8812&quot;, GOOD_TOKEN, GOOD_REPLAY)
-for k, v in r.items(): print(f&quot;{k:18s}{v}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the two half-answers</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>IMPERSONATED = Token(&quot;dana@corp&quot;, &quot;dana@corp&quot;, {&quot;repo:write&quot;}, None)
-NO_REPLAY    = Replay([&quot;fix SEC-4471&quot;], [&quot;file contents…&quot;], &quot;&quot;, None)
-
-CASES = {
- &quot;complete&quot;:                     (GOOD_TOKEN,  GOOD_REPLAY),
- &quot;attribution broken&quot;:           (IMPERSONATED, GOOD_REPLAY),
- &quot;replay incomplete&quot;:            (GOOD_TOKEN,  NO_REPLAY),
- &quot;neither&quot;:                      (IMPERSONATED, NO_REPLAY),
-}
-print(f&quot;{&#x27;case&#x27;:22s}{&#x27;who acted&#x27;:14s}{&#x27;replayable&#x27;:12s}{&#x27;answerable&#x27;:&gt;12}&quot;)
-print(&quot;-&quot; * 62)
-for name, (tok, rep) in CASES.items():
-    r = audit_record(&quot;merge_pr #8812&quot;, tok, rep)
-    print(f&quot;{name:22s}{r[&#x27;acting_identity&#x27;]:14s}{str(r[&#x27;replayable&#x27;]):12s}&quot;
-          f&quot;{str(r[&#x27;answerable&#x27;]):&gt;12}&quot;)
-
-r = audit_record(&quot;merge_pr #8812&quot;, IMPERSONATED, GOOD_REPLAY)
-print(f&quot;\nattribution-broken record: acting_identity={r[&#x27;acting_identity&#x27;]}&quot;)
-print(&quot;The record is complete, internally consistent, and false. It says a human&quot;)
-print(&quot;merged a pull request she never saw.&quot;)
-assert not r[&quot;answerable&quot;]</code></pre></div><div class="nbmd"><h2>5 · The control — the auditability test, run as a drill</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def auditability_drill(records, sample_size=3):
-    &quot;&quot;&quot;Pick actions at random and try to produce the full record for each.&quot;&quot;&quot;
-    results = []
-    for i, (action, tok, rep) in enumerate(records[:sample_size], 1):
-        r = audit_record(action, tok, rep)
-        gaps = []
-        if r[&quot;acting_identity&quot;] == r[&quot;on_behalf_of&quot;]:
-            gaps.append(&quot;acting identity not distinguishable from the principal&quot;)
-        gaps += [f&quot;replay missing {m}&quot; for m in r[&quot;replay_gaps&quot;]]
-        results.append({&quot;n&quot;: i, &quot;action&quot;: action, &quot;complete&quot;: not gaps, &quot;gaps&quot;: gaps})
-    passed = sum(r[&quot;complete&quot;] for r in results)
-    return results, passed, len(results)
-
-SAMPLE = [
- (&quot;merge_pr #8812&quot;, GOOD_TOKEN, GOOD_REPLAY),
- (&quot;deploy prod&quot;,    IMPERSONATED, GOOD_REPLAY),
- (&quot;rotate secret&quot;,  GOOD_TOKEN, NO_REPLAY),
-]
-rows, passed, total = auditability_drill(SAMPLE)
-for r in rows:
-    print(f&quot;{r[&#x27;n&#x27;]}. {r[&#x27;action&#x27;]:18s}{&#x27;COMPLETE&#x27; if r[&#x27;complete&#x27;] else &#x27;INCOMPLETE&#x27;}&quot;)
-    for g in r[&quot;gaps&quot;]: print(f&quot;      ⚠ {g}&quot;)
-print(f&quot;\nauditability: {passed}/{total} sampled actions fully answerable &quot;
-      f&quot;({passed/total:.0%})&quot;)
-print(&quot;\nRun this as a drill, quarterly, on randomly chosen production actions.&quot;)
-print(&quot;The percentage is the number that goes in the evidence pack — and it is&quot;)
-print(&quot;far more persuasive than a statement that logging is comprehensive.&quot;)
-assert passed &lt; total</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The complete record names the acting identity, principal, chain and scopes and is replayable, so it is answerable. Impersonation produces a complete, consistent and false record attributing the merge to the human. Missing replay fields break the other half. The drill reports 1 of 3 sampled actions fully answerable.</p></div><div class="nbmd"><h2>Your turn</h2>
+auditors ask both, usually in that order.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the drill on three real production actions from last week. The field you cannot fill is your auditability gap, stated precisely — and a number like "1 of 3" is far more useful to a supervisor than a paragraph about comprehensive logging.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.9.html">E2.9 · Regulator and auditor conversations</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E2.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.8.ipynb">Source</a></p>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.7 — The agent gateway: one choke point when you scale | Cyber Commons</title><meta name="description" content="A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.7</div><h1>The agent gateway: one choke point when you scale</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Per-agent controls diverge as the fleet grows, and legacy downstreams force a static credential back into agent code.</p></div><div class="ctrl"><div class="lab">Control</div><p>A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Route every call through one gateway and show the same policy holding for agents that never implemented it.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.7 · The agent gateway: one choke point when you scale</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.7 — The agent gateway: one choke point when you scale | Cyber Commons</title><meta name="description" content="A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.7</div><h1>The agent gateway: one choke point when you scale</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Per-agent controls diverge as the fleet grows, and legacy downstreams force a static credential back into agent code.</p></div><div class="ctrl"><div class="lab">Control</div><p>A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Route every call through one gateway and show the same policy holding for agents that never implemented it.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.7 · The agent gateway: one choke point when you scale</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.6.html">A3.6 · Human approval that survives volume</a></strong>.</p>
 <table>
@@ -62,63 +62,7 @@ it.</p>
 attractive target. It has to be operated accordingly.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Not a new control. The same controls, at a point every call passes through — and the only answer to a downstream that cannot consume delegated identity.</p>
-</blockquote>
-<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>LEGACY_DB_CREDENTIAL = &quot;static-service-password&quot;     # never leaves the gateway
-
-REGISTRY = {&quot;spiffe://corp/reports-agent&quot;: {&quot;owner&quot;: &quot;sam@corp&quot;, &quot;expires&quot;: 9000}}
-POLICY = {(&quot;reports-agent&quot;, &quot;run_query&quot;, &quot;table:reports&quot;): {&quot;SELECT&quot;}}
-EGRESS_ALLOW = {&quot;reports-db.corp.example&quot;}
-
-AUDIT = []
-
-def gateway(call):
-    &quot;&quot;&quot;One choke point: identity, registry, policy, egress, budget, audit.&quot;&quot;&quot;
-    checks = []
-    def check(name, ok, why=&quot;&quot;):
-        checks.append((name, ok, why)); return ok
-
-    if not check(&quot;identity&quot;, call[&quot;identity&quot;] in REGISTRY, &quot;attested and registered&quot;):
-        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
-    verbs = POLICY.get((call[&quot;agent&quot;], call[&quot;tool&quot;], call[&quot;resource&quot;]), set())
-    if not check(&quot;policy&quot;, call[&quot;verb&quot;] in verbs, f&quot;permitted verbs {sorted(verbs) or &#x27;none&#x27;}&quot;):
-        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
-    if not check(&quot;egress&quot;, call[&quot;destination&quot;] in EGRESS_ALLOW, &quot;destination allow-list&quot;):
-        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
-    if not check(&quot;budget&quot;, call[&quot;calls_so_far&quot;] &lt; 5, &quot;per-target ceiling&quot;):
-        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
-
-    # the agent never held this; the gateway attaches it on the way out
-    AUDIT.append({&quot;principal&quot;: call[&quot;principal&quot;], &quot;agent&quot;: call[&quot;agent&quot;],
-                  &quot;tool&quot;: call[&quot;tool&quot;], &quot;resource&quot;: call[&quot;resource&quot;]})
-    return {&quot;allowed&quot;: True, &quot;checks&quot;: checks, &quot;credential_attached&quot;: LEGACY_DB_CREDENTIAL[:6] + &quot;...&quot;}
-
-BASE = {&quot;identity&quot;: &quot;spiffe://corp/reports-agent&quot;, &quot;agent&quot;: &quot;reports-agent&quot;,
-        &quot;principal&quot;: &quot;dana@corp&quot;, &quot;tool&quot;: &quot;run_query&quot;, &quot;resource&quot;: &quot;table:reports&quot;,
-        &quot;verb&quot;: &quot;SELECT&quot;, &quot;destination&quot;: &quot;reports-db.corp.example&quot;, &quot;calls_so_far&quot;: 0}
-
-CASES = {
- &quot;the intended call&quot;:          BASE,
- &quot;unregistered agent&quot;:         dict(BASE, identity=&quot;spiffe://corp/rogue-agent&quot;),
- &quot;verb not permitted&quot;:         dict(BASE, verb=&quot;DELETE&quot;),
- &quot;exfiltration destination&quot;:   dict(BASE, destination=&quot;archive.evil.example&quot;),
- &quot;over the per-target ceiling&quot;:dict(BASE, calls_so_far=9),
-}
-for label, call in CASES.items():
-    r = gateway(call)
-    failed = [n for n, ok, _ in r[&quot;checks&quot;] if not ok]
-    print(f&quot;   {label:28s}{&#x27;ALLOWED&#x27; if r[&#x27;allowed&#x27;] else &#x27;denied at &#x27; + failed[0]}&quot;)
-
-print(f&quot;\naudit entries written: {len(AUDIT)}&quot;)
-print(f&quot;credential held by the agent: never - attached at the gateway&quot;)
-print()
-print(&quot;The agent implements none of this. Add a new agent tomorrow and it&quot;)
-print(&quot;inherits every control by being on the other side of one hop.&quot;)
-print()
-print(&quot;And the legacy database, which cannot consume a delegated token, is&quot;)
-print(&quot;reached with a static credential the agent has never seen - authorised&quot;)
-print(&quot;against dana before the call was made.&quot;)
-assert len(AUDIT) == 1 and gateway(CASES[&quot;unregistered agent&quot;])[&quot;allowed&quot;] is False</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent.</p></div><div class="nbmd"><h2>Your turn</h2>
+</blockquote></div><div class="nbmd"><h2>Your turn</h2>
 <p>Count your agents. If it is more than five, work out how you would currently answer 'is egress control on for all of them' — and how long that would take.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.8.html">A3.8 · Shared infrastructure between agent runs</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.7.ipynb">Source</a></p>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.8 — Threat intel sub-lane | Cyber Commons</title><meta name="description" content="Provenance discipline; refuse claims without a source."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.8</div><h1>Threat intel sub-lane</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Unsourced confidence in synthesis loops.</p></div><div class="ctrl"><div class="lab">Control</div><p>Provenance discipline; refuse claims without a source.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build a synthesis loop that must cite or abstain.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.8 · Threat intel sub-lane</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.8 — Threat intel sub-lane | Cyber Commons</title><meta name="description" content="Provenance discipline; refuse claims without a source."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.8</div><h1>Threat intel sub-lane</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Unsourced confidence in synthesis loops.</p></div><div class="ctrl"><div class="lab">Control</div><p>Provenance discipline; refuse claims without a source.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build a synthesis loop that must cite or abstain.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.8 · Threat intel sub-lane</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.7.html">D1.7 · Drift monitoring</a></strong>.</p>
 <table>
@@ -43,85 +43,8 @@ input, not outcome.</p>
 <p>A narrative about adversary trends is not intelligence you can operate. It may
 be genuinely useful for planning and it should not be counted as detection
 coverage, because counting it that way makes a programme look covered when it is
-not.</p></div><div class="nbmd"><h2>3 · Demo — a feed, converted</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-from dataclasses import dataclass
-
-@dataclass
-class Indicator:
-    value: str; kind: str; source: str; confidence: float
-
-FEED = [
- Indicator(&quot;collect.example.com&quot;, &quot;host&quot;, &quot;vendor-a&quot;, 0.95),
- Indicator(&quot;169.254.169.254&quot;, &quot;host&quot;, &quot;internal-research&quot;, 0.99),
- Indicator(&quot;a1b2c3d4e5f6&quot;, &quot;hash&quot;, &quot;vendor-b&quot;, 0.72),
- Indicator(&quot;pastebin.example&quot;, &quot;host&quot;, &quot;vendor-a&quot;, 0.55),
- Indicator(&quot;adversaries increasingly use agentic tooling&quot;, &quot;narrative&quot;, &quot;blog&quot;, 0.40),
- Indicator(&quot;agents reading ~/.aws/credentials&quot;, &quot;technique&quot;, &quot;internal-ir&quot;, 0.88),
- Indicator(&quot;threat actor GOLDEN-OTTER is targeting fintech&quot;, &quot;narrative&quot;, &quot;vendor-c&quot;, 0.60),
-]
-CONF_FLOOR = 0.70
-MATCHABLE = {&quot;host&quot;, &quot;hash&quot;, &quot;technique&quot;}
-
-def actionable(i):
-    if i.kind not in MATCHABLE:
-        return False, f&quot;{i.kind} is not matchable in telemetry&quot;
-    if i.confidence &lt; CONF_FLOOR:
-        return False, f&quot;confidence {i.confidence} below floor {CONF_FLOOR}&quot;
-    return True, &quot;convertible to a rule&quot;
-
-print(f&quot;{&#x27;indicator&#x27;:46s}{&#x27;kind&#x27;:11s}{&#x27;conf&#x27;:&gt;6}  verdict&quot;)
-print(&quot;-&quot; * 88)
-for i in FEED:
-    ok, why = actionable(i)
-    print(f&quot;{i.value[:44]:46s}{i.kind:11s}{i.confidence:&gt;6.2f}  &quot;
-          f&quot;{&#x27;RULE&#x27; if ok else &#x27;drop&#x27;} — {why}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
-class Rule:
-    name: str; severity: str; match: object; response: str
-
-def to_rules(feed):
-    rules = []
-    for i in feed:
-        ok, _ = actionable(i)
-        if not ok: continue
-        sev = &quot;critical&quot; if i.confidence &gt; 0.9 else &quot;high&quot;
-        if i.kind == &quot;host&quot;:
-            m = (lambda v: (lambda e: v in e.get(&quot;target&quot;, &quot;&quot;)))(i.value)
-            resp = f&quot;block egress, revoke the agent&#x27;s token, hunt back 30d ({i.source})&quot;
-        elif i.kind == &quot;hash&quot;:
-            m = (lambda v: (lambda e: v == e.get(&quot;hash&quot;, &quot;&quot;)))(i.value)
-            resp = f&quot;quarantine the artefact, check the supply chain ({i.source})&quot;
-        else:
-            m = (lambda: (lambda e: &quot;/.aws/&quot; in e.get(&quot;target&quot;, &quot;&quot;)))()
-            resp = f&quot;revoke, rotate the cloud role, audit reads ({i.source})&quot;
-        rules.append(Rule(f&quot;intel:{i.kind}:{i.value[:26]}&quot;, sev, m, resp))
-    return rules
-
-rules = to_rules(FEED)
-print(f&quot;{len(FEED)} indicators → {len(rules)} deployable rules &quot;
-      f&quot;({len(rules)/len(FEED):.0%} conversion)\n&quot;)
-for r in rules:
-    print(f&quot;   [{r.severity:8s}] {r.name}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — conversion is only the first of three numbers</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>EVENTS = [
- {&quot;actor&quot;: &quot;patch-agent&quot;, &quot;target&quot;: &quot;https://collect.example.com/x&quot;},
- {&quot;actor&quot;: &quot;triage-agent&quot;, &quot;target&quot;: &quot;https://api.github.com/repos&quot;},
- {&quot;actor&quot;: &quot;patch-agent&quot;, &quot;target&quot;: &quot;/home/app/.aws/credentials&quot;},
- {&quot;actor&quot;: &quot;svc-etl&quot;, &quot;target&quot;: &quot;/data/export.csv&quot;},
- {&quot;actor&quot;: &quot;build-agent&quot;, &quot;hash&quot;: &quot;a1b2c3d4e5f6&quot;},
-]
-fired = [(r, e) for r in rules for e in EVENTS if r.match(e)]
-print(&quot;alerts generated from the feed:&quot;)
-for r, e in fired:
-    print(f&quot;   [{r.severity}] {r.name}&quot;)
-    print(f&quot;        actor={e[&#x27;actor&#x27;]}  → {r.response}&quot;)
-
-ACTIONED = 2      # of those alerts, how many led to an action
-print(f&quot;\nthe three numbers that matter:&quot;)
-print(f&quot;   indicators received : {len(FEED)}&quot;)
-print(f&quot;   rules deployed      : {len(rules)}  ({len(rules)/len(FEED):.0%} of the feed)&quot;)
-print(f&quot;   alerts fired        : {len(fired)}&quot;)
-print(f&quot;   alerts actioned     : {ACTIONED}  ({ACTIONED/max(len(fired),1):.0%})&quot;)
-print(&quot;\nThe third number is the one that decides whether the subscription renews.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — agent-specific intel is mostly internal</h2></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">intel source</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">converts to a detection</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">why</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your own incidents</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>100%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the technique that worked against you</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your red team (C1)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>90%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">attack-suite results become detections directly</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your drift monitor (D1.7)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>80%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">baseline changes are leading indicators</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">vendor advisories</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">50%</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">useful for the supply chain (C2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">commercial feed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">30%</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">generic indicators; little agent-specific content yet</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">The highest-converting sources are all internal. For agentic threats the intel programme is mostly a feedback loop out of C1 and D1.7, not a purchase.</div></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Four of seven indicators convert to rules — the two narratives and the low-confidence host are dropped with reasons. The rules fire on three of five events with concrete responses. The three-number summary shows a 57% conversion rate and 67% of alerts actioned, and the source table ranks internal sources highest.</p></div><div class="nbmd"><h2>Your turn</h2>
+not.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">intel source</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">converts to a detection</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">why</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your own incidents</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>100%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the technique that worked against you</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your red team (C1)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>90%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">attack-suite results become detections directly</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your drift monitor (D1.7)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>80%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">baseline changes are leading indicators</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">vendor advisories</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">50%</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">useful for the supply chain (C2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">commercial feed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">30%</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">generic indicators; little agent-specific content yet</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The highest-converting sources are all internal. For agentic threats the intel programme is mostly a feedback loop out of C1 and D1.7, not a purchase.</div></div><div class="nbmd"><h2>Your turn</h2>
 <p>Compute your own three numbers for last quarter: indicators received, rules deployed, alerts actioned. The ratio between the first and third is the honest value of the programme.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.9.html">D1.9 · Detections whose subject is the agent platform</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.8.ipynb">Source</a></p>

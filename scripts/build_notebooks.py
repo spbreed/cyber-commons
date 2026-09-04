@@ -229,8 +229,27 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
                     f"{ex['concept'].strip()}"))
 
     # ---- 3..n the practical application, renumbered from here -------------
+    # A markdown step that ends on a bare "## N · Title" was written to
+    # introduce a code cell. Once a lesson carries no code, that heading
+    # promises something that never arrives, so it is dropped — the callout
+    # above it, which is the part that teaches, is kept.
+    RUNS = {"py", "skill", "skill_script", "model"}
+    steps, n = [], len(ex["steps"])
+    for i, (kind, source) in enumerate(ex["steps"]):
+        if kind == "md" and isinstance(source, str):
+            follows = ex["steps"][i + 1][0] if i + 1 < n else None
+            if follows not in RUNS:
+                body = source.replace("\\n", "\n").rstrip()
+                lines = body.splitlines()
+                if lines and lines[-1].lstrip().startswith("## "):
+                    body = "\n".join(lines[:-1]).rstrip()
+                    if not body:
+                        continue
+                    source = body
+        steps.append((kind, source))
+
     counter = [2]
-    for kind, source in ex["steps"]:
+    for kind, source in steps:
         if kind == "skill":
             cells.append(code(skill_source(source)))
         elif kind == "skill_script":
@@ -257,9 +276,13 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     if expect:
         # A1.1 runs no code at all — it is a drawing lesson — so "proved" would
         # be a lie there.
-        ran = any(k != "md" for k, _ in ex["steps"])
-        cells.append(md(f"## What you just proved\n\n{expect}" if ran
-                        else f"## What this gives you\n\n{expect}"))
+        # "Proved" is only honest when something ran. A lesson that carries
+        # no code cell states what the procedure gives you instead, and one
+        # whose `expect` describes an execution it no longer performs is a
+        # lesson lying about itself — so the section is dropped entirely there.
+        ran = any(k in RUNS for k, _ in steps)
+        if ran:
+            cells.append(md(f"## What you just proved\n\n{expect}"))
     if challenge := ex.get("challenge"):
         cells.append(md(f"## Your turn\n\n{challenge}"))
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.8 — Resilience over perfection | Cyber Commons</title><meta name="description" content="Maturity measured by containment, detection and recovery — not prevention."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.8</div><h1>Resilience over perfection</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Trying to enumerate every failure mode of a probabilistic system.</p></div><div class="ctrl"><div class="lab">Control</div><p>Maturity measured by containment, detection and recovery — not prevention.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Re-score your programme on containment/detection/recovery.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.8 · Resilience over perfection</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.8 — Resilience over perfection | Cyber Commons</title><meta name="description" content="Maturity measured by containment, detection and recovery — not prevention."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.8</div><h1>Resilience over perfection</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Trying to enumerate every failure mode of a probabilistic system.</p></div><div class="ctrl"><div class="lab">Control</div><p>Maturity measured by containment, detection and recovery — not prevention.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Re-score your programme on containment/detection/recovery.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.8 · Resilience over perfection</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Running the Programme — the CISO Office</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E3.7.html">E3.7 · Building the capability</a></strong>.</p>
 <table>
@@ -46,102 +46,7 @@ them prevention:</p>
 </ul>
 <p>A programme with all three survives a failure it did not predict, which is the
 only kind that actually happens. Perfection would mean containment never fails.
-Resilience means the other five steps work when it does.</p></div><div class="nbmd"><h2>3 · Demo — test the three capabilities, not the prevention</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time, statistics
-now = time.time()
-
-# --- NOTICE ------------------------------------------------------------
-BASELINE = {&quot;read_file&quot;: 0.85, &quot;search&quot;: 0.15}
-TODAY    = {&quot;read_file&quot;: 300, &quot;search&quot;: 100, &quot;run_shell&quot;: 400}
-total = sum(TODAY.values())
-mix = {k: v/total for k, v in TODAY.items()}
-keys = set(mix) | set(BASELINE)
-drift = sum(abs(mix.get(k,0) - BASELINE.get(k,0)) for k in keys)/2
-new_tools = sorted(set(mix) - set(BASELINE))
-notice = drift &gt; 0.25 or bool(new_tools)
-print(f&quot;NOTICE   drift {drift:.3f}  new tools {new_tools}  → &quot;
-      f&quot;{&#x27;detected&#x27; if notice else &#x27;MISSED&#x27;}&quot;)
-
-# --- STOP --------------------------------------------------------------
-STOP = {&quot;mechanism&quot;: &quot;revoke the SPIFFE identity at the gateway&quot;,
-        &quot;measured_seconds&quot;: 12, &quot;tested_days_ago&quot;: 41, &quot;survives_restart&quot;: True}
-stop_ok = (STOP[&quot;measured_seconds&quot;] is not None and STOP[&quot;tested_days_ago&quot;] &lt;= 180
-           and STOP[&quot;survives_restart&quot;])
-print(f&quot;STOP     {STOP[&#x27;measured_seconds&#x27;]}s, tested {STOP[&#x27;tested_days_ago&#x27;]}d ago, &quot;
-      f&quot;survives restart {STOP[&#x27;survives_restart&#x27;]}  → {&#x27;ready&#x27; if stop_ok else &#x27;NOT READY&#x27;}&quot;)
-
-# --- RECOVER -----------------------------------------------------------
-RUN = {&quot;prompts&quot;: [&quot;fix SEC-4471&quot;], &quot;tool_results&quot;: [&quot;contents…&quot;],
-       &quot;model_version&quot;: &quot;glm-4.6@2026-07-14&quot;, &quot;seed&quot;: 42}
-missing = [k for k, v in RUN.items() if not v and v != 0]
-CHAIN = [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;]
-REACHED = {&quot;dana@corp&quot;: [&quot;repo-core&quot;], &quot;orchestrator&quot;: [&quot;queue&quot;],
-           &quot;patch-agent&quot;: [&quot;repo-core&quot;,&quot;repo-payments&quot;]}
-scope = sorted({r for a in CHAIN for r in REACHED.get(a, [])})
-recover = not missing and bool(scope)
-print(f&quot;RECOVER  replayable {not missing}, scope from the chain {scope}  → &quot;
-      f&quot;{&#x27;ready&#x27; if recover else &#x27;NOT READY&#x27;}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the prevention-only programme</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PROGRAMMES = {
- &quot;prevention only&quot;: {&quot;notice&quot;: False, &quot;stop&quot;: False, &quot;recover&quot;: False,
-                     &quot;containment_asr&quot;: 0.0},
- &quot;prevention + notice&quot;: {&quot;notice&quot;: True, &quot;stop&quot;: False, &quot;recover&quot;: False,
-                         &quot;containment_asr&quot;: 0.0},
- &quot;resilient&quot;: {&quot;notice&quot;: True, &quot;stop&quot;: True, &quot;recover&quot;: True,
-               &quot;containment_asr&quot;: 0.0},
-}
-def incident_outcome(p, containment_failed=True):
-    if not containment_failed:
-        return &quot;no incident&quot;, 0
-    if not p[&quot;notice&quot;]:
-        return &quot;undetected — found by a third party, weeks later&quot;, 720
-    if not p[&quot;stop&quot;]:
-        return &quot;detected, cannot halt it — damage continues while you improvise&quot;, 96
-    if not p[&quot;recover&quot;]:
-        return &quot;detected and halted, cannot say what was touched or why&quot;, 48
-    return &quot;detected, halted in seconds, scope known, run replayable&quot;, 6
-
-print(f&quot;{&#x27;programme&#x27;:24s}{&#x27;containment ASR&#x27;:&gt;17}  outcome when containment fails&quot;)
-print(&quot;-&quot; * 96)
-for name, p in PROGRAMMES.items():
-    outcome, hours = incident_outcome(p)
-    print(f&quot;{name:24s}{p[&#x27;containment_asr&#x27;]:&gt;17.0%}  {outcome}&quot;)
-    print(f&quot;{&#x27;&#x27;:41s}elapsed to resolution: {hours}h&quot;)
-print(&quot;\nAll three have a 0% attack success rate. On a prevention-only&quot;)
-print(&quot;scorecard they are identical. They are not remotely identical.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — the game day that assumes containment failed</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def game_day(programme):
-    &quot;&quot;&quot;Assume the prevention worked until it didn&#x27;t. Measure the other three.&quot;&quot;&quot;
-    results = {}
-    results[&quot;notice&quot;]  = (0.2, &quot;drift alert fired&quot;) if programme[&quot;notice&quot;] \
-                         else (None, &quot;no signal — nothing fired&quot;)
-    results[&quot;stop&quot;]    = (12, &quot;identity revoked, survives restart&quot;) if programme[&quot;stop&quot;] \
-                         else (None, &quot;no tested mechanism&quot;)
-    results[&quot;recover&quot;] = (6, &quot;replayed the run, scope from the act chain&quot;) \
-                         if programme[&quot;recover&quot;] else (None, &quot;cannot reconstruct&quot;)
-    weakest = next((k for k, (v, _) in results.items() if v is None), None)
-    return results, weakest
-
-for name, p in PROGRAMMES.items():
-    res, weakest = game_day(p)
-    print(f&quot;=== {name} ===&quot;)
-    for cap, (val, note) in res.items():
-        print(f&quot;   {cap:9s}{(str(val) + &#x27;h&#x27;) if val is not None else &#x27;FAIL&#x27;:&gt;7}  {note}&quot;)
-    print(f&quot;   weakest capability: {weakest or &#x27;none — all three hold&#x27;}\n&quot;)
-
-_, weakest = game_day(PROGRAMMES[&quot;resilient&quot;])
-assert weakest is None
-print(&quot;The weakest capability is next quarter&#x27;s plan. That is the whole&quot;)
-print(&quot;programme-management loop, and it does not require predicting the attack.&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Close the curriculum: what you built, and what it is for.
-BUILT = [
- (&quot;A1-A3&quot;, &quot;a control plane: planes, identity, containment&quot;),
- (&quot;B1&quot;,    &quot;a 15-stage AppSec pipeline, ending in confirmed-by-exploitation severity&quot;),
- (&quot;B2&quot;,    &quot;a harness whose verifier does not lie&quot;),
- (&quot;C1-C2&quot;, &quot;the ability to attack it and to research it repeatably&quot;),
- (&quot;D1-D2&quot;, &quot;the ability to notice, stop and recover&quot;),
- (&quot;E1-E3&quot;, &quot;the ability to evidence all of it, and to decide&quot;),
-]
-for track, what in BUILT:
-    print(f&quot;   {track:8s}{what}&quot;)
-print(&quot;\nNone of it assumes a frontier-lab account, a vendor platform, or a&quot;)
-print(&quot;budget. That was the point: shared defense is stronger defense, and a&quot;)
-print(&quot;commons only works if everyone can actually run it.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Drift is detected with <code>run_shell</code> as a new tool, the stop mechanism is ready at 12 seconds tested 41 days ago, and the run is replayable with a four-resource scope. All three programmes show a 0% containment ASR yet resolve a failure in 720, 96 and 6 hours respectively. The game day identifies the weakest capability for each, and the resilient programme has none.</p></div><div class="nbmd"><h2>Your turn</h2>
+Resilience means the other five steps work when it does.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run a game day that assumes containment failed. Measure notice, stop and recover as three separate numbers. The weakest one is next quarter's plan — and unlike a prevention target, you can actually reach it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> A programme you can sequence, staff and defend: autonomy governed by level rather than by product list, one owner per thing, metrics that show control rather than activity, conditional approvals that are actually tracked, and a design that assumes failure and recovers.</p>
 <p><strong>What you still cannot do.</strong> Nothing here is finished, because none of it holds still. The models change, the patterns change, and the risks in A1 will not be the last fifteen. What you have is a method for the next set, not a solution to this one.</p>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.3 — Egress control | Cyber Commons</title><meta name="description" content="An allow-list at the network boundary, enforced where the agent cannot rewrite it."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.3</div><h1>Egress control</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent with unrestricted egress turns any successful injection into data loss.</p></div><div class="ctrl"><div class="lab">Control</div><p>An allow-list at the network boundary, enforced where the agent cannot rewrite it.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attempt exfiltration to several destinations under an allow-list and see which survive.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.3 · Egress control</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.3 — Egress control | Cyber Commons</title><meta name="description" content="An allow-list at the network boundary, enforced where the agent cannot rewrite it."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.3</div><h1>Egress control</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent with unrestricted egress turns any successful injection into data loss.</p></div><div class="ctrl"><div class="lab">Control</div><p>An allow-list at the network boundary, enforced where the agent cannot rewrite it.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attempt exfiltration to several destinations under an allow-list and see which survive.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.3 · Egress control</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.2.html">A3.2 · Sandboxed execution</a></strong>.</p>
 <table>
@@ -56,41 +56,7 @@ control, and that is a design decision to make deliberately rather than by
 default.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>The one control that does not need to know how the attack worked, because every exfiltration path ends here.</p>
-</blockquote>
-<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ALLOW = {&quot;api.corp.example&quot;, &quot;reports-db.corp.example&quot;}
-DENY_SUFFIXES = {&quot;.evil.example&quot;}          # the deny-list, for comparison
-
-def by_denylist(host):
-    return not any(host.endswith(s) for s in DENY_SUFFIXES)
-
-def by_allowlist(host):
-    return host in ALLOW                    # exact, not suffix
-
-DESTINATIONS = [
- (&quot;api.corp.example&quot;,              &quot;the one it actually needs&quot;),
- (&quot;archive.evil.example&quot;,          &quot;A1.3&#x27;s exfiltration target&quot;),
- (&quot;attacker-bucket.s3.amazonaws.com&quot;, &quot;a bucket anyone can create&quot;),
- (&quot;169.254.169.254&quot;,               &quot;cloud metadata - every credential&quot;),
- (&quot;pastebin.example&quot;,              &quot;not on anyone&#x27;s deny-list&quot;),
-]
-
-print(f&quot;{&#x27;destination&#x27;:38s}{&#x27;deny-list&#x27;:12s}{&#x27;allow-list&#x27;:12s}note&quot;)
-for host, note in DESTINATIONS:
-    d, a = by_denylist(host), by_allowlist(host)
-    print(f&quot;{host:38s}{&#x27;allow&#x27; if d else &#x27;block&#x27;:12s}{&#x27;allow&#x27; if a else &#x27;block&#x27;:12s}{note}&quot;)
-
-leaked = [h for h, _ in DESTINATIONS if by_denylist(h) and h not in ALLOW]
-print(f&quot;\ndeny-list lets through : {len(leaked)}  {leaked}&quot;)
-print(f&quot;allow-list lets through : {sorted(h for h, _ in DESTINATIONS if by_allowlist(h))}&quot;)
-print()
-print(&quot;The deny-list blocked exactly the destination somebody had already&quot;)
-print(&quot;thought of. It cannot be completed, because the internet cannot be&quot;)
-print(&quot;enumerated.&quot;)
-print()
-print(&quot;Placement matters as much: this check belongs in the network path, not&quot;)
-print(&quot;in the agent. A check inside the process being attacked is advice.&quot;)
-assert len(leaked) == 3 and len([h for h, _ in DESTINATIONS if by_allowlist(h)]) == 1</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs.</p></div><div class="nbmd"><h2>Your turn</h2>
+</blockquote></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write the allow-list for one agent by listing the hosts it genuinely calls. If it is under five, you can ship this control this week; if it is unbounded, that is the finding.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.4.html">A3.4 · Budgets and stop conditions</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb">Source</a></p>

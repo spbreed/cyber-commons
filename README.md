@@ -3,9 +3,12 @@
 **A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.**
 
-**118 lessons across 12 chapters.** Every lesson is a self-contained Python
-notebook that runs in a browser on the standard library alone, and is executed
-in CI before it ships. No licence, no vendor, no frontier-lab account.
+**118 lessons across 11 chapters.** Most are reading lessons — the idea, the
+diagram, the control, and what it looks like in one running system. Sixteen
+carry code, and that code is either an **agent skill** executed from
+[`skills/`](skills/) or a real LLM call through one adapter. Every one of the
+118 is executed in CI before it ships. No licence, no vendor, no frontier-lab
+account.
 
 🌐 **[Live site](https://spbreed.github.io/cyber-commons/)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md)
 
@@ -13,8 +16,10 @@ in CI before it ships. No licence, no vendor, no frontier-lab account.
 
 ## Start here
 
-1. Open [**A1.0**](https://spbreed.github.io/cyber-commons/lessons/A1.0.html).
-2. Press **▶ Run on Kaggle** — the notebook opens in *your* Kaggle account.
+1. Open [**A1.0**](https://spbreed.github.io/cyber-commons/lessons/A1.0.html)
+   and read.
+2. On a lesson that carries a skill, press **▶ Run on Kaggle** — the notebook
+   opens in *your* Kaggle account.
 3. Press **Run All**.
 
 That is the whole setup. The notebooks are standard-library only, so they run on

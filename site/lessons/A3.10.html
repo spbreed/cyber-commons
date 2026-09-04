@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.10 — The agent&#x27;s escalation path | Cyber Commons</title><meta name="description" content="A report-to-human tool that is cheap, non-terminal and signposted (C9.1), a mandatory checkpoint on out-of-scope discovery (C9.4), and an abstain affordance scored neutrally (C10.2"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.10</div><h1>The agent&#x27;s escalation path</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent that finds a live breach, reasons about telling someone, and has no tool for it, does nothing. Of roughly 1,200 agents that saw one, none reported it.</p></div><div class="ctrl"><div class="lab">Control</div><p>A report-to-human tool that is cheap, non-terminal and signposted (C9.1), a mandatory checkpoint on out-of-scope discovery (C9.4), and an abstain affordance scored neutrally (C10.2).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Plant a finding, run the agent with and without a report-to-human tool, and compare what it does with what it says it wants to do.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.10.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.10.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.10 · The agent's escalation path</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.10 — The agent&#x27;s escalation path | Cyber Commons</title><meta name="description" content="A report-to-human tool that is cheap, non-terminal and signposted (C9.1), a mandatory checkpoint on out-of-scope discovery (C9.4), and an abstain affordance scored neutrally (C10.2"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.10</div><h1>The agent&#x27;s escalation path</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent that finds a live breach, reasons about telling someone, and has no tool for it, does nothing. Of roughly 1,200 agents that saw one, none reported it.</p></div><div class="ctrl"><div class="lab">Control</div><p>A report-to-human tool that is cheap, non-terminal and signposted (C9.1), a mandatory checkpoint on out-of-scope discovery (C9.4), and an abstain affordance scored neutrally (C10.2).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Plant a finding, run the agent with and without a report-to-human tool, and compare what it does with what it says it wants to do.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.10 · The agent's escalation path</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.9.html">A3.9 · Turning a control off without turning the system into an experiment</a></strong>.</p>
 <table>
@@ -59,116 +59,7 @@ agent proceed on its own judgement.</p>
 <p><strong>An abstain affordance (C10.2).</strong> With 30–40% of the incident's targets
 impossible via the intended vulnerability and failure penalised, the task design
 left no acceptable path but cheating. Correct abstention has to score at least
-as well as a failed attempt, or you have priced honesty out of the run.</p></div><div class="nbmd"><h2>3 · An agent that notices, and has nowhere to go</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TOOLS_BEFORE = [&quot;run_command&quot;, &quot;read_file&quot;, &quot;write_file&quot;, &quot;submit_answer&quot;]
-TOOLS_AFTER  = TOOLS_BEFORE + [&quot;report_to_human&quot;, &quot;abstain&quot;]
-
-TRAJECTORY = [
- &quot;enumerating the target&#x27;s dataset endpoints&quot;,
- &quot;found credentials in a public artifact - these look live&quot;,
- &quot;this is a real third-party breach in progress&quot;,
- &quot;we can notify? no user.&quot;,
- &quot;posting the finding to the board instead&quot;,
-]
-
-def escalate(trajectory, tools):
-    noticed = any(&quot;breach&quot; in step for step in trajectory)
-    can_report = &quot;report_to_human&quot; in tools
-    return {&quot;noticed&quot;: noticed, &quot;tool_available&quot;: can_report,
-            &quot;reported&quot;: noticed and can_report,
-            &quot;fell_back_to&quot;: None if can_report else &quot;the peer channel&quot;}
-
-for label, tools in ((&quot;harness as shipped&quot;, TOOLS_BEFORE),
-                     (&quot;harness with the tool&quot;, TOOLS_AFTER)):
-    r = escalate(TRAJECTORY, tools)
-    print(f&quot;{label:24s}noticed={r[&#x27;noticed&#x27;]}  tool={r[&#x27;tool_available&#x27;]}  &quot;
-          f&quot;reported={r[&#x27;reported&#x27;]}  fallback={r[&#x27;fell_back_to&#x27;]}&quot;)
-print()
-print(&quot;Reported figures: 3-6 agents considered notifying a human, zero&quot;)
-print(&quot;attempted it, out of roughly 1,200 that saw the compromise. The&quot;)
-print(&quot;distinction that matters for remediation is between &#x27;did not notice&#x27;,&quot;)
-print(&quot;&#x27;did not think it was my job&#x27; and &#x27;no route available&#x27; - and this is the&quot;)
-print(&quot;third.&quot;)
-assert escalate(TRAJECTORY, TOOLS_BEFORE)[&quot;reported&quot;] is False
-assert escalate(TRAJECTORY, TOOLS_AFTER)[&quot;reported&quot;] is True</code></pre></div><div class="nbmd"><h2>4 · Making the tool one an agent will actually reach for</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def value_of_reporting(terminal, costs_budget, penalised_false_positive,
-                       acknowledged):
-    &quot;&quot;&quot;Whether reporting is worth it from inside the run.&quot;&quot;&quot;
-    score = 3
-    if terminal:                  score -= 2      # the run ends
-    if costs_budget:              score -= 1      # spends the objective&#x27;s budget
-    if penalised_false_positive:  score -= 2      # wrong reports are punished
-    if acknowledged:              score += 1      # the path is observably real
-    return score
-
-DESIGNS = [
- (&quot;terminal, budgeted, penalised&quot;, True,  True,  True,  False),
- (&quot;non-terminal, budgeted&quot;,        False, True,  False, False),
- (&quot;non-terminal, free, ack&#x27;d&quot;,     False, False, False, True),
-]
-print(f&quot;{&#x27;tool design&#x27;:32s}{&#x27;value to the agent&#x27;:&gt;19}  verdict&quot;)
-for label, term, budget, pen, ack in DESIGNS:
-    v = value_of_reporting(term, budget, pen, ack)
-    print(f&quot;{label:32s}{v:&gt;19}  &quot;
-          f&quot;{&#x27;it will be used&#x27; if v &gt;= 3 else &#x27;it will not be used&#x27;}&quot;)
-print()
-print(&quot;A tool that exists and costs the agent its run is a tool that exists.&quot;)
-print(&quot;Non-terminal, free, and acknowledged is the design; the acknowledgement&quot;)
-print(&quot;matters because it is the only way the agent can tell the path is real.&quot;)
-assert value_of_reporting(False, False, False, True) &gt; value_of_reporting(True, True, True, False)</code></pre></div><div class="nbmd"><h2>5 · The checkpoint that does not need the agent's judgement (C9.4)</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import re
-
-CRED = re.compile(r&quot;\b(?:hf_|gh[pousr]_|sk-)[A-Za-z0-9]{8,}\b&quot;)
-ALLOWLIST = {&quot;api.target.example&quot;, &quot;docs.target.example&quot;}
-
-def checkpoint(output, host=None):
-    reasons = []
-    if CRED.search(output):
-        reasons.append(&quot;credential-shaped string in output&quot;)
-    if host and host not in ALLOWLIST:
-        reasons.append(f&quot;connection to non-allowlisted host {host!r}&quot;)
-    return {&quot;paused&quot;: bool(reasons), &quot;reasons&quot;: reasons}
-
-CASES = [
- (&quot;summarising the dataset schema&quot;, None),
- (&quot;found hf_ABCD1234EFGH in the artifact metadata&quot;, None),
- (&quot;fetching the reference implementation&quot;, &quot;cdn.partner.example&quot;),
- (&quot;reading the API docs&quot;, &quot;docs.target.example&quot;),
-]
-for output, host in CASES:
-    r = checkpoint(output, host)
-    mark = &quot;PAUSE&quot; if r[&quot;paused&quot;] else &quot;run &quot;
-    print(f&quot;{mark}  {output[:44]:46s}{&#x27;; &#x27;.join(r[&#x27;reasons&#x27;])}&quot;)
-print()
-print(&quot;None of these decisions consults the model. A discovery the agent was&quot;)
-print(&quot;never provisioned for pauses the run and raises a review item, which is&quot;)
-print(&quot;the difference between the agent deciding what to do with a live&quot;)
-print(&quot;credential and a human deciding.&quot;)
-assert checkpoint(&quot;found hf_ABCD1234EFGH here&quot;)[&quot;paused&quot;]
-assert not checkpoint(&quot;reading the API docs&quot;, &quot;docs.target.example&quot;)[&quot;paused&quot;]</code></pre></div><div class="nbmd"><h2>6 · Verify — abstention has to be affordable (C10.2)</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def score(outcome, impossible):
-    &quot;&quot;&quot;Neutral abstention: correct abstention &gt;= a failed attempt.&quot;&quot;&quot;
-    return {(&quot;solved&quot;, False): 1.0, (&quot;failed&quot;, False): 0.0,
-            (&quot;abstained&quot;, False): -0.2,
-            (&quot;solved&quot;, True): 0.0, (&quot;failed&quot;, True): 0.0,
-            (&quot;abstained&quot;, True): 0.2}[(outcome, impossible)]
-
-IMPOSSIBLE_FRACTION = 0.35        # reported: 30-40% of targets
-TASKS = [(i, i % 3 == 0) for i in range(20)]      # ~35% impossible
-
-for policy, choose in ((&quot;attempt everything&quot;, lambda imp: &quot;failed&quot; if imp else &quot;solved&quot;),
-                       (&quot;abstain when impossible&quot;, lambda imp: &quot;abstained&quot; if imp else &quot;solved&quot;)):
-    total = sum(score(choose(imp), imp) for _, imp in TASKS)
-    print(f&quot;{policy:26s}score {total:&gt;5.1f} over {len(TASKS)} tasks&quot;)
-
-print(f&quot;\nimpossible fraction in this set: &quot;
-      f&quot;{sum(1 for _, imp in TASKS if imp) / len(TASKS):.0%}&quot;
-      f&quot;  (reported: {IMPOSSIBLE_FRACTION:.0%})&quot;)
-print()
-print(&quot;Honest abstention now beats a failed attempt. With the opposite scoring&quot;)
-print(&quot;and a third of targets impossible, the only strategy that scores is one&quot;)
-print(&quot;that goes around the task - which is what row 10 of the register is&quot;)
-print(&quot;about, and it starts as a scoring decision rather than a security one.&quot;)
-attempt = sum(score(&quot;failed&quot; if imp else &quot;solved&quot;, imp) for _, imp in TASKS)
-abstain = sum(score(&quot;abstained&quot; if imp else &quot;solved&quot;, imp) for _, imp in TASKS)
-assert abstain &gt; attempt</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt.</p></div><div class="nbmd"><h2>Your turn</h2>
+as well as a failed attempt, or you have priced honesty out of the run.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Open your agent's tool list and look for the outbound path. If there is no way for it to tell you something you did not ask about, then whatever it finds, you will only learn from the transcript — if anyone reads it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> Layers now stand between a compromised agent and a consequence — the policy decision at the tool call, the sandbox, egress, the budget, the gateway — plus the three the incident register adds: shared infrastructure that is no longer a channel, exemptions that cost blast radius, and an agent that has somewhere to report.</p>
 <p><strong>What you still cannot do.</strong> You have a secured architecture and nothing that builds on it. Every control here is stated as a rule; none of it is a pipeline anyone operates, and the first agentic system most organisations run is a security tool that reads untrusted code all day.</p>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.6 — Human approval that survives volume | Cyber Commons</title><meta name="description" content="Approval reserved for irreversible actions only, with machine-generated content labelled as such."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.6</div><h1>Human approval that survives volume</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An approval queue at volume approves everything, and the risk register still records it as a control.</p></div><div class="ctrl"><div class="lab">Control</div><p>Approval reserved for irreversible actions only, with machine-generated content labelled as such.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Route actions by reversibility and measure how many reach a human under each policy.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.6 · Human approval that survives volume</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.6 — Human approval that survives volume | Cyber Commons</title><meta name="description" content="Approval reserved for irreversible actions only, with machine-generated content labelled as such."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.6</div><h1>Human approval that survives volume</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An approval queue at volume approves everything, and the risk register still records it as a control.</p></div><div class="ctrl"><div class="lab">Control</div><p>Approval reserved for irreversible actions only, with machine-generated content labelled as such.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Route actions by reversibility and measure how many reach a human under each policy.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.6 · Human approval that survives volume</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.5.html">A3.5 · Validating what comes back</a></strong>.</p>
 <table>
@@ -56,52 +56,7 @@ has not earned. Labelling it does not stop anyone acting on it — it restores t
 scepticism they would apply to a colleague.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Sends <strong>fewer</strong> things to humans, so the ones that arrive are read. The test is arithmetic: how many per day reach a person.</p>
-</blockquote>
-<h2>3 · The control</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ACTIONS = {
- &quot;read_report&quot;:      {&quot;reversible&quot;: True,  &quot;external&quot;: False},
- &quot;write_draft&quot;:      {&quot;reversible&quot;: True,  &quot;external&quot;: False},
- &quot;update_ticket&quot;:    {&quot;reversible&quot;: True,  &quot;external&quot;: False},
- &quot;delete_row&quot;:       {&quot;reversible&quot;: False, &quot;external&quot;: False},
- &quot;send_email&quot;:       {&quot;reversible&quot;: False, &quot;external&quot;: True},
- &quot;issue_refund&quot;:     {&quot;reversible&quot;: False, &quot;external&quot;: True},
- &quot;rotate_credential&quot;:{&quot;reversible&quot;: False, &quot;external&quot;: False},
-}
-DAILY_VOLUME = {&quot;read_report&quot;: 400, &quot;write_draft&quot;: 120, &quot;update_ticket&quot;: 260,
-                &quot;delete_row&quot;: 6, &quot;send_email&quot;: 3, &quot;issue_refund&quot;: 2,
-                &quot;rotate_credential&quot;: 1}
-
-def route(action):
-    a = ACTIONS[action]
-    if not a[&quot;reversible&quot;] or a[&quot;external&quot;]:
-        return &quot;human approval&quot;
-    return &quot;policy only&quot;
-
-CAREFUL_CAPACITY = 25
-print(f&quot;{&#x27;action&#x27;:20s}{&#x27;reversible&#x27;:12s}{&#x27;external&#x27;:10s}{&#x27;routing&#x27;:16s}per day&quot;)
-to_human = 0
-for name in sorted(ACTIONS):
-    a, r = ACTIONS[name], route(name)
-    if r == &quot;human approval&quot;: to_human += DAILY_VOLUME[name]
-    print(f&quot;{name:20s}{str(a[&#x27;reversible&#x27;]):12s}{str(a[&#x27;external&#x27;]):10s}&quot;
-          f&quot;{r:16s}{DAILY_VOLUME[name]}&quot;)
-
-total = sum(DAILY_VOLUME.values())
-print(f&quot;\nactions per day            : {total}&quot;)
-print(f&quot;reaching a human           : {to_human}&quot;)
-print(f&quot;a reviewer considers ~{CAREFUL_CAPACITY}/day properly&quot;)
-print(f&quot;gate holds?                : {to_human &lt;= CAREFUL_CAPACITY}&quot;)
-print()
-print(f&quot;Approving everything would send {total} a day to someone who can read&quot;)
-print(f&quot;{CAREFUL_CAPACITY}. Routing by reversibility sends {to_human}, and every one gets read.&quot;)
-
-# the T15 half
-FINDING = &quot;libfoo has no known vulnerabilities&quot;
-print(f&quot;\nunlabelled : {FINDING}&quot;)
-print(f&quot;labelled   : [machine-generated, unverified] {FINDING}&quot;)
-print(&quot;\nThe label does not stop anyone acting on it. It restores the scepticism&quot;)
-print(&quot;they would give a colleague saying the same sentence.&quot;)
-assert to_human &lt;= CAREFUL_CAPACITY</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Routing by reversibility sends 12 actions a day to a human instead of 792, which is inside what one reviewer can consider properly — so the gate holds rather than degrading into a click — and machine-generated output is labelled where a person reads it.</p></div><div class="nbmd"><h2>Your turn</h2>
+</blockquote></div><div class="nbmd"><h2>Your turn</h2>
 <p>Count how many approvals your agents generate daily and compare it with 25. If you are above it, decide which actions are reversible enough to be handled by policy instead — that list is usually most of them.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.7.html">A3.7 · The agent gateway: one choke point when you scale</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.6.ipynb">Source</a></p>

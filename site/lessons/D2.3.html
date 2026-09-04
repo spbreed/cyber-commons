@@ -38,74 +38,7 @@ you scope only that actor, you miss everything the earlier actors reached — an
 because authority narrows down the chain, the earlier actors typically had
 <em>more</em> access, not less.</p>
 <p>The undercount is systematic and it grows with delegation depth, which is the
-operational reason B2.0 bounds delegation depth in the first place.</p></div><div class="nbmd"><h2>3 · Demo — scope the chain, not the actor</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>REACHED = {
- &quot;dana@corp&quot;:    [&quot;repo-core&quot;, &quot;repo-infra&quot;, &quot;vault-dev&quot;],
- &quot;orchestrator&quot;: [&quot;repo-core&quot;, &quot;queue-tasks&quot;],
- &quot;patch-agent&quot;:  [&quot;repo-core&quot;, &quot;repo-payments&quot;],
- &quot;deploy-agent&quot;: [&quot;cluster-prod&quot;],
-}
-CHAIN = [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;, &quot;deploy-agent&quot;]
-
-def scope(chain, reached):
-    last_only = set(reached.get(chain[-1], []))
-    full = {r for a in chain for r in reached.get(a, [])}
-    return {&quot;chain&quot;: &quot; → &quot;.join(chain),
-            &quot;scoped_last_actor_only&quot;: sorted(last_only),
-            &quot;scoped_whole_chain&quot;: sorted(full),
-            &quot;missed_by_naive_scoping&quot;: sorted(full - last_only),
-            &quot;undercount_factor&quot;: round(len(full)/len(last_only), 2) if last_only else None}
-
-s = scope(CHAIN, REACHED)
-for k, v in s.items(): print(f&quot;{k:26s}{v}&quot;)
-print(&quot;\nScoping the last actor finds one cluster. The chain reached six&quot;)
-print(&quot;resources, including a payments repository and a dev vault.&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the undercount grows with depth</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>print(f&quot;{&#x27;depth&#x27;:&gt;6}{&#x27;last-actor scope&#x27;:&gt;19}{&#x27;chain scope&#x27;:&gt;14}{&#x27;undercount&#x27;:&gt;12}&quot;)
-print(&quot;-&quot; * 52)
-for d in range(1, 5):
-    sub = CHAIN[:d]
-    r = scope(sub, REACHED)
-    print(f&quot;{d:&gt;6}{len(r[&#x27;scoped_last_actor_only&#x27;]):&gt;19}&quot;
-          f&quot;{len(r[&#x27;scoped_whole_chain&#x27;]):&gt;14}&quot;
-          f&quot;{str(r[&#x27;undercount_factor&#x27;]):&gt;12}&quot;)
-print(&quot;\nEach hop adds resources the last actor never touched. This is why B2.0&quot;)
-print(&quot;bounds delegation depth: depth is an incident-scope multiplier.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — scope from the act chain, then widen by shared resources</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SHARED = {&quot;repo-core&quot;: [&quot;build-agent&quot;, &quot;test-agent&quot;],
-          &quot;cluster-prod&quot;: [&quot;deploy-agent&quot;, &quot;monitor-agent&quot;],
-          &quot;repo-payments&quot;: [&quot;finance-agent&quot;]}
-
-def scope_transitive(chain, reached, shared, hops=1):
-    &quot;&quot;&quot;Anything that shares a touched resource may have been influenced.&quot;&quot;&quot;
-    direct = {r for a in chain for r in reached.get(a, [])}
-    exposed = set(chain)
-    frontier = set(direct)
-    for _ in range(hops):
-        nxt = set()
-        for res in frontier:
-            for actor in shared.get(res, []):
-                if actor not in exposed:
-                    exposed.add(actor)
-                    nxt |= set(reached.get(actor, []))
-        frontier = nxt
-    return {&quot;resources_direct&quot;: sorted(direct),
-            &quot;actors_in_scope&quot;: sorted(exposed),
-            &quot;second_order_actors&quot;: sorted(exposed - set(chain))}
-
-t = scope_transitive(CHAIN, REACHED, SHARED)
-for k, v in t.items(): print(f&quot;{k:22s}{v}&quot;)
-print(&quot;\nFive more identities shared a resource with the compromised chain.&quot;)
-print(&quot;They are not confirmed compromised — they are IN SCOPE, which is different&quot;)
-print(&quot;and is the distinction an incident record has to make explicitly.&quot;)
-assert t[&quot;second_order_actors&quot;]</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: produce the scope statement for the incident record.
-def scope_statement(chain, reached, shared):
-    s = scope(chain, reached)
-    t = scope_transitive(chain, reached, shared)
-    return (f&quot;SCOPE\n&quot;
-            f&quot;  chain              {s[&#x27;chain&#x27;]}\n&quot;
-            f&quot;  confirmed touched  {s[&#x27;scoped_whole_chain&#x27;]}\n&quot;
-            f&quot;  would have been missed by scoping the acting agent alone:\n&quot;
-            f&quot;                     {s[&#x27;missed_by_naive_scoping&#x27;]}\n&quot;
-            f&quot;  undercount factor  {s[&#x27;undercount_factor&#x27;]}×\n&quot;
-            f&quot;  in scope, not confirmed (shared a resource):\n&quot;
-            f&quot;                     {t[&#x27;second_order_actors&#x27;]}&quot;)
-print(scope_statement(CHAIN, REACHED, SHARED))</code></pre></div><div class="nbmd"><h2>6 · Scoping as a skill</h2>
+operational reason B2.0 bounds delegation depth in the first place.</p></div><div class="nbmd"><h2>3 · Scoping as a skill</h2>
 <p>Scoping a human incident asks where someone logged in. Scoping this one asks what the agent <strong>decided</strong> — every action was individually authorised, so nothing looks wrong at the authentication layer.</p>
 <p>Two fields in the contract carry most of the weight. <code>reach</code> and <code>confirmed_exfiltration</code> are separate numbers, because reach is the scope until proven otherwise and the smaller number must never stand in for the larger in a notification decision. And <code>does_not_stop</code> makes containment state its own limits.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
@@ -299,53 +232,7 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>contract = contract_of(body)
-t = scope_transitive(CHAIN, REACHED, SHARED)
-reach = sorted({r for a in CHAIN for r in REACHED.get(a, [])})
-
-incident = {
- &quot;window&quot;: {&quot;first_suspicious_action&quot;: f&quot;{CHAIN[1]} accepted an external instruction&quot;,
-            &quot;detected_at&quot;: &quot;the deploy that followed&quot;,
-            # the trigger precedes the detection by about one task loop
-            &quot;gap_seconds&quot;: 42 * 60},
- &quot;chain&quot;: [{&quot;action&quot;: f&quot;{a} acted&quot;, &quot;motivating_input&quot;: &quot;issue comment&quot;
-                      if a == CHAIN[1] else f&quot;instruction from {CHAIN[i]}&quot;,
-            &quot;input_origin&quot;: &quot;external_untrusted&quot; if a == CHAIN[1] else &quot;internal&quot;,
-            &quot;within_authority&quot;: True}
-           for i, a in enumerate(CHAIN[1:])],
- &quot;root_cause&quot;: {&quot;input&quot;: &quot;issue comment on a public tracker&quot;,
-                &quot;origin&quot;: &quot;external_untrusted&quot;,
-                &quot;why_trusted&quot;: &quot;repository content was read as instruction, not data&quot;},
- # every action was permitted; that is what makes this hard
- &quot;authority&quot;: {&quot;authorised_but_wrong&quot;: len(CHAIN) - 1, &quot;exceeded_authority&quot;: 0},
- &quot;data&quot;: {&quot;reach&quot;: reach, &quot;confirmed_exfiltration&quot;: [],
-          &quot;egress_bounded_by&quot;: &quot;agent network policy&quot;},
- &quot;containment&quot;: {&quot;cut&quot;: &quot;credential&quot;,
-                 &quot;does_not_stop&quot;: sorted(t[&quot;second_order_actors&quot;]),
-                 &quot;evidence_snapshotted_first&quot;: True},
- &quot;clock&quot;: {&quot;regulatory_trigger&quot;: False,
-           &quot;basis&quot;: &quot;no confirmed exfiltration of personal data yet&quot;},
-}
-problems = check(incident, contract)
-print(f&quot;conformance: {len(problems)} problem(s)&quot;)
-for p in problems: print(&quot;   &quot;, p)
-assert not problems, problems
-
-print(f&quot;\nauthorised but wrong : {incident[&#x27;authority&#x27;][&#x27;authorised_but_wrong&#x27;]}&quot;)
-print(f&quot;exceeded authority   : {incident[&#x27;authority&#x27;][&#x27;exceeded_authority&#x27;]}&quot;)
-print(f&quot;reach                : {len(reach)} resources&quot;)
-print(f&quot;confirmed exfil      : {len(incident[&#x27;data&#x27;][&#x27;confirmed_exfiltration&#x27;])}&quot;)
-print(f&quot;revoking one credential does NOT stop: &quot;
-      f&quot;{incident[&#x27;containment&#x27;][&#x27;does_not_stop&#x27;] or &#x27;nothing else&#x27;}&quot;)
-print()
-print(&quot;Zero actions exceeded authority, and the incident still happened. That&quot;)
-print(&quot;combination says the grant was too broad - a different fix from a&quot;)
-print(&quot;control that failed, which is why the contract counts them separately.&quot;)
-print()
-print(&quot;Reach is 4 resources; confirmed exfiltration is 0. Reporting the second&quot;)
-print(&quot;as the scope is how a notification decision gets made on the wrong number.&quot;)
-assert incident[&quot;authority&quot;][&quot;exceeded_authority&quot;] == 0
-assert len(reach) &gt; len(incident[&quot;data&quot;][&quot;confirmed_exfiltration&quot;])</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Scoping the last actor finds <code>cluster-prod</code> alone; the whole chain reaches six resources, missing five, with an undercount factor of 6.0. The undercount grows with each hop. Transitive scoping adds five second-order identities that shared a resource, explicitly marked as in scope rather than confirmed compromised.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>For your last incident involving a service account, recompute the scope by walking what else that account could reach. The number is almost always larger than what was written in the report.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.4.html">D2.4 · Containment at machine speed</a></strong></p>

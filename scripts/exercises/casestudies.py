@@ -95,41 +95,6 @@ The fix was two SQL statements.
   ("md", "## 3 · The query, and the two statements that close it\\n\\n"
          "This is worth running rather than drawing, because the interesting part "
          "is what comes back — and how little has to change for it to stop."),
-  ("py", '''AGENTS = [
- {"id": "a-0001", "owner": "dana@example",  "handle": "@researchbot",
-  "provider_key": "sk-REDACTED-openai",     "claim_token": "clm_8fA2"},
- {"id": "a-0002", "owner": "sam@example",   "handle": "@newsdigest",
-  "provider_key": "sk-ant-REDACTED",        "claim_token": "clm_2bQ7"},
- {"id": "a-0003", "owner": "kim@example",   "handle": "@dealfinder",
-  "provider_key": "AKIA-REDACTED-aws",      "claim_token": "clm_9zR1"},
-]
-
-def data_api(table, caller, rls_enabled):
-    """Supabase's PostgREST surface, in miniature.
-
-    `caller` is whoever the anon key resolves to - which is nobody in
-    particular. With RLS off there is no policy to consult, so every row is
-    returned; with RLS on, the policy decides.
-    """
-    if not rls_enabled:
-        return list(table)                       # no policy exists to consult
-    return [r for r in table if r["owner"] == caller]
-
-anon = None                                      # the anon key is not a person
-for label, rls in (("RLS disabled (as shipped)", False), ("RLS enabled", True)):
-    rows = data_api(AGENTS, caller=anon, rls_enabled=rls)
-    print(f"{label:28s}rows returned: {len(rows)}")
-    for r in rows:
-        print(f"      {r['handle']:14s}{r['owner']:16s}{r['provider_key']}")
-
-owner_rows = data_api(AGENTS, caller="dana@example", rls_enabled=True)
-print(f"\\nsigned in as dana@example, RLS enabled: {len(owner_rows)} row")
-print()
-print("Same key, same endpoint, same table. The only difference is whether a")
-print("policy exists for the API to consult.")
-assert len(data_api(AGENTS, anon, False)) == 3
-assert len(data_api(AGENTS, anon, True)) == 0 and len(owner_rows) == 1
-'''),
 
   ("md", "## 4 · The fix, in full"),
   ("html", D.table(
@@ -145,33 +110,6 @@ assert len(data_api(AGENTS, anon, True)) == 0 and len(owner_rows) == 1
          "Moltbook losing its own data would be a bad day for Moltbook. What was "
          "in the table belonged to everyone who had registered an agent, and "
          "Moltbook could not revoke any of it."),
-  ("py", '''REPORTED_SCALE = {"Treblle": 770_000, "Wiz-sourced reporting": 1_500_000}
-PROVIDERS = ["OpenAI", "Anthropic", "AWS", "GitHub", "Google Cloud"]
-
-for source, n in sorted(REPORTED_SCALE.items()):
-    print(f"{source:26s}{n:>10,} agents exposed")
-low, high = min(REPORTED_SCALE.values()), max(REPORTED_SCALE.values())
-print(f"\\nreported range            {low:>10,} - {high:,}")
-print(f"provider accounts implicated: {', '.join(PROVIDERS)}")
-
-# Who can actually revoke each thing that leaked.
-REVOCABLE_BY = {
- "the Moltbook session token": "Moltbook",
- "the claim token":            "Moltbook",
- "the agent's provider key":   "the individual who created the agent",
-}
-print()
-print(f"{'what leaked':30s}who can revoke it")
-for what in sorted(REVOCABLE_BY):
-    print(f"{what:30s}{REVOCABLE_BY[what]}")
-
-platform_can_fix = [w for w in REVOCABLE_BY if REVOCABLE_BY[w] == "Moltbook"]
-print(f"\\nthe platform can revoke {len(platform_can_fix)} of {len(REVOCABLE_BY)}.")
-print("The third is a key in somebody else's provider account, and the only")
-print("person who can turn it off may not know it was ever exposed. That is the")
-print("difference between a platform breach and a supply-chain one.")
-assert len(platform_can_fix) == 2
-'''),
 
   ("md", "## 6 · The surface the attack did not need\\n\\n"
          "Worth saying plainly, because it is the part that generalises: the "
@@ -259,69 +197,8 @@ call (A3.1), arriving at a database.
          "This is the part worth running: the vulnerable version and the safe "
          "version are indistinguishable from the application's behaviour, which "
          "is exactly why testing does not catch it."),
-  ("py", '''SCAFFOLD = [
- "create table profiles (id uuid primary key, email text, api_key text);",
- "create table posts    (id uuid primary key, author uuid, body text);",
- "alter table posts enable row level security;",
- "create policy p_read on posts for select using (true);",
-]
-
-def audit(statements):
-    """The check a generator does not run, expressed as three questions."""
-    tables = [s.split()[2] for s in statements if s.startswith("create table")]
-    rls_on = {s.split()[2] for s in statements if "enable row level security" in s}
-    permissive = [s.split()[2] for s in statements
-                  if s.startswith("create policy") and "using (true)" in s]
-    findings = []
-    for tbl in tables:
-        if tbl not in rls_on:
-            findings.append((tbl, "critical", "RLS disabled - open via the public API"))
-    for s in statements:
-        if s.startswith("create policy") and "using (true)" in s:
-            findings.append((s.split()[4], "high", "policy matches every row"))
-    return tables, findings
-
-tables, findings = audit(SCAFFOLD)
-print(f"tables created : {', '.join(tables)}")
-print(f"findings       : {len(findings)}\\n")
-print(f"{'table':12s}{'severity':11s}why")
-for tbl, sev, why in findings:
-    print(f"{tbl:12s}{sev:11s}{why}")
-
-print()
-print("The application works. Every feature passes. `profiles` holds an api_key")
-print("column and has no policy at all, and nothing in the test suite is shaped")
-print("like the question that would find it.")
-assert any(f[1] == "critical" for f in findings)
-assert "profiles" in [f[0] for f in findings]
-'''),
 
   ("md", "## 4 · The detection that actually scales"),
-  ("py", '''# One query answers the critical half, across every table at once.
-CATALOG = [                       # what pg_class would return
- {"relname": "profiles", "relrowsecurity": False},
- {"relname": "posts",    "relrowsecurity": True},
- {"relname": "sessions", "relrowsecurity": False},
- {"relname": "audit",    "relrowsecurity": True},
-]
-SENSITIVE = {"profiles", "sessions", "audit"}
-
-open_tables = sorted(r["relname"] for r in CATALOG if not r["relrowsecurity"])
-print("select relname from pg_class where relrowsecurity = false;")
-for name in open_tables:
-    mark = "  <- holds credentials or session state" if name in SENSITIVE else ""
-    print(f"   {name}{mark}")
-
-print(f"\\ntables open via the public API : {len(open_tables)} of {len(CATALOG)}")
-exposed_sensitive = [t for t in open_tables if t in SENSITIVE]
-print(f"of those, sensitive             : {len(exposed_sensitive)} "
-      f"({', '.join(exposed_sensitive)})")
-print()
-print("This is a one-line query and it is the highest-value one in the whole")
-print("pattern. It is also not something an application test can express, which")
-print("is why it belongs in CI against the schema rather than in the test suite.")
-assert exposed_sensitive == ["profiles", "sessions"]
-'''),
 
   ("md", "## 5 · The fix that does not rely on anyone remembering\\n\\n"
          "Two ways to close this. Only one of them survives the next engineer, "

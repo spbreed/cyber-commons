@@ -50,68 +50,8 @@ reading code from the internet.</p>
 <p>The binding constraint here is not technical feasibility — it is <strong>developer
 tolerance</strong>. A containment scheme that adds friction to the inner loop is
 disabled within a week, and a disabled control protects nothing. So the design
-goal is the strongest containment a developer does not notice.</p></div><div class="nbmd"><h2>3 · Demo — measure the default configuration</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SCOPE_WEIGHT = {&quot;self&quot;:1,&quot;project&quot;:3,&quot;tenant&quot;:8,&quot;org&quot;:20}
-DEV_TOOLS = [
- # (name, writes, scope, reversible, needed in the inner loop)
- (&quot;read_file&quot;,  False,&quot;self&quot;,   True,  True),
- (&quot;write_file&quot;, True, &quot;project&quot;,True,  True),
- (&quot;run_tests&quot;,  True, &quot;self&quot;,   True,  True),
- (&quot;run_shell&quot;,  True, &quot;tenant&quot;, False, True),
- (&quot;git_commit&quot;, True, &quot;project&quot;,True,  True),
- (&quot;git_push&quot;,   True, &quot;project&quot;,False, False),
- (&quot;read_env&quot;,   False,&quot;org&quot;,    True,  False),
- (&quot;http_get&quot;,   False,&quot;self&quot;,   True,  True),
-]
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2)
-               for n,w,s,rev,_ in tools if w and n not in gated)
-
-print(f&quot;{&#x27;tool&#x27;:14s}{&#x27;writes&#x27;:8s}{&#x27;scope&#x27;:9s}{&#x27;reversible&#x27;:12s}inner loop?&quot;)
-print(&quot;-&quot; * 58)
-for n,w,s,rev,need in DEV_TOOLS:
-    print(f&quot;{n:14s}{str(w):8s}{s:9s}{str(rev):12s}{need}&quot;)
-print(f&quot;\ndefault blast radius: {blast(DEV_TOOLS)}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import fnmatch
-HOME = [
- &quot;/home/dana/work/monorepo/src/app.py&quot;,
- &quot;/home/dana/work/monorepo/.env&quot;,
- &quot;/home/dana/work/other-team-repo/secrets.yaml&quot;,
- &quot;/home/dana/.aws/credentials&quot;,
- &quot;/home/dana/.ssh/id_ed25519&quot;,
- &quot;/home/dana/.config/gcloud/application_default_credentials.json&quot;,
- &quot;/home/dana/Downloads/customer-export-2026.csv&quot;,
-]
-def normalise(p):
-    parts = []
-    for seg in p.split(&quot;/&quot;):
-        if seg in (&quot;&quot;, &quot;.&quot;): continue
-        if seg == &quot;..&quot;:
-            if parts: parts.pop()
-            continue
-        parts.append(seg)
-    return &quot;/&quot; + &quot;/&quot;.join(parts)
-
-DENY = (&quot;*/.ssh/*&quot;,&quot;*/.aws/*&quot;,&quot;*/.config/gcloud/*&quot;,&quot;*.pem&quot;,&quot;*/.env&quot;,&quot;*/Downloads/*&quot;)
-def contained(p, workspace=&quot;/home/dana/work/monorepo&quot;):
-    real = normalise(p)
-    if any(fnmatch.fnmatch(real, g) for g in DENY): return False
-    return real.startswith(workspace + &quot;/&quot;)
-
-print(f&quot;{&#x27;path&#x27;:64s}{&#x27;default&#x27;:9s}contained&quot;)
-print(&quot;-&quot; * 84)
-for p in HOME:
-    print(f&quot;{p:64s}{&#x27;True&#x27;:9s}{contained(p)}&quot;)
-creds = [p for p in HOME if any(k in p for k in (&quot;.aws&quot;,&quot;.ssh&quot;,&quot;gcloud&quot;,&quot;.env&quot;))]
-print(f&quot;\ncredential files reachable by default: {len(creds)}&quot;)
-print(f&quot;credential files reachable when contained: &quot;
-      f&quot;{sum(1 for p in creds if contained(p))}&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — rank by friction, ship the invisible ones first</h2></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">control</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">friction</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what developers actually experience</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">deny-list credential paths</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the agent cannot read ~/.aws, ~/.ssh, ~/.env. Developers never noticed.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">workspace confinement</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the agent sees the open repo only. Occasionally annoying for monorepo hops.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">egress allowlist</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">package registries and your VCS. Breaks the odd curl in a generated script.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">gate &lt;code&gt;git_push&lt;/code&gt;</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.4</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">one confirmation before code leaves the machine. Noticed, usually accepted.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">gate every write</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.9</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>confirmation per file write. Abandoned within a week, every time.</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no shell at all</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1.0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>removes the inner loop. Nobody will use the agent.</b></td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">The first four ship today and cost nothing anyone will complain about. The last two are the ones people propose in meetings, and they are uninstalled by Friday — a control that gets turned off is worth less than a weaker one that stays on.</div></div><div class="nbcode"><span class="nbtag">In</span><pre><code>gated = {&quot;git_push&quot;}
-print(f&quot;blast radius     {blast(DEV_TOOLS):&gt;3} → {blast(DEV_TOOLS, gated):&gt;3}&quot;)
-print(f&quot;reachable files  {len(HOME):&gt;3} → {sum(1 for p in HOME if contained(p)):&gt;3}&quot;)
-print(f&quot;credentials      {len(creds):&gt;3} → {sum(1 for p in creds if contained(p)):&gt;3}&quot;)
-print(f&quot;friction added   0.4 of 1.0 — one confirmation before a push&quot;)
-assert not any(contained(p) for p in creds)
-print(&quot;\nNo cloud or SSH credential is reachable, the inner loop is unchanged,&quot;)
-print(&quot;and the only thing a developer notices is a prompt before pushing.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The audit, as a skill an agent runs on itself</h2>
+goal is the strongest containment a developer does not notice.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">control</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">friction</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what developers actually experience</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">deny-list credential paths</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the agent cannot read ~/.aws, ~/.ssh, ~/.env. Developers never noticed.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">workspace confinement</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the agent sees the open repo only. Occasionally annoying for monorepo hops.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">egress allowlist</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">package registries and your VCS. Breaks the odd curl in a generated script.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">gate &lt;code&gt;git_push&lt;/code&gt;</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.4</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">one confirmation before code leaves the machine. Noticed, usually accepted.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">gate every write</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.9</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>confirmation per file write. Abandoned within a week, every time.</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no shell at all</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1.0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>removes the inner loop. Nobody will use the agent.</b></td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The first four ship today and cost nothing anyone will complain about. The last two are the ones people propose in meetings, and they are uninstalled by Friday — a control that gets turned off is worth less than a weaker one that stays on.</div></div><div class="nbmd"><h2>3 · The audit, as a skill an agent runs on itself</h2>
 <p>Everything in this lesson is a review someone has to remember to do. Written as a skill, it is a review that fires whenever an agent opens a repository — including this one.</p>
 <p>The skill's central instruction is easy to miss and decides the outcome: <strong>rate an injection finding by what the allowlist permits, not by the text of the injection.</strong> The payload is the attacker's choice and costs nothing to change; the allowlist is yours.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
@@ -312,59 +252,7 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>contract = contract_of(body)
-
-# What actually reaches a coding agent&#x27;s context in a normal repository.
-SURFACE = [
- (&quot;AGENTS.md&quot;,             &quot;operator&quot;, True),
- (&quot;.claude/settings.json&quot;, &quot;operator&quot;, True),
- (&quot;README.md&quot;,             &quot;content&quot;,  True),
- (&quot;docs/CONTRIBUTING.md&quot;,  &quot;content&quot;,  True),
- (&quot;package.json&quot;,          &quot;content&quot;,  True),   # a hook may execute its scripts
- (&quot;vendor/lib/README.md&quot;,  &quot;content&quot;,  False),
-]
-
-worst = max(DEV_TOOLS, key=lambda t: SCOPE_WEIGHT[t[2]] * (1 if t[3] else 2))
-audit = {
- &quot;surface&quot;: [{&quot;path&quot;: p, &quot;control&quot;: c, &quot;auto_loaded&quot;: a} for p, c, a in SURFACE],
- &quot;findings&quot;: [
-   {&quot;kind&quot;: &quot;prompt_injection&quot;, &quot;path&quot;: &quot;README.md&quot;, &quot;grade&quot;: &quot;directive&quot;,
-    # severity is whatever the most powerful pre-approved tool can do
-    &quot;worst_case&quot;: f&quot;content-controlled text triggers {worst[0]} at {worst[2]} scope&quot;,
-    &quot;severity&quot;: &quot;critical&quot; if not worst[3] else &quot;high&quot;,
-    &quot;fix&quot;: &quot;quote repository content as data; never as instruction&quot;},
-   {&quot;kind&quot;: &quot;unsafe_hook&quot;, &quot;path&quot;: &quot;package.json&quot;, &quot;grade&quot;: &quot;directive&quot;,
-    &quot;worst_case&quot;: &quot;a hook runs a repo-supplied script the moment the repo opens&quot;,
-    &quot;severity&quot;: &quot;critical&quot;,
-    &quot;fix&quot;: &quot;pin the hook command; never take it from repository content&quot;},
-   {&quot;kind&quot;: &quot;overbroad_tool&quot;, &quot;path&quot;: &quot;.claude/settings.json&quot;, &quot;grade&quot;: &quot;advisory&quot;,
-    &quot;worst_case&quot;: f&quot;{worst[0]} pre-approved with unrestricted arguments&quot;,
-    &quot;severity&quot;: &quot;high&quot;, &quot;fix&quot;: &quot;split into narrow tools, or require approval&quot;},
- ],
- &quot;allowlist_review&quot;: [
-   {&quot;tool&quot;: name, &quot;worst_single_call&quot;: f&quot;{scope} scope, &quot;
-                                       f&quot;{&#x27;reversible&#x27; if rev else &#x27;IRREVERSIBLE&#x27;}&quot;,
-    &quot;bounded&quot;: scope in (&quot;self&quot;, &quot;project&quot;) and rev}
-   for name, writes, scope, rev, _ in DEV_TOOLS if writes],
-}
-problems = check(audit, contract)
-print(f&quot;conformance: {len(problems)} problem(s)&quot;)
-for p in problems: print(&quot;   &quot;, p)
-assert not problems, problems
-
-print(f&quot;\nauto-loaded, content-controlled inputs: &quot;
-      f&quot;{[s[&#x27;path&#x27;] for s in audit[&#x27;surface&#x27;] if s[&#x27;control&#x27;]==&#x27;content&#x27; and s[&#x27;auto_loaded&#x27;]]}&quot;)
-print(f&quot;most powerful pre-approved tool      : {worst[0]} ({worst[2]} scope)&quot;)
-print(&quot;\nallowlist:&quot;)
-for r in audit[&quot;allowlist_review&quot;]:
-    print(f&quot;   {r[&#x27;tool&#x27;]:12s}{r[&#x27;worst_single_call&#x27;]:34s}bounded={r[&#x27;bounded&#x27;]}&quot;)
-unbounded = [r[&quot;tool&quot;] for r in audit[&quot;allowlist_review&quot;] if not r[&quot;bounded&quot;]]
-print(f&quot;\nunbounded pre-approved tools: {unbounded}&quot;)
-print()
-print(&quot;The injection finding is Critical not because the README says anything&quot;)
-print(&quot;clever, but because a directive path exists to a tool that cannot be&quot;)
-print(&quot;undone. Rewrite the payload and the severity does not move.&quot;)
-assert unbounded, &quot;an unbounded pre-approved tool should be visible here&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating <code>git_push</code> drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Ship the credential deny-list first — it is a config file, it takes an afternoon, and no developer will notice. Then find out how many agents in your organisation could read <code>~/.aws/credentials</code> yesterday.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.13.html">B2.13 · Attesting control intent for agents and MCP servers</a></strong></p>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.8 — Third-party and model supply chain risk | Cyber Commons</title><meta name="description" content="Questions that actually discriminate between vendors."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.8</div><h1>Third-party and model supply chain risk</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Vendor AI features enabled by default; sub-processor chains you never mapped.</p></div><div class="ctrl"><div class="lab">Control</div><p>Questions that actually discriminate between vendors.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run a real AIBOM against a model artefact.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.8 · Third-party and model supply chain risk</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.8 — Third-party and model supply chain risk | Cyber Commons</title><meta name="description" content="Questions that actually discriminate between vendors."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.8</div><h1>Third-party and model supply chain risk</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Vendor AI features enabled by default; sub-processor chains you never mapped.</p></div><div class="ctrl"><div class="lab">Control</div><p>Questions that actually discriminate between vendors.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run a real AIBOM against a model artefact.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.8 · Third-party and model supply chain risk</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Framework — Risk and Control</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.7.html">E1.7 · Continuous control verification</a></strong>.</p>
 <table>
@@ -49,85 +49,7 @@ tested was tested against behaviour the vendor can replace on a Tuesday.</p>
 <li><strong>Prompt and tool packages (MCP, skills)</strong> — no signing convention, and they
   run with your agent's authority.</li>
 </ul>
-<p>Saying which signals are unavailable is part of the assessment, not a gap in it.</p></div><div class="nbmd"><h2>3 · Demo — the ordinary signals, and where they run out</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Component:
-    name: str; kind: str; signed: bool = False
-    pinned: bool = False; can_change_silently: bool = False
-    runs_with_agent_authority: bool = False; downloads: int = 0
-
-COMPONENTS = [
- Component(&quot;cryptography==42.0.5&quot;, &quot;library&quot;, True, True, False, False, 900_000),
- Component(&quot;langchain==0.2.1&quot;, &quot;library&quot;, False, True, False, False, 400_000),
- Component(&quot;hosted GLM-4.6 endpoint&quot;, &quot;hosted model&quot;, False, False, True, False),
- Component(&quot;local glm-4.6 weights (pinned digest)&quot;, &quot;weights&quot;, True, True, False, False),
- Component(&quot;mcp-jira-connector==0.0.3&quot;, &quot;tool package&quot;, False, True, False, True, 180),
-]
-def assess(c):
-    flags = []
-    if not c.signed:                  flags.append(&quot;unsigned&quot;)
-    if not c.pinned:                  flags.append(&quot;not version-pinned&quot;)
-    if c.can_change_silently:         flags.append(&quot;CAN CHANGE WITHOUT NOTICE&quot;)
-    if c.runs_with_agent_authority:   flags.append(&quot;runs with agent authority&quot;)
-    if c.kind == &quot;library&quot; and c.downloads &lt; 1000: flags.append(&quot;little scrutiny&quot;)
-    tier = (&quot;high&quot; if c.can_change_silently or c.runs_with_agent_authority
-            else &quot;medium&quot; if flags else &quot;low&quot;)
-    return tier, flags
-
-print(f&quot;{&#x27;component&#x27;:40s}{&#x27;kind&#x27;:14s}{&#x27;tier&#x27;:8s}flags&quot;)
-print(&quot;-&quot; * 96)
-for c in COMPONENTS:
-    tier, flags = assess(c)
-    print(f&quot;{c.name:40s}{c.kind:14s}{tier:8s}{&#x27;, &#x27;.join(flags) or &#x27;—&#x27;}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the silent change, priced</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-now = time.time(); DAY = 86400
-
-CONTROL_TESTS = {&quot;SB-2&quot;: now - 20*DAY, &quot;EV-2&quot;: now - 20*DAY, &quot;DR-1&quot;: now - 20*DAY}
-MODEL_CHANGED_AT = now - 5*DAY
-
-print(&quot;your controls were tested against a model that changed 5 days ago:&quot;)
-for cid, tested in CONTROL_TESTS.items():
-    valid = tested &gt; MODEL_CHANGED_AT
-    print(f&quot;   {cid}  tested {int((now-tested)/DAY)}d ago  &quot;
-          f&quot;{&#x27;still valid&#x27; if valid else &#x27;INVALIDATED by the model change&#x27;}&quot;)
-invalidated = [c for c, t in CONTROL_TESTS.items() if t &lt;= MODEL_CHANGED_AT]
-print(f&quot;\n{len(invalidated)}/{len(CONTROL_TESTS)} control tests invalidated by a &quot;
-      f&quot;change you did not make and were not told about.&quot;)
-assert invalidated</code></pre></div><div class="nbmd"><h2>5 · The control — the four questions, and stating the gaps</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>QUESTIONS = [
- (&quot;Can this component change without notifying us?&quot;,
-  &quot;if yes, every control test has an implicit expiry tied to the vendor&quot;),
- (&quot;Does it execute with our agent&#x27;s authority?&quot;,
-  &quot;if yes, assess it as code, not as a dependency&quot;),
- (&quot;Can we pin a digest, and do we?&quot;,
-  &quot;the difference between a supply chain and a subscription&quot;),
- (&quot;What is our exit if we stop using it?&quot;,
-  &quot;DORA Art.11 asks this directly; most AI contracts have no answer&quot;),
-]
-for q, why in QUESTIONS: print(f&quot;Q: {q}\n   → {why}\n&quot;)
-
-SIGNALS = {
- &quot;library&quot;:      {&quot;signature&quot;: True, &quot;downloads&quot;: True, &quot;pinning&quot;: True, &quot;lineage&quot;: True},
- &quot;hosted model&quot;: {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;pinning&quot;: False, &quot;lineage&quot;: False},
- &quot;weights&quot;:      {&quot;signature&quot;: True, &quot;downloads&quot;: False, &quot;pinning&quot;: True, &quot;lineage&quot;: False},
- &quot;tool package&quot;: {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;pinning&quot;: True, &quot;lineage&quot;: False},
-}
-print(f&quot;{&#x27;artefact class&#x27;:16s}{&#x27;signals available&#x27;:&gt;20}  unavailable&quot;)
-print(&quot;-&quot; * 74)
-for kind, sig in SIGNALS.items():
-    have = [k for k, v in sig.items() if v]
-    lack = [k for k, v in sig.items() if not v]
-    print(f&quot;{kind:16s}{f&#x27;{len(have)}/{len(sig)}&#x27;:&gt;20}  {lack or &#x27;—&#x27;}&quot;)
-
-def assessment_statement(kind):
-    sig = SIGNALS[kind]
-    lack = [k for k, v in sig.items() if not v]
-    return (f&quot;{kind}: assessed on {len(sig)-len(lack)}/{len(sig)} signals. &quot;
-            f&quot;{&#x27;, &#x27;.join(lack) or &#x27;none&#x27;} unavailable for this artefact class.&quot;)
-print()
-for kind in SIGNALS: print(&quot;  &quot; + assessment_statement(kind))
-print(&quot;\nThat last sentence is the deliverable. A rating that hides which signals&quot;)
-print(&quot;were unavailable is a number someone will later rely on.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The hosted model and the MCP tool package both tier high — one for silent change, one for running with agent authority. The silent model change invalidates all three control tests taken before it. The signal table shows libraries with 4 of 4 signals available and hosted models with 0 of 4, and each assessment statement names what was unavailable.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Saying which signals are unavailable is part of the assessment, not a gap in it.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add "can this change without notifying us?" to your third-party assessment form. For hosted models the answer is usually yes, and it should carry an explicit control-test expiry.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.9.html">E1.9 · Model and agent lifecycle governance</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.8.ipynb">Source</a></p>

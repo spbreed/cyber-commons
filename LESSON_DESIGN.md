@@ -164,7 +164,24 @@ python3 scripts/check_determinism.py --session B2.3
 python3 scripts/build_curriculum.py && python3 scripts/build_site.py
 ```
 
-Code cells use the **standard library only** — no imports outside it, nothing
-to clone, no `pip install` — and must be **deterministic**: seed from
-`zlib.crc32` rather than `hash()`, sort before iterating a set, and give every
-sort a full tiebreak. Both are gates in CI.
+## What a lesson may execute
+
+Most lessons execute nothing. They are the idea, the diagram, the control and
+the scene it plays out in — and a lesson that only needed a `print` statement to
+make its point never needed code at all.
+
+A lesson carries a code cell for exactly two reasons:
+
+1. **It runs an agent skill.** The `("skill", ref)` step embeds a real
+   `SKILL.md` from [`skills/`](skills) verbatim, and `("skill_script", ref)`
+   embeds that skill's own script. The lesson executes the file in the
+   repository, never a paraphrase of it, so editing the skill makes the
+   notebook stale and CI says so.
+2. **It calls a model.** The `("model", …)` step emits one adapter and one
+   round trip — a labelled replay offline, a real frontier or open-weight call
+   when one is configured.
+
+Anything else is Python teaching Python. Code cells are **standard library
+only** and must be **deterministic**: seed from `zlib.crc32` rather than
+`hash()`, sort before iterating a set, and give every sort a full tiebreak.
+Both are gates in CI.

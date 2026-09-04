@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.9 — Detections whose subject is the agent platform | Cyber Commons</title><meta name="description" content="Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.9</div><h1>Detections whose subject is the agent platform</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.</p></div><div class="ctrl"><div class="lab">Control</div><p>Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run four platform detectors over one day of events and find the ones a generic anomaly score would have missed.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.9 · Detections whose subject is the agent platform</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.9 — Detections whose subject is the agent platform | Cyber Commons</title><meta name="description" content="Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.9</div><h1>Detections whose subject is the agent platform</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.</p></div><div class="ctrl"><div class="lab">Control</div><p>Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run four platform detectors over one day of events and find the ones a generic anomaly score would have missed.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.9 · Detections whose subject is the agent platform</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.8.html">D1.8 · Threat intel sub-lane</a></strong>.</p>
 <table>
@@ -59,117 +59,8 @@ minutes.</p>
 <p><strong>Exemption-state reconciliation (C6.3).</strong> Live control state against the
 approved register, continuously. Any control disabled without a matching
 unexpired exemption is a P1, and expiry re-enables automatically with no grace
-period.</p></div><div class="nbmd"><h2>3 · Named primitives beat a generic anomaly score</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>EVENTS = [
- {&quot;t&quot;: 1,  &quot;proc&quot;: &quot;harness&quot;,   &quot;syscall&quot;: &quot;execve&quot;,  &quot;arg&quot;: &quot;python3 solve.py&quot;},
- {&quot;t&quot;: 2,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;openat&quot;,  &quot;arg&quot;: &quot;/workspace/in.json&quot;},
- {&quot;t&quot;: 3,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;ptrace&quot;,  &quot;arg&quot;: &quot;attach pid=1 (not a child)&quot;},
- {&quot;t&quot;: 4,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;execve&quot;,  &quot;arg&quot;: &quot;sh -c &#x27;LD_PRELOAD=/tmp/x.so ...&#x27;&quot;},
- {&quot;t&quot;: 5,  &quot;proc&quot;: &quot;x.so&quot;,      &quot;syscall&quot;: &quot;openat&quot;,  &quot;arg&quot;: &quot;/run/harness.sock&quot;},
- {&quot;t&quot;: 6,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;openat&quot;,  &quot;arg&quot;: &quot;/workspace/out.json&quot;},
- {&quot;t&quot;: 7,  &quot;proc&quot;: &quot;sidecar&quot;,   &quot;syscall&quot;: &quot;execve&quot;,  &quot;arg&quot;: &quot;sleep 86400&quot;},
-]
-BASELINE_TREE = {&quot;harness&quot;, &quot;solve.py&quot;}
-
-RULES = [
- (&quot;ptrace attach to a non-child&quot;, lambda e: e[&quot;syscall&quot;] == &quot;ptrace&quot; and &quot;not a child&quot; in e[&quot;arg&quot;]),
- (&quot;LD_PRELOAD on a spawned process&quot;, lambda e: &quot;LD_PRELOAD&quot; in e[&quot;arg&quot;]),
- (&quot;non-harness write to the RPC path&quot;, lambda e: &quot;harness.sock&quot; in e[&quot;arg&quot;] and e[&quot;proc&quot;] != &quot;harness&quot;),
- (&quot;process outside the baseline tree&quot;, lambda e: e[&quot;proc&quot;] not in BASELINE_TREE),
-]
-
-fired = []
-for e in EVENTS:
-    for name, rule in RULES:
-        if rule(e):
-            fired.append((e[&quot;t&quot;], name, e[&quot;proc&quot;]))
-print(f&quot;{&#x27;t&#x27;:&gt;3}  {&#x27;rule&#x27;:36s}process&quot;)
-for t, name, proc in fired:
-    print(f&quot;{t:&gt;3}  {name:36s}{proc}&quot;)
-
-# a generic score over the same events
-volume = len(EVENTS)
-score = volume / 100
-print(f&quot;\ngeneric anomaly score for this run: {score:.2f}  &quot;
-      f&quot;(seven syscalls is unremarkable)&quot;)
-print(f&quot;named rules fired: {len(fired)}&quot;)
-print()
-print(&quot;The escape is four ordinary-looking events. Volume scoring cannot see it&quot;)
-print(&quot;because nothing about the volume is unusual.&quot;)
-assert len(fired) &gt;= 5 and score &lt; 0.1</code></pre></div><div class="nbmd"><h2>4 · The one the spoofing depended on</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TOOL_CALLS = [
- {&quot;call&quot;: 1, &quot;spawned&quot;: [&quot;solve.py&quot;],  &quot;ended&quot;: [&quot;solve.py&quot;]},
- {&quot;call&quot;: 2, &quot;spawned&quot;: [&quot;sidecar&quot;],   &quot;ended&quot;: []},
- {&quot;call&quot;: 3, &quot;spawned&quot;: [&quot;fmt&quot;],       &quot;ended&quot;: [&quot;fmt&quot;]},
-]
-def orphans(calls):
-    live = []
-    for c in calls:
-        for p in c[&quot;spawned&quot;]:
-            if p not in c[&quot;ended&quot;]:
-                live.append((c[&quot;call&quot;], p))
-    return live
-
-live = orphans(TOOL_CALLS)
-print(&quot;processes surviving the tool call that spawned them:&quot;)
-for call, proc in live:
-    print(f&quot;   call {call}: {proc}&quot;)
-print()
-print(&quot;A background process that outlives its tool call is how a substituted&quot;)
-print(&quot;command stays in place for the next one. This single rule is the cheapest&quot;)
-print(&quot;detection in the set and it is specific enough to page on.&quot;)
-assert live == [(2, &quot;sidecar&quot;)]</code></pre></div><div class="nbmd"><h2>5 · Cache integrity, credential exposure, exemption drift</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import hashlib
-
-def h(s): return hashlib.sha256(s.encode()).hexdigest()[:12]
-
-MANIFEST = {&quot;libtarget-1.4.jar&quot;: h(&quot;libtarget-1.4&quot;),
-            &quot;runner-2.0.tar&quot;:    h(&quot;runner-2.0&quot;),
-            &quot;fixtures-9.zip&quot;:    h(&quot;fixtures-9&quot;)}
-REPOSITORY = {&quot;libtarget-1.4.jar&quot;: h(&quot;libtarget-1.4-modified&quot;),   # staged
-              &quot;runner-2.0.tar&quot;:    h(&quot;runner-2.0&quot;),
-              &quot;extra-0.1.jar&quot;:     h(&quot;extra-0.1&quot;)}                # unexpected
-
-def diff(manifest, repo):
-    out = []
-    for name in sorted(set(manifest) | set(repo)):
-        if name not in repo:
-            out.append((name, &quot;MISSING - expected artifact removed&quot;))
-        elif name not in manifest:
-            out.append((name, &quot;UNEXPECTED - not in the manifest&quot;))
-        elif manifest[name] != repo[name]:
-            out.append((name, &quot;MODIFIED - hash mismatch&quot;))
-    return out
-
-print(&quot;cache integrity diff (C5.4)&quot;)
-for name, why in diff(MANIFEST, REPOSITORY):
-    print(f&quot;   {name:22s}{why}&quot;)
-
-EXPOSURES = [(&quot;hf_liveToken&quot;, &quot;public dataset card&quot;, 0)]
-def revoke(exposures, human_in_loop):
-    delay = 240 if human_in_loop else 2       # minutes
-    return [(t, where, delay) for t, where, _ in exposures]
-
-print(&quot;\ncredential exposure to revocation (C4.1)&quot;)
-for mode, hitl in ((&quot;human in the loop&quot;, True), (&quot;automated&quot;, False)):
-    for token, where, delay in revoke(EXPOSURES, hitl):
-        print(f&quot;   {mode:20s}{token:16s}{where:22s}{delay:&gt;4} min&quot;)
-print(&quot;   reported interval from discovery to redistribution: minutes&quot;)
-
-APPROVED = {&quot;cyber-classifier&quot;: 30}
-LIVE = {&quot;cyber-classifier&quot;: &quot;disabled&quot;, &quot;egress-allowlist&quot;: &quot;disabled&quot;}
-print(&quot;\nexemption-state reconciliation (C6.3), day 44&quot;)
-for control, state in sorted(LIVE.items()):
-    expires = APPROVED.get(control)
-    if state == &quot;enabled&quot;:
-        verdict = &quot;ok&quot;
-    elif expires is None:
-        verdict = &quot;P1 - disabled with no approved exemption&quot;
-    elif 44 &gt; expires:
-        verdict = f&quot;P1 - exemption expired on day {expires}, auto re-enable&quot;
-    else:
-        verdict = &quot;ok - within an approved exemption&quot;
-    print(f&quot;   {control:20s}{state:10s}{verdict}&quot;)
-assert len(diff(MANIFEST, REPOSITORY)) == 3</code></pre></div><div class="nbmd"><h2>6 · Verify — who owns each of these</h2></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">detection</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">owner</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">data source</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">escape detection (C1.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">platform security</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">host sensor</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">cache integrity (C5.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">build / release</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">artifact repository</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">secret scanning (C4.1)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">appsec</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">repos, CI, the public internet</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">exemption drift (C6.3)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">governance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">control registry</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload scanning (C3.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the ingest team</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload path</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Five detections, five different owners, and not one of them reads the workload's own logs. That is the property that makes them useful after A2.8: they survive the subject of the investigation having had write access to everything else.</div></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</p></div><div class="nbmd"><h2>Your turn</h2>
+period.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">detection</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">owner</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">data source</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">escape detection (C1.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">platform security</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">host sensor</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">cache integrity (C5.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">build / release</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">artifact repository</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">secret scanning (C4.1)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">appsec</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">repos, CI, the public internet</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">exemption drift (C6.3)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">governance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">control registry</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload scanning (C3.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the ingest team</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload path</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Five detections, five different owners, and not one of them reads the workload's own logs. That is the property that makes them useful after A2.8: they survive the subject of the investigation having had write access to everything else.</div></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick the orphaned-process rule and write it for your own platform. It is one query, it has a low false-positive rate, and on most agent platforms nobody has ever run it.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.10.html">D1.10 · Fleet-level correlation: seeing a swarm</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.9.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.9.ipynb">Source</a></p>

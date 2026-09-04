@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.6 — Sandbox replication | Cyber Commons</title><meta name="description" content="Stage 11: replicate the application in an isolated, disposable runtime with no path to production."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.6</div><h1>Sandbox replication</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Dynamic testing is run against staging, so a destructive probe becomes an incident.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 11: replicate the application in an isolated, disposable runtime with no path to production.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Name the failure from the trace alone.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.6 · Sandbox replication</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.6 — Sandbox replication | Cyber Commons</title><meta name="description" content="Stage 11: replicate the application in an isolated, disposable runtime with no path to production."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.6</div><h1>Sandbox replication</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Dynamic testing is run against staging, so a destructive probe becomes an incident.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 11: replicate the application in an isolated, disposable runtime with no path to production.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Name the failure from the trace alone.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.6 · Sandbox replication</h1>
 <p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: Harnesses and an Agentic AppSec Pipeline</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.5.html">B2.5 · Feasibility filtering and reachability</a></strong>.</p>
 <table>
@@ -54,108 +54,7 @@ a database replica, and always someone's on-call rota.</p>
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · Stage 11 — model the replica and its isolation</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import re
-from dataclasses import dataclass, field
-from urllib.parse import urlparse
-
-PRIVATE = [re.compile(p) for p in (r&quot;^127\.&quot;, r&quot;^10\.&quot;, r&quot;^169\.254\.&quot;,
-                                   r&quot;^192\.168\.&quot;, r&quot;^localhost$&quot;)]
-
-@dataclass
-class Sandbox:
-    name: str
-    allow_hosts: set = field(default_factory=set)
-    credentials: dict = field(default_factory=dict)
-    data: dict = field(default_factory=dict)
-    ephemeral: bool = True
-    destroyed: bool = False
-    log: list = field(default_factory=list)
-
-    def egress(self, url):
-        host = (urlparse(url).hostname or &quot;&quot;).lower()
-        if host in self.allow_hosts:
-            d = (True, &quot;replica-internal&quot;)
-        elif any(p.match(host) for p in PRIVATE):
-            d = (False, &quot;private address outside the replica — blocked&quot;)
-        else:
-            d = (False, &quot;not on the replica allowlist&quot;)
-        self.log.append((url, d[0], d[1])); return d
-
-    def destroy(self):
-        self.credentials.clear(); self.data.clear(); self.destroyed = True
-        return &quot;replica destroyed; state cannot leak into the next run&quot;
-
-REPLICA = Sandbox(&quot;appsec-replica-8812&quot;,
-                  allow_hosts={&quot;replica.local&quot;, &quot;db.replica.local&quot;},
-                  credentials={&quot;DB_PASSWORD&quot;: &quot;synthetic-not-real-0000&quot;,
-                               &quot;API_TOKEN&quot;: &quot;synthetic-not-real-1111&quot;},
-                  data={&quot;users&quot;: [{&quot;id&quot;: 1, &quot;name&quot;: &quot;test-user-a&quot;,
-                                   &quot;card&quot;: &quot;4000000000000000&quot;}]})
-
-for url in [&quot;http://replica.local/reports&quot;,
-            &quot;http://db.replica.local:5432/&quot;,
-            &quot;https://api.github.com/&quot;,
-            &quot;http://169.254.169.254/latest/meta-data/&quot;,
-            &quot;http://10.0.3.14:9200/_search&quot;]:
-    ok, why = REPLICA.egress(url)
-    print(f&quot;{&#x27;ALLOW&#x27; if ok else &#x27;DENY &#x27;:5s} {url[:44]:46s} {why}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the same probes against staging</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>STAGING = Sandbox(&quot;staging&quot;,
-                  allow_hosts={&quot;staging.internal&quot;, &quot;db.staging.internal&quot;,
-                               &quot;sso.corp&quot;, &quot;bus.corp&quot;, &quot;api.github.com&quot;},
-                  credentials={&quot;DB_PASSWORD&quot;: &quot;real-staging-password&quot;,
-                               &quot;API_TOKEN&quot;: &quot;ghp_real_staging_token&quot;},
-                  data={&quot;users&quot;: [{&quot;id&quot;: 4471, &quot;name&quot;: &quot;dana@corp&quot;,
-                                   &quot;card&quot;: &quot;4111111111111111&quot;}]},
-                  ephemeral=False)
-
-DESTRUCTIVE_PROBES = [
- (&quot;drop a table&quot;,        &quot;db.staging.internal&quot;, &quot;db.replica.local&quot;),
- (&quot;exfiltrate user rows&quot;,&quot;api.github.com&quot;,      &quot;replica.local&quot;),
- (&quot;brute-force login&quot;,   &quot;sso.corp&quot;,            &quot;replica.local&quot;),
-]
-print(f&quot;{&#x27;probe&#x27;:24s}{&#x27;on staging&#x27;:&gt;14}{&#x27;on replica&#x27;:&gt;14}&quot;)
-print(&quot;-&quot; * 56)
-for probe, staging_target, replica_target in DESTRUCTIVE_PROBES:
-    s_ok, _ = STAGING.egress(f&quot;http://{staging_target}/&quot;)
-    r_ok, _ = REPLICA.egress(f&quot;http://{replica_target}/&quot;)
-    print(f&quot;{probe:24s}{&#x27;REACHES&#x27;:&gt;14}{&#x27;contained&#x27;:&gt;14}&quot; if s_ok
-          else f&quot;{probe:24s}{&#x27;blocked&#x27;:&gt;14}{&#x27;contained&#x27;:&gt;14}&quot;)
-
-print(&quot;\nwhat a leaked credential is worth:&quot;)
-for name, box in ((&quot;staging&quot;, STAGING), (&quot;replica&quot;, REPLICA)):
-    creds = list(box.credentials.values())
-    synthetic = all(&quot;synthetic&quot; in c for c in creds)
-    print(f&quot;   {name:10s}{&#x27;worthless — synthetic&#x27; if synthetic else &#x27;REAL — usable against real systems&#x27;}&quot;)
-
-print(&quot;\nwhat an exfiltrated record is worth:&quot;)
-for name, box in ((&quot;staging&quot;, STAGING), (&quot;replica&quot;, REPLICA)):
-    rec = box.data[&quot;users&quot;][0]
-    real = not rec[&quot;name&quot;].startswith(&quot;test-&quot;)
-    print(f&quot;   {name:10s}{&#x27;REAL customer data&#x27; if real else &#x27;synthetic&#x27;}  {rec[&#x27;name&#x27;]}&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — the four isolation properties, checked</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def isolation_report(box):
-    checks = {
-      &quot;network&quot;: all(not ok for url, ok, _ in box.log
-                     if urlparse(url).hostname not in box.allow_hosts),
-      &quot;credentials&quot;: all(&quot;synthetic&quot; in v for v in box.credentials.values()) if box.credentials else True,
-      &quot;data&quot;: all(u[&quot;name&quot;].startswith(&quot;test-&quot;) for u in box.data.get(&quot;users&quot;, [])),
-      &quot;lifetime&quot;: box.ephemeral,
-    }
-    return checks, all(checks.values())
-
-for box in (REPLICA, STAGING):
-    checks, ok = isolation_report(box)
-    print(f&quot;{box.name}&quot;)
-    for k, v in checks.items():
-        print(f&quot;   {&#x27;PASS&#x27; if v else &#x27;FAIL&#x27;:5s} {k}&quot;)
-    print(f&quot;   → suitable for dynamic testing: {ok}\n&quot;)
-
-_, replica_ok = isolation_report(REPLICA)
-_, staging_ok = isolation_report(STAGING)
-assert replica_ok and not staging_ok
-
-print(REPLICA.destroy())
-print(f&quot;credentials after destroy: {REPLICA.credentials or &#x27;cleared&#x27;}&quot;)
-print(f&quot;data after destroy:        {REPLICA.data or &#x27;cleared&#x27;}&quot;)
-assert REPLICA.destroyed and not REPLICA.credentials</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.</p></div><div class="nbmd"><h2>Your turn</h2>
+</blockquote></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check whether your dynamic testing currently runs against staging. If it does, list what staging shares with production — identity provider, message bus, data replica. Each shared component is a path from a test probe to a real incident.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.7.html">B2.7 · Dynamic exploitation (DAST)</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.6.ipynb">Source</a></p>

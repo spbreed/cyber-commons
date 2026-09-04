@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.7 — Continuous control verification | Cyber Commons</title><meta name="description" content="Agent-assisted evidence collection, drift detection, exception tracking."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.7</div><h1>Continuous control verification</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Automating judgment instead of evidence collection.</p></div><div class="ctrl"><div class="lab">Control</div><p>Agent-assisted evidence collection, drift detection, exception tracking.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Automate the evidence package, not the judgment.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.7 · Continuous control verification</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.7 — Continuous control verification | Cyber Commons</title><meta name="description" content="Agent-assisted evidence collection, drift detection, exception tracking."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.7</div><h1>Continuous control verification</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Automating judgment instead of evidence collection.</p></div><div class="ctrl"><div class="lab">Control</div><p>Agent-assisted evidence collection, drift detection, exception tracking.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Automate the evidence package, not the judgment.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.7 · Continuous control verification</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Framework — Risk and Control</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.6.html">E1.6 · Operating vs outcome guardrails</a></strong>.</p>
 <table>
@@ -42,85 +42,7 @@ its freshness window.</p>
 <li><strong>STALE</strong> — tested, was passing, out of window. <strong>Not a pass.</strong></li>
 </ul>
 <p>Plus the absence state: no evidence at all, which is different from failing and
-is often the largest category in a first assessment.</p></div><div class="nbmd"><h2>3 · Demo — the posture, computed honestly</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-from dataclasses import dataclass
-
-now = time.time(); DAY = 86400
-
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; evidence: str
-    tested_at: float; valid_for_days: float
-    def age(self, at): return (at - self.tested_at)/DAY
-    def state(self, at):
-        if self.age(at) &gt; self.valid_for_days: return &quot;STALE&quot;
-        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
-
-REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
-TESTS = [
- ControlTest(&quot;AC-1&quot;, True,  &quot;act chain sample&quot;,        now -   2*DAY, 30),
- ControlTest(&quot;AC-2&quot;, True,  &quot;delegation regression&quot;,   now -   9*DAY, 30),
- ControlTest(&quot;SB-1&quot;, True,  &quot;egress denial log&quot;,       now -  31*DAY, 30),
- ControlTest(&quot;SB-2&quot;, True,  &quot;approval gate screenshot&quot;,now - 120*DAY, 27),
- ControlTest(&quot;EV-1&quot;, True,  &quot;audit sample of 50&quot;,      now -   5*DAY, 60),
- ControlTest(&quot;EV-2&quot;, True,  &quot;expert accuracy 0.81&quot;,    now -  12*DAY, 30),
- ControlTest(&quot;DR-1&quot;, False, &quot;drift alerting not deployed&quot;, now,       30),
-]
-
-def verify(tests, required, at):
-    by = {t.cid: t for t in tests}
-    rows, evidenced = [], 0
-    for cid in required:
-        t = by.get(cid)
-        if t is None:
-            rows.append({&quot;control&quot;: cid, &quot;state&quot;: &quot;NO EVIDENCE&quot;, &quot;age&quot;: None})
-            continue
-        st = t.state(at)
-        rows.append({&quot;control&quot;: cid, &quot;state&quot;: st, &quot;age&quot;: round(t.age(at), 1)})
-        evidenced += st == &quot;PASS&quot;
-    return {&quot;required&quot;: len(required), &quot;evidenced&quot;: evidenced,
-            &quot;coverage&quot;: round(evidenced/len(required), 3), &quot;rows&quot;: rows}
-
-v = verify(TESTS, REQUIRED, now)
-print(f&quot;{&#x27;control&#x27;:9s}{&#x27;state&#x27;:14s}{&#x27;age (days)&#x27;:&gt;12}&quot;)
-print(&quot;-&quot; * 36)
-for r in v[&quot;rows&quot;]:
-    print(f&quot;{r[&#x27;control&#x27;]:9s}{r[&#x27;state&#x27;]:14s}{str(r[&#x27;age&#x27;]):&gt;12}&quot;)
-print(f&quot;\ncurrently evidenced {v[&#x27;evidenced&#x27;]}/{v[&#x27;required&#x27;]} = {v[&#x27;coverage&#x27;]:.0%}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — what a point-in-time report would have said</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>point_in_time = sum(1 for t in TESTS if t.passed)
-print(f&quot;point-in-time  : {point_in_time}/{len(REQUIRED)} = &quot;
-      f&quot;{point_in_time/len(REQUIRED):.0%}&quot;)
-print(f&quot;continuous     : {v[&#x27;evidenced&#x27;]}/{v[&#x27;required&#x27;]} = {v[&#x27;coverage&#x27;]:.0%}&quot;)
-stale = [r[&quot;control&quot;] for r in v[&quot;rows&quot;] if r[&quot;state&quot;] == &quot;STALE&quot;]
-none  = [r[&quot;control&quot;] for r in v[&quot;rows&quot;] if r[&quot;state&quot;] == &quot;NO EVIDENCE&quot;]
-fail  = [r[&quot;control&quot;] for r in v[&quot;rows&quot;] if r[&quot;state&quot;] == &quot;FAIL&quot;]
-print(f&quot;\nthe gap: STALE {stale}  NO EVIDENCE {none}  FAIL {fail}&quot;)
-print(&quot;Nobody did anything wrong to produce the STALE rows. Time passed.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — automate one test and watch the posture hold</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def automated_test(cid, run_now):
-    &quot;&quot;&quot;A control test that re-runs on a schedule writes its own evidence.&quot;&quot;&quot;
-    passed, evidence = run_now()
-    return ControlTest(cid, passed, evidence, tested_at=time.time(),
-                       valid_for_days=30)
-
-def check_egress_policy():
-    ALLOW = {&quot;api.github.com&quot;}
-    attempts = [&quot;https://api.github.com/x&quot;, &quot;http://169.254.169.254/&quot;,
-                &quot;https://collect.example.com/x&quot;]
-    from urllib.parse import urlparse
-    denied = [u for u in attempts if (urlparse(u).hostname or &quot;&quot;) not in ALLOW]
-    return len(denied) == 2, f&quot;{len(denied)}/3 destinations denied, run automatically&quot;
-
-fresh = [t for t in TESTS if t.cid != &quot;SB-1&quot;] + [automated_test(&quot;SB-1&quot;, check_egress_policy)]
-v2 = verify(fresh, REQUIRED, now)
-print(f&quot;after automating SB-1: {v2[&#x27;evidenced&#x27;]}/{v2[&#x27;required&#x27;]} = {v2[&#x27;coverage&#x27;]:.0%}&quot;)
-print(f&quot;   SB-1 is now {[r[&#x27;state&#x27;] for r in v2[&#x27;rows&#x27;] if r[&#x27;control&#x27;]==&#x27;SB-1&#x27;][0]}&quot;
-      f&quot; and will stay fresh without anyone remembering&quot;)
-assert v2[&quot;coverage&quot;] &gt; v[&quot;coverage&quot;]
-
-print(&quot;\nprioritise automation by how often a control goes stale:&quot;)
-for t in sorted(TESTS, key=lambda t: t.valid_for_days):
-    per_year = round(365 / t.valid_for_days, 1)
-    print(f&quot;   {t.cid}  window {t.valid_for_days:&gt;3.0f}d → &quot;
-          f&quot;{per_year:&gt;4} manual re-tests per year&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Four controls are PASS, SB-1 and SB-2 are STALE, DR-1 is FAIL and ST-1 has NO EVIDENCE — coverage 50%. A point-in-time report would have claimed 75%. Automating the SB-1 egress test returns it to PASS and raises coverage to 63%, and the re-test frequency table shows SB-2 needing roughly 13.5 manual re-tests a year.</p></div><div class="nbmd"><h2>Your turn</h2>
+is often the largest category in a first assessment.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Automate the control with the shortest freshness window first — it is the one costing the most manual effort and going stale most often. One automated test converts an annual assertion into a live control.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.8.html">E1.8 · Third-party and model supply chain risk</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.7.ipynb">Source</a></p>

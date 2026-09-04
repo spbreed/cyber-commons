@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.5 — Privacy and data protection | Cyber Commons</title><meta name="description" content="Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.5</div><h1>Privacy and data protection</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Deletion when the data is in weights, not a database.</p></div><div class="ctrl"><div class="lab">Control</div><p>Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Redact inside the trust boundary before anything crosses out.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.5 · Privacy and data protection</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.5 — Privacy and data protection | Cyber Commons</title><meta name="description" content="Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.5</div><h1>Privacy and data protection</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Deletion when the data is in weights, not a database.</p></div><div class="ctrl"><div class="lab">Control</div><p>Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Redact inside the trust boundary before anything crosses out.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.5 · Privacy and data protection</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Platform — Regulatory and Compliance</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E2.4.html">E2.4 · Sector overlays</a></strong>.</p>
 <table>
@@ -49,111 +49,7 @@ not reach.</p>
 </ul>
 <p>The capability that makes erasure possible is the same one C2.4 built for poison
 removal: per-record hashes. Without them you cannot locate the record, so you
-cannot delete it.</p></div><div class="nbmd"><h2>3 · Demo — personal data arriving in a trace nobody reviewed</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import re, hashlib
-from dataclasses import dataclass, field
-
-@dataclass
-class Step:
-    n: int; tool: str; target: str; result: str
-
-RUN = [
- Step(1, &quot;read_ticket&quot;, &quot;SUP-4471&quot;,
-      &quot;Customer J. Okonkwo (dana.okonkwo@example.com, acct 8812) reports a &quot;
-      &quot;double charge on card 4111111111111111.&quot;),
- Step(2, &quot;search_orders&quot;, &quot;acct=8812&quot;,
-      &quot;3 orders found for account 8812, total GBP 412.90&quot;),
- Step(3, &quot;post_reply&quot;, &quot;SUP-4471&quot;, &quot;Refund issued for the duplicate charge.&quot;),
-]
-DETECTORS = {
- &quot;email&quot;: re.compile(r&quot;[\w.+-]+@[\w-]+\.[\w.]+&quot;),
- &quot;payment card&quot;: re.compile(r&quot;\b4[0-9]{12}(?:[0-9]{3})?\b&quot;),
- &quot;account number&quot;: re.compile(r&quot;\bacct \d{4}\b&quot;),
- &quot;name&quot;: re.compile(r&quot;\b[A-Z]\. [A-Z][a-z]+\b&quot;),
-}
-found = []
-for s in RUN:
-    for kind, pat in DETECTORS.items():
-        for m in pat.finditer(s.result):
-            found.append((s.n, kind, m.group(0)))
-print(&quot;personal data present in the agent trace:&quot;)
-for n, kind, val in found:
-    print(f&quot;   step {n}  {kind:16s}{val}&quot;)
-print(f&quot;\n{len(found)} items. Nobody put them there deliberately — the agent read&quot;)
-print(&quot;a support ticket, which is exactly what it was asked to do.&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the erasure request</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SYSTEMS = {
- &quot;primary CRM&quot;:        {&quot;has_index&quot;: True,  &quot;retention_days&quot;: 2555},
- &quot;data warehouse&quot;:     {&quot;has_index&quot;: True,  &quot;retention_days&quot;: 1095},
- &quot;agent traces&quot;:       {&quot;has_index&quot;: False, &quot;retention_days&quot;: 400},
- &quot;eval corpus&quot;:        {&quot;has_index&quot;: False, &quot;retention_days&quot;: 9999},
- &quot;fine-tuning set&quot;:    {&quot;has_index&quot;: False, &quot;retention_days&quot;: 9999},
- &quot;backups&quot;:            {&quot;has_index&quot;: True,  &quot;retention_days&quot;: 90},
-}
-SUBJECT = &quot;dana.okonkwo@example.com&quot;
-
-print(f&quot;erasure request for {SUBJECT}\n&quot;)
-print(f&quot;{&#x27;system&#x27;:22s}{&#x27;can locate?&#x27;:&gt;13}{&#x27;retention (d)&#x27;:&gt;15}  outcome&quot;)
-print(&quot;-&quot; * 76)
-unreachable = []
-for name, s in SYSTEMS.items():
-    if s[&quot;has_index&quot;]:
-        outcome = &quot;erased&quot;
-    else:
-        outcome = &quot;CANNOT LOCATE — request cannot be completed&quot;
-        unreachable.append(name)
-    print(f&quot;{name:22s}{str(s[&#x27;has_index&#x27;]):&gt;13}{s[&#x27;retention_days&#x27;]:&gt;15}  {outcome}&quot;)
-print(f&quot;\n{len(unreachable)} system(s) where the request fails: {unreachable}&quot;)
-print(&quot;The response to the data subject says &#x27;erased&#x27;. It is not true in three&quot;)
-print(&quot;systems, two of which retain indefinitely.&quot;)
-assert unreachable</code></pre></div><div class="nbmd"><h2>5 · The control — index the trace, and set retention per field</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def content_hash(text): return hashlib.sha256(text.encode()).hexdigest()[:16]
-
-def index_trace(run, detectors):
-    &quot;&quot;&quot;A subject index: which steps contain data about whom.&quot;&quot;&quot;
-    idx = {}
-    for s in run:
-        for kind, pat in detectors.items():
-            for m in pat.finditer(s.result):
-                subj = m.group(0)
-                idx.setdefault(subj, []).append(
-                    {&quot;step&quot;: s.n, &quot;kind&quot;: kind, &quot;hash&quot;: content_hash(s.result)})
-    return idx
-
-IDX = index_trace(RUN, DETECTORS)
-print(&quot;subject index built from the trace:&quot;)
-for subj, entries in IDX.items():
-    print(f&quot;   {subj:36s}{len(entries)} occurrence(s) in steps &quot;
-          f&quot;{sorted({e[&#x27;step&#x27;] for e in entries})}&quot;)
-
-def erase(run, idx, subject):
-    steps = sorted({e[&quot;step&quot;] for e in idx.get(subject, [])})
-    out = []
-    for s in run:
-        if s.n in steps:
-            out.append(Step(s.n, s.tool, s.target,
-                            f&quot;[erased on request; original sha256={content_hash(s.result)}]&quot;))
-        else:
-            out.append(s)
-    return out, steps
-
-erased, touched = erase(RUN, IDX, SUBJECT)
-print(f&quot;\nerasure for {SUBJECT}: steps {touched}&quot;)
-for s in erased:
-    print(f&quot;   step {s.n}: {s.result[:66]}&quot;)
-
-remaining = [(n, k, v) for s in erased for k, pat in DETECTORS.items()
-             for m in pat.finditer(s.result) for n, v in [(s.n, m.group(0))]]
-print(f&quot;\npersonal data remaining in the trace: {remaining or &#x27;none&#x27;}&quot;)
-assert not remaining
-print(&quot;The hash is retained, so if the original surfaces in a backup you can&quot;)
-print(&quot;still prove it is the same content — which is what makes the erasure auditable.&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Per-field retention: keep the forensically useful parts, drop the rest early.
-RETENTION = {&quot;n&quot;: 400, &quot;tool&quot;: 400, &quot;target&quot;: 400, &quot;result&quot;: 7}
-print(f&quot;{&#x27;field&#x27;:10s}{&#x27;days&#x27;:&gt;6}  rationale&quot;)
-print(&quot;-&quot; * 62)
-for f, d in RETENTION.items():
-    why = (&quot;tool output — highest sensitivity, lowest retention&quot; if f == &quot;result&quot;
-           else &quot;cheap, high forensic value, no personal data&quot;)
-    print(f&quot;{f:10s}{d:&gt;6}  {why}&quot;)
-print(&quot;\nAt 7 days the result field is gone and the trace is still forensically&quot;)
-print(&quot;useful: you know what the agent did, to what, and when.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Five items of personal data appear in the agent trace — name, email, account number and payment card — none placed there deliberately. The erasure request fails in three systems that cannot locate the record, two of which retain indefinitely. Building a subject index locates the affected steps, erasure leaves no personal data while retaining the hash, and per-field retention drops the sensitive field at 7 days.</p></div><div class="nbmd"><h2>Your turn</h2>
+cannot delete it.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Time-box this to an hour: can you delete one customer's data from your agent traces today? The answer usually arrives in ten minutes and is usually no — and the eval corpus is the system people forget entirely.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.6.html">E2.6 · Incident and disclosure obligations</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E2.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.5.ipynb">Source</a></p>

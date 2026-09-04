@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.4 — Containment at machine speed | Cyber Commons</title><meta name="description" content="Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.4</div><h1>Containment at machine speed</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Mass revocation takes down the business.</p></div><div class="ctrl"><div class="lab">Control</div><p>Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Exercise the containment ladder in order, against a live misbehaving agent.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.4 · Containment at machine speed</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.4 — Containment at machine speed | Cyber Commons</title><meta name="description" content="Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.4</div><h1>Containment at machine speed</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Mass revocation takes down the business.</p></div><div class="ctrl"><div class="lab">Control</div><p>Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Exercise the containment ladder in order, against a live misbehaving agent.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.4 · Containment at machine speed</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Response</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Scoping an agentic incident</a></strong>.</p>
 <table>
@@ -40,76 +40,7 @@ pre-authorised, automated revocation of non-human identities.</p>
 <p>The asymmetry that makes it safe: revoking a <strong>human's</strong> access needs care,
 because a false positive locks a person out mid-shift. Revoking a <strong>non-human</strong>
 identity is cheap to get wrong — the agent re-requests, or an on-call re-enables
-it in a minute. So the two should have different policies, and almost nowhere do.</p></div><div class="nbmd"><h2>3 · Demo — the race, in actions rather than minutes</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def race(actions_per_min, human_minutes, auto_seconds=12):
-    manual = actions_per_min * human_minutes
-    auto   = actions_per_min * (auto_seconds/60)
-    return {&quot;manual&quot;: round(manual), &quot;auto&quot;: round(auto),
-            &quot;ratio&quot;: round(manual/max(auto, 1e-9), 1)}
-
-print(f&quot;{&#x27;agent rate&#x27;:&gt;13}{&#x27;human 8min&#x27;:&gt;13}{&#x27;auto 12s&#x27;:&gt;11}{&#x27;ratio&#x27;:&gt;8}&quot;)
-print(&quot;-&quot; * 46)
-for rate in (30, 120, 300, 1200):
-    r = race(rate, 8)
-    print(f&quot;{rate:&gt;9}/min{r[&#x27;manual&#x27;]:&gt;13}{r[&#x27;auto&#x27;]:&gt;11}{r[&#x27;ratio&#x27;]:&gt;8}×&quot;)
-print(&quot;\nAt 300/min an 8-minute approval costs 2,400 further actions.&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — approval latency is not the only delay</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>PATH = [
- (&quot;detection fires&quot;,              8,   &quot;rule evaluation + SIEM ingestion lag&quot;),
- (&quot;analyst picks it up&quot;,          240, &quot;queue depth at 02:00&quot;),
- (&quot;analyst decides to contain&quot;,   180, &quot;confirming it is not a false positive&quot;),
- (&quot;approval requested&quot;,           480, &quot;on-call manager, out of hours&quot;),
- (&quot;revocation executed&quot;,          12,  &quot;the only step anyone measures&quot;),
-]
-total = sum(s for _, s, _ in PATH)
-print(f&quot;{&#x27;step&#x27;:30s}{&#x27;seconds&#x27;:&gt;9}  why&quot;)
-print(&quot;-&quot; * 74)
-for name, secs, why in PATH:
-    print(f&quot;{name:30s}{secs:&gt;9}  {why}&quot;)
-print(f&quot;{&#x27;TOTAL&#x27;:30s}{total:&gt;9}  = {total/60:.0f} minutes&quot;)
-print(f&quot;\nat 300 actions/min that is {300*total/60:,.0f} further actions.&quot;)
-print(&quot;The 12-second revocation is 1.3% of the elapsed time. Optimising it&quot;)
-print(&quot;is not where the win is.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — pre-authorise on high-confidence signals</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SIGNALS = {
- &quot;reached the cloud metadata service&quot;: 0.99,
- &quot;read a path matching */.ssh/* or */.aws/*&quot;: 0.97,
- &quot;egress to a host not on the allowlist&quot;: 0.90,
- &quot;tool-call rate 20× its own baseline&quot;: 0.75,
- &quot;activity outside usual hours&quot;: 0.30,
-}
-THRESHOLD = 0.70
-
-def policy(signal, subject_is_human):
-    conf = SIGNALS[signal]
-    if subject_is_human:
-        return f&quot;page on-call (confidence {conf:.2f}) — human lockout needs a person&quot;
-    if conf &gt;= THRESHOLD:
-        return f&quot;AUTO-REVOKE (confidence {conf:.2f}) — no approval in the path&quot;
-    return f&quot;alert only (confidence {conf:.2f} &lt; {THRESHOLD})&quot;
-
-for s in SIGNALS:
-    print(f&quot;{s:44s}{policy(s, False)}&quot;)
-print()
-print(f&quot;{&#x27;same signal, human subject&#x27;:44s}&quot;
-      f&quot;{policy(&#x27;reached the cloud metadata service&#x27;, True)}&quot;)
-
-auto_path = [(&quot;detection fires&quot;, 8), (&quot;policy evaluates&quot;, 1), (&quot;revocation executed&quot;, 12)]
-auto_total = sum(s for _, s in auto_path)
-print(f&quot;\nautomated path: {auto_total}s vs manual {total}s &quot;
-      f&quot;({total/auto_total:.0f}× faster)&quot;)
-print(f&quot;actions prevented at 300/min: {300*(total-auto_total)/60:,.0f}&quot;)
-assert auto_total &lt; total / 10</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Verify: model the cost of getting it wrong, which is what makes it safe.
-def cost_of_false_revocation(subject_is_human, agent_can_rerequest=True):
-    if subject_is_human:
-        return {&quot;impact&quot;: &quot;person locked out mid-shift&quot;, &quot;recovery&quot;: &quot;helpdesk, 20-60 min&quot;,
-                &quot;cost&quot;: &quot;high&quot;}
-    if agent_can_rerequest:
-        return {&quot;impact&quot;: &quot;task fails, agent re-requests with a reason (A2.4)&quot;,
-                &quot;recovery&quot;: &quot;seconds to minutes&quot;, &quot;cost&quot;: &quot;low&quot;}
-    return {&quot;impact&quot;: &quot;agent stops until an on-call re-enables it&quot;,
-            &quot;recovery&quot;: &quot;minutes&quot;, &quot;cost&quot;: &quot;moderate&quot;}
-
-for label, human in ((&quot;human subject&quot;, True), (&quot;non-human identity&quot;, False)):
-    c = cost_of_false_revocation(human)
-    print(f&quot;{label:22s}{c[&#x27;cost&#x27;]:10s}{c[&#x27;impact&#x27;]}&quot;)
-print(&quot;\nThat asymmetry is the entire justification for two different policies.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The race table shows 2,400 versus 60 actions at 300/min for an eight-minute approval. The full containment path totals about 920 seconds, of which the revocation itself is 12. Four of five signals auto-revoke for non-human identities and none do for a human subject, cutting the path to 21 seconds and preventing roughly 4,500 actions.</p></div><div class="nbmd"><h2>Your turn</h2>
+it in a minute. So the two should have different policies, and almost nowhere do.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Time your own containment path end to end, step by step. The revocation is almost never the slow part — queue depth and approval are, and both are policy choices rather than technical limits.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.5.html">D2.5 · Replay and forensics</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.4.ipynb">Source</a></p>

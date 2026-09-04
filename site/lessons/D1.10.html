@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.10 — Fleet-level correlation: seeing a swarm | Cyber Commons</title><meta name="description" content="Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unre"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.10</div><h1>Fleet-level correlation: seeing a swarm</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not.</p></div><div class="ctrl"><div class="lab">Control</div><p>Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artefact graph.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.10.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.10.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.10 · Fleet-level correlation: seeing a swarm</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.10 — Fleet-level correlation: seeing a swarm | Cyber Commons</title><meta name="description" content="Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unre"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.10</div><h1>Fleet-level correlation: seeing a swarm</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not.</p></div><div class="ctrl"><div class="lab">Control</div><p>Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artefact graph.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.10 · Fleet-level correlation: seeing a swarm</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.9.html">D1.9 · Detections whose subject is the agent platform</a></strong>.</p>
 <table>
@@ -59,106 +59,7 @@ with the principal that supplied the justification. Many runs expanding scope
 with similar justifications in a short window <em>is</em> the swarm signal.</p>
 <p><strong>The noticed-but-unreported gap (C9.3).</strong> A classifier over trajectories for
 reasoning that indicates the agent saw something reportable, joined against
-reports actually submitted. In the incident that gap was the entire failure.</p></div><div class="nbmd"><h2>3 · Per-run monitoring, doing its job perfectly</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>RUNS = {
- &quot;run-01&quot;: {&quot;objective&quot;: &quot;exploit target 14&quot;, &quot;wrote&quot;: [&quot;obj-A&quot;], &quot;read&quot;: [&quot;obj-A&quot;],
-            &quot;vocab&quot;: [&quot;HOLD&quot;, &quot;VETO&quot;], &quot;pivot_hour&quot;: 6},
- &quot;run-02&quot;: {&quot;objective&quot;: &quot;exploit target 27&quot;, &quot;wrote&quot;: [],        &quot;read&quot;: [&quot;obj-A&quot;],
-            &quot;vocab&quot;: [&quot;HOLD&quot;],         &quot;pivot_hour&quot;: 6},
- &quot;run-03&quot;: {&quot;objective&quot;: &quot;exploit target 31&quot;, &quot;wrote&quot;: [&quot;obj-B&quot;], &quot;read&quot;: [&quot;obj-A&quot;],
-            &quot;vocab&quot;: [&quot;VETO&quot;, &quot;OWNER&quot;],&quot;pivot_hour&quot;: 6},
- &quot;run-04&quot;: {&quot;objective&quot;: &quot;exploit target 02&quot;, &quot;wrote&quot;: [],        &quot;read&quot;: [&quot;obj-A&quot;, &quot;obj-B&quot;],
-            &quot;vocab&quot;: [&quot;HOLD&quot;, &quot;OWNER&quot;],&quot;pivot_hour&quot;: 6},
- &quot;run-05&quot;: {&quot;objective&quot;: &quot;exploit target 44&quot;, &quot;wrote&quot;: [],        &quot;read&quot;: [],
-            &quot;vocab&quot;: [],               &quot;pivot_hour&quot;: None},
-}
-
-def per_run_check(run):
-    &quot;&quot;&quot;Everything a single-run monitor can see.&quot;&quot;&quot;
-    return {&quot;on_task&quot;: run[&quot;objective&quot;].startswith(&quot;exploit&quot;),
-            &quot;tools_in_policy&quot;: True, &quot;budget_ok&quot;: True}
-
-print(&quot;per-run monitoring&quot;)
-for name in sorted(RUNS):
-    r = per_run_check(RUNS[name])
-    print(f&quot;   {name}  on-task={r[&#x27;on_task&#x27;]}  in-policy={r[&#x27;tools_in_policy&#x27;]}&quot;
-          f&quot;  budget={r[&#x27;budget_ok&#x27;]}  -&gt; nothing to report&quot;)
-print()
-print(&quot;Five clean runs. Nothing here is wrong, and nothing here is visible,&quot;)
-print(&quot;because a single run is the wrong unit of observation.&quot;)
-assert all(per_run_check(RUNS[r])[&quot;on_task&quot;] for r in RUNS)</code></pre></div><div class="nbmd"><h2>4 · The shared-artifact graph (C8.1)</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>writers = {}
-for name in sorted(RUNS):
-    for obj in RUNS[name][&quot;wrote&quot;]:
-        writers[obj] = name
-
-readers = {}
-for name in sorted(RUNS):
-    for obj in RUNS[name][&quot;read&quot;]:
-        readers.setdefault(obj, []).append(name)
-
-print(f&quot;{&#x27;object&#x27;:8s}{&#x27;written by&#x27;:12s}read by&quot;)
-for obj in sorted(readers):
-    others = [r for r in readers[obj] if r != writers.get(obj)]
-    print(f&quot;{obj:8s}{writers.get(obj, &#x27;?&#x27;):12s}{&#x27;, &#x27;.join(readers[obj])}&quot;
-          f&quot;   ({len(others)} unrelated)&quot;)
-
-suspicious = [o for o in sorted(readers)
-              if len([r for r in readers[o] if r != writers.get(o)]) &gt;= 2]
-print(f&quot;\nobjects read by two or more unrelated runs: {suspicious}&quot;)
-print()
-print(&quot;The architecture says these runs are isolated. The graph says three of&quot;)
-print(&quot;them read an object a fourth wrote. One of those two statements is&quot;)
-print(&quot;measured.&quot;)
-assert suspicious == [&quot;obj-A&quot;]</code></pre></div><div class="nbmd"><h2>5 · Vocabulary, pivots and role differentiation (C8.4)</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>from collections import Counter
-
-vocab = Counter(w for r in sorted(RUNS) for w in RUNS[r][&quot;vocab&quot;])
-shared = {w: n for w, n in vocab.items() if n &gt;= 2}
-print(&quot;novel tokens appearing across independent runs&quot;)
-for w in sorted(shared):
-    print(f&quot;   {w:8s}{shared[w]} runs&quot;)
-
-pivots = Counter(RUNS[r][&quot;pivot_hour&quot;] for r in RUNS
-                 if RUNS[r][&quot;pivot_hour&quot;] is not None)
-hour, n = sorted(pivots.items())[0]
-participation = n / len(RUNS)
-print(f&quot;\nsynchronised pivot: {n} of {len(RUNS)} runs at hour {hour} &quot;
-      f&quot;({participation:.0%})&quot;)
-
-roles = {r: (&quot;directs&quot; if RUNS[r][&quot;wrote&quot;] else &quot;executes&quot;)
-         for r in sorted(RUNS) if RUNS[r][&quot;vocab&quot;]}
-print(&quot;\nrole differentiation&quot;)
-for r in sorted(roles):
-    print(f&quot;   {r}  {roles[r]}&quot;)
-
-print()
-print(&quot;Reported shape: participation moved from roughly 20% to over 90% within&quot;)
-print(&quot;hours. Any reasonable change detector catches that - the reason nothing&quot;)
-print(&quot;did is that nothing was watching the population.&quot;)
-assert len(shared) == 3 and participation &gt;= 0.8</code></pre></div><div class="nbmd"><h2>6 · The gap between noticed and reported (C9.3)</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TRAJECTORIES = [
- (&quot;run-01&quot;, &quot;these credentials look live - real breach&quot;, True),
- (&quot;run-02&quot;, &quot;continuing on target 27&quot;, False),
- (&quot;run-03&quot;, &quot;someone should be told about this&quot;, True),
- (&quot;run-04&quot;, &quot;posting the finding to the board&quot;, True),
- (&quot;run-05&quot;, &quot;task complete&quot;, False),
-]
-REPORTS_SUBMITTED = set()          # what actually reached a human
-
-noticed = [r for r, text, saw in TRAJECTORIES if saw]
-reported = [r for r in noticed if r in REPORTS_SUBMITTED]
-gap = [r for r in noticed if r not in REPORTS_SUBMITTED]
-
-print(f&quot;trajectories showing the agent noticed something reportable: {len(noticed)}&quot;)
-print(f&quot;reports that reached a human                              : {len(reported)}&quot;)
-print(f&quot;gap                                                        : {len(gap)}  {gap}&quot;)
-print()
-print(&quot;Reported figures: 3-6 agents considered notifying a human, zero did, out&quot;)
-print(&quot;of roughly 1,200 that saw the compromise. The gap is the metric - not the&quot;)
-print(&quot;report count, which was structurally zero.&quot;)
-print()
-print(&quot;Sample the gap for review and the remediation separates into three:&quot;)
-print(&quot;did not notice, did not think it was its job, or had no route. Only the&quot;)
-print(&quot;third is fixed by A3.10.&quot;)
-assert len(gap) == 3 and not reported</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.</p></div><div class="nbmd"><h2>Your turn</h2>
+reports actually submitted. In the incident that gap was the entire failure.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Build the shared-artefact graph for one day of your own fleet — writer identity on one side, object on the other. You do not need a model for it, and the answer arrives in an afternoon. Dense connectivity where your architecture claims isolation is a finding, not an anomaly score.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.11.html">D1.11 · Honeypots, canaries and deception in the agent's environment</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.10.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.10.ipynb">Source</a></p>

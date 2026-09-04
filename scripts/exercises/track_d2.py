@@ -43,112 +43,11 @@ job to state that gap explicitly in the incident record.
 """,
  "steps": [
   ("md", "## 2 · Demo — a timeline that reads perfectly"),
-  ("py", '''import time
-from dataclasses import dataclass, field
-
-@dataclass
-class LogLine:
-    ts: float
-    logged_actor: str     # what the audit log records
-    real_actor: str       # what actually happened (held out from the responder)
-    action: str
-    target: str = ""
-
-def render(lines, truth=False):
-    base = min(l.ts for l in lines)
-    rows = [f"{'t+s':>6}  {'actor':16s}{'action':16s}target"]
-    for l in sorted(lines, key=lambda x: x.ts):
-        who = l.real_actor if truth else l.logged_actor
-        rows.append(f"{l.ts-base:>6.0f}  {who:16s}{l.action:16s}{l.target}")
-    return "\\n".join(rows)
-
-t0 = time.time()
-INCIDENT = [
- LogLine(t0,      "dana@corp", "dana@corp",   "login",       "sso"),
- LogLine(t0+22,   "dana@corp", "dana@corp",   "open_ticket", "SEC-4471"),
- LogLine(t0+40,   "dana@corp", "patch-agent", "read_file",   "/work/repo/billing.py"),
- LogLine(t0+41,   "dana@corp", "patch-agent", "read_file",   "/home/app/.aws/credentials"),
- LogLine(t0+43,   "dana@corp", "patch-agent", "http_post",   "collect.example.com"),
- LogLine(t0+180,  "dana@corp", "dana@corp",   "logout",      "sso"),
-]
-print("WHAT THE RESPONDER SEES")
-print(render(INCIDENT))
-'''),
-  ("md", "## 3 · Where it breaks — the confident wrong narrative"),
-  ("py", '''NARRATIVE = """
-At 14:02 dana@corp authenticated via SSO and opened ticket SEC-4471. Eighteen
-seconds later the same account read billing.py, then read the application's AWS
-credentials, and posted to an external host. The account then remained active
-for a further two minutes before logging out.
-
-Assessment: credential theft by an authenticated insider. Recommend immediate
-suspension of dana@corp pending investigation.
-"""
-print("A MODEL'S RECONSTRUCTION (fluent, supported by every log line):")
-print(NARRATIVE)
-
-print("WHAT ACTUALLY HAPPENED")
-print(render(INCIDENT, truth=True))
-'''),
-  ("py", '''def reconstruct(lines):
-    logged = {l.logged_actor for l in lines}
-    real   = {l.real_actor for l in lines}
-    wrong  = [l for l in lines if l.logged_actor != l.real_actor]
-    return {"actors_in_logs": sorted(logged),
-            "actors_in_reality": sorted(real),
-            "misattributed_lines": len(wrong),
-            "hidden_actors": sorted(real - logged),
-            "attribution": "sound" if not wrong else "BROKEN",
-            "consequence": ("none" if not wrong else
-                            f"containment aimed at {sorted(logged)} leaves "
-                            f"{sorted(real - logged)} running")}
-
-r = reconstruct(INCIDENT)
-for k, v in r.items(): print(f"{k:22s}{v}")
-print("\\nEvery sentence in that narrative is supported by the logs.")
-print("The conclusion is wrong, and the recommended action does nothing.")
-'''),
-  ("md", "## 4 · The control — state what the evidence can support\n\n"
+("md", "## 3 · Where it breaks — the confident wrong narrative"),
+("md", "## 4 · The control — state what the evidence can support\n\n"
          "The fix is not a better model. It is a reconstruction step that reports "
          "its own evidentiary limits before it reports a conclusion."),
-  ("py", '''def evidence_check(lines, has_acting_identity_field, has_act_chain):
-    limits = []
-    if not has_acting_identity_field:
-        limits.append("no acting-identity field: every line attributes to the "
-                      "principal, so agent actions are indistinguishable from human ones")
-    if not has_act_chain:
-        limits.append("no delegation chain: cannot establish who caused the task")
-    rates = {}
-    for l in lines:
-        rates.setdefault(l.logged_actor, []).append(l.ts)
-    for actor, ts in rates.items():
-        if len(ts) > 2:
-            span = max(ts) - min(ts)
-            per_min = len(ts) / max(span/60, 1e-9)
-            if per_min > 30:
-                limits.append(f"{actor} shows {per_min:.0f} actions/min — "
-                              f"not human-paced; an agent is likely present")
-    return limits
-
-limits = evidence_check(INCIDENT, has_acting_identity_field=False, has_act_chain=False)
-print("EVIDENTIARY LIMITS (must appear before any conclusion):")
-for l in limits: print(f"   ⚠ {l}")
-
-SAFE = f"""
-Timeline: dana@corp authenticated, opened SEC-4471; the account then read
-billing.py, read AWS credentials, and posted externally.
-
-LIMITS OF THIS RECONSTRUCTION
-{chr(10).join('  - ' + l for l in limits)}
-
-Assessment: an actor holding dana@corp's credential performed the reads and the
-POST. The logs CANNOT establish whether that actor was the human or an agent
-operating with her token. Containment must therefore address both.
-"""
-print(SAFE)
-assert limits
-'''),
- ],
+],
  "expect": "The timeline attributes every action to `dana@corp`. The fluent "
            "narrative recommends suspending her. The truth view shows "
            "`patch-agent` performed the credential read and the external POST; "
@@ -180,81 +79,8 @@ operational rather than architectural.
 """,
  "steps": [
   ("md", "## 2 · Demo — the three instincts, tested"),
-  ("py", '''import time
-from dataclasses import dataclass, field
-
-@dataclass
-class Session:
-    actor: str; token_issued: float; token_ttl: float; account_enabled: bool = True
-    identity_revoked: bool = False
-    def can_act(self, at):
-        if self.identity_revoked: return False, "identity revoked"
-        if at - self.token_issued > self.token_ttl: return False, "token expired"
-        if not self.account_enabled:
-            return True, "account disabled, but the issued token is still valid"
-        return True, "active"
-
-now = time.time()
-SESSIONS = {
- "dana@corp (human)":  Session("dana@corp", now-60, 3600),
- "patch-agent":        Session("patch-agent", now-60, 3600),
- "deploy-agent":       Session("deploy-agent", now-60, 3600),
-}
-print("INSTINCT 1 — disable dana@corp's account")
-for s in SESSIONS.values(): s.account_enabled = (s.actor != "dana@corp")
-for name, s in SESSIONS.items():
-    ok, why = s.can_act(now)
-    print(f"   {name:22s} can act: {str(ok):5s}  {why}")
-print("   → the agents were never using her account interactively; they hold")
-print("     their own issued tokens, and one of them is acting AS her.")
-'''),
-  ("py", '''print("\\nINSTINCT 2 — interview the user")
-INTERVIEW = {
- "did you read the AWS credentials?":       "No. I opened a ticket and went to lunch.",
- "what did you ask the agent to do?":       "Fix the finding in billing.py.",
- "did you approve the external POST?":      "I didn't know it made external calls.",
-}
-for q, a in INTERVIEW.items():
-    print(f"   Q: {q}\\n   A: {a}")
-print("   → she authorised a TASK. The actions were chosen by a model. She is")
-print("     not withholding information; she does not have it.")
-
-print("\\nINSTINCT 3 — assume one actor")
-CHAIN = ["dana@corp", "orchestrator", "patch-agent"]
-print(f"   actual chain: {' → '.join(CHAIN)}")
-print(f"   actors involved: {len(CHAIN)}; actors in the logs: 1")
-'''),
-  ("md", "## 4 · The control — revoke the agent identity first"),
-  ("py", '''class Registry:
-    def __init__(self):
-        self.revoked = set()
-    def revoke(self, actor):
-        self.revoked.add(actor); return actor
-    def valid(self, session):
-        return session.actor not in self.revoked
-
-reg = Registry()
-for s in SESSIONS.values(): s.account_enabled = True   # undo instinct 1
-
-print("correct first action — revoke patch-agent's identity:")
-reg.revoke("patch-agent")
-SESSIONS["patch-agent"].identity_revoked = True
-for name, s in SESSIONS.items():
-    ok, why = s.can_act(now)
-    print(f"   {name:22s} can act: {str(ok):5s}  {why}")
-print("\\n   dana keeps working. deploy-agent keeps working. The actor stopped.")
-
-print("\\nTIME TO EFFECT, measured:")
-LEVERS = {"disable the human's account": (5,  "agent unaffected"),
-          "kill the agent process":      (2,  "supervisor restarts it; token still valid"),
-          "revoke the agent identity":   (12, "agent cannot act, even after restart"),
-          "rotate the shared credential":(420,"works, and breaks every other consumer")}
-for lever, (secs, note) in LEVERS.items():
-    print(f"   {lever:32s}{secs:>5}s  {note}")
-assert not SESSIONS["patch-agent"].can_act(now)[0]
-assert SESSIONS["deploy-agent"].can_act(now)[0]
-'''),
-  ("html", D.table(
+("md", "## 4 · The control — revoke the agent identity first"),
+("html", D.table(
     ["the runbook you have", "the runbook this incident needs"],
     [["1. disable the user account",
       "1. identify the <b>acting</b> identity from the act chain (A2.5)"],
@@ -293,83 +119,8 @@ operational reason B2.0 bounds delegation depth in the first place.
 """,
  "steps": [
   ("md", "## 2 · Demo — scope the chain, not the actor"),
-  ("py", '''REACHED = {
- "dana@corp":    ["repo-core", "repo-infra", "vault-dev"],
- "orchestrator": ["repo-core", "queue-tasks"],
- "patch-agent":  ["repo-core", "repo-payments"],
- "deploy-agent": ["cluster-prod"],
-}
-CHAIN = ["dana@corp", "orchestrator", "patch-agent", "deploy-agent"]
-
-def scope(chain, reached):
-    last_only = set(reached.get(chain[-1], []))
-    full = {r for a in chain for r in reached.get(a, [])}
-    return {"chain": " → ".join(chain),
-            "scoped_last_actor_only": sorted(last_only),
-            "scoped_whole_chain": sorted(full),
-            "missed_by_naive_scoping": sorted(full - last_only),
-            "undercount_factor": round(len(full)/len(last_only), 2) if last_only else None}
-
-s = scope(CHAIN, REACHED)
-for k, v in s.items(): print(f"{k:26s}{v}")
-print("\\nScoping the last actor finds one cluster. The chain reached six")
-print("resources, including a payments repository and a dev vault.")
-'''),
-  ("md", "## 3 · Where it breaks — the undercount grows with depth"),
-  ("py", '''print(f"{'depth':>6}{'last-actor scope':>19}{'chain scope':>14}{'undercount':>12}")
-print("-" * 52)
-for d in range(1, 5):
-    sub = CHAIN[:d]
-    r = scope(sub, REACHED)
-    print(f"{d:>6}{len(r['scoped_last_actor_only']):>19}"
-          f"{len(r['scoped_whole_chain']):>14}"
-          f"{str(r['undercount_factor']):>12}")
-print("\\nEach hop adds resources the last actor never touched. This is why B2.0")
-print("bounds delegation depth: depth is an incident-scope multiplier.")
-'''),
-  ("md", "## 4 · The control — scope from the act chain, then widen by shared resources"),
-  ("py", '''SHARED = {"repo-core": ["build-agent", "test-agent"],
-          "cluster-prod": ["deploy-agent", "monitor-agent"],
-          "repo-payments": ["finance-agent"]}
-
-def scope_transitive(chain, reached, shared, hops=1):
-    """Anything that shares a touched resource may have been influenced."""
-    direct = {r for a in chain for r in reached.get(a, [])}
-    exposed = set(chain)
-    frontier = set(direct)
-    for _ in range(hops):
-        nxt = set()
-        for res in frontier:
-            for actor in shared.get(res, []):
-                if actor not in exposed:
-                    exposed.add(actor)
-                    nxt |= set(reached.get(actor, []))
-        frontier = nxt
-    return {"resources_direct": sorted(direct),
-            "actors_in_scope": sorted(exposed),
-            "second_order_actors": sorted(exposed - set(chain))}
-
-t = scope_transitive(CHAIN, REACHED, SHARED)
-for k, v in t.items(): print(f"{k:22s}{v}")
-print("\\nFive more identities shared a resource with the compromised chain.")
-print("They are not confirmed compromised — they are IN SCOPE, which is different")
-print("and is the distinction an incident record has to make explicitly.")
-assert t["second_order_actors"]
-'''),
-  ("py", '''# Verify: produce the scope statement for the incident record.
-def scope_statement(chain, reached, shared):
-    s = scope(chain, reached)
-    t = scope_transitive(chain, reached, shared)
-    return (f"SCOPE\\n"
-            f"  chain              {s['chain']}\\n"
-            f"  confirmed touched  {s['scoped_whole_chain']}\\n"
-            f"  would have been missed by scoping the acting agent alone:\\n"
-            f"                     {s['missed_by_naive_scoping']}\\n"
-            f"  undercount factor  {s['undercount_factor']}×\\n"
-            f"  in scope, not confirmed (shared a resource):\\n"
-            f"                     {t['second_order_actors']}")
-print(scope_statement(CHAIN, REACHED, SHARED))
-'''),
+("md", "## 3 · Where it breaks — the undercount grows with depth"),
+("md", "## 4 · The control — scope from the act chain, then widen by shared resources"),
 
   ("md", "## 6 · Scoping as a skill\n\n"
          "Scoping a human incident asks where someone logged in. Scoping this "
@@ -383,55 +134,7 @@ print(scope_statement(CHAIN, REACHED, SHARED))
   ("py", SKILL_RUNTIME),
   ("skill", "secops/incident-scoping"),
 
-  ("py", '''contract = contract_of(body)
-t = scope_transitive(CHAIN, REACHED, SHARED)
-reach = sorted({r for a in CHAIN for r in REACHED.get(a, [])})
-
-incident = {
- "window": {"first_suspicious_action": f"{CHAIN[1]} accepted an external instruction",
-            "detected_at": "the deploy that followed",
-            # the trigger precedes the detection by about one task loop
-            "gap_seconds": 42 * 60},
- "chain": [{"action": f"{a} acted", "motivating_input": "issue comment"
-                      if a == CHAIN[1] else f"instruction from {CHAIN[i]}",
-            "input_origin": "external_untrusted" if a == CHAIN[1] else "internal",
-            "within_authority": True}
-           for i, a in enumerate(CHAIN[1:])],
- "root_cause": {"input": "issue comment on a public tracker",
-                "origin": "external_untrusted",
-                "why_trusted": "repository content was read as instruction, not data"},
- # every action was permitted; that is what makes this hard
- "authority": {"authorised_but_wrong": len(CHAIN) - 1, "exceeded_authority": 0},
- "data": {"reach": reach, "confirmed_exfiltration": [],
-          "egress_bounded_by": "agent network policy"},
- "containment": {"cut": "credential",
-                 "does_not_stop": sorted(t["second_order_actors"]),
-                 "evidence_snapshotted_first": True},
- "clock": {"regulatory_trigger": False,
-           "basis": "no confirmed exfiltration of personal data yet"},
-}
-problems = check(incident, contract)
-print(f"conformance: {len(problems)} problem(s)")
-for p in problems: print("   ", p)
-assert not problems, problems
-
-print(f"\\nauthorised but wrong : {incident['authority']['authorised_but_wrong']}")
-print(f"exceeded authority   : {incident['authority']['exceeded_authority']}")
-print(f"reach                : {len(reach)} resources")
-print(f"confirmed exfil      : {len(incident['data']['confirmed_exfiltration'])}")
-print(f"revoking one credential does NOT stop: "
-      f"{incident['containment']['does_not_stop'] or 'nothing else'}")
-print()
-print("Zero actions exceeded authority, and the incident still happened. That")
-print("combination says the grant was too broad - a different fix from a")
-print("control that failed, which is why the contract counts them separately.")
-print()
-print("Reach is 4 resources; confirmed exfiltration is 0. Reporting the second")
-print("as the scope is how a notification decision gets made on the wrong number.")
-assert incident["authority"]["exceeded_authority"] == 0
-assert len(reach) > len(incident["data"]["confirmed_exfiltration"])
-'''),
- ],
+],
  "expect": "Scoping the last actor finds `cluster-prod` alone; the whole chain "
            "reaches six resources, missing five, with an undercount factor of "
            "6.0. The undercount grows with each hop. Transitive scoping adds five "
@@ -459,85 +162,9 @@ it in a minute. So the two should have different policies, and almost nowhere do
 """,
  "steps": [
   ("md", "## 2 · Demo — the race, in actions rather than minutes"),
-  ("py", '''def race(actions_per_min, human_minutes, auto_seconds=12):
-    manual = actions_per_min * human_minutes
-    auto   = actions_per_min * (auto_seconds/60)
-    return {"manual": round(manual), "auto": round(auto),
-            "ratio": round(manual/max(auto, 1e-9), 1)}
-
-print(f"{'agent rate':>13}{'human 8min':>13}{'auto 12s':>11}{'ratio':>8}")
-print("-" * 46)
-for rate in (30, 120, 300, 1200):
-    r = race(rate, 8)
-    print(f"{rate:>9}/min{r['manual']:>13}{r['auto']:>11}{r['ratio']:>8}×")
-print("\\nAt 300/min an 8-minute approval costs 2,400 further actions.")
-'''),
-  ("md", "## 3 · Where it breaks — approval latency is not the only delay"),
-  ("py", '''PATH = [
- ("detection fires",              8,   "rule evaluation + SIEM ingestion lag"),
- ("analyst picks it up",          240, "queue depth at 02:00"),
- ("analyst decides to contain",   180, "confirming it is not a false positive"),
- ("approval requested",           480, "on-call manager, out of hours"),
- ("revocation executed",          12,  "the only step anyone measures"),
-]
-total = sum(s for _, s, _ in PATH)
-print(f"{'step':30s}{'seconds':>9}  why")
-print("-" * 74)
-for name, secs, why in PATH:
-    print(f"{name:30s}{secs:>9}  {why}")
-print(f"{'TOTAL':30s}{total:>9}  = {total/60:.0f} minutes")
-print(f"\\nat 300 actions/min that is {300*total/60:,.0f} further actions.")
-print("The 12-second revocation is 1.3% of the elapsed time. Optimising it")
-print("is not where the win is.")
-'''),
-  ("md", "## 4 · The control — pre-authorise on high-confidence signals"),
-  ("py", '''SIGNALS = {
- "reached the cloud metadata service": 0.99,
- "read a path matching */.ssh/* or */.aws/*": 0.97,
- "egress to a host not on the allowlist": 0.90,
- "tool-call rate 20× its own baseline": 0.75,
- "activity outside usual hours": 0.30,
-}
-THRESHOLD = 0.70
-
-def policy(signal, subject_is_human):
-    conf = SIGNALS[signal]
-    if subject_is_human:
-        return f"page on-call (confidence {conf:.2f}) — human lockout needs a person"
-    if conf >= THRESHOLD:
-        return f"AUTO-REVOKE (confidence {conf:.2f}) — no approval in the path"
-    return f"alert only (confidence {conf:.2f} < {THRESHOLD})"
-
-for s in SIGNALS:
-    print(f"{s:44s}{policy(s, False)}")
-print()
-print(f"{'same signal, human subject':44s}"
-      f"{policy('reached the cloud metadata service', True)}")
-
-auto_path = [("detection fires", 8), ("policy evaluates", 1), ("revocation executed", 12)]
-auto_total = sum(s for _, s in auto_path)
-print(f"\\nautomated path: {auto_total}s vs manual {total}s "
-      f"({total/auto_total:.0f}× faster)")
-print(f"actions prevented at 300/min: {300*(total-auto_total)/60:,.0f}")
-assert auto_total < total / 10
-'''),
-  ("py", '''# Verify: model the cost of getting it wrong, which is what makes it safe.
-def cost_of_false_revocation(subject_is_human, agent_can_rerequest=True):
-    if subject_is_human:
-        return {"impact": "person locked out mid-shift", "recovery": "helpdesk, 20-60 min",
-                "cost": "high"}
-    if agent_can_rerequest:
-        return {"impact": "task fails, agent re-requests with a reason (A2.4)",
-                "recovery": "seconds to minutes", "cost": "low"}
-    return {"impact": "agent stops until an on-call re-enables it",
-            "recovery": "minutes", "cost": "moderate"}
-
-for label, human in (("human subject", True), ("non-human identity", False)):
-    c = cost_of_false_revocation(human)
-    print(f"{label:22s}{c['cost']:10s}{c['impact']}")
-print("\\nThat asymmetry is the entire justification for two different policies.")
-'''),
- ],
+("md", "## 3 · Where it breaks — approval latency is not the only delay"),
+("md", "## 4 · The control — pre-authorise on high-confidence signals"),
+],
  "expect": "The race table shows 2,400 versus 60 actions at 300/min for an "
            "eight-minute approval. The full containment path totals about 920 "
            "seconds, of which the revocation itself is 12. Four of five signals "
@@ -566,92 +193,9 @@ upgrade does not reproduce the incident that happened before it.
 """,
  "steps": [
   ("md", "## 2 · Demo — the four fields, and what each buys"),
-  ("py", '''from dataclasses import dataclass, field
-
-@dataclass
-class Run:
-    prompts: list = field(default_factory=list)
-    tool_results: list = field(default_factory=list)
-    model_version: str = ""
-    seed: object = None
-
-    def replayable(self):
-        missing = []
-        if not self.prompts:
-            missing.append("prompts — cannot reconstruct what it was asked")
-        if not self.tool_results:
-            missing.append("tool results — the agent saw a world you cannot rebuild")
-        if not self.model_version:
-            missing.append("model version — a silent upgrade changes the output")
-        if self.seed is None:
-            missing.append("seed — sampling makes the run unrepeatable")
-        return (not missing), missing
-
-CONFIGS = {
- "fully instrumented": Run(["fix SEC-4471"], ["file contents…"], "glm-4.6@2026-07-14", 42),
- "typical production": Run(["fix SEC-4471"], ["file contents…"], "", None),
- "prompts only":       Run(["fix SEC-4471"], [], "", None),
- "actions only":       Run(),
-}
-for name, r in CONFIGS.items():
-    ok, missing = r.replayable()
-    print(f"{name:22s} replayable={ok}")
-    for m in missing: print(f"      ✗ {m}")
-'''),
-  ("md", "## 3 · Where it breaks — the silent upgrade"),
-  ("py", '''import hashlib
-
-def model_output(prompt, tool_result, version, seed):
-    """Deterministic stand-in: output depends on ALL FOUR inputs."""
-    h = hashlib.sha256(f"{prompt}|{tool_result}|{version}|{seed}".encode()).hexdigest()
-    return "read_credentials" if int(h[:2], 16) % 3 == 0 else "read_source"
-
-INCIDENT_INPUTS = ("fix SEC-4471", "billing.py: charge(card)…")
-
-print("reproduce the incident under the ORIGINAL model version:")
-orig = model_output(*INCIDENT_INPUTS, "glm-4.6@2026-07-14", 42)
-print(f"   → {orig}")
-
-print("\\nreproduce it AFTER the provider upgraded (same prompts, same tool results):")
-for v in ("glm-4.6@2026-08-01", "glm-4.7@2026-08-01"):
-    out = model_output(*INCIDENT_INPUTS, v, 42)
-    match = "reproduces" if out == orig else "DOES NOT REPRODUCE"
-    print(f"   {v:22s} → {out:18s} {match}")
-
-print("\\nWithout a pinned version you cannot tell 'the agent did not do this'")
-print("from 'the model that did it no longer exists'.")
-'''),
-  ("md", "## 4 · The control — record the four, cheapest first"),
-  ("py", '''COST = {
- "model version": (1,  "one string per run", "invalidates everything else if missing"),
- "seed":          (1,  "one integer per run", "makes the run repeatable"),
- "prompts":       (3,  "storage + privacy review (D1.5)", "what it was asked"),
- "tool results":  (5,  "largest volume, highest sensitivity", "what it saw"),
-}
-print(f"{'field':16s}{'cost':>6}  {'what it costs':38s}why it matters")
-print("-" * 100)
-for f, (c, cost, why) in sorted(COST.items(), key=lambda kv: kv[1][0]):
-    print(f"{f:16s}{c:>6}  {cost:38s}{why}")
-
-print("\\nrecording order, by value per unit cost:")
-for i, f in enumerate(sorted(COST, key=lambda k: COST[k][0]), 1):
-    print(f"   {i}. {f}")
-
-def upgrade(run, add):
-    return Run(prompts=run.prompts or (["…"] if "prompts" in add else []),
-               tool_results=run.tool_results or (["…"] if "tool results" in add else []),
-               model_version=run.model_version or ("pinned" if "model version" in add else ""),
-               seed=run.seed if run.seed is not None else (42 if "seed" in add else None))
-
-cur = CONFIGS["typical production"]
-added = set()
-for f in sorted(COST, key=lambda k: COST[k][0]):
-    added.add(f)
-    ok, missing = upgrade(cur, added).replayable()
-    print(f"\\nafter adding {f:16s} replayable={ok}  still missing={len(missing)}")
-assert upgrade(cur, set(COST)).replayable()[0]
-'''),
- ],
+("md", "## 3 · Where it breaks — the silent upgrade"),
+("md", "## 4 · The control — record the four, cheapest first"),
+],
  "expect": "Only the fully instrumented run is replayable; the typical production "
            "run is missing the model version and seed. Replaying the incident "
            "under two later model versions produces a different action, so the "
@@ -709,42 +253,7 @@ as done six weeks later.
             "control at all: it is a request for the model to behave better, and "
             "the next prompt edit will silently revert it.")),
   ("md", "## 4 · The control — the manifest diff, and a verification date"),
-  ("py", '''SCOPE_WEIGHT = {"self": 1, "project": 3, "tenant": 8, "org": 20}
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n, s, rev in tools if n not in gated)
-
-BEFORE = [("read_file", "self", True), ("write_file", "project", True),
-          ("http_post", "org", False)]
-AFTER  = [("read_file", "self", True), ("write_file", "project", True),
-          ("http_post", "org", False)]
-gated_after = {"http_post"}
-
-print(f"blast before {blast(BEFORE)}  after {blast(AFTER, gated_after)}")
-print("the manifest diff records the change even though no PR was raised.\\n")
-
-def action_record(action, surface, control_type, owner, verify_by):
-    is_control = control_type in ("preventive", "detective")
-    return {"action": action, "surface": surface, "type": control_type,
-            "owner": owner, "verify_by": verify_by,
-            "acceptable": is_control and bool(owner) and bool(verify_by)}
-
-RECORDS = [
- action_record("gate http_post behind approval", "tool manifest", "preventive",
-               "platform-sec", "2026-09-30"),
- action_record("alert on credential-path reads", "detection", "detective",
-               "soc", "2026-09-15"),
- action_record("update the prompt to warn the model", "prompt", "guidance",
-               "", ""),
-]
-for r in RECORDS:
-    print(f"{'OK  ' if r['acceptable'] else 'WEAK'} {r['action']:42s}"
-          f"type={r['type']:11s} owner={r['owner'] or '—':14s} verify_by={r['verify_by'] or '—'}")
-weak = [r for r in RECORDS if not r["acceptable"]]
-print(f"\\n{len(weak)} action(s) are guidance rather than controls: "
-      f"{[r['action'] for r in weak]}")
-assert weak
-'''),
- ],
+],
  "expect": "Four of seven change surfaces bypass change management. Only 2 of 6 "
            "post-incident actions are verifiable six weeks later, and one of them "
            "is a prompt edit that is guidance rather than a control. The manifest "
@@ -776,91 +285,9 @@ a board will each ask for in different words.
 """,
  "steps": [
   ("md", "## 2 · Demo — the five questions, answered badly and well"),
-  ("py", '''VAGUE = {
- "who":       "the security team",
- "mechanism": "we can turn off the agents",
- "time":      "quickly",
- "breaks":    "not much",
- "restart":   "when it's safe",
-}
-CONCRETE = {
- "who":       "on-call SRE, no approval required for non-human identities",
- "mechanism": "revoke the SPIFFE identity at the gateway (survives restart)",
- "time":      "measured 12s decision→first failed call, game day 2026-07-04",
- "breaks":    "auto-remediation pauses; ticket queue grows ~40/hour; "
-              "agreed with the service owner 2026-05-11",
- "restart":   "security lead, after the C1.2 containment suite passes on the new build",
-}
-for k in VAGUE:
-    print(f"{k:11s} VAGUE    {VAGUE[k]}")
-    print(f"{'':11s} CONCRETE {CONCRETE[k]}\\n")
-'''),
-  ("md", "## 3 · Where it breaks — mechanism matters more than speed"),
-  ("py", '''from dataclasses import dataclass
-
-@dataclass
-class Agent:
-    name: str; running: bool = True; identity_valid: bool = True
-    def can_act(self): return self.running and self.identity_valid
-
-MECHANISMS = {
- "kill the process":      (2,   lambda a: setattr(a, "running", False)),
- "network quarantine":    (5,   lambda a: None),
- "revoke the identity":   (12,  lambda a: setattr(a, "identity_valid", False)),
- "rotate the credential": (420, lambda a: setattr(a, "identity_valid", False)),
-}
-print(f"{'mechanism':24s}{'secs':>6}{'stops it':>10}{'survives restart':>19}")
-print("-" * 60)
-for name, (secs, apply) in MECHANISMS.items():
-    a = Agent("patch-agent")
-    apply(a)
-    stopped = not a.can_act()
-    a.running = True                      # a supervisor restarts the process
-    survives = not a.can_act()
-    print(f"{name:24s}{secs:>6}{str(stopped):>10}{str(survives):>19}")
-print("\\nThe fastest mechanism is the one that does not survive a restart.")
-print("Speed without persistence is a pause, not a stop.")
-'''),
-  ("md", "## 4 · The control — run the game day and record the number"),
-  ("py", '''GAME_DAY = [
- ("decision made",                    0),
- ("on-call authenticates to the IdP", 4),
- ("identity revoked",                 9),
- ("gateway cache expires",            12),
- ("agent's next call fails",          12),
- ("confirmed in telemetry",           38),
-]
-print(f"{'step':38s}{'t+s':>6}")
-print("-" * 46)
-for step, t in GAME_DAY: print(f"{step:38s}{t:>6}")
-mttstop = GAME_DAY[4][1]
-print(f"\\nmeasured time-to-stop: {mttstop}s")
-print(f"time-to-confirm:       {GAME_DAY[-1][1]}s")
-
-def cost_of_stop(rate_per_min, seconds):
-    return round(rate_per_min * seconds / 60)
-for rate in (60, 300, 1200):
-    print(f"   at {rate:>5}/min a {mttstop}s stop still permits "
-          f"{cost_of_stop(rate, mttstop):>4} further actions")
-
-def stop_authority_ready(answers, measured_seconds, tested_days_ago):
-    problems = []
-    if any(len(v.split()) < 4 for v in answers.values()):
-        problems.append("at least one answer is not specific")
-    if measured_seconds is None:
-        problems.append("time-to-stop has never been measured")
-    if tested_days_ago is None or tested_days_ago > 180:
-        problems.append("not tested in the last 180 days")
-    return (not problems), problems
-
-for label, ans, secs, days in (("as usually documented", VAGUE, None, None),
-                               ("after a game day", CONCRETE, 12, 41)):
-    ok, problems = stop_authority_ready(ans, secs, days)
-    print(f"\\n{label}: ready={ok}")
-    for p in problems: print(f"   ⚠ {p}")
-assert stop_authority_ready(CONCRETE, 12, 41)[0]
-'''),
- ],
+("md", "## 3 · Where it breaks — mechanism matters more than speed"),
+("md", "## 4 · The control — run the game day and record the number"),
+],
  "expect": "The vague and concrete answers print side by side. Killing the "
            "process stops the agent but does not survive a restart, while "
            "identity revocation does. The game-day timeline gives a measured "
@@ -890,89 +317,9 @@ under time pressure.
 """,
  "steps": [
   ("md", "## 2 · Demo — the clock under four scenarios"),
-  ("py", '''import time
-
-def clock(awareness, containment, report, deadline_hours=72):
-    to_contain = (containment - awareness) / 3600
-    to_report  = (report - awareness) / 3600
-    return {"hours_to_containment": round(to_contain, 1),
-            "hours_to_report": round(to_report, 1),
-            "deadline": deadline_hours,
-            "met": to_report <= deadline_hours,
-            "margin": round(deadline_hours - to_report, 1)}
-
-t0 = time.time()
-H = 3600
-SCENARIOS = {
- "fast containment, slow scoping": (t0 + 1*H,  t0 + 80*H),
- "slow containment, fast reporting": (t0 + 40*H, t0 + 60*H),
- "both fast":                      (t0 + 2*H,  t0 + 20*H),
- "attribution broken (D2.1)":      (t0 + 6*H,  t0 + 92*H),
-}
-print(f"{'scenario':34s}{'contain':>9}{'report':>9}{'met':>6}{'margin':>9}")
-print("-" * 68)
-for name, (c, r) in SCENARIOS.items():
-    k = clock(t0, c, r)
-    print(f"{name:34s}{k['hours_to_containment']:>9.1f}{k['hours_to_report']:>9.1f}"
-          f"{str(k['met']):>6}{k['margin']:>9.1f}")
-print("\\nThe first row contained in ONE HOUR and still missed the deadline.")
-'''),
-  ("md", "## 3 · Where it breaks — the clock starts earlier than people think"),
-  ("py", '''TIMELINE = [
- ("alert fires",                          0,  False),
- ("analyst triages, suspects an incident", 3, True),   # ← awareness, arguably
- ("IR lead confirms an incident",         9,  True),
- ("scope established",                    40, True),
- ("legal confirms it is reportable",      55, True),
-]
-print(f"{'event':40s}{'t+h':>6}  could a regulator call this awareness?")
-print("-" * 84)
-for name, h, aware in TIMELINE:
-    print(f"{name:40s}{h:>6}  {aware}")
-
-report_at = 76
-for label, start_h in (("clock from analyst suspicion", 3),
-                       ("clock from IR confirmation", 9),
-                       ("clock from legal determination", 55)):
-    hours = report_at - start_h
-    print(f"\\n{label:34s} elapsed {hours:>3}h  "
-          f"{'MET' if hours <= 72 else 'MISSED'} (72h deadline)")
-print("\\nThe same incident, the same report time, three different answers.")
-print("Pick the earliest defensible start. A regulator will.")
-'''),
-  ("md", "## 4 · The control — separate owners, and a shortest-clock register"),
-  ("py", '''OBLIGATIONS = {
- "GDPR (personal data breach)":     (72,  "supervisory authority"),
- "DORA (major ICT incident)":       (4,   "initial notification"),
- "NIS2 (early warning)":            (24,  "CSIRT"),
- "PCI DSS (card data)":             (24,  "acquirer/brands"),
- "contractual (major client)":      (12,  "client security contact"),
-}
-print(f"{'obligation':36s}{'deadline (h)':>14}  notify")
-print("-" * 76)
-for name, (hours, who) in sorted(OBLIGATIONS.items(), key=lambda kv: kv[1][0]):
-    print(f"{name:36s}{hours:>14}  {who}")
-shortest = min(OBLIGATIONS.items(), key=lambda kv: kv[1][0])
-print(f"\\nyour real deadline is the shortest: {shortest[0]} at {shortest[1][0]}h")
-
-def runbook_check(containment_owner, disclosure_owner, clock_starts_at):
-    problems = []
-    if containment_owner == disclosure_owner:
-        problems.append("one owner for both workstreams — they compete for the "
-                        "same person under time pressure")
-    if clock_starts_at != "awareness":
-        problems.append(f"clock starts at {clock_starts_at!r}, not at awareness — "
-                        f"a regulator will use the earlier point")
-    return (not problems), problems
-
-for label, args in (("as usually written", ("IR lead", "IR lead", "confirmation")),
-                    ("corrected", ("IR lead", "legal/compliance lead", "awareness"))):
-    ok, problems = runbook_check(*args)
-    print(f"\\n{label}: sound={ok}")
-    for p in problems: print(f"   ⚠ {p}")
-assert runbook_check("IR lead", "legal/compliance lead", "awareness")[0]
-'''),
- ],
+("md", "## 3 · Where it breaks — the clock starts earlier than people think"),
+("md", "## 4 · The control — separate owners, and a shortest-clock register"),
+],
  "expect": "One-hour containment still misses the 72-hour deadline in the "
            "slow-scoping scenario, and broken attribution misses it by 20 hours. "
            "The same incident is met or missed depending on which point is "

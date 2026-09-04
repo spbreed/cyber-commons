@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.11 — Context engineering for the pipeline | Cyber Commons</title><meta name="description" content="Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.11</div><h1>Context engineering for the pipeline</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The model is given the repository and asked to be thorough, so the relevant line falls out of the window.</p></div><div class="ctrl"><div class="lab">Control</div><p>Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Compare four context strategies against one bug and measure which are decidable and at what size.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.11 · Context engineering for the pipeline</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.11 — Context engineering for the pipeline | Cyber Commons</title><meta name="description" content="Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.11</div><h1>Context engineering for the pipeline</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The model is given the repository and asked to be thorough, so the relevant line falls out of the window.</p></div><div class="ctrl"><div class="lab">Control</div><p>Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Compare four context strategies against one bug and measure which are decidable and at what size.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.11 · Context engineering for the pipeline</h1>
 <p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: Harnesses and an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.10.html">B2.10 · Severity calibration and reporting</a></strong>.</p>
 <table>
@@ -46,96 +46,7 @@ cannot tell which parts those were.</p>
 <p>So context engineering is mostly subtraction, with one exception you must not
 subtract: the <strong>enclosing signature</strong>, because that is where reachability is
 decided. The identical concatenation is critical inside an HTTP handler and
-irrelevant inside a migration script that takes a constant.</p></div><div class="nbmd"><h2>3 · Demo — four strategies over one bug</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SOURCE = &#x27;&#x27;&#x27;&quot;&quot;&quot;Reporting service.&quot;&quot;&quot;
-import logging, os, json, datetime
-
-log = logging.getLogger(__name__)
-DEFAULT_LIMIT = 100
-CACHE = {}
-
-def _format_row(row):
-    return {&quot;id&quot;: row[0], &quot;name&quot;: row[1], &quot;created&quot;: str(row[2])}
-
-def _cache_key(*parts):
-    return &quot;:&quot;.join(str(p) for p in parts)
-
-def healthcheck():
-    return {&quot;status&quot;: &quot;ok&quot;, &quot;ts&quot;: datetime.datetime.utcnow().isoformat()}
-
-def list_reports(conn, owner, limit=DEFAULT_LIMIT):
-    &quot;&quot;&quot;Called from GET /reports?owner=... — owner is user-controlled.&quot;&quot;&quot;
-    key = _cache_key(&quot;reports&quot;, owner, limit)
-    if key in CACHE:
-        return CACHE[key]
-    rows = conn.execute(&quot;SELECT * FROM reports WHERE owner = &#x27;&quot; + owner + &quot;&#x27; LIMIT &quot; + str(limit))
-    out = [_format_row(r) for r in rows]
-    CACHE[key] = out
-    return out
-
-def purge_cache():
-    CACHE.clear()
-    log.info(&quot;cache purged&quot;)
-&#x27;&#x27;&#x27;
-lines = SOURCE.splitlines()
-BUG_LINE = next(i for i, l in enumerate(lines, 1) if &quot;SELECT * FROM reports&quot; in l)
-print(f&quot;the bug is on line {BUG_LINE}&quot;)
-
-def whole_file(_):     return SOURCE
-def window(n, radius): return &quot;\n&quot;.join(lines[max(n-radius-1,0):n+radius])
-
-STRATEGIES = {&quot;whole file&quot;: whole_file(BUG_LINE),
-              &quot;±2 line window&quot;: window(BUG_LINE, 2),
-              &quot;±6 line window&quot;: window(BUG_LINE, 6)}
-for name, ctx in STRATEGIES.items():
-    print(f&quot;{name:20s}{len(ctx):&gt;6} chars{len(ctx.splitlines()):&gt;5} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def decidable(ctx):
-    &quot;&quot;&quot;Can a reviewer judge exploitability from this context alone?&quot;&quot;&quot;
-    return {&quot;sink&quot;: &quot;conn.execute&quot; in ctx,
-            &quot;concatenation&quot;: &quot;&#x27; + owner +&quot; in ctx or &quot;+ owner +&quot; in ctx,
-            &quot;source (signature)&quot;: &quot;def list_reports&quot; in ctx,
-            &quot;intent (docstring)&quot;: &quot;user-controlled&quot; in ctx}
-
-print(f&quot;{&#x27;strategy&#x27;:20s}{&#x27;sink&#x27;:7s}{&#x27;concat&#x27;:8s}{&#x27;source&#x27;:8s}{&#x27;intent&#x27;:8s}decidable&quot;)
-print(&quot;-&quot; * 64)
-for name, ctx in STRATEGIES.items():
-    d = decidable(ctx)
-    ok = d[&quot;sink&quot;] and d[&quot;concatenation&quot;] and d[&quot;source (signature)&quot;]
-    print(f&quot;{name:20s}{str(d[&#x27;sink&#x27;]):7s}{str(d[&#x27;concatenation&#x27;]):8s}&quot;
-          f&quot;{str(d[&#x27;source (signature)&#x27;]):8s}{str(d[&#x27;intent (docstring)&#x27;]):8s}{ok}&quot;)
-print(&quot;\nThe ±2 window has the sink and the concatenation but not the signature,&quot;)
-print(&quot;so you cannot tell whether owner is user-controlled — which is the&quot;)
-print(&quot;difference between critical and won&#x27;t-fix.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The control — slice on the source-sink path</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def path_slice(source, bug_line):
-    ls = source.splitlines()
-    start = max(i for i in range(bug_line) if ls[i-1].startswith(&quot;def &quot;))
-    end = next((i for i in range(start, len(ls)) if i &gt; start and ls[i].startswith(&quot;def &quot;)),
-               len(ls))
-    return &quot;\n&quot;.join(ls[start-1:end])
-
-sliced = path_slice(SOURCE, BUG_LINE)
-print(sliced)
-d = decidable(sliced)
-print(f&quot;\n{len(sliced)} chars ({len(sliced)/len(SOURCE):.0%} of the file), &quot;
-      f&quot;decidable={d[&#x27;sink&#x27;] and d[&#x27;concatenation&#x27;] and d[&#x27;source (signature)&#x27;]}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def evaluate(name, ctx):
-    d = decidable(ctx)
-    return {&quot;strategy&quot;: name, &quot;chars&quot;: len(ctx),
-            &quot;share&quot;: round(len(ctx)/len(SOURCE), 3),
-            &quot;decidable&quot;: d[&quot;sink&quot;] and d[&quot;concatenation&quot;] and d[&quot;source (signature)&quot;],
-            &quot;noise_fns&quot;: max(ctx.count(&quot;def &quot;) - 1, 0)}
-
-rows = [evaluate(n, c) for n, c in STRATEGIES.items()] + [evaluate(&quot;path slice&quot;, sliced)]
-print(f&quot;{&#x27;strategy&#x27;:20s}{&#x27;chars&#x27;:&gt;7}{&#x27;share&#x27;:&gt;8}{&#x27;decidable&#x27;:&gt;11}{&#x27;noise fns&#x27;:&gt;11}&quot;)
-print(&quot;-&quot; * 58)
-for r in rows:
-    print(f&quot;{r[&#x27;strategy&#x27;]:20s}{r[&#x27;chars&#x27;]:&gt;7}{r[&#x27;share&#x27;]:&gt;8.0%}&quot;
-          f&quot;{str(r[&#x27;decidable&#x27;]):&gt;11}{r[&#x27;noise_fns&#x27;]:&gt;11}&quot;)
-
-best = sorted((r for r in rows if r[&quot;decidable&quot;]), key=lambda r: r[&quot;chars&quot;])[0]
-whole = next(r for r in rows if r[&quot;strategy&quot;] == &quot;whole file&quot;)
-print(f&quot;\nsmallest decidable context: {best[&#x27;strategy&#x27;]} &quot;
-      f&quot;({best[&#x27;share&#x27;]:.0%} of the file, {best[&#x27;noise_fns&#x27;]} unrelated functions)&quot;)
-print(f&quot;vs whole file: {1 - best[&#x27;chars&#x27;]/whole[&#x27;chars&#x27;]:.0%} smaller, &quot;
-      f&quot;{whole[&#x27;noise_fns&#x27;]}→{best[&#x27;noise_fns&#x27;]} unrelated functions&quot;)
-assert best[&quot;strategy&quot;] == &quot;path slice&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.</p></div><div class="nbmd"><h2>Your turn</h2>
+irrelevant inside a migration script that takes a constant.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Apply the path-slice rule where the source is three functions away from the sink. That is the case where text windows break down entirely and the call graph from B2.1 earns its keep.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Securing the developers' coding agents</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.11.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb">Source</a></p>

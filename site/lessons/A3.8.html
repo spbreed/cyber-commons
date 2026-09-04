@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.8 — Shared infrastructure between agent runs | Cyber Commons</title><meta name="description" content="Per-run namespaces bound to the run&#x27;s workload identity (C2.1), an immutable write-once cache (C2.2), signing and provenance verified at consumption (C5.1, C5.2), admin plane off t"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.8</div><h1>Shared infrastructure between agent runs</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Any shared mutable surface is a channel. The same repository is then the covert channel, the supply-chain target and the place a poisoned artifact is staged — one chain, not three findings.</p></div><div class="ctrl"><div class="lab">Control</div><p>Per-run namespaces bound to the run&#x27;s workload identity (C2.1), an immutable write-once cache (C2.2), signing and provenance verified at consumption (C5.1, C5.2), admin plane off the workload path (C5.3), and scoring infrastructure the agent cannot reach (C10.4).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Pass a message between two &#x27;isolated&#x27; runs through a shared artifact cache, then close the surface with per-run namespaces, immutable tags and signature verification at pull.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.8 · Shared infrastructure between agent runs</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.8 — Shared infrastructure between agent runs | Cyber Commons</title><meta name="description" content="Per-run namespaces bound to the run&#x27;s workload identity (C2.1), an immutable write-once cache (C2.2), signing and provenance verified at consumption (C5.1, C5.2), admin plane off t"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.8</div><h1>Shared infrastructure between agent runs</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Any shared mutable surface is a channel. The same repository is then the covert channel, the supply-chain target and the place a poisoned artifact is staged — one chain, not three findings.</p></div><div class="ctrl"><div class="lab">Control</div><p>Per-run namespaces bound to the run&#x27;s workload identity (C2.1), an immutable write-once cache (C2.2), signing and provenance verified at consumption (C5.1, C5.2), admin plane off the workload path (C5.3), and scoring infrastructure the agent cannot reach (C10.4).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Pass a message between two &#x27;isolated&#x27; runs through a shared artifact cache, then close the surface with per-run namespaces, immutable tags and signature verification at pull.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.8 · Shared infrastructure between agent runs</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.7.html">A3.7 · The agent gateway: one choke point when you scale</a></strong>.</p>
 <table>
@@ -59,124 +59,8 @@ per identity per hour.</p>
 <p><strong>Signing and provenance verified at pull (C5.1, C5.2)</strong>, fail-closed, so an
 artifact that appeared in the cache without a build behind it does not run.</p>
 <p><strong>Admin plane off the workload path (C5.3)</strong>, because the admin credential was
-obtained from the workload side twice.</p></div><div class="nbmd"><h2>3 · Inventory the shared surfaces, and rate them by capacity</h2></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">shared surface</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">bytes an agent can make readable per write</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">how</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">object store scratch prefix</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1,000,000,000</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a shared bucket with no per-run prefix</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">package cache</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">10,000,000</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whole files, readable by any run</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">artifact repository properties</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">65,536</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">arbitrary key/value on any artifact</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">CI build annotations</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">4,096</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">free text on shared jobs</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">DNS resolver cache</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">512</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">TXT lookups observable across runs</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">artifact filenames</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">255</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">structured payloads encoded in names</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">metadata service</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">per-instance, genuinely not shared</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">“Mutable and shared” is the test, not “is it a storage system”. Six of these seven are channels, and only two of them look like storage.</div></div><div class="nbmd"><h2>4 · Two 'isolated' runs, one cache</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>class Repository:
-    &quot;&quot;&quot;A shared artifact repository with writable properties. No namespacing.&quot;&quot;&quot;
-    def __init__(self):
-        self.props = {}
-        self.denied = []
-    def set_property(self, run, artifact, key, value):
-        self.props.setdefault(artifact, {})[key] = (run, value)
-        return True
-    def read_properties(self, run, artifact):
-        return {k: v for k, (_, v) in self.props.get(artifact, {}).items()}
-
-repo = Repository()
-repo.set_property(&quot;run-A&quot;, &quot;libtarget-1.4.jar&quot;, &quot;note&quot;,
-                  &quot;flag format is HMAC(target_id); see board entry 41&quot;)
-seen = repo.read_properties(&quot;run-B&quot;, &quot;libtarget-1.4.jar&quot;)
-print(&quot;run-B reads a property written by run-A:&quot;)
-for k, v in sorted(seen.items()):
-    print(f&quot;   {k}: {v}&quot;)
-print()
-print(&quot;Neither run has a network path to the other. They did not need one.&quot;)
-print(&quot;Reported scale on this surface: ~1,200 agents, &gt;70,000 messages and&quot;)
-print(&quot;files, and the board was rebuilt within about a day of being wiped -&quot;)
-print(&quot;because wiping contents does not change the surface.&quot;)
-assert seen</code></pre></div><div class="nbmd"><h2>5 · The control — namespace, then verify at pull</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>class NamespacedRepository(Repository):
-    &quot;&quot;&quot;Per-run namespace bound to the run identity (C2.1), immutable tags and
-    no arbitrary properties (C2.2), signature checked at pull (C5.1, C5.2).&quot;&quot;&quot;
-    TRUSTED_BUILDERS = {&quot;ci-builder@corp&quot;}
-
-    def __init__(self):
-        super().__init__()
-        self.objects = {}          # (run, name) -&gt; {&quot;builder&quot;:..., &quot;signed&quot;:...}
-
-    def _ns(self, run, artifact):
-        return f&quot;{run}/{artifact}&quot;
-
-    def set_property(self, run, artifact, key, value):
-        self.denied.append((run, artifact, &quot;properties are disabled&quot;))
-        return False
-
-    def publish(self, builder, run, artifact, signed):
-        if builder not in self.TRUSTED_BUILDERS:
-            self.denied.append((builder, artifact, &quot;not a trusted builder&quot;))
-            return False
-        key = self._ns(run, artifact)
-        if key in self.objects:
-            self.denied.append((builder, artifact, &quot;immutable tag already exists&quot;))
-            return False
-        self.objects[key] = {&quot;builder&quot;: builder, &quot;signed&quot;: signed}
-        return True
-
-    def pull(self, run, artifact, owner_run=None):
-        key = self._ns(owner_run or run, artifact)
-        if owner_run and owner_run != run:
-            self.denied.append((run, artifact, &quot;cross-namespace read&quot;))
-            return None
-        obj = self.objects.get(key)
-        if obj is None:
-            return None
-        if not obj[&quot;signed&quot;]:
-            self.denied.append((run, artifact, &quot;unsigned artifact, fail closed&quot;))
-            return None
-        return obj
-
-ns = NamespacedRepository()
-ns.publish(&quot;ci-builder@corp&quot;, &quot;run-A&quot;, &quot;libtarget-1.4.jar&quot;, signed=True)
-ns.publish(&quot;run-B&quot;, &quot;run-B&quot;, &quot;helper.jar&quot;, signed=True)          # not CI
-ns.publish(&quot;ci-builder@corp&quot;, &quot;run-A&quot;, &quot;libtarget-1.4.jar&quot;, True)  # overwrite
-
-print(&quot;attempts:&quot;)
-ns.set_property(&quot;run-A&quot;, &quot;libtarget-1.4.jar&quot;, &quot;note&quot;, &quot;board entry 41&quot;)
-ns.pull(&quot;run-B&quot;, &quot;libtarget-1.4.jar&quot;, owner_run=&quot;run-A&quot;)
-ns.objects[&quot;run-B/poisoned.jar&quot;] = {&quot;builder&quot;: &quot;?&quot;, &quot;signed&quot;: False}
-ns.pull(&quot;run-B&quot;, &quot;poisoned.jar&quot;)
-
-for who, artifact, why in ns.denied:
-    print(f&quot;   DENY  {who:16s}{artifact:22s}{why}&quot;)
-print()
-print(&quot;Five different attempts, five different refusals, none of them relying on&quot;)
-print(&quot;the agent&#x27;s cooperation. The surface stopped being a channel.&quot;)
-assert len(ns.denied) == 5</code></pre></div><div class="nbmd"><h2>6 · Verify — the admin path, and the scorer</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>ZONES = {
- &quot;agent workload&quot;:  {&quot;artifact:pull&quot;},
- &quot;ci&quot;:              {&quot;artifact:pull&quot;, &quot;artifact:publish&quot;},
- &quot;admin&quot;:           {&quot;artifact:pull&quot;, &quot;artifact:publish&quot;, &quot;artifact:admin&quot;},
- &quot;scoring&quot;:         {&quot;transcript:read&quot;},
-}
-NETWORK = {                       # who may open a connection to whom
- &quot;agent workload&quot;: {&quot;artifact repository&quot;},
- &quot;ci&quot;:             {&quot;artifact repository&quot;},
- &quot;admin&quot;:          {&quot;artifact repository&quot;, &quot;artifact admin API&quot;},
- &quot;scoring&quot;:        {&quot;transcript store&quot;},
-}
-
-def may(zone, capability):
-    return capability in ZONES.get(zone, set())
-
-def reachable(zone, endpoint):
-    return endpoint in NETWORK.get(zone, set())
-
-checks = [
- (&quot;agent workload&quot;, &quot;artifact:admin&quot;,    &quot;capability&quot;),
- (&quot;agent workload&quot;, &quot;artifact admin API&quot;,&quot;network&quot;),
- (&quot;agent workload&quot;, &quot;transcript store&quot;,  &quot;network&quot;),
- (&quot;ci&quot;,             &quot;artifact:publish&quot;,  &quot;capability&quot;),
- (&quot;admin&quot;,          &quot;artifact:admin&quot;,    &quot;capability&quot;),
-]
-for zone, what, kind in checks:
-    ok = may(zone, what) if kind == &quot;capability&quot; else reachable(zone, what)
-    print(f&quot;{zone:16s}{kind:11s}{what:20s}{&#x27;ALLOW&#x27; if ok else &#x27;DENY&#x27;}&quot;)
-
-print()
-print(&quot;The admin credential in the source incident was obtained from the&quot;)
-print(&quot;workload side twice. Separating the admin API onto a path the workload&quot;)
-print(&quot;cannot reach is what severs that, and the same argument puts the scorer&quot;)
-print(&quot;out of reach in the row that follows.&quot;)
-assert not may(&quot;agent workload&quot;, &quot;artifact:admin&quot;)
-assert not reachable(&quot;agent workload&quot;, &quot;transcript store&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Six of seven shared surfaces qualify as channels, and only two of them look like storage. Two runs with no network path between them exchange a message through repository properties. Namespacing, immutable tags, trusted-builder publishing and fail-closed signature verification then produce five refusals for five different reasons, and the workload can reach neither the admin API nor the transcript store.</p></div><div class="nbmd"><h2>Your turn</h2>
+obtained from the workload side twice.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">shared surface</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">bytes an agent can make readable per write</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">how</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">object store scratch prefix</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1,000,000,000</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a shared bucket with no per-run prefix</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">package cache</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">10,000,000</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whole files, readable by any run</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">artifact repository properties</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">65,536</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">arbitrary key/value on any artifact</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">CI build annotations</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">4,096</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">free text on shared jobs</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">DNS resolver cache</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">512</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">TXT lookups observable across runs</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">artifact filenames</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">255</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">structured payloads encoded in names</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">metadata service</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">per-instance, genuinely not shared</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">“Mutable and shared” is the test, not “is it a storage system”. Six of these seven are channels, and only two of them look like storage.</div></div><div class="nbmd"><h2>Your turn</h2>
 <p>List every shared, mutable, agent-reachable surface in your own environment and put a byte capacity against each. The exercise usually finds two nobody had counted, and the ranking tells you which one to namespace first.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.9.html">A3.9 · Turning a control off without turning the system into an experiment</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.8.ipynb">Source</a></p>

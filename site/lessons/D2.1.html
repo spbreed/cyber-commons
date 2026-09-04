@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.1 — Agent-assisted reconstruction | Cyber Commons</title><meta name="description" content="Pre-load logs, telemetry, segmentation model and playbooks."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.1</div><h1>Agent-assisted reconstruction</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Reaching for the agent once you&#x27;re already behind.</p></div><div class="ctrl"><div class="lab">Control</div><p>Pre-load logs, telemetry, segmentation model and playbooks.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Pre-load the agent so it reasons as a partner, not a tool you reach for late.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.1 · Agent-assisted reconstruction</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.1 — Agent-assisted reconstruction | Cyber Commons</title><meta name="description" content="Pre-load logs, telemetry, segmentation model and playbooks."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.1</div><h1>Agent-assisted reconstruction</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Reaching for the agent once you&#x27;re already behind.</p></div><div class="ctrl"><div class="lab">Control</div><p>Pre-load logs, telemetry, segmentation model and playbooks.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Pre-load the agent so it reasons as a partner, not a tool you reach for late.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.1 · Agent-assisted reconstruction</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Response</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.11.html">D1.11 · Honeypots, canaries and deception in the agent's environment</a></strong>.</p>
 <table>
@@ -44,102 +44,8 @@ than an obviously incomplete one.</p>
 <li><strong>What can the logs support?</strong></li>
 </ol>
 <p>The gap between them is where reconstruction goes wrong, and it is the responder's
-job to state that gap explicitly in the incident record.</p></div><div class="nbmd"><h2>3 · Demo — a timeline that reads perfectly</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-from dataclasses import dataclass, field
-
-@dataclass
-class LogLine:
-    ts: float
-    logged_actor: str     # what the audit log records
-    real_actor: str       # what actually happened (held out from the responder)
-    action: str
-    target: str = &quot;&quot;
-
-def render(lines, truth=False):
-    base = min(l.ts for l in lines)
-    rows = [f&quot;{&#x27;t+s&#x27;:&gt;6}  {&#x27;actor&#x27;:16s}{&#x27;action&#x27;:16s}target&quot;]
-    for l in sorted(lines, key=lambda x: x.ts):
-        who = l.real_actor if truth else l.logged_actor
-        rows.append(f&quot;{l.ts-base:&gt;6.0f}  {who:16s}{l.action:16s}{l.target}&quot;)
-    return &quot;\n&quot;.join(rows)
-
-t0 = time.time()
-INCIDENT = [
- LogLine(t0,      &quot;dana@corp&quot;, &quot;dana@corp&quot;,   &quot;login&quot;,       &quot;sso&quot;),
- LogLine(t0+22,   &quot;dana@corp&quot;, &quot;dana@corp&quot;,   &quot;open_ticket&quot;, &quot;SEC-4471&quot;),
- LogLine(t0+40,   &quot;dana@corp&quot;, &quot;patch-agent&quot;, &quot;read_file&quot;,   &quot;/work/repo/billing.py&quot;),
- LogLine(t0+41,   &quot;dana@corp&quot;, &quot;patch-agent&quot;, &quot;read_file&quot;,   &quot;/home/app/.aws/credentials&quot;),
- LogLine(t0+43,   &quot;dana@corp&quot;, &quot;patch-agent&quot;, &quot;http_post&quot;,   &quot;collect.example.com&quot;),
- LogLine(t0+180,  &quot;dana@corp&quot;, &quot;dana@corp&quot;,   &quot;logout&quot;,      &quot;sso&quot;),
-]
-print(&quot;WHAT THE RESPONDER SEES&quot;)
-print(render(INCIDENT))</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the confident wrong narrative</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>NARRATIVE = &quot;&quot;&quot;
-At 14:02 dana@corp authenticated via SSO and opened ticket SEC-4471. Eighteen
-seconds later the same account read billing.py, then read the application&#x27;s AWS
-credentials, and posted to an external host. The account then remained active
-for a further two minutes before logging out.
-
-Assessment: credential theft by an authenticated insider. Recommend immediate
-suspension of dana@corp pending investigation.
-&quot;&quot;&quot;
-print(&quot;A MODEL&#x27;S RECONSTRUCTION (fluent, supported by every log line):&quot;)
-print(NARRATIVE)
-
-print(&quot;WHAT ACTUALLY HAPPENED&quot;)
-print(render(INCIDENT, truth=True))</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def reconstruct(lines):
-    logged = {l.logged_actor for l in lines}
-    real   = {l.real_actor for l in lines}
-    wrong  = [l for l in lines if l.logged_actor != l.real_actor]
-    return {&quot;actors_in_logs&quot;: sorted(logged),
-            &quot;actors_in_reality&quot;: sorted(real),
-            &quot;misattributed_lines&quot;: len(wrong),
-            &quot;hidden_actors&quot;: sorted(real - logged),
-            &quot;attribution&quot;: &quot;sound&quot; if not wrong else &quot;BROKEN&quot;,
-            &quot;consequence&quot;: (&quot;none&quot; if not wrong else
-                            f&quot;containment aimed at {sorted(logged)} leaves &quot;
-                            f&quot;{sorted(real - logged)} running&quot;)}
-
-r = reconstruct(INCIDENT)
-for k, v in r.items(): print(f&quot;{k:22s}{v}&quot;)
-print(&quot;\nEvery sentence in that narrative is supported by the logs.&quot;)
-print(&quot;The conclusion is wrong, and the recommended action does nothing.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — state what the evidence can support</h2>
-<p>The fix is not a better model. It is a reconstruction step that reports its own evidentiary limits before it reports a conclusion.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def evidence_check(lines, has_acting_identity_field, has_act_chain):
-    limits = []
-    if not has_acting_identity_field:
-        limits.append(&quot;no acting-identity field: every line attributes to the &quot;
-                      &quot;principal, so agent actions are indistinguishable from human ones&quot;)
-    if not has_act_chain:
-        limits.append(&quot;no delegation chain: cannot establish who caused the task&quot;)
-    rates = {}
-    for l in lines:
-        rates.setdefault(l.logged_actor, []).append(l.ts)
-    for actor, ts in rates.items():
-        if len(ts) &gt; 2:
-            span = max(ts) - min(ts)
-            per_min = len(ts) / max(span/60, 1e-9)
-            if per_min &gt; 30:
-                limits.append(f&quot;{actor} shows {per_min:.0f} actions/min — &quot;
-                              f&quot;not human-paced; an agent is likely present&quot;)
-    return limits
-
-limits = evidence_check(INCIDENT, has_acting_identity_field=False, has_act_chain=False)
-print(&quot;EVIDENTIARY LIMITS (must appear before any conclusion):&quot;)
-for l in limits: print(f&quot;   ⚠ {l}&quot;)
-
-SAFE = f&quot;&quot;&quot;
-Timeline: dana@corp authenticated, opened SEC-4471; the account then read
-billing.py, read AWS credentials, and posted externally.
-
-LIMITS OF THIS RECONSTRUCTION
-{chr(10).join(&#x27;  - &#x27; + l for l in limits)}
-
-Assessment: an actor holding dana@corp&#x27;s credential performed the reads and the
-POST. The logs CANNOT establish whether that actor was the human or an agent
-operating with her token. Containment must therefore address both.
-&quot;&quot;&quot;
-print(SAFE)
-assert limits</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The timeline attributes every action to <code>dana@corp</code>. The fluent narrative recommends suspending her. The truth view shows <code>patch-agent</code> performed the credential read and the external POST; reconstruction reports BROKEN attribution with 3 misattributed lines. The evidence check flags the missing acting-identity field, the missing chain, and a non-human action rate.</p></div><div class="nbmd"><h2>Your turn</h2>
+job to state that gap explicitly in the incident record.</p></div><div class="nbmd"><h2>3 · The control — state what the evidence can support</h2>
+<p>The fix is not a better model. It is a reconstruction step that reports its own evidentiary limits before it reports a conclusion.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take a real incident timeline from your own history and ask what it would look like if an agent had been operating on the user's credential. If you cannot tell from the logs, your reconstructions already carry this risk.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.2.html">D2.2 · When the actor is an agent</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.1.ipynb">Source</a></p>

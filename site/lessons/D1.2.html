@@ -42,87 +42,7 @@ about an agent needs three more, and without them every analyst has to guess.</p
 </ul>
 <p>Without scope in the alert, the analyst's only options are to escalate
 everything or to develop a habit of closing agent alerts. Both happen, and the
-second one happens quietly.</p></div><div class="nbmd"><h2>3 · Demo — the same alert, with and without context</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import time
-from dataclasses import dataclass, field
-
-@dataclass
-class Token:
-    sub: str; actor: str; scopes: set; act: dict = None
-    def chain(self):
-        out, node = [], self.act
-        while node: out.append(node[&quot;actor&quot;]); node = node.get(&quot;act&quot;)
-        c = list(reversed(out)) + [self.actor]
-        if c[0] != self.sub: c.insert(0, self.sub)
-        return c
-
-AGENTS = {
- &quot;patch-agent&quot;:   Token(&quot;dana@corp&quot;, &quot;patch-agent&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;},
-                        {&quot;actor&quot;: &quot;orchestrator&quot;, &quot;act&quot;: None}),
- &quot;rotator-agent&quot;: Token(&quot;ops@corp&quot;, &quot;rotator-agent&quot;, {&quot;secrets:read&quot;, &quot;secrets:write&quot;},
-                        {&quot;actor&quot;: &quot;scheduler&quot;, &quot;act&quot;: None}),
-}
-EVENT = {&quot;action&quot;: &quot;read_file&quot;, &quot;target&quot;: &quot;/vault/.env&quot;, &quot;ts&quot;: time.time()}
-
-print(&quot;BARE ALERT (what most SOCs receive):&quot;)
-for actor in AGENTS:
-    print(f&quot;   {actor} read {EVENT[&#x27;target&#x27;]}&quot;)
-print(&quot;   → identical. An analyst cannot tell these apart.\n&quot;)
-
-print(&quot;ENRICHED ALERT:&quot;)
-for actor, tok in AGENTS.items():
-    expected = &quot;secrets:read&quot; in tok.scopes
-    print(f&quot;   actor        {tok.actor}&quot;)
-    print(f&quot;   on behalf of {tok.sub}&quot;)
-    print(f&quot;   chain        {&#x27; → &#x27;.join(tok.chain())}&quot;)
-    print(f&quot;   scopes held  {sorted(tok.scopes)}&quot;)
-    print(f&quot;   verdict      {&#x27;EXPECTED — this agent rotates secrets&#x27; if expected else &#x27;ANOMALY — no secrets scope&#x27;}&quot;)
-    print()</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — measure the analyst's decision quality</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def triage_without_context(event):
-    &quot;&quot;&quot;All the analyst has is the action and the target.&quot;&quot;&quot;
-    return &quot;escalate&quot; if &quot;/.env&quot; in event[&quot;target&quot;] or &quot;secret&quot; in event[&quot;target&quot;] else &quot;close&quot;
-
-def triage_with_context(event, token):
-    needed = &quot;secrets:read&quot;
-    if &quot;/.env&quot; in event[&quot;target&quot;] or &quot;vault&quot; in event[&quot;target&quot;]:
-        return &quot;close&quot; if needed in token.scopes else &quot;escalate&quot;
-    return &quot;close&quot;
-
-TRUTH = {&quot;patch-agent&quot;: &quot;tp&quot;, &quot;rotator-agent&quot;: &quot;fp&quot;}
-print(f&quot;{&#x27;agent&#x27;:16s}{&#x27;no context&#x27;:14s}{&#x27;with context&#x27;:16s}{&#x27;truth&#x27;:&gt;7}&quot;)
-print(&quot;-&quot; * 56)
-for actor, tok in AGENTS.items():
-    a = triage_without_context(EVENT)
-    b = triage_with_context(EVENT, tok)
-    print(f&quot;{actor:16s}{a:14s}{b:16s}{TRUTH[actor]:&gt;7}&quot;)
-
-print(&quot;\nWithout scopes, both escalate → the rotator generates a false positive&quot;)
-print(&quot;every single night, and within a month the rule is tuned off.&quot;)</code></pre></div><div class="nbmd"><h2>5 · The control — the six fields, and what each one decides</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>FIELDS = {
- &quot;acting identity&quot;:  &quot;which agent — not the human whose token it borrowed&quot;,
- &quot;principal&quot;:        &quot;who the action was for&quot;,
- &quot;delegation chain&quot;: &quot;who caused the task; where to look for the trigger&quot;,
- &quot;scopes held&quot;:      &quot;THE decisive field — is this action within its remit?&quot;,
- &quot;tool + target&quot;:    &quot;what it did&quot;,
- &quot;session/trace id&quot;: &quot;so the analyst can pull the whole run (D1.5)&quot;,
-}
-for k, v in FIELDS.items(): print(f&quot;{k:20s}{v}&quot;)
-
-def enrich(event, token, trace_id):
-    return {&quot;acting_identity&quot;: token.actor, &quot;principal&quot;: token.sub,
-            &quot;chain&quot;: &quot; → &quot;.join(token.chain()), &quot;scopes&quot;: sorted(token.scopes),
-            &quot;tool&quot;: event[&quot;action&quot;], &quot;target&quot;: event[&quot;target&quot;],
-            &quot;trace_id&quot;: trace_id,
-            &quot;within_remit&quot;: any(s.startswith(&quot;secrets&quot;) for s in token.scopes)
-                            if &quot;vault&quot; in event[&quot;target&quot;] or &quot;/.env&quot; in event[&quot;target&quot;]
-                            else True}
-
-print()
-for actor, tok in AGENTS.items():
-    e = enrich(EVENT, tok, trace_id=f&quot;tr-{actor[:4]}-8812&quot;)
-    verdict = &quot;close (within remit)&quot; if e[&quot;within_remit&quot;] else &quot;ESCALATE (outside remit)&quot;
-    print(f&quot;{actor:16s}{verdict}&quot;)
-    print(f&quot;{&#x27;&#x27;:16s}{e[&#x27;chain&#x27;]}  scopes={e[&#x27;scopes&#x27;]}&quot;)
-
-assert enrich(EVENT, AGENTS[&quot;patch-agent&quot;], &quot;x&quot;)[&quot;within_remit&quot;] is False
-assert enrich(EVENT, AGENTS[&quot;rotator-agent&quot;], &quot;x&quot;)[&quot;within_remit&quot;] is True</code></pre></div><div class="nbmd"><h2>6 · Triage as a skill — and the sample that keeps it honest</h2>
+second one happens quietly.</p></div><div class="nbmd"><h2>3 · Triage as a skill — and the sample that keeps it honest</h2>
 <p>Context turns a guess into a verdict. Automating the verdict without automating the audit of it is how a closing rule quietly starts closing real incidents.</p>
 <p>The skill therefore requires a sampling rule over anything auto-closed, and requires its seed to come from something <strong>stable</strong>. Sampling seeded from <code>hash()</code> picks a different subset on every run, so you can never tell whether a change in findings came from the rule or from the dice.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
@@ -318,58 +238,7 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>contract = contract_of(body)
-import zlib
-
-ALERTS = [(&quot;A-1&quot;, &quot;patch-agent&quot;), (&quot;A-2&quot;, &quot;rotator-agent&quot;), (&quot;A-3&quot;, &quot;patch-agent&quot;),
-          (&quot;A-4&quot;, &quot;rotator-agent&quot;), (&quot;A-5&quot;, &quot;patch-agent&quot;), (&quot;A-6&quot;, &quot;rotator-agent&quot;)]
-SAMPLE_RATE = 0.34
-
-def sampled(alert_id):
-    # crc32, never hash(): Python randomises string hashing per process, so a
-    # hash()-seeded sampler is unauditable by construction
-    return (zlib.crc32(alert_id.encode()) % 100) &lt; SAMPLE_RATE * 100
-
-triaged = []
-for aid, agent in ALERTS:
-    ctx = enrich(EVENT, AGENTS[agent], aid)
-    within = ctx[&quot;within_remit&quot;]
-    triaged.append({
-      &quot;alert_id&quot;: aid,
-      # reading /vault/.env is real either way; whether it is *fine* is decided
-      # by the acting identity&#x27;s remit, which is the context field that matters
-      &quot;verdict&quot;: &quot;benign_true_positive&quot; if within else &quot;true_positive&quot;,
-      &quot;deciding_context&quot;: &quot;identity&quot;,
-      &quot;reason&quot;: f&quot;{ctx[&#x27;acting_identity&#x27;]} scopes {ctx[&#x27;scopes&#x27;]}&quot;,
-      &quot;confidence&quot;: 0.9 if within else 0.95,
-      &quot;auto_closed&quot;: within,
-      &quot;sampled_for_review&quot;: within and sampled(aid)})
-
-reviewed = [t for t in triaged if t[&quot;sampled_for_review&quot;]]
-triage = {
- &quot;triaged&quot;: triaged,
- &quot;sampling&quot;: {&quot;rate&quot;: SAMPLE_RATE, &quot;seed_source&quot;: &quot;zlib.crc32(alert_id)&quot;,
-              &quot;reviewed&quot;: len(reviewed), &quot;disagreements&quot;: 0},
- &quot;tuning&quot;: [{&quot;rule&quot;: &quot;vault-file-read&quot;, &quot;fp_rate&quot;: 0.0,
-             &quot;volume&quot;: len(ALERTS), &quot;priority&quot;: 0.0}],
-}
-problems = check(triage, contract)
-print(f&quot;conformance: {len(problems)} problem(s)&quot;)
-for p in problems: print(&quot;   &quot;, p)
-assert not problems, problems
-
-for t in triaged:
-    print(f&quot;   {t[&#x27;alert_id&#x27;]}  {t[&#x27;verdict&#x27;]:20s} auto_closed={str(t[&#x27;auto_closed&#x27;]):5s} &quot;
-          f&quot;sampled={t[&#x27;sampled_for_review&#x27;]}&quot;)
-print(f&quot;\nauto-closed {sum(t[&#x27;auto_closed&#x27;] for t in triaged)}, &quot;
-      f&quot;of which {len(reviewed)} sampled back for human review&quot;)
-print()
-print(&quot;`benign_true_positive` is its own verdict. Folding it into false-positive&quot;)
-print(&quot;would teach the tuner to suppress a detection that is working exactly as&quot;)
-print(&quot;designed - the read really happened, it was simply within remit.&quot;)
-assert any(t[&quot;verdict&quot;] == &quot;benign_true_positive&quot; for t in triaged)
-assert any(t[&quot;verdict&quot;] == &quot;true_positive&quot; for t in triaged)
-assert reviewed, &quot;auto-closing with no sample is a rule with no error bar&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The bare alert is identical for both agents. Enriched, the secrets-rotation agent is within remit and the patch agent is not. Context-free triage escalates both — generating a nightly false positive — while scope-aware triage matches ground truth on both.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check which of the six fields your agent telemetry carries today. Scopes-held is the one almost nobody logs, and it is the one that decides the alert.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Agent-assisted detection engineering</a></strong></p>

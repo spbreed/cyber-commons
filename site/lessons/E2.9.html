@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.9 — Regulator and auditor conversations | Cyber Commons</title><meta name="description" content="Explain bounded autonomy with evidence, and anticipate the real questions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.9</div><h1>Regulator and auditor conversations</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Overclaiming control, or triggering a moratorium.</p></div><div class="ctrl"><div class="lab">Control</div><p>Explain bounded autonomy with evidence, and anticipate the real questions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Defend one workflow in a mock supervisory conversation.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.9 · Regulator and auditor conversations</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.9 — Regulator and auditor conversations | Cyber Commons</title><meta name="description" content="Explain bounded autonomy with evidence, and anticipate the real questions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.9</div><h1>Regulator and auditor conversations</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Overclaiming control, or triggering a moratorium.</p></div><div class="ctrl"><div class="lab">Control</div><p>Explain bounded autonomy with evidence, and anticipate the real questions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Defend one workflow in a mock supervisory conversation.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.9 · Regulator and auditor conversations</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Platform — Regulatory and Compliance</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E2.8.html">E2.8 · Auditability of autonomous action</a></strong>.</p>
 <table>
@@ -46,91 +46,8 @@ of the engagement is spent re-establishing credibility you had at the start.</p>
 <li><strong>The control you have not deployed, and the date you will.</strong></li>
 </ol>
 <p>The third one is the one people omit, and it is the one that most reliably
-converts scepticism into a working relationship.</p></div><div class="nbmd"><h2>3 · Demo — produce the two numbers, then the coverage</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, time
-from dataclasses import dataclass
-now = time.time(); DAY = 86400
-
-@dataclass
-class Truth:
-    qid: str; cwe: str; file: str
-
-def path_key(p):
-    parts = [x for x in p.replace(&quot;\\&quot;,&quot;/&quot;).split(&quot;/&quot;) if x not in (&quot;&quot;,&quot;.&quot;)]
-    return &quot;/&quot;.join(parts[-2:]) if len(parts) &gt; 1 else (parts[-1] if parts else &quot;&quot;)
-
-TRUTHS = {f&quot;q{i}&quot;: Truth(f&quot;q{i}&quot;, [&quot;CWE-89&quot;,&quot;CWE-78&quot;][i % 2],
-                         f&quot;{[&#x27;CWE-89&#x27;,&#x27;CWE-78&#x27;][i % 2]}/{i}.py&quot;) for i in range(1, 21)}
-ANSWERS = {q: json.dumps({&quot;qid&quot;: q, &quot;cwe&quot;: &quot;CWE-89&quot;, &quot;file&quot;: t.file,
-                          &quot;rationale&quot;: &quot;untrusted input is concatenated&quot;})
-           for q, t in TRUTHS.items()}
-
-def evaluate(answers, truths):
-    conf = expert = 0
-    for q, t in truths.items():
-        try: d = json.loads(answers[q])
-        except (json.JSONDecodeError, KeyError): continue
-        conf += 1
-        if path_key(d[&quot;file&quot;]) != path_key(t.file): continue
-        expert += 1.0 if d[&quot;cwe&quot;].upper() == t.cwe else 0.5
-    return {&quot;n&quot;: len(truths), &quot;conformance&quot;: round(conf/len(truths), 4),
-            &quot;expert_accuracy&quot;: round(expert/len(truths), 4)}
-
-R = evaluate(ANSWERS, TRUTHS)
-print(f&quot;n                {R[&#x27;n&#x27;]}&quot;)
-print(f&quot;conformance      {R[&#x27;conformance&#x27;]:.4f}&quot;)
-print(f&quot;expert accuracy  {R[&#x27;expert_accuracy&#x27;]:.4f}&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>@dataclass
-class ControlTest:
-    cid: str; passed: bool; tested_at: float; valid_for_days: float
-    def state(self, at):
-        if (at - self.tested_at)/DAY &gt; self.valid_for_days: return &quot;STALE&quot;
-        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
-
-REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
-TESTS = {t.cid: t for t in [
- ControlTest(&quot;AC-1&quot;, True,  now -  4*DAY, 30),
- ControlTest(&quot;AC-2&quot;, True,  now -  9*DAY, 30),
- ControlTest(&quot;SB-1&quot;, True,  now - 45*DAY, 30),
- ControlTest(&quot;EV-1&quot;, True,  now -  5*DAY, 60),
- ControlTest(&quot;EV-2&quot;, True,  now - 12*DAY, 30)]}
-
-rows = [(c, TESTS[c].state(now) if c in TESTS else &quot;NO EVIDENCE&quot;) for c in REQUIRED]
-evidenced = sum(1 for _, s in rows if s == &quot;PASS&quot;)
-print(f&quot;{&#x27;control&#x27;:9s}{&#x27;state&#x27;:14s}&quot;)
-print(&quot;-&quot; * 24)
-for c, s in rows: print(f&quot;{c:9s}{s:14s}&quot;)
-print(f&quot;\ncoverage: {evidenced}/{len(REQUIRED)} = {evidenced/len(REQUIRED):.0%}&quot;)</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — leading with the strongest number</h2></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">how you open</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it is</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what happens next</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“Our harness scores 100%.”</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance quoted as quality</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>the follow-up “against what key?” ends the meeting's credibility</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“We have full coverage of our AI controls.”</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">stale and untested counted as passing</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>one request for dates exposes it</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“Conformance is 100%; expert accuracy is 50% against a held-out key of 20. Coverage is 63%, with SB-1 stale at 45 days and two controls not yet deployed.”</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">both numbers, honestly</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">nothing left for them to discover — the conversation moves to the plan</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">The third opening is the only one that survives a follow-up, and it is the one that sounds worst when you rehearse it.</div></div><div class="nbmd"><h2>5 · The control — the disclosure script, generated from live state</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def disclosure(evalr, rows, required):
-    evidenced = [c for c, s in rows if s == &quot;PASS&quot;]
-    stale     = [c for c, s in rows if s == &quot;STALE&quot;]
-    missing   = [c for c, s in rows if s == &quot;NO EVIDENCE&quot;]
-    failing   = [c for c, s in rows if s == &quot;FAIL&quot;]
-    plan = {&quot;SB-1&quot;: &quot;re-tested by 2026-08-31 (automation in progress)&quot;,
-            &quot;DR-1&quot;: &quot;drift alerting deployed by 2026-10-15&quot;,
-            &quot;ST-1&quot;: &quot;game day scheduled 2026-09-12&quot;}
-    lines = [
-      f&quot;1. Two numbers, and they measure different things.&quot;,
-      f&quot;   conformance {evalr[&#x27;conformance&#x27;]:.0%} — schema validity, structural, &quot;
-      f&quot;not a quality claim.&quot;,
-      f&quot;   expert accuracy {evalr[&#x27;expert_accuracy&#x27;]:.0%} against a held-out key &quot;
-      f&quot;of {evalr[&#x27;n&#x27;]} questions. That is the number that means something.&quot;,
-      f&quot;&quot;,
-      f&quot;2. Control coverage {len(evidenced)}/{len(required)} = &quot;
-      f&quot;{len(evidenced)/len(required):.0%}, counting only controls that are &quot;
-      f&quot;currently evidenced.&quot;,
-      f&quot;   stale: {stale or &#x27;none&#x27;}   failing: {failing or &#x27;none&#x27;}   &quot;
-      f&quot;no evidence: {missing or &#x27;none&#x27;}&quot;,
-      f&quot;&quot;,
-      f&quot;3. What we have not done, and when we will:&quot;,
-    ]
-    for c in stale + failing + missing:
-        lines.append(f&quot;   {c}: {plan.get(c, &#x27;plan to be confirmed&#x27;)}&quot;)
-    return &quot;\n&quot;.join(lines)
-
-print(disclosure(R, rows, REQUIRED))
-print(&quot;\nRehearse the second section out loud. If naming your weakest control is&quot;)
-print(&quot;uncomfortable, that discomfort is the reason to say it first.&quot;)
-assert R[&quot;expert_accuracy&quot;] &lt; R[&quot;conformance&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Conformance is 1.0000 while expert accuracy is 0.5000 on a 20-question held-out key. Coverage is 5 of 8 with SB-1 stale and DR-1 and ST-1 unevidenced. The three openings show conformance-as-quality and inflated coverage failing on the first follow-up, and the generated disclosure script states both numbers, the stale and missing controls, and a date for each.</p></div><div class="nbmd"><h2>Your turn</h2>
+converts scepticism into a working relationship.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">how you open</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it is</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what happens next</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“Our harness scores 100%.”</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance quoted as quality</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>the follow-up “against what key?” ends the meeting's credibility</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“We have full coverage of our AI controls.”</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">stale and untested counted as passing</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>one request for dates exposes it</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“Conformance is 100%; expert accuracy is 50% against a held-out key of 20. Coverage is 63%, with SB-1 stale at 45 days and two controls not yet deployed.”</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">both numbers, honestly</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">nothing left for them to discover — the conversation moves to the plan</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The third opening is the only one that survives a follow-up, and it is the one that sounds worst when you rehearse it.</div></div><div class="nbmd"><h2>Your turn</h2>
 <p>Generate this script from your own live control state rather than writing it. If it cannot be generated, your coverage number is being assembled by hand for each meeting — which is why it differs between meetings.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> One control set mapped to a horizontal regime, a sector overlay and a privacy position; trigger criteria for disclosure written before they are needed; documentation and logs designed backwards from what a supervisor will ask.</p>
 <p><strong>What you still cannot do.</strong> Compliance tells you what you owe. It does not tell you what to build first, who owns it, how to say no to the business without losing the next conversation, or what to do when the programme is judged on a failure it was never going to prevent.</p>

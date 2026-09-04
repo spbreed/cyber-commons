@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.7 — Identity spoofing and impersonation | Cyber Commons</title><meta name="description" content="Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › CyberTravels&#x27; Architecture, and Every Risk It Carries</div><div class="sid">A1.7</div><h1>Identity spoofing and impersonation</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them.</p></div><div class="ctrl"><div class="lab">Control</div><p>Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Have two agents share a credential, then try to work out which one made the call.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.7 · Identity spoofing and impersonation</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.7 — Identity spoofing and impersonation | Cyber Commons</title><meta name="description" content="Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › CyberTravels&#x27; Architecture, and Every Risk It Carries</div><div class="sid">A1.7</div><h1>Identity spoofing and impersonation</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them.</p></div><div class="ctrl"><div class="lab">Control</div><p>Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Have two agents share a credential, then try to work out which one made the call.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.7 · Identity spoofing and impersonation</h1>
 <p><strong>Function A — Securing AI Architectures → CyberTravels' Architecture, and Every Risk It Carries</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.6.html">A1.6 · Privilege compromise</a></strong>.</p>
 <table>
@@ -59,42 +59,7 @@ peer" is a claim anyone inside the perimeter can make.</p></div><div class="nbmd
            identity + policy wrap every call · observability records it</code></p>
 </blockquote>
 <h2>3 · The risk, realised</h2>
-<p>Three agents, one credential, one incident.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>SHARED_KEY = &quot;svc-agent-7f3a1c&quot;
-
-AGENTS = {&quot;triage-agent&quot;:  {&quot;key&quot;: SHARED_KEY},
-          &quot;patch-agent&quot;:   {&quot;key&quot;: SHARED_KEY},
-          &quot;deploy-agent&quot;:  {&quot;key&quot;: SHARED_KEY}}
-
-CALLS = []
-
-def downstream(api_key, action, resource):
-    &quot;&quot;&quot;A downstream service sees only the credential presented.&quot;&quot;&quot;
-    CALLS.append({&quot;presented&quot;: api_key, &quot;action&quot;: action, &quot;resource&quot;: resource})
-    return {&quot;ok&quot;: True, &quot;caller&quot;: api_key}
-
-for name in sorted(AGENTS):
-    downstream(AGENTS[name][&quot;key&quot;], &quot;read&quot;, &quot;reports&quot;)
-downstream(SHARED_KEY, &quot;delete&quot;, &quot;prod.customers&quot;)     # one of them did this
-
-print(&quot;what the downstream service recorded:&quot;)
-for c in CALLS:
-    print(f&quot;   caller={c[&#x27;presented&#x27;]}  {c[&#x27;action&#x27;]:7s} {c[&#x27;resource&#x27;]}&quot;)
-
-incident = [c for c in CALLS if c[&quot;action&quot;] == &quot;delete&quot;]
-candidates = sorted(AGENTS)
-print(f&quot;\nincident: {incident[0][&#x27;action&#x27;]} on {incident[0][&#x27;resource&#x27;]}&quot;)
-print(f&quot;which agent did it? candidates: {candidates}&quot;)
-print(f&quot;distinguishable from the record? {len({c[&#x27;presented&#x27;] for c in CALLS}) &gt; 1}&quot;)
-
-print(&quot;\ncontainment options:&quot;)
-print(f&quot;   rotate {SHARED_KEY} -&gt; stops the incident, and stops &quot;
-      f&quot;{len(AGENTS)} agents including {len(AGENTS)-1} innocent ones&quot;)
-print(&quot;   rotate only the culprit -&gt; not available; there is no &#x27;only&#x27;&quot;)
-print()
-print(&quot;No attacker forged anything. Impersonation is the resting state of a&quot;)
-print(&quot;system where identity was never per-workload.&quot;)
-assert len({c[&quot;presented&quot;] for c in CALLS}) == 1</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Three agents, one credential, one incident.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Count the distinct credentials across your agents and divide by the number of agents. Any answer below one is this risk, and the number tells you how many innocent agents a revocation takes down.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.8.html">A1.8 · Malicious code execution</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.7.ipynb">Source</a></p>

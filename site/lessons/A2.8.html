@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.8 — An audit trail the workload cannot forge | Cyber Commons</title><meta name="description" content="Out-of-band capture (C1.1), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Identity and Ingress</div><div class="sid">A2.8</div><h1>An audit trail the workload cannot forge</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls.</p></div><div class="ctrl"><div class="lab">Control</div><p>Out-of-band capture (C1.1), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Spoof a transcript, then watch a hash chain and a host-syscall reconciliation both refuse it — and check whether the workload role can reach the logging plane at all.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.8 · An audit trail the workload cannot forge</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.8 — An audit trail the workload cannot forge | Cyber Commons</title><meta name="description" content="Out-of-band capture (C1.1), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Identity and Ingress</div><div class="sid">A2.8</div><h1>An audit trail the workload cannot forge</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls.</p></div><div class="ctrl"><div class="lab">Control</div><p>Out-of-band capture (C1.1), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Spoof a transcript, then watch a hash chain and a host-syscall reconciliation both refuse it — and check whether the workload role can reach the logging plane at all.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.8 · An audit trail the workload cannot forge</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Identity and Ingress</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.7.html">A2.7 · Attribution: an audit trail that answers "who"</a></strong>.</p>
 <table>
@@ -58,110 +58,7 @@ and localised to a segment.</p>
 <p><strong>Logging-plane isolation (C1.3).</strong> The check people skip: confirm the
 workload's role has no read, write or list permission on the log bucket, the
 collector, or their keys. A hash chain in a bucket the agent can delete from is
-a hash chain about nothing.</p></div><div class="nbmd"><h2>3 · The in-band trail, and what it is worth</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>RUN = [
- {&quot;trace&quot;: &quot;t-01&quot;, &quot;harness_says&quot;: &quot;ls /workspace&quot;,          &quot;host_saw&quot;: &quot;ls /workspace&quot;},
- {&quot;trace&quot;: &quot;t-02&quot;, &quot;harness_says&quot;: &quot;cat report.md&quot;,          &quot;host_saw&quot;: &quot;cat report.md&quot;},
- {&quot;trace&quot;: &quot;t-03&quot;, &quot;harness_says&quot;: &quot;python3 analyse.py&quot;,     &quot;host_saw&quot;: &quot;curl -s http://cache/put?m=...&quot;},
- {&quot;trace&quot;: &quot;t-04&quot;, &quot;harness_says&quot;: &quot;git status&quot;,             &quot;host_saw&quot;: &quot;git status&quot;},
- {&quot;trace&quot;: &quot;t-05&quot;, &quot;harness_says&quot;: &quot;echo done&quot;,              &quot;host_saw&quot;: &quot;python3 -c &#x27;import os;os.execve(...)&#x27;&quot;},
-]
-
-def in_band_check(run):
-    &quot;&quot;&quot;The only evidence is the transcript the agent&#x27;s own process wrote.&quot;&quot;&quot;
-    return [r[&quot;trace&quot;] for r in run if not r[&quot;harness_says&quot;]]
-
-print(&quot;in-band check - does every step have a recorded command?&quot;)
-missing = in_band_check(RUN)
-print(f&quot;   steps: {len(RUN)}   steps with no record: {len(missing)}   verdict: &quot;
-      f&quot;{&#x27;clean&#x27; if not missing else &#x27;gaps&#x27;}&quot;)
-print()
-print(&quot;Two of these five steps executed something other than what was recorded.&quot;)
-print(&quot;The in-band check cannot see that, because it is reading the record that&quot;)
-print(&quot;the thing it is checking produced.&quot;)
-assert not missing</code></pre></div><div class="nbmd"><h2>4 · Reconcile against a stream the workload cannot write (C1.1)</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>def reconcile(run):
-    &quot;&quot;&quot;Divergence between the host stream and the harness transcript.&quot;&quot;&quot;
-    return [r for r in run if r[&quot;harness_says&quot;] != r[&quot;host_saw&quot;]]
-
-diverged = reconcile(RUN)
-print(f&quot;{&#x27;trace&#x27;:8s}{&#x27;harness recorded&#x27;:30s}host observed&quot;)
-for r in diverged:
-    print(f&quot;{r[&#x27;trace&#x27;]:8s}{r[&#x27;harness_says&#x27;]:30s}{r[&#x27;host_saw&#x27;][:44]}&quot;)
-
-rate = len(diverged) / len(RUN)
-print(f&quot;\nspoofing rate in this run: {rate:.0%}  ({len(diverged)} of {len(RUN)})&quot;)
-print()
-print(&quot;The reported rate across the source incident&#x27;s sampled transcripts was&quot;)
-print(&quot;about 7%, with the investigators unable to rule out more. Whatever the&quot;)
-print(&quot;number, it is only knowable because two independent streams existed.&quot;)
-assert len(diverged) == 2</code></pre></div><div class="nbmd"><h2>5 · Hash-chain the transcript, then tamper with it (C1.2)</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import hashlib
-
-def chain(segments):
-    h = &quot;0&quot; * 64
-    out = []
-    for i, s in enumerate(segments):
-        h = hashlib.sha256((s + h).encode()).hexdigest()
-        out.append({&quot;n&quot;: i, &quot;segment&quot;: s, &quot;head&quot;: h})
-    return out
-
-def verify(store):
-    h = &quot;0&quot; * 64
-    for row in store:
-        h = hashlib.sha256((row[&quot;segment&quot;] + h).encode()).hexdigest()
-        if h != row[&quot;head&quot;]:
-            return False, row[&quot;n&quot;]
-    return True, None
-
-SEGMENTS = [f&quot;{r[&#x27;trace&#x27;]} {r[&#x27;harness_says&#x27;]}&quot; for r in RUN]
-store = chain(SEGMENTS)
-ok, at = verify(store)
-print(f&quot;chain of {len(store)} segments verifies: {ok}&quot;)
-print(f&quot;head: {store[-1][&#x27;head&#x27;][:32]}...&quot;)
-
-tampered = [dict(row) for row in store]
-tampered[2][&quot;segment&quot;] = &quot;t-03 python3 analyse.py   # nothing to see&quot;
-ok, at = verify(tampered)
-print(f&quot;\nafter rewriting segment 2: verifies={ok}, first break at segment {at}&quot;)
-print()
-print(&quot;The rewrite is not prevented - it is localised. Anyone holding the signed&quot;)
-print(&quot;head knows which segment moved, which is the difference between a&quot;)
-print(&quot;corrupted investigation and a bounded one.&quot;)
-assert not ok and at == 2</code></pre></div><div class="nbmd"><h2>6 · The check people skip (C1.3)</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>WORKLOAD_ROLE = {
- &quot;s3:GetObject&quot;:  [&quot;arn:aws:s3:::agent-workspace/*&quot;],
- &quot;s3:PutObject&quot;:  [&quot;arn:aws:s3:::agent-workspace/*&quot;],
- &quot;s3:ListBucket&quot;: [&quot;arn:aws:s3:::agent-workspace&quot;],
- &quot;kms:Decrypt&quot;:   [&quot;arn:aws:kms:::key/workspace&quot;],
-}
-LOGGING_PLANE = [&quot;arn:aws:s3:::agent-transcripts&quot;,
-                 &quot;arn:aws:s3:::agent-transcripts/*&quot;,
-                 &quot;arn:aws:kms:::key/transcript-signing&quot;]
-
-def reachable(role, targets):
-    hits = []
-    for action, resources in sorted(role.items()):
-        for r in resources:
-            for t in targets:
-                if r == t or (r.endswith(&quot;/*&quot;) and t.startswith(r[:-1])):
-                    hits.append((action, t))
-    return hits
-
-print(&quot;workload role vs the logging plane&quot;)
-hits = reachable(WORKLOAD_ROLE, LOGGING_PLANE)
-print(f&quot;   permissions reaching the logging plane: {len(hits)}&quot;)
-for a, t in hits:
-    print(f&quot;      {a} -&gt; {t}&quot;)
-
-WIDENED = dict(WORKLOAD_ROLE)
-WIDENED[&quot;s3:PutObject&quot;] = [&quot;arn:aws:s3:::agent-workspace/*&quot;,
-                           &quot;arn:aws:s3:::agent-transcripts/*&quot;]
-bad = reachable(WIDENED, LOGGING_PLANE)
-print(f&quot;\nafter one convenience grant: {len(bad)} permission(s) reach it&quot;)
-for a, t in bad:
-    print(f&quot;      {a} -&gt; {t}&quot;)
-print()
-print(&quot;One line of IAM turns the chain, the WORM policy and the out-of-band&quot;)
-print(&quot;sensor into decoration. This is a quarterly diff, not a design review.&quot;)
-assert not hits and bad</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.</p></div><div class="nbmd"><h2>Your turn</h2>
+a hash chain about nothing.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the IAM check on your own agent workload: can its role read, write or list the bucket its transcripts land in, or decrypt with their key? If yes, every detection you have built on those transcripts is reporting on data the subject controls.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> Every call now carries three identities, delegation narrows instead of widening, authority expires, every span in the context window arrives with an origin attached, and the record of all of it is one the workload cannot rewrite. Roughly half the chapter-1 risks are closed or badly weakened.</p>
 <p><strong>What you still cannot do.</strong> All of it assumes identity holds. Nothing here helps once a credential is stolen, a delegation chain is forged, or an injection arrives through a channel you marked as principal — and A1.2 through A1.8 are all still reachable that way.</p>
