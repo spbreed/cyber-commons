@@ -16,6 +16,8 @@ of these controls once you run more than a handful of agents.
     A3.7  the gateway                     all of the above, once
 """
 
+from .skills import skill_steps
+
 MITIGATES = """
 > **What this control closes.**
 >
@@ -82,8 +84,8 @@ which is a better place to stand.
          "the audit trail observed — which only means anything if the trail is "
          "intact, so incomplete coverage is a finding rather than a clean pass. "
          "This is the file in this repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/iam-least-privilege-verifier"),
+  ("skill_script", "attestation/iam-least-privilege-verifier/scripts/iam_least_privilege_verifier.py"),
 ],
  "expect": "The skill loads and reports its shape. Two of its failure modes are "
            "the ones this lesson is about: counting managed-policy *names* "
@@ -292,6 +294,8 @@ implicit:
 Three products, one structure: deny everything by construction, then name what
 is permitted, one destination at a time."""),
   ("md", "## 4 · Evaluate the manifest, including the way it is usually broken"),
+  *skill_steps('runtime/sandbox-containment-probe',
+               '## 2 · The check, as a skill\n\nOne probe, three environments, and the middle one is the configuration that actually ships: real isolation with production credentials mounted inside it. The skill then evaluates the NetworkPolicy objects connection by connection, because a namespace no policy selects is unrestricted rather than unconfigured.'),
 ],
  "expect": "The same code is executed against three environments: unsandboxed it "
            "reaches a private key, two credentials and the whole network; "
@@ -355,8 +359,8 @@ default.
          "it is the one that has actually been used — and requires you to record "
          "what you did **not** test, because a probe list is a statement about "
          "coverage. This is the file in this repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/sandbox-egress-verifier"),
+  ("skill_script", "attestation/sandbox-egress-verifier/scripts/sandbox_egress_verifier.py"),
 ],
  "expect": "The skill loads and reports its shape. Its ceiling is PARTIAL and "
            "not negotiable: a configuration that looks right is not a PASS, and "
@@ -406,6 +410,8 @@ different door.
   ("md", MITIGATES + "> Turns an unbounded loop into a defined worst case, and "
          "bounds the harm to **other people's** capacity, not just your "
          "bill.\\n\\n## 2 · The control"),
+  *skill_steps('runtime/budget-and-stop-condition-audit',
+               "## 2 · The check, as a skill\n\nA loop usually carries several budgets and only one of them ever fires. The skill runs A1.13's impossible task against all of them, reports which binds first, and checks what the loop *returns* when it stops — because partial work reported as an answer is a budget converted into a quality problem."),
 ],
  "expect": "The impossible task from A1.13 now stops after six steps, halted by "
            "the per-target ceiling — before the token or action budgets are "
@@ -451,6 +457,8 @@ succeeded" is not a verifier — it is the same component grading its own work.
   ("md", MITIGATES + "> Stops a claim propagating without evidence attached. "
          "Schema validity is not truth: a well-formed object can assert "
          "anything.\\n\\n## 2 · The control"),
+  *skill_steps('runtime/tool-return-validation-check',
+               '## 2 · The check, as a skill\n\n`{"status":"refunded"}` is well-formed and may be false. The skill checks four returns twice — schema, then an independent oracle — and confirms that a claim with no oracle stops as `unverifiable` rather than quietly becoming true.'),
 ],
  "expect": "Four messages are checked twice. A schema-perfect, high-confidence "
            "claim is refuted by the oracle; a claim with no oracle stops with "
@@ -503,8 +511,8 @@ scepticism they would apply to a colleague.
          "arguments, not the happy path, and include time-to-stop, because how "
          "fast you can halt a run is part of how much it can cost. This is the "
          "file in this repository:"),
-  RUNTIME_STEP,
   ("skill", "architecture/blast-radius-review"),
+  ("skill_script", "architecture/blast-radius-review/scripts/blast_radius_review.py"),
 ],
  "expect": "The skill loads and reports its shape. The failure mode to carry "
            "into your own estate is the last one: raising an agent's autonomy "
@@ -560,8 +568,8 @@ attractive target. It has to be operated accordingly.
          "jobs, retries — and records each guardrail's **action**, because a "
          "filter set to observe is a filter that is switched on and stopping "
          "nothing. This is the file in this repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/llm-gateway-guardrail-verifier"),
+  ("skill_script", "attestation/llm-gateway-guardrail-verifier/scripts/llm_gateway_guardrail_verifier.py"),
 ],
  "expect": "The skill loads and reports its shape. Its confidence is HIGH only "
            "where egress is enforced below the application — the gateway is a "

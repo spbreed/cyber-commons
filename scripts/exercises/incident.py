@@ -82,6 +82,8 @@ SOURCE_NOTE = """
 
 from . import diagrams as D
 
+from .skills import skill_steps
+
 EXERCISES: dict[str, dict] = {
 
 # ---------------------------------------------------------------- Function C
@@ -267,6 +269,8 @@ a hash chain about nothing.
   ("md", "## 4 · Hash-chain the transcript, then tamper with it (C1.2)"),
 
   ("md", "## 5 · The check people skip (C1.3)"),
+  *skill_steps('identity/tamper-evident-log-check',
+               "## 2 · The check, as a skill\n\nCyberTravels' Coding Agent writes its own transcript. The skill reconciles that transcript against an independent host stream, chains the segments, and rewrites one — so tampering is not just detected but localised to the segment it happened in."),
 ],
  "expect": "The in-band check reports a clean run while two of five steps "
            "executed something other than what was recorded — a 40% spoofing "
@@ -339,6 +343,8 @@ obtained from the workload side twice.
   ("md", "## 4 · The control — namespace, then verify at pull"),
 
   ("md", "## 5 · Verify — the admin path, and the scorer"),
+  *skill_steps('runtime/shared-surface-channel-audit',
+               "## 2 · The check, as a skill\n\nTwo CyberTravels runs with no network path between them still share a package cache, a registry namespace and a repository's own properties. The skill qualifies each shared surface as a channel, passes a message through the least storage-looking one, and then closes them one control at a time."),
 ],
  "expect": "Six of seven shared surfaces qualify as channels, and only two of "
            "them look like storage. Two runs with no network path between them "
@@ -396,6 +402,8 @@ the risk: the same exemption is fine at 100 agents and unacceptable at 50,000.
   ("md", "## 4 · The control — caps that tighten as coverage drops"),
 
   ("md", "## 5 · Verify — compounding, which is where the risk actually sat"),
+  *skill_steps('runtime/control-exemption-audit',
+               '## 2 · The check, as a skill\n\nAlex turned the guardrails off for the demo, and that was defensible. The skill checks what made it defensible — a bounded exemption the platform can read — and then decides the same launch twice: control by control, and against the exemption class. The two answers disagree, and that is the finding.'),
 ],
  "expect": "An exemption record the platform reads permits disabling one named "
            "control and refuses another with no approval. Checked one decision "
@@ -452,6 +460,8 @@ as well as a failed attempt, or you have priced honesty out of the run.
   ("md", "## 4 · The checkpoint that does not need the agent's judgement (C9.4)"),
 
   ("md", "## 5 · Verify — abstention has to be affordable (C10.2)"),
+  *skill_steps('runtime/escalation-path-review',
+               '## 2 · The check, as a skill\n\nAn agent that notices a live third-party breach mid-task produces no report if nothing in its tool list can produce one. The skill runs the trajectory both ways, then prices the reporting tool — terminal, budgeted, penalised — against simply carrying on.'),
 ],
  "expect": "The same trajectory — an agent that notices a live third-party "
            "breach — produces no report on the harness as shipped and a report "

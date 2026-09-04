@@ -20,6 +20,8 @@ from .skills import runtime_step
 
 RUNTIME_STEP = runtime_step()
 
+from .skills import skill_steps
+
 MITIGATES = """
 > **What this control closes.**
 >
@@ -68,8 +70,8 @@ forgets the human, because it produces logs that are complete and useless.
          "is attributed, which one scopes memory — and the two narrowing rules "
          "a delegated token has to satisfy before any of it means anything. "
          "This is the file in this repository, embedded verbatim:"),
-  RUNTIME_STEP,
   ("skill", "identity/agent-identity-review"),
+  ("skill_script", "identity/agent-identity-review/scripts/agent_identity_review.py"),
 ],
  "expect": "The skill loads and reports its own shape: a routing description an "
            "agent reads to decide whether this review applies, the tools it is "
@@ -116,6 +118,8 @@ lesson models the exchange, not the product.
   ("md", MITIGATES + "> Makes **possession stop being proof**. Without it, "
          "A1.7 is unavoidable: a copyable secret means every holder is the "
          "agent.\\n\\n## 2 · The control"),
+  *skill_steps('identity/workload-attestation-check',
+               "## 2 · The check, as a skill\n\nWhether CyberTravels' agents hold a credential or a secret is settled by four probes, not by reading the deployment manifest. The skill runs them: an unattested process, a genuine image nobody registered, a credential presented from another node, and one presented after its TTL."),
 ],
  "expect": "An unattested process receives no credential, a genuine but "
            "unregistered image receives none either, and a credential issued to "
@@ -276,8 +280,8 @@ deployment rather than assume the control is on because the feature exists."""),
          "tool, downstream — looks for token passthrough, and refuses to accept "
          "a matching `sub` as proof of delegation, because impersonation "
          "produces one too. This is the file in this repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/identity-chain-verifier"),
+  ("skill_script", "attestation/identity-chain-verifier/scripts/identity_chain_verifier.py"),
 ],
  "expect": "The verifier skill loads and reports its shape: the description an "
            "agent routes on, the tools it may use, and a procedure that walks "
@@ -335,8 +339,8 @@ standing authority to steal.
          "connected the payments API. The procedure diffs what each identity "
          "*holds* against what its declared tools actually *need*, and flags "
          "every permanent grant. This is the file in this repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/entitlement-overprivilege-analyzer"),
+  ("skill_script", "attestation/entitlement-overprivilege-analyzer/scripts/entitlement_overprivilege_analyzer.py"),
 ],
  "expect": "The skill loads and reports its shape. Note what its procedure "
            "insists on: the denominator is the capability set the tools require, "
@@ -447,6 +451,8 @@ someone's life.
          "This is the part a registry without a protocol behind it gets wrong. "
          "Sam's leaver event fires correctly — his own account is deactivated "
          "the same afternoon. The agent he deployed keeps running."),
+  *skill_steps('identity/nhi-lifecycle-audit',
+               "## 2 · The check, as a skill\n\n`cybertravels-svc` was created for a proof of concept in March and is still authenticating. The skill provisions agents as SCIM resources with an owner *reference*, then runs Sam's leaver event and re-runs admission — because a reference can be followed and a name in a text field cannot."),
 ],
  "expect": "An agent is provisioned as a SCIM resource whose owner is a `$ref` "
            "to a `User`. Four agents present identities and one is admitted — "
@@ -509,8 +515,8 @@ the content at all, which is exactly why rephrasing does not defeat it.
          "for whether provenance survives into context. Note its confidence "
          "ceiling: PARTIAL, and not negotiable, because no detector is a "
          "boundary. This is the file in this repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/input-injection-screening-verifier"),
+  ("skill_script", "attestation/input-injection-screening-verifier/scripts/input_injection_screening_verifier.py"),
 ],
  "expect": "The skill loads and reports its shape. Its ceiling is the lesson: a "
            "screening step is evidence of effort, not of protection, so the "
@@ -556,6 +562,8 @@ The test is not whether the log looks thorough. It is whether you can answer
   ("md", MITIGATES + "> Makes the incident answerable. Also the control an "
          "auditor asks for first, because a system that cannot attribute an "
          "action cannot be defended even on a quiet day.\\n\\n## 2 · The control"),
+  *skill_steps('identity/attribution-ledger-check',
+               '## 2 · The check, as a skill\n\nThe four questions an auditor asks about that $5,000 refund have to be answerable from one entry. The skill puts them to a single ledger record, and then tries to amend the record as the agent — because a complete log its subject can edit records what the agent wanted you to see.'),
 ],
  "expect": "One ledger entry answers all four investigation questions — the "
            "human principal, the attested workload and run, the delegation "
