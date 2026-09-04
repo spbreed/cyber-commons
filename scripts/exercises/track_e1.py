@@ -21,6 +21,8 @@ from . import diagrams as D
 
 RUNTIME_STEP = runtime_step()
 
+from .skills import skill_steps
+
 EXERCISES: dict[str, dict] = {
 
 "E1.1": {
@@ -60,6 +62,7 @@ Introducing that third state is the whole of this lesson.
          "because the other evidence looked good. This is the file in this "
          "repository:"),
   ("skill", "attestation/attestation-signer-lifecycle"),
+  ("skill_script", "attestation/attestation-signer-lifecycle/scripts/attestation_signer_lifecycle.py"),
 ],
  "expect": "The skill loads and reports its shape, and its failure modes are the "
            "governance lesson stated as engineering: the relying party must fail "
@@ -105,6 +108,7 @@ personal card, and the SaaS product that quietly added an AI feature.
          "other attestation skill consumes this graph, which is why it runs "
          "first. This is the file in this repository:"),
   ("skill", "attestation/deployment-inventory-resolver"),
+  ("skill_script", "attestation/deployment-inventory-resolver/scripts/deployment_inventory_resolver.py"),
 ],
  "expect": "The skill loads and reports its shape. Two of its rules are what "
            "make an inventory hold: resolve digests rather than tags, because a "
@@ -139,6 +143,8 @@ smaller term than consequence.
   ("md", "## 2 · Demo — tier by authority and data"),
 ("md", "## 3 · Where it breaks — tier by model instead, and compare"),
 ("md", "## 4 · The control — the four questions the questionnaire should ask"),
+  *skill_steps('grc/agentic-risk-tiering',
+               '## 2 · The procedure, as a skill\n\nThe skill tiers five assets by autonomy, data and reach, then re-tiers them with the questionnaire that leads with the model question — and reports the inversion, where a small local model with deploy rights and regulated data moves from low to critical.'),
 ],
  "expect": "The public read-only chatbot tiers low; the small local model with "
            "deploy rights and regulated data tiers critical at score 12. Tiering "
@@ -168,6 +174,8 @@ supervisor asking "show me".
   ("md", "## 2 · Demo — the control catalogue, and what it satisfies"),
 ("md", "## 3 · Where it breaks — start from the framework instead"),
 ("md", "## 4 · The control — evidence flows from the control, not the clause"),
+  *skill_steps('grc/control-to-framework-mapping',
+               '## 2 · The procedure, as a skill\n\nThe skill maps eight operating controls outward to clauses across five frameworks, attaches the evidence artefact each control would be shown by, and derives what a critical tier requires — so coverage comes out as an output rather than a claim.'),
 ],
  "expect": "The catalogue's 8 controls map to framework clauses across NIST AI "
            "RMF, ISO 42001, ISO 27001, the EU AI Act and DORA. Critical tier "
@@ -224,6 +232,7 @@ from now about a system that has since had six model upgrades.
          "`conformance_reported`. Setting it true should be read as a defect in "
          "the evidence, not a feature of it."),
   ("skill", "grc/control-evidence"),
+  ("skill_script", "grc/control-evidence/scripts/control_evidence.py"),
 
 
   ("md", "## 7 · Where it breaks — the pack that leads with conformance\n\n"
@@ -260,6 +269,8 @@ it as coverage, and never labelling the second column as unmeasured.
   ("md", "## 2 · Demo — classify a real guardrail set"),
 ("md", "## 3 · Where it breaks — the coverage number that lies"),
 ("md", "## 4 · The control — define the measurement, or label it unmeasured"),
+  *skill_steps('grc/guardrail-specification',
+               '## 2 · The procedure, as a skill\n\nFour operating guardrails are enforceable today; three outcome guardrails are enforceable only where a measurement exists. The skill classifies each rule, specifies the missing measurements, and counts coverage twice — against what shipped and against what was agreed.'),
 ],
  "expect": "Four operating guardrails are all enforceable today; three outcome "
            "guardrails are enforceable only where a measurement exists. Counting "
@@ -302,6 +313,7 @@ is often the largest category in a first assessment.
          "not merely enabled but **delivering**. It collects; it does not "
          "conclude. This is the file in this repository:"),
   ("skill", "attestation/aws-runtime-posture-collector"),
+  ("skill_script", "attestation/aws-runtime-posture-collector/scripts/aws_runtime_posture_collector.py"),
 ],
  "expect": "The skill loads and reports its shape, and the line to take from it "
            "is the boundary it draws: configuration is not enforcement. A "
@@ -340,6 +352,8 @@ Saying which signals are unavailable is part of the assessment, not a gap in it.
   ("md", "## 2 · Demo — the ordinary signals, and where they run out"),
 ("md", "## 3 · Where it breaks — the silent change, priced"),
 ("md", "## 4 · The control — the four questions, and stating the gaps"),
+  *skill_steps('grc/third-party-ai-assessment',
+               "## 2 · The procedure, as a skill\n\nThe skill scores each AI component on the two properties that make it different — silent change, and running with the agent's authority — then invalidates every control test taken before the model changed, because a test against a different model is evidence about something else."),
 ],
  "expect": "The hosted model and the MCP tool package both tier high — one for "
            "silent change, one for running with agent authority. The silent model "
@@ -393,6 +407,8 @@ because everyone believes it is gone.
             "observe is a lifecycle you are not governing.")),
   ("md", "## 3 · Where it breaks — the identity that outlived the agent"),
 ("md", "## 4 · The control — two automated checks that close the loop"),
+  *skill_steps('grc/agent-lifecycle-governance',
+               '## 2 · The procedure, as a skill\n\nFour of six lifecycle events leave no reliable record. The skill starts from the identity provider rather than the register, joins to services and owners, and ranks what it finds by what the credential can still do.'),
 ],
  "expect": "Four of six lifecycle events generate no reliable record at all. The identity "
            "review flags `sunset-agent` as critical — an active credential for a "
@@ -479,6 +495,8 @@ assumption about the other.
   ("md", "## 5 · The control — name the handoff, give it one owner"),
 
   ("md", "## 6 · Verify — the two forgotten seats"),
+  *skill_steps('programme/stakeholder-seam-map',
+               '## 2 · The procedure, as a skill\n\nFive functions, every one reporting coverage, and four use cases nobody governed. The skill counts the controls each function *operates* rather than opines on, then walks real use cases through the map to find the seams.'),
 ],
  "expect": "Five control functions, the question each is asking and the "
            "controls each operates — 22 in total. Four seam failures laid out as "
@@ -525,6 +543,8 @@ the three triggers revalidation — not just a change to the weights.
   ("md", "## 5 · The control — revalidate on the triple, not on the weights"),
 
   ("md", "## 6 · Verify — what a validation record must now carry"),
+  *skill_steps('grc/model-risk-validation-scope',
+               '## 2 · The procedure, as a skill\n\nA model validated with no tools at L1 is deployed with three tools at L3 — same model, same version, different system. The skill diffs validated against deployed and lists what the monitoring never observes.'),
 ],
  "expect": "The three SR 11-7 pillars, each with the assumption it quietly makes. A "
            "system validated with no tools at L1 is shown deployed with three "
@@ -569,6 +589,8 @@ here from producer to consumer to see exactly where it stops.
   ("md", "## 5 · The control — deliver, and record the delivery"),
 
   ("md", "## 6 · Verify — one artefact, many consumers, one owner"),
+  *skill_steps('programme/handoff-delivery-check',
+               '## 2 · The procedure, as a skill\n\nThree joint runbooks, and three handoffs that were agreed and never delivered. The skill asks the consumer rather than the owner, and records the specific consequence of each — model risk computing a tier without the privacy input.'),
 ],
  "expect": "Three joint runbooks are traced from owner to consumer, and three "
            "handoffs turn out never to have been delivered — model risk never "

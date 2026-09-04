@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.2 — Horizontal AI regulation | Cyber Commons</title><meta name="description" content="Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.2</div><h1>Horizontal AI regulation</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;We only deployed it, we didn&#x27;t build it&quot; — sometimes true, often not.</p></div><div class="ctrl"><div class="lab">Control</div><p>Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Classify three workflows and defend the boundary cases.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.2 · Horizontal AI regulation</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.2 — Horizontal AI regulation | Cyber Commons</title><meta name="description" content="Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.2</div><h1>Horizontal AI regulation</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;We only deployed it, we didn&#x27;t build it&quot; — sometimes true, often not.</p></div><div class="ctrl"><div class="lab">Control</div><p>Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Classify three workflows and defend the boundary cases.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.2 · Horizontal AI regulation</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Platform — Regulatory and Compliance</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E2.1.html">E2.1 · The regulatory map</a></strong>.</p>
 <table>
@@ -45,7 +45,273 @@ themes cover most of it:</p>
 <li>human oversight,</li>
 <li>accuracy and robustness.</li>
 </ul>
-<p>Each one resolves to controls you already built in tracks A, B and D.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Each one resolves to controls you already built in tracks A, B and D.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The skill maps four regulatory themes to named controls with concrete artefacts, then applies the show-me test to the prose answers a policy currently offers — and counts how many sentences survive it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/horizontal-requirement-to-control/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: horizontal-requirement-to-control
+description: &gt;-
+  Turn horizontal AI-regulation themes into named controls with concrete
+  evidence artefacts, and apply the show-me test to the prose answers a policy
+  currently offers. Use when a regulation is being answered with paragraphs.
+allowed-tools: Read, Grep, Glob
+---
+
+# Every prose answer fails the show-me test
+
+Horizontal AI regulation resolves to a small number of recurring themes — risk
+management, data governance, human oversight, record keeping, transparency,
+accuracy and robustness. Each maps to controls you can operate. A policy that
+answers them in prose passes reading and fails the first follow-up, which is
+always &quot;show me&quot;.
+
+## When to use this
+
+Responding to a horizontal AI regulation, and auditing an existing response
+before somebody external does.
+
+## Procedure
+
+**1 — Extract the themes rather than the article numbers.** Article numbers
+change between drafts and jurisdictions; the themes are stable and map to
+controls you already have.
+
+**2 — Map each theme to named controls from your catalogue.** If a theme has no
+control, that is the finding — record it as a gap rather than writing a
+paragraph.
+
+**3 — Attach the evidence artefact per control.** The specific thing that would
+be handed over: a log export, a test result, an approval record, a signed
+attestation.
+
+**4 — Apply the show-me test to the current prose answers.** For each sentence,
+is there an artefact behind it? Count the sentences that survive. It is usually
+none, and the count is more persuasive than the argument.
+
+**5 — Check freshness.** An artefact older than the control&#x27;s freshness window
+evidences the past. Report themes as fully evidenced, stale, or unevidenced —
+three states, not two.
+
+## Output contract
+
+```json
+{
+  &quot;themes&quot;: [{&quot;theme&quot;: &quot;str&quot;, &quot;controls&quot;: [&quot;str&quot;], &quot;gap&quot;: false}],
+  &quot;evidence&quot;: [{&quot;control&quot;: &quot;str&quot;, &quot;artefact&quot;: &quot;str&quot;, &quot;as_of&quot;: &quot;str&quot;, &quot;fresh&quot;: true}],
+  &quot;prose_answers&quot;: [{&quot;text&quot;: &quot;str&quot;, &quot;survives_show_me&quot;: false}],
+  &quot;status&quot;: [{&quot;theme&quot;: &quot;str&quot;, &quot;state&quot;: &quot;evidenced|stale|unevidenced&quot;}]
+}
+```
+
+## Failure modes
+
+- **Mapping article numbers.** They move; the themes do not.
+- **Answering a gap with a paragraph.** It reads as coverage and is not.
+- **Two-state reporting.** Stale is the state most of your evidence is in.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/regulatory/horizontal-requirement-to-control/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/horizontal-requirement-to-control/scripts/horizontal_requirement_to_control.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Turn horizontal AI regulation themes into named controls with evidence artefacts, and apply the show-me test to prose answers.
+
+This is the executable half of the `horizontal-requirement-to-control` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+CATALOGUE = {
+ &quot;AC-1&quot;: (&quot;agent identities distinct from human and separately revocable&quot;,
+          &quot;gateway logs with an act chain; monthly sample&quot;),
+ &quot;AC-2&quot;: (&quot;delegated authority narrows at every hop&quot;,
+          &quot;regression suite IDN-01/IDN-04 on every release&quot;),
+ &quot;SB-1&quot;: (&quot;egress deny-by-default with an allowlist&quot;, &quot;90-day denial log&quot;),
+ &quot;SB-2&quot;: (&quot;privileged tools require approval below L3&quot;, &quot;tool policy in git + denial log&quot;),
+ &quot;EV-1&quot;: (&quot;every action logged with the acting identity&quot;, &quot;audit sample of 50 actions&quot;),
+ &quot;EV-2&quot;: (&quot;accuracy evaluated against a held-out key per release&quot;,
+          &quot;expert accuracy report with sample size&quot;),
+ &quot;DR-1&quot;: (&quot;behavioural drift raises an alert&quot;, &quot;drift alerts and dispositions&quot;),
+ &quot;ST-1&quot;: (&quot;a tested stop mechanism you own&quot;, &quot;game-day record with measured time-to-stop&quot;),
+}
+THEMES = {
+ &quot;risk management system&quot;:       [&quot;AC-1&quot;, &quot;SB-2&quot;, &quot;DR-1&quot;],
+ &quot;record-keeping (Art.12)&quot;:      [&quot;EV-1&quot;, &quot;AC-2&quot;],
+ &quot;human oversight (Art.14)&quot;:     [&quot;SB-2&quot;, &quot;ST-1&quot;],
+ &quot;accuracy and robustness&quot;:      [&quot;EV-2&quot;, &quot;DR-1&quot;],
+}
+for theme, cids in THEMES.items():
+    print(f&quot;{theme}&quot;)
+    for cid in cids:
+        text, evidence = CATALOGUE[cid]
+        print(f&quot;   {cid}  {text}&quot;)
+        print(f&quot;         evidence: {evidence}&quot;)
+    print()
+
+WEAK = {
+ &quot;risk management system&quot;:   &quot;We operate a risk management framework for AI systems.&quot;,
+ &quot;record-keeping (Art.12)&quot;:  &quot;Appropriate logs are retained.&quot;,
+ &quot;human oversight (Art.14)&quot;: &quot;Human oversight is maintained at all times.&quot;,
+ &quot;accuracy and robustness&quot;:  &quot;Models are tested prior to deployment.&quot;,
+}
+def survives_followup(answer, controls):
+    &quot;&quot;&quot;The follow-up question is always &#x27;show me&#x27;.&quot;&quot;&quot;
+    return bool(controls), (&quot;names a control with an artefact&quot; if controls
+                            else &quot;no artefact — the answer IS the evidence, which is the problem&quot;)
+
+print(f&quot;{&#x27;theme&#x27;:28s}{&#x27;prose answer survives?&#x27;:&gt;24}&quot;)
+print(&quot;-&quot; * 56)
+for theme in THEMES:
+    ok_weak, _ = survives_followup(WEAK[theme], [])
+    print(f&quot;{theme:28s}{str(ok_weak):&gt;24}&quot;)
+print(&quot;\nAll four fail the same way: there is nothing to produce when asked.&quot;)
+
+import time
+from dataclasses import dataclass
+now = time.time(); DAY = 86400
+
+@dataclass
+class ControlTest:
+    cid: str; passed: bool; tested_at: float; valid_for_days: float
+    def state(self, at):
+        if (at - self.tested_at)/DAY &gt; self.valid_for_days: return &quot;STALE&quot;
+        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
+
+TESTS = [ControlTest(&quot;AC-1&quot;, True,  now -  3*DAY, 30),
+         ControlTest(&quot;AC-2&quot;, True,  now -  9*DAY, 30),
+         ControlTest(&quot;SB-2&quot;, True,  now - 40*DAY, 30),
+         ControlTest(&quot;EV-1&quot;, True,  now -  5*DAY, 60),
+         ControlTest(&quot;EV-2&quot;, True,  now - 12*DAY, 30),
+         ControlTest(&quot;DR-1&quot;, False, now,          30),
+         ControlTest(&quot;ST-1&quot;, True,  now - 41*DAY, 180)]
+by = {t.cid: t for t in TESTS}
+
+print(f&quot;{&#x27;theme&#x27;:28s}{&#x27;controls&#x27;:22s}{&#x27;evidenced now&#x27;:&gt;15}&quot;)
+print(&quot;-&quot; * 68)
+for theme, cids in THEMES.items():
+    states = [by[c].state(now) if c in by else &quot;NO EVIDENCE&quot; for c in cids]
+    ok = all(s == &quot;PASS&quot; for s in states)
+    blockers = &quot;,&quot;.join(c for c, s in zip(cids, states) if s != &quot;PASS&quot;)
+    verdict = &quot;yes&quot; if ok else f&quot;NO — {blockers}&quot;
+    print(f&quot;{theme:28s}{str(cids):22s}{verdict:&gt;15}&quot;)
+
+fully = [t for t, cids in THEMES.items()
+         if all((by[c].state(now) if c in by else &quot;X&quot;) == &quot;PASS&quot; for c in cids)]
+print(f&quot;\nthemes fully evidenced right now: {len(fully)}/{len(THEMES)}  {fully}&quot;)
+print(&quot;\nThat sentence is what you say to a supervisor. It is smaller than the&quot;)
+print(&quot;prose version and it is defensible, which is the trade worth making.&quot;)
+assert len(fully) &lt; len(THEMES)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Four regulatory themes resolve to named controls, each with a concrete evidence artefact. All four prose answers fail the show-me test. Checking freshness, two themes are fully evidenced — human oversight fails on a stale SB-2 and risk management on a failing DR-1 — giving a smaller but defensible statement.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one clause your programme claims to satisfy and trace it to an artefact with a date. If the trail ends at a policy document, the clause is ticked and undefended.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.3.html">E2.3 · Voluntary frameworks as your spine</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.2.ipynb">Source</a></p>

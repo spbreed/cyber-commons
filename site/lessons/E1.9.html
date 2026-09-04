@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.9 — Model and agent lifecycle governance | Cyber Commons</title><meta name="description" content="Retraining, fine-tuning and re-indexing as change-management events."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.9</div><h1>Model and agent lifecycle governance</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Re-indexing treated as maintenance, not change.</p></div><div class="ctrl"><div class="lab">Control</div><p>Retraining, fine-tuning and re-indexing as change-management events.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Write the gate a re-index has to pass.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.9 · Model and agent lifecycle governance</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.9 — Model and agent lifecycle governance | Cyber Commons</title><meta name="description" content="Retraining, fine-tuning and re-indexing as change-management events."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.9</div><h1>Model and agent lifecycle governance</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Re-indexing treated as maintenance, not change.</p></div><div class="ctrl"><div class="lab">Control</div><p>Retraining, fine-tuning and re-indexing as change-management events.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Write the gate a re-index has to pass.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.9 · Model and agent lifecycle governance</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Framework — Risk and Control</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.8.html">E1.8 · Third-party and model supply chain risk</a></strong>.</p>
 <table>
@@ -79,7 +79,257 @@ outside any process:</p>
 <p>The last row is the one most first reviews find: a retired agent whose identity
 still exists is a standing credential with no owner and nobody watching it,
 because everyone believes it is gone.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">lifecycle event</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">does it raise a ticket?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">why it matters</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">new agent deployed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">usually</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the existing change process catches it</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">tool added to the manifest</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">changes blast radius, and no pull request is raised</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">prompt edited in a console</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">changes behaviour, not code</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">provider upgrades the model</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">you may not be told at all</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">scope widened in IAM</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">sometimes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">depends entirely on your access-review cadence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent decommissioned</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>rarely</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the identity usually outlives the agent</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Four of six generate no reliable record. A lifecycle you cannot observe is a lifecycle you are not governing.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Four of six generate no reliable record. A lifecycle you cannot observe is a lifecycle you are not governing.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Four of six lifecycle events leave no reliable record. The skill starts from the identity provider rather than the register, joins to services and owners, and ranks what it finds by what the credential can still do.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/agent-lifecycle-governance/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: agent-lifecycle-governance
+description: &gt;-
+  Check which agent lifecycle events leave a record anybody reviews, and find
+  active credentials belonging to decommissioned services or to nobody. Use when
+  agents are created and retired faster than the process that governs them.
+allowed-tools: Read, Grep, Glob
+---
+
+# Four of six lifecycle events leave no record
+
+Model and agent lifecycle governance fails at the same place as change
+management: most of the events that matter — a model swap, a manifest edit, a
+scope grant, a decommission that stopped the workload and not the credential —
+produce nothing anybody reviews. The register is then accurate about creation
+and wrong about everything after.
+
+## When to use this
+
+Standing up lifecycle governance, and as a periodic sweep — this check finds
+things every time it is run.
+
+## Procedure
+
+**1 — List the lifecycle events.** Created, deployed, model changed, scope
+changed, superseded, decommissioned. For each, whether a record exists and who
+reads it.
+
+**2 — Take the identity list from the identity provider,** not from the
+register. The register knows what was declared; the provider knows what
+authenticates.
+
+**3 — Join to services and owners.** Three findings fall out: credentials for
+decommissioned services, identities whose owner reference does not resolve, and
+identities nobody has used in months.
+
+**4 — Rank by what the credential can still do.** An active credential for a
+decommissioned service with production scope is critical; an orphan with read
+access is not. Blast radius, not age, is the ranking.
+
+**5 — Attach an automatic consequence per class.** Decommissioned service:
+revoke. Orphan: suspend and notify. Unused past window: expire. A sweep with no
+consequence produces the same list next quarter.
+
+## Output contract
+
+```json
+{
+  &quot;events&quot;: [{&quot;event&quot;: &quot;str&quot;, &quot;record_exists&quot;: false, &quot;reviewed_by&quot;: &quot;str|null&quot;}],
+  &quot;identities&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;service&quot;: &quot;str|null&quot;, &quot;owner&quot;: &quot;str|null&quot;,
+                  &quot;last_used_days&quot;: 0, &quot;scopes&quot;: [&quot;str&quot;],
+                  &quot;finding&quot;: &quot;active_for_decommissioned|orphan|lapsed|ok&quot;, &quot;blast&quot;: 0}],
+  &quot;consequences&quot;: [{&quot;finding&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;, &quot;automatic&quot;: true}]
+}
+```
+
+## Failure modes
+
+- **Starting from the register.** It lists intentions.
+- **Ranking by age.** A recent orphan with deploy rights outranks an old
+  read-only one.
+- **A sweep with no automatic consequence.** It becomes a recurring report.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/grc/agent-lifecycle-governance/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/agent-lifecycle-governance/scripts/agent_lifecycle_governance.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Check which lifecycle events leave a record, and find the active credentials belonging to decommissioned services.
+
+This is the executable half of the `agent-lifecycle-governance` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import time
+now = time.time(); DAY = 86400
+
+IDENTITIES = {
+ &quot;triage-agent&quot;:   {&quot;created&quot;: now - 200*DAY, &quot;last_auth&quot;: now - 0.2*DAY,
+                    &quot;owner&quot;: &quot;appsec&quot;, &quot;service_running&quot;: True},
+ &quot;patch-agent&quot;:    {&quot;created&quot;: now - 180*DAY, &quot;last_auth&quot;: now - 1*DAY,
+                    &quot;owner&quot;: &quot;platform&quot;, &quot;service_running&quot;: True},
+ &quot;legacy-scanner&quot;: {&quot;created&quot;: now - 900*DAY, &quot;last_auth&quot;: now - 400*DAY,
+                    &quot;owner&quot;: &quot;&quot;, &quot;service_running&quot;: False},
+ &quot;poc-agent-2025&quot;: {&quot;created&quot;: now - 500*DAY, &quot;last_auth&quot;: now - 300*DAY,
+                    &quot;owner&quot;: &quot;&quot;, &quot;service_running&quot;: False},
+ &quot;sunset-agent&quot;:   {&quot;created&quot;: now - 300*DAY, &quot;last_auth&quot;: now - 2*DAY,
+                    &quot;owner&quot;: &quot;&quot;, &quot;service_running&quot;: False},
+}
+print(f&quot;{&#x27;identity&#x27;:18s}{&#x27;last auth (d)&#x27;:&gt;15}{&#x27;service running&#x27;:&gt;18}{&#x27;owner&#x27;:&gt;12}  finding&quot;)
+print(&quot;-&quot; * 92)
+for name, i in IDENTITIES.items():
+    age = (now - i[&quot;last_auth&quot;])/DAY
+    finding = &quot;&quot;
+    if not i[&quot;service_running&quot;] and age &lt; 30:
+        finding = &quot;ACTIVE CREDENTIAL FOR A RETIRED SERVICE&quot;
+    elif not i[&quot;service_running&quot;]:
+        finding = &quot;orphan — decommissioning never finished&quot;
+    elif not i[&quot;owner&quot;]:
+        finding = &quot;no owner&quot;
+    print(f&quot;{name:18s}{age:&gt;15.0f}{str(i[&#x27;service_running&#x27;]):&gt;18}&quot;
+          f&quot;{i[&#x27;owner&#x27;] or &#x27;—&#x27;:&gt;12}  {finding}&quot;)
+print(&quot;\nRead the sunset-agent row twice. The service was retired. The identity&quot;)
+print(&quot;authenticated two days ago. Somebody or something is still using it.&quot;)
+
+def lifecycle_checks(identities, now, stale_days=90):
+    findings = []
+    for name, i in identities.items():
+        age = (now - i[&quot;last_auth&quot;])/DAY
+        if not i[&quot;service_running&quot;] and age &lt; stale_days:
+            findings.append((name, &quot;critical&quot;,
+                             &quot;identity active for a decommissioned service&quot;))
+        elif age &gt; stale_days:
+            findings.append((name, &quot;medium&quot;,
+                             f&quot;no authentication in {age:.0f}d — decommission it&quot;))
+        elif not i[&quot;owner&quot;]:
+            findings.append((name, &quot;medium&quot;, &quot;no named owner&quot;))
+    return findings
+
+for name, sev, why in lifecycle_checks(IDENTITIES, now):
+    print(f&quot;[{sev:8s}] {name:18s} {why}&quot;)
+
+print(&quot;\nand the manifest-diff check, for the events that change behaviour:&quot;)
+SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20}
+def blast(tools, gated=frozenset()):
+    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n,s,rev in tools if n not in gated)
+BEFORE = [(&quot;read_file&quot;,&quot;self&quot;,True)]
+AFTER  = [(&quot;read_file&quot;,&quot;self&quot;,True), (&quot;deploy&quot;,&quot;org&quot;,False)]
+d = blast(AFTER) - blast(BEFORE)
+print(f&quot;   manifest changed: blast {blast(BEFORE)} → {blast(AFTER)} (+{d})&quot;)
+print(f&quot;   → requires re-tiering (E1.3) and a fresh SB-2 test (E1.7)&quot;)
+
+crit = [f for f in lifecycle_checks(IDENTITIES, now) if f[1] == &quot;critical&quot;]
+assert crit
+print(f&quot;\n{len(crit)} critical lifecycle finding(s) — each is a standing credential&quot;)
+print(&quot;for something everyone believes is switched off.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Four of six lifecycle events generate no reliable record at all. The identity review flags <code>sunset-agent</code> as critical — an active credential for a decommissioned service — plus two orphans with no authentication in 300+ days. The manifest diff shows the blast radius rising from 0 to 40, requiring re-tiering and a fresh control test.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Query your identity provider for non-human identities whose service is retired but which authenticated in the last 30 days. Every hit is either an undocumented dependency or someone else's foothold, and you cannot tell which from the directory alone.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.10.html">E1.10 · The stakeholder map: who owns what</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.9.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.9.ipynb">Source</a></p>

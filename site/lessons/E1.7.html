@@ -214,7 +214,101 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/aws-runtime-posture-collector/scripts/aws_runtime_posture_collector.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Compute a control posture honestly, then automate one test and watch coverage move.
+
+This is the executable half of the `aws-runtime-posture-collector` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import time
+from dataclasses import dataclass
+
+now = time.time(); DAY = 86400
+
+@dataclass
+class ControlTest:
+    cid: str; passed: bool; evidence: str
+    tested_at: float; valid_for_days: float
+    def age(self, at): return (at - self.tested_at)/DAY
+    def state(self, at):
+        if self.age(at) &gt; self.valid_for_days: return &quot;STALE&quot;
+        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
+
+REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
+TESTS = [
+ ControlTest(&quot;AC-1&quot;, True,  &quot;act chain sample&quot;,        now -   2*DAY, 30),
+ ControlTest(&quot;AC-2&quot;, True,  &quot;delegation regression&quot;,   now -   9*DAY, 30),
+ ControlTest(&quot;SB-1&quot;, True,  &quot;egress denial log&quot;,       now -  31*DAY, 30),
+ ControlTest(&quot;SB-2&quot;, True,  &quot;approval gate screenshot&quot;,now - 120*DAY, 27),
+ ControlTest(&quot;EV-1&quot;, True,  &quot;audit sample of 50&quot;,      now -   5*DAY, 60),
+ ControlTest(&quot;EV-2&quot;, True,  &quot;expert accuracy 0.81&quot;,    now -  12*DAY, 30),
+ ControlTest(&quot;DR-1&quot;, False, &quot;drift alerting not deployed&quot;, now,       30),
+]
+
+def verify(tests, required, at):
+    by = {t.cid: t for t in tests}
+    rows, evidenced = [], 0
+    for cid in required:
+        t = by.get(cid)
+        if t is None:
+            rows.append({&quot;control&quot;: cid, &quot;state&quot;: &quot;NO EVIDENCE&quot;, &quot;age&quot;: None})
+            continue
+        st = t.state(at)
+        rows.append({&quot;control&quot;: cid, &quot;state&quot;: st, &quot;age&quot;: round(t.age(at), 1)})
+        evidenced += st == &quot;PASS&quot;
+    return {&quot;required&quot;: len(required), &quot;evidenced&quot;: evidenced,
+            &quot;coverage&quot;: round(evidenced/len(required), 3), &quot;rows&quot;: rows}
+
+v = verify(TESTS, REQUIRED, now)
+print(f&quot;{&#x27;control&#x27;:9s}{&#x27;state&#x27;:14s}{&#x27;age (days)&#x27;:&gt;12}&quot;)
+print(&quot;-&quot; * 36)
+for r in v[&quot;rows&quot;]:
+    print(f&quot;{r[&#x27;control&#x27;]:9s}{r[&#x27;state&#x27;]:14s}{str(r[&#x27;age&#x27;]):&gt;12}&quot;)
+print(f&quot;\ncurrently evidenced {v[&#x27;evidenced&#x27;]}/{v[&#x27;required&#x27;]} = {v[&#x27;coverage&#x27;]:.0%}&quot;)
+
+point_in_time = sum(1 for t in TESTS if t.passed)
+print(f&quot;point-in-time  : {point_in_time}/{len(REQUIRED)} = &quot;
+      f&quot;{point_in_time/len(REQUIRED):.0%}&quot;)
+print(f&quot;continuous     : {v[&#x27;evidenced&#x27;]}/{v[&#x27;required&#x27;]} = {v[&#x27;coverage&#x27;]:.0%}&quot;)
+stale = [r[&quot;control&quot;] for r in v[&quot;rows&quot;] if r[&quot;state&quot;] == &quot;STALE&quot;]
+none  = [r[&quot;control&quot;] for r in v[&quot;rows&quot;] if r[&quot;state&quot;] == &quot;NO EVIDENCE&quot;]
+fail  = [r[&quot;control&quot;] for r in v[&quot;rows&quot;] if r[&quot;state&quot;] == &quot;FAIL&quot;]
+print(f&quot;\nthe gap: STALE {stale}  NO EVIDENCE {none}  FAIL {fail}&quot;)
+print(&quot;Nobody did anything wrong to produce the STALE rows. Time passed.&quot;)
+
+def automated_test(cid, run_now):
+    &quot;&quot;&quot;A control test that re-runs on a schedule writes its own evidence.&quot;&quot;&quot;
+    passed, evidence = run_now()
+    return ControlTest(cid, passed, evidence, tested_at=time.time(),
+                       valid_for_days=30)
+
+def check_egress_policy():
+    ALLOW = {&quot;api.github.com&quot;}
+    attempts = [&quot;https://api.github.com/x&quot;, &quot;http://169.254.169.254/&quot;,
+                &quot;https://collect.example.com/x&quot;]
+    from urllib.parse import urlparse
+    denied = [u for u in attempts if (urlparse(u).hostname or &quot;&quot;) not in ALLOW]
+    return len(denied) == 2, f&quot;{len(denied)}/3 destinations denied, run automatically&quot;
+
+fresh = [t for t in TESTS if t.cid != &quot;SB-1&quot;] + [automated_test(&quot;SB-1&quot;, check_egress_policy)]
+v2 = verify(fresh, REQUIRED, now)
+print(f&quot;after automating SB-1: {v2[&#x27;evidenced&#x27;]}/{v2[&#x27;required&#x27;]} = {v2[&#x27;coverage&#x27;]:.0%}&quot;)
+print(f&quot;   SB-1 is now {[r[&#x27;state&#x27;] for r in v2[&#x27;rows&#x27;] if r[&#x27;control&#x27;]==&#x27;SB-1&#x27;][0]}&quot;
+      f&quot; and will stay fresh without anyone remembering&quot;)
+assert v2[&quot;coverage&quot;] &gt; v[&quot;coverage&quot;]
+
+print(&quot;\nprioritise automation by how often a control goes stale:&quot;)
+for t in sorted(TESTS, key=lambda t: t.valid_for_days):
+    per_year = round(365 / t.valid_for_days, 1)
+    print(f&quot;   {t.cid}  window {t.valid_for_days:&gt;3.0f}d → &quot;
+          f&quot;{per_year:&gt;4} manual re-tests per year&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape, and the line to take from it is the boundary it draws: configuration is not enforcement. A private endpoint next to a route table with a NAT gateway is a recorded fact and an open path at the same time, and logging that is switched on but not delivering evidences nothing at all.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Automate the control with the shortest freshness window first — it is the one costing the most manual effort and going stale most often. One automated test converts an annual assertion into a live control.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.8.html">E1.8 · Third-party and model supply chain risk</a></strong></p>

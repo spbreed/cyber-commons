@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.2 — Bootstrapping the first credential | Cyber Commons</title><meta name="description" content="Platform attestation exchanged for a short-lived, workload-bound credential."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Identity and Ingress</div><div class="sid">A2.2</div><h1>Bootstrapping the first credential</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.</p></div><div class="ctrl"><div class="lab">Control</div><p>Platform attestation exchanged for a short-lived, workload-bound credential.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Exchange an attestation for a credential, then show a copied secret failing the same exchange.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.2 · Bootstrapping the first credential</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A2.2 — Bootstrapping the first credential | Cyber Commons</title><meta name="description" content="Platform attestation exchanged for a short-lived, workload-bound credential."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Identity and Ingress</div><div class="sid">A2.2</div><h1>Bootstrapping the first credential</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.</p></div><div class="ctrl"><div class="lab">Control</div><p>Platform attestation exchanged for a short-lived, workload-bound credential.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Exchange an attestation for a credential, then show a copied secret failing the same exchange.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A2.2 · Bootstrapping the first credential</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Identity and Ingress</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A2.1.html">A2.1 · Agent identity: user, workload, agent</a></strong>.</p>
 <table>
@@ -57,7 +57,253 @@ to that workload.</p>
 lesson models the exchange, not the product.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Makes <strong>possession stop being proof</strong>. Without it, A1.7 is unavoidable: a copyable secret means every holder is the agent.</p>
-</blockquote></div><div class="nbmd"><h2>Your turn</h2>
+</blockquote></div><div class="nbmd"><h2>3 · The check, as a skill</h2>
+<p>Whether CyberTravels' agents hold a credential or a secret is settled by four probes, not by reading the deployment manifest. The skill runs them: an unattested process, a genuine image nobody registered, a credential presented from another node, and one presented after its TTL.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/workload-attestation-check/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: workload-attestation-check
+description: &gt;-
+  Establish how a workload receives its first credential and whether possession
+  of that credential is still proof of identity — testing an unattested process,
+  an unregistered image, presentation from another node, and use after expiry.
+  Use when reviewing bootstrap, SPIFFE/SPIRE, or any secret mounted at deploy
+  time.
+allowed-tools: Read, Grep, Glob
+---
+
+# Where the first credential comes from
+
+There is a circularity at the start of every workload identity: to receive a
+credential securely the workload must already prove who it is. A pre-shared
+secret resolves it by making **possession** the proof, which means everyone who
+can read the image is the agent. Attestation resolves it by having the platform
+sign what only the platform knows.
+
+## When to use this
+
+Reviewing how any agent, job or pod authenticates for the first time. The
+answer decides whether every later identity control rests on something or on a
+copied file.
+
+## Procedure
+
+**1 — Find the first credential.** Trace back from a downstream call to where
+the credential entered the process: an environment variable, a mounted file, a
+secrets manager fetch, or an attestation exchange.
+
+**2 — Ask who else can read it.** For a secret, that set is the set of people
+who are currently the agent. Enumerate it — image layers, CI logs, anyone with
+`exec` on the namespace, anyone who can read the manifest.
+
+**3 — Test the unattested process.** A process that is not what the platform
+started should receive nothing. If it receives a credential, the exchange is
+authenticating a claim rather than a workload.
+
+**4 — Test the unregistered-but-genuine image.** A real workload nobody
+registered is the case people forget: attestation proves *what* is running, and
+registration decides whether it should be. Both must refuse.
+
+**5 — Test binding and lifetime.** Present a legitimately issued credential
+from a different node, and again after its TTL. Both must fail. A credential
+that travels is a secret with extra steps.
+
+## Output contract
+
+```json
+{
+  &quot;source&quot;: &quot;env|file|manager|attestation&quot;,
+  &quot;readable_by&quot;: [&quot;str&quot;],
+  &quot;probes&quot;: {&quot;unattested&quot;: &quot;issued|refused&quot;, &quot;unregistered_image&quot;: &quot;issued|refused&quot;,
+             &quot;wrong_node&quot;: &quot;accepted|refused&quot;, &quot;expired&quot;: &quot;accepted|refused&quot;},
+  &quot;properties&quot;: {&quot;non_copyable&quot;: false, &quot;short_lived&quot;: false, &quot;bound&quot;: false},
+  &quot;ttl_seconds&quot;: 0
+}
+```
+
+All three properties, or the credential is a secret: non-copyable because it
+describes a running process, short-lived so theft has a deadline, bound so
+presenting it elsewhere fails.
+
+## Failure modes
+
+- **Accepting a secrets manager as attestation.** It answers &quot;who may fetch
+  this&quot;, which is the same circularity one layer down.
+- **Testing only the unattested case.** The unregistered genuine workload is
+  the one that gets through.
+- **Recording a long TTL as acceptable** because rotation exists. Rotation is
+  not a deadline for a copy already taken.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/identity/workload-attestation-check/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/workload-attestation-check/scripts/workload_attestation_check.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Show what an identity service does with an unattested process, an unregistered image, and a credential presented from the wrong node or after expiry.
+
+This is the executable half of the `workload-attestation-check` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import hashlib, time
+
+PLATFORM_TRUTH = {          # only the platform can observe these
+ &quot;proc-1&quot;: {&quot;image&quot;: &quot;reports-agent@sha256:aa11&quot;, &quot;namespace&quot;: &quot;prod&quot;, &quot;node&quot;: &quot;n-7&quot;},
+ &quot;proc-2&quot;: {&quot;image&quot;: &quot;billing-agent@sha256:bb22&quot;, &quot;namespace&quot;: &quot;prod&quot;, &quot;node&quot;: &quot;n-7&quot;},
+}
+
+def platform_attest(pid):
+    &quot;&quot;&quot;The platform signs a statement about a process it actually started.&quot;&quot;&quot;
+    facts = PLATFORM_TRUTH.get(pid)
+    if not facts:
+        return None                       # cannot attest a process it did not start
+    payload = f&quot;{pid}|{facts[&#x27;image&#x27;]}|{facts[&#x27;namespace&#x27;]}&quot;
+    return {&quot;claims&quot;: facts, &quot;sig&quot;: hashlib.sha256(payload.encode()).hexdigest()[:16]}
+
+REGISTERED = {&quot;reports-agent@sha256:aa11&quot;: &quot;spiffe://corp/reports-agent&quot;}
+
+def issue_credential(attestation, now=1000, ttl=300):
+    &quot;&quot;&quot;Exchange an attestation for a short-lived, workload-bound credential.&quot;&quot;&quot;
+    if not attestation:
+        return None, &quot;no attestation - unattested process&quot;
+    identity = REGISTERED.get(attestation[&quot;claims&quot;][&quot;image&quot;])
+    if not identity:
+        return None, &quot;image is not registered to any identity&quot;
+    return {&quot;identity&quot;: identity, &quot;expires&quot;: now + ttl,
+            &quot;bound_to&quot;: attestation[&quot;claims&quot;][&quot;node&quot;]}, &quot;issued&quot;
+
+for pid in (&quot;proc-1&quot;, &quot;proc-2&quot;, &quot;proc-stolen&quot;):
+    cred, why = issue_credential(platform_attest(pid))
+    print(f&quot;   {pid:14s}{(cred[&#x27;identity&#x27;] if cred else &#x27;-&#x27;):32s}{why}&quot;)
+
+# a stolen credential presented from another node
+stolen, _ = issue_credential(platform_attest(&quot;proc-1&quot;))
+def present(cred, from_node, now):
+    if now &gt; cred[&quot;expires&quot;]:            return False, &quot;expired&quot;
+    if from_node != cred[&quot;bound_to&quot;]:    return False, f&quot;bound to {cred[&#x27;bound_to&#x27;]}&quot;
+    return True, &quot;accepted&quot;
+
+print()
+for node, now in ((&quot;n-7&quot;, 1100), (&quot;n-9&quot;, 1100), (&quot;n-7&quot;, 2000)):
+    ok, why = present(stolen, node, now)
+    print(f&quot;   presented from {node} at t={now}: {&#x27;ok&#x27; if ok else &#x27;REFUSED&#x27;} ({why})&quot;)
+print()
+print(&quot;Copying the credential does not help: it is bound to a node and expires&quot;)
+print(&quot;in five minutes. Copying the image does not help either - proc-2 is a&quot;)
+print(&quot;real process and still gets nothing, because its image is not registered.&quot;)
+assert issue_credential(platform_attest(&quot;proc-stolen&quot;))[0] is None
+assert not present(stolen, &quot;n-9&quot;, 1100)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find where one of your agents gets its first credential. If the answer is an environment variable or a mounted file, list everyone who can read it — that is the set of people who are currently that agent.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.3.html">A2.3 · Delegation that narrows, and survives audit</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A2.2.ipynb">Source</a></p>

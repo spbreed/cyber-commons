@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.0 — Start here — what AI for security operations means | Cyber Commons</title><meta name="description" content="Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.0</div><h1>Start here — what AI for security operations means</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.</p></div><div class="ctrl"><div class="lab">Control</div><p>Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Put one hour of an agent beside one hour of a person, then run a human-tempo rule against both.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.0 · Start here — what AI for security operations means</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.0 — Start here — what AI for security operations means | Cyber Commons</title><meta name="description" content="Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.0</div><h1>Start here — what AI for security operations means</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.</p></div><div class="ctrl"><div class="lab">Control</div><p>Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Put one hour of an agent beside one hour of a person, then run a human-tempo rule against both.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.0 · Start here — what AI for security operations means</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>Both directions</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.10.html">C2.10 · Case study — the Supabase pattern: open until closed</a></strong>.</p>
 <table>
@@ -63,7 +63,214 @@ manager, and <strong>R10</strong>, where passport numbers are in the logs that w
 told you.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">signal, over one hour</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">Alex</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">CyberTravels&#x27; Workflow Agent</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">ratio</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">actions taken</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">12</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1,400</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">117×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">distinct resources touched</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">5</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">260</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">52×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">median gap between calls</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">180s</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2s</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1/90×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">sessions</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">96</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">96×</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">typo / retry events</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">—</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Every detection, baseline and playbook CyberTravels owns was tuned against the second column.</div></div><div class="nbmd"><h2>3 · Why a volume rule is not the answer</h2>
 <p>The obvious rule does fire. The problem is <em>when</em> — which is the one thing a table cannot show you, so this part is worth running.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what the SOC needs</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">is it in an application log?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">which lesson gets it</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the prompt that motivated the action</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.5</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the tool call, with arguments</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.5</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the decision, and what it was based on</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D2.5</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which agent acted</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.6</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which human it acted for</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A2.7 · D1.6</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the HTTP request the tool made</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">already there</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Five of six do not exist yet. R10 in the register is the sixth one's twin problem — the log you do have is full of passport numbers.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Five of six do not exist yet. R10 in the register is the sixth one's twin problem — the log you do have is full of passport numbers.</div></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
+<p>Alex and CyberTravels' Workflow Agent, over the same hour. The skill measures the five signals that separate them, then runs the existing volume rule against the agent's run — where it fires 154 seconds in and stays silent for the remaining fifty-seven minutes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-tempo-baseline/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: agent-tempo-baseline
+description: &gt;-
+  Measure the behavioural signals that separate an agent&#x27;s tempo from a
+  person&#x27;s — action rate, inter-action variance, session length, tool breadth,
+  night-hours share — and check what a volume rule tuned for human tempo does
+  when an agent runs. Use before writing any detection that will see agents.
+allowed-tools: Read, Grep, Glob
+---
+
+# The rule fires 154 seconds into a sixty-minute run
+
+Detection content is calibrated on human tempo. An agent performs in an hour
+what a person performs in a month, so a volume rule does fire — immediately, and
+then not again for the rest of the run, which is the part that matters. The
+baseline has to be measured before any rule is written against it.
+
+## When to use this
+
+Before authoring or tuning detections in an estate where agents act, and when
+an existing rule is either silent or permanently firing.
+
+## Procedure
+
+**1 — Pick one human and one agent doing comparable work.** Same task class,
+same hour. Comparability is what makes the ratio meaningful.
+
+**2 — Measure five signals for each.** Actions per hour, variance between
+actions, session length, distinct tools touched, and share of activity outside
+working hours. Report the ratio per signal — most will be in the hundreds.
+
+**3 — Run the existing volume rule against the agent&#x27;s hour.** Record when it
+first fires, in seconds. This is usually early enough that the rest of the run
+is unmonitored, which is the finding.
+
+**4 — Say what the rule now means.** After the first firing it is silent for the
+remainder — so it is an *onset* detector, not a volume detector, and anyone
+relying on it for volume is relying on something else.
+
+**5 — Derive per-population thresholds.** Humans and agents need different
+baselines, and an agent&#x27;s baseline needs a per-agent one: a patch agent and a
+triage agent do not share a tempo.
+
+## Output contract
+
+```json
+{
+  &quot;subjects&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;human|agent&quot;,
+                &quot;actions_per_hour&quot;: 0, &quot;variance&quot;: 0.0, &quot;session_minutes&quot;: 0,
+                &quot;distinct_tools&quot;: 0, &quot;night_share&quot;: 0.0}],
+  &quot;ratios&quot;: {&quot;str&quot;: 0.0},
+  &quot;existing_rule&quot;: {&quot;threshold&quot;: 0, &quot;first_fires_after_seconds&quot;: 0, &quot;silent_after&quot;: true},
+  &quot;recommendation&quot;: {&quot;per_population_thresholds&quot;: true, &quot;populations&quot;: [&quot;str&quot;]}
+}
+```
+
+## Failure modes
+
+- **Comparing an agent to an average human.** Compare like work.
+- **Reading an early firing as coverage.** It is one alert and then silence.
+- **One agent baseline for every agent.** Their tempos differ as much as their
+  jobs do.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/detection/agent-tempo-baseline/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-tempo-baseline/scripts/agent_tempo_baseline.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Measure the behavioural signals that separate an agent&#x27;s tempo from a human&#x27;s, and show what a rule tuned for human volume does to an agent.
+
+This is the executable half of the `agent-tempo-baseline` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+def burst_rule(actions_per_hour, threshold=60):
+    return actions_per_hour &gt; threshold
+
+RATE = {&quot;Alex&quot;: 12, &quot;workflow agent&quot;: 1400}
+for who, n in RATE.items():
+    print(f&quot;   {who:16s}{n:&gt;6} actions/hour -&gt; &quot;
+          f&quot;{&#x27;ALERT&#x27; if burst_rule(n) else &#x27;silent&#x27;}&quot;)
+
+seconds_to_trip = 60 * 3600 / RATE[&quot;workflow agent&quot;]
+print(f&quot;\nthe agent crosses the threshold after {seconds_to_trip:.0f} seconds&quot;)
+print(f&quot;and keeps going for the remaining {3600 - seconds_to_trip:.0f}.&quot;)
+print()
+print(&quot;So the rule fires, about two and a half minutes into a sixty-minute run -&quot;)
+print(&quot;by which point most of what the actor was going to do is done. If those&quot;)
+print(&quot;were refunds, the alert arrives after the money has moved.&quot;)
+print()
+print(&quot;Chapter 8 is about detections that fire on shape rather than volume.&quot;)
+print(&quot;Chapter 9 is about who can pull the stop lever without asking.&quot;)
+assert burst_rule(1400) and not burst_rule(12) and seconds_to_trip &lt; 200</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Five behavioural signals for Alex and for CyberTravels' Workflow Agent over the same hour, with ratios in the hundreds. The volume rule tuned for human tempo does fire — 154 seconds into a sixty-minute run, leaving 3,446 seconds unmonitored. Five of the six things an agentic SOC needs are not in any application log.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pull one hour of activity for a service account in your own environment and compute those five signals. If you cannot, that is the first finding of chapter 8 and it is a telemetry problem rather than a detection one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · From alert queue to loop operator</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.0.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.0.ipynb">Source</a></p>

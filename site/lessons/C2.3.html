@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.3 — Weight-level techniques | Cyber Commons</title><meta name="description" content="Concept erasure and orthogonalisation on open weights — with honest claims."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.3</div><h1>Weight-level techniques</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Claiming a capability was removed when it was only hidden.</p></div><div class="ctrl"><div class="lab">Control</div><p>Concept erasure and orthogonalisation on open weights — with honest claims.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attempt targeted unlearning, then try to get the capability back.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.3 · Weight-level techniques</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.3 — Weight-level techniques | Cyber Commons</title><meta name="description" content="Concept erasure and orthogonalisation on open weights — with honest claims."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.3</div><h1>Weight-level techniques</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Claiming a capability was removed when it was only hidden.</p></div><div class="ctrl"><div class="lab">Control</div><p>Concept erasure and orthogonalisation on open weights — with honest claims.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attempt targeted unlearning, then try to get the capability back.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.3 · Weight-level techniques</h1>
 <p><strong>Function C — Red Teaming and Security Research with AI → Security Research with AI</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.2.html">C2.2 · Model-layer research</a></strong>.</p>
 <table>
@@ -78,7 +78,263 @@ signal reaching anyone, and the ability to fine-tune refusals away cheaply.</p>
 control plane has to supply what the provider used to</strong> — which is what every
 other track in this curriculum has been building.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">capability</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">hosted API</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">open weights, running locally</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">unlimited probing</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no abuse signal reaches the provider</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">can remove refusals</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">controls its own version</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">activation-level access</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">An attacker gains all five. A defender gains exactly the same five — which is the whole argument for a commons built on open weights, and the reason the asymmetry people expect here does not exist.</div></div><div class="nbmd"><h2>3 · The control — replace what the provider was doing</h2>
-<p>Map each lost control to the thing in your own stack that has to supply it. Every row points at a lesson you have already done.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Map each lost control to the thing in your own stack that has to supply it. Every row points at a lesson you have already done.</p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
+<p>Local weights grant capabilities a hosted API does not, and the larger term is arithmetic. The skill turns each rate limit into an attempt budget and applies a per-attempt success rate, which is where a 0.5% technique becomes tens of thousands of successes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/weight-access-capability-delta/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: weight-access-capability-delta
+description: &gt;-
+  Enumerate the capabilities local weights grant that a hosted API does not, and
+  convert a rate limit into an attempt budget to show what removing it does to a
+  low-probability technique. Use when assessing open-weight release risk or
+  arguing about hosted safeguards.
+allowed-tools: Read, Grep, Glob
+---
+
+# The rate limit was the control
+
+Hosted access and local weights differ in two ways that matter and one that gets
+all the attention. The capability delta — fine-tuning away refusals, reading
+activations, sampling without a filter — is real. The larger one is arithmetic:
+a hosted rate limit caps attempts, and removing it turns a technique with a
+0.5% success rate into tens of thousands of successes in a day.
+
+## When to use this
+
+Assessing the risk of an open-weight release, comparing hosted and local
+deployment, or evaluating a safeguard that exists only in the serving layer.
+
+## Procedure
+
+**1 — List the capabilities local access grants.** Weight modification,
+activation access, unfiltered sampling, arbitrary system prompts, no logging.
+For each, say whether a hosted API offers it.
+
+**2 — Turn the rate limit into an attempt budget.** Requests per minute × the
+window. Do the same for local inference from its throughput. Report the ratio;
+it is usually two or three orders of magnitude and it is the headline.
+
+**3 — Apply a per-attempt success rate.** A technique that works 0.5% of the
+time produces a handful of successes hosted and tens of thousands locally. The
+technique did not change.
+
+**4 — Assess readiness for each safeguard.** Which safeguards survive weight
+access at all — the ones in the serving layer do not. Say so plainly rather than
+listing them as mitigations.
+
+**5 — Weight the blast radius by scope.** A capability that reaches a team&#x27;s
+resources is not the same as one that reaches a run&#x27;s own. Score tools by scope
+and mark which are gated.
+
+## Output contract
+
+```json
+{
+  &quot;capabilities&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;hosted&quot;: false, &quot;local&quot;: true}],
+  &quot;attempts&quot;: {&quot;hosted_per_day&quot;: 0, &quot;local_per_day&quot;: 0, &quot;ratio&quot;: 0},
+  &quot;technique&quot;: {&quot;per_attempt_rate&quot;: 0.0, &quot;hosted_successes&quot;: 0, &quot;local_successes&quot;: 0},
+  &quot;safeguards&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;layer&quot;: &quot;serving|weights&quot;, &quot;survives_local&quot;: false}],
+  &quot;blast&quot;: {&quot;tools&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;scope&quot;: &quot;self|project|team&quot;, &quot;gated&quot;: false}], &quot;score&quot;: 0}
+}
+```
+
+## Failure modes
+
+- **Listing serving-layer safeguards as mitigations** for a weight release.
+- **Comparing capability and ignoring throughput.** Throughput is the bigger
+  term.
+- **Assuming a low success rate is a control.** It is, until the attempt budget
+  changes.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/research/weight-access-capability-delta/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/weight-access-capability-delta/scripts/weight_access_capability_delta.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Enumerate what local weights grant that a hosted API does not, and turn a rate limit into an attempt budget.
+
+This is the executable half of the `weight-access-capability-delta` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+def attempts_available(rate_limit_per_min, hours, parallel=1):
+    if rate_limit_per_min is None:                     # local: bounded by hardware
+        return hours * 3600 * 8 * parallel             # ~8 inferences/sec/GPU
+    return rate_limit_per_min * 60 * hours * parallel
+
+print(f&quot;{&#x27;setting&#x27;:34s}{&#x27;attempts in 24h&#x27;:&gt;18}&quot;)
+print(&quot;-&quot; * 54)
+for label, rl, par in ((&quot;hosted API, 20 req/min&quot;, 20, 1),
+                       (&quot;hosted API, 20 req/min, 5 keys&quot;, 20, 5),
+                       (&quot;local open weights, 1 GPU&quot;, None, 1),
+                       (&quot;local open weights, 8 GPUs&quot;, None, 8)):
+    print(f&quot;{label:34s}{attempts_available(rl, 24, par):&gt;18,}&quot;)
+
+hosted = attempts_available(20, 24, 1)
+local  = attempts_available(None, 24, 8)
+print(f&quot;\nratio: {local/hosted:,.0f}× more attempts, with no abuse signal reaching anyone.&quot;)
+print(&quot;A 0.5%-success technique becomes reliable when you can try it 5 million times.&quot;)
+
+def expected_successes(rate, attempts):
+    return rate * attempts
+for rate in (0.005, 0.05):
+    print(f&quot;   technique landing {rate:.1%} of the time → &quot;
+          f&quot;{expected_successes(rate, hosted):,.0f} successes hosted, &quot;
+          f&quot;{expected_successes(rate, local):,.0f} local&quot;)
+
+REPLACEMENTS = {
+ &quot;rate limiting&quot;:            (&quot;A2.7 choke point / A3.6 runtime levers&quot;,
+                              &quot;bound attempts per identity per window&quot;),
+ &quot;abuse monitoring&quot;:         (&quot;D1.4 detection for agents&quot;,
+                              &quot;your telemetry is the only signal now&quot;),
+ &quot;refusal behaviour&quot;:        (&quot;A3.5 tool policy + C1.2 provenance&quot;,
+                              &quot;do not rely on the model refusing; refuse at the tool&quot;),
+ &quot;immutable logging&quot;:        (&quot;A2.5 act chains + D2.5 replay&quot;,
+                              &quot;you own retention and integrity&quot;),
+ &quot;model version stability&quot;:  (&quot;D1.7 drift monitoring&quot;,
+                              &quot;you now own upgrades AND their behavioural changes&quot;),
+}
+print(f&quot;{&#x27;provider control lost&#x27;:26s}{&#x27;your replacement&#x27;:44s}&quot;)
+print(&quot;-&quot; * 96)
+for lost, (where, what) in REPLACEMENTS.items():
+    print(f&quot;{lost:26s}{where:44s}{what}&quot;)
+
+def readiness(has):
+    missing = [k for k in REPLACEMENTS if k not in has]
+    return round(len(has) / len(REPLACEMENTS), 2), missing
+
+for label, has in ((&quot;typical first local deployment&quot;, {&quot;rate limiting&quot;}),
+                   (&quot;after this curriculum&quot;, set(REPLACEMENTS))):
+    score, missing = readiness(has)
+    print(f&quot;\n{label}: {score:.0%} covered&quot;)
+    for m in missing: print(f&quot;   ✗ {m}&quot;)
+
+# Verify: an agent on local weights, with and without the replacements.
+SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20}
+def blast(tools, gated=frozenset()):
+    return sum(SCOPE_WEIGHT[s] * (1 if rev else 2)
+               for n, s, rev in tools if n not in gated)
+
+TOOLS = [(&quot;read_file&quot;, &quot;self&quot;, True), (&quot;write_file&quot;, &quot;project&quot;, True),
+         (&quot;run_shell&quot;, &quot;tenant&quot;, False)]
+print(&quot;local open-weight agent, no replacements:&quot;, blast(TOOLS))
+print(&quot;with tool policy + gating (A3.5):        &quot;,
+      blast(TOOLS, gated={&quot;run_shell&quot;}))
+print(&quot;\nThe model has no refusal training you can rely on. The tool policy&quot;)
+print(&quot;does not care what the model was persuaded to want.&quot;)
+assert blast(TOOLS, gated={&quot;run_shell&quot;}) &lt; blast(TOOLS)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Local weights grant five capabilities the hosted API does not. The probing comparison shows roughly 24,000 hosted attempts against 5.5 million local ones in 24 hours — a 230× ratio — turning a 0.5% technique into tens of thousands of successes. Each lost provider control maps to a lesson in this curriculum, and gating the shell reduces the local agent's blast radius from 19 to 3.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>List the controls you currently rely on that are actually your model provider's. For each, name your replacement if the model moved on-prem next quarter. Most teams find rate limiting and abuse monitoring have no owner at all.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.4.html">C2.4 · Data-layer research</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.3.ipynb">Source</a></p>

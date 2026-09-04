@@ -15,6 +15,8 @@ senior has to make, and the job is to make it makeable.
 
 from . import diagrams as D
 
+from .skills import skill_steps
+
 EXERCISES: dict[str, dict] = {
 
 "E3.1": {
@@ -37,6 +39,8 @@ than lobbying for a budget.
   ("md", "## 2 · Demo — compute the three numbers from what the tracks produced"),
 ("md", "## 3 · Where it breaks — the findings-shaped update"),
 ("md", "## 4 · The control — exposure, likelihood, assurance, decision"),
+  *skill_steps('programme/risk-translation-upward',
+               '## 2 · The procedure, as a skill\n\nThe skill computes exposure, containment ASR and control coverage, prints the findings-shaped update with what is wrong with it, and then writes the position — same numbers, an ask attached.'),
 ],
  "expect": "The fleet's exposure totals 46 units, containment ASR is 25%, and "
            "control coverage is 50%. The findings-shaped update is shown with five "
@@ -77,6 +81,8 @@ nobody registers anything and your inventory dies.
   ("md", "## 2 · Demo — the per-rung policy, and a request evaluated against it"),
 ("md", "## 3 · Where it breaks — govern tools instead, and watch it collapse"),
 ("md", "## 4 · The control — L1 must be free, or the inventory dies"),
+  *skill_steps('programme/autonomy-ladder-decisions',
+               "## 2 · The procedure, as a skill\n\nGoverning the rung rather than the tool. The skill computes each request's blast radius, derives the rung it supports, and refuses with the condition attached — because a bare refusal produces an appeal and a conditional one produces a fix."),
 ],
  "expect": "The four rungs print with their governance and budgets. The "
            "doc-summariser is approved at L1; `triage-bot` is refused at L2 for "
@@ -115,6 +121,8 @@ from evidence (4).
   ("md", "## 2 · Demo — the dependency graph, and what each step unlocks"),
 ("md", "## 3 · Where it breaks — evaluation first"),
 ("md", "## 4 · The control — measure the programme by capability, not activity"),
+  *skill_steps('programme/programme-sequencing',
+               '## 2 · The procedure, as a skill\n\nOnly the inventory is doable from a standing start. The skill simulates the popular evaluation-first order against the dependency-respecting one, and says what each produces at the end of every quarter — including the quiet ones.'),
 ],
  "expect": "Only inventory is doable from a standing start. The popular "
            "evaluation-first order completes 4 of 6 on the first pass with 2 "
@@ -171,7 +179,9 @@ which one to hire first — which is not the one most teams hire first.
             "attribution and act chains are prerequisites for evidence, "
             "evaluation and continuous verification alike, so hiring them second "
             "costs a quarter.")),
- ],
+   *skill_steps('programme/ownership-seam-audit',
+               '## 2 · The procedure, as a skill\n\nTwo of six decisions have no named owner, and in the simulated incident they account for 35 of 36.5 hours. The skill enumerates decisions rather than functions, and asks who may decide each one alone.'),
+],
  "expect": "Two of six seams have no named owner — autonomy rung decisions and "
            "trace retention. The simulated incident takes 36.5 hours, of which 35 "
            "are the two unowned decision steps, roughly 24× slower than if every "
@@ -206,6 +216,8 @@ comfortable and useless board slides.
   ("md", "## 2 · Demo — compute all five from what the tracks produced"),
 ("md", "## 3 · Where it breaks — metrics that cannot degrade"),
 ("md", "## 4 · The control — project the five forward under neglect"),
+  *skill_steps('programme/programme-metrics-selection',
+               '## 2 · The procedure, as a skill\n\nThe skill applies the neglect test: simulate a quarter with nothing done and see which numbers move. Four comfortable metrics stay green throughout, which is what disqualifies them.'),
 ],
  "expect": "The five metrics compute to exposure 46, ASR 25%, assurance 50%, "
            "coverage 34% and a 12-second time-to-stop. Four comfortable metrics "
@@ -240,6 +252,8 @@ This lesson takes one genuinely uncomfortable request and gets to yes.
   ("md", "## 2 · Demo — the request, assessed honestly"),
 ("md", "## 3 · Where it breaks — the flat no"),
 ("md", "## 4 · The control — five testable conditions, each owned"),
+  *skill_steps('programme/conditional-approval-design',
+               '## 2 · The procedure, as a skill\n\nThe request tiers critical on an irreversible tenant-wide tool. The skill prices the flat refusal — where the capability ships anyway and the visibility does not — then writes conditions that are each testable and dated.'),
 ],
  "expect": "The request tiers critical with a blast radius of 16 from an "
            "irreversible tenant-wide tool. The flat refusal is shown to lose "
@@ -274,6 +288,8 @@ first.
   ("md", "## 2 · Demo — four quarters, measured by evidenced coverage"),
 ("md", "## 3 · Where it breaks — the fundable order"),
 ("md", "## 4 · The control — hire for the bottleneck, not the demo"),
+  *skill_steps('programme/capability-build-order',
+               '## 2 · The procedure, as a skill\n\nTwo orders, the same work. The skill simulates both quarter by quarter: the correct one climbs to full coverage with nothing demoable until Q3, and the inverted one leads on capability for three quarters and finishes lower.'),
 ],
  "expect": "The correct order climbs 25% → 50% → 75% → 100% coverage with nothing "
            "demoable until Q3. The inverted order reaches 75% after four quarters "
@@ -309,6 +325,8 @@ Resilience means the other five steps work when it does.
   ("md", "## 2 · Demo — test the three capabilities, not the prevention"),
 ("md", "## 3 · Where it breaks — the prevention-only programme"),
 ("md", "## 4 · The control — the game day that assumes containment failed"),
+  *skill_steps('programme/resilience-readiness-check',
+               '## 2 · The procedure, as a skill\n\nThree properties for the day a control fails: drift detected, stop tested, run replayable. The skill checks each with its evidence — a measured twelve-second stop, tested 41 days ago — and reports three verdicts rather than one score.'),
 ],
  "expect": "Drift is detected with `run_shell` as a new tool, the stop mechanism "
            "is ready at 12 seconds tested 41 days ago, and the run is replayable "

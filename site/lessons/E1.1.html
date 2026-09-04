@@ -234,7 +234,107 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/attestation-signer-lifecycle/scripts/attestation_signer_lifecycle.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Read the same evidence as a point-in-time test and as a continuous one, and derive a freshness window per control from observed drift.
+
+This is the executable half of the `attestation-signer-lifecycle` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import time
+from dataclasses import dataclass, field
+
+now = time.time(); DAY = 86400
+
+@dataclass
+class ControlTest:
+    cid: str
+    passed: bool
+    evidence: str
+    tested_at: float
+    valid_for_days: float = 30
+
+    def age_days(self, at): return (at - self.tested_at) / DAY
+    def point_in_time(self, at): return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
+    def continuous(self, at):
+        if self.age_days(at) &gt; self.valid_for_days: return &quot;STALE&quot;
+        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
+
+TESTS = [
+ ControlTest(&quot;AC-1&quot;, True,  &quot;act chain sampled from gateway logs&quot;, now -   3*DAY),
+ ControlTest(&quot;AC-2&quot;, True,  &quot;delegation refusal regression suite&quot;, now -   9*DAY),
+ ControlTest(&quot;SB-1&quot;, True,  &quot;egress denial evidence&quot;,              now -  45*DAY),
+ ControlTest(&quot;SB-2&quot;, True,  &quot;approval gate screenshot&quot;,            now - 210*DAY),
+ ControlTest(&quot;EV-1&quot;, True,  &quot;audit sample of 50 agent actions&quot;,    now -   5*DAY),
+ ControlTest(&quot;DR-1&quot;, False, &quot;drift alerting not deployed&quot;,         now),
+]
+REQUIRED = [&quot;AC-1&quot;, &quot;AC-2&quot;, &quot;SB-1&quot;, &quot;SB-2&quot;, &quot;EV-1&quot;, &quot;DR-1&quot;, &quot;EV-2&quot;, &quot;ST-1&quot;]
+
+print(f&quot;{&#x27;control&#x27;:9s}{&#x27;age (days)&#x27;:&gt;12}{&#x27;point-in-time&#x27;:&gt;16}{&#x27;continuous&#x27;:&gt;13}&quot;)
+print(&quot;-&quot; * 52)
+by_id = {t.cid: t for t in TESTS}
+for cid in REQUIRED:
+    t = by_id.get(cid)
+    if t is None:
+        print(f&quot;{cid:9s}{&#x27;—&#x27;:&gt;12}{&#x27;(not tested)&#x27;:&gt;16}{&#x27;NO EVIDENCE&#x27;:&gt;13}&quot;)
+        continue
+    print(f&quot;{cid:9s}{t.age_days(now):&gt;12.0f}{t.point_in_time(now):&gt;16}{t.continuous(now):&gt;13}&quot;)
+
+def posture(tests, required, at, mode):
+    by_id = {t.cid: t for t in tests}
+    passing = 0
+    for cid in required:
+        t = by_id.get(cid)
+        if t is None: continue
+        state = t.point_in_time(at) if mode == &quot;point-in-time&quot; else t.continuous(at)
+        passing += state == &quot;PASS&quot;
+    return passing, round(passing/len(required), 3)
+
+for mode in (&quot;point-in-time&quot;, &quot;continuous&quot;):
+    n, pct = posture(TESTS, REQUIRED, now, mode)
+    print(f&quot;{mode:16s} {n}/{len(REQUIRED)} controls passing = {pct:.0%}&quot;)
+
+print(&quot;\nThe difference is entirely SB-1 and SB-2, which nobody did anything&quot;)
+print(&quot;wrong to. Time simply passed, and the agent they were tested against&quot;)
+print(&quot;has had two model upgrades since.&quot;)
+
+DRIFT_RATE = {          # observed TVD/day for what each control depends on
+ &quot;AC-1&quot;: 0.0005,        # identity model changes slowly
+ &quot;AC-2&quot;: 0.0005,
+ &quot;SB-1&quot;: 0.0020,        # egress needs change with new integrations
+ &quot;SB-2&quot;: 0.0090,        # tool manifests change weekly
+ &quot;EV-1&quot;: 0.0010,
+ &quot;DR-1&quot;: 0.0090,
+}
+TOLERANCE = 0.25
+
+def window(cid):
+    r = DRIFT_RATE.get(cid)
+    return int(TOLERANCE / r) if r else 90
+
+print(f&quot;{&#x27;control&#x27;:9s}{&#x27;drift/day&#x27;:&gt;12}{&#x27;window (days)&#x27;:&gt;15}{&#x27;current age&#x27;:&gt;13}{&#x27;state&#x27;:&gt;9}&quot;)
+print(&quot;-&quot; * 60)
+for cid in REQUIRED:
+    t = by_id.get(cid)
+    w = window(cid)
+    if t is None:
+        print(f&quot;{cid:9s}{&#x27;—&#x27;:&gt;12}{w:&gt;15}{&#x27;—&#x27;:&gt;13}{&#x27;NO EVIDENCE&#x27;:&gt;9}&quot;)
+        continue
+    t.valid_for_days = w
+    print(f&quot;{cid:9s}{DRIFT_RATE.get(cid, 0):&gt;12.4f}{w:&gt;15}{t.age_days(now):&gt;13.0f}&quot;
+          f&quot;{t.continuous(now):&gt;9}&quot;)
+
+n, pct = posture(TESTS, REQUIRED, now, &quot;continuous&quot;)
+print(f&quot;\nwith drift-derived windows: {n}/{len(REQUIRED)} = {pct:.0%} currently evidenced&quot;)
+assert pct &lt; 0.6
+print(&quot;\nSB-2 tests a tool manifest that changes weekly; a 210-day-old screenshot&quot;)
+print(&quot;cannot evidence it. Saying so is the control, not a criticism of anyone.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape, and its failure modes are the governance lesson stated as engineering: the relying party must fail closed on a missing attestation, because reading absence as a pass is exactly the annual-test habit arriving in a new format. Drift against the digest and the manifest is what re-triggers it, not the calendar.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick your three most important AI controls and set a freshness window for each from the observed change rate of what it tests. Then recompute your posture. The number will drop, and it will be the first honest one you have had.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.2.html">E1.2 · Building the AI and agent inventory</a></strong></p>

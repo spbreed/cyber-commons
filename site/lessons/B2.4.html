@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.4 — Deduplication and contextual verification | Cyber Commons</title><meta name="description" content="Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.4</div><h1>Deduplication and contextual verification</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Route cheap executor to escalated reasoner and attribute spend.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.4 · Deduplication and contextual verification</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.4 — Deduplication and contextual verification | Cyber Commons</title><meta name="description" content="Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.4</div><h1>Deduplication and contextual verification</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Route cheap executor to escalated reasoner and attribute spend.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.4 · Deduplication and contextual verification</h1>
 <p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: Harnesses and an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">B2.3 · Vulnerability auditing: three generations of SAST</a></strong>.</p>
 <table>
@@ -51,7 +51,332 @@ effort on three copies of the same claim.</p></div><div class="nbmd"><blockquote
                              └─ stages 11-14        └─ stage 15</code></p>
 </blockquote></div><div class="nbmd"><h2>3 · Stage 8 — deduplicate on the defect, not the report</h2>
 <p>Two findings are the same defect if they name the same sink in the same function, even at different lines and under different CWE labels. Cluster on that, and keep the <em>best-evidenced</em> member.</p></div><div class="nbmd"><h2>4 · Stage 9 — contextual verification against the real syntax</h2>
-<p>Now check each surviving claim against the code. Three checks, all mechanical, none requiring judgement.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Now check each surviving claim against the code. Three checks, all mechanical, none requiring judgement.</p></div><div class="nbmd"><h2>5 · The stage, as a skill</h2>
+<p>Seven raw findings, four defects. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than a line number, and then rejects the survivors whose symbols are not in the file — because a finding about <code>os.system</code> in a file that never imports <code>os</code> should die here rather than in a maintainer's inbox.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/finding-dedup-and-verification/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: finding-dedup-and-verification
+description: &gt;-
+  Collapse raw findings from several tools into distinct defects across CWE
+  aliases and duplicate reports, then reject the ones whose symbols do not
+  appear in the file. Use when a pipeline produces more findings than defects,
+  or when a scanner reports something that is not in the code.
+allowed-tools: Read, Grep, Glob
+---
+
+# Findings are not defects, and some of them are not real
+
+A pipeline running three analyses over one file produces findings that overlap
+in two different ways — the same defect reported under an alias, and the same
+defect reported by three tools — and, if a model is one of the tools, findings
+about symbols that do not exist. Both have to be resolved before a human sees
+the list, or the human resolves them by ignoring the list.
+
+## When to use this
+
+Between analysis and triage, in any pipeline with more than one analyser, and
+always when a model is one of them.
+
+## Procedure
+
+**1 — Normalise the CWE.** Maintain an alias map — CWE-943 is CWE-89 for this
+purpose — and normalise before comparing. Aliases are why the same defect
+appears twice with different identifiers.
+
+**2 — Key each finding by defect, not by report.** File, enclosing function,
+normalised CWE. Line numbers move; the enclosing function does not, and it is
+what makes two reports of one defect collapse.
+
+**3 — When duplicates disagree, keep the one with the best evidence.** A taint
+result carries a path; a grep hit carries a line; a model result carries a
+sentence. Prefer in that order, and record which tools agreed — agreement is
+useful signal even though it is not proof.
+
+**4 — Verify each survivor against the source.** Does the symbol it names appear
+in the file? Is the module it blames imported? A finding about `os.system` in a
+file that never imports `os` is a hallucination, and it is rejected here rather
+than in a maintainer&#x27;s inbox.
+
+**5 — Report both counts and the rejects.** Raw findings, distinct defects, and
+the rejected list with the reason. Discarding hallucinations silently loses the
+measurement of how often the analyser produces them.
+
+## Output contract
+
+```json
+{
+  &quot;raw&quot;: 0,
+  &quot;defects&quot;: [{&quot;key&quot;: &quot;str&quot;, &quot;file&quot;: &quot;str&quot;, &quot;function&quot;: &quot;str&quot;, &quot;cwe&quot;: &quot;str&quot;,
+               &quot;reported_by&quot;: [&quot;str&quot;], &quot;kept_from&quot;: &quot;str&quot;}],
+  &quot;rejected&quot;: [{&quot;finding&quot;: &quot;str&quot;, &quot;reason&quot;: &quot;symbol absent|module not imported&quot;}],
+  &quot;counts&quot;: {&quot;raw&quot;: 0, &quot;distinct&quot;: 0, &quot;rejected&quot;: 0}
+}
+```
+
+## Failure modes
+
+- **Keying on the line number.** One edit and the same defect is two.
+- **Merging by CWE alone.** Two real SQL injections in one file are two defects.
+- **Dropping hallucinations without counting them.** That count is how you know
+  whether to keep the analyser.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/appsec/finding-dedup-and-verification/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/finding-dedup-and-verification/scripts/finding_dedup_and_verification.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Collapse raw findings to distinct defects across aliases and tools, then reject the ones whose symbols are not in the file.
+
+This is the executable half of the `finding-dedup-and-verification` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+from dataclasses import dataclass, field
+
+SOURCE = {
+&quot;billing.py&quot;: &#x27;&#x27;&#x27;
+import sqlite3
+
+def build_filter(owner):
+    return &quot;WHERE owner = &#x27;&quot; + owner + &quot;&#x27;&quot;
+
+def list_reports(conn, owner):
+    return conn.execute(&quot;SELECT * FROM reports &quot; + build_filter(owner))
+
+def total(conn):
+    return conn.execute(&quot;SELECT SUM(amount) FROM reports&quot;).fetchone()
+&#x27;&#x27;&#x27;
+}
+
+@dataclass
+class Finding:
+    src: str; cwe: str; file: str; line: int; symbol: str
+    rationale: str; confidence: float = 1.0
+
+RAW = [
+ Finding(&quot;grep&quot;,   &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
+         &quot;execute() with string concatenation&quot;, 0.5),
+ Finding(&quot;taint&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
+         &quot;owner flows into the query via build_filter&quot;, 1.0),
+ Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 8,  &quot;execute&quot;,
+         &quot;user-controlled owner is interpolated into SQL&quot;, 0.93),
+ Finding(&quot;model&quot;,  &quot;CWE-943&quot;,&quot;billing.py&quot;, 7,  &quot;execute&quot;,
+         &quot;query language injection&quot;, 0.71),
+ Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 11, &quot;execute&quot;,
+         &quot;total() builds a query from input&quot;, 0.44),
+ Finding(&quot;model&quot;,  &quot;CWE-798&quot;,&quot;billing.py&quot;, 3,  &quot;DB_PASSWORD&quot;,
+         &quot;hardcoded database password in DB_PASSWORD&quot;, 0.88),
+ Finding(&quot;model&quot;,  &quot;CWE-78&quot;, &quot;billing.py&quot;, 6,  &quot;os.system&quot;,
+         &quot;shell invocation with user data&quot;, 0.67),
+]
+print(f&quot;{len(RAW)} raw findings from 3 tracks&quot;)
+for f in RAW:
+    print(f&quot;   {f.src:6s}{f.cwe:9s}{f.file}:{f.line:&lt;3}{f.symbol:14s}conf={f.confidence:.2f}&quot;)
+
+import ast
+
+def enclosing_function(src, line):
+    tree = ast.parse(src)
+    best = None
+    for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
+        end = max((getattr(n, &quot;lineno&quot;, fn.lineno) for n in ast.walk(fn)),
+                  default=fn.lineno)
+        if fn.lineno &lt;= line &lt;= end + 1:
+            if best is None or fn.lineno &gt; best.lineno: best = fn
+    return best.name if best else None
+
+CWE_ALIASES = {&quot;CWE-943&quot;: &quot;CWE-89&quot;, &quot;CWE-89&quot;: &quot;CWE-89&quot;}
+
+def defect_key(f, src):
+    fn = enclosing_function(src, f.line)
+    cwe = CWE_ALIASES.get(f.cwe, f.cwe)
+    return (f.file, fn, f.symbol, cwe)
+
+SRC = SOURCE[&quot;billing.py&quot;]
+clusters = {}
+for f in RAW:
+    clusters.setdefault(defect_key(f, SRC), []).append(f)
+
+RANK = {&quot;taint&quot;: 3, &quot;grep&quot;: 1, &quot;model&quot;: 2}
+deduped = []
+for key, group in clusters.items():
+    best = max(group, key=lambda f: (RANK[f.src], f.confidence))
+    deduped.append({&quot;key&quot;: key, &quot;keep&quot;: best, &quot;merged&quot;: len(group),
+                    &quot;sources&quot;: sorted({g.src for g in group})})
+
+print(f&quot;{len(RAW)} findings → {len(deduped)} distinct defects\n&quot;)
+for d in deduped:
+    file, fn, sym, cwe = d[&quot;key&quot;]
+    print(f&quot;   {cwe:8s}{str(fn):14s}{sym:14s}merged {d[&#x27;merged&#x27;]} &quot;
+          f&quot;from {d[&#x27;sources&#x27;]}  (kept {d[&#x27;keep&#x27;].src})&quot;)
+
+def verify(finding, src):
+    tree = ast.parse(src)
+    problems = []
+
+    # check 1 — does the referenced symbol exist at all?
+    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+    names |= {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
+    names |= {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
+    root = finding.symbol.split(&quot;.&quot;)[0]
+    if finding.symbol not in names and root not in names:
+        problems.append(f&quot;symbol {finding.symbol!r} does not appear in the file&quot;)
+
+    # check 2 — is the module it implies actually imported?
+    imports = {a.name.split(&quot;.&quot;)[0] for n in ast.walk(tree)
+               if isinstance(n, ast.Import) for a in n.names}
+    imports |= {n.module.split(&quot;.&quot;)[0] for n in ast.walk(tree)
+                if isinstance(n, ast.ImportFrom) and n.module}
+    if &quot;.&quot; in finding.symbol and root not in imports:
+        problems.append(f&quot;module {root!r} is never imported&quot;)
+
+    # check 3 — is the line inside a function at all?
+    if enclosing_function(src, finding.line) is None:
+        problems.append(f&quot;line {finding.line} is not inside any function&quot;)
+
+    return (not problems), problems
+
+print(f&quot;{&#x27;cwe&#x27;:9s}{&#x27;symbol&#x27;:14s}{&#x27;line&#x27;:&gt;5}  verdict&quot;)
+print(&quot;-&quot; * 74)
+verified, rejected = [], []
+for d in deduped:
+    f = d[&quot;keep&quot;]
+    ok, problems = verify(f, SRC)
+    (verified if ok else rejected).append((f, problems))
+    print(f&quot;{f.cwe:9s}{f.symbol:14s}{f.line:&gt;5}  &quot;
+          f&quot;{&#x27;verified&#x27; if ok else &#x27;REJECTED — &#x27; + problems[0]}&quot;)
+print(f&quot;\n{len(verified)} verified, {len(rejected)} rejected as hallucinations&quot;)
+
+# Verify the stage pays for itself.
+STAGE7_COUNT = len(RAW)
+after8 = len(deduped)
+after9 = len(verified)
+print(f&quot;stage 7 emitted        {STAGE7_COUNT}&quot;)
+print(f&quot;after stage 8 (dedup)  {after8}   ({1-after8/STAGE7_COUNT:.0%} removed)&quot;)
+print(f&quot;after stage 9 (verify) {after9}   ({1-after9/STAGE7_COUNT:.0%} removed overall)&quot;)
+
+TRUE_DEFECTS = {(&quot;billing.py&quot;, &quot;list_reports&quot;, &quot;execute&quot;, &quot;CWE-89&quot;)}
+found = {d[&quot;key&quot;] for d in deduped if any(d[&quot;keep&quot;] is f for f, _ in verified)}
+tp = len(found &amp; TRUE_DEFECTS); fp = len(found - TRUE_DEFECTS)
+print(f&quot;\nsurviving: tp={tp} fp={fp}&quot;)
+for f, _ in rejected:
+    print(f&quot;   rejected {f.cwe} on {f.symbol!r} — provably not in the code&quot;)
+assert any(&quot;DB_PASSWORD&quot; in f.symbol for f, _ in rejected)
+assert any(&quot;os.system&quot; in f.symbol for f, _ in rejected)
+print(&quot;\nBoth hallucinations named things that are not in the file. No model,&quot;)
+print(&quot;no judgement, no cost — just the AST disagreeing with the claim.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Seven raw findings collapse to four distinct defects, with the CWE-943 alias merging into CWE-89 and the taint result kept over grep and model duplicates. Contextual verification then rejects the hallucinated <code>DB_PASSWORD</code> and <code>os.system</code> findings because neither symbol appears in the file and <code>os</code> is never imported, leaving the real SQL injection.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add a fourth verification check: does the CWE class match the sink type? A CWE-22 finding on a <code>conn.execute</code> call is provably mislabelled, and that check costs nothing to run.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.5.html">B2.5 · Feasibility filtering and reachability</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.4.ipynb">Source</a></p>

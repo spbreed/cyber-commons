@@ -117,6 +117,8 @@ equivalent of a shape check, and B2.0 already established what those are worth.
          "The most common DAST bug: treating \"the request succeeded\" as "
          "confirmation. Both probes below hit the app and return 200-equivalents; "
          "only one of them proves anything."),
+  *skill_steps('appsec/dynamic-exploitation-probe',
+               '## 2 · The stage, as a skill\n\nA dynamic probe proves nothing unless its assertion can fail. The skill runs the probes against a live build with a control probe alongside, then re-runs them under a weak assertion so you can watch it flag the control too.'),
 ],
  "expect": "The SQL injection probe returns rows for three owners when one was "
            "requested, and the traversal probe returns the synthetic token from "
@@ -209,6 +211,8 @@ the only question that cannot be gamed by editing the code around the detector.
 ("md", "## 2 · The confirmed finding, with its working exploit"),
 ("md", "## 3 · Four candidate patches, three of which make CI green"),
 ("md", "## 4 · The control — validate on three axes, exploit first"),
+  *skill_steps('appsec/patch-validation-harness',
+               '## 2 · The stage, as a skill\n\nSeveral candidate patches make the scanner green; one of them is a fix. The skill runs all three gates — behaviour unchanged, exploit blocked, and proof of fix against the old build — and reports which gate each rejected candidate died at.'),
 ],
  "expect": "The vulnerable build passes all four behaviour cases and the exploit "
            "returns 3 rows. Candidates A, B and D make the scanner green. "
@@ -300,6 +304,8 @@ irrelevant inside a migration script that takes a constant.
  "steps": [
   ("md", "## 2 · Demo — four strategies over one bug"),
 ("md", "## 3 · The control — slice on the source-sink path"),
+  *skill_steps('appsec/context-window-sizing',
+               '## 2 · The stage, as a skill\n\nContext engineering here is not "send less" — it is finding the slice in which the defect is decidable at all, and only then making it smaller. The skill measures four candidate slices and reports which are decidable and what each carries that the defect does not depend on.'),
 ],
  "expect": "The whole file is roughly 840 characters, the ±2 window about 200 and "
            "the path slice about 390. The ±2 window is not decidable because it "
@@ -500,6 +506,8 @@ this is where you point them at someone else's pipeline.
          "structured output it goes to 1.00 and says nothing about quality. The "
          "number that decides adoption is expert accuracy against a key the tool "
          "never saw, matched on **parent directory plus filename** (B2.1)."),
+  *skill_steps('appsec/reference-pipeline-scoring',
+               "## 2 · The stage, as a skill\n\nGoogle's Mantis is a set of claims: these stages, this output shape, this accuracy. The skill checks all three — maps it onto the stage model, conformance-checks its published samples, and scores its findings against a held-out key."),
 ],
  "expect": "The stage map shows Mantis covering stage 7 strongly with a stage-1 "
            "learning loop, and not covering Phase 4 at all. Three of five sample "

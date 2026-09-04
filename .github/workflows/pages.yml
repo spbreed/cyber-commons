@@ -55,6 +55,13 @@ jobs:
       - name: Validate agent skills
         run: python3 scripts/check_skills.py --check
 
+      # And loading is not running. Every skill's own script is executed in a
+      # stripped environment — no model endpoint, no cloud credentials — so a
+      # skill that quietly depends on one, or that runs and prints nothing,
+      # fails here rather than on a reader's machine.
+      - name: Execute every agent skill
+        run: python3 scripts/test_skills.py --check
+
       # Running clean is not enough — a lesson is only evidence if the
       # reader's run matches the one on the page. Two notebooks once printed
       # different things on Kaggle than they did locally because their output

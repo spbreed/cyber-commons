@@ -4,9 +4,10 @@ description: >-
   Build a STRIDE threat model for an agentic system from the evidence an estate
   already holds — source code, CSPM findings, IAM policies, network policies and
   the tool surface — and emit a ranked threat table plus a trust-boundary
-  diagram. Use when asked to threat-model an agent, a pipeline or a service,
-  when a threat model needs regenerating after an architecture change, or when
-  someone asks which STRIDE categories a design actually exposes.
+  diagram. Use when asked what could go wrong with an architecture, to
+  threat-model an agent, a pipeline or a service, when a threat model needs
+  regenerating after an architecture change, or when someone asks which STRIDE
+  categories a design actually exposes.
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

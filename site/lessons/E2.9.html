@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.9 — Regulator and auditor conversations | Cyber Commons</title><meta name="description" content="Explain bounded autonomy with evidence, and anticipate the real questions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.9</div><h1>Regulator and auditor conversations</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Overclaiming control, or triggering a moratorium.</p></div><div class="ctrl"><div class="lab">Control</div><p>Explain bounded autonomy with evidence, and anticipate the real questions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Defend one workflow in a mock supervisory conversation.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.9 · Regulator and auditor conversations</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.9 — Regulator and auditor conversations | Cyber Commons</title><meta name="description" content="Explain bounded autonomy with evidence, and anticipate the real questions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.9</div><h1>Regulator and auditor conversations</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Overclaiming control, or triggering a moratorium.</p></div><div class="ctrl"><div class="lab">Control</div><p>Explain bounded autonomy with evidence, and anticipate the real questions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Defend one workflow in a mock supervisory conversation.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.9 · Regulator and auditor conversations</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Platform — Regulatory and Compliance</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E2.8.html">E2.8 · Auditability of autonomous action</a></strong>.</p>
 <table>
@@ -47,7 +47,282 @@ of the engagement is spent re-establishing credibility you had at the start.</p>
 </ol>
 <p>The third one is the one people omit, and it is the one that most reliably
 converts scepticism into a working relationship.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">how you open</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it is</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what happens next</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“Our harness scores 100%.”</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance quoted as quality</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>the follow-up “against what key?” ends the meeting's credibility</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“We have full coverage of our AI controls.”</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">stale and untested counted as passing</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>one request for dates exposes it</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“Conformance is 100%; expert accuracy is 50% against a held-out key of 20. Coverage is 63%, with SB-1 stale at 45 days and two controls not yet deployed.”</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">both numbers, honestly</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">nothing left for them to discover — the conversation moves to the plan</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">The third opening is the only one that survives a follow-up, and it is the one that sounds worst when you rehearse it.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The third opening is the only one that survives a follow-up, and it is the one that sounds worst when you rehearse it.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Conformance 1.0000, expert accuracy 0.5000, against a held-out key. The skill reports both to the same precision, splits control coverage into evidenced, stale and unevidenced, and rehearses the three openings that get used.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/assurance-conversation-prep/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: assurance-conversation-prep
+description: &gt;-
+  Prepare for a regulator or auditor conversation by reporting conformance and
+  expert accuracy separately alongside control coverage, and rehearsing the
+  three openings that actually get used. Use before an assurance meeting.
+allowed-tools: Read, Grep, Glob
+---
+
+# Conformance 1.00, accuracy 0.50
+
+The number that goes into an assurance conversation is usually conformance,
+because it is the one that is high. Conformance says the output had the right
+shape; accuracy says it was right. Reporting the first without the second is the
+failure mode that ends a meeting badly, and reporting both is what makes the rest
+of the conversation about controls instead of credibility.
+
+## When to use this
+
+Before any regulator, auditor or customer assurance conversation about an AI
+system.
+
+## Procedure
+
+**1 — Compute conformance and accuracy separately, against a held-out key.**
+Never the examples that were used for development. Report both to the same
+number of decimals so neither can be read as the other.
+
+**2 — Compute control coverage in three states.** Evidenced, stale, unevidenced.
+A single percentage hides the stale bucket, which is the one you will be asked
+about.
+
+**3 — Rehearse the three openings.** &quot;Show me the evidence for this control.&quot;
+&quot;What changed since the last test.&quot; &quot;What would you not be able to detect.&quot;
+These are the ones that get used.
+
+**4 — Prepare the answer to the third one honestly.** A stated blind spot is a
+programme that knows its own shape; a claim of full detection invites a search
+for the counterexample, and there is one.
+
+**5 — Bring the artefacts, dated.** The single most common failure is a correct
+answer with the evidence three teams away.
+
+## Output contract
+
+```json
+{
+  &quot;evaluation&quot;: {&quot;conformance&quot;: 0.0, &quot;accuracy&quot;: 0.0, &quot;key&quot;: &quot;held-out&quot;, &quot;n&quot;: 0},
+  &quot;coverage&quot;: {&quot;evidenced&quot;: 0, &quot;stale&quot;: 0, &quot;unevidenced&quot;: 0, &quot;of&quot;: 0},
+  &quot;openings&quot;: [{&quot;question&quot;: &quot;str&quot;, &quot;answer&quot;: &quot;str&quot;, &quot;artefact&quot;: &quot;str|null&quot;}],
+  &quot;known_blind_spots&quot;: [&quot;str&quot;],
+  &quot;artefacts&quot;: [{&quot;control&quot;: &quot;str&quot;, &quot;artefact&quot;: &quot;str&quot;, &quot;as_of&quot;: &quot;str&quot;}]
+}
+```
+
+## Failure modes
+
+- **Leading with conformance.** It is the flattering half.
+- **A single coverage percentage.** Stale is a state and it will be asked
+  about.
+- **Claiming complete detection.** The counterexample exists and they will find
+  it.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/regulatory/assurance-conversation-prep/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/assurance-conversation-prep/scripts/assurance_conversation_prep.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Report conformance and expert accuracy separately, with control coverage, and rehearse the three openings a regulator uses.
+
+This is the executable half of the `assurance-conversation-prep` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import json, time
+from dataclasses import dataclass
+now = time.time(); DAY = 86400
+
+@dataclass
+class Truth:
+    qid: str; cwe: str; file: str
+
+def path_key(p):
+    parts = [x for x in p.replace(&quot;\\&quot;,&quot;/&quot;).split(&quot;/&quot;) if x not in (&quot;&quot;,&quot;.&quot;)]
+    return &quot;/&quot;.join(parts[-2:]) if len(parts) &gt; 1 else (parts[-1] if parts else &quot;&quot;)
+
+TRUTHS = {f&quot;q{i}&quot;: Truth(f&quot;q{i}&quot;, [&quot;CWE-89&quot;,&quot;CWE-78&quot;][i % 2],
+                         f&quot;{[&#x27;CWE-89&#x27;,&#x27;CWE-78&#x27;][i % 2]}/{i}.py&quot;) for i in range(1, 21)}
+ANSWERS = {q: json.dumps({&quot;qid&quot;: q, &quot;cwe&quot;: &quot;CWE-89&quot;, &quot;file&quot;: t.file,
+                          &quot;rationale&quot;: &quot;untrusted input is concatenated&quot;})
+           for q, t in TRUTHS.items()}
+
+def evaluate(answers, truths):
+    conf = expert = 0
+    for q, t in truths.items():
+        try: d = json.loads(answers[q])
+        except (json.JSONDecodeError, KeyError): continue
+        conf += 1
+        if path_key(d[&quot;file&quot;]) != path_key(t.file): continue
+        expert += 1.0 if d[&quot;cwe&quot;].upper() == t.cwe else 0.5
+    return {&quot;n&quot;: len(truths), &quot;conformance&quot;: round(conf/len(truths), 4),
+            &quot;expert_accuracy&quot;: round(expert/len(truths), 4)}
+
+R = evaluate(ANSWERS, TRUTHS)
+print(f&quot;n                {R[&#x27;n&#x27;]}&quot;)
+print(f&quot;conformance      {R[&#x27;conformance&#x27;]:.4f}&quot;)
+print(f&quot;expert accuracy  {R[&#x27;expert_accuracy&#x27;]:.4f}&quot;)
+
+@dataclass
+class ControlTest:
+    cid: str; passed: bool; tested_at: float; valid_for_days: float
+    def state(self, at):
+        if (at - self.tested_at)/DAY &gt; self.valid_for_days: return &quot;STALE&quot;
+        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
+
+REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
+TESTS = {t.cid: t for t in [
+ ControlTest(&quot;AC-1&quot;, True,  now -  4*DAY, 30),
+ ControlTest(&quot;AC-2&quot;, True,  now -  9*DAY, 30),
+ ControlTest(&quot;SB-1&quot;, True,  now - 45*DAY, 30),
+ ControlTest(&quot;EV-1&quot;, True,  now -  5*DAY, 60),
+ ControlTest(&quot;EV-2&quot;, True,  now - 12*DAY, 30)]}
+
+rows = [(c, TESTS[c].state(now) if c in TESTS else &quot;NO EVIDENCE&quot;) for c in REQUIRED]
+evidenced = sum(1 for _, s in rows if s == &quot;PASS&quot;)
+print(f&quot;{&#x27;control&#x27;:9s}{&#x27;state&#x27;:14s}&quot;)
+print(&quot;-&quot; * 24)
+for c, s in rows: print(f&quot;{c:9s}{s:14s}&quot;)
+print(f&quot;\ncoverage: {evidenced}/{len(REQUIRED)} = {evidenced/len(REQUIRED):.0%}&quot;)
+
+def disclosure(evalr, rows, required):
+    evidenced = [c for c, s in rows if s == &quot;PASS&quot;]
+    stale     = [c for c, s in rows if s == &quot;STALE&quot;]
+    missing   = [c for c, s in rows if s == &quot;NO EVIDENCE&quot;]
+    failing   = [c for c, s in rows if s == &quot;FAIL&quot;]
+    plan = {&quot;SB-1&quot;: &quot;re-tested by 2026-08-31 (automation in progress)&quot;,
+            &quot;DR-1&quot;: &quot;drift alerting deployed by 2026-10-15&quot;,
+            &quot;ST-1&quot;: &quot;game day scheduled 2026-09-12&quot;}
+    lines = [
+      f&quot;1. Two numbers, and they measure different things.&quot;,
+      f&quot;   conformance {evalr[&#x27;conformance&#x27;]:.0%} — schema validity, structural, &quot;
+      f&quot;not a quality claim.&quot;,
+      f&quot;   expert accuracy {evalr[&#x27;expert_accuracy&#x27;]:.0%} against a held-out key &quot;
+      f&quot;of {evalr[&#x27;n&#x27;]} questions. That is the number that means something.&quot;,
+      f&quot;&quot;,
+      f&quot;2. Control coverage {len(evidenced)}/{len(required)} = &quot;
+      f&quot;{len(evidenced)/len(required):.0%}, counting only controls that are &quot;
+      f&quot;currently evidenced.&quot;,
+      f&quot;   stale: {stale or &#x27;none&#x27;}   failing: {failing or &#x27;none&#x27;}   &quot;
+      f&quot;no evidence: {missing or &#x27;none&#x27;}&quot;,
+      f&quot;&quot;,
+      f&quot;3. What we have not done, and when we will:&quot;,
+    ]
+    for c in stale + failing + missing:
+        lines.append(f&quot;   {c}: {plan.get(c, &#x27;plan to be confirmed&#x27;)}&quot;)
+    return &quot;\n&quot;.join(lines)
+
+print(disclosure(R, rows, REQUIRED))
+print(&quot;\nRehearse the second section out loud. If naming your weakest control is&quot;)
+print(&quot;uncomfortable, that discomfort is the reason to say it first.&quot;)
+assert R[&quot;expert_accuracy&quot;] &lt; R[&quot;conformance&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Conformance is 1.0000 while expert accuracy is 0.5000 on a 20-question held-out key. Coverage is 5 of 8 with SB-1 stale and DR-1 and ST-1 unevidenced. The three openings show conformance-as-quality and inflated coverage failing on the first follow-up, and the generated disclosure script states both numbers, the stale and missing controls, and a date for each.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Generate this script from your own live control state rather than writing it. If it cannot be generated, your coverage number is being assembled by hand for each meeting — which is why it differs between meetings.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> One control set mapped to a horizontal regime, a sector overlay and a privacy position; trigger criteria for disclosure written before they are needed; documentation and logs designed backwards from what a supervisor will ask.</p>
 <p><strong>What you still cannot do.</strong> Compliance tells you what you owe. It does not tell you what to build first, who owns it, how to say no to the business without losing the next conversation, or what to do when the programme is judged on a failure it was never going to prevent.</p>

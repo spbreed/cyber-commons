@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.5 — Supply-chain research | Cyber Commons</title><meta name="description" content="Verify provenance; sign and attest artefacts."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.5</div><h1>Supply-chain research</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Adapter and LoRA provenance, registry tampering, dependency confusion in agent ecosystems.</p></div><div class="ctrl"><div class="lab">Control</div><p>Verify provenance; sign and attest artefacts.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Detect a tampered adapter through provenance.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.5 · Supply-chain research</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.5 — Supply-chain research | Cyber Commons</title><meta name="description" content="Verify provenance; sign and attest artefacts."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.5</div><h1>Supply-chain research</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Adapter and LoRA provenance, registry tampering, dependency confusion in agent ecosystems.</p></div><div class="ctrl"><div class="lab">Control</div><p>Verify provenance; sign and attest artefacts.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Detect a tampered adapter through provenance.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.5 · Supply-chain research</h1>
 <p><strong>Function C — Red Teaming and Security Research with AI → Security Research with AI</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.4.html">C2.4 · Data-layer research</a></strong>.</p>
 <table>
@@ -47,7 +47,303 @@ changed.</p>
   there is no signing convention for them at all.</li>
 </ul>
 <p>The honest output of this lesson includes stating where no answer currently
-exists, because a risk assessment that invents one is worse than a gap.</p></div><div class="nbmd"><h2>Your turn</h2>
+exists, because a risk assessment that invents one is worse than a gap.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The same connector is a review when a person loads it and a block when an agent holding production credentials does. The skill scores the ordinary signals first, then re-scores weighted by the authority the artefact will execute with.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/agent-supply-chain-assessment/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: agent-supply-chain-assessment
+description: &gt;-
+  Score new packages and MCP connectors for typosquatting and ordinary
+  supply-chain signals, then re-score them weighted by the authority the agent
+  that loads them runs with. Use when an agent installs its own dependencies or
+  connects to a server somebody added last week.
+allowed-tools: Read, Grep, Glob
+---
+
+# The same package is a different risk inside an agent
+
+Supply-chain assessment for agents differs in one term: the artefact runs with
+the agent&#x27;s authority. A connector that trips three ordinary signals is a
+review; the same connector loaded by an agent holding production credentials is
+a block. Weighting by authority is what turns the ordinary assessment into the
+right answer.
+
+## When to use this
+
+When an agent can install packages, when an MCP server is added, and at any
+review of what a coding agent is allowed to pull.
+
+## Procedure
+
+**1 — Establish the known-good set.** The packages this project actually uses.
+Typosquat detection is a comparison against something; without the set it is a
+spell-check.
+
+**2 — Score edit distance against known-good names.** A distance of one or two
+from a popular package, with a recent first-publication date, is the classic
+shape. Report the package it imitates, not just the score.
+
+**3 — Apply the ordinary signals.** Age, maintainer count, download history,
+whether it was published after the agent asked for it, install scripts.
+
+**4 — Re-score weighted by agent authority.** What credentials are in the
+environment the artefact will execute in, and what the agent can reach. This is
+the step that moves a review to a block and it needs no new information.
+
+**5 — Report the two verdicts side by side.** Unweighted and authority-weighted.
+The difference is the argument for gating what agents may install, and it is
+easier to make with both numbers present.
+
+## Output contract
+
+```json
+{
+  &quot;known_good&quot;: [&quot;str&quot;],
+  &quot;artefacts&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;package|mcp&quot;, &quot;distance&quot;: 0, &quot;imitates&quot;: &quot;str|null&quot;,
+                 &quot;signals&quot;: [&quot;str&quot;], &quot;verdict&quot;: &quot;allow|review|block&quot;}],
+  &quot;authority&quot;: {&quot;credentials_present&quot;: [&quot;str&quot;], &quot;reachable&quot;: [&quot;str&quot;]},
+  &quot;weighted&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;verdict&quot;: &quot;allow|review|block&quot;, &quot;moved&quot;: true}]
+}
+```
+
+## Failure modes
+
+- **Typosquat detection with no known-good set.** Everything is close to
+  something.
+- **Assessing the package and not the environment.** The authority is the term
+  that differs.
+- **Treating an MCP connector as configuration.** It is code that runs with the
+  agent.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/research/agent-supply-chain-assessment/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/agent-supply-chain-assessment/scripts/agent_supply_chain_assessment.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Score new packages and MCP connectors for typosquatting and then re-score them weighted by the authority the agent runs with.
+
+This is the executable half of the `agent-supply-chain-assessment` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Package:
+    name: str; version: str; signed: bool = False
+    downloads: int = 0; age_days: int = 999
+
+KNOWN_GOOD = {&quot;requests&quot;, &quot;urllib3&quot;, &quot;numpy&quot;, &quot;pandas&quot;, &quot;cryptography&quot;,
+              &quot;pytest&quot;, &quot;flask&quot;, &quot;colorama&quot;, &quot;langchain&quot;}
+
+def levenshtein(a, b):
+    if len(a) &lt; len(b): a, b = b, a
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+def typosquat(pkg, known=KNOWN_GOOD):
+    if pkg.name in known:
+        return None
+    near = sorted((levenshtein(pkg.name, k), k) for k in known)[:1]
+    if near and near[0][0] &lt;= 2:
+        return f&quot;distance {near[0][0]} from popular package {near[0][1]!r}&quot;
+    return None
+
+def assess(pkg):
+    flags = []
+    if not pkg.signed:        flags.append(&quot;unsigned — no attestation to source&quot;)
+    if pkg.age_days &lt; 30:     flags.append(f&quot;published {pkg.age_days}d ago — no soak time&quot;)
+    if pkg.downloads &lt; 1000:  flags.append(f&quot;only {pkg.downloads} downloads&quot;)
+    if (t := typosquat(pkg)): flags.append(t)
+    verdict = &quot;block&quot; if len(flags) &gt;= 3 else &quot;review&quot; if flags else &quot;allow&quot;
+    return verdict, flags
+
+for p in [Package(&quot;requests&quot;, &quot;2.31.0&quot;, True, 900_000, 400),
+          Package(&quot;requsts&quot;, &quot;2.31.0&quot;, False, 12, 3),
+          Package(&quot;colourama&quot;, &quot;0.4.6&quot;, False, 40, 9),
+          Package(&quot;langchain&quot;, &quot;0.2.1&quot;, False, 400_000, 200)]:
+    v, flags = assess(p)
+    print(f&quot;{p.name+&#x27;==&#x27;+p.version:24s}{v}&quot;)
+    for f in flags: print(f&quot;      · {f}&quot;)
+
+NEW_ARTEFACTS = {
+ &quot;model weights&quot;: {
+   &quot;signing&quot;: &quot;Sigstore/in-toto possible, rarely used&quot;,
+   &quot;popularity signal&quot;: &quot;NONE — &#x27;popular checkpoint&#x27; is not provenance&quot;,
+   &quot;lineage&quot;: &quot;a fine-tune of a fine-tune; base model often unrecorded&quot;,
+   &quot;runs with&quot;: &quot;no authority of its own — but shapes every decision&quot;,
+   &quot;honest verdict&quot;: &quot;assess the PUBLISHER, because you cannot assess the artefact&quot;},
+ &quot;prompt / tool packages (MCP, skills)&quot;: {
+   &quot;signing&quot;: &quot;NO convention exists&quot;,
+   &quot;popularity signal&quot;: &quot;star counts, which are trivially gamed&quot;,
+   &quot;lineage&quot;: &quot;none recorded&quot;,
+   &quot;runs with&quot;: &quot;YOUR AGENT&#x27;S AUTHORITY — this is the dangerous one&quot;,
+   &quot;honest verdict&quot;: &quot;treat as executable code, because it is&quot;},
+}
+for artefact, props in NEW_ARTEFACTS.items():
+    print(f&quot;=== {artefact} ===&quot;)
+    for k, v in props.items():
+        print(f&quot;   {k:20s} {v}&quot;)
+    print()
+
+# An MCP tool package assessed with the ordinary signals — they still fire.
+mcp_pkg = Package(&quot;mcp-jira-connector&quot;, &quot;0.0.3&quot;, signed=False,
+                  downloads=180, age_days=6)
+v, flags = assess(mcp_pkg)
+print(f&quot;{mcp_pkg.name}: {v}&quot;)
+for f in flags: print(f&quot;   · {f}&quot;)
+print(&quot;\nGood news: the existing process EXTENDS to it rather than needing&quot;)
+print(&quot;invention. Bad news: nothing in that process accounts for the fact that&quot;)
+print(&quot;this package will run with your agent&#x27;s tools.&quot;)
+
+def authority_weighted(pkg, runs_with_agent_authority, agent_blast):
+    v, flags = assess(pkg)
+    if runs_with_agent_authority and v != &quot;allow&quot;:
+        return &quot;block&quot;, flags + [f&quot;runs with agent authority (blast {agent_blast})&quot;]
+    return v, flags
+
+v2, flags2 = authority_weighted(mcp_pkg, True, agent_blast=43)
+print(f&quot;\nauthority-weighted verdict: {v2}&quot;)
+for f in flags2: print(f&quot;   · {f}&quot;)
+assert v2 == &quot;block&quot;
+
+def risk_assessment(artefact, signals_available):
+    known = [s for s, ok in signals_available.items() if ok]
+    unknown = [s for s, ok in signals_available.items() if not ok]
+    return {
+      &quot;artefact&quot;: artefact,
+      &quot;assessed_on&quot;: known,
+      &quot;cannot_assess&quot;: unknown,
+      &quot;statement&quot;: (f&quot;assessed on {len(known)}/{len(signals_available)} signals; &quot;
+                    f&quot;{&#x27;, &#x27;.join(unknown)} not available for this artefact class&quot;),
+    }
+
+for artefact, sig in (
+  (&quot;python package&quot;, {&quot;signature&quot;: True, &quot;downloads&quot;: True, &quot;age&quot;: True, &quot;lineage&quot;: True}),
+  (&quot;model weights&quot;,  {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;age&quot;: True, &quot;lineage&quot;: False}),
+  (&quot;MCP tool pack&quot;,  {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;age&quot;: True, &quot;lineage&quot;: False}),
+):
+    r = risk_assessment(artefact, sig)
+    print(f&quot;{r[&#x27;artefact&#x27;]:18s}{r[&#x27;statement&#x27;]}&quot;)
+print(&quot;\nThat last sentence is the deliverable. A risk rating that hides which&quot;)
+print(&quot;signals were unavailable is a number someone will later rely on.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The two legitimate packages are allowed or reviewed; both typosquats are blocked with the distance and the package they imitate. The MCP connector trips three ordinary signals and is escalated to block once agent authority is weighted in. The final assessments state explicitly which signals are unavailable for model weights and tool packages.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add one question to your third-party assessment: "does this artefact execute with our agent's authority?" Anything answering yes should not be assessed on the same scale as a library.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.6.html">C2.6 · Benchmarks, reproducibility and the research harness</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.5.ipynb">Source</a></p>

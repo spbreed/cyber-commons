@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.8 — Malicious code execution | Cyber Commons</title><meta name="description" content="Sandboxed execution (A3.2) and egress control (A3.3)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › CyberTravels&#x27; Architecture, and Every Risk It Carries</div><div class="sid">A1.8</div><h1>Malicious code execution</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model-authored code runs with the runtime&#x27;s privileges — reaching the filesystem, the network and any credential in the environment.</p></div><div class="ctrl"><div class="lab">Control</div><p>Sandboxed execution (A3.2) and egress control (A3.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Execute model-authored code and enumerate what the process could touch.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.8 · Malicious code execution</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A1.8 — Malicious code execution | Cyber Commons</title><meta name="description" content="Sandboxed execution (A3.2) and egress control (A3.3)."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › CyberTravels&#x27; Architecture, and Every Risk It Carries</div><div class="sid">A1.8</div><h1>Malicious code execution</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A1.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model-authored code runs with the runtime&#x27;s privileges — reaching the filesystem, the network and any credential in the environment.</p></div><div class="ctrl"><div class="lab">Control</div><p>Sandboxed execution (A3.2) and egress control (A3.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Execute model-authored code and enumerate what the process could touch.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A1.8 · Malicious code execution</h1>
 <p><strong>Function A — Securing AI Architectures → CyberTravels' Architecture, and Every Risk It Carries</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A1.7.html">A1.7 · Identity spoofing and impersonation</a></strong>.</p>
 <table>
@@ -59,7 +59,239 @@ can <em>reach</em>, not about what the model can be persuaded to <em>write</em>.
            identity + policy wrap every call · observability records it</code></p>
 </blockquote>
 <h2>3 · The risk, realised</h2>
-<p>What the executing process can reach, enumerated rather than assumed. Nothing below actually touches your machine — the environment is a fixture, so the lesson runs anywhere.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>What the executing process can reach, enumerated rather than assumed. Nothing below actually touches your machine — the environment is a fixture, so the lesson runs anywhere.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
+<p>CyberTravels' Coding Agent runs code it wrote. The skill enumerates what that process reaches — environment, filesystem, network — on an ordinary task first, because the ordinary task is the more persuasive half of the finding.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/generated-code-reach-enumerator/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: generated-code-reach-enumerator
+description: &gt;-
+  Enumerate what model-authored code can read, write and connect to when it
+  executes — on an ordinary task and on a steered one — including process
+  environment, filesystem and cloud metadata. Use when an agent runs code it
+  wrote, or when sizing the runtime that code should execute in.
+allowed-tools: Read, Grep, Glob, Bash
+---
+
+# The reach is the same whether the code was steered or not
+
+An agent that executes its own code has the process&#x27;s reach, not the task&#x27;s.
+The interesting measurement is that an **ordinary, unattacked** task already
+touches everything the process can see; steering only changes what it does with
+that reach, not how much of it there is.
+
+## When to use this
+
+Any agent with a code-execution tool, a notebook runner, a build step it
+authors, or a shell. Run it before choosing a sandbox, because the output is
+the requirement list for one.
+
+## Procedure
+
+**1 — Inventory the process environment.** Every variable visible to the
+executing process. Credentials in the environment are reachable by any line of
+code, and the agent did not have to look for them.
+
+**2 — Inventory filesystem reach.** What the process can open, not what the
+task needs. Include the agent&#x27;s own configuration, adjacent workspaces, and any
+key material mounted for another purpose.
+
+**3 — Inventory network reach.** Resolve and attempt each destination the
+process can open. The cloud metadata address is the one that turns a code
+execution into a credential theft; test it explicitly.
+
+**4 — Run the benign task and record what it touched.** This is the number that
+changes the conversation: an ordinary task with no adversary reaching a private
+key is a design fact, not an incident.
+
+**5 — Run the steered task and diff.** The difference between the two is what
+an attacker gains. It is usually smaller than people expect, because the
+ordinary run already had everything.
+
+## Output contract
+
+```json
+{
+  &quot;environment&quot;: {&quot;variables&quot;: [&quot;str&quot;], &quot;credential_shaped&quot;: [&quot;str&quot;]},
+  &quot;filesystem&quot;: {&quot;readable&quot;: [&quot;str&quot;], &quot;sensitive&quot;: [&quot;str&quot;]},
+  &quot;network&quot;: {&quot;reachable&quot;: [&quot;str&quot;], &quot;metadata_endpoint&quot;: true},
+  &quot;benign_run&quot;: {&quot;touched&quot;: [&quot;str&quot;]},
+  &quot;steered_run&quot;: {&quot;touched&quot;: [&quot;str&quot;], &quot;gain_over_benign&quot;: [&quot;str&quot;]},
+  &quot;sandbox_requirements&quot;: [&quot;str&quot;]
+}
+```
+
+## Failure modes
+
+- **Measuring the task instead of the process.** The task is a suggestion; the
+  process boundary is the control.
+- **Skipping the metadata endpoint** because it is not in the code. It does not
+  need to be.
+- **Reporting only the steered run.** The benign run is the more persuasive
+  half of the finding.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/threats/generated-code-reach-enumerator/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/generated-code-reach-enumerator/scripts/generated_code_reach_enumerator.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Enumerate what model-authored code reaches when executed, on an ordinary task and on a steered one.
+
+This is the executable half of the `generated-code-reach-enumerator` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+# a stand-in for the process the agent&#x27;s code runs inside
+PROCESS_ENV = {
+ &quot;AWS_ACCESS_KEY_ID&quot;: &quot;AKIA-EXAMPLE-NOT-REAL&quot;,
+ &quot;DATABASE_URL&quot;: &quot;postgres://app:pw@prod-db/main&quot;,
+ &quot;HOME&quot;: &quot;/home/agent&quot;,
+}
+FILESYSTEM = {&quot;/home/agent/work/data.csv&quot;: &quot;id,amount&quot;,
+              &quot;/home/agent/.ssh/id_ed25519&quot;: &quot;PRIVATE KEY MATERIAL&quot;,
+              &quot;/etc/passwd&quot;: &quot;root:x:0:0&quot;}
+NETWORK_REACHABLE = [&quot;prod-db:5432&quot;, &quot;169.254.169.254:80&quot;, &quot;0.0.0.0/0&quot;]
+
+def execute(code):
+    &quot;&quot;&quot;The runtime runs model-authored text. Reach is decided by the process,
+    not by the code&#x27;s intent.&quot;&quot;&quot;
+    reached = []
+    if &quot;environ&quot; in code:  reached += [f&quot;env:{k}&quot; for k in sorted(PROCESS_ENV)]
+    if &quot;open(&quot; in code:    reached += [f&quot;file:{p}&quot; for p in sorted(FILESYSTEM)]
+    if &quot;connect&quot; in code:  reached += [f&quot;net:{h}&quot; for h in NETWORK_REACHABLE]
+    return reached
+
+BENIGN = &quot;rows = open(&#x27;/home/agent/work/data.csv&#x27;).read()&quot;     # nobody attacked anything
+STEERED = &quot;import os; d=os.environ; connect(&#x27;169.254.169.254&#x27;)&quot;
+
+for label, code in ((&quot;ordinary bug / benign task&quot;, BENIGN),
+                    (&quot;steered by an injection&quot;, STEERED)):
+    reach = execute(code)
+    print(f&quot;{label}:&quot;)
+    print(f&quot;   code   : {code[:58]}&quot;)
+    print(f&quot;   reached: {len(reach)} things&quot;)
+    for r in reach[:6]:
+        print(f&quot;      {r}&quot;)
+    print()
+
+print(&quot;The benign task reached every file the process can see, including a&quot;)
+print(&quot;private key it had no reason to touch. It was not attacked - the code&quot;)
+print(&quot;used open(), and open() sees what the process sees.&quot;)
+print()
+print(&quot;Blast radius here is a property of the environment. A3.2 changes the&quot;)
+print(&quot;environment; no amount of instruction changes it.&quot;)
+assert any(&quot;id_ed25519&quot; in r for r in execute(BENIGN))</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>For one agent that executes code, list what is in its process environment right now. The credentials in that list are the blast radius of the next ordinary bug, not of the next attack.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.9.html">A1.9 · Injection through content the agent was asked to read</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A1.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A1.8.ipynb">Source</a></p>

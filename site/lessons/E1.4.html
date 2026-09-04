@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.4 — Control mapping for agents | Cyber Commons</title><meta name="description" content="Map identity, secrets, sandbox, eval and telemetry onto the existing library."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.4</div><h1>Control mapping for agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Inventing new controls where an existing one applied to a new principal type.</p></div><div class="ctrl"><div class="lab">Control</div><p>Map identity, secrets, sandbox, eval and telemetry onto the existing library.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Map agent controls onto the library you already have.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.4 · Control mapping for agents</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.4 — Control mapping for agents | Cyber Commons</title><meta name="description" content="Map identity, secrets, sandbox, eval and telemetry onto the existing library."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.4</div><h1>Control mapping for agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Inventing new controls where an existing one applied to a new principal type.</p></div><div class="ctrl"><div class="lab">Control</div><p>Map identity, secrets, sandbox, eval and telemetry onto the existing library.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Map agent controls onto the library you already have.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.4 · Control mapping for agents</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Framework — Risk and Control</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.3.html">E1.3 · Risk tiering agentic use cases</a></strong>.</p>
 <table>
@@ -38,7 +38,288 @@ capabilities, and a clause with no operating control behind it evidences nothing
 <p>Starting from controls produces the opposite: a smaller list of things you
 actually do, each of which happens to satisfy several framework clauses. The
 framework coverage is an <strong>output</strong>, and that is the only mapping that survives a
-supervisor asking "show me".</p></div><div class="nbmd"><h2>Your turn</h2>
+supervisor asking "show me".</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The skill maps eight operating controls outward to clauses across five frameworks, attaches the evidence artefact each control would be shown by, and derives what a critical tier requires — so coverage comes out as an output rather than a claim.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/control-to-framework-mapping/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: control-to-framework-mapping
+description: &gt;-
+  Map a control catalogue outward to framework clauses — never the reverse — and
+  assemble the evidence pack a given risk tier requires. Use when a framework
+  checklist is being turned into a programme, or when coverage is claimed
+  without artefacts.
+allowed-tools: Read, Grep, Glob
+---
+
+# Control to framework, never framework to control
+
+Starting from the framework produces a checklist that is complete, satisfies an
+assessor, and defends nothing: it enumerates clauses rather than capabilities,
+and a clause with no operating control behind it evidences nothing. Starting
+from controls produces a smaller list of things you actually do, each of which
+happens to satisfy several clauses.
+
+## When to use this
+
+Building a control catalogue, responding to a framework mapping request, or
+auditing a coverage claim.
+
+## Procedure
+
+**1 — Write the catalogue first, as operating controls.** Each one a mechanism
+somebody runs, with an owner. If a row cannot be described as something that
+runs, it is a policy statement and belongs elsewhere.
+
+**2 — Map each control outward.** One control to many clauses across every
+framework you report against. The one-to-many direction is what makes this
+cheaper than it looks.
+
+**3 — Attach the evidence artefact per control.** A log, an export, a test
+result, a signed attestation — the thing an assessor would be handed. A control
+with no artefact is unevidenced whatever its status says.
+
+**4 — Derive requirements per tier.** Which controls a critical-tier system must
+have, which a medium one. Then count the clauses that follow, rather than
+promising clause coverage directly.
+
+**5 — Report coverage as an output.** &quot;These 8 controls satisfy 12 clauses&quot; is
+defensible; &quot;we cover 12 clauses&quot; invites the follow-up you cannot answer.
+
+## Output contract
+
+```json
+{
+  &quot;catalogue&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;control&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str&quot;, &quot;artefact&quot;: &quot;str&quot;}],
+  &quot;mapping&quot;: [{&quot;control&quot;: &quot;str&quot;, &quot;framework&quot;: &quot;str&quot;, &quot;clauses&quot;: [&quot;str&quot;]}],
+  &quot;tiers&quot;: [{&quot;tier&quot;: &quot;str&quot;, &quot;requires&quot;: [&quot;str&quot;], &quot;clauses_satisfied&quot;: 0}],
+  &quot;coverage&quot;: {&quot;controls&quot;: 0, &quot;clauses&quot;: 0, &quot;unevidenced&quot;: [&quot;str&quot;]}
+}
+```
+
+## Failure modes
+
+- **Starting from the framework.** You get a checklist, not a programme.
+- **A control with no artefact.** It cannot be shown.
+- **Claiming clause coverage directly.** The assessor asks which control, and
+  there is no answer.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/grc/control-to-framework-mapping/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/control-to-framework-mapping/scripts/control_to_framework_mapping.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Map a control catalogue outward to framework clauses, and assemble the evidence pack a tier requires.
+
+This is the executable half of the `control-to-framework-mapping` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Control:
+    cid: str; text: str; kind: str; frameworks: tuple
+
+CATALOGUE = [
+ Control(&quot;AC-1&quot;, &quot;agent identities are distinct from human and separately revocable&quot;,
+         &quot;preventive&quot;, (&quot;NIST AI RMF: GOVERN-1.2&quot;, &quot;ISO 42001: 6.1&quot;, &quot;EU AI Act: Art.14&quot;)),
+ Control(&quot;AC-2&quot;, &quot;delegated authority narrows at every hop and is recorded in an act chain&quot;,
+         &quot;preventive&quot;, (&quot;NIST AI RMF: MANAGE-2.2&quot;, &quot;ISO 42001: 8.1&quot;)),
+ Control(&quot;SB-1&quot;, &quot;agent egress is deny-by-default with an allowlist&quot;,
+         &quot;preventive&quot;, (&quot;NIST AI RMF: MANAGE-2.1&quot;, &quot;ISO 27001: A.8.20&quot;)),
+ Control(&quot;SB-2&quot;, &quot;privileged tools require approval below autonomy L3&quot;,
+         &quot;preventive&quot;, (&quot;EU AI Act: Art.14 human oversight&quot;,)),
+ Control(&quot;EV-1&quot;, &quot;every agent action is logged with the acting identity&quot;,
+         &quot;detective&quot;, (&quot;ISO 42001: 9.1&quot;, &quot;EU AI Act: Art.12 record-keeping&quot;)),
+ Control(&quot;EV-2&quot;, &quot;harness accuracy evaluated against a held-out key each release&quot;,
+         &quot;detective&quot;, (&quot;NIST AI RMF: MEASURE-2.3&quot;,)),
+ Control(&quot;DR-1&quot;, &quot;behavioural drift from the signed-off baseline raises an alert&quot;,
+         &quot;detective&quot;, (&quot;NIST AI RMF: MEASURE-2.4&quot;, &quot;ISO 42001: 9.1&quot;)),
+ Control(&quot;ST-1&quot;, &quot;a tested stop mechanism halts an agent fleet without vendor help&quot;,
+         &quot;corrective&quot;, (&quot;EU AI Act: Art.14&quot;, &quot;DORA: Art.11&quot;)),
+]
+print(f&quot;{&#x27;control&#x27;:8s}{&#x27;kind&#x27;:12s}satisfies&quot;)
+print(&quot;-&quot; * 84)
+for c in CATALOGUE:
+    print(f&quot;{c.cid:8s}{c.kind:12s}{len(c.frameworks)} clause(s): {c.frameworks[0]}&quot;)
+    for f in c.frameworks[1:]:
+        print(f&quot;{&#x27;&#x27;:20s}{f}&quot;)
+
+def map_controls(tier, catalogue=CATALOGUE):
+    if tier in (&quot;critical&quot;, &quot;high&quot;):
+        required = list(catalogue)
+    else:
+        required = [c for c in catalogue if c.kind == &quot;preventive&quot; or c.cid == &quot;EV-1&quot;]
+    frameworks = sorted({f for c in required for f in c.frameworks})
+    return {&quot;tier&quot;: tier, &quot;controls&quot;: [c.cid for c in required],
+            &quot;frameworks_satisfied&quot;: frameworks}
+
+for tier in (&quot;critical&quot;, &quot;medium&quot;):
+    m = map_controls(tier)
+    print(f&quot;\ntier {tier}: {len(m[&#x27;controls&#x27;])} controls → &quot;
+          f&quot;{len(m[&#x27;frameworks_satisfied&#x27;])} framework clauses&quot;)
+    print(f&quot;   controls   {m[&#x27;controls&#x27;]}&quot;)
+    for f in m[&quot;frameworks_satisfied&quot;]:
+        print(f&quot;   satisfies  {f}&quot;)
+
+FRAMEWORK_CLAUSES = [
+ &quot;NIST AI RMF: GOVERN-1.1 policies are documented&quot;,
+ &quot;NIST AI RMF: GOVERN-1.2 roles and responsibilities are defined&quot;,
+ &quot;NIST AI RMF: MAP-1.1 context is established&quot;,
+ &quot;NIST AI RMF: MEASURE-2.3 performance is evaluated&quot;,
+ &quot;ISO 42001: 6.1 actions to address risks&quot;,
+ &quot;ISO 42001: 7.2 competence&quot;,
+ &quot;ISO 42001: 9.1 monitoring and measurement&quot;,
+]
+have = {f for c in CATALOGUE for f in c.frameworks}
+print(f&quot;{&#x27;clause&#x27;:52s}{&#x27;operating control?&#x27;:&gt;20}&quot;)
+print(&quot;-&quot; * 74)
+orphans = []
+for clause in FRAMEWORK_CLAUSES:
+    covered = clause in have
+    if not covered: orphans.append(clause)
+    print(f&quot;{clause:52s}{(&#x27;yes&#x27; if covered else &#x27;NO — checklist only&#x27;):&gt;20}&quot;)
+print(f&quot;\n{len(orphans)}/{len(FRAMEWORK_CLAUSES)} clauses have no operating control behind them.&quot;)
+print(&quot;Working framework-first, those get a policy document and a tick. Working&quot;)
+print(&quot;control-first, they are visibly uncovered — which is the useful state.&quot;)
+assert orphans
+
+EVIDENCE = {
+ &quot;AC-1&quot;: &quot;gateway logs containing an act chain for every action; monthly sample&quot;,
+ &quot;AC-2&quot;: &quot;regression suite cases IDN-01/IDN-04, run on every release&quot;,
+ &quot;SB-1&quot;: &quot;90-day egress denial log&quot;,
+ &quot;SB-2&quot;: &quot;tool policy in git + denial log&quot;,
+ &quot;EV-1&quot;: &quot;audit sample of 50 actions with acting identity present&quot;,
+ &quot;EV-2&quot;: &quot;expert accuracy against a held-out key, per release&quot;,
+ &quot;DR-1&quot;: &quot;drift alerts and their dispositions&quot;,
+ &quot;ST-1&quot;: &quot;game-day record with measured time-to-stop&quot;,
+}
+def evidence_pack(tier):
+    m = map_controls(tier)
+    return [{&quot;control&quot;: cid, &quot;evidence&quot;: EVIDENCE[cid],
+             &quot;satisfies&quot;: [f for c in CATALOGUE if c.cid == cid for f in c.frameworks]}
+            for cid in m[&quot;controls&quot;]]
+
+pack = evidence_pack(&quot;critical&quot;)
+for row in pack[:4]:
+    print(f&quot;{row[&#x27;control&#x27;]}  {row[&#x27;evidence&#x27;]}&quot;)
+    for f in row[&quot;satisfies&quot;]:
+        print(f&quot;      → {f}&quot;)
+print(f&quot;\n{len(pack)} controls produce evidence for &quot;
+      f&quot;{len({f for r in pack for f in r[&#x27;satisfies&#x27;]})} framework clauses.&quot;)
+print(&quot;One artefact, many clauses. That ratio is why control-first is cheaper.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The catalogue's 8 controls map to framework clauses across NIST AI RMF, ISO 42001, ISO 27001, the EU AI Act and DORA. Critical tier requires all 8 and satisfies 12 clauses; medium requires 5. Working framework-first leaves 3 of 7 clauses with no operating control. The evidence pack shows one artefact satisfying several clauses.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one framework clause your programme claims to satisfy and ask which operating control produces its evidence. If the answer is a policy document, the clause is ticked and undefended.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.5.html">E1.5 · Evaluation output as audit evidence</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.4.ipynb">Source</a></p>

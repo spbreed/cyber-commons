@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.6 — Saying no, and saying yes with conditions | Cyber Commons</title><meta name="description" content="Autonomy promotion as an earned event with named evidence."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.6</div><h1>Saying no, and saying yes with conditions</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Conditional approval that is aspirational rather than enforceable.</p></div><div class="ctrl"><div class="lab">Control</div><p>Autonomy promotion as an earned event with named evidence.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Make a conditional approval enforceable rather than aspirational.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.6 · Saying no, and saying yes with conditions</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.6 — Saying no, and saying yes with conditions | Cyber Commons</title><meta name="description" content="Autonomy promotion as an earned event with named evidence."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.6</div><h1>Saying no, and saying yes with conditions</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Conditional approval that is aspirational rather than enforceable.</p></div><div class="ctrl"><div class="lab">Control</div><p>Autonomy promotion as an earned event with named evidence.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Make a conditional approval enforceable rather than aspirational.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.6 · Saying no, and saying yes with conditions</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Running the Programme — the CISO Office</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E3.5.html">E3.5 · The metrics that matter at your level</a></strong>.</p>
 <table>
@@ -44,7 +44,277 @@ ships anyway, and you have traded influence for a moment of comfort.</p>
 <p>The mechanics come from the rest of the curriculum: the rung decides the
 governance (E3.2), the blast radius sizes the conditions (A1.4), and each
 condition maps to a control that already produces evidence (E1.4).</p>
-<p>This lesson takes one genuinely uncomfortable request and gets to yes.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>This lesson takes one genuinely uncomfortable request and gets to yes.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The request tiers critical on an irreversible tenant-wide tool. The skill prices the flat refusal — where the capability ships anyway and the visibility does not — then writes conditions that are each testable and dated.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/conditional-approval-design/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: conditional-approval-design
+description: &gt;-
+  Tier a risky request, show what a flat refusal costs in visibility, and write
+  the conditions that make a yes safe, testable and time-bound. Use when the
+  answer is no and the capability will ship anyway.
+allowed-tools: Read, Grep, Glob
+---
+
+# The flat no loses the visibility and the capability ships
+
+A refusal without conditions has a predictable outcome: the capability appears
+somewhere you cannot see, on somebody&#x27;s personal account or inside a product
+already bought. A conditional yes keeps it inside the estate, and the conditions
+are the control — provided each one is testable and has a date.
+
+## When to use this
+
+Any request whose straightforward answer is no, and any exception that is about
+to be granted informally.
+
+## Procedure
+
+**1 — Tier the request and compute its blast radius.** An irreversible
+tenant-wide tool is what usually makes it critical, and naming that is more
+useful than the tier.
+
+**2 — Model the flat refusal.** Where the capability goes instead, and what
+visibility you lose. Write it down — the point is not to argue against refusing
+but to price it.
+
+**3 — Write conditions that each remove a term of the risk.** Gate the
+irreversible action, narrow the scope, cap the population, add the detection.
+Vague conditions — &quot;with appropriate oversight&quot; — are a yes with extra words.
+
+**4 — Make each condition testable.** A check that would fail if the condition
+were not met, and who runs it. A condition nobody tests is a condition nobody
+keeps.
+
+**5 — Put an expiry on the approval.** Conditional approvals that do not expire
+become permanent policy set by whoever asked first.
+
+## Output contract
+
+```json
+{
+  &quot;request&quot;: {&quot;name&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;blast&quot;: 0, &quot;tier&quot;: &quot;str&quot;, &quot;irreversible&quot;: [&quot;str&quot;]},
+  &quot;flat_refusal&quot;: {&quot;capability_ships_anyway&quot;: true, &quot;visibility_lost&quot;: [&quot;str&quot;]},
+  &quot;conditions&quot;: [{&quot;condition&quot;: &quot;str&quot;, &quot;removes&quot;: &quot;str&quot;, &quot;test&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str&quot;}],
+  &quot;approval&quot;: {&quot;granted&quot;: true, &quot;expires&quot;: &quot;str&quot;, &quot;review_trigger&quot;: [&quot;str&quot;]}
+}
+```
+
+## Failure modes
+
+- **Refusing without pricing it.** The capability ships out of sight.
+- **Untestable conditions.** They are a yes in a longer sentence.
+- **No expiry.** The exception becomes the policy.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/programme/conditional-approval-design/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/conditional-approval-design/scripts/conditional_approval_design.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Tier a request, show what a flat refusal costs, and write the conditions that make a yes safe and testable.
+
+This is the executable half of the `conditional-approval-design` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+SCOPE_WEIGHT = {&quot;self&quot;:1,&quot;project&quot;:3,&quot;tenant&quot;:8,&quot;org&quot;:20}
+def blast(tools, gated=frozenset()):
+    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n,s,rev in tools if n not in gated)
+
+REQUEST = {
+ &quot;name&quot;: &quot;customer-refund-agent&quot;,
+ &quot;asks_for&quot;: &quot;issue refunds up to GBP 500 without human approval&quot;,
+ &quot;tools&quot;: [(&quot;read_order&quot;,&quot;self&quot;,True), (&quot;read_customer&quot;,&quot;self&quot;,True),
+           (&quot;issue_refund&quot;,&quot;tenant&quot;,False)],
+ &quot;rung&quot;: &quot;L2.5&quot;,
+ &quot;data&quot;: (&quot;customer&quot;,&quot;regulated&quot;),
+ &quot;business_case&quot;: &quot;42% of refund tickets are mechanical; 3.5 FTE of manual work&quot;,
+}
+b = blast(REQUEST[&quot;tools&quot;])
+print(f&quot;request        {REQUEST[&#x27;name&#x27;]}&quot;)
+print(f&quot;asks for       {REQUEST[&#x27;asks_for&#x27;]}&quot;)
+print(f&quot;business case  {REQUEST[&#x27;business_case&#x27;]}&quot;)
+print(f&quot;claimed rung   {REQUEST[&#x27;rung&#x27;]}&quot;)
+print(f&quot;blast radius   {b}  (irreversible, tenant-wide)&quot;)
+
+TIER_PTS = {&quot;L1&quot;:0,&quot;L2&quot;:1,&quot;L2.5&quot;:3,&quot;L3&quot;:5}
+score = TIER_PTS[REQUEST[&quot;rung&quot;]] + 3*(&quot;regulated&quot; in REQUEST[&quot;data&quot;]) + \
+        2*(&quot;customer&quot; in REQUEST[&quot;data&quot;])
+tier = &quot;critical&quot; if score &gt;= 9 else &quot;high&quot; if score &gt;= 6 else &quot;medium&quot;
+print(f&quot;risk tier      {tier} (score {score})&quot;)
+
+def flat_no_outcome(request):
+    return {
+      &quot;decision&quot;: &quot;refused&quot;,
+      &quot;what happens&quot;: &quot;the team ships it as a &#x27;workflow automation&#x27; outside the &quot;
+                      &quot;AI register&quot;,
+      &quot;your visibility&quot;: &quot;none — it will not appear in the inventory (E1.2)&quot;,
+      &quot;controls applied&quot;: &quot;whatever the team chose&quot;,
+      &quot;when you find out&quot;: &quot;at the first incident, or at audit&quot;,
+    }
+for k, v in flat_no_outcome(REQUEST).items():
+    print(f&quot;{k:20s}{v}&quot;)
+print(&quot;\nThe capability ships either way. The only variable is whether you&quot;)
+print(&quot;have visibility and conditions on it.&quot;)
+
+CONDITIONS = [
+ (&quot;refund cap of GBP 500 enforced in the tool, not the prompt&quot;,
+  &quot;the irreversible step is bounded by code&quot;, &quot;payments-eng&quot;, &quot;SB-2&quot;, &quot;2026-09-30&quot;),
+ (&quot;approval gate above the cap&quot;,
+  &quot;L2 for the tail, L2.5 for the body&quot;, &quot;payments-eng&quot;, &quot;SB-2&quot;, &quot;2026-09-30&quot;),
+ (&quot;act chain on every refund&quot;,
+  &quot;attribution survives an incident (D2.1)&quot;, &quot;platform-sec&quot;, &quot;AC-1/EV-1&quot;, &quot;2026-09-15&quot;),
+ (&quot;tested stop, measured in seconds&quot;,
+  &quot;you can halt it without the vendor&quot;, &quot;SRE&quot;, &quot;ST-1&quot;, &quot;2026-10-12&quot;),
+ (&quot;re-tier automatically if the tool list changes&quot;,
+  &quot;A1.1 manifest diff wired into CI&quot;, &quot;platform-sec&quot;, &quot;DR-1&quot;, &quot;2026-10-31&quot;),
+]
+print(f&quot;{&#x27;condition&#x27;:52s}{&#x27;owner&#x27;:16s}{&#x27;control&#x27;:10s}{&#x27;by&#x27;:&gt;12}&quot;)
+print(&quot;-&quot; * 94)
+for cond, why, owner, control, date in CONDITIONS:
+    print(f&quot;{cond:52s}{owner:16s}{control:10s}{date:&gt;12}&quot;)
+    print(f&quot;   why: {why}&quot;)
+
+def testable(cond):
+    &quot;&quot;&quot;A condition is testable if a control produces evidence for it.&quot;&quot;&quot;
+    return bool(cond[3])
+print(f&quot;\nall conditions testable: {all(testable(c) for c in CONDITIONS)}&quot;)
+print(f&quot;count: {len(CONDITIONS)} — few enough to be met rather than negotiated&quot;)
+assert len(CONDITIONS) &lt;= 6 and all(testable(c) for c in CONDITIONS)
+
+# Verify: the conditions actually change the risk, not just the paperwork.
+gated = {&quot;issue_refund&quot;}
+before, after = blast(REQUEST[&quot;tools&quot;]), blast(REQUEST[&quot;tools&quot;], gated)
+print(f&quot;blast radius   {before} → {after} with the cap and gate applied&quot;)
+
+def residual(tier, conditions_met):
+    reduction = 0.18 * conditions_met
+    base = {&quot;critical&quot;: 1.0, &quot;high&quot;: 0.7, &quot;medium&quot;: 0.4}[tier]
+    return round(max(base - reduction, 0.05), 2)
+
+print(f&quot;\n{&#x27;conditions met&#x27;:&gt;16}{&#x27;residual risk&#x27;:&gt;16}&quot;)
+print(&quot;-&quot; * 34)
+for n in range(len(CONDITIONS) + 1):
+    print(f&quot;{n:&gt;16}{residual(tier, n):&gt;16.2f}&quot;)
+
+print(f&quot;\nyes, with {len(CONDITIONS)} conditions → residual &quot;
+      f&quot;{residual(tier, len(CONDITIONS)):.2f} from {residual(tier, 0):.2f}&quot;)
+print(&quot;\nAnd the sentence that makes it a decision rather than a demand:&quot;)
+print(&quot;   &#x27;If any condition slips its date, the agent drops to L2 — every refund&quot;)
+print(&quot;    needs approval — until it is met. That is automatic, not a negotiation.&#x27;&quot;)
+assert after &lt; before</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The request tiers critical with a blast radius of 16 from an irreversible tenant-wide tool. The flat refusal is shown to lose visibility while the capability ships anyway. Five testable conditions print with owners, mapped controls and dates; gating the refund drops the blast radius to 0 and the residual risk from 1.00 to 0.05.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take a request you refused in the last year and write the five conditions that would have made it a yes. Send them to the team that asked — they will usually accept, and you get the visibility you lost by refusing.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E3.7.html">E3.7 · Building the capability</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E3.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.6.ipynb">Source</a></p>

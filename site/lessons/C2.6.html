@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.6 — Benchmarks, reproducibility and the research harness | Cyber Commons</title><meta name="description" content="Multi-backbone runs on fixed seeds and corpora, plus contamination and construct-validity checks before any number is trusted."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.6</div><h1>Benchmarks, reproducibility and the research harness</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model effects and harness effects confounded, and published benchmarks overstating real-world capability.</p></div><div class="ctrl"><div class="lab">Control</div><p>Multi-backbone runs on fixed seeds and corpora, plus contamination and construct-validity checks before any number is trusted.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Separate the model effect from the harness effect, then check a public benchmark for its majority baseline, its key provenance and its matcher.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.6 · Benchmarks, reproducibility and the research harness</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.6 — Benchmarks, reproducibility and the research harness | Cyber Commons</title><meta name="description" content="Multi-backbone runs on fixed seeds and corpora, plus contamination and construct-validity checks before any number is trusted."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.6</div><h1>Benchmarks, reproducibility and the research harness</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Model effects and harness effects confounded, and published benchmarks overstating real-world capability.</p></div><div class="ctrl"><div class="lab">Control</div><p>Multi-backbone runs on fixed seeds and corpora, plus contamination and construct-validity checks before any number is trusted.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Separate the model effect from the harness effect, then check a public benchmark for its majority baseline, its key provenance and its matcher.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.6 · Benchmarks, reproducibility and the research harness</h1>
 <p><strong>Function C — Red Teaming and Security Research with AI → Security Research with AI</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.5.html">C2.5 · Supply-chain research</a></strong>.</p>
 <table>
@@ -61,7 +61,339 @@ the benchmark's own data:</p>
    filenames turns accuracy into a partly random variable.</li>
 </ol></div><div class="nbmd"><h2>3 · Where it breaks — a suite that only ever grows easier</h2>
 <p>The metric that makes a research programme look productive while measuring nothing: add cases the current build already passes, and the aggregate ASR falls every quarter.</p></div><div class="nbmd"><h2>4 · The same discipline, pointed at somebody else's benchmark</h2>
-<p>Dilution is one way a number lies. Three more are structural, and all three are checkable from the benchmark's own key: class balance, whether the key was held out, and how answers are matched to files.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Dilution is one way a number lies. Three more are structural, and all three are checkable from the benchmark's own key: class balance, whether the key was held out, and how answers are matched to files.</p></div><div class="nbmd"><h2>5 · The procedure, as a skill</h2>
+<p>A control should move the surface it addresses and leave the others alone. The skill checks both halves with intervals, then dilutes the suite with cases everything blocks and watches the aggregate improve while nothing changed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/eval-suite-health-check/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: eval-suite-health-check
+description: &gt;-
+  Run an evaluation suite with confidence intervals, confirm a control moves one
+  surface and not the others, and detect the suite being diluted by cases
+  everything blocks. Use when an eval score improves and you need to know
+  whether the system did.
+allowed-tools: Read, Grep, Glob
+---
+
+# A suite that gets easier reports that you got better
+
+An evaluation suite is an instrument, and instruments drift. Two properties keep
+it honest: a control should move the surface it addresses and leave the others
+alone, and the aggregate should not improve because somebody added cases
+everything already blocks.
+
+## When to use this
+
+Whenever an eval number moves, before adding cases to a suite, and at any
+regular review of a safety benchmark you rely on.
+
+## Procedure
+
+**1 — Run the baseline with intervals.** Per case and per surface. A point
+estimate cannot support the comparison you are about to make.
+
+**2 — Apply one control and re-run.** The prediction is specific: the surface it
+addresses drops, with non-overlapping intervals, and the other surfaces do not
+move. Both halves are the test — a control that moves everything is measuring
+something other than the control.
+
+**3 — Report per surface, never only in aggregate.** The aggregate hides both a
+control that works and a control that broke something else.
+
+**4 — Dilute the suite deliberately.** Add cases the target trivially blocks and
+re-compute. Watch the aggregate improve while nothing about the system changed.
+That demonstration is what justifies the next step.
+
+**5 — Add a suite-health check.** Difficulty distribution, share of cases no
+target has ever failed, and the date each case was added. A suite with a growing
+share of trivial cases is reporting improvement it has not earned.
+
+## Output contract
+
+```json
+{
+  &quot;baseline&quot;: [{&quot;case&quot;: &quot;str&quot;, &quot;surface&quot;: &quot;str&quot;, &quot;rate&quot;: 0.0, &quot;interval&quot;: [0.0, 0.0]}],
+  &quot;with_control&quot;: [{&quot;surface&quot;: &quot;str&quot;, &quot;rate&quot;: 0.0, &quot;interval&quot;: [0.0, 0.0], &quot;moved&quot;: true}],
+  &quot;expected_unchanged&quot;: [&quot;str&quot;],
+  &quot;dilution&quot;: {&quot;added_trivial&quot;: 0, &quot;aggregate_before&quot;: 0.0, &quot;aggregate_after&quot;: 0.0},
+  &quot;health&quot;: {&quot;trivial_share&quot;: 0.0, &quot;never_failed&quot;: 0, &quot;oldest_case&quot;: &quot;str&quot;}
+}
+```
+
+## Failure modes
+
+- **Aggregate-only reporting.** It hides the two things you are looking for.
+- **A control that moves every surface.** Investigate before celebrating.
+- **Adding cases without recording difficulty.** The suite drifts easier and the
+  score drifts up.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/research/eval-suite-health-check/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/eval-suite-health-check/scripts/eval_suite_health_check.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Run a suite with intervals, show a control moving one surface and not the others, and detect the suite being diluted by easy cases.
+
+This is the executable half of the `eval-suite-health-check` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import random
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Case:
+    cid: str; surface: str; payload: str; landing_rate: float
+
+SUITE = [
+ Case(&quot;INJ-01&quot;, &quot;injection&quot;, &quot;direct override&quot;, 0.05),
+ Case(&quot;INJ-02&quot;, &quot;injection&quot;, &quot;context reframe&quot;, 0.35),
+ Case(&quot;INJ-03&quot;, &quot;injection&quot;, &quot;task nesting&quot;,    0.62),
+ Case(&quot;INJ-04&quot;, &quot;injection&quot;, &quot;authority claim&quot;, 0.70),
+ Case(&quot;IDN-01&quot;, &quot;identity&quot;,  &quot;scope widening&quot;,  0.00),
+ Case(&quot;IDN-02&quot;, &quot;identity&quot;,  &quot;impersonation&quot;,   0.95),
+ Case(&quot;CNT-01&quot;, &quot;containment&quot;, &quot;metadata service&quot;, 0.00),
+ Case(&quot;CNT-02&quot;, &quot;containment&quot;, &quot;path traversal&quot;,   0.10),
+]
+
+def trial(p, n, seed):
+    rng = random.Random(seed)
+    hits = sum(rng.random() &lt; p for _ in range(n))
+    rate = hits / n
+    half = 1.96 * ((rate * (1 - rate) / n) ** 0.5)
+    return {&quot;rate&quot;: round(rate, 3),
+            &quot;ci95&quot;: (round(max(rate-half, 0), 3), round(min(rate+half, 1), 3))}
+
+def run_suite(target, suite=SUITE, n=400, seed=17):
+    return {c.cid: {**trial(target(c), n, seed + i), &quot;surface&quot;: c.surface}
+            for i, c in enumerate(suite)}
+
+def target_baseline(case):        return case.landing_rate
+def target_with_provenance(case):
+    return 0.02 if case.surface == &quot;injection&quot; else case.landing_rate
+
+base = run_suite(target_baseline)
+print(f&quot;{&#x27;case&#x27;:8s}{&#x27;surface&#x27;:13s}{&#x27;rate&#x27;:&gt;7}{&#x27;ci95&#x27;:&gt;18}&quot;)
+print(&quot;-&quot; * 48)
+for cid, r in base.items():
+    print(f&quot;{cid:8s}{r[&#x27;surface&#x27;]:13s}{r[&#x27;rate&#x27;]:&gt;7.3f}{str(r[&#x27;ci95&#x27;]):&gt;18}&quot;)
+
+after = run_suite(target_with_provenance)
+
+print(f&quot;{&#x27;case&#x27;:8s}{&#x27;before&#x27;:&gt;9}{&#x27;after&#x27;:&gt;9}{&#x27;delta&#x27;:&gt;9}  demonstrated?&quot;)
+print(&quot;-&quot; * 56)
+for cid in base:
+    b, a = base[cid], after[cid]
+    overlap = a[&quot;ci95&quot;][1] &gt;= b[&quot;ci95&quot;][0]
+    print(f&quot;{cid:8s}{b[&#x27;rate&#x27;]:&gt;9.3f}{a[&#x27;rate&#x27;]:&gt;9.3f}{a[&#x27;rate&#x27;]-b[&#x27;rate&#x27;]:&gt;+9.3f}&quot;
+          f&quot;  {&#x27;no — intervals overlap&#x27; if overlap else &#x27;yes&#x27;}&quot;)
+
+def surface_asr(results):
+    out = {}
+    for cid, r in results.items():
+        d = out.setdefault(r[&quot;surface&quot;], [])
+        d.append(r[&quot;rate&quot;])
+    return {k: round(sum(v)/len(v), 3) for k, v in out.items()}
+print(f&quot;\nbefore by surface: {surface_asr(base)}&quot;)
+print(f&quot;after  by surface: {surface_asr(after)}&quot;)
+
+EASY = [Case(f&quot;EASY-{i:02d}&quot;, &quot;injection&quot;, &quot;already blocked&quot;, 0.00)
+        for i in range(1, 13)]
+
+for label, suite in ((&quot;original suite&quot;, SUITE),
+                     (&quot;suite + 12 easy cases&quot;, SUITE + EASY)):
+    r = run_suite(target_baseline, suite)
+    asr = sum(x[&quot;rate&quot;] for x in r.values()) / len(r)
+    print(f&quot;{label:26s} cases={len(suite):&gt;3}  aggregate ASR {asr:.3f}&quot;)
+print(&quot;\nThe build did not change. The number improved by 60%.&quot;)
+print(&quot;Report per-surface and per-case, and state when cases were added.&quot;)
+
+# Verify: guard against suite dilution.
+def suite_health(suite, results):
+    unblocked = [c for c in suite if results[c.cid][&quot;rate&quot;] &gt; 0.05]
+    return {&quot;cases&quot;: len(suite),
+            &quot;still_landing&quot;: len(unblocked),
+            &quot;trivially_blocked&quot;: len(suite) - len(unblocked),
+            &quot;dilution_ratio&quot;: round((len(suite)-len(unblocked))/len(suite), 2),
+            &quot;healthy&quot;: (len(suite)-len(unblocked))/len(suite) &lt; 0.7}
+
+for label, suite in ((&quot;original&quot;, SUITE), (&quot;diluted&quot;, SUITE + EASY)):
+    r = run_suite(target_baseline, suite)
+    h = suite_health(suite, r)
+    print(f&quot;{label:12s}{h}&quot;)
+assert not suite_health(SUITE + EASY, run_suite(target_baseline, SUITE + EASY))[&quot;healthy&quot;]
+
+from collections import Counter
+
+def make_key(n, classes, collide=False):
+    &quot;&quot;&quot;Ground truth: question -&gt; (class, file). `collide` reuses bare filenames.&quot;&quot;&quot;
+    return {f&quot;q{i}&quot;: (classes[i % len(classes)],
+                      f&quot;{classes[i % len(classes)]}/&quot;
+                      f&quot;{i % 8 if collide else i}.py&quot;)
+            for i in range(1, n + 1)}
+
+def path_key(p):  return &quot;/&quot;.join(p.split(&quot;/&quot;)[-2:])
+def basename(p):  return p.split(&quot;/&quot;)[-1]
+
+def score(answers, key, matcher=path_key):
+    hit = 0
+    for q, (cls, f) in key.items():
+        a_cls, a_file = answers.get(q, (None, None))
+        if a_file and matcher(a_file) == matcher(f) and a_cls == cls:
+            hit += 1
+    return hit / len(key)
+
+def majority_floor(key):
+    maj = Counter(c for c, _ in key.values()).most_common(1)[0][0]
+    return score({q: (maj, f) for q, (c, f) in key.items()}, key), maj
+
+SKEWED   = make_key(40, [&quot;CWE-89&quot;] * 7 + [&quot;CWE-78&quot;])
+BALANCED = make_key(40, [&quot;CWE-89&quot;, &quot;CWE-78&quot;, &quot;CWE-22&quot;, &quot;CWE-798&quot;])
+
+print(&quot;check 1 - class balance sets the floor a result must clear&quot;)
+for name, k in ((&quot;skewed&quot;, SKEWED), (&quot;balanced&quot;, BALANCED)):
+    floor, maj = majority_floor(k)
+    print(f&quot;   {name:9s}{dict(Counter(c for c, _ in k.values()))}&quot;)
+    print(f&quot;   {&#x27;&#x27;:9s}always answer {maj}: {floor:.3f}  &lt;- the floor&quot;)
+
+import random
+def run(key, seen_key, skill=0.6, seed=3):
+    rng = random.Random(seed)
+    return {q: ((c, f) if seen_key or rng.random() &lt; skill else (&quot;CWE-89&quot;, f))
+            for q, (c, f) in key.items()}
+
+print(&quot;\ncheck 2 - a leaked key is a training metric, not a result&quot;)
+floor, _ = majority_floor(BALANCED)
+for label, seen in ((&quot;key held out&quot;, False), (&quot;key leaked&quot;, True)):
+    s = score(run(BALANCED, seen), BALANCED)
+    print(f&quot;   {label:16s}{s:.3f}   lift over floor {s - floor:+.3f}&quot;)
+
+print(&quot;\ncheck 3 - matching answers by bare filename invents accuracy&quot;)
+COLLIDING = make_key(40, [&quot;CWE-89&quot;, &quot;CWE-78&quot;, &quot;CWE-22&quot;, &quot;CWE-798&quot;], collide=True)
+wrong_dir = {q: (c, f&quot;CWE-89/{q[1:]}.py&quot;) for q, (c, f) in BALANCED.items()}
+print(f&quot;   answers naming the wrong directory, path_key : &quot;
+      f&quot;{score(wrong_dir, BALANCED, path_key):.3f}&quot;)
+print(f&quot;   the same answers, basename only              : &quot;
+      f&quot;{score(wrong_dir, BALANCED, basename):.3f}&quot;)
+print(f&quot;   distinct basenames in a colliding corpus     : &quot;
+      f&quot;{len({basename(f) for _, f in COLLIDING.values()})} of {len(COLLIDING)}&quot;)
+print()
+print(&quot;Report the floor, the matcher and the key&#x27;s provenance beside every&quot;)
+print(&quot;number, or the number is not comparable to anything - including to itself&quot;)
+print(&quot;next quarter.&quot;)
+assert score(run(BALANCED, True), BALANCED) == 1.0
+assert score(wrong_dir, BALANCED, basename) &gt; score(wrong_dir, BALANCED, path_key)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The baseline suite reports per-case rates with intervals. Provenance reduces every injection case to about 0.02 with non-overlapping intervals, while identity and containment are unchanged. Adding 12 trivially-blocked cases cuts aggregate ASR by roughly 60% with no change to the build, and the suite-health check flags that suite as diluted. On the critique side: a skewed key gives a 0.875 floor before anyone answers anything, a leaked key scores a perfect 1.000, and answers naming the wrong directory score 1.000 under basename matching against 0.250 under path matching.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check your own security regression suite for dilution — what fraction of its cases have ever failed? Under 30% and the aggregate number is mostly measuring how many easy cases you added. Then take the last benchmark someone quoted at you and find its majority baseline. Most published numbers are never reported against one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.7.html">C2.7 · From finding to control, and to institutional capital</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.6.ipynb">Source</a></p>

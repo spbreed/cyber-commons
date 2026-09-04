@@ -236,7 +236,52 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/sandbox-egress-verifier/scripts/sandbox_egress_verifier.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Evaluate the same destinations under a deny-list and under an exact allow-list.
+
+This is the executable half of the `sandbox-egress-verifier` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+ALLOW = {&quot;api.corp.example&quot;, &quot;reports-db.corp.example&quot;}
+DENY_SUFFIXES = {&quot;.evil.example&quot;}          # the deny-list, for comparison
+
+def by_denylist(host):
+    return not any(host.endswith(s) for s in DENY_SUFFIXES)
+
+def by_allowlist(host):
+    return host in ALLOW                    # exact, not suffix
+
+DESTINATIONS = [
+ (&quot;api.corp.example&quot;,              &quot;the one it actually needs&quot;),
+ (&quot;archive.evil.example&quot;,          &quot;A1.3&#x27;s exfiltration target&quot;),
+ (&quot;attacker-bucket.s3.amazonaws.com&quot;, &quot;a bucket anyone can create&quot;),
+ (&quot;169.254.169.254&quot;,               &quot;cloud metadata - every credential&quot;),
+ (&quot;pastebin.example&quot;,              &quot;not on anyone&#x27;s deny-list&quot;),
+]
+
+print(f&quot;{&#x27;destination&#x27;:38s}{&#x27;deny-list&#x27;:12s}{&#x27;allow-list&#x27;:12s}note&quot;)
+for host, note in DESTINATIONS:
+    d, a = by_denylist(host), by_allowlist(host)
+    print(f&quot;{host:38s}{&#x27;allow&#x27; if d else &#x27;block&#x27;:12s}{&#x27;allow&#x27; if a else &#x27;block&#x27;:12s}{note}&quot;)
+
+leaked = [h for h, _ in DESTINATIONS if by_denylist(h) and h not in ALLOW]
+print(f&quot;\ndeny-list lets through : {len(leaked)}  {leaked}&quot;)
+print(f&quot;allow-list lets through : {sorted(h for h, _ in DESTINATIONS if by_allowlist(h))}&quot;)
+print()
+print(&quot;The deny-list blocked exactly the destination somebody had already&quot;)
+print(&quot;thought of. It cannot be completed, because the internet cannot be&quot;)
+print(&quot;enumerated.&quot;)
+print()
+print(&quot;Placement matters as much: this check belongs in the network path, not&quot;)
+print(&quot;in the agent. A check inside the process being attacked is advice.&quot;)
+assert len(leaked) == 3 and len([h for h, _ in DESTINATIONS if by_allowlist(h)]) == 1</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. Its ceiling is PARTIAL and not negotiable: a configuration that looks right is not a PASS, and probing general HTTP while leaving DNS alone tests the path nobody uses. The untested list is part of the output, not an omission from it.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write the allow-list for one agent by listing the hosts it genuinely calls. If it is under five, you can ship this control this week; if it is unbounded, that is the finding.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.4.html">A3.4 · Budgets and stop conditions</a></strong></p>

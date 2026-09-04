@@ -44,37 +44,206 @@ every alert". The analyst's job becomes:</p>
 </ul>
 <p>The skill that transfers is not triage speed. It is knowing which signals the
 loop may believe — because a triage loop with a weak verifier closes true
-positives at machine speed, and closing a true positive is silent.</p></div><div class="nbmd"><h2>3 · The model backend, and the disposition it proposes</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- model backend: replay by default, real model when you configure one ----
-# Nothing here is Anthropic- or vendor-specific beyond one URL and one header
-# shape. Standard library only, so the notebook stays self-contained.
+positives at machine speed, and closing a true positive is silent.</p></div><div class="nbmd"><h2>3 · Where it breaks — closing a true positive is silent</h2>
+<p>Every triage decision has two error directions and they are not symmetric. Escalating a false positive costs an analyst ten minutes. <strong>Closing a true positive costs you the incident</strong>, and nothing tells you it happened.</p></div><div class="nbmd"><h2>4 · The control — the loop may close, but not silently</h2>
+<p>Three rules make an agentic triage loop safe to run, and none of them is about model quality.</p></div><div class="nbmd"><h2>5 · The procedure, as a skill</h2>
+<p>The skill scores a triage loop against ground truth, sweeps the confidence bar so the trade between analyst minutes and missed incidents is made explicitly, and adds the severity floor that no automatic closure may cross whatever its confidence.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/triage-loop-with-floor/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: triage-loop-with-floor
+description: &gt;-
+  Run an alert triage loop against ground truth, measure the confusion matrix,
+  and bound it with a confidence bar and a severity floor no automatic closure
+  may cross. Use when automating triage, or when deciding what an agent may
+  close on its own.
+allowed-tools: Read, Grep, Glob
+---
+
+# The floor is the part that makes the loop deployable
+
+A triage loop that matches ground truth on a sample is a promising loop. What
+makes it something you can run is the pair of bounds around it: a confidence bar
+that decides when it defers, and a severity floor it may never close through,
+whatever its confidence.
+
+## When to use this
+
+Before an agent closes anything, and when tuning how much of a queue is
+automated.
+
+## Procedure
+
+**1 — Score against ground truth, as a confusion matrix.** Escalated and closed,
+against true and false. Accuracy alone hides the direction of the errors, and
+only one direction matters here.
+
+**2 — Sweep the confidence bar.** For each setting, record analyst minutes saved
+and incidents missed. This is the trade being made, and it should be made
+explicitly by whoever owns the queue rather than implicitly by a default.
+
+**3 — Set the severity floor separately.** Any alert above it is escalated
+regardless of confidence. A confident wrong closure on a critical alert is the
+failure this exists to prevent, and no confidence threshold protects against it.
+
+**4 — Check what the floor costs.** How many alerts it forces to a human per
+day. If that number is above the reading budget, the floor is theatre and the
+queue needs a different cut.
+
+**5 — Record every automatic closure with its reason and confidence.** The loop
+will be wrong sometimes; the question at review is whether you can find out how.
+
+## Output contract
+
+```json
+{
+  &quot;confusion&quot;: {&quot;tp&quot;: 0, &quot;fp&quot;: 0, &quot;tn&quot;: 0, &quot;fn&quot;: 0},
+  &quot;confidence_sweep&quot;: [{&quot;bar&quot;: 0.0, &quot;analyst_minutes_saved&quot;: 0, &quot;incidents_missed&quot;: 0}],
+  &quot;floor&quot;: {&quot;severity&quot;: &quot;str&quot;, &quot;escalated_regardless&quot;: 0, &quot;per_day&quot;: 0},
+  &quot;audit&quot;: {&quot;closures_logged&quot;: true, &quot;fields&quot;: [&quot;reason&quot;, &quot;confidence&quot;, &quot;rule&quot;]}
+}
+```
+
+## Failure modes
+
+- **Reporting accuracy.** The direction of the error is the whole question.
+- **A floor set above the reading budget.** It routes to a person who will not
+  read it.
+- **Unlogged closures.** You cannot review what the loop decided.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/detection/triage-loop-with-floor/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/triage-loop-with-floor/scripts/triage_loop_with_floor.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Run a triage loop against ground truth, then bound it with a confidence bar and a severity floor that no automatic closure may cross.
+
+This is the executable half of the `triage-loop-with-floor` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+# --- model backend: replay by default, a Kaggle open-weight model when served -
+# One URL and one header shape, no vendor SDK. Standard library only, so the
+# notebook stays self-contained.
 import json, os, urllib.error, urllib.request
 
-# The cheapest current model on each side, which is what a lesson needs.
-FRONTIER_DEFAULT   = &quot;claude-haiku-4-5-20251001&quot;
-OPEN_WEIGHT_DEFAULT = &quot;glm-4.6&quot;
+# Qwen2.5-7B-Instruct is the floor established in MODELS.md: below it two of
+# the lessons&#x27; acceptance properties stop holding.
+OPEN_WEIGHT_DEFAULT = &quot;qwen2.5-7b-instruct&quot;
 TIMEOUT = 60
-
-def _kaggle_secret(name):
-    &quot;&quot;&quot;On Kaggle, a key lives in Add-ons -&gt; Secrets rather than the environment.
-
-    kaggle_secrets is pre-installed in the Kaggle image and absent everywhere
-    else, so the import is guarded and the notebook needs no dependency. It also
-    requires the notebook to have internet enabled, which on Kaggle requires a
-    phone-verified account - see the note printed below.
-    &quot;&quot;&quot;
-    try:
-        from kaggle_secrets import UserSecretsClient
-        return UserSecretsClient().get_secret(name)
-    except Exception:
-        return None
 
 def backend():
     &quot;&quot;&quot;(kind, model). Configuration comes from the environment, never a literal.&quot;&quot;&quot;
-    if os.environ.get(&quot;ANTHROPIC_API_KEY&quot;) or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;):
-        os.environ.setdefault(&quot;ANTHROPIC_API_KEY&quot;,
-                              os.environ.get(&quot;ANTHROPIC_API_KEY&quot;)
-                              or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;) or &quot;&quot;)
-        return &quot;frontier&quot;, os.environ.get(&quot;MODEL&quot;, FRONTIER_DEFAULT)
     if os.environ.get(&quot;OPENAI_BASE_URL&quot;):
         return &quot;open-weight&quot;, os.environ.get(&quot;MODEL&quot;, OPEN_WEIGHT_DEFAULT)
     return &quot;replay&quot;, &quot;deterministic stand-in (no backend configured)&quot;
@@ -84,23 +253,6 @@ def _post(url, payload, headers):
                                  headers={&quot;content-type&quot;: &quot;application/json&quot;, **headers})
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
         return json.loads(r.read().decode())
-
-def _anthropic(prompt, system, model, max_tokens, temperature):
-    body = {&quot;model&quot;: model, &quot;max_tokens&quot;: max_tokens, &quot;temperature&quot;: temperature,
-            &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]}
-    if system:
-        body[&quot;system&quot;] = system
-    headers = {&quot;x-api-key&quot;: os.environ[&quot;ANTHROPIC_API_KEY&quot;],
-               &quot;anthropic-version&quot;: &quot;2023-06-01&quot;}
-    # An identity-linked key is scoped to a workspace and the API refuses the
-    # call without being told which one. A plain organisation key needs nothing
-    # here, so the header is only sent when it is set.
-    ws = os.environ.get(&quot;ANTHROPIC_WORKSPACE_ID&quot;)
-    if ws:
-        headers[&quot;anthropic-workspace-id&quot;] = ws
-    base = os.environ.get(&quot;ANTHROPIC_BASE_URL&quot;, &quot;https://api.anthropic.com&quot;).rstrip(&quot;/&quot;)
-    out = _post(f&quot;{base}/v1/messages&quot;, body, headers)
-    return &quot;&quot;.join(b.get(&quot;text&quot;, &quot;&quot;) for b in out.get(&quot;content&quot;, [])).strip()
 
 def _openai_compatible(prompt, system, model, max_tokens, temperature):
     msgs = ([{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: system}] if system else []) + \
@@ -124,12 +276,12 @@ def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
     if kind == &quot;replay&quot;:
         return replay, kind, model
     try:
-        fn = _anthropic if kind == &quot;frontier&quot; else _openai_compatible
-        return fn(prompt, system, model, max_tokens, temperature), kind, model
+        return _openai_compatible(prompt, system, model, max_tokens,
+                                  temperature), kind, model
     except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
-        # Print what the API actually said. &quot;failed: 400&quot; costs whoever hits
-        # this an hour; the body usually names the exact missing header or
-        # parameter, and it never contains the key.
+        # Print what the server actually said. &quot;failed: 400&quot; costs whoever hits
+        # this an hour; the body usually names the exact missing parameter, and
+        # it never contains a key.
         detail = getattr(e, &quot;code&quot;, None) or type(e).__name__
         why = &quot;&quot;
         if hasattr(e, &quot;read&quot;):
@@ -149,26 +301,138 @@ if _kind == &quot;replay&quot;:
     print()
     print(&quot;This lesson runs offline against a deterministic replay, which is why&quot;)
     print(&quot;it works on a Kaggle kernel with the internet switched off. To run the&quot;)
-    print(&quot;identical code against a real model, set one of:&quot;)
+    print(&quot;identical code against a real model, serve an open-weight model from&quot;)
+    print(&quot;Kaggle Models and point the adapter at it:&quot;)
     print()
-    print(&quot;   frontier     export ANTHROPIC_API_KEY=...   # cheapest: &quot; + FRONTIER_DEFAULT)
-    print(&quot;                (an identity-linked key also needs&quot;)
-    print(&quot;                 ANTHROPIC_WORKSPACE_ID=...)&quot;)
-    print(&quot;   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \\&quot;)
-    print(&quot;                       OPENAI_API_KEY=ollama MODEL=glm-4.6&quot;)
+    print(&quot;   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \\&quot;)
+    print(&quot;           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen&quot;)
+    print(&quot;   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \\&quot;)
+    print(&quot;          MODEL=qwen2.5-7b-instruct&quot;)
     print()
-    print(&quot;   On Kaggle: Add-ons -&gt; Secrets, add ANTHROPIC_API_KEY, and switch&quot;)
-    print(&quot;   Internet on in the notebook settings. Internet requires a&quot;)
-    print(&quot;   phone-verified Kaggle account; without it DNS fails in the kernel&quot;)
-    print(&quot;   and this lesson correctly stays on the replay.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The same lesson, against a real model</h2>
-<p>Everything below this point runs identically on three backends. Offline it uses
-a deterministic replay that is labelled as a replay wherever it appears — never
-presented as a model's output. With <code>ANTHROPIC_API_KEY</code> set it calls a frontier
-model; with <code>OPENAI_BASE_URL</code> set it calls any OpenAI-compatible endpoint,
-which covers Ollama, vLLM and the hosted open-weight providers.</p>
-<p>The point of running it both ways is not that the answers match. It is that
-<strong>the lesson's assertion holds either way</strong> — if it only holds against the
-replay, the lesson was testing the replay.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TASK = &#x27;Triage this alert to one of: escalate, close-benign, needs-context.\n\nAlert: service account svc-reports authenticated from 203.0.113.9 at 03:14 and listed all S3 buckets. svc-reports normally runs hourly from 10.2.0.0/16 and touches one bucket.&#x27;
+    print(&quot;   MODELS.md has the exact Kaggle download. There is no paid backend:&quot;)
+    print(&quot;   every model result in this repository was produced this way.&quot;)
+
+
+import time
+from dataclasses import dataclass, field
+
+@dataclass
+class Alert:
+    aid: str; rule: str; actor: str; target: str; severity: str
+    truth: str          # held out from the loop: &quot;tp&quot; or &quot;fp&quot;
+
+QUEUE = [
+ Alert(&quot;A-01&quot;,&quot;impossible travel&quot;,&quot;dana@corp&quot;,&quot;vpn-eu&quot;,&quot;medium&quot;,&quot;fp&quot;),
+ Alert(&quot;A-02&quot;,&quot;metadata service access&quot;,&quot;patch-agent&quot;,&quot;169.254.169.254&quot;,&quot;critical&quot;,&quot;tp&quot;),
+ Alert(&quot;A-03&quot;,&quot;failed logins x40&quot;,&quot;svc-etl&quot;,&quot;auth&quot;,&quot;medium&quot;,&quot;fp&quot;),
+ Alert(&quot;A-04&quot;,&quot;secret path read&quot;,&quot;patch-agent&quot;,&quot;/home/app/.aws/credentials&quot;,&quot;high&quot;,&quot;tp&quot;),
+ Alert(&quot;A-05&quot;,&quot;new admin group member&quot;,&quot;sam@corp&quot;,&quot;group:admins&quot;,&quot;high&quot;,&quot;tp&quot;),
+ Alert(&quot;A-06&quot;,&quot;port scan detected&quot;,&quot;scanner-01&quot;,&quot;10.0.0.0/24&quot;,&quot;low&quot;,&quot;fp&quot;),
+ Alert(&quot;A-07&quot;,&quot;egress to unlisted host&quot;,&quot;triage-agent&quot;,&quot;collect.example.com&quot;,&quot;high&quot;,&quot;tp&quot;),
+ Alert(&quot;A-08&quot;,&quot;expired certificate&quot;,&quot;www&quot;,&quot;tls&quot;,&quot;low&quot;,&quot;fp&quot;),
+]
+print(f&quot;queue: {len(QUEUE)} alerts, &quot;
+      f&quot;{sum(a.truth==&#x27;tp&#x27; for a in QUEUE)} true positives&quot;)
+for a in QUEUE:
+    print(f&quot;   {a.aid} {a.severity:8s} {a.rule:24s} {a.actor}&quot;)
+
+class ReplayTriage:
+    &quot;&quot;&quot;DETERMINISTIC REPLAY — not a language model. Stands in for a triage model.&quot;&quot;&quot;
+    VERDICTS = {
+     &quot;A-01&quot;: (&quot;close&quot;, 0.88, &quot;corporate VPN egress in Frankfurt; matches this user&#x27;s pattern&quot;),
+     &quot;A-02&quot;: (&quot;escalate&quot;, 0.97, &quot;link-local metadata endpoint from a non-human identity&quot;),
+     &quot;A-03&quot;: (&quot;close&quot;, 0.71, &quot;service account retry storm after a credential rotation&quot;),
+     &quot;A-04&quot;: (&quot;escalate&quot;, 0.93, &quot;agent read a cloud credential path outside its workspace&quot;),
+     &quot;A-05&quot;: (&quot;escalate&quot;, 0.64, &quot;privileged group change; needs the change ticket checked&quot;),
+     &quot;A-06&quot;: (&quot;close&quot;, 0.90, &quot;authorised internal scanner, scheduled window&quot;),
+     &quot;A-07&quot;: (&quot;escalate&quot;, 0.95, &quot;egress to a host not on the allowlist&quot;),
+     &quot;A-08&quot;: (&quot;close&quot;, 0.99, &quot;hygiene finding, not a security event&quot;),
+    }
+    def triage(self, alert):
+        verdict, conf, why = self.VERDICTS[alert.aid]
+        return {&quot;aid&quot;: alert.aid, &quot;verdict&quot;: verdict, &quot;confidence&quot;: conf, &quot;why&quot;: why}
+
+model = ReplayTriage()
+results = [model.triage(a) for a in QUEUE]
+truth = {a.aid: a.truth for a in QUEUE}
+
+print(f&quot;{&#x27;alert&#x27;:7s}{&#x27;verdict&#x27;:10s}{&#x27;conf&#x27;:&gt;6}{&#x27;truth&#x27;:&gt;7}  reasoning&quot;)
+print(&quot;-&quot; * 92)
+for r in results:
+    t = truth[r[&quot;aid&quot;]]
+    correct = (r[&quot;verdict&quot;] == &quot;escalate&quot;) == (t == &quot;tp&quot;)
+    flag = &quot;&quot; if correct else &quot;   ← WRONG&quot;
+    print(f&quot;{r[&#x27;aid&#x27;]:7s}{r[&#x27;verdict&#x27;]:10s}{r[&#x27;confidence&#x27;]:&gt;6.2f}{t:&gt;7}{flag}  {r[&#x27;why&#x27;][:44]}&quot;)
+
+def confusion(results, truth):
+    tp = fp = tn = fn = 0
+    missed = []
+    for r in results:
+        esc = r[&quot;verdict&quot;] == &quot;escalate&quot;
+        real = truth[r[&quot;aid&quot;]] == &quot;tp&quot;
+        if esc and real:      tp += 1
+        elif esc and not real: fp += 1
+        elif not esc and real: fn += 1; missed.append(r[&quot;aid&quot;])
+        else:                  tn += 1
+    return {&quot;escalated_correctly&quot;: tp, &quot;false_escalations&quot;: fp,
+            &quot;closed_correctly&quot;: tn, &quot;CLOSED_TRUE_POSITIVES&quot;: fn,
+            &quot;missed&quot;: missed,
+            &quot;analyst_minutes_saved&quot;: tn * 10,
+            &quot;incidents_missed&quot;: fn}
+
+c = confusion(results, truth)
+for k, v in c.items(): print(f&quot;{k:26s}{v}&quot;)
+
+print(&quot;\nNow lower the escalation bar and watch the trade:&quot;)
+for threshold in (0.5, 0.7, 0.9, 0.99):
+    esc = [r for r in results if r[&quot;verdict&quot;] == &quot;escalate&quot; or r[&quot;confidence&quot;] &lt; threshold]
+    adj = [{**r, &quot;verdict&quot;: &quot;escalate&quot; if (r[&quot;verdict&quot;] == &quot;escalate&quot; or
+            r[&quot;confidence&quot;] &lt; threshold) else &quot;close&quot;} for r in results]
+    cc = confusion(adj, truth)
+    print(f&quot;   close only above conf {threshold:.2f} → &quot;
+          f&quot;missed {cc[&#x27;incidents_missed&#x27;]}, analyst minutes saved &quot;
+          f&quot;{cc[&#x27;analyst_minutes_saved&#x27;]}&quot;)
+
+RULES = {
+ &quot;1. never close above a severity threshold&quot;:
+   &quot;critical and high alerts may be enriched and ranked, never auto-closed&quot;,
+ &quot;2. sample the closures&quot;:
+   &quot;a fixed fraction of auto-closed alerts go to a human, always&quot;,
+ &quot;3. measure closures against ground truth&quot;:
+   &quot;when an incident is found later, check whether the loop closed a related alert&quot;,
+}
+for k, v in RULES.items(): print(f&quot;{k}\n     {v}&quot;)
+
+def safe_triage(alert, verdict, confidence, sample_rate=0.1, seed=0):
+    import random, zlib
+    # NOT hash(): Python randomises str hashing per process (PYTHONHASHSEED),
+    # so hash(alert.aid) picks a different sample on every run and on every
+    # machine. crc32 is stable, which is what a sampling rule needs.
+    rng = random.Random(zlib.crc32(alert.aid.encode()) % 1000 + seed)
+    if verdict == &quot;close&quot; and alert.severity in (&quot;critical&quot;, &quot;high&quot;):
+        return &quot;escalate&quot;, &quot;rule 1: severity floor — never auto-close high/critical&quot;
+    if verdict == &quot;close&quot; and rng.random() &lt; sample_rate:
+        return &quot;sample&quot;, &quot;rule 2: routine closure sample for quality measurement&quot;
+    return verdict, &quot;&quot;
+
+print()
+adjusted = []
+for a in QUEUE:
+    r = model.triage(a)
+    v, why = safe_triage(a, r[&quot;verdict&quot;], r[&quot;confidence&quot;])
+    adjusted.append({**r, &quot;verdict&quot;: &quot;escalate&quot; if v == &quot;escalate&quot; else
+                     (&quot;close&quot; if v == &quot;close&quot; else &quot;close&quot;)})
+    print(f&quot;   {a.aid} {a.severity:8s} {r[&#x27;verdict&#x27;]:9s} → {v:9s} {why}&quot;)
+
+c2 = confusion(adjusted, truth)
+print(f&quot;\nbefore: missed {c[&#x27;incidents_missed&#x27;]}   after: missed {c2[&#x27;incidents_missed&#x27;]}&quot;)
+assert c2[&quot;incidents_missed&quot;] &lt;= c[&quot;incidents_missed&quot;]
+
+# ------------------------------------ the same task, against a real model
+# Offline this is a labelled replay; with an open-weight model served
+# from Kaggle it is the same code calling a real one.
+
+TASK = &#x27;Triage this alert to one of: escalate, close-benign, needs-context.\n\nAlert: service account svc-reports authenticated from 203.0.113.9 at 03:14 and listed all S3 buckets. svc-reports normally runs hourly from 10.2.0.0/16 and touches one bucket.&#x27;
 
 REPLAY = &quot;escalate - the source range and the breadth of the list call are both outside this account&#x27;s established pattern.&quot;
 
@@ -196,10 +460,8 @@ print()
 print(f&quot;property checked : {label}&quot;)
 print(f&quot;held on {used:12s} : {held}&quot;)
 print()
-print(&quot;Same code, same assertions, three possible backends. Offline the answer&quot;)
-print(&quot;is the replay and is labelled as one; with a key it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — closing a true positive is silent</h2>
-<p>Every triage decision has two error directions and they are not symmetric. Escalating a false positive costs an analyst ten minutes. <strong>Closing a true positive costs you the incident</strong>, and nothing tells you it happened.</p></div><div class="nbmd"><h2>6 · The control — the loop may close, but not silently</h2>
-<p>Three rules make an agentic triage loop safe to run, and none of them is about model quality.</p></div><div class="nbmd"><h2>What you just proved</h2>
+print(&quot;Same code, same assertions, two possible backends. Offline the answer is&quot;)
+print(&quot;the replay and is labelled as one; with a served model it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The triage loop escalates 4 alerts and closes 4, matching ground truth on all 8. Lowering the confidence bar trades analyst minutes against missed incidents. The severity floor converts any high or critical closure into an escalation, and the closure sampling routes a fraction of routine closures to a human for quality measurement.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Ask your SOC one question: when an incident is confirmed, does anyone check whether an earlier alert about it was closed? If nobody does, you have no measurement of your false-negative rate — with or without an agent.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">D1.2 · Context that makes triage work</a></strong></p>

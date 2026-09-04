@@ -53,37 +53,207 @@ the only question that cannot be gamed by editing the code around the detector.<
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · The model backend, and the patch it proposes</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- model backend: replay by default, real model when you configure one ----
-# Nothing here is Anthropic- or vendor-specific beyond one URL and one header
-# shape. Standard library only, so the notebook stays self-contained.
+</blockquote></div><div class="nbmd"><h2>3 · The stage, as a skill</h2>
+<p>Several candidate patches make the scanner green; one of them is a fix. The skill runs all three gates — behaviour unchanged, exploit blocked, and proof of fix against the old build — and reports which gate each rejected candidate died at.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/patch-validation-harness/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: patch-validation-harness
+description: &gt;-
+  Accept a proposed fix only when three things hold — behaviour unchanged, the
+  exploit no longer works, and the fix proved against the build that was
+  vulnerable. Use when an agent proposes a patch, or when a scanner going green
+  is being read as a fix.
+allowed-tools: Read, Grep, Glob, Bash
+---
+
+# A green scanner is not a fixed bug
+
+Several candidate patches will make the scanner green. Some of them change
+behaviour, some of them leave the bug exploitable, and one of them does neither.
+Telling them apart needs three gates, and the third is the one that is usually
+missing: proof against the **old** build, so &quot;the exploit stops working&quot; is a
+statement about the patch rather than about the environment.
+
+## When to use this
+
+Every proposed remediation, whether authored by a person or an agent, and
+especially when the evidence offered is that the scanner no longer fires.
+
+## Procedure
+
+**1 — Establish the baseline on the vulnerable build.** The behaviour cases must
+pass and the exploit must work. If the exploit does not work here, you are about
+to validate a patch against a bug you have not reproduced.
+
+**2 — Gate one: behaviour unchanged.** Run every behaviour case against the
+patched build. A patch that fixes the defect and changes an answer is a
+regression with a security justification.
+
+**3 — Gate two: the exploit no longer works.** Against the patched build,
+directly. Not &quot;the scanner is quiet&quot; — the scanner was one of the tools that
+missed the defect class in the first place.
+
+**4 — Gate three: proof of fix.** Run the exploit against the old build again,
+after the patch is written, in the same harness. It must still work. This is
+what excludes the environment having changed underneath the test.
+
+**5 — Report per candidate and per gate.** A candidate rejected at gate one and
+one rejected at gate two need different conversations with whoever wrote them.
+
+## Output contract
+
+```json
+{
+  &quot;baseline&quot;: {&quot;behaviour_pass&quot;: true, &quot;exploit_works&quot;: true},
+  &quot;candidates&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;scanner_green&quot;: true,
+                  &quot;behaviour_unchanged&quot;: true, &quot;exploit_blocked&quot;: true,
+                  &quot;proof_of_fix&quot;: true, &quot;verdict&quot;: &quot;accepted|rejected&quot;, &quot;rejected_at&quot;: &quot;str|null&quot;}],
+  &quot;accepted&quot;: [&quot;str&quot;]
+}
+```
+
+## Failure modes
+
+- **Accepting a green scanner.** Several wrong patches produce one.
+- **Skipping the behaviour cases.** The most reliable way to block an exploit is
+  to break the feature.
+- **Omitting proof of fix.** Without it you cannot distinguish a working patch
+  from a broken exploit.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/appsec/patch-validation-harness/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/patch-validation-harness/scripts/patch_validation_harness.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Accept a patch only when behaviour is unchanged, the exploit stops working, and the fix is proved against the old build.
+
+This is the executable half of the `patch-validation-harness` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+# --- model backend: replay by default, a Kaggle open-weight model when served -
+# One URL and one header shape, no vendor SDK. Standard library only, so the
+# notebook stays self-contained.
 import json, os, urllib.error, urllib.request
 
-# The cheapest current model on each side, which is what a lesson needs.
-FRONTIER_DEFAULT   = &quot;claude-haiku-4-5-20251001&quot;
-OPEN_WEIGHT_DEFAULT = &quot;glm-4.6&quot;
+# Qwen2.5-7B-Instruct is the floor established in MODELS.md: below it two of
+# the lessons&#x27; acceptance properties stop holding.
+OPEN_WEIGHT_DEFAULT = &quot;qwen2.5-7b-instruct&quot;
 TIMEOUT = 60
-
-def _kaggle_secret(name):
-    &quot;&quot;&quot;On Kaggle, a key lives in Add-ons -&gt; Secrets rather than the environment.
-
-    kaggle_secrets is pre-installed in the Kaggle image and absent everywhere
-    else, so the import is guarded and the notebook needs no dependency. It also
-    requires the notebook to have internet enabled, which on Kaggle requires a
-    phone-verified account - see the note printed below.
-    &quot;&quot;&quot;
-    try:
-        from kaggle_secrets import UserSecretsClient
-        return UserSecretsClient().get_secret(name)
-    except Exception:
-        return None
 
 def backend():
     &quot;&quot;&quot;(kind, model). Configuration comes from the environment, never a literal.&quot;&quot;&quot;
-    if os.environ.get(&quot;ANTHROPIC_API_KEY&quot;) or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;):
-        os.environ.setdefault(&quot;ANTHROPIC_API_KEY&quot;,
-                              os.environ.get(&quot;ANTHROPIC_API_KEY&quot;)
-                              or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;) or &quot;&quot;)
-        return &quot;frontier&quot;, os.environ.get(&quot;MODEL&quot;, FRONTIER_DEFAULT)
     if os.environ.get(&quot;OPENAI_BASE_URL&quot;):
         return &quot;open-weight&quot;, os.environ.get(&quot;MODEL&quot;, OPEN_WEIGHT_DEFAULT)
     return &quot;replay&quot;, &quot;deterministic stand-in (no backend configured)&quot;
@@ -93,23 +263,6 @@ def _post(url, payload, headers):
                                  headers={&quot;content-type&quot;: &quot;application/json&quot;, **headers})
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
         return json.loads(r.read().decode())
-
-def _anthropic(prompt, system, model, max_tokens, temperature):
-    body = {&quot;model&quot;: model, &quot;max_tokens&quot;: max_tokens, &quot;temperature&quot;: temperature,
-            &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]}
-    if system:
-        body[&quot;system&quot;] = system
-    headers = {&quot;x-api-key&quot;: os.environ[&quot;ANTHROPIC_API_KEY&quot;],
-               &quot;anthropic-version&quot;: &quot;2023-06-01&quot;}
-    # An identity-linked key is scoped to a workspace and the API refuses the
-    # call without being told which one. A plain organisation key needs nothing
-    # here, so the header is only sent when it is set.
-    ws = os.environ.get(&quot;ANTHROPIC_WORKSPACE_ID&quot;)
-    if ws:
-        headers[&quot;anthropic-workspace-id&quot;] = ws
-    base = os.environ.get(&quot;ANTHROPIC_BASE_URL&quot;, &quot;https://api.anthropic.com&quot;).rstrip(&quot;/&quot;)
-    out = _post(f&quot;{base}/v1/messages&quot;, body, headers)
-    return &quot;&quot;.join(b.get(&quot;text&quot;, &quot;&quot;) for b in out.get(&quot;content&quot;, [])).strip()
 
 def _openai_compatible(prompt, system, model, max_tokens, temperature):
     msgs = ([{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: system}] if system else []) + \
@@ -133,12 +286,12 @@ def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
     if kind == &quot;replay&quot;:
         return replay, kind, model
     try:
-        fn = _anthropic if kind == &quot;frontier&quot; else _openai_compatible
-        return fn(prompt, system, model, max_tokens, temperature), kind, model
+        return _openai_compatible(prompt, system, model, max_tokens,
+                                  temperature), kind, model
     except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
-        # Print what the API actually said. &quot;failed: 400&quot; costs whoever hits
-        # this an hour; the body usually names the exact missing header or
-        # parameter, and it never contains the key.
+        # Print what the server actually said. &quot;failed: 400&quot; costs whoever hits
+        # this an hour; the body usually names the exact missing parameter, and
+        # it never contains a key.
         detail = getattr(e, &quot;code&quot;, None) or type(e).__name__
         why = &quot;&quot;
         if hasattr(e, &quot;read&quot;):
@@ -158,26 +311,136 @@ if _kind == &quot;replay&quot;:
     print()
     print(&quot;This lesson runs offline against a deterministic replay, which is why&quot;)
     print(&quot;it works on a Kaggle kernel with the internet switched off. To run the&quot;)
-    print(&quot;identical code against a real model, set one of:&quot;)
+    print(&quot;identical code against a real model, serve an open-weight model from&quot;)
+    print(&quot;Kaggle Models and point the adapter at it:&quot;)
     print()
-    print(&quot;   frontier     export ANTHROPIC_API_KEY=...   # cheapest: &quot; + FRONTIER_DEFAULT)
-    print(&quot;                (an identity-linked key also needs&quot;)
-    print(&quot;                 ANTHROPIC_WORKSPACE_ID=...)&quot;)
-    print(&quot;   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \\&quot;)
-    print(&quot;                       OPENAI_API_KEY=ollama MODEL=glm-4.6&quot;)
+    print(&quot;   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \\&quot;)
+    print(&quot;           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen&quot;)
+    print(&quot;   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \\&quot;)
+    print(&quot;          MODEL=qwen2.5-7b-instruct&quot;)
     print()
-    print(&quot;   On Kaggle: Add-ons -&gt; Secrets, add ANTHROPIC_API_KEY, and switch&quot;)
-    print(&quot;   Internet on in the notebook settings. Internet requires a&quot;)
-    print(&quot;   phone-verified Kaggle account; without it DNS fails in the kernel&quot;)
-    print(&quot;   and this lesson correctly stays on the replay.&quot;)</code></pre></div><div class="nbmd"><h2>4 · The same lesson, against a real model</h2>
-<p>Everything below this point runs identically on three backends. Offline it uses
-a deterministic replay that is labelled as a replay wherever it appears — never
-presented as a model's output. With <code>ANTHROPIC_API_KEY</code> set it calls a frontier
-model; with <code>OPENAI_BASE_URL</code> set it calls any OpenAI-compatible endpoint,
-which covers Ollama, vLLM and the hosted open-weight providers.</p>
-<p>The point of running it both ways is not that the answers match. It is that
-<strong>the lesson's assertion holds either way</strong> — if it only holds against the
-replay, the lesson was testing the replay.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TASK = &#x27;Fix this without changing the function\&#x27;s behaviour for valid input. Return only the patched function.\n\ndef report(request):\n    q = &quot;SELECT * FROM orders WHERE ref = \&#x27;&quot; + request.args[\&#x27;ref\&#x27;] + &quot;\&#x27;&quot;\n    return db.execute(q)&#x27;
+    print(&quot;   MODELS.md has the exact Kaggle download. There is no paid backend:&quot;)
+    print(&quot;   every model result in this repository was produced this way.&quot;)
+
+
+import re, sqlite3
+
+VULNERABLE = &#x27;&#x27;&#x27;
+def get_user(conn, name):
+    return conn.execute(&quot;SELECT id, name FROM users WHERE name = &#x27;&quot; + name + &quot;&#x27;&quot;).fetchall()
+&#x27;&#x27;&#x27;
+
+def build_db():
+    conn = sqlite3.connect(&quot;:memory:&quot;)
+    conn.execute(&quot;CREATE TABLE users(id INTEGER, name TEXT)&quot;)
+    conn.executemany(&quot;INSERT INTO users VALUES (?,?)&quot;,
+                     [(1,&quot;dana&quot;),(2,&quot;sam&quot;),(3,&quot;o&#x27;brien&quot;)])
+    return conn
+
+def load(src):
+    ns = {}; exec(compile(src, &quot;&lt;patch&gt;&quot;, &quot;exec&quot;), ns); return ns[&quot;get_user&quot;]
+
+BEHAVIOUR = [(&quot;dana&quot;,[(1,&quot;dana&quot;)]), (&quot;sam&quot;,[(2,&quot;sam&quot;)]),
+             (&quot;nobody&quot;,[]), (&quot;o&#x27;brien&quot;,[(3,&quot;o&#x27;brien&quot;)])]
+
+def behaviour_ok(fn):
+    conn = build_db(); rows = []
+    for name, expected in BEHAVIOUR:
+        try: got = fn(conn, name)
+        except Exception as e: rows.append((name, f&quot;raised {type(e).__name__}&quot;, False)); continue
+        rows.append((name, got, got == expected))
+    return rows
+
+def exploit_works(fn):
+    &quot;&quot;&quot;The stage-12 probe, reused as the acceptance test.&quot;&quot;&quot;
+    conn = build_db()
+    try: rows = fn(conn, &quot;x&#x27; OR &#x27;1&#x27;=&#x27;1&quot;)
+    except Exception: return False, &quot;probe raised — not exploitable this way&quot;
+    return len(rows) &gt; 1, f&quot;probe returned {len(rows)} rows&quot;
+
+def scanner_fires(src):
+    return bool(re.search(r&quot;execute\(\s*[\&quot;\&#x27;][^\&quot;\&#x27;]*[\&quot;\&#x27;]\s*\+&quot;, src))
+
+fn = load(VULNERABLE)
+print(&quot;behaviour of the vulnerable build:&quot;)
+for name, got, ok in behaviour_ok(fn):
+    print(f&quot;   get_user({name!r:10s}) → {str(got):18s} {&#x27;ok&#x27; if ok else &#x27;FAILS&#x27;}&quot;)
+ex, why = exploit_works(fn)
+print(f&quot;\nexploit works: {ex} — {why}&quot;)
+print(f&quot;scanner fires: {scanner_fires(VULNERABLE)}&quot;)
+
+CANDIDATES = {
+ &quot;A · parameterise (the real fix)&quot;: &#x27;&#x27;&#x27;
+def get_user(conn, name):
+    return conn.execute(&quot;SELECT id, name FROM users WHERE name = ?&quot;, (name,)).fetchall()
+&#x27;&#x27;&#x27;,
+ &quot;B · delete the feature&quot;: &#x27;&#x27;&#x27;
+def get_user(conn, name):
+    return []
+&#x27;&#x27;&#x27;,
+ &quot;C · evade the scanner&quot;: &#x27;&#x27;&#x27;
+def get_user(conn, name):
+    q = &quot;SELECT id, name FROM users WHERE name = &#x27;%s&#x27;&quot; % name
+    return conn.execute(q).fetchall()
+&#x27;&#x27;&#x27;,
+ &quot;D · escape by hand&quot;: &#x27;&#x27;&#x27;
+def get_user(conn, name):
+    safe = name.replace(&quot;&#x27;&quot;, &quot;&#x27;&#x27;&quot;)
+    return conn.execute(&quot;SELECT id, name FROM users WHERE name = &#x27;&quot; + safe + &quot;&#x27;&quot;).fetchall()
+&#x27;&#x27;&#x27;,
+}
+print(f&quot;{&#x27;candidate&#x27;:34s}{&#x27;scanner green&#x27;:&gt;15}&quot;)
+print(&quot;-&quot; * 50)
+for name, src in CANDIDATES.items():
+    print(f&quot;{name:34s}{str(not scanner_fires(src)):&gt;15}&quot;)
+print(&quot;\nThree of four are green. Only one of those is a fix.&quot;)
+
+def validate(src):
+    fn = load(src)
+    green = not scanner_fires(src)
+    beh = behaviour_ok(fn)
+    preserved = all(ok for _, _, ok in beh)
+    still_exploitable, _ = exploit_works(fn)
+    reasons = []
+    if not green:            reasons.append(&quot;scanner still fires&quot;)
+    if not preserved:        reasons.append(&quot;behaviour changed&quot;)
+    if still_exploitable:    reasons.append(&quot;STILL EXPLOITABLE (stage-12 probe passes)&quot;)
+    return (not reasons), green, preserved, still_exploitable, reasons
+
+print(f&quot;{&#x27;candidate&#x27;:34s}{&#x27;scan&#x27;:6s}{&#x27;behaviour&#x27;:11s}{&#x27;exploitable&#x27;:13s}verdict&quot;)
+print(&quot;-&quot; * 84)
+accepted = []
+for name, src in CANDIDATES.items():
+    ok, g, b, x, reasons = validate(src)
+    if ok: accepted.append(name)
+    print(f&quot;{name:34s}{str(g):6s}{str(b):11s}{str(x):13s}&quot;
+          f&quot;{&#x27;ACCEPT&#x27; if ok else &#x27;REJECT — &#x27; + &#x27;, &#x27;.join(reasons)}&quot;)
+print(f&quot;\naccepted: {accepted}&quot;)
+assert &quot;A · parameterise (the real fix)&quot; in accepted
+assert &quot;B · delete the feature&quot; not in accepted
+assert &quot;C · evade the scanner&quot; not in accepted
+
+# The proof-of-fix clause: the exploit must fail on the new build and
+# succeed on the old one. Without both halves, &quot;fixed&quot; is a claim.
+def proof_of_fix(old_src, new_src):
+    old_ex, _ = exploit_works(load(old_src))
+    new_ex, _ = exploit_works(load(new_src))
+    return (old_ex and not new_ex), f&quot;exploit on old={old_ex}, on new={new_ex}&quot;
+
+for name in accepted:
+    ok, detail = proof_of_fix(VULNERABLE, CANDIDATES[name])
+    print(f&quot;{name:34s} proof of fix: {ok}  ({detail})&quot;)
+
+print(&quot;\nCandidate D passes every automated check and is still the wrong answer:&quot;)
+print(&quot;it reimplements the driver&#x27;s escaping and will be wrong for the next&quot;)
+print(&quot;input class or the next database. Nothing except a rule about MECHANISM&quot;)
+print(&quot;catches that — which is the part of remediation that does not automate.&quot;)
+
+# ------------------------------------ the same task, against a real model
+# Offline this is a labelled replay; with an open-weight model served
+# from Kaggle it is the same code calling a real one.
+
+TASK = &#x27;Fix this without changing the function\&#x27;s behaviour for valid input. Return only the patched function.\n\ndef report(request):\n    q = &quot;SELECT * FROM orders WHERE ref = \&#x27;&quot; + request.args[\&#x27;ref\&#x27;] + &quot;\&#x27;&quot;\n    return db.execute(q)&#x27;
 
 REPLAY = &#x27;def report(request):\n    q = &quot;SELECT * FROM orders WHERE ref = ?&quot;\n    return db.execute(q, (request.args[\&#x27;ref\&#x27;],))&#x27;
 
@@ -205,8 +468,8 @@ print()
 print(f&quot;property checked : {label}&quot;)
 print(f&quot;held on {used:12s} : {held}&quot;)
 print()
-print(&quot;Same code, same assertions, three possible backends. Offline the answer&quot;)
-print(&quot;is the replay and is labelled as one; with a key it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(&quot;Same code, same assertions, two possible backends. Offline the answer is&quot;)
+print(&quot;the replay and is labelled as one; with a served model it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Candidate D passes every automated gate and is still wrong. Write the rule that rejects it. You will find it has to be about which <em>mechanism</em> is acceptable, not about outcomes — and that rule belongs in your secure coding standard, not in the pipeline.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.10.html">B2.10 · Severity calibration and reporting</a></strong></p>

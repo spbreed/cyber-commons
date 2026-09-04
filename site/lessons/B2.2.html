@@ -130,9 +130,10 @@ description: &gt;-
   Build a STRIDE threat model for an agentic system from the evidence an estate
   already holds — source code, CSPM findings, IAM policies, network policies and
   the tool surface — and emit a ranked threat table plus a trust-boundary
-  diagram. Use when asked to threat-model an agent, a pipeline or a service,
-  when a threat model needs regenerating after an architecture change, or when
-  someone asks which STRIDE categories a design actually exposes.
+  diagram. Use when asked what could go wrong with an architecture, to
+  threat-model an agent, a pipeline or a service, when a threat model needs
+  regenerating after an architecture change, or when someone asks which STRIDE
+  categories a design actually exposes.
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -357,6 +358,7 @@ Standard library only, so it runs on a Kaggle kernel with the internet off.
 
 import argparse
 import json
+import sys
 from collections import defaultdict
 
 # ---------------------------------------------------------------- the inputs
@@ -540,6 +542,52 @@ def diff(before, after):
     return {&quot;new&quot;: new, &quot;escalated&quot;: esc}
 
 
+# ---------------------------------------------------- the demonstration
+# What the lesson runs, at module level, so the notebook and a terminal
+# both print the same thing. `main()` below is still the CLI, and only
+# fires when arguments are given.
+
+threats = model(ARCHITECTURE, cspm=CSPM, iam=IAM, network=NETWORK,
+                 entitlements=ENTITLEMENTS)
+bnds = boundaries(ARCHITECTURE)
+
+print(f&quot;{&#x27;id&#x27;:6s}{&#x27;&#x27;:2s}{&#x27;entry&#x27;:16s}{&#x27;sink&#x27;:14s}{&#x27;score&#x27;:&gt;6}  why&quot;)
+print(&quot;-&quot; * 92)
+for t in threats:
+    print(f&quot;{t[&#x27;id&#x27;]:6s}{t[&#x27;stride&#x27;]:2s}{t[&#x27;entry&#x27;]:16s}{t[&#x27;sink&#x27;]:14s}&quot;
+          f&quot;{t[&#x27;score&#x27;]:&gt;6}  {t[&#x27;reasons&#x27;][0]}&quot;)
+
+print(f&quot;\n{len(threats)} threats across &quot;
+      f&quot;{len({t[&#x27;stride&#x27;] for t in threats})} STRIDE categories&quot;)
+print(f&quot;{len(bnds)} trust-boundary crossing(s):&quot;)
+for b in bnds:
+    print(f&quot;   {b[&#x27;from&#x27;]} -&gt; {b[&#x27;to&#x27;]}   ({b[&#x27;trust&#x27;]})&quot;)
+assert len({t[&quot;stride&quot;] for t in threats}) == 6
+
+print(diagram(ARCHITECTURE, bnds))
+
+hard = model(ARCHITECTURE, cspm=HARDENED[&quot;cspm&quot;], iam=HARDENED[&quot;iam&quot;],
+              network=HARDENED[&quot;network&quot;],
+              entitlements=HARDENED[&quot;entitlements&quot;])
+by_id = {(t[&quot;stride&quot;], t[&quot;entry&quot;], t[&quot;sink&quot;]): t[&quot;score&quot;] for t in hard}
+
+print(f&quot;{&#x27;&#x27;:2s}{&#x27;entry -&gt; sink&#x27;:34s}{&#x27;deployed&#x27;:&gt;10}{&#x27;hardened&#x27;:&gt;10}&quot;)
+print(&quot;-&quot; * 58)
+for t in threats[:6]:
+    k = (t[&quot;stride&quot;], t[&quot;entry&quot;], t[&quot;sink&quot;])
+    print(f&quot;{t[&#x27;stride&#x27;]:2s}{t[&#x27;entry&#x27;] + &#x27; -&gt; &#x27; + t[&#x27;sink&#x27;]:34s}&quot;
+          f&quot;{t[&#x27;score&#x27;]:&gt;10}{by_id[k]:&gt;10}&quot;)
+
+print(f&quot;\nthreat rows: {len(threats)} -&gt; {len(hard)}   (unchanged)&quot;)
+print(f&quot;max severity: {max(t[&#x27;score&#x27;] for t in threats)} -&gt; &quot;
+      f&quot;{max(t[&#x27;score&#x27;] for t in hard)}&quot;)
+print()
+print(&quot;The rows do not disappear. Hardening removes severity, not threats -&quot;)
+print(&quot;and the row is what you re-check after the next terraform change.&quot;)
+assert len(hard) == len(threats)
+assert max(t[&quot;score&quot;] for t in hard) &lt; max(t[&quot;score&quot;] for t in threats)
+
+
 def main() -&gt; int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument(&quot;--hardened&quot;, action=&quot;store_true&quot;)
@@ -572,44 +620,14 @@ def main() -&gt; int:
     print(f&quot;{len(bnds)} trust-boundary crossing(s):&quot;)
     for b in bnds:
         print(f&quot;   {b[&#x27;from&#x27;]} -&gt; {b[&#x27;to&#x27;]}   ({b[&#x27;trust&#x27;]})&quot;)
-    return 0</code></pre></div><div class="nbmd"><h2>5 · Execute it against CyberTravels</h2>
-<p>Five synthetic inputs, standing in for what a real estate already holds.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>threats = model(ARCHITECTURE, cspm=CSPM, iam=IAM, network=NETWORK,
-                 entitlements=ENTITLEMENTS)
-bnds = boundaries(ARCHITECTURE)
+    return 0
 
-print(f&quot;{&#x27;id&#x27;:6s}{&#x27;&#x27;:2s}{&#x27;entry&#x27;:16s}{&#x27;sink&#x27;:14s}{&#x27;score&#x27;:&gt;6}  why&quot;)
-print(&quot;-&quot; * 92)
-for t in threats:
-    print(f&quot;{t[&#x27;id&#x27;]:6s}{t[&#x27;stride&#x27;]:2s}{t[&#x27;entry&#x27;]:16s}{t[&#x27;sink&#x27;]:14s}&quot;
-          f&quot;{t[&#x27;score&#x27;]:&gt;6}  {t[&#x27;reasons&#x27;][0]}&quot;)
 
-print(f&quot;\n{len(threats)} threats across &quot;
-      f&quot;{len({t[&#x27;stride&#x27;] for t in threats})} STRIDE categories&quot;)
-print(f&quot;{len(bnds)} trust-boundary crossing(s):&quot;)
-for b in bnds:
-    print(f&quot;   {b[&#x27;from&#x27;]} -&gt; {b[&#x27;to&#x27;]}   ({b[&#x27;trust&#x27;]})&quot;)
-assert len({t[&quot;stride&quot;] for t in threats}) == 6</code></pre></div><div class="nbmd"><h2>6 · The diagram it emits</h2>
-<p>Mermaid, so it renders here and on the lesson page without a library. Double arrows are trust-boundary crossings — the edges every finding turned out to live on.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>print(diagram(ARCHITECTURE, bnds))</code></pre></div><div class="nbmd"><h2>7 · The same code, a hardened estate</h2>
-<p>Not one line of CyberTravels' source changes. Only the four evidence inputs around it do.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>hard = model(ARCHITECTURE, cspm=HARDENED[&quot;cspm&quot;], iam=HARDENED[&quot;iam&quot;],
-              network=HARDENED[&quot;network&quot;],
-              entitlements=HARDENED[&quot;entitlements&quot;])
-by_id = {(t[&quot;stride&quot;], t[&quot;entry&quot;], t[&quot;sink&quot;]): t[&quot;score&quot;] for t in hard}
-
-print(f&quot;{&#x27;&#x27;:2s}{&#x27;entry -&gt; sink&#x27;:34s}{&#x27;deployed&#x27;:&gt;10}{&#x27;hardened&#x27;:&gt;10}&quot;)
-print(&quot;-&quot; * 58)
-for t in threats[:6]:
-    k = (t[&quot;stride&quot;], t[&quot;entry&quot;], t[&quot;sink&quot;])
-    print(f&quot;{t[&#x27;stride&#x27;]:2s}{t[&#x27;entry&#x27;] + &#x27; -&gt; &#x27; + t[&#x27;sink&#x27;]:34s}&quot;
-          f&quot;{t[&#x27;score&#x27;]:&gt;10}{by_id[k]:&gt;10}&quot;)
-
-print(f&quot;\nthreat rows: {len(threats)} -&gt; {len(hard)}   (unchanged)&quot;)
-print(f&quot;max severity: {max(t[&#x27;score&#x27;] for t in threats)} -&gt; &quot;
-      f&quot;{max(t[&#x27;score&#x27;] for t in hard)}&quot;)
-print()
-print(&quot;The rows do not disappear. Hardening removes severity, not threats -&quot;)
-print(&quot;and the row is what you re-check after the next terraform change.&quot;)
-assert len(hard) == len(threats)
-assert max(t[&quot;score&quot;] for t in hard) &lt; max(t[&quot;score&quot;] for t in threats)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+if __name__ == &quot;__main__&quot; and sys.argv[1:]:
+    raise SystemExit(main())</code></pre></div><div class="nbmd"><h2>5 · Execute it against CyberTravels</h2>
+<p>Five synthetic inputs, standing in for what a real estate already holds.</p></div><div class="nbmd"><h2>6 · The diagram it emits</h2>
+<p>Mermaid, so it renders here and on the lesson page without a library. Double arrows are trust-boundary crossings — the edges every finding turned out to live on.</p></div><div class="nbmd"><h2>7 · The same code, a hardened estate</h2>
+<p>Not one line of CyberTravels' source changes. Only the four evidence inputs around it do.</p></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Point the skill at one of your own services. The work is not the model, it is collecting the five inputs: if any of them is "in somebody's head", that is the input your threat model is currently guessing at, and the guess is always the optimistic one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">B2.3 · Vulnerability auditing: three generations of SAST</a></strong></p>

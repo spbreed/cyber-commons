@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.5 — The metrics that matter at your level | Cyber Commons</title><meta name="description" content="Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.5</div><h1>The metrics that matter at your level</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Reporting activity instead of exposure.</p></div><div class="ctrl"><div class="lab">Control</div><p>Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Instrument the six board-level metrics from your own lab stack.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.5 · The metrics that matter at your level</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.5 — The metrics that matter at your level | Cyber Commons</title><meta name="description" content="Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.5</div><h1>The metrics that matter at your level</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Reporting activity instead of exposure.</p></div><div class="ctrl"><div class="lab">Control</div><p>Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Instrument the six board-level metrics from your own lab stack.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.5 · The metrics that matter at your level</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Running the Programme — the CISO Office</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E3.4.html">E3.4 · Org design and ownership</a></strong>.</p>
 <table>
@@ -44,7 +44,281 @@ alerts, findings or trainings completed.</p>
 <p>The shared property is the important one: <strong>each degrades if nobody does
 anything.</strong> A metric that stays flat under neglect is measuring activity, not
 posture — which is why finding counts and training completion make such
-comfortable and useless board slides.</p></div><div class="nbmd"><h2>Your turn</h2>
+comfortable and useless board slides.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The skill applies the neglect test: simulate a quarter with nothing done and see which numbers move. Four comfortable metrics stay green throughout, which is what disqualifies them.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/programme-metrics-selection/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: programme-metrics-selection
+description: &gt;-
+  Pick programme metrics that degrade when the programme is neglected, and
+  separate them from the comfortable ones that stay green regardless. Use when
+  choosing what to report, or when every metric is green and the estate is not.
+allowed-tools: Read, Grep, Glob
+---
+
+# A metric that cannot go red is a decoration
+
+The test for a programme metric is simple and rarely applied: if the programme
+were neglected for a quarter, would this number move? Counts of policies
+published, training completed and tools deployed would not. Exposure,
+containment effectiveness, evidence freshness and measured time-to-stop all
+would.
+
+## When to use this
+
+Choosing what to report to an executive committee, and auditing an existing
+dashboard that is entirely green.
+
+## Procedure
+
+**1 — List the candidate metrics** and, for each, what it is computed from.
+Anything computed from a plan rather than from the estate is a decoration
+already.
+
+**2 — Apply the neglect test.** Simulate a quarter with nothing done: no
+attestations refreshed, no evals run, no drift reviewed. Which numbers move?
+
+**3 — Keep the ones that move and say what each one costs to compute.** A
+metric nobody can produce monthly will be produced annually and stop being a
+control.
+
+**4 — Report the comfortable ones you are dropping,** with the reason. They have
+constituencies, and removing them silently gets them reinstated.
+
+**5 — Set a target and a direction per surviving metric.** A number with no
+target is a chart; a number with a target is a commitment somebody is
+accountable for.
+
+## Output contract
+
+```json
+{
+  &quot;candidates&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;computed_from&quot;: &quot;estate|plan&quot;, &quot;moves_under_neglect&quot;: false}],
+  &quot;kept&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;value&quot;: 0.0, &quot;target&quot;: 0.0, &quot;cadence&quot;: &quot;str&quot;, &quot;cost&quot;: &quot;str&quot;}],
+  &quot;dropped&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;why&quot;: &quot;str&quot;}],
+  &quot;neglect_simulation&quot;: {&quot;quarter&quot;: &quot;str&quot;, &quot;moved&quot;: [&quot;str&quot;], &quot;unmoved&quot;: [&quot;str&quot;]}
+}
+```
+
+## Failure modes
+
+- **Metrics computed from the plan.** They measure the plan.
+- **Dropping comfortable metrics silently.** They come back.
+- **No target.** Nobody is accountable for a direction.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/programme/programme-metrics-selection/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/programme-metrics-selection/scripts/programme_metrics_selection.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Compute the metrics that degrade under neglect and separate them from the comfortable ones that do not.
+
+This is the executable half of the `programme-metrics-selection` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import time
+SCOPE_WEIGHT = {&quot;self&quot;:1,&quot;project&quot;:3,&quot;tenant&quot;:8,&quot;org&quot;:20}
+now = time.time(); DAY = 86400
+
+FLEET = {&quot;pr-remediation&quot;: [(&quot;read_file&quot;,&quot;self&quot;,True),(&quot;write_file&quot;,&quot;project&quot;,True),
+                            (&quot;deploy&quot;,&quot;org&quot;,False)],
+         &quot;claims-triage&quot;:  [(&quot;read_file&quot;,&quot;self&quot;,True),(&quot;issue_refund&quot;,&quot;tenant&quot;,False)],
+         &quot;doc-summariser&quot;: [(&quot;read_file&quot;,&quot;self&quot;,True)]}
+GATED = {&quot;pr-remediation&quot;: set(), &quot;claims-triage&quot;: {&quot;issue_refund&quot;},
+         &quot;doc-summariser&quot;: set()}
+def blast(t, g): return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n,s,rev in t if n not in g)
+exposure = sum(blast(t, GATED[a]) for a, t in FLEET.items())
+
+ATTACKS = [(&quot;metadata&quot;,False),(&quot;traversal&quot;,False),(&quot;unlisted egress&quot;,True),(&quot;denied tool&quot;,False)]
+asr = sum(1 for _, t in ATTACKS if t)/len(ATTACKS)
+
+CONTROL_TESTS = {&quot;AC-1&quot;: now-3*DAY, &quot;AC-2&quot;: now-9*DAY, &quot;SB-1&quot;: now-45*DAY,
+                 &quot;EV-1&quot;: now-5*DAY, &quot;EV-2&quot;: now-12*DAY}
+WINDOW = {&quot;AC-1&quot;:30,&quot;AC-2&quot;:30,&quot;SB-1&quot;:30,&quot;EV-1&quot;:60,&quot;EV-2&quot;:30}
+REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
+evidenced = sum(1 for c in REQUIRED
+                if c in CONTROL_TESTS and (now-CONTROL_TESTS[c])/DAY &lt;= WINDOW[c])
+assurance = evidenced/len(REQUIRED)
+
+REGISTERED, ESTIMATED = 41, 120
+coverage = REGISTERED/ESTIMATED
+TIME_TO_STOP = 12
+
+METRICS = {
+ &quot;exposure   fleet blast radius&quot;:        (exposure, &quot;units of unreviewed action&quot;),
+ &quot;likelihood red-team ASR&quot;:              (f&quot;{asr:.0%}&quot;, &quot;measured, containment surface&quot;),
+ &quot;assurance  controls evidenced&quot;:        (f&quot;{assurance:.0%}&quot;, f&quot;{evidenced}/{len(REQUIRED)}&quot;),
+ &quot;coverage   agents in inventory&quot;:       (f&quot;{coverage:.0%}&quot;, f&quot;{REGISTERED} of ~{ESTIMATED} est.&quot;),
+ &quot;speed      measured time-to-stop&quot;:     (f&quot;{TIME_TO_STOP}s&quot;, &quot;game day 41 days ago&quot;),
+}
+for k, (v, note) in METRICS.items():
+    print(f&quot;{k:36s}{str(v):&gt;8}   {note}&quot;)
+
+COMFORTABLE = {
+ &quot;findings closed this quarter&quot;: &quot;goes up with activity; says nothing about posture&quot;,
+ &quot;training completion %&quot;:        &quot;reaches 98% and stays there forever&quot;,
+ &quot;number of AI policies&quot;:        &quot;monotonically increasing by construction&quot;,
+ &quot;tools evaluated&quot;:              &quot;measures procurement, not risk&quot;,
+}
+print(&quot;metrics that look like governance and are not:&quot;)
+for m, why in COMFORTABLE.items():
+    print(f&quot;   {m:34s}{why}&quot;)
+
+def degrades_under_neglect(metric):
+    DEGRADES = {&quot;exposure&quot;: True, &quot;likelihood&quot;: True, &quot;assurance&quot;: True,
+                &quot;coverage&quot;: True, &quot;speed&quot;: True,
+                &quot;findings closed&quot;: False, &quot;training completion&quot;: False,
+                &quot;number of policies&quot;: False, &quot;tools evaluated&quot;: False}
+    return DEGRADES.get(metric, False)
+
+print(f&quot;\n{&#x27;metric&#x27;:28s}{&#x27;degrades if ignored?&#x27;:&gt;22}&quot;)
+print(&quot;-&quot; * 52)
+for m in (&quot;exposure&quot;,&quot;likelihood&quot;,&quot;assurance&quot;,&quot;coverage&quot;,&quot;speed&quot;,
+          &quot;findings closed&quot;,&quot;training completion&quot;,&quot;number of policies&quot;):
+    print(f&quot;{m:28s}{str(degrades_under_neglect(m)):&gt;22}&quot;)
+print(&quot;\nThe first five fall on their own. That is what makes them worth&quot;)
+print(&quot;reporting monthly — the report itself creates the pressure.&quot;)
+
+def project(months, exposure, asr, assurance, coverage, ttl_days=41):
+    &quot;&quot;&quot;What happens to each metric if nobody does anything for N months.&quot;&quot;&quot;
+    new_agents_per_month = 3
+    exposure_growth = 8            # blast units per new agent, ungoverned
+    controls_going_stale = 0.12    # fraction of evidence expiring per month
+    return {
+      &quot;exposure&quot;:  exposure + months * new_agents_per_month * exposure_growth,
+      &quot;likelihood&quot;: min(asr + months * 0.03, 1.0),
+      &quot;assurance&quot;: max(assurance - months * controls_going_stale, 0.0),
+      &quot;coverage&quot;:  max(coverage - months * 0.04, 0.0),
+      &quot;days_since_stop_test&quot;: ttl_days + months * 30,
+    }
+
+print(f&quot;{&#x27;month&#x27;:&gt;6}{&#x27;exposure&#x27;:&gt;10}{&#x27;ASR&#x27;:&gt;7}{&#x27;assurance&#x27;:&gt;11}{&#x27;coverage&#x27;:&gt;10}&quot;
+      f&quot;{&#x27;stop test age&#x27;:&gt;15}&quot;)
+print(&quot;-&quot; * 60)
+for m in (0, 3, 6, 12):
+    p = project(m, exposure, asr, assurance, coverage)
+    print(f&quot;{m:&gt;6}{p[&#x27;exposure&#x27;]:&gt;10}{p[&#x27;likelihood&#x27;]:&gt;7.0%}{p[&#x27;assurance&#x27;]:&gt;11.0%}&quot;
+          f&quot;{p[&#x27;coverage&#x27;]:&gt;10.0%}{p[&#x27;days_since_stop_test&#x27;]:&gt;15}&quot;)
+
+p12 = project(12, exposure, asr, assurance, coverage)
+print(f&quot;\nAfter a year of no investment: exposure {exposure}→{p12[&#x27;exposure&#x27;]}, &quot;
+      f&quot;assurance {assurance:.0%}→{p12[&#x27;assurance&#x27;]:.0%}.&quot;)
+print(&quot;Nobody made a bad decision. This is the default trajectory, and the&quot;)
+print(&quot;monthly report is what makes it visible before it is a board topic.&quot;)
+assert p12[&quot;assurance&quot;] &lt; assurance and p12[&quot;exposure&quot;] &gt; exposure</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The five metrics compute to exposure 46, ASR 25%, assurance 50%, coverage 34% and a 12-second time-to-stop. Four comfortable metrics are shown not to degrade under neglect while all five real ones do. Projected twelve months forward with no investment, exposure rises from 46 to 334 and assurance falls from 50% to 0%.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Which of the five can you produce today without a project? Start reporting that one monthly and let the missing ones become conspicuous — that is a cheaper way to get the others funded than asking for all five at once.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E3.6.html">E3.6 · Saying no, and saying yes with conditions</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E3.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.5.ipynb">Source</a></p>

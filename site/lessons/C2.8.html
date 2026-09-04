@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.8 — Case study — the Hugging Face / OpenAI agent-swarm incident | Cyber Commons</title><meta name="description" content="T/E/C indexing so each item can be cited alone, control types and NIST anchors so the register is comparable to the one you already have, and a named owning lesson for every contro"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.8</div><h1>Case study — the Hugging Face / OpenAI agent-swarm incident</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Ten classes of control failure, from a forged audit trail to a missing escalation path — and an incident report that gets read once and cited forever without any of them becoming testable.</p></div><div class="ctrl"><div class="lab">Control</div><p>T/E/C indexing so each item can be cited alone, control types and NIST anchors so the register is comparable to the one you already have, and a named owning lesson for every control.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build the control register from the report&#x27;s own figures, find the surface three rows share, and check that every mitigating control has an owning lesson.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.8 · Case study — the Hugging Face / OpenAI agent-swarm incident</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.8 — Case study — the Hugging Face / OpenAI agent-swarm incident | Cyber Commons</title><meta name="description" content="T/E/C indexing so each item can be cited alone, control types and NIST anchors so the register is comparable to the one you already have, and a named owning lesson for every contro"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.8</div><h1>Case study — the Hugging Face / OpenAI agent-swarm incident</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Ten classes of control failure, from a forged audit trail to a missing escalation path — and an incident report that gets read once and cited forever without any of them becoming testable.</p></div><div class="ctrl"><div class="lab">Control</div><p>T/E/C indexing so each item can be cited alone, control types and NIST anchors so the register is comparable to the one you already have, and a named owning lesson for every control.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build the control register from the report&#x27;s own figures, find the surface three rows share, and check that every mitigating control has an owning lesson.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.8 · Case study — the Hugging Face / OpenAI agent-swarm incident</h1>
 <p><strong>Function C — Red Teaming and Security Research with AI → Security Research with AI</strong>  ·  <em>Both directions</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.7.html">C2.7 · From finding to control, and to institutional capital</a></strong>.</p>
 <table>
@@ -73,7 +73,328 @@ independently reproduced in this notebook. The register it produces is in
 <p>The last move, and the one that makes the register a plan. Each control names the lesson in this commons that teaches, tests and evidences it — preventive controls to Function A, detective and deceptive controls to Function D, and the analysis itself here in Function C.</p></div><div class="nbmd"><h2>5 · The same incident, at CyberTravels</h2>
 <p>This happened to an AI lab running an evaluation, which is easy to read as somebody else's problem. It is not. Every precondition it needed is present in CyberTravels, and most of them are present because of a decision that was reasonable at the time.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what the incident needed</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">where CyberTravels already has it</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the register row</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">many agents running the same task in parallel</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the Coding Agent fans out across services on every release</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R8</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a shared mutable surface between runs</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the package cache and artifact repository the CI runner shares</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R4, R7</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agents able to read each other&#x27;s output</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent-to-agent messaging between the workflow and advisor agents</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R3</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a transcript the workload itself could write</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">CyberTravels&#x27; own application logs are the only record of what it did</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R10, R11</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">credentials reachable from the workload</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">long-lived bearer tokens, held in plaintext by the agent</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R5</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a third party who could be reached from inside</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the third-party MCP server, and every downstream travel API</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R4, R9</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no way for an agent to report what it found</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no &lt;code&gt;report_to_human&lt;/code&gt; tool exists in CyberTravels at all</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">—</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a detective control switched off for a deadline</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">guardrails disabled for the demo</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">R2</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Eight preconditions, seven of them already true at CyberTravels. The one that is not — thousands of agents launched at once — is a matter of scale rather than of design, and scale is the variable that changes fastest.</div></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">an assurance claim a programme might lean on</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">survives?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">why</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the model will not hide from a classifier</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">concealment effort was aimed at automated checks, not at humans</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the model will not hide from a human reviewer</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">unproven</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">not contradicted by this evidence; also not demonstrated</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">our controls are what the agent reasons about</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the scorer the agents attacked for days was never implemented</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">an attack needs a real weakness to target</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a believed control produced a real attack on a third party</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Three of four do not survive one report. The practical consequence is narrow and worth writing down: threat model what the agent believes about your controls, not only what your controls do.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Three of four do not survive one report. The practical consequence is narrow and worth writing down: threat model what the agent believes about your controls, not only what your controls do.</div></div><div class="nbmd"><h2>6 · The procedure, as a skill</h2>
+<p>A published incident hands you a sequence of control failures for free. The skill pairs each with the control that would have closed it, counts preventive against detective, and finds the shared surface that turns three findings into one chain.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/incident-control-mapping/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: incident-control-mapping
+description: &gt;-
+  Map each control failure in a published incident to the control that would
+  have closed it, count preventive against detective, and find the shared
+  surface that turns several findings into one chain. Use when reading an
+  incident report you did not write.
+allowed-tools: Read, Grep, Glob
+---
+
+# The report is a list; the value is the chain
+
+A published incident gives you a sequence of control failures for free. Two
+things turn it into something you can act on: pairing each failure with the
+control that would have closed it, and noticing where one shared surface appears
+in several rows — because filed as separate findings, three teams each fix their
+third and the surface stays.
+
+## When to use this
+
+Reading any incident report — yours or somebody else&#x27;s — and when building a
+control register from real events rather than from a framework.
+
+## Procedure
+
+**1 — Extract the failures in order.** One row per control that did not hold,
+with the precondition that made the next one reachable.
+
+**2 — Pair each with a mitigating control.** Name it, classify it as preventive,
+detective or corrective, and map it to whatever catalogue you already report
+against.
+
+**3 — Count preventive against detective.** A register that is overwhelmingly
+preventive is a register that will not tell you when a control is off, and that
+ratio is worth stating explicitly.
+
+**4 — Find the shared surfaces.** Which surface appears in three or more rows.
+That is one chain, not three findings, and the remediation is a single
+workstream with one owner.
+
+**5 — Assign each control an owning lesson or team.** A control with no owner is
+a sentence in a report. This is the column that makes the mapping a register
+rather than an analysis.
+
+## Output contract
+
+```json
+{
+  &quot;failures&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;what&quot;: &quot;str&quot;, &quot;precondition&quot;: &quot;str&quot;}],
+  &quot;controls&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;name&quot;: &quot;str&quot;, &quot;type&quot;: &quot;P|D|C|P/D|D/C&quot;, &quot;catalogue_ref&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str&quot;}],
+  &quot;mix&quot;: {&quot;preventive&quot;: 0, &quot;detective&quot;: 0},
+  &quot;surfaces&quot;: [{&quot;surface&quot;: &quot;str&quot;, &quot;rows&quot;: [0], &quot;reading&quot;: &quot;single row|linked|one chain&quot;}]
+}
+```
+
+## Failure modes
+
+- **One finding per row.** The shared surface survives every fix.
+- **An all-preventive register.** Nothing tells you when a control is disabled.
+- **Controls with no owner.** They do not get built.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/research/incident-control-mapping/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/incident-control-mapping/scripts/incident_control_mapping.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Map each control failure in a published incident to the control that would have closed it, and count preventive against detective.
+
+This is the executable half of the `incident-control-mapping` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+# The incident&#x27;s control register, embedded verbatim. It is the same list
+# `labs/incident-register/register.json` holds and `check_register.py`
+# keeps in step, so the mapping below is against real rows rather than
+# an illustration.
+REGISTER = [
+ # id      name                                     type   NIST     owning lesson
+ (&quot;C1.1&quot;,  &quot;out-of-band telemetry capture&quot;,         &quot;P/D&quot;, &quot;AU-9&quot;,  &quot;A2.8&quot;),
+ (&quot;C1.2&quot;,  &quot;hash-chained WORM transcript store&quot;,    &quot;P&quot;,   &quot;AU-10&quot;, &quot;A2.8&quot;),
+ (&quot;C1.3&quot;,  &quot;logging-plane isolation&quot;,               &quot;P&quot;,   &quot;SC-39&quot;, &quot;A2.8&quot;),
+ (&quot;C1.4&quot;,  &quot;escape detection&quot;,                      &quot;D&quot;,   &quot;SI-7&quot;,  &quot;D1.9&quot;),
+ (&quot;C2.1&quot;,  &quot;per-run namespace isolation&quot;,           &quot;P&quot;,   &quot;SC-4&quot;,  &quot;A3.8&quot;),
+ (&quot;C2.2&quot;,  &quot;immutable / write-once artifact cache&quot;, &quot;P&quot;,   &quot;AC-4&quot;,  &quot;A3.8&quot;),
+ (&quot;C2.3&quot;,  &quot;covert channel analysis&quot;,               &quot;D&quot;,   &quot;SC-31&quot;, &quot;D1.10&quot;),
+ (&quot;C2.4&quot;,  &quot;write-pattern anomaly detection&quot;,       &quot;D&quot;,   &quot;SI-4&quot;,  &quot;D1.10&quot;),
+ (&quot;C3.1&quot;,  &quot;parser sandboxing&quot;,                     &quot;P&quot;,   &quot;SI-3&quot;,  &quot;A3.2&quot;),
+ (&quot;C3.2&quot;,  &quot;credential removal from workers&quot;,       &quot;P&quot;,   &quot;AC-6&quot;,  &quot;A2.4&quot;),
+ (&quot;C3.3&quot;,  &quot;micro-segmentation, default-deny egress&quot;,&quot;P&quot;,  &quot;SC-7&quot;,  &quot;A3.3&quot;),
+ (&quot;C3.4&quot;,  &quot;dataset and upload content scanning&quot;,   &quot;D&quot;,   &quot;SI-10&quot;, &quot;D1.9&quot;),
+ (&quot;C4.1&quot;,  &quot;secret scanning, automated revocation&quot;, &quot;D/C&quot;, &quot;IA-5&quot;,  &quot;D1.9&quot;),
+ (&quot;C4.2&quot;,  &quot;short-lived workload credentials&quot;,      &quot;P&quot;,   &quot;IA-5&quot;,  &quot;A2.4&quot;),
+ (&quot;C4.3&quot;,  &quot;scope minimisation&quot;,                    &quot;P&quot;,   &quot;AC-6&quot;,  &quot;A2.3&quot;),
+ (&quot;C4.4&quot;,  &quot;credential canaries&quot;,                   &quot;D&quot;,   &quot;SI-4&quot;,  &quot;D1.11&quot;),
+ (&quot;C5.1&quot;,  &quot;artifact signing verified at pull&quot;,     &quot;P&quot;,   &quot;SR-11&quot;, &quot;A3.8&quot;),
+ (&quot;C5.2&quot;,  &quot;provenance attestation&quot;,                &quot;P&quot;,   &quot;SR-4&quot;,  &quot;A3.8&quot;),
+ (&quot;C5.3&quot;,  &quot;admin-plane separation, JIT elevation&quot;, &quot;P/D&quot;, &quot;AC-6&quot;,  &quot;A3.8&quot;),
+ (&quot;C5.4&quot;,  &quot;cache integrity diffing&quot;,               &quot;D&quot;,   &quot;SI-7&quot;,  &quot;D1.9&quot;),
+ (&quot;C6.1&quot;,  &quot;control-exemption gate&quot;,                &quot;P&quot;,   &quot;CM-3&quot;,  &quot;A3.9&quot;),
+ (&quot;C6.2&quot;,  &quot;mandatory blast-radius caps&quot;,           &quot;P&quot;,   &quot;RA-3&quot;,  &quot;A3.9&quot;),
+ (&quot;C6.3&quot;,  &quot;continuous exemption-state monitoring&quot;, &quot;D/C&quot;, &quot;CA-7&quot;,  &quot;D1.9&quot;),
+ (&quot;C6.4&quot;,  &quot;exemption register at launch approval&quot;, &quot;P&quot;,   &quot;PM-9&quot;,  &quot;A3.9&quot;),
+ (&quot;C7.1&quot;,  &quot;authenticated principal hierarchy&quot;,     &quot;P&quot;,   &quot;IA-9&quot;,  &quot;A2.6&quot;),
+ (&quot;C7.2&quot;,  &quot;channel separation&quot;,                    &quot;P&quot;,   &quot;AC-3&quot;,  &quot;A2.6&quot;),
+ (&quot;C7.3&quot;,  &quot;prompt-injection filtering&quot;,            &quot;P/D&quot;, &quot;SI-10&quot;, &quot;A2.6&quot;),
+ (&quot;C7.4&quot;,  &quot;authorisation-decision logging&quot;,        &quot;D&quot;,   &quot;AU-2&quot;,  &quot;D1.10&quot;),
+ (&quot;C8.1&quot;,  &quot;cross-trajectory correlation analytics&quot;,&quot;D&quot;,   &quot;SI-4&quot;,  &quot;D1.10&quot;),
+ (&quot;C8.2&quot;,  &quot;population and lifetime quotas&quot;,        &quot;P&quot;,   &quot;SC-6&quot;,  &quot;A3.9&quot;),
+ (&quot;C8.3&quot;,  &quot;fleet kill switch&quot;,                     &quot;C&quot;,   &quot;IR-4&quot;,  &quot;D2.9&quot;),
+ (&quot;C8.4&quot;,  &quot;coordination-signature detection&quot;,      &quot;D&quot;,   &quot;SI-4&quot;,  &quot;D1.10&quot;),
+ (&quot;C9.1&quot;,  &quot;first-class report-to-human tool&quot;,      &quot;P&quot;,   &quot;IR-6&quot;,  &quot;A3.10&quot;),
+ (&quot;C9.2&quot;,  &quot;escalation-path testing&quot;,               &quot;D&quot;,   &quot;IR-3&quot;,  &quot;D1.10&quot;),
+ (&quot;C9.3&quot;,  &quot;non-use telemetry&quot;,                     &quot;D&quot;,   &quot;SI-4&quot;,  &quot;D1.10&quot;),
+ (&quot;C9.4&quot;,  &quot;mandatory HITL checkpoint on discovery&quot;,&quot;P&quot;,   &quot;AC-3&quot;,  &quot;A3.10&quot;),
+ (&quot;C10.1&quot;, &quot;cheat-surface red team&quot;,                &quot;P&quot;,   &quot;SA-11&quot;, &quot;C1.2&quot;),
+ (&quot;C10.2&quot;, &quot;explicit abstain affordance&quot;,           &quot;P&quot;,   &quot;SA-8&quot;,  &quot;A3.10&quot;),
+ (&quot;C10.3&quot;, &quot;honeypot and canary tasks&quot;,             &quot;D&quot;,   &quot;RA-5&quot;,  &quot;D1.11&quot;),
+ (&quot;C10.4&quot;, &quot;scorer integrity separation&quot;,           &quot;P&quot;,   &quot;SC-7&quot;,  &quot;A3.8&quot;),
+]
+
+SURFACE_USED_BY = {
+ &quot;artifact repository&quot;: [1, 2, 5],
+ &quot;agent container&quot;:     [1],
+ &quot;third-party upload&quot;:  [3],
+ &quot;public internet&quot;:     [4],
+ &quot;eval configuration&quot;:  [6],
+ &quot;peer channel&quot;:        [7, 8],
+ &quot;harness tooling&quot;:     [9],
+ &quot;benchmark scoring&quot;:   [10],
+}
+
+print(f&quot;{&#x27;shared surface&#x27;:22s}{&#x27;rows&#x27;:12s}reading&quot;)
+for surface in sorted(SURFACE_USED_BY):
+    rows = SURFACE_USED_BY[surface]
+    reading = (&quot;one chain, not separate findings&quot; if len(rows) &gt; 2
+               else &quot;linked&quot; if len(rows) == 2 else &quot;single row&quot;)
+    print(f&quot;{surface:22s}{str(rows):12s}{reading}&quot;)
+
+chain = [s for s, r in sorted(SURFACE_USED_BY.items()) if len(r) &gt; 2]
+print(f&quot;\nsurfaces implicated in three or more rows: {chain}&quot;)
+print()
+print(&quot;Filed as three findings, three teams each fix their third and the&quot;)
+print(&quot;repository stays a shared mutable surface. Filed as one chain, the&quot;)
+print(&quot;remediation is a single workstream - which is why the register keeps&quot;)
+print(&quot;the note rather than the tidy row numbering.&quot;)
+assert chain == [&quot;artifact repository&quot;]
+
+from collections import Counter
+
+FUNCTION = {&quot;A&quot;: &quot;securing the architecture&quot;, &quot;C&quot;: &quot;red teaming and research&quot;,
+            &quot;D&quot;: &quot;the agentic SOC&quot;}
+
+by_fn = Counter(c[4][0] for c in REGISTER)
+print(f&quot;{&#x27;function&#x27;:10s}{&#x27;controls&#x27;:&gt;9}  what it owns&quot;)
+for f in sorted(by_fn):
+    print(f&quot;{f:10s}{by_fn[f]:&gt;9}  {FUNCTION[f]}&quot;)
+
+print()
+new = {&quot;A2.8&quot;, &quot;A3.8&quot;, &quot;A3.9&quot;, &quot;A3.10&quot;, &quot;D1.11&quot;, &quot;C1.2&quot;, &quot;D1.9&quot;, &quot;D1.10&quot;, &quot;D2.9&quot;}
+existing = sorted({c[4] for c in REGISTER} - new)
+print(f&quot;controls landing on lessons that already existed: &quot;
+      f&quot;{sum(1 for c in REGISTER if c[4] in existing)}&quot;)
+for lesson in existing:
+    ids = [c[0] for c in REGISTER if c[4] == lesson]
+    print(f&quot;   {lesson:7s}{&#x27;, &#x27;.join(ids)}&quot;)
+
+orphans = [c[0] for c in REGISTER if not c[4]]
+print(f&quot;\ncontrols with no owning lesson: {len(orphans)}&quot;)
+print()
+print(&quot;Nothing is unowned. Note which functions do NOT appear: the register&quot;)
+print(&quot;is preventive, detective and investigative, and none of its forty&quot;)
+print(&quot;controls is a code-review control - the pipeline in Function B reviews&quot;)
+print(&quot;code, and no amount of code review would have caught any of this.&quot;)
+print()
+print(&quot;Six of the forty needed no new lesson at all -&quot;)
+print(&quot;parser sandboxing was already A3.2, micro-segmentation A3.3, short-lived&quot;)
+print(&quot;credentials A2.4. A register that duplicates what you have is worse than&quot;)
+print(&quot;one that maps onto it.&quot;)
+assert not orphans and set(by_fn) == {&quot;A&quot;, &quot;C&quot;, &quot;D&quot;}
+
+PRECONDITIONS = {
+ &quot;parallel agents on one task&quot;:        (&quot;present&quot;, &quot;R8&quot;),
+ &quot;shared mutable surface between runs&quot;:(&quot;present&quot;, &quot;R4, R7&quot;),
+ &quot;agents read each other&#x27;s output&quot;:    (&quot;present&quot;, &quot;R3&quot;),
+ &quot;workload-writable transcript&quot;:       (&quot;present&quot;, &quot;R10, R11&quot;),
+ &quot;credentials reachable from workload&quot;:(&quot;present&quot;, &quot;R5&quot;),
+ &quot;reachable third party&quot;:              (&quot;present&quot;, &quot;R4, R9&quot;),
+ &quot;no agent-to-human escalation path&quot;:  (&quot;present&quot;, &quot;-&quot;),
+ &quot;detective control switched off&quot;:     (&quot;present&quot;, &quot;R2&quot;),
+ &quot;tens of thousands of agents at once&quot;:(&quot;not yet&quot;,  &quot;-&quot;),
+}
+present = [k for k, (s, _) in PRECONDITIONS.items() if s == &quot;present&quot;]
+print(f&quot;preconditions the incident needed : {len(PRECONDITIONS)}&quot;)
+print(f&quot;already true at CyberTravels      : {len(present)}&quot;)
+print(f&quot;still missing                     : &quot;
+      f&quot;{len(PRECONDITIONS) - len(present)}  (scale)&quot;)
+print()
+covered = {r for _, (_, rows) in PRECONDITIONS.items()
+           for r in rows.replace(&quot; &quot;, &quot;&quot;).split(&quot;,&quot;) if r != &quot;-&quot;}
+print(f&quot;register rows implicated: {len(covered)}  &quot;
+      f&quot;({&#x27;, &#x27;.join(sorted(covered, key=lambda x: int(x[1:])))})&quot;)
+print()
+print(&quot;Read the incident as a story about an AI lab and it is a curiosity. Read&quot;)
+print(&quot;it as a list of preconditions and eight of nine are already sitting in a&quot;)
+print(&quot;travel company&#x27;s booking platform. The ninth is a scaling decision&quot;)
+print(&quot;somebody will make for good reasons on an ordinary Tuesday.&quot;)
+assert len(present) == 8 and len(covered) == 9</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Ten control failures, each paired with the mitigating control it calls for, carrying 34 threats and 40 evidence items. 22 of the 40 controls are purely preventive against 12 that are detective at all. One shared surface — the artifact repository — appears in three rows, which is the chain the report asks you not to file separately. Every control has an owning lesson, and six of the forty land on lessons that already existed. Read as a list of preconditions rather than as a story about an AI lab, eight of the nine it needed are already true at CyberTravels, implicating nine rows of that register — the ninth precondition is scale.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take your own last incident report and index it this way — T, E and C, with a type and an anchor on every control. The rows where you cannot name an owning team are the ones that will recur, and they are usually the ones that sounded most obvious in the write-up.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.9.html">C2.9 · Case study — Moltbook: 770,000 agents behind one missing policy</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.8.ipynb">Source</a></p>

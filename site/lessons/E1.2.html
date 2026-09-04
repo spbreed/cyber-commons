@@ -230,7 +230,112 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/deployment-inventory-resolver/scripts/deployment_inventory_resolver.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Build an AI inventory from three sources and measure ownership coverage against what the third one finds.
+
+This is the executable half of the `deployment-inventory-resolver` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+from dataclasses import dataclass, field
+
+@dataclass
+class AIAsset:
+    name: str
+    kind: str              # model | agent | copilot | embedded-feature
+    owner: str = &quot;&quot;
+    autonomy: str = &quot;L1&quot;
+    data: tuple = ()
+    external: bool = False
+    discovered_via: str = &quot;registry&quot;
+
+    def gaps(self):
+        g = []
+        if not self.owner:
+            g.append(&quot;no named owner — nobody can accept the risk or recertify it&quot;)
+        if self.discovered_via != &quot;registry&quot;:
+            g.append(f&quot;not registered — found via {self.discovered_via}&quot;)
+        if self.autonomy in (&quot;L2.5&quot;, &quot;L3&quot;) and not self.owner:
+            g.append(&quot;acts semi-autonomously with nobody accountable&quot;)
+        return g
+
+REGISTRY = [
+ AIAsset(&quot;fraud-scoring-model&quot;, &quot;model&quot;, &quot;risk-eng&quot;, &quot;L1&quot;, (&quot;customer&quot;,)),
+ AIAsset(&quot;support-summariser&quot;, &quot;copilot&quot;, &quot;support-eng&quot;, &quot;L1&quot;, (&quot;customer&quot;,)),
+]
+PROCUREMENT = [
+ AIAsset(&quot;vendor-contract-analyser&quot;, &quot;embedded-feature&quot;, &quot;&quot;, &quot;L1&quot;, (&quot;regulated&quot;,),
+         discovered_via=&quot;expense report&quot;),
+]
+EGRESS = [
+ AIAsset(&quot;unknown-openai-usage-marketing&quot;, &quot;copilot&quot;, &quot;&quot;, &quot;L1&quot;, (&quot;public&quot;,),
+         discovered_via=&quot;egress logs&quot;),
+ AIAsset(&quot;pr-remediation-agent&quot;, &quot;agent&quot;, &quot;&quot;, &quot;L2.5&quot;, (&quot;customer&quot;,), True,
+         discovered_via=&quot;egress logs&quot;),
+ AIAsset(&quot;agent-worker-7f3c&quot;, &quot;agent&quot;, &quot;&quot;, &quot;L2.5&quot;, (&quot;customer&quot;,),
+         discovered_via=&quot;egress logs&quot;),
+]
+ALL = REGISTRY + PROCUREMENT + EGRESS
+print(f&quot;{&#x27;asset&#x27;:34s}{&#x27;kind&#x27;:18s}{&#x27;autonomy&#x27;:10s}{&#x27;owner&#x27;:14s}found via&quot;)
+print(&quot;-&quot; * 92)
+for a in ALL:
+    print(f&quot;{a.name:34s}{a.kind:18s}{a.autonomy:10s}{a.owner or &#x27;—&#x27;:14s}{a.discovered_via}&quot;)
+print(f&quot;\nregistry found {len(REGISTRY)}; the other two sources found &quot;
+      f&quot;{len(ALL)-len(REGISTRY)} more.&quot;)
+
+unowned = [a for a in ALL if not a.owner]
+unregistered = [a for a in ALL if a.discovered_via != &quot;registry&quot;]
+high_autonomy_unowned = [a for a in ALL if a.autonomy in (&quot;L2.5&quot;,&quot;L3&quot;) and not a.owner]
+
+print(f&quot;assets                    {len(ALL)}&quot;)
+print(f&quot;no named owner            {len(unowned)}  {[a.name for a in unowned]}&quot;)
+print(f&quot;never registered          {len(unregistered)}&quot;)
+print(f&quot;L2.5+ with no owner       {len(high_autonomy_unowned)}  &quot;
+      f&quot;{[a.name for a in high_autonomy_unowned]}&quot;)
+
+print(&quot;\ngaps in detail:&quot;)
+for a in ALL:
+    for g in a.gaps():
+        print(f&quot;   {a.name:34s}{g}&quot;)
+assert high_autonomy_unowned
+
+MODEL_PROVIDER_DOMAINS = {&quot;api.openai.com&quot;, &quot;api.anthropic.com&quot;,
+                          &quot;generativelanguage.googleapis.com&quot;,
+                          &quot;api.mistral.ai&quot;, &quot;api.together.xyz&quot;}
+
+EGRESS_LOG = [
+ {&quot;src&quot;: &quot;marketing-workstation-14&quot;, &quot;host&quot;: &quot;api.openai.com&quot;, &quot;bytes&quot;: 240_000},
+ {&quot;src&quot;: &quot;svc-pr-remediation&quot;,       &quot;host&quot;: &quot;api.anthropic.com&quot;, &quot;bytes&quot;: 8_400_000},
+ {&quot;src&quot;: &quot;build-runner-3&quot;,           &quot;host&quot;: &quot;registry.npmjs.org&quot;, &quot;bytes&quot;: 90_000},
+ {&quot;src&quot;: &quot;agent-worker-7f3c&quot;,        &quot;host&quot;: &quot;api.together.xyz&quot;, &quot;bytes&quot;: 1_200_000},
+]
+def discover(log, known_names):
+    found = []
+    for row in log:
+        if row[&quot;host&quot;] not in MODEL_PROVIDER_DOMAINS: continue
+        if row[&quot;src&quot;] in known_names: continue
+        found.append({&quot;source&quot;: row[&quot;src&quot;], &quot;provider&quot;: row[&quot;host&quot;],
+                      &quot;volume&quot;: row[&quot;bytes&quot;],
+                      &quot;finding&quot;: &quot;AI usage not present in the inventory&quot;})
+    return found
+
+known = {a.name for a in REGISTRY + PROCUREMENT}
+for f in discover(EGRESS_LOG, known):
+    print(f&quot;{f[&#x27;source&#x27;]:30s}{f[&#x27;provider&#x27;]:34s}{f[&#x27;volume&#x27;]:&gt;10,} bytes&quot;)
+    print(f&quot;{&#x27;&#x27;:30s}{f[&#x27;finding&#x27;]}&quot;)
+
+def inventory_health(assets):
+    return {&quot;total&quot;: len(assets),
+            &quot;owned&quot;: sum(1 for a in assets if a.owner),
+            &quot;registered&quot;: sum(1 for a in assets if a.discovered_via == &quot;registry&quot;),
+            &quot;coverage&quot;: round(sum(1 for a in assets if a.owner)/len(assets), 2)}
+print(f&quot;\n{inventory_health(ALL)}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. Two of its rules are what make an inventory hold: resolve digests rather than tags, because a tag is mutable and the thing you attested is not the thing running; and never record an unresolvable artefact as absent — "no gateway configured" and "could not read the gateway" are different findings with different owners.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the egress query for real: one week of traffic to model-provider domains, joined against your inventory. It takes an hour and it always finds something.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.3.html">E1.3 · Risk tiering agentic use cases</a></strong></p>

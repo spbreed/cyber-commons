@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.7 — Drift monitoring | Cyber Commons</title><meta name="description" content="Watch model updates, prompt changes, index refreshes, tool versions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.7</div><h1>Drift monitoring</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection that worked last month is silently degraded.</p></div><div class="ctrl"><div class="lab">Control</div><p>Watch model updates, prompt changes, index refreshes, tool versions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Catch a detection silently degrading after a model change.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.7 · Drift monitoring</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.7 — Drift monitoring | Cyber Commons</title><meta name="description" content="Watch model updates, prompt changes, index refreshes, tool versions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.7</div><h1>Drift monitoring</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection that worked last month is silently degraded.</p></div><div class="ctrl"><div class="lab">Control</div><p>Watch model updates, prompt changes, index refreshes, tool versions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Catch a detection silently degrading after a model change.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.7 · Drift monitoring</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.6.html">D1.6 · Distinguishing agent from human</a></strong>.</p>
 <table>
@@ -45,7 +45,260 @@ more honest state.</p>
    it tests actually drifts.</li>
 </ol>
 <p>E1.7 turns the second into a compliance posture. This lesson produces the signal.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">change surface</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">in change management?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what happens today</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">application code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">pull request, review, CI</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent prompt</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">edited in a console</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">tool manifest</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a config change, with no threat-model diff</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">model version</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">provider-side; you may not be told</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">policy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">if it is in git — often it is not</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">approval settings</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a toggle in an admin UI</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Four of six surfaces bypass change management entirely. Drift is the failure mode with no adversary, and this table is why it is also the failure mode with no ticket.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Four of six surfaces bypass change management entirely. Drift is the failure mode with no adversary, and this table is why it is also the failure mode with no ticket.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Four of six things that change an agent's behaviour never reach change management. The skill counts them, then tracks drift across a quarter and attributes the rise that coincides with the model upgrade — and the one that does not.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/behavioural-drift-monitor/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: behavioural-drift-monitor
+description: &gt;-
+  Track an agent&#x27;s drift from its signed-off baseline across a quarter and count
+  how many of the surfaces that change its behaviour bypass change management.
+  Use when an agent behaves differently than it was approved to, with no code
+  change to point at.
+allowed-tools: Read, Grep, Glob
+---
+
+# Four of six things that change an agent are not code changes
+
+The model version, the prompt, the tool manifest and the approval settings all
+change what an agent does, and none of them generates a change record. So drift
+is the only signal that the approved system and the running system have diverged,
+and it has to be measured rather than inferred from a changelog.
+
+## When to use this
+
+Continuously, for any agent under governance — and specifically after a provider
+announces a model update.
+
+## Procedure
+
+**1 — Enumerate the change surfaces.** Code, model version, system prompt, tool
+manifest, approval settings, retrieval corpus. For each, record whether a change
+produces a record anybody reviews.
+
+**2 — Count the ones that bypass change management.** Four of six is typical.
+That count is the argument for measuring drift at all.
+
+**3 — Fix a baseline at sign-off.** Tools, resources, rate, refusal rate — and
+the model version and prompt hash alongside, so a later drift can be attributed.
+
+**4 — Compute drift per period and attribute each rise.** A jump that coincides
+with a model upgrade is a different conversation from a jump with no
+corresponding event, and the second is the one to escalate.
+
+**5 — Set a tolerance and a consequence.** Beyond tolerance: re-attest, or
+revert. A drift figure with no consequence is a chart.
+
+## Output contract
+
+```json
+{
+  &quot;surfaces&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;produces_change_record&quot;: false}],
+  &quot;bypass_count&quot;: 0,
+  &quot;baseline&quot;: {&quot;at&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;model_version&quot;: &quot;str&quot;, &quot;prompt_hash&quot;: &quot;str&quot;},
+  &quot;timeline&quot;: [{&quot;period&quot;: &quot;str&quot;, &quot;drift&quot;: 0.0, &quot;new&quot;: [&quot;str&quot;], &quot;attributed_to&quot;: &quot;str|null&quot;}],
+  &quot;tolerance&quot;: 0.0,
+  &quot;consequence&quot;: &quot;str&quot;
+}
+```
+
+## Failure modes
+
+- **Trusting the changelog.** Most of what changes an agent is not in it.
+- **Drift with no attribution.** A number nobody can act on.
+- **No consequence at the tolerance.** The line stops being a line.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/detection/behavioural-drift-monitor/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/behavioural-drift-monitor/scripts/behavioural_drift_monitor.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Track drift from a signed-off baseline across a quarter and count the change surfaces that bypass change management.
+
+This is the executable half of the `behavioural-drift-monitor` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import time
+from dataclasses import dataclass, field
+
+now = time.time(); DAY = 86400
+
+@dataclass
+class Baseline:
+    signed_off: float
+    tool_mix: dict
+    def compare(self, mix):
+        total = sum(mix.values()) or 1
+        cur = {k: v/total for k, v in mix.items()}
+        keys = set(cur) | set(self.tool_mix)
+        tvd = sum(abs(cur.get(k,0) - self.tool_mix.get(k,0)) for k in keys)/2
+        return {&quot;drift&quot;: round(tvd, 3),
+                &quot;new_tools&quot;: sorted(set(cur) - set(self.tool_mix)),
+                &quot;gone&quot;: sorted(set(self.tool_mix) - set(cur))}
+
+base = Baseline(signed_off=now - 90*DAY,
+                tool_mix={&quot;read_file&quot;: 0.80, &quot;search&quot;: 0.15, &quot;write_file&quot;: 0.05})
+
+TIMELINE = [
+ (now - 90*DAY, &quot;control signed off&quot;,     {&quot;read_file&quot;: 800, &quot;search&quot;: 150, &quot;write_file&quot;: 50}),
+ (now - 60*DAY, &quot;prompt edited&quot;,          {&quot;read_file&quot;: 700, &quot;search&quot;: 150, &quot;write_file&quot;: 150}),
+ (now - 30*DAY, &quot;tool added (no PR)&quot;,     {&quot;read_file&quot;: 500, &quot;search&quot;: 120, &quot;write_file&quot;: 180,
+                                           &quot;run_shell&quot;: 200}),
+ (now -  5*DAY, &quot;model upgraded by vendor&quot;,{&quot;read_file&quot;: 300, &quot;search&quot;: 100, &quot;write_file&quot;: 250,
+                                            &quot;run_shell&quot;: 350}),
+]
+print(f&quot;{&#x27;when&#x27;:&gt;8}  {&#x27;event&#x27;:26s}{&#x27;drift&#x27;:&gt;7}  new tools&quot;)
+print(&quot;-&quot; * 66)
+for ts, event, mix in TIMELINE:
+    d = base.compare(mix)
+    print(f&quot;{(now-ts)/DAY:&gt;6.0f}d  {event:26s}{d[&#x27;drift&#x27;]:&gt;7.3f}  {d[&#x27;new_tools&#x27;]}&quot;)
+
+def drift_rate(baseline, timeline):
+    &quot;&quot;&quot;How fast does this agent actually drift? Set the window from the answer.&quot;&quot;&quot;
+    pts = [(ts, baseline.compare(mix)[&quot;drift&quot;]) for ts, _, mix in timeline]
+    pts.sort()
+    span_days = (pts[-1][0] - pts[0][0]) / 86400
+    return (pts[-1][1] - pts[0][1]) / max(span_days, 1)
+
+rate = drift_rate(base, TIMELINE)
+TOLERANCE = 0.25
+window = int(TOLERANCE / rate) if rate &gt; 0 else 365
+print(f&quot;observed drift rate  {rate:.5f} TVD/day&quot;)
+print(f&quot;tolerance            {TOLERANCE}&quot;)
+print(f&quot;→ freshness window   {window} days &quot;
+      f&quot;(a control test older than this is unevidenced, not passing)&quot;)
+
+@dataclass
+class ControlTest:
+    cid: str; passed: bool; tested_at: float; valid_for_days: float
+    def state(self, at):
+        age = (at - self.tested_at) / 86400
+        if age &gt; self.valid_for_days: return &quot;STALE&quot;
+        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
+
+tests = [ControlTest(&quot;SB-1&quot;, True, now - 90*DAY, window),
+         ControlTest(&quot;SB-2&quot;, True, now - 10*DAY, window),
+         ControlTest(&quot;DR-1&quot;, False, now, window)]
+print(f&quot;\n{&#x27;control&#x27;:10s}{&#x27;age (d)&#x27;:&gt;9}{&#x27;state&#x27;:&gt;10}&quot;)
+print(&quot;-&quot; * 30)
+for t in tests:
+    print(f&quot;{t.cid:10s}{(now-t.tested_at)/DAY:&gt;9.0f}{t.state(now):&gt;10}&quot;)
+evidenced = sum(t.state(now) == &quot;PASS&quot; for t in tests)
+print(f&quot;\ncurrently evidenced: {evidenced}/{len(tests)}&quot;)
+assert any(t.state(now) == &quot;STALE&quot; for t in tests)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Drift rises across the quarter from 0.0 at sign-off to roughly 0.35 after the model upgrade, with <code>run_shell</code> appearing as a new tool. Four of six change surfaces bypass change management. The observed drift rate yields a freshness window, and the 90-day-old control test is reported STALE rather than passing.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Compute the drift rate for one production agent from three months of telemetry, and set its control freshness window from that number rather than from the audit calendar.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.8.html">D1.8 · Threat intel sub-lane</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.7.ipynb">Source</a></p>

@@ -51,6 +51,17 @@ ROUTING_CASES = [
     "work the alert queue and decide what to auto-close",
     "scope what this agent touched during the incident",
     "prepare audit evidence that this control works",
+    # Added as the catalogue grew past a hundred skills. Each of these is a
+    # sentence somebody would actually type, and each was a tie at some point
+    # while the descriptions were being written.
+    "which regulations apply to this agent and what is the shortest clock",
+    "tier this use case by how much authority it has",
+    "can this run unattended, and at what autonomy level",
+    "our canaries and honeypots need designing for an agent environment",
+    "the model provider changed the model, what does that invalidate",
+    "how long would it actually take us to stop a running agent",
+    "find the personal data in this agent trace and try to erase it",
+    "measure whether this jailbreak technique reproduces",
 ]
 
 

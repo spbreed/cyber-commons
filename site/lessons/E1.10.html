@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.10 — The stakeholder map: who owns what | Cyber Commons</title><meta name="description" content="A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.10</div><h1>The stakeholder map: who owns what</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Legal, compliance, privacy, cyber and model risk each hold part of the AI control estate and none holds all of it. The programme fails at the seams between them, not inside any one.</p></div><div class="ctrl"><div class="lab">Control</div><p>A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.10 · The stakeholder map: who owns what</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.10 — The stakeholder map: who owns what | Cyber Commons</title><meta name="description" content="A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.10</div><h1>The stakeholder map: who owns what</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Legal, compliance, privacy, cyber and model risk each hold part of the AI control estate and none holds all of it. The programme fails at the seams between them, not inside any one.</p></div><div class="ctrl"><div class="lab">Control</div><p>A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.10.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.10.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.10 · The stakeholder map: who owns what</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Framework — Risk and Control</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.9.html">E1.9 · Model and agent lifecycle governance</a></strong>.</p>
 <table>
@@ -73,7 +73,258 @@ five are doing what they claim.</p>
 one is a real failure that happens because <em>both</em> sides made a reasonable
 assumption about the other.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">function</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the question it is asking</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the controls it holds</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">legal</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">can we be held liable, and under what theory</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">contract clauses · acceptable-use terms · IP screening · e-discovery retention</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">compliance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which obligations apply, can we demonstrate we meet them</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">AI policy · use-case classification · attestations · disclosure triggers</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">privacy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whose data, on what basis, for how long</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">impact-assessment gate · PII redaction · retention schedules · transfers</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">cyber</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">can this be attacked, can we contain it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent identity and JIT authz · tool permissions · sandbox and egress · guardrails · telemetry · kill switch</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">model risk</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">is it fit for purpose, will we know when it stops being</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">pre-deployment validation · thresholds · drift alerting · revalidation</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Plus two more that hold no controls and decide everything: the business owner, accountable for the use case and its risk appetite, and internal audit, independently assuring that the five above do what they claim. 22 controls across five functions, and no function holds more than a quarter of them.</div></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the seam</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">one side assumed…</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the other assumed…</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what happened</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent traces are full of personal data</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>cyber:</i> privacy owns retention of anything containing personal data</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>privacy:</i> security owns the log store, so security sets its schedule</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no schedule was set; three years of prompts are discoverable</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the model was validated, the tools were not</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>model risk:</i> validation covered the model, which is our scope</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>cyber:</i> MRM signed it off, so the deployment was approved</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>an agent holds production write access that was never in scope</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“no training on our data” was negotiated, never instrumented</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>legal:</i> the clause is in the contract and it is binding</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>cyber:</i> legal handled the vendor, so the restriction is handled</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>nobody built the control that verifies the vendor honours it</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the use case was risk-tiered before it had tools</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>compliance:</i> classified low-risk — it was a chatbot when we saw it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>business owner:</i> we shipped features, not a new use case</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>it files tickets, sends mail and moves money at the low-risk tier</b></td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Neither assumption in any pair is unreasonable. That is what makes these seams rather than mistakes — and why naming the handoff is the control.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Neither assumption in any pair is unreasonable. That is what makes these seams rather than mistakes — and why naming the handoff is the control.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Five functions, every one reporting coverage, and four use cases nobody governed. The skill counts the controls each function <em>operates</em> rather than opines on, then walks real use cases through the map to find the seams.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/stakeholder-seam-map/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: stakeholder-seam-map
+description: &gt;-
+  Map which control function operates which controls and what question each is
+  asking, then find the seams where two individually reasonable assumptions
+  leave a use case ungoverned. Use when everyone reports full coverage and
+  something was still missed.
+allowed-tools: Read, Grep, Glob
+---
+
+# Every function is covered and the use case is not
+
+Governance failures cluster in the seams. Legal assumes security assessed the
+tool; security assumes procurement assessed the vendor; procurement assumes it
+was an internal build. Each assumption is reasonable, each function reports full
+coverage, and the use case is governed by nobody.
+
+## When to use this
+
+Standing up an AI governance programme, and after any incident where several
+functions were involved and none of them owned it.
+
+## Procedure
+
+**1 — List the functions and the question each asks.** Legal, compliance,
+security, privacy, model risk, internal audit. The question is what makes their
+coverage claim meaningful — &quot;is it lawful&quot; is a different sweep from &quot;is it
+contained&quot;.
+
+**2 — Count the controls each function operates.** Operates, not opines on. The
+total is usually smaller than the sum of what everyone believes they cover.
+
+**3 — Take each function&#x27;s self-report at face value** and record it. This is
+the state everybody is in before the exercise.
+
+**4 — Walk real use cases through the map.** For each, which function actually
+governed it. The ones nobody claims are the seams, and there are always some.
+
+**5 — Write the seam as a pair of assumptions, with an owner.** &quot;Legal assumed
+security reviewed the connector; security assumed it was procurement&quot; — then
+name who closes it. A seam with no owner is a seam next quarter.
+
+## Output contract
+
+```json
+{
+  &quot;functions&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;question&quot;: &quot;str&quot;, &quot;controls_operated&quot;: 0}],
+  &quot;self_reports&quot;: [{&quot;function&quot;: &quot;str&quot;, &quot;claims_coverage&quot;: true}],
+  &quot;use_cases&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;governed_by&quot;: [&quot;str&quot;], &quot;ungoverned&quot;: false}],
+  &quot;seams&quot;: [{&quot;assumption_a&quot;: &quot;str&quot;, &quot;assumption_b&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str|null&quot;}]
+}
+```
+
+## Failure modes
+
+- **Counting controls a function has an opinion about.** Count what it
+  operates.
+- **Auditing functions rather than use cases.** The seam is only visible from
+  the use case.
+- **A seam with no owner.** It is a description, not a fix.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/programme/stakeholder-seam-map/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/stakeholder-seam-map/scripts/stakeholder_seam_map.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Map which function operates which controls, and find the seams where two reasonable assumptions leave a use case ungoverned.
+
+This is the executable half of the `stakeholder-seam-map` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+# The five control functions from the table above, with the count of
+# controls each one operates. Everything here is true, and self-reported.
+OPERATES = {&quot;legal&quot;: 4, &quot;compliance&quot;: 4, &quot;privacy&quot;: 4, &quot;cyber&quot;: 6, &quot;model_risk&quot;: 4}
+OPEN_SEAMS = 4                      # the four from the previous section
+
+def self_report(function):
+    &quot;&quot;&quot;Each function reports on the controls it operates. All of it is true.&quot;&quot;&quot;
+    return {&quot;function&quot;: function, &quot;controls_operating&quot;: OPERATES[function],
+            &quot;status&quot;: &quot;green&quot;}
+
+for f in sorted(OPERATES):
+    r = self_report(f)
+    print(f&quot;   {r[&#x27;function&#x27;]:12s}{r[&#x27;controls_operating&#x27;]} controls  {r[&#x27;status&#x27;]}&quot;)
+print()
+print(f&quot;functions reporting green : {len(OPERATES)}/{len(OPERATES)}&quot;)
+print(f&quot;open seams                : {OPEN_SEAMS}&quot;)
+print()
+print(&quot;A dashboard assembled from function self-reports is all green, and four&quot;)
+print(&quot;material gaps are open. The dashboard is not lying - it is asking each&quot;)
+print(&quot;function about the inside of its own box, and every failure here is&quot;)
+print(&quot;between boxes.&quot;)
+assert OPEN_SEAMS == 4 and len(OPERATES) == 5
+
+HANDOFFS = {
+ &quot;trace retention schedule&quot;:      {&quot;owner&quot;: &quot;privacy&quot;,  &quot;consumers&quot;: [&quot;cyber&quot;, &quot;legal&quot;]},
+ &quot;tool scope in validation&quot;:      {&quot;owner&quot;: &quot;model_risk&quot;,&quot;consumers&quot;: [&quot;cyber&quot;, &quot;business_owner&quot;]},
+ &quot;vendor no-train verification&quot;:  {&quot;owner&quot;: &quot;cyber&quot;,    &quot;consumers&quot;: [&quot;legal&quot;, &quot;compliance&quot;]},
+ &quot;re-tier on capability change&quot;:  {&quot;owner&quot;: &quot;compliance&quot;,&quot;consumers&quot;: [&quot;business_owner&quot;, &quot;cyber&quot;]},
+}
+print(f&quot;{&#x27;handoff artefact&#x27;:32s}{&#x27;accountable&#x27;:13s}consumers&quot;)
+for h in sorted(HANDOFFS):
+    v = HANDOFFS[h]
+    print(f&quot;{h:32s}{v[&#x27;owner&#x27;]:13s}{&#x27;, &#x27;.join(v[&#x27;consumers&#x27;])}&quot;)
+
+covered = len(HANDOFFS)
+print(f&quot;\nseams: {OPEN_SEAMS}   handoffs with an accountable owner: {covered}&quot;)
+print()
+print(&quot;One artefact, many consumers, exactly one owner. The consumers matter as&quot;)
+print(&quot;much as the owner: a handoff nobody consumes was never a handoff, and a&quot;)
+print(&quot;handoff with two owners is the contested case from E1.0 again.&quot;)
+assert covered == OPEN_SEAMS
+
+def governed(use_case):
+    missing = [seat for seat in (&quot;business_owner&quot;, &quot;internal_audit&quot;)
+               if seat not in use_case[&quot;seats&quot;]]
+    five = [f for f in OPERATES if f in use_case[&quot;seats&quot;]]
+    return {&quot;control_functions_present&quot;: len(five),
+            &quot;missing_seats&quot;: missing,
+            &quot;is_governed&quot;: not missing and len(five) == len(OPERATES)}
+
+CASES = [
+ {&quot;name&quot;: &quot;customer support agent&quot;,
+  &quot;seats&quot;: list(OPERATES) + [&quot;business_owner&quot;, &quot;internal_audit&quot;]},
+ {&quot;name&quot;: &quot;internal code assistant&quot;, &quot;seats&quot;: list(OPERATES)},
+]
+for c in CASES:
+    g = governed(c)
+    print(f&quot;   {c[&#x27;name&#x27;]:26s}five functions: {g[&#x27;control_functions_present&#x27;]}/5   &quot;
+          f&quot;missing: {g[&#x27;missing_seats&#x27;] or &#x27;none&#x27;}   governed: {g[&#x27;is_governed&#x27;]}&quot;)
+print()
+print(&quot;The second one has every control function at the table and no accountable&quot;)
+print(&quot;owner. Five functions are governing something nobody has agreed to own,&quot;)
+print(&quot;which is how a use case survives a review and still has no one to fund&quot;)
+print(&quot;the remediation it was told to do.&quot;)
+assert not governed(CASES[1])[&quot;is_governed&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Five control functions, the question each is asking and the controls each operates — 22 in total. Four seam failures laid out as pairs of individually reasonable assumptions, and every function still self-reports green while all four gaps are open. Naming one accountable owner per handoff closes them, and a use case with all five control functions and no business owner is shown to be ungoverned.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick one of the four seams and find out, today, who owns it in your organisation. The answer 'I assume security does' from one side and 'I assume privacy does' from the other is the finding.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.11.html">E1.11 · Model risk management for AI systems</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.10.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.10.ipynb">Source</a></p>

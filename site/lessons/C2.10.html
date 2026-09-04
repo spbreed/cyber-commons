@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.10 — Case study — the Supabase pattern: open until closed | Cyber Commons</title><meta name="description" content="A schema check in CI rather than an application test — and, better, a default that does not expose a table until something opts it in."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.10</div><h1>Case study — the Supabase pattern: open until closed</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A failure that is invisible in testing, because nothing about the application&#x27;s behaviour is wrong. One write-up puts it at 73% of generated applications carrying at least one issue.</p></div><div class="ctrl"><div class="lab">Control</div><p>A schema check in CI rather than an application test — and, better, a default that does not expose a table until something opts it in.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Audit a generated scaffold, then run the one catalogue query that answers the critical half across every table at once.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.10 · Case study — the Supabase pattern: open until closed</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.10 — Case study — the Supabase pattern: open until closed | Cyber Commons</title><meta name="description" content="A schema check in CI rather than an application test — and, better, a default that does not expose a table until something opts it in."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.10</div><h1>Case study — the Supabase pattern: open until closed</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.10.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A failure that is invisible in testing, because nothing about the application&#x27;s behaviour is wrong. One write-up puts it at 73% of generated applications carrying at least one issue.</p></div><div class="ctrl"><div class="lab">Control</div><p>A schema check in CI rather than an application test — and, better, a default that does not expose a table until something opts it in.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Audit a generated scaffold, then run the one catalogue query that answers the critical half across every table at once.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.10.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.10.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.10 · Case study — the Supabase pattern: open until closed</h1>
 <p><strong>Function C — Red Teaming and Security Research with AI → Security Research with AI</strong>  ·  <em>Both directions</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.9.html">C2.9 · Case study — Moltbook: 770,000 agents behind one missing policy</a></strong>.</p>
 <table>
@@ -74,7 +74,254 @@ vendor.</p>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The first two are not degrees of the same problem. One removes the policy; the other removes the policy engine.</div></div><div class="nbmd"><h2>3 · Why generated code lands here by default</h2>
 <p>This is the part worth running: the vulnerable version and the safe version are indistinguishable from the application's behaviour, which is exactly why testing does not catch it.</p></div><div class="nbmd"><h2>4 · The fix that does not rely on anyone remembering</h2>
 <p>Two ways to close this. Only one of them survives the next engineer, the next generated scaffold, and the next deadline.</p></div><div class="nbmd"><p><svg viewBox="0 0 700 152" width="100%" style="max-width:700px;height:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8A93A6"/></marker></defs><rect x="6" y="14" width="320" height="96" rx="5" fill="none" stroke="#E0912F" stroke-width="1.4"/><text x="166.0" y="66.0" text-anchor="middle" fill="#E0912F">fix each table</text><text x="166" y="58" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">alter table … enable row level security</text><text x="166" y="76" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">create policy … using (auth.uid() = owner)</text><text x="166" y="96" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">correct, and true only until the next table</text><rect x="374" y="14" width="320" height="96" rx="5" fill="none" stroke="#3FA06B" stroke-width="1.4"/><text x="534.0" y="66.0" text-anchor="middle" fill="#3FA06B">fix the default</text><text x="534" y="58" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">tables are not exposed through the Data API</text><text x="534" y="76" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">unless something opts them in</text><text x="534" y="96" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">the Supabase default since 2026</text><text x="350" y="138" text-anchor="middle" fill="#8A93A6" font-size="11.5" font-weight="normal">the same argument as default-deny on the tool call (A3.1), arriving at a database</text></svg><div style="font-size:12px;color:#8A93A6;margin-top:2px">A control that depends on everyone remembering is a control with a half-life.</div></p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">finding here</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the control, and where it lives</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">credential-shaped data in a client-readable table</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.8 — shared infrastructure between agent runs</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">an admin key reachable from the client</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.8 — admin plane off the workload path</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a default that is open until closed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.1 — default-deny, applied to data rather than tools</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a schema check no application test expresses</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.9 — detections whose subject is the platform</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">73% of generated apps carrying at least one issue</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B2.12 — securing the developers&#x27; coding agents</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Every row is a control that already exists in this curriculum. The case study's job was to show you why it is there.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Every row is a control that already exists in this curriculum. The case study's job was to show you why it is there.</div></div><div class="nbmd"><h2>5 · The procedure, as a skill</h2>
+<p>Every feature of the application works and two tables are open. The skill audits the scaffold statement by statement, then enumerates from the catalogue rather than the application — because the application only knows about the tables it uses.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/generated-schema-audit/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: generated-schema-audit
+description: &gt;-
+  Audit a generated database scaffold for tables that hold secrets and carry no
+  access policy, working from the catalogue rather than from the application&#x27;s
+  own queries. Use after any scaffold, migration or agent-authored schema
+  change.
+allowed-tools: Read, Grep, Glob
+---
+
+# Everything works, and two tables are open
+
+A generated scaffold produces a schema that runs. Whether it is safe is a
+different question and the application cannot answer it, because the application
+only touches the tables it uses. The catalogue knows about all of them, and the
+gap between those two sets is where this finding lives.
+
+## When to use this
+
+After a scaffold generator, an agent-authored migration, or any schema change
+nobody reviewed statement by statement.
+
+## Procedure
+
+**1 — Read the statements as written.** Table by table, column by column. Flag
+every column that holds a credential, a token, a session or personal data — an
+`api_key` column in a profiles table is the shape to look for.
+
+**2 — Check policy per table, not per application feature.** For each table:
+does an access policy exist at all, and does it name a subject. &quot;No policy&quot; and
+&quot;a policy that permits everyone&quot; are different findings.
+
+**3 — Enumerate from the catalogue.** Query the system catalogue for every table
+in the schema. Compare against the tables the application references. The
+difference is the set nobody has looked at.
+
+**4 — Classify by sensitivity and policy together.** Sensitive with no policy is
+critical. Non-sensitive with no policy is a finding with a lower number and the
+same cause.
+
+**5 — Report per table with the statement that created it.** A finding that
+points at a line in a migration gets fixed; one that says &quot;enable RLS&quot; gets
+discussed.
+
+## Output contract
+
+```json
+{
+  &quot;statements&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;columns&quot;: [&quot;str&quot;], &quot;sensitive_columns&quot;: [&quot;str&quot;]}],
+  &quot;policies&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;policy&quot;: &quot;none|open|scoped&quot;, &quot;subject&quot;: &quot;str|null&quot;}],
+  &quot;catalogue&quot;: {&quot;tables&quot;: [&quot;str&quot;], &quot;referenced_by_app&quot;: [&quot;str&quot;], &quot;unreviewed&quot;: [&quot;str&quot;]},
+  &quot;findings&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium&quot;, &quot;created_by&quot;: &quot;str&quot;}]
+}
+```
+
+## Failure modes
+
+- **Auditing the application&#x27;s queries.** They cover the tables it uses.
+- **Treating &quot;no policy&quot; as &quot;open policy&quot;.** They are different fixes.
+- **Reporting the table without the statement.** Nobody knows where to change
+  it.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/research/generated-schema-audit/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/generated-schema-audit/scripts/generated_schema_audit.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Audit a generated database scaffold for tables that hold secrets and carry no policy, using the catalogue rather than the application.
+
+This is the executable half of the `generated-schema-audit` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+SCAFFOLD = [
+ &quot;create table profiles (id uuid primary key, email text, api_key text);&quot;,
+ &quot;create table posts    (id uuid primary key, author uuid, body text);&quot;,
+ &quot;alter table posts enable row level security;&quot;,
+ &quot;create policy p_read on posts for select using (true);&quot;,
+]
+
+def audit(statements):
+    &quot;&quot;&quot;The check a generator does not run, expressed as three questions.&quot;&quot;&quot;
+    tables = [s.split()[2] for s in statements if s.startswith(&quot;create table&quot;)]
+    rls_on = {s.split()[2] for s in statements if &quot;enable row level security&quot; in s}
+    permissive = [s.split()[2] for s in statements
+                  if s.startswith(&quot;create policy&quot;) and &quot;using (true)&quot; in s]
+    findings = []
+    for tbl in tables:
+        if tbl not in rls_on:
+            findings.append((tbl, &quot;critical&quot;, &quot;RLS disabled - open via the public API&quot;))
+    for s in statements:
+        if s.startswith(&quot;create policy&quot;) and &quot;using (true)&quot; in s:
+            findings.append((s.split()[4], &quot;high&quot;, &quot;policy matches every row&quot;))
+    return tables, findings
+
+tables, findings = audit(SCAFFOLD)
+print(f&quot;tables created : {&#x27;, &#x27;.join(tables)}&quot;)
+print(f&quot;findings       : {len(findings)}\n&quot;)
+print(f&quot;{&#x27;table&#x27;:12s}{&#x27;severity&#x27;:11s}why&quot;)
+for tbl, sev, why in findings:
+    print(f&quot;{tbl:12s}{sev:11s}{why}&quot;)
+
+print()
+print(&quot;The application works. Every feature passes. `profiles` holds an api_key&quot;)
+print(&quot;column and has no policy at all, and nothing in the test suite is shaped&quot;)
+print(&quot;like the question that would find it.&quot;)
+assert any(f[1] == &quot;critical&quot; for f in findings)
+assert &quot;profiles&quot; in [f[0] for f in findings]
+
+# One query answers the critical half, across every table at once.
+CATALOG = [                       # what pg_class would return
+ {&quot;relname&quot;: &quot;profiles&quot;, &quot;relrowsecurity&quot;: False},
+ {&quot;relname&quot;: &quot;posts&quot;,    &quot;relrowsecurity&quot;: True},
+ {&quot;relname&quot;: &quot;sessions&quot;, &quot;relrowsecurity&quot;: False},
+ {&quot;relname&quot;: &quot;audit&quot;,    &quot;relrowsecurity&quot;: True},
+]
+SENSITIVE = {&quot;profiles&quot;, &quot;sessions&quot;, &quot;audit&quot;}
+
+open_tables = sorted(r[&quot;relname&quot;] for r in CATALOG if not r[&quot;relrowsecurity&quot;])
+print(&quot;select relname from pg_class where relrowsecurity = false;&quot;)
+for name in open_tables:
+    mark = &quot;  &lt;- holds credentials or session state&quot; if name in SENSITIVE else &quot;&quot;
+    print(f&quot;   {name}{mark}&quot;)
+
+print(f&quot;\ntables open via the public API : {len(open_tables)} of {len(CATALOG)}&quot;)
+exposed_sensitive = [t for t in open_tables if t in SENSITIVE]
+print(f&quot;of those, sensitive             : {len(exposed_sensitive)} &quot;
+      f&quot;({&#x27;, &#x27;.join(exposed_sensitive)})&quot;)
+print()
+print(&quot;This is a one-line query and it is the highest-value one in the whole&quot;)
+print(&quot;pattern. It is also not something an application test can express, which&quot;)
+print(&quot;is why it belongs in CI against the schema rather than in the test suite.&quot;)
+assert exposed_sensitive == [&quot;profiles&quot;, &quot;sessions&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>An audit of a four-statement scaffold finds a critical issue: the <code>profiles</code> table holds an api_key column and has no RLS at all, while every feature of the application works. The catalogue query then finds two of four tables open via the public API, both of them holding credentials or session state — a one-line check that no application test expresses.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take the last thing a code generator scaffolded for you and run the two questions from this lesson against it: which tables have no row policy, and is any admin-scoped key reachable from the client bundle? Neither question is about the framework — both are about what the default was when nobody said otherwise.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> Research that reproduces — model effect separated from harness effect, benchmarks checked for a floor, a leaked key and a loose matcher — a handover that ends in a control with an eval case that fails on the old build, and three real incidents worked end to end: an agent swarm, a platform that shipped its database open, and the default that made the third one ordinary.</p>
 <p><strong>What you still cannot do.</strong> You can now produce a finding, prove it, and hand it over. You still cannot see it happen in production: nothing here tells you that the class you closed is being attempted right now, by whom, or how fast — and the register you just built assigned twelve controls to a function you have not read yet.</p>

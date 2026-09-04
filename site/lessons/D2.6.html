@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.6 — Post-incident change surface | Cyber Commons</title><meta name="description" content="Choose among model, prompt, tool, policy, sandbox, identity, eval."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.6</div><h1>Post-incident change surface</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Fixing the prompt when the bug is in the control plane.</p></div><div class="ctrl"><div class="lab">Control</div><p>Choose among model, prompt, tool, policy, sandbox, identity, eval.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Pick the right layer to change after an incident.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.6 · Post-incident change surface</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.6 — Post-incident change surface | Cyber Commons</title><meta name="description" content="Choose among model, prompt, tool, policy, sandbox, identity, eval."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.6</div><h1>Post-incident change surface</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.6.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Fixing the prompt when the bug is in the control plane.</p></div><div class="ctrl"><div class="lab">Control</div><p>Choose among model, prompt, tool, policy, sandbox, identity, eval.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Pick the right layer to change after an incident.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.6.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.6.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.6 · Post-incident change surface</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Response</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.5.html">D2.5 · Replay and forensics</a></strong>.</p>
 <table>
@@ -42,7 +42,229 @@ and the ones that do not are precisely the ones most likely to be adjusted at
 record, and a post-incident action list where half the items cannot be verified
 as done six weeks later.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">change surface</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">in change management?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what happens today</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">application code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">pull request, review, CI, deploy</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent prompt</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">edited in a console, no diff retained</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">tool manifest</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a config change, with no threat-model diff</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">model version</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">provider-side; you may not be told</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">policy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">if it is in git — often it is not</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">approval settings</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a toggle in an admin UI</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">egress allowlist</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">sometimes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">depends whether it is IaC or a console</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The same surfaces D1.7 watches for drift. There they were the things that change without anyone deciding; here they are the things you change on purpose, after an incident — and four of seven still leave no record that you did.</div></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the action, as written in the report</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">where it landed</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">still verifiable in six weeks?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">revoke the compromised agent identity</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">identity provider</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">add collect.example.com to the egress denylist</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a console</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">remove read access to /home/app/.aws</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">tool manifest</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">require approval for http_post</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">an admin toggle</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">add a regression test for the credential read</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">update the prompt to warn about credential files</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a console</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Two of six survive as something you can check. The other four exist only in the incident document — and the last of them is not a control at all: it is a request for the model to behave better, and the next prompt edit will silently revert it.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Two of six survive as something you can check. The other four exist only in the incident document — and the last of them is not a control at all: it is a request for the model to behave better, and the next prompt edit will silently revert it.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Only two of six post-incident actions are still verifiable six weeks later, and one of those is a prompt edit recorded as a control. The skill classifies each action, tests whether a check would fail if it were reverted, and compares blast radius before and after.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/post-incident-change-surface/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: post-incident-change-surface
+description: &gt;-
+  Count the surfaces that change an agent&#x27;s behaviour without passing change
+  management, and check weeks later which post-incident actions are still
+  verifiable rather than guidance. Use at post-incident review, or before
+  closing actions from the last one.
+allowed-tools: Read, Grep, Glob
+---
+
+# A prompt edit is guidance, and it closed an action item
+
+Post-incident actions for agentic systems fail in a specific way: several of them
+are changes to surfaces that generate no record, and one or two are prompt edits
+recorded as controls. Six weeks later nobody can demonstrate that any of it is
+still in place, and the review declares the incident closed.
+
+## When to use this
+
+At post-incident review, and again several weeks afterwards — the second pass is
+the one that finds this.
+
+## Procedure
+
+**1 — Enumerate the change surfaces and mark which bypass change management.**
+Code and infrastructure usually do not; model version, prompt, manifest and
+approval settings usually do.
+
+**2 — Classify every action from the review.** Control, detection, guidance, or
+documentation. A prompt edit is guidance: it changes behaviour on average and
+enforces nothing.
+
+**3 — Test verifiability now.** For each action, is there a check that would fail
+if it were reverted? If not, the action cannot be audited and will silently
+regress.
+
+**4 — Re-test weeks later.** Run the same check. The count that survives is the
+honest measure of the review, and it is usually a third of what was agreed.
+
+**5 — Measure the blast radius before and after.** The reduction is what the
+incident actually bought. If it is unchanged, the actions were process rather
+than containment, and that belongs in the report.
+
+## Output contract
+
+```json
+{
+  &quot;surfaces&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;bypasses_change_management&quot;: true}],
+  &quot;actions&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;control|detection|guidance|documentation&quot;,
+               &quot;verifiable&quot;: false, &quot;check&quot;: &quot;str|null&quot;}],
+  &quot;recheck&quot;: {&quot;weeks_later&quot;: 0, &quot;still_verifiable&quot;: 0, &quot;of&quot;: 0},
+  &quot;blast_radius&quot;: {&quot;before&quot;: 0, &quot;after&quot;: 0}
+}
+```
+
+## Failure modes
+
+- **Recording a prompt edit as a control.** It is guidance under a different
+  name.
+- **Closing actions at the review.** Re-check weeks later or the number is
+  aspirational.
+- **No before-and-after blast radius.** Nothing shows whether it helped.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/response/post-incident-change-surface/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/post-incident-change-surface/scripts/post_incident_change_surface.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Count the change surfaces that bypass change management and check which post-incident actions are still verifiable weeks later.
+
+This is the executable half of the `post-incident-change-surface` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20}
+def blast(tools, gated=frozenset()):
+    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n, s, rev in tools if n not in gated)
+
+BEFORE = [(&quot;read_file&quot;, &quot;self&quot;, True), (&quot;write_file&quot;, &quot;project&quot;, True),
+          (&quot;http_post&quot;, &quot;org&quot;, False)]
+AFTER  = [(&quot;read_file&quot;, &quot;self&quot;, True), (&quot;write_file&quot;, &quot;project&quot;, True),
+          (&quot;http_post&quot;, &quot;org&quot;, False)]
+gated_after = {&quot;http_post&quot;}
+
+print(f&quot;blast before {blast(BEFORE)}  after {blast(AFTER, gated_after)}&quot;)
+print(&quot;the manifest diff records the change even though no PR was raised.\n&quot;)
+
+def action_record(action, surface, control_type, owner, verify_by):
+    is_control = control_type in (&quot;preventive&quot;, &quot;detective&quot;)
+    return {&quot;action&quot;: action, &quot;surface&quot;: surface, &quot;type&quot;: control_type,
+            &quot;owner&quot;: owner, &quot;verify_by&quot;: verify_by,
+            &quot;acceptable&quot;: is_control and bool(owner) and bool(verify_by)}
+
+RECORDS = [
+ action_record(&quot;gate http_post behind approval&quot;, &quot;tool manifest&quot;, &quot;preventive&quot;,
+               &quot;platform-sec&quot;, &quot;2026-09-30&quot;),
+ action_record(&quot;alert on credential-path reads&quot;, &quot;detection&quot;, &quot;detective&quot;,
+               &quot;soc&quot;, &quot;2026-09-15&quot;),
+ action_record(&quot;update the prompt to warn the model&quot;, &quot;prompt&quot;, &quot;guidance&quot;,
+               &quot;&quot;, &quot;&quot;),
+]
+for r in RECORDS:
+    print(f&quot;{&#x27;OK  &#x27; if r[&#x27;acceptable&#x27;] else &#x27;WEAK&#x27;} {r[&#x27;action&#x27;]:42s}&quot;
+          f&quot;type={r[&#x27;type&#x27;]:11s} owner={r[&#x27;owner&#x27;] or &#x27;—&#x27;:14s} verify_by={r[&#x27;verify_by&#x27;] or &#x27;—&#x27;}&quot;)
+weak = [r for r in RECORDS if not r[&quot;acceptable&quot;]]
+print(f&quot;\n{len(weak)} action(s) are guidance rather than controls: &quot;
+      f&quot;{[r[&#x27;action&#x27;] for r in weak]}&quot;)
+assert weak</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Four of seven change surfaces bypass change management. Only 2 of 6 post-incident actions are verifiable six weeks later, and one of them is a prompt edit that is guidance rather than a control. The manifest diff records the gating change with the blast radius dropping from 40 to 3, and the action review flags the prompt update as weak.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take your last incident's action list and mark each item's landing surface. Anything landing in a console has no record and no verification path — move those into git before the next one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.7.html">D2.7 · Stop authority</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.6.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.6.ipynb">Source</a></p>

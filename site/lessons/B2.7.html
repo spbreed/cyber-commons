@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.7 — Dynamic exploitation (DAST) | Cyber Commons</title><meta name="description" content="Stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.7</div><h1>Dynamic exploitation (DAST)</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A SAST finding is a hypothesis, and hypotheses get argued about instead of fixed.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Let a scaffold mutate itself, and keep only measured gains.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.7 · Dynamic exploitation (DAST)</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.7 — Dynamic exploitation (DAST) | Cyber Commons</title><meta name="description" content="Stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.7</div><h1>Dynamic exploitation (DAST)</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A SAST finding is a hypothesis, and hypotheses get argued about instead of fixed.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Let a scaffold mutate itself, and keep only measured gains.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.7 · Dynamic exploitation (DAST)</h1>
 <p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: Harnesses and an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.6.html">B2.6 · Sandbox replication</a></strong>.</p>
 <table>
@@ -59,7 +59,311 @@ equivalent of a shape check, and B2.0 already established what those are worth.<
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
 </blockquote></div><div class="nbmd"><h2>3 · Where it breaks — the probe that asserts nothing</h2>
-<p>The most common DAST bug: treating "the request succeeded" as confirmation. Both probes below hit the app and return 200-equivalents; only one of them proves anything.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>The most common DAST bug: treating "the request succeeded" as confirmation. Both probes below hit the app and return 200-equivalents; only one of them proves anything.</p></div><div class="nbmd"><h2>4 · The stage, as a skill</h2>
+<p>A dynamic probe proves nothing unless its assertion can fail. The skill runs the probes against a live build with a control probe alongside, then re-runs them under a weak assertion so you can watch it flag the control too.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/dynamic-exploitation-probe/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: dynamic-exploitation-probe
+description: &gt;-
+  Run probes against a live build to turn a static finding into a demonstrated
+  one, with a control probe and an assertion strong enough to tell them apart.
+  Use when confirming exploitability, or when a dynamic test reports everything
+  as vulnerable.
+allowed-tools: Read, Grep, Glob, Bash
+---
+
+# The assertion is the experiment
+
+A dynamic probe proves nothing unless its assertion can fail. A weak assertion —
+&quot;the response contains rows&quot;, &quot;the request did not error&quot; — confirms the control
+probe as readily as the attack, and a test that confirms everything has measured
+nothing.
+
+## When to use this
+
+After static analysis has produced hypotheses, in a replica confirmed by an
+isolation check, and before any finding is reported as exploitable.
+
+## Procedure
+
+**1 — State each hypothesis as a prediction.** Not &quot;SQL injection in
+`list_reports`&quot; but &quot;requesting one owner returns rows for more than one&quot;. A
+hypothesis you cannot write as a prediction is not ready to test.
+
+**2 — Include a control probe.** A well-formed, benign request whose result is
+known. It is the thing that tells you your assertion discriminates.
+
+**3 — Write the assertion against the prediction.** Count owners returned, not
+whether rows came back. Read the file&#x27;s contents, not whether a path resolved.
+The difference between these is the entire value of the stage.
+
+**4 — Run all probes, including the control, and record raw results.** Then
+apply the assertion. Keep both: the raw result is what somebody re-reads when
+they doubt the finding.
+
+**5 — Demonstrate the weak assertion too.** Run the same probes under the loose
+check and show it flagging the control. That comparison is what stops the next
+person writing one.
+
+**6 — Mark each hypothesis confirmed, refuted, or untested** — and never
+&quot;probably&quot;. A hypothesis whose probe could not run is untested, which is
+different from refuted and much more common.
+
+## Output contract
+
+```json
+{
+  &quot;hypotheses&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;prediction&quot;: &quot;str&quot;}],
+  &quot;probes&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;attack|control&quot;, &quot;raw&quot;: &quot;str&quot;}],
+  &quot;assertions&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;strong&quot;: true, &quot;verdict&quot;: &quot;confirmed|refuted|untested&quot;}],
+  &quot;weak_assertion_run&quot;: {&quot;flagged&quot;: [&quot;str&quot;], &quot;includes_control&quot;: true}
+}
+```
+
+## Failure modes
+
+- **No control probe.** Nothing tells you the assertion discriminates.
+- **Asserting on shape.** &quot;Rows came back&quot; is true for the legitimate query.
+- **Recording untested as refuted.** They have different owners and different
+  next steps.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/appsec/dynamic-exploitation-probe/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/dynamic-exploitation-probe/scripts/dynamic_exploitation_probe.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Run probes against a live build, and show what a weak assertion does to the control probe.
+
+This is the executable half of the `dynamic-exploitation-probe` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import sqlite3
+from dataclasses import dataclass, field
+
+def build_app():
+    conn = sqlite3.connect(&quot;:memory:&quot;)
+    conn.execute(&quot;CREATE TABLE reports(id INTEGER, owner TEXT, amount INT)&quot;)
+    conn.executemany(&quot;INSERT INTO reports VALUES (?,?,?)&quot;,
+                     [(1,&quot;test-user-a&quot;,100),(2,&quot;test-user-a&quot;,250),
+                      (3,&quot;test-user-b&quot;,900),(4,&quot;test-user-c&quot;,50)])
+    return conn
+
+FILES = {&quot;/srv/docs/readme.txt&quot;: &quot;public readme&quot;,
+         &quot;/srv/secrets/token&quot;: &quot;synthetic-not-real-9999&quot;}
+
+class App:
+    &quot;&quot;&quot;The replica under test. Two handlers, one of each bug class.&quot;&quot;&quot;
+    def __init__(self): self.conn = build_app()
+    def list_reports(self, owner):
+        q = &quot;SELECT id, owner, amount FROM reports WHERE owner = &#x27;&quot; + owner + &quot;&#x27;&quot;
+        return self.conn.execute(q).fetchall()
+    def fetch_doc(self, name):
+        path = &quot;/srv/docs/&quot; + name
+        parts = []
+        for seg in path.split(&quot;/&quot;):
+            if seg in (&quot;&quot;, &quot;.&quot;): continue
+            if seg == &quot;..&quot;:
+                if parts: parts.pop()
+                continue
+            parts.append(seg)
+        real = &quot;/&quot; + &quot;/&quot;.join(parts)
+        return FILES.get(real, &quot;not found&quot;)
+
+app = App()
+print(&quot;normal use:&quot;)
+print(&quot;   list_reports(&#x27;test-user-a&#x27;) →&quot;, app.list_reports(&quot;test-user-a&quot;))
+print(&quot;   fetch_doc(&#x27;readme.txt&#x27;)     →&quot;, app.fetch_doc(&quot;readme.txt&quot;))
+
+@dataclass
+class Probe:
+    pid: str; cwe: str; target: str; payload: str
+    effect: str                     # what must be TRUE for this to be exploitation
+
+PROBES = [
+ Probe(&quot;P-01&quot;,&quot;CWE-89&quot;,&quot;list_reports&quot;,&quot;x&#x27; OR &#x27;1&#x27;=&#x27;1&quot;,
+       &quot;returns rows belonging to owners other than the one requested&quot;),
+ Probe(&quot;P-02&quot;,&quot;CWE-22&quot;,&quot;fetch_doc&quot;,&quot;../secrets/token&quot;,
+       &quot;returns file content from outside /srv/docs&quot;),
+ Probe(&quot;P-03&quot;,&quot;CWE-89&quot;,&quot;list_reports&quot;,&quot;test-user-a&quot;,
+       &quot;control probe — must NOT be flagged as exploitation&quot;),
+]
+
+def run_probe(app, probe):
+    if probe.target == &quot;list_reports&quot;:
+        rows = app.list_reports(probe.payload)
+        owners = {r[1] for r in rows}
+        exploited = len(owners) &gt; 1
+        return exploited, f&quot;{len(rows)} rows, owners={sorted(owners)}&quot;
+    content = app.fetch_doc(probe.payload)
+    exploited = content not in (&quot;not found&quot;,) and &quot;secrets&quot; in probe.payload
+    return exploited, f&quot;returned {content!r}&quot;
+
+print(f&quot;{&#x27;probe&#x27;:7s}{&#x27;cwe&#x27;:9s}{&#x27;exploited&#x27;:11s}observation&quot;)
+print(&quot;-&quot; * 74)
+results = {}
+for p in PROBES:
+    ok, obs = run_probe(app, p)
+    results[p.pid] = ok
+    print(f&quot;{p.pid:7s}{p.cwe:9s}{str(ok):11s}{obs}&quot;)
+assert results[&quot;P-01&quot;] and results[&quot;P-02&quot;] and not results[&quot;P-03&quot;]
+
+def weak_probe(app, probe):
+    &quot;&quot;&quot;Asserts only that nothing blew up.&quot;&quot;&quot;
+    try:
+        if probe.target == &quot;list_reports&quot;: app.list_reports(probe.payload)
+        else: app.fetch_doc(probe.payload)
+        return True, &quot;request completed without error&quot;
+    except Exception as e:
+        return False, f&quot;raised {type(e).__name__}&quot;
+
+print(f&quot;{&#x27;probe&#x27;:7s}{&#x27;weak assertion&#x27;:17s}{&#x27;effect assertion&#x27;:18s}agreement&quot;)
+print(&quot;-&quot; * 66)
+for p in PROBES:
+    w, _ = weak_probe(app, p)
+    s, _ = run_probe(app, p)
+    print(f&quot;{p.pid:7s}{str(w):17s}{str(s):18s}{&#x27;&#x27; if w == s else &#x27;← DISAGREE&#x27;}&quot;)
+print(&quot;\nThe weak assertion confirms all three, including the control probe.&quot;)
+print(&quot;A pipeline built on it reports 100% confirmation and means nothing by it.&quot;)
+
+# Stage 12 output: findings promoted from hypothesis to confirmed, or dropped.
+HYPOTHESES = [
+ {&quot;id&quot;:&quot;F-01&quot;,&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;unit&quot;:&quot;list_reports&quot;,&quot;status&quot;:&quot;HYPOTHESIS&quot;,&quot;probe&quot;:&quot;P-01&quot;},
+ {&quot;id&quot;:&quot;F-02&quot;,&quot;cwe&quot;:&quot;CWE-22&quot;,&quot;unit&quot;:&quot;fetch_doc&quot;,  &quot;status&quot;:&quot;HYPOTHESIS&quot;,&quot;probe&quot;:&quot;P-02&quot;},
+ {&quot;id&quot;:&quot;F-03&quot;,&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;unit&quot;:&quot;total&quot;,      &quot;status&quot;:&quot;HYPOTHESIS&quot;,&quot;probe&quot;:None},
+]
+def stage12(hypotheses, results):
+    out = []
+    for h in hypotheses:
+        if h[&quot;probe&quot;] is None:
+            out.append({**h, &quot;status&quot;: &quot;UNVALIDATED&quot;,
+                        &quot;note&quot;: &quot;no probe generated — cannot confirm or refute&quot;})
+        elif results.get(h[&quot;probe&quot;]):
+            out.append({**h, &quot;status&quot;: &quot;CONFIRMED&quot;,
+                        &quot;note&quot;: &quot;exploit achieved the asserted effect on the replica&quot;})
+        else:
+            out.append({**h, &quot;status&quot;: &quot;REFUTED&quot;,
+                        &quot;note&quot;: &quot;probe ran; asserted effect did not occur&quot;})
+    return out
+
+for f in stage12(HYPOTHESES, results):
+    print(f&quot;{f[&#x27;id&#x27;]}  {f[&#x27;cwe&#x27;]:9s}{f[&#x27;status&#x27;]:12s}{f[&#x27;note&#x27;]}&quot;)
+confirmed = [f for f in stage12(HYPOTHESES, results) if f[&quot;status&quot;] == &quot;CONFIRMED&quot;]
+print(f&quot;\n{len(confirmed)} confirmed by execution — these go to stages 13-15.&quot;)
+print(&quot;UNVALIDATED is not a pass. It is a gap in probe generation, and it should&quot;)
+print(&quot;appear in the report as one.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Look at your DAST assertions. If any of them checks only for a non-error response, it is confirming findings it has not tested — and the control probe above is how you prove that in five minutes.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.8.html">B2.8 · Exploit chaining</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.7.ipynb">Source</a></p>

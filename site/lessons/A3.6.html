@@ -261,7 +261,63 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/architecture/blast-radius-review/scripts/blast_radius_review.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Route actions by reversibility and count how many reach a human per day.
+
+This is the executable half of the `blast-radius-review` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+ACTIONS = {
+ &quot;read_report&quot;:      {&quot;reversible&quot;: True,  &quot;external&quot;: False},
+ &quot;write_draft&quot;:      {&quot;reversible&quot;: True,  &quot;external&quot;: False},
+ &quot;update_ticket&quot;:    {&quot;reversible&quot;: True,  &quot;external&quot;: False},
+ &quot;delete_row&quot;:       {&quot;reversible&quot;: False, &quot;external&quot;: False},
+ &quot;send_email&quot;:       {&quot;reversible&quot;: False, &quot;external&quot;: True},
+ &quot;issue_refund&quot;:     {&quot;reversible&quot;: False, &quot;external&quot;: True},
+ &quot;rotate_credential&quot;:{&quot;reversible&quot;: False, &quot;external&quot;: False},
+}
+DAILY_VOLUME = {&quot;read_report&quot;: 400, &quot;write_draft&quot;: 120, &quot;update_ticket&quot;: 260,
+                &quot;delete_row&quot;: 6, &quot;send_email&quot;: 3, &quot;issue_refund&quot;: 2,
+                &quot;rotate_credential&quot;: 1}
+
+def route(action):
+    a = ACTIONS[action]
+    if not a[&quot;reversible&quot;] or a[&quot;external&quot;]:
+        return &quot;human approval&quot;
+    return &quot;policy only&quot;
+
+CAREFUL_CAPACITY = 25
+print(f&quot;{&#x27;action&#x27;:20s}{&#x27;reversible&#x27;:12s}{&#x27;external&#x27;:10s}{&#x27;routing&#x27;:16s}per day&quot;)
+to_human = 0
+for name in sorted(ACTIONS):
+    a, r = ACTIONS[name], route(name)
+    if r == &quot;human approval&quot;: to_human += DAILY_VOLUME[name]
+    print(f&quot;{name:20s}{str(a[&#x27;reversible&#x27;]):12s}{str(a[&#x27;external&#x27;]):10s}&quot;
+          f&quot;{r:16s}{DAILY_VOLUME[name]}&quot;)
+
+total = sum(DAILY_VOLUME.values())
+print(f&quot;\nactions per day            : {total}&quot;)
+print(f&quot;reaching a human           : {to_human}&quot;)
+print(f&quot;a reviewer considers ~{CAREFUL_CAPACITY}/day properly&quot;)
+print(f&quot;gate holds?                : {to_human &lt;= CAREFUL_CAPACITY}&quot;)
+print()
+print(f&quot;Approving everything would send {total} a day to someone who can read&quot;)
+print(f&quot;{CAREFUL_CAPACITY}. Routing by reversibility sends {to_human}, and every one gets read.&quot;)
+
+# the T15 half
+FINDING = &quot;libfoo has no known vulnerabilities&quot;
+print(f&quot;\nunlabelled : {FINDING}&quot;)
+print(f&quot;labelled   : [machine-generated, unverified] {FINDING}&quot;)
+print(&quot;\nThe label does not stop anyone acting on it. It restores the scepticism&quot;)
+print(&quot;they would give a colleague saying the same sentence.&quot;)
+assert to_human &lt;= CAREFUL_CAPACITY</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. The failure mode to carry into your own estate is the last one: raising an agent's autonomy because it has been reliable. Reliability is a measurement of the happy path; blast radius is a measurement of the worst one, and only the second bounds what an approval gate is for.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Count how many approvals your agents generate daily and compare it with 25. If you are above it, decide which actions are reversible enough to be handled by policy instead — that list is usually most of them.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.7.html">A3.7 · The agent gateway: one choke point when you scale</a></strong></p>

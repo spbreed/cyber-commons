@@ -4,11 +4,11 @@
 secure the AI *itself*.**
 
 **118 lessons across 11 chapters.** Most are reading lessons — the idea, the
-diagram, the control, and what it looks like in one running system. Twenty-eight
-carry code, and that code is either an **agent skill** executed from
-[`skills/`](skills/) or a real LLM call through one adapter. Every one of the
-118 is executed in CI before it ships. No licence, no vendor, no frontier-lab
-account.
+diagram, the control, and what it looks like in one running system — and then
+they **run a skill**. 115 of the 118 execute a `SKILL.md` from
+[`skills/`](skills/) and that skill's own script; there is no other code in a
+lesson. Every one of the 118 is executed in CI before it ships, and so is every
+skill. No licence, no vendor, no paid model account.
 
 🌐 **[Live site](https://spbreed.github.io/cyber-commons/)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md)
 
@@ -48,7 +48,7 @@ The build **fails** on a lesson missing a hook, a diagram or a concept, and
 [`check_lessons.py`](scripts/check_lessons.py) fails CI if a code cell ever
 precedes the framework. [LESSON_DESIGN.md](LESSON_DESIGN.md) is the contract.
 
-**Twenty-three of those procedures are packaged as real agent skills** in
+**Every one of those procedures is packaged as a real agent skill** in
 [`skills/`](skills) — `SKILL.md` files with frontmatter, the format a coding
 agent loads:
 
@@ -58,17 +58,32 @@ python3 scripts/check_skills.py --check   # parses, names, tools, contracts, rou
 ```
 
 Each declares an **output contract**, which is what makes a skill checkable
-rather than aspirational. Twenty-two lessons embed their skill verbatim at build time —
-so the lesson can never drift from the skill — then build that contract shape
-from the data they just produced and validate it. And then show what the
-contract *cannot* see: **an empty result conforms perfectly.** Conformance is a
-statement about the serialiser; accuracy is the expensive part.
+rather than aspirational. Every skill lesson embeds its skill verbatim at build
+time — so the lesson can never drift from the skill — and 114 of the 115 carry
+a script the lesson runs. Several build the contract shape from the data they
+just produced and validate it, then show what the contract *cannot* see: **an
+empty result conforms perfectly.** Conformance is a statement about the
+serialiser; accuracy is the expensive part.
 
-| | |
+```bash
+python3 scripts/check_skills.py --check  # parses, names, tools, contracts, routing
+python3 scripts/test_skills.py  --check  # runs every script, offline, stripped env
+```
+
+Both gate CI. The second one exists because loading a skill is not running it:
+it executes each script in a subprocess with the model and cloud variables
+removed, and a script that runs and prints nothing counts as a failure.
+
+| area | what it holds |
 |---|---|
-| [`skills/appsec/`](skills/appsec) | 7 — repo recon, threat model, STRIDE threat model, vuln audit, exploit validation, triage report, coding-agent hardening |
-| [`skills/attestation/`](skills/attestation) | 11 — turn a control claim into a signed statement bound to one deployment ([B2.13](labs/notebooks/B2.13.ipynb), run against 10 real OSS agent/MCP repos) |
-| [`skills/architecture/`](skills/architecture) · [`identity/`](skills/identity) · [`secops/`](skills/secops) · [`grc/`](skills/grc) | 5 — blast radius, delegation chains, alert triage, incident scoping, control evidence |
+| [`threats/`](skills/threats) | 16 — one check per risk in the OWASP-grounded chapter: instruction channels, memory scope, tool abuse, blast radius, attribution |
+| [`identity/`](skills/identity) | 5 — attestation, delegation, the non-human identity lifecycle, tamper-evident logging |
+| [`runtime/`](skills/runtime) | 6 — sandbox containment, budgets, return validation, shared surfaces, exemptions, escalation |
+| [`appsec/`](skills/appsec) | 14 — the fifteen-stage AI SDLC pipeline, stage by stage |
+| [`redteam/`](skills/redteam) · [`research/`](skills/research) | 14 — campaigns, reproducibility, corpus integrity, supply chain, published incidents |
+| [`detection/`](skills/detection) · [`response/`](skills/response) · [`secops/`](skills/secops) | 21 — agent tempo, drift, fleet correlation, canaries, containment, stop authority |
+| [`grc/`](skills/grc) · [`regulatory/`](skills/regulatory) · [`programme/`](skills/programme) | 26 — tiering, control mapping, obligations, disclosure, sequencing, metrics |
+| [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 13 — turn a control claim into a signed statement bound to one deployment ([B2.13](labs/notebooks/B2.13.ipynb), run against 10 real OSS agent/MCP repos) |
 
 ## The programme
 
@@ -212,7 +227,7 @@ refuses to read a credential file inside the repo. Install the guard once:
 site/data/curriculum.json   source of truth: 118 sessions, 12 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
-skills/                     23 agent skills, embedded verbatim into notebooks
+skills/                     115 agent skills, embedded verbatim into notebooks
 labs/notebooks/             118 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)

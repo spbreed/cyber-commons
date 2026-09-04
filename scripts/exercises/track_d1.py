@@ -99,6 +99,7 @@ second one happens quietly.
          "so you can never tell whether a change in findings came from the rule "
          "or from the dice."),
   ("skill", "secops/detection-triage"),
+  ("skill_script", "secops/detection-triage/scripts/detection_triage.py"),
 
 ],
  "expect": "The bare alert is identical for both agents. Enriched, the "

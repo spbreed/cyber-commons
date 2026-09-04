@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.4 — Budgets and stop conditions | Cyber Commons</title><meta name="description" content="Ceilings bound to the loop, with the run terminating rather than degrading when one is hit."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.4</div><h1>Budgets and stop conditions</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Without a ceiling the loop runs until an external system stops it, and the failure mode is denial of service against yourself.</p></div><div class="ctrl"><div class="lab">Control</div><p>Ceilings bound to the loop, with the run terminating rather than degrading when one is hit.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Bound a divergent loop four different ways.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.4 · Budgets and stop conditions</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.4 — Budgets and stop conditions | Cyber Commons</title><meta name="description" content="Ceilings bound to the loop, with the run terminating rather than degrading when one is hit."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.4</div><h1>Budgets and stop conditions</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Without a ceiling the loop runs until an external system stops it, and the failure mode is denial of service against yourself.</p></div><div class="ctrl"><div class="lab">Control</div><p>Ceilings bound to the loop, with the run terminating rather than degrading when one is hit.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Bound a divergent loop four different ways.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.4 · Budgets and stop conditions</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.3.html">A3.3 · Egress control</a></strong>.</p>
 <table>
@@ -56,7 +56,242 @@ partial result becomes a reported success, which is A1.16 arriving through a
 different door.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Turns an unbounded loop into a defined worst case, and bounds the harm to <strong>other people's</strong> capacity, not just your bill.</p>
-</blockquote></div><div class="nbmd"><h2>Your turn</h2>
+</blockquote></div><div class="nbmd"><h2>3 · The check, as a skill</h2>
+<p>A loop usually carries several budgets and only one of them ever fires. The skill runs A1.13's impossible task against all of them, reports which binds first, and checks what the loop <em>returns</em> when it stops — because partial work reported as an answer is a budget converted into a quality problem.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/budget-and-stop-condition-audit/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: budget-and-stop-condition-audit
+description: &gt;-
+  Check that an agent loop has ceilings that actually bind — per-target, token
+  and action — and that hitting one returns an incomplete result rather than a
+  summary of what it managed. Use when reviewing loop termination, retries, or
+  an agent that runs unattended.
+allowed-tools: Read, Grep, Glob
+---
+
+# The ceiling that binds first is the only one that matters
+
+A loop usually has several budgets and only one of them ever fires. Which one
+fires, and how early, is the design; the rest are decoration. The second half
+matters more: what the loop **returns** when it stops. A run that halts and
+reports its partial work as an answer has converted a budget into a quality
+problem.
+
+## When to use this
+
+Any agentic loop, particularly one that retries, and any agent that runs on a
+schedule with nobody watching.
+
+## Procedure
+
+**1 — Enumerate every ceiling.** Steps, tokens, wall clock, cost, actions,
+per-target attempts. For each, where it is checked and what it does on breach.
+
+**2 — Order them by when they bind.** Run a task that consumes all resources
+and record which fires first. A per-target ceiling usually binds long before a
+token budget, which means the token budget was never the control.
+
+**3 — Test the breach path.** The result must carry an explicit incomplete
+flag. Check what a caller does with it: a loop that returns `complete: False`
+into a pipeline that ignores the field has the same outcome as no budget.
+
+**4 — Check the ceiling is not resettable by the agent.** A budget the loop can
+extend on its own behalf — by starting a sub-task, spawning a child, or
+retrying at a new target — is advisory.
+
+**5 — Derive the numbers from observation.** State the p95 of a legitimate run
+and set each ceiling above it. A round number either strangles real work or
+never fires.
+
+## Output contract
+
+```json
+{
+  &quot;ceilings&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;value&quot;: 0, &quot;checked_at&quot;: &quot;str&quot;, &quot;binds_at_step&quot;: 0}],
+  &quot;first_to_bind&quot;: &quot;str&quot;,
+  &quot;breach&quot;: {&quot;returns_incomplete&quot;: true, &quot;caller_respects_flag&quot;: false},
+  &quot;agent_resettable&quot;: [&quot;str&quot;],
+  &quot;basis&quot;: {&quot;p95_legitimate_run&quot;: {&quot;steps&quot;: 0, &quot;tokens&quot;: 0}}
+}
+```
+
+## Failure modes
+
+- **Listing budgets without ordering them.** Only the first one exists.
+- **Returning partial work as an answer.** The flag is the control; the number
+  is the trigger.
+- **A ceiling the agent can reset by spawning.** Count the whole tree.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/runtime/budget-and-stop-condition-audit/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/budget-and-stop-condition-audit/scripts/budget_and_stop_condition_audit.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Run the impossible task against per-target, token and action ceilings and see which one halts it first.
+
+This is the executable half of the `budget-and-stop-condition-audit` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+class Budget:
+    def __init__(self, tokens=50_000, seconds=60, actions=20, per_target=5):
+        self.limits = {&quot;tokens&quot;: tokens, &quot;seconds&quot;: seconds,
+                       &quot;actions&quot;: actions, &quot;per_target&quot;: per_target}
+        self.used = {&quot;tokens&quot;: 0, &quot;seconds&quot;: 0, &quot;actions&quot;: 0}
+        self.targets = {}
+    def spend(self, tokens=0, seconds=0, action=None, target=None):
+        self.used[&quot;tokens&quot;] += tokens
+        self.used[&quot;seconds&quot;] += seconds
+        if action: self.used[&quot;actions&quot;] += 1
+        if target:
+            self.targets[target] = self.targets.get(target, 0) + 1
+            if self.targets[target] &gt; self.limits[&quot;per_target&quot;]:
+                return False, f&quot;per_target ({target})&quot;
+        for k in (&quot;tokens&quot;, &quot;seconds&quot;, &quot;actions&quot;):
+            if self.used[k] &gt; self.limits[k]:
+                return False, k
+        return True, None
+
+def loop(budget):
+    &quot;&quot;&quot;A task that cannot succeed - A1.13&#x27;s exact scenario, now bounded.&quot;&quot;&quot;
+    steps = 0
+    while True:
+        steps += 1
+        ok, hit = budget.spend(tokens=1800, seconds=0.4, action=&quot;query&quot;,
+                               target=&quot;reports-db&quot;)
+        if not ok:
+            return {&quot;steps&quot;: steps, &quot;stopped_by&quot;: hit, &quot;complete&quot;: False}
+
+b = Budget()
+r = loop(b)
+print(f&quot;steps taken : {r[&#x27;steps&#x27;]}&quot;)
+print(f&quot;stopped by  : {r[&#x27;stopped_by&#x27;]}&quot;)
+print(f&quot;complete    : {r[&#x27;complete&#x27;]}   &lt;- visible in the output, not silent&quot;)
+print()
+print(f&quot;{&#x27;ceiling&#x27;:14s}{&#x27;limit&#x27;:&gt;9}{&#x27;used&#x27;:&gt;9}&quot;)
+for k in (&quot;tokens&quot;, &quot;seconds&quot;, &quot;actions&quot;):
+    print(f&quot;{k:14s}{b.limits[k]:&gt;9}{round(b.used[k], 1):&gt;9}&quot;)
+print(f&quot;{&#x27;per_target&#x27;:14s}{b.limits[&#x27;per_target&#x27;]:&gt;9}{b.targets[&#x27;reports-db&#x27;]:&gt;9}&quot;)
+print()
+print(&quot;per_target fired first, at 6 calls - long before the token budget or the&quot;)
+print(&quot;action budget. That is the ceiling that protects everyone else, and it is&quot;)
+print(&quot;the one most budgets do not have.&quot;)
+print()
+print(&quot;`complete: False` is the other half. A run that stops silently and&quot;)
+print(&quot;reports what it managed becomes A1.16 with extra steps.&quot;)
+assert r[&quot;stopped_by&quot;].startswith(&quot;per_target&quot;) and not r[&quot;complete&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The impossible task from A1.13 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries <code>complete: False</code> rather than reporting what it managed.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check whether your agent's budget bounds calls per downstream target. If it only bounds tokens, your cost is protected and the service your agent hammers is not.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.5.html">A3.5 · Validating what comes back</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.4.ipynb">Source</a></p>

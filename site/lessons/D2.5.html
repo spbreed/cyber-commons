@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.5 — Replay and forensics | Cyber Commons</title><meta name="description" content="Log at design time what replay will need."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.5</div><h1>Replay and forensics</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Non-determinism as an evidentiary problem.</p></div><div class="ctrl"><div class="lab">Control</div><p>Log at design time what replay will need.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Replay an agent run to a regulator-grade standard.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.5 · Replay and forensics</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.5 — Replay and forensics | Cyber Commons</title><meta name="description" content="Log at design time what replay will need."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.5</div><h1>Replay and forensics</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Non-determinism as an evidentiary problem.</p></div><div class="ctrl"><div class="lab">Control</div><p>Log at design time what replay will need.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Replay an agent run to a regulator-grade standard.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.5 · Replay and forensics</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Response</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.4.html">D2.4 · Containment at machine speed</a></strong>.</p>
 <table>
@@ -40,7 +40,277 @@ disputes your conclusion.</p>
 <p>The field teams miss most often is the <strong>model version</strong>, and it is the one that
 silently invalidates everything else: a provider-side upgrade changes the
 behaviour with no change on your side, so a reconstruction performed after the
-upgrade does not reproduce the incident that happened before it.</p></div><div class="nbmd"><h2>Your turn</h2>
+upgrade does not reproduce the incident that happened before it.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Replay needs five inputs and the typical production run records three. The skill checks each against a real record, then replays under two later model versions — where a different action means the original decision cannot be reproduced at all.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/run-replayability-audit/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: run-replayability-audit
+description: &gt;-
+  Check whether an incident run can be replayed at all — model version, seed,
+  prompt, tool results, retrieved context — and what a later model version does
+  to the replay. Use when forensics needs to know why the agent did what it did.
+allowed-tools: Read, Grep, Glob
+---
+
+# Replay needs five things and production records three
+
+&quot;Why did the agent do that&quot; is answerable only if the run can be re-run under the
+conditions it ran in. That needs the model version, the sampling parameters and
+seed, the exact prompt, every tool result and the retrieved context. A typical
+production run records enough to see what happened and not enough to reproduce
+it.
+
+## When to use this
+
+Before an incident, as a readiness check, and during one, to establish honestly
+whether the reconstruction is possible.
+
+## Procedure
+
+**1 — List the five inputs and check each against a real run record.** Model
+version and seed are the two usually missing, and their absence is decisive
+rather than inconvenient.
+
+**2 — Attempt the replay.** If any input is missing, say what the replay can and
+cannot establish. A partial replay is still useful for the tool path and useless
+for the reasoning.
+
+**3 — Replay under later model versions.** The provider has probably upgraded.
+Record whether the action changes: if it does, the original decision cannot be
+reproduced at all, and that is a finding about the estate rather than about the
+incident.
+
+**4 — Cost full instrumentation.** Storage and latency for recording everything,
+against the incidents where you needed it. Present both; the answer is usually to
+instrument the high-tier agents only, and that is a defensible decision when the
+numbers are attached.
+
+**5 — Record what the estate has chosen.** Which agents are replayable and which
+are not, so nobody assumes during an incident.
+
+## Output contract
+
+```json
+{
+  &quot;inputs&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;recorded&quot;: false}],
+  &quot;replay&quot;: {&quot;possible&quot;: false, &quot;establishes&quot;: [&quot;str&quot;], &quot;cannot_establish&quot;: [&quot;str&quot;]},
+  &quot;version_drift&quot;: [{&quot;version&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;, &quot;same_as_original&quot;: false}],
+  &quot;cost&quot;: {&quot;storage_per_run&quot;: &quot;str&quot;, &quot;latency_ms&quot;: 0},
+  &quot;policy&quot;: [{&quot;tier&quot;: &quot;str&quot;, &quot;fully_instrumented&quot;: true}]
+}
+```
+
+## Failure modes
+
+- **Assuming replay is possible.** Check the record before promising it.
+- **Replaying on the current model.** It is not the one that acted.
+- **Instrumenting everything or nothing.** Tier it and write the choice down.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/response/run-replayability-audit/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/run-replayability-audit/scripts/run_replayability_audit.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Check whether an incident run can be replayed at all, and what a later model version does to the replay.
+
+This is the executable half of the `run-replayability-audit` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+from dataclasses import dataclass, field
+
+@dataclass
+class Run:
+    prompts: list = field(default_factory=list)
+    tool_results: list = field(default_factory=list)
+    model_version: str = &quot;&quot;
+    seed: object = None
+
+    def replayable(self):
+        missing = []
+        if not self.prompts:
+            missing.append(&quot;prompts — cannot reconstruct what it was asked&quot;)
+        if not self.tool_results:
+            missing.append(&quot;tool results — the agent saw a world you cannot rebuild&quot;)
+        if not self.model_version:
+            missing.append(&quot;model version — a silent upgrade changes the output&quot;)
+        if self.seed is None:
+            missing.append(&quot;seed — sampling makes the run unrepeatable&quot;)
+        return (not missing), missing
+
+CONFIGS = {
+ &quot;fully instrumented&quot;: Run([&quot;fix SEC-4471&quot;], [&quot;file contents…&quot;], &quot;glm-4.6@2026-07-14&quot;, 42),
+ &quot;typical production&quot;: Run([&quot;fix SEC-4471&quot;], [&quot;file contents…&quot;], &quot;&quot;, None),
+ &quot;prompts only&quot;:       Run([&quot;fix SEC-4471&quot;], [], &quot;&quot;, None),
+ &quot;actions only&quot;:       Run(),
+}
+for name, r in CONFIGS.items():
+    ok, missing = r.replayable()
+    print(f&quot;{name:22s} replayable={ok}&quot;)
+    for m in missing: print(f&quot;      ✗ {m}&quot;)
+
+import hashlib
+
+def model_output(prompt, tool_result, version, seed):
+    &quot;&quot;&quot;Deterministic stand-in: output depends on ALL FOUR inputs.&quot;&quot;&quot;
+    h = hashlib.sha256(f&quot;{prompt}|{tool_result}|{version}|{seed}&quot;.encode()).hexdigest()
+    return &quot;read_credentials&quot; if int(h[:2], 16) % 3 == 0 else &quot;read_source&quot;
+
+INCIDENT_INPUTS = (&quot;fix SEC-4471&quot;, &quot;billing.py: charge(card)…&quot;)
+
+print(&quot;reproduce the incident under the ORIGINAL model version:&quot;)
+orig = model_output(*INCIDENT_INPUTS, &quot;glm-4.6@2026-07-14&quot;, 42)
+print(f&quot;   → {orig}&quot;)
+
+print(&quot;\nreproduce it AFTER the provider upgraded (same prompts, same tool results):&quot;)
+for v in (&quot;glm-4.6@2026-08-01&quot;, &quot;glm-4.7@2026-08-01&quot;):
+    out = model_output(*INCIDENT_INPUTS, v, 42)
+    match = &quot;reproduces&quot; if out == orig else &quot;DOES NOT REPRODUCE&quot;
+    print(f&quot;   {v:22s} → {out:18s} {match}&quot;)
+
+print(&quot;\nWithout a pinned version you cannot tell &#x27;the agent did not do this&#x27;&quot;)
+print(&quot;from &#x27;the model that did it no longer exists&#x27;.&quot;)
+
+COST = {
+ &quot;model version&quot;: (1,  &quot;one string per run&quot;, &quot;invalidates everything else if missing&quot;),
+ &quot;seed&quot;:          (1,  &quot;one integer per run&quot;, &quot;makes the run repeatable&quot;),
+ &quot;prompts&quot;:       (3,  &quot;storage + privacy review (D1.5)&quot;, &quot;what it was asked&quot;),
+ &quot;tool results&quot;:  (5,  &quot;largest volume, highest sensitivity&quot;, &quot;what it saw&quot;),
+}
+print(f&quot;{&#x27;field&#x27;:16s}{&#x27;cost&#x27;:&gt;6}  {&#x27;what it costs&#x27;:38s}why it matters&quot;)
+print(&quot;-&quot; * 100)
+for f, (c, cost, why) in sorted(COST.items(), key=lambda kv: kv[1][0]):
+    print(f&quot;{f:16s}{c:&gt;6}  {cost:38s}{why}&quot;)
+
+print(&quot;\nrecording order, by value per unit cost:&quot;)
+for i, f in enumerate(sorted(COST, key=lambda k: COST[k][0]), 1):
+    print(f&quot;   {i}. {f}&quot;)
+
+def upgrade(run, add):
+    return Run(prompts=run.prompts or ([&quot;…&quot;] if &quot;prompts&quot; in add else []),
+               tool_results=run.tool_results or ([&quot;…&quot;] if &quot;tool results&quot; in add else []),
+               model_version=run.model_version or (&quot;pinned&quot; if &quot;model version&quot; in add else &quot;&quot;),
+               seed=run.seed if run.seed is not None else (42 if &quot;seed&quot; in add else None))
+
+cur = CONFIGS[&quot;typical production&quot;]
+added = set()
+for f in sorted(COST, key=lambda k: COST[k][0]):
+    added.add(f)
+    ok, missing = upgrade(cur, added).replayable()
+    print(f&quot;\nafter adding {f:16s} replayable={ok}  still missing={len(missing)}&quot;)
+assert upgrade(cur, set(COST)).replayable()[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Only the fully instrumented run is replayable; the typical production run is missing the model version and seed. Replaying the incident under two later model versions produces a different action, so the original run does not reproduce. Adding the two cheapest fields (model version and seed) makes the typical production run replayable.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add model version and seed to your agent's run records this week. Both are one field each, and together they are the difference between forensics and storytelling.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.6.html">D2.6 · Post-incident change surface</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.5.ipynb">Source</a></p>

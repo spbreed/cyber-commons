@@ -2,8 +2,9 @@
 name: stop-authority-readiness
 description: >-
   Turn "we can stop it" into a named mechanism with an owner, a measured
-  time-to-stop from a game day, and a stated cost of stopping. Use before
-  granting autonomy, and whenever stop authority has never been exercised.
+  time-to-stop from a game day, and a stated cost of stopping. Use to answer how
+  long it would actually take to stop a running agent, before granting autonomy,
+  and whenever stop authority has never been exercised.
 allowed-tools: Read, Grep, Glob
 ---
 

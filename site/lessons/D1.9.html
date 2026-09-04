@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.9 — Detections whose subject is the agent platform | Cyber Commons</title><meta name="description" content="Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.9</div><h1>Detections whose subject is the agent platform</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.</p></div><div class="ctrl"><div class="lab">Control</div><p>Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run four platform detectors over one day of events and find the ones a generic anomaly score would have missed.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.9 · Detections whose subject is the agent platform</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.9 — Detections whose subject is the agent platform | Cyber Commons</title><meta name="description" content="Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.9</div><h1>Detections whose subject is the agent platform</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.</p></div><div class="ctrl"><div class="lab">Control</div><p>Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run four platform detectors over one day of events and find the ones a generic anomaly score would have missed.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.9 · Detections whose subject is the agent platform</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.8.html">D1.8 · Threat intel sub-lane</a></strong>.</p>
 <table>
@@ -60,7 +60,310 @@ minutes.</p>
 approved register, continuously. Any control disabled without a matching
 unexpired exemption is a P1, and expiry re-enables automatically with no grace
 period.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">detection</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">owner</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">data source</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">escape detection (C1.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">platform security</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">host sensor</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">cache integrity (C5.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">build / release</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">artifact repository</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">secret scanning (C4.1)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">appsec</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">repos, CI, the public internet</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">exemption drift (C6.3)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">governance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">control registry</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload scanning (C3.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the ingest team</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload path</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Five detections, five different owners, and not one of them reads the workload's own logs. That is the property that makes them useful after A2.8: they survive the subject of the investigation having had write access to everything else.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Five detections, five different owners, and not one of them reads the workload's own logs. That is the property that makes them useful after A2.8: they survive the subject of the investigation having had write access to everything else.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>A seven-event escape sequence scores 0.07 on a generic volume anomaly. The skill writes four named rules whose subject is the platform — orphaned processes, cache diffs, escape signatures — and runs both against the same events so the comparison is visible.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-platform-detections/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: agent-platform-detections
+description: &gt;-
+  Write detections whose subject is the agent platform itself — sandbox escape,
+  orphaned processes, artefact cache tampering, secret exposure — and compare
+  them against a generic volume anomaly on the same events. Use when the thing
+  being attacked is the harness rather than the application.
+allowed-tools: Read, Grep, Glob
+---
+
+# A generic anomaly score gives an escape sequence 0.07
+
+An escape from an agent sandbox is seven quiet events. It does not look like
+volume, it does not look like a spike, and a generic anomaly detector ranks it
+near zero. Detections whose subject is the platform are specific by necessity,
+and each of them names a mechanism rather than a statistic.
+
+## When to use this
+
+Any estate running agent workloads on shared infrastructure, and after any
+incident where &quot;we would have seen it&quot; was asserted without a named rule.
+
+## Procedure
+
+**1 — Enumerate the platform&#x27;s own failure modes.** Escape from the sandbox,
+processes that outlive their tool call, artefact cache contents changing between
+runs, credentials appearing in output, tools invoked outside the manifest.
+
+**2 — Write one named rule per mechanism.** Each with the specific condition it
+matches — a process tree deviating from the baseline, a PID alive after its call
+returned, a manifest hash mismatch. Named rules can be argued with; scores
+cannot.
+
+**3 — Run them against a real sequence.** All the rules that should fire, should.
+Record which fired and on which event, because that mapping is what an analyst
+uses to reconstruct.
+
+**4 — Score the same sequence with a generic anomaly detector.** Report both
+numbers side by side. The comparison is the argument for writing platform
+detections at all.
+
+**5 — Check each rule&#x27;s data dependency.** A cache-diff rule needs a manifest; an
+orphan rule needs process accounting. A rule whose input is not collected is a
+plan.
+
+## Output contract
+
+```json
+{
+  &quot;mechanisms&quot;: [&quot;str&quot;],
+  &quot;rules&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;condition&quot;: &quot;str&quot;, &quot;requires&quot;: &quot;str&quot;}],
+  &quot;sequence&quot;: [{&quot;event&quot;: &quot;str&quot;, &quot;rules_fired&quot;: [&quot;str&quot;]}],
+  &quot;generic_anomaly&quot;: {&quot;score&quot;: 0.0},
+  &quot;coverage&quot;: {&quot;fired&quot;: 0, &quot;expected&quot;: 0, &quot;missing_inputs&quot;: [&quot;str&quot;]}
+}
+```
+
+## Failure modes
+
+- **Relying on a generic anomaly detector.** The sequence is quiet by
+  construction.
+- **Rules whose inputs nobody collects.** Check the pipeline, not the rule.
+- **One rule for &quot;escape&quot;.** Escape is several mechanisms with different
+  evidence.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/detection/agent-platform-detections/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-platform-detections/scripts/agent_platform_detections.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Write detections whose subject is the agent platform — sandbox escape, orphaned processes, cache tampering — and compare them with a generic anomaly score.
+
+This is the executable half of the `agent-platform-detections` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+EVENTS = [
+ {&quot;t&quot;: 1,  &quot;proc&quot;: &quot;harness&quot;,   &quot;syscall&quot;: &quot;execve&quot;,  &quot;arg&quot;: &quot;python3 solve.py&quot;},
+ {&quot;t&quot;: 2,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;openat&quot;,  &quot;arg&quot;: &quot;/workspace/in.json&quot;},
+ {&quot;t&quot;: 3,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;ptrace&quot;,  &quot;arg&quot;: &quot;attach pid=1 (not a child)&quot;},
+ {&quot;t&quot;: 4,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;execve&quot;,  &quot;arg&quot;: &quot;sh -c &#x27;LD_PRELOAD=/tmp/x.so ...&#x27;&quot;},
+ {&quot;t&quot;: 5,  &quot;proc&quot;: &quot;x.so&quot;,      &quot;syscall&quot;: &quot;openat&quot;,  &quot;arg&quot;: &quot;/run/harness.sock&quot;},
+ {&quot;t&quot;: 6,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;openat&quot;,  &quot;arg&quot;: &quot;/workspace/out.json&quot;},
+ {&quot;t&quot;: 7,  &quot;proc&quot;: &quot;sidecar&quot;,   &quot;syscall&quot;: &quot;execve&quot;,  &quot;arg&quot;: &quot;sleep 86400&quot;},
+]
+BASELINE_TREE = {&quot;harness&quot;, &quot;solve.py&quot;}
+
+RULES = [
+ (&quot;ptrace attach to a non-child&quot;, lambda e: e[&quot;syscall&quot;] == &quot;ptrace&quot; and &quot;not a child&quot; in e[&quot;arg&quot;]),
+ (&quot;LD_PRELOAD on a spawned process&quot;, lambda e: &quot;LD_PRELOAD&quot; in e[&quot;arg&quot;]),
+ (&quot;non-harness write to the RPC path&quot;, lambda e: &quot;harness.sock&quot; in e[&quot;arg&quot;] and e[&quot;proc&quot;] != &quot;harness&quot;),
+ (&quot;process outside the baseline tree&quot;, lambda e: e[&quot;proc&quot;] not in BASELINE_TREE),
+]
+
+fired = []
+for e in EVENTS:
+    for name, rule in RULES:
+        if rule(e):
+            fired.append((e[&quot;t&quot;], name, e[&quot;proc&quot;]))
+print(f&quot;{&#x27;t&#x27;:&gt;3}  {&#x27;rule&#x27;:36s}process&quot;)
+for t, name, proc in fired:
+    print(f&quot;{t:&gt;3}  {name:36s}{proc}&quot;)
+
+# a generic score over the same events
+volume = len(EVENTS)
+score = volume / 100
+print(f&quot;\ngeneric anomaly score for this run: {score:.2f}  &quot;
+      f&quot;(seven syscalls is unremarkable)&quot;)
+print(f&quot;named rules fired: {len(fired)}&quot;)
+print()
+print(&quot;The escape is four ordinary-looking events. Volume scoring cannot see it&quot;)
+print(&quot;because nothing about the volume is unusual.&quot;)
+assert len(fired) &gt;= 5 and score &lt; 0.1
+
+TOOL_CALLS = [
+ {&quot;call&quot;: 1, &quot;spawned&quot;: [&quot;solve.py&quot;],  &quot;ended&quot;: [&quot;solve.py&quot;]},
+ {&quot;call&quot;: 2, &quot;spawned&quot;: [&quot;sidecar&quot;],   &quot;ended&quot;: []},
+ {&quot;call&quot;: 3, &quot;spawned&quot;: [&quot;fmt&quot;],       &quot;ended&quot;: [&quot;fmt&quot;]},
+]
+def orphans(calls):
+    live = []
+    for c in calls:
+        for p in c[&quot;spawned&quot;]:
+            if p not in c[&quot;ended&quot;]:
+                live.append((c[&quot;call&quot;], p))
+    return live
+
+live = orphans(TOOL_CALLS)
+print(&quot;processes surviving the tool call that spawned them:&quot;)
+for call, proc in live:
+    print(f&quot;   call {call}: {proc}&quot;)
+print()
+print(&quot;A background process that outlives its tool call is how a substituted&quot;)
+print(&quot;command stays in place for the next one. This single rule is the cheapest&quot;)
+print(&quot;detection in the set and it is specific enough to page on.&quot;)
+assert live == [(2, &quot;sidecar&quot;)]
+
+import hashlib
+
+def h(s): return hashlib.sha256(s.encode()).hexdigest()[:12]
+
+MANIFEST = {&quot;libtarget-1.4.jar&quot;: h(&quot;libtarget-1.4&quot;),
+            &quot;runner-2.0.tar&quot;:    h(&quot;runner-2.0&quot;),
+            &quot;fixtures-9.zip&quot;:    h(&quot;fixtures-9&quot;)}
+REPOSITORY = {&quot;libtarget-1.4.jar&quot;: h(&quot;libtarget-1.4-modified&quot;),   # staged
+              &quot;runner-2.0.tar&quot;:    h(&quot;runner-2.0&quot;),
+              &quot;extra-0.1.jar&quot;:     h(&quot;extra-0.1&quot;)}                # unexpected
+
+def diff(manifest, repo):
+    out = []
+    for name in sorted(set(manifest) | set(repo)):
+        if name not in repo:
+            out.append((name, &quot;MISSING - expected artifact removed&quot;))
+        elif name not in manifest:
+            out.append((name, &quot;UNEXPECTED - not in the manifest&quot;))
+        elif manifest[name] != repo[name]:
+            out.append((name, &quot;MODIFIED - hash mismatch&quot;))
+    return out
+
+print(&quot;cache integrity diff (C5.4)&quot;)
+for name, why in diff(MANIFEST, REPOSITORY):
+    print(f&quot;   {name:22s}{why}&quot;)
+
+EXPOSURES = [(&quot;hf_liveToken&quot;, &quot;public dataset card&quot;, 0)]
+def revoke(exposures, human_in_loop):
+    delay = 240 if human_in_loop else 2       # minutes
+    return [(t, where, delay) for t, where, _ in exposures]
+
+print(&quot;\ncredential exposure to revocation (C4.1)&quot;)
+for mode, hitl in ((&quot;human in the loop&quot;, True), (&quot;automated&quot;, False)):
+    for token, where, delay in revoke(EXPOSURES, hitl):
+        print(f&quot;   {mode:20s}{token:16s}{where:22s}{delay:&gt;4} min&quot;)
+print(&quot;   reported interval from discovery to redistribution: minutes&quot;)
+
+APPROVED = {&quot;cyber-classifier&quot;: 30}
+LIVE = {&quot;cyber-classifier&quot;: &quot;disabled&quot;, &quot;egress-allowlist&quot;: &quot;disabled&quot;}
+print(&quot;\nexemption-state reconciliation (C6.3), day 44&quot;)
+for control, state in sorted(LIVE.items()):
+    expires = APPROVED.get(control)
+    if state == &quot;enabled&quot;:
+        verdict = &quot;ok&quot;
+    elif expires is None:
+        verdict = &quot;P1 - disabled with no approved exemption&quot;
+    elif 44 &gt; expires:
+        verdict = f&quot;P1 - exemption expired on day {expires}, auto re-enable&quot;
+    else:
+        verdict = &quot;ok - within an approved exemption&quot;
+    print(f&quot;   {control:20s}{state:10s}{verdict}&quot;)
+assert len(diff(MANIFEST, REPOSITORY)) == 3</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick the orphaned-process rule and write it for your own platform. It is one query, it has a low false-positive rate, and on most agent platforms nobody has ever run it.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.10.html">D1.10 · Fleet-level correlation: seeing a swarm</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.9.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.9.ipynb">Source</a></p>

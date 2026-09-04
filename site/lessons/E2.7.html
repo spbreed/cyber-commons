@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.7 — Documentation that survives supervision | Cyber Commons</title><meta name="description" content="System documentation, data lineage, eval records, oversight evidence, decision logs."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.7</div><h1>Documentation that survives supervision</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;Explainability&quot; for a system with no deterministic reasoning.</p></div><div class="ctrl"><div class="lab">Control</div><p>System documentation, data lineage, eval records, oversight evidence, decision logs.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Assemble a pack that survives supervision.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.7 · Documentation that survives supervision</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E2.7 — Documentation that survives supervision | Cyber Commons</title><meta name="description" content="System documentation, data lineage, eval records, oversight evidence, decision logs."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Platform — Regulatory and Compliance</div><div class="sid">E2.7</div><h1>Documentation that survives supervision</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E2.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;Explainability&quot; for a system with no deterministic reasoning.</p></div><div class="ctrl"><div class="lab">Control</div><p>System documentation, data lineage, eval records, oversight evidence, decision logs.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Assemble a pack that survives supervision.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E2.7 · Documentation that survives supervision</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Platform — Regulatory and Compliance</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E2.6.html">E2.6 · Incident and disclosure obligations</a></strong>.</p>
 <table>
@@ -48,7 +48,267 @@ immediately.</p>
 <p>Intent statements are not forbidden — some things genuinely are aspirations. The
 failure is presenting them as controls. Label them, and the rest of the document
 becomes more credible rather than less.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the follow-up question</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">answerable from the document?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“appropriate oversight” — show me the last time it operated.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“reviewed periodically” — what period, and when was the last one?</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“comprehensive logging” — produce one action&#x27;s full record.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“act chain for every action” — produce the August sample.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Three of four cannot be answered, and by the time the fourth is asked the person asking doubts that one too. Vague language does not fail on its own line; it fails the lines around it.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Three of four cannot be answered, and by the time the fourth is asked the person asking doubts that one too. Vague language does not fail on its own line; it fails the lines around it.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The skill counts the sentences that name a control, an artefact and a date. The weak paragraph scores zero and reads perfectly well; the strong one scores three and answers the follow-ups a supervisor actually asks.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/supervisory-documentation-score/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: supervisory-documentation-score
+description: &gt;-
+  Score written documentation on how many of its sentences are checkable — each
+  naming a control, an artefact and a date — and test it against the follow-up
+  questions a supervisor actually asks. Use before submitting anything to an
+  assessor.
+allowed-tools: Read, Grep, Glob
+---
+
+# Count the checkable sentences
+
+Documentation that survives supervision is not better written; it is
+differently written. Each load-bearing sentence names a control, the artefact
+that evidences it, and a date. A paragraph with none of those reads well, passes
+internal review, and produces four follow-ups you cannot answer.
+
+## When to use this
+
+Before submitting documentation to a regulator, an auditor or a customer&#x27;s
+assurance team.
+
+## Procedure
+
+**1 — Split the text into sentences and score each.** Does it name a control
+identifier, an artefact, and a date? Three marks per sentence, and the count of
+sentences scoring all three is the headline.
+
+**2 — Report the weak version&#x27;s score.** Usually zero. Showing it beside the
+strong version is what changes how the next document gets written.
+
+**3 — Rewrite so the load-bearing claims carry all three.** Not every sentence —
+the ones an assessor would test. The rest can be prose.
+
+**4 — Generate the follow-up questions and try to answer them from the text
+alone.** &quot;Which control&quot;, &quot;show me the artefact&quot;, &quot;when was it last tested&quot;,
+&quot;who owns it&quot;. A question you cannot answer from the document is a question you
+will answer live, badly.
+
+**5 — Attach the artefacts.** A checkable sentence with an unattached artefact
+is one email away from being unevidenced.
+
+## Output contract
+
+```json
+{
+  &quot;sentences&quot;: [{&quot;text&quot;: &quot;str&quot;, &quot;names_control&quot;: false, &quot;names_artefact&quot;: false, &quot;has_date&quot;: false}],
+  &quot;score&quot;: {&quot;checkable&quot;: 0, &quot;total&quot;: 0},
+  &quot;comparison&quot;: {&quot;weak_checkable&quot;: 0, &quot;strong_checkable&quot;: 0},
+  &quot;followups&quot;: [{&quot;question&quot;: &quot;str&quot;, &quot;answerable_from_text&quot;: false}],
+  &quot;artefacts_attached&quot;: [&quot;str&quot;]
+}
+```
+
+## Failure modes
+
+- **Editing for tone.** The problem is not the prose.
+- **Making every sentence checkable.** Only the load-bearing ones need it.
+- **Naming an artefact you did not attach.** The follow-up arrives immediately.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/regulatory/supervisory-documentation-score/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/supervisory-documentation-score/scripts/supervisory_documentation_score.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Score a paragraph on how many of its sentences are checkable, and test it against the follow-up questions a supervisor asks.
+
+This is the executable half of the `supervisory-documentation-score` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import re, time
+now = time.time(); DAY = 86400
+
+WEAK = &quot;&quot;&quot;
+Our AI systems are subject to appropriate oversight and controls. Access is
+granted on a least-privilege basis and reviewed periodically. Agents are
+monitored for anomalous behaviour and we maintain comprehensive logging.
+&quot;&quot;&quot;
+
+STRONG = &quot;&quot;&quot;
+Agent identities are distinct from human identities (AC-1). Evidence: gateway
+logs containing an act chain for every action; sampled monthly, last test
+2026-08-13, valid 30d.
+
+Delegated authority narrows at every hop (AC-2). Evidence: the token exchange
+refuses widening; regression cases IDN-01/IDN-04 run on every release, last run
+2026-08-15.
+
+Autonomy above L2 requires approval for privileged tools (SB-2). Evidence: tool
+policy in git; 90-day denial log attached, last reviewed 2026-07-06.
+&quot;&quot;&quot;
+
+CONTROL_RE = re.compile(r&quot;\b([A-Z]{2}-\d)\b&quot;)
+DATE_RE    = re.compile(r&quot;\b20\d{2}-\d{2}-\d{2}\b&quot;)
+ARTEFACT_RE = re.compile(r&quot;\b(log|logs|sample|report|test|cases|policy|record)\b&quot;, re.I)
+
+def score_paragraph(text):
+    sentences = [s.strip() for s in text.split(&quot;.&quot;) if s.strip()]
+    rows = []
+    for s in sentences:
+        rows.append({&quot;has_control&quot;: bool(CONTROL_RE.search(s)),
+                     &quot;has_artefact&quot;: bool(ARTEFACT_RE.search(s)),
+                     &quot;has_date&quot;: bool(DATE_RE.search(s)),
+                     &quot;text&quot;: s[:56]})
+    checkable = [r for r in rows if r[&quot;has_control&quot;] and r[&quot;has_artefact&quot;]]
+    return rows, len(checkable), len(rows)
+
+for label, text in ((&quot;WEAK&quot;, WEAK), (&quot;STRONG&quot;, STRONG)):
+    rows, checkable, total = score_paragraph(text)
+    print(f&quot;=== {label} — {checkable}/{total} sentences checkable ===&quot;)
+    for r in rows:
+        marks = (&quot;C&quot; if r[&quot;has_control&quot;] else &quot;-&quot;) + \
+                (&quot;A&quot; if r[&quot;has_artefact&quot;] else &quot;-&quot;) + \
+                (&quot;D&quot; if r[&quot;has_date&quot;] else &quot;-&quot;)
+        print(f&quot;   [{marks}] {r[&#x27;text&#x27;]}&quot;)
+    print()
+print(&quot;C = names a control · A = names an artefact · D = carries a date&quot;)
+
+from dataclasses import dataclass
+@dataclass
+class ControlTest:
+    cid: str; passed: bool; tested_at: float; valid_for_days: float
+    def state(self, at):
+        if (at - self.tested_at)/DAY &gt; self.valid_for_days: return &quot;STALE&quot;
+        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
+
+TESTS = {t.cid: t for t in [
+ ControlTest(&quot;AC-1&quot;, True, now -  3*DAY, 30),
+ ControlTest(&quot;AC-2&quot;, True, now -  1*DAY, 30),
+ ControlTest(&quot;SB-2&quot;, True, now - 40*DAY, 30)]}
+
+cited = CONTROL_RE.findall(STRONG)
+print(f&quot;controls cited in the document: {sorted(set(cited))}\n&quot;)
+print(f&quot;{&#x27;control&#x27;:9s}{&#x27;state now&#x27;:12s}{&#x27;document claim still true?&#x27;:&gt;28}&quot;)
+print(&quot;-&quot; * 52)
+stale = []
+for cid in sorted(set(cited)):
+    st = TESTS[cid].state(now) if cid in TESTS else &quot;NO EVIDENCE&quot;
+    ok = st == &quot;PASS&quot;
+    if not ok: stale.append(cid)
+    print(f&quot;{cid:9s}{st:12s}{str(ok):&gt;28}&quot;)
+print(f&quot;\n{len(stale)} cited control(s) no longer evidenced: {stale}&quot;)
+print(&quot;A document that cites controls can be CHECKED against live state.&quot;)
+print(&quot;A document of intent cannot go stale, because it never said anything.&quot;)
+assert stale</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The weak paragraph has zero checkable sentences; the strong one has three, each naming a control, an artefact and a date. Three of four supervisor follow-ups are unanswerable from the weak version. Verifying the strong document against live control state finds SB-2 stale, so one of its claims is no longer true — which is only detectable because the document named a control.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Rewrite one paragraph of your AI policy in the strong shape. Any sentence that cannot name an artefact is intent — label it as such rather than deleting it, and the document gets more credible.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.8.html">E2.8 · Auditability of autonomous action</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E2.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E2.7.ipynb">Source</a></p>

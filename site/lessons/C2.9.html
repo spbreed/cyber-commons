@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.9 — Case study — Moltbook: 770,000 agents behind one missing policy | Cyber Commons</title><meta name="description" content="Row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.9</div><h1>Case study — Moltbook: 770,000 agents behind one missing policy</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The blast radius was not the platform&#x27;s. What leaked were credentials in five other providers&#x27; accounts, and the platform could revoke none of them.</p></div><div class="ctrl"><div class="lab">Control</div><p>Row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the same query with and without a row policy, then work out which of the leaked things the platform could actually have revoked.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.9 · Case study — Moltbook: 770,000 agents behind one missing policy</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>C2.9 — Case study — Moltbook: 770,000 agents behind one missing policy | Cyber Commons</title><meta name="description" content="Row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function C — Red Teaming and Security Research with AI › Security Research with AI</div><div class="sid">C2.9</div><h1>Case study — Moltbook: 770,000 agents behind one missing policy</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">C2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/C2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The blast radius was not the platform&#x27;s. What leaked were credentials in five other providers&#x27; accounts, and the platform could revoke none of them.</p></div><div class="ctrl"><div class="lab">Control</div><p>Row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the same query with and without a row policy, then work out which of the leaked things the platform could actually have revoked.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>C2.9 · Case study — Moltbook: 770,000 agents behind one missing policy</h1>
 <p><strong>Function C — Red Teaming and Security Research with AI → Security Research with AI</strong>  ·  <em>Both directions</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/C2.8.html">C2.8 · Case study — the Hugging Face / OpenAI agent-swarm incident</a></strong>.</p>
 <table>
@@ -80,7 +80,256 @@ than one being chosen.</p>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Reported as roughly two statements. The gap between an incident and no incident was a policy nobody wrote, not a control nobody could afford.</div></div><div class="nbmd"><h2>4 · Why the blast radius is not the platform's</h2>
 <p>Moltbook losing its own data would be a bad day for Moltbook. What was in the table belonged to everyone who had registered an agent, and Moltbook could not revoke any of it.</p></div><div class="nbmd"><h2>5 · The surface the attack did not need</h2>
 <p>Worth saying plainly, because it is the part that generalises: the interesting architectural risk in Moltbook was never exercised.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">surface</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">status in this incident</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">where it is taught</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">credential store readable by anyone</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>used — this was the breach</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.8, and the Supabase pattern in C2.10</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agents ingest and act on other agents&#x27; posts</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">present, untouched</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A1.3 indirect prompt injection, A1.10 comms poisoning</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agents coordinating at population scale</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">present, untouched</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A1.11, D1.10 fleet correlation</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">An architecture can hold two novel risks and still be undone by a missing row policy. Novelty is not the same as likelihood.</div></div><div class="nbmd"><h2>Your turn</h2>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">An architecture can hold two novel risks and still be undone by a missing row policy. Novelty is not the same as likelihood.</div></div><div class="nbmd"><h2>6 · The procedure, as a skill</h2>
+<p>The publishable key is meant to ship in a client; the rows are not. The skill queries every table anonymously with row-level policy off and on, and counts the provider credentials a leaked key returns — along with who can revoke them.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/row-level-policy-check/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: row-level-policy-check
+description: &gt;-
+  Query an exposed data API as an anonymous caller with row-level security off
+  and on, and count what a publishable key returns. Use when a client-side key
+  reaches a database directly, or when a platform&#x27;s default is open until
+  somebody closes it.
+allowed-tools: Read, Grep, Glob
+---
+
+# The anonymous key is meant to be public; the rows are not
+
+Platforms that expose a database over HTTP hand out a key designed to ship in a
+client. That is safe exactly when row-level policy is on, and the default on
+several of them is off. The check is one query, run twice, and it is the
+difference between a key that is public by design and a table that is.
+
+## When to use this
+
+Any deployment where a browser or an agent talks to a database service directly,
+and any platform whose quickstart hands you an anonymous key.
+
+## Procedure
+
+**1 — Get the publishable key from where it actually is.** The client bundle,
+the mobile app, the agent&#x27;s configuration. It is not a secret and treating it as
+one is what hides this defect.
+
+**2 — Enumerate the tables.** Use the platform&#x27;s catalogue rather than the
+application&#x27;s own queries — the application only touches the tables it needs,
+which is not the set that exists.
+
+**3 — Query each table anonymously with policy off.** Record the row count and,
+specifically, whether any row contains a credential: provider keys stored
+alongside agent configuration are the common and expensive case.
+
+**4 — Enable policy and re-run.** Anonymous should return nothing; a signed-in
+owner should return their own rows and no more. Both halves — a policy that
+returns nothing to everyone is an outage.
+
+**5 — Cost the exposure.** For every credential returned, name the provider and
+who can revoke it. The revocation owner is usually not you, and that is the
+sentence that gets the work scheduled.
+
+## Output contract
+
+```json
+{
+  &quot;key&quot;: {&quot;kind&quot;: &quot;publishable&quot;, &quot;found_in&quot;: &quot;str&quot;},
+  &quot;tables&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;sensitive&quot;: true,
+              &quot;anon_rows_policy_off&quot;: 0, &quot;anon_rows_policy_on&quot;: 0, &quot;owner_rows&quot;: 0}],
+  &quot;credentials_exposed&quot;: [{&quot;provider&quot;: &quot;str&quot;, &quot;revocable_by&quot;: &quot;str&quot;}],
+  &quot;verdict&quot;: &quot;open|closed&quot;
+}
+```
+
+## Failure modes
+
+- **Testing with the service key.** It bypasses policy; that proves nothing.
+- **Enumerating from the application.** It knows about its own tables only.
+- **Reporting rows without the credentials.** The provider keys are the
+  incident.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/research/row-level-policy-check/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/row-level-policy-check/scripts/row_level_policy_check.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Query an exposed data API as an anonymous caller with row-level security off and on, and count what a leaked key returns.
+
+This is the executable half of the `row-level-policy-check` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+AGENTS = [
+ {&quot;id&quot;: &quot;a-0001&quot;, &quot;owner&quot;: &quot;dana@example&quot;,  &quot;handle&quot;: &quot;@researchbot&quot;,
+  &quot;provider_key&quot;: &quot;sk-REDACTED-openai&quot;,     &quot;claim_token&quot;: &quot;clm_8fA2&quot;},
+ {&quot;id&quot;: &quot;a-0002&quot;, &quot;owner&quot;: &quot;sam@example&quot;,   &quot;handle&quot;: &quot;@newsdigest&quot;,
+  &quot;provider_key&quot;: &quot;sk-ant-REDACTED&quot;,        &quot;claim_token&quot;: &quot;clm_2bQ7&quot;},
+ {&quot;id&quot;: &quot;a-0003&quot;, &quot;owner&quot;: &quot;kim@example&quot;,   &quot;handle&quot;: &quot;@dealfinder&quot;,
+  &quot;provider_key&quot;: &quot;AKIA-REDACTED-aws&quot;,      &quot;claim_token&quot;: &quot;clm_9zR1&quot;},
+]
+
+def data_api(table, caller, rls_enabled):
+    &quot;&quot;&quot;Supabase&#x27;s PostgREST surface, in miniature.
+
+    `caller` is whoever the anon key resolves to - which is nobody in
+    particular. With RLS off there is no policy to consult, so every row is
+    returned; with RLS on, the policy decides.
+    &quot;&quot;&quot;
+    if not rls_enabled:
+        return list(table)                       # no policy exists to consult
+    return [r for r in table if r[&quot;owner&quot;] == caller]
+
+anon = None                                      # the anon key is not a person
+for label, rls in ((&quot;RLS disabled (as shipped)&quot;, False), (&quot;RLS enabled&quot;, True)):
+    rows = data_api(AGENTS, caller=anon, rls_enabled=rls)
+    print(f&quot;{label:28s}rows returned: {len(rows)}&quot;)
+    for r in rows:
+        print(f&quot;      {r[&#x27;handle&#x27;]:14s}{r[&#x27;owner&#x27;]:16s}{r[&#x27;provider_key&#x27;]}&quot;)
+
+owner_rows = data_api(AGENTS, caller=&quot;dana@example&quot;, rls_enabled=True)
+print(f&quot;\nsigned in as dana@example, RLS enabled: {len(owner_rows)} row&quot;)
+print()
+print(&quot;Same key, same endpoint, same table. The only difference is whether a&quot;)
+print(&quot;policy exists for the API to consult.&quot;)
+assert len(data_api(AGENTS, anon, False)) == 3
+assert len(data_api(AGENTS, anon, True)) == 0 and len(owner_rows) == 1
+
+REPORTED_SCALE = {&quot;Treblle&quot;: 770_000, &quot;Wiz-sourced reporting&quot;: 1_500_000}
+PROVIDERS = [&quot;OpenAI&quot;, &quot;Anthropic&quot;, &quot;AWS&quot;, &quot;GitHub&quot;, &quot;Google Cloud&quot;]
+
+for source, n in sorted(REPORTED_SCALE.items()):
+    print(f&quot;{source:26s}{n:&gt;10,} agents exposed&quot;)
+low, high = min(REPORTED_SCALE.values()), max(REPORTED_SCALE.values())
+print(f&quot;\nreported range            {low:&gt;10,} - {high:,}&quot;)
+print(f&quot;provider accounts implicated: {&#x27;, &#x27;.join(PROVIDERS)}&quot;)
+
+# Who can actually revoke each thing that leaked.
+REVOCABLE_BY = {
+ &quot;the Moltbook session token&quot;: &quot;Moltbook&quot;,
+ &quot;the claim token&quot;:            &quot;Moltbook&quot;,
+ &quot;the agent&#x27;s provider key&quot;:   &quot;the individual who created the agent&quot;,
+}
+print()
+print(f&quot;{&#x27;what leaked&#x27;:30s}who can revoke it&quot;)
+for what in sorted(REVOCABLE_BY):
+    print(f&quot;{what:30s}{REVOCABLE_BY[what]}&quot;)
+
+platform_can_fix = [w for w in REVOCABLE_BY if REVOCABLE_BY[w] == &quot;Moltbook&quot;]
+print(f&quot;\nthe platform can revoke {len(platform_can_fix)} of {len(REVOCABLE_BY)}.&quot;)
+print(&quot;The third is a key in somebody else&#x27;s provider account, and the only&quot;)
+print(&quot;person who can turn it off may not know it was ever exposed. That is the&quot;)
+print(&quot;difference between a platform breach and a supply-chain one.&quot;)
+assert len(platform_can_fix) == 2</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>With RLS disabled the anon key returns all three agent rows, secret provider keys included; with RLS enabled and no signed-in user it returns none, and one row for the owner. Reported scale spans 770,000 to 1.5 million agents across five providers, and of the three things that leaked the platform can revoke two — the third is a key in somebody else's account.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run <code>select relname from pg_class where relrowsecurity = false</code> against your own project, or the equivalent for whatever backend you use. Then find the table holding anything credential-shaped and check whether it is reachable from the client at all — the answer to the second question is the one that decides the size of your bad day.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.10.html">C2.10 · Case study — the Supabase pattern: open until closed</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/C2.9.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/C2.9.ipynb">Source</a></p>

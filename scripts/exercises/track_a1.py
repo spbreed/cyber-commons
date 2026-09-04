@@ -183,7 +183,14 @@ Whatever the topology, something reaches the agent runtime and the agent runtime
 reaches tools. Every risk in the rest of this chapter is a route into the left
 side of that picture. Every control in chapters 2 and 3 is an attempt to stand
 somewhere on the arrow."""),
- ],
+   ("md", "## 2 \u00b7 Drawing it, as a skill\n\n"
+          "The map is not a picture of CyberTravels \u2014 it is the procedure for "
+          "drawing one of any agentic system, which is why every later lesson can "
+          "name a box. It is written down here as a skill, and it is the one lesson "
+          "whose skill has no script: the output is a diagram and a list of boundary "
+          "crossings, not a computation."),
+   ("skill", "architecture/agentic-architecture-map"),
+],
  "expect": "You can draw one agentic system you run as thirteen named components, "
            "say which of the five patterns it is, and name the three components "
            "in it whose content an outsider can author. That list is the input "

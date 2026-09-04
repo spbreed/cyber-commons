@@ -138,6 +138,7 @@ operational reason B2.0 bounds delegation depth in the first place.
          "in for the larger in a notification decision. And `does_not_stop` "
          "makes containment state its own limits."),
   ("skill", "secops/incident-scoping"),
+  ("skill_script", "secops/incident-scoping/scripts/incident_scoping.py"),
 
 ],
  "expect": "Scoping the last actor finds `cluster-prod` alone; the whole chain "

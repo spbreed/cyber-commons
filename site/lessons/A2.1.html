@@ -257,7 +257,64 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/agent-identity-review/scripts/agent_identity_review.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Separate the user, the workload and the agent instance, and use each for what only it can answer.
+
+This is the executable half of the `agent-identity-review` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+from dataclasses import dataclass, field
+
+@dataclass(frozen=True)
+class Principal:
+    user: str            # the human who asked
+    workload: str        # the process, from platform attestation
+    instance: str        # this run of this agent
+    scopes: frozenset    # the workload&#x27;s ceiling
+
+def authorize(p, required):
+    &quot;&quot;&quot;Authorization is about the WORKLOAD: what may this agent ever do.&quot;&quot;&quot;
+    return required in p.scopes
+
+def attribute(p, action):
+    &quot;&quot;&quot;Attribution is about the USER: who caused this.&quot;&quot;&quot;
+    return {&quot;action&quot;: action, &quot;caused_by&quot;: p.user,
+            &quot;performed_by&quot;: p.workload, &quot;run&quot;: p.instance}
+
+def memory_key(p, workspace):
+    &quot;&quot;&quot;Memory is scoped to the USER, not the workspace - this is the write that
+    let A1.4 leak a poisoned note between people.&quot;&quot;&quot;
+    return f&quot;{workspace}:{p.user}&quot;
+
+dana = Principal(&quot;dana@corp&quot;, &quot;reports-agent&quot;, &quot;run-8812&quot;,
+                 frozenset({&quot;reports:read&quot;}))
+priya = Principal(&quot;priya@corp&quot;, &quot;reports-agent&quot;, &quot;run-8813&quot;,
+                  frozenset({&quot;reports:read&quot;}))
+
+print(f&quot;{&#x27;request&#x27;:28s}{&#x27;authorized?&#x27;:13s}attributed to&quot;)
+for p, need in ((dana, &quot;reports:read&quot;), (dana, &quot;db:admin&quot;)):
+    ok = authorize(p, need)
+    rec = attribute(p, need)
+    print(f&quot;{p.user + &#x27; -&gt; &#x27; + need:28s}{str(ok):13s}{rec[&#x27;caused_by&#x27;]} via {rec[&#x27;performed_by&#x27;]}&quot;)
+
+print(&quot;\nmemory keys - the same workspace, two users:&quot;)
+print(f&quot;   dana  -&gt; {memory_key(dana, &#x27;acme&#x27;)}&quot;)
+print(f&quot;   priya -&gt; {memory_key(priya, &#x27;acme&#x27;)}&quot;)
+print(f&quot;   shared? {memory_key(dana, &#x27;acme&#x27;) == memory_key(priya, &#x27;acme&#x27;)}&quot;)
+print()
+print(&quot;db:admin is refused because the WORKLOAD never held it - so no user can&quot;)
+print(&quot;borrow it through the agent, which is A1.6 closed. The audit line names&quot;)
+print(&quot;dana, which is A1.14 closed. And a note written in dana&#x27;s session cannot&quot;)
+print(&quot;be read back in priya&#x27;s, which is A1.4 closed.&quot;)
+assert not authorize(dana, &quot;db:admin&quot;)
+assert memory_key(dana, &quot;acme&quot;) != memory_key(priya, &quot;acme&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its own shape: a routing description an agent reads to decide whether this review applies, the tools it is allowed to use, and a procedure long enough to separate user, workload and agent instance and to check both narrowing rules — scope is a subset of what was presented, and within the actor's own ceiling.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>For one agent, write down its three identities. If the workload and the user are the same value, you have inherited credentials; if the instance does not exist, you cannot revoke one run.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">A2.2 · Bootstrapping the first credential</a></strong></p>

@@ -231,7 +231,106 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/risk-registry-integrator/scripts/risk_registry_integrator.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Roll a register up from the downstreams an agent&#x27;s tools reach, and treat an unmapped dependency as unassessed rather than clean.
+
+This is the executable half of the `risk-registry-integrator` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+FAMILIES = {
+ &quot;prompt injection and instruction hijacking&quot;: [&quot;R3&quot;],
+ &quot;identity and authorisation&quot;:                 [&quot;R1&quot;, &quot;R5&quot;, &quot;R11&quot;],
+ &quot;software supply chain and execution&quot;:        [&quot;R4&quot;],
+ &quot;local filesystem manipulation&quot;:              [&quot;R6&quot;],
+ &quot;code and CI/CD pipeline&quot;:                    [&quot;R7&quot;, &quot;R8&quot;],
+ &quot;RAG misconfiguration and data exposure&quot;:     [&quot;R12&quot;],
+ &quot;lateral movement and logging&quot;:               [&quot;R9&quot;, &quot;R10&quot;],
+ &quot;guardrail tampering&quot;:                        [&quot;R2&quot;],
+}
+print(f&quot;{&#x27;family&#x27;:44s}{&#x27;risks&#x27;:&gt;6}  ids&quot;)
+for fam in sorted(FAMILIES, key=lambda f: (-len(FAMILIES[f]), f)):
+    ids = FAMILIES[fam]
+    print(f&quot;{fam:44s}{len(ids):&gt;6}  {&#x27;, &#x27;.join(ids)}&quot;)
+
+total = sum(len(v) for v in FAMILIES.values())
+biggest = max(sorted(FAMILIES), key=lambda f: len(FAMILIES[f]))
+print(f&quot;\nrisks: {total}   families: {len(FAMILIES)}&quot;)
+print(f&quot;largest family: {biggest} ({len(FAMILIES[biggest])} of {total})&quot;)
+print()
+print(&quot;Identity carries a quarter of the register on its own - over-privileged&quot;)
+print(&quot;execution, plaintext long-lived tokens, and no lineage from a human to an&quot;)
+print(&quot;action. None of the three is exotic, and all three are closed by the same&quot;)
+print(&quot;chapter. That is why chapter 2 is identity and not something more&quot;)
+print(&quot;interesting.&quot;)
+assert total == 12 and biggest == &quot;identity and authorisation&quot;
+
+COMPONENT = {
+ &quot;R1&quot;:  &quot;workflow agent + its authorisation&quot;,
+ &quot;R2&quot;:  &quot;guardrails around the advisor&#x27;s output&quot;,
+ &quot;R3&quot;:  &quot;ingress into any agent&quot;,
+ &quot;R4&quot;:  &quot;third-party MCP server&quot;,
+ &quot;R5&quot;:  &quot;the transport between agent and API&quot;,
+ &quot;R6&quot;:  &quot;local std I/O on Alex&#x27;s laptop&quot;,
+ &quot;R7&quot;:  &quot;the coding agent&#x27;s CI/CD path&quot;,
+ &quot;R8&quot;:  &quot;the coding agent&#x27;s pull requests&quot;,
+ &quot;R9&quot;:  &quot;every downstream API, once one agent is held&quot;,
+ &quot;R10&quot;: &quot;the log sink&quot;,
+ &quot;R11&quot;: &quot;identity, across all four agents&quot;,
+ &quot;R12&quot;: &quot;the vector store&quot;,
+}
+AGENT_OF = {
+ &quot;R1&quot;: &quot;workflow&quot;, &quot;R2&quot;: &quot;advisor&quot;, &quot;R3&quot;: &quot;all four&quot;, &quot;R4&quot;: &quot;workflow&quot;,
+ &quot;R5&quot;: &quot;all four&quot;, &quot;R6&quot;: &quot;files&quot;, &quot;R7&quot;: &quot;coding&quot;, &quot;R8&quot;: &quot;coding&quot;,
+ &quot;R9&quot;: &quot;all four&quot;, &quot;R10&quot;: &quot;all four&quot;, &quot;R11&quot;: &quot;all four&quot;, &quot;R12&quot;: &quot;advisor&quot;,
+}
+from collections import Counter
+per_agent = Counter(AGENT_OF.values())
+print(f&quot;{&#x27;agent&#x27;:12s}{&#x27;risks&#x27;:&gt;6}&quot;)
+for a in sorted(per_agent, key=lambda k: (-per_agent[k], k)):
+    print(f&quot;{a:12s}{per_agent[a]:&gt;6}&quot;)
+
+shared = per_agent[&quot;all four&quot;]
+print(f&quot;\nrisks that belong to no single agent : {shared} of {len(AGENT_OF)}&quot;)
+print()
+print(&quot;Five of twelve are not any one agent&#x27;s problem. They are properties of&quot;)
+print(&quot;how the four are wired together - ingress, transport, identity, logging,&quot;)
+print(&quot;and what a held agent can reach. Assign those to an agent owner and they&quot;)
+print(&quot;will be nobody&#x27;s, which is the failure E1.10 is entirely about.&quot;)
+assert shared == 5
+
+OWNED_BY_LESSON = {
+ &quot;R1&quot;: [&quot;A2.3&quot;, &quot;A2.4&quot;, &quot;A3.1&quot;], &quot;R2&quot;: [&quot;A3.5&quot;, &quot;A3.6&quot;, &quot;A3.9&quot;],
+ &quot;R3&quot;: [&quot;A1.2&quot;, &quot;A1.3&quot;, &quot;A2.6&quot;, &quot;A3.1&quot;], &quot;R4&quot;: [&quot;C2.5&quot;, &quot;A3.8&quot;, &quot;B2.13&quot;],
+ &quot;R5&quot;: [&quot;A2.1&quot;, &quot;A2.2&quot;, &quot;A2.4&quot;], &quot;R6&quot;: [&quot;A3.2&quot;, &quot;A1.8&quot;, &quot;B2.12&quot;],
+ &quot;R7&quot;: [&quot;B2.12&quot;, &quot;B2.9&quot;, &quot;A3.6&quot;], &quot;R8&quot;: [&quot;B2.5&quot;, &quot;B2.9&quot;, &quot;B2.10&quot;],
+ &quot;R9&quot;: [&quot;A3.3&quot;, &quot;A3.7&quot;, &quot;D2.3&quot;], &quot;R10&quot;: [&quot;D1.5&quot;, &quot;E2.5&quot;, &quot;A2.7&quot;],
+ &quot;R11&quot;: [&quot;A2.1&quot;, &quot;A2.7&quot;, &quot;A1.14&quot;], &quot;R12&quot;: [&quot;A1.3&quot;, &quot;A1.4&quot;, &quot;E1.3&quot;],
+}
+lessons = sorted({l for ls in OWNED_BY_LESSON.values() for l in ls})
+by_function = Counter(l[0] for l in lessons)
+
+print(f&quot;risks with at least one owning lesson : &quot;
+      f&quot;{sum(1 for v in OWNED_BY_LESSON.values() if v)}/{len(OWNED_BY_LESSON)}&quot;)
+print(f&quot;distinct lessons doing the work       : {len(lessons)}&quot;)
+print()
+print(f&quot;{&#x27;function&#x27;:10s}{&#x27;lessons&#x27;:&gt;8}&quot;)
+for f in sorted(by_function):
+    print(f&quot;{f:10s}{by_function[f]:&gt;8}&quot;)
+
+unowned = [r for r, ls in OWNED_BY_LESSON.items() if not ls]
+print(f&quot;\nrisks with no owner: {unowned or &#x27;none&#x27;}&quot;)
+print()
+print(&quot;Twelve risks, twenty-odd lessons, four functions. A register that fits on&quot;)
+print(&quot;one page and points at everything else is the artefact this chapter was&quot;)
+print(&quot;for - and the thing to re-run whenever CyberTravels grows a fifth agent.&quot;)
+assert not unowned and len(lessons) &gt; 15</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Twelve risks, each as a scene rather than a mechanism, each with a control and an owning lesson. Identity and authorisation is the largest family at three of twelve. Five of the twelve belong to no single agent — ingress, transport, identity, logging and blast radius are properties of how the four are wired together. The integrator skill then loads and reports its shape, and its first failure mode is the one that keeps registers looking clean: a downstream with no register entry is unassessed, not safe.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write the same four columns for one agentic system you run. The column that will be hardest is the fourth: for each control, where is it taught, tested and evidenced in your organisation? The rows with no answer are the ones that will recur.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> You can draw an agentic system as named components, say which of the five patterns it is, and place any of fifteen risks on the component it attacks. That is the vocabulary the rest of the commons runs on.</p>

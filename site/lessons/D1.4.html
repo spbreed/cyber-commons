@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.4 — Detection engineering *for* agents | Cyber Commons</title><meta name="description" content="Detections whose subject is a non-human principal."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.4</div><h1>Detection engineering *for* agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Scope drift, unusual tool sequencing, off-hours autonomous action.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detections whose subject is a non-human principal.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Five detections whose subject is a non-human principal.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.4 · Detection engineering <em>for</em> agents</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.4 — Detection engineering *for* agents | Cyber Commons</title><meta name="description" content="Detections whose subject is a non-human principal."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.4</div><h1>Detection engineering *for* agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">D1</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Scope drift, unusual tool sequencing, off-hours autonomous action.</p></div><div class="ctrl"><div class="lab">Control</div><p>Detections whose subject is a non-human principal.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Five detections whose subject is a non-human principal.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.4 · Detection engineering <em>for</em> agents</h1>
 <p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Agent-assisted detection engineering</a></strong>.</p>
 <table>
@@ -73,7 +73,281 @@ rule gets tuned down, and then it never fires again — including when something
 is genuinely wrong.</p>
 <p>The signals that <em>do</em> work for agents are about <strong>change</strong>: a tool it has never
 used, a mix that has shifted, a scope exercised that was never needed before.</p></div><div class="nbmd"><h2>3 · Verify — the alert text an analyst can act on</h2>
-<p>"Anomaly detected" fails both tests: it does not say what changed, and it does not say what to do.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>"Anomaly detected" fails both tests: it does not say what changed, and it does not say what to do.</p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
+<p>All three classic rules fire on CyberTravels' patch agent doing exactly its job, and only the rate rule fires on the human. The skill runs both, then measures drift from a signed-off baseline week by week — naming the new tool rather than reporting a distance.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-aware-rule-review/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: agent-aware-rule-review
+description: &gt;-
+  Run existing detection rules against an agent doing its job to find which fire
+  on legitimate work, and measure behavioural drift from a signed-off baseline
+  week by week. Use when agents enter an estate whose detection content predates
+  them.
+allowed-tools: Read, Grep, Glob
+---
+
+# Every classic rule fires on an agent working normally
+
+Detection content written for humans classifies agent behaviour as an incident:
+the volume rule, the off-hours rule, the breadth-of-access rule. Turning them
+off loses coverage; leaving them on trains the analyst to ignore them. The
+answer is a per-population baseline and a drift measure against it.
+
+## When to use this
+
+Whenever agents are introduced into an estate with existing detection content,
+and at each model or manifest upgrade afterwards.
+
+## Procedure
+
+**1 — Run each classic rule against a clean agent run** and against a human&#x27;s
+day. Record which fire on which. Rules that fire on the agent and not the human
+are the ones needing a population.
+
+**2 — Sign off a baseline for each agent.** Tools used, resources touched, rate,
+hours. Signed off means somebody agreed it — a baseline nobody approved is a
+measurement, not a control.
+
+**3 — Compare each subsequent week against the baseline.** Report a drift figure
+and, more usefully, the *new* items: a tool that was not in the baseline is the
+signal, and it is legible in a way a distance number is not.
+
+**4 — Set a tolerance and say what crossing it does.** Drift within tolerance is
+noise; beyond it is a review, and the review is of the change that caused it —
+usually a model upgrade or a manifest edit.
+
+**5 — Write the alert text for a human.** &quot;patch-agent drift 0.35, new tools:
+run_shell&quot; is actionable. A distance metric on its own gets closed.
+
+## Output contract
+
+```json
+{
+  &quot;classic_rules&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;fires_on_agent&quot;: true, &quot;fires_on_human&quot;: false}],
+  &quot;baseline&quot;: {&quot;agent&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;resources&quot;: [&quot;str&quot;], &quot;signed_off&quot;: true},
+  &quot;weeks&quot;: [{&quot;week&quot;: 0, &quot;drift&quot;: 0.0, &quot;new_tools&quot;: [&quot;str&quot;], &quot;within_tolerance&quot;: true}],
+  &quot;tolerance&quot;: 0.0,
+  &quot;alert_text&quot;: &quot;str&quot;
+}
+```
+
+## Failure modes
+
+- **Muting the classic rules.** You lose them for humans too.
+- **A baseline nobody signed off.** Nothing to appeal to when it drifts.
+- **Alerting on the distance only.** Name the new tool.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/detection/agent-aware-rule-review/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-aware-rule-review/scripts/agent_aware_rule_review.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Run classic detection rules against an agent doing its job, and measure behavioural drift against a signed-off baseline.
+
+This is the executable half of the `agent-aware-rule-review` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import statistics, time
+from dataclasses import dataclass
+
+@dataclass
+class Event:
+    ts: float; actor: str; action: str; target: str = &quot;&quot;
+
+now = time.time()
+AGENT = [Event(now + i*0.2, &quot;patch-agent&quot;, &quot;read_file&quot;, f&quot;/work/{i}.py&quot;)
+         for i in range(300)]
+HUMAN = [Event(now + t, &quot;dana@corp&quot;, &quot;read_file&quot;, &quot;/work/a.py&quot;)
+         for t in (0, 12, 30, 95, 240, 600, 1500)]
+
+CLASSIC = {
+ &quot;rate &gt; 30 actions/min&quot;:
+   lambda ev: (len(ev) / max((ev[-1].ts - ev[0].ts)/60, 1e-9)) &gt; 30,
+ &quot;activity outside 09:00-18:00&quot;:
+   lambda ev: True,                     # agents run continuously
+ &quot;same action &gt; 100 times&quot;:
+   lambda ev: max((sum(1 for e in ev if e.action == a) for a in {x.action for x in ev}),
+                  default=0) &gt; 100,
+}
+print(f&quot;{&#x27;classic rule&#x27;:34s}{&#x27;fires on agent&#x27;:16s}fires on human&quot;)
+print(&quot;-&quot; * 66)
+for name, rule in CLASSIC.items():
+    print(f&quot;{name:34s}{str(rule(AGENT)):16s}{rule(HUMAN)}&quot;)
+print(&quot;\nAll three fire on an agent doing exactly its job. Deployed as-is, they&quot;)
+print(&quot;produce continuous noise and are disabled within a week.&quot;)
+
+@dataclass
+class Baseline:
+    &quot;&quot;&quot;What normal looked like when the control was signed off.&quot;&quot;&quot;
+    tool_mix: dict
+    actions_per_hour: float
+    scopes_used: set
+
+    def compare(self, events, scopes_used, hours=1.0):
+        counts = {}
+        for e in events:
+            counts[e.action] = counts.get(e.action, 0) + 1
+        total = sum(counts.values()) or 1
+        now_mix = {k: v/total for k, v in counts.items()}
+        keys = set(now_mix) | set(self.tool_mix)
+        tvd = sum(abs(now_mix.get(k, 0) - self.tool_mix.get(k, 0)) for k in keys) / 2
+        new_tools = sorted(set(now_mix) - set(self.tool_mix))
+        new_scopes = sorted(scopes_used - self.scopes_used)
+        return {&quot;drift&quot;: round(tvd, 3), &quot;new_tools&quot;: new_tools,
+                &quot;new_scopes&quot;: new_scopes,
+                &quot;rate_ratio&quot;: round((total/hours) / self.actions_per_hour, 2),
+                &quot;verdict&quot;: (&quot;SIGNIFICANT — re-test the controls&quot;
+                            if tvd &gt; 0.25 or new_tools or new_scopes
+                            else &quot;within tolerance&quot;)}
+
+base = Baseline(tool_mix={&quot;read_file&quot;: 0.85, &quot;search&quot;: 0.15},
+                actions_per_hour=1200, scopes_used={&quot;repo:read&quot;})
+
+WEEKS = {
+ &quot;week 1 (baseline)&quot;:   ([(&quot;read_file&quot;, 850), (&quot;search&quot;, 150)], {&quot;repo:read&quot;}),
+ &quot;week 4 (new prompt)&quot;: ([(&quot;read_file&quot;, 700), (&quot;search&quot;, 200), (&quot;write_file&quot;, 100)],
+                          {&quot;repo:read&quot;, &quot;repo:write&quot;}),
+ &quot;week 8 (upgrade)&quot;:    ([(&quot;read_file&quot;, 300), (&quot;search&quot;, 100), (&quot;write_file&quot;, 200),
+                          (&quot;run_shell&quot;, 400)], {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;exec&quot;}),
+}
+for label, (mix, scopes) in WEEKS.items():
+    ev = [Event(now, &quot;patch-agent&quot;, tool) for tool, n in mix for _ in range(n)]
+    d = base.compare(ev, scopes)
+    print(f&quot;{label:22s} drift={d[&#x27;drift&#x27;]:.3f}  rate×{d[&#x27;rate_ratio&#x27;]}  {d[&#x27;verdict&#x27;]}&quot;)
+    if d[&quot;new_tools&quot;]:  print(f&quot;{&#x27;&#x27;:22s} new tools:  {d[&#x27;new_tools&#x27;]}&quot;)
+    if d[&quot;new_scopes&quot;]: print(f&quot;{&#x27;&#x27;:22s} new scopes: {d[&#x27;new_scopes&#x27;]}&quot;)
+
+def alert_text(agent, d):
+    if d[&quot;verdict&quot;].startswith(&quot;within&quot;): return None
+    changes = []
+    if d[&quot;new_tools&quot;]:  changes.append(f&quot;began using {d[&#x27;new_tools&#x27;]}&quot;)
+    if d[&quot;new_scopes&quot;]: changes.append(f&quot;exercised new scopes {d[&#x27;new_scopes&#x27;]}&quot;)
+    if d[&quot;drift&quot;] &gt; 0.25: changes.append(f&quot;tool mix shifted (TVD {d[&#x27;drift&#x27;]})&quot;)
+    return (f&quot;[{agent}] behaviour changed from the signed-off baseline\n&quot;
+            f&quot;   what changed : {&#x27;; &#x27;.join(changes)}\n&quot;
+            f&quot;   why it matters: the controls in A3 were tested against the old\n&quot;
+            f&quot;                   behaviour; a new tool may not be covered\n&quot;
+            f&quot;   do this      : confirm a manifest change was reviewed (A1.1),\n&quot;
+            f&quot;                   then re-run the containment suite (C1.2)&quot;)
+
+ev = [Event(now, &quot;patch-agent&quot;, tool) for tool, n in WEEKS[&quot;week 8 (upgrade)&quot;][0]
+      for _ in range(n)]
+d = base.compare(ev, WEEKS[&quot;week 8 (upgrade)&quot;][1])
+print(alert_text(&quot;patch-agent&quot;, d))
+assert d[&quot;new_tools&quot;] and d[&quot;new_scopes&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>All three classic rules fire on an agent doing its job and only the rate rule fires on the human. Drift is within tolerance at week 1, significant at week 4 with <code>write_file</code> and <code>repo:write</code> new, and larger at week 8 with <code>run_shell</code> and an <code>exec</code> scope. The alert text names what changed, why it matters and what to do.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one human-baseline rule in your SIEM and check how it behaves against a service account. If it fires nightly, it is already tuned off for that actor — which means you have no detection there at all.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.5.html">D1.5 · Agent telemetry as a data source</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb">Source</a></p>

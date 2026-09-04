@@ -66,163 +66,10 @@ in this lesson demonstrates and the reason the next lesson works at all.</p></di
                              └─ stages 11-14        └─ stage 15</code></p>
 </blockquote></div><div class="nbmd"><h2>3 · Stage 1 — historical parsing</h2>
 <p>A slice of the CyberTravels bookings repository: commits, their subjects, and which of them were security fixes. Nothing has been scanned yet.</p></div><div class="nbmd"><h2>4 · Stage 2 — structural indexing</h2>
-<p>Index the code into semantic units. <code>ast</code> does the work here; in a polyglot repository this is what tree-sitter is for.</p></div><div class="nbmd"><h2>5 · Stage 3, with a model actually doing the summarising</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># --- model backend: replay by default, real model when you configure one ----
-# Nothing here is Anthropic- or vendor-specific beyond one URL and one header
-# shape. Standard library only, so the notebook stays self-contained.
-import json, os, urllib.error, urllib.request
-
-# The cheapest current model on each side, which is what a lesson needs.
-FRONTIER_DEFAULT   = &quot;claude-haiku-4-5-20251001&quot;
-OPEN_WEIGHT_DEFAULT = &quot;glm-4.6&quot;
-TIMEOUT = 60
-
-def _kaggle_secret(name):
-    &quot;&quot;&quot;On Kaggle, a key lives in Add-ons -&gt; Secrets rather than the environment.
-
-    kaggle_secrets is pre-installed in the Kaggle image and absent everywhere
-    else, so the import is guarded and the notebook needs no dependency. It also
-    requires the notebook to have internet enabled, which on Kaggle requires a
-    phone-verified account - see the note printed below.
-    &quot;&quot;&quot;
-    try:
-        from kaggle_secrets import UserSecretsClient
-        return UserSecretsClient().get_secret(name)
-    except Exception:
-        return None
-
-def backend():
-    &quot;&quot;&quot;(kind, model). Configuration comes from the environment, never a literal.&quot;&quot;&quot;
-    if os.environ.get(&quot;ANTHROPIC_API_KEY&quot;) or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;):
-        os.environ.setdefault(&quot;ANTHROPIC_API_KEY&quot;,
-                              os.environ.get(&quot;ANTHROPIC_API_KEY&quot;)
-                              or _kaggle_secret(&quot;ANTHROPIC_API_KEY&quot;) or &quot;&quot;)
-        return &quot;frontier&quot;, os.environ.get(&quot;MODEL&quot;, FRONTIER_DEFAULT)
-    if os.environ.get(&quot;OPENAI_BASE_URL&quot;):
-        return &quot;open-weight&quot;, os.environ.get(&quot;MODEL&quot;, OPEN_WEIGHT_DEFAULT)
-    return &quot;replay&quot;, &quot;deterministic stand-in (no backend configured)&quot;
-
-def _post(url, payload, headers):
-    req = urllib.request.Request(url, data=json.dumps(payload).encode(),
-                                 headers={&quot;content-type&quot;: &quot;application/json&quot;, **headers})
-    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
-        return json.loads(r.read().decode())
-
-def _anthropic(prompt, system, model, max_tokens, temperature):
-    body = {&quot;model&quot;: model, &quot;max_tokens&quot;: max_tokens, &quot;temperature&quot;: temperature,
-            &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]}
-    if system:
-        body[&quot;system&quot;] = system
-    headers = {&quot;x-api-key&quot;: os.environ[&quot;ANTHROPIC_API_KEY&quot;],
-               &quot;anthropic-version&quot;: &quot;2023-06-01&quot;}
-    # An identity-linked key is scoped to a workspace and the API refuses the
-    # call without being told which one. A plain organisation key needs nothing
-    # here, so the header is only sent when it is set.
-    ws = os.environ.get(&quot;ANTHROPIC_WORKSPACE_ID&quot;)
-    if ws:
-        headers[&quot;anthropic-workspace-id&quot;] = ws
-    base = os.environ.get(&quot;ANTHROPIC_BASE_URL&quot;, &quot;https://api.anthropic.com&quot;).rstrip(&quot;/&quot;)
-    out = _post(f&quot;{base}/v1/messages&quot;, body, headers)
-    return &quot;&quot;.join(b.get(&quot;text&quot;, &quot;&quot;) for b in out.get(&quot;content&quot;, [])).strip()
-
-def _openai_compatible(prompt, system, model, max_tokens, temperature):
-    msgs = ([{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: system}] if system else []) + \
-           [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]
-    base = os.environ[&quot;OPENAI_BASE_URL&quot;].rstrip(&quot;/&quot;)
-    key = os.environ.get(&quot;OPENAI_API_KEY&quot;, &quot;not-needed&quot;)
-    out = _post(f&quot;{base}/chat/completions&quot;,
-                {&quot;model&quot;: model, &quot;messages&quot;: msgs, &quot;max_tokens&quot;: max_tokens,
-                 &quot;temperature&quot;: temperature},
-                {&quot;authorization&quot;: f&quot;Bearer {key}&quot;})
-    return out[&quot;choices&quot;][0][&quot;message&quot;][&quot;content&quot;].strip()
-
-def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
-    &quot;&quot;&quot;Answer `prompt` with the configured backend, or return `replay`.
-
-    `replay` is required, not optional: a lesson must be able to run offline,
-    and the answer it falls back to has to be visible in the source rather than
-    invented at runtime.
-    &quot;&quot;&quot;
-    kind, model = backend()
-    if kind == &quot;replay&quot;:
-        return replay, kind, model
-    try:
-        fn = _anthropic if kind == &quot;frontier&quot; else _openai_compatible
-        return fn(prompt, system, model, max_tokens, temperature), kind, model
-    except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
-        # Print what the API actually said. &quot;failed: 400&quot; costs whoever hits
-        # this an hour; the body usually names the exact missing header or
-        # parameter, and it never contains the key.
-        detail = getattr(e, &quot;code&quot;, None) or type(e).__name__
-        why = &quot;&quot;
-        if hasattr(e, &quot;read&quot;):
-            try:
-                why = json.loads(e.read().decode()).get(&quot;error&quot;, {}).get(&quot;message&quot;, &quot;&quot;)
-            except Exception:
-                why = &quot;&quot;
-        print(f&quot;   !! {kind} backend ({model}) failed: {detail}&quot;
-              f&quot;{&#x27; - &#x27; + why if why else &#x27;&#x27;}&quot;)
-        print(&quot;      Using the replay, which is labelled as one. No model answered.&quot;)
-        return replay, &quot;replay&quot;, f&quot;{model} unreachable&quot;
-
-_kind, _model = backend()
-print(f&quot;model backend : {_kind}&quot;)
-print(f&quot;model         : {_model}&quot;)
-if _kind == &quot;replay&quot;:
-    print()
-    print(&quot;This lesson runs offline against a deterministic replay, which is why&quot;)
-    print(&quot;it works on a Kaggle kernel with the internet switched off. To run the&quot;)
-    print(&quot;identical code against a real model, set one of:&quot;)
-    print()
-    print(&quot;   frontier     export ANTHROPIC_API_KEY=...   # cheapest: &quot; + FRONTIER_DEFAULT)
-    print(&quot;                (an identity-linked key also needs&quot;)
-    print(&quot;                 ANTHROPIC_WORKSPACE_ID=...)&quot;)
-    print(&quot;   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \\&quot;)
-    print(&quot;                       OPENAI_API_KEY=ollama MODEL=glm-4.6&quot;)
-    print()
-    print(&quot;   On Kaggle: Add-ons -&gt; Secrets, add ANTHROPIC_API_KEY, and switch&quot;)
-    print(&quot;   Internet on in the notebook settings. Internet requires a&quot;)
-    print(&quot;   phone-verified Kaggle account; without it DNS fails in the kernel&quot;)
-    print(&quot;   and this lesson correctly stays on the replay.&quot;)</code></pre></div><div class="nbmd"><h2>6 · The same lesson, against a real model</h2>
-<p>Everything below this point runs identically on three backends. Offline it uses
-a deterministic replay that is labelled as a replay wherever it appears — never
-presented as a model's output. With <code>ANTHROPIC_API_KEY</code> set it calls a frontier
-model; with <code>OPENAI_BASE_URL</code> set it calls any OpenAI-compatible endpoint,
-which covers Ollama, vLLM and the hosted open-weight providers.</p>
-<p>The point of running it both ways is not that the answers match. It is that
-<strong>the lesson's assertion holds either way</strong> — if it only holds against the
-replay, the lesson was testing the replay.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>TASK = &#x27;Summarise what this component does in one sentence, then name its trust boundary.\n\nFiles: src/api/bookings.py\nExports: get_booking(request), upload_voucher(request)\nCallers: the public HTTP router. Calls into: src/data/reports.py, src/data/docs.py&#x27;
-
-REPLAY = &#x27;Accepts traveller HTTP requests for bookings and voucher uploads, passing both straight into the data layer.\nTrust boundary: every parameter here arrives from the public internet, so the edge between src/api and src/data is where untrusted input crosses into a component that reaches the database and the filesystem.&#x27;
-
-answer, used, model = ask(TASK, replay=REPLAY,
-            system=&#x27;You summarise code components for a security architecture map. Two sentences, no preamble.&#x27;,
-            max_tokens=300)
-
-print(f&quot;backend used : {used}&quot;)
-print(f&quot;model        : {model}&quot;)
-print(f&quot;prompt       : {TASK[:66]}...&quot;)
-print()
-print(&quot;answer:&quot;)
-for line in (answer.splitlines() or [answer]):
-    print(f&quot;   {line}&quot;)
-
-# Two assertions that must hold on every backend, and one property that is
-# reported rather than asserted - a real model failing it is a finding about
-# the model, not a broken notebook.
-assert answer.strip(), &quot;the configured backend returned nothing&quot;
-if used == &quot;replay&quot;:
-    assert answer == REPLAY, &quot;the offline path must return the replay verbatim&quot;
-
-label, held = (&quot;names a trust boundary&quot;, &quot;trust&quot; in answer.lower() or &quot;boundary&quot; in answer.lower())
-print()
-print(f&quot;property checked : {label}&quot;)
-print(f&quot;held on {used:12s} : {held}&quot;)
-print()
-print(&quot;Same code, same assertions, three possible backends. Offline the answer&quot;)
-print(&quot;is the replay and is labelled as one; with a key it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>7 · Stage 3 — summarise each component, locally</h2>
-<p>The model call above is what stage 3 looks like in production. Below is the deterministic version, so the rest of the lesson has a fixed input to work from.</p></div><div class="nbmd"><h2>8 · Stage 4 — synthesise the map, and find the boundaries</h2>
-<p>A trust boundary is any edge where data crosses from a less-trusted component into a more-trusted one. Those edges are where every finding in the rest of the pipeline turns out to live.</p></div><div class="nbmd"><h2>9 · The map changes when the code changes</h2>
-<p>This is the whole reason for deriving it. One function is added; the map is regenerated; the delta is the thing the next lesson threat-models.</p></div><div class="nbmd"><h2>10 · Write the four stages down as an agent skill</h2>
+<p>Index the code into semantic units. <code>ast</code> does the work here; in a polyglot repository this is what tree-sitter is for.</p></div><div class="nbmd"><h2>5 · Stage 3 — summarise each component, locally</h2>
+<p>The model call above is what stage 3 looks like in production. Below is the deterministic version, so the rest of the lesson has a fixed input to work from.</p></div><div class="nbmd"><h2>6 · Stage 4 — synthesise the map, and find the boundaries</h2>
+<p>A trust boundary is any edge where data crosses from a less-trusted component into a more-trusted one. Those edges are where every finding in the rest of the pipeline turns out to live.</p></div><div class="nbmd"><h2>7 · The map changes when the code changes</h2>
+<p>This is the whole reason for deriving it. One function is added; the map is regenerated; the delta is the thing the next lesson threat-models.</p></div><div class="nbmd"><h2>8 · Write the four stages down as an agent skill</h2>
 <p>You have just run Phase 1 by hand. The next repository needs the same four stages and so does the next agent, so the procedure belongs in a file rather than in your head. This is the one in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-repo-recon/SKILL.md — embedded verbatim from the repository.
 # This is the file itself, not a paraphrase of it.
 SKILL_MD = r&quot;&quot;&quot;---
@@ -434,7 +281,362 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-repo-recon/scripts/appsec_repo_recon.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Read a repository the way stage 1 to 4 of the pipeline does: history, structural index, component summaries, and the map they synthesise.
+
+This is the executable half of the `appsec-repo-recon` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+# --- model backend: replay by default, a Kaggle open-weight model when served -
+# One URL and one header shape, no vendor SDK. Standard library only, so the
+# notebook stays self-contained.
+import json, os, urllib.error, urllib.request
+
+# Qwen2.5-7B-Instruct is the floor established in MODELS.md: below it two of
+# the lessons&#x27; acceptance properties stop holding.
+OPEN_WEIGHT_DEFAULT = &quot;qwen2.5-7b-instruct&quot;
+TIMEOUT = 60
+
+def backend():
+    &quot;&quot;&quot;(kind, model). Configuration comes from the environment, never a literal.&quot;&quot;&quot;
+    if os.environ.get(&quot;OPENAI_BASE_URL&quot;):
+        return &quot;open-weight&quot;, os.environ.get(&quot;MODEL&quot;, OPEN_WEIGHT_DEFAULT)
+    return &quot;replay&quot;, &quot;deterministic stand-in (no backend configured)&quot;
+
+def _post(url, payload, headers):
+    req = urllib.request.Request(url, data=json.dumps(payload).encode(),
+                                 headers={&quot;content-type&quot;: &quot;application/json&quot;, **headers})
+    with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+        return json.loads(r.read().decode())
+
+def _openai_compatible(prompt, system, model, max_tokens, temperature):
+    msgs = ([{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: system}] if system else []) + \
+           [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: prompt}]
+    base = os.environ[&quot;OPENAI_BASE_URL&quot;].rstrip(&quot;/&quot;)
+    key = os.environ.get(&quot;OPENAI_API_KEY&quot;, &quot;not-needed&quot;)
+    out = _post(f&quot;{base}/chat/completions&quot;,
+                {&quot;model&quot;: model, &quot;messages&quot;: msgs, &quot;max_tokens&quot;: max_tokens,
+                 &quot;temperature&quot;: temperature},
+                {&quot;authorization&quot;: f&quot;Bearer {key}&quot;})
+    return out[&quot;choices&quot;][0][&quot;message&quot;][&quot;content&quot;].strip()
+
+def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
+    &quot;&quot;&quot;Answer `prompt` with the configured backend, or return `replay`.
+
+    `replay` is required, not optional: a lesson must be able to run offline,
+    and the answer it falls back to has to be visible in the source rather than
+    invented at runtime.
+    &quot;&quot;&quot;
+    kind, model = backend()
+    if kind == &quot;replay&quot;:
+        return replay, kind, model
+    try:
+        return _openai_compatible(prompt, system, model, max_tokens,
+                                  temperature), kind, model
+    except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
+        # Print what the server actually said. &quot;failed: 400&quot; costs whoever hits
+        # this an hour; the body usually names the exact missing parameter, and
+        # it never contains a key.
+        detail = getattr(e, &quot;code&quot;, None) or type(e).__name__
+        why = &quot;&quot;
+        if hasattr(e, &quot;read&quot;):
+            try:
+                why = json.loads(e.read().decode()).get(&quot;error&quot;, {}).get(&quot;message&quot;, &quot;&quot;)
+            except Exception:
+                why = &quot;&quot;
+        print(f&quot;   !! {kind} backend ({model}) failed: {detail}&quot;
+              f&quot;{&#x27; - &#x27; + why if why else &#x27;&#x27;}&quot;)
+        print(&quot;      Using the replay, which is labelled as one. No model answered.&quot;)
+        return replay, &quot;replay&quot;, f&quot;{model} unreachable&quot;
+
+_kind, _model = backend()
+print(f&quot;model backend : {_kind}&quot;)
+print(f&quot;model         : {_model}&quot;)
+if _kind == &quot;replay&quot;:
+    print()
+    print(&quot;This lesson runs offline against a deterministic replay, which is why&quot;)
+    print(&quot;it works on a Kaggle kernel with the internet switched off. To run the&quot;)
+    print(&quot;identical code against a real model, serve an open-weight model from&quot;)
+    print(&quot;Kaggle Models and point the adapter at it:&quot;)
+    print()
+    print(&quot;   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \\&quot;)
+    print(&quot;           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen&quot;)
+    print(&quot;   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \\&quot;)
+    print(&quot;          MODEL=qwen2.5-7b-instruct&quot;)
+    print()
+    print(&quot;   MODELS.md has the exact Kaggle download. There is no paid backend:&quot;)
+    print(&quot;   every model result in this repository was produced this way.&quot;)
+
+
+import ast, math, re
+from collections import Counter, defaultdict
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Commit:
+    sha: str; subject: str; files: tuple; days_ago: int
+
+HISTORY = [
+ Commit(&quot;a1b2c3d&quot;, &quot;fix(api): reject empty session tokens (CVE-2025-0091)&quot;,
+        (&quot;src/api/bookings.py&quot;,), 420),
+ Commit(&quot;b2c3d4e&quot;, &quot;refactor: extract render helper&quot;, (&quot;src/util/render.py&quot;,), 400),
+ Commit(&quot;c3d4e5f&quot;, &quot;fix(data): SQL injection in the booking filter (CVE-2025-1188)&quot;,
+        (&quot;src/data/reports.py&quot;,), 300),
+ Commit(&quot;d4e5f6a&quot;, &quot;feat: CSV export of itineraries&quot;,
+        (&quot;src/data/reports.py&quot;, &quot;src/util/render.py&quot;), 260),
+ Commit(&quot;e5f6a7b&quot;, &quot;security: patch path traversal in the voucher store&quot;,
+        (&quot;src/data/docs.py&quot;,), 210),
+ Commit(&quot;f6a7b8c&quot;, &quot;chore: bump deps&quot;, (&quot;requirements.txt&quot;,), 180),
+ Commit(&quot;a7b8c9d&quot;, &quot;fix(api): timing leak in the token compare&quot;,
+        (&quot;src/api/bookings.py&quot;,), 150),
+ Commit(&quot;b8c9d0e&quot;, &quot;feat: pagination on bookings&quot;, (&quot;src/data/reports.py&quot;,), 120),
+ Commit(&quot;c9d0e1f&quot;, &quot;fix: harden the voucher path join after the report&quot;,
+        (&quot;src/data/docs.py&quot;,), 60),
+ Commit(&quot;d0e1f2a&quot;, &quot;style: formatting&quot;, (&quot;src/util/render.py&quot;,), 30),
+]
+
+MARKERS = re.compile(
+    r&quot;\b(cve-\d{4}-\d+|security|injection|traversal|xss|ssrf|auth|hardcoded|&quot;
+    r&quot;leak|sanitis|sanitiz|escap)\w*&quot;, re.I)
+
+def is_security_fix(c):
+    return bool(MARKERS.search(c.subject))
+
+def risk_zones(history, half_life_days=180):
+    &quot;&quot;&quot;Prior-defect density, decayed by age. A recent security fix weighs more.&quot;&quot;&quot;
+    score, fixes, churn = defaultdict(float), defaultdict(int), Counter()
+    for c in history:
+        for f in c.files:
+            churn[f] += 1
+            if is_security_fix(c):
+                fixes[f] += 1
+                score[f] += math.exp(-c.days_ago / half_life_days)
+    return sorted(
+        ({&quot;file&quot;: f, &quot;commits&quot;: churn[f], &quot;security_fixes&quot;: fixes[f],
+          &quot;risk&quot;: round(score[f], 3)} for f in churn),
+        key=lambda r: (-r[&quot;risk&quot;], r[&quot;file&quot;]))
+
+zones = risk_zones(HISTORY)
+print(f&quot;{&#x27;file&#x27;:24s}{&#x27;commits&#x27;:&gt;9}{&#x27;sec fixes&#x27;:&gt;11}{&#x27;risk&#x27;:&gt;8}&quot;)
+print(&quot;-&quot; * 52)
+for r in zones:
+    print(f&quot;{r[&#x27;file&#x27;]:24s}{r[&#x27;commits&#x27;]:&gt;9}{r[&#x27;security_fixes&#x27;]:&gt;11}{r[&#x27;risk&#x27;]:&gt;8}&quot;)
+
+print(&quot;\nsrc/api/bookings.py and src/data/docs.py are the repeat zones, and the&quot;)
+print(&quot;ordering comes entirely from history - no rule has run.&quot;)
+print(&quot;Note what stage 1 missed: &#x27;harden the voucher path join&#x27; is the most&quot;)
+print(&quot;recent security commit in the list and matches no marker, so it scores&quot;)
+print(&quot;nothing. Marker quality IS the accuracy of this stage.&quot;)
+
+SOURCES = {
+ &quot;src/api/bookings.py&quot;: &#x27;&#x27;&#x27;
+def get_booking(request):
+    &quot;&quot;&quot;HTTP GET /bookings/&lt;ref&gt; - request.args is traveller-controlled.&quot;&quot;&quot;
+    return render(load_booking(request.args[&quot;ref&quot;], request.args[&quot;owner&quot;]))
+
+def upload_voucher(request):
+    &quot;&quot;&quot;HTTP POST /vouchers - the multipart body is traveller-controlled.&quot;&quot;&quot;
+    return store(request.files[&quot;doc&quot;], request.args[&quot;name&quot;])
+&#x27;&#x27;&#x27;,
+ &quot;src/data/reports.py&quot;: &#x27;&#x27;&#x27;
+def load_booking(ref, owner):
+    return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + ref +
+                      &quot; AND owner=&#x27;&quot; + owner + &quot;&#x27;&quot;)
+&#x27;&#x27;&#x27;,
+ &quot;src/data/docs.py&quot;: &#x27;&#x27;&#x27;
+def store(blob, name):
+    path = &quot;/srv/vouchers/&quot; + name
+    open(path, &quot;wb&quot;).write(blob)
+    return path
+&#x27;&#x27;&#x27;,
+ &quot;src/util/render.py&quot;: &#x27;&#x27;&#x27;
+def render(rows):
+    return &quot;\\n&quot;.join(str(r) for r in rows)
+&#x27;&#x27;&#x27;,
+}
+
+DANGEROUS = {&quot;execute&quot;: &quot;database&quot;, &quot;open&quot;: &quot;filesystem&quot;, &quot;write&quot;: &quot;filesystem&quot;}
+
+def units_of(src, path):
+    out = []
+    for fn in [n for n in ast.walk(ast.parse(src))
+               if isinstance(n, ast.FunctionDef)]:
+        calls = sorted({(c.func.id if isinstance(c.func, ast.Name)
+                         else getattr(c.func, &quot;attr&quot;, &quot;&quot;))
+                        for c in ast.walk(fn) if isinstance(c, ast.Call)} - {&quot;&quot;})
+        # file AND line, never a bare name: two functions called `handler` in
+        # two files are two units, and merging them loses a finding
+        out.append({&quot;name&quot;: fn.name, &quot;file&quot;: path, &quot;line&quot;: fn.lineno,
+                    &quot;params&quot;: [a.arg for a in fn.args.args], &quot;calls&quot;: calls,
+                    &quot;doc&quot;: ast.get_docstring(fn) or &quot;&quot;})
+    return out
+
+UNITS = [u for p, s in sorted(SOURCES.items()) for u in units_of(s, p)]
+NAMES = {u[&quot;name&quot;] for u in UNITS}
+
+print(f&quot;{&#x27;unit&#x27;:16s}{&#x27;file&#x27;:24s}{&#x27;line&#x27;:&gt;5}  params -&gt; calls&quot;)
+print(&quot;-&quot; * 78)
+for u in UNITS:
+    print(f&quot;{u[&#x27;name&#x27;]:16s}{u[&#x27;file&#x27;]:24s}{u[&#x27;line&#x27;]:&gt;5}  &quot;
+          f&quot;{u[&#x27;params&#x27;]} -&gt; {u[&#x27;calls&#x27;]}&quot;)
+
+# The question every later stage asks, and what each kind of index can say.
+def callers_of(name):
+    return sorted(u[&quot;name&quot;] for u in UNITS if name in u[&quot;calls&quot;])
+
+print(&quot;\n\&quot;who reaches store(), and with what?\&quot;&quot;)
+print(&quot;   line-based index : cannot answer - the token appears in two places&quot;)
+print(&quot;   file-based index : \&quot;it is in src/data/docs.py\&quot;&quot;)
+print(f&quot;   semantic index   : callers = {callers_of(&#x27;store&#x27;)}, and its input is &quot;
+      f&quot;a traveller-supplied filename&quot;)
+entries = sorted(u[&quot;name&quot;] for u in UNITS if not callers_of(u[&quot;name&quot;]))
+print(f&quot;\nentry points (nothing in the repository calls them): {entries}&quot;)
+
+def summarise(component, units):
+    &quot;&quot;&quot;Stage 3 - a LOCAL summary. One component, not the repository.&quot;&quot;&quot;
+    names = [u[&quot;name&quot;] for u in units]
+    return {
+      &quot;component&quot;: component,
+      &quot;units&quot;: names,
+      &quot;entry_points&quot;: [u[&quot;name&quot;] for u in units if u[&quot;doc&quot;].startswith(&quot;HTTP&quot;)],
+      &quot;talks_to&quot;: sorted({c for u in units for c in u[&quot;calls&quot;]
+                          if c in NAMES and c not in names}),
+      &quot;touches&quot;: sorted({DANGEROUS[c] for u in units for c in u[&quot;calls&quot;]
+                         if c in DANGEROUS}),
+    }
+
+by_dir = defaultdict(list)
+for u in UNITS:
+    by_dir[u[&quot;file&quot;].rsplit(&quot;/&quot;, 1)[0]].append(u)
+
+SUMMARIES = [summarise(d, us) for d, us in sorted(by_dir.items())]
+for s in SUMMARIES:
+    print(s[&quot;component&quot;])
+    print(f&quot;   units       {s[&#x27;units&#x27;]}&quot;)
+    print(f&quot;   entry pts   {s[&#x27;entry_points&#x27;] or &#x27;-&#x27;}&quot;)
+    print(f&quot;   talks to    {s[&#x27;talks_to&#x27;] or &#x27;-&#x27;}&quot;)
+    print(f&quot;   touches     {s[&#x27;touches&#x27;] or &#x27;-&#x27;}\n&quot;)
+
+TRUST = {&quot;src/api&quot;: 0, &quot;src/util&quot;: 1, &quot;src/data&quot;: 2}   # 0 = untrusted edge
+
+def synthesise(summaries, units):
+    comp = {u[&quot;name&quot;]: u[&quot;file&quot;].rsplit(&quot;/&quot;, 1)[0] for u in units}
+    flows = sorted({(u[&quot;name&quot;], c) for u in units for c in u[&quot;calls&quot;]
+                    if c in NAMES})
+    return {
+      &quot;entry_points&quot;: sorted(e for s in summaries for e in s[&quot;entry_points&quot;]),
+      &quot;flows&quot;: flows,
+      &quot;sinks&quot;: sorted({(u[&quot;name&quot;], DANGEROUS[c]) for u in units
+                       for c in u[&quot;calls&quot;] if c in DANGEROUS}),
+      &quot;boundaries&quot;: [(a, b, comp[a], comp[b]) for a, b in flows
+                     if TRUST[comp[a]] &lt; TRUST[comp[b]]],
+    }
+
+MAP = synthesise(SUMMARIES, UNITS)
+print(&quot;ENTRY POINTS   &quot;, MAP[&quot;entry_points&quot;])
+print(&quot;DATA FLOWS&quot;)
+for a, b in MAP[&quot;flows&quot;]:
+    print(f&quot;   {a} -&gt; {b}&quot;)
+print(&quot;SINKS&quot;)
+for u, res in MAP[&quot;sinks&quot;]:
+    print(f&quot;   {u:16s}touches the {res}&quot;)
+print(&quot;TRUST BOUNDARY CROSSINGS&quot;)
+for a, b, ca, cb in MAP[&quot;boundaries&quot;]:
+    print(f&quot;   {a + &#x27; -&gt; &#x27; + b:34s}{ca} (trust {TRUST[ca]}) -&gt; &quot;
+          f&quot;{cb} (trust {TRUST[cb]})&quot;)
+
+adj = defaultdict(list)
+for a, b in MAP[&quot;flows&quot;]:
+    adj[a].append(b)
+
+def reaches(start, seen=None):
+    seen = seen or set()
+    if start in seen:
+        return set()
+    out = {start}
+    for n in adj[start]:
+        out |= reaches(n, seen | {start})
+    return out
+
+# sorted(), not the set: a reachability report that lists the same entry points
+# in a different order on every machine cannot be diffed between two scans, and
+# diffing scans is the whole point of deriving the map rather than drawing it.
+print(&quot;\nSINKS REACHABLE FROM AN ENTRY POINT&quot;)
+for e in MAP[&quot;entry_points&quot;]:
+    for u, res in MAP[&quot;sinks&quot;]:
+        if u in reaches(e):
+            print(f&quot;   {e:16s} -&gt; {u:16s} touches the {res}&quot;)
+
+SOURCES_V2 = dict(SOURCES)
+SOURCES_V2[&quot;src/api/bookings.py&quot;] += &#x27;&#x27;&#x27;
+def admin_export(request):
+    &quot;&quot;&quot;HTTP GET /admin/export - was internal-only until this morning.&quot;&quot;&quot;
+    return store(load_booking(request.args[&quot;ref&quot;], request.args[&quot;owner&quot;]),
+                 request.args[&quot;name&quot;])
+&#x27;&#x27;&#x27;
+
+units2 = [u for p, s in sorted(SOURCES_V2.items()) for u in units_of(s, p)]
+NAMES = {u[&quot;name&quot;] for u in units2}
+by_dir2 = defaultdict(list)
+for u in units2:
+    by_dir2[u[&quot;file&quot;].rsplit(&quot;/&quot;, 1)[0]].append(u)
+map2 = synthesise([summarise(d, us) for d, us in sorted(by_dir2.items())], units2)
+
+before, after = set(MAP[&quot;entry_points&quot;]), set(map2[&quot;entry_points&quot;])
+print(f&quot;entry points before : {sorted(before)}&quot;)
+print(f&quot;entry points after  : {sorted(after)}&quot;)
+print(f&quot;NEW                 : {sorted(after - before)}&quot;)
+print(f&quot;flows {len(MAP[&#x27;flows&#x27;])} -&gt; {len(map2[&#x27;flows&#x27;])}, &quot;
+      f&quot;boundary crossings {len(MAP[&#x27;boundaries&#x27;])} -&gt; {len(map2[&#x27;boundaries&#x27;])}&quot;)
+print()
+print(&quot;One function. A new untrusted entry point now reaches both the database&quot;)
+print(&quot;and the filesystem, and two new edges cross a trust boundary. A threat&quot;)
+print(&quot;model drawn in a workshop last quarter says nothing about any of it.&quot;)
+assert after - before == {&quot;admin_export&quot;}
+assert len(map2[&quot;boundaries&quot;]) &gt; len(MAP[&quot;boundaries&quot;])
+assert MAP[&quot;entry_points&quot;] == [&quot;get_booking&quot;, &quot;upload_voucher&quot;]
+
+# ------------------------------------ the same task, against a real model
+# Offline this is a labelled replay; with an open-weight model served
+# from Kaggle it is the same code calling a real one.
+
+TASK = &#x27;Summarise what this component does in one sentence, then name its trust boundary.\n\nFiles: src/api/bookings.py\nExports: get_booking(request), upload_voucher(request)\nCallers: the public HTTP router. Calls into: src/data/reports.py, src/data/docs.py&#x27;
+
+REPLAY = &#x27;Accepts traveller HTTP requests for bookings and voucher uploads, passing both straight into the data layer.\nTrust boundary: every parameter here arrives from the public internet, so the edge between src/api and src/data is where untrusted input crosses into a component that reaches the database and the filesystem.&#x27;
+
+answer, used, model = ask(TASK, replay=REPLAY,
+            system=&#x27;You summarise code components for a security architecture map. Two sentences, no preamble.&#x27;,
+            max_tokens=300)
+
+print(f&quot;backend used : {used}&quot;)
+print(f&quot;model        : {model}&quot;)
+print(f&quot;prompt       : {TASK[:66]}...&quot;)
+print()
+print(&quot;answer:&quot;)
+for line in (answer.splitlines() or [answer]):
+    print(f&quot;   {line}&quot;)
+
+# Two assertions that must hold on every backend, and one property that is
+# reported rather than asserted - a real model failing it is a finding about
+# the model, not a broken notebook.
+assert answer.strip(), &quot;the configured backend returned nothing&quot;
+if used == &quot;replay&quot;:
+    assert answer == REPLAY, &quot;the offline path must return the replay verbatim&quot;
+
+label, held = (&quot;names a trust boundary&quot;, &quot;trust&quot; in answer.lower() or &quot;boundary&quot; in answer.lower())
+print()
+print(f&quot;property checked : {label}&quot;)
+print(f&quot;held on {used:12s} : {held}&quot;)
+print()
+print(&quot;Same code, same assertions, two possible backends. Offline the answer is&quot;)
+print(&quot;the replay and is labelled as one; with a served model it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four of ten commits match the security markers, and <code>src/api/bookings.py</code> ranks highest on decayed risk purely from history — with the most recent security commit scoring nothing, because it matches no marker. The structural index extracts five functions and identifies two entry points. Component summaries name what each directory touches, and the synthesised map shows both entry points reaching the database and the filesystem across a trust boundary. Adding one function adds a third entry point and two more boundary crossings.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run stage 1 against a repository you own: <code>git log --name-only --grep='CVE\|security\|injection'</code>, then rank the files by how often they appear. That list usually surprises people, and it is free. Then check how many of your recent security fixes your markers would have missed.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">B2.2 · Threat modelling from what the estate already knows</a></strong></p>

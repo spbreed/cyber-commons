@@ -279,7 +279,276 @@ meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
 print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
-print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>4 · Control intent, and why it is the honest static claim</h2>
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/agent-code-surface-analyzer/scripts/agent_code_surface_analyzer.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Enumerate a deployment&#x27;s declared tools and dangerous actions from its repository.
+
+This is the executable half of the `agent-code-surface-analyzer` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+SIGNALS = {
+ &quot;C1_default_deny_least_privilege&quot;: [&quot;default_deny&quot;, &quot;allowlist&quot;, &quot;policy engine&quot;,
+                                     &quot;authorisation check&quot;],
+ &quot;C2_sandbox_no_egress&quot;:            [&quot;isolation runtime&quot;, &quot;kernel confinement&quot;,
+                                     &quot;network mode control&quot;],
+ &quot;C3_identity_chain_obo&quot;:           [&quot;workload identity&quot;, &quot;delegation claim&quot;,
+                                     &quot;audience validation&quot;, &quot;token exchange&quot;],
+ &quot;C4_gateway_guardrails&quot;:           [&quot;gateway&quot;, &quot;guardrail&quot;, &quot;egress policy&quot;],
+ &quot;C5_injection_screening&quot;:          [&quot;injection detector&quot;, &quot;sanitisation&quot;,
+                                     &quot;provenance tagging&quot;],
+}
+CEILINGS = {
+ &quot;C2_sandbox_no_egress&quot;: &quot;absence of a covert channel is not provable from source&quot;,
+ &quot;C5_injection_screening&quot;: &quot;detector presence is verifiable; robustness is not&quot;,
+}
+RUNTIME_ONLY = {
+ &quot;C1_default_deny_least_privilege&quot;: &quot;observed usage and the effective role policy&quot;,
+ &quot;C4_gateway_guardrails&quot;: &quot;reachability testing from the deployment network&quot;,
+}
+
+def verdict(control, hits):
+    if not hits:
+        return &quot;NO_INTENT_FOUND&quot;, &quot;no signal for this control in the source&quot;
+    if control in CEILINGS:
+        return &quot;PARTIAL&quot;, CEILINGS[control]
+    if control in RUNTIME_ONLY:
+        return &quot;INTENT_EVIDENCED&quot;, f&quot;runtime verdict needs {RUNTIME_ONLY[control]}&quot;
+    return &quot;INTENT_EVIDENCED&quot;, f&quot;{len(hits)} signals; enforcement not shown&quot;
+
+for c in sorted(SIGNALS):
+    v, why = verdict(c, SIGNALS[c])
+    print(f&quot;{c:34s}{v:18s}{why[:44]}&quot;)
+print()
+print(&quot;PASS is not in the vocabulary. The strongest static verdict is&quot;)
+print(&quot;INTENT_EVIDENCED, and two controls cannot exceed PARTIAL at all.&quot;)
+assert &quot;PASS&quot; not in {verdict(c, SIGNALS[c])[0] for c in SIGNALS}
+
+CORPUS = [
+ {
+  &quot;repo&quot;: &quot;awslabs_mcp&quot;,
+  &quot;kind&quot;: &quot;mcp&quot;,
+  &quot;files&quot;: 2616,
+  &quot;tool_sites&quot;: 140,
+  &quot;sinks&quot;: 5,
+  &quot;annotated&quot;: True,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;PARTIAL&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;PARTIAL&quot;
+  }
+ },
+ {
+  &quot;repo&quot;: &quot;crewAIInc_crewAI&quot;,
+  &quot;kind&quot;: &quot;agent&quot;,
+  &quot;files&quot;: 2105,
+  &quot;tool_sites&quot;: 35,
+  &quot;sinks&quot;: 5,
+  &quot;annotated&quot;: False,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;PARTIAL&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;PARTIAL&quot;
+  }
+ },
+ {
+  &quot;repo&quot;: &quot;github_github-mcp-server&quot;,
+  &quot;kind&quot;: &quot;mcp&quot;,
+  &quot;files&quot;: 258,
+  &quot;tool_sites&quot;: 41,
+  &quot;sinks&quot;: 3,
+  &quot;annotated&quot;: False,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;PARTIAL&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;PARTIAL&quot;
+  }
+ },
+ {
+  &quot;repo&quot;: &quot;langchain-ai_langchain&quot;,
+  &quot;kind&quot;: &quot;agent&quot;,
+  &quot;files&quot;: 2673,
+  &quot;tool_sites&quot;: 99,
+  &quot;sinks&quot;: 5,
+  &quot;annotated&quot;: False,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;PARTIAL&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;PARTIAL&quot;
+  }
+ },
+ {
+  &quot;repo&quot;: &quot;langchain-ai_langgraph&quot;,
+  &quot;kind&quot;: &quot;agent&quot;,
+  &quot;files&quot;: 538,
+  &quot;tool_sites&quot;: 20,
+  &quot;sinks&quot;: 4,
+  &quot;annotated&quot;: False,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;NO_INTENT_FOUND&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;PARTIAL&quot;
+  }
+ },
+ {
+  &quot;repo&quot;: &quot;microsoft_autogen&quot;,
+  &quot;kind&quot;: &quot;agent&quot;,
+  &quot;files&quot;: 707,
+  &quot;tool_sites&quot;: 49,
+  &quot;sinks&quot;: 5,
+  &quot;annotated&quot;: True,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;PARTIAL&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;PARTIAL&quot;
+  }
+ },
+ {
+  &quot;repo&quot;: &quot;modelcontextprotocol_python-sdk&quot;,
+  &quot;kind&quot;: &quot;mcp&quot;,
+  &quot;files&quot;: 894,
+  &quot;tool_sites&quot;: 710,
+  &quot;sinks&quot;: 4,
+  &quot;annotated&quot;: True,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;PARTIAL&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;PARTIAL&quot;
+  }
+ },
+ {
+  &quot;repo&quot;: &quot;modelcontextprotocol_servers&quot;,
+  &quot;kind&quot;: &quot;mcp&quot;,
+  &quot;files&quot;: 100,
+  &quot;tool_sites&quot;: 9,
+  &quot;sinks&quot;: 3,
+  &quot;annotated&quot;: True,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;NO_INTENT_FOUND&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;NO_INTENT_FOUND&quot;
+  }
+ },
+ {
+  &quot;repo&quot;: &quot;modelcontextprotocol_typescript-sdk&quot;,
+  &quot;kind&quot;: &quot;mcp&quot;,
+  &quot;files&quot;: 957,
+  &quot;tool_sites&quot;: 58,
+  &quot;sinks&quot;: 2,
+  &quot;annotated&quot;: True,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;NO_INTENT_FOUND&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;PARTIAL&quot;
+  }
+ },
+ {
+  &quot;repo&quot;: &quot;openai_openai-agents-python&quot;,
+  &quot;kind&quot;: &quot;agent&quot;,
+  &quot;files&quot;: 998,
+  &quot;tool_sites&quot;: 182,
+  &quot;sinks&quot;: 5,
+  &quot;annotated&quot;: False,
+  &quot;verdicts&quot;: {
+   &quot;C1&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C2&quot;: &quot;PARTIAL&quot;,
+   &quot;C3&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C4&quot;: &quot;INTENT_EVIDENCED&quot;,
+   &quot;C5&quot;: &quot;PARTIAL&quot;
+  }
+ }
+]
+
+print(f&quot;{&#x27;repository&#x27;:36s}{&#x27;kind&#x27;:7s}{&#x27;files&#x27;:&gt;6}{&#x27;tools&#x27;:&gt;7}{&#x27;sinks&#x27;:&gt;6}  C1   C2   C3   C4   C5&quot;)
+SHORT = {&quot;INTENT_EVIDENCED&quot;: &quot;INT&quot;, &quot;PARTIAL&quot;: &quot;PART&quot;, &quot;NO_INTENT_FOUND&quot;: &quot;-&quot;}
+for r in CORPUS:
+    v = &quot;&quot;.join(f&quot;{SHORT[r[&#x27;verdicts&#x27;][c]]:&gt;5}&quot; for c in (&quot;C1&quot;,&quot;C2&quot;,&quot;C3&quot;,&quot;C4&quot;,&quot;C5&quot;))
+    print(f&quot;{r[&#x27;repo&#x27;]:36s}{r[&#x27;kind&#x27;]:7s}{r[&#x27;files&#x27;]:&gt;6}{r[&#x27;tool_sites&#x27;]:&gt;7}{r[&#x27;sinks&#x27;]:&gt;6}{v}&quot;)
+
+evals = [r[&quot;verdicts&quot;][c] for r in CORPUS for c in (&quot;C1&quot;,&quot;C2&quot;,&quot;C3&quot;,&quot;C4&quot;,&quot;C5&quot;)]
+print(f&quot;\ncontrol evaluations : {len(evals)}&quot;)
+for k in (&quot;INTENT_EVIDENCED&quot;, &quot;PARTIAL&quot;, &quot;NO_INTENT_FOUND&quot;):
+    print(f&quot;   {k:20s}{evals.count(k)}&quot;)
+print(f&quot;   {&#x27;PASS&#x27;:20s}{evals.count(&#x27;PASS&#x27;)}   &lt;- static evidence cannot prove enforcement&quot;)
+assert evals.count(&quot;PASS&quot;) == 0
+
+unannotated = [r for r in CORPUS if r[&quot;kind&quot;] == &quot;mcp&quot; and not r[&quot;annotated&quot;]]
+print(&quot;1. MCP servers shipping NO tool annotations:&quot;)
+for r in unannotated:
+    print(f&quot;   {r[&#x27;repo&#x27;]:36s}{r[&#x27;tool_sites&#x27;]} tool declaration sites&quot;)
+print(&quot;   The specification is explicit that annotations are hints, not&quot;)
+print(&quot;   guarantees - and that an UNANNOTATED tool must be assumed&quot;)
+print(&quot;   destructiveHint=true and openWorldHint=true. Every one of those&quot;)
+print(&quot;   tool sites inherits that pessimistic default.&quot;)
+
+gaps = [(r[&quot;repo&quot;], c) for r in CORPUS for c in (&quot;C1&quot;,&quot;C2&quot;,&quot;C3&quot;,&quot;C4&quot;,&quot;C5&quot;)
+        if r[&quot;verdicts&quot;][c] == &quot;NO_INTENT_FOUND&quot;]
+print(f&quot;\n2. Controls with no intent anywhere in the source: {len(gaps)}&quot;)
+for repo, c in gaps:
+    print(f&quot;   {repo:36s}{c}&quot;)
+
+capped = [c for r in CORPUS for c in (&quot;C2&quot;,&quot;C5&quot;) if r[&quot;verdicts&quot;][c] == &quot;PARTIAL&quot;]
+print(f&quot;\n3. Verdicts capped at PARTIAL by the ceiling rule: {len(capped)}&quot;)
+print(&quot;   Not because the evidence was weak - because the claim is not&quot;)
+print(&quot;   provable. An attestation that reported PASS here would be a&quot;)
+print(&quot;   signed, tamper-evident overstatement, which is worse than none.&quot;)
+assert unannotated and gaps and capped
+
+import json
+
+def attestation(repo_row, commit=&quot;c9e71f7&quot;):
+    controls = []
+    for c in (&quot;C1&quot;,&quot;C2&quot;,&quot;C3&quot;,&quot;C4&quot;,&quot;C5&quot;):
+        full = [k for k in SIGNALS if k.startswith(c)][0]
+        controls.append({
+            &quot;id&quot;: full,
+            &quot;verdict&quot;: repo_row[&quot;verdicts&quot;][c],
+            &quot;confidence&quot;: &quot;CAPPED&quot; if full in CEILINGS else &quot;STATIC&quot;,
+            &quot;evidence&quot;: [{&quot;skill&quot;: &quot;agent-code-surface-analyzer&quot;,
+                          &quot;uri&quot;: f&quot;labs/attestation/oss-corpus-results.json#{repo_row[&#x27;repo&#x27;]}&quot;}],
+        })
+    return {
+      &quot;_type&quot;: &quot;https://in-toto.io/Statement/v1&quot;,
+      &quot;subject&quot;: [{&quot;name&quot;: repo_row[&quot;repo&quot;], &quot;digest&quot;: {&quot;gitCommit&quot;: commit}}],
+      &quot;predicateType&quot;: &quot;https://cyber-commons/attestations/ai-control-intent/v1&quot;,
+      &quot;predicate&quot;: {&quot;deployment_id&quot;: repo_row[&quot;repo&quot;],
+                    &quot;scope&quot;: &quot;static source analysis only&quot;,
+                    &quot;controls&quot;: controls,
+                    &quot;drift&quot;: {&quot;since&quot;: None, &quot;changed&quot;: []}},
+      &quot;signatures&quot;: [],
+    }
+
+a = attestation(CORPUS[0])
+print(json.dumps(a, indent=1)[:600])
+print(&quot;   ...&quot;)
+print()
+print(&quot;`signatures` is empty and says so. A relying party MUST fail closed on a&quot;)
+print(&quot;missing or unsigned attestation: a signed file can be deleted, and&quot;)
+print(&quot;absence must never be read as a pass.&quot;)
+assert a[&quot;signatures&quot;] == [] and a[&quot;predicate&quot;][&quot;scope&quot;].startswith(&quot;static&quot;)</code></pre></div><div class="nbmd"><h2>4 · Control intent, and why it is the honest static claim</h2>
 <p>Static analysis cannot show that a control <strong>holds</strong>. It can show that somebody <strong>intended</strong> it — an imported sandbox, a validated audience claim, a provenance tag. That is a smaller claim and a true one, so the analyser never emits PASS.</p></div><div class="nbmd"><h2>5 · Run against ten real repositories</h2>
 <p>These are the verdicts the analyser in <code>labs/attestation/control_intent.py</code> produced against the five most-deployed open-source MCP repositories and five most-used agent frameworks, cloned at HEAD. Not a simulation — the counts below are what the scan returned.</p></div><div class="nbmd"><h2>6 · What the scan actually found</h2>
 <p>Three findings worth more than the table.</p></div><div class="nbmd"><h2>7 · The artefact</h2>

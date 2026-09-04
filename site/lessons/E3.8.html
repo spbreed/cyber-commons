@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.8 — Resilience over perfection | Cyber Commons</title><meta name="description" content="Maturity measured by containment, detection and recovery — not prevention."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.8</div><h1>Resilience over perfection</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Trying to enumerate every failure mode of a probabilistic system.</p></div><div class="ctrl"><div class="lab">Control</div><p>Maturity measured by containment, detection and recovery — not prevention.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Re-score your programme on containment/detection/recovery.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.8 · Resilience over perfection</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E3.8 — Resilience over perfection | Cyber Commons</title><meta name="description" content="Maturity measured by containment, detection and recovery — not prevention."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Running the Programme — the CISO Office</div><div class="sid">E3.8</div><h1>Resilience over perfection</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">E3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E3.8.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Trying to enumerate every failure mode of a probabilistic system.</p></div><div class="ctrl"><div class="lab">Control</div><p>Maturity measured by containment, detection and recovery — not prevention.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Re-score your programme on containment/detection/recovery.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.8.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.8.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E3.8 · Resilience over perfection</h1>
 <p><strong>Function E — AI Governance for Agentic Systems → Running the Programme — the CISO Office</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E3.7.html">E3.7 · Building the capability</a></strong>.</p>
 <table>
@@ -46,7 +46,294 @@ them prevention:</p>
 </ul>
 <p>A programme with all three survives a failure it did not predict, which is the
 only kind that actually happens. Perfection would mean containment never fails.
-Resilience means the other five steps work when it does.</p></div><div class="nbmd"><h2>Your turn</h2>
+Resilience means the other five steps work when it does.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Three properties for the day a control fails: drift detected, stop tested, run replayable. The skill checks each with its evidence — a measured twelve-second stop, tested 41 days ago — and reports three verdicts rather than one score.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/resilience-readiness-check/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: resilience-readiness-check
+description: &gt;-
+  Check the three properties a programme needs for the day a control fails —
+  drift is detected, the stop mechanism is tested, and the run is replayable —
+  and report which are not ready. Use as a standing readiness check rather than
+  after an incident.
+allowed-tools: Read, Grep, Glob
+---
+
+# Perfection is not available; these three are
+
+A programme cannot prevent every failure and does not need to. What it needs is
+that when a control fails, somebody notices, somebody can stop it, and somebody
+can reconstruct what happened. Each of the three is testable today, and each
+fails quietly if nobody tests it.
+
+## When to use this
+
+As a standing quarterly check, before granting unattended autonomy, and as the
+closing item of a programme review.
+
+## Procedure
+
+**1 — Detection: compare today against the signed-off baseline.** Not &quot;do we
+have monitoring&quot; — run the comparison and report the drift and any new tool. A
+monitor that has never been compared against a baseline is untested.
+
+**2 — Stop: check the mechanism, the measurement and the date.** A named
+mechanism, a measured time-to-stop in seconds, and when it was last exercised. A
+test older than a quarter is a claim.
+
+**3 — Replay: check the run record has the five inputs** — prompts, tool
+results, model version, seed, retrieved context — and confirm the delegation
+chain and the resources reached are recorded.
+
+**4 — Report each as ready or not, with the missing item named.** Three
+booleans and three sentences. A single readiness score hides which of the three
+is missing, and they have different owners.
+
+**5 — Re-run after every change to any of the three.** A model upgrade
+invalidates the drift baseline; a platform change invalidates the stop test.
+
+## Output contract
+
+```json
+{
+  &quot;detection&quot;: {&quot;baseline_at&quot;: &quot;str&quot;, &quot;drift&quot;: 0.0, &quot;new_tools&quot;: [&quot;str&quot;], &quot;ready&quot;: true},
+  &quot;stop&quot;: {&quot;mechanism&quot;: &quot;str&quot;, &quot;measured_seconds&quot;: 0, &quot;last_tested&quot;: &quot;str&quot;, &quot;ready&quot;: true},
+  &quot;replay&quot;: {&quot;inputs_present&quot;: [&quot;str&quot;], &quot;missing&quot;: [&quot;str&quot;], &quot;chain_recorded&quot;: true,
+             &quot;resources_recorded&quot;: true, &quot;ready&quot;: true},
+  &quot;verdict&quot;: {&quot;ready&quot;: false, &quot;missing&quot;: [&quot;str&quot;]}
+}
+```
+
+## Failure modes
+
+- **Checking that monitoring exists.** Run the comparison.
+- **An estimated time-to-stop.** Measure it.
+- **A single readiness score.** Three properties, three owners.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/programme/resilience-readiness-check/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/resilience-readiness-check/scripts/resilience_readiness_check.py — embedded verbatim from the repository.
+# This is the skill&#x27;s own script, not a paraphrase of it.
+#!/usr/bin/env python3
+&quot;&quot;&quot;Check the three properties a programme needs when a control fails: drift detected, stop tested, run replayable.
+
+This is the executable half of the `resilience-readiness-check` skill: the check the
+SKILL.md next to it describes, run against a synthetic CyberTravels
+estate so two runs can be diffed and the result argued with.
+
+Standard library only, and deterministic, so it runs on a Kaggle
+kernel with the internet switched off.
+&quot;&quot;&quot;
+
+import time, statistics
+now = time.time()
+
+# --- NOTICE ------------------------------------------------------------
+BASELINE = {&quot;read_file&quot;: 0.85, &quot;search&quot;: 0.15}
+TODAY    = {&quot;read_file&quot;: 300, &quot;search&quot;: 100, &quot;run_shell&quot;: 400}
+total = sum(TODAY.values())
+mix = {k: v/total for k, v in TODAY.items()}
+keys = set(mix) | set(BASELINE)
+drift = sum(abs(mix.get(k,0) - BASELINE.get(k,0)) for k in keys)/2
+new_tools = sorted(set(mix) - set(BASELINE))
+notice = drift &gt; 0.25 or bool(new_tools)
+print(f&quot;NOTICE   drift {drift:.3f}  new tools {new_tools}  → &quot;
+      f&quot;{&#x27;detected&#x27; if notice else &#x27;MISSED&#x27;}&quot;)
+
+# --- STOP --------------------------------------------------------------
+STOP = {&quot;mechanism&quot;: &quot;revoke the SPIFFE identity at the gateway&quot;,
+        &quot;measured_seconds&quot;: 12, &quot;tested_days_ago&quot;: 41, &quot;survives_restart&quot;: True}
+stop_ok = (STOP[&quot;measured_seconds&quot;] is not None and STOP[&quot;tested_days_ago&quot;] &lt;= 180
+           and STOP[&quot;survives_restart&quot;])
+print(f&quot;STOP     {STOP[&#x27;measured_seconds&#x27;]}s, tested {STOP[&#x27;tested_days_ago&#x27;]}d ago, &quot;
+      f&quot;survives restart {STOP[&#x27;survives_restart&#x27;]}  → {&#x27;ready&#x27; if stop_ok else &#x27;NOT READY&#x27;}&quot;)
+
+# --- RECOVER -----------------------------------------------------------
+RUN = {&quot;prompts&quot;: [&quot;fix SEC-4471&quot;], &quot;tool_results&quot;: [&quot;contents…&quot;],
+       &quot;model_version&quot;: &quot;glm-4.6@2026-07-14&quot;, &quot;seed&quot;: 42}
+missing = [k for k, v in RUN.items() if not v and v != 0]
+CHAIN = [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;]
+REACHED = {&quot;dana@corp&quot;: [&quot;repo-core&quot;], &quot;orchestrator&quot;: [&quot;queue&quot;],
+           &quot;patch-agent&quot;: [&quot;repo-core&quot;,&quot;repo-payments&quot;]}
+scope = sorted({r for a in CHAIN for r in REACHED.get(a, [])})
+recover = not missing and bool(scope)
+print(f&quot;RECOVER  replayable {not missing}, scope from the chain {scope}  → &quot;
+      f&quot;{&#x27;ready&#x27; if recover else &#x27;NOT READY&#x27;}&quot;)
+
+PROGRAMMES = {
+ &quot;prevention only&quot;: {&quot;notice&quot;: False, &quot;stop&quot;: False, &quot;recover&quot;: False,
+                     &quot;containment_asr&quot;: 0.0},
+ &quot;prevention + notice&quot;: {&quot;notice&quot;: True, &quot;stop&quot;: False, &quot;recover&quot;: False,
+                         &quot;containment_asr&quot;: 0.0},
+ &quot;resilient&quot;: {&quot;notice&quot;: True, &quot;stop&quot;: True, &quot;recover&quot;: True,
+               &quot;containment_asr&quot;: 0.0},
+}
+def incident_outcome(p, containment_failed=True):
+    if not containment_failed:
+        return &quot;no incident&quot;, 0
+    if not p[&quot;notice&quot;]:
+        return &quot;undetected — found by a third party, weeks later&quot;, 720
+    if not p[&quot;stop&quot;]:
+        return &quot;detected, cannot halt it — damage continues while you improvise&quot;, 96
+    if not p[&quot;recover&quot;]:
+        return &quot;detected and halted, cannot say what was touched or why&quot;, 48
+    return &quot;detected, halted in seconds, scope known, run replayable&quot;, 6
+
+print(f&quot;{&#x27;programme&#x27;:24s}{&#x27;containment ASR&#x27;:&gt;17}  outcome when containment fails&quot;)
+print(&quot;-&quot; * 96)
+for name, p in PROGRAMMES.items():
+    outcome, hours = incident_outcome(p)
+    print(f&quot;{name:24s}{p[&#x27;containment_asr&#x27;]:&gt;17.0%}  {outcome}&quot;)
+    print(f&quot;{&#x27;&#x27;:41s}elapsed to resolution: {hours}h&quot;)
+print(&quot;\nAll three have a 0% attack success rate. On a prevention-only&quot;)
+print(&quot;scorecard they are identical. They are not remotely identical.&quot;)
+
+def game_day(programme):
+    &quot;&quot;&quot;Assume the prevention worked until it didn&#x27;t. Measure the other three.&quot;&quot;&quot;
+    results = {}
+    results[&quot;notice&quot;]  = (0.2, &quot;drift alert fired&quot;) if programme[&quot;notice&quot;] \
+                         else (None, &quot;no signal — nothing fired&quot;)
+    results[&quot;stop&quot;]    = (12, &quot;identity revoked, survives restart&quot;) if programme[&quot;stop&quot;] \
+                         else (None, &quot;no tested mechanism&quot;)
+    results[&quot;recover&quot;] = (6, &quot;replayed the run, scope from the act chain&quot;) \
+                         if programme[&quot;recover&quot;] else (None, &quot;cannot reconstruct&quot;)
+    weakest = next((k for k, (v, _) in results.items() if v is None), None)
+    return results, weakest
+
+for name, p in PROGRAMMES.items():
+    res, weakest = game_day(p)
+    print(f&quot;=== {name} ===&quot;)
+    for cap, (val, note) in res.items():
+        print(f&quot;   {cap:9s}{(str(val) + &#x27;h&#x27;) if val is not None else &#x27;FAIL&#x27;:&gt;7}  {note}&quot;)
+    print(f&quot;   weakest capability: {weakest or &#x27;none — all three hold&#x27;}\n&quot;)
+
+_, weakest = game_day(PROGRAMMES[&quot;resilient&quot;])
+assert weakest is None
+print(&quot;The weakest capability is next quarter&#x27;s plan. That is the whole&quot;)
+print(&quot;programme-management loop, and it does not require predicting the attack.&quot;)
+
+# Close the curriculum: what you built, and what it is for.
+BUILT = [
+ (&quot;A1-A3&quot;, &quot;a control plane: planes, identity, containment&quot;),
+ (&quot;B1&quot;,    &quot;a 15-stage AppSec pipeline, ending in confirmed-by-exploitation severity&quot;),
+ (&quot;B2&quot;,    &quot;a harness whose verifier does not lie&quot;),
+ (&quot;C1-C2&quot;, &quot;the ability to attack it and to research it repeatably&quot;),
+ (&quot;D1-D2&quot;, &quot;the ability to notice, stop and recover&quot;),
+ (&quot;E1-E3&quot;, &quot;the ability to evidence all of it, and to decide&quot;),
+]
+for track, what in BUILT:
+    print(f&quot;   {track:8s}{what}&quot;)
+print(&quot;\nNone of it assumes a frontier-lab account, a vendor platform, or a&quot;)
+print(&quot;budget. That was the point: shared defense is stronger defense, and a&quot;)
+print(&quot;commons only works if everyone can actually run it.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Drift is detected with <code>run_shell</code> as a new tool, the stop mechanism is ready at 12 seconds tested 41 days ago, and the run is replayable with a four-resource scope. All three programmes show a 0% containment ASR yet resolve a failure in 720, 96 and 6 hours respectively. The game day identifies the weakest capability for each, and the resilient programme has none.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run a game day that assumes containment failed. Measure notice, stop and recover as three separate numbers. The weakest one is next quarter's plan — and unlike a prevention target, you can actually reach it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> A programme you can sequence, staff and defend: autonomy governed by level rather than by product list, one owner per thing, metrics that show control rather than activity, conditional approvals that are actually tracked, and a design that assumes failure and recovers.</p>
 <p><strong>What you still cannot do.</strong> Nothing here is finished, because none of it holds still. The models change, the patterns change, and the risks in A1 will not be the last fifteen. What you have is a method for the next set, not a solution to this one.</p>

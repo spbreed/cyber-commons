@@ -137,16 +137,20 @@ none of them are.
  "concept": """...the idea, in prose...""",
  "steps": [
    ("md", "## 2 · Demo — the idea working"),
-   ("py", '''...'''),
+   ("html", D.table(...)),           # or more prose; no ("py", ...) steps
    ("md", "## 3 · Where it breaks"),
-   ("py", '''...'''),
-   ("md", "## 4 · The control, and a check that it holds"),
-   ("py", '''...'''),
+   *skill_steps("appsec/<the-skill>",
+                "## 4 · The procedure, as a skill\n\n"
+                "...two or three sentences, grounded in CyberTravels..."),
  ],
  "expect": "what a correct run prints",
  "challenge": "the same thing, against a system you own",
 },
 ```
+
+The skill and its script are written first, in `skills/<area>/<name>/`, and
+`test_skills.py` runs the script before the lesson exists. A lesson is the
+narration around a procedure that already works.
 
 ```python
 # scripts/exercises/framing.py
@@ -161,36 +165,42 @@ python3 scripts/build_notebooks.py
 python3 scripts/run_notebooks.py --session B2.3
 python3 scripts/check_lessons.py
 python3 scripts/check_determinism.py --session B2.3
+python3 scripts/test_skills.py --skill appsec/<the-skill>
 python3 scripts/build_curriculum.py && python3 scripts/build_site.py
 ```
 
 ## What a lesson may execute
 
-Most lessons execute nothing. They are the idea, the diagram, the control and
-the scene it plays out in — and a lesson that only needed a `print` statement to
-make its point never needed code at all.
+A lesson executes **one thing**: an agent skill from [`skills/`](skills). There
+is no other code in a lesson, and that rule is what keeps the curriculum from
+drifting back into Python teaching Python.
 
-A lesson carries a code cell for exactly two reasons:
+The `skill_steps(ref, intro)` helper emits three steps, in this order and only
+this order:
 
-1. **It runs an agent skill.** The `("skill", ref)` step embeds a real
-   `SKILL.md` from [`skills/`](skills) verbatim, and `("skill_script", ref)`
-   embeds that skill's own script. The lesson executes the file in the
-   repository, never a paraphrase of it, so editing the skill makes the
-   notebook stale and CI says so.
+1. **The `SKILL.md` itself**, embedded verbatim. The procedure comes first
+   because that is what the lesson is teaching and what an agent would load.
+2. **The runtime that parses it** — sixty lines that split the frontmatter from
+   the body and read the output contract. Emitted by the skill step rather than
+   written as a step of its own, so it cannot be placed above the file. A
+   `("py", SKILL_RUNTIME)` step preceding a skill is dropped at build time.
+3. **The skill's own script**, embedded verbatim from `skills/<ref>/scripts/`.
+   The lesson runs the file in the repository, never a copy, so editing the
+   skill makes the notebook stale and CI says so.
 
-   **The file comes first.** A skill step emits two cells in a fixed order —
-   the `SKILL.md` itself, then the Python that parses and executes it. The
-   runtime is emitted by the skill step rather than written as a step of its
-   own, because a lesson that opens on sixty lines of parser has put the
-   machinery above the procedure. A `("py", SKILL_RUNTIME)` step placed before
-   a skill is dropped at build time for that reason.
-2. **It calls a model.** The `("model", …)` step emits one adapter and one
-   round trip — a labelled replay offline, a real frontier or open-weight call
-   when one is configured. A lesson may also drive the adapter itself from a
-   `py` cell when its subject is the loop rather than one round trip; B2.0 is
-   the only one, and `live_model_test.py` recognises that shape too.
+A skill whose output is a judgement or a diagram may carry no script; the lesson
+then executes the parse alone. One skill is in that position
+(`architecture/agentic-architecture-map`) and it says so in the lesson.
 
-Anything else is Python teaching Python. Code cells are **standard library
-only** and must be **deterministic**: seed from `zlib.crc32` rather than
-`hash()`, sort before iterating a set, and give every sort a full tiebreak.
-Both are gates in CI.
+**Model calls happen inside skill scripts.** A lesson does not emit an adapter.
+The seven skills that call a model carry `MODEL_RUNTIME` and their round trip in
+their own script, so "the only code is the skill" stays true for them too. There
+is one backend — an OpenAI-compatible endpoint, which is how an open-weight
+model from Kaggle is served — plus the labelled offline replay that is the
+default.
+
+Code is **standard library only** and must be **deterministic**: seed from
+`zlib.crc32` rather than `hash()`, sort before iterating a set, and give every
+sort a full tiebreak. Both are gates in CI, and so is
+[`test_skills.py`](scripts/test_skills.py), which executes every skill script in
+a stripped environment — a script that runs and prints nothing is a failure.
