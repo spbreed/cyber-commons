@@ -22,9 +22,14 @@ and so is every skill. No licence, no vendor, no paid model account.
    opens in *your* Kaggle account.
 3. Press **Run All**.
 
-That is the whole setup. The notebooks are standard-library only, so they run on
-a free CPU kernel **with the internet switched off** — no model download, no API
-key, no GPU, no quota. A lesson takes seconds.
+That is the whole setup. A lesson fetches the skills tree — a shallow, sparse
+clone, about three seconds — and runs one script out of it. Standard library
+only, free CPU kernel, no model download, no API key, no GPU, no quota.
+
+The clone needs **Internet on** in the notebook settings, which Kaggle gates on
+a verified phone number. Without one, attach the dataset
+[`cybercommons/cyber-commons-skills`](https://www.kaggle.com/datasets/cybercommons/cyber-commons-skills)
+instead: same tree, no network, and the cell tells you so if the clone fails.
 
 Locally, if you prefer: `python3 scripts/run_notebooks.py --session A1.0`
 
@@ -168,7 +173,7 @@ executed in CI and are labelled as such.
 **Where a skill calls a model, the same code runs two ways.** Offline it uses a
 deterministic stand-in, labelled as a stand-in everywhere it appears and never
 presented as a model's output — which is what lets it run on Kaggle with the
-internet off and keeps the determinism gate meaningful. Set one environment
+replay and keeps the determinism gate meaningful. Set one environment
 variable and the identical code calls a real model:
 
 ```bash

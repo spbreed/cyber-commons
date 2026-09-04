@@ -14,15 +14,15 @@ skills tree and runs that skill's own script out of it. Nothing else. The
 procedure, the runtime and the script are all files in `skills/`, so a fix is
 one edit rather than 117 rebuilt notebooks.
 
-The tree reaches Kaggle as an **attached dataset**, mounted read-only at
-`/kaggle/input/…/cyber-commons-skills/`. Not a clone: DNS does not resolve
-inside a kernel on an account without a verified phone number, which was probed
-rather than assumed —
+On Kaggle the lesson **clones** the tree — shallow, blobless and sparse, so it
+is the skills directory and about three seconds, not the repository. That needs
+the kernel's internet on, which needs a phone-verified account; without one the
+cell says so and points at `cybercommons/cyber-commons-skills`, the dataset
+`scripts/kaggle_dataset.py` publishes, which holds the same tree and needs no
+network.
 
-    fatal: unable to access '…': Could not resolve host: github.com
-
-`scripts/kaggle_dataset.py` publishes it. Still standard library only, and
-still runs with the internet switched off.
+Still standard library only. The clone is the one network call a lesson makes;
+nothing it runs afterwards touches the network.
 
 **One concept, in one order.** Each lesson is built the same way and only that
 way — see LESSON_DESIGN.md for the authoring contract:
@@ -88,18 +88,34 @@ def skill_markdown(ref: str) -> str:
             f"```yaml\n{front.strip()}\n```\n\n{body.strip()}")
 
 
-# One cell, and it carries no procedure of its own: it locates the repository
-# and runs the skill's script out of it. On Kaggle the repository arrives as an
-# attached dataset — `git clone` is not available, DNS does not resolve inside a
-# kernel on a free account — and locally it is the checkout.
-RUN_SKILL = '''import glob, os, subprocess, sys
+# One cell, and it carries no procedure of its own: it gets the repository and
+# runs the skill's script out of it. On Kaggle that is a shallow, sparse clone —
+# ~3 seconds for the skills tree alone — which needs the kernel's internet
+# switched on. In a checkout the file is already there and nothing is fetched.
+# Raw: the message below contains a \n that must reach the notebook as an
+# escape, not as a real newline inside a string literal. A non-raw literal
+# here produced 117 notebooks with a syntax error in the same place.
+RUN_SKILL = r'''import glob, os, subprocess, sys
 
-# The skills tree: the attached dataset on Kaggle, the checkout locally.
-_ROOTS = sorted(glob.glob("/kaggle/input/**/cyber-commons-skills", recursive=True)) + [".", "..", "../.."]
-_root = next((r for r in _ROOTS if os.path.isfile(os.path.join(r, SCRIPT))), None)
+CLONE = "/kaggle/working/cyber-commons"
+_root = next((r for r in (".", "..", "../..", CLONE)
+              if os.path.isfile(os.path.join(r, SCRIPT))), None)
+
 if _root is None:
-    raise SystemExit("skills tree not found. On Kaggle add the dataset "
-                     "cybercommons/cyber-commons-skills; locally run from a checkout.")
+    # --filter=blob:none --sparse fetches the tree without the history or the
+    # notebooks; `sparse-checkout set skills` then materialises only what runs.
+    _c = subprocess.run(["git", "clone", "--depth", "1", "--filter=blob:none",
+                         "--sparse", "--branch", BRANCH, REPO, CLONE],
+                        capture_output=True, text=True)
+    if _c.returncode:
+        raise SystemExit(
+            "could not fetch the skills: " + _c.stderr.strip()[-300:] +
+            "\nOn Kaggle this needs Internet on in the notebook settings, which "
+            "needs a phone-verified account. Without one, attach the dataset "
+            "cybercommons/cyber-commons-skills instead — it holds the same tree.")
+    subprocess.run(["git", "-C", CLONE, "sparse-checkout", "set", "skills"],
+                   capture_output=True, text=True)
+    _root = CLONE
 
 _out = subprocess.run([sys.executable, os.path.join(_root, SCRIPT)],
                       capture_output=True, text=True,
@@ -113,9 +129,11 @@ if _out.returncode:
 
 def run_skill_cell(script: str) -> str:
     """The only code cell a lesson has: run this skill's script from the repo."""
-    return (f"# The code is not in this notebook. It is the file in the repository:\n"
+    return (f"# The code is not in this notebook. It is this file in the repository:\n"
             f"#   {REPO}/blob/{BRANCH}/skills/{script}\n"
-            f'SCRIPT = "skills/{script}"\n\n'
+            f'SCRIPT = "skills/{script}"\n'
+            f'REPO = "{REPO}"\n'
+            f'BRANCH = "{BRANCH}"\n\n'
             f"{RUN_SKILL}")
 
 

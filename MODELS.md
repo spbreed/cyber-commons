@@ -21,7 +21,8 @@ export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm
 ```
 
 The adapter is standard library only (`urllib`), so a notebook stays
-self-contained and still runs on a Kaggle kernel with the internet switched off.
+self-contained and needs no model service: offline it is the replay, and the
+only network call a lesson makes is the clone that fetches the skills tree.
 It lives inside the **skill scripts** that call a model, not in the lessons — a
 lesson executes a skill and nothing else. If a backend is configured and the
 call fails, the lesson **says so and falls back to the replay, labelled as a

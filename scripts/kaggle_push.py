@@ -234,15 +234,15 @@ def push(session: str, username: str, private: bool = True) -> dict:
         # setting, not something this script can or should work around — pass
         # --public once the account is verified.
         "isPrivate": private,
-        # the labs are stdlib-only by design, so they pass with the internet off
-        "enableInternet": False,
+        # The lesson clones the skills tree from GitHub, so the kernel needs
+        # the internet. That requires a phone-verified account; without one the
+        # clone fails with a DNS error and the cell says to attach the dataset
+        # `cybercommons/cyber-commons-skills` instead.
+        "enableInternet": True,
         "enableGpu": False,
-        # The skills tree, attached as a dataset and mounted read-only. This is
-        # how the repository reaches a kernel: `git clone` is not available,
-        # because DNS does not resolve inside a kernel on an account without a
-        # verified phone number — probed, not assumed:
-        #   fatal: unable to access '...': Could not resolve host: github.com
-        "datasetDataSources": [f"{username}/{DATASET_SLUG}"],
+        # Nothing attached: the notebook fetches what it runs. The dataset
+        # remains published as the fallback for an unverified account.
+        "datasetDataSources": [],
         "competitionDataSources": [],
         "kernelDataSources": [],
         "categoryIds": ["cybersecurity"],

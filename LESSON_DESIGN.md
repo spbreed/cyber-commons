@@ -184,10 +184,12 @@ runs the file rather than a copy of it.
    `skills/<ref>/scripts/<name>.py` as a subprocess, printing its stdout. Eight
    lines, identical in every lesson, and none of them is the procedure.
 
-The tree is found in one of two places: the **dataset** attached to the Kaggle
-kernel (`cybercommons/cyber-commons-skills`, published by
-`scripts/kaggle_dataset.py`), or the checkout. Cloning the repository inside a
-kernel is not an option — DNS does not resolve without a verified phone number.
+The tree is found in the checkout if there is one, and otherwise **cloned** —
+`--depth 1 --filter=blob:none --sparse`, then `sparse-checkout set skills`, so a
+kernel fetches the skills directory rather than the repository. That needs the
+kernel's internet on, which Kaggle gates on a verified phone number; the cell's
+failure message names the dataset `cybercommons/cyber-commons-skills` as the
+fallback for an account without one.
 
 **Model calls happen inside skill scripts.** A lesson does not emit an adapter,
 and neither does a script: the six skills that call a model import `ask()` from

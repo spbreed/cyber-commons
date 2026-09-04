@@ -289,7 +289,7 @@ def lesson_page(entry, prev, nxt) -> str:
         parts.append('<p class="sub kagnote">“Run on Kaggle” opens the notebook in '
                      '<b>your own</b> Kaggle account as a new kernel. It carries '
                      'every line of code it runs — nothing to clone, nothing to '
-                     'install — so it works with the internet switched off, and the '
+                     'install \u2014 it fetches the skills tree and runs one file from it, and the '
                      'copy is yours to edit and re-run. Nothing is written back '
                      'here.</p>')
     else:
