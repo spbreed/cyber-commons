@@ -46,18 +46,22 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from exercises import EXERCISES  # noqa: E402
 
 def _calls_a_model(ex: dict) -> bool:
-    """A lesson is model-facing if it has a `model` step *or* runs the loop.
+    """A lesson is model-facing if the skill script it runs calls a model.
 
-    The second half matters: B2.0 drives the adapter from a plain `("py", ...)`
-    cell because its subject is the loop rather than one round trip, so a rule
-    that only looked for `model` steps would quietly skip the lesson whose whole
-    point is a model in a for-loop.
+    Lessons no longer emit an adapter of their own — the round trip lives in
+    the skill's script, so the question is about the file in `skills/` rather
+    than about the lesson's steps. Deriving it this way also means a skill that
+    gains or loses a model call is picked up without editing this script.
     """
     for kind, source in ex["steps"]:
-        if kind == "model":
-            return True
-        if kind == "py" and isinstance(source, str) and "loop(TASK" in source:
-            return True
+        if kind != "skill_script" or not isinstance(source, str):
+            continue
+        path = ROOT / "skills" / source
+        try:
+            if "def ask(" in path.read_text():
+                return True
+        except OSError:
+            continue
     return False
 
 
