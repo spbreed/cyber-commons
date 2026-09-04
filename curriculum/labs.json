@@ -5,6 +5,23 @@
   "env": "export OPENAI_BASE_URL=http://localhost:11434/v1; export OPENAI_API_KEY=ollama; export MODEL=glm-4.6"
  },
  "labs": {
+  "A0.1": {
+   "goal": "Run one lesson end to end on either free route, and see the two ways the arrangement fails before it works.",
+   "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A0.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A0.1   # run it headless and check it",
+    "",
+    "# --- route one, from nothing: clone once and nothing is fetched afterwards ---",
+    "git clone https://github.com/spbreed/cyber-commons && cd cyber-commons",
+    "PYTHONPATH=skills/_runtime python3 \\",
+    "  skills/programme/lesson-preflight/scripts/lesson_preflight.py",
+    "",
+    "# --- route two: press 'Run on Kaggle' on the lesson page, then switch",
+    "#     Internet on in the settings panel (Kaggle needs a verified phone). ---"
+   ],
+   "expect": "The tree inventoried from disk — 14 areas, 115 skills, 114 with a script — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file."
+  },
   "A1.0": {
    "goal": "Place the five functions of the commons on one map and find what each of the other four borrows from Function A.",
    "run": [

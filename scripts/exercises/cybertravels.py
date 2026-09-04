@@ -227,6 +227,13 @@ FAMILIES = [
 # --------------------------------------------------------------------------
 GROUNDING: dict[str, str] = {
 
+# ---- A0 · running the commons at all -------------------------------------
+"A0.1": "Every procedure in this commons is run against CyberTravels — a "
+        "synthetic estate, so a result can be diffed and argued with rather "
+        "than taken on trust. The procedure this lesson executes to prove the "
+        "machinery is A1.2's: a traveller's message overriding CyberTravels' "
+        "operator prompt.",
+
 # ---- A1 · the architecture and its risks ---------------------------------
 "A1.0": "CyberTravels is the system. Everything after this lesson names one of its "
         "boxes.",

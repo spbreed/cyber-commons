@@ -27,6 +27,14 @@ and the curriculum stay in step.
 # --------------------------------------------------------------------------
 HOOKS: dict[str, str] = {
 
+"A0.1":
+ "The first code cell you open in this commons is twenty lines of "
+ "`subprocess` and no procedure at all, which reads like a stub. It is not: "
+ "the procedure is a file in the repository, the cell fetches it, and the "
+ "only prerequisite anybody gets stuck on is one checkbox in a settings "
+ "panel. Ten minutes here saves the hour spent concluding the lessons are "
+ "empty.",
+
 "A1.0":
  "Two teams argue for an hour about whether an agent is safe, and discover at "
  "the end that one of them meant the model and the other meant the loop calling "
@@ -684,6 +692,28 @@ HOOKS: dict[str, str] = {
 
 # --------------------------------------------------------------------------
 DIAGRAMS: dict[str, str] = {
+
+"A0.1": """
+   WHAT YOU READ                 WHAT ACTUALLY RUNS
+
+   +---------------------+       repository
+   |  the lesson page    |       +---------------------------------+
+   |    hook             |       |  skills/<area>/<name>/          |
+   |    framework        |       |     SKILL.md    the procedure   |
+   |    the SKILL.md     |<------|     scripts/*.py  its executable|
+   |    Out: the output  |       |  skills/_runtime/  the library  |
+   +---------------------+       +---------------------------------+
+              |                            ^
+              | Run on Kaggle              | fetch (~3s), then run
+              v                            |
+   +---------------------+                 |
+   |  one cell, 20 lines |-----------------+
+   |  no procedure in it |
+   +---------------------+
+
+   on your laptop   the tree is already there   -> nothing is fetched
+   on Kaggle        the tree is not             -> Internet must be on
+""",
 
 "A1.0": """
    AI FOR SECURITY                        SECURITY OF AI
@@ -2217,6 +2247,19 @@ DIAGRAMS: dict[str, str] = {
 # has, and introduce the next chapter as the answer to that flaw.
 # --------------------------------------------------------------------------
 BRIDGES: dict[str, dict[str, str]] = {
+
+"A0": {
+ "gained": "You can run any lesson in the commons on either route, you know "
+           "what the one code cell in it is doing, and you can tell a fetch "
+           "failure from a procedure failure by reading one line of the error.",
+ "gap": "You have run a procedure and you cannot yet say what it is for. The "
+        "preflight proved the machinery works; it proved nothing about "
+        "agentic systems, which is the only reason any of this exists.",
+ "next": "Chapter 1 draws the system everything else in the commons names — "
+         "CyberTravels, its components, and the fifteen risks that "
+         "architecture makes possible. Next → A1.0, what securing an AI "
+         "architecture means.",
+},
 
 "A1": {
  "gained": "You can draw an agentic system as named components, say which of "

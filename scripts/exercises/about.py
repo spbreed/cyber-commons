@@ -9,6 +9,14 @@ not do this job; this does, and the build refuses a lesson without one.
 
 ABOUT: dict[str, str] = {
 
+"A0.1": """
+**What it covers.** How to run any lesson in this commons on either of the two free routes — a GitHub clone, or a Kaggle CPU kernel — what each one needs, and what the single code cell in every lesson is actually doing.
+
+**Why a security engineer needs it.** A lesson here carries no procedure: the procedure is a file in `skills/`, and the notebook fetches and runs it. That is what makes 118 lessons maintainable, and it is also a dependency the output does not show you. The control it builds is: a preflight that reproduces both ways the arrangement fails before reporting the host ready.
+
+This is the **first** lesson. It is the only one whose subject is the repository rather than the systems the repository is about, and everything after it assumes you have run something once.
+""",
+
 "A1.0": """
 **What it covers.** Place the five functions of the commons on one diagram and find where your own work sits.
 

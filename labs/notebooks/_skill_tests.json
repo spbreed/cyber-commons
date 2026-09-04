@@ -1,8 +1,8 @@
 {
  "generated_by": "scripts/test_skills.py",
  "note": "Each row is one skill: whether its frontmatter and output contract parse, and whether its own script runs to completion in a stripped environment and prints something. A script that runs and prints nothing counts as a failure.",
- "skills": 114,
- "executed": 113,
+ "skills": 115,
+ "executed": 114,
  "without_script": 1,
  "problems": [],
  "results": [
@@ -20,7 +20,7 @@
    "contract": true,
    "script": true,
    "lines": 66,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/appsec-triage-report",
@@ -28,7 +28,7 @@
    "contract": true,
    "script": true,
    "lines": 81,
-   "seconds": 0.06
+   "seconds": 0.05
   },
   {
    "skill": "appsec/appsec-vuln-audit",
@@ -140,7 +140,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "attestation/aws-runtime-posture-collector",
@@ -148,7 +148,7 @@
    "contract": true,
    "script": true,
    "lines": 28,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "attestation/deployment-inventory-resolver",
@@ -316,7 +316,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "grc/control-evidence",
@@ -332,7 +332,7 @@
    "contract": true,
    "script": true,
    "lines": 74,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "grc/guardrail-specification",
@@ -356,7 +356,7 @@
    "contract": true,
    "script": true,
    "lines": 39,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "identity/agent-identity-review",
@@ -364,7 +364,7 @@
    "contract": true,
    "script": true,
    "lines": 13,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "identity/attribution-ledger-check",
@@ -431,6 +431,14 @@
    "seconds": 0.01
   },
   {
+   "skill": "programme/lesson-preflight",
+   "parses": true,
+   "contract": true,
+   "script": true,
+   "lines": 33,
+   "seconds": 0.06
+  },
+  {
    "skill": "programme/ownership-seam-audit",
    "parses": true,
    "contract": true,
@@ -484,7 +492,7 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "redteam/attack-success-rate-campaign",
@@ -524,7 +532,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "regulatory/disclosure-phase-breakdown",
@@ -548,7 +556,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "regulatory/obligation-mapping",
@@ -572,7 +580,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "regulatory/trace-personal-data-audit",
@@ -628,7 +636,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "research/row-level-policy-check",
@@ -716,7 +724,7 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "response/stop-authority-readiness",
@@ -844,7 +852,7 @@
    "contract": true,
    "script": true,
    "lines": 43,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "threats/generated-code-reach-enumerator",

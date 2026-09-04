@@ -3,11 +3,11 @@
 **A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.**
 
-**117 lessons across 11 chapters.** Most are reading lessons — the idea, the
+**118 lessons across 12 chapters.** Most are reading lessons — the idea, the
 diagram, the control, and what it looks like in one running system — and then
-they **run a skill**. 114 of the 117 do, and the code is not in the notebook:
+they **run a skill**. 115 of the 118 do, and the code is not in the notebook:
 the lesson shows the `SKILL.md` as prose and runs that skill's own script from
-[`skills/`](skills/). Every one of the 117 is executed in CI before it ships,
+[`skills/`](skills/). Every one of the 118 is executed in CI before it ships,
 and so is every skill. No licence, no vendor, no paid model account.
 
 🌐 **[Live site](https://spbreed.github.io/cyber-commons/)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md)
@@ -16,11 +16,13 @@ and so is every skill. No licence, no vendor, no paid model account.
 
 ## Start here
 
-1. Open [**A1.0**](https://spbreed.github.io/cyber-commons/lessons/A1.0.html)
-   and read.
+1. Open [**A0.1**](https://spbreed.github.io/cyber-commons/lessons/A0.1.html) —
+   the two free routes through the commons, what each one needs, and what the
+   single code cell in every lesson is doing. Then
+   [**A1.0**](https://spbreed.github.io/cyber-commons/lessons/A1.0.html).
 2. On a lesson that carries a skill, press **▶ Run on Kaggle** — the notebook
    opens in *your* Kaggle account.
-3. Press **Run All**.
+3. Switch **Internet** on in the settings panel, then press **Run All**.
 
 That is the whole setup. A lesson fetches the skills tree — a shallow, sparse
 clone, about three seconds — and runs one script out of it. Standard library
@@ -99,17 +101,17 @@ and a local std-I/O path on a developer's laptop. Every lesson says what its
 idea looks like in that system, and a twelve-row risk register ties the whole
 curriculum together.
 
-Five functions, eleven chapters. **Each function opens with an introduction
+Five functions, twelve chapters. **Each function opens with an introduction
 lesson** that meets CyberTravels and asks its own question of it.
 
 | Function | The question it asks of CyberTravels | Chapters | Lessons |
 |---|---|---|---|
-| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [1](curriculum/track-a1.md) CyberTravels' architecture and every risk it carries · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 37 |
+| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [0](curriculum/track-a0.md) Running the commons · [1](curriculum/track-a1.md) CyberTravels' architecture and every risk it carries · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 38 |
 | **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [4](curriculum/track-b2.md) Harnesses and the AI SDLC pipeline | 14 |
 | **C · Red Teaming and Security Research with AI** | can we break it before somebody else does | [6](curriculum/track-c1.md) Red teaming with AI · [7](curriculum/track-c2.md) Security research with AI | 15 |
 | **D · The Agentic SOC** | would we see it happening, and could we stop it | [8](curriculum/track-d1.md) Detection · [9](curriculum/track-d2.md) Response | 21 |
 | **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [10](curriculum/track-e1.md) The governance framework · [11](curriculum/track-e2.md) The governance platform · [12](curriculum/track-e3.md) Running the programme | 30 |
-| | | **11 chapters** | **117** |
+| | | **12 chapters** | **118** |
 
 Nobody takes all of it. Everyone takes the **common spine** first — twenty
 lessons, in order, that carry the vocabulary the rest runs on. Then the chapters
@@ -141,7 +143,7 @@ only one produces a practitioner who gets surprised.
 
 ## Why you can trust the output
 
-**Every one of the 117 notebooks has been run twice — here, and again on Kaggle
+**Every one of the 118 notebooks has been run twice — here, and again on Kaggle
 on a different machine — and printed exactly the same bytes.**
 
 That second run is the claim worth making, because a kernel that prints nothing
@@ -151,7 +153,7 @@ remote stdout line-for-line against a fresh local run
 ([evidence](labs/notebooks/_kaggle_verified.json)). It caught two lessons whose
 output depended on `PYTHONHASHSEED`; both are fixed, and
 [`check_determinism.py`](scripts/check_determinism.py) now gates CI so the next
-one is caught in nine seconds instead of after 117 remote pushes.
+one is caught in nine seconds instead of after 118 remote pushes.
 
 Two properties make that possible, and both are enforced by the build:
 
@@ -215,7 +217,7 @@ python3 scripts/build_site.py
 git add -A && git commit -m "lesson: A2.5" && git push
 ```
 
-CI re-runs all of it with `--check` — secret scan, 117 notebooks, determinism
+CI re-runs all of it with `--check` — secret scan, 118 notebooks, determinism
 gate, skill contracts — and fails on drift, so the notebook you read on the site
 is always the notebook that ran. Pushing deploys the site.
 
@@ -230,11 +232,11 @@ refuses to read a credential file inside the repo. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 117 sessions, 11 chapters
+site/data/curriculum.json   source of truth: 118 sessions, 12 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
-skills/                     114 agent skills, plus _runtime/ — the one shared library
-labs/notebooks/             117 generated notebooks + execution and Kaggle evidence
+skills/                     115 agent skills, plus _runtime/ — the one shared library
+labs/notebooks/             118 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · run_notebooks · check_{lessons,skills,secrets,determinism,register} · kaggle_*

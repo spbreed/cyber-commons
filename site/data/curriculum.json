@@ -29,6 +29,29 @@
    "blurb": "CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.",
    "tracks": [
     {
+     "id": "A0",
+     "chapter": 0,
+     "title": "Running the Commons — GitHub, Kaggle, and What You Need First",
+     "titles": "Anyone. This chapter assumes no security background and no setup.",
+     "changes": "One lesson. The two free routes through the commons, what each needs, and what the single code cell in every lesson is doing — demonstrated by running a real lesson's procedure three times, twice in the ways it breaks. 1 lesson.",
+     "autonomy": "Run one lesson end to end before reading a second one.",
+     "deliverable": "One lesson executed on a host you did not configure, with its output checksum matching the one recorded here.",
+     "sessions": [
+      {
+       "id": "A0.1",
+       "title": "Run your first lesson — GitHub, Kaggle, and what you need first",
+       "track": "both",
+       "kind": "introduction",
+       "summary": "Every lesson is a page, a SKILL.md and a script, and the notebook holds none of them — it fetches the skills tree and runs the script out of it. This lesson says what that needs on each of the two free routes, then proves the chain by running A1.2's procedure with each condition broken in turn.",
+       "risk": "A reader opens the first code cell, finds twenty lines of subprocess and no procedure, and concludes the lessons are stubs — or runs one on a hosted kernel with no network and reports a broken lesson when the fetch is what failed.",
+       "control": "A preflight that inventories the tree from disk and reproduces both failure conditions before reporting the host ready.",
+       "lab": "Run the preflight on both routes and compare the output checksum.",
+       "tools": [],
+       "models": []
+      }
+     ]
+    },
+    {
      "id": "A1",
      "chapter": 1,
      "title": "CyberTravels' Architecture, and Every Risk It Carries",

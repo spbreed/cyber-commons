@@ -24,6 +24,7 @@ from .casestudies import EXERCISES as _cases
 from .register import EXERCISES as _register
 from .incident import EXERCISES as _incident
 from .intros import EXERCISES as _intro
+from .track_a0 import EXERCISES as _a0      # how to run the commons at all
 from .track_a1 import EXERCISES as _a1
 from .track_a2 import EXERCISES as _a2
 from .track_a3 import EXERCISES as _a3
@@ -42,7 +43,7 @@ EXERCISES: dict[str, dict] = {
     **_incident,
     **_cases,
     **_register,
-    **_a1, **_a2, **_a3, **_b2a, **_b2b,
+    **_a0, **_a1, **_a2, **_a3, **_b2a, **_b2b,
     **_c1, **_c2, **_d1, **_d2, **_e1, **_e2, **_e3,
 }
 

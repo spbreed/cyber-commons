@@ -162,6 +162,28 @@ def notebook_block(sid: str) -> str:
     return "".join(parts)
 
 
+FALLBACK_SCRIPT = "the skill\u2019s script"
+
+
+def script_of(sid: str) -> str | None:
+    """The skill script this lesson runs, read out of the built notebook.
+
+    Naming it on the page is the point of the change: the reader can open that
+    file in the repository and see the whole procedure, rather than scrolling a
+    notebook that used to inline it.
+    """
+    f = NB_DIR / f"{sid}.ipynb"
+    if not f.is_file():
+        return None
+    for cell in json.loads(f.read_text()).get("cells", []):
+        if cell.get("cell_type") != "code":
+            continue
+        for line in cell.get("source", []):
+            if line.startswith("SCRIPT = "):
+                return line.split("=", 1)[1].strip().strip('"')
+    return None
+
+
 def recorded_output(sid: str) -> str:
     """What this lesson printed when it ran — on Kaggle, verified against local.
 
@@ -287,11 +309,17 @@ def lesson_page(entry, prev, nxt) -> str:
                      f'↗ Open the notebook on GitHub</a>'
                      '</div>')
         parts.append('<p class="sub kagnote">“Run on Kaggle” opens the notebook in '
-                     '<b>your own</b> Kaggle account as a new kernel. It carries '
-                     'every line of code it runs — nothing to clone, nothing to '
-                     'install \u2014 it fetches the skills tree and runs one file from it, and the '
-                     'copy is yours to edit and re-run. Nothing is written back '
-                     'here.</p>')
+                     '<b>your own</b> Kaggle account as a new kernel. The notebook '
+                     'carries no procedure: it clones this repository — shallow '
+                     'and sparse, the skills directory only, about three seconds '
+                     '— and runs '
+                     f'<code>{html.escape(script_of(sid) or FALLBACK_SCRIPT)}</code> '
+                     'out of it. Switch <b>Internet</b> on in the notebook '
+                     'settings first; Kaggle gates that on a verified phone '
+                     'number, and without one you can attach the dataset '
+                     '<code>cybercommons/cyber-commons-skills</code> instead. '
+                     'The copy is yours to edit and re-run, and nothing is '
+                     'written back here.</p>')
     else:
         parts.append('<p class="sub kagnote">This lesson is a reading lesson — '
                      'diagrams and prose, no code to run.</p>')
