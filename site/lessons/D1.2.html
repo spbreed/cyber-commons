@@ -44,7 +44,94 @@ about an agent needs three more, and without them every analyst has to guess.</p
 everything or to develop a habit of closing agent alerts. Both happen, and the
 second one happens quietly.</p></div><div class="nbmd"><h2>3 · Triage as a skill — and the sample that keeps it honest</h2>
 <p>Context turns a guess into a verdict. Automating the verdict without automating the audit of it is how a closing rule quietly starts closing real incidents.</p>
-<p>The skill therefore requires a sampling rule over anything auto-closed, and requires its seed to come from something <strong>stable</strong>. Sampling seeded from <code>hash()</code> picks a different subset on every run, so you can never tell whether a change in findings came from the rule or from the dice.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>The skill therefore requires a sampling rule over anything auto-closed, and requires its seed to come from something <strong>stable</strong>. Sampling seeded from <code>hash()</code> picks a different subset on every run, so you can never tell whether a change in findings came from the rule or from the dice.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/secops/detection-triage/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: detection-triage
+description: &gt;-
+  Triage security alerts with the context needed to reach a defensible verdict,
+  and sample what is auto-closed so the closing rule stays honest. Use when
+  working an alert queue, deciding whether an alert is a true positive, tuning
+  a noisy detection, or designing automated alert handling.
+allowed-tools: Read, Grep, Bash
+---
+
+# Alert triage with context
+
+An analyst reading an alert in isolation is guessing. The verdict comes from
+the alert **plus** the context that makes it normal or abnormal, and most
+triage automation fails because it automated the guess instead of the context.
+
+## When to use this
+
+Working an alert queue, building an auto-close rule, or reviewing why a
+detection produces verdicts nobody trusts.
+
+## Procedure
+
+**1 — Gather the context before judging.** For every alert, assemble:
+
+- **asset** — what it is, who owns it, how exposed it is
+- **identity** — human or workload, and its normal behaviour
+- **history** — has this fired before on this asset, and how was it resolved
+- **change** — was there a deploy, a migration, a new agent, in the window
+- **peers** — did the same thing fire elsewhere at the same time
+
+A verdict issued without `history` will re-litigate a decision the team already
+made, which is the most common way triage automation loses trust.
+
+**2 — Reach a verdict, with the reason.** One of `true_positive`,
+`false_positive`, `benign_true_positive` (it really happened and it is fine),
+or `needs_human`. Record which context field decided it. &quot;Benign true positive&quot;
+is a distinct category and collapsing it into false-positive corrupts every
+tuning decision made from the data afterwards.
+
+**3 — Attach confidence, and let it gate automation.** Only high-confidence
+verdicts may auto-close. Everything else queues.
+
+**4 — Sample the auto-closed.** Automation that closes alerts must be audited
+by re-opening a fraction of them for human review. This is the control that
+catches a closing rule that has quietly started closing real incidents.
+
+Seed the sampler from something **stable** — a checksum of the alert id, never
+`hash()`, which Python randomises per process. A sampling rule that picks a
+different subset every run cannot be audited, because you cannot tell whether a
+change in findings came from the rule or from the dice.
+
+**5 — Feed tuning from verdicts, not volume.** A detection is noisy if its
+false-positive rate is high, not if it fires often. Rank tuning candidates by
+`false_positive_rate × volume`, with a full tiebreak so the list is stable
+between runs.
+
+## Output contract
+
+```json
+{
+  &quot;triaged&quot;: [
+    {&quot;alert_id&quot;: &quot;str&quot;, &quot;verdict&quot;: &quot;true_positive|false_positive|benign_true_positive|needs_human&quot;,
+     &quot;deciding_context&quot;: &quot;asset|identity|history|change|peers&quot;,
+     &quot;reason&quot;: &quot;str&quot;, &quot;confidence&quot;: 0.0,
+     &quot;auto_closed&quot;: false, &quot;sampled_for_review&quot;: false}
+  ],
+  &quot;sampling&quot;: {&quot;rate&quot;: 0.0, &quot;seed_source&quot;: &quot;str&quot;, &quot;reviewed&quot;: 0, &quot;disagreements&quot;: 0},
+  &quot;tuning&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;fp_rate&quot;: 0.0, &quot;volume&quot;: 0, &quot;priority&quot;: 0.0}]
+}
+```
+
+`disagreements` is the number that matters: it is the measured error rate of
+the automation, and it belongs in every report about it.
+
+## Failure modes
+
+- **Auto-closing without sampling.** The rule then has no error bar and no way
+  to acquire one.
+- **Seeding the sampler from `hash()`.** Non-reproducible sampling is not a
+  control.
+- **Folding benign-true-positive into false-positive.** It teaches the tuner to
+  suppress a working detection.
+- **Removing `needs_human`.** Forced verdicts under uncertainty are how a queue
+  becomes an incident.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -145,95 +232,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/secops/detection-triage/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: detection-triage
-description: &gt;-
-  Triage security alerts with the context needed to reach a defensible verdict,
-  and sample what is auto-closed so the closing rule stays honest. Use when
-  working an alert queue, deciding whether an alert is a true positive, tuning
-  a noisy detection, or designing automated alert handling.
-allowed-tools: Read, Grep, Bash
----
+    return problems
 
-# Alert triage with context
-
-An analyst reading an alert in isolation is guessing. The verdict comes from
-the alert **plus** the context that makes it normal or abnormal, and most
-triage automation fails because it automated the guess instead of the context.
-
-## When to use this
-
-Working an alert queue, building an auto-close rule, or reviewing why a
-detection produces verdicts nobody trusts.
-
-## Procedure
-
-**1 — Gather the context before judging.** For every alert, assemble:
-
-- **asset** — what it is, who owns it, how exposed it is
-- **identity** — human or workload, and its normal behaviour
-- **history** — has this fired before on this asset, and how was it resolved
-- **change** — was there a deploy, a migration, a new agent, in the window
-- **peers** — did the same thing fire elsewhere at the same time
-
-A verdict issued without `history` will re-litigate a decision the team already
-made, which is the most common way triage automation loses trust.
-
-**2 — Reach a verdict, with the reason.** One of `true_positive`,
-`false_positive`, `benign_true_positive` (it really happened and it is fine),
-or `needs_human`. Record which context field decided it. &quot;Benign true positive&quot;
-is a distinct category and collapsing it into false-positive corrupts every
-tuning decision made from the data afterwards.
-
-**3 — Attach confidence, and let it gate automation.** Only high-confidence
-verdicts may auto-close. Everything else queues.
-
-**4 — Sample the auto-closed.** Automation that closes alerts must be audited
-by re-opening a fraction of them for human review. This is the control that
-catches a closing rule that has quietly started closing real incidents.
-
-Seed the sampler from something **stable** — a checksum of the alert id, never
-`hash()`, which Python randomises per process. A sampling rule that picks a
-different subset every run cannot be audited, because you cannot tell whether a
-change in findings came from the rule or from the dice.
-
-**5 — Feed tuning from verdicts, not volume.** A detection is noisy if its
-false-positive rate is high, not if it fires often. Rank tuning candidates by
-`false_positive_rate × volume`, with a full tiebreak so the list is stable
-between runs.
-
-## Output contract
-
-```json
-{
-  &quot;triaged&quot;: [
-    {&quot;alert_id&quot;: &quot;str&quot;, &quot;verdict&quot;: &quot;true_positive|false_positive|benign_true_positive|needs_human&quot;,
-     &quot;deciding_context&quot;: &quot;asset|identity|history|change|peers&quot;,
-     &quot;reason&quot;: &quot;str&quot;, &quot;confidence&quot;: 0.0,
-     &quot;auto_closed&quot;: false, &quot;sampled_for_review&quot;: false}
-  ],
-  &quot;sampling&quot;: {&quot;rate&quot;: 0.0, &quot;seed_source&quot;: &quot;str&quot;, &quot;reviewed&quot;: 0, &quot;disagreements&quot;: 0},
-  &quot;tuning&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;fp_rate&quot;: 0.0, &quot;volume&quot;: 0, &quot;priority&quot;: 0.0}]
-}
-```
-
-`disagreements` is the number that matters: it is the measured error rate of
-the automation, and it belongs in every report about it.
-
-## Failure modes
-
-- **Auto-closing without sampling.** The rule then has no error bar and no way
-  to acquire one.
-- **Seeding the sampler from `hash()`.** Non-reproducible sampling is not a
-  control.
-- **Folding benign-true-positive into false-positive.** It teaches the tuner to
-  suppress a working detection.
-- **Removing `needs_human`.** Forced verdicts under uncertainty are how a queue
-  becomes an incident.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/secops/detection-triage/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

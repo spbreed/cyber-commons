@@ -55,7 +55,99 @@ forgets the human, because it produces logs that are complete and useless.</p></
 <p><strong>What this control closes.</strong></p>
 <p>Answers <strong>who is calling</strong>, so every later control has a subject. Without it, default-deny has nothing to deny and the audit trail has nobody to name.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Separating the three, as a skill</h2>
-<p>Keeping the three identities apart is a review you will run against every agent CyberTravels ships, not a decision you make once. So it is written down as a procedure: which principal authorises, which one is attributed, which one scopes memory — and the two narrowing rules a delegated token has to satisfy before any of it means anything. This is the file in this repository, embedded verbatim:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>Keeping the three identities apart is a review you will run against every agent CyberTravels ships, not a decision you make once. So it is written down as a procedure: which principal authorises, which one is attributed, which one scopes memory — and the two narrowing rules a delegated token has to satisfy before any of it means anything. This is the file in this repository, embedded verbatim:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/agent-identity-review/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: agent-identity-review
+description: &gt;-
+  Review how an agent authenticates and how a user&#x27;s authority is delegated to
+  it, including token exchange, on-behalf-of chains, service accounts and
+  non-human identity. Use when asked who an agent is calling as, whether a
+  delegation is auditable, why a downstream system sees the wrong principal, or
+  how to scope an agent&#x27;s credentials.
+allowed-tools: Read, Grep, Glob
+---
+
+# Agent identity and delegation review
+
+Three identities are in play whenever an agent acts, and most incidents come
+from collapsing them:
+
+- the **user** whose request started the work
+- the **agent** doing the work — a workload identity, not a person
+- the **actor chain** connecting them, which is what an auditor needs
+
+A service account shared by every agent answers &quot;what ran&quot; and destroys &quot;for
+whom&quot;. That is the gap non-human identity exists to close.
+
+## When to use this
+
+Reviewing an agent&#x27;s auth design, an OBO/token-exchange implementation, a
+gateway that fronts an agent, or any log where you cannot tell which user
+caused an action.
+
+## Procedure
+
+**1 — Name the three identities.** For the flow under review, write down the
+user principal, the workload identity, and where each is asserted. If the
+workload identity is a long-lived shared secret, that is finding one.
+
+**2 — Check the delegation narrows.** In RFC 8693 token exchange the issued
+token must satisfy **both** rules:
+
+- **subset of presented** — never more scope than the incoming token carried
+- **within the actor&#x27;s ceiling** — never more than the agent is itself allowed
+
+Either rule alone is insufficient. Subset-only lets a highly privileged user
+hand an agent authority the agent should never hold; ceiling-only lets an agent
+exceed the user who asked. Test both directions explicitly.
+
+**3 — Check the chain is preserved and not duplicated.** The `act` chain should
+read `user → agent`, once. A chain that repeats the principal
+(`alice → alice → agent`) usually means the head was appended twice, and it
+breaks any audit query that counts hops.
+
+**4 — Find where OBO stops.** Some downstream systems cannot consume a
+delegated token — legacy databases, vendor APIs, anything with a static
+credential. Identify each, and require a **choke point**: a gateway that holds
+the credential, enforces per-user authorisation *before* the call, and logs the
+original principal. The credential must not be reachable by the agent directly.
+
+**5 — Check expiry and revocation.** How long is the delegated token valid, and
+what stops it being replayed after the user&#x27;s session ends? Just-in-time
+authority that outlives the task is standing authority with extra steps.
+
+**6 — Check the log answers the audit question.** Pick a real question — &quot;which
+user caused this row to be deleted?&quot; — and try to answer it from the logs alone.
+If you cannot, the delegation is not auditable regardless of how it is built.
+
+## Output contract
+
+```json
+{
+  &quot;identities&quot;: {&quot;user&quot;: &quot;str&quot;, &quot;workload&quot;: &quot;str&quot;, &quot;assertion&quot;: &quot;str&quot;},
+  &quot;delegation&quot;: {&quot;mechanism&quot;: &quot;obo|impersonation|shared_service_account|none&quot;,
+                 &quot;subset_of_presented&quot;: true, &quot;within_actor_ceiling&quot;: true,
+                 &quot;chain&quot;: [&quot;principal&quot;, &quot;...&quot;], &quot;chain_wellformed&quot;: true,
+                 &quot;ttl_seconds&quot;: 0, &quot;revocable&quot;: true},
+  &quot;chokepoints&quot;: [{&quot;downstream&quot;: &quot;str&quot;, &quot;reason&quot;: &quot;str&quot;,
+                   &quot;enforced_at&quot;: &quot;gateway|service|none&quot;,
+                   &quot;credential_reachable_by_agent&quot;: false}],
+  &quot;audit&quot;: {&quot;question&quot;: &quot;str&quot;, &quot;answerable_from_logs&quot;: true},
+  &quot;findings&quot;: [{&quot;issue&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium|low&quot;, &quot;fix&quot;: &quot;str&quot;}]
+}
+```
+
+## Failure modes
+
+- **Checking only one narrowing rule.** Both, every time.
+- **Accepting a shared service account because it is &quot;internal&quot;.** Internal is
+  a network property; it says nothing about attribution.
+- **Treating the gateway as optional** where the downstream cannot do OBO. It
+  is the only place authorisation can happen.
+- **Measuring delegation by whether the call succeeded.** A call that succeeds
+  with too much scope is the failure being looked for.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -156,100 +248,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/agent-identity-review/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-identity-review
-description: &gt;-
-  Review how an agent authenticates and how a user&#x27;s authority is delegated to
-  it, including token exchange, on-behalf-of chains, service accounts and
-  non-human identity. Use when asked who an agent is calling as, whether a
-  delegation is auditable, why a downstream system sees the wrong principal, or
-  how to scope an agent&#x27;s credentials.
-allowed-tools: Read, Grep, Glob
----
+    return problems
 
-# Agent identity and delegation review
-
-Three identities are in play whenever an agent acts, and most incidents come
-from collapsing them:
-
-- the **user** whose request started the work
-- the **agent** doing the work — a workload identity, not a person
-- the **actor chain** connecting them, which is what an auditor needs
-
-A service account shared by every agent answers &quot;what ran&quot; and destroys &quot;for
-whom&quot;. That is the gap non-human identity exists to close.
-
-## When to use this
-
-Reviewing an agent&#x27;s auth design, an OBO/token-exchange implementation, a
-gateway that fronts an agent, or any log where you cannot tell which user
-caused an action.
-
-## Procedure
-
-**1 — Name the three identities.** For the flow under review, write down the
-user principal, the workload identity, and where each is asserted. If the
-workload identity is a long-lived shared secret, that is finding one.
-
-**2 — Check the delegation narrows.** In RFC 8693 token exchange the issued
-token must satisfy **both** rules:
-
-- **subset of presented** — never more scope than the incoming token carried
-- **within the actor&#x27;s ceiling** — never more than the agent is itself allowed
-
-Either rule alone is insufficient. Subset-only lets a highly privileged user
-hand an agent authority the agent should never hold; ceiling-only lets an agent
-exceed the user who asked. Test both directions explicitly.
-
-**3 — Check the chain is preserved and not duplicated.** The `act` chain should
-read `user → agent`, once. A chain that repeats the principal
-(`alice → alice → agent`) usually means the head was appended twice, and it
-breaks any audit query that counts hops.
-
-**4 — Find where OBO stops.** Some downstream systems cannot consume a
-delegated token — legacy databases, vendor APIs, anything with a static
-credential. Identify each, and require a **choke point**: a gateway that holds
-the credential, enforces per-user authorisation *before* the call, and logs the
-original principal. The credential must not be reachable by the agent directly.
-
-**5 — Check expiry and revocation.** How long is the delegated token valid, and
-what stops it being replayed after the user&#x27;s session ends? Just-in-time
-authority that outlives the task is standing authority with extra steps.
-
-**6 — Check the log answers the audit question.** Pick a real question — &quot;which
-user caused this row to be deleted?&quot; — and try to answer it from the logs alone.
-If you cannot, the delegation is not auditable regardless of how it is built.
-
-## Output contract
-
-```json
-{
-  &quot;identities&quot;: {&quot;user&quot;: &quot;str&quot;, &quot;workload&quot;: &quot;str&quot;, &quot;assertion&quot;: &quot;str&quot;},
-  &quot;delegation&quot;: {&quot;mechanism&quot;: &quot;obo|impersonation|shared_service_account|none&quot;,
-                 &quot;subset_of_presented&quot;: true, &quot;within_actor_ceiling&quot;: true,
-                 &quot;chain&quot;: [&quot;principal&quot;, &quot;...&quot;], &quot;chain_wellformed&quot;: true,
-                 &quot;ttl_seconds&quot;: 0, &quot;revocable&quot;: true},
-  &quot;chokepoints&quot;: [{&quot;downstream&quot;: &quot;str&quot;, &quot;reason&quot;: &quot;str&quot;,
-                   &quot;enforced_at&quot;: &quot;gateway|service|none&quot;,
-                   &quot;credential_reachable_by_agent&quot;: false}],
-  &quot;audit&quot;: {&quot;question&quot;: &quot;str&quot;, &quot;answerable_from_logs&quot;: true},
-  &quot;findings&quot;: [{&quot;issue&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium|low&quot;, &quot;fix&quot;: &quot;str&quot;}]
-}
-```
-
-## Failure modes
-
-- **Checking only one narrowing rule.** Both, every time.
-- **Accepting a shared service account because it is &quot;internal&quot;.** Internal is
-  a network property; it says nothing about attribution.
-- **Treating the gateway as optional** where the downstream cannot do OBO. It
-  is the only place authorisation can happen.
-- **Measuring delegation by whether the call succeeded.** A call that succeeds
-  with too much scope is the failure being looked for.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/identity/agent-identity-review/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

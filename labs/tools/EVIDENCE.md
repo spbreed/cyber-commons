@@ -220,58 +220,73 @@ Served on CPU through `llama_cpp.server`, which is OpenAI-compatible, so the
 adapter needed nothing new:
 
 ```bash
-export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 MODEL=qwen2.5-1.5b-instruct
+# weights, straight from Kaggle Models — one file, not the 13 GB instance
+curl -sSL -H "authorization: Bearer $KAGGLE_KEY" -o qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf \
+  https://www.kaggle.com/api/v1/models/qwen-lm/qwen2.5/gguf/7b-instruct/1/download/qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf
+# (and -00002-of-00002; llama.cpp opens the split from the first shard)
+
+python3 -m llama_cpp.server --model qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf \
+  --model_alias qwen2.5-7b-instruct --host 127.0.0.1 --port 11434 --chat_format qwen
+
+export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 MODEL=qwen2.5-7b-instruct
 python3 scripts/live_model_test.py --backend open-weight --save
 ```
 
-**Qwen2.5-1.5B-Instruct, 4 CPUs, no GPU:**
+**Seven model-facing lessons, two model sizes, 4 CPUs, no GPU:**
 
-```
-8/8 lessons reached a real open-weight model
-6/8 lessons had their acceptance property hold on qwen2.5-1.5b-instruct
-property did NOT hold: B2.9, C1.1
-```
+| | reached the model | acceptance property held |
+|---|---|---|
+| **Qwen2.5-1.5B-Instruct** | 7/7 | **5/7** — B2.9, C1.1 failed |
+| **Qwen2.5-7B-Instruct** | 7/7 | **7/7** |
 
 That split is the point, and it is why the summary reports two numbers rather
 than one. **Reaching the backend is plumbing; the property holding is the
-claim.** The script previously printed "8/8" for the first and said nothing
-about the second — so a run in which two lessons' acceptance criteria failed
-looked like a clean pass.
+claim.** The script previously printed one number for the first and said
+nothing about the second — so a run in which two lessons' acceptance criteria
+failed looked like a clean pass.
 
-The two failures are honest and specific:
+The two 1.5B failures are honest and specific:
 
 - **B2.9** asks the model to fix a SQL injection by parameterising the query.
-  The 1.5B model returned the vulnerable line unchanged — string concatenation
-  straight back. It did not fix the bug it was asked to fix, which is a
-  **capability** failure — the model, not the harness.
+  The 1.5B model returned the vulnerable function unchanged — string
+  concatenation straight back, inside a code fence. It did not fix the bug it
+  was asked to fix, which is a **capability** failure: the model, not the
+  harness.
 - **C1.1** asks for pentest findings ranked by severity and expects the
   unauthenticated endpoint first. The model put TLS 1.0 first and the
   unauthenticated `/v1/users` endpoint second. A judgement failure, and a
   defensible-sounding one, which is what makes it worth showing.
 
-### The same eight lessons on Qwen2.5-7B-Instruct
+Both clear at 7B: B2.9 returns `q = "SELECT * FROM orders WHERE ref = %s"` with
+the parameter bound, and C1.1 ranks the unauthenticated endpoint first.
+Re-running 1.5B afterwards reproduced exactly the same two failures, so this is
+a size effect and not run-to-run variance.
 
-Same machine, same adapter, same prompts, one variable changed:
+### The finding worth having: the same model, asked differently
 
-| | reached the model | acceptance property held |
+B2.9 and **B2.0** put the same task to the same 1.5B model — parameterise a
+concatenated SQL query — and get opposite results:
+
+| | B2.9 · one shot, fix the function | B2.0 · harness loop, one line, verified |
 |---|---|---|
-| **Qwen2.5-1.5B-Instruct** | 8/8 | **6/8** — B2.9, C1.1 failed |
-| **Qwen2.5-7B-Instruct** | 8/8 | **8/8** |
+| **1.5B** | the vulnerable function, unchanged | `DB.execute("SELECT * FROM bookings WHERE ref=?")` |
+| **7B** | parameterised, bound | `DB.execute("SELECT * FROM bookings WHERE ref=%s", (ref,))` |
 
-Both of the 1.5B failures clear at 7B. At 7B, B2.9 returns a parameterised
-query and C1.1 ranks the unauthenticated endpoint first. Re-running 1.5B
-afterwards reproduced exactly the same two failures, so this is a size effect
-and not run-to-run variance.
+The 1.5B model that cannot fix the function *can* produce the correct line when
+the harness asks for one line and an independent verifier checks it. The 1.5B
+loop reached that answer in **one step**, so this is not retries rescuing a
+weak model — it is the **shape of the ask**, which is the thing B2.0 is about
+and the reason the harness lesson is in the curriculum rather than a
+prompt-engineering aside.
 
-That is the answer the curriculum actually needed. The lessons are not broken
-and the harness is not broken: **the mechanics run on a 1.5B model, and two of
-the eight acceptance properties need roughly 7B.** MODELS.md has always claimed
-the first half and promised that a lab needing a bigger model would say so —
-B2.9 and C1.1 are now the named cases rather than the claim being made in
-general.
+The lessons are not broken and the harness is not broken: **the mechanics run
+on a 1.5B model, and two of the seven acceptance properties need roughly 7B.**
+MODELS.md has always claimed the first half and promised that a lab needing a
+bigger model would say so — B2.9 and C1.1 are the named cases.
 
-Cost of establishing it: a 1.1 GB and a 4.7 GB download from Kaggle, CPU-only,
-about 7 s and 14 s per lesson respectively. No GPU, no API credit.
+Cost of establishing it: a 1.1 GB and a 4.7 GB download from Kaggle Models,
+CPU-only, about 5 s and 12 s per lesson respectively. No GPU, no API credit,
+no frontier account.
 
 Evidence is in `labs/notebooks/_live_model.json`, keyed by backend **and**
 model so a second run does not delete the first — comparing two models is the

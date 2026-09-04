@@ -47,7 +47,84 @@ invalidate the conditions the control was tested under.</p>
 it is <strong>unevidenced</strong>, which is a third state most GRC tooling cannot represent.
 Introducing that third state is the whole of this lesson.</p></div><div class="nbmd"><h2>3 · The control — a freshness window per control, derived from drift</h2>
 <p>The window is not an audit-calendar choice. It comes from <strong>how fast the thing the control tests actually changes.</strong></p></div><div class="nbmd"><h2>4 · What replaces the annual test, as a skill</h2>
-<p>If the window is short, something has to re-run inside it, and that something is an attestation: collect each control's verdict, resolve every evidence pointer, compute drift against the image digest and the tool manifest, and sign the result. Two rules in the procedure are the whole difference between an attestation and a slide — a missing verdict is not a pass, and a capped verdict does not get raised because the other evidence looked good. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>If the window is short, something has to re-run inside it, and that something is an attestation: collect each control's verdict, resolve every evidence pointer, compute drift against the image digest and the tool manifest, and sign the result. Two rules in the procedure are the whole difference between an attestation and a slide — a missing verdict is not a pass, and a capped verdict does not get raised because the other evidence looked good. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/attestation-signer-lifecycle/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: attestation-signer-lifecycle
+description: &gt;-
+  Bundle control evidence, compute verdicts, and produce a signed verifiable
+  attestation for a deployment, re-attesting on drift. Use to emit or verify
+  a control attestation, to sign evidence into an in-toto envelope, or to
+  decide whether drift requires re-attestation.
+allowed-tools: Bash, Read, Write
+---
+
+# Attestation Signer Lifecycle
+
+**Controls:** All — the artifact
+
+## Use the existing framework
+
+Do not invent a format. Wrap the evidence in an **in-toto style statement**
+inside a signed envelope, with the subject naming the deployment and its
+digests, and a typed predicate carrying the control verdicts. Express the
+predicate body in an assessment-results vocabulary so the verdicts map to
+control catalogues and an auditor can consume them.
+
+The roles are worth naming explicitly: this skill set is the **attester**
+producing evidence, a separate service is the **verifier** appraising it
+against reference values, and the deployment gate is the **relying party**
+applying policy. Keep them separate — an attester that also decides whether it
+passed is not an attestation.
+
+## Procedure
+
+1. **Collect every sub-skill verdict.** A missing verdict is not a pass. If a
+   skill did not run, the control is `UNKNOWN` and the attestation says so.
+2. **Apply the confidence ceilings.** Sandbox-egress and injection-screening are
+   capped at `PARTIAL` by their own skills; the signer must refuse to raise them.
+3. **Resolve every evidence pointer.** A URI that does not resolve is a broken
+   attestation, not a cosmetic issue.
+4. **Attach framework mappings**, so one artefact answers several catalogues.
+5. **Compute drift.** Compare image digest, configuration hashes and tool
+   description hashes against the previous attestation. Any change triggers
+   re-attestation — the tool-description hash specifically defends against a
+   server mutating a tool after approval.
+6. **Sign**, and store alongside the image or in a transparency log.
+
+## Output contract
+
+```json
+{
+  &quot;subject&quot;: [{&quot;name&quot;: &quot;deployment_id&quot;, &quot;digest&quot;: {&quot;image&quot;: &quot;sha256:…&quot;, &quot;repo&quot;: &quot;str&quot;}}],
+  &quot;predicate_type&quot;: &quot;str&quot;,
+  &quot;predicate&quot;: {
+    &quot;deployment_id&quot;: &quot;str&quot;, &quot;evaluated_at&quot;: &quot;str&quot;, &quot;evaluator_version&quot;: &quot;str&quot;,
+    &quot;controls&quot;: [
+      {&quot;id&quot;: &quot;C1_default_deny_least_privilege&quot;,
+       &quot;verdict&quot;: &quot;PASS|FAIL|PARTIAL|UNKNOWN&quot;,
+       &quot;confidence&quot;: &quot;HIGH|PARTIAL&quot;,
+       &quot;evidence&quot;: [{&quot;skill&quot;: &quot;str&quot;, &quot;uri&quot;: &quot;str&quot;, &quot;hash&quot;: &quot;str&quot;}],
+       &quot;findings&quot;: [&quot;str&quot;]}
+    ],
+    &quot;framework_mappings&quot;: {&quot;owasp_llm&quot;: [&quot;str&quot;], &quot;owasp_agentic&quot;: [&quot;str&quot;],
+                           &quot;atlas&quot;: [&quot;str&quot;], &quot;nist_ai_rmf&quot;: [&quot;str&quot;], &quot;iso_42001&quot;: [&quot;str&quot;]},
+    &quot;drift&quot;: {&quot;since&quot;: &quot;str&quot;, &quot;changed&quot;: [&quot;str&quot;]}
+  },
+  &quot;signatures&quot;: [{&quot;keyid&quot;: &quot;str&quot;, &quot;sig&quot;: &quot;str&quot;}]
+}
+```
+
+## Failure modes
+
+- **Reading a missing attestation as a pass.** The relying party must **fail
+  closed**: a signed file can be deleted, and absence is not evidence.
+- **Raising a capped verdict** because the other evidence looked good.
+- **Signing without resolving evidence pointers**, which produces a
+  tamper-evident document full of dead links.
+- **Attesting once.** Without drift-triggered re-attestation the artefact
+  describes a deployment that may no longer exist.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -148,85 +225,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/attestation-signer-lifecycle/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: attestation-signer-lifecycle
-description: &gt;-
-  Bundle control evidence, compute verdicts, and produce a signed verifiable
-  attestation for a deployment, re-attesting on drift. Use to emit or verify
-  a control attestation, to sign evidence into an in-toto envelope, or to
-  decide whether drift requires re-attestation.
-allowed-tools: Bash, Read, Write
----
+    return problems
 
-# Attestation Signer Lifecycle
-
-**Controls:** All — the artifact
-
-## Use the existing framework
-
-Do not invent a format. Wrap the evidence in an **in-toto style statement**
-inside a signed envelope, with the subject naming the deployment and its
-digests, and a typed predicate carrying the control verdicts. Express the
-predicate body in an assessment-results vocabulary so the verdicts map to
-control catalogues and an auditor can consume them.
-
-The roles are worth naming explicitly: this skill set is the **attester**
-producing evidence, a separate service is the **verifier** appraising it
-against reference values, and the deployment gate is the **relying party**
-applying policy. Keep them separate — an attester that also decides whether it
-passed is not an attestation.
-
-## Procedure
-
-1. **Collect every sub-skill verdict.** A missing verdict is not a pass. If a
-   skill did not run, the control is `UNKNOWN` and the attestation says so.
-2. **Apply the confidence ceilings.** Sandbox-egress and injection-screening are
-   capped at `PARTIAL` by their own skills; the signer must refuse to raise them.
-3. **Resolve every evidence pointer.** A URI that does not resolve is a broken
-   attestation, not a cosmetic issue.
-4. **Attach framework mappings**, so one artefact answers several catalogues.
-5. **Compute drift.** Compare image digest, configuration hashes and tool
-   description hashes against the previous attestation. Any change triggers
-   re-attestation — the tool-description hash specifically defends against a
-   server mutating a tool after approval.
-6. **Sign**, and store alongside the image or in a transparency log.
-
-## Output contract
-
-```json
-{
-  &quot;subject&quot;: [{&quot;name&quot;: &quot;deployment_id&quot;, &quot;digest&quot;: {&quot;image&quot;: &quot;sha256:…&quot;, &quot;repo&quot;: &quot;str&quot;}}],
-  &quot;predicate_type&quot;: &quot;str&quot;,
-  &quot;predicate&quot;: {
-    &quot;deployment_id&quot;: &quot;str&quot;, &quot;evaluated_at&quot;: &quot;str&quot;, &quot;evaluator_version&quot;: &quot;str&quot;,
-    &quot;controls&quot;: [
-      {&quot;id&quot;: &quot;C1_default_deny_least_privilege&quot;,
-       &quot;verdict&quot;: &quot;PASS|FAIL|PARTIAL|UNKNOWN&quot;,
-       &quot;confidence&quot;: &quot;HIGH|PARTIAL&quot;,
-       &quot;evidence&quot;: [{&quot;skill&quot;: &quot;str&quot;, &quot;uri&quot;: &quot;str&quot;, &quot;hash&quot;: &quot;str&quot;}],
-       &quot;findings&quot;: [&quot;str&quot;]}
-    ],
-    &quot;framework_mappings&quot;: {&quot;owasp_llm&quot;: [&quot;str&quot;], &quot;owasp_agentic&quot;: [&quot;str&quot;],
-                           &quot;atlas&quot;: [&quot;str&quot;], &quot;nist_ai_rmf&quot;: [&quot;str&quot;], &quot;iso_42001&quot;: [&quot;str&quot;]},
-    &quot;drift&quot;: {&quot;since&quot;: &quot;str&quot;, &quot;changed&quot;: [&quot;str&quot;]}
-  },
-  &quot;signatures&quot;: [{&quot;keyid&quot;: &quot;str&quot;, &quot;sig&quot;: &quot;str&quot;}]
-}
-```
-
-## Failure modes
-
-- **Reading a missing attestation as a pass.** The relying party must **fail
-  closed**: a signed file can be deleted, and absence is not evidence.
-- **Raising a capped verdict** because the other evidence looked good.
-- **Signing without resolving evidence pointers**, which produces a
-  tamper-evident document full of dead links.
-- **Attesting once.** Without drift-triggered re-attestation the artefact
-  describes a deployment that may no longer exist.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/attestation-signer-lifecycle/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

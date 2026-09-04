@@ -59,7 +59,80 @@ the content at all, which is exactly why rephrasing does not defeat it.</p></div
 <p><strong>What this control closes.</strong></p>
 <p>The largest control in the chapter. It never inspects content, so rewriting the payload does not help — the check is on <strong>origin</strong>, which the attacker cannot change.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Checking the ingress paths, as a skill</h2>
-<p>Tagging origin is the control; knowing which of CyberTravels' paths actually reaches the model without one is the audit. The procedure inventories every untrusted ingestion path — hotel descriptions, booking notes, uploaded vouchers, web fetches, and the one everybody forgets, <strong>tool results</strong> — and checks each for a screening step and for whether provenance survives into context. Note its confidence ceiling: PARTIAL, and not negotiable, because no detector is a boundary. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>Tagging origin is the control; knowing which of CyberTravels' paths actually reaches the model without one is the audit. The procedure inventories every untrusted ingestion path — hotel descriptions, booking notes, uploaded vouchers, web fetches, and the one everybody forgets, <strong>tool results</strong> — and checks each for a screening step and for whether provenance survives into context. Note its confidence ceiling: PARTIAL, and not negotiable, because no detector is a boundary. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/input-injection-screening-verifier/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: input-injection-screening-verifier
+description: &gt;-
+  Verify that untrusted ingestion paths pass through an injection detection
+  or sanitisation step before reaching model context. Use to attest
+  injection screening, to inventory which untrusted sources are screened, or
+  to check for the private-data plus untrusted-content plus egress
+  combination.
+allowed-tools: Read, Grep, Glob
+---
+
+# Input Injection Screening Verifier
+
+**Controls:** Control 5 — indirect prompt-injection screening
+
+## Confidence: PARTIAL — and this ceiling is not negotiable
+
+You can verify that a detector **exists on the path** and record its class.
+You cannot verify that it works. Published defences that reduce attack success
+to a few percent under static attacks have been driven back above 95% by
+adaptive, search-based attacks, and human red-teamers defeat them routinely.
+
+**Record the detector class. Do not assert protection. Cap at PARTIAL.**
+
+## Procedure
+
+1. **Inventory untrusted ingestion paths.** Email, documents, web fetches,
+   tickets, tool results, MCP tool descriptions, retrieved corpora, memory
+   reads, inter-agent messages. Anything a party outside your trust boundary
+   can write into.
+
+2. **For each path, determine whether a screening step exists** between
+   ingestion and model context, and record which one — a classifier, a
+   prompt-attack filter, delimiting or spotlighting, a dual-model pattern, or
+   nothing.
+
+3. **Check provenance tagging.** Whether the origin survives into the context
+   window is more durable than any detector, because it does not depend on
+   recognising the payload.
+
+4. **Flag the dangerous combination.** Private data reachable **and** untrusted
+   content ingested **and** an egress path available is the combination that
+   turns injection into exfiltration. Any deployment with all three is a
+   finding on its own, whatever the detector says.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;ingestion_paths&quot;: [
+    {&quot;source&quot;: &quot;str&quot;, &quot;screened&quot;: true, &quot;detector_class&quot;: &quot;classifier|filter|spotlighting|dual_model|none&quot;,
+     &quot;provenance_tagged&quot;: true}
+  ],
+  &quot;unscreened_sources&quot;: [&quot;str&quot;],
+  &quot;trifecta&quot;: {&quot;private_data&quot;: true, &quot;untrusted_content&quot;: true, &quot;egress&quot;: true, &quot;present&quot;: true},
+  &quot;verdict&quot;: &quot;PARTIAL|FAIL&quot;,
+  &quot;verdict_ceiling_reason&quot;: &quot;detector presence is verifiable; robustness under adaptive attack is not&quot;
+}
+```
+
+`PASS` is not a permitted value.
+
+## Failure modes
+
+- **Reporting a detector&#x27;s benchmark score as this deployment&#x27;s protection.**
+  Those numbers are from static attacks.
+- **Missing tool results as an ingestion path.** They are the most commonly
+  forgotten one, because they arrive from a system you trust.
+- **Ignoring the combination check** because each element looked acceptable
+  alone.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -160,81 +233,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/input-injection-screening-verifier/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: input-injection-screening-verifier
-description: &gt;-
-  Verify that untrusted ingestion paths pass through an injection detection
-  or sanitisation step before reaching model context. Use to attest
-  injection screening, to inventory which untrusted sources are screened, or
-  to check for the private-data plus untrusted-content plus egress
-  combination.
-allowed-tools: Read, Grep, Glob
----
+    return problems
 
-# Input Injection Screening Verifier
-
-**Controls:** Control 5 — indirect prompt-injection screening
-
-## Confidence: PARTIAL — and this ceiling is not negotiable
-
-You can verify that a detector **exists on the path** and record its class.
-You cannot verify that it works. Published defences that reduce attack success
-to a few percent under static attacks have been driven back above 95% by
-adaptive, search-based attacks, and human red-teamers defeat them routinely.
-
-**Record the detector class. Do not assert protection. Cap at PARTIAL.**
-
-## Procedure
-
-1. **Inventory untrusted ingestion paths.** Email, documents, web fetches,
-   tickets, tool results, MCP tool descriptions, retrieved corpora, memory
-   reads, inter-agent messages. Anything a party outside your trust boundary
-   can write into.
-
-2. **For each path, determine whether a screening step exists** between
-   ingestion and model context, and record which one — a classifier, a
-   prompt-attack filter, delimiting or spotlighting, a dual-model pattern, or
-   nothing.
-
-3. **Check provenance tagging.** Whether the origin survives into the context
-   window is more durable than any detector, because it does not depend on
-   recognising the payload.
-
-4. **Flag the dangerous combination.** Private data reachable **and** untrusted
-   content ingested **and** an egress path available is the combination that
-   turns injection into exfiltration. Any deployment with all three is a
-   finding on its own, whatever the detector says.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;ingestion_paths&quot;: [
-    {&quot;source&quot;: &quot;str&quot;, &quot;screened&quot;: true, &quot;detector_class&quot;: &quot;classifier|filter|spotlighting|dual_model|none&quot;,
-     &quot;provenance_tagged&quot;: true}
-  ],
-  &quot;unscreened_sources&quot;: [&quot;str&quot;],
-  &quot;trifecta&quot;: {&quot;private_data&quot;: true, &quot;untrusted_content&quot;: true, &quot;egress&quot;: true, &quot;present&quot;: true},
-  &quot;verdict&quot;: &quot;PARTIAL|FAIL&quot;,
-  &quot;verdict_ceiling_reason&quot;: &quot;detector presence is verifiable; robustness under adaptive attack is not&quot;
-}
-```
-
-`PASS` is not a permitted value.
-
-## Failure modes
-
-- **Reporting a detector&#x27;s benchmark score as this deployment&#x27;s protection.**
-  Those numbers are from static attacks.
-- **Missing tool results as an ingestion path.** They are the most commonly
-  forgotten one, because they arrive from a system you trust.
-- **Ignoring the combination check** because each element looked acceptable
-  alone.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/input-injection-screening-verifier/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

@@ -51,7 +51,107 @@ severity is the severity of its final effect.</p>
                              └─ stages 11-14        └─ stage 15</code></p>
 </blockquote></div><div class="nbmd"><h2>3 · Phase 4 as a skill — and the preconditions that gate it</h2>
 <p>Dynamic validation is the one phase that <em>acts</em>. Everything before it reads; this one sends input to a running system. The skill therefore opens with safety preconditions rather than a procedure, and a refusal is a first-class output.</p>
-<p>The contract also insists that <code>reproduced: false</code> be reported rather than dropped. A finding that survived Phase 3 and then failed to reproduce is the most useful signal the pipeline produces about its own false-positive rate — and it is the one a tidy report deletes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>The contract also insists that <code>reproduced: false</code> be reported rather than dropped. A finding that survived Phase 3 and then failed to reproduce is the most useful signal the pipeline produces about its own false-positive rate — and it is the one a tidy report deletes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-exploit-validate/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: appsec-exploit-validate
+description: &gt;-
+  Prove a candidate vulnerability is real by reproducing it in an isolated
+  sandbox, then decide whether it chains into something worse. Use when asked
+  to validate or confirm a finding, write or run a proof-of-concept, check
+  exploitability, reproduce a CVE, or separate theoretical findings from
+  demonstrated ones.
+allowed-tools: Bash, Read, Write, Grep
+---
+
+# AppSec pipeline · Phase 4 — Dynamic validation
+
+Covers **stages 11–14**. A finding that has been reproduced is a different
+object from a finding that has been argued for. This phase produces the
+difference, and it is the phase with the sharpest safety constraints.
+
+## When to use this
+
+Only on findings that reached `feasible: true, verdict: confirmed` in Phase 3.
+Validating an unfiltered list wastes the most expensive stage in the pipeline
+on findings Phase 3 would have deleted.
+
+## Safety preconditions — check before anything else
+
+Refuse to proceed unless **all** hold, and say which one failed:
+
+1. The target is a **local sandbox or an explicitly authorised environment**.
+   Never a production host, never a third party&#x27;s infrastructure.
+2. The sandbox has **no credentials** beyond throwaway ones, and **no route**
+   to a real network the exploit could reach.
+3. The proof-of-concept **demonstrates** the flaw. It does not exfiltrate real
+   data, persist, escalate beyond the demonstration, or damage anything.
+4. There is a **teardown** and it runs even on failure.
+
+This is not ceremony. A validation harness with production credentials in its
+environment is itself the vulnerability.
+
+## Procedure
+
+**Stage 11 — Sandbox replication.** Stand the component up in isolation with
+the smallest fixture that reproduces the conditions: the vulnerable version,
+the reachable entry point, and nothing else. Record the exact commit and the
+fixture, because a PoC that cannot be re-run is an anecdote.
+
+**Stage 12 — Dynamic exploitation.** Drive the entry point with an input that
+should trigger the sink. Capture the observable: the crash, the query executed,
+the file read, the process spawned. **The observable is the evidence** — an
+exit code is not. Record what you sent and what came back.
+
+**Stage 13 — Exploit chaining.** Ask what the demonstrated primitive gives
+access to next. A path traversal that reads a config file containing a token is
+not a file-read bug; it is a credential-disclosure bug. Chain only within the
+sandbox, and stop at the first step that would need a real credential.
+
+**Stage 14 — Remediation engineering.** Propose the fix at the right layer, and
+say what it costs. Prefer the control that makes the class impossible
+(parameterised queries, an allowlist, a type) over the one that blocks the
+sample payload (a regex on the input you happened to send). Then **re-run
+stage 12 against the fix** — a remediation that has not been tested against the
+PoC that motivated it is a hypothesis.
+
+## Output contract
+
+```json
+{
+  &quot;validations&quot;: [
+    {&quot;finding_id&quot;: &quot;str&quot;, &quot;reproduced&quot;: true,
+     &quot;sandbox&quot;: {&quot;commit&quot;: &quot;str&quot;, &quot;fixture&quot;: &quot;str&quot;, &quot;isolated&quot;: true},
+     &quot;input&quot;: &quot;str&quot;, &quot;observable&quot;: &quot;str&quot;,
+     &quot;chain&quot;: [{&quot;primitive&quot;: &quot;str&quot;, &quot;leads_to&quot;: &quot;str&quot;, &quot;stopped_because&quot;: &quot;str&quot;}],
+     &quot;remediation&quot;: {&quot;layer&quot;: &quot;input|query|api|config|architecture&quot;,
+                     &quot;change&quot;: &quot;str&quot;, &quot;cost&quot;: &quot;low|medium|high&quot;,
+                     &quot;retested&quot;: true, &quot;still_reproduces&quot;: false}}
+  ],
+  &quot;refused&quot;: [{&quot;finding_id&quot;: &quot;str&quot;, &quot;precondition_failed&quot;: 1, &quot;why&quot;: &quot;str&quot;}]
+}
+```
+
+`reproduced: false` is a first-class result and must be reported, not dropped.
+A finding that survived Phase 3 and then failed to reproduce is the single most
+useful signal the pipeline produces about its own false-positive rate.
+
+## Failure modes
+
+- **Reporting `reproduced: true` without an observable.** The observable is the
+  claim; without it there is nothing to check.
+- **Treating &quot;the exploit ran&quot; as &quot;the fix works&quot;.** Re-run after remediation
+  or set `retested: false` and say so.
+- **Chaining outside the sandbox.** Stop and record `stopped_because`.
+- **Fixing the payload instead of the class.** A regex that blocks `../` does
+  not fix path traversal.
+
+## Handoff
+
+Pass `validations` to **appsec-triage-report**. Findings that failed to
+reproduce keep their finding record and gain `reproduced: false` — the report
+must be able to distinguish &quot;demonstrated&quot; from &quot;asserted&quot;.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -152,108 +252,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-exploit-validate/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: appsec-exploit-validate
-description: &gt;-
-  Prove a candidate vulnerability is real by reproducing it in an isolated
-  sandbox, then decide whether it chains into something worse. Use when asked
-  to validate or confirm a finding, write or run a proof-of-concept, check
-  exploitability, reproduce a CVE, or separate theoretical findings from
-  demonstrated ones.
-allowed-tools: Bash, Read, Write, Grep
----
+    return problems
 
-# AppSec pipeline · Phase 4 — Dynamic validation
-
-Covers **stages 11–14**. A finding that has been reproduced is a different
-object from a finding that has been argued for. This phase produces the
-difference, and it is the phase with the sharpest safety constraints.
-
-## When to use this
-
-Only on findings that reached `feasible: true, verdict: confirmed` in Phase 3.
-Validating an unfiltered list wastes the most expensive stage in the pipeline
-on findings Phase 3 would have deleted.
-
-## Safety preconditions — check before anything else
-
-Refuse to proceed unless **all** hold, and say which one failed:
-
-1. The target is a **local sandbox or an explicitly authorised environment**.
-   Never a production host, never a third party&#x27;s infrastructure.
-2. The sandbox has **no credentials** beyond throwaway ones, and **no route**
-   to a real network the exploit could reach.
-3. The proof-of-concept **demonstrates** the flaw. It does not exfiltrate real
-   data, persist, escalate beyond the demonstration, or damage anything.
-4. There is a **teardown** and it runs even on failure.
-
-This is not ceremony. A validation harness with production credentials in its
-environment is itself the vulnerability.
-
-## Procedure
-
-**Stage 11 — Sandbox replication.** Stand the component up in isolation with
-the smallest fixture that reproduces the conditions: the vulnerable version,
-the reachable entry point, and nothing else. Record the exact commit and the
-fixture, because a PoC that cannot be re-run is an anecdote.
-
-**Stage 12 — Dynamic exploitation.** Drive the entry point with an input that
-should trigger the sink. Capture the observable: the crash, the query executed,
-the file read, the process spawned. **The observable is the evidence** — an
-exit code is not. Record what you sent and what came back.
-
-**Stage 13 — Exploit chaining.** Ask what the demonstrated primitive gives
-access to next. A path traversal that reads a config file containing a token is
-not a file-read bug; it is a credential-disclosure bug. Chain only within the
-sandbox, and stop at the first step that would need a real credential.
-
-**Stage 14 — Remediation engineering.** Propose the fix at the right layer, and
-say what it costs. Prefer the control that makes the class impossible
-(parameterised queries, an allowlist, a type) over the one that blocks the
-sample payload (a regex on the input you happened to send). Then **re-run
-stage 12 against the fix** — a remediation that has not been tested against the
-PoC that motivated it is a hypothesis.
-
-## Output contract
-
-```json
-{
-  &quot;validations&quot;: [
-    {&quot;finding_id&quot;: &quot;str&quot;, &quot;reproduced&quot;: true,
-     &quot;sandbox&quot;: {&quot;commit&quot;: &quot;str&quot;, &quot;fixture&quot;: &quot;str&quot;, &quot;isolated&quot;: true},
-     &quot;input&quot;: &quot;str&quot;, &quot;observable&quot;: &quot;str&quot;,
-     &quot;chain&quot;: [{&quot;primitive&quot;: &quot;str&quot;, &quot;leads_to&quot;: &quot;str&quot;, &quot;stopped_because&quot;: &quot;str&quot;}],
-     &quot;remediation&quot;: {&quot;layer&quot;: &quot;input|query|api|config|architecture&quot;,
-                     &quot;change&quot;: &quot;str&quot;, &quot;cost&quot;: &quot;low|medium|high&quot;,
-                     &quot;retested&quot;: true, &quot;still_reproduces&quot;: false}}
-  ],
-  &quot;refused&quot;: [{&quot;finding_id&quot;: &quot;str&quot;, &quot;precondition_failed&quot;: 1, &quot;why&quot;: &quot;str&quot;}]
-}
-```
-
-`reproduced: false` is a first-class result and must be reported, not dropped.
-A finding that survived Phase 3 and then failed to reproduce is the single most
-useful signal the pipeline produces about its own false-positive rate.
-
-## Failure modes
-
-- **Reporting `reproduced: true` without an observable.** The observable is the
-  claim; without it there is nothing to check.
-- **Treating &quot;the exploit ran&quot; as &quot;the fix works&quot;.** Re-run after remediation
-  or set `retested: false` and say so.
-- **Chaining outside the sandbox.** Stop and record `stopped_because`.
-- **Fixing the payload instead of the class.** A regex that blocks `../` does
-  not fix path traversal.
-
-## Handoff
-
-Pass `validations` to **appsec-triage-report**. Findings that failed to
-reproduce keep their finding record and gain `reproduced: false` — the report
-must be able to distinguish &quot;demonstrated&quot; from &quot;asserted&quot;.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/appsec/appsec-exploit-validate/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

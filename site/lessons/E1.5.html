@@ -53,7 +53,100 @@ and it only works if you present the right number.</p>
 from now about a system that has since had six model upgrades.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the claim, as written</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it measures</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">defensible?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our AI security harness scores 100%.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness achieves 100% schema conformance.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness scores 0.81 expert accuracy on a 24-question held-out set.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">accuracy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness passes all automated checks.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">unspecified</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The first is true and misleading — conformance really is 100%. The last is the most common of the four and evidences nothing at all.</div></div><div class="nbmd"><h2>3 · The evidence pack, as a skill</h2>
 <p>An evaluation result becomes evidence only when it tested the control that is claimed, ran on the system that is <strong>deployed</strong>, and states its failure mode. Most evidence fails the second.</p>
-<p>The contract carries a field most packs would rather not have: <code>conformance_reported</code>. Setting it true should be read as a defect in the evidence, not a feature of it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>The contract carries a field most packs would rather not have: <code>conformance_reported</code>. Setting it true should be read as a defect in the evidence, not a feature of it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/control-evidence/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: control-evidence
+description: &gt;-
+  Turn evaluation and monitoring output into audit evidence that survives
+  challenge, and say plainly what it does not prove. Use when asked to evidence
+  a control, prepare for an audit, map evals to a control framework, justify
+  continuous control verification, or interpret a passing test as assurance.
+allowed-tools: Read, Bash
+---
+
+# Evaluation output as audit evidence
+
+An evaluation result is not evidence until three things are true: it tested the
+control that is claimed, it ran on the system that is deployed, and its failure
+mode is stated. Most &quot;evidence&quot; fails the second.
+
+Point-in-time control testing fails for AI systems specifically because the
+thing under test changes between tests — the model, the prompt, the tool set,
+and the data all move independently of any release.
+
+## When to use this
+
+Preparing audit evidence, mapping evals to controls, or reviewing whether a
+green dashboard supports the assurance being claimed from it.
+
+## Procedure
+
+**1 — State the control claim precisely.** &quot;The agent cannot exfiltrate
+customer data&quot; is not testable. &quot;Egress from the agent workload is denied to
+all destinations outside the allowlist, enforced at the gateway&quot; is. Evidence
+is only as good as the sentence it supports.
+
+**2 — Bind evidence to the deployed artefact.** Record the model version, the
+prompt/config hash, the tool allowlist, and the commit — for the system **as
+deployed**, not as tested in a branch. Evidence that cannot be bound to a
+deployed artefact proves something about a different system.
+
+**3 — State the population and the sample.** How many cases exist, how many
+were tested, how they were chosen. A sample chosen by the team that built the
+control is not independent, and that has to be written down rather than
+implied.
+
+**4 — Separate operating effectiveness from outcome.** &quot;The gate ran on every
+request&quot; (operating) is different from &quot;no harmful action got through&quot;
+(outcome). Auditors ask for the first; incidents are caused by the second. Give
+both, labelled.
+
+**5 — Report accuracy, never conformance.** A pipeline whose output is
+schema-valid 100% of the time has demonstrated that its serialiser works.
+Conformance is near-free by construction; accuracy is the expensive,
+interesting number. Any evidence pack leading with a conformance percentage is
+overstating itself, and an auditor who notices will discount everything else in
+it.
+
+**6 — State the blind spots.** What the eval cannot see: cases not in the
+corpus, failure modes not modelled, drift since the run. A control with stated
+limits is stronger evidence than one claiming none.
+
+**7 — Set the re-verification interval from the change rate.** If the model can
+be updated weekly, annual testing evidences a system that no longer exists. Tie
+re-verification to the artefact&#x27;s change events, not the calendar.
+
+## Output contract
+
+```json
+{
+  &quot;control&quot;: {&quot;id&quot;: &quot;str&quot;, &quot;claim&quot;: &quot;str&quot;, &quot;testable&quot;: true},
+  &quot;binding&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;config_hash&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;],
+              &quot;commit&quot;: &quot;str&quot;, &quot;matches_deployed&quot;: true},
+  &quot;sample&quot;: {&quot;population&quot;: 0, &quot;tested&quot;: 0, &quot;selection&quot;: &quot;random|risk_based|convenience&quot;,
+             &quot;independent&quot;: false},
+  &quot;results&quot;: {&quot;operating_effectiveness&quot;: 0.0, &quot;outcome_effectiveness&quot;: 0.0,
+              &quot;accuracy&quot;: 0.0, &quot;conformance_reported&quot;: false},
+  &quot;blind_spots&quot;: [&quot;str&quot;],
+  &quot;reverification&quot;: {&quot;trigger&quot;: &quot;on_model_change|on_config_change|periodic&quot;,
+                     &quot;interval_days&quot;: 0},
+  &quot;conclusion&quot;: {&quot;supports_claim&quot;: true, &quot;limits&quot;: &quot;str&quot;}
+}
+```
+
+`conformance_reported: true` should be treated as a defect in the evidence
+pack, not a feature of it.
+
+## Failure modes
+
+- **Evidence from a branch.** Bind to what is deployed or say you cannot.
+- **A green dashboard as assurance.** Ask what turns it red, and test that.
+- **Convenience sampling presented as coverage.**
+- **Annual re-verification of a weekly-changing artefact.**
+- **Leading with conformance.** The single most common overstatement in
+  automated assurance.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -154,101 +247,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/control-evidence/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: control-evidence
-description: &gt;-
-  Turn evaluation and monitoring output into audit evidence that survives
-  challenge, and say plainly what it does not prove. Use when asked to evidence
-  a control, prepare for an audit, map evals to a control framework, justify
-  continuous control verification, or interpret a passing test as assurance.
-allowed-tools: Read, Bash
----
+    return problems
 
-# Evaluation output as audit evidence
-
-An evaluation result is not evidence until three things are true: it tested the
-control that is claimed, it ran on the system that is deployed, and its failure
-mode is stated. Most &quot;evidence&quot; fails the second.
-
-Point-in-time control testing fails for AI systems specifically because the
-thing under test changes between tests — the model, the prompt, the tool set,
-and the data all move independently of any release.
-
-## When to use this
-
-Preparing audit evidence, mapping evals to controls, or reviewing whether a
-green dashboard supports the assurance being claimed from it.
-
-## Procedure
-
-**1 — State the control claim precisely.** &quot;The agent cannot exfiltrate
-customer data&quot; is not testable. &quot;Egress from the agent workload is denied to
-all destinations outside the allowlist, enforced at the gateway&quot; is. Evidence
-is only as good as the sentence it supports.
-
-**2 — Bind evidence to the deployed artefact.** Record the model version, the
-prompt/config hash, the tool allowlist, and the commit — for the system **as
-deployed**, not as tested in a branch. Evidence that cannot be bound to a
-deployed artefact proves something about a different system.
-
-**3 — State the population and the sample.** How many cases exist, how many
-were tested, how they were chosen. A sample chosen by the team that built the
-control is not independent, and that has to be written down rather than
-implied.
-
-**4 — Separate operating effectiveness from outcome.** &quot;The gate ran on every
-request&quot; (operating) is different from &quot;no harmful action got through&quot;
-(outcome). Auditors ask for the first; incidents are caused by the second. Give
-both, labelled.
-
-**5 — Report accuracy, never conformance.** A pipeline whose output is
-schema-valid 100% of the time has demonstrated that its serialiser works.
-Conformance is near-free by construction; accuracy is the expensive,
-interesting number. Any evidence pack leading with a conformance percentage is
-overstating itself, and an auditor who notices will discount everything else in
-it.
-
-**6 — State the blind spots.** What the eval cannot see: cases not in the
-corpus, failure modes not modelled, drift since the run. A control with stated
-limits is stronger evidence than one claiming none.
-
-**7 — Set the re-verification interval from the change rate.** If the model can
-be updated weekly, annual testing evidences a system that no longer exists. Tie
-re-verification to the artefact&#x27;s change events, not the calendar.
-
-## Output contract
-
-```json
-{
-  &quot;control&quot;: {&quot;id&quot;: &quot;str&quot;, &quot;claim&quot;: &quot;str&quot;, &quot;testable&quot;: true},
-  &quot;binding&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;config_hash&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;],
-              &quot;commit&quot;: &quot;str&quot;, &quot;matches_deployed&quot;: true},
-  &quot;sample&quot;: {&quot;population&quot;: 0, &quot;tested&quot;: 0, &quot;selection&quot;: &quot;random|risk_based|convenience&quot;,
-             &quot;independent&quot;: false},
-  &quot;results&quot;: {&quot;operating_effectiveness&quot;: 0.0, &quot;outcome_effectiveness&quot;: 0.0,
-              &quot;accuracy&quot;: 0.0, &quot;conformance_reported&quot;: false},
-  &quot;blind_spots&quot;: [&quot;str&quot;],
-  &quot;reverification&quot;: {&quot;trigger&quot;: &quot;on_model_change|on_config_change|periodic&quot;,
-                     &quot;interval_days&quot;: 0},
-  &quot;conclusion&quot;: {&quot;supports_claim&quot;: true, &quot;limits&quot;: &quot;str&quot;}
-}
-```
-
-`conformance_reported: true` should be treated as a defect in the evidence
-pack, not a feature of it.
-
-## Failure modes
-
-- **Evidence from a branch.** Bind to what is deployed or say you cannot.
-- **A green dashboard as assurance.** Ask what turns it red, and test that.
-- **Convenience sampling presented as coverage.**
-- **Annual re-verification of a weekly-changing artefact.**
-- **Leading with conformance.** The single most common overstatement in
-  automated assurance.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/grc/control-evidence/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

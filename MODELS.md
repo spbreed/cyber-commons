@@ -79,18 +79,24 @@ needs ~40GB RAM. If your laptop has 16GB, use the small variants
 (`llama3.2:3b`, `glm-4-9b`, `qwen2.5:7b`) — every lab's *mechanics* work on a
 small model.
 
-The eight model-facing lessons were run against two sizes on 4 CPUs with no
-GPU, and the difference is worth knowing before you pick:
+The seven model-facing lessons — six one-shot sections plus B2.0's agentic
+loop — were run against two sizes on 4 CPUs with no GPU, on weights pulled from
+Kaggle Models. The difference is worth knowing before you pick:
 
 | | reached the model | acceptance property held |
 |---|---|---|
-| Qwen2.5-**1.5B**-Instruct | 8/8 | **6/8** — B2.9 and C1.1 fail |
-| Qwen2.5-**7B**-Instruct | 8/8 | **8/8** |
+| Qwen2.5-**1.5B**-Instruct | 7/7 | **5/7** — B2.9 and C1.1 fail |
+| Qwen2.5-**7B**-Instruct | 7/7 | **7/7** |
 
 At 1.5B, B2.9 hands back the SQL injection unfixed and C1.1 ranks TLS 1.0 above
 an unauthenticated endpoint. Both clear at 7B. So **7B is the floor for the
 acceptance criteria**; below it the lessons still run and still teach, but two
-of them will not hit their numbers. Full transcripts in
+of them will not hit their numbers.
+
+The exception is the one worth reading: **B2.0 holds at 1.5B**, on the same SQL
+task B2.9 fails at that size — because it asks for one line and checks the
+answer with an independent verifier rather than asking for a corrected function
+and trusting what comes back. Full transcripts in
 [`labs/notebooks/_live_model.json`](labs/notebooks/_live_model.json) and the
 write-up in [`labs/tools/EVIDENCE.md`](labs/tools/EVIDENCE.md).
 
@@ -124,6 +130,24 @@ export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=none MODEL=qwen2
 The `framework` segment is lower-case in the API path (`gguf`) and capitalised
 in the web URL (`Gguf`); the API returns 404 for the capitalised form, which
 reads like the model does not exist.
+
+For 7B — the size the acceptance criteria need — the q4_k_m build is **split
+across two shards**. Download both, then point llama.cpp at the first; it opens
+the rest itself:
+
+```bash
+for p in 1 2; do
+  curl -sSL -H "authorization: Bearer $KAGGLE_KEY" \
+    -o qwen2.5-7b-instruct-q4_k_m-0000$p-of-00002.gguf \
+    https://www.kaggle.com/api/v1/models/qwen-lm/qwen2.5/gguf/7b-instruct/1/download/qwen2.5-7b-instruct-q4_k_m-0000$p-of-00002.gguf
+done
+python3 -m llama_cpp.server --model qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf \
+  --model_alias qwen2.5-7b-instruct --port 11434 --n_ctx 4096 --chat_format qwen
+```
+
+`--chat_format qwen` matters: without it the server falls back to a generic
+template and the model's answers arrive wrapped in prose the lessons' checks
+do not expect.
 
 ## Option 2 — Free hosted tiers (when your laptop can't hold it)
 

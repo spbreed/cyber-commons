@@ -121,7 +121,75 @@ the binding was bought to prevent is back.</p>
 <p>Neither is a reason not to build this. Both are reasons to check your own
 deployment rather than assume the control is on because the feature exists.</p></div><div class="nbmd"><h2>4 · What the audit trail can now answer</h2>
 <p>Every hop is on the token, so the chain reconstructs from the token alone rather than by correlating four services' logs on timestamp. This is the thing A1.14 could not do.</p></div><div class="nbmd"><h2>5 · Verifying the chain, as a skill</h2>
-<p>The two findings above are what you get from <em>checking</em> a deployment rather than reading its design document, and CyberTravels has four agents and a payments API to check. The procedure walks every hop — user, agent, MCP server, tool, downstream — looks for token passthrough, and refuses to accept a matching <code>sub</code> as proof of delegation, because impersonation produces one too. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>The two findings above are what you get from <em>checking</em> a deployment rather than reading its design document, and CyberTravels has four agents and a payments API to check. The procedure walks every hop — user, agent, MCP server, tool, downstream — looks for token passthrough, and refuses to accept a matching <code>sub</code> as proof of delegation, because impersonation produces one too. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/identity-chain-verifier/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: identity-chain-verifier
+description: &gt;-
+  Verify workload identity and end-to-end on-behalf-of propagation across
+  user, agent, MCP server, tool and downstream. Use to check for token
+  passthrough, to distinguish delegation from impersonation, or when asked
+  whether a downstream can attribute an action to the original user.
+allowed-tools: Bash, Read, Grep
+---
+
+# Identity Chain Verifier
+
+**Controls:** Control 3 — workload identity and OBO attribution
+
+## Confidence: HIGH
+
+Delegation is cryptographically distinguishable from impersonation, and token
+passthrough is visible in the audience claim. This control is genuinely
+verifiable.
+
+## Procedure
+
+1. **Establish workload identity.** Read the registration entry and its
+   selectors. For an X.509 credential the identity is in the SAN URI; for a JWT
+   credential it is the subject. Confirm it matches the deployment manifest.
+
+2. **Walk every hop.** For user → agent → MCP server → tool → downstream,
+   record the principal, the audience, and the token type at each hop.
+
+3. **Check for token passthrough — the finding that matters most.** A server
+   must not forward the token it received to a downstream. Each hop must carry
+   a **distinct, audience-scoped** token. A repeated audience across two hops
+   is passthrough, and it is the mechanism behind the confused-deputy class.
+
+4. **Distinguish delegation from impersonation.** In token exchange, delegation
+   is impossible without an actor token: the presence of an actor token, and a
+   corresponding actor claim in the issued token, is what proves the chain is
+   delegation rather than the agent simply becoming the user.
+
+5. **Check credential hygiene.** Short lifetime, rotation, and — where mutual
+   TLS is possible — prefer certificate credentials over bearer tokens, which
+   are replayable. Flag every JWT-only hop.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;chain&quot;: [
+    {&quot;hop&quot;: &quot;user|agent|mcp|tool|downstream&quot;, &quot;principal&quot;: &quot;str&quot;,
+     &quot;audience&quot;: &quot;str&quot;, &quot;token_type&quot;: &quot;x509|jwt&quot;,
+     &quot;mode&quot;: &quot;delegation|impersonation|passthrough&quot;, &quot;ttl_seconds&quot;: 0}
+  ],
+  &quot;passthrough_violations&quot;: [{&quot;from_hop&quot;: &quot;str&quot;, &quot;to_hop&quot;: &quot;str&quot;, &quot;audience&quot;: &quot;str&quot;}],
+  &quot;delegation_proven&quot;: true,
+  &quot;jwt_only_hops&quot;: [&quot;str&quot;],
+  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
+}
+```
+
+## Failure modes
+
+- **Accepting a matching subject as proof of delegation.** Impersonation also
+  produces the right subject. The actor claim is the difference.
+- **Not checking the audience.** Passthrough is invisible without it.
+- **Treating a long-lived JWT as equivalent to a rotated certificate.**
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -222,76 +290,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/identity-chain-verifier/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: identity-chain-verifier
-description: &gt;-
-  Verify workload identity and end-to-end on-behalf-of propagation across
-  user, agent, MCP server, tool and downstream. Use to check for token
-  passthrough, to distinguish delegation from impersonation, or when asked
-  whether a downstream can attribute an action to the original user.
-allowed-tools: Bash, Read, Grep
----
+    return problems
 
-# Identity Chain Verifier
-
-**Controls:** Control 3 — workload identity and OBO attribution
-
-## Confidence: HIGH
-
-Delegation is cryptographically distinguishable from impersonation, and token
-passthrough is visible in the audience claim. This control is genuinely
-verifiable.
-
-## Procedure
-
-1. **Establish workload identity.** Read the registration entry and its
-   selectors. For an X.509 credential the identity is in the SAN URI; for a JWT
-   credential it is the subject. Confirm it matches the deployment manifest.
-
-2. **Walk every hop.** For user → agent → MCP server → tool → downstream,
-   record the principal, the audience, and the token type at each hop.
-
-3. **Check for token passthrough — the finding that matters most.** A server
-   must not forward the token it received to a downstream. Each hop must carry
-   a **distinct, audience-scoped** token. A repeated audience across two hops
-   is passthrough, and it is the mechanism behind the confused-deputy class.
-
-4. **Distinguish delegation from impersonation.** In token exchange, delegation
-   is impossible without an actor token: the presence of an actor token, and a
-   corresponding actor claim in the issued token, is what proves the chain is
-   delegation rather than the agent simply becoming the user.
-
-5. **Check credential hygiene.** Short lifetime, rotation, and — where mutual
-   TLS is possible — prefer certificate credentials over bearer tokens, which
-   are replayable. Flag every JWT-only hop.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;chain&quot;: [
-    {&quot;hop&quot;: &quot;user|agent|mcp|tool|downstream&quot;, &quot;principal&quot;: &quot;str&quot;,
-     &quot;audience&quot;: &quot;str&quot;, &quot;token_type&quot;: &quot;x509|jwt&quot;,
-     &quot;mode&quot;: &quot;delegation|impersonation|passthrough&quot;, &quot;ttl_seconds&quot;: 0}
-  ],
-  &quot;passthrough_violations&quot;: [{&quot;from_hop&quot;: &quot;str&quot;, &quot;to_hop&quot;: &quot;str&quot;, &quot;audience&quot;: &quot;str&quot;}],
-  &quot;delegation_proven&quot;: true,
-  &quot;jwt_only_hops&quot;: [&quot;str&quot;],
-  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-```
-
-## Failure modes
-
-- **Accepting a matching subject as proof of delegation.** Impersonation also
-  produces the right subject. The actor claim is the difference.
-- **Not checking the audience.** Passthrough is invisible without it.
-- **Treating a long-lived JWT as equivalent to a rotated certificate.**
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/identity-chain-verifier/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

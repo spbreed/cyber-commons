@@ -63,7 +63,65 @@ is the useful part — it tells Alex which afternoon to spend first.</p></div><d
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Every row has an owner. That is the property that distinguishes a register from a list, and it is the only reason this document is worth keeping.</div></div><div class="nbmd"><h2>3 · The six families, and where the weight sits</h2>
 <p>The twelve roll up into six families. Counting which family carries the most risks is the cheapest prioritisation available, and it is usually not the answer people expect.</p></div><div class="nbmd"><h2>4 · Which component carries the most</h2>
 <p>The other way to read the same register: not by risk family, but by the box on the architecture that the risk lands on.</p></div><div class="nbmd"><h2>5 · The risk CyberTravels did not write down</h2>
-<p>Twelve rows cover what CyberTravels built. None of them covers what it <strong>inherits</strong>: the payments API's open findings, the booking provider's expired exception, the identity service somebody accepted a risk on last year. An agent's risk is the union of its own and every downstream its tools reach, and that union is assembled by pulling the register per downstream rather than by asking each team. The procedure is written down as a skill, embedded here verbatim from this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>Twelve rows cover what CyberTravels built. None of them covers what it <strong>inherits</strong>: the payments API's open findings, the booking provider's expired exception, the identity service somebody accepted a risk on last year. An agent's risk is the union of its own and every downstream its tools reach, and that union is assembled by pulling the register per downstream rather than by asking each team. The procedure is written down as a skill, embedded here verbatim from this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/risk-registry-integrator/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: risk-registry-integrator
+description: &gt;-
+  Pull open risks and exceptions for the downstream services an agent or its
+  MCP tools connect to, and map them to the deployment. Use to roll up
+  inherited risk, to find expired exceptions on a dependency, or when asked
+  what a deployment inherits from the systems it calls.
+allowed-tools: Bash, Read
+---
+
+# Risk Registry Integrator
+
+**Controls:** Cross-cutting — inherited risk
+
+## What this adds
+
+A deployment&#x27;s own controls can be clean while every system it calls is
+carrying an accepted risk. Inherited risk is invisible unless something joins
+the downstream inventory to the register, and this skill is that join.
+
+## Procedure
+
+1. **Take the downstream inventory** from the inventory resolver. Do not build
+   a second list — a divergence between the two is itself the finding.
+2. **Query the register per downstream.** Open risks with severity and status,
+   plus any accepted exceptions.
+3. **Check exception expiry.** Expired and approaching-expiry exceptions are
+   separate categories and are treated differently.
+4. **Find unmapped downstreams.** A dependency with no register entry is not a
+   dependency with no risk; it is one nobody has assessed.
+5. **Roll up.** The deployment inherits the highest open severity among its
+   dependencies, and that number belongs in the attestation.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;downstreams&quot;: [
+    {&quot;service&quot;: &quot;str&quot;,
+     &quot;open_risks&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium|low&quot;, &quot;status&quot;: &quot;str&quot;}],
+     &quot;exceptions&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;expires&quot;: &quot;str&quot;, &quot;state&quot;: &quot;active|expiring|expired&quot;}],
+     &quot;in_register&quot;: true}
+  ],
+  &quot;unmapped_downstreams&quot;: [&quot;str&quot;],
+  &quot;inherited_severity&quot;: &quot;critical|high|medium|low|none&quot;,
+  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
+}
+```
+
+## Failure modes
+
+- **Treating an unmapped downstream as clean.** Absence of a record is absence
+  of assessment.
+- **Ignoring expired exceptions** because the risk is still recorded as
+  accepted. An expired exception is an open risk with a date on it.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -164,66 +222,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/risk-registry-integrator/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: risk-registry-integrator
-description: &gt;-
-  Pull open risks and exceptions for the downstream services an agent or its
-  MCP tools connect to, and map them to the deployment. Use to roll up
-  inherited risk, to find expired exceptions on a dependency, or when asked
-  what a deployment inherits from the systems it calls.
-allowed-tools: Bash, Read
----
+    return problems
 
-# Risk Registry Integrator
-
-**Controls:** Cross-cutting — inherited risk
-
-## What this adds
-
-A deployment&#x27;s own controls can be clean while every system it calls is
-carrying an accepted risk. Inherited risk is invisible unless something joins
-the downstream inventory to the register, and this skill is that join.
-
-## Procedure
-
-1. **Take the downstream inventory** from the inventory resolver. Do not build
-   a second list — a divergence between the two is itself the finding.
-2. **Query the register per downstream.** Open risks with severity and status,
-   plus any accepted exceptions.
-3. **Check exception expiry.** Expired and approaching-expiry exceptions are
-   separate categories and are treated differently.
-4. **Find unmapped downstreams.** A dependency with no register entry is not a
-   dependency with no risk; it is one nobody has assessed.
-5. **Roll up.** The deployment inherits the highest open severity among its
-   dependencies, and that number belongs in the attestation.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;downstreams&quot;: [
-    {&quot;service&quot;: &quot;str&quot;,
-     &quot;open_risks&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium|low&quot;, &quot;status&quot;: &quot;str&quot;}],
-     &quot;exceptions&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;expires&quot;: &quot;str&quot;, &quot;state&quot;: &quot;active|expiring|expired&quot;}],
-     &quot;in_register&quot;: true}
-  ],
-  &quot;unmapped_downstreams&quot;: [&quot;str&quot;],
-  &quot;inherited_severity&quot;: &quot;critical|high|medium|low|none&quot;,
-  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-```
-
-## Failure modes
-
-- **Treating an unmapped downstream as clean.** Absence of a record is absence
-  of assessment.
-- **Ignoring expired exceptions** because the risk is still recorded as
-  accepted. An expired exception is an open risk with a date on it.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/risk-registry-integrator/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

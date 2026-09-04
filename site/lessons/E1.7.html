@@ -43,7 +43,68 @@ its freshness window.</p>
 </ul>
 <p>Plus the absence state: no evidence at all, which is different from failing and
 is often the largest category in a first assessment.</p></div><div class="nbmd"><h2>3 · Collecting the runtime evidence, as a skill</h2>
-<p>Automating a control means something has to go and look. For the network and logging controls that underwrite every default-deny claim CyberTravels makes, that is a posture collector: egress rules, private endpoints, route tables, key policies, and whether the audit trail is not merely enabled but <strong>delivering</strong>. It collects; it does not conclude. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>Automating a control means something has to go and look. For the network and logging controls that underwrite every default-deny claim CyberTravels makes, that is a posture collector: egress rules, private endpoints, route tables, key policies, and whether the audit trail is not merely enabled but <strong>delivering</strong>. It collects; it does not conclude. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/aws-runtime-posture-collector/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: aws-runtime-posture-collector
+description: &gt;-
+  Snapshot a deployment&#x27;s cloud network, crypto and logging posture as
+  evidence for default-deny and egress controls. Use to evidence network
+  isolation, to check whether private endpoints and endpoint policies are in
+  place, or to record the runtime configuration an attestation depends on.
+allowed-tools: Bash, Read
+---
+
+# Aws Runtime Posture Collector
+
+**Controls:** Controls 1 and 2 — runtime posture
+
+## What this collects
+
+Configuration state, at a point in time, for the network and crypto boundary
+around one deployment. It is evidence for other skills&#x27; verdicts rather than a
+verdict in itself.
+
+## Procedure
+
+1. **Security groups and network ACLs.** Enumerate egress rules. Any rule
+   permitting `0.0.0.0/0` outbound is an egress-open finding regardless of what
+   an application-layer policy says.
+2. **Private endpoints.** Record whether a private endpoint exists for each
+   model and gateway service in use, and read the endpoint policy — an
+   unscoped endpoint policy is an endpoint that permits any principal.
+3. **Route tables.** Identify NAT and internet gateways on the deployment&#x27;s
+   subnets. A private endpoint does not help if a default route to an internet
+   gateway remains.
+4. **Key policies.** Record key policies and condition keys that scope use to a
+   specific service. Unconditioned key access is a finding.
+5. **Logging.** Confirm the audit trail and log destinations are enabled and
+   delivering, and record the retention.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;collected_at&quot;: &quot;str&quot;,
+  &quot;network&quot;: {
+    &quot;egress_open_findings&quot;: [{&quot;sg&quot;: &quot;str&quot;, &quot;rule&quot;: &quot;str&quot;}],
+    &quot;private_endpoints&quot;: [{&quot;service&quot;: &quot;str&quot;, &quot;present&quot;: true, &quot;policy_scoped&quot;: true}],
+    &quot;internet_route_present&quot;: false
+  },
+  &quot;crypto&quot;: {&quot;keys&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;conditioned&quot;: true}]},
+  &quot;logging&quot;: {&quot;audit_trail_enabled&quot;: true, &quot;log_destinations&quot;: [&quot;str&quot;], &quot;retention_days&quot;: 0},
+  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
+}
+```
+
+## Failure modes
+
+- **Reading configuration and calling it enforcement.** This skill records what
+  is configured. Whether traffic actually obeys it is the egress verifier&#x27;s job.
+- **Ignoring the route table** because a private endpoint exists.
+- **Recording that logging is enabled** without checking that it is delivering.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -144,69 +205,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/aws-runtime-posture-collector/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: aws-runtime-posture-collector
-description: &gt;-
-  Snapshot a deployment&#x27;s cloud network, crypto and logging posture as
-  evidence for default-deny and egress controls. Use to evidence network
-  isolation, to check whether private endpoints and endpoint policies are in
-  place, or to record the runtime configuration an attestation depends on.
-allowed-tools: Bash, Read
----
+    return problems
 
-# Aws Runtime Posture Collector
-
-**Controls:** Controls 1 and 2 — runtime posture
-
-## What this collects
-
-Configuration state, at a point in time, for the network and crypto boundary
-around one deployment. It is evidence for other skills&#x27; verdicts rather than a
-verdict in itself.
-
-## Procedure
-
-1. **Security groups and network ACLs.** Enumerate egress rules. Any rule
-   permitting `0.0.0.0/0` outbound is an egress-open finding regardless of what
-   an application-layer policy says.
-2. **Private endpoints.** Record whether a private endpoint exists for each
-   model and gateway service in use, and read the endpoint policy — an
-   unscoped endpoint policy is an endpoint that permits any principal.
-3. **Route tables.** Identify NAT and internet gateways on the deployment&#x27;s
-   subnets. A private endpoint does not help if a default route to an internet
-   gateway remains.
-4. **Key policies.** Record key policies and condition keys that scope use to a
-   specific service. Unconditioned key access is a finding.
-5. **Logging.** Confirm the audit trail and log destinations are enabled and
-   delivering, and record the retention.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;collected_at&quot;: &quot;str&quot;,
-  &quot;network&quot;: {
-    &quot;egress_open_findings&quot;: [{&quot;sg&quot;: &quot;str&quot;, &quot;rule&quot;: &quot;str&quot;}],
-    &quot;private_endpoints&quot;: [{&quot;service&quot;: &quot;str&quot;, &quot;present&quot;: true, &quot;policy_scoped&quot;: true}],
-    &quot;internet_route_present&quot;: false
-  },
-  &quot;crypto&quot;: {&quot;keys&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;conditioned&quot;: true}]},
-  &quot;logging&quot;: {&quot;audit_trail_enabled&quot;: true, &quot;log_destinations&quot;: [&quot;str&quot;], &quot;retention_days&quot;: 0},
-  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-```
-
-## Failure modes
-
-- **Reading configuration and calling it enforcement.** This skill records what
-  is configured. Whether traffic actually obeys it is the egress verifier&#x27;s job.
-- **Ignoring the route table** because a private endpoint exists.
-- **Recording that logging is enabled** without checking that it is delivering.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/aws-runtime-posture-collector/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

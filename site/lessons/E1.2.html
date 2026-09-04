@@ -47,7 +47,80 @@ other agents.</p>
 </ol>
 <p>Source 3 is the one that discovers the department using a frontier API on a
 personal card, and the SaaS product that quietly added an AI feature.</p></div><div class="nbmd"><h2>3 · Resolving one row into a deployment, as a skill</h2>
-<p>Discovery finds that a thing exists. Governing it needs the row resolved into artefacts: which repository at which commit, which image <strong>digest</strong> rather than which tag, which IAM role and SPIFFE ID, which gateway and guardrail, and every downstream its tools call. Every other attestation skill consumes this graph, which is why it runs first. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>Discovery finds that a thing exists. Governing it needs the row resolved into artefacts: which repository at which commit, which image <strong>digest</strong> rather than which tag, which IAM role and SPIFFE ID, which gateway and guardrail, and every downstream its tools call. Every other attestation skill consumes this graph, which is why it runs first. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/deployment-inventory-resolver/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: deployment-inventory-resolver
+description: &gt;-
+  Resolve a deployment_id into the artifacts that make up one agentic
+  deployment and build the evidence graph every other attestation skill
+  consumes. Use first, before any control is evaluated, or when asked which
+  repo, image, role, workload identity, gateway or guardrail a deployment
+  actually consists of.
+allowed-tools: Bash, Read, Grep, Glob
+---
+
+# Deployment Inventory Resolver
+
+**Controls:** All — this skill produces the join key
+
+## Why this runs first
+
+`deployment_id` is the primary key for every other skill in this set. Without
+it, an IAM finding, a SPIFFE entry and a gateway policy are three unrelated
+facts about three things that may or may not be the same system.
+
+This skill turns that ID into a manifest of content-addressed artifacts, so
+every later finding resolves to one evaluable unit and cannot be silently
+confused with a neighbouring deployment.
+
+## Procedure
+
+1. **Resolve the code.** Repository URL plus the exact commit SHA that was
+   built. Not a branch — a branch moves.
+2. **Resolve the image.** Registry digest (`sha256:…`), not a tag. Confirm the
+   digest matches the revision actually deployed, not the newest build.
+3. **Resolve the runtime identity.** The IAM role ARN, the SPIFFE ID, and —
+   on platforms that auto-create one — the workload identity ARN exposed by the
+   runtime/gateway description API.
+4. **Resolve the traffic path.** Gateway or route ARN, and the guardrail ID
+   attached to it.
+5. **Resolve the downstreams.** Every service the deployment&#x27;s tools call.
+   These become the input to the risk-registry skill.
+6. **Cross-link and check completeness.** Every artifact must reference the
+   others. Report orphans rather than omitting them.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;resolved_at&quot;: &quot;str&quot;,
+  &quot;artifacts&quot;: {
+    &quot;repo&quot;: {&quot;url&quot;: &quot;str&quot;, &quot;commit&quot;: &quot;str&quot;},
+    &quot;image&quot;: {&quot;registry&quot;: &quot;str&quot;, &quot;digest&quot;: &quot;str&quot;, &quot;matches_deployed&quot;: true},
+    &quot;identity&quot;: {&quot;role_arn&quot;: &quot;str&quot;, &quot;spiffe_id&quot;: &quot;str&quot;, &quot;workload_identity_arn&quot;: &quot;str&quot;},
+    &quot;traffic&quot;: {&quot;gateway_arn&quot;: &quot;str&quot;, &quot;guardrail_id&quot;: &quot;str&quot;},
+    &quot;downstreams&quot;: [&quot;str&quot;]
+  },
+  &quot;missing&quot;: [&quot;str&quot;],
+  &quot;orphans&quot;: [&quot;str&quot;],
+  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
+}
+```
+
+A manifest with entries in `missing` is `PARTIAL` at best. Every downstream
+skill inherits that ceiling — you cannot attest a control on an artifact you
+could not resolve.
+
+## Failure modes
+
+- **Resolving a tag instead of a digest.** Tags are mutable; the thing you
+  attested is not necessarily the thing running.
+- **Treating an unresolvable artifact as absent.** &quot;No gateway configured&quot; and
+  &quot;I could not read the gateway API&quot; are different findings.
+- **Reusing a manifest across runs.** Re-resolve. Drift is the point.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -148,81 +221,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/deployment-inventory-resolver/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: deployment-inventory-resolver
-description: &gt;-
-  Resolve a deployment_id into the artifacts that make up one agentic
-  deployment and build the evidence graph every other attestation skill
-  consumes. Use first, before any control is evaluated, or when asked which
-  repo, image, role, workload identity, gateway or guardrail a deployment
-  actually consists of.
-allowed-tools: Bash, Read, Grep, Glob
----
+    return problems
 
-# Deployment Inventory Resolver
-
-**Controls:** All — this skill produces the join key
-
-## Why this runs first
-
-`deployment_id` is the primary key for every other skill in this set. Without
-it, an IAM finding, a SPIFFE entry and a gateway policy are three unrelated
-facts about three things that may or may not be the same system.
-
-This skill turns that ID into a manifest of content-addressed artifacts, so
-every later finding resolves to one evaluable unit and cannot be silently
-confused with a neighbouring deployment.
-
-## Procedure
-
-1. **Resolve the code.** Repository URL plus the exact commit SHA that was
-   built. Not a branch — a branch moves.
-2. **Resolve the image.** Registry digest (`sha256:…`), not a tag. Confirm the
-   digest matches the revision actually deployed, not the newest build.
-3. **Resolve the runtime identity.** The IAM role ARN, the SPIFFE ID, and —
-   on platforms that auto-create one — the workload identity ARN exposed by the
-   runtime/gateway description API.
-4. **Resolve the traffic path.** Gateway or route ARN, and the guardrail ID
-   attached to it.
-5. **Resolve the downstreams.** Every service the deployment&#x27;s tools call.
-   These become the input to the risk-registry skill.
-6. **Cross-link and check completeness.** Every artifact must reference the
-   others. Report orphans rather than omitting them.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;resolved_at&quot;: &quot;str&quot;,
-  &quot;artifacts&quot;: {
-    &quot;repo&quot;: {&quot;url&quot;: &quot;str&quot;, &quot;commit&quot;: &quot;str&quot;},
-    &quot;image&quot;: {&quot;registry&quot;: &quot;str&quot;, &quot;digest&quot;: &quot;str&quot;, &quot;matches_deployed&quot;: true},
-    &quot;identity&quot;: {&quot;role_arn&quot;: &quot;str&quot;, &quot;spiffe_id&quot;: &quot;str&quot;, &quot;workload_identity_arn&quot;: &quot;str&quot;},
-    &quot;traffic&quot;: {&quot;gateway_arn&quot;: &quot;str&quot;, &quot;guardrail_id&quot;: &quot;str&quot;},
-    &quot;downstreams&quot;: [&quot;str&quot;]
-  },
-  &quot;missing&quot;: [&quot;str&quot;],
-  &quot;orphans&quot;: [&quot;str&quot;],
-  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-```
-
-A manifest with entries in `missing` is `PARTIAL` at best. Every downstream
-skill inherits that ceiling — you cannot attest a control on an artifact you
-could not resolve.
-
-## Failure modes
-
-- **Resolving a tag instead of a digest.** Tags are mutable; the thing you
-  attested is not necessarily the thing running.
-- **Treating an unresolvable artifact as absent.** &quot;No gateway configured&quot; and
-  &quot;I could not read the gateway API&quot; are different findings.
-- **Reusing a manifest across runs.** Re-resolve. Drift is the point.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/deployment-inventory-resolver/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

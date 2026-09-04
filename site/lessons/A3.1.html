@@ -69,7 +69,76 @@ which is a better place to stand.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Stands on the edge every topology shares: <code>agent_runtime -&gt; tools</code>. Persuasion still happens; it just stops reaching anything.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Proving the baseline is default-deny, as a skill</h2>
-<p>Writing the entitlement is one job; showing that CyberTravels' running role <em>is</em> the entitlement is another, and it is the one an auditor asks for. The procedure reads every inline and attached policy for the baseline, then measures granted-but-unused permissions against what the audit trail observed — which only means anything if the trail is intact, so incomplete coverage is a finding rather than a clean pass. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>Writing the entitlement is one job; showing that CyberTravels' running role <em>is</em> the entitlement is another, and it is the one an auditor asks for. The procedure reads every inline and attached policy for the baseline, then measures granted-but-unused permissions against what the audit trail observed — which only means anything if the trail is intact, so incomplete coverage is a finding rather than a clean pass. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/iam-least-privilege-verifier/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: iam-least-privilege-verifier
+description: &gt;-
+  Prove a deployment&#x27;s role baseline is default-deny and quantify granted-
+  but-unused permissions against observed usage. Use to evidence least
+  privilege, to find excess permissions on an agent role, or when asked
+  whether a deployment&#x27;s IAM posture supports a default-deny claim.
+allowed-tools: Bash, Read
+---
+
+# Iam Least Privilege Verifier
+
+**Controls:** Control 1 — default-deny and least privilege
+
+## Confidence: HIGH
+
+This is one of the controls that is genuinely provable at runtime. Policy
+documents are readable, and usage data turns &quot;least privilege&quot; from an
+assertion into a measured delta.
+
+## Procedure
+
+1. **Establish the default-deny baseline.** Read every inline and attached
+   policy. The baseline fails if any of these are present:
+   - `Action: &quot;*&quot;` or `Resource: &quot;*&quot;` in an Allow statement
+   - broad managed policies such as administrator or power-user equivalents
+   - a wildcard principal on a trust policy
+
+2. **Measure excess.** Compare granted permissions against observed usage from
+   the access-analysis and last-accessed data. Count actions, roles, keys and
+   passwords idle for at least the tracking period (configurable 1–180 days;
+   default 90).
+
+3. **Generate the least-privilege diff.** Policy generation derived from actual
+   activity produces a candidate policy; the diff against what is granted is
+   the excess-permission finding, expressed concretely rather than as a score.
+
+4. **Check external access.** External-access findings must be zero, or each
+   one must map to an approved exception.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;role_arn&quot;: &quot;str&quot;,
+  &quot;default_deny_verified&quot;: true,
+  &quot;wildcard_findings&quot;: [{&quot;policy&quot;: &quot;str&quot;, &quot;statement&quot;: &quot;str&quot;}],
+  &quot;excess_permission_count&quot;: 0,
+  &quot;unused&quot;: [{&quot;type&quot;: &quot;action|role|key|password&quot;, &quot;name&quot;: &quot;str&quot;, &quot;idle_days&quot;: 0}],
+  &quot;generated_policy_diff&quot;: &quot;str&quot;,
+  &quot;external_access_findings&quot;: 0,
+  &quot;tracking_period_days&quot;: 90,
+  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
+}
+```
+
+## Failure modes
+
+- **Incomplete audit-trail coverage.** If the trail is not intact, &quot;unused&quot; is
+  unreliable and the verdict must be `PARTIAL`. Policy generation can miss
+  legitimately-used-but-rare actions — an annual disaster-recovery permission
+  looks identical to dead permission over a 90-day window.
+- **Counting managed-policy names instead of effective actions.** Two policies
+  can grant the same action; the union is what matters.
+- **Treating a low excess count as a pass** while a wildcard is present. The
+  baseline check is a gate, not a contributor to a score.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -170,77 +239,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/iam-least-privilege-verifier/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: iam-least-privilege-verifier
-description: &gt;-
-  Prove a deployment&#x27;s role baseline is default-deny and quantify granted-
-  but-unused permissions against observed usage. Use to evidence least
-  privilege, to find excess permissions on an agent role, or when asked
-  whether a deployment&#x27;s IAM posture supports a default-deny claim.
-allowed-tools: Bash, Read
----
+    return problems
 
-# Iam Least Privilege Verifier
-
-**Controls:** Control 1 — default-deny and least privilege
-
-## Confidence: HIGH
-
-This is one of the controls that is genuinely provable at runtime. Policy
-documents are readable, and usage data turns &quot;least privilege&quot; from an
-assertion into a measured delta.
-
-## Procedure
-
-1. **Establish the default-deny baseline.** Read every inline and attached
-   policy. The baseline fails if any of these are present:
-   - `Action: &quot;*&quot;` or `Resource: &quot;*&quot;` in an Allow statement
-   - broad managed policies such as administrator or power-user equivalents
-   - a wildcard principal on a trust policy
-
-2. **Measure excess.** Compare granted permissions against observed usage from
-   the access-analysis and last-accessed data. Count actions, roles, keys and
-   passwords idle for at least the tracking period (configurable 1–180 days;
-   default 90).
-
-3. **Generate the least-privilege diff.** Policy generation derived from actual
-   activity produces a candidate policy; the diff against what is granted is
-   the excess-permission finding, expressed concretely rather than as a score.
-
-4. **Check external access.** External-access findings must be zero, or each
-   one must map to an approved exception.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;role_arn&quot;: &quot;str&quot;,
-  &quot;default_deny_verified&quot;: true,
-  &quot;wildcard_findings&quot;: [{&quot;policy&quot;: &quot;str&quot;, &quot;statement&quot;: &quot;str&quot;}],
-  &quot;excess_permission_count&quot;: 0,
-  &quot;unused&quot;: [{&quot;type&quot;: &quot;action|role|key|password&quot;, &quot;name&quot;: &quot;str&quot;, &quot;idle_days&quot;: 0}],
-  &quot;generated_policy_diff&quot;: &quot;str&quot;,
-  &quot;external_access_findings&quot;: 0,
-  &quot;tracking_period_days&quot;: 90,
-  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-```
-
-## Failure modes
-
-- **Incomplete audit-trail coverage.** If the trail is not intact, &quot;unused&quot; is
-  unreliable and the verdict must be `PARTIAL`. Policy generation can miss
-  legitimately-used-but-rare actions — an annual disaster-recovery permission
-  looks identical to dead permission over a 90-day window.
-- **Counting managed-policy names instead of effective actions.** Two policies
-  can grant the same action; the union is what matters.
-- **Treating a low excess count as a pass** while a wildcard is present. The
-  baseline check is a gate, not a contributor to a score.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/iam-least-privilege-verifier/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

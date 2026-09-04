@@ -90,7 +90,86 @@ single mega-skill produces context bloat and verdicts nobody can read.</p>
 </tbody>
 </table>
 <p>A tool that reports PASS on C2 or C5 is wrong, and the cap belongs in the
-artefact rather than in a footnote.</p></div><div class="nbmd"><h2>3 · The skill that does the static half</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+artefact rather than in a footnote.</p></div><div class="nbmd"><h2>3 · The skill that does the static half</h2></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/agent-code-surface-analyzer/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: agent-code-surface-analyzer
+description: &gt;-
+  Statically enumerate an agent or MCP server&#x27;s declared tools, dangerous
+  actions and declared-versus-actual capability surface from its repository
+  or image. Use to inventory what a deployment can do before trusting what
+  it says it does, to check MCP tool annotations against the code, or to
+  baseline tool descriptions for rug-pull detection.
+allowed-tools: Read, Grep, Glob, Bash
+---
+
+# Agent Code Surface Analyzer
+
+**Controls:** Static basis for controls 1, 2 and 5
+
+## What this establishes
+
+Every other control is about constraining capability. This skill establishes
+what the capability actually **is**, from the code rather than from the
+manifest — because the manifest is a claim made by the thing being audited.
+
+## Procedure
+
+1. **Enumerate declared tools.** From the MCP tool manifest, the tool registry,
+   or the decorator/registration sites in code.
+
+2. **Classify each tool by what it actually reaches**, by locating sinks:
+   - `subprocess`, `os.system`, `exec`, `eval` → **process execution**
+   - `open(...,&#x27;w&#x27;)`, file writes, `shutil`, `os.remove` → **filesystem write**
+   - HTTP clients, sockets → **network egress**
+   - SDK credential reads, environment access → **credential access**
+   - `DELETE`, `DROP`, `TRUNCATE` → **destructive downstream**
+
+3. **Cross-check annotations against the code.** MCP tool annotations
+   (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) are
+   **hints, not guarantees** — the specification says so explicitly, and a
+   server can mislabel a destructive tool as read-only. Treat every annotation
+   as a claim to verify, never as truth.
+
+   Apply the spec&#x27;s pessimistic defaults: an **unannotated** tool is assumed
+   `destructiveHint: true` and `openWorldHint: true`.
+
+4. **Record the declared-versus-actual delta.** A tool annotated `readOnlyHint`
+   whose body writes a file is the highest-value finding this skill produces.
+
+5. **Hash the tool descriptions.** Store `tool_description_hash` per tool. This
+   is the rug-pull baseline: a server can change a tool&#x27;s description after the
+   client approved it, and the hash is what detects that.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;tools&quot;: [
+    {&quot;name&quot;: &quot;str&quot;, &quot;capability_class&quot;: [&quot;process|filesystem|network|credential|destructive&quot;],
+     &quot;annotations&quot;: {&quot;readOnlyHint&quot;: false, &quot;destructiveHint&quot;: true,
+                     &quot;idempotentHint&quot;: false, &quot;openWorldHint&quot;: true},
+     &quot;annotations_present&quot;: true,
+     &quot;declared_vs_actual&quot;: &quot;match|understated|overstated&quot;,
+     &quot;evidence&quot;: [{&quot;file&quot;: &quot;str&quot;, &quot;line&quot;: 0, &quot;sink&quot;: &quot;str&quot;}],
+     &quot;tool_description_hash&quot;: &quot;str&quot;}
+  ],
+  &quot;dangerous_actions&quot;: [&quot;str&quot;],
+  &quot;unannotated_count&quot;: 0,
+  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
+}
+```
+
+## Failure modes
+
+- **Believing the annotations.** They are advisory. Cross-check or do not
+  report on them at all.
+- **Missing dynamic registration.** Tools registered at runtime from config do
+  not appear in a static scan; record that as a `PARTIAL`, not a clean pass.
+- **Hashing the tool name instead of the description.** The description is what
+  the model reads and what a rug-pull changes.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -191,87 +270,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/agent-code-surface-analyzer/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-code-surface-analyzer
-description: &gt;-
-  Statically enumerate an agent or MCP server&#x27;s declared tools, dangerous
-  actions and declared-versus-actual capability surface from its repository
-  or image. Use to inventory what a deployment can do before trusting what
-  it says it does, to check MCP tool annotations against the code, or to
-  baseline tool descriptions for rug-pull detection.
-allowed-tools: Read, Grep, Glob, Bash
----
+    return problems
 
-# Agent Code Surface Analyzer
-
-**Controls:** Static basis for controls 1, 2 and 5
-
-## What this establishes
-
-Every other control is about constraining capability. This skill establishes
-what the capability actually **is**, from the code rather than from the
-manifest — because the manifest is a claim made by the thing being audited.
-
-## Procedure
-
-1. **Enumerate declared tools.** From the MCP tool manifest, the tool registry,
-   or the decorator/registration sites in code.
-
-2. **Classify each tool by what it actually reaches**, by locating sinks:
-   - `subprocess`, `os.system`, `exec`, `eval` → **process execution**
-   - `open(...,&#x27;w&#x27;)`, file writes, `shutil`, `os.remove` → **filesystem write**
-   - HTTP clients, sockets → **network egress**
-   - SDK credential reads, environment access → **credential access**
-   - `DELETE`, `DROP`, `TRUNCATE` → **destructive downstream**
-
-3. **Cross-check annotations against the code.** MCP tool annotations
-   (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`) are
-   **hints, not guarantees** — the specification says so explicitly, and a
-   server can mislabel a destructive tool as read-only. Treat every annotation
-   as a claim to verify, never as truth.
-
-   Apply the spec&#x27;s pessimistic defaults: an **unannotated** tool is assumed
-   `destructiveHint: true` and `openWorldHint: true`.
-
-4. **Record the declared-versus-actual delta.** A tool annotated `readOnlyHint`
-   whose body writes a file is the highest-value finding this skill produces.
-
-5. **Hash the tool descriptions.** Store `tool_description_hash` per tool. This
-   is the rug-pull baseline: a server can change a tool&#x27;s description after the
-   client approved it, and the hash is what detects that.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;tools&quot;: [
-    {&quot;name&quot;: &quot;str&quot;, &quot;capability_class&quot;: [&quot;process|filesystem|network|credential|destructive&quot;],
-     &quot;annotations&quot;: {&quot;readOnlyHint&quot;: false, &quot;destructiveHint&quot;: true,
-                     &quot;idempotentHint&quot;: false, &quot;openWorldHint&quot;: true},
-     &quot;annotations_present&quot;: true,
-     &quot;declared_vs_actual&quot;: &quot;match|understated|overstated&quot;,
-     &quot;evidence&quot;: [{&quot;file&quot;: &quot;str&quot;, &quot;line&quot;: 0, &quot;sink&quot;: &quot;str&quot;}],
-     &quot;tool_description_hash&quot;: &quot;str&quot;}
-  ],
-  &quot;dangerous_actions&quot;: [&quot;str&quot;],
-  &quot;unannotated_count&quot;: 0,
-  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-```
-
-## Failure modes
-
-- **Believing the annotations.** They are advisory. Cross-check or do not
-  report on them at all.
-- **Missing dynamic registration.** Tools registered at runtime from config do
-  not appear in a static scan; record that as a `PARTIAL`, not a clean pass.
-- **Hashing the tool name instead of the description.** The description is what
-  the model reads and what a rug-pull changes.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/agent-code-surface-analyzer/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

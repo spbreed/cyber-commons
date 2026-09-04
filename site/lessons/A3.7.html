@@ -63,7 +63,74 @@ attractive target. It has to be operated accordingly.</p></div><div class="nbmd"
 <p><strong>What this control closes.</strong></p>
 <p>Not a new control. The same controls, at a point every call passes through — and the only answer to a downstream that cannot consume delegated identity.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Proving every call goes through it, as a skill</h2>
-<p>A gateway is only a choke point if nothing routes around it, and "nothing routes around it" is not a fact you can read off a route table. The procedure tests reachability from inside the deployment, covers the paths people forget — tool-initiated calls, background jobs, retries — and records each guardrail's <strong>action</strong>, because a filter set to observe is a filter that is switched on and stopping nothing. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>A gateway is only a choke point if nothing routes around it, and "nothing routes around it" is not a fact you can read off a route table. The procedure tests reachability from inside the deployment, covers the paths people forget — tool-initiated calls, background jobs, retries — and records each guardrail's <strong>action</strong>, because a filter set to observe is a filter that is switched on and stopping nothing. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/llm-gateway-guardrail-verifier/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: llm-gateway-guardrail-verifier
+description: &gt;-
+  Prove all model traffic leaves through the sanctioned gateway, including
+  tool-initiated and background calls, and that guardrail policies are
+  attached and enforced. Use to attest gateway routing, to check whether a
+  provider endpoint is directly reachable, or to evidence which guardrail
+  policies are switched on.
+allowed-tools: Bash, Read
+---
+
+# Llm Gateway Guardrail Verifier
+
+**Controls:** Control 4 — gateway routing and guardrails
+
+## Confidence: HIGH **only if** egress is enforced below the application
+
+An application-layer gateway configuration is a routing preference. An agent
+that can open a socket can bypass it by calling the provider directly. If the
+allowlist is not enforced at the network layer, **downgrade this control to
+PARTIAL** and say why.
+
+## Procedure
+
+1. **Test reachability, do not read configuration.** From the deployment&#x27;s
+   network position, attempt to reach provider endpoints directly. Anything
+   reachable that is not the gateway is a finding, regardless of what the
+   configuration says.
+
+2. **Cover the paths people forget.** Tool-initiated calls, background jobs,
+   scheduled tasks, retry paths and sub-agents. A gateway that fronts the main
+   request path and not the batch job is a gateway with a hole in it.
+
+3. **Confirm guardrail attachment and version.** Record the guardrail ID and
+   version actually attached to the route, not the one in the template.
+
+4. **Enumerate enabled policies.** Content filters, prompt-attack filtering,
+   denied topics, sensitive-information filters, contextual grounding. Record
+   whether each is applied on **input, output, or both** — input-only filtering
+   is a common and quiet gap.
+
+5. **Confirm the action.** A filter set to observe rather than block is
+   telemetry, not a control. Record the configured action per policy.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;gateway_enforced&quot;: true,
+  &quot;enforcement_layer&quot;: &quot;network|application&quot;,
+  &quot;reachable_provider_findings&quot;: [{&quot;endpoint&quot;: &quot;str&quot;, &quot;path&quot;: &quot;direct|tool|background&quot;}],
+  &quot;guardrail&quot;: {&quot;id&quot;: &quot;str&quot;, &quot;version&quot;: &quot;str&quot;,
+                &quot;policies&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;applied_to&quot;: &quot;input|output|both&quot;,
+                              &quot;action&quot;: &quot;block|anonymize|observe&quot;}]},
+  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
+}
+```
+
+## Failure modes
+
+- **Reading the route table instead of testing reachability.**
+- **Missing the background path.** Scheduled and tool-initiated calls are the
+  ones that bypass the gateway in practice.
+- **Recording a guardrail as enforced when its action is observe.**
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -164,75 +231,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/llm-gateway-guardrail-verifier/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: llm-gateway-guardrail-verifier
-description: &gt;-
-  Prove all model traffic leaves through the sanctioned gateway, including
-  tool-initiated and background calls, and that guardrail policies are
-  attached and enforced. Use to attest gateway routing, to check whether a
-  provider endpoint is directly reachable, or to evidence which guardrail
-  policies are switched on.
-allowed-tools: Bash, Read
----
+    return problems
 
-# Llm Gateway Guardrail Verifier
-
-**Controls:** Control 4 — gateway routing and guardrails
-
-## Confidence: HIGH **only if** egress is enforced below the application
-
-An application-layer gateway configuration is a routing preference. An agent
-that can open a socket can bypass it by calling the provider directly. If the
-allowlist is not enforced at the network layer, **downgrade this control to
-PARTIAL** and say why.
-
-## Procedure
-
-1. **Test reachability, do not read configuration.** From the deployment&#x27;s
-   network position, attempt to reach provider endpoints directly. Anything
-   reachable that is not the gateway is a finding, regardless of what the
-   configuration says.
-
-2. **Cover the paths people forget.** Tool-initiated calls, background jobs,
-   scheduled tasks, retry paths and sub-agents. A gateway that fronts the main
-   request path and not the batch job is a gateway with a hole in it.
-
-3. **Confirm guardrail attachment and version.** Record the guardrail ID and
-   version actually attached to the route, not the one in the template.
-
-4. **Enumerate enabled policies.** Content filters, prompt-attack filtering,
-   denied topics, sensitive-information filters, contextual grounding. Record
-   whether each is applied on **input, output, or both** — input-only filtering
-   is a common and quiet gap.
-
-5. **Confirm the action.** A filter set to observe rather than block is
-   telemetry, not a control. Record the configured action per policy.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;gateway_enforced&quot;: true,
-  &quot;enforcement_layer&quot;: &quot;network|application&quot;,
-  &quot;reachable_provider_findings&quot;: [{&quot;endpoint&quot;: &quot;str&quot;, &quot;path&quot;: &quot;direct|tool|background&quot;}],
-  &quot;guardrail&quot;: {&quot;id&quot;: &quot;str&quot;, &quot;version&quot;: &quot;str&quot;,
-                &quot;policies&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;applied_to&quot;: &quot;input|output|both&quot;,
-                              &quot;action&quot;: &quot;block|anonymize|observe&quot;}]},
-  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-```
-
-## Failure modes
-
-- **Reading the route table instead of testing reachability.**
-- **Missing the background path.** Scheduled and tool-initiated calls are the
-  ones that bypass the gateway in practice.
-- **Recording a guardrail as enforced when its action is observe.**
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/llm-gateway-guardrail-verifier/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

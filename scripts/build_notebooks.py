@@ -56,16 +56,21 @@ from exercises.about import ABOUT
 from exercises.cybertravels import GROUNDING  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 from exercises.models import LIVE_MD, MODEL_RUNTIME, live_cell  # noqa: E402
+from exercises.skills import SKILL_RUNTIME  # noqa: E402
 
 SKILLS = ROOT / "skills"
 
 
-def skill_source(ref: str) -> str:
-    """Embed a real SKILL.md as a Python string, verbatim.
+def skill_file(ref: str) -> str:
+    """The SKILL.md itself, verbatim, as the first of the two skill cells.
 
     The file in `skills/` is the single source of truth. Embedding it at build
     time keeps the notebook self-contained *and* makes drift impossible: change
     the skill and the notebook is stale until it is rebuilt, which CI checks.
+
+    This cell defines and prints nothing. It is the skill, on top, so a reader
+    meets the procedure before meeting the machinery that runs it — the order
+    an agent meets them in too.
     """
     path = SKILLS / ref / "SKILL.md"
     if not path.is_file():
@@ -79,7 +84,20 @@ def skill_source(ref: str) -> str:
         raise ValueError(f"skills/{ref}/SKILL.md ends with a backslash")
     return (f'# skills/{ref}/SKILL.md — embedded verbatim from the repository.\n'
             f'# This is the file itself, not a paraphrase of it.\n'
-            f'SKILL_MD = r"""{text}"""\n\n'
+            f'SKILL_MD = r"""{text}"""')
+
+
+def skill_exec(ref: str) -> str:
+    """The Python that executes the skill above: parse it, then report it.
+
+    Second of the two cells, and deliberately after the file rather than before
+    it. The runtime is emitted here rather than as a step of its own so a lesson
+    cannot put sixty lines of parser between the reader and the procedure.
+    """
+    return (f"{SKILL_RUNTIME}\n\n"
+            f"# Execute the skill above: parse skills/{ref}/SKILL.md into the two\n"
+            f"# halves an agent uses — the frontmatter it routes on, and the body\n"
+            f"# it follows.\n"
             f'meta, body = parse_skill(SKILL_MD)\n'
             f'print(f"loaded skill: {{meta[\'name\']}}")\n'
             f'print(f"  tools it may use: {{\', \'.join(meta.get(\'allowed-tools\', [])) or \'—\'}}")\n'
@@ -236,6 +254,13 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     RUNS = {"py", "skill", "skill_script", "model"}
     steps, n = [], len(ex["steps"])
     for i, (kind, source) in enumerate(ex["steps"]):
+        # The skill runtime is emitted *after* the SKILL.md it parses, by the
+        # skill step itself. A lesson that also asks for it as a step of its own
+        # would put sixty lines of parser above the procedure, which is the
+        # wrong order to meet them in — so drop it here.
+        if (kind == "py" and source == SKILL_RUNTIME
+                and i + 1 < n and ex["steps"][i + 1][0] == "skill"):
+            continue
         if kind == "md" and isinstance(source, str):
             follows = ex["steps"][i + 1][0] if i + 1 < n else None
             if follows not in RUNS:
@@ -251,7 +276,10 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     counter = [2]
     for kind, source in steps:
         if kind == "skill":
-            cells.append(code(skill_source(source)))
+            # Two cells, in this order: the SKILL.md itself, then the Python
+            # that executes it.
+            cells.append(code(skill_file(source)))
+            cells.append(code(skill_exec(source)))
         elif kind == "skill_script":
             cells.append(code(skill_script(source)))
         elif kind == "model":

@@ -322,6 +322,23 @@ assert not parameterised(BAD) and parameterised(PSYCOPG) and not NARROW(PSYCOPG)
       "whether the deployment still matches what was signed"]],
     emphasise=1,
     caption="This chapter is mostly the first column. Function D is the third.")),
+
+  ("md", "## 7 · What this harness is worth, measured\n\n"
+         "Both of these were run for real, on CPU, against Qwen2.5 weights "
+         "pulled from Kaggle Models — same machine, same adapter, one variable "
+         "changed. B2.9 asks a model to fix the same SQL injection in one shot, "
+         "by returning the corrected function. This lesson asks for **one line** "
+         "and checks it."),
+  ("html", D.table(
+    ["", "B2.9 — one shot, fix the function", "B2.0 — loop, one line, verified"],
+    [["Qwen2.5-1.5B", "the vulnerable function, unchanged",
+      "<b>ref=?</b> — accepted, in one step"],
+     ["Qwen2.5-7B", "parameterised, bound", "<b>ref=%s</b> with the value bound"]],
+    emphasise=2,
+    caption="The 1.5B model that cannot fix the function produces the correct "
+            "line when the harness narrows the ask and an independent verifier "
+            "checks the answer. One step, not retries - this is the shape of "
+            "the ask, which is the part you own.")),
  ],
  "expect": "The loop runs with a real model behind `ask()` — a labelled replay "
            "offline, a frontier or open-weight call when one is configured. "

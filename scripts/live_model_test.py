@@ -45,9 +45,24 @@ NB = ROOT / "labs" / "notebooks"
 sys.path.insert(0, str(ROOT / "scripts"))
 from exercises import EXERCISES  # noqa: E402
 
+def _calls_a_model(ex: dict) -> bool:
+    """A lesson is model-facing if it has a `model` step *or* runs the loop.
+
+    The second half matters: B2.0 drives the adapter from a plain `("py", ...)`
+    cell because its subject is the loop rather than one round trip, so a rule
+    that only looked for `model` steps would quietly skip the lesson whose whole
+    point is a model in a for-loop.
+    """
+    for kind, source in ex["steps"]:
+        if kind == "model":
+            return True
+        if kind == "py" and isinstance(source, str) and "loop(TASK" in source:
+            return True
+    return False
+
+
 LESSONS = sorted(
-    (sid for sid, ex in EXERCISES.items()
-     if any(kind == "model" for kind, _ in ex["steps"])),
+    (sid for sid, ex in EXERCISES.items() if _calls_a_model(ex)),
     key=lambda s: (s[0], int(s[1]), [int(p) for p in s[2:].split(".") if p]))
 
 KEY_FILES = [Path.home() / ".anthropic" / "key", Path.home() / ".anthropic_key"]
@@ -71,8 +86,16 @@ def load_key() -> str | None:
 def live_cells(sid: str) -> str:
     """The adapter plus the live round-trip — not the whole notebook.
 
-    Running only these two cells keeps the cost to one API call per lesson and
-    keeps the rest of the lesson (which needs no model) out of the bill.
+    Running only these cells keeps the cost to the calls the lesson's own live
+    section makes and keeps the rest of the lesson (which needs no model) out of
+    the bill.
+
+    Two shapes exist, and both are real. Most lessons carry one round trip: a
+    task, a replay to fall back to, and one acceptance property. B2.0 carries an
+    agentic **loop** — plan, act, verify, repeat — which is several calls and is
+    the only lesson whose subject is the harness itself. Testing only the first
+    shape would leave the loop lesson, the one most sensitive to model size,
+    unexercised.
     """
     nb = json.loads((NB / f"{sid}.ipynb").read_text())
     src = ["".join(c["source"]) for c in nb["cells"] if c["cell_type"] == "code"]
@@ -80,10 +103,15 @@ def live_cells(sid: str) -> str:
     # model section part-way through, and a positional assumption here fails
     # the moment one does.
     adapter = next((s for s in src if "model backend" in s), None)
+    if adapter is None:
+        raise SystemExit(f"{sid}: no model adapter cell")
     live = next((s for s in src if "answer, used, model" in s), None)
-    if adapter is None or live is None:
-        raise SystemExit(f"{sid}: expected an adapter cell and a live cell")
-    return f"{adapter}\n\n{live}"
+    if live is not None:
+        return f"{adapter}\n\n{live}"
+    loop_cells = [s for s in src if "def plan(" in s or "loop(TASK" in s]
+    if not loop_cells:
+        raise SystemExit(f"{sid}: expected a live cell or a harness loop")
+    return "\n\n".join([adapter, *loop_cells])
 
 
 def main() -> int:
@@ -132,15 +160,31 @@ def main() -> int:
         out = buf.getvalue()
         took = time.time() - t0
 
-        used = next((ln.split(":", 1)[1].strip() for ln in out.splitlines()
-                     if ln.startswith("backend used")), "?")
-        model = next((ln.split(":", 1)[1].strip() for ln in out.splitlines()
-                      if ln.startswith("model        :")), "?")
-        held = next((ln.split(":", 1)[1].strip() for ln in out.splitlines()
-                     if ln.startswith("held on")), "?")
-        prop = next((ln.split(":", 1)[1].strip() for ln in out.splitlines()
-                     if ln.startswith("property checked")), "?")
+        def line(prefix: str, default: str = "?") -> str:
+            return next((ln.split(":", 1)[1].strip() for ln in out.splitlines()
+                         if ln.startswith(prefix)), default)
+
+        used = line("backend used")
+        model = line("model        :")
+        held = line("held on")
+        prop = line("property checked")
         answer = out.split("answer:\n", 1)[-1].split("\n\nproperty", 1)[0].strip()
+
+        # The loop lesson prints a different shape, because it is a different
+        # thing: several calls, and a verdict from a verifier rather than from a
+        # one-shot property. Read it on its own terms rather than making the
+        # lesson print a shape it does not have.
+        if used == "?" and line("backend  ") != "?":
+            used = line("backend  ")
+            model = os.environ.get("MODEL", env.get("MODEL", "?"))
+            prop = ("the verified loop returns a parameterised query, and the "
+                    "unverified one does not have to")
+            verified = [ln for ln in out.splitlines() if ln.startswith("verified :")]
+            # The second `verified` line is the one that ran with a verifier;
+            # the first deliberately has none, and reporting that one would
+            # score the lesson on the run it is teaching you not to trust.
+            held = str(len(verified) > 1 and "True" in verified[-1])
+            answer = line("accepted ", "")
 
         # A lesson that fell back to the replay has not been tested live. Carry
         # the adapter's own reason into the report: "fell back to replay" on

@@ -57,7 +57,101 @@ scepticism they would apply to a colleague.</p></div><div class="nbmd"><blockquo
 <p><strong>What this control closes.</strong></p>
 <p>Sends <strong>fewer</strong> things to humans, so the ones that arrive are read. The test is arithmetic: how many per day reach a person.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Deciding what needs a human, as a skill</h2>
-<p>Routing by reversibility only works if somebody has computed what each CyberTravels agent can actually reach and damage in one run. That is a blast-radius review, and its output is an autonomy level rather than an opinion: enumerate the reachable actions with attacker-chosen arguments, not the happy path, and include time-to-stop, because how fast you can halt a run is part of how much it can cost. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>Routing by reversibility only works if somebody has computed what each CyberTravels agent can actually reach and damage in one run. That is a blast-radius review, and its output is an autonomy level rather than an opinion: enumerate the reachable actions with attacker-chosen arguments, not the happy path, and include time-to-stop, because how fast you can halt a run is part of how much it can cost. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/architecture/blast-radius-review/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: blast-radius-review
+description: &gt;-
+  Compute what an agent can reach and damage in a single run, and decide the
+  autonomy level its blast radius can support. Use when reviewing an agent
+  design or deployment, deciding whether an action needs human approval, sizing
+  a sandbox, or answering how bad it would be if an agent were fully
+  compromised.
+allowed-tools: Read, Grep, Glob
+---
+
+# Blast radius as a design metric
+
+Blast radius is not an adjective. It is the set of resources an agent can
+change before anyone can stop it, and it is **computed** from three inputs:
+
+```
+blast_radius = reachable_resources × action_irreversibility × time_to_human_stop
+```
+
+Treating it as a number is what lets it be a design constraint instead of a
+discussion.
+
+## When to use this
+
+At design review, before raising an agent&#x27;s autonomy, and after any change that
+adds a tool, a credential, or a scheduled trigger.
+
+## Procedure
+
+**1 — Enumerate reachable resources.** For each tool the agent can call, list
+what it can touch with attacker-chosen arguments — not what it touches in the
+happy path. A `Bash` tool with unrestricted arguments reaches everything the
+process can reach; record it that way rather than as one row.
+
+**2 — Grade irreversibility.** Per action:
+
+| Grade | Meaning | Example |
+|---|---|---|
+| 0 | read-only | query, list |
+| 1 | reversible with effort | write a file, open a PR |
+| 2 | reversible only with a backup | delete a row, force-push |
+| 3 | irreversible or externally visible | send an email, pay, publish, rotate a key |
+
+Grade 3 actions are the whole reason approval gates exist. An agent whose
+worst action is grade 0 does not need one.
+
+**3 — Measure time-to-human-stop.** How long between the agent deciding and a
+human being able to intervene? Interactive with a prompt is seconds. A
+scheduled run at 03:00 with notifications off is hours. This term dominates the
+product more often than people expect, and it is usually the cheapest to fix.
+
+**4 — Place it on the autonomy ladder.**
+
+| Level | Meaning | Requires |
+|---|---|---|
+| L1 | suggests; human executes | nothing |
+| L2 | acts within a bounded sandbox | reversible actions only |
+| L2.5 | acts, but grade-3 actions need approval | a working approval path |
+| L3 | acts unattended | demonstrated containment + audit + stop authority |
+
+An agent at L3 whose grade-3 actions are unbounded is misclassified, not brave.
+
+**5 — Find the cheapest reduction.** Usually one of: remove a credential from
+the environment, split one broad tool into two narrow ones, add a choke point
+in front of the irreversible action, or shorten time-to-stop with a
+notification. Recommend the one with the best radius reduction per unit of
+friction, and say what it costs.
+
+## Output contract
+
+```json
+{
+  &quot;resources&quot;: [{&quot;tool&quot;: &quot;str&quot;, &quot;reachable&quot;: [&quot;str&quot;], &quot;unbounded&quot;: false}],
+  &quot;actions&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;irreversibility&quot;: 0, &quot;why&quot;: &quot;str&quot;}],
+  &quot;time_to_human_stop_seconds&quot;: 0,
+  &quot;blast_radius&quot;: {&quot;score&quot;: 0, &quot;inputs&quot;: {&quot;resources&quot;: 0, &quot;max_irreversibility&quot;: 0, &quot;seconds&quot;: 0}},
+  &quot;autonomy&quot;: {&quot;current&quot;: &quot;L1|L2|L2.5|L3&quot;, &quot;supported&quot;: &quot;L1|L2|L2.5|L3&quot;, &quot;mismatch&quot;: false},
+  &quot;reductions&quot;: [{&quot;change&quot;: &quot;str&quot;, &quot;new_score&quot;: 0, &quot;friction&quot;: &quot;low|medium|high&quot;}]
+}
+```
+
+Show `inputs`. A blast-radius score without its terms cannot be challenged, and
+an unchallengeable metric stops being used.
+
+## Failure modes
+
+- **Counting the happy path.** Enumerate with attacker-chosen arguments.
+- **Ignoring time-to-stop** because it is not about permissions. It is the term
+  that separates an incident from a near miss.
+- **Raising autonomy because the agent has been reliable.** Reliability is not
+  containment; it is the absence of an adversary so far.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -158,102 +252,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/architecture/blast-radius-review/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: blast-radius-review
-description: &gt;-
-  Compute what an agent can reach and damage in a single run, and decide the
-  autonomy level its blast radius can support. Use when reviewing an agent
-  design or deployment, deciding whether an action needs human approval, sizing
-  a sandbox, or answering how bad it would be if an agent were fully
-  compromised.
-allowed-tools: Read, Grep, Glob
----
+    return problems
 
-# Blast radius as a design metric
-
-Blast radius is not an adjective. It is the set of resources an agent can
-change before anyone can stop it, and it is **computed** from three inputs:
-
-```
-blast_radius = reachable_resources × action_irreversibility × time_to_human_stop
-```
-
-Treating it as a number is what lets it be a design constraint instead of a
-discussion.
-
-## When to use this
-
-At design review, before raising an agent&#x27;s autonomy, and after any change that
-adds a tool, a credential, or a scheduled trigger.
-
-## Procedure
-
-**1 — Enumerate reachable resources.** For each tool the agent can call, list
-what it can touch with attacker-chosen arguments — not what it touches in the
-happy path. A `Bash` tool with unrestricted arguments reaches everything the
-process can reach; record it that way rather than as one row.
-
-**2 — Grade irreversibility.** Per action:
-
-| Grade | Meaning | Example |
-|---|---|---|
-| 0 | read-only | query, list |
-| 1 | reversible with effort | write a file, open a PR |
-| 2 | reversible only with a backup | delete a row, force-push |
-| 3 | irreversible or externally visible | send an email, pay, publish, rotate a key |
-
-Grade 3 actions are the whole reason approval gates exist. An agent whose
-worst action is grade 0 does not need one.
-
-**3 — Measure time-to-human-stop.** How long between the agent deciding and a
-human being able to intervene? Interactive with a prompt is seconds. A
-scheduled run at 03:00 with notifications off is hours. This term dominates the
-product more often than people expect, and it is usually the cheapest to fix.
-
-**4 — Place it on the autonomy ladder.**
-
-| Level | Meaning | Requires |
-|---|---|---|
-| L1 | suggests; human executes | nothing |
-| L2 | acts within a bounded sandbox | reversible actions only |
-| L2.5 | acts, but grade-3 actions need approval | a working approval path |
-| L3 | acts unattended | demonstrated containment + audit + stop authority |
-
-An agent at L3 whose grade-3 actions are unbounded is misclassified, not brave.
-
-**5 — Find the cheapest reduction.** Usually one of: remove a credential from
-the environment, split one broad tool into two narrow ones, add a choke point
-in front of the irreversible action, or shorten time-to-stop with a
-notification. Recommend the one with the best radius reduction per unit of
-friction, and say what it costs.
-
-## Output contract
-
-```json
-{
-  &quot;resources&quot;: [{&quot;tool&quot;: &quot;str&quot;, &quot;reachable&quot;: [&quot;str&quot;], &quot;unbounded&quot;: false}],
-  &quot;actions&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;irreversibility&quot;: 0, &quot;why&quot;: &quot;str&quot;}],
-  &quot;time_to_human_stop_seconds&quot;: 0,
-  &quot;blast_radius&quot;: {&quot;score&quot;: 0, &quot;inputs&quot;: {&quot;resources&quot;: 0, &quot;max_irreversibility&quot;: 0, &quot;seconds&quot;: 0}},
-  &quot;autonomy&quot;: {&quot;current&quot;: &quot;L1|L2|L2.5|L3&quot;, &quot;supported&quot;: &quot;L1|L2|L2.5|L3&quot;, &quot;mismatch&quot;: false},
-  &quot;reductions&quot;: [{&quot;change&quot;: &quot;str&quot;, &quot;new_score&quot;: 0, &quot;friction&quot;: &quot;low|medium|high&quot;}]
-}
-```
-
-Show `inputs`. A blast-radius score without its terms cannot be challenged, and
-an unchallengeable metric stops being used.
-
-## Failure modes
-
-- **Counting the happy path.** Enumerate with attacker-chosen arguments.
-- **Ignoring time-to-stop** because it is not about permissions. It is the term
-  that separates an incident from a near miss.
-- **Raising autonomy because the agent has been reliable.** Reliability is not
-  containment; it is the absence of an adversary so far.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/architecture/blast-radius-review/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

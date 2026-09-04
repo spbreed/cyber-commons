@@ -40,7 +40,92 @@ because authority narrows down the chain, the earlier actors typically had
 <p>The undercount is systematic and it grows with delegation depth, which is the
 operational reason B2.0 bounds delegation depth in the first place.</p></div><div class="nbmd"><h2>3 · Scoping as a skill</h2>
 <p>Scoping a human incident asks where someone logged in. Scoping this one asks what the agent <strong>decided</strong> — every action was individually authorised, so nothing looks wrong at the authentication layer.</p>
-<p>Two fields in the contract carry most of the weight. <code>reach</code> and <code>confirmed_exfiltration</code> are separate numbers, because reach is the scope until proven otherwise and the smaller number must never stand in for the larger in a notification decision. And <code>does_not_stop</code> makes containment state its own limits.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>Two fields in the contract carry most of the weight. <code>reach</code> and <code>confirmed_exfiltration</code> are separate numbers, because reach is the scope until proven otherwise and the smaller number must never stand in for the larger in a notification decision. And <code>does_not_stop</code> makes containment state its own limits.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/secops/incident-scoping/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: incident-scoping
+description: &gt;-
+  Scope an incident in which an agent was the actor — what it touched, what it
+  changed, what it may have exfiltrated, and where containment must cut. Use
+  when responding to an agent-involved incident, reconstructing what an
+  autonomous system did, deciding what to revoke, or sizing notification
+  obligations.
+allowed-tools: Read, Grep, Bash
+---
+
+# Scoping an agentic incident
+
+Scoping a human incident asks where someone logged in. Scoping an agentic one
+asks what the agent **decided**, because a compromised agent&#x27;s actions are all
+individually authorised. Nothing looks anomalous at the authentication layer;
+the anomaly is in the sequence.
+
+## When to use this
+
+Any incident where an agent, an automated pipeline, or an AI-driven tool
+performed actions under investigation.
+
+## Procedure
+
+**1 — Fix the window.** Establish the first suspicious decision, not the first
+alert. Work backwards from the earliest action you cannot explain; the trigger
+is usually earlier than the detection by the length of one task loop.
+
+**2 — Reconstruct the decision chain.** For the window, list every action with
+the input that motivated it. The critical question is which input entered the
+context from **outside the trust boundary** — a fetched page, an issue comment,
+a dependency&#x27;s README, a tool description. That input is the likely root cause,
+and it is invisible if you only log tool calls and not their justification.
+
+**3 — Separate authority from behaviour.** For each action ask: was it within
+the agent&#x27;s granted authority? Actions that were authorised but wrong tell you
+the grant was too broad. Actions that exceeded authority tell you a control
+failed. These lead to different fixes and must not be pooled.
+
+**4 — Establish data reach.** What did the agent read, and where could it have
+sent it? Reach is bounded by the agent&#x27;s egress, not by what it appears to have
+sent — a request body you cannot see is still reach. State reach and confirmed
+exfiltration as separate numbers, and never let the smaller one stand in for
+the larger in a notification decision.
+
+**5 — Decide the containment cut.** Options, in increasing cost: revoke the
+agent&#x27;s credential, disable the trigger, quarantine the workload, disable the
+whole class of agents. Choose by blast radius, not by convenience, and record
+what the cut does **not** stop — sibling agents on the same shared service
+account almost always survive a credential revocation aimed at one of them.
+
+**6 — Preserve evidence the agent could alter.** If the agent can write to the
+log store, the logs are not evidence. Snapshot first, then contain.
+
+## Output contract
+
+```json
+{
+  &quot;window&quot;: {&quot;first_suspicious_action&quot;: &quot;str&quot;, &quot;detected_at&quot;: &quot;str&quot;, &quot;gap_seconds&quot;: 0},
+  &quot;chain&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;motivating_input&quot;: &quot;str&quot;,
+             &quot;input_origin&quot;: &quot;operator|internal|external_untrusted&quot;,
+             &quot;within_authority&quot;: true}],
+  &quot;root_cause&quot;: {&quot;input&quot;: &quot;str&quot;, &quot;origin&quot;: &quot;str&quot;, &quot;why_trusted&quot;: &quot;str&quot;},
+  &quot;authority&quot;: {&quot;authorised_but_wrong&quot;: 0, &quot;exceeded_authority&quot;: 0},
+  &quot;data&quot;: {&quot;reach&quot;: [&quot;str&quot;], &quot;confirmed_exfiltration&quot;: [&quot;str&quot;], &quot;egress_bounded_by&quot;: &quot;str&quot;},
+  &quot;containment&quot;: {&quot;cut&quot;: &quot;credential|trigger|workload|class&quot;,
+                  &quot;does_not_stop&quot;: [&quot;str&quot;], &quot;evidence_snapshotted_first&quot;: true},
+  &quot;clock&quot;: {&quot;regulatory_trigger&quot;: false, &quot;basis&quot;: &quot;str&quot;}
+}
+```
+
+## Failure modes
+
+- **Scoping by authentication.** Every action was authenticated; that is the
+  point.
+- **Logging tool calls without their motivating input.** Root cause then cannot
+  be established at all.
+- **Reporting confirmed exfiltration as the scope.** Reach is the scope until
+  proven otherwise.
+- **Revoking one agent&#x27;s token** when the identity is shared, and calling it
+  contained.
+- **Containing before snapshotting** a log store the agent can write to.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -141,93 +226,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/secops/incident-scoping/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: incident-scoping
-description: &gt;-
-  Scope an incident in which an agent was the actor — what it touched, what it
-  changed, what it may have exfiltrated, and where containment must cut. Use
-  when responding to an agent-involved incident, reconstructing what an
-  autonomous system did, deciding what to revoke, or sizing notification
-  obligations.
-allowed-tools: Read, Grep, Bash
----
+    return problems
 
-# Scoping an agentic incident
-
-Scoping a human incident asks where someone logged in. Scoping an agentic one
-asks what the agent **decided**, because a compromised agent&#x27;s actions are all
-individually authorised. Nothing looks anomalous at the authentication layer;
-the anomaly is in the sequence.
-
-## When to use this
-
-Any incident where an agent, an automated pipeline, or an AI-driven tool
-performed actions under investigation.
-
-## Procedure
-
-**1 — Fix the window.** Establish the first suspicious decision, not the first
-alert. Work backwards from the earliest action you cannot explain; the trigger
-is usually earlier than the detection by the length of one task loop.
-
-**2 — Reconstruct the decision chain.** For the window, list every action with
-the input that motivated it. The critical question is which input entered the
-context from **outside the trust boundary** — a fetched page, an issue comment,
-a dependency&#x27;s README, a tool description. That input is the likely root cause,
-and it is invisible if you only log tool calls and not their justification.
-
-**3 — Separate authority from behaviour.** For each action ask: was it within
-the agent&#x27;s granted authority? Actions that were authorised but wrong tell you
-the grant was too broad. Actions that exceeded authority tell you a control
-failed. These lead to different fixes and must not be pooled.
-
-**4 — Establish data reach.** What did the agent read, and where could it have
-sent it? Reach is bounded by the agent&#x27;s egress, not by what it appears to have
-sent — a request body you cannot see is still reach. State reach and confirmed
-exfiltration as separate numbers, and never let the smaller one stand in for
-the larger in a notification decision.
-
-**5 — Decide the containment cut.** Options, in increasing cost: revoke the
-agent&#x27;s credential, disable the trigger, quarantine the workload, disable the
-whole class of agents. Choose by blast radius, not by convenience, and record
-what the cut does **not** stop — sibling agents on the same shared service
-account almost always survive a credential revocation aimed at one of them.
-
-**6 — Preserve evidence the agent could alter.** If the agent can write to the
-log store, the logs are not evidence. Snapshot first, then contain.
-
-## Output contract
-
-```json
-{
-  &quot;window&quot;: {&quot;first_suspicious_action&quot;: &quot;str&quot;, &quot;detected_at&quot;: &quot;str&quot;, &quot;gap_seconds&quot;: 0},
-  &quot;chain&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;motivating_input&quot;: &quot;str&quot;,
-             &quot;input_origin&quot;: &quot;operator|internal|external_untrusted&quot;,
-             &quot;within_authority&quot;: true}],
-  &quot;root_cause&quot;: {&quot;input&quot;: &quot;str&quot;, &quot;origin&quot;: &quot;str&quot;, &quot;why_trusted&quot;: &quot;str&quot;},
-  &quot;authority&quot;: {&quot;authorised_but_wrong&quot;: 0, &quot;exceeded_authority&quot;: 0},
-  &quot;data&quot;: {&quot;reach&quot;: [&quot;str&quot;], &quot;confirmed_exfiltration&quot;: [&quot;str&quot;], &quot;egress_bounded_by&quot;: &quot;str&quot;},
-  &quot;containment&quot;: {&quot;cut&quot;: &quot;credential|trigger|workload|class&quot;,
-                  &quot;does_not_stop&quot;: [&quot;str&quot;], &quot;evidence_snapshotted_first&quot;: true},
-  &quot;clock&quot;: {&quot;regulatory_trigger&quot;: false, &quot;basis&quot;: &quot;str&quot;}
-}
-```
-
-## Failure modes
-
-- **Scoping by authentication.** Every action was authenticated; that is the
-  point.
-- **Logging tool calls without their motivating input.** Root cause then cannot
-  be established at all.
-- **Reporting confirmed exfiltration as the scope.** Reach is the scope until
-  proven otherwise.
-- **Revoking one agent&#x27;s token** when the identity is shared, and calling it
-  contained.
-- **Containing before snapshotting** a log store the agent can write to.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/secops/incident-scoping/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

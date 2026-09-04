@@ -223,108 +223,7 @@ print(&quot;is the replay and is labelled as one; with a key it is the model&#x2
 <p>The model call above is what stage 3 looks like in production. Below is the deterministic version, so the rest of the lesson has a fixed input to work from.</p></div><div class="nbmd"><h2>8 · Stage 4 — synthesise the map, and find the boundaries</h2>
 <p>A trust boundary is any edge where data crosses from a less-trusted component into a more-trusted one. Those edges are where every finding in the rest of the pipeline turns out to live.</p></div><div class="nbmd"><h2>9 · The map changes when the code changes</h2>
 <p>This is the whole reason for deriving it. One function is added; the map is regenerated; the delta is the thing the next lesson threat-models.</p></div><div class="nbmd"><h2>10 · Write the four stages down as an agent skill</h2>
-<p>You have just run Phase 1 by hand. The next repository needs the same four stages and so does the next agent, so the procedure belongs in a file rather than in your head. This is the one in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
-
-def parse_skill(md):
-    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
-
-    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
-    scalars (`description: &gt;-`) whose continuation lines are indented. That is
-    all a skill needs, and parsing it directly means no dependency.
-    &quot;&quot;&quot;
-    if not md.startswith(&quot;---&quot;):
-        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
-    _, front, body = md.split(&quot;---&quot;, 2)
-    meta, key = {}, None
-    for line in front.strip().splitlines():
-        if not line.strip():
-            continue
-        if not line[0].isspace() and &quot;:&quot; in line:
-            key, val = line.split(&quot;:&quot;, 1)
-            key, val = key.strip(), val.strip()
-            # `&gt;-` and `|` open a folded block; the value is on the next lines
-            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
-        elif key is not None:
-            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
-    if &quot;allowed-tools&quot; in meta:
-        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
-                                 if t.strip()]
-    for required in (&quot;name&quot;, &quot;description&quot;):
-        if not meta.get(required):
-            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
-    return meta, body.strip()
-
-_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
-
-def route(task, skills):
-    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
-
-    The description is not documentation — it is the routing key. An agent
-    decides whether to load a skill by reading it, so a vague description means
-    the skill never fires when it should, and two overlapping descriptions mean
-    the wrong one fires.
-
-    Returns (pick, scores, margin). A margin of 0 means the top two scored the
-    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
-    wearing a confident face. Callers should refuse to auto-route on margin 0
-    rather than pretend the tiebreak meant something.
-    &quot;&quot;&quot;
-    want = set(_WORD.findall(task.lower()))
-    def score(meta):
-        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
-    scores = {n: score(skills[n]) for n in sorted(skills)}
-    # sort names first, then by score: ties must break identically on every
-    # machine or the same task routes differently on two runs
-    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
-    top = scores[ranked[0]]
-    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
-    return ranked[0], scores, margin
-
-def contract_of(body):
-    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
-    # non-greedy across any prose between the heading and the fence
-    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
-    if not m:
-        raise ValueError(&quot;skill declares no output contract&quot;)
-    return json.loads(m.group(1))
-
-def check(instance, contract, path=&quot;$&quot;):
-    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
-
-    Returns the list of problems. An empty list means the shape is right — and
-    that is *all* it means. Conformance is not accuracy: an empty findings list
-    conforms perfectly and tells you nothing.
-    &quot;&quot;&quot;
-    problems = []
-    if isinstance(contract, dict):
-        if not isinstance(instance, dict):
-            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
-        for k, v in sorted(contract.items()):
-            if k not in instance:
-                problems.append(f&quot;{path}.{k}: missing&quot;)
-            else:
-                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
-    elif isinstance(contract, list):
-        if not isinstance(instance, list):
-            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
-        for i, item in enumerate(instance):          # every element, same template
-            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
-    elif isinstance(contract, str) and &quot;|&quot; in contract:
-        if instance not in contract.split(&quot;|&quot;):
-            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
-    elif isinstance(contract, bool):                  # before the numeric case:
-        if not isinstance(instance, bool):            # bool is a subclass of int
-            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
-    elif isinstance(contract, (int, float)):
-        # JSON has one number type. A contract written `0` must accept 0.4, or
-        # every cost and rate in the pipeline has to be rounded to satisfy a
-        # checker rather than to be correct.
-        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
-            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
-    elif not isinstance(instance, type(contract)):
-        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
-                        f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-repo-recon/SKILL.md — embedded verbatim from the repository.
+<p>You have just run Phase 1 by hand. The next repository needs the same four stages and so does the next agent, so the procedure belongs in a file rather than in your head. This is the one in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-repo-recon/SKILL.md — embedded verbatim from the repository.
 # This is the file itself, not a paraphrase of it.
 SKILL_MD = r&quot;&quot;&quot;---
 name: appsec-repo-recon
@@ -425,8 +324,112 @@ byte-identical output, or the diff between two scans is meaningless.
 
 Pass `architecture_map` to **appsec-threat-model**. If `reachable` is empty,
 stop and report that — do not proceed to threat modelling on an empty surface.
-&quot;&quot;&quot;
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems
+
+# Execute the skill above: parse skills/appsec/appsec-repo-recon/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

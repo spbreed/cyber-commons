@@ -57,7 +57,76 @@ default.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>The one control that does not need to know how the attack worked, because every exfiltration path ends here.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Probing the sandbox, as a skill</h2>
-<p>An allow-list in a config file is a claim. CyberTravels' Coding Agent runs model-authored code, so the claim worth making is <em>this runtime has no egress</em>, and that one is settled by probing, in an environment you own. The procedure names the residual paths — DNS first, because it is the one that has actually been used — and requires you to record what you did <strong>not</strong> test, because a probe list is a statement about coverage. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>An allow-list in a config file is a claim. CyberTravels' Coding Agent runs model-authored code, so the claim worth making is <em>this runtime has no egress</em>, and that one is settled by probing, in an environment you own. The procedure names the residual paths — DNS first, because it is the one that has actually been used — and requires you to record what you did <strong>not</strong> test, because a probe list is a statement about coverage. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/sandbox-egress-verifier/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: sandbox-egress-verifier
+description: &gt;-
+  Verify AI-generated code executes only in an approved sandbox with no
+  network egress, and probe the known bypass paths. Use when attesting a no-
+  egress execution claim, choosing a code-execution runtime, or asked
+  whether a sandbox actually contains model-authored code.
+allowed-tools: Bash, Read
+---
+
+# Sandbox Egress Verifier
+
+**Controls:** Control 2 — sandboxed no-egress runtime
+
+## Confidence: PARTIAL — and this ceiling is not negotiable
+
+You can prove a sandbox is **misconfigured**. You cannot prove the negative
+&quot;no covert channel exists&quot;. Network isolation has documented bypass paths, and
+a verdict of PASS on this control would be a claim the evidence cannot support.
+
+**Cap every verdict this skill produces at PARTIAL.**
+
+## Procedure
+
+1. **Identify the runtime and its network mode.** Record which isolation
+   technology is in use and which mode it runs in. A mode that permits general
+   outbound network access is an immediate FAIL — no probing required.
+
+2. **Confirm the runtime is on the approved list.** An approved sandbox in the
+   wrong mode and an unapproved sandbox in the right mode are both findings.
+
+3. **Probe the known residual paths**, in an environment you own:
+   - **DNS.** Name resolution is frequently permitted where general egress is
+     not, and A/AAAA queries carry data outward. This has been demonstrated to
+     yield interactive command-and-control on a major managed sandbox.
+   - **Object storage reachability.** Managed storage endpoints are commonly
+     left reachable and have been used as a command-and-control channel.
+   - **Host escape.** Subprocess spawning and any path from the sandboxed
+     process to the host.
+
+4. **Record what you did not test.** A probe list is a statement about coverage,
+   and coverage is the honest part of this verdict.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;sandbox_runtime&quot;: &quot;str&quot;,
+  &quot;network_mode&quot;: &quot;str&quot;,
+  &quot;approved_runtime&quot;: true,
+  &quot;bypass_probes&quot;: [{&quot;path&quot;: &quot;dns|object_storage|host_escape&quot;, &quot;reachable&quot;: false, &quot;detail&quot;: &quot;str&quot;}],
+  &quot;untested_paths&quot;: [&quot;str&quot;],
+  &quot;verdict&quot;: &quot;PARTIAL|FAIL&quot;,
+  &quot;verdict_ceiling_reason&quot;: &quot;absence of a covert channel is not provable at runtime&quot;
+}
+```
+
+`PASS` is not a permitted value. If a tool emits one, that tool is wrong.
+
+## Failure modes
+
+- **Reporting PASS** because the configuration looked right. That is the whole
+  reason this skill has a ceiling.
+- **Probing only general HTTP egress.** DNS is the path that has actually been
+  used.
+- **Testing against someone else&#x27;s infrastructure.** Probe only what you own.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -158,77 +227,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/sandbox-egress-verifier/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: sandbox-egress-verifier
-description: &gt;-
-  Verify AI-generated code executes only in an approved sandbox with no
-  network egress, and probe the known bypass paths. Use when attesting a no-
-  egress execution claim, choosing a code-execution runtime, or asked
-  whether a sandbox actually contains model-authored code.
-allowed-tools: Bash, Read
----
+    return problems
 
-# Sandbox Egress Verifier
-
-**Controls:** Control 2 — sandboxed no-egress runtime
-
-## Confidence: PARTIAL — and this ceiling is not negotiable
-
-You can prove a sandbox is **misconfigured**. You cannot prove the negative
-&quot;no covert channel exists&quot;. Network isolation has documented bypass paths, and
-a verdict of PASS on this control would be a claim the evidence cannot support.
-
-**Cap every verdict this skill produces at PARTIAL.**
-
-## Procedure
-
-1. **Identify the runtime and its network mode.** Record which isolation
-   technology is in use and which mode it runs in. A mode that permits general
-   outbound network access is an immediate FAIL — no probing required.
-
-2. **Confirm the runtime is on the approved list.** An approved sandbox in the
-   wrong mode and an unapproved sandbox in the right mode are both findings.
-
-3. **Probe the known residual paths**, in an environment you own:
-   - **DNS.** Name resolution is frequently permitted where general egress is
-     not, and A/AAAA queries carry data outward. This has been demonstrated to
-     yield interactive command-and-control on a major managed sandbox.
-   - **Object storage reachability.** Managed storage endpoints are commonly
-     left reachable and have been used as a command-and-control channel.
-   - **Host escape.** Subprocess spawning and any path from the sandboxed
-     process to the host.
-
-4. **Record what you did not test.** A probe list is a statement about coverage,
-   and coverage is the honest part of this verdict.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;sandbox_runtime&quot;: &quot;str&quot;,
-  &quot;network_mode&quot;: &quot;str&quot;,
-  &quot;approved_runtime&quot;: true,
-  &quot;bypass_probes&quot;: [{&quot;path&quot;: &quot;dns|object_storage|host_escape&quot;, &quot;reachable&quot;: false, &quot;detail&quot;: &quot;str&quot;}],
-  &quot;untested_paths&quot;: [&quot;str&quot;],
-  &quot;verdict&quot;: &quot;PARTIAL|FAIL&quot;,
-  &quot;verdict_ceiling_reason&quot;: &quot;absence of a covert channel is not provable at runtime&quot;
-}
-```
-
-`PASS` is not a permitted value. If a tool emits one, that tool is wrong.
-
-## Failure modes
-
-- **Reporting PASS** because the configuration looked right. That is the whole
-  reason this skill has a ceiling.
-- **Probing only general HTTP egress.** DNS is the path that has actually been
-  used.
-- **Testing against someone else&#x27;s infrastructure.** Probe only what you own.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/sandbox-egress-verifier/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)

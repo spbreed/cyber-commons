@@ -54,7 +54,70 @@ standing authority to steal.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Removes the <strong>standing</strong> grant an injection needs. The attacker must now arrive inside a window bound to one task and one resource.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Finding the standing grants, as a skill</h2>
-<p>Just-in-time authority is only worth building where standing authority exists today, and at CyberTravels that list is not the one in the design document — it is in the authorisation graph and in the OAuth scopes the credential provider stored when someone first connected the payments API. The procedure diffs what each identity <em>holds</em> against what its declared tools actually <em>need</em>, and flags every permanent grant. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+<p>Just-in-time authority is only worth building where standing authority exists today, and at CyberTravels that list is not the one in the design document — it is in the authorisation graph and in the OAuth scopes the credential provider stored when someone first connected the payments API. The procedure diffs what each identity <em>holds</em> against what its declared tools actually <em>need</em>, and flags every permanent grant. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/entitlement-overprivilege-analyzer/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: entitlement-overprivilege-analyzer
+description: &gt;-
+  Analyse entitlement and identity registries to find over-privileged access
+  held by a deployment&#x27;s identities. Use to check granted entitlements
+  against what the declared tools actually need, to find over-broad OAuth
+  scopes on credential providers, or to find standing privilege.
+allowed-tools: Bash, Read
+---
+
+# Entitlement Overprivilege Analyzer
+
+**Controls:** Controls 1 and 3 — over-privileged access
+
+## What this adds beyond the IAM verifier
+
+The IAM verifier measures cloud permissions against cloud usage. This skill
+measures **application-level entitlements** — relationship-graph authorisation,
+OAuth scopes on stored credential providers, and identity-registry
+relationships — against what the declared tool surface actually requires.
+
+An agent can hold a minimal cloud role and an OAuth token with full mailbox
+access.
+
+## Procedure
+
+1. **Take the required capability set** from the code-surface analyzer. This is
+   the denominator: what the declared tools genuinely need.
+2. **Enumerate granted entitlements** from the authorisation graph for every
+   identity in the deployment manifest.
+3. **Enumerate credential-provider scopes.** Stored OAuth scopes are frequently
+   far wider than the tool needs, because the consent screen offered a bundle.
+4. **Diff.** Every grant with no corresponding requirement is an over-privilege
+   finding, and each needs a justification gap recorded — the grant, the
+   requirement it was presumably for, and the absence.
+5. **Flag standing privilege.** Any grant that is permanent rather than issued
+   per task.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;identities&quot;: [
+    {&quot;id&quot;: &quot;str&quot;,
+     &quot;granted&quot;: [&quot;str&quot;],
+     &quot;required_by_tools&quot;: [&quot;str&quot;],
+     &quot;excess&quot;: [{&quot;grant&quot;: &quot;str&quot;, &quot;justification_gap&quot;: &quot;str&quot;}]}
+  ],
+  &quot;oauth_scope_excess&quot;: [{&quot;provider&quot;: &quot;str&quot;, &quot;granted_scope&quot;: &quot;str&quot;, &quot;needed_scope&quot;: &quot;str&quot;}],
+  &quot;standing_privilege&quot;: [&quot;str&quot;],
+  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
+}
+```
+
+## Failure modes
+
+- **Comparing grants against other grants.** The denominator is the tool
+  surface, not a peer deployment.
+- **Accepting a bundled OAuth scope** because it was what the provider offered.
+- **Missing standing privilege** because the scope itself looked narrow.
+&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
 
 def parse_skill(md):
     &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
@@ -155,71 +218,11 @@ def check(instance, contract, path=&quot;$&quot;):
     elif not isinstance(instance, type(contract)):
         problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
                         f&quot;got {type(instance).__name__}&quot;)
-    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/entitlement-overprivilege-analyzer/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: entitlement-overprivilege-analyzer
-description: &gt;-
-  Analyse entitlement and identity registries to find over-privileged access
-  held by a deployment&#x27;s identities. Use to check granted entitlements
-  against what the declared tools actually need, to find over-broad OAuth
-  scopes on credential providers, or to find standing privilege.
-allowed-tools: Bash, Read
----
+    return problems
 
-# Entitlement Overprivilege Analyzer
-
-**Controls:** Controls 1 and 3 — over-privileged access
-
-## What this adds beyond the IAM verifier
-
-The IAM verifier measures cloud permissions against cloud usage. This skill
-measures **application-level entitlements** — relationship-graph authorisation,
-OAuth scopes on stored credential providers, and identity-registry
-relationships — against what the declared tool surface actually requires.
-
-An agent can hold a minimal cloud role and an OAuth token with full mailbox
-access.
-
-## Procedure
-
-1. **Take the required capability set** from the code-surface analyzer. This is
-   the denominator: what the declared tools genuinely need.
-2. **Enumerate granted entitlements** from the authorisation graph for every
-   identity in the deployment manifest.
-3. **Enumerate credential-provider scopes.** Stored OAuth scopes are frequently
-   far wider than the tool needs, because the consent screen offered a bundle.
-4. **Diff.** Every grant with no corresponding requirement is an over-privilege
-   finding, and each needs a justification gap recorded — the grant, the
-   requirement it was presumably for, and the absence.
-5. **Flag standing privilege.** Any grant that is permanent rather than issued
-   per task.
-
-## Output contract
-
-```json
-{
-  &quot;deployment_id&quot;: &quot;str&quot;,
-  &quot;identities&quot;: [
-    {&quot;id&quot;: &quot;str&quot;,
-     &quot;granted&quot;: [&quot;str&quot;],
-     &quot;required_by_tools&quot;: [&quot;str&quot;],
-     &quot;excess&quot;: [{&quot;grant&quot;: &quot;str&quot;, &quot;justification_gap&quot;: &quot;str&quot;}]}
-  ],
-  &quot;oauth_scope_excess&quot;: [{&quot;provider&quot;: &quot;str&quot;, &quot;granted_scope&quot;: &quot;str&quot;, &quot;needed_scope&quot;: &quot;str&quot;}],
-  &quot;standing_privilege&quot;: [&quot;str&quot;],
-  &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
-}
-```
-
-## Failure modes
-
-- **Comparing grants against other grants.** The denominator is the tool
-  surface, not a peer deployment.
-- **Accepting a bundled OAuth scope** because it was what the provider offered.
-- **Missing standing privilege** because the scope itself looked narrow.
-&quot;&quot;&quot;
-
+# Execute the skill above: parse skills/attestation/entitlement-overprivilege-analyzer/SKILL.md into the two
+# halves an agent uses — the frontmatter it routes on, and the body
+# it follows.
 meta, body = parse_skill(SKILL_MD)
 print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
 print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
