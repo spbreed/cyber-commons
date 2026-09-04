@@ -47,168 +47,103 @@ security programmes.</p>
 <p>Each step also unlocks the next: you cannot log the acting identity (4) before
 agents have identities (2), and you cannot alert on drift (6) without a baseline
 from evidence (4).</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Only the inventory is doable from a standing start. The skill simulates the popular evaluation-first order against the dependency-respecting one, and says what each produces at the end of every quarter — including the quiet ones.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/programme-sequencing/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: programme-sequencing
+<p>Only the inventory is doable from a standing start. The skill simulates the popular evaluation-first order against the dependency-respecting one, and says what each produces at the end of every quarter — including the quiet ones.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/programme-sequencing/SKILL.md"><code>skills/programme/programme-sequencing/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: programme-sequencing
 description: &gt;-
-  Simulate a programme&#x27;s build order against its prerequisites and find the
+  Simulate a programme's build order against its prerequisites and find the
   steps that block on something not yet done. Use when planning an AI security
   programme, or when a plan starts with evaluation.
 allowed-tools: Read, Grep, Glob
----
-
-# Only one step is doable from a standing start
-
-Programme plans are usually ordered by what is interesting or visible.
+</code></pre>
+<h1>Only one step is doable from a standing start</h1>
+<p>Programme plans are usually ordered by what is interesting or visible.
 Simulating the order against prerequisites shows which steps block: the popular
 evaluation-first sequence completes four of six on the first pass and stalls
 twice, because you cannot evaluate what you have not inventoried or tier what
-you cannot list.
-
-## When to use this
-
-Planning a programme, reviewing somebody else&#x27;s plan, and when a quarter ended
-with several things &quot;in progress&quot;.
-
-## Procedure
-
-**1 — Write the steps and their prerequisites.** Explicitly, as a dependency
+you cannot list.</p>
+<h2>When to use this</h2>
+<p>Planning a programme, reviewing somebody else's plan, and when a quarter ended
+with several things "in progress".</p>
+<h2>Procedure</h2>
+<p><strong>1 — Write the steps and their prerequisites.</strong> Explicitly, as a dependency
 list. Most disagreements about order dissolve here, because the dependency is
-not a matter of opinion.
-
-**2 — Identify what is doable from a standing start.** Steps with no
-prerequisites. There is usually exactly one, and it is the inventory.
-
-**3 — Simulate the proposed order.** Walk it, marking each step done or blocked.
+not a matter of opinion.</p>
+<p><strong>2 — Identify what is doable from a standing start.</strong> Steps with no
+prerequisites. There is usually exactly one, and it is the inventory.</p>
+<p><strong>3 — Simulate the proposed order.</strong> Walk it, marking each step done or blocked.
 Report completions on the first pass and the steps that blocked, with what they
-were waiting on.
-
-**4 — Simulate the dependency-respecting order** and compare. Same steps, same
+were waiting on.</p>
+<p><strong>4 — Simulate the dependency-respecting order</strong> and compare. Same steps, same
 effort, different completion — that comparison is the argument, and it does not
-require anybody to concede a preference.
-
-**5 — Say what each order produces at the end of each period.** The correct
+require anybody to concede a preference.</p>
+<p><strong>5 — Say what each order produces at the end of each period.</strong> The correct
 order usually produces nothing demoable for two quarters, and saying so in
-advance is what stops it being abandoned in the second.
-
-## Output contract
-
-```json
-{
+advance is what stops it being abandoned in the second.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;steps&quot;: [{&quot;id&quot;: 0, &quot;name&quot;: &quot;str&quot;, &quot;requires&quot;: [0]}],
   &quot;doable_from_start&quot;: [0],
   &quot;orders&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;sequence&quot;: [0], &quot;completed_first_pass&quot;: 0,
               &quot;blocked&quot;: [{&quot;step&quot;: 0, &quot;waiting_on&quot;: [0]}]}],
   &quot;per_period_output&quot;: [{&quot;order&quot;: &quot;str&quot;, &quot;period&quot;: &quot;str&quot;, &quot;demoable&quot;: false}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Starting with evaluation.</strong> It depends on nearly everything else.</li>
+<li><strong>Arguing about order without the dependency list.</strong> It becomes preference.</li>
+<li><strong>Not warning about the quiet quarters.</strong> The plan gets abandoned mid-way.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code> step  name          needs     unlocks
+------------------------------------------------------------------------------------
+    1  inventory     []        you can now tier and assign owners
+    2  identity      [1]       per-agent revocation; attribution in logs
+    3  containment   [1]       bounded blast radius; a red team has something to test
+    4  evidence      [2]       act chains; replayable runs; a drift baseline
+    5  evaluation    [4]       accuracy you can defend; regression cases
+    6  continuous    [4, 5]    freshness windows; drift alerts; live posture
 
-## Failure modes
+what is doable from a standing start:
+    [1]
+=== popular order ===
+   5. evaluation    BLOCKED on [&#x27;evidence&#x27;]
+   6. continuous    BLOCKED on [&#x27;evidence&#x27;, &#x27;evaluation&#x27;]
+   1. inventory     done
+   3. containment   done
+   2. identity      done
+   4. evidence      done
+   completed 4/6, blocked 2
 
-- **Starting with evaluation.** It depends on nearly everything else.
-- **Arguing about order without the dependency list.** It becomes preference.
-- **Not warning about the quiet quarters.** The plan gets abandoned mid-way.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+=== correct order ===
+   1. inventory     done
+   2. identity      done
+   3. containment   done
+   4. evidence      done
+   5. evaluation    done
+   6. continuous    done
+   completed 6/6, blocked 0
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+popular order completes 4/6 on the first pass;
+2 step(s) have to be redone after their prerequisites land.
+=== eval-first, one quarter in — 0 capabilit(y/ies) ===
+   no   can list every AI asset with an owner
+   no   can revoke one agent without stopping the others
+   no   can bound what a compromised agent reaches
+   no   can say who caused a specific action, and replay it
+   no   can defend an accuracy number to a supervisor
+   no   can say what is TRUE TODAY, not what passed once
 
-from cyber_commons_skill_runtime import run_skill
+=== correct order, one quarter in — 3 capabilit(y/ies) ===
+   YES  can list every AI asset with an owner
+   YES  can revoke one agent without stopping the others
+   YES  can bound what a compromised agent reaches
+   no   can say who caused a specific action, and replay it
+   no   can defend an accuracy number to a supervisor
+   no   can say what is TRUE TODAY, not what passed once
 
-# Split skills/programme/programme-sequencing/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/programme-sequencing/scripts/programme_sequencing.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Simulate a programme order against its prerequisites and find the steps that block on something not yet done.
+after equal effort: eval-first has 0 capabilities, correct order has 3
 
-This is the executable half of the `programme-sequencing` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-STEPS = {
- 1: (&quot;inventory&quot;,   [],     [&quot;you can now tier and assign owners&quot;]),
- 2: (&quot;identity&quot;,    [1],    [&quot;per-agent revocation&quot;, &quot;attribution in logs&quot;]),
- 3: (&quot;containment&quot;, [1],    [&quot;bounded blast radius&quot;, &quot;a red team has something to test&quot;]),
- 4: (&quot;evidence&quot;,    [2],    [&quot;act chains&quot;, &quot;replayable runs&quot;, &quot;a drift baseline&quot;]),
- 5: (&quot;evaluation&quot;,  [4],    [&quot;accuracy you can defend&quot;, &quot;regression cases&quot;]),
- 6: (&quot;continuous&quot;,  [4,5],  [&quot;freshness windows&quot;, &quot;drift alerts&quot;, &quot;live posture&quot;]),
-}
-print(f&quot;{&#x27;step&#x27;:&gt;5}  {&#x27;name&#x27;:14s}{&#x27;needs&#x27;:10s}unlocks&quot;)
-print(&quot;-&quot; * 84)
-for n, (name, needs, unlocks) in STEPS.items():
-    print(f&quot;{n:&gt;5}  {name:14s}{str(needs):10s}{&#x27;; &#x27;.join(unlocks)}&quot;)
-
-def can_do(step, done):
-    return all(d in done for d in STEPS[step][1])
-
-print(&quot;\nwhat is doable from a standing start:&quot;)
-print(&quot;   &quot;, [n for n in STEPS if can_do(n, set())])
-
-def simulate(order):
-    done, blocked, timeline = set(), [], []
-    for step in order:
-        if can_do(step, done):
-            done.add(step); timeline.append((step, STEPS[step][0], &quot;done&quot;))
-        else:
-            missing = [STEPS[d][0] for d in STEPS[step][1] if d not in done]
-            blocked.append((step, STEPS[step][0], missing))
-            timeline.append((step, STEPS[step][0], f&quot;BLOCKED on {missing}&quot;))
-    return done, blocked, timeline
-
-POPULAR = [5, 6, 1, 3, 2, 4]     # evaluation and dashboards first
-CORRECT = [1, 2, 3, 4, 5, 6]
-
-for label, order in ((&quot;popular order&quot;, POPULAR), (&quot;correct order&quot;, CORRECT)):
-    done, blocked, timeline = simulate(order)
-    print(f&quot;=== {label} ===&quot;)
-    for step, name, state in timeline:
-        print(f&quot;   {step}. {name:14s}{state}&quot;)
-    print(f&quot;   completed {len(done)}/6, blocked {len(blocked)}\n&quot;)
-
-done_pop, blocked_pop, _ = simulate(POPULAR)
-print(f&quot;popular order completes {len(done_pop)}/6 on the first pass;&quot;)
-print(f&quot;{len(blocked_pop)} step(s) have to be redone after their prerequisites land.&quot;)
-assert len(blocked_pop) &gt; 0
-
-CAPABILITY = {
- 1: &quot;can list every AI asset with an owner&quot;,
- 2: &quot;can revoke one agent without stopping the others&quot;,
- 3: &quot;can bound what a compromised agent reaches&quot;,
- 4: &quot;can say who caused a specific action, and replay it&quot;,
- 5: &quot;can defend an accuracy number to a supervisor&quot;,
- 6: &quot;can say what is TRUE TODAY, not what passed once&quot;,
-}
-def programme_state(done):
-    return [(n, CAPABILITY[n], n in done) for n in STEPS]
-
-for label, order in ((&quot;eval-first, one quarter in&quot;, POPULAR[:2]),
-                     (&quot;correct order, one quarter in&quot;, CORRECT[:3])):
-    done, _, _ = simulate(order)
-    print(f&quot;=== {label} — {len(done)} capabilit(y/ies) ===&quot;)
-    for n, cap, have in programme_state(done):
-        print(f&quot;   {&#x27;YES&#x27; if have else &#x27;no &#x27;:4s} {cap}&quot;)
-    print()
-
-done_a, _, _ = simulate(POPULAR[:2])
-done_b, _, _ = simulate(CORRECT[:3])
-print(f&quot;after equal effort: eval-first has {len(done_a)} capabilities, &quot;
-      f&quot;correct order has {len(done_b)}&quot;)
-print(&quot;\nThe eval-first programme can produce a dashboard. It cannot switch&quot;)
-print(&quot;anything off, and it cannot say who did what.&quot;)
-assert len(done_b) &gt; len(done_a)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The eval-first programme can produce a dashboard. It cannot switch
+anything off, and it cannot say who did what.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Only inventory is doable from a standing start. The popular evaluation-first order completes 4 of 6 on the first pass with 2 steps blocked on missing prerequisites; the correct order completes all six. After equal effort the eval-first programme holds 1 capability against the correct order's 3, and can produce a dashboard while being unable to revoke an agent or attribute an action.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Locate your programme on the six steps honestly. Most are between 2 and 3 while reporting on 5, which is exactly the gap this sequence prevents — and the fix is to stop reporting 5 until 2 and 3 are done.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E3.4.html">E3.4 · Org design and ownership</a></strong></p>

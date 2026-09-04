@@ -68,199 +68,89 @@ the manifest against the rung, and the policy does not need rewriting when a new
 tool appears.</p>
 <p>The rung that decides your programme's fate is <strong>L1</strong>. If L1 requires approval,
 nobody registers anything and your inventory dies.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Governing the rung rather than the tool. The skill computes each request's blast radius, derives the rung it supports, and refuses with the condition attached — because a bare refusal produces an appeal and a conditional one produces a fix.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/autonomy-ladder-decisions/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: autonomy-ladder-decisions
+<p>Governing the rung rather than the tool. The skill computes each request's blast radius, derives the rung it supports, and refuses with the condition attached — because a bare refusal produces an appeal and a conditional one produces a fix.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/autonomy-ladder-decisions/SKILL.md"><code>skills/programme/autonomy-ladder-decisions/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: autonomy-ladder-decisions
 description: &gt;-
   Approve or refuse an autonomy request against the rung its blast radius and
   gating actually support, rather than approving the tool it wants. Use when
   agents are being promoted to act unattended.
 allowed-tools: Read, Grep, Glob
----
-
-# Govern the rung, not the tool
-
-Approving tools one at a time produces an agent nobody approved: each tool was
+</code></pre>
+<h1>Govern the rung, not the tool</h1>
+<p>Approving tools one at a time produces an agent nobody approved: each tool was
 reasonable, and the combination acts unattended on production. Governing the
-**rung** asks a different question — what does this agent&#x27;s blast radius and
-gating support — and the answer is computed rather than negotiated.
-
-## When to use this
-
-Every request to raise an agent&#x27;s autonomy, and as a periodic re-check, because
-tools accumulate.
-
-## Procedure
-
-**1 — Publish the ladder.** L1 suggests, L2 acts in a sandbox, L2.5 acts with
+<strong>rung</strong> asks a different question — what does this agent's blast radius and
+gating support — and the answer is computed rather than negotiated.</p>
+<h2>When to use this</h2>
+<p>Every request to raise an agent's autonomy, and as a periodic re-check, because
+tools accumulate.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Publish the ladder.</strong> L1 suggests, L2 acts in a sandbox, L2.5 acts with
 approval on irreversible actions, L3 acts unattended. With, for each rung, the
-governance and the budget it requires.
-
-**2 — Compute the request&#x27;s blast radius.** Reachable resources weighted by
+governance and the budget it requires.</p>
+<p><strong>2 — Compute the request's blast radius.</strong> Reachable resources weighted by
 scope, with gated actions discounted. Ungated writers are what usually decide
-the outcome.
-
-**3 — Derive the supported rung from the radius and the gating,** not from the
-requester&#x27;s ask. Then compare. The gap is the conversation.
-
-**4 — Refuse with the condition attached.** &quot;Refused at L2 for ungated writers&quot;
+the outcome.</p>
+<p><strong>3 — Derive the supported rung from the radius and the gating,</strong> not from the
+requester's ask. Then compare. The gap is the conversation.</p>
+<p><strong>4 — Refuse with the condition attached.</strong> "Refused at L2 for ungated writers"
 tells the requester what to change. A bare refusal produces an appeal; a
-conditional one produces a pull request.
-
-**5 — Re-evaluate on tool change.** A rung approved with three tools does not
-carry over to five. Make the tool manifest the trigger for re-evaluation.
-
-## Output contract
-
-```json
-{
+conditional one produces a pull request.</p>
+<p><strong>5 — Re-evaluate on tool change.</strong> A rung approved with three tools does not
+carry over to five. Make the tool manifest the trigger for re-evaluation.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;ladder&quot;: [{&quot;rung&quot;: &quot;str&quot;, &quot;governance&quot;: &quot;str&quot;, &quot;budget&quot;: &quot;str&quot;}],
   &quot;requests&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;asked&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;gated&quot;: [&quot;str&quot;],
                 &quot;blast&quot;: 0, &quot;supported&quot;: &quot;str&quot;, &quot;verdict&quot;: &quot;approved|refused&quot;, &quot;condition&quot;: &quot;str|null&quot;}],
   &quot;reevaluate_on&quot;: [&quot;tool added&quot;, &quot;scope widened&quot;, &quot;model changed&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Approving tools.</strong> The combination is what acts.</li>
+<li><strong>A bare refusal.</strong> Nobody knows what to fix.</li>
+<li><strong>No re-evaluation trigger.</strong> The manifest grows and the rung does not move.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>L1   self-service  budget   0  register it; no further review
+                   Assist — model proposes, a human performs every action.
+L2   lightweight   budget   0  named owner + approval gate on every writer
+                   Act with approval — model calls tools, a human approves each call.
+L2.5 governed      budget  20  risk tier + blast budget + drift monitoring + tested stop
+                   Act within a blast radius — pre-approved tools, bounded scope, review after.
+L3   board         budget  60  all of L2.5 + held-out eval per release + board sign-off
+                   Autonomous — model acts and self-verifies; humans see aggregates.
+doc-summariser          L1    blast   1  REFUSE or RE-TIER
+                              ⚠ blast radius 1 exceeds the L1 budget of 0
+triage-bot              L2    blast   7  REFUSE or RE-TIER
+                              ⚠ claims L2 (approve every call) but ungated: [&#x27;post_comment&#x27;, &#x27;close_ticket&#x27;]
+                              ⚠ blast radius 7 exceeds the L2 budget of 0
+refund-agent            L2.5  blast  17  APPROVE
+refund-agent (gated)    L2.5  blast   1  APPROVE
+  agents   initial reviews   hours   monthly reviews   hours
+--------------------------------------------------------------
+       5                40    16.7                10     4.2
+      25               200    83.3                50    20.8
+     120               960   400.0               240   100.0
 
-## Failure modes
+same estates, governing by rung (re-tier only on a manifest change):
+      5 agents → 0.2 hours/month
+     25 agents → 1.0 hours/month
+    120 agents → 5.0 hours/month
 
-- **Approving tools.** The combination is what acts.
-- **A bare refusal.** Nobody knows what to fix.
-- **No re-evaluation trigger.** The manifest grows and the rung does not move.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Tool approval scales with agents × tools. Rung governance scales with
+agents × rate of significant change, which is two orders of magnitude less.
+L1 policy                           friction (h)   registration rate
+----------------------------------------------------------------------
+self-service (register only)                 0.1                 95%
+approval required, fast                      1.0                 60%
+approval required, committee                40.0                  5%
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+self-service: 114/120 registered, 6 shadow assets
 
-from cyber_commons_skill_runtime import run_skill
+committee: 6/120 registered, 114 shadow assets
 
-# Split skills/programme/autonomy-ladder-decisions/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/autonomy-ladder-decisions/scripts/autonomy_ladder_decisions.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Approve or refuse an autonomy request against the rung its blast radius and gating actually support.
-
-This is the executable half of the `autonomy-ladder-decisions` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-SCOPE_WEIGHT = {&quot;self&quot;:1,&quot;project&quot;:3,&quot;tenant&quot;:8,&quot;org&quot;:20}
-LADDER = {
- &quot;L1&quot;:  &quot;Assist — model proposes, a human performs every action.&quot;,
- &quot;L2&quot;:  &quot;Act with approval — model calls tools, a human approves each call.&quot;,
- &quot;L2.5&quot;:&quot;Act within a blast radius — pre-approved tools, bounded scope, review after.&quot;,
- &quot;L3&quot;:  &quot;Autonomous — model acts and self-verifies; humans see aggregates.&quot;,
-}
-POLICY = {
- &quot;L1&quot;:   (&quot;self-service&quot;, &quot;register it; no further review&quot;, 0),
- &quot;L2&quot;:   (&quot;lightweight&quot;,  &quot;named owner + approval gate on every writer&quot;, 0),
- &quot;L2.5&quot;: (&quot;governed&quot;,     &quot;risk tier + blast budget + drift monitoring + tested stop&quot;, 20),
- &quot;L3&quot;:   (&quot;board&quot;,        &quot;all of L2.5 + held-out eval per release + board sign-off&quot;, 60),
-}
-for rung, desc in LADDER.items():
-    kind, req, budget = POLICY[rung]
-    print(f&quot;{rung:5s}{kind:14s}budget {budget:&gt;3}  {req}&quot;)
-    print(f&quot;{&#x27;&#x27;:19s}{desc}&quot;)
-
-def blast(tools, gated):
-    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n,s,rev in tools if n not in gated)
-
-def evaluate_request(name, tools, gated, claimed_rung):
-    b = blast(tools, gated)
-    kind, req, budget = POLICY[claimed_rung]
-    problems = []
-    writers = [n for n,s,rev in tools if s != &quot;self&quot; or not rev]
-    ungated = [n for n in writers if n not in gated]
-    if claimed_rung == &quot;L1&quot; and writers:
-        problems.append(f&quot;claims L1 but holds state-changing tools: {writers}&quot;)
-    if claimed_rung == &quot;L2&quot; and ungated:
-        problems.append(f&quot;claims L2 (approve every call) but ungated: {ungated}&quot;)
-    if b &gt; budget:
-        problems.append(f&quot;blast radius {b} exceeds the {claimed_rung} budget of {budget}&quot;)
-    return {&quot;agent&quot;: name, &quot;rung&quot;: claimed_rung, &quot;blast&quot;: b,
-            &quot;decision&quot;: &quot;APPROVE&quot; if not problems else &quot;REFUSE or RE-TIER&quot;,
-            &quot;problems&quot;: problems, &quot;governance&quot;: req}
-
-REQUESTS = [
- (&quot;doc-summariser&quot;, [(&quot;read_file&quot;,&quot;self&quot;,True)], set(), &quot;L1&quot;),
- (&quot;triage-bot&quot;, [(&quot;read_file&quot;,&quot;self&quot;,True), (&quot;post_comment&quot;,&quot;project&quot;,True),
-                 (&quot;close_ticket&quot;,&quot;project&quot;,True)], set(), &quot;L2&quot;),
- (&quot;refund-agent&quot;, [(&quot;read_file&quot;,&quot;self&quot;,True),
-                   (&quot;issue_refund&quot;,&quot;tenant&quot;,False)], set(), &quot;L2.5&quot;),
- (&quot;refund-agent (gated)&quot;, [(&quot;read_file&quot;,&quot;self&quot;,True),
-                           (&quot;issue_refund&quot;,&quot;tenant&quot;,False)], {&quot;issue_refund&quot;}, &quot;L2.5&quot;),
-]
-for name, tools, gated, rung in REQUESTS:
-    r = evaluate_request(name, tools, gated, rung)
-    print(f&quot;{r[&#x27;agent&#x27;]:24s}{r[&#x27;rung&#x27;]:6s}blast {r[&#x27;blast&#x27;]:&gt;3}  {r[&#x27;decision&#x27;]}&quot;)
-    for p in r[&quot;problems&quot;]: print(f&quot;{&#x27;&#x27;:30s}⚠ {p}&quot;)
-
-import math
-def tool_approval_load(n_agents, tools_per_agent, new_tools_per_month,
-                       minutes_per_review=25):
-    initial = n_agents * tools_per_agent
-    monthly = n_agents * new_tools_per_month
-    return {&quot;initial_reviews&quot;: initial,
-            &quot;initial_hours&quot;: round(initial * minutes_per_review / 60, 1),
-            &quot;monthly_reviews&quot;: monthly,
-            &quot;monthly_hours&quot;: round(monthly * minutes_per_review / 60, 1)}
-
-print(f&quot;{&#x27;agents&#x27;:&gt;8}{&#x27;initial reviews&#x27;:&gt;18}{&#x27;hours&#x27;:&gt;8}{&#x27;monthly reviews&#x27;:&gt;18}{&#x27;hours&#x27;:&gt;8}&quot;)
-print(&quot;-&quot; * 62)
-for n in (5, 25, 120):
-    r = tool_approval_load(n, tools_per_agent=8, new_tools_per_month=2)
-    print(f&quot;{n:&gt;8}{r[&#x27;initial_reviews&#x27;]:&gt;18}{r[&#x27;initial_hours&#x27;]:&gt;8}&quot;
-          f&quot;{r[&#x27;monthly_reviews&#x27;]:&gt;18}{r[&#x27;monthly_hours&#x27;]:&gt;8}&quot;)
-
-def rung_load(n_agents, re_tier_per_month=0.1, minutes=25):
-    monthly = n_agents * re_tier_per_month
-    return round(monthly * minutes / 60, 1)
-print(f&quot;\nsame estates, governing by rung (re-tier only on a manifest change):&quot;)
-for n in (5, 25, 120):
-    print(f&quot;   {n:&gt;4} agents → {rung_load(n)} hours/month&quot;)
-print(&quot;\nTool approval scales with agents × tools. Rung governance scales with&quot;)
-print(&quot;agents × rate of significant change, which is two orders of magnitude less.&quot;)
-
-def registration_rate(l1_requires_approval, friction_hours):
-    &quot;&quot;&quot;People register when it is cheaper than not registering.&quot;&quot;&quot;
-    base = 0.95
-    penalty = min(friction_hours * 0.35, 0.9)
-    return round(base - (penalty if l1_requires_approval else 0.0), 2)
-
-print(f&quot;{&#x27;L1 policy&#x27;:34s}{&#x27;friction (h)&#x27;:&gt;14}{&#x27;registration rate&#x27;:&gt;20}&quot;)
-print(&quot;-&quot; * 70)
-for label, approval, hours in ((&quot;self-service (register only)&quot;, False, 0.1),
-                               (&quot;approval required, fast&quot;, True, 1.0),
-                               (&quot;approval required, committee&quot;, True, 40.0)):
-    rate = registration_rate(approval, hours)
-    print(f&quot;{label:34s}{hours:&gt;14}{rate:&gt;20.0%}&quot;)
-
-def inventory_completeness(rate, n_true_assets=120):
-    known = int(n_true_assets * rate)
-    return {&quot;true_assets&quot;: n_true_assets, &quot;registered&quot;: known,
-            &quot;shadow&quot;: n_true_assets - known}
-
-for label, approval, hours in ((&quot;self-service&quot;, False, 0.1),
-                               (&quot;committee&quot;, True, 40.0)):
-    inv = inventory_completeness(registration_rate(approval, hours))
-    print(f&quot;\n{label}: {inv[&#x27;registered&#x27;]}/{inv[&#x27;true_assets&#x27;]} registered, &quot;
-          f&quot;{inv[&#x27;shadow&#x27;]} shadow assets&quot;)
-print(&quot;\nEvery control in E1 depends on the inventory. Charging for L1&quot;)
-print(&quot;registration destroys the input to the entire governance programme.&quot;)
-assert inventory_completeness(registration_rate(True, 40.0))[&quot;shadow&quot;] &gt; \
-       inventory_completeness(registration_rate(False, 0.1))[&quot;shadow&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Every control in E1 depends on the inventory. Charging for L1
+registration destroys the input to the entire governance programme.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The four rungs print with their governance and budgets. The doc-summariser is approved at L1; <code>triage-bot</code> is refused at L2 for ungated writers; the refund agent is refused at L2.5 for exceeding the budget and approved once gated. Tool approval scales to 240 reviews a month at 120 agents against 5 hours for rung governance, and a committee-gated L1 leaves roughly 108 shadow assets.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write your own per-rung policy in four lines and check what L1 costs a team today. If registering a read-only copilot needs an approval, your inventory is already incomplete and you cannot see by how much.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E3.3.html">E3.3 · Sequencing the programme</a></strong></p>

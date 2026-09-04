@@ -63,45 +63,36 @@ is the useful part — it tells Alex which afternoon to spend first.</p></div><d
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Every row has an owner. That is the property that distinguishes a register from a list, and it is the only reason this document is worth keeping.</div></div><div class="nbmd"><h2>3 · The six families, and where the weight sits</h2>
 <p>The twelve roll up into six families. Counting which family carries the most risks is the cheapest prioritisation available, and it is usually not the answer people expect.</p></div><div class="nbmd"><h2>4 · Which component carries the most</h2>
 <p>The other way to read the same register: not by risk family, but by the box on the architecture that the risk lands on.</p></div><div class="nbmd"><h2>5 · The risk CyberTravels did not write down</h2>
-<p>Twelve rows cover what CyberTravels built. None of them covers what it <strong>inherits</strong>: the payments API's open findings, the booking provider's expired exception, the identity service somebody accepted a risk on last year. An agent's risk is the union of its own and every downstream its tools reach, and that union is assembled by pulling the register per downstream rather than by asking each team. The procedure is written down as a skill, embedded here verbatim from this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/risk-registry-integrator/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: risk-registry-integrator
+<p>Twelve rows cover what CyberTravels built. None of them covers what it <strong>inherits</strong>: the payments API's open findings, the booking provider's expired exception, the identity service somebody accepted a risk on last year. An agent's risk is the union of its own and every downstream its tools reach, and that union is assembled by pulling the register per downstream rather than by asking each team. The procedure is written down as a skill, embedded here verbatim from this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/risk-registry-integrator/SKILL.md"><code>skills/attestation/risk-registry-integrator/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: risk-registry-integrator
 description: &gt;-
   Pull open risks and exceptions for the downstream services an agent or its
   MCP tools connect to, and map them to the deployment. Use to roll up
   inherited risk, to find expired exceptions on a dependency, or when asked
   what a deployment inherits from the systems it calls.
 allowed-tools: Bash, Read
----
-
-# Risk Registry Integrator
-
-**Controls:** Cross-cutting — inherited risk
-
-## What this adds
-
-A deployment&#x27;s own controls can be clean while every system it calls is
+</code></pre>
+<h1>Risk Registry Integrator</h1>
+<p><strong>Controls:</strong> Cross-cutting — inherited risk</p>
+<h2>What this adds</h2>
+<p>A deployment's own controls can be clean while every system it calls is
 carrying an accepted risk. Inherited risk is invisible unless something joins
-the downstream inventory to the register, and this skill is that join.
-
-## Procedure
-
-1. **Take the downstream inventory** from the inventory resolver. Do not build
-   a second list — a divergence between the two is itself the finding.
-2. **Query the register per downstream.** Open risks with severity and status,
-   plus any accepted exceptions.
-3. **Check exception expiry.** Expired and approaching-expiry exceptions are
-   separate categories and are treated differently.
-4. **Find unmapped downstreams.** A dependency with no register entry is not a
-   dependency with no risk; it is one nobody has assessed.
-5. **Roll up.** The deployment inherits the highest open severity among its
-   dependencies, and that number belongs in the attestation.
-
-## Output contract
-
-```json
-{
+the downstream inventory to the register, and this skill is that join.</p>
+<h2>Procedure</h2>
+<ol>
+<li><strong>Take the downstream inventory</strong> from the inventory resolver. Do not build
+   a second list — a divergence between the two is itself the finding.</li>
+<li><strong>Query the register per downstream.</strong> Open risks with severity and status,
+   plus any accepted exceptions.</li>
+<li><strong>Check exception expiry.</strong> Expired and approaching-expiry exceptions are
+   separate categories and are treated differently.</li>
+<li><strong>Find unmapped downstreams.</strong> A dependency with no register entry is not a
+   dependency with no risk; it is one nobody has assessed.</li>
+<li><strong>Roll up.</strong> The deployment inherits the highest open severity among its
+   dependencies, and that number belongs in the attestation.</li>
+</ol>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;downstreams&quot;: [
     {&quot;service&quot;: &quot;str&quot;,
@@ -113,130 +104,59 @@ the downstream inventory to the register, and this skill is that join.
   &quot;inherited_severity&quot;: &quot;critical|high|medium|low|none&quot;,
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Treating an unmapped downstream as clean.</strong> Absence of a record is absence
+  of assessment.</li>
+<li><strong>Ignoring expired exceptions</strong> because the risk is still recorded as
+  accepted. An expired exception is an open risk with a date on it.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>family                                       risks  ids
+identity and authorisation                       3  R1, R5, R11
+code and CI/CD pipeline                          2  R7, R8
+lateral movement and logging                     2  R9, R10
+RAG misconfiguration and data exposure           1  R12
+guardrail tampering                              1  R2
+local filesystem manipulation                    1  R6
+prompt injection and instruction hijacking       1  R3
+software supply chain and execution              1  R4
 
-## Failure modes
+risks: 12   families: 8
+largest family: identity and authorisation (3 of 12)
 
-- **Treating an unmapped downstream as clean.** Absence of a record is absence
-  of assessment.
-- **Ignoring expired exceptions** because the risk is still recorded as
-  accepted. An expired exception is an open risk with a date on it.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Identity carries a quarter of the register on its own - over-privileged
+execution, plaintext long-lived tokens, and no lineage from a human to an
+action. None of the three is exotic, and all three are closed by the same
+chapter. That is why chapter 2 is identity and not something more
+interesting.
+agent        risks
+all four         5
+advisor          2
+coding           2
+workflow         2
+files            1
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+risks that belong to no single agent : 5 of 12
 
-from cyber_commons_skill_runtime import run_skill
+Five of twelve are not any one agent&#x27;s problem. They are properties of
+how the four are wired together - ingress, transport, identity, logging,
+and what a held agent can reach. Assign those to an agent owner and they
+will be nobody&#x27;s, which is the failure E1.10 is entirely about.
+risks with at least one owning lesson : 12/12
+distinct lessons doing the work       : 29
 
-# Split skills/attestation/risk-registry-integrator/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/risk-registry-integrator/scripts/risk_registry_integrator.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Roll a register up from the downstreams an agent&#x27;s tools reach, and treat an unmapped dependency as unassessed rather than clean.
+function   lessons
+A               19
+B                5
+C                1
+D                2
+E                2
 
-This is the executable half of the `risk-registry-integrator` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+risks with no owner: none
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-FAMILIES = {
- &quot;prompt injection and instruction hijacking&quot;: [&quot;R3&quot;],
- &quot;identity and authorisation&quot;:                 [&quot;R1&quot;, &quot;R5&quot;, &quot;R11&quot;],
- &quot;software supply chain and execution&quot;:        [&quot;R4&quot;],
- &quot;local filesystem manipulation&quot;:              [&quot;R6&quot;],
- &quot;code and CI/CD pipeline&quot;:                    [&quot;R7&quot;, &quot;R8&quot;],
- &quot;RAG misconfiguration and data exposure&quot;:     [&quot;R12&quot;],
- &quot;lateral movement and logging&quot;:               [&quot;R9&quot;, &quot;R10&quot;],
- &quot;guardrail tampering&quot;:                        [&quot;R2&quot;],
-}
-print(f&quot;{&#x27;family&#x27;:44s}{&#x27;risks&#x27;:&gt;6}  ids&quot;)
-for fam in sorted(FAMILIES, key=lambda f: (-len(FAMILIES[f]), f)):
-    ids = FAMILIES[fam]
-    print(f&quot;{fam:44s}{len(ids):&gt;6}  {&#x27;, &#x27;.join(ids)}&quot;)
-
-total = sum(len(v) for v in FAMILIES.values())
-biggest = max(sorted(FAMILIES), key=lambda f: len(FAMILIES[f]))
-print(f&quot;\nrisks: {total}   families: {len(FAMILIES)}&quot;)
-print(f&quot;largest family: {biggest} ({len(FAMILIES[biggest])} of {total})&quot;)
-print()
-print(&quot;Identity carries a quarter of the register on its own - over-privileged&quot;)
-print(&quot;execution, plaintext long-lived tokens, and no lineage from a human to an&quot;)
-print(&quot;action. None of the three is exotic, and all three are closed by the same&quot;)
-print(&quot;chapter. That is why chapter 2 is identity and not something more&quot;)
-print(&quot;interesting.&quot;)
-assert total == 12 and biggest == &quot;identity and authorisation&quot;
-
-COMPONENT = {
- &quot;R1&quot;:  &quot;workflow agent + its authorisation&quot;,
- &quot;R2&quot;:  &quot;guardrails around the advisor&#x27;s output&quot;,
- &quot;R3&quot;:  &quot;ingress into any agent&quot;,
- &quot;R4&quot;:  &quot;third-party MCP server&quot;,
- &quot;R5&quot;:  &quot;the transport between agent and API&quot;,
- &quot;R6&quot;:  &quot;local std I/O on Alex&#x27;s laptop&quot;,
- &quot;R7&quot;:  &quot;the coding agent&#x27;s CI/CD path&quot;,
- &quot;R8&quot;:  &quot;the coding agent&#x27;s pull requests&quot;,
- &quot;R9&quot;:  &quot;every downstream API, once one agent is held&quot;,
- &quot;R10&quot;: &quot;the log sink&quot;,
- &quot;R11&quot;: &quot;identity, across all four agents&quot;,
- &quot;R12&quot;: &quot;the vector store&quot;,
-}
-AGENT_OF = {
- &quot;R1&quot;: &quot;workflow&quot;, &quot;R2&quot;: &quot;advisor&quot;, &quot;R3&quot;: &quot;all four&quot;, &quot;R4&quot;: &quot;workflow&quot;,
- &quot;R5&quot;: &quot;all four&quot;, &quot;R6&quot;: &quot;files&quot;, &quot;R7&quot;: &quot;coding&quot;, &quot;R8&quot;: &quot;coding&quot;,
- &quot;R9&quot;: &quot;all four&quot;, &quot;R10&quot;: &quot;all four&quot;, &quot;R11&quot;: &quot;all four&quot;, &quot;R12&quot;: &quot;advisor&quot;,
-}
-from collections import Counter
-per_agent = Counter(AGENT_OF.values())
-print(f&quot;{&#x27;agent&#x27;:12s}{&#x27;risks&#x27;:&gt;6}&quot;)
-for a in sorted(per_agent, key=lambda k: (-per_agent[k], k)):
-    print(f&quot;{a:12s}{per_agent[a]:&gt;6}&quot;)
-
-shared = per_agent[&quot;all four&quot;]
-print(f&quot;\nrisks that belong to no single agent : {shared} of {len(AGENT_OF)}&quot;)
-print()
-print(&quot;Five of twelve are not any one agent&#x27;s problem. They are properties of&quot;)
-print(&quot;how the four are wired together - ingress, transport, identity, logging,&quot;)
-print(&quot;and what a held agent can reach. Assign those to an agent owner and they&quot;)
-print(&quot;will be nobody&#x27;s, which is the failure E1.10 is entirely about.&quot;)
-assert shared == 5
-
-OWNED_BY_LESSON = {
- &quot;R1&quot;: [&quot;A2.3&quot;, &quot;A2.4&quot;, &quot;A3.1&quot;], &quot;R2&quot;: [&quot;A3.5&quot;, &quot;A3.6&quot;, &quot;A3.9&quot;],
- &quot;R3&quot;: [&quot;A1.2&quot;, &quot;A1.3&quot;, &quot;A2.6&quot;, &quot;A3.1&quot;], &quot;R4&quot;: [&quot;C2.5&quot;, &quot;A3.8&quot;, &quot;B2.13&quot;],
- &quot;R5&quot;: [&quot;A2.1&quot;, &quot;A2.2&quot;, &quot;A2.4&quot;], &quot;R6&quot;: [&quot;A3.2&quot;, &quot;A1.8&quot;, &quot;B2.12&quot;],
- &quot;R7&quot;: [&quot;B2.12&quot;, &quot;B2.9&quot;, &quot;A3.6&quot;], &quot;R8&quot;: [&quot;B2.5&quot;, &quot;B2.9&quot;, &quot;B2.10&quot;],
- &quot;R9&quot;: [&quot;A3.3&quot;, &quot;A3.7&quot;, &quot;D2.3&quot;], &quot;R10&quot;: [&quot;D1.5&quot;, &quot;E2.5&quot;, &quot;A2.7&quot;],
- &quot;R11&quot;: [&quot;A2.1&quot;, &quot;A2.7&quot;, &quot;A1.14&quot;], &quot;R12&quot;: [&quot;A1.3&quot;, &quot;A1.4&quot;, &quot;E1.3&quot;],
-}
-lessons = sorted({l for ls in OWNED_BY_LESSON.values() for l in ls})
-by_function = Counter(l[0] for l in lessons)
-
-print(f&quot;risks with at least one owning lesson : &quot;
-      f&quot;{sum(1 for v in OWNED_BY_LESSON.values() if v)}/{len(OWNED_BY_LESSON)}&quot;)
-print(f&quot;distinct lessons doing the work       : {len(lessons)}&quot;)
-print()
-print(f&quot;{&#x27;function&#x27;:10s}{&#x27;lessons&#x27;:&gt;8}&quot;)
-for f in sorted(by_function):
-    print(f&quot;{f:10s}{by_function[f]:&gt;8}&quot;)
-
-unowned = [r for r, ls in OWNED_BY_LESSON.items() if not ls]
-print(f&quot;\nrisks with no owner: {unowned or &#x27;none&#x27;}&quot;)
-print()
-print(&quot;Twelve risks, twenty-odd lessons, four functions. A register that fits on&quot;)
-print(&quot;one page and points at everything else is the artefact this chapter was&quot;)
-print(&quot;for - and the thing to re-run whenever CyberTravels grows a fifth agent.&quot;)
-assert not unowned and len(lessons) &gt; 15</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Twelve risks, twenty-odd lessons, four functions. A register that fits on
+one page and points at everything else is the artefact this chapter was
+for - and the thing to re-run whenever CyberTravels grows a fifth agent.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Twelve risks, each as a scene rather than a mechanism, each with a control and an owning lesson. Identity and authorisation is the largest family at three of twelve. Five of the twelve belong to no single agent — ingress, transport, identity, logging and blast radius are properties of how the four are wired together. The integrator skill then loads and reports its shape, and its first failure mode is the one that keeps registers looking clean: a downstream with no register entry is unassessed, not safe.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write the same four columns for one agentic system you run. The column that will be hardest is the fourth: for each control, where is it taught, tested and evidenced in your organisation? The rows with no answer are the ones that will recur.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> You can draw an agentic system as named components, say which of the five patterns it is, and place any of fifteen risks on the component it attacks. That is the vocabulary the rest of the commons runs on.</p>

@@ -1,0 +1,13 @@
+request                     authorized?  attributed to
+dana@corp -> reports:read   True         dana@corp via reports-agent
+dana@corp -> db:admin       False        dana@corp via reports-agent
+
+memory keys - the same workspace, two users:
+   dana  -> acme:dana@corp
+   priya -> acme:priya@corp
+   shared? False
+
+db:admin is refused because the WORKLOAD never held it - so no user can
+borrow it through the agent, which is A1.6 closed. The audit line names
+dana, which is A1.14 closed. And a note written in dana's session cannot
+be read back in priya's, which is A1.4 closed.

@@ -45,185 +45,84 @@ alerts, findings or trainings completed.</p>
 anything.</strong> A metric that stays flat under neglect is measuring activity, not
 posture — which is why finding counts and training completion make such
 comfortable and useless board slides.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill applies the neglect test: simulate a quarter with nothing done and see which numbers move. Four comfortable metrics stay green throughout, which is what disqualifies them.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/programme-metrics-selection/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: programme-metrics-selection
+<p>The skill applies the neglect test: simulate a quarter with nothing done and see which numbers move. Four comfortable metrics stay green throughout, which is what disqualifies them.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/programme-metrics-selection/SKILL.md"><code>skills/programme/programme-metrics-selection/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: programme-metrics-selection
 description: &gt;-
   Pick programme metrics that degrade when the programme is neglected, and
   separate them from the comfortable ones that stay green regardless. Use when
   choosing what to report, or when every metric is green and the estate is not.
 allowed-tools: Read, Grep, Glob
----
-
-# A metric that cannot go red is a decoration
-
-The test for a programme metric is simple and rarely applied: if the programme
+</code></pre>
+<h1>A metric that cannot go red is a decoration</h1>
+<p>The test for a programme metric is simple and rarely applied: if the programme
 were neglected for a quarter, would this number move? Counts of policies
 published, training completed and tools deployed would not. Exposure,
 containment effectiveness, evidence freshness and measured time-to-stop all
-would.
-
-## When to use this
-
-Choosing what to report to an executive committee, and auditing an existing
-dashboard that is entirely green.
-
-## Procedure
-
-**1 — List the candidate metrics** and, for each, what it is computed from.
+would.</p>
+<h2>When to use this</h2>
+<p>Choosing what to report to an executive committee, and auditing an existing
+dashboard that is entirely green.</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the candidate metrics</strong> and, for each, what it is computed from.
 Anything computed from a plan rather than from the estate is a decoration
-already.
-
-**2 — Apply the neglect test.** Simulate a quarter with nothing done: no
-attestations refreshed, no evals run, no drift reviewed. Which numbers move?
-
-**3 — Keep the ones that move and say what each one costs to compute.** A
+already.</p>
+<p><strong>2 — Apply the neglect test.</strong> Simulate a quarter with nothing done: no
+attestations refreshed, no evals run, no drift reviewed. Which numbers move?</p>
+<p><strong>3 — Keep the ones that move and say what each one costs to compute.</strong> A
 metric nobody can produce monthly will be produced annually and stop being a
-control.
-
-**4 — Report the comfortable ones you are dropping,** with the reason. They have
-constituencies, and removing them silently gets them reinstated.
-
-**5 — Set a target and a direction per surviving metric.** A number with no
+control.</p>
+<p><strong>4 — Report the comfortable ones you are dropping,</strong> with the reason. They have
+constituencies, and removing them silently gets them reinstated.</p>
+<p><strong>5 — Set a target and a direction per surviving metric.</strong> A number with no
 target is a chart; a number with a target is a commitment somebody is
-accountable for.
-
-## Output contract
-
-```json
-{
+accountable for.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;candidates&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;computed_from&quot;: &quot;estate|plan&quot;, &quot;moves_under_neglect&quot;: false}],
   &quot;kept&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;value&quot;: 0.0, &quot;target&quot;: 0.0, &quot;cadence&quot;: &quot;str&quot;, &quot;cost&quot;: &quot;str&quot;}],
   &quot;dropped&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;why&quot;: &quot;str&quot;}],
   &quot;neglect_simulation&quot;: {&quot;quarter&quot;: &quot;str&quot;, &quot;moved&quot;: [&quot;str&quot;], &quot;unmoved&quot;: [&quot;str&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Metrics computed from the plan.</strong> They measure the plan.</li>
+<li><strong>Dropping comfortable metrics silently.</strong> They come back.</li>
+<li><strong>No target.</strong> Nobody is accountable for a direction.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>exposure   fleet blast radius             46   units of unreviewed action
+likelihood red-team ASR                  25%   measured, containment surface
+assurance  controls evidenced            50%   4/8
+coverage   agents in inventory           34%   41 of ~120 est.
+speed      measured time-to-stop         12s   game day 41 days ago
+metrics that look like governance and are not:
+   findings closed this quarter      goes up with activity; says nothing about posture
+   training completion %             reaches 98% and stays there forever
+   number of AI policies             monotonically increasing by construction
+   tools evaluated                   measures procurement, not risk
 
-## Failure modes
+metric                        degrades if ignored?
+----------------------------------------------------
+exposure                                      True
+likelihood                                    True
+assurance                                     True
+coverage                                      True
+speed                                         True
+findings closed                              False
+training completion                          False
+number of policies                           False
 
-- **Metrics computed from the plan.** They measure the plan.
-- **Dropping comfortable metrics silently.** They come back.
-- **No target.** Nobody is accountable for a direction.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+The first five fall on their own. That is what makes them worth
+reporting monthly — the report itself creates the pressure.
+ month  exposure    ASR  assurance  coverage  stop test age
+------------------------------------------------------------
+     0        46    25%        50%       34%             41
+     3       118    34%        14%       22%            131
+     6       190    43%         0%       10%            221
+    12       334    61%         0%        0%            401
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/programme/programme-metrics-selection/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/programme-metrics-selection/scripts/programme_metrics_selection.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Compute the metrics that degrade under neglect and separate them from the comfortable ones that do not.
-
-This is the executable half of the `programme-metrics-selection` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-SCOPE_WEIGHT = {&quot;self&quot;:1,&quot;project&quot;:3,&quot;tenant&quot;:8,&quot;org&quot;:20}
-now = time.time(); DAY = 86400
-
-FLEET = {&quot;pr-remediation&quot;: [(&quot;read_file&quot;,&quot;self&quot;,True),(&quot;write_file&quot;,&quot;project&quot;,True),
-                            (&quot;deploy&quot;,&quot;org&quot;,False)],
-         &quot;claims-triage&quot;:  [(&quot;read_file&quot;,&quot;self&quot;,True),(&quot;issue_refund&quot;,&quot;tenant&quot;,False)],
-         &quot;doc-summariser&quot;: [(&quot;read_file&quot;,&quot;self&quot;,True)]}
-GATED = {&quot;pr-remediation&quot;: set(), &quot;claims-triage&quot;: {&quot;issue_refund&quot;},
-         &quot;doc-summariser&quot;: set()}
-def blast(t, g): return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n,s,rev in t if n not in g)
-exposure = sum(blast(t, GATED[a]) for a, t in FLEET.items())
-
-ATTACKS = [(&quot;metadata&quot;,False),(&quot;traversal&quot;,False),(&quot;unlisted egress&quot;,True),(&quot;denied tool&quot;,False)]
-asr = sum(1 for _, t in ATTACKS if t)/len(ATTACKS)
-
-CONTROL_TESTS = {&quot;AC-1&quot;: now-3*DAY, &quot;AC-2&quot;: now-9*DAY, &quot;SB-1&quot;: now-45*DAY,
-                 &quot;EV-1&quot;: now-5*DAY, &quot;EV-2&quot;: now-12*DAY}
-WINDOW = {&quot;AC-1&quot;:30,&quot;AC-2&quot;:30,&quot;SB-1&quot;:30,&quot;EV-1&quot;:60,&quot;EV-2&quot;:30}
-REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
-evidenced = sum(1 for c in REQUIRED
-                if c in CONTROL_TESTS and (now-CONTROL_TESTS[c])/DAY &lt;= WINDOW[c])
-assurance = evidenced/len(REQUIRED)
-
-REGISTERED, ESTIMATED = 41, 120
-coverage = REGISTERED/ESTIMATED
-TIME_TO_STOP = 12
-
-METRICS = {
- &quot;exposure   fleet blast radius&quot;:        (exposure, &quot;units of unreviewed action&quot;),
- &quot;likelihood red-team ASR&quot;:              (f&quot;{asr:.0%}&quot;, &quot;measured, containment surface&quot;),
- &quot;assurance  controls evidenced&quot;:        (f&quot;{assurance:.0%}&quot;, f&quot;{evidenced}/{len(REQUIRED)}&quot;),
- &quot;coverage   agents in inventory&quot;:       (f&quot;{coverage:.0%}&quot;, f&quot;{REGISTERED} of ~{ESTIMATED} est.&quot;),
- &quot;speed      measured time-to-stop&quot;:     (f&quot;{TIME_TO_STOP}s&quot;, &quot;game day 41 days ago&quot;),
-}
-for k, (v, note) in METRICS.items():
-    print(f&quot;{k:36s}{str(v):&gt;8}   {note}&quot;)
-
-COMFORTABLE = {
- &quot;findings closed this quarter&quot;: &quot;goes up with activity; says nothing about posture&quot;,
- &quot;training completion %&quot;:        &quot;reaches 98% and stays there forever&quot;,
- &quot;number of AI policies&quot;:        &quot;monotonically increasing by construction&quot;,
- &quot;tools evaluated&quot;:              &quot;measures procurement, not risk&quot;,
-}
-print(&quot;metrics that look like governance and are not:&quot;)
-for m, why in COMFORTABLE.items():
-    print(f&quot;   {m:34s}{why}&quot;)
-
-def degrades_under_neglect(metric):
-    DEGRADES = {&quot;exposure&quot;: True, &quot;likelihood&quot;: True, &quot;assurance&quot;: True,
-                &quot;coverage&quot;: True, &quot;speed&quot;: True,
-                &quot;findings closed&quot;: False, &quot;training completion&quot;: False,
-                &quot;number of policies&quot;: False, &quot;tools evaluated&quot;: False}
-    return DEGRADES.get(metric, False)
-
-print(f&quot;\n{&#x27;metric&#x27;:28s}{&#x27;degrades if ignored?&#x27;:&gt;22}&quot;)
-print(&quot;-&quot; * 52)
-for m in (&quot;exposure&quot;,&quot;likelihood&quot;,&quot;assurance&quot;,&quot;coverage&quot;,&quot;speed&quot;,
-          &quot;findings closed&quot;,&quot;training completion&quot;,&quot;number of policies&quot;):
-    print(f&quot;{m:28s}{str(degrades_under_neglect(m)):&gt;22}&quot;)
-print(&quot;\nThe first five fall on their own. That is what makes them worth&quot;)
-print(&quot;reporting monthly — the report itself creates the pressure.&quot;)
-
-def project(months, exposure, asr, assurance, coverage, ttl_days=41):
-    &quot;&quot;&quot;What happens to each metric if nobody does anything for N months.&quot;&quot;&quot;
-    new_agents_per_month = 3
-    exposure_growth = 8            # blast units per new agent, ungoverned
-    controls_going_stale = 0.12    # fraction of evidence expiring per month
-    return {
-      &quot;exposure&quot;:  exposure + months * new_agents_per_month * exposure_growth,
-      &quot;likelihood&quot;: min(asr + months * 0.03, 1.0),
-      &quot;assurance&quot;: max(assurance - months * controls_going_stale, 0.0),
-      &quot;coverage&quot;:  max(coverage - months * 0.04, 0.0),
-      &quot;days_since_stop_test&quot;: ttl_days + months * 30,
-    }
-
-print(f&quot;{&#x27;month&#x27;:&gt;6}{&#x27;exposure&#x27;:&gt;10}{&#x27;ASR&#x27;:&gt;7}{&#x27;assurance&#x27;:&gt;11}{&#x27;coverage&#x27;:&gt;10}&quot;
-      f&quot;{&#x27;stop test age&#x27;:&gt;15}&quot;)
-print(&quot;-&quot; * 60)
-for m in (0, 3, 6, 12):
-    p = project(m, exposure, asr, assurance, coverage)
-    print(f&quot;{m:&gt;6}{p[&#x27;exposure&#x27;]:&gt;10}{p[&#x27;likelihood&#x27;]:&gt;7.0%}{p[&#x27;assurance&#x27;]:&gt;11.0%}&quot;
-          f&quot;{p[&#x27;coverage&#x27;]:&gt;10.0%}{p[&#x27;days_since_stop_test&#x27;]:&gt;15}&quot;)
-
-p12 = project(12, exposure, asr, assurance, coverage)
-print(f&quot;\nAfter a year of no investment: exposure {exposure}→{p12[&#x27;exposure&#x27;]}, &quot;
-      f&quot;assurance {assurance:.0%}→{p12[&#x27;assurance&#x27;]:.0%}.&quot;)
-print(&quot;Nobody made a bad decision. This is the default trajectory, and the&quot;)
-print(&quot;monthly report is what makes it visible before it is a board topic.&quot;)
-assert p12[&quot;assurance&quot;] &lt; assurance and p12[&quot;exposure&quot;] &gt; exposure</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+After a year of no investment: exposure 46→334, assurance 50%→0%.
+Nobody made a bad decision. This is the default trajectory, and the
+monthly report is what makes it visible before it is a board topic.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The five metrics compute to exposure 46, ASR 25%, assurance 50%, coverage 34% and a 12-second time-to-stop. Four comfortable metrics are shown not to degrade under neglect while all five real ones do. Projected twelve months forward with no investment, exposure rises from 46 to 334 and assurance falls from 50% to 0%.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Which of the five can you produce today without a project? Start reporting that one monthly and let the missing ones become conspicuous — that is a cheaper way to get the others funded than asking for all five at once.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E3.6.html">E3.6 · Saying no, and saying yes with conditions</a></strong></p>

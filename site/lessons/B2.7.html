@@ -60,215 +60,78 @@ equivalent of a shape check, and B2.0 already established what those are worth.<
                              └─ stages 11-14        └─ stage 15</code></p>
 </blockquote></div><div class="nbmd"><h2>3 · Where it breaks — the probe that asserts nothing</h2>
 <p>The most common DAST bug: treating "the request succeeded" as confirmation. Both probes below hit the app and return 200-equivalents; only one of them proves anything.</p></div><div class="nbmd"><h2>4 · The stage, as a skill</h2>
-<p>A dynamic probe proves nothing unless its assertion can fail. The skill runs the probes against a live build with a control probe alongside, then re-runs them under a weak assertion so you can watch it flag the control too.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/dynamic-exploitation-probe/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: dynamic-exploitation-probe
+<p>A dynamic probe proves nothing unless its assertion can fail. The skill runs the probes against a live build with a control probe alongside, then re-runs them under a weak assertion so you can watch it flag the control too.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/dynamic-exploitation-probe/SKILL.md"><code>skills/appsec/dynamic-exploitation-probe/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: dynamic-exploitation-probe
 description: &gt;-
   Run probes against a live build to turn a static finding into a demonstrated
   one, with a control probe and an assertion strong enough to tell them apart.
   Use when confirming exploitability, or when a dynamic test reports everything
   as vulnerable.
 allowed-tools: Read, Grep, Glob, Bash
----
-
-# The assertion is the experiment
-
-A dynamic probe proves nothing unless its assertion can fail. A weak assertion —
-&quot;the response contains rows&quot;, &quot;the request did not error&quot; — confirms the control
+</code></pre>
+<h1>The assertion is the experiment</h1>
+<p>A dynamic probe proves nothing unless its assertion can fail. A weak assertion —
+"the response contains rows", "the request did not error" — confirms the control
 probe as readily as the attack, and a test that confirms everything has measured
-nothing.
-
-## When to use this
-
-After static analysis has produced hypotheses, in a replica confirmed by an
-isolation check, and before any finding is reported as exploitable.
-
-## Procedure
-
-**1 — State each hypothesis as a prediction.** Not &quot;SQL injection in
-`list_reports`&quot; but &quot;requesting one owner returns rows for more than one&quot;. A
-hypothesis you cannot write as a prediction is not ready to test.
-
-**2 — Include a control probe.** A well-formed, benign request whose result is
-known. It is the thing that tells you your assertion discriminates.
-
-**3 — Write the assertion against the prediction.** Count owners returned, not
-whether rows came back. Read the file&#x27;s contents, not whether a path resolved.
-The difference between these is the entire value of the stage.
-
-**4 — Run all probes, including the control, and record raw results.** Then
+nothing.</p>
+<h2>When to use this</h2>
+<p>After static analysis has produced hypotheses, in a replica confirmed by an
+isolation check, and before any finding is reported as exploitable.</p>
+<h2>Procedure</h2>
+<p><strong>1 — State each hypothesis as a prediction.</strong> Not "SQL injection in
+<code>list_reports</code>" but "requesting one owner returns rows for more than one". A
+hypothesis you cannot write as a prediction is not ready to test.</p>
+<p><strong>2 — Include a control probe.</strong> A well-formed, benign request whose result is
+known. It is the thing that tells you your assertion discriminates.</p>
+<p><strong>3 — Write the assertion against the prediction.</strong> Count owners returned, not
+whether rows came back. Read the file's contents, not whether a path resolved.
+The difference between these is the entire value of the stage.</p>
+<p><strong>4 — Run all probes, including the control, and record raw results.</strong> Then
 apply the assertion. Keep both: the raw result is what somebody re-reads when
-they doubt the finding.
-
-**5 — Demonstrate the weak assertion too.** Run the same probes under the loose
+they doubt the finding.</p>
+<p><strong>5 — Demonstrate the weak assertion too.</strong> Run the same probes under the loose
 check and show it flagging the control. That comparison is what stops the next
-person writing one.
-
-**6 — Mark each hypothesis confirmed, refuted, or untested** — and never
-&quot;probably&quot;. A hypothesis whose probe could not run is untested, which is
-different from refuted and much more common.
-
-## Output contract
-
-```json
-{
+person writing one.</p>
+<p><strong>6 — Mark each hypothesis confirmed, refuted, or untested</strong> — and never
+"probably". A hypothesis whose probe could not run is untested, which is
+different from refuted and much more common.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;hypotheses&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;prediction&quot;: &quot;str&quot;}],
   &quot;probes&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;attack|control&quot;, &quot;raw&quot;: &quot;str&quot;}],
   &quot;assertions&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;strong&quot;: true, &quot;verdict&quot;: &quot;confirmed|refuted|untested&quot;}],
   &quot;weak_assertion_run&quot;: {&quot;flagged&quot;: [&quot;str&quot;], &quot;includes_control&quot;: true}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>No control probe.</strong> Nothing tells you the assertion discriminates.</li>
+<li><strong>Asserting on shape.</strong> "Rows came back" is true for the legitimate query.</li>
+<li><strong>Recording untested as refuted.</strong> They have different owners and different
+  next steps.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>normal use:
+   list_reports(&#x27;test-user-a&#x27;) → [(1, &#x27;test-user-a&#x27;, 100), (2, &#x27;test-user-a&#x27;, 250)]
+   fetch_doc(&#x27;readme.txt&#x27;)     → public readme
+probe  cwe      exploited  observation
+--------------------------------------------------------------------------
+P-01   CWE-89   True       4 rows, owners=[&#x27;test-user-a&#x27;, &#x27;test-user-b&#x27;, &#x27;test-user-c&#x27;]
+P-02   CWE-22   True       returned &#x27;synthetic-not-real-9999&#x27;
+P-03   CWE-89   False      2 rows, owners=[&#x27;test-user-a&#x27;]
+probe  weak assertion   effect assertion  agreement
+------------------------------------------------------------------
+P-01   True             True              
+P-02   True             True              
+P-03   True             False             ← DISAGREE
 
-## Failure modes
+The weak assertion confirms all three, including the control probe.
+A pipeline built on it reports 100% confirmation and means nothing by it.
+F-01  CWE-89   CONFIRMED   exploit achieved the asserted effect on the replica
+F-02  CWE-22   CONFIRMED   exploit achieved the asserted effect on the replica
+F-03  CWE-89   UNVALIDATED no probe generated — cannot confirm or refute
 
-- **No control probe.** Nothing tells you the assertion discriminates.
-- **Asserting on shape.** &quot;Rows came back&quot; is true for the legitimate query.
-- **Recording untested as refuted.** They have different owners and different
-  next steps.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/appsec/dynamic-exploitation-probe/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/dynamic-exploitation-probe/scripts/dynamic_exploitation_probe.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run probes against a live build, and show what a weak assertion does to the control probe.
-
-This is the executable half of the `dynamic-exploitation-probe` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import sqlite3
-from dataclasses import dataclass, field
-
-def build_app():
-    conn = sqlite3.connect(&quot;:memory:&quot;)
-    conn.execute(&quot;CREATE TABLE reports(id INTEGER, owner TEXT, amount INT)&quot;)
-    conn.executemany(&quot;INSERT INTO reports VALUES (?,?,?)&quot;,
-                     [(1,&quot;test-user-a&quot;,100),(2,&quot;test-user-a&quot;,250),
-                      (3,&quot;test-user-b&quot;,900),(4,&quot;test-user-c&quot;,50)])
-    return conn
-
-FILES = {&quot;/srv/docs/readme.txt&quot;: &quot;public readme&quot;,
-         &quot;/srv/secrets/token&quot;: &quot;synthetic-not-real-9999&quot;}
-
-class App:
-    &quot;&quot;&quot;The replica under test. Two handlers, one of each bug class.&quot;&quot;&quot;
-    def __init__(self): self.conn = build_app()
-    def list_reports(self, owner):
-        q = &quot;SELECT id, owner, amount FROM reports WHERE owner = &#x27;&quot; + owner + &quot;&#x27;&quot;
-        return self.conn.execute(q).fetchall()
-    def fetch_doc(self, name):
-        path = &quot;/srv/docs/&quot; + name
-        parts = []
-        for seg in path.split(&quot;/&quot;):
-            if seg in (&quot;&quot;, &quot;.&quot;): continue
-            if seg == &quot;..&quot;:
-                if parts: parts.pop()
-                continue
-            parts.append(seg)
-        real = &quot;/&quot; + &quot;/&quot;.join(parts)
-        return FILES.get(real, &quot;not found&quot;)
-
-app = App()
-print(&quot;normal use:&quot;)
-print(&quot;   list_reports(&#x27;test-user-a&#x27;) →&quot;, app.list_reports(&quot;test-user-a&quot;))
-print(&quot;   fetch_doc(&#x27;readme.txt&#x27;)     →&quot;, app.fetch_doc(&quot;readme.txt&quot;))
-
-@dataclass
-class Probe:
-    pid: str; cwe: str; target: str; payload: str
-    effect: str                     # what must be TRUE for this to be exploitation
-
-PROBES = [
- Probe(&quot;P-01&quot;,&quot;CWE-89&quot;,&quot;list_reports&quot;,&quot;x&#x27; OR &#x27;1&#x27;=&#x27;1&quot;,
-       &quot;returns rows belonging to owners other than the one requested&quot;),
- Probe(&quot;P-02&quot;,&quot;CWE-22&quot;,&quot;fetch_doc&quot;,&quot;../secrets/token&quot;,
-       &quot;returns file content from outside /srv/docs&quot;),
- Probe(&quot;P-03&quot;,&quot;CWE-89&quot;,&quot;list_reports&quot;,&quot;test-user-a&quot;,
-       &quot;control probe — must NOT be flagged as exploitation&quot;),
-]
-
-def run_probe(app, probe):
-    if probe.target == &quot;list_reports&quot;:
-        rows = app.list_reports(probe.payload)
-        owners = {r[1] for r in rows}
-        exploited = len(owners) &gt; 1
-        return exploited, f&quot;{len(rows)} rows, owners={sorted(owners)}&quot;
-    content = app.fetch_doc(probe.payload)
-    exploited = content not in (&quot;not found&quot;,) and &quot;secrets&quot; in probe.payload
-    return exploited, f&quot;returned {content!r}&quot;
-
-print(f&quot;{&#x27;probe&#x27;:7s}{&#x27;cwe&#x27;:9s}{&#x27;exploited&#x27;:11s}observation&quot;)
-print(&quot;-&quot; * 74)
-results = {}
-for p in PROBES:
-    ok, obs = run_probe(app, p)
-    results[p.pid] = ok
-    print(f&quot;{p.pid:7s}{p.cwe:9s}{str(ok):11s}{obs}&quot;)
-assert results[&quot;P-01&quot;] and results[&quot;P-02&quot;] and not results[&quot;P-03&quot;]
-
-def weak_probe(app, probe):
-    &quot;&quot;&quot;Asserts only that nothing blew up.&quot;&quot;&quot;
-    try:
-        if probe.target == &quot;list_reports&quot;: app.list_reports(probe.payload)
-        else: app.fetch_doc(probe.payload)
-        return True, &quot;request completed without error&quot;
-    except Exception as e:
-        return False, f&quot;raised {type(e).__name__}&quot;
-
-print(f&quot;{&#x27;probe&#x27;:7s}{&#x27;weak assertion&#x27;:17s}{&#x27;effect assertion&#x27;:18s}agreement&quot;)
-print(&quot;-&quot; * 66)
-for p in PROBES:
-    w, _ = weak_probe(app, p)
-    s, _ = run_probe(app, p)
-    print(f&quot;{p.pid:7s}{str(w):17s}{str(s):18s}{&#x27;&#x27; if w == s else &#x27;← DISAGREE&#x27;}&quot;)
-print(&quot;\nThe weak assertion confirms all three, including the control probe.&quot;)
-print(&quot;A pipeline built on it reports 100% confirmation and means nothing by it.&quot;)
-
-# Stage 12 output: findings promoted from hypothesis to confirmed, or dropped.
-HYPOTHESES = [
- {&quot;id&quot;:&quot;F-01&quot;,&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;unit&quot;:&quot;list_reports&quot;,&quot;status&quot;:&quot;HYPOTHESIS&quot;,&quot;probe&quot;:&quot;P-01&quot;},
- {&quot;id&quot;:&quot;F-02&quot;,&quot;cwe&quot;:&quot;CWE-22&quot;,&quot;unit&quot;:&quot;fetch_doc&quot;,  &quot;status&quot;:&quot;HYPOTHESIS&quot;,&quot;probe&quot;:&quot;P-02&quot;},
- {&quot;id&quot;:&quot;F-03&quot;,&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;unit&quot;:&quot;total&quot;,      &quot;status&quot;:&quot;HYPOTHESIS&quot;,&quot;probe&quot;:None},
-]
-def stage12(hypotheses, results):
-    out = []
-    for h in hypotheses:
-        if h[&quot;probe&quot;] is None:
-            out.append({**h, &quot;status&quot;: &quot;UNVALIDATED&quot;,
-                        &quot;note&quot;: &quot;no probe generated — cannot confirm or refute&quot;})
-        elif results.get(h[&quot;probe&quot;]):
-            out.append({**h, &quot;status&quot;: &quot;CONFIRMED&quot;,
-                        &quot;note&quot;: &quot;exploit achieved the asserted effect on the replica&quot;})
-        else:
-            out.append({**h, &quot;status&quot;: &quot;REFUTED&quot;,
-                        &quot;note&quot;: &quot;probe ran; asserted effect did not occur&quot;})
-    return out
-
-for f in stage12(HYPOTHESES, results):
-    print(f&quot;{f[&#x27;id&#x27;]}  {f[&#x27;cwe&#x27;]:9s}{f[&#x27;status&#x27;]:12s}{f[&#x27;note&#x27;]}&quot;)
-confirmed = [f for f in stage12(HYPOTHESES, results) if f[&quot;status&quot;] == &quot;CONFIRMED&quot;]
-print(f&quot;\n{len(confirmed)} confirmed by execution — these go to stages 13-15.&quot;)
-print(&quot;UNVALIDATED is not a pass. It is a gap in probe generation, and it should&quot;)
-print(&quot;appear in the report as one.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+2 confirmed by execution — these go to stages 13-15.
+UNVALIDATED is not a pass. It is a gap in probe generation, and it should
+appear in the report as one.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The SQL injection probe returns rows for three owners when one was requested, and the traversal probe returns the synthetic token from outside the document root; the control probe returns a single owner and is not flagged. The weak assertion confirms all three including the control. Stage 12 marks two findings CONFIRMED and one UNVALIDATED for having no probe.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Look at your DAST assertions. If any of them checks only for a non-error response, it is confirming findings it has not tested — and the control probe above is how you prove that in five minutes.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.8.html">B2.8 · Exploit chaining</a></strong></p>

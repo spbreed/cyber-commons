@@ -79,195 +79,85 @@ legitimately.</p>
 </table>
 <p>The first three are cheap and should be kept long. The last two are where the
 retention conversation actually is.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The run record contains a payment-card pattern, in a source file the agent read legitimately. The skill scans every field, then sets retention per field so timestamps and verdicts survive for 400 days and prompts do not survive 30.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-telemetry-retention/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-telemetry-retention
+<p>The run record contains a payment-card pattern, in a source file the agent read legitimately. The skill scans every field, then sets retention per field so timestamps and verdicts survive for 400 days and prompts do not survive 30.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-telemetry-retention/SKILL.md"><code>skills/detection/agent-telemetry-retention/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-telemetry-retention
 description: &gt;-
-  Scan an agent&#x27;s run record for sensitive content it read legitimately, then
+  Scan an agent's run record for sensitive content it read legitimately, then
   set retention per field rather than per record so the investigable parts
   survive and the prompts do not. Use when agent telemetry is being kept,
   discarded, or argued about with privacy.
 allowed-tools: Read, Grep, Glob
----
-
-# The agent read a card number because you asked it to
-
-An agent run record is the richest telemetry in the estate and the most
+</code></pre>
+<h1>The agent read a card number because you asked it to</h1>
+<p>An agent run record is the richest telemetry in the estate and the most
 dangerous to keep whole. The content it read — source files, tickets, documents
 — lands in the record, so the record inherits every classification the source
 had. Per-record retention forces a choice between losing the investigation and
-keeping the data; per-field does not.
-
-## When to use this
-
-Before agent telemetry is retained at scale, and whenever a retention policy is
-being written by someone who has not read a run record.
-
-## Procedure
-
-**1 — Read one full record.** Every step, every field. This is the step people
+keeping the data; per-field does not.</p>
+<h2>When to use this</h2>
+<p>Before agent telemetry is retained at scale, and whenever a retention policy is
+being written by someone who has not read a run record.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Read one full record.</strong> Every step, every field. This is the step people
 skip, and it is where the payment-card pattern in a legitimately-read source
-file turns up.
-
-**2 — Scan for sensitive patterns across all fields.** Card numbers, keys,
+file turns up.</p>
+<p><strong>2 — Scan for sensitive patterns across all fields.</strong> Card numbers, keys,
 personal data, health terms. Record which field carried each hit — prompts and
-tool results are the usual answer.
-
-**3 — Classify fields by investigative value.** Timestamps, tool name, target
+tool results are the usual answer.</p>
+<p><strong>3 — Classify fields by investigative value.</strong> Timestamps, tool name, target
 and verifier verdict answer most investigation questions. Prompts and raw tool
-output answer few and carry most of the risk.
-
-**4 — Set retention per field.** Long for the structural fields, short for the
+output answer few and carry most of the risk.</p>
+<p><strong>4 — Set retention per field.</strong> Long for the structural fields, short for the
 content ones. Then age a record and check what an investigation could still do
-with it — that check is what makes the policy defensible.
-
-**5 — State what is lost.** A short prompt retention means you cannot re-derive
-motivation after that window. Say so, rather than discovering it in an incident.
-
-## Output contract
-
-```json
-{
+with it — that check is what makes the policy defensible.</p>
+<p><strong>5 — State what is lost.</strong> A short prompt retention means you cannot re-derive
+motivation after that window. Say so, rather than discovering it in an incident.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;record&quot;: {&quot;steps&quot;: 0, &quot;fields&quot;: [&quot;str&quot;]},
   &quot;scan&quot;: [{&quot;pattern&quot;: &quot;str&quot;, &quot;field&quot;: &quot;str&quot;, &quot;legitimate_source&quot;: &quot;str&quot;}],
   &quot;retention&quot;: [{&quot;field&quot;: &quot;str&quot;, &quot;days&quot;: 0, &quot;investigative_value&quot;: &quot;high|low&quot;}],
   &quot;aged_record&quot;: {&quot;age_days&quot;: 0, &quot;questions_still_answerable&quot;: [&quot;str&quot;], &quot;lost&quot;: [&quot;str&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Retaining or discarding whole records.</strong> Both answers are wrong.</li>
+<li><strong>Scanning prompts only.</strong> Tool results carry the same content.</li>
+<li><strong>Not stating what the short windows lose.</strong> That is the trade being made.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>full record (everything the harness saw):
+    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result&#x27;: &#x27;def charge(card_number, amount):  # card_number = 4111111111111111&#x27;}
+    {&#x27;n&#x27;: 2, &#x27;tool&#x27;: &#x27;search_code&#x27;, &#x27;target&#x27;: &#x27;charge(&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;find callers of charge()&#x27;, &#x27;result&#x27;: &#x27;api/checkout.py:88 charge(user.card, total)&#x27;}
+    {&#x27;n&#x27;: 3, &#x27;tool&#x27;: &#x27;write_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;tests pass&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;apply the fix&#x27;, &#x27;result&#x27;: &#x27;patch applied&#x27;}
+sensitive content found in the trace:
+   step 1  result   payment card
 
-## Failure modes
+Nobody put a card number in the trace deliberately. The agent read a
+source file, and the file contained a test fixture with a real-shaped PAN.
+The trace is now in scope for PCI, and it is in your SIEM for 400 days.
+field       days  sensitivity  rationale
+--------------------------------------------------------------------------
+n            400          low  cheap, high forensic value
+tool         400          low  cheap, high forensic value
+target       400          low  path only, no contents
+verifier     400          low  what the harness believed — the key forensic field
+ok           400          low  
+prompt        30         high  may contain anything the task included
+result         7         high  tool output — the highest-risk field
 
-- **Retaining or discarding whole records.** Both answers are wrong.
-- **Scanning prompts only.** Tool results carry the same content.
-- **Not stating what the short windows lose.** That is the trade being made.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+after 1 days — step 1 record:
+    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result&#x27;: &#x27;def charge(card_number, amount):  # card_number = 4111111111111111&#x27;}
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+after 14 days — step 1 record:
+    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result_sha256&#x27;: &#x27;b0e3ecafa7e7a9a0&#x27;}
 
-from cyber_commons_skill_runtime import run_skill
+after 90 days — step 1 record:
+    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt_sha256&#x27;: &#x27;60d7bceb0de1a7bd&#x27;, &#x27;result_sha256&#x27;: &#x27;b0e3ecafa7e7a9a0&#x27;}
+sensitive content after 90 days: none
+can still answer &#x27;what did it do and what did the harness believe?&#x27;: True
 
-# Split skills/detection/agent-telemetry-retention/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-telemetry-retention/scripts/agent_telemetry_retention.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Scan an agent run record for sensitive content it read legitimately, and retain per field rather than per record.
-
-This is the executable half of the `agent-telemetry-retention` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time, hashlib
-from dataclasses import dataclass, field
-
-@dataclass
-class Step:
-    n: int; tool: str; target: str; verifier: str; ok: bool
-    prompt: str = &quot;&quot;; result: str = &quot;&quot;
-
-RUN = [
- Step(1, &quot;read_file&quot;, &quot;/work/repo/billing.py&quot;, &quot;n/a&quot;, True,
-      prompt=&quot;Investigate finding SEC-4471 in billing.py&quot;,
-      result=&quot;def charge(card_number, amount):  # card_number = 4111111111111111&quot;),
- Step(2, &quot;search_code&quot;, &quot;charge(&quot;, &quot;n/a&quot;, True,
-      prompt=&quot;find callers of charge()&quot;,
-      result=&quot;api/checkout.py:88 charge(user.card, total)&quot;),
- Step(3, &quot;write_file&quot;, &quot;/work/repo/billing.py&quot;, &quot;tests pass&quot;, True,
-      prompt=&quot;apply the fix&quot;, result=&quot;patch applied&quot;),
-]
-def render(steps, fields):
-    out = []
-    for s in steps:
-        row = {k: getattr(s, k) for k in fields}
-        out.append(row)
-    return out
-
-print(&quot;full record (everything the harness saw):&quot;)
-for r in render(RUN, [&quot;n&quot;, &quot;tool&quot;, &quot;target&quot;, &quot;verifier&quot;, &quot;ok&quot;, &quot;prompt&quot;, &quot;result&quot;]):
-    print(&quot;   &quot;, r)
-
-import re
-SENSITIVE = {
- &quot;payment card&quot;: re.compile(r&quot;\b4[0-9]{12}(?:[0-9]{3})?\b&quot;),
- &quot;email&quot;:        re.compile(r&quot;[\w.+-]+@[\w-]+\.[\w.]+&quot;),
- &quot;aws key&quot;:      re.compile(r&quot;\bAKIA[0-9A-Z]{16}\b&quot;),
-}
-def scan_record(steps):
-    hits = []
-    for s in steps:
-        for field in (&quot;prompt&quot;, &quot;result&quot;):
-            text = getattr(s, field)
-            for name, pat in SENSITIVE.items():
-                if pat.search(text):
-                    hits.append((s.n, field, name))
-    return hits
-
-hits = scan_record(RUN)
-print(&quot;sensitive content found in the trace:&quot;)
-for n, field, kind in hits:
-    print(f&quot;   step {n}  {field:8s} {kind}&quot;)
-print(&quot;\nNobody put a card number in the trace deliberately. The agent read a&quot;)
-print(&quot;source file, and the file contained a test fixture with a real-shaped PAN.&quot;)
-print(&quot;The trace is now in scope for PCI, and it is in your SIEM for 400 days.&quot;)
-
-RETENTION = {
- &quot;n&quot;:        (400, &quot;low&quot;,  &quot;cheap, high forensic value&quot;),
- &quot;tool&quot;:     (400, &quot;low&quot;,  &quot;cheap, high forensic value&quot;),
- &quot;target&quot;:   (400, &quot;low&quot;,  &quot;path only, no contents&quot;),
- &quot;verifier&quot;: (400, &quot;low&quot;,  &quot;what the harness believed — the key forensic field&quot;),
- &quot;ok&quot;:       (400, &quot;low&quot;,  &quot;&quot;),
- &quot;prompt&quot;:   (30,  &quot;high&quot;, &quot;may contain anything the task included&quot;),
- &quot;result&quot;:   (7,   &quot;high&quot;, &quot;tool output — the highest-risk field&quot;),
-}
-print(f&quot;{&#x27;field&#x27;:10s}{&#x27;days&#x27;:&gt;6}{&#x27;sensitivity&#x27;:&gt;13}  rationale&quot;)
-print(&quot;-&quot; * 74)
-for f, (days, sens, why) in RETENTION.items():
-    print(f&quot;{f:10s}{days:&gt;6}{sens:&gt;13}  {why}&quot;)
-
-def age_record(steps, age_days):
-    &quot;&quot;&quot;What survives after N days.&quot;&quot;&quot;
-    keep = [f for f, (d, _, _) in RETENTION.items() if d &gt;= age_days]
-    out = []
-    for s in steps:
-        row = {k: getattr(s, k) for k in keep}
-        for f in (&quot;prompt&quot;, &quot;result&quot;):
-            if f not in keep and getattr(s, f):
-                row[f + &quot;_sha256&quot;] = hashlib.sha256(
-                    getattr(s, f).encode()).hexdigest()[:16]
-        out.append(row)
-    return out
-
-for age in (1, 14, 90):
-    aged = age_record(RUN, age)
-    print(f&quot;\nafter {age} days — step 1 record:&quot;)
-    print(&quot;   &quot;, aged[0])
-
-# Verify: the aged record is still forensically useful and no longer sensitive.
-aged = age_record(RUN, 90)
-class Fake:
-    def __init__(self, d): self.__dict__.update(d); self.prompt = d.get(&quot;prompt&quot;,&quot;&quot;); self.result = d.get(&quot;result&quot;,&quot;&quot;)
-remaining = scan_record([Fake(r) for r in aged])
-print(f&quot;sensitive content after 90 days: {remaining or &#x27;none&#x27;}&quot;)
-assert not remaining
-
-can_answer = all(&quot;verifier&quot; in r and &quot;tool&quot; in r and &quot;target&quot; in r for r in aged)
-print(f&quot;can still answer &#x27;what did it do and what did the harness believe?&#x27;: {can_answer}&quot;)
-assert can_answer
-print(&quot;\nThe hash is retained, so if the original is recovered from a backup you&quot;)
-print(&quot;can still prove it is the same content the agent saw.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The hash is retained, so if the original is recovered from a backup you
+can still prove it is the same content the agent saw.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The full record contains a payment-card pattern found in a source file the agent read legitimately. Per-field retention keeps timestamps, tool, target and verifier for 400 days while dropping prompts at 30 days and tool results at 7, replacing them with hashes. After 90 days no sensitive content remains and the record can still answer what the agent did and what the harness believed.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check the retention period on your agent traces. If it is the same as your firewall logs, one of those two numbers was chosen without anyone looking at what the traces contain.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.6.html">D1.6 · Distinguishing agent from human</a></strong></p>

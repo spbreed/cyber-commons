@@ -44,55 +44,40 @@ outcomes across segments. They matter more and most need a measurement you do
 not yet have.</p>
 <p>The failure is not choosing one. It is shipping only the first column, reporting
 it as coverage, and never labelling the second column as unmeasured.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Four operating guardrails are enforceable today; three outcome guardrails are enforceable only where a measurement exists. The skill classifies each rule, specifies the missing measurements, and counts coverage twice — against what shipped and against what was agreed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/guardrail-specification/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: guardrail-specification
+<p>Four operating guardrails are enforceable today; three outcome guardrails are enforceable only where a measurement exists. The skill classifies each rule, specifies the missing measurements, and counts coverage twice — against what shipped and against what was agreed.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/grc/guardrail-specification/SKILL.md"><code>skills/grc/guardrail-specification/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: guardrail-specification
 description: &gt;-
   Separate operating guardrails, which are enforceable today, from outcome
   guardrails, which need a measurement before they mean anything — and specify
   that measurement. Use when a policy contains a rule nobody can enforce.
 allowed-tools: Read, Grep, Glob
----
-
-# An outcome guardrail with no measurement is a wish
-
-Operating guardrails constrain what the system may do: which tools, which data,
+</code></pre>
+<h1>An outcome guardrail with no measurement is a wish</h1>
+<p>Operating guardrails constrain what the system may do: which tools, which data,
 which actions need approval. They are enforceable today. Outcome guardrails
 constrain what the system may cause — no discriminatory decisions, no
 misleading advice — and they are enforceable only where somebody has specified
-the measurement.
-
-## When to use this
-
-Writing an AI policy, reviewing one, or explaining why a coverage figure of 100%
-is counting only the rules that shipped.
-
-## Procedure
-
-**1 — Classify every rule.** Does it constrain the system&#x27;s behaviour, or the
+the measurement.</p>
+<h2>When to use this</h2>
+<p>Writing an AI policy, reviewing one, or explaining why a coverage figure of 100%
+is counting only the rules that shipped.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Classify every rule.</strong> Does it constrain the system's behaviour, or the
 outcome of that behaviour? The test is whether it can be checked at the moment
-of action.
-
-**2 — For each operating guardrail, name the enforcement point.** The gateway,
+of action.</p>
+<p><strong>2 — For each operating guardrail, name the enforcement point.</strong> The gateway,
 the tool policy, the approval gate. If there is not one, it is aspirational and
-should be reported that way.
-
-**3 — For each outcome guardrail, specify the measurement.** The metric, the
+should be reported that way.</p>
+<p><strong>3 — For each outcome guardrail, specify the measurement.</strong> The metric, the
 population, the threshold, the cadence, and who reviews it. Four of those five
-being present is still not a guardrail.
-
-**4 — Count coverage both ways.** Against the rules that shipped, and against
+being present is still not a guardrail.</p>
+<p><strong>4 — Count coverage both ways.</strong> Against the rules that shipped, and against
 all the rules that were agreed. The first is usually 100% and the second is
-usually about half, and the gap is the honest programme statement.
-
-**5 — Report the unmeasurable ones as open commitments** with an owner and a
-date. Leaving them in the policy unmarked is how a policy stops being read.
-
-## Output contract
-
-```json
-{
+usually about half, and the gap is the honest programme statement.</p>
+<p><strong>5 — Report the unmeasurable ones as open commitments</strong> with an owner and a
+date. Leaving them in the policy unmarked is how a policy stops being read.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;rules&quot;: [{&quot;text&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;operating|outcome&quot;,
              &quot;enforcement_point&quot;: &quot;str|null&quot;,
              &quot;measurement&quot;: {&quot;metric&quot;: &quot;str&quot;, &quot;population&quot;: &quot;str&quot;, &quot;threshold&quot;: 0.0,
@@ -100,114 +85,44 @@ date. Leaving them in the policy unmarked is how a policy stops being read.
   &quot;coverage&quot;: {&quot;of_shipped&quot;: 1.0, &quot;of_agreed&quot;: 0.0},
   &quot;open_commitments&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str&quot;, &quot;due&quot;: &quot;str&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Counting only what shipped.</strong> The number is 100% by construction.</li>
+<li><strong>An outcome guardrail with a metric and no threshold.</strong> Nothing fails.</li>
+<li><strong>Leaving unmeasurable rules unmarked.</strong> The policy loses credibility as a
+  whole.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>rule                                                        kind        enforceable
+--------------------------------------------------------------------------------------
+all agent egress goes through the gateway                   operating          True
+privileged tools require approval below L3                  operating          True
+every action is logged with the acting identity             operating          True
+agent identities are separately revocable                   operating          True
+no agent action causes unrecoverable customer data loss     outcome           False
+automated remediation does not increase customer-facing incidentsoutcome            True
+model outputs do not produce disparate outcomes across segmentsoutcome           False
+operating guardrails : 4  all enforceable today
+outcome guardrails   : 3  of which enforceable: 1
 
-## Failure modes
+&#x27;guardrail coverage&#x27; if you count only what you shipped: 4/4 = 100%
+coverage across ALL agreed guardrails: 5/7 = 71%
 
-- **Counting only what shipped.** The number is 100% by construction.
-- **An outcome guardrail with a metric and no threshold.** Nothing fails.
-- **Leaving unmeasurable rules unmarked.** The policy loses credibility as a
-  whole.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+The first number is what usually reaches a steering committee.
+automated remediation does not increase customer-facing incidents
+   metric   customer-facing SEV1+SEV2 per 1000 remediations
+   threshold 1.2
+   source   incident management system
+   status   enforceable
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+no agent action causes unrecoverable customer data loss
+   metric   —
+   threshold —
+   source   —
+   status   ASPIRATION — label it as such
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/grc/guardrail-specification/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/guardrail-specification/scripts/guardrail_specification.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Separate operating guardrails from outcome guardrails and specify the measurement each outcome one needs before it can be enforced.
-
-This is the executable half of the `guardrail-specification` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-def classify(rule, constrains_outcome, measurement_exists):
-    kind = &quot;outcome&quot; if constrains_outcome else &quot;operating&quot;
-    if kind == &quot;operating&quot;:
-        return {&quot;rule&quot;: rule, &quot;kind&quot;: kind, &quot;enforceable_today&quot;: True,
-                &quot;risk&quot;: &quot;may satisfy audit while missing real harm&quot;}
-    return {&quot;rule&quot;: rule, &quot;kind&quot;: kind, &quot;enforceable_today&quot;: measurement_exists,
-            &quot;risk&quot;: (&quot;enforceable&quot; if measurement_exists
-                     else &quot;needs an agreed measurement before it can be enforced&quot;)}
-
-RULES = [
- (&quot;all agent egress goes through the gateway&quot;, False, True),
- (&quot;privileged tools require approval below L3&quot;, False, True),
- (&quot;every action is logged with the acting identity&quot;, False, True),
- (&quot;agent identities are separately revocable&quot;, False, True),
- (&quot;no agent action causes unrecoverable customer data loss&quot;, True, False),
- (&quot;automated remediation does not increase customer-facing incidents&quot;, True, True),
- (&quot;model outputs do not produce disparate outcomes across segments&quot;, True, False),
-]
-print(f&quot;{&#x27;rule&#x27;:60s}{&#x27;kind&#x27;:11s}{&#x27;enforceable&#x27;:&gt;12}&quot;)
-print(&quot;-&quot; * 86)
-for rule, outcome, measurable in RULES:
-    c = classify(rule, outcome, measurable)
-    print(f&quot;{c[&#x27;rule&#x27;]:60s}{c[&#x27;kind&#x27;]:11s}{str(c[&#x27;enforceable_today&#x27;]):&gt;12}&quot;)
-
-operating = [r for r in RULES if not r[1]]
-outcome   = [r for r in RULES if r[1]]
-enforceable_outcome = [r for r in outcome if r[2]]
-
-print(f&quot;operating guardrails : {len(operating)}  all enforceable today&quot;)
-print(f&quot;outcome guardrails   : {len(outcome)}  of which enforceable: &quot;
-      f&quot;{len(enforceable_outcome)}&quot;)
-
-naive = len(operating) / len(RULES)
-honest = (len(operating) + len(enforceable_outcome)) / len(RULES)
-print(f&quot;\n&#x27;guardrail coverage&#x27; if you count only what you shipped: &quot;
-      f&quot;{len(operating)}/{len(operating)} = 100%&quot;)
-print(f&quot;coverage across ALL agreed guardrails: &quot;
-      f&quot;{len(operating)+len(enforceable_outcome)}/{len(RULES)} = {honest:.0%}&quot;)
-print(&quot;\nThe first number is what usually reaches a steering committee.&quot;)
-
-def specify_outcome_guardrail(rule, metric, threshold, source, cadence):
-    complete = all([metric, threshold is not None, source, cadence])
-    return {&quot;rule&quot;: rule, &quot;metric&quot;: metric, &quot;threshold&quot;: threshold,
-            &quot;source&quot;: source, &quot;cadence&quot;: cadence,
-            &quot;status&quot;: &quot;enforceable&quot; if complete else &quot;ASPIRATION — label it as such&quot;}
-
-SPECS = [
- specify_outcome_guardrail(
-   &quot;automated remediation does not increase customer-facing incidents&quot;,
-   metric=&quot;customer-facing SEV1+SEV2 per 1000 remediations&quot;,
-   threshold=1.2, source=&quot;incident management system&quot;, cadence=&quot;monthly&quot;),
- specify_outcome_guardrail(
-   &quot;no agent action causes unrecoverable customer data loss&quot;,
-   metric=&quot;&quot;, threshold=None, source=&quot;&quot;, cadence=&quot;&quot;),
-]
-for s in SPECS:
-    print(f&quot;{s[&#x27;rule&#x27;]}&quot;)
-    print(f&quot;   metric   {s[&#x27;metric&#x27;] or &#x27;—&#x27;}&quot;)
-    print(f&quot;   threshold {s[&#x27;threshold&#x27;] if s[&#x27;threshold&#x27;] is not None else &#x27;—&#x27;}&quot;)
-    print(f&quot;   source   {s[&#x27;source&#x27;] or &#x27;—&#x27;}&quot;)
-    print(f&quot;   status   {s[&#x27;status&#x27;]}\n&quot;)
-
-def programme_statement(rules, specs):
-    enforceable = len([r for r in rules if not r[1]]) + \
-                  len([s for s in specs if s[&quot;status&quot;] == &quot;enforceable&quot;])
-    aspirations = [s[&quot;rule&quot;] for s in specs if s[&quot;status&quot;] != &quot;enforceable&quot;]
-    return (f&quot;{enforceable}/{len(rules)} guardrails are enforceable today.\n&quot;
-            f&quot;The following are agreed but UNMEASURED, and are not counted as &quot;
-            f&quot;coverage:\n&quot; + &quot;\n&quot;.join(f&quot;   - {a}&quot; for a in aspirations))
-print(programme_statement(RULES, SPECS))
-assert any(s[&quot;status&quot;] != &quot;enforceable&quot; for s in SPECS)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+5/7 guardrails are enforceable today.
+The following are agreed but UNMEASURED, and are not counted as coverage:
+   - no agent action causes unrecoverable customer data loss</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four operating guardrails are all enforceable today; three outcome guardrails are enforceable only where a measurement exists. Counting only what shipped gives 100% coverage; counting all agreed guardrails gives 71%. One outcome guardrail is fully specified and enforceable; the other is labelled an aspiration and excluded from coverage.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick one outcome guardrail your programme has agreed and specify its metric, threshold, source and cadence precisely enough that someone could dispute the result. If you cannot, say so in the coverage report rather than counting it.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.7.html">E1.7 · Continuous control verification</a></strong></p>

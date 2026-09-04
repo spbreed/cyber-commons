@@ -74,185 +74,73 @@ is genuinely wrong.</p>
 <p>The signals that <em>do</em> work for agents are about <strong>change</strong>: a tool it has never
 used, a mix that has shifted, a scope exercised that was never needed before.</p></div><div class="nbmd"><h2>3 · Verify — the alert text an analyst can act on</h2>
 <p>"Anomaly detected" fails both tests: it does not say what changed, and it does not say what to do.</p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
-<p>All three classic rules fire on CyberTravels' patch agent doing exactly its job, and only the rate rule fires on the human. The skill runs both, then measures drift from a signed-off baseline week by week — naming the new tool rather than reporting a distance.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-aware-rule-review/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-aware-rule-review
+<p>All three classic rules fire on CyberTravels' patch agent doing exactly its job, and only the rate rule fires on the human. The skill runs both, then measures drift from a signed-off baseline week by week — naming the new tool rather than reporting a distance.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-aware-rule-review/SKILL.md"><code>skills/detection/agent-aware-rule-review/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-aware-rule-review
 description: &gt;-
   Run existing detection rules against an agent doing its job to find which fire
   on legitimate work, and measure behavioural drift from a signed-off baseline
   week by week. Use when agents enter an estate whose detection content predates
   them.
 allowed-tools: Read, Grep, Glob
----
-
-# Every classic rule fires on an agent working normally
-
-Detection content written for humans classifies agent behaviour as an incident:
+</code></pre>
+<h1>Every classic rule fires on an agent working normally</h1>
+<p>Detection content written for humans classifies agent behaviour as an incident:
 the volume rule, the off-hours rule, the breadth-of-access rule. Turning them
 off loses coverage; leaving them on trains the analyst to ignore them. The
-answer is a per-population baseline and a drift measure against it.
-
-## When to use this
-
-Whenever agents are introduced into an estate with existing detection content,
-and at each model or manifest upgrade afterwards.
-
-## Procedure
-
-**1 — Run each classic rule against a clean agent run** and against a human&#x27;s
+answer is a per-population baseline and a drift measure against it.</p>
+<h2>When to use this</h2>
+<p>Whenever agents are introduced into an estate with existing detection content,
+and at each model or manifest upgrade afterwards.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Run each classic rule against a clean agent run</strong> and against a human's
 day. Record which fire on which. Rules that fire on the agent and not the human
-are the ones needing a population.
-
-**2 — Sign off a baseline for each agent.** Tools used, resources touched, rate,
+are the ones needing a population.</p>
+<p><strong>2 — Sign off a baseline for each agent.</strong> Tools used, resources touched, rate,
 hours. Signed off means somebody agreed it — a baseline nobody approved is a
-measurement, not a control.
-
-**3 — Compare each subsequent week against the baseline.** Report a drift figure
-and, more usefully, the *new* items: a tool that was not in the baseline is the
-signal, and it is legible in a way a distance number is not.
-
-**4 — Set a tolerance and say what crossing it does.** Drift within tolerance is
+measurement, not a control.</p>
+<p><strong>3 — Compare each subsequent week against the baseline.</strong> Report a drift figure
+and, more usefully, the <em>new</em> items: a tool that was not in the baseline is the
+signal, and it is legible in a way a distance number is not.</p>
+<p><strong>4 — Set a tolerance and say what crossing it does.</strong> Drift within tolerance is
 noise; beyond it is a review, and the review is of the change that caused it —
-usually a model upgrade or a manifest edit.
-
-**5 — Write the alert text for a human.** &quot;patch-agent drift 0.35, new tools:
-run_shell&quot; is actionable. A distance metric on its own gets closed.
-
-## Output contract
-
-```json
-{
+usually a model upgrade or a manifest edit.</p>
+<p><strong>5 — Write the alert text for a human.</strong> "patch-agent drift 0.35, new tools:
+run_shell" is actionable. A distance metric on its own gets closed.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;classic_rules&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;fires_on_agent&quot;: true, &quot;fires_on_human&quot;: false}],
   &quot;baseline&quot;: {&quot;agent&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;resources&quot;: [&quot;str&quot;], &quot;signed_off&quot;: true},
   &quot;weeks&quot;: [{&quot;week&quot;: 0, &quot;drift&quot;: 0.0, &quot;new_tools&quot;: [&quot;str&quot;], &quot;within_tolerance&quot;: true}],
   &quot;tolerance&quot;: 0.0,
   &quot;alert_text&quot;: &quot;str&quot;
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Muting the classic rules.</strong> You lose them for humans too.</li>
+<li><strong>A baseline nobody signed off.</strong> Nothing to appeal to when it drifts.</li>
+<li><strong>Alerting on the distance only.</strong> Name the new tool.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>classic rule                      fires on agent  fires on human
+------------------------------------------------------------------
+rate &gt; 30 actions/min             True            False
+activity outside 09:00-18:00      True            True
+same action &gt; 100 times           True            False
 
-## Failure modes
-
-- **Muting the classic rules.** You lose them for humans too.
-- **A baseline nobody signed off.** Nothing to appeal to when it drifts.
-- **Alerting on the distance only.** Name the new tool.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/detection/agent-aware-rule-review/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-aware-rule-review/scripts/agent_aware_rule_review.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run classic detection rules against an agent doing its job, and measure behavioural drift against a signed-off baseline.
-
-This is the executable half of the `agent-aware-rule-review` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import statistics, time
-from dataclasses import dataclass
-
-@dataclass
-class Event:
-    ts: float; actor: str; action: str; target: str = &quot;&quot;
-
-now = time.time()
-AGENT = [Event(now + i*0.2, &quot;patch-agent&quot;, &quot;read_file&quot;, f&quot;/work/{i}.py&quot;)
-         for i in range(300)]
-HUMAN = [Event(now + t, &quot;dana@corp&quot;, &quot;read_file&quot;, &quot;/work/a.py&quot;)
-         for t in (0, 12, 30, 95, 240, 600, 1500)]
-
-CLASSIC = {
- &quot;rate &gt; 30 actions/min&quot;:
-   lambda ev: (len(ev) / max((ev[-1].ts - ev[0].ts)/60, 1e-9)) &gt; 30,
- &quot;activity outside 09:00-18:00&quot;:
-   lambda ev: True,                     # agents run continuously
- &quot;same action &gt; 100 times&quot;:
-   lambda ev: max((sum(1 for e in ev if e.action == a) for a in {x.action for x in ev}),
-                  default=0) &gt; 100,
-}
-print(f&quot;{&#x27;classic rule&#x27;:34s}{&#x27;fires on agent&#x27;:16s}fires on human&quot;)
-print(&quot;-&quot; * 66)
-for name, rule in CLASSIC.items():
-    print(f&quot;{name:34s}{str(rule(AGENT)):16s}{rule(HUMAN)}&quot;)
-print(&quot;\nAll three fire on an agent doing exactly its job. Deployed as-is, they&quot;)
-print(&quot;produce continuous noise and are disabled within a week.&quot;)
-
-@dataclass
-class Baseline:
-    &quot;&quot;&quot;What normal looked like when the control was signed off.&quot;&quot;&quot;
-    tool_mix: dict
-    actions_per_hour: float
-    scopes_used: set
-
-    def compare(self, events, scopes_used, hours=1.0):
-        counts = {}
-        for e in events:
-            counts[e.action] = counts.get(e.action, 0) + 1
-        total = sum(counts.values()) or 1
-        now_mix = {k: v/total for k, v in counts.items()}
-        keys = set(now_mix) | set(self.tool_mix)
-        tvd = sum(abs(now_mix.get(k, 0) - self.tool_mix.get(k, 0)) for k in keys) / 2
-        new_tools = sorted(set(now_mix) - set(self.tool_mix))
-        new_scopes = sorted(scopes_used - self.scopes_used)
-        return {&quot;drift&quot;: round(tvd, 3), &quot;new_tools&quot;: new_tools,
-                &quot;new_scopes&quot;: new_scopes,
-                &quot;rate_ratio&quot;: round((total/hours) / self.actions_per_hour, 2),
-                &quot;verdict&quot;: (&quot;SIGNIFICANT — re-test the controls&quot;
-                            if tvd &gt; 0.25 or new_tools or new_scopes
-                            else &quot;within tolerance&quot;)}
-
-base = Baseline(tool_mix={&quot;read_file&quot;: 0.85, &quot;search&quot;: 0.15},
-                actions_per_hour=1200, scopes_used={&quot;repo:read&quot;})
-
-WEEKS = {
- &quot;week 1 (baseline)&quot;:   ([(&quot;read_file&quot;, 850), (&quot;search&quot;, 150)], {&quot;repo:read&quot;}),
- &quot;week 4 (new prompt)&quot;: ([(&quot;read_file&quot;, 700), (&quot;search&quot;, 200), (&quot;write_file&quot;, 100)],
-                          {&quot;repo:read&quot;, &quot;repo:write&quot;}),
- &quot;week 8 (upgrade)&quot;:    ([(&quot;read_file&quot;, 300), (&quot;search&quot;, 100), (&quot;write_file&quot;, 200),
-                          (&quot;run_shell&quot;, 400)], {&quot;repo:read&quot;, &quot;repo:write&quot;, &quot;exec&quot;}),
-}
-for label, (mix, scopes) in WEEKS.items():
-    ev = [Event(now, &quot;patch-agent&quot;, tool) for tool, n in mix for _ in range(n)]
-    d = base.compare(ev, scopes)
-    print(f&quot;{label:22s} drift={d[&#x27;drift&#x27;]:.3f}  rate×{d[&#x27;rate_ratio&#x27;]}  {d[&#x27;verdict&#x27;]}&quot;)
-    if d[&quot;new_tools&quot;]:  print(f&quot;{&#x27;&#x27;:22s} new tools:  {d[&#x27;new_tools&#x27;]}&quot;)
-    if d[&quot;new_scopes&quot;]: print(f&quot;{&#x27;&#x27;:22s} new scopes: {d[&#x27;new_scopes&#x27;]}&quot;)
-
-def alert_text(agent, d):
-    if d[&quot;verdict&quot;].startswith(&quot;within&quot;): return None
-    changes = []
-    if d[&quot;new_tools&quot;]:  changes.append(f&quot;began using {d[&#x27;new_tools&#x27;]}&quot;)
-    if d[&quot;new_scopes&quot;]: changes.append(f&quot;exercised new scopes {d[&#x27;new_scopes&#x27;]}&quot;)
-    if d[&quot;drift&quot;] &gt; 0.25: changes.append(f&quot;tool mix shifted (TVD {d[&#x27;drift&#x27;]})&quot;)
-    return (f&quot;[{agent}] behaviour changed from the signed-off baseline\n&quot;
-            f&quot;   what changed : {&#x27;; &#x27;.join(changes)}\n&quot;
-            f&quot;   why it matters: the controls in A3 were tested against the old\n&quot;
-            f&quot;                   behaviour; a new tool may not be covered\n&quot;
-            f&quot;   do this      : confirm a manifest change was reviewed (A1.1),\n&quot;
-            f&quot;                   then re-run the containment suite (C1.2)&quot;)
-
-ev = [Event(now, &quot;patch-agent&quot;, tool) for tool, n in WEEKS[&quot;week 8 (upgrade)&quot;][0]
-      for _ in range(n)]
-d = base.compare(ev, WEEKS[&quot;week 8 (upgrade)&quot;][1])
-print(alert_text(&quot;patch-agent&quot;, d))
-assert d[&quot;new_tools&quot;] and d[&quot;new_scopes&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+All three fire on an agent doing exactly its job. Deployed as-is, they
+produce continuous noise and are disabled within a week.
+week 1 (baseline)      drift=0.000  rate×0.83  within tolerance
+week 4 (new prompt)    drift=0.150  rate×0.83  SIGNIFICANT — re-test the controls
+                       new tools:  [&#x27;write_file&#x27;]
+                       new scopes: [&#x27;repo:write&#x27;]
+week 8 (upgrade)       drift=0.600  rate×0.83  SIGNIFICANT — re-test the controls
+                       new tools:  [&#x27;run_shell&#x27;, &#x27;write_file&#x27;]
+                       new scopes: [&#x27;exec&#x27;, &#x27;repo:write&#x27;]
+[patch-agent] behaviour changed from the signed-off baseline
+   what changed : began using [&#x27;run_shell&#x27;, &#x27;write_file&#x27;]; exercised new scopes [&#x27;exec&#x27;, &#x27;repo:write&#x27;]; tool mix shifted (TVD 0.6)
+   why it matters: the controls in A3 were tested against the old
+                   behaviour; a new tool may not be covered
+   do this      : confirm a manifest change was reviewed (A1.1),
+                   then re-run the containment suite (C1.2)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>All three classic rules fire on an agent doing its job and only the rate rule fires on the human. Drift is within tolerance at week 1, significant at week 4 with <code>write_file</code> and <code>repo:write</code> new, and larger at week 8 with <code>run_shell</code> and an <code>exec</code> scope. The alert text names what changed, why it matters and what to do.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one human-baseline rule in your SIEM and check how it behaves against a service account. If it fires nightly, it is already tuned off for that actor — which means you have no detection there at all.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.5.html">D1.5 · Agent telemetry as a data source</a></strong></p>

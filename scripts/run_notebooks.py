@@ -61,6 +61,14 @@ def run_one(path: Path, timeout: int = 120) -> dict:
     p = subprocess.run([sys.executable, "-c", src], cwd=ROOT, env=_env(),
                        capture_output=True, text=True, timeout=timeout)
     elapsed = time.monotonic() - t0
+    # Each lesson's stdout, written where the site can render it. The lesson
+    # page shows what the skill printed rather than the code that ran it, and
+    # this file is regenerated on every run — including in CI — so the page can
+    # never show output from a lesson that has since changed.
+    outdir = ROOT / "labs" / "notebooks" / "_output"
+    outdir.mkdir(exist_ok=True)
+    (outdir / f"{path.stem}.txt").write_text(p.stdout)
+
     return {
         "session": path.stem,
         "ok": p.returncode == 0,

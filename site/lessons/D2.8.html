@@ -43,53 +43,38 @@ reportable event may have occurred. Not at confirmation, not at containment.</p>
 <p>Containment and disclosure are separate workstreams competing for the same
 people. If your runbook has one owner for both, one of them is being done badly
 under time pressure.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>One-hour containment still misses a 72-hour deadline when scoping takes three days, and broken attribution misses it by twenty hours. The skill runs the clock from each candidate awareness point and names the owner of every runbook step.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/regulatory-clock-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: regulatory-clock-check
+<p>One-hour containment still misses a 72-hour deadline when scoping takes three days, and broken attribution misses it by twenty hours. The skill runs the clock from each candidate awareness point and names the owner of every runbook step.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/regulatory-clock-check/SKILL.md"><code>skills/response/regulatory-clock-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: regulatory-clock-check
 description: &gt;-
   Run a disclosure deadline from each candidate awareness point and find which
   scoping delays cause it to be missed, then name the owner of each step in the
   runbook. Use when an incident has a reporting obligation and scoping is slow.
 allowed-tools: Read, Grep, Glob
----
-
-# The clock started before you knew what happened
-
-Disclosure deadlines run from awareness, and awareness is a defensible judgement
+</code></pre>
+<h1>The clock started before you knew what happened</h1>
+<p>Disclosure deadlines run from awareness, and awareness is a defensible judgement
 rather than a timestamp. The same incident is met or missed depending on which
 point you treat as the start — and the delay that misses it is almost never
-containment. It is scoping, and broken attribution is what makes scoping slow.
-
-## When to use this
-
-Any incident with a reporting obligation, and in advance as a tabletop, which is
-the only time the answer can still be changed.
-
-## Procedure
-
-**1 — List the candidate awareness points.** First alert, first triage, first
+containment. It is scoping, and broken attribution is what makes scoping slow.</p>
+<h2>When to use this</h2>
+<p>Any incident with a reporting obligation, and in advance as a tabletop, which is
+the only time the answer can still be changed.</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the candidate awareness points.</strong> First alert, first triage, first
 confirmation, first executive notification. Each is arguable, and the earliest
-defensible one is the one to plan against.
-
-**2 — Run the clock from each.** Containment, scoping, report drafted, report
-submitted. Record met or missed per obligation, per starting point.
-
-**3 — Find the term that misses the deadline.** Containment in an hour and
+defensible one is the one to plan against.</p>
+<p><strong>2 — Run the clock from each.</strong> Containment, scoping, report drafted, report
+submitted. Record met or missed per obligation, per starting point.</p>
+<p><strong>3 — Find the term that misses the deadline.</strong> Containment in an hour and
 scoping in three days still misses a 72-hour obligation. Attribution that cannot
-say which principal acted turns scoping from hours into days.
-
-**4 — Map obligations to jurisdictions and their clocks.** Different regimes,
+say which principal acted turns scoping from hours into days.</p>
+<p><strong>4 — Map obligations to jurisdictions and their clocks.</strong> Different regimes,
 different windows, different definitions of a reportable event. One incident can
-be inside one and outside another.
-
-**5 — Name an owner per step in the runbook.** Containment, scoping, disclosure
-drafting, submission. A runbook with an unowned step is where the hours go.
-
-## Output contract
-
-```json
-{
+be inside one and outside another.</p>
+<p><strong>5 — Name an owner per step in the runbook.</strong> Containment, scoping, disclosure
+drafting, submission. A runbook with an unowned step is where the hours go.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;awareness_points&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;at&quot;: &quot;str&quot;, &quot;defensible&quot;: true}],
   &quot;obligations&quot;: [{&quot;regime&quot;: &quot;str&quot;, &quot;hours&quot;: 0}],
   &quot;runs&quot;: [{&quot;from&quot;: &quot;str&quot;, &quot;containment_h&quot;: 0, &quot;scoping_h&quot;: 0, &quot;report_h&quot;: 0,
@@ -97,121 +82,51 @@ drafting, submission. A runbook with an unowned step is where the hours go.
   &quot;dominant_delay&quot;: &quot;str&quot;,
   &quot;runbook&quot;: [{&quot;step&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str|null&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Starting the clock at confirmation.</strong> A regulator may start it earlier.</li>
+<li><strong>Optimising containment.</strong> Scoping is the term that misses the deadline.</li>
+<li><strong>An unowned runbook step.</strong> It is the one that takes a day.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>scenario                            contain   report   met   margin
+--------------------------------------------------------------------
+fast containment, slow scoping          1.0     80.0 False     -8.0
+slow containment, fast reporting       40.0     60.0  True     12.0
+both fast                               2.0     20.0  True     52.0
+attribution broken (D2.1)               6.0     92.0 False    -20.0
 
-## Failure modes
+The first row contained in ONE HOUR and still missed the deadline.
+event                                      t+h  could a regulator call this awareness?
+------------------------------------------------------------------------------------
+alert fires                                  0  False
+analyst triages, suspects an incident        3  True
+IR lead confirms an incident                 9  True
+scope established                           40  True
+legal confirms it is reportable             55  True
 
-- **Starting the clock at confirmation.** A regulator may start it earlier.
-- **Optimising containment.** Scoping is the term that misses the deadline.
-- **An unowned runbook step.** It is the one that takes a day.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+clock from analyst suspicion       elapsed  73h  MISSED (72h deadline)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+clock from IR confirmation         elapsed  67h  MET (72h deadline)
 
-from cyber_commons_skill_runtime import run_skill
+clock from legal determination     elapsed  21h  MET (72h deadline)
 
-# Split skills/response/regulatory-clock-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/regulatory-clock-check/scripts/regulatory_clock_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run the disclosure clock from each candidate awareness point and find which scoping delays miss the deadline.
+The same incident, the same report time, three different answers.
+Pick the earliest defensible start. A regulator will.
+obligation                            deadline (h)  notify
+----------------------------------------------------------------------------
+DORA (major ICT incident)                        4  initial notification
+contractual (major client)                      12  client security contact
+NIS2 (early warning)                            24  CSIRT
+PCI DSS (card data)                             24  acquirer/brands
+GDPR (personal data breach)                     72  supervisory authority
 
-This is the executable half of the `regulatory-clock-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+your real deadline is the shortest: DORA (major ICT incident) at 4h
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
+as usually written: sound=False
+   ⚠ one owner for both workstreams — they compete for the same person under time pressure
+   ⚠ clock starts at &#x27;confirmation&#x27;, not at awareness — a regulator will use the earlier point
 
-import time
-
-def clock(awareness, containment, report, deadline_hours=72):
-    to_contain = (containment - awareness) / 3600
-    to_report  = (report - awareness) / 3600
-    return {&quot;hours_to_containment&quot;: round(to_contain, 1),
-            &quot;hours_to_report&quot;: round(to_report, 1),
-            &quot;deadline&quot;: deadline_hours,
-            &quot;met&quot;: to_report &lt;= deadline_hours,
-            &quot;margin&quot;: round(deadline_hours - to_report, 1)}
-
-t0 = time.time()
-H = 3600
-SCENARIOS = {
- &quot;fast containment, slow scoping&quot;: (t0 + 1*H,  t0 + 80*H),
- &quot;slow containment, fast reporting&quot;: (t0 + 40*H, t0 + 60*H),
- &quot;both fast&quot;:                      (t0 + 2*H,  t0 + 20*H),
- &quot;attribution broken (D2.1)&quot;:      (t0 + 6*H,  t0 + 92*H),
-}
-print(f&quot;{&#x27;scenario&#x27;:34s}{&#x27;contain&#x27;:&gt;9}{&#x27;report&#x27;:&gt;9}{&#x27;met&#x27;:&gt;6}{&#x27;margin&#x27;:&gt;9}&quot;)
-print(&quot;-&quot; * 68)
-for name, (c, r) in SCENARIOS.items():
-    k = clock(t0, c, r)
-    print(f&quot;{name:34s}{k[&#x27;hours_to_containment&#x27;]:&gt;9.1f}{k[&#x27;hours_to_report&#x27;]:&gt;9.1f}&quot;
-          f&quot;{str(k[&#x27;met&#x27;]):&gt;6}{k[&#x27;margin&#x27;]:&gt;9.1f}&quot;)
-print(&quot;\nThe first row contained in ONE HOUR and still missed the deadline.&quot;)
-
-TIMELINE = [
- (&quot;alert fires&quot;,                          0,  False),
- (&quot;analyst triages, suspects an incident&quot;, 3, True),   # ← awareness, arguably
- (&quot;IR lead confirms an incident&quot;,         9,  True),
- (&quot;scope established&quot;,                    40, True),
- (&quot;legal confirms it is reportable&quot;,      55, True),
-]
-print(f&quot;{&#x27;event&#x27;:40s}{&#x27;t+h&#x27;:&gt;6}  could a regulator call this awareness?&quot;)
-print(&quot;-&quot; * 84)
-for name, h, aware in TIMELINE:
-    print(f&quot;{name:40s}{h:&gt;6}  {aware}&quot;)
-
-report_at = 76
-for label, start_h in ((&quot;clock from analyst suspicion&quot;, 3),
-                       (&quot;clock from IR confirmation&quot;, 9),
-                       (&quot;clock from legal determination&quot;, 55)):
-    hours = report_at - start_h
-    print(f&quot;\n{label:34s} elapsed {hours:&gt;3}h  &quot;
-          f&quot;{&#x27;MET&#x27; if hours &lt;= 72 else &#x27;MISSED&#x27;} (72h deadline)&quot;)
-print(&quot;\nThe same incident, the same report time, three different answers.&quot;)
-print(&quot;Pick the earliest defensible start. A regulator will.&quot;)
-
-OBLIGATIONS = {
- &quot;GDPR (personal data breach)&quot;:     (72,  &quot;supervisory authority&quot;),
- &quot;DORA (major ICT incident)&quot;:       (4,   &quot;initial notification&quot;),
- &quot;NIS2 (early warning)&quot;:            (24,  &quot;CSIRT&quot;),
- &quot;PCI DSS (card data)&quot;:             (24,  &quot;acquirer/brands&quot;),
- &quot;contractual (major client)&quot;:      (12,  &quot;client security contact&quot;),
-}
-print(f&quot;{&#x27;obligation&#x27;:36s}{&#x27;deadline (h)&#x27;:&gt;14}  notify&quot;)
-print(&quot;-&quot; * 76)
-for name, (hours, who) in sorted(OBLIGATIONS.items(), key=lambda kv: kv[1][0]):
-    print(f&quot;{name:36s}{hours:&gt;14}  {who}&quot;)
-shortest = min(OBLIGATIONS.items(), key=lambda kv: kv[1][0])
-print(f&quot;\nyour real deadline is the shortest: {shortest[0]} at {shortest[1][0]}h&quot;)
-
-def runbook_check(containment_owner, disclosure_owner, clock_starts_at):
-    problems = []
-    if containment_owner == disclosure_owner:
-        problems.append(&quot;one owner for both workstreams — they compete for the &quot;
-                        &quot;same person under time pressure&quot;)
-    if clock_starts_at != &quot;awareness&quot;:
-        problems.append(f&quot;clock starts at {clock_starts_at!r}, not at awareness — &quot;
-                        f&quot;a regulator will use the earlier point&quot;)
-    return (not problems), problems
-
-for label, args in ((&quot;as usually written&quot;, (&quot;IR lead&quot;, &quot;IR lead&quot;, &quot;confirmation&quot;)),
-                    (&quot;corrected&quot;, (&quot;IR lead&quot;, &quot;legal/compliance lead&quot;, &quot;awareness&quot;))):
-    ok, problems = runbook_check(*args)
-    print(f&quot;\n{label}: sound={ok}&quot;)
-    for p in problems: print(f&quot;   ⚠ {p}&quot;)
-assert runbook_check(&quot;IR lead&quot;, &quot;legal/compliance lead&quot;, &quot;awareness&quot;)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+corrected: sound=True</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>One-hour containment still misses the 72-hour deadline in the slow-scoping scenario, and broken attribution misses it by 20 hours. The same incident is met or missed depending on which point is treated as awareness. The obligation register shows DORA's 4-hour clock as the binding one, and the runbook check flags a shared owner and a late clock start.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Build your shortest-clock register: every obligation, its deadline, and who notifies. Then check whether your runbook starts the clock at awareness or at confirmation. The gap between those two is often more than a day.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.9.html">D2.9 · The fleet kill switch</a></strong></p>

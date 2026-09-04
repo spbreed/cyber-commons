@@ -59,143 +59,65 @@ succeeded" is not a verifier — it is the same component grading its own work.<
 <p><strong>What this control closes.</strong></p>
 <p>Stops a claim propagating without evidence attached. Schema validity is not truth: a well-formed object can assert anything.</p>
 </blockquote></div><div class="nbmd"><h2>3 · The check, as a skill</h2>
-<p><code>{"status":"refunded"}</code> is well-formed and may be false. The skill checks four returns twice — schema, then an independent oracle — and confirms that a claim with no oracle stops as <code>unverifiable</code> rather than quietly becoming true.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/tool-return-validation-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: tool-return-validation-check
+<p><code>{"status":"refunded"}</code> is well-formed and may be false. The skill checks four returns twice — schema, then an independent oracle — and confirms that a claim with no oracle stops as <code>unverifiable</code> rather than quietly becoming true.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/runtime/tool-return-validation-check/SKILL.md"><code>skills/runtime/tool-return-validation-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: tool-return-validation-check
 description: &gt;-
-  Check what a tool&#x27;s return value is validated against before the agent acts on
+  Check what a tool's return value is validated against before the agent acts on
   it — schema, then an independent oracle — and confirm that an unverifiable
-  claim stops rather than propagating. Use when a tool&#x27;s output becomes an
-  agent&#x27;s belief, or when reviewing multi-hop reasoning.
+  claim stops rather than propagating. Use when a tool's output becomes an
+  agent's belief, or when reviewing multi-hop reasoning.
 allowed-tools: Read, Grep, Glob
----
-
-# Well-formed is not true
-
-A tool return is untrusted input that arrives wearing the tool&#x27;s authority. Two
-checks are needed and they catch different things: a **schema** catches
-malformed, and an **oracle** catches confidently wrong. Systems usually have the
-first and treat it as if it were the second.
-
-## When to use this
-
-Any agent that acts on what a tool told it, and any pipeline where one step&#x27;s
-output is the next step&#x27;s premise.
-
-## Procedure
-
-**1 — Define the schema per tool return.** Types and required fields. This is
+</code></pre>
+<h1>Well-formed is not true</h1>
+<p>A tool return is untrusted input that arrives wearing the tool's authority. Two
+checks are needed and they catch different things: a <strong>schema</strong> catches
+malformed, and an <strong>oracle</strong> catches confidently wrong. Systems usually have the
+first and treat it as if it were the second.</p>
+<h2>When to use this</h2>
+<p>Any agent that acts on what a tool told it, and any pipeline where one step's
+output is the next step's premise.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Define the schema per tool return.</strong> Types and required fields. This is
 the cheap check and it should be automatic; a return that fails it never
-reaches the model.
-
-**2 — Identify the oracle for each claim type.** Something independent that can
+reaches the model.</p>
+<p><strong>2 — Identify the oracle for each claim type.</strong> Something independent that can
 say true or false: a CVE database, a build, a test run, a second source. Not
-another model — a model checking a model measures agreement, not truth.
-
-**3 — Run the four cases.** Schema-perfect and true; schema-perfect and false;
-schema-perfect with **no oracle available**; malformed. All four have to be
-distinguishable in the output.
-
-**4 — Make &quot;unverifiable&quot; a terminal state.** The third case is the one that
-matters. A claim with no oracle must stop as `unverifiable` rather than
+another model — a model checking a model measures agreement, not truth.</p>
+<p><strong>3 — Run the four cases.</strong> Schema-perfect and true; schema-perfect and false;
+schema-perfect with <strong>no oracle available</strong>; malformed. All four have to be
+distinguishable in the output.</p>
+<p><strong>4 — Make "unverifiable" a terminal state.</strong> The third case is the one that
+matters. A claim with no oracle must stop as <code>unverifiable</code> rather than
 defaulting to true — silent promotion is how a hedge becomes a fact three hops
-later.
-
-**5 — Confirm only verified claims propagate.** Follow each case for several
-hops and record which survive. The unverified ones surviving is the finding.
-
-## Output contract
-
-```json
-{
+later.</p>
+<p><strong>5 — Confirm only verified claims propagate.</strong> Follow each case for several
+hops and record which survive. The unverified ones surviving is the finding.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;tools&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;schema&quot;: true, &quot;oracle&quot;: &quot;str|null&quot;}],
   &quot;cases&quot;: [{&quot;claim&quot;: &quot;str&quot;, &quot;schema_ok&quot;: true, &quot;oracle_verdict&quot;: &quot;true|false|unavailable&quot;,
              &quot;state&quot;: &quot;verified|refuted|unverifiable|malformed&quot;, &quot;propagated&quot;: false}],
   &quot;unverifiable_is_terminal&quot;: true
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Treating schema conformance as verification.</strong> It is a statement about the
+  serialiser.</li>
+<li><strong>Using a model as the oracle.</strong> Two models agreeing is not evidence.</li>
+<li><strong>Defaulting unverifiable to true</strong> because the pipeline needs a value. That
+  default is the defect.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   schema_ok=True  -&gt; {&#x27;stopped&#x27;: &#x27;refuted&#x27;, &#x27;claim&#x27;: &#x27;libfoo has no known CVEs&#x27;, &#x27;by&#x27;: &#x27;checked against the advisory database&#x27;}
+   schema_ok=True  -&gt; {&#x27;propagated&#x27;: &#x27;test_login passes&#x27;, &#x27;verified_by&#x27;: &#x27;checked against the advisory database&#x27;, &#x27;hops&#x27;: 3}
+   schema_ok=True  -&gt; {&#x27;stopped&#x27;: &#x27;unverifiable&#x27;, &#x27;claim&#x27;: &#x27;the refund was approved&#x27;, &#x27;why&#x27;: &#x27;no oracle for this claim&#x27;}
+   schema_ok=False -&gt; {&#x27;stopped&#x27;: &#x27;malformed&#x27;}
 
-## Failure modes
+The first message is schema-perfect and confident and false. Schema
+validation passed it; the oracle refuted it.
 
-- **Treating schema conformance as verification.** It is a statement about the
-  serialiser.
-- **Using a model as the oracle.** Two models agreeing is not evidence.
-- **Defaulting unverifiable to true** because the pipeline needs a value. That
-  default is the defect.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/runtime/tool-return-validation-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/tool-return-validation-check/scripts/tool_return_validation_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Check four tool returns against a schema and against an oracle, and propagate only what verified.
-
-This is the executable half of the `tool-return-validation-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-SCHEMA = {&quot;claim&quot;: str, &quot;confidence&quot;: float, &quot;verified_by&quot;: (str, type(None))}
-
-def schema_ok(msg):
-    return all(k in msg and isinstance(msg[k], t) for k, t in SCHEMA.items())
-
-GROUND_TRUTH = {&quot;libfoo has no known CVEs&quot;: False,      # it has one
-                &quot;test_login passes&quot;: True}
-
-def verify(claim):
-    &quot;&quot;&quot;Independent: reads ground truth, not the sender&#x27;s opinion.&quot;&quot;&quot;
-    if claim not in GROUND_TRUTH:
-        return None, &quot;no oracle for this claim&quot;
-    return GROUND_TRUTH[claim], &quot;checked against the advisory database&quot;
-
-def propagate(msg, hops=3):
-    &quot;&quot;&quot;A claim may not travel without a verification result attached.&quot;&quot;&quot;
-    if not schema_ok(msg):
-        return {&quot;stopped&quot;: &quot;malformed&quot;}
-    result, how = verify(msg[&quot;claim&quot;])
-    if result is None:
-        return {&quot;stopped&quot;: &quot;unverifiable&quot;, &quot;claim&quot;: msg[&quot;claim&quot;], &quot;why&quot;: how}
-    if result is False:
-        return {&quot;stopped&quot;: &quot;refuted&quot;, &quot;claim&quot;: msg[&quot;claim&quot;], &quot;by&quot;: how}
-    return {&quot;propagated&quot;: msg[&quot;claim&quot;], &quot;verified_by&quot;: how, &quot;hops&quot;: hops}
-
-MESSAGES = [
- {&quot;claim&quot;: &quot;libfoo has no known CVEs&quot;, &quot;confidence&quot;: 0.9, &quot;verified_by&quot;: None},
- {&quot;claim&quot;: &quot;test_login passes&quot;,        &quot;confidence&quot;: 0.5, &quot;verified_by&quot;: None},
- {&quot;claim&quot;: &quot;the refund was approved&quot;,  &quot;confidence&quot;: 0.99, &quot;verified_by&quot;: None},
- {&quot;claim&quot;: &quot;libfoo is fine&quot;,           &quot;confidence&quot;: &quot;high&quot;, &quot;verified_by&quot;: None},
-]
-for m in MESSAGES:
-    print(f&quot;   schema_ok={str(schema_ok(m)):5s} -&gt; {propagate(m)}&quot;)
-
-print()
-print(&quot;The first message is schema-perfect and confident and false. Schema&quot;)
-print(&quot;validation passed it; the oracle refuted it.&quot;)
-print()
-print(&quot;The third is unverifiable - no oracle exists. That is a legitimate&quot;)
-print(&quot;outcome and it must not silently become &#x27;true&#x27;. It stops here with a&quot;)
-print(&quot;reason, which is what A1.12&#x27;s cascade never had.&quot;)
-assert propagate(MESSAGES[0])[&quot;stopped&quot;] == &quot;refuted&quot;
-assert propagate(MESSAGES[2])[&quot;stopped&quot;] == &quot;unverifiable&quot;
-assert &quot;propagated&quot; in propagate(MESSAGES[1])</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The third is unverifiable - no oracle exists. That is a legitimate
+outcome and it must not silently become &#x27;true&#x27;. It stops here with a
+reason, which is what A1.12&#x27;s cascade never had.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four messages are checked twice. A schema-perfect, high-confidence claim is refuted by the oracle; a claim with no oracle stops with <code>unverifiable</code> rather than silently becoming true; a malformed message is caught by the schema; and only the verified claim propagates.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find one place a sub-agent's output becomes another agent's input and ask what oracle checks it. If the answer is the model's own confidence, that is the component grading its own work.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.6.html">A3.6 · Human approval that survives volume</a></strong></p>

@@ -57,212 +57,90 @@ orchestrator and terminating on breach rather than alerting.</p>
 reduced monitoring lowers them automatically.</p>
 <p><strong>A register reviewed at launch (C6.4).</strong> Scale is the variable that changes
 the risk: the same exemption is fine at 100 agents and unacceptable at 50,000.</p></div><div class="nbmd"><h2>3 · The check, as a skill</h2>
-<p>Alex turned the guardrails off for the demo, and that was defensible. The skill checks what made it defensible — a bounded exemption the platform can read — and then decides the same launch twice: control by control, and against the exemption class. The two answers disagree, and that is the finding.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/control-exemption-audit/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: control-exemption-audit
+<p>Alex turned the guardrails off for the demo, and that was defensible. The skill checks what made it defensible — a bounded exemption the platform can read — and then decides the same launch twice: control by control, and against the exemption class. The two answers disagree, and that is the finding.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/runtime/control-exemption-audit/SKILL.md"><code>skills/runtime/control-exemption-audit/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: control-exemption-audit
 description: &gt;-
   Check that turning a control off is a recorded, bounded exemption the platform
   reads, and that risky launches are decided against the exemption class rather
   than one control at a time. Use when guardrails are disabled for a demo, a
   migration, or a load test.
 allowed-tools: Read, Grep, Glob
----
-
-# Turning a control off is defensible; not recording it is not
-
-Every estate disables controls sometimes. The failure is not the disabling — it
+</code></pre>
+<h1>Turning a control off is defensible; not recording it is not</h1>
+<p>Every estate disables controls sometimes. The failure is not the disabling — it
 is that nothing recorded it, nothing bounded it, and the next decision was made
 by a system that believed the control was on. And decisions made one control at
-a time approve launches that the same facts refuse when taken together.
-
-## When to use this
-
-Reviewing guardrail configuration, change management for agent platforms, or
-any launch where &quot;we turned that off for the demo&quot; appears in a thread.
-
-## Procedure
-
-**1 — Compare intended state with actual state,** per control. The gap is the
+a time approve launches that the same facts refuse when taken together.</p>
+<h2>When to use this</h2>
+<p>Reviewing guardrail configuration, change management for agent platforms, or
+any launch where "we turned that off for the demo" appears in a thread.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Compare intended state with actual state,</strong> per control. The gap is the
 set of undeclared exemptions, and each one is a finding regardless of whether
-it was reasonable.
-
-**2 — Require the exemption to be a record the platform reads.** Control,
+it was reasonable.</p>
+<p><strong>2 — Require the exemption to be a record the platform reads.</strong> Control,
 requester, approver, reason, expiry. A record in a ticket the platform cannot
 read is documentation; the orchestrator must refuse a disable with no matching
-record.
-
-**3 — Test both directions.** A named control with a valid exemption may be
+record.</p>
+<p><strong>3 — Test both directions.</strong> A named control with a valid exemption may be
 disabled. A control with no approval must be refused. Both, or it is a logging
-system.
-
-**4 — Decide a launch one control at a time.** Take a large launch and evaluate
-each control&#x27;s own rule. It will be approved, and each answer will be correct in
-isolation. Record that.
-
-**5 — Re-decide against the exemption class.** Group the disabled controls —
+system.</p>
+<p><strong>4 — Decide a launch one control at a time.</strong> Take a large launch and evaluate
+each control's own rule. It will be approved, and each answer will be correct in
+isolation. Record that.</p>
+<p><strong>5 — Re-decide against the exemption class.</strong> Group the disabled controls —
 detective, preventive, egress — and set caps per class: how many agents, for how
 long, with what compensating control. The same launch is now refused, and a
 smaller one on an allowlist is permitted. The disagreement between step 4 and
-step 5 is the finding.
-
-## Output contract
-
-```json
-{
+step 5 is the finding.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;controls&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;intended&quot;: &quot;on|off&quot;, &quot;actual&quot;: &quot;on|off&quot;, &quot;exemption&quot;: &quot;str|null&quot;}],
   &quot;exemptions&quot;: [{&quot;control&quot;: &quot;str&quot;, &quot;approver&quot;: &quot;str&quot;, &quot;expires&quot;: &quot;str&quot;, &quot;platform_readable&quot;: true}],
   &quot;probes&quot;: {&quot;named_with_approval&quot;: &quot;permitted&quot;, &quot;unapproved&quot;: &quot;refused&quot;},
   &quot;launch&quot;: {&quot;request&quot;: {&quot;agents&quot;: 0, &quot;hours&quot;: 0}, &quot;per_control_verdict&quot;: &quot;approved&quot;,
              &quot;by_exemption_class_verdict&quot;: &quot;refused&quot;, &quot;caps&quot;: {&quot;class&quot;: &quot;str&quot;, &quot;agents&quot;: 0, &quot;hours&quot;: 0}}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>An exemption the platform cannot read.</strong> It cannot enforce an expiry it
+  cannot see.</li>
+<li><strong>Deciding control by control.</strong> Each answer is right and the composition is
+  wrong.</li>
+<li><strong>No expiry.</strong> A permanent exemption is a policy change made by whoever was
+  on call.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>day  12  disable cyber-classifier    ALLOW via EX-118
+day  44  disable cyber-classifier    REFUSE - no approved exemption
+day  12  disable transcript-signing  REFUSE - no approved exemption
 
-## Failure modes
+The record is the mechanism, not a wiki page describing one. An
+exemption the platform cannot express is an exemption you cannot grant.
+checked one decision at a time:
+   exemption valid : True
+   launch approved : True  (50,000 agents)
 
-- **An exemption the platform cannot read.** It cannot enforce an expiry it
-  cannot see.
-- **Deciding control by control.** Each answer is right and the composition is
-  wrong.
-- **No expiry.** A permanent exemption is a policy change made by whoever was
-  on call.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Both answers are correct. Turning the classifier off was justified and
+approved; launching at scale was a normal request. Nothing in the path
+required the two to be considered in the same sentence, and the report
+assesses the classifier would likely have blocked many of the actions
+that followed.
+all controls on   class=none              cap=50,000 agents  LAUNCH
+classifier off    class=one-detective-off cap=   200 agents  REFUSED: agents,runtime_hours,egress
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+same exemption, 200 agents for 8h on an allowlist: LAUNCH
 
-from cyber_commons_skill_runtime import run_skill
+The exemption did not become unavailable. Its price became visible, and
+the orchestrator charges it rather than asking someone to remember.
+state                       class                agent cap  runtime
+classifiers on              none                    50,000      72h
+classifier off              one-detective-off          200       8h
+classifier + signing off    two-or-more-off             25       2h
 
-# Split skills/runtime/control-exemption-audit/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/control-exemption-audit/scripts/control_exemption_audit.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Decide a launch one control at a time and then against an exemption class, and watch the two answers disagree.
-
-This is the executable half of the `control-exemption-audit` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-EXEMPTIONS = {
- &quot;EX-118&quot;: {&quot;control&quot;: &quot;cyber-classifier&quot;, &quot;scope&quot;: &quot;exploitgym-eval&quot;,
-            &quot;justification&quot;: &quot;classifier blocks the behaviour under test&quot;,
-            &quot;compensating&quot;: &quot;egress allowlist + concurrency cap&quot;,
-            &quot;expires_day&quot;: 30, &quot;approved_by&quot;: &quot;security&quot;},
-}
-CONTROL_STATE = {&quot;cyber-classifier&quot;: &quot;disabled&quot;, &quot;egress-allowlist&quot;: &quot;enabled&quot;,
-                 &quot;transcript-signing&quot;: &quot;enabled&quot;}
-
-def may_disable(control, day, exemptions):
-    for eid, x in sorted(exemptions.items()):
-        if x[&quot;control&quot;] == control and day &lt;= x[&quot;expires_day&quot;]:
-            return True, eid
-    return False, None
-
-for control, day in ((&quot;cyber-classifier&quot;, 12), (&quot;cyber-classifier&quot;, 44),
-                     (&quot;transcript-signing&quot;, 12)):
-    ok, eid = may_disable(control, day, EXEMPTIONS)
-    print(f&quot;day {day:&gt;3}  disable {control:20s}&quot;
-          f&quot;{&#x27;ALLOW via &#x27; + eid if ok else &#x27;REFUSE - no approved exemption&#x27;}&quot;)
-print()
-print(&quot;The record is the mechanism, not a wiki page describing one. An&quot;)
-print(&quot;exemption the platform cannot express is an exemption you cannot grant.&quot;)
-assert may_disable(&quot;cyber-classifier&quot;, 12, EXEMPTIONS)[0]
-assert not may_disable(&quot;transcript-signing&quot;, 12, EXEMPTIONS)[0]
-
-LAUNCH = {&quot;agents&quot;: 50000, &quot;runtime_hours&quot;: 72, &quot;egress&quot;: &quot;any&quot;,
-          &quot;exemptions&quot;: [&quot;EX-118&quot;]}
-
-def naive_launch(request):
-    &quot;&quot;&quot;Each decision checked alone, which is how the incident&#x27;s was.&quot;&quot;&quot;
-    ok, _ = may_disable(&quot;cyber-classifier&quot;, 12, EXEMPTIONS)
-    return {&quot;exemption_valid&quot;: ok, &quot;launched&quot;: True, &quot;agents&quot;: request[&quot;agents&quot;]}
-
-r = naive_launch(LAUNCH)
-print(&quot;checked one decision at a time:&quot;)
-print(f&quot;   exemption valid : {r[&#x27;exemption_valid&#x27;]}&quot;)
-print(f&quot;   launch approved : {r[&#x27;launched&#x27;]}  ({r[&#x27;agents&#x27;]:,} agents)&quot;)
-print()
-print(&quot;Both answers are correct. Turning the classifier off was justified and&quot;)
-print(&quot;approved; launching at scale was a normal request. Nothing in the path&quot;)
-print(&quot;required the two to be considered in the same sentence, and the report&quot;)
-print(&quot;assesses the classifier would likely have blocked many of the actions&quot;)
-print(&quot;that followed.&quot;)
-assert r[&quot;launched&quot;] and r[&quot;agents&quot;] == 50000
-
-CAPS = {                       # exemption class -&gt; caps
- &quot;none&quot;:              {&quot;agents&quot;: 50000, &quot;runtime_hours&quot;: 72, &quot;egress&quot;: &quot;allowlist+&quot;},
- &quot;one-detective-off&quot;: {&quot;agents&quot;: 200,   &quot;runtime_hours&quot;: 8,  &quot;egress&quot;: &quot;allowlist&quot;},
- &quot;two-or-more-off&quot;:   {&quot;agents&quot;: 25,    &quot;runtime_hours&quot;: 2,  &quot;egress&quot;: &quot;allowlist&quot;},
-}
-DETECTIVE = {&quot;cyber-classifier&quot;, &quot;egress-allowlist&quot;, &quot;transcript-signing&quot;}
-
-def exemption_class(state):
-    off = sum(1 for c, s in state.items() if c in DETECTIVE and s != &quot;enabled&quot;)
-    return &quot;none&quot; if off == 0 else &quot;one-detective-off&quot; if off == 1 else &quot;two-or-more-off&quot;
-
-def orchestrate(request, state):
-    cls = exemption_class(state)
-    caps = CAPS[cls]
-    breaches = [k for k in (&quot;agents&quot;, &quot;runtime_hours&quot;)
-                if request[k] &gt; caps[k]]
-    if request[&quot;egress&quot;] != &quot;allowlist&quot; and cls != &quot;none&quot;:
-        breaches.append(&quot;egress&quot;)
-    return {&quot;class&quot;: cls, &quot;caps&quot;: caps, &quot;breaches&quot;: breaches,
-            &quot;launched&quot;: not breaches}
-
-for label, state in ((&quot;all controls on&quot;, {&quot;cyber-classifier&quot;: &quot;enabled&quot;,
-                                          &quot;egress-allowlist&quot;: &quot;enabled&quot;,
-                                          &quot;transcript-signing&quot;: &quot;enabled&quot;}),
-                     (&quot;classifier off&quot;, CONTROL_STATE)):
-    out = orchestrate(LAUNCH, state)
-    print(f&quot;{label:18s}class={out[&#x27;class&#x27;]:18s}&quot;
-          f&quot;cap={out[&#x27;caps&#x27;][&#x27;agents&#x27;]:&gt;6,} agents  &quot;
-          f&quot;{&#x27;LAUNCH&#x27; if out[&#x27;launched&#x27;] else &#x27;REFUSED: &#x27; + &#x27;,&#x27;.join(out[&#x27;breaches&#x27;])}&quot;)
-
-ok = orchestrate({&quot;agents&quot;: 200, &quot;runtime_hours&quot;: 8, &quot;egress&quot;: &quot;allowlist&quot;},
-                 CONTROL_STATE)
-print(f&quot;\nsame exemption, 200 agents for 8h on an allowlist: &quot;
-      f&quot;{&#x27;LAUNCH&#x27; if ok[&#x27;launched&#x27;] else &#x27;refused&#x27;}&quot;)
-print()
-print(&quot;The exemption did not become unavailable. Its price became visible, and&quot;)
-print(&quot;the orchestrator charges it rather than asking someone to remember.&quot;)
-assert not orchestrate(LAUNCH, CONTROL_STATE)[&quot;launched&quot;] and ok[&quot;launched&quot;]
-
-SCENARIOS = [
- (&quot;classifiers on&quot;,                {&quot;cyber-classifier&quot;: &quot;enabled&quot;,
-                                    &quot;egress-allowlist&quot;: &quot;enabled&quot;,
-                                    &quot;transcript-signing&quot;: &quot;enabled&quot;}),
- (&quot;classifier off&quot;,                {&quot;cyber-classifier&quot;: &quot;disabled&quot;,
-                                    &quot;egress-allowlist&quot;: &quot;enabled&quot;,
-                                    &quot;transcript-signing&quot;: &quot;enabled&quot;}),
- (&quot;classifier + signing off&quot;,      {&quot;cyber-classifier&quot;: &quot;disabled&quot;,
-                                    &quot;egress-allowlist&quot;: &quot;enabled&quot;,
-                                    &quot;transcript-signing&quot;: &quot;disabled&quot;}),
-]
-print(f&quot;{&#x27;state&#x27;:28s}{&#x27;class&#x27;:20s}{&#x27;agent cap&#x27;:&gt;10}{&#x27;runtime&#x27;:&gt;9}&quot;)
-for label, state in SCENARIOS:
-    cls = exemption_class(state)
-    caps = CAPS[cls]
-    print(f&quot;{label:28s}{cls:20s}{caps[&#x27;agents&#x27;]:&gt;10,}{caps[&#x27;runtime_hours&#x27;]:&gt;8}h&quot;)
-
-print()
-print(&quot;50,000 -&gt; 200 -&gt; 25. The second exemption costs an order of magnitude&quot;)
-print(&quot;more than the first, which is the correct shape: compounding is where&quot;)
-print(&quot;the incident&#x27;s risk sat, and it is the case a human reviewer is worst at&quot;)
-print(&quot;holding in their head.&quot;)
-assert CAPS[&quot;two-or-more-off&quot;][&quot;agents&quot;] &lt; CAPS[&quot;one-detective-off&quot;][&quot;agents&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+50,000 -&gt; 200 -&gt; 25. The second exemption costs an order of magnitude
+more than the first, which is the correct shape: compounding is where
+the incident&#x27;s risk sat, and it is the case a human reviewer is worst at
+holding in their head.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find one control currently disabled in your environment and ask three questions: who approved it, when does it expire, and what cap came with it. The third question is the one that usually has no answer.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.10.html">A3.10 · The agent's escalation path</a></strong></p>

@@ -51,10 +51,8 @@ severity is the severity of its final effect.</p>
                              └─ stages 11-14        └─ stage 15</code></p>
 </blockquote></div><div class="nbmd"><h2>3 · Phase 4 as a skill — and the preconditions that gate it</h2>
 <p>Dynamic validation is the one phase that <em>acts</em>. Everything before it reads; this one sends input to a running system. The skill therefore opens with safety preconditions rather than a procedure, and a refusal is a first-class output.</p>
-<p>The contract also insists that <code>reproduced: false</code> be reported rather than dropped. A finding that survived Phase 3 and then failed to reproduce is the most useful signal the pipeline produces about its own false-positive rate — and it is the one a tidy report deletes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-exploit-validate/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: appsec-exploit-validate
+<p>The contract also insists that <code>reproduced: false</code> be reported rather than dropped. A finding that survived Phase 3 and then failed to reproduce is the most useful signal the pipeline produces about its own false-positive rate — and it is the one a tidy report deletes.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/appsec-exploit-validate/SKILL.md"><code>skills/appsec/appsec-exploit-validate/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: appsec-exploit-validate
 description: &gt;-
   Prove a candidate vulnerability is real by reproducing it in an isolated
   sandbox, then decide whether it chains into something worse. Use when asked
@@ -62,63 +60,49 @@ description: &gt;-
   exploitability, reproduce a CVE, or separate theoretical findings from
   demonstrated ones.
 allowed-tools: Bash, Read, Write, Grep
----
-
-# AppSec pipeline · Phase 4 — Dynamic validation
-
-Covers **stages 11–14**. A finding that has been reproduced is a different
+</code></pre>
+<h1>AppSec pipeline · Phase 4 — Dynamic validation</h1>
+<p>Covers <strong>stages 11–14</strong>. A finding that has been reproduced is a different
 object from a finding that has been argued for. This phase produces the
-difference, and it is the phase with the sharpest safety constraints.
-
-## When to use this
-
-Only on findings that reached `feasible: true, verdict: confirmed` in Phase 3.
+difference, and it is the phase with the sharpest safety constraints.</p>
+<h2>When to use this</h2>
+<p>Only on findings that reached <code>feasible: true, verdict: confirmed</code> in Phase 3.
 Validating an unfiltered list wastes the most expensive stage in the pipeline
-on findings Phase 3 would have deleted.
-
-## Safety preconditions — check before anything else
-
-Refuse to proceed unless **all** hold, and say which one failed:
-
-1. The target is a **local sandbox or an explicitly authorised environment**.
-   Never a production host, never a third party&#x27;s infrastructure.
-2. The sandbox has **no credentials** beyond throwaway ones, and **no route**
-   to a real network the exploit could reach.
-3. The proof-of-concept **demonstrates** the flaw. It does not exfiltrate real
-   data, persist, escalate beyond the demonstration, or damage anything.
-4. There is a **teardown** and it runs even on failure.
-
-This is not ceremony. A validation harness with production credentials in its
-environment is itself the vulnerability.
-
-## Procedure
-
-**Stage 11 — Sandbox replication.** Stand the component up in isolation with
+on findings Phase 3 would have deleted.</p>
+<h2>Safety preconditions — check before anything else</h2>
+<p>Refuse to proceed unless <strong>all</strong> hold, and say which one failed:</p>
+<ol>
+<li>The target is a <strong>local sandbox or an explicitly authorised environment</strong>.
+   Never a production host, never a third party's infrastructure.</li>
+<li>The sandbox has <strong>no credentials</strong> beyond throwaway ones, and <strong>no route</strong>
+   to a real network the exploit could reach.</li>
+<li>The proof-of-concept <strong>demonstrates</strong> the flaw. It does not exfiltrate real
+   data, persist, escalate beyond the demonstration, or damage anything.</li>
+<li>There is a <strong>teardown</strong> and it runs even on failure.</li>
+</ol>
+<p>This is not ceremony. A validation harness with production credentials in its
+environment is itself the vulnerability.</p>
+<h2>Procedure</h2>
+<p><strong>Stage 11 — Sandbox replication.</strong> Stand the component up in isolation with
 the smallest fixture that reproduces the conditions: the vulnerable version,
 the reachable entry point, and nothing else. Record the exact commit and the
-fixture, because a PoC that cannot be re-run is an anecdote.
-
-**Stage 12 — Dynamic exploitation.** Drive the entry point with an input that
+fixture, because a PoC that cannot be re-run is an anecdote.</p>
+<p><strong>Stage 12 — Dynamic exploitation.</strong> Drive the entry point with an input that
 should trigger the sink. Capture the observable: the crash, the query executed,
-the file read, the process spawned. **The observable is the evidence** — an
-exit code is not. Record what you sent and what came back.
-
-**Stage 13 — Exploit chaining.** Ask what the demonstrated primitive gives
+the file read, the process spawned. <strong>The observable is the evidence</strong> — an
+exit code is not. Record what you sent and what came back.</p>
+<p><strong>Stage 13 — Exploit chaining.</strong> Ask what the demonstrated primitive gives
 access to next. A path traversal that reads a config file containing a token is
 not a file-read bug; it is a credential-disclosure bug. Chain only within the
-sandbox, and stop at the first step that would need a real credential.
-
-**Stage 14 — Remediation engineering.** Propose the fix at the right layer, and
+sandbox, and stop at the first step that would need a real credential.</p>
+<p><strong>Stage 14 — Remediation engineering.</strong> Propose the fix at the right layer, and
 say what it costs. Prefer the control that makes the class impossible
 (parameterised queries, an allowlist, a type) over the one that blocks the
-sample payload (a regex on the input you happened to send). Then **re-run
-stage 12 against the fix** — a remediation that has not been tested against the
-PoC that motivated it is a hypothesis.
-
-## Output contract
-
-```json
-{
+sample payload (a regex on the input you happened to send). Then <strong>re-run
+stage 12 against the fix</strong> — a remediation that has not been tested against the
+PoC that motivated it is a hypothesis.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;validations&quot;: [
     {&quot;finding_id&quot;: &quot;str&quot;, &quot;reproduced&quot;: true,
      &quot;sandbox&quot;: {&quot;commit&quot;: &quot;str&quot;, &quot;fixture&quot;: &quot;str&quot;, &quot;isolated&quot;: true},
@@ -130,253 +114,89 @@ PoC that motivated it is a hypothesis.
   ],
   &quot;refused&quot;: [{&quot;finding_id&quot;: &quot;str&quot;, &quot;precondition_failed&quot;: 1, &quot;why&quot;: &quot;str&quot;}]
 }
-```
-
-`reproduced: false` is a first-class result and must be reported, not dropped.
+</code></pre>
+<p><code>reproduced: false</code> is a first-class result and must be reported, not dropped.
 A finding that survived Phase 3 and then failed to reproduce is the single most
-useful signal the pipeline produces about its own false-positive rate.
+useful signal the pipeline produces about its own false-positive rate.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting <code>reproduced: true</code> without an observable.</strong> The observable is the
+  claim; without it there is nothing to check.</li>
+<li><strong>Treating "the exploit ran" as "the fix works".</strong> Re-run after remediation
+  or set <code>retested: false</code> and say so.</li>
+<li><strong>Chaining outside the sandbox.</strong> Stop and record <code>stopped_because</code>.</li>
+<li><strong>Fixing the payload instead of the class.</strong> A regex that blocks <code>../</code> does
+  not fix path traversal.</li>
+</ul>
+<h2>Handoff</h2>
+<p>Pass <code>validations</code> to <strong>appsec-triage-report</strong>. Findings that failed to
+reproduce keep their finding record and gain <code>reproduced: false</code> — the report
+must be able to distinguish "demonstrated" from "asserted".</p></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>id     cwe       sev      requires                              grants
+------------------------------------------------------------------------------------------------
+F-01   CWE-200   low      [&#x27;unauthenticated&#x27;]                   [&#x27;valid_report_id&#x27;]
+F-02   CWE-639   medium   [&#x27;authenticated&#x27;, &#x27;valid_report_id&#x27;]  [&#x27;other_users_report_data&#x27;]
+F-03   CWE-352   medium   [&#x27;authenticated&#x27;]                     [&#x27;password_reset_for_victim&#x27;]
+F-04   CWE-89    high     [&#x27;authenticated&#x27;]                     [&#x27;database_read&#x27;]
+F-05   CWE-306   medium   [&#x27;internal_network&#x27;]                  [&#x27;admin_actions&#x27;]
+F-06   CWE-918   medium   [&#x27;authenticated&#x27;]                     [&#x27;internal_network&#x27;]
+158 composable chains found
 
-## Failure modes
+[critical] F-01 → F-03                links: low, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+[critical] F-04 → F-03                links: high, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+[critical] F-06 → F-03                links: medium, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+[critical] F-06 → F-05                links: medium, medium
+            final effect: [&#x27;admin_actions&#x27;]
+[critical] F-01 → F-02 → F-03         links: low, medium, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+[critical] F-01 → F-04 → F-03         links: low, high, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+highest individual finding severity : high
+highest chained severity            : critical
 
-- **Reporting `reproduced: true` without an observable.** The observable is the
-  claim; without it there is nothing to check.
-- **Treating &quot;the exploit ran&quot; as &quot;the fix works&quot;.** Re-run after remediation
-  or set `retested: false` and say so.
-- **Chaining outside the sandbox.** Stop and record `stopped_because`.
-- **Fixing the payload instead of the class.** A regex that blocks `../` does
-  not fix path traversal.
+critical chains built entirely from non-critical findings:
+   F-01(low) → F-03(medium)
+      → [&#x27;password_reset_for_victim&#x27;]
+   F-04(high) → F-03(medium)
+      → [&#x27;password_reset_for_victim&#x27;]
+   F-06(medium) → F-03(medium)
+      → [&#x27;password_reset_for_victim&#x27;]
 
-## Handoff
+26 critical chain(s) whose every link is medium or lower.
+Triaged individually, none of those findings would be worked this sprint.
+finding  own sev     chains broken   worst chain
+--------------------------------------------------
+F-01     low                   127      critical
+F-06     medium                127      critical
+F-03     medium                102      critical
+F-04     high                  102      critical
+F-02     medium                 52      critical
+F-05     medium                 52      critical
 
-Pass `validations` to **appsec-triage-report**. Findings that failed to
-reproduce keep their finding record and gain `reproduced: false` — the report
-must be able to distinguish &quot;demonstrated&quot; from &quot;asserted&quot;.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+fix first: F-01 — own severity low, but it breaks 127 chains including a critical
+conformance: 0 problem(s)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+validated 6 findings, refused 1
+   F-01  chains to: valid_report_id
+   F-02  chains to: other_users_report_data
+   F-03  chains to: password_reset_for_victim
 
-from cyber_commons_skill_runtime import run_skill
+Refusing is an output, not an error. A validation harness that quietly
+skips the production target reports the same thing as one that never
+saw it, and those are very different states to be in.
+conformance, tidy report  : 0
+conformance, honest report: 0
 
-# Split skills/appsec/appsec-exploit-validate/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/appsec-exploit-validate/scripts/appsec_exploit_validate.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Chain findings into a path and check each link actually reaches the next.
+validations attempted : 6
+reproduced            : 4
+failed to reproduce   : 2  (F-01, F-04)
+measured false-positive rate of Phase 3: 33%
 
-This is the executable half of the `appsec-exploit-validate` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-# The skill runtime comes from the shared library, not from a copy in this file.
-# In a lesson notebook the cell above has already loaded it; standalone, find it
-# the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import check, contract_of, parse_skill
-
-
-def _skill_md():
-    &quot;&quot;&quot;The SKILL.md next to this script, or the one the notebook already parsed.&quot;&quot;&quot;
-    if &quot;SKILL_MD&quot; in globals():
-        return globals()[&quot;SKILL_MD&quot;]
-    return (_pathlib.Path(__file__).resolve().parent.parent / &quot;SKILL.md&quot;).read_text()
-
-
-import pathlib as _pathlib
-
-SKILL_MD = _skill_md()
-meta, body = parse_skill(SKILL_MD)
-
-from dataclasses import dataclass, field
-from itertools import permutations
-
-@dataclass(frozen=True)
-class Confirmed:
-    fid: str; cwe: str; name: str
-    requires: frozenset       # preconditions
-    grants: frozenset         # effects
-    severity: str
-
-FINDINGS = [
- Confirmed(&quot;F-01&quot;,&quot;CWE-200&quot;,&quot;report id disclosed in an error message&quot;,
-           frozenset({&quot;unauthenticated&quot;}), frozenset({&quot;valid_report_id&quot;}), &quot;low&quot;),
- Confirmed(&quot;F-02&quot;,&quot;CWE-639&quot;,&quot;report fetch does not check ownership (IDOR)&quot;,
-           frozenset({&quot;valid_report_id&quot;,&quot;authenticated&quot;}),
-           frozenset({&quot;other_users_report_data&quot;}), &quot;medium&quot;),
- Confirmed(&quot;F-03&quot;,&quot;CWE-352&quot;,&quot;password change endpoint lacks CSRF protection&quot;,
-           frozenset({&quot;authenticated&quot;}), frozenset({&quot;password_reset_for_victim&quot;}), &quot;medium&quot;),
- Confirmed(&quot;F-04&quot;,&quot;CWE-89&quot;,&quot;SQL injection in the report filter&quot;,
-           frozenset({&quot;authenticated&quot;}), frozenset({&quot;database_read&quot;}), &quot;high&quot;),
- Confirmed(&quot;F-05&quot;,&quot;CWE-306&quot;,&quot;internal admin endpoint has no authentication&quot;,
-           frozenset({&quot;internal_network&quot;}), frozenset({&quot;admin_actions&quot;}), &quot;medium&quot;),
- Confirmed(&quot;F-06&quot;,&quot;CWE-918&quot;,&quot;report export fetches a user-supplied URL (SSRF)&quot;,
-           frozenset({&quot;authenticated&quot;}), frozenset({&quot;internal_network&quot;}), &quot;medium&quot;),
-]
-SEV_RANK = {&quot;low&quot;:1,&quot;medium&quot;:2,&quot;high&quot;:3,&quot;critical&quot;:4}
-START = frozenset({&quot;unauthenticated&quot;,&quot;authenticated&quot;})
-
-print(f&quot;{&#x27;id&#x27;:7s}{&#x27;cwe&#x27;:10s}{&#x27;sev&#x27;:9s}{&#x27;requires&#x27;:38s}grants&quot;)
-print(&quot;-&quot; * 96)
-for f in FINDINGS:
-    print(f&quot;{f.fid:7s}{f.cwe:10s}{f.severity:9s}{str(sorted(f.requires)):38s}&quot;
-          f&quot;{sorted(f.grants)}&quot;)
-
-EFFECT_SEVERITY = {
- &quot;other_users_report_data&quot;: &quot;high&quot;,
- &quot;password_reset_for_victim&quot;: &quot;critical&quot;,
- &quot;admin_actions&quot;: &quot;critical&quot;,
- &quot;database_read&quot;: &quot;high&quot;,
- &quot;internal_network&quot;: &quot;medium&quot;,
- &quot;valid_report_id&quot;: &quot;low&quot;,
-}
-
-def chains(findings, start, max_len=4):
-    found = []
-    def walk(path, state):
-        if len(path) &gt;= max_len: return
-        for f in findings:
-            if f in path: continue
-            if not f.requires &lt;= state: continue
-            new_state = state | f.grants
-            new_path = path + [f]
-            if len(new_path) &gt; 1:
-                worst = max((EFFECT_SEVERITY.get(g, &quot;low&quot;) for g in f.grants),
-                            key=lambda s: SEV_RANK[s])
-                found.append({&quot;chain&quot;: new_path, &quot;final_effect&quot;: sorted(f.grants),
-                              &quot;severity&quot;: worst})
-            walk(new_path, new_state)
-    walk([], start)
-    return found
-
-ALL = chains(FINDINGS, START)
-best = {}
-for c in ALL:
-    key = tuple(f.fid for f in c[&quot;chain&quot;])
-    best[key] = c
-ranked = sorted(best.values(), key=lambda c: (-SEV_RANK[c[&quot;severity&quot;]], len(c[&quot;chain&quot;])))
-
-print(f&quot;{len(ranked)} composable chains found\n&quot;)
-for c in ranked[:6]:
-    ids = &quot; → &quot;.join(f.fid for f in c[&quot;chain&quot;])
-    links = &quot;, &quot;.join(f&quot;{f.severity}&quot; for f in c[&quot;chain&quot;])
-    print(f&quot;[{c[&#x27;severity&#x27;]:8s}] {ids:26s} links: {links}&quot;)
-    print(f&quot;{&#x27;&#x27;:11s} final effect: {c[&#x27;final_effect&#x27;]}&quot;)
-
-individual = max(SEV_RANK[f.severity] for f in FINDINGS)
-chained = max(SEV_RANK[c[&quot;severity&quot;]] for c in ranked)
-inv = {v: k for k, v in SEV_RANK.items()}
-print(f&quot;highest individual finding severity : {inv[individual]}&quot;)
-print(f&quot;highest chained severity            : {inv[chained]}&quot;)
-
-critical_chains = [c for c in ranked if c[&quot;severity&quot;] == &quot;critical&quot;]
-print(f&quot;\ncritical chains built entirely from non-critical findings:&quot;)
-for c in critical_chains[:3]:
-    ids = &quot; → &quot;.join(f&quot;{f.fid}({f.severity})&quot; for f in c[&quot;chain&quot;])
-    print(f&quot;   {ids}&quot;)
-    print(f&quot;      → {c[&#x27;final_effect&#x27;]}&quot;)
-
-all_links_medium_or_below = [c for c in critical_chains
-                             if all(SEV_RANK[f.severity] &lt;= 2 for f in c[&quot;chain&quot;])]
-print(f&quot;\n{len(all_links_medium_or_below)} critical chain(s) whose every link is &quot;
-      f&quot;medium or lower.&quot;)
-print(&quot;Triaged individually, none of those findings would be worked this sprint.&quot;)
-assert all_links_medium_or_below
-
-# The control: rank by chain severity, and report the chain, not the link.
-def remediation_order(findings, chains_):
-    &quot;&quot;&quot;Fixing one link breaks every chain through it. Rank by chains broken.&quot;&quot;&quot;
-    impact = {}
-    for f in findings:
-        broken = [c for c in chains_ if f in c[&quot;chain&quot;]]
-        worst = max((SEV_RANK[c[&quot;severity&quot;]] for c in broken), default=0)
-        impact[f.fid] = {&quot;chains_broken&quot;: len(broken), &quot;worst_chain&quot;: inv.get(worst, &quot;—&quot;),
-                         &quot;own_severity&quot;: f.severity}
-    return sorted(impact.items(),
-                  key=lambda kv: (-SEV_RANK.get(kv[1][&quot;worst_chain&quot;], 0),
-                                  -kv[1][&quot;chains_broken&quot;]))
-
-print(f&quot;{&#x27;finding&#x27;:9s}{&#x27;own sev&#x27;:10s}{&#x27;chains broken&#x27;:&gt;15}{&#x27;worst chain&#x27;:&gt;14}&quot;)
-print(&quot;-&quot; * 50)
-for fid, i in remediation_order(FINDINGS, ranked):
-    print(f&quot;{fid:9s}{i[&#x27;own_severity&#x27;]:10s}{i[&#x27;chains_broken&#x27;]:&gt;15}{i[&#x27;worst_chain&#x27;]:&gt;14}&quot;)
-top = remediation_order(FINDINGS, ranked)[0]
-print(f&quot;\nfix first: {top[0]} — own severity {top[1][&#x27;own_severity&#x27;]}, but it &quot;
-      f&quot;breaks {top[1][&#x27;chains_broken&#x27;]} chains including a {top[1][&#x27;worst_chain&#x27;]}&quot;)
-
-contract = contract_of(body)
-
-def validation_of(f):
-    &quot;&quot;&quot;One confirmed finding, expressed as the skill&#x27;s validation record.&quot;&quot;&quot;
-    return {
-      &quot;finding_id&quot;: f.fid, &quot;reproduced&quot;: True,
-      &quot;sandbox&quot;: {&quot;commit&quot;: &quot;a1fcf68&quot;, &quot;fixture&quot;: f&quot;minimal app exposing {f.fid}&quot;,
-                  &quot;isolated&quot;: True},
-      &quot;input&quot;: f&quot;crafted request exercising {f.cwe}&quot;,
-      # the observable is the claim; an exit code is not
-      &quot;observable&quot;: f.name,
-      &quot;chain&quot;: [{&quot;primitive&quot;: f.name, &quot;leads_to&quot;: g,
-                 &quot;stopped_because&quot;: &quot;next step needs a real credential&quot;}
-                for g in sorted(f.grants)],
-      &quot;remediation&quot;: {&quot;layer&quot;: &quot;query&quot; if f.cwe == &quot;CWE-89&quot; else &quot;api&quot;,
-                      &quot;change&quot;: f&quot;eliminate the class behind {f.cwe}&quot;,
-                      &quot;cost&quot;: &quot;low&quot;, &quot;retested&quot;: True, &quot;still_reproduces&quot;: False},
-    }
-
-phase4 = {
- &quot;validations&quot;: [validation_of(f) for f in FINDINGS],
- # the safety gate, exercised rather than described
- &quot;refused&quot;: [{&quot;finding_id&quot;: &quot;F-99&quot;, &quot;precondition_failed&quot;: 1,
-              &quot;why&quot;: &quot;target is a production host, not a sandbox&quot;}],
-}
-problems = check(phase4, contract)
-print(f&quot;conformance: {len(problems)} problem(s)&quot;)
-for p in problems: print(&quot;   &quot;, p)
-assert not problems, problems
-
-print(f&quot;\nvalidated {len(phase4[&#x27;validations&#x27;])} findings, &quot;
-      f&quot;refused {len(phase4[&#x27;refused&#x27;])}&quot;)
-for v in phase4[&quot;validations&quot;][:3]:
-    print(f&quot;   {v[&#x27;finding_id&#x27;]}  chains to: &quot;
-          f&quot;{&#x27;, &#x27;.join(c[&#x27;leads_to&#x27;] for c in v[&#x27;chain&#x27;]) or &#x27;—&#x27;}&quot;)
-print()
-print(&quot;Refusing is an output, not an error. A validation harness that quietly&quot;)
-print(&quot;skips the production target reports the same thing as one that never&quot;)
-print(&quot;saw it, and those are very different states to be in.&quot;)
-assert phase4[&quot;refused&quot;], &quot;the safety gate must be visible in the output&quot;
-
-mixed = [dict(validation_of(f), reproduced=(i % 3 != 0))
-         for i, f in enumerate(FINDINGS)]
-failed = [v for v in mixed if not v[&quot;reproduced&quot;]]
-
-tidy = {&quot;validations&quot;: [v for v in mixed if v[&quot;reproduced&quot;]], &quot;refused&quot;: []}
-honest = {&quot;validations&quot;: mixed, &quot;refused&quot;: phase4[&quot;refused&quot;]}
-
-print(f&quot;conformance, tidy report  : {len(check(tidy, contract))}&quot;)
-print(f&quot;conformance, honest report: {len(check(honest, contract))}&quot;)
-print(f&quot;\nvalidations attempted : {len(mixed)}&quot;)
-print(f&quot;reproduced            : {len(mixed) - len(failed)}&quot;)
-print(f&quot;failed to reproduce   : {len(failed)}  ({&#x27;, &#x27;.join(v[&#x27;finding_id&#x27;] for v in failed)})&quot;)
-fpr = len(failed) / len(mixed)
-print(f&quot;measured false-positive rate of Phase 3: {fpr:.0%}&quot;)
-print()
-print(&quot;Both conform. The tidy one drops the non-reproductions, and with them&quot;)
-print(&quot;the only number that says how good the earlier phases actually are.&quot;)
-print(&quot;Its reader sees a pipeline that is right every time.&quot;)
-assert not check(tidy, contract), &quot;dropping the failures is schema-valid - that is the point&quot;
-assert failed, &quot;the demo needs at least one non-reproduction&quot;</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the tidy report</h2>
+Both conform. The tidy one drops the non-reproductions, and with them
+the only number that says how good the earlier phases actually are.
+Its reader sees a pipeline that is right every time.</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the tidy report</h2>
 <p>Now suppose two of these findings do not reproduce, and the pipeline does the natural thing with them.</p></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take your current open findings and write down each one's preconditions and effects. The chaining falls out mechanically, and the finding you should fix first is usually not the one at the top of the severity-sorted queue.</p></div><div class="nbmd"><hr />

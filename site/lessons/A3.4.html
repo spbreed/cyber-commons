@@ -57,146 +57,70 @@ different door.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Turns an unbounded loop into a defined worst case, and bounds the harm to <strong>other people's</strong> capacity, not just your bill.</p>
 </blockquote></div><div class="nbmd"><h2>3 · The check, as a skill</h2>
-<p>A loop usually carries several budgets and only one of them ever fires. The skill runs A1.13's impossible task against all of them, reports which binds first, and checks what the loop <em>returns</em> when it stops — because partial work reported as an answer is a budget converted into a quality problem.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/budget-and-stop-condition-audit/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: budget-and-stop-condition-audit
+<p>A loop usually carries several budgets and only one of them ever fires. The skill runs A1.13's impossible task against all of them, reports which binds first, and checks what the loop <em>returns</em> when it stops — because partial work reported as an answer is a budget converted into a quality problem.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/runtime/budget-and-stop-condition-audit/SKILL.md"><code>skills/runtime/budget-and-stop-condition-audit/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: budget-and-stop-condition-audit
 description: &gt;-
   Check that an agent loop has ceilings that actually bind — per-target, token
   and action — and that hitting one returns an incomplete result rather than a
   summary of what it managed. Use when reviewing loop termination, retries, or
   an agent that runs unattended.
 allowed-tools: Read, Grep, Glob
----
-
-# The ceiling that binds first is the only one that matters
-
-A loop usually has several budgets and only one of them ever fires. Which one
+</code></pre>
+<h1>The ceiling that binds first is the only one that matters</h1>
+<p>A loop usually has several budgets and only one of them ever fires. Which one
 fires, and how early, is the design; the rest are decoration. The second half
-matters more: what the loop **returns** when it stops. A run that halts and
+matters more: what the loop <strong>returns</strong> when it stops. A run that halts and
 reports its partial work as an answer has converted a budget into a quality
-problem.
-
-## When to use this
-
-Any agentic loop, particularly one that retries, and any agent that runs on a
-schedule with nobody watching.
-
-## Procedure
-
-**1 — Enumerate every ceiling.** Steps, tokens, wall clock, cost, actions,
-per-target attempts. For each, where it is checked and what it does on breach.
-
-**2 — Order them by when they bind.** Run a task that consumes all resources
+problem.</p>
+<h2>When to use this</h2>
+<p>Any agentic loop, particularly one that retries, and any agent that runs on a
+schedule with nobody watching.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate every ceiling.</strong> Steps, tokens, wall clock, cost, actions,
+per-target attempts. For each, where it is checked and what it does on breach.</p>
+<p><strong>2 — Order them by when they bind.</strong> Run a task that consumes all resources
 and record which fires first. A per-target ceiling usually binds long before a
-token budget, which means the token budget was never the control.
-
-**3 — Test the breach path.** The result must carry an explicit incomplete
-flag. Check what a caller does with it: a loop that returns `complete: False`
-into a pipeline that ignores the field has the same outcome as no budget.
-
-**4 — Check the ceiling is not resettable by the agent.** A budget the loop can
+token budget, which means the token budget was never the control.</p>
+<p><strong>3 — Test the breach path.</strong> The result must carry an explicit incomplete
+flag. Check what a caller does with it: a loop that returns <code>complete: False</code>
+into a pipeline that ignores the field has the same outcome as no budget.</p>
+<p><strong>4 — Check the ceiling is not resettable by the agent.</strong> A budget the loop can
 extend on its own behalf — by starting a sub-task, spawning a child, or
-retrying at a new target — is advisory.
-
-**5 — Derive the numbers from observation.** State the p95 of a legitimate run
+retrying at a new target — is advisory.</p>
+<p><strong>5 — Derive the numbers from observation.</strong> State the p95 of a legitimate run
 and set each ceiling above it. A round number either strangles real work or
-never fires.
-
-## Output contract
-
-```json
-{
+never fires.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;ceilings&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;value&quot;: 0, &quot;checked_at&quot;: &quot;str&quot;, &quot;binds_at_step&quot;: 0}],
   &quot;first_to_bind&quot;: &quot;str&quot;,
   &quot;breach&quot;: {&quot;returns_incomplete&quot;: true, &quot;caller_respects_flag&quot;: false},
   &quot;agent_resettable&quot;: [&quot;str&quot;],
   &quot;basis&quot;: {&quot;p95_legitimate_run&quot;: {&quot;steps&quot;: 0, &quot;tokens&quot;: 0}}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Listing budgets without ordering them.</strong> Only the first one exists.</li>
+<li><strong>Returning partial work as an answer.</strong> The flag is the control; the number
+  is the trigger.</li>
+<li><strong>A ceiling the agent can reset by spawning.</strong> Count the whole tree.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>steps taken : 6
+stopped by  : per_target (reports-db)
+complete    : False   &lt;- visible in the output, not silent
 
-## Failure modes
+ceiling           limit     used
+tokens            50000    10800
+seconds              60      2.4
+actions              20        6
+per_target            5        6
 
-- **Listing budgets without ordering them.** Only the first one exists.
-- **Returning partial work as an answer.** The flag is the control; the number
-  is the trigger.
-- **A ceiling the agent can reset by spawning.** Count the whole tree.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+per_target fired first, at 6 calls - long before the token budget or the
+action budget. That is the ceiling that protects everyone else, and it is
+the one most budgets do not have.
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/runtime/budget-and-stop-condition-audit/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/budget-and-stop-condition-audit/scripts/budget_and_stop_condition_audit.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run the impossible task against per-target, token and action ceilings and see which one halts it first.
-
-This is the executable half of the `budget-and-stop-condition-audit` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-class Budget:
-    def __init__(self, tokens=50_000, seconds=60, actions=20, per_target=5):
-        self.limits = {&quot;tokens&quot;: tokens, &quot;seconds&quot;: seconds,
-                       &quot;actions&quot;: actions, &quot;per_target&quot;: per_target}
-        self.used = {&quot;tokens&quot;: 0, &quot;seconds&quot;: 0, &quot;actions&quot;: 0}
-        self.targets = {}
-    def spend(self, tokens=0, seconds=0, action=None, target=None):
-        self.used[&quot;tokens&quot;] += tokens
-        self.used[&quot;seconds&quot;] += seconds
-        if action: self.used[&quot;actions&quot;] += 1
-        if target:
-            self.targets[target] = self.targets.get(target, 0) + 1
-            if self.targets[target] &gt; self.limits[&quot;per_target&quot;]:
-                return False, f&quot;per_target ({target})&quot;
-        for k in (&quot;tokens&quot;, &quot;seconds&quot;, &quot;actions&quot;):
-            if self.used[k] &gt; self.limits[k]:
-                return False, k
-        return True, None
-
-def loop(budget):
-    &quot;&quot;&quot;A task that cannot succeed - A1.13&#x27;s exact scenario, now bounded.&quot;&quot;&quot;
-    steps = 0
-    while True:
-        steps += 1
-        ok, hit = budget.spend(tokens=1800, seconds=0.4, action=&quot;query&quot;,
-                               target=&quot;reports-db&quot;)
-        if not ok:
-            return {&quot;steps&quot;: steps, &quot;stopped_by&quot;: hit, &quot;complete&quot;: False}
-
-b = Budget()
-r = loop(b)
-print(f&quot;steps taken : {r[&#x27;steps&#x27;]}&quot;)
-print(f&quot;stopped by  : {r[&#x27;stopped_by&#x27;]}&quot;)
-print(f&quot;complete    : {r[&#x27;complete&#x27;]}   &lt;- visible in the output, not silent&quot;)
-print()
-print(f&quot;{&#x27;ceiling&#x27;:14s}{&#x27;limit&#x27;:&gt;9}{&#x27;used&#x27;:&gt;9}&quot;)
-for k in (&quot;tokens&quot;, &quot;seconds&quot;, &quot;actions&quot;):
-    print(f&quot;{k:14s}{b.limits[k]:&gt;9}{round(b.used[k], 1):&gt;9}&quot;)
-print(f&quot;{&#x27;per_target&#x27;:14s}{b.limits[&#x27;per_target&#x27;]:&gt;9}{b.targets[&#x27;reports-db&#x27;]:&gt;9}&quot;)
-print()
-print(&quot;per_target fired first, at 6 calls - long before the token budget or the&quot;)
-print(&quot;action budget. That is the ceiling that protects everyone else, and it is&quot;)
-print(&quot;the one most budgets do not have.&quot;)
-print()
-print(&quot;`complete: False` is the other half. A run that stops silently and&quot;)
-print(&quot;reports what it managed becomes A1.16 with extra steps.&quot;)
-assert r[&quot;stopped_by&quot;].startswith(&quot;per_target&quot;) and not r[&quot;complete&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+`complete: False` is the other half. A run that stops silently and
+reports what it managed becomes A1.16 with extra steps.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The impossible task from A1.13 now stops after six steps, halted by the per-target ceiling — before the token or action budgets are anywhere near exhausted — and the result carries <code>complete: False</code> rather than reporting what it managed.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check whether your agent's budget bounds calls per downstream target. If it only bounds tokens, your cost is protected and the service your agent hammers is not.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.5.html">A3.5 · Validating what comes back</a></strong></p>

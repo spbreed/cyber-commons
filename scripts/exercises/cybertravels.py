@@ -228,7 +228,6 @@ FAMILIES = [
 GROUNDING: dict[str, str] = {
 
 # ---- A1 · the architecture and its risks ---------------------------------
-"A0.1": "Every procedure in this commons is a file you can copy into your own agent, and CyberTravels is what they are all demonstrated against. This lesson is the exception that explains the rule: its subject is the mechanism, so the system it runs against is the commons itself.",
 "A1.0": "CyberTravels is the system. Everything after this lesson names one of its "
         "boxes.",
 "A1.1": "The generic names on this map have CyberTravels names too: ingress is "

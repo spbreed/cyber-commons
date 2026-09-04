@@ -75,158 +75,73 @@ vendor.</p>
 <p>This is the part worth running: the vulnerable version and the safe version are indistinguishable from the application's behaviour, which is exactly why testing does not catch it.</p></div><div class="nbmd"><h2>4 · The fix that does not rely on anyone remembering</h2>
 <p>Two ways to close this. Only one of them survives the next engineer, the next generated scaffold, and the next deadline.</p></div><div class="nbmd"><p><svg viewBox="0 0 700 152" width="100%" style="max-width:700px;height:auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#8A93A6"/></marker></defs><rect x="6" y="14" width="320" height="96" rx="5" fill="none" stroke="#E0912F" stroke-width="1.4"/><text x="166.0" y="66.0" text-anchor="middle" fill="#E0912F">fix each table</text><text x="166" y="58" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">alter table … enable row level security</text><text x="166" y="76" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">create policy … using (auth.uid() = owner)</text><text x="166" y="96" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">correct, and true only until the next table</text><rect x="374" y="14" width="320" height="96" rx="5" fill="none" stroke="#3FA06B" stroke-width="1.4"/><text x="534.0" y="66.0" text-anchor="middle" fill="#3FA06B">fix the default</text><text x="534" y="58" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">tables are not exposed through the Data API</text><text x="534" y="76" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">unless something opts them in</text><text x="534" y="96" text-anchor="middle" fill="#8A93A6" font-size="11" font-weight="normal">the Supabase default since 2026</text><text x="350" y="138" text-anchor="middle" fill="#8A93A6" font-size="11.5" font-weight="normal">the same argument as default-deny on the tool call (A3.1), arriving at a database</text></svg><div style="font-size:12px;color:#8A93A6;margin-top:2px">A control that depends on everyone remembering is a control with a half-life.</div></p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">finding here</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the control, and where it lives</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">credential-shaped data in a client-readable table</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.8 — shared infrastructure between agent runs</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">an admin key reachable from the client</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.8 — admin plane off the workload path</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a default that is open until closed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.1 — default-deny, applied to data rather than tools</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a schema check no application test expresses</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.9 — detections whose subject is the platform</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">73% of generated apps carrying at least one issue</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B2.12 — securing the developers&#x27; coding agents</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Every row is a control that already exists in this curriculum. The case study's job was to show you why it is there.</div></div><div class="nbmd"><h2>5 · The procedure, as a skill</h2>
-<p>Every feature of the application works and two tables are open. The skill audits the scaffold statement by statement, then enumerates from the catalogue rather than the application — because the application only knows about the tables it uses.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/generated-schema-audit/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: generated-schema-audit
+<p>Every feature of the application works and two tables are open. The skill audits the scaffold statement by statement, then enumerates from the catalogue rather than the application — because the application only knows about the tables it uses.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/generated-schema-audit/SKILL.md"><code>skills/research/generated-schema-audit/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: generated-schema-audit
 description: &gt;-
   Audit a generated database scaffold for tables that hold secrets and carry no
-  access policy, working from the catalogue rather than from the application&#x27;s
+  access policy, working from the catalogue rather than from the application's
   own queries. Use after any scaffold, migration or agent-authored schema
   change.
 allowed-tools: Read, Grep, Glob
----
-
-# Everything works, and two tables are open
-
-A generated scaffold produces a schema that runs. Whether it is safe is a
+</code></pre>
+<h1>Everything works, and two tables are open</h1>
+<p>A generated scaffold produces a schema that runs. Whether it is safe is a
 different question and the application cannot answer it, because the application
 only touches the tables it uses. The catalogue knows about all of them, and the
-gap between those two sets is where this finding lives.
-
-## When to use this
-
-After a scaffold generator, an agent-authored migration, or any schema change
-nobody reviewed statement by statement.
-
-## Procedure
-
-**1 — Read the statements as written.** Table by table, column by column. Flag
+gap between those two sets is where this finding lives.</p>
+<h2>When to use this</h2>
+<p>After a scaffold generator, an agent-authored migration, or any schema change
+nobody reviewed statement by statement.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Read the statements as written.</strong> Table by table, column by column. Flag
 every column that holds a credential, a token, a session or personal data — an
-`api_key` column in a profiles table is the shape to look for.
-
-**2 — Check policy per table, not per application feature.** For each table:
-does an access policy exist at all, and does it name a subject. &quot;No policy&quot; and
-&quot;a policy that permits everyone&quot; are different findings.
-
-**3 — Enumerate from the catalogue.** Query the system catalogue for every table
+<code>api_key</code> column in a profiles table is the shape to look for.</p>
+<p><strong>2 — Check policy per table, not per application feature.</strong> For each table:
+does an access policy exist at all, and does it name a subject. "No policy" and
+"a policy that permits everyone" are different findings.</p>
+<p><strong>3 — Enumerate from the catalogue.</strong> Query the system catalogue for every table
 in the schema. Compare against the tables the application references. The
-difference is the set nobody has looked at.
-
-**4 — Classify by sensitivity and policy together.** Sensitive with no policy is
+difference is the set nobody has looked at.</p>
+<p><strong>4 — Classify by sensitivity and policy together.</strong> Sensitive with no policy is
 critical. Non-sensitive with no policy is a finding with a lower number and the
-same cause.
-
-**5 — Report per table with the statement that created it.** A finding that
-points at a line in a migration gets fixed; one that says &quot;enable RLS&quot; gets
-discussed.
-
-## Output contract
-
-```json
-{
+same cause.</p>
+<p><strong>5 — Report per table with the statement that created it.</strong> A finding that
+points at a line in a migration gets fixed; one that says "enable RLS" gets
+discussed.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;statements&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;columns&quot;: [&quot;str&quot;], &quot;sensitive_columns&quot;: [&quot;str&quot;]}],
   &quot;policies&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;policy&quot;: &quot;none|open|scoped&quot;, &quot;subject&quot;: &quot;str|null&quot;}],
   &quot;catalogue&quot;: {&quot;tables&quot;: [&quot;str&quot;], &quot;referenced_by_app&quot;: [&quot;str&quot;], &quot;unreviewed&quot;: [&quot;str&quot;]},
   &quot;findings&quot;: [{&quot;table&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium&quot;, &quot;created_by&quot;: &quot;str&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Auditing the application's queries.</strong> They cover the tables it uses.</li>
+<li><strong>Treating "no policy" as "open policy".</strong> They are different fixes.</li>
+<li><strong>Reporting the table without the statement.</strong> Nobody knows where to change
+  it.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>tables created : profiles, posts
+findings       : 2
 
-## Failure modes
+table       severity   why
+profiles    critical   RLS disabled - open via the public API
+posts       high       policy matches every row
 
-- **Auditing the application&#x27;s queries.** They cover the tables it uses.
-- **Treating &quot;no policy&quot; as &quot;open policy&quot;.** They are different fixes.
-- **Reporting the table without the statement.** Nobody knows where to change
-  it.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+The application works. Every feature passes. `profiles` holds an api_key
+column and has no policy at all, and nothing in the test suite is shaped
+like the question that would find it.
+select relname from pg_class where relrowsecurity = false;
+   profiles  &lt;- holds credentials or session state
+   sessions  &lt;- holds credentials or session state
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+tables open via the public API : 2 of 4
+of those, sensitive             : 2 (profiles, sessions)
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/research/generated-schema-audit/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/generated-schema-audit/scripts/generated_schema_audit.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Audit a generated database scaffold for tables that hold secrets and carry no policy, using the catalogue rather than the application.
-
-This is the executable half of the `generated-schema-audit` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-SCAFFOLD = [
- &quot;create table profiles (id uuid primary key, email text, api_key text);&quot;,
- &quot;create table posts    (id uuid primary key, author uuid, body text);&quot;,
- &quot;alter table posts enable row level security;&quot;,
- &quot;create policy p_read on posts for select using (true);&quot;,
-]
-
-def audit(statements):
-    &quot;&quot;&quot;The check a generator does not run, expressed as three questions.&quot;&quot;&quot;
-    tables = [s.split()[2] for s in statements if s.startswith(&quot;create table&quot;)]
-    rls_on = {s.split()[2] for s in statements if &quot;enable row level security&quot; in s}
-    permissive = [s.split()[2] for s in statements
-                  if s.startswith(&quot;create policy&quot;) and &quot;using (true)&quot; in s]
-    findings = []
-    for tbl in tables:
-        if tbl not in rls_on:
-            findings.append((tbl, &quot;critical&quot;, &quot;RLS disabled - open via the public API&quot;))
-    for s in statements:
-        if s.startswith(&quot;create policy&quot;) and &quot;using (true)&quot; in s:
-            findings.append((s.split()[4], &quot;high&quot;, &quot;policy matches every row&quot;))
-    return tables, findings
-
-tables, findings = audit(SCAFFOLD)
-print(f&quot;tables created : {&#x27;, &#x27;.join(tables)}&quot;)
-print(f&quot;findings       : {len(findings)}\n&quot;)
-print(f&quot;{&#x27;table&#x27;:12s}{&#x27;severity&#x27;:11s}why&quot;)
-for tbl, sev, why in findings:
-    print(f&quot;{tbl:12s}{sev:11s}{why}&quot;)
-
-print()
-print(&quot;The application works. Every feature passes. `profiles` holds an api_key&quot;)
-print(&quot;column and has no policy at all, and nothing in the test suite is shaped&quot;)
-print(&quot;like the question that would find it.&quot;)
-assert any(f[1] == &quot;critical&quot; for f in findings)
-assert &quot;profiles&quot; in [f[0] for f in findings]
-
-# One query answers the critical half, across every table at once.
-CATALOG = [                       # what pg_class would return
- {&quot;relname&quot;: &quot;profiles&quot;, &quot;relrowsecurity&quot;: False},
- {&quot;relname&quot;: &quot;posts&quot;,    &quot;relrowsecurity&quot;: True},
- {&quot;relname&quot;: &quot;sessions&quot;, &quot;relrowsecurity&quot;: False},
- {&quot;relname&quot;: &quot;audit&quot;,    &quot;relrowsecurity&quot;: True},
-]
-SENSITIVE = {&quot;profiles&quot;, &quot;sessions&quot;, &quot;audit&quot;}
-
-open_tables = sorted(r[&quot;relname&quot;] for r in CATALOG if not r[&quot;relrowsecurity&quot;])
-print(&quot;select relname from pg_class where relrowsecurity = false;&quot;)
-for name in open_tables:
-    mark = &quot;  &lt;- holds credentials or session state&quot; if name in SENSITIVE else &quot;&quot;
-    print(f&quot;   {name}{mark}&quot;)
-
-print(f&quot;\ntables open via the public API : {len(open_tables)} of {len(CATALOG)}&quot;)
-exposed_sensitive = [t for t in open_tables if t in SENSITIVE]
-print(f&quot;of those, sensitive             : {len(exposed_sensitive)} &quot;
-      f&quot;({&#x27;, &#x27;.join(exposed_sensitive)})&quot;)
-print()
-print(&quot;This is a one-line query and it is the highest-value one in the whole&quot;)
-print(&quot;pattern. It is also not something an application test can express, which&quot;)
-print(&quot;is why it belongs in CI against the schema rather than in the test suite.&quot;)
-assert exposed_sensitive == [&quot;profiles&quot;, &quot;sessions&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+This is a one-line query and it is the highest-value one in the whole
+pattern. It is also not something an application test can express, which
+is why it belongs in CI against the schema rather than in the test suite.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>An audit of a four-statement scaffold finds a critical issue: the <code>profiles</code> table holds an api_key column and has no RLS at all, while every feature of the application works. The catalogue query then finds two of four tables open via the public API, both of them holding credentials or session state — a one-line check that no application test expresses.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take the last thing a code generator scaffolded for you and run the two questions from this lesson against it: which tables have no row policy, and is any admin-scoped key reachable from the client bundle? Neither question is about the framework — both are about what the default was when nobody said otherwise.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> Research that reproduces — model effect separated from harness effect, benchmarks checked for a floor, a leaked key and a loose matcher — a handover that ends in a control with an eval case that fails on the old build, and three real incidents worked end to end: an agent swarm, a platform that shipped its database open, and the default that made the third one ordinary.</p>

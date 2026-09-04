@@ -122,10 +122,8 @@ egress, one on the internet with a wildcard trust policy. It is wrong about
 both.</p>
 <p>This lesson runs the <code>threat-model-stride</code> skill. You do not write the code;
 you read the procedure, execute it, and read what it produced.</p></div><div class="nbmd"><h2>3 · The skill</h2>
-<p>This is <code>skills/appsec/threat-model-stride/SKILL.md</code>, verbatim. The frontmatter is what routes a request to it; the body is the procedure a model follows.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/threat-model-stride/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: threat-model-stride
+<p>This is <code>skills/appsec/threat-model-stride/SKILL.md</code>, verbatim. The frontmatter is what routes a request to it; the body is the procedure a model follows.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/threat-model-stride/SKILL.md"><code>skills/appsec/threat-model-stride/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: threat-model-stride
 description: &gt;-
   Build a STRIDE threat model for an agentic system from the evidence an estate
   already holds — source code, CSPM findings, IAM policies, network policies and
@@ -135,76 +133,107 @@ description: &gt;-
   regenerating after an architecture change, or when someone asks which STRIDE
   categories a design actually exposes.
 allowed-tools: Read, Grep, Glob, Bash
----
-
-# STRIDE threat modelling for an agentic system
-
-A threat model written in a workshop describes the system as it was on the day
-of the workshop. This one is **derived**: every threat traces to a line of
+</code></pre>
+<h1>STRIDE threat modelling for an agentic system</h1>
+<p>A threat model written in a workshop describes the system as it was on the day
+of the workshop. This one is <strong>derived</strong>: every threat traces to a line of
 evidence that already exists somewhere in the estate, so regenerating it is
-cheap and the useful artefact is the **diff between two runs**.
-
-STRIDE gives six categories. Against an agentic system each one has a specific
-shape that a web-application threat model does not:
-
-| STRIDE | In an agentic system |
-|---|---|
-| **S**poofing | An agent calls downstream as a shared service account, so &quot;which agent&quot; is unanswerable |
-| **T**ampering | Untrusted content the agent read becomes an instruction it follows |
-| **R**epudiation | The delegation chain is not on the token, so no log answers &quot;on whose behalf&quot; |
-| **I**nformation disclosure | An over-broad tool return, or egress that permits anything |
-| **D**enial of service | An unbounded loop, or a budget nobody set |
-| **E**levation of privilege | A role assumable by `*`, or a scope that includes refunds because it included payments |
-
-## When to use this
-
-Threat-modelling an agent, an MCP server, or a review pipeline; re-running a
-model after an architecture change; or answering &quot;which STRIDE categories does
-this design actually expose&quot; with something better than an opinion.
-
-## Inputs it expects
-
-Five evidence sources. Any one alone produces a model that is wrong in a
+cheap and the useful artefact is the <strong>diff between two runs</strong>.</p>
+<p>STRIDE gives six categories. Against an agentic system each one has a specific
+shape that a web-application threat model does not:</p>
+<table>
+<thead>
+<tr>
+<th>STRIDE</th>
+<th>In an agentic system</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>S</strong>poofing</td>
+<td>An agent calls downstream as a shared service account, so "which agent" is unanswerable</td>
+</tr>
+<tr>
+<td><strong>T</strong>ampering</td>
+<td>Untrusted content the agent read becomes an instruction it follows</td>
+</tr>
+<tr>
+<td><strong>R</strong>epudiation</td>
+<td>The delegation chain is not on the token, so no log answers "on whose behalf"</td>
+</tr>
+<tr>
+<td><strong>I</strong>nformation disclosure</td>
+<td>An over-broad tool return, or egress that permits anything</td>
+</tr>
+<tr>
+<td><strong>D</strong>enial of service</td>
+<td>An unbounded loop, or a budget nobody set</td>
+</tr>
+<tr>
+<td><strong>E</strong>levation of privilege</td>
+<td>A role assumable by <code>*</code>, or a scope that includes refunds because it included payments</td>
+</tr>
+</tbody>
+</table>
+<h2>When to use this</h2>
+<p>Threat-modelling an agent, an MCP server, or a review pipeline; re-running a
+model after an architecture change; or answering "which STRIDE categories does
+this design actually expose" with something better than an opinion.</p>
+<h2>Inputs it expects</h2>
+<p>Five evidence sources. Any one alone produces a model that is wrong in a
 predictable direction — code alone cannot tell you whether a path is exposed,
-and CSPM alone cannot tell you what reaches it.
-
-| Input | What only it can tell you |
-|---|---|
-| `architecture` | components, flows, sinks, trust levels — what *could* be reached |
-| `cspm` | live posture findings: what is public *today* |
-| `iam` | which roles exist, who may assume them, whether MFA is required |
-| `network` | ingress exposure and egress policy — can anything leave |
-| `entitlements` | what the running identity may do once it is through |
-
-## Procedure
-
-**1 — Load the five inputs.** Refuse to proceed on fewer. A model built on
-`architecture` alone should say so in its output rather than silently scoring as
-though the estate were hardened.
-
-**2 — Walk each entry point to each sink.** For every reachable pair, ask the
+and CSPM alone cannot tell you what reaches it.</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>What only it can tell you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>architecture</code></td>
+<td>components, flows, sinks, trust levels — what <em>could</em> be reached</td>
+</tr>
+<tr>
+<td><code>cspm</code></td>
+<td>live posture findings: what is public <em>today</em></td>
+</tr>
+<tr>
+<td><code>iam</code></td>
+<td>which roles exist, who may assume them, whether MFA is required</td>
+</tr>
+<tr>
+<td><code>network</code></td>
+<td>ingress exposure and egress policy — can anything leave</td>
+</tr>
+<tr>
+<td><code>entitlements</code></td>
+<td>what the running identity may do once it is through</td>
+</tr>
+</tbody>
+</table>
+<h2>Procedure</h2>
+<p><strong>1 — Load the five inputs.</strong> Refuse to proceed on fewer. A model built on
+<code>architecture</code> alone should say so in its output rather than silently scoring as
+though the estate were hardened.</p>
+<p><strong>2 — Walk each entry point to each sink.</strong> For every reachable pair, ask the
 six STRIDE questions. A category that has no evidence behind it is not a threat;
-do not invent one to fill the row.
-
-**3 — Score from evidence, not from feeling.** Base severity comes from the
-asset. Then adjust *only* where an input says so: internet-facing, no WAF, a
+do not invent one to fill the row.</p>
+<p><strong>3 — Score from evidence, not from feeling.</strong> Base severity comes from the
+asset. Then adjust <em>only</em> where an input says so: internet-facing, no WAF, a
 live CSPM finding on the resource, a role that holds write, a trust policy with
 a wildcard, egress open. Record which adjustment fired — the reasons are the
-part a reviewer argues with.
-
-**4 — Emit the trust-boundary diagram.** Nodes are components, edges are flows,
+part a reviewer argues with.</p>
+<p><strong>4 — Emit the trust-boundary diagram.</strong> Nodes are components, edges are flows,
 and an edge crossing from a lower trust level to a higher one is a boundary.
-Boundaries are where findings live; render them differently from ordinary edges.
-
-**5 — Diff against the previous run.** Report new threats *and* escalated ones.
+Boundaries are where findings live; render them differently from ordinary edges.</p>
+<p><strong>5 — Diff against the previous run.</strong> Report new threats <em>and</em> escalated ones.
 A pull request that changes only infrastructure introduces no new threat and
 raises every existing score, so a gate that counts arrivals alone waves it
-through.
-
-## Output contract
-
-```json
-{
+through.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;inputs_present&quot;: [&quot;architecture&quot;, &quot;cspm&quot;, &quot;iam&quot;, &quot;network&quot;, &quot;entitlements&quot;],
   &quot;threats&quot;: [
     {&quot;id&quot;: &quot;T-01&quot;, &quot;stride&quot;: &quot;S|T|R|I|D|E&quot;, &quot;entry&quot;: &quot;str&quot;, &quot;sink&quot;: &quot;str&quot;,
@@ -216,346 +245,70 @@ through.
   &quot;diagram&quot;: &quot;mermaid or svg source&quot;,
   &quot;diff&quot;: {&quot;new&quot;: [&quot;T-07&quot;], &quot;escalated&quot;: [{&quot;id&quot;: &quot;T-01&quot;, &quot;from&quot;: 13, &quot;to&quot;: 17}]}
 }
-```
-
-## Failure modes
-
-- **Modelling the code and calling it the system.** The same repository behind
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Modelling the code and calling it the system.</strong> The same repository behind
   a private load balancer with default-deny egress and on the internet with a
-  wildcard trust policy is two different threat models. Read all five inputs.
-- **Counting new threats only.** Escalation is the signal a terraform-only
-  change produces, and it is the majority of how an estate gets worse.
-- **One row per STRIDE letter.** Six categories is a checklist, not a quota. An
-  agent with no state has no meaningful tampering row.
-- **Scoring without recording why.** A score nobody can argue with is a score
-  nobody will act on.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+  wildcard trust policy is two different threat models. Read all five inputs.</li>
+<li><strong>Counting new threats only.</strong> Escalation is the signal a terraform-only
+  change produces, and it is the majority of how an estate gets worse.</li>
+<li><strong>One row per STRIDE letter.</strong> Six categories is a checklist, not a quota. An
+  agent with no state has no meaningful tampering row.</li>
+<li><strong>Scoring without recording why.</strong> A score nobody can argue with is a score
+  nobody will act on.</li>
+</ul></div><div class="nbmd"><h2>4 · Its script</h2>
+<p>The deterministic half of the skill — the part that has to give the same answer twice so two runs can be diffed. Embedded from <code>skills/appsec/threat-model-stride/scripts/</code>.</p></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>id      entry           sink           score  why
+--------------------------------------------------------------------------------------------
+T-10  I upload_voucher  store             11  a live CSPM finding on the resource this path reaches
+T-01  S get_booking     load_booking      11  the running role is assumable by *
+T-05  D get_booking     load_booking      10  internet-facing with no WAF in front of it
+T-06  E get_booking     load_booking      10  the identity holds write, not just read
+T-03  R get_booking     load_booking      10  no MFA on the assumable role, so the actor is not established
+T-04  I get_booking     load_booking       9  no open CSPM finding on the resource
+T-07  S upload_voucher  store              9  the running role is assumable by *
+T-02  T get_booking     load_booking       9  entry point requires a session
+T-11  D upload_voucher  store              8  internet-facing with no WAF in front of it
+T-12  E upload_voucher  store              8  the identity holds write, not just read
+T-09  R upload_voucher  store              8  no MFA on the assumable role, so the actor is not established
+T-08  T upload_voucher  store              7  entry point requires a session
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+12 threats across 6 STRIDE categories
+2 trust-boundary crossing(s):
+   get_booking -&gt; load_booking   (0-&gt;2)
+   upload_voucher -&gt; store   (0-&gt;2)
+flowchart LR
+  subgraph src_api[&quot;src/api · trust 0&quot;]
+    get_booking
+    health
+    upload_voucher
+  end
+  subgraph src_data[&quot;src/data · trust 2&quot;]
+    load_booking
+    store
+  end
+  subgraph src_util[&quot;src/util · trust 1&quot;]
+    ·
+  end
+  get_booking ==&gt;|BOUNDARY| load_booking
+  get_booking --&gt; render
+  load_booking --&gt; execute
+  store --&gt; open
+  upload_voucher ==&gt;|BOUNDARY| store
+  entry -&gt; sink                       deployed  hardened
+----------------------------------------------------------
+I upload_voucher -&gt; store                   11         1
+S get_booking -&gt; load_booking               11         2
+D get_booking -&gt; load_booking               10         2
+E get_booking -&gt; load_booking               10         2
+R get_booking -&gt; load_booking               10         2
+I get_booking -&gt; load_booking                9         2
 
-from cyber_commons_skill_runtime import run_skill
+threat rows: 12 -&gt; 12   (unchanged)
+max severity: 11 -&gt; 2
 
-# Split skills/appsec/threat-model-stride/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbmd"><h2>4 · Its script</h2>
-<p>The deterministic half of the skill — the part that has to give the same answer twice so two runs can be diffed. Embedded from <code>skills/appsec/threat-model-stride/scripts/</code>.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/threat-model-stride/scripts/threat_model.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Derive a STRIDE threat model and a trust-boundary diagram from five inputs.
-
-This is the executable half of the `threat-model-stride` skill. The SKILL.md
-next to it is the procedure a model follows; this is the deterministic part it
-calls, so the scoring is reproducible and two runs can be diffed.
-
-    python3 threat_model.py     # the synthetic CyberTravels estate, then the
-                                # same estate hardened, then the diff
-
-There is no CLI. The module prints its demonstration at import, because it is
-embedded into a notebook cell where `__name__` is `__main__` and `sys.argv`
-belongs to the kernel — an `if __name__ == &quot;__main__&quot;` block guarded on
-arguments ran argparse against a Kaggle kernel&#x27;s argv and failed the notebook.
-Call `model()`, `boundaries()` and `diagram()` directly for the JSON contract.
-
-Standard library only, so it runs on a Kaggle kernel with the internet off.
-&quot;&quot;&quot;
-
-import ast
-import json
-from collections import defaultdict
-
-# ---------------------------------------------------------------- the inputs
-# Synthetic, and deliberately so: every value below stands in for something a
-# real estate already holds, and the point of the lesson is that all five are
-# read rather than just the first.
-
-# ------------------------------------------------- the architecture, derived
-# The recon stage used to be a lesson of its own and this file retyped its
-# result. Retyping is the failure this lesson warns about: a threat model that
-# describes the system as somebody once described it, rather than as the code
-# is now. So the minimum of the recon stage lives here — parse the sources,
-# take the units nothing calls as entry points, take a call into a dangerous
-# builtin as a sink — and the model below is built from what that returns.
-
-SOURCES = {
- &quot;src/api/bookings.py&quot;: &#x27;&#x27;&#x27;
-def get_booking(request):
-    &quot;&quot;&quot;HTTP GET /bookings/&lt;ref&gt; - request.args is traveller-controlled.&quot;&quot;&quot;
-    return render(load_booking(request.args[&quot;ref&quot;], request.args[&quot;owner&quot;]))
-
-def upload_voucher(request):
-    &quot;&quot;&quot;HTTP POST /vouchers - the multipart body is traveller-controlled.&quot;&quot;&quot;
-    return store(request.files[&quot;doc&quot;], request.args[&quot;name&quot;])
-
-def health(request):
-    &quot;&quot;&quot;HTTP GET /health - no session required.&quot;&quot;&quot;
-    return &quot;ok&quot;
-&#x27;&#x27;&#x27;,
- &quot;src/data/reports.py&quot;: &#x27;&#x27;&#x27;
-def load_booking(ref, owner):
-    return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + ref)
-&#x27;&#x27;&#x27;,
- &quot;src/data/docs.py&quot;: &#x27;&#x27;&#x27;
-def store(blob, name):
-    open(&quot;/srv/vouchers/&quot; + name, &quot;wb&quot;).write(blob)
-&#x27;&#x27;&#x27;,
- &quot;src/util/render.py&quot;: &#x27;&#x27;&#x27;
-def render(rows):
-    return &quot;\\n&quot;.join(str(r) for r in rows)
-&#x27;&#x27;&#x27;,
-}
-
-TRUST = {&quot;src/api&quot;: 0, &quot;src/util&quot;: 1, &quot;src/data&quot;: 2}   # 0 = the untrusted edge
-DANGEROUS = {&quot;execute&quot;: &quot;bookings_db&quot;, &quot;open&quot;: &quot;voucher_bucket&quot;}
-UNAUTHENTICATED = {&quot;health&quot;}          # what the router leaves open
-ASSETS = {&quot;bookings_db&quot;: {&quot;data&quot;: [&quot;customer&quot;, &quot;financial&quot;], &quot;value&quot;: 5},
-          &quot;voucher_bucket&quot;: {&quot;data&quot;: [&quot;documents&quot;], &quot;value&quot;: 3}}
-
-
-def units_of(src, path):
-    &quot;&quot;&quot;Semantic units and what each one calls. Not lines, not files.&quot;&quot;&quot;
-    out = []
-    for fn in [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef)]:
-        calls = sorted({(c.func.id if isinstance(c.func, ast.Name)
-                         else getattr(c.func, &quot;attr&quot;, &quot;&quot;))
-                        for c in ast.walk(fn) if isinstance(c, ast.Call)} - {&quot;&quot;})
-        out.append({&quot;name&quot;: fn.name, &quot;component&quot;: path.rsplit(&quot;/&quot;, 1)[0],
-                    &quot;calls&quot;: calls})
-    return out
-
-
-def derive(sources):
-    &quot;&quot;&quot;The map: entry points, flows, sinks, and the trust level per component.
-
-    An entry point is a unit nothing in the repository calls — which is what
-    makes it reachable from outside. Deriving it beats declaring it, because
-    adding a function changes the answer and nobody has to remember to.
-    &quot;&quot;&quot;
-    units = [u for p, s in sorted(sources.items()) for u in units_of(s, p)]
-    names = {u[&quot;name&quot;] for u in units}
-    called = {c for u in units for c in u[&quot;calls&quot;] if c in names}
-    entries = [{&quot;unit&quot;: u[&quot;name&quot;], &quot;component&quot;: u[&quot;component&quot;],
-                &quot;auth&quot;: &quot;none&quot; if u[&quot;name&quot;] in UNAUTHENTICATED else &quot;session&quot;}
-               for u in units if u[&quot;name&quot;] not in called]
-    flows = sorted({(u[&quot;name&quot;], c) for u in units for c in u[&quot;calls&quot;]
-                    if c in names or c in DANGEROUS})
-    sinks = [{&quot;unit&quot;: u[&quot;name&quot;], &quot;component&quot;: u[&quot;component&quot;],
-              &quot;resource&quot;: DANGEROUS[c], &quot;sink&quot;: c}
-             for u in units for c in u[&quot;calls&quot;] if c in DANGEROUS]
-    return {&quot;components&quot;: TRUST, &quot;entry_points&quot;: sorted(entries, key=lambda e: e[&quot;unit&quot;]),
-            &quot;flows&quot;: flows, &quot;sinks&quot;: sorted(sinks, key=lambda s: s[&quot;unit&quot;]),
-            &quot;assets&quot;: ASSETS}
-
-
-ARCHITECTURE = derive(SOURCES)
-
-CSPM = [
-    {&quot;resource&quot;: &quot;voucher_bucket&quot;, &quot;finding&quot;: &quot;bucket policy allows public read&quot;,
-     &quot;severity&quot;: 4},
-]
-
-IAM = {&quot;src/api&quot;: {&quot;role&quot;: &quot;cybertravels-api&quot;,
-                   &quot;assumable_by&quot;: [&quot;ci-deploy-role&quot;, &quot;*&quot;],
-                   &quot;mfa_required&quot;: False}}
-
-NETWORK = {&quot;src/api&quot;: {&quot;exposed&quot;: &quot;internet&quot;, &quot;waf&quot;: False,
-                       &quot;egress_default_deny&quot;: False,
-                       &quot;egress_allowed&quot;: [&quot;0.0.0.0/0&quot;]}}
-
-ENTITLEMENTS = {&quot;src/api&quot;: [&quot;db:select&quot;, &quot;db:update&quot;,
-                            &quot;s3:GetObject&quot;, &quot;s3:PutObject&quot;]}
-
-HARDENED = {
-    &quot;cspm&quot;: [],
-    &quot;iam&quot;: {&quot;src/api&quot;: {&quot;role&quot;: &quot;cybertravels-api&quot;,
-                        &quot;assumable_by&quot;: [&quot;ci-deploy-role&quot;], &quot;mfa_required&quot;: True}},
-    &quot;network&quot;: {&quot;src/api&quot;: {&quot;exposed&quot;: &quot;vpc-only&quot;, &quot;waf&quot;: True,
-                            &quot;egress_default_deny&quot;: True,
-                            &quot;egress_allowed&quot;: [&quot;bookings-db.prod:5432&quot;]}},
-    &quot;entitlements&quot;: {&quot;src/api&quot;: [&quot;db:select&quot;, &quot;s3:GetObject&quot;]},
-}
-
-# The six questions. Each one applies to a path structurally — an agent that
-# calls a sink can always be spoofed, can always repudiate, can always disclose.
-# What the evidence changes is the SCORE, not whether the row exists. A model
-# that deletes rows when the estate is hardened teaches that hardening removes
-# threats; it does not, it removes severity, and the row is what you re-check
-# after the next terraform change.
-STRIDE = [
-    (&quot;S&quot;, &quot;Spoofing&quot;, &quot;iam&quot;,
-     lambda c: (2, &quot;the running role is assumable by *&quot;)
-     if &quot;*&quot; in c[&quot;iam&quot;].get(&quot;assumable_by&quot;, []) else
-     (0, &quot;role assumable only by named principals&quot;)),
-    (&quot;T&quot;, &quot;Tampering&quot;, &quot;architecture&quot;,
-     lambda c: (2, &quot;an unauthenticated entry point reaches this sink&quot;)
-     if c[&quot;entry&quot;][&quot;auth&quot;] == &quot;none&quot; else
-     (0, &quot;entry point requires a session&quot;)),
-    (&quot;R&quot;, &quot;Repudiation&quot;, &quot;iam&quot;,
-     lambda c: (1, &quot;no MFA on the assumable role, so the actor is not established&quot;)
-     if not c[&quot;iam&quot;].get(&quot;mfa_required&quot;, False) else
-     (0, &quot;MFA required to assume the role&quot;)),
-    (&quot;I&quot;, &quot;Information disclosure&quot;, &quot;cspm&quot;,
-     lambda c: (c[&quot;cspm_severity&quot;],
-                &quot;a live CSPM finding on the resource this path reaches&quot;)
-     if c[&quot;cspm_severity&quot;] else (0, &quot;no open CSPM finding on the resource&quot;)),
-    (&quot;D&quot;, &quot;Denial of service&quot;, &quot;network&quot;,
-     lambda c: (1, &quot;internet-facing with no WAF in front of it&quot;)
-     if c[&quot;net&quot;].get(&quot;exposed&quot;) == &quot;internet&quot; and not c[&quot;net&quot;].get(&quot;waf&quot;) else
-     (0, &quot;not directly reachable, or a WAF is in front&quot;)),
-    (&quot;E&quot;, &quot;Elevation of privilege&quot;, &quot;entitlements&quot;,
-     lambda c: (1, &quot;the identity holds write, not just read&quot;)
-     if any(e in c[&quot;entitlements&quot;] for e in (&quot;db:update&quot;, &quot;s3:PutObject&quot;)) else
-     (0, &quot;the identity is read-only on this resource&quot;)),
-]
-
-
-def reachable(entry, flows):
-    adj = defaultdict(list)
-    for a, b in flows:
-        adj[a].append(b)
-    seen, stack = set(), [entry]
-    while stack:
-        for nxt in adj[stack.pop()]:
-            if nxt not in seen:
-                seen.add(nxt)
-                stack.append(nxt)
-    return seen
-
-
-def model(architecture, cspm, iam, network, entitlements):
-    &quot;&quot;&quot;Step 2 and 3 of the procedure: walk, question, score from evidence.&quot;&quot;&quot;
-    by_resource = defaultdict(int)
-    for f in cspm:
-        by_resource[f[&quot;resource&quot;]] += f[&quot;severity&quot;]
-
-    threats, n = [], 0
-    for entry in architecture[&quot;entry_points&quot;]:
-        reach = reachable(entry[&quot;unit&quot;], architecture[&quot;flows&quot;])
-        comp = entry[&quot;component&quot;]
-        for sink in architecture[&quot;sinks&quot;]:
-            if sink[&quot;unit&quot;] not in reach:
-                continue
-            asset = architecture[&quot;assets&quot;][sink[&quot;resource&quot;]]
-            ctx = {&quot;entry&quot;: entry, &quot;sink&quot;: sink, &quot;iam&quot;: iam.get(comp, {}),
-                   &quot;net&quot;: network.get(comp, {}),
-                   &quot;entitlements&quot;: entitlements.get(comp, []),
-                   &quot;cspm_severity&quot;: by_resource[sink[&quot;resource&quot;]]}
-            exposure = 2 if ctx[&quot;net&quot;].get(&quot;exposed&quot;) == &quot;internet&quot; else -3
-            egress = 0 if ctx[&quot;net&quot;].get(&quot;egress_default_deny&quot;, True) else 2
-            for letter, name, source, assess in STRIDE:
-                bump, why = assess(ctx)
-                n += 1
-                score = max(1, asset[&quot;value&quot;] + bump + exposure + egress)
-                threats.append({
-                    &quot;id&quot;: f&quot;T-{n:02d}&quot;, &quot;stride&quot;: letter, &quot;category&quot;: name,
-                    &quot;entry&quot;: entry[&quot;unit&quot;], &quot;sink&quot;: sink[&quot;unit&quot;],
-                    &quot;asset&quot;: sink[&quot;resource&quot;], &quot;score&quot;: score,
-                    &quot;mitigated&quot;: bump == 0,
-                    &quot;reasons&quot;: [why]
-                               + ([&quot;internet-facing&quot;] if exposure &gt; 0 else [&quot;vpc-only&quot;])
-                               + ([&quot;egress open&quot;] if egress else [&quot;egress default-deny&quot;]),
-                    &quot;evidence&quot;: {&quot;source&quot;: source, &quot;detail&quot;: why},
-                })
-    return sorted(threats, key=lambda t: (-t[&quot;score&quot;], t[&quot;stride&quot;], t[&quot;id&quot;]))
-
-
-def boundaries(architecture):
-    &quot;&quot;&quot;Step 4: an edge from a lower trust level to a higher one.&quot;&quot;&quot;
-    comp = {}
-    for e in architecture[&quot;entry_points&quot;]:
-        comp[e[&quot;unit&quot;]] = e[&quot;component&quot;]
-    for s in architecture[&quot;sinks&quot;]:
-        comp[s[&quot;unit&quot;]] = s[&quot;component&quot;]
-    lv = architecture[&quot;components&quot;]
-    out = []
-    for a, b in architecture[&quot;flows&quot;]:
-        ca, cb = comp.get(a), comp.get(b)
-        if ca and cb and lv.get(ca, 0) &lt; lv.get(cb, 0):
-            out.append({&quot;from&quot;: a, &quot;to&quot;: b, &quot;trust&quot;: f&quot;{lv[ca]}-&gt;{lv[cb]}&quot;})
-    return out
-
-
-def diagram(architecture, bnds):
-    &quot;&quot;&quot;Step 4: mermaid, because it renders in the notebook without a library.&quot;&quot;&quot;
-    lines = [&quot;flowchart LR&quot;]
-    for comp, level in sorted(architecture[&quot;components&quot;].items()):
-        label = comp.replace(&quot;/&quot;, &quot;_&quot;)
-        lines.append(f&#x27;  subgraph {label}[&quot;{comp} · trust {level}&quot;]&#x27;)
-        members = [e[&quot;unit&quot;] for e in architecture[&quot;entry_points&quot;]
-                   if e[&quot;component&quot;] == comp]
-        members += [s[&quot;unit&quot;] for s in architecture[&quot;sinks&quot;]
-                    if s[&quot;component&quot;] == comp]
-        for m in sorted(set(members)) or [&quot;·&quot;]:
-            lines.append(f&quot;    {m}&quot;)
-        lines.append(&quot;  end&quot;)
-    crossing = {(b[&quot;from&quot;], b[&quot;to&quot;]) for b in bnds}
-    for a, b in architecture[&quot;flows&quot;]:
-        lines.append(f&quot;  {a} ==&gt;|BOUNDARY| {b}&quot; if (a, b) in crossing
-                     else f&quot;  {a} --&gt; {b}&quot;)
-    return &quot;\n&quot;.join(lines)
-
-
-def diff(before, after):
-    &quot;&quot;&quot;Step 5: arrivals AND escalations.&quot;&quot;&quot;
-    key = lambda t: (t[&quot;stride&quot;], t[&quot;entry&quot;], t[&quot;sink&quot;])
-    prev = {key(t): t[&quot;score&quot;] for t in before}
-    new = [t[&quot;id&quot;] for t in after if key(t) not in prev]
-    esc = [{&quot;id&quot;: t[&quot;id&quot;], &quot;from&quot;: prev[key(t)], &quot;to&quot;: t[&quot;score&quot;]}
-           for t in after if key(t) in prev and t[&quot;score&quot;] &gt; prev[key(t)]]
-    return {&quot;new&quot;: new, &quot;escalated&quot;: esc}
-
-
-# ---------------------------------------------------- the demonstration
-# What the lesson runs, at module level, so the notebook and a terminal
-# both print the same thing. `main()` below is still the CLI, and only
-# fires when arguments are given.
-
-threats = model(ARCHITECTURE, cspm=CSPM, iam=IAM, network=NETWORK,
-                 entitlements=ENTITLEMENTS)
-bnds = boundaries(ARCHITECTURE)
-
-print(f&quot;{&#x27;id&#x27;:6s}{&#x27;&#x27;:2s}{&#x27;entry&#x27;:16s}{&#x27;sink&#x27;:14s}{&#x27;score&#x27;:&gt;6}  why&quot;)
-print(&quot;-&quot; * 92)
-for t in threats:
-    print(f&quot;{t[&#x27;id&#x27;]:6s}{t[&#x27;stride&#x27;]:2s}{t[&#x27;entry&#x27;]:16s}{t[&#x27;sink&#x27;]:14s}&quot;
-          f&quot;{t[&#x27;score&#x27;]:&gt;6}  {t[&#x27;reasons&#x27;][0]}&quot;)
-
-print(f&quot;\n{len(threats)} threats across &quot;
-      f&quot;{len({t[&#x27;stride&#x27;] for t in threats})} STRIDE categories&quot;)
-print(f&quot;{len(bnds)} trust-boundary crossing(s):&quot;)
-for b in bnds:
-    print(f&quot;   {b[&#x27;from&#x27;]} -&gt; {b[&#x27;to&#x27;]}   ({b[&#x27;trust&#x27;]})&quot;)
-assert len({t[&quot;stride&quot;] for t in threats}) == 6
-
-print(diagram(ARCHITECTURE, bnds))
-
-hard = model(ARCHITECTURE, cspm=HARDENED[&quot;cspm&quot;], iam=HARDENED[&quot;iam&quot;],
-              network=HARDENED[&quot;network&quot;],
-              entitlements=HARDENED[&quot;entitlements&quot;])
-by_id = {(t[&quot;stride&quot;], t[&quot;entry&quot;], t[&quot;sink&quot;]): t[&quot;score&quot;] for t in hard}
-
-print(f&quot;{&#x27;&#x27;:2s}{&#x27;entry -&gt; sink&#x27;:34s}{&#x27;deployed&#x27;:&gt;10}{&#x27;hardened&#x27;:&gt;10}&quot;)
-print(&quot;-&quot; * 58)
-for t in threats[:6]:
-    k = (t[&quot;stride&quot;], t[&quot;entry&quot;], t[&quot;sink&quot;])
-    print(f&quot;{t[&#x27;stride&#x27;]:2s}{t[&#x27;entry&#x27;] + &#x27; -&gt; &#x27; + t[&#x27;sink&#x27;]:34s}&quot;
-          f&quot;{t[&#x27;score&#x27;]:&gt;10}{by_id[k]:&gt;10}&quot;)
-
-print(f&quot;\nthreat rows: {len(threats)} -&gt; {len(hard)}   (unchanged)&quot;)
-print(f&quot;max severity: {max(t[&#x27;score&#x27;] for t in threats)} -&gt; &quot;
-      f&quot;{max(t[&#x27;score&#x27;] for t in hard)}&quot;)
-print()
-print(&quot;The rows do not disappear. Hardening removes severity, not threats -&quot;)
-print(&quot;and the row is what you re-check after the next terraform change.&quot;)
-assert len(hard) == len(threats)
-assert max(t[&quot;score&quot;] for t in hard) &lt; max(t[&quot;score&quot;] for t in threats)</code></pre></div><div class="nbmd"><h2>5 · Execute it against CyberTravels</h2>
+The rows do not disappear. Hardening removes severity, not threats -
+and the row is what you re-check after the next terraform change.</code></pre></div><div class="nbmd"><h2>5 · Execute it against CyberTravels</h2>
 <p>Five synthetic inputs, standing in for what a real estate already holds.</p></div><div class="nbmd"><h2>6 · The diagram it emits</h2>
 <p>Mermaid, so it renders here and on the lesson page without a library. Double arrows are trust-boundary crossings — the edges every finding turned out to live on.</p></div><div class="nbmd"><h2>7 · The same code, a hardened estate</h2>
 <p>Not one line of CyberTravels' source changes. Only the four evidence inputs around it do.</p></div><div class="nbmd"><h2>What you just proved</h2>

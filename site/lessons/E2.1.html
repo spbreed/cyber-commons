@@ -50,55 +50,40 @@ have supervisors, and their clocks are shorter.</p>
 system on all three layers and find the shortest clock.</strong></p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">layer</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">instruments</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">triggered by</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">lead time</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1 · horizontal AI regulation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">EU AI Act, national AI acts in progress</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the system being AI, and its risk classification</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">months to years of transition</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2 · sector overlays</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">DORA (financial), HIPAA (health), PCI DSS (cards), NIS2 (CNI)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">what your organisation does</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>none — already applies</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3 · cross-cutting</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">GDPR and privacy law, consumer protection, incident reporting</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the data processed and the outcome produced</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>none — already applies</b></td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Layer 1 is the one that gets written about and the one with time left on it. Layers 2 and 3 were already in force before anyone deployed an agent.</div></div><div class="nbmd"><h2>3 · The control — the shortest-clock register</h2>
 <p>Your real deadline is not the one you have read about. It is the shortest one that applies.</p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
-<p>CyberTravels' claims-triage agent attracts obligations from all three layers at once. The skill resolves each layer independently and registers the shortest clock among them, because that is the one the incident runbook has to meet.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/obligation-mapping/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: obligation-mapping
+<p>CyberTravels' claims-triage agent attracts obligations from all three layers at once. The skill resolves each layer independently and registers the shortest clock among them, because that is the one the incident runbook has to meet.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/regulatory/obligation-mapping/SKILL.md"><code>skills/regulatory/obligation-mapping/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: obligation-mapping
 description: &gt;-
   Resolve which regulatory layers apply to an AI system — horizontal, sectoral
   and data protection — and register the shortest clock among the obligations
   they impose. Use when a system attracts obligations from more than one regime.
 allowed-tools: Read, Grep, Glob
----
-
-# Three layers, and the shortest clock is the one you plan against
-
-Regulation arrives in layers that apply simultaneously: horizontal AI rules
+</code></pre>
+<h1>Three layers, and the shortest clock is the one you plan against</h1>
+<p>Regulation arrives in layers that apply simultaneously: horizontal AI rules
 triggered by what the system does, sector rules triggered by the industry, and
 data protection triggered by the data. A single agent commonly attracts all
 three, and the operational consequence is one number — the shortest reporting
-clock among them.
-
-## When to use this
-
-At intake for any AI system, and again when it changes what it does, who it
-serves, or what data it reads.
-
-## Procedure
-
-**1 — Describe the system in the terms the regimes use.** Purpose, sector,
+clock among them.</p>
+<h2>When to use this</h2>
+<p>At intake for any AI system, and again when it changes what it does, who it
+serves, or what data it reads.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Describe the system in the terms the regimes use.</strong> Purpose, sector,
 decision effect on individuals, data categories, deployment geography. These are
-the trigger inputs, and vague answers here produce vague obligations.
-
-**2 — Resolve each layer independently.** Horizontal by risk category, sector by
+the trigger inputs, and vague answers here produce vague obligations.</p>
+<p><strong>2 — Resolve each layer independently.</strong> Horizontal by risk category, sector by
 industry and function, data protection by category and territory. Do not let one
-layer&#x27;s conclusion suppress another&#x27;s — they are cumulative.
-
-**3 — List the obligations each produces,** with its clock. Reporting windows,
-assessment requirements, record-keeping durations, human-oversight duties.
-
-**4 — Register the shortest clock.** That is the one the incident runbook has to
+layer's conclusion suppress another's — they are cumulative.</p>
+<p><strong>3 — List the obligations each produces,</strong> with its clock. Reporting windows,
+assessment requirements, record-keeping durations, human-oversight duties.</p>
+<p><strong>4 — Register the shortest clock.</strong> That is the one the incident runbook has to
 meet. Publish it with the obligation it comes from, so nobody relaxes it by
-citing a longer one.
-
-**5 — Record what changes the answer.** Adding a decision effect, a new
+citing a longer one.</p>
+<p><strong>5 — Record what changes the answer.</strong> Adding a decision effect, a new
 territory, a new data category. Obligations are re-derived on those events, not
-annually.
-
-## Output contract
-
-```json
-{
+annually.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;system&quot;: {&quot;purpose&quot;: &quot;str&quot;, &quot;sector&quot;: &quot;str&quot;, &quot;decision_effect&quot;: true,
              &quot;data_categories&quot;: [&quot;str&quot;], &quot;territories&quot;: [&quot;str&quot;]},
   &quot;layers&quot;: [{&quot;layer&quot;: &quot;horizontal|sector|data_protection&quot;, &quot;regime&quot;: &quot;str&quot;, &quot;applies&quot;: true, &quot;why&quot;: &quot;str&quot;}],
@@ -106,109 +91,38 @@ annually.
   &quot;shortest_clock&quot;: {&quot;hours&quot;: 0, &quot;from&quot;: &quot;str&quot;},
   &quot;re_derive_on&quot;: [&quot;str&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Stopping at the first regime that applies.</strong> They are cumulative.</li>
+<li><strong>Planning against the longest clock.</strong> The shortest is the one you miss.</li>
+<li><strong>Annual re-derivation.</strong> The triggers are changes, not dates.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>claims-triage-agent — autonomy L2.5, data [&#x27;customer&#x27;, &#x27;health&#x27;, &#x27;regulated&#x27;]
 
-## Failure modes
+instrument             layer  obligation
+--------------------------------------------------------------------------------------------
+EU AI Act                  1  automated decision affecting individuals; human oversight and record-keeping obligations
+DORA                       2  ICT third-party risk, incident reporting, resilience testing, exit strategy
+HIPAA-equivalent           2  minimum necessary; audit controls
+GDPR                       3  lawful basis, erasure, automated decision-making
+obligation                            deadline (h)  notify
+------------------------------------------------------------------------------
+DORA (major ICT incident)                        4  initial notification to the regulator
+contractual (major client)                      12  client security contact
+GDPR (personal data breach)                     72  supervisory authority
+EU AI Act (serious incident)                    72  market surveillance authority
 
-- **Stopping at the first regime that applies.** They are cumulative.
-- **Planning against the longest clock.** The shortest is the one you miss.
-- **Annual re-derivation.** The triggers are changes, not dates.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+BINDING DEADLINE: DORA (major ICT incident) at 4h
+Every runbook, every escalation path and every out-of-hours rota is
+designed against that number, not against the 72-hour one people quote.
+obligations by layer: {1: 1, 2: 2, 3: 1}
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+   layer 1 (horizontal AI regulation  ) 1 obligation(s)
+   layer 2 (sector overlay            ) 2 obligation(s)
+   layer 3 (cross-cutting             ) 1 obligation(s)
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/regulatory/obligation-mapping/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/obligation-mapping/scripts/obligation_mapping.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Resolve which regulatory layers apply to a system and register the shortest clock among them.
-
-This is the executable half of the `obligation-mapping` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-from dataclasses import dataclass
-
-@dataclass
-class System:
-    name: str; sector: str; data: tuple; autonomy: str
-    affects_individuals: bool; is_ict_service: bool
-
-CLAIMS = System(&quot;claims-triage-agent&quot;, sector=&quot;insurance&quot;,
-                data=(&quot;customer&quot;, &quot;health&quot;, &quot;regulated&quot;), autonomy=&quot;L2.5&quot;,
-                affects_individuals=True, is_ict_service=True)
-
-def applicable(sys_):
-    out = []
-    # layer 1
-    if sys_.autonomy in (&quot;L2&quot;, &quot;L2.5&quot;, &quot;L3&quot;) and sys_.affects_individuals:
-        out.append((&quot;EU AI Act&quot;, 1, &quot;automated decision affecting individuals; &quot;
-                    &quot;human oversight and record-keeping obligations&quot;))
-    # layer 2
-    if sys_.sector in (&quot;insurance&quot;, &quot;banking&quot;, &quot;financial&quot;):
-        out.append((&quot;DORA&quot;, 2, &quot;ICT third-party risk, incident reporting, &quot;
-                    &quot;resilience testing, exit strategy&quot;))
-    if &quot;health&quot; in sys_.data:
-        out.append((&quot;HIPAA-equivalent&quot;, 2, &quot;minimum necessary; audit controls&quot;))
-    # layer 3
-    if sys_.affects_individuals and &quot;customer&quot; in sys_.data:
-        out.append((&quot;GDPR&quot;, 3, &quot;lawful basis, erasure, automated decision-making&quot;))
-    return sorted(out, key=lambda r: r[1])
-
-print(f&quot;{CLAIMS.name} — autonomy {CLAIMS.autonomy}, data {list(CLAIMS.data)}\n&quot;)
-print(f&quot;{&#x27;instrument&#x27;:22s}{&#x27;layer&#x27;:&gt;6}  obligation&quot;)
-print(&quot;-&quot; * 92)
-for name, layer, why in applicable(CLAIMS):
-    print(f&quot;{name:22s}{layer:&gt;6}  {why}&quot;)
-
-CLOCKS = {
- &quot;DORA (major ICT incident)&quot;:       (4,  &quot;initial notification to the regulator&quot;),
- &quot;contractual (major client)&quot;:      (12, &quot;client security contact&quot;),
- &quot;NIS2 (early warning)&quot;:            (24, &quot;national CSIRT&quot;),
- &quot;GDPR (personal data breach)&quot;:     (72, &quot;supervisory authority&quot;),
- &quot;EU AI Act (serious incident)&quot;:    (72, &quot;market surveillance authority&quot;),
-}
-applicable_names = {n for n, _, _ in applicable(CLAIMS)}
-mine = {k: v for k, v in CLOCKS.items()
-        if any(a.split()[0] in k for a in applicable_names) or &quot;contractual&quot; in k}
-
-print(f&quot;{&#x27;obligation&#x27;:36s}{&#x27;deadline (h)&#x27;:&gt;14}  notify&quot;)
-print(&quot;-&quot; * 78)
-for name, (hours, who) in sorted(mine.items(), key=lambda kv: kv[1][0]):
-    print(f&quot;{name:36s}{hours:&gt;14}  {who}&quot;)
-shortest = min(mine.items(), key=lambda kv: kv[1][0])
-print(f&quot;\nBINDING DEADLINE: {shortest[0]} at {shortest[1][0]}h&quot;)
-print(&quot;Every runbook, every escalation path and every out-of-hours rota is&quot;)
-print(&quot;designed against that number, not against the 72-hour one people quote.&quot;)
-assert shortest[1][0] &lt;= 12
-
-# Verify: which layer actually drove the requirements?
-from collections import Counter
-layers = Counter(layer for _, layer, _ in applicable(CLAIMS))
-print(&quot;obligations by layer:&quot;, dict(layers))
-print()
-for layer, label in ((1, &quot;horizontal AI regulation&quot;), (2, &quot;sector overlay&quot;),
-                     (3, &quot;cross-cutting&quot;)):
-    n = layers.get(layer, 0)
-    print(f&quot;   layer {layer} ({label:26s}) {n} obligation(s)&quot;)
-print(&quot;\nLayers 2 and 3 produce more obligations than layer 1, and they were&quot;)
-print(&quot;already in force before anyone deployed an agent. That is the finding.&quot;)
-assert layers.get(2, 0) + layers.get(3, 0) &gt; layers.get(1, 0)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Layers 2 and 3 produce more obligations than layer 1, and they were
+already in force before anyone deployed an agent. That is the finding.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The three layers print with what triggers each. The claims-triage agent attracts obligations from all three — EU AI Act, DORA, a HIPAA-equivalent and GDPR. The shortest-clock register identifies DORA's 4-hour initial notification as the binding deadline, and layers 2 and 3 together produce more obligations than the horizontal AI regulation.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Build the shortest-clock register for your highest-tier AI system. Most teams discover the binding deadline is a sector overlay or a customer contract, not the AI regulation they have been reading.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.2.html">E2.2 · Horizontal AI regulation</a></strong></p>

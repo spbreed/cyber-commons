@@ -48,191 +48,100 @@ properties:</p>
 </ul>
 <p>The three seams below are the ones that fail most often, and each is traced
 here from producer to consumer to see exactly where it stops.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Three joint runbooks, and three handoffs that were agreed and never delivered. The skill asks the consumer rather than the owner, and records the specific consequence of each — model risk computing a tier without the privacy input.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/handoff-delivery-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: handoff-delivery-check
+<p>Three joint runbooks, and three handoffs that were agreed and never delivered. The skill asks the consumer rather than the owner, and records the specific consequence of each — model risk computing a tier without the privacy input.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/handoff-delivery-check/SKILL.md"><code>skills/programme/handoff-delivery-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: handoff-delivery-check
 description: &gt;-
   Trace each joint runbook from the function that owns it to the function that
   consumes it, and find the handoffs that were agreed and never actually
   delivered. Use when two teams both believe the other has something.
 allowed-tools: Read, Grep, Glob
----
-
-# Agreed, documented, never delivered
-
-A joint runbook has an owner and a consumer, and closing the seam between two
+</code></pre>
+<h1>Agreed, documented, never delivered</h1>
+<p>A joint runbook has an owner and a consumer, and closing the seam between two
 functions means the consumer actually receives the artefact. The common failure
 is that everyone agrees the handoff exists, the runbook says so, and nothing has
-ever been sent — which is invisible until somebody asks the consumer.
-
-## When to use this
-
-After designing cross-functional runbooks, and periodically — this decays.
-
-## Procedure
-
-**1 — List the joint runbooks.** For each: the owning function, the consuming
-function, the artefact, and the trigger that should produce it.
-
-**2 — Ask the consumer, not the owner.** &quot;Have you received this, and when?&quot;
-Owners report intent accurately and delivery optimistically. The consumer&#x27;s
-answer is the measurement.
-
-**3 — Record the consequence of each undelivered handoff.** Model risk never
+ever been sent — which is invisible until somebody asks the consumer.</p>
+<h2>When to use this</h2>
+<p>After designing cross-functional runbooks, and periodically — this decays.</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the joint runbooks.</strong> For each: the owning function, the consuming
+function, the artefact, and the trigger that should produce it.</p>
+<p><strong>2 — Ask the consumer, not the owner.</strong> "Have you received this, and when?"
+Owners report intent accurately and delivery optimistically. The consumer's
+answer is the measurement.</p>
+<p><strong>3 — Record the consequence of each undelivered handoff.</strong> Model risk never
 receiving the privacy assessment means the tier is computed without a data
-input. Name the specific consequence, not &quot;reduced coverage&quot;.
-
-**4 — Check the trigger, not the document.** A handoff triggered by a person
+input. Name the specific consequence, not "reduced coverage".</p>
+<p><strong>4 — Check the trigger, not the document.</strong> A handoff triggered by a person
 remembering is not a handoff. Look for the mechanism: a ticket transition, a
-pipeline step, a scheduled export.
-
-**5 — Close by making the trigger automatic or naming a date.** Anything else
-recreates the same state, and the check will find it again next time.
-
-## Output contract
-
-```json
-{
+pipeline step, a scheduled export.</p>
+<p><strong>5 — Close by making the trigger automatic or naming a date.</strong> Anything else
+recreates the same state, and the check will find it again next time.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;runbooks&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str&quot;, &quot;consumer&quot;: &quot;str&quot;, &quot;artefact&quot;: &quot;str&quot;,
                 &quot;trigger&quot;: &quot;str&quot;, &quot;trigger_automatic&quot;: false}],
   &quot;delivery&quot;: [{&quot;runbook&quot;: &quot;str&quot;, &quot;consumer_confirms&quot;: false, &quot;last_received&quot;: &quot;str|null&quot;}],
   &quot;undelivered&quot;: [{&quot;runbook&quot;: &quot;str&quot;, &quot;consequence&quot;: &quot;str&quot;}],
   &quot;closure&quot;: [{&quot;runbook&quot;: &quot;str&quot;, &quot;action&quot;: &quot;automate|scheduled&quot;, &quot;due&quot;: &quot;str&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Asking the owner.</strong> They will describe the design.</li>
+<li><strong>Accepting the runbook as evidence.</strong> It is the agreement, not the delivery.</li>
+<li><strong>A human-memory trigger.</strong> It works until the person changes role.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>MRM validation -&gt; security evidence
+   artefact  : validation report with tool surface and autonomy
+   owner     : model_risk
+   consumers : cyber, compliance, internal_audit
 
-## Failure modes
+legal position -&gt; system prompt
+   artefact  : approved language and refusal set
+   owner     : legal
+   consumers : cyber, business_owner
 
-- **Asking the owner.** They will describe the design.
-- **Accepting the runbook as evidence.** It is the agreement, not the delivery.
-- **A human-memory trigger.** It works until the person changes role.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+privacy assessment -&gt; control design
+   artefact  : DPIA with a control annex
+   owner     : privacy
+   consumers : cyber, model_risk
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+MRM validation -&gt; security evidence           NOT DELIVERED to cyber, internal_audit
+legal position -&gt; system prompt               complete
+privacy assessment -&gt; control design          NOT DELIVERED to model_risk
 
-from cyber_commons_skill_runtime import run_skill
+undelivered handoffs: 3
+   cyber          is assuming: the validated unit matches what is deployed
+                  and has not received: validation report with tool surface and autonomy
+   internal_audit is assuming: the validated unit matches what is deployed
+                  and has not received: validation report with tool surface and autonomy
+   model_risk     is assuming: the data classes and retention limits are settled
+                  and has not received: DPIA with a control annex
+   cyber           security cannot see the validated tool surface, so scope creep is undetectable
+   internal_audit  third line cannot test the second line&#x27;s assurance; it audits the artefact it has
+   model_risk      validation runs on data the DPIA restricted; the restriction is invisible to it
 
-# Split skills/programme/handoff-delivery-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/handoff-delivery-check/scripts/handoff_delivery_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Trace each joint runbook from owner to consumer and find the handoffs that were never actually delivered.
+None of these is a control failing. Each is a control that was built,
+works, and is invisible to the function whose decision depends on it.
+seam                                          owner        delivered to
+MRM validation -&gt; security evidence           model_risk   compliance, cyber, internal_audit
+legal position -&gt; system prompt               legal        business_owner, cyber
+privacy assessment -&gt; control design          privacy      cyber, model_risk
 
-This is the executable half of the `handoff-delivery-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+undelivered handoffs remaining: 0
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
+One owner per artefact, every consumer named, and delivery recorded
+rather than assumed. The delivery record is the part people skip, and it
+is the only part that makes the seam auditable a year later.
+before: 2 problem(s)
+    MRM validation -&gt; security evidence: undelivered to [&#x27;cyber&#x27;, &#x27;internal_audit&#x27;]
+    privacy assessment -&gt; control design: undelivered to [&#x27;model_risk&#x27;]
+after : 0 problem(s)
 
-RUNBOOKS = {
- &quot;privacy assessment -&gt; control design&quot;: {
-   &quot;artefact&quot;: &quot;DPIA with a control annex&quot;,
-   &quot;owner&quot;: &quot;privacy&quot;,
-   &quot;consumers&quot;: [&quot;cyber&quot;, &quot;model_risk&quot;],
-   &quot;consumer_entitled_to_assume&quot;: &quot;the data classes and retention limits are settled&quot;,
-   &quot;delivered_to&quot;: [&quot;cyber&quot;]},                       # model_risk never receives it
- &quot;legal position -&gt; system prompt&quot;: {
-   &quot;artefact&quot;: &quot;approved language and refusal set&quot;,
-   &quot;owner&quot;: &quot;legal&quot;,
-   &quot;consumers&quot;: [&quot;cyber&quot;, &quot;business_owner&quot;],
-   &quot;consumer_entitled_to_assume&quot;: &quot;these refusals are contractually required&quot;,
-   &quot;delivered_to&quot;: [&quot;cyber&quot;, &quot;business_owner&quot;]},
- &quot;MRM validation -&gt; security evidence&quot;: {
-   &quot;artefact&quot;: &quot;validation report with tool surface and autonomy&quot;,
-   &quot;owner&quot;: &quot;model_risk&quot;,
-   &quot;consumers&quot;: [&quot;cyber&quot;, &quot;compliance&quot;, &quot;internal_audit&quot;],
-   &quot;consumer_entitled_to_assume&quot;: &quot;the validated unit matches what is deployed&quot;,
-   &quot;delivered_to&quot;: [&quot;compliance&quot;]},                  # cyber and audit never receive it
-}
-for name in sorted(RUNBOOKS):
-    r = RUNBOOKS[name]
-    print(f&quot;{name}&quot;)
-    print(f&quot;   artefact  : {r[&#x27;artefact&#x27;]}&quot;)
-    print(f&quot;   owner     : {r[&#x27;owner&#x27;]}&quot;)
-    print(f&quot;   consumers : {&#x27;, &#x27;.join(r[&#x27;consumers&#x27;])}&quot;)
-    print()
-
-gaps = []
-for name in sorted(RUNBOOKS):
-    r = RUNBOOKS[name]
-    missing = sorted(set(r[&quot;consumers&quot;]) - set(r[&quot;delivered_to&quot;]))
-    status = &quot;complete&quot; if not missing else f&quot;NOT DELIVERED to {&#x27;, &#x27;.join(missing)}&quot;
-    print(f&quot;{name[:44]:46s}{status}&quot;)
-    for m in missing:
-        gaps.append((name, m, r[&quot;consumer_entitled_to_assume&quot;]))
-print()
-print(f&quot;undelivered handoffs: {len(gaps)}&quot;)
-for name, who, assumption in gaps:
-    print(f&quot;   {who:14s} is assuming: {assumption}&quot;)
-    print(f&quot;   {&#x27;&#x27;:14s} and has not received: {RUNBOOKS[name][&#x27;artefact&#x27;]}&quot;)
-assert gaps
-
-CONSEQUENCE = {
- (&quot;privacy assessment -&gt; control design&quot;, &quot;model_risk&quot;):
-   &quot;validation runs on data the DPIA restricted; the restriction is invisible to it&quot;,
- (&quot;MRM validation -&gt; security evidence&quot;, &quot;cyber&quot;):
-   &quot;security cannot see the validated tool surface, so scope creep is undetectable&quot;,
- (&quot;MRM validation -&gt; security evidence&quot;, &quot;internal_audit&quot;):
-   &quot;third line cannot test the second line&#x27;s assurance; it audits the artefact it has&quot;,
-}
-for name, who, _ in gaps:
-    print(f&quot;   {who:16s}{CONSEQUENCE.get((name, who), &#x27;unknown&#x27;)}&quot;)
-print()
-print(&quot;None of these is a control failing. Each is a control that was built,&quot;)
-print(&quot;works, and is invisible to the function whose decision depends on it.&quot;)
-
-def close(runbooks):
-    out = {}
-    for name, r in runbooks.items():
-        out[name] = dict(r, delivered_to=sorted(r[&quot;consumers&quot;]))
-    return out
-
-CLOSED = close(RUNBOOKS)
-remaining = [(n, c) for n, r in sorted(CLOSED.items())
-             for c in r[&quot;consumers&quot;] if c not in r[&quot;delivered_to&quot;]]
-print(f&quot;{&#x27;seam&#x27;:46s}{&#x27;owner&#x27;:13s}delivered to&quot;)
-for n in sorted(CLOSED):
-    r = CLOSED[n]
-    print(f&quot;{n[:44]:46s}{r[&#x27;owner&#x27;]:13s}{&#x27;, &#x27;.join(r[&#x27;delivered_to&#x27;])}&quot;)
-print(f&quot;\nundelivered handoffs remaining: {len(remaining)}&quot;)
-print()
-print(&quot;One owner per artefact, every consumer named, and delivery recorded&quot;)
-print(&quot;rather than assumed. The delivery record is the part people skip, and it&quot;)
-print(&quot;is the only part that makes the seam auditable a year later.&quot;)
-assert not remaining
-
-def check(runbooks):
-    problems = []
-    for name, r in sorted(runbooks.items()):
-        if not r[&quot;artefact&quot;]:                     problems.append(f&quot;{name}: no artefact&quot;)
-        if not r[&quot;owner&quot;]:                        problems.append(f&quot;{name}: no owner&quot;)
-        if isinstance(r[&quot;owner&quot;], list):          problems.append(f&quot;{name}: {len(r[&#x27;owner&#x27;])} owners&quot;)
-        if not r[&quot;consumers&quot;]:                    problems.append(f&quot;{name}: no consumers&quot;)
-        undel = set(r[&quot;consumers&quot;]) - set(r[&quot;delivered_to&quot;])
-        if undel:                                 problems.append(f&quot;{name}: undelivered to {sorted(undel)}&quot;)
-    return problems
-
-print(&quot;before:&quot;, len(check(RUNBOOKS)), &quot;problem(s)&quot;)
-for p in check(RUNBOOKS): print(&quot;   &quot;, p)
-print(&quot;after :&quot;, len(check(CLOSED)), &quot;problem(s)&quot;)
-print()
-print(&quot;Four properties, checked mechanically: an artefact exists, one owner is&quot;)
-print(&quot;accountable, consumers are named, delivery is recorded. A governance&quot;)
-print(&quot;programme that can run this check on its own seams is doing something&quot;)
-print(&quot;more useful than another policy document.&quot;)
-assert check(RUNBOOKS) and not check(CLOSED)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Four properties, checked mechanically: an artefact exists, one owner is
+accountable, consumers are named, delivery is recorded. A governance
+programme that can run this check on its own seams is doing something
+more useful than another policy document.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick the artefact your function produces for someone else and ask the recipient when they last received it. The gap between 'we produce that' and 'we receive that' is the seam, and it is usually measured in quarters.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> An inventory that stays true, a risk tiering that makes control sets proportionate, a control map that finds the genuine gaps rather than restating the overlap, evidence auditors accept, and verification that runs continuously instead of annually.</p>

@@ -59,210 +59,87 @@ and localised to a segment.</p>
 workload's role has no read, write or list permission on the log bucket, the
 collector, or their keys. A hash chain in a bucket the agent can delete from is
 a hash chain about nothing.</p></div><div class="nbmd"><h2>3 · The check, as a skill</h2>
-<p>CyberTravels' Coding Agent writes its own transcript. The skill reconciles that transcript against an independent host stream, chains the segments, and rewrites one — so tampering is not just detected but localised to the segment it happened in.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/tamper-evident-log-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: tamper-evident-log-check
+<p>CyberTravels' Coding Agent writes its own transcript. The skill reconciles that transcript against an independent host stream, chains the segments, and rewrites one — so tampering is not just detected but localised to the segment it happened in.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/identity/tamper-evident-log-check/SKILL.md"><code>skills/identity/tamper-evident-log-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: tamper-evident-log-check
 description: &gt;-
-  Reconcile an agent&#x27;s own transcript against an independent host stream to find
+  Reconcile an agent's own transcript against an independent host stream to find
   steps that executed something other than what was recorded, then hash-chain
-  the segments and localise a rewrite. Use when the log&#x27;s writer is the thing
+  the segments and localise a rewrite. Use when the log's writer is the thing
   being investigated.
 allowed-tools: Read, Grep, Glob
----
-
-# The transcript is written by the subject of the investigation
-
-An in-band check reads the agent&#x27;s account of what it did and reports a clean
+</code></pre>
+<h1>The transcript is written by the subject of the investigation</h1>
+<p>An in-band check reads the agent's account of what it did and reports a clean
 run. Spoofing is invisible to it by construction. Two independent things fix
-that: a **second stream** the agent does not author, and a **chain** that makes
-a later rewrite detectable and localisable.
-
-## When to use this
-
-Any agent whose actions matter after the fact: one that executes code, changes
-infrastructure, moves money, or whose output is evidence.
-
-## Procedure
-
-**1 — Identify the writer of each stream.** The agent&#x27;s transcript is written by
+that: a <strong>second stream</strong> the agent does not author, and a <strong>chain</strong> that makes
+a later rewrite detectable and localisable.</p>
+<h2>When to use this</h2>
+<p>Any agent whose actions matter after the fact: one that executes code, changes
+infrastructure, moves money, or whose output is evidence.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Identify the writer of each stream.</strong> The agent's transcript is written by
 the agent. Find one stream that is not: host process accounting, container
-runtime events, a syscall auditor, cloud API logs.
-
-**2 — Reconcile step by step.** For each recorded step, does the host stream
-show the action the transcript claims? Report the disagreement **rate**, not
-just examples — a rate is a property of the system, an example is an anecdote.
-
-**3 — Chain the segments.** Hash each segment together with the previous hash.
-This is what turns &quot;the log looks fine&quot; into &quot;any change to segment *n* is
-detectable, and detectable *at* segment *n*&quot;.
-
-**4 — Rewrite one segment and verify.** The check must fail, and it must name
+runtime events, a syscall auditor, cloud API logs.</p>
+<p><strong>2 — Reconcile step by step.</strong> For each recorded step, does the host stream
+show the action the transcript claims? Report the disagreement <strong>rate</strong>, not
+just examples — a rate is a property of the system, an example is an anecdote.</p>
+<p><strong>3 — Chain the segments.</strong> Hash each segment together with the previous hash.
+This is what turns "the log looks fine" into "any change to segment <em>n</em> is
+detectable, and detectable <em>at</em> segment <em>n</em>".</p>
+<p><strong>4 — Rewrite one segment and verify.</strong> The check must fail, and it must name
 the segment. A chain that detects tampering but cannot localise it sends you
-back to reconciling everything.
-
-**5 — Check what the workload&#x27;s own role can reach.** If the agent&#x27;s role can
+back to reconciling everything.</p>
+<p><strong>5 — Check what the workload's own role can reach.</strong> If the agent's role can
 write to the log store, the chain protects against an outsider and not against
-the subject. Enumerate the logging plane against the role&#x27;s permissions.
-
-## Output contract
-
-```json
-{
+the subject. Enumerate the logging plane against the role's permissions.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;streams&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;written_by&quot;: &quot;agent|host|platform&quot;}],
   &quot;reconciliation&quot;: {&quot;steps&quot;: 0, &quot;disagreements&quot;: 0, &quot;rate&quot;: 0.0, &quot;examples&quot;: [&quot;str&quot;]},
   &quot;chain&quot;: {&quot;segments&quot;: 0, &quot;verifies&quot;: true},
   &quot;rewrite_probe&quot;: {&quot;segment&quot;: 0, &quot;detected&quot;: true, &quot;localised_to&quot;: 0},
   &quot;logging_plane&quot;: {&quot;targets&quot;: [&quot;str&quot;], &quot;writable_by_workload&quot;: [&quot;str&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting an in-band clean run.</strong> It is the expected result and it means
+  nothing.</li>
+<li><strong>Chaining without an independent stream.</strong> A consistent chain of false
+  entries verifies perfectly.</li>
+<li><strong>Ignoring the workload's write access to the log store.</strong> It is the whole
+  threat model of this check.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>in-band check - does every step have a recorded command?
+   steps: 5   steps with no record: 0   verdict: clean
 
-## Failure modes
+Two of these five steps executed something other than what was recorded.
+The in-band check cannot see that, because it is reading the record that
+the thing it is checking produced.
+trace   harness recorded              host observed
+t-03    python3 analyse.py            curl -s http://cache/put?m=...
+t-05    echo done                     python3 -c &#x27;import os;os.execve(...)&#x27;
 
-- **Reporting an in-band clean run.** It is the expected result and it means
-  nothing.
-- **Chaining without an independent stream.** A consistent chain of false
-  entries verifies perfectly.
-- **Ignoring the workload&#x27;s write access to the log store.** It is the whole
-  threat model of this check.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+spoofing rate in this run: 40%  (2 of 5)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+The reported rate across the source incident&#x27;s sampled transcripts was
+about 7%, with the investigators unable to rule out more. Whatever the
+number, it is only knowable because two independent streams existed.
+chain of 5 segments verifies: True
+head: 5bbdf8e96e0eaf03719ee683a47be411...
 
-from cyber_commons_skill_runtime import run_skill
+after rewriting segment 2: verifies=False, first break at segment 2
 
-# Split skills/identity/tamper-evident-log-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/tamper-evident-log-check/scripts/tamper_evident_log_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Reconcile an agent&#x27;s own transcript against a host stream, then hash-chain the segments and localise a rewrite.
+The rewrite is not prevented - it is localised. Anyone holding the signed
+head knows which segment moved, which is the difference between a
+corrupted investigation and a bounded one.
+workload role vs the logging plane
+   permissions reaching the logging plane: 0
 
-This is the executable half of the `tamper-evident-log-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+after one convenience grant: 1 permission(s) reach it
+      s3:PutObject -&gt; arn:aws:s3:::agent-transcripts/*
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-RUN = [
- {&quot;trace&quot;: &quot;t-01&quot;, &quot;harness_says&quot;: &quot;ls /workspace&quot;,          &quot;host_saw&quot;: &quot;ls /workspace&quot;},
- {&quot;trace&quot;: &quot;t-02&quot;, &quot;harness_says&quot;: &quot;cat report.md&quot;,          &quot;host_saw&quot;: &quot;cat report.md&quot;},
- {&quot;trace&quot;: &quot;t-03&quot;, &quot;harness_says&quot;: &quot;python3 analyse.py&quot;,     &quot;host_saw&quot;: &quot;curl -s http://cache/put?m=...&quot;},
- {&quot;trace&quot;: &quot;t-04&quot;, &quot;harness_says&quot;: &quot;git status&quot;,             &quot;host_saw&quot;: &quot;git status&quot;},
- {&quot;trace&quot;: &quot;t-05&quot;, &quot;harness_says&quot;: &quot;echo done&quot;,              &quot;host_saw&quot;: &quot;python3 -c &#x27;import os;os.execve(...)&#x27;&quot;},
-]
-
-def in_band_check(run):
-    &quot;&quot;&quot;The only evidence is the transcript the agent&#x27;s own process wrote.&quot;&quot;&quot;
-    return [r[&quot;trace&quot;] for r in run if not r[&quot;harness_says&quot;]]
-
-print(&quot;in-band check - does every step have a recorded command?&quot;)
-missing = in_band_check(RUN)
-print(f&quot;   steps: {len(RUN)}   steps with no record: {len(missing)}   verdict: &quot;
-      f&quot;{&#x27;clean&#x27; if not missing else &#x27;gaps&#x27;}&quot;)
-print()
-print(&quot;Two of these five steps executed something other than what was recorded.&quot;)
-print(&quot;The in-band check cannot see that, because it is reading the record that&quot;)
-print(&quot;the thing it is checking produced.&quot;)
-assert not missing
-
-def reconcile(run):
-    &quot;&quot;&quot;Divergence between the host stream and the harness transcript.&quot;&quot;&quot;
-    return [r for r in run if r[&quot;harness_says&quot;] != r[&quot;host_saw&quot;]]
-
-diverged = reconcile(RUN)
-print(f&quot;{&#x27;trace&#x27;:8s}{&#x27;harness recorded&#x27;:30s}host observed&quot;)
-for r in diverged:
-    print(f&quot;{r[&#x27;trace&#x27;]:8s}{r[&#x27;harness_says&#x27;]:30s}{r[&#x27;host_saw&#x27;][:44]}&quot;)
-
-rate = len(diverged) / len(RUN)
-print(f&quot;\nspoofing rate in this run: {rate:.0%}  ({len(diverged)} of {len(RUN)})&quot;)
-print()
-print(&quot;The reported rate across the source incident&#x27;s sampled transcripts was&quot;)
-print(&quot;about 7%, with the investigators unable to rule out more. Whatever the&quot;)
-print(&quot;number, it is only knowable because two independent streams existed.&quot;)
-assert len(diverged) == 2
-
-import hashlib
-
-def chain(segments):
-    h = &quot;0&quot; * 64
-    out = []
-    for i, s in enumerate(segments):
-        h = hashlib.sha256((s + h).encode()).hexdigest()
-        out.append({&quot;n&quot;: i, &quot;segment&quot;: s, &quot;head&quot;: h})
-    return out
-
-def verify(store):
-    h = &quot;0&quot; * 64
-    for row in store:
-        h = hashlib.sha256((row[&quot;segment&quot;] + h).encode()).hexdigest()
-        if h != row[&quot;head&quot;]:
-            return False, row[&quot;n&quot;]
-    return True, None
-
-SEGMENTS = [f&quot;{r[&#x27;trace&#x27;]} {r[&#x27;harness_says&#x27;]}&quot; for r in RUN]
-store = chain(SEGMENTS)
-ok, at = verify(store)
-print(f&quot;chain of {len(store)} segments verifies: {ok}&quot;)
-print(f&quot;head: {store[-1][&#x27;head&#x27;][:32]}...&quot;)
-
-tampered = [dict(row) for row in store]
-tampered[2][&quot;segment&quot;] = &quot;t-03 python3 analyse.py   # nothing to see&quot;
-ok, at = verify(tampered)
-print(f&quot;\nafter rewriting segment 2: verifies={ok}, first break at segment {at}&quot;)
-print()
-print(&quot;The rewrite is not prevented - it is localised. Anyone holding the signed&quot;)
-print(&quot;head knows which segment moved, which is the difference between a&quot;)
-print(&quot;corrupted investigation and a bounded one.&quot;)
-assert not ok and at == 2
-
-WORKLOAD_ROLE = {
- &quot;s3:GetObject&quot;:  [&quot;arn:aws:s3:::agent-workspace/*&quot;],
- &quot;s3:PutObject&quot;:  [&quot;arn:aws:s3:::agent-workspace/*&quot;],
- &quot;s3:ListBucket&quot;: [&quot;arn:aws:s3:::agent-workspace&quot;],
- &quot;kms:Decrypt&quot;:   [&quot;arn:aws:kms:::key/workspace&quot;],
-}
-LOGGING_PLANE = [&quot;arn:aws:s3:::agent-transcripts&quot;,
-                 &quot;arn:aws:s3:::agent-transcripts/*&quot;,
-                 &quot;arn:aws:kms:::key/transcript-signing&quot;]
-
-def reachable(role, targets):
-    hits = []
-    for action, resources in sorted(role.items()):
-        for r in resources:
-            for t in targets:
-                if r == t or (r.endswith(&quot;/*&quot;) and t.startswith(r[:-1])):
-                    hits.append((action, t))
-    return hits
-
-print(&quot;workload role vs the logging plane&quot;)
-hits = reachable(WORKLOAD_ROLE, LOGGING_PLANE)
-print(f&quot;   permissions reaching the logging plane: {len(hits)}&quot;)
-for a, t in hits:
-    print(f&quot;      {a} -&gt; {t}&quot;)
-
-WIDENED = dict(WORKLOAD_ROLE)
-WIDENED[&quot;s3:PutObject&quot;] = [&quot;arn:aws:s3:::agent-workspace/*&quot;,
-                           &quot;arn:aws:s3:::agent-transcripts/*&quot;]
-bad = reachable(WIDENED, LOGGING_PLANE)
-print(f&quot;\nafter one convenience grant: {len(bad)} permission(s) reach it&quot;)
-for a, t in bad:
-    print(f&quot;      {a} -&gt; {t}&quot;)
-print()
-print(&quot;One line of IAM turns the chain, the WORM policy and the out-of-band&quot;)
-print(&quot;sensor into decoration. This is a quarterly diff, not a design review.&quot;)
-assert not hits and bad</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+One line of IAM turns the chain, the WORM policy and the out-of-band
+sensor into decoration. This is a quarterly diff, not a design review.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the IAM check on your own agent workload: can its role read, write or list the bucket its transcripts land in, or decrypt with their key? If yes, every detection you have built on those transcripts is reporting on data the subject controls.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> Every call now carries three identities, delegation narrows instead of widening, authority expires, every span in the context window arrives with an origin attached, and the record of all of it is one the workload cannot rewrite. Roughly half the chapter-1 risks are closed or badly weakened.</p>

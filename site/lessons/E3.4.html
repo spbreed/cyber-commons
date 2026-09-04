@@ -72,146 +72,77 @@ which is a decision nobody made rather than a surprise.</p>
 <p>The second half of this lesson is the four roles this curriculum implies, and
 which one to hire first — which is not the one most teams hire first.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">role</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">track</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">owns</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">delivers</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">how many others it unblocks</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">identity engineer</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent identity and delegation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">revocation · attribution · act chains</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>3</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">detection engineer</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent telemetry and drift</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">drift alerts · agent detections</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">2</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">GRC practitioner</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">E1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">tiering, evidence, continuous verification</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">inventory · control coverage</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">2</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">harness engineer</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">B2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the loop, the verifier, the eval</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">evaluation · stop conditions</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The harness engineer is the one most teams hire first. The identity engineer is the one who unblocks the most others — revocation, attribution and act chains are prerequisites for evidence, evaluation and continuous verification alike, so hiring them second costs a quarter.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Two of six decisions have no named owner, and in the simulated incident they account for 35 of 36.5 hours. The skill enumerates decisions rather than functions, and asks who may decide each one alone.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/ownership-seam-audit/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: ownership-seam-audit
+<p>Two of six decisions have no named owner, and in the simulated incident they account for 35 of 36.5 hours. The skill enumerates decisions rather than functions, and asks who may decide each one alone.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/ownership-seam-audit/SKILL.md"><code>skills/programme/ownership-seam-audit/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: ownership-seam-audit
 description: &gt;-
   Find the decisions in an agentic programme that have no named owner and
   measure what they cost during a simulated incident. Use when org design is
   being discussed, or when an incident stalled waiting for a decision.
 allowed-tools: Read, Grep, Glob
----
-
-# Thirty-five of thirty-six hours were two unowned decisions
-
-Org design failures are invisible until an incident, when they appear as hours.
+</code></pre>
+<h1>Thirty-five of thirty-six hours were two unowned decisions</h1>
+<p>Org design failures are invisible until an incident, when they appear as hours.
 The two decisions that typically have no owner — what autonomy rung an agent may
 run at, and how long traces are retained — are the ones that stall response,
-because nobody can make them and everybody can veto them.
-
-## When to use this
-
-Designing ownership for an agentic programme, and after any incident whose
-timeline contains a wait.
-
-## Procedure
-
-**1 — Enumerate the decisions, not the functions.** Autonomy rung, trace
+because nobody can make them and everybody can veto them.</p>
+<h2>When to use this</h2>
+<p>Designing ownership for an agentic programme, and after any incident whose
+timeline contains a wait.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate the decisions, not the functions.</strong> Autonomy rung, trace
 retention, stop authority, exemption approval, disclosure sign-off, vendor
-acceptance. Decisions have owners; functions have opinions.
-
-**2 — Ask who may decide each one alone.** Not who is consulted — who may
+acceptance. Decisions have owners; functions have opinions.</p>
+<p><strong>2 — Ask who may decide each one alone.</strong> Not who is consulted — who may
 decide. Two or more names is the same as none, and it takes the same time to
-resolve.
-
-**3 — Simulate an incident that needs several of them.** Assign realistic hours,
+resolve.</p>
+<p><strong>3 — Simulate an incident that needs several of them.</strong> Assign realistic hours,
 with the unowned decisions taking as long as it takes to convene the people who
-could make them.
-
-**4 — Report the share of the incident that was decision latency.** It is
-usually most of it, and the number is far more persuasive than the observation.
-
-**5 — Assign each unowned decision a single accountable name, with an escalation
-path.** Then re-run the simulation to show the difference. That is the business
-case for the org change.
-
-## Output contract
-
-```json
-{
+could make them.</p>
+<p><strong>4 — Report the share of the incident that was decision latency.</strong> It is
+usually most of it, and the number is far more persuasive than the observation.</p>
+<p><strong>5 — Assign each unowned decision a single accountable name, with an escalation
+path.</strong> Then re-run the simulation to show the difference. That is the business
+case for the org change.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;decisions&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str|null&quot;, &quot;consulted&quot;: [&quot;str&quot;], &quot;may_decide_alone&quot;: 0}],
   &quot;unowned&quot;: [&quot;str&quot;],
   &quot;incident&quot;: [{&quot;step&quot;: &quot;str&quot;, &quot;hours&quot;: 0.0, &quot;blocked_on&quot;: &quot;str|null&quot;}],
   &quot;totals&quot;: {&quot;hours&quot;: 0.0, &quot;decision_latency_hours&quot;: 0.0, &quot;share&quot;: 0.0},
   &quot;after_assignment&quot;: {&quot;hours&quot;: 0.0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Mapping functions.</strong> They all report coverage.</li>
+<li><strong>Two owners.</strong> It resolves as slowly as none.</li>
+<li><strong>Reporting the seam without the hours.</strong> It reads as a governance
+  preference.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>seam                        owner                           lesson
+------------------------------------------------------------------------------
+AppSec ↔ Platform           platform-security               A3.1
+Identity ↔ SecOps           on-call SRE, pre-authorised     A3.6
+GRC ↔ Engineering           ⚠ NOBODY                        E3.2
+SOC ↔ Data                  ⚠ NOBODY                        D1.5
+CISO office ↔ Legal         legal, on IR notification       E2.6
+AppSec ↔ SOC                detection engineering           D1.4
 
-## Failure modes
+2/6 seams have no named owner:
+   who decides an autonomy rung?
+   who retains agent traces, and for how long?
+step                                  seam                  owned   hours
+----------------------------------------------------------------------------
+detection fires                       SOC                    True     0.2
+agent identified as the actor         SOC                    True     1.0
+decision to revoke the identity       Identity ↔ SecOps      True     0.3
+decide trace retention for evidence   SOC ↔ Data            False    14.0   ← stalls
+re-tier the agent post-incident       GRC ↔ Engineering     False    21.0   ← stalls
 
-- **Mapping functions.** They all report coverage.
-- **Two owners.** It resolves as slowly as none.
-- **Reporting the seam without the hours.** It reads as a governance
-  preference.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+total elapsed: 36.5 hours
+if every seam were owned: 1.5 hours (24× faster)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/programme/ownership-seam-audit/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/ownership-seam-audit/scripts/ownership_seam_audit.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Find the decisions with no named owner and measure what they cost during a simulated incident.
-
-This is the executable half of the `ownership-seam-audit` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-SEAMS = [
- (&quot;AppSec&quot;, &quot;Platform&quot;,     &quot;who owns the agent&#x27;s sandbox?&quot;,              &quot;A3.1&quot;),
- (&quot;Identity&quot;, &quot;SecOps&quot;,     &quot;who revokes a non-human identity at 03:00?&quot;, &quot;A3.6&quot;),
- (&quot;GRC&quot;, &quot;Engineering&quot;,     &quot;who decides an autonomy rung?&quot;,              &quot;E3.2&quot;),
- (&quot;SOC&quot;, &quot;Data&quot;,            &quot;who retains agent traces, and for how long?&quot;,&quot;D1.5&quot;),
- (&quot;CISO office&quot;, &quot;Legal&quot;,   &quot;who starts the regulatory clock?&quot;,           &quot;E2.6&quot;),
- (&quot;AppSec&quot;, &quot;SOC&quot;,          &quot;who owns detections FOR agents?&quot;,            &quot;D1.4&quot;),
-]
-ANSWERS = {
- &quot;who owns the agent&#x27;s sandbox?&quot;: &quot;platform-security&quot;,
- &quot;who revokes a non-human identity at 03:00?&quot;: &quot;on-call SRE, pre-authorised&quot;,
- &quot;who decides an autonomy rung?&quot;: &quot;&quot;,                    # unanswered
- &quot;who retains agent traces, and for how long?&quot;: &quot;&quot;,      # unanswered
- &quot;who starts the regulatory clock?&quot;: &quot;legal, on IR notification&quot;,
- &quot;who owns detections FOR agents?&quot;: &quot;detection engineering&quot;,
-}
-print(f&quot;{&#x27;seam&#x27;:28s}{&#x27;owner&#x27;:32s}lesson&quot;)
-print(&quot;-&quot; * 78)
-unanswered = []
-for a, b, q, lesson in SEAMS:
-    owner = ANSWERS.get(q, &quot;&quot;)
-    if not owner: unanswered.append(q)
-    print(f&quot;{a + &#x27; ↔ &#x27; + b:28s}{owner or &#x27;⚠ NOBODY&#x27;:32s}{lesson}&quot;)
-print(f&quot;\n{len(unanswered)}/{len(SEAMS)} seams have no named owner:&quot;)
-for q in unanswered: print(f&quot;   {q}&quot;)
-assert unanswered
-
-INCIDENT = [
- (&quot;detection fires&quot;,                     &quot;SOC&quot;,              True,  0.2),
- (&quot;agent identified as the actor&quot;,       &quot;SOC&quot;,              True,  1.0),
- (&quot;decision to revoke the identity&quot;,     &quot;Identity ↔ SecOps&quot;,True,  0.3),
- (&quot;decide trace retention for evidence&quot;, &quot;SOC ↔ Data&quot;,       False, 14.0),
- (&quot;re-tier the agent post-incident&quot;,     &quot;GRC ↔ Engineering&quot;,False, 21.0),
-]
-print(f&quot;{&#x27;step&#x27;:38s}{&#x27;seam&#x27;:20s}{&#x27;owned&#x27;:&gt;7}{&#x27;hours&#x27;:&gt;8}&quot;)
-print(&quot;-&quot; * 76)
-total = 0
-for step, seam, owned, hours in INCIDENT:
-    total += hours
-    flag = &quot;&quot; if owned else &quot;   ← stalls&quot;
-    print(f&quot;{step:38s}{seam:20s}{str(owned):&gt;7}{hours:&gt;8}{flag}&quot;)
-print(f&quot;\ntotal elapsed: {total:.1f} hours&quot;)
-owned_only = sum(h for _, _, o, h in INCIDENT if o)
-print(f&quot;if every seam were owned: {owned_only:.1f} hours &quot;
-      f&quot;({total/owned_only:.0f}× faster)&quot;)
-print(&quot;\nThe two unowned steps account for &quot;
-      f&quot;{(total-owned_only)/total:.0%} of the elapsed time, and both are&quot;)
-print(&quot;decisions rather than work.&quot;)
-assert total &gt; owned_only * 5</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The two unowned steps account for 96% of the elapsed time, and both are
+decisions rather than work.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Two of six seams have no named owner — autonomy rung decisions and trace retention. The simulated incident takes 36.5 hours, of which 35 are the two unowned decision steps, roughly 24× slower than if every seam were owned. The role analysis shows the identity engineer unblocks the most downstream capability while the harness engineer is hired first most often.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Put a name against each of the six seams this week. Any seam where two people both say "them" is the one that will stall your next incident, and finding it now costs one meeting.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E3.5.html">E3.5 · The metrics that matter at your level</a></strong></p>

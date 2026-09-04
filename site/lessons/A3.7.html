@@ -63,10 +63,8 @@ attractive target. It has to be operated accordingly.</p></div><div class="nbmd"
 <p><strong>What this control closes.</strong></p>
 <p>Not a new control. The same controls, at a point every call passes through — and the only answer to a downstream that cannot consume delegated identity.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Proving every call goes through it, as a skill</h2>
-<p>A gateway is only a choke point if nothing routes around it, and "nothing routes around it" is not a fact you can read off a route table. The procedure tests reachability from inside the deployment, covers the paths people forget — tool-initiated calls, background jobs, retries — and records each guardrail's <strong>action</strong>, because a filter set to observe is a filter that is switched on and stopping nothing. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/llm-gateway-guardrail-verifier/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: llm-gateway-guardrail-verifier
+<p>A gateway is only a choke point if nothing routes around it, and "nothing routes around it" is not a fact you can read off a route table. The procedure tests reachability from inside the deployment, covers the paths people forget — tool-initiated calls, background jobs, retries — and records each guardrail's <strong>action</strong>, because a filter set to observe is a filter that is switched on and stopping nothing. This is the file in this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/llm-gateway-guardrail-verifier/SKILL.md"><code>skills/attestation/llm-gateway-guardrail-verifier/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: llm-gateway-guardrail-verifier
 description: &gt;-
   Prove all model traffic leaves through the sanctioned gateway, including
   tool-initiated and background calls, and that guardrail policies are
@@ -74,45 +72,44 @@ description: &gt;-
   provider endpoint is directly reachable, or to evidence which guardrail
   policies are switched on.
 allowed-tools: Bash, Read
----
-
-# Llm Gateway Guardrail Verifier
-
-**Controls:** Control 4 — gateway routing and guardrails
-
-## Confidence: HIGH **only if** egress is enforced below the application
-
-An application-layer gateway configuration is a routing preference. An agent
+</code></pre>
+<h1>Llm Gateway Guardrail Verifier</h1>
+<p><strong>Controls:</strong> Control 4 — gateway routing and guardrails</p>
+<h2>Confidence: HIGH <strong>only if</strong> egress is enforced below the application</h2>
+<p>An application-layer gateway configuration is a routing preference. An agent
 that can open a socket can bypass it by calling the provider directly. If the
-allowlist is not enforced at the network layer, **downgrade this control to
-PARTIAL** and say why.
-
-## Procedure
-
-1. **Test reachability, do not read configuration.** From the deployment&#x27;s
+allowlist is not enforced at the network layer, <strong>downgrade this control to
+PARTIAL</strong> and say why.</p>
+<h2>Procedure</h2>
+<ol>
+<li>
+<p><strong>Test reachability, do not read configuration.</strong> From the deployment's
    network position, attempt to reach provider endpoints directly. Anything
    reachable that is not the gateway is a finding, regardless of what the
-   configuration says.
-
-2. **Cover the paths people forget.** Tool-initiated calls, background jobs,
+   configuration says.</p>
+</li>
+<li>
+<p><strong>Cover the paths people forget.</strong> Tool-initiated calls, background jobs,
    scheduled tasks, retry paths and sub-agents. A gateway that fronts the main
-   request path and not the batch job is a gateway with a hole in it.
-
-3. **Confirm guardrail attachment and version.** Record the guardrail ID and
-   version actually attached to the route, not the one in the template.
-
-4. **Enumerate enabled policies.** Content filters, prompt-attack filtering,
+   request path and not the batch job is a gateway with a hole in it.</p>
+</li>
+<li>
+<p><strong>Confirm guardrail attachment and version.</strong> Record the guardrail ID and
+   version actually attached to the route, not the one in the template.</p>
+</li>
+<li>
+<p><strong>Enumerate enabled policies.</strong> Content filters, prompt-attack filtering,
    denied topics, sensitive-information filters, contextual grounding. Record
-   whether each is applied on **input, output, or both** — input-only filtering
-   is a common and quiet gap.
-
-5. **Confirm the action.** A filter set to observe rather than block is
-   telemetry, not a control. Record the configured action per policy.
-
-## Output contract
-
-```json
-{
+   whether each is applied on <strong>input, output, or both</strong> — input-only filtering
+   is a common and quiet gap.</p>
+</li>
+<li>
+<p><strong>Confirm the action.</strong> A filter set to observe rather than block is
+   telemetry, not a control. Record the configured action per policy.</p>
+</li>
+</ol>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;gateway_enforced&quot;: true,
   &quot;enforcement_layer&quot;: &quot;network|application&quot;,
@@ -122,98 +119,28 @@ PARTIAL** and say why.
                               &quot;action&quot;: &quot;block|anonymize|observe&quot;}]},
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reading the route table instead of testing reachability.</strong></li>
+<li><strong>Missing the background path.</strong> Scheduled and tool-initiated calls are the
+  ones that bypass the gateway in practice.</li>
+<li><strong>Recording a guardrail as enforced when its action is observe.</strong></li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   the intended call           ALLOWED
+   unregistered agent          denied at identity
+   verb not permitted          denied at policy
+   exfiltration destination    denied at egress
+   over the per-target ceiling denied at budget
 
-## Failure modes
+audit entries written: 1
+credential held by the agent: never - attached at the gateway
 
-- **Reading the route table instead of testing reachability.**
-- **Missing the background path.** Scheduled and tool-initiated calls are the
-  ones that bypass the gateway in practice.
-- **Recording a guardrail as enforced when its action is observe.**
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+The agent implements none of this. Add a new agent tomorrow and it
+inherits every control by being on the other side of one hop.
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/attestation/llm-gateway-guardrail-verifier/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/llm-gateway-guardrail-verifier/scripts/llm_gateway_guardrail_verifier.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Send five calls through one gateway and record which check refuses each one.
-
-This is the executable half of the `llm-gateway-guardrail-verifier` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-LEGACY_DB_CREDENTIAL = &quot;static-service-password&quot;     # never leaves the gateway
-
-REGISTRY = {&quot;spiffe://corp/reports-agent&quot;: {&quot;owner&quot;: &quot;sam@corp&quot;, &quot;expires&quot;: 9000}}
-POLICY = {(&quot;reports-agent&quot;, &quot;run_query&quot;, &quot;table:reports&quot;): {&quot;SELECT&quot;}}
-EGRESS_ALLOW = {&quot;reports-db.corp.example&quot;}
-
-AUDIT = []
-
-def gateway(call):
-    &quot;&quot;&quot;One choke point: identity, registry, policy, egress, budget, audit.&quot;&quot;&quot;
-    checks = []
-    def check(name, ok, why=&quot;&quot;):
-        checks.append((name, ok, why)); return ok
-
-    if not check(&quot;identity&quot;, call[&quot;identity&quot;] in REGISTRY, &quot;attested and registered&quot;):
-        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
-    verbs = POLICY.get((call[&quot;agent&quot;], call[&quot;tool&quot;], call[&quot;resource&quot;]), set())
-    if not check(&quot;policy&quot;, call[&quot;verb&quot;] in verbs, f&quot;permitted verbs {sorted(verbs) or &#x27;none&#x27;}&quot;):
-        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
-    if not check(&quot;egress&quot;, call[&quot;destination&quot;] in EGRESS_ALLOW, &quot;destination allow-list&quot;):
-        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
-    if not check(&quot;budget&quot;, call[&quot;calls_so_far&quot;] &lt; 5, &quot;per-target ceiling&quot;):
-        return {&quot;allowed&quot;: False, &quot;checks&quot;: checks}
-
-    # the agent never held this; the gateway attaches it on the way out
-    AUDIT.append({&quot;principal&quot;: call[&quot;principal&quot;], &quot;agent&quot;: call[&quot;agent&quot;],
-                  &quot;tool&quot;: call[&quot;tool&quot;], &quot;resource&quot;: call[&quot;resource&quot;]})
-    return {&quot;allowed&quot;: True, &quot;checks&quot;: checks, &quot;credential_attached&quot;: LEGACY_DB_CREDENTIAL[:6] + &quot;...&quot;}
-
-BASE = {&quot;identity&quot;: &quot;spiffe://corp/reports-agent&quot;, &quot;agent&quot;: &quot;reports-agent&quot;,
-        &quot;principal&quot;: &quot;dana@corp&quot;, &quot;tool&quot;: &quot;run_query&quot;, &quot;resource&quot;: &quot;table:reports&quot;,
-        &quot;verb&quot;: &quot;SELECT&quot;, &quot;destination&quot;: &quot;reports-db.corp.example&quot;, &quot;calls_so_far&quot;: 0}
-
-CASES = {
- &quot;the intended call&quot;:          BASE,
- &quot;unregistered agent&quot;:         dict(BASE, identity=&quot;spiffe://corp/rogue-agent&quot;),
- &quot;verb not permitted&quot;:         dict(BASE, verb=&quot;DELETE&quot;),
- &quot;exfiltration destination&quot;:   dict(BASE, destination=&quot;archive.evil.example&quot;),
- &quot;over the per-target ceiling&quot;:dict(BASE, calls_so_far=9),
-}
-for label, call in CASES.items():
-    r = gateway(call)
-    failed = [n for n, ok, _ in r[&quot;checks&quot;] if not ok]
-    print(f&quot;   {label:28s}{&#x27;ALLOWED&#x27; if r[&#x27;allowed&#x27;] else &#x27;denied at &#x27; + failed[0]}&quot;)
-
-print(f&quot;\naudit entries written: {len(AUDIT)}&quot;)
-print(f&quot;credential held by the agent: never - attached at the gateway&quot;)
-print()
-print(&quot;The agent implements none of this. Add a new agent tomorrow and it&quot;)
-print(&quot;inherits every control by being on the other side of one hop.&quot;)
-print()
-print(&quot;And the legacy database, which cannot consume a delegated token, is&quot;)
-print(&quot;reached with a static credential the agent has never seen - authorised&quot;)
-print(&quot;against dana before the call was made.&quot;)
-assert len(AUDIT) == 1 and gateway(CASES[&quot;unregistered agent&quot;])[&quot;allowed&quot;] is False</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+And the legacy database, which cannot consume a delegated token, is
+reached with a static credential the agent has never seen - authorised
+against dana before the call was made.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. Its confidence is HIGH only where egress is enforced below the application — the gateway is a choke point because the network makes it one, not because the SDK was configured to point at it, and an application-level base URL is a default, not a control.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Count your agents. If it is more than five, work out how you would currently answer 'is egress control on for all of them' — and how long that would take.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.8.html">A3.8 · Shared infrastructure between agent runs</a></strong></p>

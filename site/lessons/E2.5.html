@@ -50,55 +50,40 @@ not reach.</p>
 <p>The capability that makes erasure possible is the same one C2.4 built for poison
 removal: per-record hashes. Without them you cannot locate the record, so you
 cannot delete it.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Five items of personal data are in the agent trace and nobody put them there deliberately. The skill maps every system holding a copy and runs a real erasure request through all of them — three of which cannot delete one subject's records.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/trace-personal-data-audit/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: trace-personal-data-audit
+<p>Five items of personal data are in the agent trace and nobody put them there deliberately. The skill maps every system holding a copy and runs a real erasure request through all of them — three of which cannot delete one subject's records.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/regulatory/trace-personal-data-audit/SKILL.md"><code>skills/regulatory/trace-personal-data-audit/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: trace-personal-data-audit
 description: &gt;-
   Find personal data that nobody deliberately placed in an agent trace, and run
   an erasure request through every system that holds a copy. Use when agent
   telemetry meets data protection, or before a subject access request arrives.
 allowed-tools: Read, Grep, Glob
----
-
-# Nobody put it there, and it is there
-
-An agent trace accumulates personal data as a side effect: a name in a ticket, an
+</code></pre>
+<h1>Nobody put it there, and it is there</h1>
+<p>An agent trace accumulates personal data as a side effect: a name in a ticket, an
 email in a tool result, an account number in a document it read, a card number
 in a file it was asked to fix. None of it was placed deliberately, all of it is
-personal data, and it is copied into every system the trace is shipped to.
-
-## When to use this
-
-Before agent telemetry is retained or exported, and before the first erasure
-request rather than during it.
-
-## Procedure
-
-**1 — Run detectors over the whole trace.** Every field, every step. Names,
+personal data, and it is copied into every system the trace is shipped to.</p>
+<h2>When to use this</h2>
+<p>Before agent telemetry is retained or exported, and before the first erasure
+request rather than during it.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Run detectors over the whole trace.</strong> Every field, every step. Names,
 emails, account and card numbers, health terms. Record which step introduced
-each, because that tells you whether it is preventable.
-
-**2 — Map every system that holds a copy.** The trace store, the SIEM, the
+each, because that tells you whether it is preventable.</p>
+<p><strong>2 — Map every system that holds a copy.</strong> The trace store, the SIEM, the
 warehouse, backups, and any vendor it is exported to. This list is the erasure
-surface and it is longer than the trace store.
-
-**3 — Run a real erasure request end to end.** Locate every copy for one
-subject, delete, and verify. Systems that cannot delete a single subject&#x27;s
+surface and it is longer than the trace store.</p>
+<p><strong>3 — Run a real erasure request end to end.</strong> Locate every copy for one
+subject, delete, and verify. Systems that cannot delete a single subject's
 records — append-only stores, immutable backups, aggregate indexes — are the
-finding.
-
-**4 — Say what is legitimately retained and why.** Some copies survive erasure
+finding.</p>
+<p><strong>4 — Say what is legitimately retained and why.</strong> Some copies survive erasure
 lawfully. Naming the basis, per system, is the difference between a defensible
-position and a gap.
-
-**5 — Reduce at source.** Redaction at write time is cheaper than erasure across
-six systems. Say which detector should run before the trace is stored.
-
-## Output contract
-
-```json
-{
+position and a gap.</p>
+<p><strong>5 — Reduce at source.</strong> Redaction at write time is cheaper than erasure across
+six systems. Say which detector should run before the trace is stored.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;trace&quot;: {&quot;steps&quot;: 0},
   &quot;detections&quot;: [{&quot;kind&quot;: &quot;str&quot;, &quot;field&quot;: &quot;str&quot;, &quot;step&quot;: 0, &quot;deliberate&quot;: false}],
   &quot;systems&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;holds_copy&quot;: true, &quot;can_delete_subject&quot;: false}],
@@ -106,153 +91,58 @@ six systems. Say which detector should run before the trace is stored.
   &quot;retained_lawfully&quot;: [{&quot;system&quot;: &quot;str&quot;, &quot;basis&quot;: &quot;str&quot;}],
   &quot;redaction_at_source&quot;: [&quot;str&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Auditing the trace store only.</strong> The copies are the problem.</li>
+<li><strong>Assuming erasure works.</strong> Run one and find out.</li>
+<li><strong>Reporting failures without the lawful retentions.</strong> Half the list is fine
+  and the report loses credibility without saying so.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>personal data present in the agent trace:
+   step 1  email           dana.okonkwo@example.com
+   step 1  payment card    4111111111111111
+   step 1  account number  acct 8812
+   step 1  name            J. Okonkwo
 
-## Failure modes
+4 items. Nobody put them there deliberately — the agent read
+a support ticket, which is exactly what it was asked to do.
+erasure request for dana.okonkwo@example.com
 
-- **Auditing the trace store only.** The copies are the problem.
-- **Assuming erasure works.** Run one and find out.
-- **Reporting failures without the lawful retentions.** Half the list is fine
-  and the report loses credibility without saying so.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+system                  can locate?  retention (d)  outcome
+----------------------------------------------------------------------------
+primary CRM                    True           2555  erased
+data warehouse                 True           1095  erased
+agent traces                  False            400  CANNOT LOCATE — request cannot be completed
+eval corpus                   False           9999  CANNOT LOCATE — request cannot be completed
+fine-tuning set               False           9999  CANNOT LOCATE — request cannot be completed
+backups                        True             90  erased
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+3 system(s) where the request fails: [&#x27;agent traces&#x27;, &#x27;eval corpus&#x27;, &#x27;fine-tuning set&#x27;]
+The response to the data subject says &#x27;erased&#x27;. It is not true in three
+systems, two of which retain indefinitely.
+subject index built from the trace:
+   dana.okonkwo@example.com            1 occurrence(s) in steps [1]
+   4111111111111111                    1 occurrence(s) in steps [1]
+   acct 8812                           1 occurrence(s) in steps [1]
+   J. Okonkwo                          1 occurrence(s) in steps [1]
 
-from cyber_commons_skill_runtime import run_skill
+erasure for dana.okonkwo@example.com: steps [1]
+   step 1: [erased on request; original sha256=8eca2dd536af650a]
+   step 2: 3 orders found for account 8812, total GBP 412.90
+   step 3: Refund issued for the duplicate charge.
 
-# Split skills/regulatory/trace-personal-data-audit/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/trace-personal-data-audit/scripts/trace_personal_data_audit.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Find personal data nobody placed in an agent trace deliberately, and run an erasure request through every system that holds it.
+personal data remaining in the trace: none
+The hash is retained, so if the original surfaces in a backup you can
+still prove it is the same content — which is what makes the erasure auditable.
+field       days  rationale
+--------------------------------------------------------------
+n            400  cheap, high forensic value, no personal data
+tool         400  cheap, high forensic value, no personal data
+target       400  cheap, high forensic value, no personal data
+result         7  tool output — highest sensitivity, lowest retention
 
-This is the executable half of the `trace-personal-data-audit` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import re, hashlib
-from dataclasses import dataclass, field
-
-@dataclass
-class Step:
-    n: int; tool: str; target: str; result: str
-
-RUN = [
- Step(1, &quot;read_ticket&quot;, &quot;SUP-4471&quot;,
-      &quot;Customer J. Okonkwo (dana.okonkwo@example.com, acct 8812) reports a &quot;
-      &quot;double charge on card 4111111111111111.&quot;),
- Step(2, &quot;search_orders&quot;, &quot;acct=8812&quot;,
-      &quot;3 orders found for account 8812, total GBP 412.90&quot;),
- Step(3, &quot;post_reply&quot;, &quot;SUP-4471&quot;, &quot;Refund issued for the duplicate charge.&quot;),
-]
-DETECTORS = {
- &quot;email&quot;: re.compile(r&quot;[\w.+-]+@[\w-]+\.[\w.]+&quot;),
- &quot;payment card&quot;: re.compile(r&quot;\b4[0-9]{12}(?:[0-9]{3})?\b&quot;),
- &quot;account number&quot;: re.compile(r&quot;\bacct \d{4}\b&quot;),
- &quot;name&quot;: re.compile(r&quot;\b[A-Z]\. [A-Z][a-z]+\b&quot;),
-}
-found = []
-for s in RUN:
-    for kind, pat in DETECTORS.items():
-        for m in pat.finditer(s.result):
-            found.append((s.n, kind, m.group(0)))
-print(&quot;personal data present in the agent trace:&quot;)
-for n, kind, val in found:
-    print(f&quot;   step {n}  {kind:16s}{val}&quot;)
-print(f&quot;\n{len(found)} items. Nobody put them there deliberately — the agent read&quot;)
-print(&quot;a support ticket, which is exactly what it was asked to do.&quot;)
-
-SYSTEMS = {
- &quot;primary CRM&quot;:        {&quot;has_index&quot;: True,  &quot;retention_days&quot;: 2555},
- &quot;data warehouse&quot;:     {&quot;has_index&quot;: True,  &quot;retention_days&quot;: 1095},
- &quot;agent traces&quot;:       {&quot;has_index&quot;: False, &quot;retention_days&quot;: 400},
- &quot;eval corpus&quot;:        {&quot;has_index&quot;: False, &quot;retention_days&quot;: 9999},
- &quot;fine-tuning set&quot;:    {&quot;has_index&quot;: False, &quot;retention_days&quot;: 9999},
- &quot;backups&quot;:            {&quot;has_index&quot;: True,  &quot;retention_days&quot;: 90},
-}
-SUBJECT = &quot;dana.okonkwo@example.com&quot;
-
-print(f&quot;erasure request for {SUBJECT}\n&quot;)
-print(f&quot;{&#x27;system&#x27;:22s}{&#x27;can locate?&#x27;:&gt;13}{&#x27;retention (d)&#x27;:&gt;15}  outcome&quot;)
-print(&quot;-&quot; * 76)
-unreachable = []
-for name, s in SYSTEMS.items():
-    if s[&quot;has_index&quot;]:
-        outcome = &quot;erased&quot;
-    else:
-        outcome = &quot;CANNOT LOCATE — request cannot be completed&quot;
-        unreachable.append(name)
-    print(f&quot;{name:22s}{str(s[&#x27;has_index&#x27;]):&gt;13}{s[&#x27;retention_days&#x27;]:&gt;15}  {outcome}&quot;)
-print(f&quot;\n{len(unreachable)} system(s) where the request fails: {unreachable}&quot;)
-print(&quot;The response to the data subject says &#x27;erased&#x27;. It is not true in three&quot;)
-print(&quot;systems, two of which retain indefinitely.&quot;)
-assert unreachable
-
-def content_hash(text): return hashlib.sha256(text.encode()).hexdigest()[:16]
-
-def index_trace(run, detectors):
-    &quot;&quot;&quot;A subject index: which steps contain data about whom.&quot;&quot;&quot;
-    idx = {}
-    for s in run:
-        for kind, pat in detectors.items():
-            for m in pat.finditer(s.result):
-                subj = m.group(0)
-                idx.setdefault(subj, []).append(
-                    {&quot;step&quot;: s.n, &quot;kind&quot;: kind, &quot;hash&quot;: content_hash(s.result)})
-    return idx
-
-IDX = index_trace(RUN, DETECTORS)
-print(&quot;subject index built from the trace:&quot;)
-for subj, entries in IDX.items():
-    print(f&quot;   {subj:36s}{len(entries)} occurrence(s) in steps &quot;
-          f&quot;{sorted({e[&#x27;step&#x27;] for e in entries})}&quot;)
-
-def erase(run, idx, subject):
-    steps = sorted({e[&quot;step&quot;] for e in idx.get(subject, [])})
-    out = []
-    for s in run:
-        if s.n in steps:
-            out.append(Step(s.n, s.tool, s.target,
-                            f&quot;[erased on request; original sha256={content_hash(s.result)}]&quot;))
-        else:
-            out.append(s)
-    return out, steps
-
-erased, touched = erase(RUN, IDX, SUBJECT)
-print(f&quot;\nerasure for {SUBJECT}: steps {touched}&quot;)
-for s in erased:
-    print(f&quot;   step {s.n}: {s.result[:66]}&quot;)
-
-remaining = [(n, k, v) for s in erased for k, pat in DETECTORS.items()
-             for m in pat.finditer(s.result) for n, v in [(s.n, m.group(0))]]
-print(f&quot;\npersonal data remaining in the trace: {remaining or &#x27;none&#x27;}&quot;)
-assert not remaining
-print(&quot;The hash is retained, so if the original surfaces in a backup you can&quot;)
-print(&quot;still prove it is the same content — which is what makes the erasure auditable.&quot;)
-
-# Per-field retention: keep the forensically useful parts, drop the rest early.
-RETENTION = {&quot;n&quot;: 400, &quot;tool&quot;: 400, &quot;target&quot;: 400, &quot;result&quot;: 7}
-print(f&quot;{&#x27;field&#x27;:10s}{&#x27;days&#x27;:&gt;6}  rationale&quot;)
-print(&quot;-&quot; * 62)
-for f, d in RETENTION.items():
-    why = (&quot;tool output — highest sensitivity, lowest retention&quot; if f == &quot;result&quot;
-           else &quot;cheap, high forensic value, no personal data&quot;)
-    print(f&quot;{f:10s}{d:&gt;6}  {why}&quot;)
-print(&quot;\nAt 7 days the result field is gone and the trace is still forensically&quot;)
-print(&quot;useful: you know what the agent did, to what, and when.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+At 7 days the result field is gone and the trace is still forensically
+useful: you know what the agent did, to what, and when.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Five items of personal data appear in the agent trace — name, email, account number and payment card — none placed there deliberately. The erasure request fails in three systems that cannot locate the record, two of which retain indefinitely. Building a subject index locates the affected steps, erasure leaves no personal data while retaining the hash, and per-field retention drops the sensitive field at 7 days.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Time-box this to an hour: can you delete one customer's data from your agent traces today? The answer usually arrives in ten minutes and is usually no — and the eval corpus is the system people forget entirely.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.6.html">E2.6 · Incident and disclosure obligations</a></strong></p>

@@ -47,10 +47,8 @@ other agents.</p>
 </ol>
 <p>Source 3 is the one that discovers the department using a frontier API on a
 personal card, and the SaaS product that quietly added an AI feature.</p></div><div class="nbmd"><h2>3 · Resolving one row into a deployment, as a skill</h2>
-<p>Discovery finds that a thing exists. Governing it needs the row resolved into artefacts: which repository at which commit, which image <strong>digest</strong> rather than which tag, which IAM role and SPIFFE ID, which gateway and guardrail, and every downstream its tools call. Every other attestation skill consumes this graph, which is why it runs first. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/deployment-inventory-resolver/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: deployment-inventory-resolver
+<p>Discovery finds that a thing exists. Governing it needs the row resolved into artefacts: which repository at which commit, which image <strong>digest</strong> rather than which tag, which IAM role and SPIFFE ID, which gateway and guardrail, and every downstream its tools call. Every other attestation skill consumes this graph, which is why it runs first. This is the file in this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/deployment-inventory-resolver/SKILL.md"><code>skills/attestation/deployment-inventory-resolver/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: deployment-inventory-resolver
 description: &gt;-
   Resolve a deployment_id into the artifacts that make up one agentic
   deployment and build the evidence graph every other attestation skill
@@ -58,42 +56,34 @@ description: &gt;-
   repo, image, role, workload identity, gateway or guardrail a deployment
   actually consists of.
 allowed-tools: Bash, Read, Grep, Glob
----
-
-# Deployment Inventory Resolver
-
-**Controls:** All — this skill produces the join key
-
-## Why this runs first
-
-`deployment_id` is the primary key for every other skill in this set. Without
+</code></pre>
+<h1>Deployment Inventory Resolver</h1>
+<p><strong>Controls:</strong> All — this skill produces the join key</p>
+<h2>Why this runs first</h2>
+<p><code>deployment_id</code> is the primary key for every other skill in this set. Without
 it, an IAM finding, a SPIFFE entry and a gateway policy are three unrelated
-facts about three things that may or may not be the same system.
-
-This skill turns that ID into a manifest of content-addressed artifacts, so
+facts about three things that may or may not be the same system.</p>
+<p>This skill turns that ID into a manifest of content-addressed artifacts, so
 every later finding resolves to one evaluable unit and cannot be silently
-confused with a neighbouring deployment.
-
-## Procedure
-
-1. **Resolve the code.** Repository URL plus the exact commit SHA that was
-   built. Not a branch — a branch moves.
-2. **Resolve the image.** Registry digest (`sha256:…`), not a tag. Confirm the
-   digest matches the revision actually deployed, not the newest build.
-3. **Resolve the runtime identity.** The IAM role ARN, the SPIFFE ID, and —
+confused with a neighbouring deployment.</p>
+<h2>Procedure</h2>
+<ol>
+<li><strong>Resolve the code.</strong> Repository URL plus the exact commit SHA that was
+   built. Not a branch — a branch moves.</li>
+<li><strong>Resolve the image.</strong> Registry digest (<code>sha256:…</code>), not a tag. Confirm the
+   digest matches the revision actually deployed, not the newest build.</li>
+<li><strong>Resolve the runtime identity.</strong> The IAM role ARN, the SPIFFE ID, and —
    on platforms that auto-create one — the workload identity ARN exposed by the
-   runtime/gateway description API.
-4. **Resolve the traffic path.** Gateway or route ARN, and the guardrail ID
-   attached to it.
-5. **Resolve the downstreams.** Every service the deployment&#x27;s tools call.
-   These become the input to the risk-registry skill.
-6. **Cross-link and check completeness.** Every artifact must reference the
-   others. Report orphans rather than omitting them.
-
-## Output contract
-
-```json
-{
+   runtime/gateway description API.</li>
+<li><strong>Resolve the traffic path.</strong> Gateway or route ARN, and the guardrail ID
+   attached to it.</li>
+<li><strong>Resolve the downstreams.</strong> Every service the deployment's tools call.
+   These become the input to the risk-registry skill.</li>
+<li><strong>Cross-link and check completeness.</strong> Every artifact must reference the
+   others. Report orphans rather than omitting them.</li>
+</ol>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;resolved_at&quot;: &quot;str&quot;,
   &quot;artifacts&quot;: {
@@ -107,141 +97,51 @@ confused with a neighbouring deployment.
   &quot;orphans&quot;: [&quot;str&quot;],
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
 }
-```
-
-A manifest with entries in `missing` is `PARTIAL` at best. Every downstream
+</code></pre>
+<p>A manifest with entries in <code>missing</code> is <code>PARTIAL</code> at best. Every downstream
 skill inherits that ceiling — you cannot attest a control on an artifact you
-could not resolve.
+could not resolve.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Resolving a tag instead of a digest.</strong> Tags are mutable; the thing you
+  attested is not necessarily the thing running.</li>
+<li><strong>Treating an unresolvable artifact as absent.</strong> "No gateway configured" and
+  "I could not read the gateway API" are different findings.</li>
+<li><strong>Reusing a manifest across runs.</strong> Re-resolve. Drift is the point.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>asset                             kind              autonomy  owner         found via
+--------------------------------------------------------------------------------------------
+fraud-scoring-model               model             L1        risk-eng      registry
+support-summariser                copilot           L1        support-eng   registry
+vendor-contract-analyser          embedded-feature  L1        —             expense report
+unknown-openai-usage-marketing    copilot           L1        —             egress logs
+pr-remediation-agent              agent             L2.5      —             egress logs
+agent-worker-7f3c                 agent             L2.5      —             egress logs
 
-## Failure modes
+registry found 2; the other two sources found 4 more.
+assets                    6
+no named owner            4  [&#x27;vendor-contract-analyser&#x27;, &#x27;unknown-openai-usage-marketing&#x27;, &#x27;pr-remediation-agent&#x27;, &#x27;agent-worker-7f3c&#x27;]
+never registered          4
+L2.5+ with no owner       2  [&#x27;pr-remediation-agent&#x27;, &#x27;agent-worker-7f3c&#x27;]
 
-- **Resolving a tag instead of a digest.** Tags are mutable; the thing you
-  attested is not necessarily the thing running.
-- **Treating an unresolvable artifact as absent.** &quot;No gateway configured&quot; and
-  &quot;I could not read the gateway API&quot; are different findings.
-- **Reusing a manifest across runs.** Re-resolve. Drift is the point.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+gaps in detail:
+   vendor-contract-analyser          no named owner — nobody can accept the risk or recertify it
+   vendor-contract-analyser          not registered — found via expense report
+   unknown-openai-usage-marketing    no named owner — nobody can accept the risk or recertify it
+   unknown-openai-usage-marketing    not registered — found via egress logs
+   pr-remediation-agent              no named owner — nobody can accept the risk or recertify it
+   pr-remediation-agent              not registered — found via egress logs
+   pr-remediation-agent              acts semi-autonomously with nobody accountable
+   agent-worker-7f3c                 no named owner — nobody can accept the risk or recertify it
+   agent-worker-7f3c                 not registered — found via egress logs
+   agent-worker-7f3c                 acts semi-autonomously with nobody accountable
+marketing-workstation-14      api.openai.com                       240,000 bytes
+                              AI usage not present in the inventory
+svc-pr-remediation            api.anthropic.com                  8,400,000 bytes
+                              AI usage not present in the inventory
+agent-worker-7f3c             api.together.xyz                   1,200,000 bytes
+                              AI usage not present in the inventory
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/attestation/deployment-inventory-resolver/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/deployment-inventory-resolver/scripts/deployment_inventory_resolver.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Build an AI inventory from three sources and measure ownership coverage against what the third one finds.
-
-This is the executable half of the `deployment-inventory-resolver` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-from dataclasses import dataclass, field
-
-@dataclass
-class AIAsset:
-    name: str
-    kind: str              # model | agent | copilot | embedded-feature
-    owner: str = &quot;&quot;
-    autonomy: str = &quot;L1&quot;
-    data: tuple = ()
-    external: bool = False
-    discovered_via: str = &quot;registry&quot;
-
-    def gaps(self):
-        g = []
-        if not self.owner:
-            g.append(&quot;no named owner — nobody can accept the risk or recertify it&quot;)
-        if self.discovered_via != &quot;registry&quot;:
-            g.append(f&quot;not registered — found via {self.discovered_via}&quot;)
-        if self.autonomy in (&quot;L2.5&quot;, &quot;L3&quot;) and not self.owner:
-            g.append(&quot;acts semi-autonomously with nobody accountable&quot;)
-        return g
-
-REGISTRY = [
- AIAsset(&quot;fraud-scoring-model&quot;, &quot;model&quot;, &quot;risk-eng&quot;, &quot;L1&quot;, (&quot;customer&quot;,)),
- AIAsset(&quot;support-summariser&quot;, &quot;copilot&quot;, &quot;support-eng&quot;, &quot;L1&quot;, (&quot;customer&quot;,)),
-]
-PROCUREMENT = [
- AIAsset(&quot;vendor-contract-analyser&quot;, &quot;embedded-feature&quot;, &quot;&quot;, &quot;L1&quot;, (&quot;regulated&quot;,),
-         discovered_via=&quot;expense report&quot;),
-]
-EGRESS = [
- AIAsset(&quot;unknown-openai-usage-marketing&quot;, &quot;copilot&quot;, &quot;&quot;, &quot;L1&quot;, (&quot;public&quot;,),
-         discovered_via=&quot;egress logs&quot;),
- AIAsset(&quot;pr-remediation-agent&quot;, &quot;agent&quot;, &quot;&quot;, &quot;L2.5&quot;, (&quot;customer&quot;,), True,
-         discovered_via=&quot;egress logs&quot;),
- AIAsset(&quot;agent-worker-7f3c&quot;, &quot;agent&quot;, &quot;&quot;, &quot;L2.5&quot;, (&quot;customer&quot;,),
-         discovered_via=&quot;egress logs&quot;),
-]
-ALL = REGISTRY + PROCUREMENT + EGRESS
-print(f&quot;{&#x27;asset&#x27;:34s}{&#x27;kind&#x27;:18s}{&#x27;autonomy&#x27;:10s}{&#x27;owner&#x27;:14s}found via&quot;)
-print(&quot;-&quot; * 92)
-for a in ALL:
-    print(f&quot;{a.name:34s}{a.kind:18s}{a.autonomy:10s}{a.owner or &#x27;—&#x27;:14s}{a.discovered_via}&quot;)
-print(f&quot;\nregistry found {len(REGISTRY)}; the other two sources found &quot;
-      f&quot;{len(ALL)-len(REGISTRY)} more.&quot;)
-
-unowned = [a for a in ALL if not a.owner]
-unregistered = [a for a in ALL if a.discovered_via != &quot;registry&quot;]
-high_autonomy_unowned = [a for a in ALL if a.autonomy in (&quot;L2.5&quot;,&quot;L3&quot;) and not a.owner]
-
-print(f&quot;assets                    {len(ALL)}&quot;)
-print(f&quot;no named owner            {len(unowned)}  {[a.name for a in unowned]}&quot;)
-print(f&quot;never registered          {len(unregistered)}&quot;)
-print(f&quot;L2.5+ with no owner       {len(high_autonomy_unowned)}  &quot;
-      f&quot;{[a.name for a in high_autonomy_unowned]}&quot;)
-
-print(&quot;\ngaps in detail:&quot;)
-for a in ALL:
-    for g in a.gaps():
-        print(f&quot;   {a.name:34s}{g}&quot;)
-assert high_autonomy_unowned
-
-MODEL_PROVIDER_DOMAINS = {&quot;api.openai.com&quot;, &quot;api.anthropic.com&quot;,
-                          &quot;generativelanguage.googleapis.com&quot;,
-                          &quot;api.mistral.ai&quot;, &quot;api.together.xyz&quot;}
-
-EGRESS_LOG = [
- {&quot;src&quot;: &quot;marketing-workstation-14&quot;, &quot;host&quot;: &quot;api.openai.com&quot;, &quot;bytes&quot;: 240_000},
- {&quot;src&quot;: &quot;svc-pr-remediation&quot;,       &quot;host&quot;: &quot;api.anthropic.com&quot;, &quot;bytes&quot;: 8_400_000},
- {&quot;src&quot;: &quot;build-runner-3&quot;,           &quot;host&quot;: &quot;registry.npmjs.org&quot;, &quot;bytes&quot;: 90_000},
- {&quot;src&quot;: &quot;agent-worker-7f3c&quot;,        &quot;host&quot;: &quot;api.together.xyz&quot;, &quot;bytes&quot;: 1_200_000},
-]
-def discover(log, known_names):
-    found = []
-    for row in log:
-        if row[&quot;host&quot;] not in MODEL_PROVIDER_DOMAINS: continue
-        if row[&quot;src&quot;] in known_names: continue
-        found.append({&quot;source&quot;: row[&quot;src&quot;], &quot;provider&quot;: row[&quot;host&quot;],
-                      &quot;volume&quot;: row[&quot;bytes&quot;],
-                      &quot;finding&quot;: &quot;AI usage not present in the inventory&quot;})
-    return found
-
-known = {a.name for a in REGISTRY + PROCUREMENT}
-for f in discover(EGRESS_LOG, known):
-    print(f&quot;{f[&#x27;source&#x27;]:30s}{f[&#x27;provider&#x27;]:34s}{f[&#x27;volume&#x27;]:&gt;10,} bytes&quot;)
-    print(f&quot;{&#x27;&#x27;:30s}{f[&#x27;finding&#x27;]}&quot;)
-
-def inventory_health(assets):
-    return {&quot;total&quot;: len(assets),
-            &quot;owned&quot;: sum(1 for a in assets if a.owner),
-            &quot;registered&quot;: sum(1 for a in assets if a.discovered_via == &quot;registry&quot;),
-            &quot;coverage&quot;: round(sum(1 for a in assets if a.owner)/len(assets), 2)}
-print(f&quot;\n{inventory_health(ALL)}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+{&#x27;total&#x27;: 6, &#x27;owned&#x27;: 2, &#x27;registered&#x27;: 2, &#x27;coverage&#x27;: 0.33}</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. Two of its rules are what make an inventory hold: resolve digests rather than tags, because a tag is mutable and the thing you attested is not the thing running; and never record an unresolvable artefact as absent — "no gateway configured" and "could not read the gateway" are different findings with different owners.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the egress query for real: one week of traffic to model-provider domains, joined against your inventory. It takes an hour and it always finds something.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.3.html">E1.3 · Risk tiering agentic use cases</a></strong></p>

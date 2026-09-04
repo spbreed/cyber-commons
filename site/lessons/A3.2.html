@@ -203,57 +203,42 @@ implicit:</p>
 </code></pre>
 <p>Three products, one structure: deny everything by construction, then name what
 is permitted, one destination at a time.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>One probe, three environments, and the middle one is the configuration that actually ships: real isolation with production credentials mounted inside it. The skill then evaluates the NetworkPolicy objects connection by connection, because a namespace no policy selects is unrestricted rather than unconfigured.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/sandbox-containment-probe/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: sandbox-containment-probe
+<p>One probe, three environments, and the middle one is the configuration that actually ships: real isolation with production credentials mounted inside it. The skill then evaluates the NetworkPolicy objects connection by connection, because a namespace no policy selects is unrestricted rather than unconfigured.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/runtime/sandbox-containment-probe/SKILL.md"><code>skills/runtime/sandbox-containment-probe/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: sandbox-containment-probe
 description: &gt;-
   Execute the same code against an unsandboxed environment, a sandbox with
   production credentials mounted, and a contained one — then evaluate the
   network policies that separate them, connection by connection. Use when
   choosing or reviewing a runtime for agent-authored code.
 allowed-tools: Read, Grep, Glob, Bash
----
-
-# A sandbox with production credentials in it is a directory
-
-&quot;Sandboxed&quot; is not a property a runtime has; it is a property of a specific
+</code></pre>
+<h1>A sandbox with production credentials in it is a directory</h1>
+<p>"Sandboxed" is not a property a runtime has; it is a property of a specific
 configuration, and the configuration that defeats it is common: the isolation
 is real and the credentials were mounted in anyway. Probing all three
-environments with one piece of code is what makes the difference visible.
-
-## When to use this
-
-Before choosing a runtime for model-authored code, and after any change to what
-is mounted into it.
-
-## Procedure
-
-**1 — Write one probe and hold it fixed.** It should read the environment, walk
+environments with one piece of code is what makes the difference visible.</p>
+<h2>When to use this</h2>
+<p>Before choosing a runtime for model-authored code, and after any change to what
+is mounted into it.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Write one probe and hold it fixed.</strong> It should read the environment, walk
 the filesystem, and attempt a connection. Varying the probe per environment
-tests probes; varying the environment tests containment.
-
-**2 — Run it unsandboxed and record the reach.** This is the baseline the
+tests probes; varying the environment tests containment.</p>
+<p><strong>2 — Run it unsandboxed and record the reach.</strong> This is the baseline the
 sandbox is being asked to reduce. It usually includes key material nobody
-remembered was on that host.
-
-**3 — Run it in the sandbox as actually configured.** Not the reference
+remembered was on that host.</p>
+<p><strong>3 — Run it in the sandbox as actually configured.</strong> Not the reference
 configuration — the one in your manifest, with whatever is mounted. Credentials
-and a route to production are the two things to look for.
-
-**4 — Run it in the contained configuration** and record what is left. That
+and a route to production are the two things to look for.</p>
+<p><strong>4 — Run it in the contained configuration</strong> and record what is left. That
 delta is the value of the control, and it is the number to put in the change
-request.
-
-**5 — Evaluate the network policy connection by connection.** For each
+request.</p>
+<p><strong>5 — Evaluate the network policy connection by connection.</strong> For each
 (source, destination, port) the workload might attempt, does a policy permit
 it? Kubernetes NetworkPolicy is default-allow until a policy selects the pod,
-so a namespace with no policy is not &quot;no rules&quot; — it is &quot;all traffic&quot;.
-
-## Output contract
-
-```json
-{
+so a namespace with no policy is not "no rules" — it is "all traffic".</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;probe&quot;: &quot;str&quot;,
   &quot;environments&quot;: [{&quot;name&quot;: &quot;unsandboxed|sandboxed|contained&quot;,
                     &quot;filesystem&quot;: [&quot;str&quot;], &quot;credentials&quot;: [&quot;str&quot;], &quot;network&quot;: [&quot;str&quot;]}],
@@ -261,142 +246,60 @@ so a namespace with no policy is not &quot;no rules&quot; — it is &quot;all tr
   &quot;network_policy&quot;: {&quot;attempts&quot;: [{&quot;from&quot;: &quot;str&quot;, &quot;to&quot;: &quot;str&quot;, &quot;port&quot;: 0, &quot;permitted&quot;: false}],
                      &quot;default_allow_namespaces&quot;: [&quot;str&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Testing the reference configuration.</strong> Test the one in the manifest.</li>
+<li><strong>Calling isolation containment while credentials are mounted.</strong> The process
+  boundary did not stop being crossed by a file.</li>
+<li><strong>Reading a namespace with no NetworkPolicy as restricted.</strong> It is
+  unrestricted.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>no sandbox                      reached 8
+      file:/etc/passwd
+      file:/home/agent/.ssh/id_ed25519
+      file:/home/agent/work/data.csv
+      env:AWS_ACCESS_KEY_ID
+      env:DATABASE_URL
+      net:0.0.0.0/0
+      net:169.254.169.254:80
+      net:bookings-db.prod:5432
 
-## Failure modes
+sandbox, prod creds mounted     reached 4
+      file:/sandbox/work/data.csv
+      env:AWS_ACCESS_KEY_ID
+      env:DATABASE_URL
+      net:bookings-db.prod:5432
 
-- **Testing the reference configuration.** Test the one in the manifest.
-- **Calling isolation containment while credentials are mounted.** The process
-  boundary did not stop being crossed by a file.
-- **Reading a namespace with no NetworkPolicy as restricted.** It is
-  unrestricted.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+sandbox, no ambient creds       reached 1
+      file:/sandbox/work/data.csv
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+The middle configuration is the one that ships. The filesystem is
+isolated, the syscalls are filtered, and the environment holds a
+credential that reaches production over a network hop the sandbox allows.
 
-from cyber_commons_skill_runtime import run_skill
+Isolation of the wrong dimension is not a weaker control. It is the
+appearance of one.
+both objects applied:
+   workflow-agent  bookings-db.prod      5432  ALLOW allowed by workflow-agent-egress
+   workflow-agent  kube-dns              53    ALLOW allowed by workflow-agent-egress
+   workflow-agent  169.254.169.254       80    deny  no selecting policy permits it - denied
+   workflow-agent  archive.evil.example  443   deny  no selecting policy permits it - denied
+   coding-agent    archive.evil.example  443   deny  no selecting policy permits it - denied
+   -&gt; 2/5 connections permitted
 
-# Split skills/runtime/sandbox-containment-probe/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/sandbox-containment-probe/scripts/sandbox_containment_probe.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Execute the same code against three environments and evaluate the network policies that separate them.
+default-deny-all deleted, the narrow policy kept:
+   workflow-agent  bookings-db.prod      5432  ALLOW allowed by workflow-agent-egress
+   workflow-agent  kube-dns              53    ALLOW allowed by workflow-agent-egress
+   workflow-agent  169.254.169.254       80    deny  no selecting policy permits it - denied
+   workflow-agent  archive.evil.example  443   deny  no selecting policy permits it - denied
+   coding-agent    archive.evil.example  443   ALLOW no policy selects this pod - unrestricted
+   -&gt; 3/5 connections permitted
 
-This is the executable half of the `sandbox-containment-probe` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-HOST = {&quot;fs&quot;: [&quot;/home/agent/work/data.csv&quot;, &quot;/home/agent/.ssh/id_ed25519&quot;,
-                &quot;/etc/passwd&quot;],
-        &quot;env&quot;: {&quot;AWS_ACCESS_KEY_ID&quot;: &quot;AKIA-EXAMPLE-NOT-REAL&quot;,
-                &quot;DATABASE_URL&quot;: &quot;postgres://bookings-db.prod/main&quot;},
-        &quot;net&quot;: [&quot;bookings-db.prod:5432&quot;, &quot;169.254.169.254:80&quot;, &quot;0.0.0.0/0&quot;]}
-
-def sandbox(workdir=&quot;/sandbox/work&quot;, allow_net=(), keep_env=()):
-    return {&quot;fs&quot;: [p for p in HOST[&quot;fs&quot;] if p.startswith(workdir)]
-                  + [f&quot;{workdir}/data.csv&quot;],
-            &quot;env&quot;: {k: v for k, v in HOST[&quot;env&quot;].items() if k in keep_env},
-            &quot;net&quot;: list(allow_net)}
-
-def reach(env, code):
-    out = []
-    if &quot;open(&quot;   in code: out += [f&quot;file:{p}&quot; for p in sorted(env[&quot;fs&quot;])]
-    if &quot;environ&quot; in code: out += [f&quot;env:{k}&quot;  for k in sorted(env[&quot;env&quot;])]
-    if &quot;connect&quot; in code: out += [f&quot;net:{h}&quot;  for h in sorted(env[&quot;net&quot;])]
-    return out
-
-CODE = &quot;import os; d=os.environ; open(&#x27;/home/agent/.ssh/id_ed25519&#x27;); connect(&#x27;x&#x27;)&quot;
-
-configs = {
- &quot;no sandbox&quot;:                    HOST,
- &quot;sandbox, prod creds mounted&quot;:   sandbox(allow_net=[&quot;bookings-db.prod:5432&quot;],
-                                          keep_env=(&quot;AWS_ACCESS_KEY_ID&quot;,
-                                                    &quot;DATABASE_URL&quot;)),
- &quot;sandbox, no ambient creds&quot;:     sandbox(),
-}
-for label, env in configs.items():
-    r = reach(env, CODE)
-    print(f&quot;{label:32s}reached {len(r)}&quot;)
-    for item in r:
-        print(f&quot;      {item}&quot;)
-    print()
-
-print(&quot;The middle configuration is the one that ships. The filesystem is&quot;)
-print(&quot;isolated, the syscalls are filtered, and the environment holds a&quot;)
-print(&quot;credential that reaches production over a network hop the sandbox allows.&quot;)
-print()
-print(&quot;Isolation of the wrong dimension is not a weaker control. It is the&quot;)
-print(&quot;appearance of one.&quot;)
-assert reach(configs[&quot;sandbox, no ambient creds&quot;], CODE) and \
-       not any(&quot;env:&quot; in r for r in reach(configs[&quot;sandbox, no ambient creds&quot;], CODE))
-
-# The two NetworkPolicy objects above, as data. The point of modelling them
-# rather than trusting them is the additive rule: a pod that NO policy selects
-# is unrestricted, and policies never deny.
-POLICIES = [
- {&quot;name&quot;: &quot;default-deny-all&quot;,      &quot;selects&quot;: &quot;*&quot;,              &quot;egress&quot;: []},
- {&quot;name&quot;: &quot;workflow-agent-egress&quot;, &quot;selects&quot;: &quot;workflow-agent&quot;,
-  &quot;egress&quot;: [(&quot;bookings-db.prod&quot;, 5432), (&quot;kube-dns&quot;, 53)]},
-]
-
-def permitted(policies, pod, dest, port):
-    &quot;&quot;&quot;Kubernetes semantics, exactly: restricted only if some policy selects
-    this pod, and then permitted only if some selecting policy allows it.&quot;&quot;&quot;
-    selecting = [p for p in policies if p[&quot;selects&quot;] in (&quot;*&quot;, pod)]
-    if not selecting:
-        return True, &quot;no policy selects this pod - unrestricted&quot;
-    for p in selecting:
-        if (dest, port) in p[&quot;egress&quot;]:
-            return True, f&quot;allowed by {p[&#x27;name&#x27;]}&quot;
-    return False, &quot;no selecting policy permits it - denied&quot;
-
-ATTEMPTS = [
- (&quot;workflow-agent&quot;, &quot;bookings-db.prod&quot;, 5432, &quot;the one it needs&quot;),
- (&quot;workflow-agent&quot;, &quot;kube-dns&quot;,           53, &quot;resolution, explicitly granted&quot;),
- (&quot;workflow-agent&quot;, &quot;169.254.169.254&quot;,    80, &quot;cloud metadata - node credentials&quot;),
- (&quot;workflow-agent&quot;, &quot;archive.evil.example&quot;, 443, &quot;A1.3&#x27;s exfiltration target&quot;),
- (&quot;coding-agent&quot;,   &quot;archive.evil.example&quot;, 443, &quot;a pod nobody wrote a policy for&quot;),
-]
-
-def run(policies, label):
-    print(f&quot;{label}:&quot;)
-    out = 0
-    for pod, dest, port, note in ATTEMPTS:
-        ok, why = permitted(policies, pod, dest, port)
-        out += ok
-        print(f&quot;   {pod:16s}{dest:22s}{port:&lt;6d}&quot;
-              f&quot;{&#x27;ALLOW&#x27; if ok else &#x27;deny &#x27;:6s}{why}&quot;)
-    print(f&quot;   -&gt; {out}/{len(ATTEMPTS)} connections permitted\n&quot;)
-    return out
-
-with_deny = run(POLICIES, &quot;both objects applied&quot;)
-
-# The usual breakage. Somebody removes default-deny-all because it broke a
-# health check, and re-adds a targeted allow instead. Every test still passes.
-without = run([p for p in POLICIES if p[&quot;name&quot;] != &quot;default-deny-all&quot;],
-              &quot;default-deny-all deleted, the narrow policy kept&quot;)
-
-print(&quot;Deleting the deny changed nothing about workflow-agent - its own policy&quot;)
-print(&quot;still selects it. What it changed is every OTHER pod in the namespace,&quot;)
-print(&quot;including coding-agent, which now reaches the internet because no&quot;)
-print(&quot;object mentions it. Nothing failed, nothing alerted, and the namespace&quot;)
-print(&quot;went from default-deny to default-allow in one commit.&quot;)
-assert with_deny == 2
-assert without == 3 and not permitted(POLICIES, &quot;coding-agent&quot;,
-                                      &quot;archive.evil.example&quot;, 443)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Deleting the deny changed nothing about workflow-agent - its own policy
+still selects it. What it changed is every OTHER pod in the namespace,
+including coding-agent, which now reaches the internet because no
+object mentions it. Nothing failed, nothing alerted, and the namespace
+went from default-deny to default-allow in one commit.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The same code is executed against three environments: unsandboxed it reaches a private key, two credentials and the whole network; sandboxed with production credentials mounted it still reaches both credentials and the production database; only the third contains it. Then the two NetworkPolicy objects are evaluated — 2 of 5 connections permitted, with cloud metadata and the exfiltration target both refused for not being named. Deleting <code>default-deny-all</code> leaves workflow-agent unchanged and silently opens every other pod in the namespace.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run <code>kubectl get networkpolicy -A</code> and look for a policy with an empty <code>podSelector</code> and <code>policyTypes: [Ingress, Egress]</code>. If there isn't one in the namespace your agents run in, every narrow policy you have written is an allowance rather than a restriction, and every pod nobody wrote a policy for has the internet.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.3.html">A3.3 · Egress control</a></strong></p>

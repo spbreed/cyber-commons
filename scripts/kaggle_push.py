@@ -186,6 +186,7 @@ def call(path: str, payload: dict | None = None, timeout: int = 120) -> dict:
 
 # ------------------------------------------------------------------- pushing
 RUNTIME_SLUG = "cyber-commons-skill-runtime"
+DATASET_SLUG = "cyber-commons-skills"
 RUNTIME_FILE = ROOT / "skills" / "_runtime" / "cyber_commons_skill_runtime.py"
 
 
@@ -236,12 +237,14 @@ def push(session: str, username: str, private: bool = True) -> dict:
         # the labs are stdlib-only by design, so they pass with the internet off
         "enableInternet": False,
         "enableGpu": False,
-        "datasetDataSources": [],
+        # The skills tree, attached as a dataset and mounted read-only. This is
+        # how the repository reaches a kernel: `git clone` is not available,
+        # because DNS does not resolve inside a kernel on an account without a
+        # verified phone number — probed, not assumed:
+        #   fatal: unable to access '...': Could not resolve host: github.com
+        "datasetDataSources": [f"{username}/{DATASET_SLUG}"],
         "competitionDataSources": [],
-        # The shared runtime, attached as a utility script. Without it the
-        # notebook's `from cyber_commons_skill_runtime import ...` fails on
-        # Kaggle with a bare ImportError.
-        "kernelDataSources": [f"{username}/{RUNTIME_SLUG}"],
+        "kernelDataSources": [],
         "categoryIds": ["cybersecurity"],
     })
 

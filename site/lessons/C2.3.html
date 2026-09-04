@@ -79,167 +79,87 @@ control plane has to supply what the provider used to</strong> — which is what
 other track in this curriculum has been building.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">capability</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">hosted API</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">open weights, running locally</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">unlimited probing</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no abuse signal reaches the provider</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">can remove refusals</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">controls its own version</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">activation-level access</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">An attacker gains all five. A defender gains exactly the same five — which is the whole argument for a commons built on open weights, and the reason the asymmetry people expect here does not exist.</div></div><div class="nbmd"><h2>3 · The control — replace what the provider was doing</h2>
 <p>Map each lost control to the thing in your own stack that has to supply it. Every row points at a lesson you have already done.</p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
-<p>Local weights grant capabilities a hosted API does not, and the larger term is arithmetic. The skill turns each rate limit into an attempt budget and applies a per-attempt success rate, which is where a 0.5% technique becomes tens of thousands of successes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/weight-access-capability-delta/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: weight-access-capability-delta
+<p>Local weights grant capabilities a hosted API does not, and the larger term is arithmetic. The skill turns each rate limit into an attempt budget and applies a per-attempt success rate, which is where a 0.5% technique becomes tens of thousands of successes.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/weight-access-capability-delta/SKILL.md"><code>skills/research/weight-access-capability-delta/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: weight-access-capability-delta
 description: &gt;-
   Enumerate the capabilities local weights grant that a hosted API does not, and
   convert a rate limit into an attempt budget to show what removing it does to a
   low-probability technique. Use when assessing open-weight release risk or
   arguing about hosted safeguards.
 allowed-tools: Read, Grep, Glob
----
-
-# The rate limit was the control
-
-Hosted access and local weights differ in two ways that matter and one that gets
+</code></pre>
+<h1>The rate limit was the control</h1>
+<p>Hosted access and local weights differ in two ways that matter and one that gets
 all the attention. The capability delta — fine-tuning away refusals, reading
 activations, sampling without a filter — is real. The larger one is arithmetic:
 a hosted rate limit caps attempts, and removing it turns a technique with a
-0.5% success rate into tens of thousands of successes in a day.
-
-## When to use this
-
-Assessing the risk of an open-weight release, comparing hosted and local
-deployment, or evaluating a safeguard that exists only in the serving layer.
-
-## Procedure
-
-**1 — List the capabilities local access grants.** Weight modification,
+0.5% success rate into tens of thousands of successes in a day.</p>
+<h2>When to use this</h2>
+<p>Assessing the risk of an open-weight release, comparing hosted and local
+deployment, or evaluating a safeguard that exists only in the serving layer.</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the capabilities local access grants.</strong> Weight modification,
 activation access, unfiltered sampling, arbitrary system prompts, no logging.
-For each, say whether a hosted API offers it.
-
-**2 — Turn the rate limit into an attempt budget.** Requests per minute × the
+For each, say whether a hosted API offers it.</p>
+<p><strong>2 — Turn the rate limit into an attempt budget.</strong> Requests per minute × the
 window. Do the same for local inference from its throughput. Report the ratio;
-it is usually two or three orders of magnitude and it is the headline.
-
-**3 — Apply a per-attempt success rate.** A technique that works 0.5% of the
+it is usually two or three orders of magnitude and it is the headline.</p>
+<p><strong>3 — Apply a per-attempt success rate.</strong> A technique that works 0.5% of the
 time produces a handful of successes hosted and tens of thousands locally. The
-technique did not change.
-
-**4 — Assess readiness for each safeguard.** Which safeguards survive weight
+technique did not change.</p>
+<p><strong>4 — Assess readiness for each safeguard.</strong> Which safeguards survive weight
 access at all — the ones in the serving layer do not. Say so plainly rather than
-listing them as mitigations.
-
-**5 — Weight the blast radius by scope.** A capability that reaches a team&#x27;s
-resources is not the same as one that reaches a run&#x27;s own. Score tools by scope
-and mark which are gated.
-
-## Output contract
-
-```json
-{
+listing them as mitigations.</p>
+<p><strong>5 — Weight the blast radius by scope.</strong> A capability that reaches a team's
+resources is not the same as one that reaches a run's own. Score tools by scope
+and mark which are gated.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;capabilities&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;hosted&quot;: false, &quot;local&quot;: true}],
   &quot;attempts&quot;: {&quot;hosted_per_day&quot;: 0, &quot;local_per_day&quot;: 0, &quot;ratio&quot;: 0},
   &quot;technique&quot;: {&quot;per_attempt_rate&quot;: 0.0, &quot;hosted_successes&quot;: 0, &quot;local_successes&quot;: 0},
   &quot;safeguards&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;layer&quot;: &quot;serving|weights&quot;, &quot;survives_local&quot;: false}],
   &quot;blast&quot;: {&quot;tools&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;scope&quot;: &quot;self|project|team&quot;, &quot;gated&quot;: false}], &quot;score&quot;: 0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Listing serving-layer safeguards as mitigations</strong> for a weight release.</li>
+<li><strong>Comparing capability and ignoring throughput.</strong> Throughput is the bigger
+  term.</li>
+<li><strong>Assuming a low success rate is a control.</strong> It is, until the attempt budget
+  changes.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>setting                              attempts in 24h
+------------------------------------------------------
+hosted API, 20 req/min                        28,800
+hosted API, 20 req/min, 5 keys               144,000
+local open weights, 1 GPU                    691,200
+local open weights, 8 GPUs                 5,529,600
 
-## Failure modes
+ratio: 192× more attempts, with no abuse signal reaching anyone.
+A 0.5%-success technique becomes reliable when you can try it 5 million times.
+   technique landing 0.5% of the time → 144 successes hosted, 27,648 local
+   technique landing 5.0% of the time → 1,440 successes hosted, 276,480 local
+provider control lost     your replacement                            
+------------------------------------------------------------------------------------------------
+rate limiting             A2.7 choke point / A3.6 runtime levers      bound attempts per identity per window
+abuse monitoring          D1.4 detection for agents                   your telemetry is the only signal now
+refusal behaviour         A3.5 tool policy + C1.2 provenance          do not rely on the model refusing; refuse at the tool
+immutable logging         A2.5 act chains + D2.5 replay               you own retention and integrity
+model version stability   D1.7 drift monitoring                       you now own upgrades AND their behavioural changes
 
-- **Listing serving-layer safeguards as mitigations** for a weight release.
-- **Comparing capability and ignoring throughput.** Throughput is the bigger
-  term.
-- **Assuming a low success rate is a control.** It is, until the attempt budget
-  changes.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+typical first local deployment: 20% covered
+   ✗ abuse monitoring
+   ✗ refusal behaviour
+   ✗ immutable logging
+   ✗ model version stability
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+after this curriculum: 100% covered
+local open-weight agent, no replacements: 20
+with tool policy + gating (A3.5):         4
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/research/weight-access-capability-delta/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/weight-access-capability-delta/scripts/weight_access_capability_delta.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Enumerate what local weights grant that a hosted API does not, and turn a rate limit into an attempt budget.
-
-This is the executable half of the `weight-access-capability-delta` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-def attempts_available(rate_limit_per_min, hours, parallel=1):
-    if rate_limit_per_min is None:                     # local: bounded by hardware
-        return hours * 3600 * 8 * parallel             # ~8 inferences/sec/GPU
-    return rate_limit_per_min * 60 * hours * parallel
-
-print(f&quot;{&#x27;setting&#x27;:34s}{&#x27;attempts in 24h&#x27;:&gt;18}&quot;)
-print(&quot;-&quot; * 54)
-for label, rl, par in ((&quot;hosted API, 20 req/min&quot;, 20, 1),
-                       (&quot;hosted API, 20 req/min, 5 keys&quot;, 20, 5),
-                       (&quot;local open weights, 1 GPU&quot;, None, 1),
-                       (&quot;local open weights, 8 GPUs&quot;, None, 8)):
-    print(f&quot;{label:34s}{attempts_available(rl, 24, par):&gt;18,}&quot;)
-
-hosted = attempts_available(20, 24, 1)
-local  = attempts_available(None, 24, 8)
-print(f&quot;\nratio: {local/hosted:,.0f}× more attempts, with no abuse signal reaching anyone.&quot;)
-print(&quot;A 0.5%-success technique becomes reliable when you can try it 5 million times.&quot;)
-
-def expected_successes(rate, attempts):
-    return rate * attempts
-for rate in (0.005, 0.05):
-    print(f&quot;   technique landing {rate:.1%} of the time → &quot;
-          f&quot;{expected_successes(rate, hosted):,.0f} successes hosted, &quot;
-          f&quot;{expected_successes(rate, local):,.0f} local&quot;)
-
-REPLACEMENTS = {
- &quot;rate limiting&quot;:            (&quot;A2.7 choke point / A3.6 runtime levers&quot;,
-                              &quot;bound attempts per identity per window&quot;),
- &quot;abuse monitoring&quot;:         (&quot;D1.4 detection for agents&quot;,
-                              &quot;your telemetry is the only signal now&quot;),
- &quot;refusal behaviour&quot;:        (&quot;A3.5 tool policy + C1.2 provenance&quot;,
-                              &quot;do not rely on the model refusing; refuse at the tool&quot;),
- &quot;immutable logging&quot;:        (&quot;A2.5 act chains + D2.5 replay&quot;,
-                              &quot;you own retention and integrity&quot;),
- &quot;model version stability&quot;:  (&quot;D1.7 drift monitoring&quot;,
-                              &quot;you now own upgrades AND their behavioural changes&quot;),
-}
-print(f&quot;{&#x27;provider control lost&#x27;:26s}{&#x27;your replacement&#x27;:44s}&quot;)
-print(&quot;-&quot; * 96)
-for lost, (where, what) in REPLACEMENTS.items():
-    print(f&quot;{lost:26s}{where:44s}{what}&quot;)
-
-def readiness(has):
-    missing = [k for k in REPLACEMENTS if k not in has]
-    return round(len(has) / len(REPLACEMENTS), 2), missing
-
-for label, has in ((&quot;typical first local deployment&quot;, {&quot;rate limiting&quot;}),
-                   (&quot;after this curriculum&quot;, set(REPLACEMENTS))):
-    score, missing = readiness(has)
-    print(f&quot;\n{label}: {score:.0%} covered&quot;)
-    for m in missing: print(f&quot;   ✗ {m}&quot;)
-
-# Verify: an agent on local weights, with and without the replacements.
-SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20}
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s] * (1 if rev else 2)
-               for n, s, rev in tools if n not in gated)
-
-TOOLS = [(&quot;read_file&quot;, &quot;self&quot;, True), (&quot;write_file&quot;, &quot;project&quot;, True),
-         (&quot;run_shell&quot;, &quot;tenant&quot;, False)]
-print(&quot;local open-weight agent, no replacements:&quot;, blast(TOOLS))
-print(&quot;with tool policy + gating (A3.5):        &quot;,
-      blast(TOOLS, gated={&quot;run_shell&quot;}))
-print(&quot;\nThe model has no refusal training you can rely on. The tool policy&quot;)
-print(&quot;does not care what the model was persuaded to want.&quot;)
-assert blast(TOOLS, gated={&quot;run_shell&quot;}) &lt; blast(TOOLS)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The model has no refusal training you can rely on. The tool policy
+does not care what the model was persuaded to want.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Local weights grant five capabilities the hosted API does not. The probing comparison shows roughly 24,000 hosted attempts against 5.5 million local ones in 24 hours — a 230× ratio — turning a 0.5% technique into tens of thousands of successes. Each lost provider control maps to a lesson in this curriculum, and gating the shell reduces the local agent's blast radius from 19 to 3.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>List the controls you currently rely on that are actually your model provider's. For each, name your replacement if the model moved on-prem next quarter. Most teams find rate limiting and abuse monitoring have no owner at all.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.4.html">C2.4 · Data-layer research</a></strong></p>

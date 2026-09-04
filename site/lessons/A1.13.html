@@ -56,134 +56,63 @@ one third of the triad regardless of how the outage was caused.</p></div><div cl
 </blockquote>
 <h2>3 · The risk, realised</h2>
 <p>A task that cannot succeed, and a loop with no ceiling.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>CyberTravels' agent does not know the task is impossible. The skill gives it one, measures the three costs, and reports the one that lands on somebody else: the downstream capacity its retries consumed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/unbounded-loop-cost-probe/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: unbounded-loop-cost-probe
+<p>CyberTravels' agent does not know the task is impossible. The skill gives it one, measures the three costs, and reports the one that lands on somebody else: the downstream capacity its retries consumed.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/threats/unbounded-loop-cost-probe/SKILL.md"><code>skills/threats/unbounded-loop-cost-probe/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: unbounded-loop-cost-probe
 description: &gt;-
   Give an agent a task it cannot complete and measure what it spends and who
   else pays — tokens, wall time, and the downstream capacity consumed by its
   retries. Use when reviewing loop termination, retry policy, budgets, or a
   scheduled agent nobody watches.
 allowed-tools: Read, Grep, Glob
----
-
-# The agent does not know the task is impossible
-
-Resource overload rarely needs an attacker. It needs a task with no completion
+</code></pre>
+<h1>The agent does not know the task is impossible</h1>
+<p>Resource overload rarely needs an attacker. It needs a task with no completion
 condition and a loop with no stop condition, and the cost lands in two places:
-your bill, and a downstream service&#x27;s capacity — where the rejections hit
-whoever else was using it.
-
-## When to use this
-
-Before running any agent unattended or on a schedule, and after adding a retry.
-
-## Procedure
-
-**1 — Find the stop conditions.** Step ceiling, token budget, wall-clock
-deadline, cost ceiling, and a condition that recognises &quot;this cannot be done&quot;.
-Record which exist. A loop whose only exit is success has no exit.
-
-**2 — Construct an impossible-but-plausible task.** Not malformed — plausible.
+your bill, and a downstream service's capacity — where the rejections hit
+whoever else was using it.</p>
+<h2>When to use this</h2>
+<p>Before running any agent unattended or on a schedule, and after adding a retry.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Find the stop conditions.</strong> Step ceiling, token budget, wall-clock
+deadline, cost ceiling, and a condition that recognises "this cannot be done".
+Record which exist. A loop whose only exit is success has no exit.</p>
+<p><strong>2 — Construct an impossible-but-plausible task.</strong> Not malformed — plausible.
 A query against data that does not exist, a fix for a test that cannot pass. The
-agent must believe it is making progress.
-
-**3 — Run it with instrumentation and a hard external kill.** The kill is the
-safety net; if it is the thing that stops the run, that is the result.
-
-**4 — Record the three costs.** Tokens and money; wall-clock; and downstream
+agent must believe it is making progress.</p>
+<p><strong>3 — Run it with instrumentation and a hard external kill.</strong> The kill is the
+safety net; if it is the thing that stops the run, that is the result.</p>
+<p><strong>4 — Record the three costs.</strong> Tokens and money; wall-clock; and downstream
 calls — with the rejection rate the downstream started returning. The third is
-the one that turns your incident into somebody else&#x27;s.
-
-**5 — Set the budget from the measurement.** A ceiling chosen from an observed
+the one that turns your incident into somebody else's.</p>
+<p><strong>5 — Set the budget from the measurement.</strong> A ceiling chosen from an observed
 distribution is defensible; one chosen from a round number is a guess. State
-what a legitimate run costs at p95 and set the ceiling above that.
-
-## Output contract
-
-```json
-{
+what a legitimate run costs at p95 and set the ceiling above that.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;stop_conditions&quot;: {&quot;steps&quot;: false, &quot;tokens&quot;: false, &quot;wallclock&quot;: false, &quot;cost&quot;: false, &quot;impossibility&quot;: false},
   &quot;run&quot;: {&quot;stopped_by&quot;: &quot;condition|external_kill&quot;, &quot;steps&quot;: 0, &quot;tokens&quot;: 0, &quot;seconds&quot;: 0},
   &quot;downstream&quot;: {&quot;calls&quot;: 0, &quot;rejections&quot;: 0, &quot;affected_others&quot;: true},
   &quot;recommended_budget&quot;: {&quot;basis&quot;: &quot;p95 of legitimate runs&quot;, &quot;steps&quot;: 0, &quot;tokens&quot;: 0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Using a malformed task.</strong> The agent gives up, and you learn nothing.</li>
+<li><strong>Counting only tokens.</strong> The downstream capacity is the externality.</li>
+<li><strong>Setting a round-number ceiling.</strong> Measure first, or the budget either
+  breaks legitimate runs or never fires.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>steps taken           : 501
+tokens spent          : 901,800  (about $1.80)
+downstream calls      : 501
+downstream rejections : 451  &lt;- other callers got these
+stopped by            : runaway
 
-## Failure modes
+The agent was not attacked and nothing malfunctioned. It was given a
+task that cannot succeed, and the loop did what loops do.
 
-- **Using a malformed task.** The agent gives up, and you learn nothing.
-- **Counting only tokens.** The downstream capacity is the externality.
-- **Setting a round-number ceiling.** Measure first, or the budget either
-  breaks legitimate runs or never fires.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/threats/unbounded-loop-cost-probe/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/unbounded-loop-cost-probe/scripts/unbounded_loop_cost_probe.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run an agent at an impossible task and measure what it spends, and who else pays for it.
-
-This is the executable half of the `unbounded-loop-cost-probe` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-DOWNSTREAM = {&quot;calls&quot;: 0, &quot;capacity&quot;: 50, &quot;rejected&quot;: 0}
-
-def flaky_api(query):
-    &quot;&quot;&quot;A downstream service. It is not broken - the query cannot be satisfied.&quot;&quot;&quot;
-    DOWNSTREAM[&quot;calls&quot;] += 1
-    if DOWNSTREAM[&quot;calls&quot;] &gt; DOWNSTREAM[&quot;capacity&quot;]:
-        DOWNSTREAM[&quot;rejected&quot;] += 1
-        return {&quot;error&quot;: &quot;capacity exceeded&quot;}
-    return {&quot;result&quot;: None}                     # no match, ever
-
-def agent_loop(task, max_steps=None):
-    &quot;&quot;&quot;plan -&gt; act -&gt; observe -&gt; decide again. Stops when it succeeds.&quot;&quot;&quot;
-    steps, tokens = 0, 0
-    while True:
-        steps += 1
-        tokens += 1800
-        result = flaky_api(task)
-        if result.get(&quot;result&quot;):
-            return {&quot;done&quot;: True, &quot;steps&quot;: steps, &quot;tokens&quot;: tokens}
-        if max_steps and steps &gt;= max_steps:
-            return {&quot;done&quot;: False, &quot;steps&quot;: steps, &quot;tokens&quot;: tokens, &quot;stopped_by&quot;: &quot;budget&quot;}
-        if steps &gt; 500:                          # the notebook&#x27;s own safety net
-            return {&quot;done&quot;: False, &quot;steps&quot;: steps, &quot;tokens&quot;: tokens, &quot;stopped_by&quot;: &quot;runaway&quot;}
-
-r = agent_loop(&quot;find the order for customer 99999&quot;)     # this order does not exist
-print(f&quot;steps taken           : {r[&#x27;steps&#x27;]}&quot;)
-print(f&quot;tokens spent          : {r[&#x27;tokens&#x27;]:,}  (about ${r[&#x27;tokens&#x27;]/1000*0.002:,.2f})&quot;)
-print(f&quot;downstream calls      : {DOWNSTREAM[&#x27;calls&#x27;]}&quot;)
-print(f&quot;downstream rejections : {DOWNSTREAM[&#x27;rejected&#x27;]}  &lt;- other callers got these&quot;)
-print(f&quot;stopped by            : {r[&#x27;stopped_by&#x27;]}&quot;)
-print()
-print(&quot;The agent was not attacked and nothing malfunctioned. It was given a&quot;)
-print(&quot;task that cannot succeed, and the loop did what loops do.&quot;)
-print()
-print(f&quot;{DOWNSTREAM[&#x27;rejected&#x27;]} rejections went to whoever else was using that&quot;)
-print(&quot;service - a denial of service launched from inside the perimeter, by&quot;)
-print(&quot;something holding valid credentials.&quot;)
-assert DOWNSTREAM[&quot;rejected&quot;] &gt; 0</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+451 rejections went to whoever else was using that
+service - a denial of service launched from inside the perimeter, by
+something holding valid credentials.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find the ceiling on one agent loop you run. If there is a token budget but no cap on downstream calls, the cost is bounded and the availability risk is not.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.14.html">A1.14 · Repudiation and untraceability</a></strong></p>

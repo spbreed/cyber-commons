@@ -99,217 +99,95 @@ cannot block the merge that caused it.</p></div><div class="nbmd"><table style="
 <p><code>run_skill(SKILL_MD)</code> is the whole of the execution surface: it splits the frontmatter from the body and reports what was loaded. <code>contract_of(body)</code> and <code>check(instance, contract)</code> are there when a skill validates its own output. Nothing else in a lesson is Python.</p>
 <p><strong>To use the library in a notebook of your own</strong>, on Kaggle add <code>cybercommons/cyber-commons-skill-runtime</code> as a source — <em>File → Add data → Notebooks</em>, or <code>kernelDataSources</code> through the API — and paste those four lines. Locally, put <code>skills/_runtime</code> on <code>PYTHONPATH</code>. A0.1 runs that procedure on itself if you want to see it work before you copy it.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">cell</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it is</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">how long</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><code>SKILL_MD</code> — the procedure, verbatim</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the skill</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">make the runtime importable, then &lt;code&gt;run_skill&lt;/code&gt;</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>4 lines</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the skill&#x27;s script — opens on one import</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the work</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The runtime used to be copied into cell 2 of every notebook. That was 9,730 lines of identical code and one place it could not be fixed from.</div></div><div class="nbmd"><h2>5 · The loop, as a skill</h2>
-<p>The procedure is written down first, because the loop is the part you own and the model is a component inside it. Its script carries the adapter and the four moves — run offline it uses a labelled replay, and against a served open-weight model it is the same code.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/agentic-harness-loop/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agentic-harness-loop
+<p>The procedure is written down first, because the loop is the part you own and the model is a component inside it. Its script carries the adapter and the four moves — run offline it uses a labelled replay, and against a served open-weight model it is the same code.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/agentic-harness-loop/SKILL.md"><code>skills/appsec/agentic-harness-loop/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agentic-harness-loop
 description: &gt;-
   Build and check the plan-act-verify loop that turns a model into a harness —
   including the exit condition, the parser, and an independent verifier that
   decides what the loop is allowed to accept. Use when writing an agentic
   pipeline, or when a loop reports success on work nobody checked.
 allowed-tools: Read, Grep, Glob
----
-
-# The loop is yours; the model is a component in it
-
-A harness is four moves — plan, act, verify, stop — and the security engineer
-owns three of them. What the loop **accepts** is decided by the verifier, not by
+</code></pre>
+<h1>The loop is yours; the model is a component in it</h1>
+<p>A harness is four moves — plan, act, verify, stop — and the security engineer
+owns three of them. What the loop <strong>accepts</strong> is decided by the verifier, not by
 the model, and a loop with no verifier accepts whatever came back and reports
-success.
-
-## When to use this
-
-Whenever you are about to put a model in a for-loop: triage, remediation,
-detection authoring, anything that iterates until it is satisfied.
-
-## Procedure
-
-**1 — Write the exit condition before the prompt.** A loop whose exit is easier
+success.</p>
+<h2>When to use this</h2>
+<p>Whenever you are about to put a model in a for-loop: triage, remediation,
+detection authoring, anything that iterates until it is satisfied.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Write the exit condition before the prompt.</strong> A loop whose exit is easier
 than the work will take the exit. Do not offer the model a way to declare
-itself done; decide that from the outside, on the artefact.
-
-**2 — Parse defensively, because parsing is the harness&#x27;s job.** Asked for one
+itself done; decide that from the outside, on the artefact.</p>
+<p><strong>2 — Parse defensively, because parsing is the harness's job.</strong> Asked for one
 line, a small model returns the whole function and a larger one returns a fenced
 block. Both are reasonable readings. Take what you need from what arrives rather
-than requiring the model to do you a favour.
-
-**3 — Write the verifier as an independent check.** Independent means it does
+than requiring the model to do you a favour.</p>
+<p><strong>3 — Write the verifier as an independent check.</strong> Independent means it does
 not ask the model whether the answer is good. It examines the artefact: does the
-line use a placeholder, does the test pass, does the exploit stop working.
-
-**4 — Test the verifier against a correct answer you did not expect.** This is
+line use a placeholder, does the test pass, does the exploit stop working.</p>
+<p><strong>4 — Test the verifier against a correct answer you did not expect.</strong> This is
 the step that gets skipped. A verifier that accepts only one spelling of correct
-rejects real work and burns the budget doing it — check `%s`, `:name` and `$1`
-before shipping a check for `?`.
-
-**5 — Test it against a plausible wrong answer.** Something that reads like a
+rejects real work and burns the budget doing it — check <code>%s</code>, <code>:name</code> and <code>$1</code>
+before shipping a check for <code>?</code>.</p>
+<p><strong>5 — Test it against a plausible wrong answer.</strong> Something that reads like a
 fix and is not — an escape function wrapped around concatenation. If the
 verifier accepts it, the loop ships it, reports success, and the trace looks
-clean.
-
-## Output contract
-
-```json
-{
+clean.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;loop&quot;: {&quot;moves&quot;: [&quot;plan&quot;, &quot;act&quot;, &quot;verify&quot;, &quot;stop&quot;], &quot;max_steps&quot;: 0, &quot;exit_owned_by&quot;: &quot;harness|model&quot;},
   &quot;parse&quot;: {&quot;expected&quot;: &quot;str&quot;, &quot;shapes_seen&quot;: [&quot;str&quot;], &quot;strategy&quot;: &quot;str&quot;},
   &quot;verifier&quot;: {&quot;independent&quot;: true, &quot;accepts&quot;: [&quot;str&quot;], &quot;rejects&quot;: [&quot;str&quot;]},
   &quot;runs&quot;: [{&quot;verifier&quot;: &quot;none|present&quot;, &quot;steps&quot;: 0, &quot;accepted&quot;: &quot;str&quot;, &quot;verified&quot;: null}]
 }
-```
+</code></pre>
+<p>Report the unverified run too. The pair is the lesson: the same model and the
+same prompt, with and without something checking the answer.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Offering the model a DONE exit.</strong> It will take it on the first turn.</li>
+<li><strong>A verifier that accepts one spelling.</strong> It rejects correct work, repeatedly,
+  and the budget goes on retries.</li>
+<li><strong>Asking a model to judge the answer.</strong> That is a second opinion, not a
+  verification.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-Report the unverified run too. The pair is the lesson: the same model and the
-same prompt, with and without something checking the answer.
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
 
-## Failure modes
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
 
-- **Offering the model a DONE exit.** It will take it on the first turn.
-- **A verifier that accepts one spelling.** It rejects correct work, repeatedly,
-  and the budget goes on retries.
-- **Asking a model to judge the answer.** That is a second opinion, not a
-  verification.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+the loop, wired: [&#x27;plan&#x27;, &#x27;act&#x27;, &#x27;verify&#x27;, &#x27;stop&#x27;]
+backend  : replay
+steps    : 1
+accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
+verified : None   &lt;- nothing checked it
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+The loop stopped because the model produced something, which is not the
+same as producing something correct. Whatever came back was accepted.
+accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
+verified : True   &lt;- an independent check said so
+steps    : 1
 
-from cyber_commons_skill_runtime import run_skill
+a correct psycopg fix: return DB.execute(&quot;SELECT * FROM bookings WHERE ref=%s&quot;, (ref,))
+   narrow verifier (only &#x27;?&#x27;) : REJECTS a correct fix
+   this lesson&#x27;s verifier     : accepts
 
-# Split skills/appsec/agentic-harness-loop/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/agentic-harness-loop/scripts/agentic_harness_loop.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run a plan-act-verify loop with a real model in it, and show what the loop accepts when nothing independent checks the answer.
+a plausible-looking answer: return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + escape(ref))
+   would the verifier accept it? False
 
-This is the executable half of the `agentic-harness-loop` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-# --- model backend: replay by default, a Kaggle open-weight model when served -
-# One URL and one header shape, no vendor SDK. Standard library only, so the
-# notebook stays self-contained.
-# The model adapter comes from the shared runtime, not from a copy in this
-# file. In a lesson notebook the cell above has already loaded it; standalone,
-# find it the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import announce_backend, ask
-
-announce_backend()
-
-
-FINDING = &quot;&quot;&quot;
-def load_booking(ref, owner):
-    return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + ref)
-&quot;&quot;&quot;
-
-def plan(task, feedback):
-    &quot;&quot;&quot;PLAN - the model proposes the corrected line.
-
-    Note what the prompt does NOT do: offer a way out. An earlier version of
-    this cell let the model reply DONE, and a real model replied DONE on the
-    first turn every time. A loop whose exit is easier than the work exits.
-    &quot;&quot;&quot;
-    prompt = f&quot;{task}\n\nCode:\n{FINDING}\n&quot;
-    if feedback:
-        prompt += f&quot;Your previous attempt was rejected: {feedback}\n&quot;
-    prompt += &quot;Reply with ONLY the corrected line of code.&quot;
-    answer, used, _ = ask(
-        prompt,
-        replay=&#x27;return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))&#x27;,
-        system=&quot;You fix security defects. One line of code, no prose, no fences.&quot;,
-        max_tokens=120)
-    # Parsing is the harness&#x27;s job, not the model&#x27;s favour. Asked for one
-    # line, a 7B model returns the whole function and a frontier model returns
-    # a fenced block; both are reasonable readings of the request. Take the
-    # line that actually calls the sink.
-    lines = [ln.strip() for ln in answer.strip().splitlines()
-             if ln.strip() and not ln.strip().startswith(&quot;```&quot;)]
-    sink = [ln for ln in lines if &quot;execute&quot; in ln]
-    return ((sink or lines or [&quot;&quot;])[0]), used
-
-def act(proposal):
-    &quot;&quot;&quot;ACT - the harness applies it. Here, that is recording what it would do.&quot;&quot;&quot;
-    return {&quot;would_write&quot;: proposal}
-
-PLACEHOLDERS = (&quot;?&quot;, &quot;%s&quot;, &quot;:ref&quot;, &quot;$1&quot;)
-
-def parameterised(code):
-    &quot;&quot;&quot;VERIFY - independent. Does the line actually use a placeholder?
-
-    The tuple matters more than it looks. An earlier version accepted only &quot;?&quot;
-    and a real model returned a perfectly correct psycopg fix using &quot;%s&quot; - so
-    the verifier rejected correct work three times and burned the whole budget.
-    A verifier that is too narrow does not fail safe; it fails expensively, and
-    it looks exactly like a model that cannot do the task.
-    &quot;&quot;&quot;
-    after = code.split(&quot;execute&quot;, 1)[-1]
-    return any(p in after for p in PLACEHOLDERS) and &quot;+&quot; not in after
-
-def loop(task, verifier=None, max_steps=3):
-    &quot;&quot;&quot;PLAN -&gt; ACT -&gt; VERIFY -&gt; STOP, with the rejection fed back in.&quot;&quot;&quot;
-    feedback, log, used = &quot;&quot;, [], &quot;?&quot;
-    for step in range(1, max_steps + 1):              # STOP: the budget
-        proposal, used = plan(task, feedback)         # PLAN
-        act(proposal)                                 # ACT
-        log.append((step, proposal[:70]))
-        if verifier is None:                          # no VERIFY: accept it
-            return {&quot;ok&quot;: None, &quot;steps&quot;: step, &quot;answer&quot;: proposal,
-                    &quot;backend&quot;: used, &quot;log&quot;: log}
-        if verifier(proposal):                        # VERIFY
-            return {&quot;ok&quot;: True, &quot;steps&quot;: step, &quot;answer&quot;: proposal,
-                    &quot;backend&quot;: used, &quot;log&quot;: log}
-        feedback = &quot;it still concatenates the input into the SQL string&quot;
-    return {&quot;ok&quot;: False, &quot;steps&quot;: max_steps,
-            &quot;answer&quot;: log[-1][1] if log else None, &quot;backend&quot;: used, &quot;log&quot;: log}
-
-TASK = &quot;Rewrite the one vulnerable line so the query is parameterised.&quot;
-print(&quot;the loop, wired:&quot;, [&quot;plan&quot;, &quot;act&quot;, &quot;verify&quot;, &quot;stop&quot;])
-
-no_check = loop(TASK, verifier=None)
-print(f&quot;backend  : {no_check[&#x27;backend&#x27;]}&quot;)
-print(f&quot;steps    : {no_check[&#x27;steps&#x27;]}&quot;)
-print(f&quot;accepted : {no_check[&#x27;answer&#x27;]}&quot;)
-print(f&quot;verified : {no_check[&#x27;ok&#x27;]}   &lt;- nothing checked it&quot;)
-print()
-print(&quot;The loop stopped because the model produced something, which is not the&quot;)
-print(&quot;same as producing something correct. Whatever came back was accepted.&quot;)
-
-checked = loop(TASK, verifier=parameterised)
-print(f&quot;accepted : {checked[&#x27;answer&#x27;]}&quot;)
-print(f&quot;verified : {checked[&#x27;ok&#x27;]}   &lt;- an independent check said so&quot;)
-print(f&quot;steps    : {checked[&#x27;steps&#x27;]}&quot;)
-
-# Two ways a verifier is wrong, and only one of them is loud.
-NARROW = lambda c: &quot;?&quot; in c.split(&quot;execute&quot;, 1)[-1] and &quot;+&quot; not in c
-PSYCOPG = &#x27;return DB.execute(&quot;SELECT * FROM bookings WHERE ref=%s&quot;, (ref,))&#x27;
-print(f&quot;\na correct psycopg fix: {PSYCOPG}&quot;)
-print(f&quot;   narrow verifier (only &#x27;?&#x27;) : &quot;
-      f&quot;{&#x27;accepts&#x27; if NARROW(PSYCOPG) else &#x27;REJECTS a correct fix&#x27;}&quot;)
-print(f&quot;   this lesson&#x27;s verifier     : &quot;
-      f&quot;{&#x27;accepts&#x27; if parameterised(PSYCOPG) else &#x27;rejects&#x27;}&quot;)
-
-# And the case that matters: a plausible answer that is still vulnerable.
-BAD = &#x27;return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + escape(ref))&#x27;
-print(f&quot;\na plausible-looking answer: {BAD}&quot;)
-print(f&quot;   would the verifier accept it? {parameterised(BAD)}&quot;)
-print()
-print(&quot;It reads like a fix and it is still concatenation. Without the verifier&quot;)
-print(&quot;this loop ships it, reports success, and the trace looks clean.&quot;)
-assert not parameterised(BAD) and parameterised(PSYCOPG) and not NARROW(PSYCOPG)</code></pre></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">technique</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">pre-deploy</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">post-deploy</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what only the other side sees</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">SAST / code analysis</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whether the vulnerable path is reached with real traffic</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Dependency and SBOM scanning</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">partly</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">what actually loaded, versus what the manifest pinned</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">IaC and policy-as-code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the identity and network the workload really got</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Threat modelling</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">re-run on drift</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">entry points added by a config change, not a commit</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Tool-schema and MCP surface review</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a description edited by a server after review</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">DAST / attack simulation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">against a replica</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">responses only a live system produces</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Guardrails and egress enforcement</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">config only</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the request that was actually attempted</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Runtime posture and drift</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a guardrail switched off after the demo — A3.9</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Detection and canaries</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">somebody using a credential nothing legitimate touches</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Attestation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">signs the claim</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">re-checks it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whether the deployment still matches what was signed</td></tr></tbody></table>
+It reads like a fix and it is still concatenation. Without the verifier
+this loop ships it, reports success, and the trace looks clean.</code></pre></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">technique</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">pre-deploy</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">post-deploy</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what only the other side sees</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">SAST / code analysis</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whether the vulnerable path is reached with real traffic</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Dependency and SBOM scanning</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">partly</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">what actually loaded, versus what the manifest pinned</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">IaC and policy-as-code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the identity and network the workload really got</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Threat modelling</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">re-run on drift</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">entry points added by a config change, not a commit</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Tool-schema and MCP surface review</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a description edited by a server after review</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">DAST / attack simulation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">against a replica</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">responses only a live system produces</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Guardrails and egress enforcement</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">config only</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the request that was actually attempted</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Runtime posture and drift</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a guardrail switched off after the demo — A3.9</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Detection and canaries</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">somebody using a credential nothing legitimate touches</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Attestation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">signs the claim</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">re-checks it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whether the deployment still matches what was signed</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">This chapter is mostly the first column. Function D is the third.</div></div><div class="nbmd"><h2>6 · What this harness is worth, measured</h2>
 <p>Both of these were run for real, on CPU, against Qwen2.5 weights pulled from Kaggle Models — same machine, same adapter, one variable changed. B2.9 asks a model to fix the same SQL injection in one shot, by returning the corrected function. This lesson asks for <strong>one line</strong> and checks it.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)"></th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">B2.9 — one shot, fix the function</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">B2.0 — loop, one line, verified</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Qwen2.5-1.5B</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the vulnerable function, unchanged</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>ref=?</b> — accepted, in one step</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Qwen2.5-7B</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">parameterised, bound</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>ref=%s</b> with the value bound</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The 1.5B model that cannot fix the function produces the correct line when the harness narrows the ask and an independent verifier checks the answer. One step, not retries - this is the shape of the ask, which is the part you own.</div></div><div class="nbmd"><h2>What you just proved</h2>

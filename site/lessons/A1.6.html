@@ -60,134 +60,71 @@ human who caused it is not in the record at all. The compromise is of privilege
 </blockquote>
 <h2>3 · The risk, realised</h2>
 <p>A read-only user asks for something, and the agent has more authority than they do.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>Everything turns on which principal the decision was evaluated against. The skill runs the asymmetric probe — a traveller holding <code>reports:read</code> asking for something that needs <code>db:admin</code> — and then reads one audit row to see whether a human can be recovered from it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/authorization-subject-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: authorization-subject-check
+<p>Everything turns on which principal the decision was evaluated against. The skill runs the asymmetric probe — a traveller holding <code>reports:read</code> asking for something that needs <code>db:admin</code> — and then reads one audit row to see whether a human can be recovered from it.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/threats/authorization-subject-check/SKILL.md"><code>skills/threats/authorization-subject-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: authorization-subject-check
 description: &gt;-
   Establish which principal a tool call is actually authorised against — the
-  requesting human, or the agent&#x27;s own service account — and what the resulting
+  requesting human, or the agent's own service account — and what the resulting
   audit row can name. Use when a user reaches a scope they do not hold, or when
   every log line shows the same caller.
 allowed-tools: Read, Grep, Glob
----
-
-# Authorised as whom?
-
-Privilege compromise in an agentic system is rarely a stolen credential. It is
-authorisation evaluated against the **agent&#x27;s** identity while the request came
+</code></pre>
+<h1>Authorised as whom?</h1>
+<p>Privilege compromise in an agentic system is rarely a stolen credential. It is
+authorisation evaluated against the <strong>agent's</strong> identity while the request came
 from a user who does not hold the scope — and an audit trail that then names
-the agent on every row, so the human cannot be recovered at all.
-
-## When to use this
-
-Any time an agent calls something on a user&#x27;s behalf. Run it before designing
+the agent on every row, so the human cannot be recovered at all.</p>
+<h2>When to use this</h2>
+<p>Any time an agent calls something on a user's behalf. Run it before designing
 delegation, because the answer decides whether delegation is missing or merely
-unenforced.
-
-## Procedure
-
-**1 — Find the authorisation decision point.** The single place where a scope
+unenforced.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Find the authorisation decision point.</strong> The single place where a scope
 is compared against a holder. If there are several, list them all; they will
-disagree.
-
-**2 — Name the subject at that point.** Is the compared identity the requesting
-user, or the process&#x27;s own account? A service account with a union of every
-scope any user might need is the shape to look for.
-
-**3 — Run the asymmetric probe.** Have a user holding a narrow scope request an
+disagree.</p>
+<p><strong>2 — Name the subject at that point.</strong> Is the compared identity the requesting
+user, or the process's own account? A service account with a union of every
+scope any user might need is the shape to look for.</p>
+<p><strong>3 — Run the asymmetric probe.</strong> Have a user holding a narrow scope request an
 action requiring a wider one. If it succeeds, authorisation is on the workload,
-not the requester.
-
-**4 — Read one audit row.** Does it name a human? A row naming `agent-svc` is
-complete, well-formed and useless: it answers &quot;what ran&quot;, never &quot;who caused
-it&quot;.
-
-**5 — Separate the two fixes.** Authorising on the requester and *recording*
+not the requester.</p>
+<p><strong>4 — Read one audit row.</strong> Does it name a human? A row naming <code>agent-svc</code> is
+complete, well-formed and useless: it answers "what ran", never "who caused
+it".</p>
+<p><strong>5 — Separate the two fixes.</strong> Authorising on the requester and <em>recording</em>
 the requester are different changes with different owners; a report that merges
-them gets half-implemented.
-
-## Output contract
-
-```json
-{
+them gets half-implemented.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;decision_points&quot;: [{&quot;site&quot;: &quot;str&quot;, &quot;subject&quot;: &quot;requester|workload|both&quot;}],
   &quot;probe&quot;: {&quot;user_scopes&quot;: [&quot;str&quot;], &quot;required&quot;: &quot;str&quot;, &quot;succeeded&quot;: true},
   &quot;audit_row&quot;: {&quot;names_human&quot;: false, &quot;fields&quot;: [&quot;str&quot;]},
   &quot;fixes&quot;: {&quot;authorize_on_requester&quot;: true, &quot;record_requester&quot;: true}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Accepting that the user is "in the request".</strong> Present in the payload is
+  not the same as compared at the decision point.</li>
+<li><strong>Testing with an admin.</strong> The probe needs a user who genuinely lacks the
+  scope.</li>
+<li><strong>Reporting the audit gap as a logging bug.</strong> It is the reason the incident
+  cannot be scoped later.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>requestertheir scopes                                asked for       allowed?
+dana    [&#x27;reports:read&#x27;]                            db:admin        True
+priya   [&#x27;db:admin&#x27;, &#x27;reports:read&#x27;, &#x27;reports:write&#x27;]db:admin        True
 
-## Failure modes
+AUDIT TRAIL
+   actor=agent-svc  tool=drop_table   allowed=True
+   actor=agent-svc  tool=drop_table   allowed=True
 
-- **Accepting that the user is &quot;in the request&quot;.** Present in the payload is
-  not the same as compared at the decision point.
-- **Testing with an admin.** The probe needs a user who genuinely lacks the
-  scope.
-- **Reporting the audit gap as a logging bug.** It is the reason the incident
-  cannot be scoped later.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+dana holds reports:read only, and her request reached db:admin.
+The authorization decision was made about the agent, not about her.
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/threats/authorization-subject-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/authorization-subject-check/scripts/authorization_subject_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Show which principal authorisation is actually evaluated against, and what the audit trail can name afterwards.
-
-This is the executable half of the `authorization-subject-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-USERS = {&quot;dana&quot;:  {&quot;scopes&quot;: {&quot;reports:read&quot;}},
-         &quot;priya&quot;: {&quot;scopes&quot;: {&quot;reports:read&quot;, &quot;reports:write&quot;, &quot;db:admin&quot;}}}
-
-# the agent authenticates as itself, and needs the union of what any user needs
-AGENT_SVC = {&quot;name&quot;: &quot;agent-svc&quot;, &quot;scopes&quot;: {&quot;reports:read&quot;, &quot;reports:write&quot;, &quot;db:admin&quot;}}
-
-AUDIT = []
-
-def call_tool(caller_identity, on_behalf_of, tool, required_scope):
-    &quot;&quot;&quot;Authorization is checked against the CALLER - which is the agent.&quot;&quot;&quot;
-    allowed = required_scope in caller_identity[&quot;scopes&quot;]
-    AUDIT.append({&quot;actor&quot;: caller_identity[&quot;name&quot;], &quot;tool&quot;: tool,
-                  &quot;allowed&quot;: allowed})          # note: no human principal
-    return allowed
-
-print(f&quot;{&#x27;requester&#x27;:8s}{&#x27;their scopes&#x27;:44s}{&#x27;asked for&#x27;:16s}allowed?&quot;)
-for user in sorted(USERS):
-    ok = call_tool(AGENT_SVC, user, &quot;drop_table&quot;, &quot;db:admin&quot;)
-    print(f&quot;{user:8s}{str(sorted(USERS[user][&#x27;scopes&#x27;])):44s}{&#x27;db:admin&#x27;:16s}{ok}&quot;)
-
-print(&quot;\nAUDIT TRAIL&quot;)
-for a in AUDIT:
-    print(f&quot;   actor={a[&#x27;actor&#x27;]:10s} tool={a[&#x27;tool&#x27;]:12s} allowed={a[&#x27;allowed&#x27;]}&quot;)
-
-print(&quot;\ndana holds reports:read only, and her request reached db:admin.&quot;)
-print(&quot;The authorization decision was made about the agent, not about her.&quot;)
-print()
-print(&quot;Now answer &#x27;which user caused the table to be dropped&#x27; from that trail.&quot;)
-print(&quot;You cannot: every row says agent-svc. Privilege and attribution failed&quot;)
-print(&quot;in the same step, which is what makes this different from a human with&quot;)
-print(&quot;too much access.&quot;)
-assert all(a[&quot;allowed&quot;] for a in AUDIT)
-assert all(&quot;dana&quot; not in str(a) for a in AUDIT)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Now answer &#x27;which user caused the table to be dropped&#x27; from that trail.
+You cannot: every row says agent-svc. Privilege and attribution failed
+in the same step, which is what makes this different from a human with
+too much access.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>A user holding only <code>reports:read</code> triggers a <code>db:admin</code> action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names <code>agent-svc</code> on every row, so the human who caused it cannot be recovered from it at all.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick one agent and answer two questions: what identity does it authenticate as, and can you name the human behind any single action it took last week. If the second answer is no, you have this risk regardless of how the scopes are set.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.7.html">A1.7 · Identity spoofing and impersonation</a></strong></p>

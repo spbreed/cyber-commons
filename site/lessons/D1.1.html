@@ -47,259 +47,128 @@ loop may believe — because a triage loop with a weak verifier closes true
 positives at machine speed, and closing a true positive is silent.</p></div><div class="nbmd"><h2>3 · Where it breaks — closing a true positive is silent</h2>
 <p>Every triage decision has two error directions and they are not symmetric. Escalating a false positive costs an analyst ten minutes. <strong>Closing a true positive costs you the incident</strong>, and nothing tells you it happened.</p></div><div class="nbmd"><h2>4 · The control — the loop may close, but not silently</h2>
 <p>Three rules make an agentic triage loop safe to run, and none of them is about model quality.</p></div><div class="nbmd"><h2>5 · The procedure, as a skill</h2>
-<p>The skill scores a triage loop against ground truth, sweeps the confidence bar so the trade between analyst minutes and missed incidents is made explicitly, and adds the severity floor that no automatic closure may cross whatever its confidence.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/triage-loop-with-floor/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: triage-loop-with-floor
+<p>The skill scores a triage loop against ground truth, sweeps the confidence bar so the trade between analyst minutes and missed incidents is made explicitly, and adds the severity floor that no automatic closure may cross whatever its confidence.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/triage-loop-with-floor/SKILL.md"><code>skills/detection/triage-loop-with-floor/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: triage-loop-with-floor
 description: &gt;-
   Run an alert triage loop against ground truth, measure the confusion matrix,
   and bound it with a confidence bar and a severity floor no automatic closure
   may cross. Use when automating triage, or when deciding what an agent may
   close on its own.
 allowed-tools: Read, Grep, Glob
----
-
-# The floor is the part that makes the loop deployable
-
-A triage loop that matches ground truth on a sample is a promising loop. What
+</code></pre>
+<h1>The floor is the part that makes the loop deployable</h1>
+<p>A triage loop that matches ground truth on a sample is a promising loop. What
 makes it something you can run is the pair of bounds around it: a confidence bar
 that decides when it defers, and a severity floor it may never close through,
-whatever its confidence.
-
-## When to use this
-
-Before an agent closes anything, and when tuning how much of a queue is
-automated.
-
-## Procedure
-
-**1 — Score against ground truth, as a confusion matrix.** Escalated and closed,
+whatever its confidence.</p>
+<h2>When to use this</h2>
+<p>Before an agent closes anything, and when tuning how much of a queue is
+automated.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Score against ground truth, as a confusion matrix.</strong> Escalated and closed,
 against true and false. Accuracy alone hides the direction of the errors, and
-only one direction matters here.
-
-**2 — Sweep the confidence bar.** For each setting, record analyst minutes saved
+only one direction matters here.</p>
+<p><strong>2 — Sweep the confidence bar.</strong> For each setting, record analyst minutes saved
 and incidents missed. This is the trade being made, and it should be made
-explicitly by whoever owns the queue rather than implicitly by a default.
-
-**3 — Set the severity floor separately.** Any alert above it is escalated
+explicitly by whoever owns the queue rather than implicitly by a default.</p>
+<p><strong>3 — Set the severity floor separately.</strong> Any alert above it is escalated
 regardless of confidence. A confident wrong closure on a critical alert is the
-failure this exists to prevent, and no confidence threshold protects against it.
-
-**4 — Check what the floor costs.** How many alerts it forces to a human per
+failure this exists to prevent, and no confidence threshold protects against it.</p>
+<p><strong>4 — Check what the floor costs.</strong> How many alerts it forces to a human per
 day. If that number is above the reading budget, the floor is theatre and the
-queue needs a different cut.
-
-**5 — Record every automatic closure with its reason and confidence.** The loop
-will be wrong sometimes; the question at review is whether you can find out how.
-
-## Output contract
-
-```json
-{
+queue needs a different cut.</p>
+<p><strong>5 — Record every automatic closure with its reason and confidence.</strong> The loop
+will be wrong sometimes; the question at review is whether you can find out how.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;confusion&quot;: {&quot;tp&quot;: 0, &quot;fp&quot;: 0, &quot;tn&quot;: 0, &quot;fn&quot;: 0},
   &quot;confidence_sweep&quot;: [{&quot;bar&quot;: 0.0, &quot;analyst_minutes_saved&quot;: 0, &quot;incidents_missed&quot;: 0}],
   &quot;floor&quot;: {&quot;severity&quot;: &quot;str&quot;, &quot;escalated_regardless&quot;: 0, &quot;per_day&quot;: 0},
   &quot;audit&quot;: {&quot;closures_logged&quot;: true, &quot;fields&quot;: [&quot;reason&quot;, &quot;confidence&quot;, &quot;rule&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting accuracy.</strong> The direction of the error is the whole question.</li>
+<li><strong>A floor set above the reading budget.</strong> It routes to a person who will not
+  read it.</li>
+<li><strong>Unlogged closures.</strong> You cannot review what the loop decided.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-## Failure modes
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
 
-- **Reporting accuracy.** The direction of the error is the whole question.
-- **A floor set above the reading budget.** It routes to a person who will not
-  read it.
-- **Unlogged closures.** You cannot review what the loop decided.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+queue: 8 alerts, 4 true positives
+   A-01 medium   impossible travel        dana@corp
+   A-02 critical metadata service access  patch-agent
+   A-03 medium   failed logins x40        svc-etl
+   A-04 high     secret path read         patch-agent
+   A-05 high     new admin group member   sam@corp
+   A-06 low      port scan detected       scanner-01
+   A-07 high     egress to unlisted host  triage-agent
+   A-08 low      expired certificate      www
+alert  verdict     conf  truth  reasoning
+--------------------------------------------------------------------------------------------
+A-01   close       0.88     fp  corporate VPN egress in Frankfurt; matches t
+A-02   escalate    0.97     tp  link-local metadata endpoint from a non-huma
+A-03   close       0.71     fp  service account retry storm after a credenti
+A-04   escalate    0.93     tp  agent read a cloud credential path outside i
+A-05   escalate    0.64     tp  privileged group change; needs the change ti
+A-06   close       0.90     fp  authorised internal scanner, scheduled windo
+A-07   escalate    0.95     tp  egress to a host not on the allowlist
+A-08   close       0.99     fp  hygiene finding, not a security event
+escalated_correctly       4
+false_escalations         0
+closed_correctly          4
+CLOSED_TRUE_POSITIVES     0
+missed                    []
+analyst_minutes_saved     40
+incidents_missed          0
 
-from cyber_commons_skill_runtime import run_skill
+Now lower the escalation bar and watch the trade:
+   close only above conf 0.50 → missed 0, analyst minutes saved 40
+   close only above conf 0.70 → missed 0, analyst minutes saved 40
+   close only above conf 0.90 → missed 0, analyst minutes saved 20
+   close only above conf 0.99 → missed 0, analyst minutes saved 10
+1. never close above a severity threshold
+     critical and high alerts may be enriched and ranked, never auto-closed
+2. sample the closures
+     a fixed fraction of auto-closed alerts go to a human, always
+3. measure closures against ground truth
+     when an incident is found later, check whether the loop closed a related alert
 
-# Split skills/detection/triage-loop-with-floor/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/triage-loop-with-floor/scripts/triage_loop_with_floor.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run a triage loop against ground truth, then bound it with a confidence bar and a severity floor that no automatic closure may cross.
+   A-01 medium   close     → close     
+   A-02 critical escalate  → escalate  
+   A-03 medium   close     → sample    rule 2: routine closure sample for quality measurement
+   A-04 high     escalate  → escalate  
+   A-05 high     escalate  → escalate  
+   A-06 low      close     → close     
+   A-07 high     escalate  → escalate  
+   A-08 low      close     → close     
 
-This is the executable half of the `triage-loop-with-floor` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+before: missed 0   after: missed 0
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Triage this alert to one of: escalate, close-benign, needs-context...
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
+answer:
+   escalate - the source range and the breadth of the list call are both outside this account&#x27;s established pattern.
 
-# --- model backend: replay by default, a Kaggle open-weight model when served -
-# One URL and one header shape, no vendor SDK. Standard library only, so the
-# notebook stays self-contained.
-# The model adapter comes from the shared runtime, not from a copy in this
-# file. In a lesson notebook the cell above has already loaded it; standalone,
-# find it the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import announce_backend, ask
+property checked : returned one of the three dispositions
+held on replay       : True
 
-announce_backend()
-
-
-import time
-from dataclasses import dataclass, field
-
-@dataclass
-class Alert:
-    aid: str; rule: str; actor: str; target: str; severity: str
-    truth: str          # held out from the loop: &quot;tp&quot; or &quot;fp&quot;
-
-QUEUE = [
- Alert(&quot;A-01&quot;,&quot;impossible travel&quot;,&quot;dana@corp&quot;,&quot;vpn-eu&quot;,&quot;medium&quot;,&quot;fp&quot;),
- Alert(&quot;A-02&quot;,&quot;metadata service access&quot;,&quot;patch-agent&quot;,&quot;169.254.169.254&quot;,&quot;critical&quot;,&quot;tp&quot;),
- Alert(&quot;A-03&quot;,&quot;failed logins x40&quot;,&quot;svc-etl&quot;,&quot;auth&quot;,&quot;medium&quot;,&quot;fp&quot;),
- Alert(&quot;A-04&quot;,&quot;secret path read&quot;,&quot;patch-agent&quot;,&quot;/home/app/.aws/credentials&quot;,&quot;high&quot;,&quot;tp&quot;),
- Alert(&quot;A-05&quot;,&quot;new admin group member&quot;,&quot;sam@corp&quot;,&quot;group:admins&quot;,&quot;high&quot;,&quot;tp&quot;),
- Alert(&quot;A-06&quot;,&quot;port scan detected&quot;,&quot;scanner-01&quot;,&quot;10.0.0.0/24&quot;,&quot;low&quot;,&quot;fp&quot;),
- Alert(&quot;A-07&quot;,&quot;egress to unlisted host&quot;,&quot;triage-agent&quot;,&quot;collect.example.com&quot;,&quot;high&quot;,&quot;tp&quot;),
- Alert(&quot;A-08&quot;,&quot;expired certificate&quot;,&quot;www&quot;,&quot;tls&quot;,&quot;low&quot;,&quot;fp&quot;),
-]
-print(f&quot;queue: {len(QUEUE)} alerts, &quot;
-      f&quot;{sum(a.truth==&#x27;tp&#x27; for a in QUEUE)} true positives&quot;)
-for a in QUEUE:
-    print(f&quot;   {a.aid} {a.severity:8s} {a.rule:24s} {a.actor}&quot;)
-
-class ReplayTriage:
-    &quot;&quot;&quot;DETERMINISTIC REPLAY — not a language model. Stands in for a triage model.&quot;&quot;&quot;
-    VERDICTS = {
-     &quot;A-01&quot;: (&quot;close&quot;, 0.88, &quot;corporate VPN egress in Frankfurt; matches this user&#x27;s pattern&quot;),
-     &quot;A-02&quot;: (&quot;escalate&quot;, 0.97, &quot;link-local metadata endpoint from a non-human identity&quot;),
-     &quot;A-03&quot;: (&quot;close&quot;, 0.71, &quot;service account retry storm after a credential rotation&quot;),
-     &quot;A-04&quot;: (&quot;escalate&quot;, 0.93, &quot;agent read a cloud credential path outside its workspace&quot;),
-     &quot;A-05&quot;: (&quot;escalate&quot;, 0.64, &quot;privileged group change; needs the change ticket checked&quot;),
-     &quot;A-06&quot;: (&quot;close&quot;, 0.90, &quot;authorised internal scanner, scheduled window&quot;),
-     &quot;A-07&quot;: (&quot;escalate&quot;, 0.95, &quot;egress to a host not on the allowlist&quot;),
-     &quot;A-08&quot;: (&quot;close&quot;, 0.99, &quot;hygiene finding, not a security event&quot;),
-    }
-    def triage(self, alert):
-        verdict, conf, why = self.VERDICTS[alert.aid]
-        return {&quot;aid&quot;: alert.aid, &quot;verdict&quot;: verdict, &quot;confidence&quot;: conf, &quot;why&quot;: why}
-
-model = ReplayTriage()
-results = [model.triage(a) for a in QUEUE]
-truth = {a.aid: a.truth for a in QUEUE}
-
-print(f&quot;{&#x27;alert&#x27;:7s}{&#x27;verdict&#x27;:10s}{&#x27;conf&#x27;:&gt;6}{&#x27;truth&#x27;:&gt;7}  reasoning&quot;)
-print(&quot;-&quot; * 92)
-for r in results:
-    t = truth[r[&quot;aid&quot;]]
-    correct = (r[&quot;verdict&quot;] == &quot;escalate&quot;) == (t == &quot;tp&quot;)
-    flag = &quot;&quot; if correct else &quot;   ← WRONG&quot;
-    print(f&quot;{r[&#x27;aid&#x27;]:7s}{r[&#x27;verdict&#x27;]:10s}{r[&#x27;confidence&#x27;]:&gt;6.2f}{t:&gt;7}{flag}  {r[&#x27;why&#x27;][:44]}&quot;)
-
-def confusion(results, truth):
-    tp = fp = tn = fn = 0
-    missed = []
-    for r in results:
-        esc = r[&quot;verdict&quot;] == &quot;escalate&quot;
-        real = truth[r[&quot;aid&quot;]] == &quot;tp&quot;
-        if esc and real:      tp += 1
-        elif esc and not real: fp += 1
-        elif not esc and real: fn += 1; missed.append(r[&quot;aid&quot;])
-        else:                  tn += 1
-    return {&quot;escalated_correctly&quot;: tp, &quot;false_escalations&quot;: fp,
-            &quot;closed_correctly&quot;: tn, &quot;CLOSED_TRUE_POSITIVES&quot;: fn,
-            &quot;missed&quot;: missed,
-            &quot;analyst_minutes_saved&quot;: tn * 10,
-            &quot;incidents_missed&quot;: fn}
-
-c = confusion(results, truth)
-for k, v in c.items(): print(f&quot;{k:26s}{v}&quot;)
-
-print(&quot;\nNow lower the escalation bar and watch the trade:&quot;)
-for threshold in (0.5, 0.7, 0.9, 0.99):
-    esc = [r for r in results if r[&quot;verdict&quot;] == &quot;escalate&quot; or r[&quot;confidence&quot;] &lt; threshold]
-    adj = [{**r, &quot;verdict&quot;: &quot;escalate&quot; if (r[&quot;verdict&quot;] == &quot;escalate&quot; or
-            r[&quot;confidence&quot;] &lt; threshold) else &quot;close&quot;} for r in results]
-    cc = confusion(adj, truth)
-    print(f&quot;   close only above conf {threshold:.2f} → &quot;
-          f&quot;missed {cc[&#x27;incidents_missed&#x27;]}, analyst minutes saved &quot;
-          f&quot;{cc[&#x27;analyst_minutes_saved&#x27;]}&quot;)
-
-RULES = {
- &quot;1. never close above a severity threshold&quot;:
-   &quot;critical and high alerts may be enriched and ranked, never auto-closed&quot;,
- &quot;2. sample the closures&quot;:
-   &quot;a fixed fraction of auto-closed alerts go to a human, always&quot;,
- &quot;3. measure closures against ground truth&quot;:
-   &quot;when an incident is found later, check whether the loop closed a related alert&quot;,
-}
-for k, v in RULES.items(): print(f&quot;{k}\n     {v}&quot;)
-
-def safe_triage(alert, verdict, confidence, sample_rate=0.1, seed=0):
-    import random, zlib
-    # NOT hash(): Python randomises str hashing per process (PYTHONHASHSEED),
-    # so hash(alert.aid) picks a different sample on every run and on every
-    # machine. crc32 is stable, which is what a sampling rule needs.
-    rng = random.Random(zlib.crc32(alert.aid.encode()) % 1000 + seed)
-    if verdict == &quot;close&quot; and alert.severity in (&quot;critical&quot;, &quot;high&quot;):
-        return &quot;escalate&quot;, &quot;rule 1: severity floor — never auto-close high/critical&quot;
-    if verdict == &quot;close&quot; and rng.random() &lt; sample_rate:
-        return &quot;sample&quot;, &quot;rule 2: routine closure sample for quality measurement&quot;
-    return verdict, &quot;&quot;
-
-print()
-adjusted = []
-for a in QUEUE:
-    r = model.triage(a)
-    v, why = safe_triage(a, r[&quot;verdict&quot;], r[&quot;confidence&quot;])
-    adjusted.append({**r, &quot;verdict&quot;: &quot;escalate&quot; if v == &quot;escalate&quot; else
-                     (&quot;close&quot; if v == &quot;close&quot; else &quot;close&quot;)})
-    print(f&quot;   {a.aid} {a.severity:8s} {r[&#x27;verdict&#x27;]:9s} → {v:9s} {why}&quot;)
-
-c2 = confusion(adjusted, truth)
-print(f&quot;\nbefore: missed {c[&#x27;incidents_missed&#x27;]}   after: missed {c2[&#x27;incidents_missed&#x27;]}&quot;)
-assert c2[&quot;incidents_missed&quot;] &lt;= c[&quot;incidents_missed&quot;]
-
-# ------------------------------------ the same task, against a real model
-# Offline this is a labelled replay; with an open-weight model served
-# from Kaggle it is the same code calling a real one.
-
-TASK = &#x27;Triage this alert to one of: escalate, close-benign, needs-context.\n\nAlert: service account svc-reports authenticated from 203.0.113.9 at 03:14 and listed all S3 buckets. svc-reports normally runs hourly from 10.2.0.0/16 and touches one bucket.&#x27;
-
-REPLAY = &quot;escalate - the source range and the breadth of the list call are both outside this account&#x27;s established pattern.&quot;
-
-answer, used, model = ask(TASK, replay=REPLAY,
-            system=&#x27;You are a SOC triage assistant. One line: disposition, then why.&#x27;,
-            max_tokens=300)
-
-print(f&quot;backend used : {used}&quot;)
-print(f&quot;model        : {model}&quot;)
-print(f&quot;prompt       : {TASK[:66]}...&quot;)
-print()
-print(&quot;answer:&quot;)
-for line in (answer.splitlines() or [answer]):
-    print(f&quot;   {line}&quot;)
-
-# Two assertions that must hold on every backend, and one property that is
-# reported rather than asserted - a real model failing it is a finding about
-# the model, not a broken notebook.
-assert answer.strip(), &quot;the configured backend returned nothing&quot;
-if used == &quot;replay&quot;:
-    assert answer == REPLAY, &quot;the offline path must return the replay verbatim&quot;
-
-label, held = (&quot;returned one of the three dispositions&quot;, any(d in answer.lower() for d in (&quot;escalate&quot;, &quot;close-benign&quot;, &quot;needs-context&quot;)))
-print()
-print(f&quot;property checked : {label}&quot;)
-print(f&quot;held on {used:12s} : {held}&quot;)
-print()
-print(&quot;Same code, same assertions, two possible backends. Offline the answer is&quot;)
-print(&quot;the replay and is labelled as one; with a served model it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The triage loop escalates 4 alerts and closes 4, matching ground truth on all 8. Lowering the confidence bar trades analyst minutes against missed incidents. The severity floor converts any high or critical closure into an escalation, and the closure sampling routes a fraction of routine closures to a human for quality measurement.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Ask your SOC one question: when an incident is confirmed, does anyone check whether an earlier alert about it was closed? If nobody does, you have no measurement of your false-negative rate — with or without an agent.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">D1.2 · Context that makes triage work</a></strong></p>

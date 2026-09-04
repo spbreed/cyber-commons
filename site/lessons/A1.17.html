@@ -63,143 +63,77 @@ this risk rather than reducing it.</p></div><div class="nbmd"><blockquote>
 </blockquote>
 <h2>3 · The risk, realised</h2>
 <p>A request that is denied directly, and permitted through the architecture.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>A CyberTravels traveller denied <code>payments:write</code> reaches it through the orchestrator, with every hop legitimate. The skill records the direct refusal first, so the composed success reads as a finding rather than as intended behaviour.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/authority-composition-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: authority-composition-check
+<p>A CyberTravels traveller denied <code>payments:write</code> reaches it through the orchestrator, with every hop legitimate. The skill records the direct refusal first, so the composed success reads as a finding rather than as intended behaviour.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/threats/authority-composition-check/SKILL.md"><code>skills/threats/authority-composition-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: authority-composition-check
 description: &gt;-
   Check whether a scope a user is denied directly can be reached through a chain
-  of individually legitimate hops, and whether an agent&#x27;s restatement of a claim
-  carries more weight than a colleague&#x27;s. Use when reviewing an orchestrator, a
+  of individually legitimate hops, and whether an agent's restatement of a claim
+  carries more weight than a colleague's. Use when reviewing an orchestrator, a
   routing layer, or an agent that answers on behalf of people.
 allowed-tools: Read, Grep, Glob
----
-
-# Every hop legitimate, the composition unauthorised
-
-A user is denied `payments:write` at the front door and reaches it through the
+</code></pre>
+<h1>Every hop legitimate, the composition unauthorised</h1>
+<p>A user is denied <code>payments:write</code> at the front door and reaches it through the
 orchestrator. No hop broke a rule. Authorisation was decided per edge, and
 nobody owns the path. The second half of the check is social: the same claim is
 believed more when an agent states it, which is what makes an agent a good
-carrier for one.
-
-## When to use this
-
-Any system where a request is routed, decomposed, or delegated between
+carrier for one.</p>
+<h2>When to use this</h2>
+<p>Any system where a request is routed, decomposed, or delegated between
 components with different privileges — an orchestrator, a workflow engine, a
-tool that calls another tool.
-
-## Procedure
-
-**1 — Draw the edges with their scopes.** For each hop, what identity it runs
+tool that calls another tool.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Draw the edges with their scopes.</strong> For each hop, what identity it runs
 as and what it may do. The picture is usually the first time anyone has seen
-the composition.
-
-**2 — Attempt the direct call and record the refusal.** Establish that the
+the composition.</p>
+<p><strong>2 — Attempt the direct call and record the refusal.</strong> Establish that the
 control exists, so the composed success is a finding rather than a
-misunderstanding.
-
-**3 — Compose a path to the same effect.** Ask for something the orchestrator
-will decompose into the denied action. Record each hop&#x27;s decision: every one
-should be a legitimate &quot;yes&quot;.
-
-**4 — Find where the path could have been evaluated.** Usually nowhere: each
+misunderstanding.</p>
+<p><strong>3 — Compose a path to the same effect.</strong> Ask for something the orchestrator
+will decompose into the denied action. Record each hop's decision: every one
+should be a legitimate "yes".</p>
+<p><strong>4 — Find where the path could have been evaluated.</strong> Usually nowhere: each
 component sees one edge. Name the component that would have to hold the
-end-to-end policy, because that is the fix.
-
-**5 — Test the trust asymmetry.** Present the same unverified claim from an
-agent and from a person, and record which is challenged. If the agent&#x27;s version
+end-to-end policy, because that is the fix.</p>
+<p><strong>5 — Test the trust asymmetry.</strong> Present the same unverified claim from an
+agent and from a person, and record which is challenged. If the agent's version
 is accepted more readily, the agent is the better delivery vehicle and that
-belongs in the report.
-
-## Output contract
-
-```json
-{
+belongs in the report.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;edges&quot;: [{&quot;from&quot;: &quot;str&quot;, &quot;to&quot;: &quot;str&quot;, &quot;runs_as&quot;: &quot;str&quot;, &quot;scopes&quot;: [&quot;str&quot;]}],
   &quot;direct&quot;: {&quot;scope&quot;: &quot;str&quot;, &quot;refused&quot;: true},
   &quot;composed&quot;: {&quot;path&quot;: [&quot;str&quot;], &quot;each_hop_legitimate&quot;: true, &quot;effect_achieved&quot;: true},
   &quot;policy_owner&quot;: {&quot;component&quot;: &quot;str&quot;, &quot;exists&quot;: false},
   &quot;trust_asymmetry&quot;: {&quot;agent_claim_challenged&quot;: false, &quot;human_claim_challenged&quot;: true}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Auditing hops.</strong> They are all fine; that is the point.</li>
+<li><strong>Skipping the direct refusal.</strong> Without it the composed success looks like
+  intended behaviour.</li>
+<li><strong>Leaving the trust asymmetry out</strong> because it is not technical. It is the
+  reason the finding recurs.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>mallory holds        : [&#x27;reports:read&#x27;]
+mallory asks directly for payments:write -&gt; DENIED
 
-## Failure modes
+same outcome, requested through the architecture:
+   user asks orchestrator    mallory         ok
+   orchestrator routes       orchestrator    ok
+   agent acts                finance-agent   ok
+   -&gt; reached payments:write: True
 
-- **Auditing hops.** They are all fine; that is the point.
-- **Skipping the direct refusal.** Without it the composed success looks like
-  intended behaviour.
-- **Leaving the trust asymmetry out** because it is not technical. It is the
-  reason the finding recurs.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Every hop was legitimate. Mallory was allowed to ask, the orchestrator
+was allowed to route, the agent was allowed to act. The composition
+reached exactly what the direct check refused.
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+and the other direction - the same claim, two ways:
+   colleague says : &#x27;dependency libfoo has no known vulnerabilities&#x27;   -&gt; reader asks how they know
+   agent reports  : &#x27;dependency libfoo has no known vulnerabilities&#x27;   -&gt; reader treats it as checked
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/threats/authority-composition-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/authority-composition-check/scripts/authority_composition_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Show a denied scope being reached through a chain of individually legitimate hops.
-
-This is the executable half of the `authority-composition-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-PERMISSIONS = {&quot;mallory&quot;: {&quot;reports:read&quot;},
-               &quot;finance-agent&quot;: {&quot;reports:read&quot;, &quot;payments:write&quot;},
-               &quot;orchestrator&quot;: {&quot;reports:read&quot;, &quot;route&quot;}}
-
-def direct(user, scope):
-    return scope in PERMISSIONS[user]
-
-CHAIN = []
-def route(user, request):
-    &quot;&quot;&quot;Each hop checks only its own permission. Nothing checks the composition.&quot;&quot;&quot;
-    CHAIN.append((&quot;user asks orchestrator&quot;, user, direct(user, &quot;reports:read&quot;)))
-    CHAIN.append((&quot;orchestrator routes&quot;, &quot;orchestrator&quot;, direct(&quot;orchestrator&quot;, &quot;route&quot;)))
-    needed = &quot;payments:write&quot; if &quot;refund&quot; in request else &quot;reports:read&quot;
-    CHAIN.append((&quot;agent acts&quot;, &quot;finance-agent&quot;, direct(&quot;finance-agent&quot;, needed)))
-    return all(ok for _, _, ok in CHAIN)
-
-print(f&quot;mallory holds        : {sorted(PERMISSIONS[&#x27;mallory&#x27;])}&quot;)
-print(f&quot;mallory asks directly for payments:write -&gt; &quot;
-      f&quot;{&#x27;allowed&#x27; if direct(&#x27;mallory&#x27;, &#x27;payments:write&#x27;) else &#x27;DENIED&#x27;}&quot;)
-print()
-print(&quot;same outcome, requested through the architecture:&quot;)
-ok = route(&quot;mallory&quot;, &quot;please issue a refund for order 4471&quot;)
-for step, who, allowed in CHAIN:
-    print(f&quot;   {step:26s}{who:16s}{&#x27;ok&#x27; if allowed else &#x27;denied&#x27;}&quot;)
-print(f&quot;   -&gt; reached payments:write: {ok}&quot;)
-print()
-print(&quot;Every hop was legitimate. Mallory was allowed to ask, the orchestrator&quot;)
-print(&quot;was allowed to route, the agent was allowed to act. The composition&quot;)
-print(&quot;reached exactly what the direct check refused.&quot;)
-
-# T15: the same output, two framings
-FINDING = &quot;dependency libfoo has no known vulnerabilities&quot;
-print()
-print(&quot;and the other direction - the same claim, two ways:&quot;)
-print(f&quot;   colleague says : &#x27;{FINDING}&#x27;   -&gt; reader asks how they know&quot;)
-print(f&quot;   agent reports  : &#x27;{FINDING}&#x27;   -&gt; reader treats it as checked&quot;)
-print()
-print(&quot;Nothing about the second is more true. It is formatted like a system&quot;)
-print(&quot;output, so it recruits the authority of one.&quot;)
-assert not direct(&quot;mallory&quot;, &quot;payments:write&quot;) and ok</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Nothing about the second is more true. It is formatted like a system
+output, so it recruits the authority of one.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>A user denied <code>payments:write</code> directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one permission a user is denied and see whether an agent they can talk to holds it. That pair is a laundering path, and it is invisible to any review that checks permissions one hop at a time.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.18.html">A1.18 · The CyberTravels risk register</a></strong></p>

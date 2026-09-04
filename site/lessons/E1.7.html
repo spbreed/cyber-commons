@@ -43,48 +43,39 @@ its freshness window.</p>
 </ul>
 <p>Plus the absence state: no evidence at all, which is different from failing and
 is often the largest category in a first assessment.</p></div><div class="nbmd"><h2>3 · Collecting the runtime evidence, as a skill</h2>
-<p>Automating a control means something has to go and look. For the network and logging controls that underwrite every default-deny claim CyberTravels makes, that is a posture collector: egress rules, private endpoints, route tables, key policies, and whether the audit trail is not merely enabled but <strong>delivering</strong>. It collects; it does not conclude. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/aws-runtime-posture-collector/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: aws-runtime-posture-collector
+<p>Automating a control means something has to go and look. For the network and logging controls that underwrite every default-deny claim CyberTravels makes, that is a posture collector: egress rules, private endpoints, route tables, key policies, and whether the audit trail is not merely enabled but <strong>delivering</strong>. It collects; it does not conclude. This is the file in this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/aws-runtime-posture-collector/SKILL.md"><code>skills/attestation/aws-runtime-posture-collector/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: aws-runtime-posture-collector
 description: &gt;-
-  Snapshot a deployment&#x27;s cloud network, crypto and logging posture as
+  Snapshot a deployment's cloud network, crypto and logging posture as
   evidence for default-deny and egress controls. Use to evidence network
   isolation, to check whether private endpoints and endpoint policies are in
   place, or to record the runtime configuration an attestation depends on.
 allowed-tools: Bash, Read
----
-
-# Aws Runtime Posture Collector
-
-**Controls:** Controls 1 and 2 — runtime posture
-
-## What this collects
-
-Configuration state, at a point in time, for the network and crypto boundary
-around one deployment. It is evidence for other skills&#x27; verdicts rather than a
-verdict in itself.
-
-## Procedure
-
-1. **Security groups and network ACLs.** Enumerate egress rules. Any rule
-   permitting `0.0.0.0/0` outbound is an egress-open finding regardless of what
-   an application-layer policy says.
-2. **Private endpoints.** Record whether a private endpoint exists for each
+</code></pre>
+<h1>Aws Runtime Posture Collector</h1>
+<p><strong>Controls:</strong> Controls 1 and 2 — runtime posture</p>
+<h2>What this collects</h2>
+<p>Configuration state, at a point in time, for the network and crypto boundary
+around one deployment. It is evidence for other skills' verdicts rather than a
+verdict in itself.</p>
+<h2>Procedure</h2>
+<ol>
+<li><strong>Security groups and network ACLs.</strong> Enumerate egress rules. Any rule
+   permitting <code>0.0.0.0/0</code> outbound is an egress-open finding regardless of what
+   an application-layer policy says.</li>
+<li><strong>Private endpoints.</strong> Record whether a private endpoint exists for each
    model and gateway service in use, and read the endpoint policy — an
-   unscoped endpoint policy is an endpoint that permits any principal.
-3. **Route tables.** Identify NAT and internet gateways on the deployment&#x27;s
+   unscoped endpoint policy is an endpoint that permits any principal.</li>
+<li><strong>Route tables.</strong> Identify NAT and internet gateways on the deployment's
    subnets. A private endpoint does not help if a default route to an internet
-   gateway remains.
-4. **Key policies.** Record key policies and condition keys that scope use to a
-   specific service. Unconditioned key access is a finding.
-5. **Logging.** Confirm the audit trail and log destinations are enabled and
-   delivering, and record the retention.
-
-## Output contract
-
-```json
-{
+   gateway remains.</li>
+<li><strong>Key policies.</strong> Record key policies and condition keys that scope use to a
+   specific service. Unconditioned key access is a finding.</li>
+<li><strong>Logging.</strong> Confirm the audit trail and log destinations are enabled and
+   delivering, and record the retention.</li>
+</ol>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;collected_at&quot;: &quot;str&quot;,
   &quot;network&quot;: {
@@ -96,125 +87,41 @@ verdict in itself.
   &quot;logging&quot;: {&quot;audit_trail_enabled&quot;: true, &quot;log_destinations&quot;: [&quot;str&quot;], &quot;retention_days&quot;: 0},
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reading configuration and calling it enforcement.</strong> This skill records what
+  is configured. Whether traffic actually obeys it is the egress verifier's job.</li>
+<li><strong>Ignoring the route table</strong> because a private endpoint exists.</li>
+<li><strong>Recording that logging is enabled</strong> without checking that it is delivering.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>control  state           age (days)
+------------------------------------
+AC-1     PASS                   2.0
+AC-2     PASS                   9.0
+SB-1     STALE                 31.0
+SB-2     STALE                120.0
+EV-1     PASS                   5.0
+EV-2     PASS                  12.0
+DR-1     FAIL                   0.0
+ST-1     NO EVIDENCE           None
 
-## Failure modes
+currently evidenced 4/8 = 50%
+point-in-time  : 6/8 = 75%
+continuous     : 4/8 = 50%
 
-- **Reading configuration and calling it enforcement.** This skill records what
-  is configured. Whether traffic actually obeys it is the egress verifier&#x27;s job.
-- **Ignoring the route table** because a private endpoint exists.
-- **Recording that logging is enabled** without checking that it is delivering.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+the gap: STALE [&#x27;SB-1&#x27;, &#x27;SB-2&#x27;]  NO EVIDENCE [&#x27;ST-1&#x27;]  FAIL [&#x27;DR-1&#x27;]
+Nobody did anything wrong to produce the STALE rows. Time passed.
+after automating SB-1: 5/8 = 62%
+   SB-1 is now PASS and will stay fresh without anyone remembering
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/attestation/aws-runtime-posture-collector/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/aws-runtime-posture-collector/scripts/aws_runtime_posture_collector.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Compute a control posture honestly, then automate one test and watch coverage move.
-
-This is the executable half of the `aws-runtime-posture-collector` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-from dataclasses import dataclass
-
-now = time.time(); DAY = 86400
-
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; evidence: str
-    tested_at: float; valid_for_days: float
-    def age(self, at): return (at - self.tested_at)/DAY
-    def state(self, at):
-        if self.age(at) &gt; self.valid_for_days: return &quot;STALE&quot;
-        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
-
-REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
-TESTS = [
- ControlTest(&quot;AC-1&quot;, True,  &quot;act chain sample&quot;,        now -   2*DAY, 30),
- ControlTest(&quot;AC-2&quot;, True,  &quot;delegation regression&quot;,   now -   9*DAY, 30),
- ControlTest(&quot;SB-1&quot;, True,  &quot;egress denial log&quot;,       now -  31*DAY, 30),
- ControlTest(&quot;SB-2&quot;, True,  &quot;approval gate screenshot&quot;,now - 120*DAY, 27),
- ControlTest(&quot;EV-1&quot;, True,  &quot;audit sample of 50&quot;,      now -   5*DAY, 60),
- ControlTest(&quot;EV-2&quot;, True,  &quot;expert accuracy 0.81&quot;,    now -  12*DAY, 30),
- ControlTest(&quot;DR-1&quot;, False, &quot;drift alerting not deployed&quot;, now,       30),
-]
-
-def verify(tests, required, at):
-    by = {t.cid: t for t in tests}
-    rows, evidenced = [], 0
-    for cid in required:
-        t = by.get(cid)
-        if t is None:
-            rows.append({&quot;control&quot;: cid, &quot;state&quot;: &quot;NO EVIDENCE&quot;, &quot;age&quot;: None})
-            continue
-        st = t.state(at)
-        rows.append({&quot;control&quot;: cid, &quot;state&quot;: st, &quot;age&quot;: round(t.age(at), 1)})
-        evidenced += st == &quot;PASS&quot;
-    return {&quot;required&quot;: len(required), &quot;evidenced&quot;: evidenced,
-            &quot;coverage&quot;: round(evidenced/len(required), 3), &quot;rows&quot;: rows}
-
-v = verify(TESTS, REQUIRED, now)
-print(f&quot;{&#x27;control&#x27;:9s}{&#x27;state&#x27;:14s}{&#x27;age (days)&#x27;:&gt;12}&quot;)
-print(&quot;-&quot; * 36)
-for r in v[&quot;rows&quot;]:
-    print(f&quot;{r[&#x27;control&#x27;]:9s}{r[&#x27;state&#x27;]:14s}{str(r[&#x27;age&#x27;]):&gt;12}&quot;)
-print(f&quot;\ncurrently evidenced {v[&#x27;evidenced&#x27;]}/{v[&#x27;required&#x27;]} = {v[&#x27;coverage&#x27;]:.0%}&quot;)
-
-point_in_time = sum(1 for t in TESTS if t.passed)
-print(f&quot;point-in-time  : {point_in_time}/{len(REQUIRED)} = &quot;
-      f&quot;{point_in_time/len(REQUIRED):.0%}&quot;)
-print(f&quot;continuous     : {v[&#x27;evidenced&#x27;]}/{v[&#x27;required&#x27;]} = {v[&#x27;coverage&#x27;]:.0%}&quot;)
-stale = [r[&quot;control&quot;] for r in v[&quot;rows&quot;] if r[&quot;state&quot;] == &quot;STALE&quot;]
-none  = [r[&quot;control&quot;] for r in v[&quot;rows&quot;] if r[&quot;state&quot;] == &quot;NO EVIDENCE&quot;]
-fail  = [r[&quot;control&quot;] for r in v[&quot;rows&quot;] if r[&quot;state&quot;] == &quot;FAIL&quot;]
-print(f&quot;\nthe gap: STALE {stale}  NO EVIDENCE {none}  FAIL {fail}&quot;)
-print(&quot;Nobody did anything wrong to produce the STALE rows. Time passed.&quot;)
-
-def automated_test(cid, run_now):
-    &quot;&quot;&quot;A control test that re-runs on a schedule writes its own evidence.&quot;&quot;&quot;
-    passed, evidence = run_now()
-    return ControlTest(cid, passed, evidence, tested_at=time.time(),
-                       valid_for_days=30)
-
-def check_egress_policy():
-    ALLOW = {&quot;api.github.com&quot;}
-    attempts = [&quot;https://api.github.com/x&quot;, &quot;http://169.254.169.254/&quot;,
-                &quot;https://collect.example.com/x&quot;]
-    from urllib.parse import urlparse
-    denied = [u for u in attempts if (urlparse(u).hostname or &quot;&quot;) not in ALLOW]
-    return len(denied) == 2, f&quot;{len(denied)}/3 destinations denied, run automatically&quot;
-
-fresh = [t for t in TESTS if t.cid != &quot;SB-1&quot;] + [automated_test(&quot;SB-1&quot;, check_egress_policy)]
-v2 = verify(fresh, REQUIRED, now)
-print(f&quot;after automating SB-1: {v2[&#x27;evidenced&#x27;]}/{v2[&#x27;required&#x27;]} = {v2[&#x27;coverage&#x27;]:.0%}&quot;)
-print(f&quot;   SB-1 is now {[r[&#x27;state&#x27;] for r in v2[&#x27;rows&#x27;] if r[&#x27;control&#x27;]==&#x27;SB-1&#x27;][0]}&quot;
-      f&quot; and will stay fresh without anyone remembering&quot;)
-assert v2[&quot;coverage&quot;] &gt; v[&quot;coverage&quot;]
-
-print(&quot;\nprioritise automation by how often a control goes stale:&quot;)
-for t in sorted(TESTS, key=lambda t: t.valid_for_days):
-    per_year = round(365 / t.valid_for_days, 1)
-    print(f&quot;   {t.cid}  window {t.valid_for_days:&gt;3.0f}d → &quot;
-          f&quot;{per_year:&gt;4} manual re-tests per year&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+prioritise automation by how often a control goes stale:
+   SB-2  window  27d → 13.5 manual re-tests per year
+   AC-1  window  30d → 12.2 manual re-tests per year
+   AC-2  window  30d → 12.2 manual re-tests per year
+   SB-1  window  30d → 12.2 manual re-tests per year
+   EV-2  window  30d → 12.2 manual re-tests per year
+   DR-1  window  30d → 12.2 manual re-tests per year
+   EV-1  window  60d →  6.1 manual re-tests per year</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape, and the line to take from it is the boundary it draws: configuration is not enforcement. A private endpoint next to a route table with a NAT gateway is a recorded fact and an open path at the same time, and logging that is switched on but not delivering evidences nothing at all.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Automate the control with the shortest freshness window first — it is the one costing the most manual effort and going stale most often. One automated test converts an annual assertion into a live control.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.8.html">E1.8 · Third-party and model supply chain risk</a></strong></p>

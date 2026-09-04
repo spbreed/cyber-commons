@@ -229,9 +229,11 @@ def main() -> int:
                        + (f", first diff at line {first_diff}" if first_diff is not None else ""))
         print(f"  {mark} {sid:8s} {detail}")
 
-        if a.save:
-            (NB_DIR / "_kaggle_output").mkdir(exist_ok=True)
-            (NB_DIR / "_kaggle_output" / f"{sid}.txt").write_text(remote)
+        # Always, not behind a flag. Gated on --save these files were refreshed
+        # only when somebody remembered, and one of them sat on the website for
+        # weeks showing output from a lesson that had since been rewritten.
+        (NB_DIR / "_kaggle_output").mkdir(exist_ok=True)
+        (NB_DIR / "_kaggle_output" / f"{sid}.txt").write_text(remote)
 
     passed = sum(r["ok"] for r in rows)
     summary = {

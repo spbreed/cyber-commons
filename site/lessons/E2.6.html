@@ -47,56 +47,41 @@ the days you spend establishing what actually happened are deadline days.</p>
    you send when you know an agent acted but cannot yet say which one needs to
    be drafted <em>now</em>, not during the incident.</li>
 </ol></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Containment takes an hour and establishing who acted takes forty-eight, on a seventy-two hour clock. The skill breaks the deadline into phases, finds the dominant one, and re-runs it with delegation chains recorded.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/disclosure-phase-breakdown/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: disclosure-phase-breakdown
+<p>Containment takes an hour and establishing who acted takes forty-eight, on a seventy-two hour clock. The skill breaks the deadline into phases, finds the dominant one, and re-runs it with delegation chains recorded.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/regulatory/disclosure-phase-breakdown/SKILL.md"><code>skills/regulatory/disclosure-phase-breakdown/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: disclosure-phase-breakdown
 description: &gt;-
   Break a disclosure deadline into its phases and find the one that consumes
   most of it — usually establishing who acted rather than containment. Use when
   a reporting obligation is being planned for, or was missed.
 allowed-tools: Read, Grep, Glob
----
-
-# Two-thirds of the clock is establishing who acted
-
-Disclosure planning concentrates on containment because that is the exciting
+</code></pre>
+<h1>Two-thirds of the clock is establishing who acted</h1>
+<p>Disclosure planning concentrates on containment because that is the exciting
 part. The phase breakdown says otherwise: containment in an hour, and
 establishing the acting identity in forty-eight, on a seventy-two hour clock.
 The delay is attribution, and attribution is fixed months earlier by what the
-logs record.
-
-## When to use this
-
-Planning for a reporting obligation, and at post-incident review when a deadline
-was met late or narrowly.
-
-## Procedure
-
-**1 — Enumerate the phases.** Detection, triage, containment, establishing who
+logs record.</p>
+<h2>When to use this</h2>
+<p>Planning for a reporting obligation, and at post-incident review when a deadline
+was met late or narrowly.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate the phases.</strong> Detection, triage, containment, establishing who
 acted, scoping affected subjects, drafting, approval, submission. All of them,
-including the approval step everyone forgets.
-
-**2 — Attribute hours to each from a real incident** or a tabletop. Estimates
+including the approval step everyone forgets.</p>
+<p><strong>2 — Attribute hours to each from a real incident</strong> or a tabletop. Estimates
 here are systematically optimistic; use measured values where you have them and
-mark the rest as estimates.
-
-**3 — Find the dominant phase.** It is usually attribution or scoping. Report it
-as a proportion of the whole clock, which is what makes it actionable.
-
-**4 — Re-run with delegation chains recorded.** Model what attribution costs
+mark the rest as estimates.</p>
+<p><strong>3 — Find the dominant phase.</strong> It is usually attribution or scoping. Report it
+as a proportion of the whole clock, which is what makes it actionable.</p>
+<p><strong>4 — Re-run with delegation chains recorded.</strong> Model what attribution costs
 when the acting identity and the chain are on every record. The difference is
 the business case for A2.7-style attribution, in hours against a regulatory
-deadline.
-
-**5 — Pre-draft what can be pre-drafted.** The regime, the template, the
+deadline.</p>
+<p><strong>5 — Pre-draft what can be pre-drafted.</strong> The regime, the template, the
 distribution list, the approver. Drafting under time pressure is where the
-avoidable hours are.
-
-## Output contract
-
-```json
-{
+avoidable hours are.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;obligation&quot;: {&quot;regime&quot;: &quot;str&quot;, &quot;hours&quot;: 0},
   &quot;phases&quot;: [{&quot;phase&quot;: &quot;str&quot;, &quot;hours&quot;: 0, &quot;measured&quot;: false}],
   &quot;total_hours&quot;: 0,
@@ -104,99 +89,35 @@ avoidable hours are.
   &quot;with_attribution&quot;: {&quot;phase_hours&quot;: 0, &quot;total_hours&quot;: 0, &quot;meets_deadline&quot;: true},
   &quot;pre_drafted&quot;: [&quot;str&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Optimising containment.</strong> It is already the fast phase.</li>
+<li><strong>Estimating attribution.</strong> Measure it once; it is worse than you think.</li>
+<li><strong>Omitting approval.</strong> It is a real phase with a real queue.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>scenario                          contain   report   met   margin
+------------------------------------------------------------------
+attribution sound                     2.0     20.0  True     52.0
+attribution broken, 3d scope          6.0     92.0 False    -20.0
+fast containment, slow scope          1.0     80.0 False     -8.0
 
-## Failure modes
+The third row contained in ONE HOUR and missed by 8 hours.
+phase                                   hours  cumulative  note
+----------------------------------------------------------------------------------
+alert fires → analyst picks it up           3           3  queue depth
+confirm an incident                         6           9  is this real?
+establish WHO acted                        48          57  logs name the human; agents hidden
+scope what was touched                     24          81  ← DEADLINE PASSED  must walk the delegation chain (D2.3)
+legal determines reportability              8          89  ← DEADLINE PASSED  needs the scope
+draft and send                              3          92  ← DEADLINE PASSED  
 
-- **Optimising containment.** It is already the fast phase.
-- **Estimating attribution.** Measure it once; it is worse than you think.
-- **Omitting approval.** It is a real phase with a real queue.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+total 92h against a 72h deadline
+the attribution phase alone is 48h — 67% of the entire deadline
+with act chains recorded (A2.5 + EV-1): 44.5h vs 92h
+deadline met: True
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+PRE-DRAFTED DISCLOSURE (write this now, not during the incident):
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/regulatory/disclosure-phase-breakdown/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/disclosure-phase-breakdown/scripts/disclosure_phase_breakdown.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Break the disclosure clock into phases and find the one that consumes most of it.
-
-This is the executable half of the `disclosure-phase-breakdown` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-t0 = time.time(); H = 3600
-
-def clock(awareness, containment, report, deadline_hours):
-    to_contain = (containment - awareness)/H
-    to_report  = (report - awareness)/H
-    return {&quot;contain_h&quot;: round(to_contain,1), &quot;report_h&quot;: round(to_report,1),
-            &quot;deadline&quot;: deadline_hours, &quot;met&quot;: to_report &lt;= deadline_hours,
-            &quot;margin_h&quot;: round(deadline_hours - to_report, 1)}
-
-SCENARIOS = {
- &quot;attribution sound&quot;:            (t0 + 2*H,  t0 + 20*H),
- &quot;attribution broken, 3d scope&quot;: (t0 + 6*H,  t0 + 92*H),
- &quot;fast containment, slow scope&quot;: (t0 + 1*H,  t0 + 80*H),
-}
-print(f&quot;{&#x27;scenario&#x27;:32s}{&#x27;contain&#x27;:&gt;9}{&#x27;report&#x27;:&gt;9}{&#x27;met&#x27;:&gt;6}{&#x27;margin&#x27;:&gt;9}&quot;)
-print(&quot;-&quot; * 66)
-for name, (c, r) in SCENARIOS.items():
-    k = clock(t0, c, r, 72)
-    print(f&quot;{name:32s}{k[&#x27;contain_h&#x27;]:&gt;9.1f}{k[&#x27;report_h&#x27;]:&gt;9.1f}&quot;
-          f&quot;{str(k[&#x27;met&#x27;]):&gt;6}{k[&#x27;margin_h&#x27;]:&gt;9.1f}&quot;)
-print(&quot;\nThe third row contained in ONE HOUR and missed by 8 hours.&quot;)
-
-# Where the time actually goes when attribution is broken.
-PHASES = [
- (&quot;alert fires → analyst picks it up&quot;,        3,  &quot;queue depth&quot;),
- (&quot;confirm an incident&quot;,                      6,  &quot;is this real?&quot;),
- (&quot;establish WHO acted&quot;,                     48,  &quot;logs name the human; agents hidden&quot;),
- (&quot;scope what was touched&quot;,                  24,  &quot;must walk the delegation chain (D2.3)&quot;),
- (&quot;legal determines reportability&quot;,            8,  &quot;needs the scope&quot;),
- (&quot;draft and send&quot;,                            3,  &quot;&quot;),
-]
-elapsed = 0
-print(f&quot;{&#x27;phase&#x27;:38s}{&#x27;hours&#x27;:&gt;7}{&#x27;cumulative&#x27;:&gt;12}  note&quot;)
-print(&quot;-&quot; * 82)
-for name, h, note in PHASES:
-    elapsed += h
-    flag = &quot;  ← DEADLINE PASSED&quot; if elapsed &gt; 72 else &quot;&quot;
-    print(f&quot;{name:38s}{h:&gt;7}{elapsed:&gt;12}{flag}  {note}&quot;)
-print(f&quot;\ntotal {elapsed}h against a 72h deadline&quot;)
-attribution_cost = PHASES[2][1]
-print(f&quot;the attribution phase alone is {attribution_cost}h — &quot;
-      f&quot;{attribution_cost/72:.0%} of the entire deadline&quot;)
-assert elapsed &gt; 72
-
-def with_act_chains(phases):
-    &quot;&quot;&quot;With an acting-identity field, &#x27;who acted&#x27; is a query, not an investigation.&quot;&quot;&quot;
-    return [(n, (0.5 if n.startswith(&quot;establish WHO&quot;) else h), note)
-            for n, h, note in phases]
-
-fixed = with_act_chains(PHASES)
-total_fixed = sum(h for _, h, _ in fixed)
-print(f&quot;with act chains recorded (A2.5 + EV-1): {total_fixed}h vs {elapsed}h&quot;)
-print(f&quot;deadline met: {total_fixed &lt;= 72}&quot;)
-assert total_fixed &lt;= 72
-
-PRE_DRAFTED = &quot;&quot;&quot;
 We are notifying you of an incident under [instrument], first identified at
 [awareness timestamp].
 
@@ -207,30 +128,14 @@ establish which specific automated component performed them.
 
 Containment: [action] completed at [time].
 We will provide an update within [period], including the completed attribution.
-&quot;&quot;&quot;
-print(&quot;\nPRE-DRAFTED DISCLOSURE (write this now, not during the incident):&quot;)
-print(PRE_DRAFTED)
-print(&quot;It is honest, it starts the notification, and it does not claim an&quot;)
-print(&quot;attribution you cannot yet support.&quot;)
 
-# Verify: the runbook needs two owners, not one.
-def runbook_check(containment_owner, disclosure_owner, clock_starts_at,
-                  has_predrafted):
-    problems = []
-    if containment_owner == disclosure_owner:
-        problems.append(&quot;one owner for both workstreams — they compete under time pressure&quot;)
-    if clock_starts_at != &quot;awareness&quot;:
-        problems.append(f&quot;clock starts at {clock_starts_at!r}; a regulator will use awareness&quot;)
-    if not has_predrafted:
-        problems.append(&quot;no pre-drafted disclosure for incomplete attribution&quot;)
-    return (not problems), problems
-
-for label, args in ((&quot;as usually written&quot;, (&quot;IR lead&quot;, &quot;IR lead&quot;, &quot;confirmation&quot;, False)),
-                    (&quot;corrected&quot;, (&quot;IR lead&quot;, &quot;legal/compliance lead&quot;, &quot;awareness&quot;, True))):
-    ok, problems = runbook_check(*args)
-    print(f&quot;{label:22s} sound={ok}&quot;)
-    for p in problems: print(f&quot;   ⚠ {p}&quot;)
-assert runbook_check(&quot;IR lead&quot;, &quot;legal/compliance lead&quot;, &quot;awareness&quot;, True)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+It is honest, it starts the notification, and it does not claim an
+attribution you cannot yet support.
+as usually written     sound=False
+   ⚠ one owner for both workstreams — they compete under time pressure
+   ⚠ clock starts at &#x27;confirmation&#x27;; a regulator will use awareness
+   ⚠ no pre-drafted disclosure for incomplete attribution
+corrected              sound=True</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>One-hour containment still misses the 72-hour deadline when scoping is slow. The phase breakdown totals 92 hours, of which establishing who acted is 48 — two-thirds of the entire deadline. Recording act chains cuts the total to 44.5 hours and meets the deadline. The runbook check flags a shared owner, a late clock start and a missing pre-drafted disclosure.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Draft the disclosure sentence you would send when you know an agent acted but cannot say which one. Getting legal to agree that wording takes weeks in peacetime and is impossible at hour 60.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.7.html">E2.7 · Documentation that survives supervision</a></strong></p>

@@ -47,114 +47,66 @@ cannot tell which parts those were.</p>
 subtract: the <strong>enclosing signature</strong>, because that is where reachability is
 decided. The identical concatenation is critical inside an HTTP handler and
 irrelevant inside a migration script that takes a constant.</p></div><div class="nbmd"><h2>3 · The stage, as a skill</h2>
-<p>Context engineering here is not "send less" — it is finding the slice in which the defect is decidable at all, and only then making it smaller. The skill measures four candidate slices and reports which are decidable and what each carries that the defect does not depend on.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/context-window-sizing/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: context-window-sizing
+<p>Context engineering here is not "send less" — it is finding the slice in which the defect is decidable at all, and only then making it smaller. The skill measures four candidate slices and reports which are decidable and what each carries that the defect does not depend on.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/context-window-sizing/SKILL.md"><code>skills/appsec/context-window-sizing/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: context-window-sizing
 description: &gt;-
   Find the smallest slice of a file in which a defect is actually decidable, and
   measure what larger windows add in unrelated code. Use when tuning what a
   model is shown per finding, when analysis costs too much, or when a model
   keeps missing a bug that is on the line you gave it.
 allowed-tools: Read, Grep, Glob
----
-
-# Decidable, then small — in that order
-
-Context engineering for an analysis pipeline is not &quot;send less&quot;. It is finding
+</code></pre>
+<h1>Decidable, then small — in that order</h1>
+<p>Context engineering for an analysis pipeline is not "send less". It is finding
 the slice in which the question can be answered at all, and only then making it
-smaller. A ±2-line window around the bug is cheap and **not decidable**: it
-lacks the signature, so nothing in it says where the value came from.
-
-## When to use this
-
-When designing what a pipeline sends per finding, and whenever cost per finding
-is the constraint.
-
-## Procedure
-
-**1 — Define decidability for the defect class.** For injection: the sink, the
-value&#x27;s origin, and any sanitiser between them. Write it down before slicing, or
-you will judge slices by how they look.
-
-**2 — Build the candidate slices.** The whole file, a fixed window around the
-line, a wider window, and a **path slice** — the enclosing function plus the
-definitions it depends on. Measure each in characters.
-
-**3 — Mark each slice decidable or not,** against step 1. Cheap and undecidable
+smaller. A ±2-line window around the bug is cheap and <strong>not decidable</strong>: it
+lacks the signature, so nothing in it says where the value came from.</p>
+<h2>When to use this</h2>
+<p>When designing what a pipeline sends per finding, and whenever cost per finding
+is the constraint.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Define decidability for the defect class.</strong> For injection: the sink, the
+value's origin, and any sanitiser between them. Write it down before slicing, or
+you will judge slices by how they look.</p>
+<p><strong>2 — Build the candidate slices.</strong> The whole file, a fixed window around the
+line, a wider window, and a <strong>path slice</strong> — the enclosing function plus the
+definitions it depends on. Measure each in characters.</p>
+<p><strong>3 — Mark each slice decidable or not,</strong> against step 1. Cheap and undecidable
 is the trap: it looks like a saving and it produces confident answers about
-information that is not there.
-
-**4 — Count unrelated content in the decidable ones.** Functions, constants and
+information that is not there.</p>
+<p><strong>4 — Count unrelated content in the decidable ones.</strong> Functions, constants and
 imports the defect does not depend on. This is what a bigger window costs, in
-tokens and in the model&#x27;s attention.
-
-**5 — Pick the smallest decidable slice, and say what it excluded.** The
-exclusion list is what somebody re-reads when the pipeline misses something.
-
-## Output contract
-
-```json
-{
+tokens and in the model's attention.</p>
+<p><strong>5 — Pick the smallest decidable slice, and say what it excluded.</strong> The
+exclusion list is what somebody re-reads when the pipeline misses something.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;decidability&quot;: {&quot;requires&quot;: [&quot;str&quot;]},
   &quot;slices&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;chars&quot;: 0, &quot;decidable&quot;: false, &quot;unrelated_units&quot;: 0}],
   &quot;chosen&quot;: {&quot;name&quot;: &quot;str&quot;, &quot;chars&quot;: 0, &quot;unrelated_units&quot;: 0},
   &quot;excluded&quot;: [&quot;str&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Optimising size first.</strong> An undecidable slice is not cheap; it is wrong at a
+  lower price.</li>
+<li><strong>Judging slices by eye.</strong> Write the decidability requirement down first.</li>
+<li><strong>Ignoring unrelated content</strong> in a decidable slice. It is the cost you can
+  actually remove.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the bug is on line 22
+whole file             839 chars   29 lines
+±2 line window         207 chars    5 lines
+±6 line window         432 chars   13 lines
+strategy            sink   concat  source  intent  decidable
+----------------------------------------------------------------
+whole file          True   True    True    True    True
+±2 line window      True   True    False   False   False
+±6 line window      True   True    True    True    True
 
-## Failure modes
-
-- **Optimising size first.** An undecidable slice is not cheap; it is wrong at a
-  lower price.
-- **Judging slices by eye.** Write the decidability requirement down first.
-- **Ignoring unrelated content** in a decidable slice. It is the cost you can
-  actually remove.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/appsec/context-window-sizing/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/context-window-sizing/scripts/context_window_sizing.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Find the smallest slice of a file in which a defect is decidable, and measure what larger contexts add.
-
-This is the executable half of the `context-window-sizing` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-SOURCE = &#x27;&#x27;&#x27;&quot;&quot;&quot;Reporting service.&quot;&quot;&quot;
-import logging, os, json, datetime
-
-log = logging.getLogger(__name__)
-DEFAULT_LIMIT = 100
-CACHE = {}
-
-def _format_row(row):
-    return {&quot;id&quot;: row[0], &quot;name&quot;: row[1], &quot;created&quot;: str(row[2])}
-
-def _cache_key(*parts):
-    return &quot;:&quot;.join(str(p) for p in parts)
-
-def healthcheck():
-    return {&quot;status&quot;: &quot;ok&quot;, &quot;ts&quot;: datetime.datetime.utcnow().isoformat()}
-
+The ±2 window has the sink and the concatenation but not the signature,
+so you cannot tell whether owner is user-controlled — which is the
+difference between critical and won&#x27;t-fix.
 def list_reports(conn, owner, limit=DEFAULT_LIMIT):
     &quot;&quot;&quot;Called from GET /reports?owner=... — owner is user-controlled.&quot;&quot;&quot;
     key = _cache_key(&quot;reports&quot;, owner, limit)
@@ -165,75 +117,17 @@ def list_reports(conn, owner, limit=DEFAULT_LIMIT):
     CACHE[key] = out
     return out
 
-def purge_cache():
-    CACHE.clear()
-    log.info(&quot;cache purged&quot;)
-&#x27;&#x27;&#x27;
-lines = SOURCE.splitlines()
-BUG_LINE = next(i for i, l in enumerate(lines, 1) if &quot;SELECT * FROM reports&quot; in l)
-print(f&quot;the bug is on line {BUG_LINE}&quot;)
 
-def whole_file(_):     return SOURCE
-def window(n, radius): return &quot;\n&quot;.join(lines[max(n-radius-1,0):n+radius])
+394 chars (47% of the file), decidable=True
+strategy              chars   share  decidable  noise fns
+----------------------------------------------------------
+whole file              839    100%       True          4
+±2 line window          207     25%      False          0
+±6 line window          432     52%       True          1
+path slice              394     47%       True          0
 
-STRATEGIES = {&quot;whole file&quot;: whole_file(BUG_LINE),
-              &quot;±2 line window&quot;: window(BUG_LINE, 2),
-              &quot;±6 line window&quot;: window(BUG_LINE, 6)}
-for name, ctx in STRATEGIES.items():
-    print(f&quot;{name:20s}{len(ctx):&gt;6} chars{len(ctx.splitlines()):&gt;5} lines&quot;)
-
-def decidable(ctx):
-    &quot;&quot;&quot;Can a reviewer judge exploitability from this context alone?&quot;&quot;&quot;
-    return {&quot;sink&quot;: &quot;conn.execute&quot; in ctx,
-            &quot;concatenation&quot;: &quot;&#x27; + owner +&quot; in ctx or &quot;+ owner +&quot; in ctx,
-            &quot;source (signature)&quot;: &quot;def list_reports&quot; in ctx,
-            &quot;intent (docstring)&quot;: &quot;user-controlled&quot; in ctx}
-
-print(f&quot;{&#x27;strategy&#x27;:20s}{&#x27;sink&#x27;:7s}{&#x27;concat&#x27;:8s}{&#x27;source&#x27;:8s}{&#x27;intent&#x27;:8s}decidable&quot;)
-print(&quot;-&quot; * 64)
-for name, ctx in STRATEGIES.items():
-    d = decidable(ctx)
-    ok = d[&quot;sink&quot;] and d[&quot;concatenation&quot;] and d[&quot;source (signature)&quot;]
-    print(f&quot;{name:20s}{str(d[&#x27;sink&#x27;]):7s}{str(d[&#x27;concatenation&#x27;]):8s}&quot;
-          f&quot;{str(d[&#x27;source (signature)&#x27;]):8s}{str(d[&#x27;intent (docstring)&#x27;]):8s}{ok}&quot;)
-print(&quot;\nThe ±2 window has the sink and the concatenation but not the signature,&quot;)
-print(&quot;so you cannot tell whether owner is user-controlled — which is the&quot;)
-print(&quot;difference between critical and won&#x27;t-fix.&quot;)
-
-def path_slice(source, bug_line):
-    ls = source.splitlines()
-    start = max(i for i in range(bug_line) if ls[i-1].startswith(&quot;def &quot;))
-    end = next((i for i in range(start, len(ls)) if i &gt; start and ls[i].startswith(&quot;def &quot;)),
-               len(ls))
-    return &quot;\n&quot;.join(ls[start-1:end])
-
-sliced = path_slice(SOURCE, BUG_LINE)
-print(sliced)
-d = decidable(sliced)
-print(f&quot;\n{len(sliced)} chars ({len(sliced)/len(SOURCE):.0%} of the file), &quot;
-      f&quot;decidable={d[&#x27;sink&#x27;] and d[&#x27;concatenation&#x27;] and d[&#x27;source (signature)&#x27;]}&quot;)
-
-def evaluate(name, ctx):
-    d = decidable(ctx)
-    return {&quot;strategy&quot;: name, &quot;chars&quot;: len(ctx),
-            &quot;share&quot;: round(len(ctx)/len(SOURCE), 3),
-            &quot;decidable&quot;: d[&quot;sink&quot;] and d[&quot;concatenation&quot;] and d[&quot;source (signature)&quot;],
-            &quot;noise_fns&quot;: max(ctx.count(&quot;def &quot;) - 1, 0)}
-
-rows = [evaluate(n, c) for n, c in STRATEGIES.items()] + [evaluate(&quot;path slice&quot;, sliced)]
-print(f&quot;{&#x27;strategy&#x27;:20s}{&#x27;chars&#x27;:&gt;7}{&#x27;share&#x27;:&gt;8}{&#x27;decidable&#x27;:&gt;11}{&#x27;noise fns&#x27;:&gt;11}&quot;)
-print(&quot;-&quot; * 58)
-for r in rows:
-    print(f&quot;{r[&#x27;strategy&#x27;]:20s}{r[&#x27;chars&#x27;]:&gt;7}{r[&#x27;share&#x27;]:&gt;8.0%}&quot;
-          f&quot;{str(r[&#x27;decidable&#x27;]):&gt;11}{r[&#x27;noise_fns&#x27;]:&gt;11}&quot;)
-
-best = sorted((r for r in rows if r[&quot;decidable&quot;]), key=lambda r: r[&quot;chars&quot;])[0]
-whole = next(r for r in rows if r[&quot;strategy&quot;] == &quot;whole file&quot;)
-print(f&quot;\nsmallest decidable context: {best[&#x27;strategy&#x27;]} &quot;
-      f&quot;({best[&#x27;share&#x27;]:.0%} of the file, {best[&#x27;noise_fns&#x27;]} unrelated functions)&quot;)
-print(f&quot;vs whole file: {1 - best[&#x27;chars&#x27;]/whole[&#x27;chars&#x27;]:.0%} smaller, &quot;
-      f&quot;{whole[&#x27;noise_fns&#x27;]}→{best[&#x27;noise_fns&#x27;]} unrelated functions&quot;)
-assert best[&quot;strategy&quot;] == &quot;path slice&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+smallest decidable context: path slice (47% of the file, 0 unrelated functions)
+vs whole file: 53% smaller, 4→0 unrelated functions</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Apply the path-slice rule where the source is three functions away from the sink. That is the case where text windows break down entirely and the call graph the threat model derives (B2.2) earns its keep.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Securing the developers' coding agents</a></strong></p>

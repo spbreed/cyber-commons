@@ -41,181 +41,96 @@ disputes your conclusion.</p>
 silently invalidates everything else: a provider-side upgrade changes the
 behaviour with no change on your side, so a reconstruction performed after the
 upgrade does not reproduce the incident that happened before it.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Replay needs five inputs and the typical production run records three. The skill checks each against a real record, then replays under two later model versions — where a different action means the original decision cannot be reproduced at all.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/run-replayability-audit/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: run-replayability-audit
+<p>Replay needs five inputs and the typical production run records three. The skill checks each against a real record, then replays under two later model versions — where a different action means the original decision cannot be reproduced at all.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/run-replayability-audit/SKILL.md"><code>skills/response/run-replayability-audit/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: run-replayability-audit
 description: &gt;-
   Check whether an incident run can be replayed at all — model version, seed,
   prompt, tool results, retrieved context — and what a later model version does
   to the replay. Use when forensics needs to know why the agent did what it did.
 allowed-tools: Read, Grep, Glob
----
-
-# Replay needs five things and production records three
-
-&quot;Why did the agent do that&quot; is answerable only if the run can be re-run under the
+</code></pre>
+<h1>Replay needs five things and production records three</h1>
+<p>"Why did the agent do that" is answerable only if the run can be re-run under the
 conditions it ran in. That needs the model version, the sampling parameters and
 seed, the exact prompt, every tool result and the retrieved context. A typical
 production run records enough to see what happened and not enough to reproduce
-it.
-
-## When to use this
-
-Before an incident, as a readiness check, and during one, to establish honestly
-whether the reconstruction is possible.
-
-## Procedure
-
-**1 — List the five inputs and check each against a real run record.** Model
+it.</p>
+<h2>When to use this</h2>
+<p>Before an incident, as a readiness check, and during one, to establish honestly
+whether the reconstruction is possible.</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the five inputs and check each against a real run record.</strong> Model
 version and seed are the two usually missing, and their absence is decisive
-rather than inconvenient.
-
-**2 — Attempt the replay.** If any input is missing, say what the replay can and
+rather than inconvenient.</p>
+<p><strong>2 — Attempt the replay.</strong> If any input is missing, say what the replay can and
 cannot establish. A partial replay is still useful for the tool path and useless
-for the reasoning.
-
-**3 — Replay under later model versions.** The provider has probably upgraded.
+for the reasoning.</p>
+<p><strong>3 — Replay under later model versions.</strong> The provider has probably upgraded.
 Record whether the action changes: if it does, the original decision cannot be
 reproduced at all, and that is a finding about the estate rather than about the
-incident.
-
-**4 — Cost full instrumentation.** Storage and latency for recording everything,
+incident.</p>
+<p><strong>4 — Cost full instrumentation.</strong> Storage and latency for recording everything,
 against the incidents where you needed it. Present both; the answer is usually to
 instrument the high-tier agents only, and that is a defensible decision when the
-numbers are attached.
-
-**5 — Record what the estate has chosen.** Which agents are replayable and which
-are not, so nobody assumes during an incident.
-
-## Output contract
-
-```json
-{
+numbers are attached.</p>
+<p><strong>5 — Record what the estate has chosen.</strong> Which agents are replayable and which
+are not, so nobody assumes during an incident.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;inputs&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;recorded&quot;: false}],
   &quot;replay&quot;: {&quot;possible&quot;: false, &quot;establishes&quot;: [&quot;str&quot;], &quot;cannot_establish&quot;: [&quot;str&quot;]},
   &quot;version_drift&quot;: [{&quot;version&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;, &quot;same_as_original&quot;: false}],
   &quot;cost&quot;: {&quot;storage_per_run&quot;: &quot;str&quot;, &quot;latency_ms&quot;: 0},
   &quot;policy&quot;: [{&quot;tier&quot;: &quot;str&quot;, &quot;fully_instrumented&quot;: true}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Assuming replay is possible.</strong> Check the record before promising it.</li>
+<li><strong>Replaying on the current model.</strong> It is not the one that acted.</li>
+<li><strong>Instrumenting everything or nothing.</strong> Tier it and write the choice down.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>fully instrumented     replayable=True
+typical production     replayable=False
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+prompts only           replayable=False
+      ✗ tool results — the agent saw a world you cannot rebuild
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+actions only           replayable=False
+      ✗ prompts — cannot reconstruct what it was asked
+      ✗ tool results — the agent saw a world you cannot rebuild
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+reproduce the incident under the ORIGINAL model version:
+   → read_source
 
-## Failure modes
+reproduce it AFTER the provider upgraded (same prompts, same tool results):
+   glm-4.6@2026-08-01     → read_source        reproduces
+   glm-4.7@2026-08-01     → read_source        reproduces
 
-- **Assuming replay is possible.** Check the record before promising it.
-- **Replaying on the current model.** It is not the one that acted.
-- **Instrumenting everything or nothing.** Tier it and write the choice down.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Without a pinned version you cannot tell &#x27;the agent did not do this&#x27;
+from &#x27;the model that did it no longer exists&#x27;.
+field             cost  what it costs                         why it matters
+----------------------------------------------------------------------------------------------------
+model version        1  one string per run                    invalidates everything else if missing
+seed                 1  one integer per run                   makes the run repeatable
+prompts              3  storage + privacy review (D1.5)       what it was asked
+tool results         5  largest volume, highest sensitivity   what it saw
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+recording order, by value per unit cost:
+   1. model version
+   2. seed
+   3. prompts
+   4. tool results
 
-from cyber_commons_skill_runtime import run_skill
+after adding model version    replayable=False  still missing=1
 
-# Split skills/response/run-replayability-audit/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/run-replayability-audit/scripts/run_replayability_audit.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Check whether an incident run can be replayed at all, and what a later model version does to the replay.
+after adding seed             replayable=True  still missing=0
 
-This is the executable half of the `run-replayability-audit` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+after adding prompts          replayable=True  still missing=0
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-from dataclasses import dataclass, field
-
-@dataclass
-class Run:
-    prompts: list = field(default_factory=list)
-    tool_results: list = field(default_factory=list)
-    model_version: str = &quot;&quot;
-    seed: object = None
-
-    def replayable(self):
-        missing = []
-        if not self.prompts:
-            missing.append(&quot;prompts — cannot reconstruct what it was asked&quot;)
-        if not self.tool_results:
-            missing.append(&quot;tool results — the agent saw a world you cannot rebuild&quot;)
-        if not self.model_version:
-            missing.append(&quot;model version — a silent upgrade changes the output&quot;)
-        if self.seed is None:
-            missing.append(&quot;seed — sampling makes the run unrepeatable&quot;)
-        return (not missing), missing
-
-CONFIGS = {
- &quot;fully instrumented&quot;: Run([&quot;fix SEC-4471&quot;], [&quot;file contents…&quot;], &quot;glm-4.6@2026-07-14&quot;, 42),
- &quot;typical production&quot;: Run([&quot;fix SEC-4471&quot;], [&quot;file contents…&quot;], &quot;&quot;, None),
- &quot;prompts only&quot;:       Run([&quot;fix SEC-4471&quot;], [], &quot;&quot;, None),
- &quot;actions only&quot;:       Run(),
-}
-for name, r in CONFIGS.items():
-    ok, missing = r.replayable()
-    print(f&quot;{name:22s} replayable={ok}&quot;)
-    for m in missing: print(f&quot;      ✗ {m}&quot;)
-
-import hashlib
-
-def model_output(prompt, tool_result, version, seed):
-    &quot;&quot;&quot;Deterministic stand-in: output depends on ALL FOUR inputs.&quot;&quot;&quot;
-    h = hashlib.sha256(f&quot;{prompt}|{tool_result}|{version}|{seed}&quot;.encode()).hexdigest()
-    return &quot;read_credentials&quot; if int(h[:2], 16) % 3 == 0 else &quot;read_source&quot;
-
-INCIDENT_INPUTS = (&quot;fix SEC-4471&quot;, &quot;billing.py: charge(card)…&quot;)
-
-print(&quot;reproduce the incident under the ORIGINAL model version:&quot;)
-orig = model_output(*INCIDENT_INPUTS, &quot;glm-4.6@2026-07-14&quot;, 42)
-print(f&quot;   → {orig}&quot;)
-
-print(&quot;\nreproduce it AFTER the provider upgraded (same prompts, same tool results):&quot;)
-for v in (&quot;glm-4.6@2026-08-01&quot;, &quot;glm-4.7@2026-08-01&quot;):
-    out = model_output(*INCIDENT_INPUTS, v, 42)
-    match = &quot;reproduces&quot; if out == orig else &quot;DOES NOT REPRODUCE&quot;
-    print(f&quot;   {v:22s} → {out:18s} {match}&quot;)
-
-print(&quot;\nWithout a pinned version you cannot tell &#x27;the agent did not do this&#x27;&quot;)
-print(&quot;from &#x27;the model that did it no longer exists&#x27;.&quot;)
-
-COST = {
- &quot;model version&quot;: (1,  &quot;one string per run&quot;, &quot;invalidates everything else if missing&quot;),
- &quot;seed&quot;:          (1,  &quot;one integer per run&quot;, &quot;makes the run repeatable&quot;),
- &quot;prompts&quot;:       (3,  &quot;storage + privacy review (D1.5)&quot;, &quot;what it was asked&quot;),
- &quot;tool results&quot;:  (5,  &quot;largest volume, highest sensitivity&quot;, &quot;what it saw&quot;),
-}
-print(f&quot;{&#x27;field&#x27;:16s}{&#x27;cost&#x27;:&gt;6}  {&#x27;what it costs&#x27;:38s}why it matters&quot;)
-print(&quot;-&quot; * 100)
-for f, (c, cost, why) in sorted(COST.items(), key=lambda kv: kv[1][0]):
-    print(f&quot;{f:16s}{c:&gt;6}  {cost:38s}{why}&quot;)
-
-print(&quot;\nrecording order, by value per unit cost:&quot;)
-for i, f in enumerate(sorted(COST, key=lambda k: COST[k][0]), 1):
-    print(f&quot;   {i}. {f}&quot;)
-
-def upgrade(run, add):
-    return Run(prompts=run.prompts or ([&quot;…&quot;] if &quot;prompts&quot; in add else []),
-               tool_results=run.tool_results or ([&quot;…&quot;] if &quot;tool results&quot; in add else []),
-               model_version=run.model_version or (&quot;pinned&quot; if &quot;model version&quot; in add else &quot;&quot;),
-               seed=run.seed if run.seed is not None else (42 if &quot;seed&quot; in add else None))
-
-cur = CONFIGS[&quot;typical production&quot;]
-added = set()
-for f in sorted(COST, key=lambda k: COST[k][0]):
-    added.add(f)
-    ok, missing = upgrade(cur, added).replayable()
-    print(f&quot;\nafter adding {f:16s} replayable={ok}  still missing={len(missing)}&quot;)
-assert upgrade(cur, set(COST)).replayable()[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+after adding tool results     replayable=True  still missing=0</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Only the fully instrumented run is replayable; the typical production run is missing the model version and seed. Replaying the incident under two later model versions produces a different action, so the original run does not reproduce. Adding the two cheapest fields (model version and seed) makes the typical production run replayable.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add model version and seed to your agent's run records this week. Both are one field each, and together they are the difference between forensics and storytelling.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.6.html">D2.6 · Post-incident change surface</a></strong></p>

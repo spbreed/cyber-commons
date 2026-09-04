@@ -152,10 +152,29 @@ def notebook_block(sid: str) -> str:
         if cell["cell_type"] == "markdown":
             parts.append(f'<div class="nbmd">{md_to_html(src)}</div>')
         else:
-            parts.append(f'<div class="nbcode"><span class="nbtag">In</span>'
-                         f'<pre><code>{html.escape(src)}</code></pre></div>')
+            # A lesson page shows what the skill **printed**, not the eight
+            # lines that located the file and ran it. The code lives in the
+            # repository and is linked from the cell; putting it on the page
+            # again made the page look like source and buried the result.
+            parts.append(f'<div class="nbcode"><span class="nbtag">Out</span>'
+                         f'<pre><code>{html.escape(recorded_output(sid))}</code></pre></div>')
     parts.append("</div>")
     return "".join(parts)
+
+
+def recorded_output(sid: str) -> str:
+    """What this lesson printed when it ran — on Kaggle, verified against local.
+
+    `labs/notebooks/_output/<id>.txt` is written by `run_notebooks.py` on every
+    run, so it cannot show output from a lesson that has since changed —
+    which the previous source, refreshed only when kaggle_verify was passed
+    --save, silently did. `kaggle_verify.py` separately proves this same text
+    is what a Kaggle kernel printed.
+    """
+    f = ROOT / "labs" / "notebooks" / "_output" / f"{sid}.txt"
+    if f.is_file() and f.read_text().strip():
+        return f.read_text().rstrip()
+    return "(no output — this is a reading lesson)"
 
 
 def has_code(sid: str) -> bool:

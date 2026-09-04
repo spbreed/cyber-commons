@@ -117,355 +117,140 @@ sits above both, and its policy is three rules:</p>
 <li>mark everything the model says as a hypothesis, never a finding, because
    stages 8 to 12 are what turn one into the other.</li>
 </ol></div><div class="nbmd"><h2>8 · The stage, as a skill</h2>
-<p>Three generations of analysis over the same CyberTravels code, and they fail differently: grep flags the safe queries, taint finds the real flows and nothing in <code>authz.py</code>, and the model finds the authorization defect that has no syntactic signature — along with the hallucination that is the price of it. The skill runs all three and reports precision, recall and that last column.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/sast-generation-comparison/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: sast-generation-comparison
+<p>Three generations of analysis over the same CyberTravels code, and they fail differently: grep flags the safe queries, taint finds the real flows and nothing in <code>authz.py</code>, and the model finds the authorization defect that has no syntactic signature — along with the hallucination that is the price of it. The skill runs all three and reports precision, recall and that last column.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/sast-generation-comparison/SKILL.md"><code>skills/appsec/sast-generation-comparison/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: sast-generation-comparison
 description: &gt;-
   Run pattern rules, taint analysis and a model over the same code and compare
   precision, recall and the class of defect only the third one finds. Use when
   choosing static analysis, justifying a model in the pipeline, or explaining
-  why the scanner&#x27;s output is mostly noise.
+  why the scanner's output is mostly noise.
 allowed-tools: Read, Grep, Glob
----
-
-# Three generations, and they fail differently
-
-Grep-class rules match syntax and cannot see data flow, so they flag the
+</code></pre>
+<h1>Three generations, and they fail differently</h1>
+<p>Grep-class rules match syntax and cannot see data flow, so they flag the
 parameterised query and the constant insert. Taint analysis follows source to
 sink and is precise on the bugs it models. A model reads intent and finds the
 class neither of the others can express — an authorization defect, where nothing
-is malformed and the code is simply wrong about who may do what.
-
-## When to use this
-
-Choosing or defending a static analysis stack, and any time somebody proposes
-replacing one generation with another rather than layering them.
-
-## Procedure
-
-**1 — Assemble a corpus with known ground truth.** Real bugs, safe lookalikes
+is malformed and the code is simply wrong about who may do what.</p>
+<h2>When to use this</h2>
+<p>Choosing or defending a static analysis stack, and any time somebody proposes
+replacing one generation with another rather than layering them.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Assemble a corpus with known ground truth.</strong> Real bugs, safe lookalikes
 of each bug, and at least one defect with no syntactic signature. The
 lookalikes are what produce the precision number; without them every tool looks
-perfect.
-
-**2 — Run generation 1: pattern rules.** Record every hit and mark it against
+perfect.</p>
+<p><strong>2 — Run generation 1: pattern rules.</strong> Record every hit and mark it against
 ground truth. Precision here is usually about half, and the false positives are
-the safe versions of the true positives.
-
-**3 — Run generation 2: taint rules.** Source, sink, sanitiser. Expect high
+the safe versions of the true positives.</p>
+<p><strong>3 — Run generation 2: taint rules.</strong> Source, sink, sanitiser. Expect high
 precision and recall inside the model it has, and expect it to find nothing in
-the file whose defect is not a flow.
-
-**4 — Run generation 3: a model, with confidence.** Give it the same code. Record
+the file whose defect is not a flow.</p>
+<p><strong>4 — Run generation 3: a model, with confidence.</strong> Give it the same code. Record
 what it finds, its confidence, and — separately — anything it asserts that is
-not in the file. That last column is the cost of this generation.
-
-**5 — Report per generation and per defect class.** The useful output is not a
+not in the file. That last column is the cost of this generation.</p>
+<p><strong>5 — Report per generation and per defect class.</strong> The useful output is not a
 winner; it is which class each generation can and cannot express, and the
-precision each pays for its recall.
-
-## Output contract
-
-```json
-{
+precision each pays for its recall.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;corpus&quot;: [{&quot;file&quot;: &quot;str&quot;, &quot;defect&quot;: &quot;str|null&quot;, &quot;cwe&quot;: &quot;str|null&quot;}],
   &quot;generations&quot;: [{&quot;name&quot;: &quot;grep|taint|model&quot;, &quot;findings&quot;: 0, &quot;true_positives&quot;: 0,
                    &quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0, &quot;hallucinated&quot;: 0}],
   &quot;only_found_by&quot;: [{&quot;defect&quot;: &quot;str&quot;, &quot;generation&quot;: &quot;str&quot;}],
   &quot;recommendation&quot;: {&quot;layers&quot;: [&quot;str&quot;], &quot;why&quot;: &quot;str&quot;}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>A corpus with no safe lookalikes.</strong> Precision becomes meaningless.</li>
+<li><strong>Comparing on recall alone.</strong> Grep has excellent recall and unusable
+  precision.</li>
+<li><strong>Not counting the model's hallucinations.</strong> They are the reason generation 3
+  needs generation 4 — verification.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-## Failure modes
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
 
-- **A corpus with no safe lookalikes.** Precision becomes meaningless.
-- **Comparing on recall alone.** Grep has excellent recall and unusable
-  precision.
-- **Not counting the model&#x27;s hallucinations.** They are the reason generation 3
-  needs generation 4 — verification.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+generation 1 (grep): 7 findings
+   CWE-89  db.py:4   return conn.execute(&quot;SELECT * FROM users WHERE name 
+   CWE-89  db.py:8   return conn.execute(&quot;SELECT * FROM users WHERE name 
+   CWE-89  db.py:12  return conn.execute(&quot;INSERT INTO audit(msg) VALUES (
+   CWE-78  ops.py:2   import os, subprocess
+   CWE-78  ops.py:6   os.system(&quot;ping -c1 &quot; + host)
+   CWE-78  ops.py:9   subprocess.run([&quot;ping&quot;, &quot;-c1&quot;, host], check=True)
+   CWE-22  files.py:4   return open(base + &quot;/&quot; + filename).read()
+generation 1 · grep              tp=3 fp=4 fn=0  precision=0.43 recall=1.00
 
-from cyber_commons_skill_runtime import run_skill
+false positives:
+   db.py:8   return conn.execute(&quot;SELECT * FROM users WHERE name = ?&quot;
+   db.py:12  return conn.execute(&quot;INSERT INTO audit(msg) VALUES (&#x27;sta
+   ops.py:2   import os, subprocess
+   ops.py:9   subprocess.run([&quot;ping&quot;, &quot;-c1&quot;, host], check=True)
+generation 2 (taint rules): 3 findings
+   CWE-89  db.py:4   conn.execute(&quot;SELECT * FROM users WHERE name = &#x27;&quot; + 
+   CWE-78  ops.py:6   os.system(&quot;ping -c1 &quot; + host)
+   CWE-22  files.py:4   open(base + &quot;/&quot; + filename)
 
-# Split skills/appsec/sast-generation-comparison/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/sast-generation-comparison/scripts/sast_generation_comparison.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run grep rules, taint rules and a model over the same code and compare precision, recall and what only the third one finds.
+generation 2 · taint rules       tp=3 fp=0 fn=0  precision=1.00 recall=1.00
+generation 1 on authz.py: nothing
+generation 2 on authz.py: nothing
 
-This is the executable half of the `sast-generation-comparison` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+generation 3 (model review):
+   CWE-863  authz.py:4   conf=0.82  disjunctive permission check: a non-public document 
+   CWE-89   db.py:4   conf=0.95  name is concatenated into the query string
+   CWE-89   db.py:12  conf=0.41  audit_note also calls execute
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
+It found the authorization bug neither earlier generation can see.
+It also invented a SQL injection in a function with a constant string.
+the agent&#x27;s allocation:
+   authz.py    risk 0.48   high risk, rules silent -&gt; REVIEW
+   db.py       risk 0.53   high risk, rules already fired -&gt; skip
+   files.py    risk 0.00   low historical risk -&gt; skip
+   ops.py      risk 0.19   low historical risk -&gt; skip
 
-# --- model backend: replay by default, a Kaggle open-weight model when served -
-# One URL and one header shape, no vendor SDK. Standard library only, so the
-# notebook stays self-contained.
-# The model adapter comes from the shared runtime, not from a copy in this
-# file. In a lesson notebook the cell above has already loaded it; standalone,
-# find it the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import announce_backend, ask
+model pass on 1 of 4 files ($0.031 rather than $0.124)
 
-announce_backend()
+stage 7 emits 4, 0 suppressed below 0.70
+   [model] CWE-863  authz.py:4   conf=0.82  HYPOTHESIS
+   [rules] CWE-89   db.py:4   conf=1.00  confirmed-by-rule
+   [rules] CWE-22   files.py:4   conf=1.00  confirmed-by-rule
+   [rules] CWE-78   ops.py:6   conf=1.00  confirmed-by-rule
 
+tp=4 fp=0 fn=0
+the same corpus, with authz.py carrying no history:
+   model pass on 0 file(s): []
+   MISSED: [(&#x27;CWE-863&#x27;, &#x27;authz.py&#x27;, 4)]
 
-CODE = {
-&quot;db.py&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    # BUG: user input concatenated into SQL
-    return conn.execute(&quot;SELECT * FROM users WHERE name = \&#x27;&quot; + name + &quot;\&#x27;&quot;)
+A new file with no history is invisible to the allocator, and the
+allocator is what makes generation 3 affordable. The mitigation is not
+subtle - review everything a pull request touched regardless of history,
+and let the risk floor decide only where to spend the SECOND pass.
 
-def get_user_safe(conn, name):
-    # parameterised — the driver escapes it
-    return conn.execute(&quot;SELECT * FROM users WHERE name = ?&quot;, (name,))
+Every model finding above is marked HYPOTHESIS. Stages 8 to 12 decide.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Is this function vulnerable? Name the CWE if so, and say which val...
 
-def audit_note(conn, msg):
-    # a constant string. No user input anywhere.
-    return conn.execute(&quot;INSERT INTO audit(msg) VALUES (\&#x27;startup\&#x27;)&quot;)
-&#x27;&#x27;&#x27;,
-&quot;ops.py&quot;: &#x27;&#x27;&#x27;
-import os, subprocess
+answer:
+   Yes - CWE-89, SQL injection. request.args[&#x27;ref&#x27;] is concatenated directly into the query string and reaches db.execute unsanitised.
 
-def ping(host):
-    # BUG: shell string built from user input
-    os.system(&quot;ping -c1 &quot; + host)
+property checked : names the CWE identifier
+held on replay       : True
 
-def ping_safe(host):
-    subprocess.run([&quot;ping&quot;, &quot;-c1&quot;, host], check=True)
-&#x27;&#x27;&#x27;,
-&quot;files.py&quot;: &#x27;&#x27;&#x27;
-def read_doc(base, filename):
-    # BUG: path joined from untrusted input
-    return open(base + &quot;/&quot; + filename).read()
-&#x27;&#x27;&#x27;,
-}
-import re
-GREP_RULES = [(&quot;CWE-89&quot;,&quot;SQL injection&quot;,r&quot;execute\(&quot;),
-              (&quot;CWE-78&quot;,&quot;command injection&quot;,r&quot;os\.system|subprocess&quot;),
-              (&quot;CWE-22&quot;,&quot;path traversal&quot;,r&quot;open\(&quot;)]
-def gen1(code):
-    return [(cwe, name, f, i, ln.strip())
-            for f, src in code.items()
-            for i, ln in enumerate(src.splitlines(), 1)
-            for cwe, name, pat in GREP_RULES if re.search(pat, ln)]
-
-g1 = gen1(CODE)
-print(f&quot;generation 1 (grep): {len(g1)} findings&quot;)
-for cwe, name, f, i, ln in g1:
-    print(f&quot;   {cwe:8s}{f}:{i:&lt;3} {ln[:52]}&quot;)
-
-TRUTH = {(&quot;CWE-89&quot;,&quot;db.py&quot;,4), (&quot;CWE-78&quot;,&quot;ops.py&quot;,6), (&quot;CWE-22&quot;,&quot;files.py&quot;,4)}
-def score(findings, label):
-    got = {(c, f, i) for c, _, f, i, _ in findings}
-    tp, fp, fn = len(got &amp; TRUTH), len(got - TRUTH), len(TRUTH - got)
-    prec = tp/(tp+fp) if tp+fp else 0.0
-    rec  = tp/(tp+fn) if tp+fn else 0.0
-    print(f&quot;{label:32s} tp={tp} fp={fp} fn={fn}  precision={prec:.2f} recall={rec:.2f}&quot;)
-    return prec, rec
-score(g1, &quot;generation 1 · grep&quot;)
-print(&quot;\nfalse positives:&quot;)
-for cwe, name, f, i, ln in g1:
-    if (cwe, f, i) not in TRUTH: print(f&quot;   {f}:{i:&lt;3} {ln[:56]}&quot;)
-
-import ast
-class TaintRule:
-    SINKS = {&quot;execute&quot;: (&quot;CWE-89&quot;,&quot;SQL injection&quot;),
-             &quot;system&quot;:  (&quot;CWE-78&quot;,&quot;command injection&quot;),
-             &quot;open&quot;:    (&quot;CWE-22&quot;,&quot;path traversal&quot;)}
-    def scan(self, fname, src):
-        out = []
-        for fn in [n for n in ast.walk(ast.parse(src)) if isinstance(n, ast.FunctionDef)]:
-            tainted = {a.arg for a in fn.args.args}
-            for call in [n for n in ast.walk(fn) if isinstance(n, ast.Call)]:
-                sink = (call.func.attr if isinstance(call.func, ast.Attribute)
-                        else getattr(call.func, &quot;id&quot;, &quot;&quot;))
-                if sink not in self.SINKS: continue
-                cwe, name = self.SINKS[sink]
-                for arg in call.args:
-                    if self._concat_taint(arg, tainted):
-                        out.append((cwe, name, fname, call.lineno,
-                                    ast.get_source_segment(src, call) or &quot;&quot;))
-                        break
-        return out
-    @staticmethod
-    def _concat_taint(node, tainted):
-        for n in ast.walk(node):
-            if isinstance(n, ast.BinOp) and isinstance(n.op, ast.Add):
-                if {x.id for x in ast.walk(n) if isinstance(x, ast.Name)} &amp; tainted:
-                    return True
-        return False
-
-rule = TaintRule()
-g2 = [f for n, s in CODE.items() for f in rule.scan(n, s)]
-print(f&quot;generation 2 (taint rules): {len(g2)} findings&quot;)
-for cwe, name, f, i, snip in g2: print(f&quot;   {cwe:8s}{f}:{i:&lt;3} {snip[:52]}&quot;)
-print()
-score(g2, &quot;generation 2 · taint rules&quot;)
-
-CODE[&quot;authz.py&quot;] = &#x27;&#x27;&#x27;
-def can_delete(user, doc):
-    # Reads &quot;or&quot; where it means &quot;and&quot;. No sink, no taint, no pattern.
-    if user.is_admin or user.id == doc.owner_id or doc.is_public:
-        return True
-    return False
-&#x27;&#x27;&#x27;
-print(&quot;generation 1 on authz.py:&quot;, gen1({&quot;authz.py&quot;: CODE[&quot;authz.py&quot;]}) or &quot;nothing&quot;)
-print(&quot;generation 2 on authz.py:&quot;, rule.scan(&quot;authz.py&quot;, CODE[&quot;authz.py&quot;]) or &quot;nothing&quot;)
-
-class StandIn:
-    &quot;&quot;&quot;DETERMINISTIC STAND-IN — not a language model. See the note above.&quot;&quot;&quot;
-    KNOWN = {
-     &quot;authz.py&quot;: [{&quot;cwe&quot;:&quot;CWE-863&quot;,&quot;line&quot;:4,&quot;confidence&quot;:0.82,
-                   &quot;rationale&quot;:&quot;disjunctive permission check: a non-public document &quot;
-                               &quot;owned by another user is deletable whenever is_public &quot;
-                               &quot;is true, and delete rights are never checked&quot;}],
-     &quot;db.py&quot;: [{&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;line&quot;:4,&quot;confidence&quot;:0.95,
-                &quot;rationale&quot;:&quot;name is concatenated into the query string&quot;},
-               {&quot;cwe&quot;:&quot;CWE-89&quot;,&quot;line&quot;:12,&quot;confidence&quot;:0.41,
-                &quot;rationale&quot;:&quot;audit_note also calls execute&quot;}],     # HALLUCINATION
-    }
-    def review(self, fname, src): return self.KNOWN.get(fname, [])
-
-model = StandIn()
-print(&quot;\ngeneration 3 (model review):&quot;)
-for fname in (&quot;authz.py&quot;, &quot;db.py&quot;):
-    for f in model.review(fname, CODE[fname]):
-        print(f&quot;   {f[&#x27;cwe&#x27;]:9s}{fname}:{f[&#x27;line&#x27;]:&lt;3} conf={f[&#x27;confidence&#x27;]:.2f}  &quot;
-              f&quot;{f[&#x27;rationale&#x27;][:52]}&quot;)
-print(&quot;\nIt found the authorization bug neither earlier generation can see.&quot;)
-print(&quot;It also invented a SQL injection in a function with a constant string.&quot;)
-
-# What stage 1 said, and what generation 2 found. The agent has both.
-HISTORICAL_RISK = {&quot;db.py&quot;: 0.53, &quot;authz.py&quot;: 0.48, &quot;ops.py&quot;: 0.19,
-                   &quot;safe.py&quot;: 0.02}
-MODEL_COST_PER_FILE = 0.031      # dollars, measured on a small open-weight model
-
-def audit_agent(code, rule, model, risk, gate=0.70, risk_floor=0.30):
-    &quot;&quot;&quot;Stage 7, allocated. Rules everywhere; the model where rules went quiet.&quot;&quot;&quot;
-    findings, suppressed, plan = [], [], []
-    rule_hits = {f: rule.scan(f, s) for f, s in sorted(code.items())}
-
-    for fname, hits in rule_hits.items():
-        for cwe, name, f, i, snip in hits:
-            findings.append({&quot;src&quot;: &quot;rules&quot;, &quot;cwe&quot;: cwe, &quot;file&quot;: f, &quot;line&quot;: i,
-                             &quot;confidence&quot;: 1.0, &quot;status&quot;: &quot;confirmed-by-rule&quot;})
-
-    for fname in sorted(code):
-        r = risk.get(fname, 0.0)
-        quiet = not rule_hits[fname]
-        if r &gt;= risk_floor and quiet:
-            plan.append((fname, r, &quot;high risk, rules silent -&gt; REVIEW&quot;))
-        elif r &gt;= risk_floor:
-            plan.append((fname, r, &quot;high risk, rules already fired -&gt; skip&quot;))
-        else:
-            plan.append((fname, r, &quot;low historical risk -&gt; skip&quot;))
-
-    reviewed = [f for f, _, why in plan if why.endswith(&quot;REVIEW&quot;)]
-    for fname in reviewed:
-        for m in model.review(fname, code[fname]):
-            row = {&quot;src&quot;: &quot;model&quot;, &quot;cwe&quot;: m[&quot;cwe&quot;], &quot;file&quot;: fname,
-                   &quot;line&quot;: m[&quot;line&quot;], &quot;confidence&quot;: m[&quot;confidence&quot;],
-                   &quot;status&quot;: &quot;HYPOTHESIS&quot;}
-            (findings if m[&quot;confidence&quot;] &gt;= gate else suppressed).append(row)
-
-    seen, dedup = set(), []
-    for f in sorted(findings, key=lambda r: (r[&quot;src&quot;], r[&quot;file&quot;], r[&quot;line&quot;])):
-        k = (f[&quot;cwe&quot;], f[&quot;file&quot;], f[&quot;line&quot;])
-        if k not in seen:
-            seen.add(k); dedup.append(f)
-    return dedup, suppressed, plan, reviewed
-
-final, suppressed, plan, reviewed = audit_agent(CODE, rule, model, HISTORICAL_RISK)
-
-print(&quot;the agent&#x27;s allocation:&quot;)
-for fname, r, why in plan:
-    print(f&quot;   {fname:12s}risk {r:.2f}   {why}&quot;)
-print(f&quot;\nmodel pass on {len(reviewed)} of {len(CODE)} files &quot;
-      f&quot;(${len(reviewed) * MODEL_COST_PER_FILE:.3f} rather than &quot;
-      f&quot;${len(CODE) * MODEL_COST_PER_FILE:.3f})&quot;)
-
-print(f&quot;\nstage 7 emits {len(final)}, {len(suppressed)} suppressed below 0.70&quot;)
-for f in final:
-    print(f&quot;   [{f[&#x27;src&#x27;]:5s}] {f[&#x27;cwe&#x27;]:9s}{f[&#x27;file&#x27;]}:{f[&#x27;line&#x27;]:&lt;3} &quot;
-          f&quot;conf={f[&#x27;confidence&#x27;]:.2f}  {f[&#x27;status&#x27;]}&quot;)
-
-TRUTH_FULL = TRUTH | {(&quot;CWE-863&quot;, &quot;authz.py&quot;, 4)}
-got = {(f[&quot;cwe&quot;], f[&quot;file&quot;], f[&quot;line&quot;]) for f in final}
-print(f&quot;\ntp={len(got &amp; TRUTH_FULL)} fp={len(got - TRUTH_FULL)} &quot;
-      f&quot;fn={len(TRUTH_FULL - got)}&quot;)
-assert not (got - TRUTH_FULL) and not (TRUTH_FULL - got)
-
-# The allocation is a bet, so measure what it costs when it loses. Move the
-# authorisation bug into a file with LOW historical risk and re-run.
-print(&quot;the same corpus, with authz.py carrying no history:&quot;)
-_, _, plan_b, reviewed_b = audit_agent(CODE, rule, model,
-                                       {**HISTORICAL_RISK, &quot;authz.py&quot;: 0.04})
-final_b, _, _, _ = audit_agent(CODE, rule, model,
-                               {**HISTORICAL_RISK, &quot;authz.py&quot;: 0.04})
-got_b = {(f[&quot;cwe&quot;], f[&quot;file&quot;], f[&quot;line&quot;]) for f in final_b}
-missed = TRUTH_FULL - got_b
-print(f&quot;   model pass on {len(reviewed_b)} file(s): {reviewed_b}&quot;)
-print(f&quot;   MISSED: {sorted(missed)}&quot;)
-print()
-print(&quot;A new file with no history is invisible to the allocator, and the&quot;)
-print(&quot;allocator is what makes generation 3 affordable. The mitigation is not&quot;)
-print(&quot;subtle - review everything a pull request touched regardless of history,&quot;)
-print(&quot;and let the risk floor decide only where to spend the SECOND pass.&quot;)
-assert missed == {(&quot;CWE-863&quot;, &quot;authz.py&quot;, 4)}
-print()
-print(&quot;Every model finding above is marked HYPOTHESIS. Stages 8 to 12 decide.&quot;)
-
-# ------------------------------------ the same task, against a real model
-# Offline this is a labelled replay; with an open-weight model served
-# from Kaggle it is the same code calling a real one.
-
-TASK = &#x27;Is this function vulnerable? Name the CWE if so, and say which value reaches the sink.\n\ndef report(request):\n    q = &quot;SELECT * FROM orders WHERE ref = \&#x27;&quot; + request.args[\&#x27;ref\&#x27;] + &quot;\&#x27;&quot;\n    return db.execute(q)&#x27;
-
-REPLAY = &quot;Yes - CWE-89, SQL injection. request.args[&#x27;ref&#x27;] is concatenated directly into the query string and reaches db.execute unsanitised.&quot;
-
-answer, used, model = ask(TASK, replay=REPLAY,
-            system=&#x27;You are a code reviewer. Answer in at most three lines.&#x27;,
-            max_tokens=300)
-
-print(f&quot;backend used : {used}&quot;)
-print(f&quot;model        : {model}&quot;)
-print(f&quot;prompt       : {TASK[:66]}...&quot;)
-print()
-print(&quot;answer:&quot;)
-for line in (answer.splitlines() or [answer]):
-    print(f&quot;   {line}&quot;)
-
-# Two assertions that must hold on every backend, and one property that is
-# reported rather than asserted - a real model failing it is a finding about
-# the model, not a broken notebook.
-assert answer.strip(), &quot;the configured backend returned nothing&quot;
-if used == &quot;replay&quot;:
-    assert answer == REPLAY, &quot;the offline path must return the replay verbatim&quot;
-
-label, held = (&quot;names the CWE identifier&quot;, &quot;CWE-89&quot; in answer.upper() or &quot;SQL INJECT&quot; in answer.upper())
-print()
-print(f&quot;property checked : {label}&quot;)
-print(f&quot;held on {used:12s} : {held}&quot;)
-print()
-print(&quot;Same code, same assertions, two possible backends. Offline the answer is&quot;)
-print(&quot;the replay and is labelled as one; with a served model it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Grep produces 6 findings at 50% precision, flagging the parameterised query, the constant insert and the safe subprocess call. Taint rules find exactly the 3 real injection bugs at 100% precision and recall and find nothing in <code>authz.py</code>. The model finds the authorization bug at 0.82 confidence and hallucinates one SQL injection at 0.41. The audit agent then runs the rules everywhere and spends the model pass on one file of four — the one where history says risk lives and the rules were silent — emitting 4 findings with zero false positives, every model finding marked as a hypothesis. The last cell shows what the allocation costs when it loses: give <code>authz.py</code> no history and the authorization bug is never reviewed.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Two things, and the second is the one people skip. Point the stand-in at a real GLM-4.6 or Kimi K2 through Ollama and run it on <code>authz.py</code> ten times — the variance in what it reports, and in its confidence, decides whether you can gate on confidence at all. Then run Semgrep against one of your own repositories at your current ruleset and at seven packs, and count the difference. Whatever that number is, it has been the number all year.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.4.html">B2.4 · Deduplication and contextual verification</a></strong></p>

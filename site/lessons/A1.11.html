@@ -62,57 +62,42 @@ records a name the attacker chose.</p></div><div class="nbmd"><blockquote>
 </blockquote>
 <h2>3 · The risk, realised</h2>
 <p>An orchestrator that admits workers by configuration.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>CyberTravels discovers its workers. The skill compares what is present against what anybody registered, then follows a delegation to see what the unregistered agent is handed — including the narrowed traveller token.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/agent-registry-gap-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-registry-gap-check
+<p>CyberTravels discovers its workers. The skill compares what is present against what anybody registered, then follows a delegation to see what the unregistered agent is handed — including the narrowed traveller token.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/threats/agent-registry-gap-check/SKILL.md"><code>skills/threats/agent-registry-gap-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-registry-gap-check
 description: &gt;-
   Compare the agents actually present in an environment against the agents
   anybody registered, and establish what work and which tokens the unregistered
   ones are handed. Use when agents are created programmatically, when a
   discovery protocol is in play, or when asked how a worker joins a fleet.
 allowed-tools: Read, Grep, Glob
----
-
-# Discovery is not admission
-
-A topology that discovers its workers will discover whatever answers. The
+</code></pre>
+<h1>Discovery is not admission</h1>
+<p>A topology that discovers its workers will discover whatever answers. The
 defect is not that an unknown agent exists — it is that the orchestrator hands
 it the same delegated work, and the same narrowed user token, as a registered
-one. The unregistered agent then acts **as the user** against anything
-downstream that honours the token.
-
-## When to use this
-
-Any fleet where agents register themselves, are discovered over a network, or
+one. The unregistered agent then acts <strong>as the user</strong> against anything
+downstream that honours the token.</p>
+<h2>When to use this</h2>
+<p>Any fleet where agents register themselves, are discovered over a network, or
 are spawned by other agents. Also after adding a marketplace, a plugin
-mechanism or an A2A-style protocol.
-
-## Procedure
-
-**1 — Enumerate what is present.** Ask the runtime, not the design document:
+mechanism or an A2A-style protocol.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate what is present.</strong> Ask the runtime, not the design document:
 running workloads, connected clients, queue consumers, whatever the discovery
-mechanism itself returns.
-
-**2 — Enumerate what is registered.** The list somebody maintains, with owners.
-Both lists in hand, the gap is arithmetic.
-
-**3 — Follow a delegation.** For one task, record which agents received work
+mechanism itself returns.</p>
+<p><strong>2 — Enumerate what is registered.</strong> The list somebody maintains, with owners.
+Both lists in hand, the gap is arithmetic.</p>
+<p><strong>3 — Follow a delegation.</strong> For one task, record which agents received work
 and what credential travelled with it. The question is whether registration is
-consulted *before* delegation or only reported afterwards.
-
-**4 — Establish what the token permits.** A narrowed on-behalf-of token in the
+consulted <em>before</em> delegation or only reported afterwards.</p>
+<p><strong>4 — Establish what the token permits.</strong> A narrowed on-behalf-of token in the
 hands of an unregistered agent is a user session with no login. Name the
-downstreams that would honour it.
-
-**5 — Separate admission from identity.** Registration answers &quot;should this
-agent exist&quot;; workload identity answers &quot;is this the agent it claims to be&quot;.
-Report which of the two is missing, because they are different projects.
-
-## Output contract
-
-```json
-{
+downstreams that would honour it.</p>
+<p><strong>5 — Separate admission from identity.</strong> Registration answers "should this
+agent exist"; workload identity answers "is this the agent it claims to be".
+Report which of the two is missing, because they are different projects.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;present&quot;: [&quot;str&quot;],
   &quot;registered&quot;: [&quot;str&quot;],
   &quot;gap&quot;: [&quot;str&quot;],
@@ -120,75 +105,26 @@ Report which of the two is missing, because they are different projects.
   &quot;token&quot;: {&quot;kind&quot;: &quot;str&quot;, &quot;acts_as_user&quot;: true, &quot;honoured_by&quot;: [&quot;str&quot;]},
   &quot;missing&quot;: {&quot;admission&quot;: true, &quot;workload_identity&quot;: true}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reading the registry as the inventory.</strong> The registry is the claim; the
+  runtime is the fact.</li>
+<li><strong>Treating discovery as authentication.</strong> Answering is not proving.</li>
+<li><strong>Reporting the unregistered agent as the problem.</strong> The problem is that
+  delegation never consulted the registry.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>agent                 in registry?  approved?  received work?
+pricing-agent         True          True       yes
+billing-agent         True          True       yes
+reporting-agent-v2    False         False      yes
 
-## Failure modes
+agents that received delegated work : 3
+of which unregistered               : 1
+   reporting-agent-v2 now holds obo:dana@corp:reports:read,reports:write
 
-- **Reading the registry as the inventory.** The registry is the claim; the
-  runtime is the fact.
-- **Treating discovery as authentication.** Answering is not proving.
-- **Reporting the unregistered agent as the problem.** The problem is that
-  delegation never consulted the registry.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/threats/agent-registry-gap-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/agent-registry-gap-check/scripts/agent_registry_gap_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Compare the agents that exist with the agents anybody registered, and show what the unregistered ones are handed.
-
-This is the executable half of the `agent-registry-gap-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-REGISTRY = {&quot;pricing-agent&quot;:  {&quot;owner&quot;: &quot;payments-team&quot;, &quot;approved&quot;: True},
-            &quot;billing-agent&quot;:  {&quot;owner&quot;: &quot;payments-team&quot;, &quot;approved&quot;: True}}
-
-DISCOVERED = [&quot;pricing-agent&quot;, &quot;billing-agent&quot;, &quot;reporting-agent-v2&quot;]
-
-DELEGATED = []
-
-def delegate(agent_name, task, user_token):
-    &quot;&quot;&quot;The orchestrator hands work - and the caller&#x27;s narrowed token - onward.&quot;&quot;&quot;
-    DELEGATED.append({&quot;agent&quot;: agent_name, &quot;task&quot;: task, &quot;token&quot;: user_token})
-    return f&quot;{agent_name} accepted&quot;
-
-USER_TOKEN = &quot;obo:dana@corp:reports:read,reports:write&quot;
-
-print(f&quot;{&#x27;agent&#x27;:22s}{&#x27;in registry?&#x27;:14s}{&#x27;approved?&#x27;:11s}received work?&quot;)
-for name in DISCOVERED:
-    entry = REGISTRY.get(name)
-    delegate(name, &quot;summarise Q3 revenue&quot;, USER_TOKEN)      # admitted by discovery
-    print(f&quot;{name:22s}{str(bool(entry)):14s}&quot;
-          f&quot;{str(bool(entry and entry[&#x27;approved&#x27;])):11s}yes&quot;)
-
-rogue = [d for d in DELEGATED if d[&quot;agent&quot;] not in REGISTRY]
-print(f&quot;\nagents that received delegated work : {len(DELEGATED)}&quot;)
-print(f&quot;of which unregistered               : {len(rogue)}&quot;)
-for r in rogue:
-    print(f&quot;   {r[&#x27;agent&#x27;]} now holds {r[&#x27;token&#x27;]}&quot;)
-print()
-print(&quot;It was admitted because it answered the protocol in the right place.&quot;)
-print(&quot;It received the task AND the narrowed user token, so it can act as dana&quot;)
-print(&quot;against every downstream that honours that token.&quot;)
-assert rogue and all(r[&quot;token&quot;] == USER_TOKEN for r in rogue)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+It was admitted because it answered the protocol in the right place.
+It received the task AND the narrowed user token, so it can act as dana
+against every downstream that honours that token.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Three agents are discovered, two are in the registry, and all three receive delegated work — including the narrowed user token. The unregistered agent can now act as the requesting user against any downstream that honours it.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Ask how your orchestrator decides which agents may receive work. If the answer is a config list or service discovery, write down what would have to be true for an extra entry to be noticed.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.12.html">A1.12 · Cascading hallucination</a></strong></p>

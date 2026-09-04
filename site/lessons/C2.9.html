@@ -81,160 +81,79 @@ than one being chosen.</p>
 <p>Moltbook losing its own data would be a bad day for Moltbook. What was in the table belonged to everyone who had registered an agent, and Moltbook could not revoke any of it.</p></div><div class="nbmd"><h2>5 · The surface the attack did not need</h2>
 <p>Worth saying plainly, because it is the part that generalises: the interesting architectural risk in Moltbook was never exercised.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">surface</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">status in this incident</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">where it is taught</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">credential store readable by anyone</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>used — this was the breach</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A3.8, and the Supabase pattern in C2.10</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agents ingest and act on other agents&#x27; posts</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">present, untouched</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A1.3 indirect prompt injection, A1.10 comms poisoning</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agents coordinating at population scale</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">present, untouched</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A1.11, D1.10 fleet correlation</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">An architecture can hold two novel risks and still be undone by a missing row policy. Novelty is not the same as likelihood.</div></div><div class="nbmd"><h2>6 · The procedure, as a skill</h2>
-<p>The publishable key is meant to ship in a client; the rows are not. The skill queries every table anonymously with row-level policy off and on, and counts the provider credentials a leaked key returns — along with who can revoke them.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/row-level-policy-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: row-level-policy-check
+<p>The publishable key is meant to ship in a client; the rows are not. The skill queries every table anonymously with row-level policy off and on, and counts the provider credentials a leaked key returns — along with who can revoke them.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/row-level-policy-check/SKILL.md"><code>skills/research/row-level-policy-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: row-level-policy-check
 description: &gt;-
   Query an exposed data API as an anonymous caller with row-level security off
   and on, and count what a publishable key returns. Use when a client-side key
-  reaches a database directly, or when a platform&#x27;s default is open until
+  reaches a database directly, or when a platform's default is open until
   somebody closes it.
 allowed-tools: Read, Grep, Glob
----
-
-# The anonymous key is meant to be public; the rows are not
-
-Platforms that expose a database over HTTP hand out a key designed to ship in a
+</code></pre>
+<h1>The anonymous key is meant to be public; the rows are not</h1>
+<p>Platforms that expose a database over HTTP hand out a key designed to ship in a
 client. That is safe exactly when row-level policy is on, and the default on
 several of them is off. The check is one query, run twice, and it is the
-difference between a key that is public by design and a table that is.
-
-## When to use this
-
-Any deployment where a browser or an agent talks to a database service directly,
-and any platform whose quickstart hands you an anonymous key.
-
-## Procedure
-
-**1 — Get the publishable key from where it actually is.** The client bundle,
-the mobile app, the agent&#x27;s configuration. It is not a secret and treating it as
-one is what hides this defect.
-
-**2 — Enumerate the tables.** Use the platform&#x27;s catalogue rather than the
-application&#x27;s own queries — the application only touches the tables it needs,
-which is not the set that exists.
-
-**3 — Query each table anonymously with policy off.** Record the row count and,
+difference between a key that is public by design and a table that is.</p>
+<h2>When to use this</h2>
+<p>Any deployment where a browser or an agent talks to a database service directly,
+and any platform whose quickstart hands you an anonymous key.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Get the publishable key from where it actually is.</strong> The client bundle,
+the mobile app, the agent's configuration. It is not a secret and treating it as
+one is what hides this defect.</p>
+<p><strong>2 — Enumerate the tables.</strong> Use the platform's catalogue rather than the
+application's own queries — the application only touches the tables it needs,
+which is not the set that exists.</p>
+<p><strong>3 — Query each table anonymously with policy off.</strong> Record the row count and,
 specifically, whether any row contains a credential: provider keys stored
-alongside agent configuration are the common and expensive case.
-
-**4 — Enable policy and re-run.** Anonymous should return nothing; a signed-in
+alongside agent configuration are the common and expensive case.</p>
+<p><strong>4 — Enable policy and re-run.</strong> Anonymous should return nothing; a signed-in
 owner should return their own rows and no more. Both halves — a policy that
-returns nothing to everyone is an outage.
-
-**5 — Cost the exposure.** For every credential returned, name the provider and
+returns nothing to everyone is an outage.</p>
+<p><strong>5 — Cost the exposure.</strong> For every credential returned, name the provider and
 who can revoke it. The revocation owner is usually not you, and that is the
-sentence that gets the work scheduled.
-
-## Output contract
-
-```json
-{
+sentence that gets the work scheduled.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;key&quot;: {&quot;kind&quot;: &quot;publishable&quot;, &quot;found_in&quot;: &quot;str&quot;},
   &quot;tables&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;sensitive&quot;: true,
               &quot;anon_rows_policy_off&quot;: 0, &quot;anon_rows_policy_on&quot;: 0, &quot;owner_rows&quot;: 0}],
   &quot;credentials_exposed&quot;: [{&quot;provider&quot;: &quot;str&quot;, &quot;revocable_by&quot;: &quot;str&quot;}],
   &quot;verdict&quot;: &quot;open|closed&quot;
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Testing with the service key.</strong> It bypasses policy; that proves nothing.</li>
+<li><strong>Enumerating from the application.</strong> It knows about its own tables only.</li>
+<li><strong>Reporting rows without the credentials.</strong> The provider keys are the
+  incident.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>RLS disabled (as shipped)   rows returned: 3
+      @researchbot  dana@example    sk-REDACTED-openai
+      @newsdigest   sam@example     sk-ant-REDACTED
+      @dealfinder   kim@example     AKIA-REDACTED-aws
+RLS enabled                 rows returned: 0
 
-## Failure modes
+signed in as dana@example, RLS enabled: 1 row
 
-- **Testing with the service key.** It bypasses policy; that proves nothing.
-- **Enumerating from the application.** It knows about its own tables only.
-- **Reporting rows without the credentials.** The provider keys are the
-  incident.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Same key, same endpoint, same table. The only difference is whether a
+policy exists for the API to consult.
+Treblle                      770,000 agents exposed
+Wiz-sourced reporting      1,500,000 agents exposed
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+reported range               770,000 - 1,500,000
+provider accounts implicated: OpenAI, Anthropic, AWS, GitHub, Google Cloud
 
-from cyber_commons_skill_runtime import run_skill
+what leaked                   who can revoke it
+the Moltbook session token    Moltbook
+the agent&#x27;s provider key      the individual who created the agent
+the claim token               Moltbook
 
-# Split skills/research/row-level-policy-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/row-level-policy-check/scripts/row_level_policy_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Query an exposed data API as an anonymous caller with row-level security off and on, and count what a leaked key returns.
-
-This is the executable half of the `row-level-policy-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-AGENTS = [
- {&quot;id&quot;: &quot;a-0001&quot;, &quot;owner&quot;: &quot;dana@example&quot;,  &quot;handle&quot;: &quot;@researchbot&quot;,
-  &quot;provider_key&quot;: &quot;sk-REDACTED-openai&quot;,     &quot;claim_token&quot;: &quot;clm_8fA2&quot;},
- {&quot;id&quot;: &quot;a-0002&quot;, &quot;owner&quot;: &quot;sam@example&quot;,   &quot;handle&quot;: &quot;@newsdigest&quot;,
-  &quot;provider_key&quot;: &quot;sk-ant-REDACTED&quot;,        &quot;claim_token&quot;: &quot;clm_2bQ7&quot;},
- {&quot;id&quot;: &quot;a-0003&quot;, &quot;owner&quot;: &quot;kim@example&quot;,   &quot;handle&quot;: &quot;@dealfinder&quot;,
-  &quot;provider_key&quot;: &quot;AKIA-REDACTED-aws&quot;,      &quot;claim_token&quot;: &quot;clm_9zR1&quot;},
-]
-
-def data_api(table, caller, rls_enabled):
-    &quot;&quot;&quot;Supabase&#x27;s PostgREST surface, in miniature.
-
-    `caller` is whoever the anon key resolves to - which is nobody in
-    particular. With RLS off there is no policy to consult, so every row is
-    returned; with RLS on, the policy decides.
-    &quot;&quot;&quot;
-    if not rls_enabled:
-        return list(table)                       # no policy exists to consult
-    return [r for r in table if r[&quot;owner&quot;] == caller]
-
-anon = None                                      # the anon key is not a person
-for label, rls in ((&quot;RLS disabled (as shipped)&quot;, False), (&quot;RLS enabled&quot;, True)):
-    rows = data_api(AGENTS, caller=anon, rls_enabled=rls)
-    print(f&quot;{label:28s}rows returned: {len(rows)}&quot;)
-    for r in rows:
-        print(f&quot;      {r[&#x27;handle&#x27;]:14s}{r[&#x27;owner&#x27;]:16s}{r[&#x27;provider_key&#x27;]}&quot;)
-
-owner_rows = data_api(AGENTS, caller=&quot;dana@example&quot;, rls_enabled=True)
-print(f&quot;\nsigned in as dana@example, RLS enabled: {len(owner_rows)} row&quot;)
-print()
-print(&quot;Same key, same endpoint, same table. The only difference is whether a&quot;)
-print(&quot;policy exists for the API to consult.&quot;)
-assert len(data_api(AGENTS, anon, False)) == 3
-assert len(data_api(AGENTS, anon, True)) == 0 and len(owner_rows) == 1
-
-REPORTED_SCALE = {&quot;Treblle&quot;: 770_000, &quot;Wiz-sourced reporting&quot;: 1_500_000}
-PROVIDERS = [&quot;OpenAI&quot;, &quot;Anthropic&quot;, &quot;AWS&quot;, &quot;GitHub&quot;, &quot;Google Cloud&quot;]
-
-for source, n in sorted(REPORTED_SCALE.items()):
-    print(f&quot;{source:26s}{n:&gt;10,} agents exposed&quot;)
-low, high = min(REPORTED_SCALE.values()), max(REPORTED_SCALE.values())
-print(f&quot;\nreported range            {low:&gt;10,} - {high:,}&quot;)
-print(f&quot;provider accounts implicated: {&#x27;, &#x27;.join(PROVIDERS)}&quot;)
-
-# Who can actually revoke each thing that leaked.
-REVOCABLE_BY = {
- &quot;the Moltbook session token&quot;: &quot;Moltbook&quot;,
- &quot;the claim token&quot;:            &quot;Moltbook&quot;,
- &quot;the agent&#x27;s provider key&quot;:   &quot;the individual who created the agent&quot;,
-}
-print()
-print(f&quot;{&#x27;what leaked&#x27;:30s}who can revoke it&quot;)
-for what in sorted(REVOCABLE_BY):
-    print(f&quot;{what:30s}{REVOCABLE_BY[what]}&quot;)
-
-platform_can_fix = [w for w in REVOCABLE_BY if REVOCABLE_BY[w] == &quot;Moltbook&quot;]
-print(f&quot;\nthe platform can revoke {len(platform_can_fix)} of {len(REVOCABLE_BY)}.&quot;)
-print(&quot;The third is a key in somebody else&#x27;s provider account, and the only&quot;)
-print(&quot;person who can turn it off may not know it was ever exposed. That is the&quot;)
-print(&quot;difference between a platform breach and a supply-chain one.&quot;)
-assert len(platform_can_fix) == 2</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+the platform can revoke 2 of 3.
+The third is a key in somebody else&#x27;s provider account, and the only
+person who can turn it off may not know it was ever exposed. That is the
+difference between a platform breach and a supply-chain one.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>With RLS disabled the anon key returns all three agent rows, secret provider keys included; with RLS enabled and no signed-in user it returns none, and one row for the owner. Reported scale spans 770,000 to 1.5 million agents across five providers, and of the three things that leaked the platform can revoke two — the third is a key in somebody else's account.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run <code>select relname from pg_class where relrowsecurity = false</code> against your own project, or the equivalent for whatever backend you use. Then find the table holding anything credential-shaped and check whether it is reachable from the client at all — the answer to the second question is the one that decides the size of your bad day.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.10.html">C2.10 · Case study — the Supabase pattern: open until closed</a></strong></p>

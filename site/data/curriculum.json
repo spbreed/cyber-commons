@@ -29,29 +29,6 @@
    "blurb": "CyberTravels as built, every risk that architecture carries, and the controls that close them. Get this layer wrong and no amount of downstream diligence recovers it.",
    "tracks": [
     {
-     "id": "A0",
-     "chapter": 0,
-     "title": "How This Commons Runs",
-     "titles": "Everyone, once",
-     "changes": "One lesson on the mechanism every other lesson uses: an agent skill, a shared runtime, and a Kaggle kernel. 1 lesson.",
-     "autonomy": "Read it once and the other 116 lessons stop being magic.",
-     "deliverable": "The same runtime wired into a notebook of your own.",
-     "sessions": [
-      {
-       "id": "A0.1",
-       "title": "How a lesson runs — skills, one shared runtime, and Kaggle",
-       "track": "both",
-       "kind": "introduction",
-       "summary": "Every lesson in the commons executes an agent skill: the SKILL.md first, then a shared runtime that parses it, then the skill's own script. This lesson runs that procedure on itself, and shows how to point the same runtime at a notebook of your own.",
-       "risk": "A curriculum whose mechanism is undocumented teaches people to run cells they cannot explain, and copies its own boilerplate into every notebook until a fix means rebuilding all of them.",
-       "control": "One skill format, one shared runtime loaded rather than copied, and an output contract whose ceiling is stated out loud.",
-       "lab": "Load a skill with the shared runtime, check an instance against its contract, and watch a vacuous result conform.",
-       "tools": [],
-       "models": []
-      }
-     ]
-    },
-    {
      "id": "A1",
      "chapter": 1,
      "title": "CyberTravels' Architecture, and Every Risk It Carries",

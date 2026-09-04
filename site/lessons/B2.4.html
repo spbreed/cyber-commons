@@ -52,236 +52,89 @@ effort on three copies of the same claim.</p></div><div class="nbmd"><blockquote
 </blockquote></div><div class="nbmd"><h2>3 · Stage 8 — deduplicate on the defect, not the report</h2>
 <p>Two findings are the same defect if they name the same sink in the same function, even at different lines and under different CWE labels. Cluster on that, and keep the <em>best-evidenced</em> member.</p></div><div class="nbmd"><h2>4 · Stage 9 — contextual verification against the real syntax</h2>
 <p>Now check each surviving claim against the code. Three checks, all mechanical, none requiring judgement.</p></div><div class="nbmd"><h2>5 · The stage, as a skill</h2>
-<p>Seven raw findings, four defects. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than a line number, and then rejects the survivors whose symbols are not in the file — because a finding about <code>os.system</code> in a file that never imports <code>os</code> should die here rather than in a maintainer's inbox.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/finding-dedup-and-verification/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: finding-dedup-and-verification
+<p>Seven raw findings, four defects. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than a line number, and then rejects the survivors whose symbols are not in the file — because a finding about <code>os.system</code> in a file that never imports <code>os</code> should die here rather than in a maintainer's inbox.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/finding-dedup-and-verification/SKILL.md"><code>skills/appsec/finding-dedup-and-verification/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: finding-dedup-and-verification
 description: &gt;-
   Collapse raw findings from several tools into distinct defects across CWE
   aliases and duplicate reports, then reject the ones whose symbols do not
   appear in the file. Use when a pipeline produces more findings than defects,
   or when a scanner reports something that is not in the code.
 allowed-tools: Read, Grep, Glob
----
-
-# Findings are not defects, and some of them are not real
-
-A pipeline running three analyses over one file produces findings that overlap
+</code></pre>
+<h1>Findings are not defects, and some of them are not real</h1>
+<p>A pipeline running three analyses over one file produces findings that overlap
 in two different ways — the same defect reported under an alias, and the same
 defect reported by three tools — and, if a model is one of the tools, findings
 about symbols that do not exist. Both have to be resolved before a human sees
-the list, or the human resolves them by ignoring the list.
-
-## When to use this
-
-Between analysis and triage, in any pipeline with more than one analyser, and
-always when a model is one of them.
-
-## Procedure
-
-**1 — Normalise the CWE.** Maintain an alias map — CWE-943 is CWE-89 for this
+the list, or the human resolves them by ignoring the list.</p>
+<h2>When to use this</h2>
+<p>Between analysis and triage, in any pipeline with more than one analyser, and
+always when a model is one of them.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Normalise the CWE.</strong> Maintain an alias map — CWE-943 is CWE-89 for this
 purpose — and normalise before comparing. Aliases are why the same defect
-appears twice with different identifiers.
-
-**2 — Key each finding by defect, not by report.** File, enclosing function,
+appears twice with different identifiers.</p>
+<p><strong>2 — Key each finding by defect, not by report.</strong> File, enclosing function,
 normalised CWE. Line numbers move; the enclosing function does not, and it is
-what makes two reports of one defect collapse.
-
-**3 — When duplicates disagree, keep the one with the best evidence.** A taint
+what makes two reports of one defect collapse.</p>
+<p><strong>3 — When duplicates disagree, keep the one with the best evidence.</strong> A taint
 result carries a path; a grep hit carries a line; a model result carries a
 sentence. Prefer in that order, and record which tools agreed — agreement is
-useful signal even though it is not proof.
-
-**4 — Verify each survivor against the source.** Does the symbol it names appear
-in the file? Is the module it blames imported? A finding about `os.system` in a
-file that never imports `os` is a hallucination, and it is rejected here rather
-than in a maintainer&#x27;s inbox.
-
-**5 — Report both counts and the rejects.** Raw findings, distinct defects, and
+useful signal even though it is not proof.</p>
+<p><strong>4 — Verify each survivor against the source.</strong> Does the symbol it names appear
+in the file? Is the module it blames imported? A finding about <code>os.system</code> in a
+file that never imports <code>os</code> is a hallucination, and it is rejected here rather
+than in a maintainer's inbox.</p>
+<p><strong>5 — Report both counts and the rejects.</strong> Raw findings, distinct defects, and
 the rejected list with the reason. Discarding hallucinations silently loses the
-measurement of how often the analyser produces them.
-
-## Output contract
-
-```json
-{
+measurement of how often the analyser produces them.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;raw&quot;: 0,
   &quot;defects&quot;: [{&quot;key&quot;: &quot;str&quot;, &quot;file&quot;: &quot;str&quot;, &quot;function&quot;: &quot;str&quot;, &quot;cwe&quot;: &quot;str&quot;,
                &quot;reported_by&quot;: [&quot;str&quot;], &quot;kept_from&quot;: &quot;str&quot;}],
   &quot;rejected&quot;: [{&quot;finding&quot;: &quot;str&quot;, &quot;reason&quot;: &quot;symbol absent|module not imported&quot;}],
   &quot;counts&quot;: {&quot;raw&quot;: 0, &quot;distinct&quot;: 0, &quot;rejected&quot;: 0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Keying on the line number.</strong> One edit and the same defect is two.</li>
+<li><strong>Merging by CWE alone.</strong> Two real SQL injections in one file are two defects.</li>
+<li><strong>Dropping hallucinations without counting them.</strong> That count is how you know
+  whether to keep the analyser.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>7 raw findings from 3 tracks
+   grep  CWE-89   billing.py:7  execute       conf=0.50
+   taint CWE-89   billing.py:7  execute       conf=1.00
+   model CWE-89   billing.py:8  execute       conf=0.93
+   model CWE-943  billing.py:7  execute       conf=0.71
+   model CWE-89   billing.py:11 execute       conf=0.44
+   model CWE-798  billing.py:3  DB_PASSWORD   conf=0.88
+   model CWE-78   billing.py:6  os.system     conf=0.67
+7 findings → 4 distinct defects
 
-## Failure modes
+   CWE-89  list_reports  execute       merged 4 from [&#x27;grep&#x27;, &#x27;model&#x27;, &#x27;taint&#x27;]  (kept taint)
+   CWE-89  total         execute       merged 1 from [&#x27;model&#x27;]  (kept model)
+   CWE-798 None          DB_PASSWORD   merged 1 from [&#x27;model&#x27;]  (kept model)
+   CWE-78  build_filter  os.system     merged 1 from [&#x27;model&#x27;]  (kept model)
+cwe      symbol         line  verdict
+--------------------------------------------------------------------------
+CWE-89   execute           7  verified
+CWE-89   execute          11  verified
+CWE-798  DB_PASSWORD       3  REJECTED — symbol &#x27;DB_PASSWORD&#x27; does not appear in the file
+CWE-78   os.system         6  REJECTED — symbol &#x27;os.system&#x27; does not appear in the file
 
-- **Keying on the line number.** One edit and the same defect is two.
-- **Merging by CWE alone.** Two real SQL injections in one file are two defects.
-- **Dropping hallucinations without counting them.** That count is how you know
-  whether to keep the analyser.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+2 verified, 2 rejected as hallucinations
+stage 7 emitted        7
+after stage 8 (dedup)  4   (43% removed)
+after stage 9 (verify) 2   (71% removed overall)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+surviving: tp=1 fp=1
+   rejected CWE-798 on &#x27;DB_PASSWORD&#x27; — provably not in the code
+   rejected CWE-78 on &#x27;os.system&#x27; — provably not in the code
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/appsec/finding-dedup-and-verification/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/finding-dedup-and-verification/scripts/finding_dedup_and_verification.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Collapse raw findings to distinct defects across aliases and tools, then reject the ones whose symbols are not in the file.
-
-This is the executable half of the `finding-dedup-and-verification` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-from dataclasses import dataclass, field
-
-SOURCE = {
-&quot;billing.py&quot;: &#x27;&#x27;&#x27;
-import sqlite3
-
-def build_filter(owner):
-    return &quot;WHERE owner = &#x27;&quot; + owner + &quot;&#x27;&quot;
-
-def list_reports(conn, owner):
-    return conn.execute(&quot;SELECT * FROM reports &quot; + build_filter(owner))
-
-def total(conn):
-    return conn.execute(&quot;SELECT SUM(amount) FROM reports&quot;).fetchone()
-&#x27;&#x27;&#x27;
-}
-
-@dataclass
-class Finding:
-    src: str; cwe: str; file: str; line: int; symbol: str
-    rationale: str; confidence: float = 1.0
-
-RAW = [
- Finding(&quot;grep&quot;,   &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
-         &quot;execute() with string concatenation&quot;, 0.5),
- Finding(&quot;taint&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 7,  &quot;execute&quot;,
-         &quot;owner flows into the query via build_filter&quot;, 1.0),
- Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 8,  &quot;execute&quot;,
-         &quot;user-controlled owner is interpolated into SQL&quot;, 0.93),
- Finding(&quot;model&quot;,  &quot;CWE-943&quot;,&quot;billing.py&quot;, 7,  &quot;execute&quot;,
-         &quot;query language injection&quot;, 0.71),
- Finding(&quot;model&quot;,  &quot;CWE-89&quot;, &quot;billing.py&quot;, 11, &quot;execute&quot;,
-         &quot;total() builds a query from input&quot;, 0.44),
- Finding(&quot;model&quot;,  &quot;CWE-798&quot;,&quot;billing.py&quot;, 3,  &quot;DB_PASSWORD&quot;,
-         &quot;hardcoded database password in DB_PASSWORD&quot;, 0.88),
- Finding(&quot;model&quot;,  &quot;CWE-78&quot;, &quot;billing.py&quot;, 6,  &quot;os.system&quot;,
-         &quot;shell invocation with user data&quot;, 0.67),
-]
-print(f&quot;{len(RAW)} raw findings from 3 tracks&quot;)
-for f in RAW:
-    print(f&quot;   {f.src:6s}{f.cwe:9s}{f.file}:{f.line:&lt;3}{f.symbol:14s}conf={f.confidence:.2f}&quot;)
-
-import ast
-
-def enclosing_function(src, line):
-    tree = ast.parse(src)
-    best = None
-    for fn in [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]:
-        end = max((getattr(n, &quot;lineno&quot;, fn.lineno) for n in ast.walk(fn)),
-                  default=fn.lineno)
-        if fn.lineno &lt;= line &lt;= end + 1:
-            if best is None or fn.lineno &gt; best.lineno: best = fn
-    return best.name if best else None
-
-CWE_ALIASES = {&quot;CWE-943&quot;: &quot;CWE-89&quot;, &quot;CWE-89&quot;: &quot;CWE-89&quot;}
-
-def defect_key(f, src):
-    fn = enclosing_function(src, f.line)
-    cwe = CWE_ALIASES.get(f.cwe, f.cwe)
-    return (f.file, fn, f.symbol, cwe)
-
-SRC = SOURCE[&quot;billing.py&quot;]
-clusters = {}
-for f in RAW:
-    clusters.setdefault(defect_key(f, SRC), []).append(f)
-
-RANK = {&quot;taint&quot;: 3, &quot;grep&quot;: 1, &quot;model&quot;: 2}
-deduped = []
-for key, group in clusters.items():
-    best = max(group, key=lambda f: (RANK[f.src], f.confidence))
-    deduped.append({&quot;key&quot;: key, &quot;keep&quot;: best, &quot;merged&quot;: len(group),
-                    &quot;sources&quot;: sorted({g.src for g in group})})
-
-print(f&quot;{len(RAW)} findings → {len(deduped)} distinct defects\n&quot;)
-for d in deduped:
-    file, fn, sym, cwe = d[&quot;key&quot;]
-    print(f&quot;   {cwe:8s}{str(fn):14s}{sym:14s}merged {d[&#x27;merged&#x27;]} &quot;
-          f&quot;from {d[&#x27;sources&#x27;]}  (kept {d[&#x27;keep&#x27;].src})&quot;)
-
-def verify(finding, src):
-    tree = ast.parse(src)
-    problems = []
-
-    # check 1 — does the referenced symbol exist at all?
-    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
-    names |= {n.attr for n in ast.walk(tree) if isinstance(n, ast.Attribute)}
-    names |= {n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)}
-    root = finding.symbol.split(&quot;.&quot;)[0]
-    if finding.symbol not in names and root not in names:
-        problems.append(f&quot;symbol {finding.symbol!r} does not appear in the file&quot;)
-
-    # check 2 — is the module it implies actually imported?
-    imports = {a.name.split(&quot;.&quot;)[0] for n in ast.walk(tree)
-               if isinstance(n, ast.Import) for a in n.names}
-    imports |= {n.module.split(&quot;.&quot;)[0] for n in ast.walk(tree)
-                if isinstance(n, ast.ImportFrom) and n.module}
-    if &quot;.&quot; in finding.symbol and root not in imports:
-        problems.append(f&quot;module {root!r} is never imported&quot;)
-
-    # check 3 — is the line inside a function at all?
-    if enclosing_function(src, finding.line) is None:
-        problems.append(f&quot;line {finding.line} is not inside any function&quot;)
-
-    return (not problems), problems
-
-print(f&quot;{&#x27;cwe&#x27;:9s}{&#x27;symbol&#x27;:14s}{&#x27;line&#x27;:&gt;5}  verdict&quot;)
-print(&quot;-&quot; * 74)
-verified, rejected = [], []
-for d in deduped:
-    f = d[&quot;keep&quot;]
-    ok, problems = verify(f, SRC)
-    (verified if ok else rejected).append((f, problems))
-    print(f&quot;{f.cwe:9s}{f.symbol:14s}{f.line:&gt;5}  &quot;
-          f&quot;{&#x27;verified&#x27; if ok else &#x27;REJECTED — &#x27; + problems[0]}&quot;)
-print(f&quot;\n{len(verified)} verified, {len(rejected)} rejected as hallucinations&quot;)
-
-# Verify the stage pays for itself.
-STAGE7_COUNT = len(RAW)
-after8 = len(deduped)
-after9 = len(verified)
-print(f&quot;stage 7 emitted        {STAGE7_COUNT}&quot;)
-print(f&quot;after stage 8 (dedup)  {after8}   ({1-after8/STAGE7_COUNT:.0%} removed)&quot;)
-print(f&quot;after stage 9 (verify) {after9}   ({1-after9/STAGE7_COUNT:.0%} removed overall)&quot;)
-
-TRUE_DEFECTS = {(&quot;billing.py&quot;, &quot;list_reports&quot;, &quot;execute&quot;, &quot;CWE-89&quot;)}
-found = {d[&quot;key&quot;] for d in deduped if any(d[&quot;keep&quot;] is f for f, _ in verified)}
-tp = len(found &amp; TRUE_DEFECTS); fp = len(found - TRUE_DEFECTS)
-print(f&quot;\nsurviving: tp={tp} fp={fp}&quot;)
-for f, _ in rejected:
-    print(f&quot;   rejected {f.cwe} on {f.symbol!r} — provably not in the code&quot;)
-assert any(&quot;DB_PASSWORD&quot; in f.symbol for f, _ in rejected)
-assert any(&quot;os.system&quot; in f.symbol for f, _ in rejected)
-print(&quot;\nBoth hallucinations named things that are not in the file. No model,&quot;)
-print(&quot;no judgement, no cost — just the AST disagreeing with the claim.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Both hallucinations named things that are not in the file. No model,
+no judgement, no cost — just the AST disagreeing with the claim.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Seven raw findings collapse to four distinct defects, with the CWE-943 alias merging into CWE-89 and the taint result kept over grep and model duplicates. Contextual verification then rejects the hallucinated <code>DB_PASSWORD</code> and <code>os.system</code> findings because neither symbol appears in the file and <code>os</code> is never imported, leaving the real SQL injection.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add a fourth verification check: does the CWE class match the sink type? A CWE-22 finding on a <code>conn.execute</code> call is provably mislabelled, and that check costs nothing to run.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.5.html">B2.5 · Feasibility filtering and reachability</a></strong></p>

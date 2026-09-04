@@ -48,57 +48,42 @@ rather than an intention:</p>
 <p>An untested stop button is a belief. The purpose of this lesson is to convert it
 into a measurement, because the measurement is what an auditor, a regulator and
 a board will each ask for in different words.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill prints the vague answers beside the concrete ones, then establishes what each mechanism actually survives — killing the process does not survive a restart, revoking the identity does — and reports a measured twelve-second time-to-stop from a game day rather than an estimate.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/stop-authority-readiness/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: stop-authority-readiness
+<p>The skill prints the vague answers beside the concrete ones, then establishes what each mechanism actually survives — killing the process does not survive a restart, revoking the identity does — and reports a measured twelve-second time-to-stop from a game day rather than an estimate.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/stop-authority-readiness/SKILL.md"><code>skills/response/stop-authority-readiness/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: stop-authority-readiness
 description: &gt;-
   Turn &quot;we can stop it&quot; into a named mechanism with an owner, a measured
   time-to-stop from a game day, and a stated cost of stopping. Use to answer how
   long it would actually take to stop a running agent, before granting autonomy,
   and whenever stop authority has never been exercised.
 allowed-tools: Read, Grep, Glob
----
-
-# Killing the process does not survive a restart
-
-Stop authority is usually described rather than specified: somebody can stop it,
+</code></pre>
+<h1>Killing the process does not survive a restart</h1>
+<p>Stop authority is usually described rather than specified: somebody can stop it,
 probably quickly, and nobody has tried. Three questions turn that into a control
 — which mechanism, who may invoke it without asking, and how long it takes when
-measured rather than estimated.
-
-## When to use this
-
-Before raising an agent&#x27;s autonomy, at any authorisation to run unattended, and
-once a year as a game day.
-
-## Procedure
-
-**1 — Write the vague answers down and then the concrete ones.** Side by side.
-&quot;Ops can kill it&quot; against &quot;the on-call SRE revokes the workload identity in the
-identity console, and here is the runbook&quot;. The contrast is what gets the work
-scheduled.
-
-**2 — Enumerate mechanisms and what each survives.** Killing the process does not
+measured rather than estimated.</p>
+<h2>When to use this</h2>
+<p>Before raising an agent's autonomy, at any authorisation to run unattended, and
+once a year as a game day.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Write the vague answers down and then the concrete ones.</strong> Side by side.
+"Ops can kill it" against "the on-call SRE revokes the workload identity in the
+identity console, and here is the runbook". The contrast is what gets the work
+scheduled.</p>
+<p><strong>2 — Enumerate mechanisms and what each survives.</strong> Killing the process does not
 survive a restart or a scheduler. Revoking the identity does. Blocking egress
-stops the effect and not the run. Record what each actually stops.
-
-**3 — Name who may invoke it without asking.** Stop authority that needs an
+stops the effect and not the run. Record what each actually stops.</p>
+<p><strong>3 — Name who may invoke it without asking.</strong> Stop authority that needs an
 approval is not stop authority; it is an escalation. If nobody may act alone,
-that is the finding.
-
-**4 — Run a game day and measure.** From decision to the agent being unable to
+that is the finding.</p>
+<p><strong>4 — Run a game day and measure.</strong> From decision to the agent being unable to
 act. Report seconds. An estimate is not a measurement and this is the number
-that is always wrong in the optimistic direction.
-
-**5 — Cost the stop.** What stopping costs per minute in halted legitimate work.
+that is always wrong in the optimistic direction.</p>
+<p><strong>5 — Cost the stop.</strong> What stopping costs per minute in halted legitimate work.
 Somebody will ask, and having the number is what makes the decision fast during
-an incident.
-
-## Output contract
-
-```json
-{
+an incident.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;answers&quot;: [{&quot;question&quot;: &quot;str&quot;, &quot;vague&quot;: &quot;str&quot;, &quot;concrete&quot;: &quot;str&quot;}],
   &quot;mechanisms&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;stops&quot;: [&quot;str&quot;], &quot;survives_restart&quot;: false}],
   &quot;authority&quot;: {&quot;may_invoke_alone&quot;: [&quot;str&quot;], &quot;approval_required&quot;: false},
@@ -106,124 +91,58 @@ an incident.
   &quot;cost_per_minute&quot;: 0.0,
   &quot;ready&quot;: false
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Process termination as the mechanism.</strong> The scheduler restarts it.</li>
+<li><strong>An estimated time-to-stop.</strong> Measure it once and the estimate is revealed.</li>
+<li><strong>Stop authority behind an approval.</strong> That is escalation with a different
+  name.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>who         VAGUE    the security team
+            CONCRETE on-call SRE, no approval required for non-human identities
 
-## Failure modes
+mechanism   VAGUE    we can turn off the agents
+            CONCRETE revoke the SPIFFE identity at the gateway (survives restart)
 
-- **Process termination as the mechanism.** The scheduler restarts it.
-- **An estimated time-to-stop.** Measure it once and the estimate is revealed.
-- **Stop authority behind an approval.** That is escalation with a different
-  name.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+time        VAGUE    quickly
+            CONCRETE measured 12s decision→first failed call, game day 2026-07-04
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+breaks      VAGUE    not much
+            CONCRETE auto-remediation pauses; ticket queue grows ~40/hour; agreed with the service owner 2026-05-11
 
-from cyber_commons_skill_runtime import run_skill
+restart     VAGUE    when it&#x27;s safe
+            CONCRETE security lead, after the C1.2 containment suite passes on the new build
 
-# Split skills/response/stop-authority-readiness/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/stop-authority-readiness/scripts/stop_authority_readiness.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Turn stop authority from a vague answer into a named mechanism with a measured time-to-stop and a known cost.
+mechanism                 secs  stops it   survives restart
+------------------------------------------------------------
+kill the process             2      True              False
+network quarantine           5     False              False
+revoke the identity         12      True               True
+rotate the credential      420      True               True
 
-This is the executable half of the `stop-authority-readiness` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+The fastest mechanism is the one that does not survive a restart.
+Speed without persistence is a pause, not a stop.
+step                                     t+s
+----------------------------------------------
+decision made                              0
+on-call authenticates to the IdP           4
+identity revoked                           9
+gateway cache expires                     12
+agent&#x27;s next call fails                   12
+confirmed in telemetry                    38
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
+measured time-to-stop: 12s
+time-to-confirm:       38s
+   at    60/min a 12s stop still permits   12 further actions
+   at   300/min a 12s stop still permits   60 further actions
+   at  1200/min a 12s stop still permits  240 further actions
 
-VAGUE = {
- &quot;who&quot;:       &quot;the security team&quot;,
- &quot;mechanism&quot;: &quot;we can turn off the agents&quot;,
- &quot;time&quot;:      &quot;quickly&quot;,
- &quot;breaks&quot;:    &quot;not much&quot;,
- &quot;restart&quot;:   &quot;when it&#x27;s safe&quot;,
-}
-CONCRETE = {
- &quot;who&quot;:       &quot;on-call SRE, no approval required for non-human identities&quot;,
- &quot;mechanism&quot;: &quot;revoke the SPIFFE identity at the gateway (survives restart)&quot;,
- &quot;time&quot;:      &quot;measured 12s decision→first failed call, game day 2026-07-04&quot;,
- &quot;breaks&quot;:    &quot;auto-remediation pauses; ticket queue grows ~40/hour; &quot;
-              &quot;agreed with the service owner 2026-05-11&quot;,
- &quot;restart&quot;:   &quot;security lead, after the C1.2 containment suite passes on the new build&quot;,
-}
-for k in VAGUE:
-    print(f&quot;{k:11s} VAGUE    {VAGUE[k]}&quot;)
-    print(f&quot;{&#x27;&#x27;:11s} CONCRETE {CONCRETE[k]}\n&quot;)
+as usually documented: ready=False
+   ⚠ at least one answer is not specific
+   ⚠ time-to-stop has never been measured
+   ⚠ not tested in the last 180 days
 
-from dataclasses import dataclass
-
-@dataclass
-class Agent:
-    name: str; running: bool = True; identity_valid: bool = True
-    def can_act(self): return self.running and self.identity_valid
-
-MECHANISMS = {
- &quot;kill the process&quot;:      (2,   lambda a: setattr(a, &quot;running&quot;, False)),
- &quot;network quarantine&quot;:    (5,   lambda a: None),
- &quot;revoke the identity&quot;:   (12,  lambda a: setattr(a, &quot;identity_valid&quot;, False)),
- &quot;rotate the credential&quot;: (420, lambda a: setattr(a, &quot;identity_valid&quot;, False)),
-}
-print(f&quot;{&#x27;mechanism&#x27;:24s}{&#x27;secs&#x27;:&gt;6}{&#x27;stops it&#x27;:&gt;10}{&#x27;survives restart&#x27;:&gt;19}&quot;)
-print(&quot;-&quot; * 60)
-for name, (secs, apply) in MECHANISMS.items():
-    a = Agent(&quot;patch-agent&quot;)
-    apply(a)
-    stopped = not a.can_act()
-    a.running = True                      # a supervisor restarts the process
-    survives = not a.can_act()
-    print(f&quot;{name:24s}{secs:&gt;6}{str(stopped):&gt;10}{str(survives):&gt;19}&quot;)
-print(&quot;\nThe fastest mechanism is the one that does not survive a restart.&quot;)
-print(&quot;Speed without persistence is a pause, not a stop.&quot;)
-
-GAME_DAY = [
- (&quot;decision made&quot;,                    0),
- (&quot;on-call authenticates to the IdP&quot;, 4),
- (&quot;identity revoked&quot;,                 9),
- (&quot;gateway cache expires&quot;,            12),
- (&quot;agent&#x27;s next call fails&quot;,          12),
- (&quot;confirmed in telemetry&quot;,           38),
-]
-print(f&quot;{&#x27;step&#x27;:38s}{&#x27;t+s&#x27;:&gt;6}&quot;)
-print(&quot;-&quot; * 46)
-for step, t in GAME_DAY: print(f&quot;{step:38s}{t:&gt;6}&quot;)
-mttstop = GAME_DAY[4][1]
-print(f&quot;\nmeasured time-to-stop: {mttstop}s&quot;)
-print(f&quot;time-to-confirm:       {GAME_DAY[-1][1]}s&quot;)
-
-def cost_of_stop(rate_per_min, seconds):
-    return round(rate_per_min * seconds / 60)
-for rate in (60, 300, 1200):
-    print(f&quot;   at {rate:&gt;5}/min a {mttstop}s stop still permits &quot;
-          f&quot;{cost_of_stop(rate, mttstop):&gt;4} further actions&quot;)
-
-def stop_authority_ready(answers, measured_seconds, tested_days_ago):
-    problems = []
-    if any(len(v.split()) &lt; 4 for v in answers.values()):
-        problems.append(&quot;at least one answer is not specific&quot;)
-    if measured_seconds is None:
-        problems.append(&quot;time-to-stop has never been measured&quot;)
-    if tested_days_ago is None or tested_days_ago &gt; 180:
-        problems.append(&quot;not tested in the last 180 days&quot;)
-    return (not problems), problems
-
-for label, ans, secs, days in ((&quot;as usually documented&quot;, VAGUE, None, None),
-                               (&quot;after a game day&quot;, CONCRETE, 12, 41)):
-    ok, problems = stop_authority_ready(ans, secs, days)
-    print(f&quot;\n{label}: ready={ok}&quot;)
-    for p in problems: print(f&quot;   ⚠ {p}&quot;)
-assert stop_authority_ready(CONCRETE, 12, 41)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+after a game day: ready=True</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The vague and concrete answers print side by side. Killing the process stops the agent but does not survive a restart, while identity revocation does. The game-day timeline gives a measured 12-second time-to-stop, permitting 12 to 240 further actions depending on rate. The readiness check fails the vague version on three counts and passes the tested one.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the game day. The deliverable is the number, and the number is what goes in the evidence pack for E1.7 and the board slide for E3.5. An untested stop button is a belief.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.8.html">D2.8 · Regulatory clock</a></strong></p>

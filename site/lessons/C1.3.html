@@ -45,214 +45,89 @@ benchmark you are reading — and so can your own team, without meaning to.</p>
 </ol>
 <p>Red-teaming evaluation means running these three against your own numbers before
 someone else does.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Before believing an evaluation, score a harness with no capability at all. The skill does exactly that against the skewed corpus, then rebalances and re-scores — and separately checks whether the matcher rewards answers naming the wrong directory.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/redteam/eval-corpus-integrity-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: eval-corpus-integrity-check
+<p>Before believing an evaluation, score a harness with no capability at all. The skill does exactly that against the skewed corpus, then rebalances and re-scores — and separately checks whether the matcher rewards answers naming the wrong directory.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/redteam/eval-corpus-integrity-check/SKILL.md"><code>skills/redteam/eval-corpus-integrity-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: eval-corpus-integrity-check
 description: &gt;-
   Attack an evaluation rather than a system: score a deliberately
   zero-capability harness against the corpus and see what the corpus alone
   awards it, then rebalance and re-score. Use before trusting any benchmark
   number, your own included.
 allowed-tools: Read, Grep, Glob
----
-
-# Score the null harness first
-
-An evaluation is a claim about a system, and it is only as good as the corpus
+</code></pre>
+<h1>Score the null harness first</h1>
+<p>An evaluation is a claim about a system, and it is only as good as the corpus
 underneath it. The cheapest way to find out is to score a harness that has no
-capability at all — one that answers from the corpus&#x27;s own skew. A high score
+capability at all — one that answers from the corpus's own skew. A high score
 there is a measurement of the corpus, and every number derived from it inherits
-the problem.
-
-## When to use this
-
-Before publishing an evaluation, before believing one, and whenever a benchmark
-result is surprisingly good.
-
-## Procedure
-
-**1 — Build the null harness.** No analysis: answer with whatever the corpus&#x27;s
-majority class is. It should be trivial to write, and writing it takes minutes.
-
-**2 — Score it against the corpus as it stands.** Record conformance and
+the problem.</p>
+<h2>When to use this</h2>
+<p>Before publishing an evaluation, before believing one, and whenever a benchmark
+result is surprisingly good.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Build the null harness.</strong> No analysis: answer with whatever the corpus's
+majority class is. It should be trivial to write, and writing it takes minutes.</p>
+<p><strong>2 — Score it against the corpus as it stands.</strong> Record conformance and
 accuracy separately — a null harness usually conforms perfectly, which is itself
-worth knowing about conformance as a metric.
-
-**3 — Rebalance and re-score.** Equalise the classes and run the same null
+worth knowing about conformance as a metric.</p>
+<p><strong>3 — Rebalance and re-score.</strong> Equalise the classes and run the same null
 harness. The drop is the portion of the original score that came from skew
-rather than capability.
-
-**4 — Check the matcher, not just the corpus.** Score answers that name the
+rather than capability.</p>
+<p><strong>4 — Check the matcher, not just the corpus.</strong> Score answers that name the
 wrong directory. If they still score, the matcher is measuring string similarity
-rather than correctness, and it will flatter every harness equally.
-
-**5 — Report the null score alongside every real one.** A harness scoring 0.85
+rather than correctness, and it will flatter every harness equally.</p>
+<p><strong>5 — Report the null score alongside every real one.</strong> A harness scoring 0.85
 against a null of 0.85 has demonstrated nothing, and that comparison is the only
-honest way to read the number.
-
-## Output contract
-
-```json
-{
+honest way to read the number.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;corpus&quot;: {&quot;n&quot;: 0, &quot;skew&quot;: 0.0, &quot;classes&quot;: {&quot;str&quot;: 0}},
   &quot;null_harness&quot;: {&quot;conformance&quot;: 0.0, &quot;accuracy_skewed&quot;: 0.0, &quot;accuracy_balanced&quot;: 0.0},
   &quot;matcher&quot;: {&quot;kind&quot;: &quot;str&quot;, &quot;wrong_directory_scores&quot;: 0.0},
   &quot;verdict&quot;: {&quot;score_from_skew&quot;: 0.0, &quot;score_from_capability&quot;: 0.0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting accuracy without the null baseline.</strong> It is unreadable without
+  one.</li>
+<li><strong>Conflating conformance with accuracy.</strong> The null harness conforms.</li>
+<li><strong>Trusting a matcher that has never been attacked.</strong> Try to fool it before you
+  publish with it.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>class balance: Counter({&#x27;CWE-89&#x27;: 32, &#x27;CWE-78&#x27;: 3, &#x27;CWE-22&#x27;: 3, &#x27;CWE-798&#x27;: 2})
+the null harness, scored on the skewed corpus:
+   conformance      1.00   ← quotable as &#x27;100%&#x27;
+   expert accuracy  0.90
 
-## Failure modes
+Zero capability. Both numbers look like a working product.
+same null harness:
+   skewed corpus (80% CWE-89)   conformance 1.00  expert accuracy 0.90
+   balanced corpus              conformance 1.00  expert accuracy 0.62
 
-- **Reporting accuracy without the null baseline.** It is unreadable without
-  one.
-- **Conflating conformance with accuracy.** The null harness conforms.
-- **Trusting a matcher that has never been attacked.** Try to fool it before you
-  publish with it.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Balancing the corpus removed most of the fake score. Nothing about the
+harness changed.
+path_key (parent + filename)       expert accuracy 0.25
+basename only (the bug)            expert accuracy 1.00
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+Every answer names the wrong file. The basename matcher scores them
+as correct, because the corpus reuses numeric filenames across directories.
+audit of the skewed benchmark with a basename matcher:
+   majority_class_share                   0.8
+   score_of_always_guessing_majority      0.9
+   reported_expert_accuracy               0.9
+   lift_over_trivial_baseline             0.0
+   matcher_collisions                     0
+   conformance_reported_as_quality        False
 
-from cyber_commons_skill_runtime import run_skill
+audit of the balanced benchmark with path_key:
+   majority_class_share                   0.25
+   score_of_always_guessing_majority      0.62
+   reported_expert_accuracy               0.62
+   lift_over_trivial_baseline             0.0
+   matcher_collisions                     0
+   conformance_reported_as_quality        True
 
-# Split skills/redteam/eval-corpus-integrity-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/redteam/eval-corpus-integrity-check/scripts/eval_corpus_integrity_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Score a zero-capability harness against a skewed corpus and again against a balanced one, and watch the number collapse.
-
-This is the executable half of the `eval-corpus-integrity-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import json
-from dataclasses import dataclass
-
-@dataclass
-class Truth:
-    qid: str; cwe: str; file: str
-
-def make_corpus(n=40, skew=0.8):
-    &quot;&quot;&quot;A corpus where `skew` of the answers are one class — very common.&quot;&quot;&quot;
-    truths = {}
-    n_major = int(n * skew)
-    for i in range(1, n + 1):
-        cwe = &quot;CWE-89&quot; if i &lt;= n_major else [&quot;CWE-78&quot;, &quot;CWE-22&quot;, &quot;CWE-798&quot;][i % 3]
-        truths[f&quot;q{i}&quot;] = Truth(f&quot;q{i}&quot;, cwe, f&quot;{cwe}/{i}.py&quot;)
-    return truths
-
-SKEWED = make_corpus(40, skew=0.8)
-from collections import Counter
-print(&quot;class balance:&quot;, Counter(t.cwe for t in SKEWED.values()))
-
-class NullHarness:
-    &quot;&quot;&quot;No capability whatsoever. Emits perfect JSON and always guesses CWE-89.&quot;&quot;&quot;
-    def answer(self, qid, truth):
-        return json.dumps({&quot;qid&quot;: qid, &quot;cwe&quot;: &quot;CWE-89&quot;, &quot;file&quot;: truth.file,
-                           &quot;line&quot;: 1, &quot;rationale&quot;: &quot;user input is concatenated&quot;})
-
-null = NullHarness()
-ANSWERS = {q: null.answer(q, t) for q, t in SKEWED.items()}
-
-def path_key(p):
-    parts = [x for x in p.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;) if x not in (&quot;&quot;, &quot;.&quot;)]
-    return &quot;/&quot;.join(parts[-2:]) if len(parts) &gt; 1 else (parts[-1] if parts else &quot;&quot;)
-def basename(p): return p.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;)[-1]
-
-def evaluate(answers, truths, matcher=path_key):
-    conforming = expert = 0
-    for qid, t in truths.items():
-        try:
-            d = json.loads(answers[qid])
-        except json.JSONDecodeError:
-            continue
-        conforming += 1
-        if matcher(d[&quot;file&quot;]) != matcher(t.file):
-            continue
-        expert += 1.0 if d[&quot;cwe&quot;].upper() == t.cwe else 0.5
-    return {&quot;conformance&quot;: conforming / len(truths),
-            &quot;expert_accuracy&quot;: expert / len(truths)}
-
-r = evaluate(ANSWERS, SKEWED)
-print(&quot;the null harness, scored on the skewed corpus:&quot;)
-print(f&quot;   conformance      {r[&#x27;conformance&#x27;]:.2f}   ← quotable as &#x27;100%&#x27;&quot;)
-print(f&quot;   expert accuracy  {r[&#x27;expert_accuracy&#x27;]:.2f}&quot;)
-print(&quot;\nZero capability. Both numbers look like a working product.&quot;)
-
-BALANCED = {}
-for i in range(1, 41):
-    cwe = [&quot;CWE-89&quot;, &quot;CWE-78&quot;, &quot;CWE-22&quot;, &quot;CWE-798&quot;][i % 4]
-    BALANCED[f&quot;q{i}&quot;] = Truth(f&quot;q{i}&quot;, cwe, f&quot;{cwe}/{i}.py&quot;)
-ANS_B = {q: null.answer(q, t) for q, t in BALANCED.items()}
-
-print(&quot;same null harness:&quot;)
-for label, truths, ans in ((&quot;skewed corpus (80% CWE-89)&quot;, SKEWED, ANSWERS),
-                           (&quot;balanced corpus&quot;, BALANCED, ANS_B)):
-    r = evaluate(ans, truths)
-    print(f&quot;   {label:28s} conformance {r[&#x27;conformance&#x27;]:.2f}  &quot;
-          f&quot;expert accuracy {r[&#x27;expert_accuracy&#x27;]:.2f}&quot;)
-print(&quot;\nBalancing the corpus removed most of the fake score. Nothing about the&quot;)
-print(&quot;harness changed.&quot;)
-
-# exploit 3: a matcher that compares bare filenames.
-# Build answers that point at the WRONG directory but the right filename.
-WRONG_DIR = {}
-for q, t in BALANCED.items():
-    n = q[1:]
-    WRONG_DIR[q] = json.dumps({&quot;qid&quot;: q, &quot;cwe&quot;: t.cwe,
-                               &quot;file&quot;: f&quot;CWE-89/{n}.py&quot;,     # wrong dir, right basename
-                               &quot;line&quot;: 1, &quot;rationale&quot;: &quot;untrusted input&quot;})
-
-for matcher, name in ((path_key, &quot;path_key (parent + filename)&quot;),
-                      (basename, &quot;basename only (the bug)&quot;)):
-    r = evaluate(WRONG_DIR, BALANCED, matcher)
-    print(f&quot;{name:34s} expert accuracy {r[&#x27;expert_accuracy&#x27;]:.2f}&quot;)
-print(&quot;\nEvery answer names the wrong file. The basename matcher scores them&quot;)
-print(&quot;as correct, because the corpus reuses numeric filenames across directories.&quot;)
-
-def audit_benchmark(truths, answers, matcher):
-    from collections import Counter
-    counts = Counter(t.cwe for t in truths.values())
-    majority_share = max(counts.values()) / len(truths)
-    always_majority = {q: json.dumps({&quot;qid&quot;: q, &quot;cwe&quot;: counts.most_common(1)[0][0],
-                                      &quot;file&quot;: t.file, &quot;line&quot;: 1, &quot;rationale&quot;: &quot;x&quot;})
-                       for q, t in truths.items()}
-    floor = evaluate(always_majority, truths, matcher)[&quot;expert_accuracy&quot;]
-    real  = evaluate(answers, truths, matcher)
-    collisions = len(truths) - len({matcher(t.file) for t in truths.values()})
-    return {
-      &quot;majority_class_share&quot;: round(majority_share, 2),
-      &quot;score_of_always_guessing_majority&quot;: round(floor, 2),
-      &quot;reported_expert_accuracy&quot;: round(real[&quot;expert_accuracy&quot;], 2),
-      &quot;lift_over_trivial_baseline&quot;: round(real[&quot;expert_accuracy&quot;] - floor, 2),
-      &quot;matcher_collisions&quot;: collisions,
-      &quot;conformance_reported_as_quality&quot;: real[&quot;expert_accuracy&quot;] &lt; real[&quot;conformance&quot;] - 0.2,
-    }
-
-print(&quot;audit of the skewed benchmark with a basename matcher:&quot;)
-for k, v in audit_benchmark(SKEWED, ANSWERS, basename).items():
-    print(f&quot;   {k:38s} {v}&quot;)
-print(&quot;\naudit of the balanced benchmark with path_key:&quot;)
-for k, v in audit_benchmark(BALANCED, ANS_B, path_key).items():
-    print(f&quot;   {k:38s} {v}&quot;)
-
-a = audit_benchmark(BALANCED, ANS_B, path_key)
-assert a[&quot;lift_over_trivial_baseline&quot;] &lt;= 0.01
-print(&quot;\nThe null harness has ~zero lift over the trivial baseline, which is the&quot;)
-print(&quot;only honest way to describe it.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The null harness has ~zero lift over the trivial baseline, which is the
+only honest way to describe it.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>On the skewed corpus the zero-capability harness scores conformance 1.00 and expert accuracy around 0.85. Balancing the corpus drops expert accuracy to roughly 0.25. Answers naming the wrong directory score near zero under <code>path_key</code> and near 1.00 under a basename matcher. The audit reports the majority-class share, the trivial baseline, the matcher collisions, and near-zero lift.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the audit against a benchmark result your organisation relies on. Two questions decide it: what does always guessing the majority class score, and does the matcher collide? Most published numbers answer neither.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C1.4.html">C1.4 · Reporting agentic findings</a></strong></p>

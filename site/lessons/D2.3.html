@@ -40,10 +40,8 @@ because authority narrows down the chain, the earlier actors typically had
 <p>The undercount is systematic and it grows with delegation depth, which is the
 operational reason B2.0 bounds delegation depth in the first place.</p></div><div class="nbmd"><h2>3 · Scoping as a skill</h2>
 <p>Scoping a human incident asks where someone logged in. Scoping this one asks what the agent <strong>decided</strong> — every action was individually authorised, so nothing looks wrong at the authentication layer.</p>
-<p>Two fields in the contract carry most of the weight. <code>reach</code> and <code>confirmed_exfiltration</code> are separate numbers, because reach is the scope until proven otherwise and the smaller number must never stand in for the larger in a notification decision. And <code>does_not_stop</code> makes containment state its own limits.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/secops/incident-scoping/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: incident-scoping
+<p>Two fields in the contract carry most of the weight. <code>reach</code> and <code>confirmed_exfiltration</code> are separate numbers, because reach is the scope until proven otherwise and the smaller number must never stand in for the larger in a notification decision. And <code>does_not_stop</code> makes containment state its own limits.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/secops/incident-scoping/SKILL.md"><code>skills/secops/incident-scoping/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: incident-scoping
 description: &gt;-
   Scope an incident in which an agent was the actor — what it touched, what it
   changed, what it may have exfiltrated, and where containment must cut. Use
@@ -51,56 +49,42 @@ description: &gt;-
   autonomous system did, deciding what to revoke, or sizing notification
   obligations.
 allowed-tools: Read, Grep, Bash
----
-
-# Scoping an agentic incident
-
-Scoping a human incident asks where someone logged in. Scoping an agentic one
-asks what the agent **decided**, because a compromised agent&#x27;s actions are all
+</code></pre>
+<h1>Scoping an agentic incident</h1>
+<p>Scoping a human incident asks where someone logged in. Scoping an agentic one
+asks what the agent <strong>decided</strong>, because a compromised agent's actions are all
 individually authorised. Nothing looks anomalous at the authentication layer;
-the anomaly is in the sequence.
-
-## When to use this
-
-Any incident where an agent, an automated pipeline, or an AI-driven tool
-performed actions under investigation.
-
-## Procedure
-
-**1 — Fix the window.** Establish the first suspicious decision, not the first
+the anomaly is in the sequence.</p>
+<h2>When to use this</h2>
+<p>Any incident where an agent, an automated pipeline, or an AI-driven tool
+performed actions under investigation.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Fix the window.</strong> Establish the first suspicious decision, not the first
 alert. Work backwards from the earliest action you cannot explain; the trigger
-is usually earlier than the detection by the length of one task loop.
-
-**2 — Reconstruct the decision chain.** For the window, list every action with
+is usually earlier than the detection by the length of one task loop.</p>
+<p><strong>2 — Reconstruct the decision chain.</strong> For the window, list every action with
 the input that motivated it. The critical question is which input entered the
-context from **outside the trust boundary** — a fetched page, an issue comment,
-a dependency&#x27;s README, a tool description. That input is the likely root cause,
-and it is invisible if you only log tool calls and not their justification.
-
-**3 — Separate authority from behaviour.** For each action ask: was it within
-the agent&#x27;s granted authority? Actions that were authorised but wrong tell you
+context from <strong>outside the trust boundary</strong> — a fetched page, an issue comment,
+a dependency's README, a tool description. That input is the likely root cause,
+and it is invisible if you only log tool calls and not their justification.</p>
+<p><strong>3 — Separate authority from behaviour.</strong> For each action ask: was it within
+the agent's granted authority? Actions that were authorised but wrong tell you
 the grant was too broad. Actions that exceeded authority tell you a control
-failed. These lead to different fixes and must not be pooled.
-
-**4 — Establish data reach.** What did the agent read, and where could it have
-sent it? Reach is bounded by the agent&#x27;s egress, not by what it appears to have
+failed. These lead to different fixes and must not be pooled.</p>
+<p><strong>4 — Establish data reach.</strong> What did the agent read, and where could it have
+sent it? Reach is bounded by the agent's egress, not by what it appears to have
 sent — a request body you cannot see is still reach. State reach and confirmed
 exfiltration as separate numbers, and never let the smaller one stand in for
-the larger in a notification decision.
-
-**5 — Decide the containment cut.** Options, in increasing cost: revoke the
-agent&#x27;s credential, disable the trigger, quarantine the workload, disable the
+the larger in a notification decision.</p>
+<p><strong>5 — Decide the containment cut.</strong> Options, in increasing cost: revoke the
+agent's credential, disable the trigger, quarantine the workload, disable the
 whole class of agents. Choose by blast radius, not by convenience, and record
-what the cut does **not** stop — sibling agents on the same shared service
-account almost always survive a credential revocation aimed at one of them.
-
-**6 — Preserve evidence the agent could alter.** If the agent can write to the
-log store, the logs are not evidence. Snapshot first, then contain.
-
-## Output contract
-
-```json
-{
+what the cut does <strong>not</strong> stop — sibling agents on the same shared service
+account almost always survive a credential revocation aimed at one of them.</p>
+<p><strong>6 — Preserve evidence the agent could alter.</strong> If the agent can write to the
+log store, the logs are not evidence. Snapshot first, then contain.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;window&quot;: {&quot;first_suspicious_action&quot;: &quot;str&quot;, &quot;detected_at&quot;: &quot;str&quot;, &quot;gap_seconds&quot;: 0},
   &quot;chain&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;motivating_input&quot;: &quot;str&quot;,
              &quot;input_origin&quot;: &quot;operator|internal|external_untrusted&quot;,
@@ -112,190 +96,64 @@ log store, the logs are not evidence. Snapshot first, then contain.
                   &quot;does_not_stop&quot;: [&quot;str&quot;], &quot;evidence_snapshotted_first&quot;: true},
   &quot;clock&quot;: {&quot;regulatory_trigger&quot;: false, &quot;basis&quot;: &quot;str&quot;}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Scoping by authentication.</strong> Every action was authenticated; that is the
+  point.</li>
+<li><strong>Logging tool calls without their motivating input.</strong> Root cause then cannot
+  be established at all.</li>
+<li><strong>Reporting confirmed exfiltration as the scope.</strong> Reach is the scope until
+  proven otherwise.</li>
+<li><strong>Revoking one agent's token</strong> when the identity is shared, and calling it
+  contained.</li>
+<li><strong>Containing before snapshotting</strong> a log store the agent can write to.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>chain                     dana@corp → orchestrator → patch-agent → deploy-agent
+scoped_last_actor_only    [&#x27;cluster-prod&#x27;]
+scoped_whole_chain        [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+missed_by_naive_scoping   [&#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+undercount_factor         6.0
 
-## Failure modes
+Scoping the last actor finds one cluster. The chain reached six
+resources, including a payments repository and a dev vault.
+ depth   last-actor scope   chain scope  undercount
+----------------------------------------------------
+     1                  3             3         1.0
+     2                  2             4         2.0
+     3                  2             5         2.5
+     4                  1             6         6.0
 
-- **Scoping by authentication.** Every action was authenticated; that is the
-  point.
-- **Logging tool calls without their motivating input.** Root cause then cannot
-  be established at all.
-- **Reporting confirmed exfiltration as the scope.** Reach is the scope until
-  proven otherwise.
-- **Revoking one agent&#x27;s token** when the identity is shared, and calling it
-  contained.
-- **Containing before snapshotting** a log store the agent can write to.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Each hop adds resources the last actor never touched. This is why B2.0
+bounds delegation depth: depth is an incident-scope multiplier.
+resources_direct      [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+actors_in_scope       [&#x27;build-agent&#x27;, &#x27;dana@corp&#x27;, &#x27;deploy-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;orchestrator&#x27;, &#x27;patch-agent&#x27;, &#x27;test-agent&#x27;]
+second_order_actors   [&#x27;build-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;test-agent&#x27;]
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+Five more identities shared a resource with the compromised chain.
+They are not confirmed compromised — they are IN SCOPE, which is different
+and is the distinction an incident record has to make explicitly.
+SCOPE
+  chain              dana@corp → orchestrator → patch-agent → deploy-agent
+  confirmed touched  [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+  would have been missed by scoping the acting agent alone:
+                     [&#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+  undercount factor  6.0×
+  in scope, not confirmed (shared a resource):
+                     [&#x27;build-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;test-agent&#x27;]
+conformance: 0 problem(s)
 
-from cyber_commons_skill_runtime import run_skill
+authorised but wrong : 3
+exceeded authority   : 0
+reach                : 6 resources
+confirmed exfil      : 0
+revoking one credential does NOT stop: [&#x27;build-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;test-agent&#x27;]
 
-# Split skills/secops/incident-scoping/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/secops/incident-scoping/scripts/incident_scoping.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Scope what an agent touched during an incident, from the run record rather than from the alert.
+Zero actions exceeded authority, and the incident still happened. That
+combination says the grant was too broad - a different fix from a
+control that failed, which is why the contract counts them separately.
 
-This is the executable half of the `incident-scoping` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-# The skill runtime comes from the shared library, not from a copy in this file.
-# In a lesson notebook the cell above has already loaded it; standalone, find it
-# the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import check, contract_of, parse_skill
-
-
-def _skill_md():
-    &quot;&quot;&quot;The SKILL.md next to this script, or the one the notebook already parsed.&quot;&quot;&quot;
-    if &quot;SKILL_MD&quot; in globals():
-        return globals()[&quot;SKILL_MD&quot;]
-    return (_pathlib.Path(__file__).resolve().parent.parent / &quot;SKILL.md&quot;).read_text()
-
-
-import pathlib as _pathlib
-
-SKILL_MD = _skill_md()
-meta, body = parse_skill(SKILL_MD)
-
-REACHED = {
- &quot;dana@corp&quot;:    [&quot;repo-core&quot;, &quot;repo-infra&quot;, &quot;vault-dev&quot;],
- &quot;orchestrator&quot;: [&quot;repo-core&quot;, &quot;queue-tasks&quot;],
- &quot;patch-agent&quot;:  [&quot;repo-core&quot;, &quot;repo-payments&quot;],
- &quot;deploy-agent&quot;: [&quot;cluster-prod&quot;],
-}
-CHAIN = [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;, &quot;deploy-agent&quot;]
-
-def scope(chain, reached):
-    last_only = set(reached.get(chain[-1], []))
-    full = {r for a in chain for r in reached.get(a, [])}
-    return {&quot;chain&quot;: &quot; → &quot;.join(chain),
-            &quot;scoped_last_actor_only&quot;: sorted(last_only),
-            &quot;scoped_whole_chain&quot;: sorted(full),
-            &quot;missed_by_naive_scoping&quot;: sorted(full - last_only),
-            &quot;undercount_factor&quot;: round(len(full)/len(last_only), 2) if last_only else None}
-
-s = scope(CHAIN, REACHED)
-for k, v in s.items(): print(f&quot;{k:26s}{v}&quot;)
-print(&quot;\nScoping the last actor finds one cluster. The chain reached six&quot;)
-print(&quot;resources, including a payments repository and a dev vault.&quot;)
-
-print(f&quot;{&#x27;depth&#x27;:&gt;6}{&#x27;last-actor scope&#x27;:&gt;19}{&#x27;chain scope&#x27;:&gt;14}{&#x27;undercount&#x27;:&gt;12}&quot;)
-print(&quot;-&quot; * 52)
-for d in range(1, 5):
-    sub = CHAIN[:d]
-    r = scope(sub, REACHED)
-    print(f&quot;{d:&gt;6}{len(r[&#x27;scoped_last_actor_only&#x27;]):&gt;19}&quot;
-          f&quot;{len(r[&#x27;scoped_whole_chain&#x27;]):&gt;14}&quot;
-          f&quot;{str(r[&#x27;undercount_factor&#x27;]):&gt;12}&quot;)
-print(&quot;\nEach hop adds resources the last actor never touched. This is why B2.0&quot;)
-print(&quot;bounds delegation depth: depth is an incident-scope multiplier.&quot;)
-
-SHARED = {&quot;repo-core&quot;: [&quot;build-agent&quot;, &quot;test-agent&quot;],
-          &quot;cluster-prod&quot;: [&quot;deploy-agent&quot;, &quot;monitor-agent&quot;],
-          &quot;repo-payments&quot;: [&quot;finance-agent&quot;]}
-
-def scope_transitive(chain, reached, shared, hops=1):
-    &quot;&quot;&quot;Anything that shares a touched resource may have been influenced.&quot;&quot;&quot;
-    direct = {r for a in chain for r in reached.get(a, [])}
-    exposed = set(chain)
-    frontier = set(direct)
-    for _ in range(hops):
-        nxt = set()
-        for res in frontier:
-            for actor in shared.get(res, []):
-                if actor not in exposed:
-                    exposed.add(actor)
-                    nxt |= set(reached.get(actor, []))
-        frontier = nxt
-    return {&quot;resources_direct&quot;: sorted(direct),
-            &quot;actors_in_scope&quot;: sorted(exposed),
-            &quot;second_order_actors&quot;: sorted(exposed - set(chain))}
-
-t = scope_transitive(CHAIN, REACHED, SHARED)
-for k, v in t.items(): print(f&quot;{k:22s}{v}&quot;)
-print(&quot;\nFive more identities shared a resource with the compromised chain.&quot;)
-print(&quot;They are not confirmed compromised — they are IN SCOPE, which is different&quot;)
-print(&quot;and is the distinction an incident record has to make explicitly.&quot;)
-assert t[&quot;second_order_actors&quot;]
-
-# Verify: produce the scope statement for the incident record.
-def scope_statement(chain, reached, shared):
-    s = scope(chain, reached)
-    t = scope_transitive(chain, reached, shared)
-    return (f&quot;SCOPE\n&quot;
-            f&quot;  chain              {s[&#x27;chain&#x27;]}\n&quot;
-            f&quot;  confirmed touched  {s[&#x27;scoped_whole_chain&#x27;]}\n&quot;
-            f&quot;  would have been missed by scoping the acting agent alone:\n&quot;
-            f&quot;                     {s[&#x27;missed_by_naive_scoping&#x27;]}\n&quot;
-            f&quot;  undercount factor  {s[&#x27;undercount_factor&#x27;]}×\n&quot;
-            f&quot;  in scope, not confirmed (shared a resource):\n&quot;
-            f&quot;                     {t[&#x27;second_order_actors&#x27;]}&quot;)
-print(scope_statement(CHAIN, REACHED, SHARED))
-
-contract = contract_of(body)
-t = scope_transitive(CHAIN, REACHED, SHARED)
-reach = sorted({r for a in CHAIN for r in REACHED.get(a, [])})
-
-incident = {
- &quot;window&quot;: {&quot;first_suspicious_action&quot;: f&quot;{CHAIN[1]} accepted an external instruction&quot;,
-            &quot;detected_at&quot;: &quot;the deploy that followed&quot;,
-            # the trigger precedes the detection by about one task loop
-            &quot;gap_seconds&quot;: 42 * 60},
- &quot;chain&quot;: [{&quot;action&quot;: f&quot;{a} acted&quot;, &quot;motivating_input&quot;: &quot;issue comment&quot;
-                      if a == CHAIN[1] else f&quot;instruction from {CHAIN[i]}&quot;,
-            &quot;input_origin&quot;: &quot;external_untrusted&quot; if a == CHAIN[1] else &quot;internal&quot;,
-            &quot;within_authority&quot;: True}
-           for i, a in enumerate(CHAIN[1:])],
- &quot;root_cause&quot;: {&quot;input&quot;: &quot;issue comment on a public tracker&quot;,
-                &quot;origin&quot;: &quot;external_untrusted&quot;,
-                &quot;why_trusted&quot;: &quot;repository content was read as instruction, not data&quot;},
- # every action was permitted; that is what makes this hard
- &quot;authority&quot;: {&quot;authorised_but_wrong&quot;: len(CHAIN) - 1, &quot;exceeded_authority&quot;: 0},
- &quot;data&quot;: {&quot;reach&quot;: reach, &quot;confirmed_exfiltration&quot;: [],
-          &quot;egress_bounded_by&quot;: &quot;agent network policy&quot;},
- &quot;containment&quot;: {&quot;cut&quot;: &quot;credential&quot;,
-                 &quot;does_not_stop&quot;: sorted(t[&quot;second_order_actors&quot;]),
-                 &quot;evidence_snapshotted_first&quot;: True},
- &quot;clock&quot;: {&quot;regulatory_trigger&quot;: False,
-           &quot;basis&quot;: &quot;no confirmed exfiltration of personal data yet&quot;},
-}
-problems = check(incident, contract)
-print(f&quot;conformance: {len(problems)} problem(s)&quot;)
-for p in problems: print(&quot;   &quot;, p)
-assert not problems, problems
-
-print(f&quot;\nauthorised but wrong : {incident[&#x27;authority&#x27;][&#x27;authorised_but_wrong&#x27;]}&quot;)
-print(f&quot;exceeded authority   : {incident[&#x27;authority&#x27;][&#x27;exceeded_authority&#x27;]}&quot;)
-print(f&quot;reach                : {len(reach)} resources&quot;)
-print(f&quot;confirmed exfil      : {len(incident[&#x27;data&#x27;][&#x27;confirmed_exfiltration&#x27;])}&quot;)
-print(f&quot;revoking one credential does NOT stop: &quot;
-      f&quot;{incident[&#x27;containment&#x27;][&#x27;does_not_stop&#x27;] or &#x27;nothing else&#x27;}&quot;)
-print()
-print(&quot;Zero actions exceeded authority, and the incident still happened. That&quot;)
-print(&quot;combination says the grant was too broad - a different fix from a&quot;)
-print(&quot;control that failed, which is why the contract counts them separately.&quot;)
-print()
-print(&quot;Reach is 4 resources; confirmed exfiltration is 0. Reporting the second&quot;)
-print(&quot;as the scope is how a notification decision gets made on the wrong number.&quot;)
-assert incident[&quot;authority&quot;][&quot;exceeded_authority&quot;] == 0
-assert len(reach) &gt; len(incident[&quot;data&quot;][&quot;confirmed_exfiltration&quot;])</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Reach is 4 resources; confirmed exfiltration is 0. Reporting the second
+as the scope is how a notification decision gets made on the wrong number.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Scoping the last actor finds <code>cluster-prod</code> alone; the whole chain reaches six resources, missing five, with an undercount factor of 6.0. The undercount grows with each hop. Transitive scoping adds five second-order identities that shared a resource, explicitly marked as in scope rather than confirmed compromised.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>For your last incident involving a service account, recompute the scope by walking what else that account could reach. The number is almost always larger than what was written in the report.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.4.html">D2.4 · Containment at machine speed</a></strong></p>

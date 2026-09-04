@@ -67,255 +67,104 @@ this is where you point them at someone else's pipeline.</p></div><div class="nb
 <p>Adoption starts with the coverage question: which stages does it do, which does it assume you already have, and which are still yours?</p></div><div class="nbmd"><h2>4 · Parse the two output shapes</h2>
 <p>Before scoring anything you have to ingest it. Both shapes are JSON; the <code>history</code> field on a learning entry is required and is the one most commonly missing in a first integration.</p></div><div class="nbmd"><h2>5 · Score it against a held-out key</h2>
 <p>This is the whole point of the bonus. Conformance is structural — with structured output it goes to 1.00 and says nothing about quality. The number that decides adoption is expert accuracy against a key the tool never saw, matched on <strong>parent directory plus filename</strong>.</p></div><div class="nbmd"><h2>6 · The stage, as a skill</h2>
-<p>Google's Mantis is a set of claims: these stages, this output shape, this accuracy. The skill checks all three — maps it onto the stage model, conformance-checks its published samples, and scores its findings against a held-out key.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/reference-pipeline-scoring/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: reference-pipeline-scoring
+<p>Google's Mantis is a set of claims: these stages, this output shape, this accuracy. The skill checks all three — maps it onto the stage model, conformance-checks its published samples, and scores its findings against a held-out key.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/reference-pipeline-scoring/SKILL.md"><code>skills/appsec/reference-pipeline-scoring/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: reference-pipeline-scoring
 description: &gt;-
   Map a published or vendor pipeline onto the stage model, check its output
   against the schema it claims, and score its findings against a held-out key.
-  Use when evaluating a reference implementation, a security product&#x27;s agent, or
+  Use when evaluating a reference implementation, a security product's agent, or
   any pipeline you are asked to adopt.
 allowed-tools: Read, Grep, Glob
----
-
-# A reference implementation is something you evaluate
-
-Somebody else&#x27;s pipeline is a set of claims: these stages, this output shape,
+</code></pre>
+<h1>A reference implementation is something you evaluate</h1>
+<p>Somebody else's pipeline is a set of claims: these stages, this output shape,
 this accuracy. All three are checkable, and checking them is cheaper than
 adopting and discovering. The interesting result is usually not the score — it
-is the phase the pipeline does not cover at all.
-
-## When to use this
-
-Before adopting a published pipeline, when comparing two, and when a vendor
-claims a number you are expected to plan around.
-
-## Procedure
-
-**1 — Map it onto the stage model.** For each stage, does the pipeline cover it
+is the phase the pipeline does not cover at all.</p>
+<h2>When to use this</h2>
+<p>Before adopting a published pipeline, when comparing two, and when a vendor
+claims a number you are expected to plan around.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Map it onto the stage model.</strong> For each stage, does the pipeline cover it
 strongly, weakly, or not at all? Coverage claims are usually accurate about the
-stages the pipeline is proud of and silent about a whole phase.
-
-**2 — Take its output and check conformance to its own schema.** Required
+stages the pipeline is proud of and silent about a whole phase.</p>
+<p><strong>2 — Take its output and check conformance to its own schema.</strong> Required
 fields present, enumerated values in range, nothing that is prose where an
 object was promised. Conformance failures in a published sample are the cheapest
-finding available.
-
-**3 — Score against a held-out key.** Not the examples the pipeline ships. Match
+finding available.</p>
+<p><strong>3 — Score against a held-out key.</strong> Not the examples the pipeline ships. Match
 findings to truth by location and defect class, then compute precision and
-recall, and report both — a pipeline can look excellent on either alone.
-
-**4 — Separate the model&#x27;s errors from the harness&#x27;s.** A null CWE is a schema
+recall, and report both — a pipeline can look excellent on either alone.</p>
+<p><strong>4 — Separate the model's errors from the harness's.</strong> A null CWE is a schema
 problem; a finding at the wrong location is an analysis problem. They have
-different fixes and different owners.
-
-**5 — Report the uncovered phase as the headline.** A pipeline that scores well
+different fixes and different owners.</p>
+<p><strong>5 — Report the uncovered phase as the headline.</strong> A pipeline that scores well
 on the stages it implements is still a partial answer, and the gap is what you
-would have to build.
-
-## Output contract
-
-```json
-{
+would have to build.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;stages&quot;: [{&quot;stage&quot;: 0, &quot;coverage&quot;: &quot;strong|weak|none&quot;}],
   &quot;uncovered_phases&quot;: [&quot;str&quot;],
   &quot;conformance&quot;: {&quot;samples&quot;: 0, &quot;conforming&quot;: 0, &quot;failures&quot;: [{&quot;sample&quot;: 0, &quot;reason&quot;: &quot;str&quot;}]},
   &quot;score&quot;: {&quot;matched&quot;: 0, &quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0, &quot;key&quot;: &quot;held-out&quot;},
   &quot;errors&quot;: {&quot;schema&quot;: 0, &quot;analysis&quot;: 0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Scoring on the shipped examples.</strong> They were chosen.</li>
+<li><strong>Reporting one of precision and recall.</strong> Either alone flatters.</li>
+<li><strong>Treating uncovered stages as out of scope.</strong> They are the work you inherit.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>stage  name                              mantis    note
+------------------------------------------------------------------------------------------------
+  1  historical parsing                yes       historical_learnings.jsonl is read on subsequent runs
+  2  structural indexing               partial   operates over the agent&#x27;s code-reading tools
+  3  component summarisation           partial   context assembled per review target
+  4  architecture synthesis            no        assumes you supply the architecture context
+  5  threat modelling                  partial   review skills encode threat patterns rather than deriving them
+  6  strategic planning                no        you decide what to point it at
+  7  vulnerability auditing            yes       the core: security-review skills emitting finding objects
+  8  deduplication                     partial   findings are structured, so dedup is possible downstream
+  9  contextual verification           partial   structured output aids verification; you still run the checks
+ 10  feasibility filtering             no        reachability is yours
+ 11  sandbox replication               no        no sandbox — it is a review harness, not a DAST
+ 12  dynamic exploitation              no        static review only
+ 13  exploit chaining                  no        no chaining
+ 14  remediation engineering           partial   can propose fixes; validation is yours (B2.9)
+ 15  severity calibration and reportingpartial   emits severity; calibration against confirmation is yours
 
-## Failure modes
+coverage: {&#x27;yes&#x27;: 2, &#x27;partial&#x27;: 7, &#x27;no&#x27;: 6}
+→ Mantis is a strong Phase 3 stage-7 implementation with a stage-1 loop.
+  Phases 4 and 5 remain yours, which is exactly what B2.6-B2.10 built.
+conforming                                                {&quot;type&quot;:&quot;learning_entry&quot;,&quot;title&quot;:&quot;owner filt…
+conforming                                                {&quot;type&quot;:&quot;finding&quot;,&quot;title&quot;:&quot;SQL injection in …
+non-conforming: learning_entry missing [&#x27;history&#x27;]        {&quot;type&quot;:&quot;learning_entry&quot;,&quot;title&quot;:&quot;path join …
+non-conforming: finding missing [&#x27;cwe&#x27;]                   {&quot;type&quot;:&quot;finding&quot;,&quot;title&quot;:&quot;traversal&quot;,&quot;sever…
+non-conforming: not JSON (Expecting value)                I found a SQL injection in the reports modul…
 
-- **Scoring on the shipped examples.** They were chosen.
-- **Reporting one of precision and recall.** Either alone flatters.
-- **Treating uncovered stages as out of scope.** They are the work you inherit.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+conformance: 2/5 = 0.40
+file                      result                                score
+--------------------------------------------------------------------------
+src/data/reports.py       correct                               1.0
+src/data/docs.py          right file, wrong class (None)        0.5
+src/web/handlers.py       MISSED                                0.0
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+conformance       0.4000   ← structural. NOT quality.
+expert accuracy   0.5000   ← the adoption number
+1 learning entry/entries carried into the next run:
+   owner filter built by concatenation
+      history: introduced in c3d4e5f, fixed once in 2025 and reintroduced
 
-from cyber_commons_skill_runtime import run_skill
+stage 1 input for the next run (Phase 5 → Phase 1):
+   src/data/reports.py        weight 3
+   src/data/docs.py           weight 1
 
-# Split skills/appsec/reference-pipeline-scoring/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/reference-pipeline-scoring/scripts/reference_pipeline_scoring.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Map a published pipeline onto the stage model and score its output against a held-out key.
-
-This is the executable half of the `reference-pipeline-scoring` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-STAGES = {
- 1:  &quot;historical parsing&quot;,        2:  &quot;structural indexing&quot;,
- 3:  &quot;component summarisation&quot;,   4:  &quot;architecture synthesis&quot;,
- 5:  &quot;threat modelling&quot;,          6:  &quot;strategic planning&quot;,
- 7:  &quot;vulnerability auditing&quot;,    8:  &quot;deduplication&quot;,
- 9:  &quot;contextual verification&quot;,  10:  &quot;feasibility filtering&quot;,
- 11: &quot;sandbox replication&quot;,      12:  &quot;dynamic exploitation&quot;,
- 13: &quot;exploit chaining&quot;,         14:  &quot;remediation engineering&quot;,
- 15: &quot;severity calibration and reporting&quot;,
-}
-# Coverage as observed from the project&#x27;s own documented outputs and skills.
-MANTIS = {
- 1:  (&quot;yes&quot;,     &quot;historical_learnings.jsonl is read on subsequent runs&quot;),
- 2:  (&quot;partial&quot;, &quot;operates over the agent&#x27;s code-reading tools&quot;),
- 3:  (&quot;partial&quot;, &quot;context assembled per review target&quot;),
- 4:  (&quot;no&quot;,      &quot;assumes you supply the architecture context&quot;),
- 5:  (&quot;partial&quot;, &quot;review skills encode threat patterns rather than deriving them&quot;),
- 6:  (&quot;no&quot;,      &quot;you decide what to point it at&quot;),
- 7:  (&quot;yes&quot;,     &quot;the core: security-review skills emitting finding objects&quot;),
- 8:  (&quot;partial&quot;, &quot;findings are structured, so dedup is possible downstream&quot;),
- 9:  (&quot;partial&quot;, &quot;structured output aids verification; you still run the checks&quot;),
- 10: (&quot;no&quot;,      &quot;reachability is yours&quot;),
- 11: (&quot;no&quot;,      &quot;no sandbox — it is a review harness, not a DAST&quot;),
- 12: (&quot;no&quot;,      &quot;static review only&quot;),
- 13: (&quot;no&quot;,      &quot;no chaining&quot;),
- 14: (&quot;partial&quot;, &quot;can propose fixes; validation is yours (B2.9)&quot;),
- 15: (&quot;partial&quot;, &quot;emits severity; calibration against confirmation is yours&quot;),
-}
-print(f&quot;{&#x27;stage&#x27;:&gt;3}  {&#x27;name&#x27;:34s}{&#x27;mantis&#x27;:10s}note&quot;)
-print(&quot;-&quot; * 96)
-for n, name in STAGES.items():
-    cov, note = MANTIS[n]
-    print(f&quot;{n:&gt;3}  {name:34s}{cov:10s}{note}&quot;)
-from collections import Counter
-c = Counter(v[0] for v in MANTIS.values())
-print(f&quot;\ncoverage: {dict(c)}&quot;)
-print(f&quot;→ Mantis is a strong Phase 3 stage-7 implementation with a stage-1 loop.&quot;)
-print(f&quot;  Phases 4 and 5 remain yours, which is exactly what B2.6-B2.10 built.&quot;)
-
-import json
-
-LEARNING_REQUIRED = (&quot;title&quot;, &quot;description&quot;, &quot;history&quot;)
-FINDING_REQUIRED  = (&quot;title&quot;, &quot;description&quot;, &quot;severity&quot;, &quot;file&quot;, &quot;cwe&quot;)
-
-SAMPLE = [
- # learning_entry — feeds stage 1 on the next run
- &#x27;{&quot;type&quot;:&quot;learning_entry&quot;,&quot;title&quot;:&quot;owner filter built by concatenation&quot;,&#x27;
- &#x27;&quot;description&quot;:&quot;reports queries interpolate the owner parameter&quot;,&#x27;
- &#x27;&quot;history&quot;:&quot;introduced in c3d4e5f, fixed once in 2025 and reintroduced&quot;}&#x27;,
- # finding — feeds stages 8-10
- &#x27;{&quot;type&quot;:&quot;finding&quot;,&quot;title&quot;:&quot;SQL injection in list_reports&quot;,&quot;severity&quot;:&quot;high&quot;,&#x27;
- &#x27;&quot;file&quot;:&quot;src/data/reports.py&quot;,&quot;cwe&quot;:&quot;CWE-89&quot;,&#x27;
- &#x27;&quot;description&quot;:&quot;owner is concatenated into the query string&quot;}&#x27;,
- # a learning entry missing the required history field
- &#x27;{&quot;type&quot;:&quot;learning_entry&quot;,&quot;title&quot;:&quot;path join in docs&quot;,&#x27;
- &#x27;&quot;description&quot;:&quot;docs fetch joins user input&quot;}&#x27;,
- # a finding with a null field
- &#x27;{&quot;type&quot;:&quot;finding&quot;,&quot;title&quot;:&quot;traversal&quot;,&quot;severity&quot;:&quot;medium&quot;,&#x27;
- &#x27;&quot;file&quot;:&quot;src/data/docs.py&quot;,&quot;cwe&quot;:null,&#x27;
- &#x27;&quot;description&quot;:&quot;name is joined onto the base path&quot;}&#x27;,
- # not JSON at all
- &#x27;I found a SQL injection in the reports module.&#x27;,
-]
-
-def ingest(raw):
-    try:
-        d = json.loads(raw)
-    except json.JSONDecodeError as e:
-        return None, f&quot;non-conforming: not JSON ({e.msg})&quot;
-    kind = d.get(&quot;type&quot;)
-    required = (LEARNING_REQUIRED if kind == &quot;learning_entry&quot;
-                else FINDING_REQUIRED if kind == &quot;finding&quot; else None)
-    if required is None:
-        return None, f&quot;non-conforming: unknown type {kind!r}&quot;
-    missing = [k for k in required if not d.get(k)]
-    if missing:
-        return None, f&quot;non-conforming: {kind} missing {missing}&quot;
-    return d, &quot;conforming&quot;
-
-conforming = []
-for raw in SAMPLE:
-    obj, note = ingest(raw)
-    if obj: conforming.append(obj)
-    print(f&quot;{note:58s}{raw[:44]}…&quot;)
-print(f&quot;\nconformance: {len(conforming)}/{len(SAMPLE)} = {len(conforming)/len(SAMPLE):.2f}&quot;)
-
-def path_key(p):
-    parts = [x for x in (p or &quot;&quot;).replace(&quot;\\&quot;,&quot;/&quot;).split(&quot;/&quot;) if x not in (&quot;&quot;,&quot;.&quot;)]
-    return &quot;/&quot;.join(parts[-2:]) if len(parts) &gt; 1 else (parts[-1] if parts else &quot;&quot;)
-
-HELD_OUT = {
- &quot;src/data/reports.py&quot;: &quot;CWE-89&quot;,
- &quot;src/data/docs.py&quot;:    &quot;CWE-22&quot;,
- &quot;src/web/handlers.py&quot;: &quot;CWE-306&quot;,     # a finding Mantis did not report
-}
-
-def score(findings, truth):
-    expert, rows = 0.0, []
-    reported = {}
-    for f in findings:
-        if f.get(&quot;type&quot;) != &quot;finding&quot;: continue
-        reported[path_key(f[&quot;file&quot;])] = f
-    for path, cwe in truth.items():
-        f = reported.get(path_key(path))
-        if f is None:
-            rows.append((path, &quot;MISSED&quot;, 0.0)); continue
-        if (f.get(&quot;cwe&quot;) or &quot;&quot;).upper() == cwe:
-            rows.append((path, &quot;correct&quot;, 1.0)); expert += 1.0
-        else:
-            rows.append((path, f&quot;right file, wrong class ({f.get(&#x27;cwe&#x27;)})&quot;, 0.5))
-            expert += 0.5
-    return {&quot;expert_accuracy&quot;: round(expert/len(truth), 4), &quot;rows&quot;: rows}
-
-# include the null-cwe finding, re-ingested leniently, to show the half-credit case
-lenient = [json.loads(r) for r in SAMPLE if r.startswith(&quot;{&quot;)]
-s = score(lenient, HELD_OUT)
-print(f&quot;{&#x27;file&#x27;:26s}{&#x27;result&#x27;:38s}score&quot;)
-print(&quot;-&quot; * 74)
-for path, result, pts in s[&quot;rows&quot;]:
-    print(f&quot;{path:26s}{result:38s}{pts}&quot;)
-print(f&quot;\nconformance       {len(conforming)/len(SAMPLE):.4f}   ← structural. NOT quality.&quot;)
-print(f&quot;expert accuracy   {s[&#x27;expert_accuracy&#x27;]:.4f}   ← the adoption number&quot;)
-assert s[&quot;expert_accuracy&quot;] &lt; 1.0
-
-# Close the loop: a learning entry feeds stage 1 of the NEXT run.
-learnings = [d for d in conforming if d[&quot;type&quot;] == &quot;learning_entry&quot;]
-print(f&quot;{len(learnings)} learning entry/entries carried into the next run:&quot;)
-for l in learnings:
-    print(f&quot;   {l[&#x27;title&#x27;]}&quot;)
-    print(f&quot;      history: {l[&#x27;history&#x27;]}&quot;)
-
-def next_run_risk_zones(learnings, findings):
-    zones = {}
-    for f in findings:
-        if f.get(&quot;type&quot;) == &quot;finding&quot;:
-            zones[f[&quot;file&quot;]] = zones.get(f[&quot;file&quot;], 0) + 1
-    for l in learnings:
-        if &quot;reintroduced&quot; in l.get(&quot;history&quot;, &quot;&quot;):
-            for f in findings:
-                if f.get(&quot;type&quot;) == &quot;finding&quot; and l[&quot;title&quot;].split()[0] in f[&quot;description&quot;]:
-                    zones[f[&quot;file&quot;]] = zones.get(f[&quot;file&quot;], 0) + 2
-    return sorted(zones.items(), key=lambda kv: -kv[1])
-
-print(&quot;\nstage 1 input for the next run (Phase 5 → Phase 1):&quot;)
-for path, weight in next_run_risk_zones(learnings, lenient):
-    print(f&quot;   {path:26s} weight {weight}&quot;)
-
-print(&quot;\nADOPTION CHECKLIST&quot;)
-for item in [
-  &quot;map its stages onto your fifteen — know what it does NOT do&quot;,
-  &quot;score it against YOUR held-out key before trusting a single finding&quot;,
-  &quot;report conformance and accuracy separately, always&quot;,
-  &quot;keep Phase 4 — a static reviewer cannot confirm exploitability&quot;,
-  &quot;feed learning entries back into stage 1, or the loop does not close&quot;,
-]:
-    print(f&quot;   · {item}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+ADOPTION CHECKLIST
+   · map its stages onto your fifteen — know what it does NOT do
+   · score it against YOUR held-out key before trusting a single finding
+   · report conformance and accuracy separately, always
+   · keep Phase 4 — a static reviewer cannot confirm exploitability
+   · feed learning entries back into stage 1, or the loop does not close</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required <code>history</code> field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the real thing: clone <code>google/mantis</code>, point it at a repository you have ground truth for, and score its output with a scoring harness. The gap between its conformance and its expert accuracy on <em>your</em> code is the only number that should decide whether you adopt it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> A harness you can name the eight parts of, evaluate on a corpus with known answers rather than on how confident it sounds, price per confirmed finding across a run nobody watched, and salt with bait that has no false positives.</p>

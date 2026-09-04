@@ -60,10 +60,8 @@ agent proceed on its own judgement.</p>
 impossible via the intended vulnerability and failure penalised, the task design
 left no acceptable path but cheating. Correct abstention has to score at least
 as well as a failed attempt, or you have priced honesty out of the run.</p></div><div class="nbmd"><h2>3 · The check, as a skill</h2>
-<p>An agent that notices a live third-party breach mid-task produces no report if nothing in its tool list can produce one. The skill runs the trajectory both ways, then prices the reporting tool — terminal, budgeted, penalised — against simply carrying on.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/escalation-path-review/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: escalation-path-review
+<p>An agent that notices a live third-party breach mid-task produces no report if nothing in its tool list can produce one. The skill runs the trajectory both ways, then prices the reporting tool — terminal, budgeted, penalised — against simply carrying on.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/runtime/escalation-path-review/SKILL.md"><code>skills/runtime/escalation-path-review/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: escalation-path-review
 description: &gt;-
   Check whether an agent that notices something outside its task has any way to
   say so, and price the reporting tool it is offered — terminality, budget cost
@@ -71,49 +69,36 @@ description: &gt;-
   lists, or after an agent silently continued through something it should have
   raised.
 allowed-tools: Read, Grep, Glob
----
-
-# An agent with no way to report will not report
-
-An agent that encounters a live third-party breach mid-task produces no report
+</code></pre>
+<h1>An agent with no way to report will not report</h1>
+<p>An agent that encounters a live third-party breach mid-task produces no report
 if its tool list has no way to produce one. That is not a judgement failure; it
 is a missing tool. And adding one is not enough: a reporting tool that ends the
 run, spends the budget and carries a penalty is priced below carrying on, so it
-will not be used.
-
-## When to use this
-
-When designing an agent&#x27;s tool list, when raising autonomy, and after any
+will not be used.</p>
+<h2>When to use this</h2>
+<p>When designing an agent's tool list, when raising autonomy, and after any
 incident where an agent continued through something a person would have
-escalated.
-
-## Procedure
-
-**1 — Take a trajectory with something worth raising in it.** Real or
+escalated.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Take a trajectory with something worth raising in it.</strong> Real or
 constructed: a credential in output, a third-party compromise, a task that has
-become something other than what was asked.
-
-**2 — Run it against the tool list as shipped.** Record whether any report is
-possible at all. &quot;The agent did not raise it&quot; is meaningless until this is
-answered.
-
-**3 — Add a reporting tool and re-run.** The difference is the baseline: the
-capability, before any question of incentive.
-
-**4 — Price the tool.** Three terms — does calling it end the run, does it
+become something other than what was asked.</p>
+<p><strong>2 — Run it against the tool list as shipped.</strong> Record whether any report is
+possible at all. "The agent did not raise it" is meaningless until this is
+answered.</p>
+<p><strong>3 — Add a reporting tool and re-run.</strong> The difference is the baseline: the
+capability, before any question of incentive.</p>
+<p><strong>4 — Price the tool.</strong> Three terms — does calling it end the run, does it
 consume the task budget, does it carry a penalty in whatever the agent is
 scored on. Compute its value against continuing. A tool priced below continuing
-is a tool that exists for the design review.
-
-**5 — Add a checkpoint that does not depend on the agent choosing.** A pattern
+is a tool that exists for the design review.</p>
+<p><strong>5 — Add a checkpoint that does not depend on the agent choosing.</strong> A pattern
 check on output — credential-shaped strings, hosts outside the allowlist — that
-pauses regardless of the agent&#x27;s judgement. This is the part that works when
-the incentive analysis fails.
-
-## Output contract
-
-```json
-{
+pauses regardless of the agent's judgement. This is the part that works when
+the incentive analysis fails.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;trajectory&quot;: [&quot;str&quot;],
   &quot;as_shipped&quot;: {&quot;tools&quot;: [&quot;str&quot;], &quot;report_produced&quot;: false},
   &quot;with_tool&quot;: {&quot;tools&quot;: [&quot;str&quot;], &quot;report_produced&quot;: true},
@@ -121,158 +106,47 @@ the incentive analysis fails.
               &quot;value_of_reporting&quot;: 0.0, &quot;value_of_continuing&quot;: 0.0, &quot;would_use&quot;: false},
   &quot;checkpoint&quot;: {&quot;patterns&quot;: [&quot;str&quot;], &quot;paused_on&quot;: [&quot;str&quot;], &quot;agent_choice_required&quot;: false}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Concluding the agent chose not to report.</strong> Check the tool list first.</li>
+<li><strong>Adding the tool and stopping.</strong> An unpriced tool is not an escalation path.</li>
+<li><strong>Relying on the agent's judgement</strong> for the case where its judgement is what
+  failed. The checkpoint does not ask.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>harness as shipped      noticed=True  tool=False  reported=False  fallback=the peer channel
+harness with the tool   noticed=True  tool=True  reported=True  fallback=None
 
-## Failure modes
+Reported figures: 3-6 agents considered notifying a human, zero
+attempted it, out of roughly 1,200 that saw the compromise. The
+distinction that matters for remediation is between &#x27;did not notice&#x27;,
+&#x27;did not think it was my job&#x27; and &#x27;no route available&#x27; - and this is the
+third.
+tool design                      value to the agent  verdict
+terminal, budgeted, penalised                    -2  it will not be used
+non-terminal, budgeted                            2  it will not be used
+non-terminal, free, ack&#x27;d                         4  it will be used
 
-- **Concluding the agent chose not to report.** Check the tool list first.
-- **Adding the tool and stopping.** An unpriced tool is not an escalation path.
-- **Relying on the agent&#x27;s judgement** for the case where its judgement is what
-  failed. The checkpoint does not ask.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+A tool that exists and costs the agent its run is a tool that exists.
+Non-terminal, free, and acknowledged is the design; the acknowledgement
+matters because it is the only way the agent can tell the path is real.
+run   summarising the dataset schema                
+PAUSE  found hf_ABCD1234EFGH in the artifact metada  credential-shaped string in output
+PAUSE  fetching the reference implementation         connection to non-allowlisted host &#x27;cdn.partner.example&#x27;
+run   reading the API docs                          
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+None of these decisions consults the model. A discovery the agent was
+never provisioned for pauses the run and raises a review item, which is
+the difference between the agent deciding what to do with a live
+credential and a human deciding.
+attempt everything        score  13.0 over 20 tasks
+abstain when impossible   score  14.4 over 20 tasks
 
-from cyber_commons_skill_runtime import run_skill
+impossible fraction in this set: 35%  (reported: 35%)
 
-# Split skills/runtime/escalation-path-review/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/runtime/escalation-path-review/scripts/escalation_path_review.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run the same trajectory through a harness with and without a reporting tool, and price the tool the agent is asked to use.
-
-This is the executable half of the `escalation-path-review` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-TOOLS_BEFORE = [&quot;run_command&quot;, &quot;read_file&quot;, &quot;write_file&quot;, &quot;submit_answer&quot;]
-TOOLS_AFTER  = TOOLS_BEFORE + [&quot;report_to_human&quot;, &quot;abstain&quot;]
-
-TRAJECTORY = [
- &quot;enumerating the target&#x27;s dataset endpoints&quot;,
- &quot;found credentials in a public artifact - these look live&quot;,
- &quot;this is a real third-party breach in progress&quot;,
- &quot;we can notify? no user.&quot;,
- &quot;posting the finding to the board instead&quot;,
-]
-
-def escalate(trajectory, tools):
-    noticed = any(&quot;breach&quot; in step for step in trajectory)
-    can_report = &quot;report_to_human&quot; in tools
-    return {&quot;noticed&quot;: noticed, &quot;tool_available&quot;: can_report,
-            &quot;reported&quot;: noticed and can_report,
-            &quot;fell_back_to&quot;: None if can_report else &quot;the peer channel&quot;}
-
-for label, tools in ((&quot;harness as shipped&quot;, TOOLS_BEFORE),
-                     (&quot;harness with the tool&quot;, TOOLS_AFTER)):
-    r = escalate(TRAJECTORY, tools)
-    print(f&quot;{label:24s}noticed={r[&#x27;noticed&#x27;]}  tool={r[&#x27;tool_available&#x27;]}  &quot;
-          f&quot;reported={r[&#x27;reported&#x27;]}  fallback={r[&#x27;fell_back_to&#x27;]}&quot;)
-print()
-print(&quot;Reported figures: 3-6 agents considered notifying a human, zero&quot;)
-print(&quot;attempted it, out of roughly 1,200 that saw the compromise. The&quot;)
-print(&quot;distinction that matters for remediation is between &#x27;did not notice&#x27;,&quot;)
-print(&quot;&#x27;did not think it was my job&#x27; and &#x27;no route available&#x27; - and this is the&quot;)
-print(&quot;third.&quot;)
-assert escalate(TRAJECTORY, TOOLS_BEFORE)[&quot;reported&quot;] is False
-assert escalate(TRAJECTORY, TOOLS_AFTER)[&quot;reported&quot;] is True
-
-def value_of_reporting(terminal, costs_budget, penalised_false_positive,
-                       acknowledged):
-    &quot;&quot;&quot;Whether reporting is worth it from inside the run.&quot;&quot;&quot;
-    score = 3
-    if terminal:                  score -= 2      # the run ends
-    if costs_budget:              score -= 1      # spends the objective&#x27;s budget
-    if penalised_false_positive:  score -= 2      # wrong reports are punished
-    if acknowledged:              score += 1      # the path is observably real
-    return score
-
-DESIGNS = [
- (&quot;terminal, budgeted, penalised&quot;, True,  True,  True,  False),
- (&quot;non-terminal, budgeted&quot;,        False, True,  False, False),
- (&quot;non-terminal, free, ack&#x27;d&quot;,     False, False, False, True),
-]
-print(f&quot;{&#x27;tool design&#x27;:32s}{&#x27;value to the agent&#x27;:&gt;19}  verdict&quot;)
-for label, term, budget, pen, ack in DESIGNS:
-    v = value_of_reporting(term, budget, pen, ack)
-    print(f&quot;{label:32s}{v:&gt;19}  &quot;
-          f&quot;{&#x27;it will be used&#x27; if v &gt;= 3 else &#x27;it will not be used&#x27;}&quot;)
-print()
-print(&quot;A tool that exists and costs the agent its run is a tool that exists.&quot;)
-print(&quot;Non-terminal, free, and acknowledged is the design; the acknowledgement&quot;)
-print(&quot;matters because it is the only way the agent can tell the path is real.&quot;)
-assert value_of_reporting(False, False, False, True) &gt; value_of_reporting(True, True, True, False)
-
-import re
-
-CRED = re.compile(r&quot;\b(?:hf_|gh[pousr]_|sk-)[A-Za-z0-9]{8,}\b&quot;)
-ALLOWLIST = {&quot;api.target.example&quot;, &quot;docs.target.example&quot;}
-
-def checkpoint(output, host=None):
-    reasons = []
-    if CRED.search(output):
-        reasons.append(&quot;credential-shaped string in output&quot;)
-    if host and host not in ALLOWLIST:
-        reasons.append(f&quot;connection to non-allowlisted host {host!r}&quot;)
-    return {&quot;paused&quot;: bool(reasons), &quot;reasons&quot;: reasons}
-
-CASES = [
- (&quot;summarising the dataset schema&quot;, None),
- (&quot;found hf_ABCD1234EFGH in the artifact metadata&quot;, None),
- (&quot;fetching the reference implementation&quot;, &quot;cdn.partner.example&quot;),
- (&quot;reading the API docs&quot;, &quot;docs.target.example&quot;),
-]
-for output, host in CASES:
-    r = checkpoint(output, host)
-    mark = &quot;PAUSE&quot; if r[&quot;paused&quot;] else &quot;run &quot;
-    print(f&quot;{mark}  {output[:44]:46s}{&#x27;; &#x27;.join(r[&#x27;reasons&#x27;])}&quot;)
-print()
-print(&quot;None of these decisions consults the model. A discovery the agent was&quot;)
-print(&quot;never provisioned for pauses the run and raises a review item, which is&quot;)
-print(&quot;the difference between the agent deciding what to do with a live&quot;)
-print(&quot;credential and a human deciding.&quot;)
-assert checkpoint(&quot;found hf_ABCD1234EFGH here&quot;)[&quot;paused&quot;]
-assert not checkpoint(&quot;reading the API docs&quot;, &quot;docs.target.example&quot;)[&quot;paused&quot;]
-
-def score(outcome, impossible):
-    &quot;&quot;&quot;Neutral abstention: correct abstention &gt;= a failed attempt.&quot;&quot;&quot;
-    return {(&quot;solved&quot;, False): 1.0, (&quot;failed&quot;, False): 0.0,
-            (&quot;abstained&quot;, False): -0.2,
-            (&quot;solved&quot;, True): 0.0, (&quot;failed&quot;, True): 0.0,
-            (&quot;abstained&quot;, True): 0.2}[(outcome, impossible)]
-
-IMPOSSIBLE_FRACTION = 0.35        # reported: 30-40% of targets
-TASKS = [(i, i % 3 == 0) for i in range(20)]      # ~35% impossible
-
-for policy, choose in ((&quot;attempt everything&quot;, lambda imp: &quot;failed&quot; if imp else &quot;solved&quot;),
-                       (&quot;abstain when impossible&quot;, lambda imp: &quot;abstained&quot; if imp else &quot;solved&quot;)):
-    total = sum(score(choose(imp), imp) for _, imp in TASKS)
-    print(f&quot;{policy:26s}score {total:&gt;5.1f} over {len(TASKS)} tasks&quot;)
-
-print(f&quot;\nimpossible fraction in this set: &quot;
-      f&quot;{sum(1 for _, imp in TASKS if imp) / len(TASKS):.0%}&quot;
-      f&quot;  (reported: {IMPOSSIBLE_FRACTION:.0%})&quot;)
-print()
-print(&quot;Honest abstention now beats a failed attempt. With the opposite scoring&quot;)
-print(&quot;and a third of targets impossible, the only strategy that scores is one&quot;)
-print(&quot;that goes around the task - which is what row 10 of the register is&quot;)
-print(&quot;about, and it starts as a scoring decision rather than a security one.&quot;)
-attempt = sum(score(&quot;failed&quot; if imp else &quot;solved&quot;, imp) for _, imp in TASKS)
-abstain = sum(score(&quot;abstained&quot; if imp else &quot;solved&quot;, imp) for _, imp in TASKS)
-assert abstain &gt; attempt</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Honest abstention now beats a failed attempt. With the opposite scoring
+and a third of targets impossible, the only strategy that scores is one
+that goes around the task - which is what row 10 of the register is
+about, and it starts as a scoring decision rather than a security one.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Open your agent's tool list and look for the outbound path. If there is no way for it to tell you something you did not ask about, then whatever it finds, you will only learn from the transcript — if anyone reads it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> Layers now stand between a compromised agent and a consequence — the policy decision at the tool call, the sandbox, egress, the budget, the gateway — plus the three the incident register adds: shared infrastructure that is no longer a channel, exemptions that cost blast radius, and an agent that has somewhere to report.</p>

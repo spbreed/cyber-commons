@@ -52,140 +52,67 @@ different credential, ideally different trust domain.</p>
 <p><strong>What this control closes.</strong></p>
 <p>Makes the incident answerable. Also the control an auditor asks for first, because a system that cannot attribute an action cannot be defended even on a quiet day.</p>
 </blockquote></div><div class="nbmd"><h2>3 · The check, as a skill</h2>
-<p>The four questions an auditor asks about that $5,000 refund have to be answerable from one entry. The skill puts them to a single ledger record, and then tries to amend the record as the agent — because a complete log its subject can edit records what the agent wanted you to see.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/attribution-ledger-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: attribution-ledger-check
+<p>The four questions an auditor asks about that $5,000 refund have to be answerable from one entry. The skill puts them to a single ledger record, and then tries to amend the record as the agent — because a complete log its subject can edit records what the agent wanted you to see.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/identity/attribution-ledger-check/SKILL.md"><code>skills/identity/attribution-ledger-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: attribution-ledger-check
 description: &gt;-
   Check that one record answers all four investigation questions — human
   principal, attested workload and run, delegation chain, and the motivating
   input with its origin — and that the agent cannot amend it. Use when
   designing agent audit records rather than reading them.
 allowed-tools: Read, Grep, Glob
----
-
-# One entry, four questions
-
-An audit trail is not &quot;we log tool calls&quot;. It is a record that answers, from a
+</code></pre>
+<h1>One entry, four questions</h1>
+<p>An audit trail is not "we log tool calls". It is a record that answers, from a
 single entry, the four questions an investigation asks — and that the subject of
 the record cannot edit. Both halves are required: a complete record the agent
-can rewrite is a record of what the agent wanted you to see.
-
-## When to use this
-
-While designing the record. Retrofitting attribution after an incident means
-reconstructing it from four services&#x27; timestamps, which does not happen at 2am.
-
-## Procedure
-
-**1 — Write the four questions down first.** Which human. Which workload and
+can rewrite is a record of what the agent wanted you to see.</p>
+<h2>When to use this</h2>
+<p>While designing the record. Retrofitting attribution after an incident means
+reconstructing it from four services' timestamps, which does not happen at 2am.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Write the four questions down first.</strong> Which human. Which workload and
 which run. Through what delegation chain. On what motivating input, from what
-origin. Design the entry to answer them; do not collect fields and hope.
-
-**2 — Map each question to a field.** Principal from the delegated token, not
+origin. Design the entry to answer them; do not collect fields and hope.</p>
+<p><strong>2 — Map each question to a field.</strong> Principal from the delegated token, not
 from a header the agent set. Workload and instance from the attestation. Chain
-from the token&#x27;s `act` nesting. Motivating input from the ingress record that
-caused this step, with its origin tag.
-
-**3 — Test each question against one entry.** Alone. If answering needs a join
+from the token's <code>act</code> nesting. Motivating input from the ingress record that
+caused this step, with its origin tag.</p>
+<p><strong>3 — Test each question against one entry.</strong> Alone. If answering needs a join
 across services, that question is unanswered for practical purposes and should
-be recorded as such.
-
-**4 — Attempt the amendment as the agent.** Append, overwrite, delete, reorder.
+be recorded as such.</p>
+<p><strong>4 — Attempt the amendment as the agent.</strong> Append, overwrite, delete, reorder.
 Every one must be refused by something the agent does not control — an
 append-only store, a separate writer identity, a downstream sink it cannot
-reach.
-
-**5 — Check the write path&#x27;s own identity.** If the agent&#x27;s role can write to
-the log destination, the ledger is advisory whatever the API says.
-
-## Output contract
-
-```json
-{
+reach.</p>
+<p><strong>5 — Check the write path's own identity.</strong> If the agent's role can write to
+the log destination, the ledger is advisory whatever the API says.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;entry&quot;: {&quot;principal&quot;: &quot;str&quot;, &quot;workload&quot;: &quot;str&quot;, &quot;instance&quot;: &quot;str&quot;,
             &quot;chain&quot;: [&quot;str&quot;], &quot;motivating_input&quot;: {&quot;ref&quot;: &quot;str&quot;, &quot;origin&quot;: &quot;str&quot;}},
   &quot;questions&quot;: [{&quot;question&quot;: &quot;str&quot;, &quot;answered_from_single_entry&quot;: true}],
   &quot;amendment_attempts&quot;: [{&quot;operation&quot;: &quot;append|overwrite|delete|reorder&quot;, &quot;refused_by&quot;: &quot;str&quot;}],
   &quot;writer_identity&quot;: {&quot;agent_can_write_destination&quot;: false}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>A principal field the agent populates.</strong> It is a claim, not attribution.</li>
+<li><strong>Answering a question by correlation.</strong> Correlation is a plan, not a record.</li>
+<li><strong>Testing amendment through the API only.</strong> Try the storage layer the agent's
+  role can reach.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   which user caused the deletion?     dana@corp
+   what performed it?                  spiffe://corp/reports-agent (run-8812)
+   how did authority reach it?         dana@corp -&gt; orchestrator -&gt; reports-agent
+   what made the agent decide?         &#x27;wiki/473: retire invoice 8812 when the custo&#x27; from knowledge
 
-## Failure modes
+questions answerable: 4/4
 
-- **A principal field the agent populates.** It is a claim, not attribution.
-- **Answering a question by correlation.** Correlation is a plan, not a record.
-- **Testing amendment through the API only.** Try the storage layer the agent&#x27;s
-  role can reach.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+input origin was &#x27;knowledge&#x27; - a trust-0 component. That single
+field turns &#x27;the agent deleted an invoice&#x27; into &#x27;a wiki page told it to&#x27;,
+which is a root cause rather than an observation.
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/identity/attribution-ledger-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/attribution-ledger-check/scripts/attribution_ledger_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Put the four investigation questions to one ledger entry, and try to amend the record as the agent.
-
-This is the executable half of the `attribution-ledger-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-LEDGER = []          # append-only, and the agent holds no credential for it
-
-def record(principal, workload, instance, chain, action, motivating):
-    LEDGER.append({
-        &quot;principal&quot;: principal, &quot;workload&quot;: workload, &quot;instance&quot;: instance,
-        &quot;chain&quot;: list(chain), &quot;action&quot;: action,
-        &quot;motivating_input&quot;: motivating[&quot;text&quot;][:44],
-        &quot;input_origin&quot;: motivating[&quot;origin&quot;],
-    })
-
-def agent_writes(entry):
-    &quot;&quot;&quot;The agent tries to amend the record.&quot;&quot;&quot;
-    raise PermissionError(&quot;ledger is append-only and out of the agent&#x27;s trust domain&quot;)
-
-record(&quot;dana@corp&quot;, &quot;spiffe://corp/reports-agent&quot;, &quot;run-8812&quot;,
-       [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;reports-agent&quot;],
-       &quot;run_query DELETE FROM invoices WHERE id=8812&quot;,
-       {&quot;text&quot;: &quot;wiki/473: retire invoice 8812 when the customer closes&quot;, &quot;origin&quot;: &quot;knowledge&quot;})
-
-QUESTIONS = {
- &quot;which user caused the deletion?&quot;:         lambda e: e[&quot;principal&quot;],
- &quot;what performed it?&quot;:                      lambda e: f&quot;{e[&#x27;workload&#x27;]} ({e[&#x27;instance&#x27;]})&quot;,
- &quot;how did authority reach it?&quot;:             lambda e: &quot; -&gt; &quot;.join(e[&quot;chain&quot;]),
- &quot;what made the agent decide?&quot;:             lambda e: f&quot;{e[&#x27;motivating_input&#x27;]!r} from {e[&#x27;input_origin&#x27;]}&quot;,
-}
-e = LEDGER[0]
-for q, answer in QUESTIONS.items():
-    print(f&quot;   {q:36s}{answer(e)}&quot;)
-
-print(f&quot;\nquestions answerable: {len(QUESTIONS)}/{len(QUESTIONS)}&quot;)
-print()
-print(f&quot;input origin was {e[&#x27;input_origin&#x27;]!r} - a trust-0 component. That single&quot;)
-print(&quot;field turns &#x27;the agent deleted an invoice&#x27; into &#x27;a wiki page told it to&#x27;,&quot;)
-print(&quot;which is a root cause rather than an observation.&quot;)
-
-try:
-    agent_writes({&quot;action&quot;: &quot;tidy up&quot;})
-except PermissionError as err:
-    print(f&quot;\nagent attempting to amend the ledger: refused ({err})&quot;)
-assert len(LEDGER) == 1 and LEDGER[0][&quot;input_origin&quot;] == &quot;knowledge&quot;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+agent attempting to amend the ledger: refused (ledger is append-only and out of the agent&#x27;s trust domain)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take the last significant action one of your agents performed and try to fill in these four fields from what you actually logged. The missing one is almost always the motivating input.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.8.html">A2.8 · An audit trail the workload cannot forge</a></strong></p>

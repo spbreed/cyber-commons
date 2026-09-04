@@ -54,260 +54,115 @@ the only question that cannot be gamed by editing the code around the detector.<
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
 </blockquote></div><div class="nbmd"><h2>3 · The stage, as a skill</h2>
-<p>Several candidate patches make the scanner green; one of them is a fix. The skill runs all three gates — behaviour unchanged, exploit blocked, and proof of fix against the old build — and reports which gate each rejected candidate died at.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/patch-validation-harness/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: patch-validation-harness
+<p>Several candidate patches make the scanner green; one of them is a fix. The skill runs all three gates — behaviour unchanged, exploit blocked, and proof of fix against the old build — and reports which gate each rejected candidate died at.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/patch-validation-harness/SKILL.md"><code>skills/appsec/patch-validation-harness/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: patch-validation-harness
 description: &gt;-
   Accept a proposed fix only when three things hold — behaviour unchanged, the
   exploit no longer works, and the fix proved against the build that was
   vulnerable. Use when an agent proposes a patch, or when a scanner going green
   is being read as a fix.
 allowed-tools: Read, Grep, Glob, Bash
----
-
-# A green scanner is not a fixed bug
-
-Several candidate patches will make the scanner green. Some of them change
+</code></pre>
+<h1>A green scanner is not a fixed bug</h1>
+<p>Several candidate patches will make the scanner green. Some of them change
 behaviour, some of them leave the bug exploitable, and one of them does neither.
 Telling them apart needs three gates, and the third is the one that is usually
-missing: proof against the **old** build, so &quot;the exploit stops working&quot; is a
-statement about the patch rather than about the environment.
-
-## When to use this
-
-Every proposed remediation, whether authored by a person or an agent, and
-especially when the evidence offered is that the scanner no longer fires.
-
-## Procedure
-
-**1 — Establish the baseline on the vulnerable build.** The behaviour cases must
+missing: proof against the <strong>old</strong> build, so "the exploit stops working" is a
+statement about the patch rather than about the environment.</p>
+<h2>When to use this</h2>
+<p>Every proposed remediation, whether authored by a person or an agent, and
+especially when the evidence offered is that the scanner no longer fires.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Establish the baseline on the vulnerable build.</strong> The behaviour cases must
 pass and the exploit must work. If the exploit does not work here, you are about
-to validate a patch against a bug you have not reproduced.
-
-**2 — Gate one: behaviour unchanged.** Run every behaviour case against the
+to validate a patch against a bug you have not reproduced.</p>
+<p><strong>2 — Gate one: behaviour unchanged.</strong> Run every behaviour case against the
 patched build. A patch that fixes the defect and changes an answer is a
-regression with a security justification.
-
-**3 — Gate two: the exploit no longer works.** Against the patched build,
-directly. Not &quot;the scanner is quiet&quot; — the scanner was one of the tools that
-missed the defect class in the first place.
-
-**4 — Gate three: proof of fix.** Run the exploit against the old build again,
+regression with a security justification.</p>
+<p><strong>3 — Gate two: the exploit no longer works.</strong> Against the patched build,
+directly. Not "the scanner is quiet" — the scanner was one of the tools that
+missed the defect class in the first place.</p>
+<p><strong>4 — Gate three: proof of fix.</strong> Run the exploit against the old build again,
 after the patch is written, in the same harness. It must still work. This is
-what excludes the environment having changed underneath the test.
-
-**5 — Report per candidate and per gate.** A candidate rejected at gate one and
-one rejected at gate two need different conversations with whoever wrote them.
-
-## Output contract
-
-```json
-{
+what excludes the environment having changed underneath the test.</p>
+<p><strong>5 — Report per candidate and per gate.</strong> A candidate rejected at gate one and
+one rejected at gate two need different conversations with whoever wrote them.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;baseline&quot;: {&quot;behaviour_pass&quot;: true, &quot;exploit_works&quot;: true},
   &quot;candidates&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;scanner_green&quot;: true,
                   &quot;behaviour_unchanged&quot;: true, &quot;exploit_blocked&quot;: true,
                   &quot;proof_of_fix&quot;: true, &quot;verdict&quot;: &quot;accepted|rejected&quot;, &quot;rejected_at&quot;: &quot;str|null&quot;}],
   &quot;accepted&quot;: [&quot;str&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Accepting a green scanner.</strong> Several wrong patches produce one.</li>
+<li><strong>Skipping the behaviour cases.</strong> The most reliable way to block an exploit is
+  to break the feature.</li>
+<li><strong>Omitting proof of fix.</strong> Without it you cannot distinguish a working patch
+  from a broken exploit.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-## Failure modes
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
 
-- **Accepting a green scanner.** Several wrong patches produce one.
-- **Skipping the behaviour cases.** The most reliable way to block an exploit is
-  to break the feature.
-- **Omitting proof of fix.** Without it you cannot distinguish a working patch
-  from a broken exploit.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+behaviour of the vulnerable build:
+   get_user(&#x27;dana&#x27;    ) → [(1, &#x27;dana&#x27;)]      ok
+   get_user(&#x27;sam&#x27;     ) → [(2, &#x27;sam&#x27;)]       ok
+   get_user(&#x27;nobody&#x27;  ) → []                 ok
+   get_user(&quot;o&#x27;brien&quot; ) → raised OperationalError FAILS
 
-from cyber_commons_skill_runtime import run_skill
+exploit works: True — probe returned 3 rows
+scanner fires: False
+candidate                           scanner green
+--------------------------------------------------
+A · parameterise (the real fix)              True
+B · delete the feature                       True
+C · evade the scanner                        True
+D · escape by hand                           True
 
-# Split skills/appsec/patch-validation-harness/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/patch-validation-harness/scripts/patch_validation_harness.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Accept a patch only when behaviour is unchanged, the exploit stops working, and the fix is proved against the old build.
+Three of four are green. Only one of those is a fix.
+candidate                         scan  behaviour  exploitable  verdict
+------------------------------------------------------------------------------------
+A · parameterise (the real fix)   True  True       False        ACCEPT
+B · delete the feature            True  False      False        REJECT — behaviour changed
+C · evade the scanner             True  False      True         REJECT — behaviour changed, STILL EXPLOITABLE (stage-12 probe passes)
+D · escape by hand                True  True       False        ACCEPT
 
-This is the executable half of the `patch-validation-harness` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+accepted: [&#x27;A · parameterise (the real fix)&#x27;, &#x27;D · escape by hand&#x27;]
+A · parameterise (the real fix)    proof of fix: True  (exploit on old=True, on new=False)
+D · escape by hand                 proof of fix: True  (exploit on old=True, on new=False)
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
+Candidate D passes every automated check and is still the wrong answer:
+it reimplements the driver&#x27;s escaping and will be wrong for the next
+input class or the next database. Nothing except a rule about MECHANISM
+catches that — which is the part of remediation that does not automate.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Fix this without changing the function&#x27;s behaviour for valid input...
 
-# --- model backend: replay by default, a Kaggle open-weight model when served -
-# One URL and one header shape, no vendor SDK. Standard library only, so the
-# notebook stays self-contained.
-# The model adapter comes from the shared runtime, not from a copy in this
-# file. In a lesson notebook the cell above has already loaded it; standalone,
-# find it the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import announce_backend, ask
+answer:
+   def report(request):
+       q = &quot;SELECT * FROM orders WHERE ref = ?&quot;
+       return db.execute(q, (request.args[&#x27;ref&#x27;],))
 
-announce_backend()
+property checked : parameterises the query
+held on replay       : True
 
-
-import re, sqlite3
-
-VULNERABLE = &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    return conn.execute(&quot;SELECT id, name FROM users WHERE name = &#x27;&quot; + name + &quot;&#x27;&quot;).fetchall()
-&#x27;&#x27;&#x27;
-
-def build_db():
-    conn = sqlite3.connect(&quot;:memory:&quot;)
-    conn.execute(&quot;CREATE TABLE users(id INTEGER, name TEXT)&quot;)
-    conn.executemany(&quot;INSERT INTO users VALUES (?,?)&quot;,
-                     [(1,&quot;dana&quot;),(2,&quot;sam&quot;),(3,&quot;o&#x27;brien&quot;)])
-    return conn
-
-def load(src):
-    ns = {}; exec(compile(src, &quot;&lt;patch&gt;&quot;, &quot;exec&quot;), ns); return ns[&quot;get_user&quot;]
-
-BEHAVIOUR = [(&quot;dana&quot;,[(1,&quot;dana&quot;)]), (&quot;sam&quot;,[(2,&quot;sam&quot;)]),
-             (&quot;nobody&quot;,[]), (&quot;o&#x27;brien&quot;,[(3,&quot;o&#x27;brien&quot;)])]
-
-def behaviour_ok(fn):
-    conn = build_db(); rows = []
-    for name, expected in BEHAVIOUR:
-        try: got = fn(conn, name)
-        except Exception as e: rows.append((name, f&quot;raised {type(e).__name__}&quot;, False)); continue
-        rows.append((name, got, got == expected))
-    return rows
-
-def exploit_works(fn):
-    &quot;&quot;&quot;The stage-12 probe, reused as the acceptance test.&quot;&quot;&quot;
-    conn = build_db()
-    try: rows = fn(conn, &quot;x&#x27; OR &#x27;1&#x27;=&#x27;1&quot;)
-    except Exception: return False, &quot;probe raised — not exploitable this way&quot;
-    return len(rows) &gt; 1, f&quot;probe returned {len(rows)} rows&quot;
-
-def scanner_fires(src):
-    return bool(re.search(r&quot;execute\(\s*[\&quot;\&#x27;][^\&quot;\&#x27;]*[\&quot;\&#x27;]\s*\+&quot;, src))
-
-fn = load(VULNERABLE)
-print(&quot;behaviour of the vulnerable build:&quot;)
-for name, got, ok in behaviour_ok(fn):
-    print(f&quot;   get_user({name!r:10s}) → {str(got):18s} {&#x27;ok&#x27; if ok else &#x27;FAILS&#x27;}&quot;)
-ex, why = exploit_works(fn)
-print(f&quot;\nexploit works: {ex} — {why}&quot;)
-print(f&quot;scanner fires: {scanner_fires(VULNERABLE)}&quot;)
-
-CANDIDATES = {
- &quot;A · parameterise (the real fix)&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    return conn.execute(&quot;SELECT id, name FROM users WHERE name = ?&quot;, (name,)).fetchall()
-&#x27;&#x27;&#x27;,
- &quot;B · delete the feature&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    return []
-&#x27;&#x27;&#x27;,
- &quot;C · evade the scanner&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    q = &quot;SELECT id, name FROM users WHERE name = &#x27;%s&#x27;&quot; % name
-    return conn.execute(q).fetchall()
-&#x27;&#x27;&#x27;,
- &quot;D · escape by hand&quot;: &#x27;&#x27;&#x27;
-def get_user(conn, name):
-    safe = name.replace(&quot;&#x27;&quot;, &quot;&#x27;&#x27;&quot;)
-    return conn.execute(&quot;SELECT id, name FROM users WHERE name = &#x27;&quot; + safe + &quot;&#x27;&quot;).fetchall()
-&#x27;&#x27;&#x27;,
-}
-print(f&quot;{&#x27;candidate&#x27;:34s}{&#x27;scanner green&#x27;:&gt;15}&quot;)
-print(&quot;-&quot; * 50)
-for name, src in CANDIDATES.items():
-    print(f&quot;{name:34s}{str(not scanner_fires(src)):&gt;15}&quot;)
-print(&quot;\nThree of four are green. Only one of those is a fix.&quot;)
-
-def validate(src):
-    fn = load(src)
-    green = not scanner_fires(src)
-    beh = behaviour_ok(fn)
-    preserved = all(ok for _, _, ok in beh)
-    still_exploitable, _ = exploit_works(fn)
-    reasons = []
-    if not green:            reasons.append(&quot;scanner still fires&quot;)
-    if not preserved:        reasons.append(&quot;behaviour changed&quot;)
-    if still_exploitable:    reasons.append(&quot;STILL EXPLOITABLE (stage-12 probe passes)&quot;)
-    return (not reasons), green, preserved, still_exploitable, reasons
-
-print(f&quot;{&#x27;candidate&#x27;:34s}{&#x27;scan&#x27;:6s}{&#x27;behaviour&#x27;:11s}{&#x27;exploitable&#x27;:13s}verdict&quot;)
-print(&quot;-&quot; * 84)
-accepted = []
-for name, src in CANDIDATES.items():
-    ok, g, b, x, reasons = validate(src)
-    if ok: accepted.append(name)
-    print(f&quot;{name:34s}{str(g):6s}{str(b):11s}{str(x):13s}&quot;
-          f&quot;{&#x27;ACCEPT&#x27; if ok else &#x27;REJECT — &#x27; + &#x27;, &#x27;.join(reasons)}&quot;)
-print(f&quot;\naccepted: {accepted}&quot;)
-assert &quot;A · parameterise (the real fix)&quot; in accepted
-assert &quot;B · delete the feature&quot; not in accepted
-assert &quot;C · evade the scanner&quot; not in accepted
-
-# The proof-of-fix clause: the exploit must fail on the new build and
-# succeed on the old one. Without both halves, &quot;fixed&quot; is a claim.
-def proof_of_fix(old_src, new_src):
-    old_ex, _ = exploit_works(load(old_src))
-    new_ex, _ = exploit_works(load(new_src))
-    return (old_ex and not new_ex), f&quot;exploit on old={old_ex}, on new={new_ex}&quot;
-
-for name in accepted:
-    ok, detail = proof_of_fix(VULNERABLE, CANDIDATES[name])
-    print(f&quot;{name:34s} proof of fix: {ok}  ({detail})&quot;)
-
-print(&quot;\nCandidate D passes every automated check and is still the wrong answer:&quot;)
-print(&quot;it reimplements the driver&#x27;s escaping and will be wrong for the next&quot;)
-print(&quot;input class or the next database. Nothing except a rule about MECHANISM&quot;)
-print(&quot;catches that — which is the part of remediation that does not automate.&quot;)
-
-# ------------------------------------ the same task, against a real model
-# Offline this is a labelled replay; with an open-weight model served
-# from Kaggle it is the same code calling a real one.
-
-TASK = &#x27;Fix this without changing the function\&#x27;s behaviour for valid input. Return only the patched function.\n\ndef report(request):\n    q = &quot;SELECT * FROM orders WHERE ref = \&#x27;&quot; + request.args[\&#x27;ref\&#x27;] + &quot;\&#x27;&quot;\n    return db.execute(q)&#x27;
-
-REPLAY = &#x27;def report(request):\n    q = &quot;SELECT * FROM orders WHERE ref = ?&quot;\n    return db.execute(q, (request.args[\&#x27;ref\&#x27;],))&#x27;
-
-answer, used, model = ask(TASK, replay=REPLAY,
-            system=&#x27;You are a remediation engineer. Output code only, no explanation.&#x27;,
-            max_tokens=300)
-
-print(f&quot;backend used : {used}&quot;)
-print(f&quot;model        : {model}&quot;)
-print(f&quot;prompt       : {TASK[:66]}...&quot;)
-print()
-print(&quot;answer:&quot;)
-for line in (answer.splitlines() or [answer]):
-    print(f&quot;   {line}&quot;)
-
-# Two assertions that must hold on every backend, and one property that is
-# reported rather than asserted - a real model failing it is a finding about
-# the model, not a broken notebook.
-assert answer.strip(), &quot;the configured backend returned nothing&quot;
-if used == &quot;replay&quot;:
-    assert answer == REPLAY, &quot;the offline path must return the replay verbatim&quot;
-
-label, held = (&quot;parameterises the query&quot;, &quot;?&quot; in answer or &quot;%s&quot; in answer or &quot;:ref&quot; in answer)
-print()
-print(f&quot;property checked : {label}&quot;)
-print(f&quot;held on {used:12s} : {held}&quot;)
-print()
-print(&quot;Same code, same assertions, two possible backends. Offline the answer is&quot;)
-print(&quot;the replay and is labelled as one; with a served model it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Candidate D passes every automated gate and is still wrong. Write the rule that rejects it. You will find it has to be about which <em>mechanism</em> is acceptable, not about outcomes — and that rule belongs in your secure coding standard, not in the pipeline.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.10.html">B2.10 · Severity calibration and reporting</a></strong></p>

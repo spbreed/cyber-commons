@@ -60,134 +60,70 @@ peer" is a claim anyone inside the perimeter can make.</p></div><div class="nbmd
 </blockquote>
 <h2>3 · The risk, realised</h2>
 <p>Three agents, one credential, one incident.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>Three CyberTravels agents share one API key, so the payments API records one caller on every line. The skill measures both costs: what the record can attribute, and what revoking the key would stop.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/shared-credential-attribution-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: shared-credential-attribution-check
+<p>Three CyberTravels agents share one API key, so the payments API records one caller on every line. The skill measures both costs: what the record can attribute, and what revoking the key would stop.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/threats/shared-credential-attribution-check/SKILL.md"><code>skills/threats/shared-credential-attribution-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: shared-credential-attribution-check
 description: &gt;-
   Find credentials held by more than one agent and show what sharing does to
   attribution and to containment — who the downstream records, and what
   revoking it stops. Use when several agents call the same API, or when asked
   which agent did something and the record cannot say.
 allowed-tools: Read, Grep, Glob
----
-
-# One credential, three agents, one line in the log
-
-A shared credential is usually adopted for convenience and paid for during an
+</code></pre>
+<h1>One credential, three agents, one line in the log</h1>
+<p>A shared credential is usually adopted for convenience and paid for during an
 incident. It costs two things at once: the downstream cannot attribute an
-action to an agent, and the only containment available stops **every** holder.
-
-## When to use this
-
-Whenever more than one agent, job or replica authenticates downstream. Also
+action to an agent, and the only containment available stops <strong>every</strong> holder.</p>
+<h2>When to use this</h2>
+<p>Whenever more than one agent, job or replica authenticates downstream. Also
 before an incident: this is the check whose absence turns a contained problem
-into an outage.
-
-## Procedure
-
-**1 — Enumerate holders per credential.** Group by the secret, not by the
+into an outage.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate holders per credential.</strong> Group by the secret, not by the
 service. Environment variables, mounted files, a shared secrets-manager path
-and a baked-in image layer are all the same credential when the value matches.
-
-**2 — Read a downstream record.** Whatever the caller is identified by — an API
+and a baked-in image layer are all the same credential when the value matches.</p>
+<p><strong>2 — Read a downstream record.</strong> Whatever the caller is identified by — an API
 key id, a client id, a service account — record what the downstream can print.
-If three agents map to one identifier, attribution ends there.
-
-**3 — Simulate the destructive call.** Have one holder perform something
+If three agents map to one identifier, attribution ends there.</p>
+<p><strong>3 — Simulate the destructive call.</strong> Have one holder perform something
 irreversible. Ask, from the downstream record alone, which holder did it. Write
-down the answer even when it is &quot;cannot be determined&quot;; that sentence is the
-finding.
-
-**4 — Cost the containment.** Revoke the credential on paper and list what
-stops. The count of unrelated things that stop is the number to report.
-
-**5 — Propose per-workload identity,** and say what it costs: one credential
+down the answer even when it is "cannot be determined"; that sentence is the
+finding.</p>
+<p><strong>4 — Cost the containment.</strong> Revoke the credential on paper and list what
+stops. The count of unrelated things that stop is the number to report.</p>
+<p><strong>5 — Propose per-workload identity,</strong> and say what it costs: one credential
 per agent, issued by the platform rather than pasted, so revocation is
-per-agent and attribution is free.
-
-## Output contract
-
-```json
-{
+per-agent and attribution is free.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;credentials&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;holders&quot;: [&quot;str&quot;], &quot;source&quot;: &quot;env|file|manager|image&quot;}],
   &quot;downstream_identifier&quot;: {&quot;field&quot;: &quot;str&quot;, &quot;distinguishes_holders&quot;: false},
   &quot;destructive_probe&quot;: {&quot;actor&quot;: &quot;str&quot;, &quot;recoverable_from_record&quot;: false},
   &quot;containment&quot;: {&quot;revoking_stops&quot;: [&quot;str&quot;], &quot;collateral&quot;: 0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Grouping by service instead of by secret value.</strong> Two names, one key, is
+  still one credential.</li>
+<li><strong>Assuming the log will disambiguate.</strong> Read an actual row before assuming a
+  field exists.</li>
+<li><strong>Reporting only attribution.</strong> The containment cost is what makes it urgent.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>what the downstream service recorded:
+   caller=svc-agent-7f3a1c  read    reports
+   caller=svc-agent-7f3a1c  read    reports
+   caller=svc-agent-7f3a1c  read    reports
+   caller=svc-agent-7f3a1c  delete  prod.customers
 
-## Failure modes
+incident: delete on prod.customers
+which agent did it? candidates: [&#x27;deploy-agent&#x27;, &#x27;patch-agent&#x27;, &#x27;triage-agent&#x27;]
+distinguishable from the record? False
 
-- **Grouping by service instead of by secret value.** Two names, one key, is
-  still one credential.
-- **Assuming the log will disambiguate.** Read an actual row before assuming a
-  field exists.
-- **Reporting only attribution.** The containment cost is what makes it urgent.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+containment options:
+   rotate svc-agent-7f3a1c -&gt; stops the incident, and stops 3 agents including 2 innocent ones
+   rotate only the culprit -&gt; not available; there is no &#x27;only&#x27;
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/threats/shared-credential-attribution-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/shared-credential-attribution-check/scripts/shared_credential_attribution_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Show what a shared credential does to attribution and to containment when one holder misbehaves.
-
-This is the executable half of the `shared-credential-attribution-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-SHARED_KEY = &quot;svc-agent-7f3a1c&quot;
-
-AGENTS = {&quot;triage-agent&quot;:  {&quot;key&quot;: SHARED_KEY},
-          &quot;patch-agent&quot;:   {&quot;key&quot;: SHARED_KEY},
-          &quot;deploy-agent&quot;:  {&quot;key&quot;: SHARED_KEY}}
-
-CALLS = []
-
-def downstream(api_key, action, resource):
-    &quot;&quot;&quot;A downstream service sees only the credential presented.&quot;&quot;&quot;
-    CALLS.append({&quot;presented&quot;: api_key, &quot;action&quot;: action, &quot;resource&quot;: resource})
-    return {&quot;ok&quot;: True, &quot;caller&quot;: api_key}
-
-for name in sorted(AGENTS):
-    downstream(AGENTS[name][&quot;key&quot;], &quot;read&quot;, &quot;reports&quot;)
-downstream(SHARED_KEY, &quot;delete&quot;, &quot;prod.customers&quot;)     # one of them did this
-
-print(&quot;what the downstream service recorded:&quot;)
-for c in CALLS:
-    print(f&quot;   caller={c[&#x27;presented&#x27;]}  {c[&#x27;action&#x27;]:7s} {c[&#x27;resource&#x27;]}&quot;)
-
-incident = [c for c in CALLS if c[&quot;action&quot;] == &quot;delete&quot;]
-candidates = sorted(AGENTS)
-print(f&quot;\nincident: {incident[0][&#x27;action&#x27;]} on {incident[0][&#x27;resource&#x27;]}&quot;)
-print(f&quot;which agent did it? candidates: {candidates}&quot;)
-print(f&quot;distinguishable from the record? {len({c[&#x27;presented&#x27;] for c in CALLS}) &gt; 1}&quot;)
-
-print(&quot;\ncontainment options:&quot;)
-print(f&quot;   rotate {SHARED_KEY} -&gt; stops the incident, and stops &quot;
-      f&quot;{len(AGENTS)} agents including {len(AGENTS)-1} innocent ones&quot;)
-print(&quot;   rotate only the culprit -&gt; not available; there is no &#x27;only&#x27;&quot;)
-print()
-print(&quot;No attacker forged anything. Impersonation is the resting state of a&quot;)
-print(&quot;system where identity was never per-workload.&quot;)
-assert len({c[&quot;presented&quot;] for c in CALLS}) == 1</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+No attacker forged anything. Impersonation is the resting state of a
+system where identity was never per-workload.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Count the distinct credentials across your agents and divide by the number of agents. Any answer below one is this risk, and the number tells you how many innocent agents a revocation takes down.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.8.html">A1.8 · Malicious code execution</a></strong></p>

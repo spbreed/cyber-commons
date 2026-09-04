@@ -53,74 +53,56 @@ and it only works if you present the right number.</p>
 from now about a system that has since had six model upgrades.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the claim, as written</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it measures</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">defensible?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our AI security harness scores 100%.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness achieves 100% schema conformance.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">conformance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness scores 0.81 expert accuracy on a 24-question held-out set.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">accuracy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Our harness passes all automated checks.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">unspecified</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The first is true and misleading — conformance really is 100%. The last is the most common of the four and evidences nothing at all.</div></div><div class="nbmd"><h2>3 · The evidence pack, as a skill</h2>
 <p>An evaluation result becomes evidence only when it tested the control that is claimed, ran on the system that is <strong>deployed</strong>, and states its failure mode. Most evidence fails the second.</p>
-<p>The contract carries a field most packs would rather not have: <code>conformance_reported</code>. Setting it true should be read as a defect in the evidence, not a feature of it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/control-evidence/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: control-evidence
+<p>The contract carries a field most packs would rather not have: <code>conformance_reported</code>. Setting it true should be read as a defect in the evidence, not a feature of it.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/grc/control-evidence/SKILL.md"><code>skills/grc/control-evidence/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: control-evidence
 description: &gt;-
   Turn evaluation and monitoring output into audit evidence that survives
   challenge, and say plainly what it does not prove. Use when asked to evidence
   a control, prepare for an audit, map evals to a control framework, justify
   continuous control verification, or interpret a passing test as assurance.
 allowed-tools: Read, Bash
----
-
-# Evaluation output as audit evidence
-
-An evaluation result is not evidence until three things are true: it tested the
+</code></pre>
+<h1>Evaluation output as audit evidence</h1>
+<p>An evaluation result is not evidence until three things are true: it tested the
 control that is claimed, it ran on the system that is deployed, and its failure
-mode is stated. Most &quot;evidence&quot; fails the second.
-
-Point-in-time control testing fails for AI systems specifically because the
+mode is stated. Most "evidence" fails the second.</p>
+<p>Point-in-time control testing fails for AI systems specifically because the
 thing under test changes between tests — the model, the prompt, the tool set,
-and the data all move independently of any release.
-
-## When to use this
-
-Preparing audit evidence, mapping evals to controls, or reviewing whether a
-green dashboard supports the assurance being claimed from it.
-
-## Procedure
-
-**1 — State the control claim precisely.** &quot;The agent cannot exfiltrate
-customer data&quot; is not testable. &quot;Egress from the agent workload is denied to
-all destinations outside the allowlist, enforced at the gateway&quot; is. Evidence
-is only as good as the sentence it supports.
-
-**2 — Bind evidence to the deployed artefact.** Record the model version, the
-prompt/config hash, the tool allowlist, and the commit — for the system **as
-deployed**, not as tested in a branch. Evidence that cannot be bound to a
-deployed artefact proves something about a different system.
-
-**3 — State the population and the sample.** How many cases exist, how many
+and the data all move independently of any release.</p>
+<h2>When to use this</h2>
+<p>Preparing audit evidence, mapping evals to controls, or reviewing whether a
+green dashboard supports the assurance being claimed from it.</p>
+<h2>Procedure</h2>
+<p><strong>1 — State the control claim precisely.</strong> "The agent cannot exfiltrate
+customer data" is not testable. "Egress from the agent workload is denied to
+all destinations outside the allowlist, enforced at the gateway" is. Evidence
+is only as good as the sentence it supports.</p>
+<p><strong>2 — Bind evidence to the deployed artefact.</strong> Record the model version, the
+prompt/config hash, the tool allowlist, and the commit — for the system <strong>as
+deployed</strong>, not as tested in a branch. Evidence that cannot be bound to a
+deployed artefact proves something about a different system.</p>
+<p><strong>3 — State the population and the sample.</strong> How many cases exist, how many
 were tested, how they were chosen. A sample chosen by the team that built the
 control is not independent, and that has to be written down rather than
-implied.
-
-**4 — Separate operating effectiveness from outcome.** &quot;The gate ran on every
-request&quot; (operating) is different from &quot;no harmful action got through&quot;
+implied.</p>
+<p><strong>4 — Separate operating effectiveness from outcome.</strong> "The gate ran on every
+request" (operating) is different from "no harmful action got through"
 (outcome). Auditors ask for the first; incidents are caused by the second. Give
-both, labelled.
-
-**5 — Report accuracy, never conformance.** A pipeline whose output is
+both, labelled.</p>
+<p><strong>5 — Report accuracy, never conformance.</strong> A pipeline whose output is
 schema-valid 100% of the time has demonstrated that its serialiser works.
 Conformance is near-free by construction; accuracy is the expensive,
 interesting number. Any evidence pack leading with a conformance percentage is
 overstating itself, and an auditor who notices will discount everything else in
-it.
-
-**6 — State the blind spots.** What the eval cannot see: cases not in the
+it.</p>
+<p><strong>6 — State the blind spots.</strong> What the eval cannot see: cases not in the
 corpus, failure modes not modelled, drift since the run. A control with stated
-limits is stronger evidence than one claiming none.
-
-**7 — Set the re-verification interval from the change rate.** If the model can
+limits is stronger evidence than one claiming none.</p>
+<p><strong>7 — Set the re-verification interval from the change rate.</strong> If the model can
 be updated weekly, annual testing evidences a system that no longer exists. Tie
-re-verification to the artefact&#x27;s change events, not the calendar.
-
-## Output contract
-
-```json
-{
+re-verification to the artefact's change events, not the calendar.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;control&quot;: {&quot;id&quot;: &quot;str&quot;, &quot;claim&quot;: &quot;str&quot;, &quot;testable&quot;: true},
   &quot;binding&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;config_hash&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;],
               &quot;commit&quot;: &quot;str&quot;, &quot;matches_deployed&quot;: true},
@@ -133,210 +115,52 @@ re-verification to the artefact&#x27;s change events, not the calendar.
                      &quot;interval_days&quot;: 0},
   &quot;conclusion&quot;: {&quot;supports_claim&quot;: true, &quot;limits&quot;: &quot;str&quot;}
 }
-```
+</code></pre>
+<p><code>conformance_reported: true</code> should be treated as a defect in the evidence
+pack, not a feature of it.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Evidence from a branch.</strong> Bind to what is deployed or say you cannot.</li>
+<li><strong>A green dashboard as assurance.</strong> Ask what turns it red, and test that.</li>
+<li><strong>Convenience sampling presented as coverage.</strong></li>
+<li><strong>Annual re-verification of a weekly-changing artefact.</strong></li>
+<li><strong>Leading with conformance.</strong> The single most common overstatement in
+  automated assurance.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>n                24
+conformance      1.0000   ← structural. NOT a quality claim.
+expert accuracy  0.8750   ← the number that evidences EV-2
+EV-2  PASS
+      expert accuracy 0.8750 over 24 held-out questions; conformance 1.0000 reported separately; key never exposed to the harness
+      at +10d → PASS
+      at +45d → STALE
 
-`conformance_reported: true` should be treated as a defect in the evidence
-pack, not a feature of it.
+auditability checklist:
+   PASS  key held out
+   PASS  accuracy not conformance reported
+   PASS  sample size stated
+   PASS  expires
+   PASS  threshold stated up front
+conformance: 0 problem(s)
 
-## Failure modes
+control      : AI-07 (testable=True)
+bound to     : glm-4.6 @ 6a14d8b, matches deployed=True
+operating    : 100%   outcome: 88%
+sample       : 24/24, independent=False
+re-verify on : on_model_change
 
-- **Evidence from a branch.** Bind to what is deployed or say you cannot.
-- **A green dashboard as assurance.** Ask what turns it red, and test that.
-- **Convenience sampling presented as coverage.**
-- **Annual re-verification of a weekly-changing artefact.**
-- **Leading with conformance.** The single most common overstatement in
-  automated assurance.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Operating effectiveness says the gate ran on every request. Outcome
+effectiveness says whether anything harmful still got through. Auditors
+ask for the first; incidents are caused by the second. Give both,
+labelled, or the pack answers a question nobody asked.
+conformance problems: 0   &lt;- still zero
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+claimed    : 100% schema-valid output
+measured   : accuracy 88% on 24 cases
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/grc/control-evidence/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/control-evidence/scripts/control_evidence.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Turn evaluation output into audit evidence, with the conformance and accuracy numbers reported separately.
-
-This is the executable half of the `control-evidence` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-# The skill runtime comes from the shared library, not from a copy in this file.
-# In a lesson notebook the cell above has already loaded it; standalone, find it
-# the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import check, contract_of, parse_skill
-
-
-def _skill_md():
-    &quot;&quot;&quot;The SKILL.md next to this script, or the one the notebook already parsed.&quot;&quot;&quot;
-    if &quot;SKILL_MD&quot; in globals():
-        return globals()[&quot;SKILL_MD&quot;]
-    return (_pathlib.Path(__file__).resolve().parent.parent / &quot;SKILL.md&quot;).read_text()
-
-
-import pathlib as _pathlib
-
-SKILL_MD = _skill_md()
-meta, body = parse_skill(SKILL_MD)
-
-import json, time
-from dataclasses import dataclass, field
-
-@dataclass
-class Truth:
-    qid: str; cwe: str; file: str
-
-def path_key(p):
-    parts = [x for x in p.replace(&quot;\\&quot;, &quot;/&quot;).split(&quot;/&quot;) if x not in (&quot;&quot;, &quot;.&quot;)]
-    return &quot;/&quot;.join(parts[-2:]) if len(parts) &gt; 1 else (parts[-1] if parts else &quot;&quot;)
-
-TRUTHS = {f&quot;q{i}&quot;: Truth(f&quot;q{i}&quot;, [&quot;CWE-89&quot;,&quot;CWE-78&quot;,&quot;CWE-22&quot;,&quot;CWE-798&quot;][i % 4],
-                         f&quot;{[&#x27;CWE-89&#x27;,&#x27;CWE-78&#x27;,&#x27;CWE-22&#x27;,&#x27;CWE-798&#x27;][i % 4]}/{i}.py&quot;)
-          for i in range(1, 25)}
-
-def harness_answers(truths, skill=0.75, seed=5):
-    import random
-    rng = random.Random(seed)
-    out = {}
-    for q, t in truths.items():
-        right = rng.random() &lt; skill
-        out[q] = json.dumps({&quot;qid&quot;: q, &quot;cwe&quot;: t.cwe if right else &quot;CWE-89&quot;,
-                             &quot;file&quot;: t.file, &quot;line&quot;: 1,
-                             &quot;rationale&quot;: &quot;untrusted input reaches the sink&quot;})
-    return out
-
-def evaluate(answers, truths):
-    conforming = expert = 0
-    for q, t in truths.items():
-        try: d = json.loads(answers[q])
-        except (json.JSONDecodeError, KeyError): continue
-        conforming += 1
-        if path_key(d[&quot;file&quot;]) != path_key(t.file): continue
-        expert += 1.0 if d[&quot;cwe&quot;].upper() == t.cwe else 0.5
-    return {&quot;n&quot;: len(truths),
-            &quot;conformance&quot;: round(conforming/len(truths), 4),
-            &quot;expert_accuracy&quot;: round(expert/len(truths), 4)}
-
-r = evaluate(harness_answers(TRUTHS), TRUTHS)
-print(f&quot;n                {r[&#x27;n&#x27;]}&quot;)
-print(f&quot;conformance      {r[&#x27;conformance&#x27;]:.4f}   ← structural. NOT a quality claim.&quot;)
-print(f&quot;expert accuracy  {r[&#x27;expert_accuracy&#x27;]:.4f}   ← the number that evidences EV-2&quot;)
-
-DAY = 86400
-now = time.time()
-
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; evidence: str
-    tested_at: float; valid_for_days: float
-    def state(self, at):
-        if (at - self.tested_at)/DAY &gt; self.valid_for_days: return &quot;STALE&quot;
-        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
-
-THRESHOLD = 0.80
-test = ControlTest(
-    &quot;EV-2&quot;,
-    passed=r[&quot;expert_accuracy&quot;] &gt;= THRESHOLD,
-    evidence=(f&quot;expert accuracy {r[&#x27;expert_accuracy&#x27;]:.4f} over {r[&#x27;n&#x27;]} held-out &quot;
-              f&quot;questions; conformance {r[&#x27;conformance&#x27;]:.4f} reported separately; &quot;
-              f&quot;key never exposed to the harness&quot;),
-    tested_at=now, valid_for_days=30)
-
-print(f&quot;EV-2  {test.state(now)}&quot;)
-print(f&quot;      {test.evidence}&quot;)
-for age in (10, 45):
-    print(f&quot;      at +{age}d → {test.state(now + age*DAY)}&quot;)
-
-CHECKLIST = {
- &quot;key held out&quot;:         True,
- &quot;accuracy not conformance reported&quot;: True,
- &quot;sample size stated&quot;:   True,
- &quot;expires&quot;:              test.valid_for_days &gt; 0,
- &quot;threshold stated up front&quot;: True,
-}
-print(&quot;\nauditability checklist:&quot;)
-for k, v in CHECKLIST.items():
-    print(f&quot;   {&#x27;PASS&#x27; if v else &#x27;FAIL&#x27;}  {k}&quot;)
-assert all(CHECKLIST.values())
-assert test.state(now + 45*DAY) == &quot;STALE&quot;
-
-contract = contract_of(body)
-
-pack = {
- &quot;control&quot;: {&quot;id&quot;: &quot;AI-07&quot;, &quot;claim&quot;: &quot;Egress from the agent workload is denied &quot;
-                                     &quot;to destinations outside the allowlist, &quot;
-                                     &quot;enforced at the gateway&quot;,
-             &quot;testable&quot;: True},
- &quot;binding&quot;: {&quot;model&quot;: &quot;glm-4.6&quot;, &quot;config_hash&quot;: &quot;sha256:7f3a1c&quot;,
-             &quot;tools&quot;: [&quot;read_file&quot;, &quot;http_get&quot;], &quot;commit&quot;: &quot;6a14d8b&quot;,
-             &quot;matches_deployed&quot;: True},
- &quot;sample&quot;: {&quot;population&quot;: len(TRUTHS), &quot;tested&quot;: len(TRUTHS),
-            &quot;selection&quot;: &quot;risk_based&quot;, &quot;independent&quot;: False},
- # r came from evaluate() above: conformance and expert accuracy on the same
- # run. Only one of them belongs in an evidence pack as a quality number.
- &quot;results&quot;: {&quot;operating_effectiveness&quot;: 1.0,
-             &quot;outcome_effectiveness&quot;: r[&quot;expert_accuracy&quot;],
-             &quot;accuracy&quot;: r[&quot;expert_accuracy&quot;],
-             # the honest default, and the one line an auditor looks for
-             &quot;conformance_reported&quot;: False},
- &quot;blind_spots&quot;: [&quot;cases not in the corpus&quot;,
-                 &quot;drift since the run&quot;,
-                 &quot;the sample was chosen by the team that built the control&quot;],
- &quot;reverification&quot;: {&quot;trigger&quot;: &quot;on_model_change&quot;, &quot;interval_days&quot;: 0},
- &quot;conclusion&quot;: {&quot;supports_claim&quot;: True,
-                &quot;limits&quot;: &quot;evidences the gateway control only, at this commit&quot;},
-}
-problems = check(pack, contract)
-print(f&quot;conformance: {len(problems)} problem(s)&quot;)
-for p in problems: print(&quot;   &quot;, p)
-assert not problems, problems
-
-print(f&quot;\ncontrol      : {pack[&#x27;control&#x27;][&#x27;id&#x27;]} (testable={pack[&#x27;control&#x27;][&#x27;testable&#x27;]})&quot;)
-print(f&quot;bound to     : {pack[&#x27;binding&#x27;][&#x27;model&#x27;]} @ {pack[&#x27;binding&#x27;][&#x27;commit&#x27;]}, &quot;
-      f&quot;matches deployed={pack[&#x27;binding&#x27;][&#x27;matches_deployed&#x27;]}&quot;)
-print(f&quot;operating    : {pack[&#x27;results&#x27;][&#x27;operating_effectiveness&#x27;]:.0%}   &quot;
-      f&quot;outcome: {pack[&#x27;results&#x27;][&#x27;outcome_effectiveness&#x27;]:.0%}&quot;)
-print(f&quot;sample       : {pack[&#x27;sample&#x27;][&#x27;tested&#x27;]}/{pack[&#x27;sample&#x27;][&#x27;population&#x27;]}, &quot;
-      f&quot;independent={pack[&#x27;sample&#x27;][&#x27;independent&#x27;]}&quot;)
-print(f&quot;re-verify on : {pack[&#x27;reverification&#x27;][&#x27;trigger&#x27;]}&quot;)
-print()
-print(&quot;Operating effectiveness says the gate ran on every request. Outcome&quot;)
-print(&quot;effectiveness says whether anything harmful still got through. Auditors&quot;)
-print(&quot;ask for the first; incidents are caused by the second. Give both,&quot;)
-print(&quot;labelled, or the pack answers a question nobody asked.&quot;)
-assert pack[&quot;results&quot;][&quot;conformance_reported&quot;] is False
-assert pack[&quot;sample&quot;][&quot;independent&quot;] is False   # stated, not hidden
-
-flattering = dict(pack, results=dict(pack[&quot;results&quot;],
-                     accuracy=r[&quot;conformance&quot;], conformance_reported=True))
-print(f&quot;conformance problems: {len(check(flattering, contract))}   &lt;- still zero&quot;)
-print()
-print(f&quot;claimed    : {r[&#x27;conformance&#x27;]:.0%} schema-valid output&quot;)
-print(f&quot;measured   : accuracy {pack[&#x27;results&#x27;][&#x27;accuracy&#x27;]:.0%} on &quot;
-      f&quot;{pack[&#x27;sample&#x27;][&#x27;tested&#x27;]} cases&quot;)
-print()
-print(&quot;Schema validity is near-free by construction: an empty result scores&quot;)
-print(&quot;100%. It is a statement about the serialiser, not about whether the&quot;)
-print(&quot;control works. An auditor who notices the substitution discounts every&quot;)
-print(&quot;other number in the pack, which is the expensive part.&quot;)
-assert not check(flattering, contract), &quot;the flattering pack conforms - that is the point&quot;
-assert flattering[&quot;results&quot;][&quot;conformance_reported&quot;] is True</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the pack that leads with conformance</h2>
+Schema validity is near-free by construction: an empty result scores
+100%. It is a statement about the serialiser, not about whether the
+control works. An auditor who notices the substitution discounts every
+other number in the pack, which is the expensive part.</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the pack that leads with conformance</h2>
 <p>The most common overstatement in automated assurance, and it is usually made in good faith.</p></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Conformance is 1.0000 while expert accuracy lands around 0.81 on 24 held-out questions. Two of four sample claims are defensible. The EV-2 control test passes against a stated 0.80 threshold, is valid for 30 days, and reads STALE at 45 days. All five auditability checks pass.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find an eval number your organisation has quoted, internally or externally, and determine which of the two it was. Then check whether it has an expiry. Most do not, and are still being cited.</p></div><div class="nbmd"><hr />

@@ -46,131 +46,64 @@ than an obviously incomplete one.</p>
 <p>The gap between them is where reconstruction goes wrong, and it is the responder's
 job to state that gap explicitly in the incident record.</p></div><div class="nbmd"><h2>3 · The control — state what the evidence can support</h2>
 <p>The fix is not a better model. It is a reconstruction step that reports its own evidentiary limits before it reports a conclusion.</p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
-<p>The timeline attributes every action to <code>dana@corp</code> and the fluent narrative recommends suspending her. The skill renders that view first, produces the truth view from an independent source, and then gates every claim on a field that supports it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/incident-reconstruction-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: incident-reconstruction-check
+<p>The timeline attributes every action to <code>dana@corp</code> and the fluent narrative recommends suspending her. The skill renders that view first, produces the truth view from an independent source, and then gates every claim on a field that supports it.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/incident-reconstruction-check/SKILL.md"><code>skills/response/incident-reconstruction-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: incident-reconstruction-check
 description: &gt;-
   Reconstruct an incident from logs that attribute every action to a human,
   check what the evidence actually supports, and refuse to publish a narrative
   it does not carry. Use during response, when the timeline names a person and
   an agent did the work.
 allowed-tools: Read, Grep, Glob
----
-
-# The fluent narrative recommends suspending the wrong person
-
-Agent logs that record only the delegated principal produce a timeline in which
+</code></pre>
+<h1>The fluent narrative recommends suspending the wrong person</h1>
+<p>Agent logs that record only the delegated principal produce a timeline in which
 a human did everything. A model asked to summarise it writes something fluent
 and confident that recommends suspending her. The reconstruction is not wrong
-about the events; it is wrong about the actor, and nothing in the log says so.
-
-## When to use this
-
-Every incident involving an agent, and before any narrative reaches a person who
-will act on it.
-
-## Procedure
-
-**1 — Render the timeline as the logs have it.** Do not correct it yet. This is
-what an investigator would see, and seeing it is the point.
-
-**2 — Ask which field carries the acting identity.** Not the delegated
+about the events; it is wrong about the actor, and nothing in the log says so.</p>
+<h2>When to use this</h2>
+<p>Every incident involving an agent, and before any narrative reaches a person who
+will act on it.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Render the timeline as the logs have it.</strong> Do not correct it yet. This is
+what an investigator would see, and seeing it is the point.</p>
+<p><strong>2 — Ask which field carries the acting identity.</strong> Not the delegated
 principal — the identity that performed the action. If no field carries it, stop:
-every attribution below is inherited from the request, not observed.
-
-**3 — Produce the truth view from an independent source** where one exists — host
-accounting, the gateway, the downstream&#x27;s own log. Diff it against the timeline
+every attribution below is inherited from the request, not observed.</p>
+<p><strong>3 — Produce the truth view from an independent source</strong> where one exists — host
+accounting, the gateway, the downstream's own log. Diff it against the timeline
 and record what changes. Usually one or two actions move from the human to the
-agent, and they are the important ones.
-
-**4 — Gate the narrative on evidence.** A summary may assert only what a field
+agent, and they are the important ones.</p>
+<p><strong>4 — Gate the narrative on evidence.</strong> A summary may assert only what a field
 supports. Attach the field to each claim; a claim with no field is removed, not
-softened.
-
-**5 — Publish the safe version and the gap.** State plainly which questions the
+softened.</p>
+<p><strong>5 — Publish the safe version and the gap.</strong> State plainly which questions the
 record cannot answer. An investigation that says so is more useful than one that
-fills the gap fluently.
-
-## Output contract
-
-```json
-{
+fills the gap fluently.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;timeline&quot;: [{&quot;at&quot;: &quot;str&quot;, &quot;attributed_to&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;}],
   &quot;acting_identity_field&quot;: &quot;str|null&quot;,
   &quot;truth_view&quot;: [{&quot;at&quot;: &quot;str&quot;, &quot;actual_actor&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;, &quot;source&quot;: &quot;str&quot;}],
   &quot;narrative&quot;: {&quot;claims&quot;: [{&quot;text&quot;: &quot;str&quot;, &quot;supported_by&quot;: &quot;str|null&quot;}], &quot;removed&quot;: 0},
   &quot;gaps&quot;: [&quot;str&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Publishing the fluent version.</strong> It is confident and it names a person.</li>
+<li><strong>Correcting the timeline before showing it.</strong> The uncorrected view is what
+  everyone else is looking at.</li>
+<li><strong>Softening unsupported claims.</strong> Remove them.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>WHAT THE RESPONDER SEES
+   t+s  actor           action          target
+     0  dana@corp       login           sso
+    22  dana@corp       open_ticket     SEC-4471
+    40  dana@corp       read_file       /work/repo/billing.py
+    41  dana@corp       read_file       /home/app/.aws/credentials
+    43  dana@corp       http_post       collect.example.com
+   180  dana@corp       logout          sso
+A MODEL&#x27;S RECONSTRUCTION (fluent, supported by every log line):
 
-## Failure modes
-
-- **Publishing the fluent version.** It is confident and it names a person.
-- **Correcting the timeline before showing it.** The uncorrected view is what
-  everyone else is looking at.
-- **Softening unsupported claims.** Remove them.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/response/incident-reconstruction-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/incident-reconstruction-check/scripts/incident_reconstruction_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Reconstruct an incident from logs that attribute every action to a human, and refuse to report a narrative the evidence does not carry.
-
-This is the executable half of the `incident-reconstruction-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-from dataclasses import dataclass, field
-
-@dataclass
-class LogLine:
-    ts: float
-    logged_actor: str     # what the audit log records
-    real_actor: str       # what actually happened (held out from the responder)
-    action: str
-    target: str = &quot;&quot;
-
-def render(lines, truth=False):
-    base = min(l.ts for l in lines)
-    rows = [f&quot;{&#x27;t+s&#x27;:&gt;6}  {&#x27;actor&#x27;:16s}{&#x27;action&#x27;:16s}target&quot;]
-    for l in sorted(lines, key=lambda x: x.ts):
-        who = l.real_actor if truth else l.logged_actor
-        rows.append(f&quot;{l.ts-base:&gt;6.0f}  {who:16s}{l.action:16s}{l.target}&quot;)
-    return &quot;\n&quot;.join(rows)
-
-t0 = time.time()
-INCIDENT = [
- LogLine(t0,      &quot;dana@corp&quot;, &quot;dana@corp&quot;,   &quot;login&quot;,       &quot;sso&quot;),
- LogLine(t0+22,   &quot;dana@corp&quot;, &quot;dana@corp&quot;,   &quot;open_ticket&quot;, &quot;SEC-4471&quot;),
- LogLine(t0+40,   &quot;dana@corp&quot;, &quot;patch-agent&quot;, &quot;read_file&quot;,   &quot;/work/repo/billing.py&quot;),
- LogLine(t0+41,   &quot;dana@corp&quot;, &quot;patch-agent&quot;, &quot;read_file&quot;,   &quot;/home/app/.aws/credentials&quot;),
- LogLine(t0+43,   &quot;dana@corp&quot;, &quot;patch-agent&quot;, &quot;http_post&quot;,   &quot;collect.example.com&quot;),
- LogLine(t0+180,  &quot;dana@corp&quot;, &quot;dana@corp&quot;,   &quot;logout&quot;,      &quot;sso&quot;),
-]
-print(&quot;WHAT THE RESPONDER SEES&quot;)
-print(render(INCIDENT))
-
-NARRATIVE = &quot;&quot;&quot;
 At 14:02 dana@corp authenticated via SSO and opened ticket SEC-4471. Eighteen
 seconds later the same account read billing.py, then read the application&#x27;s AWS
 credentials, and posted to an external host. The account then remained active
@@ -178,67 +111,38 @@ for a further two minutes before logging out.
 
 Assessment: credential theft by an authenticated insider. Recommend immediate
 suspension of dana@corp pending investigation.
-&quot;&quot;&quot;
-print(&quot;A MODEL&#x27;S RECONSTRUCTION (fluent, supported by every log line):&quot;)
-print(NARRATIVE)
 
-print(&quot;WHAT ACTUALLY HAPPENED&quot;)
-print(render(INCIDENT, truth=True))
+WHAT ACTUALLY HAPPENED
+   t+s  actor           action          target
+     0  dana@corp       login           sso
+    22  dana@corp       open_ticket     SEC-4471
+    40  patch-agent     read_file       /work/repo/billing.py
+    41  patch-agent     read_file       /home/app/.aws/credentials
+    43  patch-agent     http_post       collect.example.com
+   180  dana@corp       logout          sso
+actors_in_logs        [&#x27;dana@corp&#x27;]
+actors_in_reality     [&#x27;dana@corp&#x27;, &#x27;patch-agent&#x27;]
+misattributed_lines   3
+hidden_actors         [&#x27;patch-agent&#x27;]
+attribution           BROKEN
+consequence           containment aimed at [&#x27;dana@corp&#x27;] leaves [&#x27;patch-agent&#x27;] running
 
-def reconstruct(lines):
-    logged = {l.logged_actor for l in lines}
-    real   = {l.real_actor for l in lines}
-    wrong  = [l for l in lines if l.logged_actor != l.real_actor]
-    return {&quot;actors_in_logs&quot;: sorted(logged),
-            &quot;actors_in_reality&quot;: sorted(real),
-            &quot;misattributed_lines&quot;: len(wrong),
-            &quot;hidden_actors&quot;: sorted(real - logged),
-            &quot;attribution&quot;: &quot;sound&quot; if not wrong else &quot;BROKEN&quot;,
-            &quot;consequence&quot;: (&quot;none&quot; if not wrong else
-                            f&quot;containment aimed at {sorted(logged)} leaves &quot;
-                            f&quot;{sorted(real - logged)} running&quot;)}
+Every sentence in that narrative is supported by the logs.
+The conclusion is wrong, and the recommended action does nothing.
+EVIDENTIARY LIMITS (must appear before any conclusion):
+   ⚠ no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
+   ⚠ no delegation chain: cannot establish who caused the task
 
-r = reconstruct(INCIDENT)
-for k, v in r.items(): print(f&quot;{k:22s}{v}&quot;)
-print(&quot;\nEvery sentence in that narrative is supported by the logs.&quot;)
-print(&quot;The conclusion is wrong, and the recommended action does nothing.&quot;)
-
-def evidence_check(lines, has_acting_identity_field, has_act_chain):
-    limits = []
-    if not has_acting_identity_field:
-        limits.append(&quot;no acting-identity field: every line attributes to the &quot;
-                      &quot;principal, so agent actions are indistinguishable from human ones&quot;)
-    if not has_act_chain:
-        limits.append(&quot;no delegation chain: cannot establish who caused the task&quot;)
-    rates = {}
-    for l in lines:
-        rates.setdefault(l.logged_actor, []).append(l.ts)
-    for actor, ts in rates.items():
-        if len(ts) &gt; 2:
-            span = max(ts) - min(ts)
-            per_min = len(ts) / max(span/60, 1e-9)
-            if per_min &gt; 30:
-                limits.append(f&quot;{actor} shows {per_min:.0f} actions/min — &quot;
-                              f&quot;not human-paced; an agent is likely present&quot;)
-    return limits
-
-limits = evidence_check(INCIDENT, has_acting_identity_field=False, has_act_chain=False)
-print(&quot;EVIDENTIARY LIMITS (must appear before any conclusion):&quot;)
-for l in limits: print(f&quot;   ⚠ {l}&quot;)
-
-SAFE = f&quot;&quot;&quot;
 Timeline: dana@corp authenticated, opened SEC-4471; the account then read
 billing.py, read AWS credentials, and posted externally.
 
 LIMITS OF THIS RECONSTRUCTION
-{chr(10).join(&#x27;  - &#x27; + l for l in limits)}
+  - no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
+  - no delegation chain: cannot establish who caused the task
 
 Assessment: an actor holding dana@corp&#x27;s credential performed the reads and the
 POST. The logs CANNOT establish whether that actor was the human or an agent
-operating with her token. Containment must therefore address both.
-&quot;&quot;&quot;
-print(SAFE)
-assert limits</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+operating with her token. Containment must therefore address both.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The timeline attributes every action to <code>dana@corp</code>. The fluent narrative recommends suspending her. The truth view shows <code>patch-agent</code> performed the credential read and the external POST; reconstruction reports BROKEN attribution with 3 misattributed lines. The evidence check flags the missing acting-identity field, the missing chain, and a non-human action rate.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take a real incident timeline from your own history and ask what it would look like if an agent had been operating on the user's credential. If you cannot tell from the logs, your reconstructions already carry this risk.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.2.html">D2.2 · When the actor is an agent</a></strong></p>

@@ -9,16 +9,6 @@ not do this job; this does, and the build refuses a lesson without one.
 
 ABOUT: dict[str, str] = {
 
-"A0.1": """
-**What it covers.** The mechanism every other lesson uses: an agent skill as a
-file, one shared runtime that parses and executes it, and how both reach a
-Kaggle kernel.
-
-**Why a security engineer needs it.** A procedure you can only run inside
-somebody else's curriculum is a demo. These are files — a `SKILL.md` a coding
-agent loads, a script it calls, and a runtime you can point at your own
-notebooks. This lesson is how you take them with you.
-""",
 "A1.0": """
 **What it covers.** Place the five functions of the commons on one diagram and find where your own work sits.
 

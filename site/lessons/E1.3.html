@@ -44,190 +44,101 @@ a small local model with production deploy rights and regulated data.</p>
 </ul>
 <p>The model matters for <em>likelihood</em> of a bad output, which is a different and
 smaller term than consequence.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill tiers five assets by autonomy, data and reach, then re-tiers them with the questionnaire that leads with the model question — and reports the inversion, where a small local model with deploy rights and regulated data moves from low to critical.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/agentic-risk-tiering/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agentic-risk-tiering
+<p>The skill tiers five assets by autonomy, data and reach, then re-tiers them with the questionnaire that leads with the model question — and reports the inversion, where a small local model with deploy rights and regulated data moves from low to critical.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/grc/agentic-risk-tiering/SKILL.md"><code>skills/grc/agentic-risk-tiering/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agentic-risk-tiering
 description: &gt;-
   Tier an AI use case by what it can do — autonomy, data reach and external
   effect — and compare the result against tiering by which model it uses. Use
   when writing or auditing a risk questionnaire, or when every large-model
   deployment is coming out high.
 allowed-tools: Read, Grep, Glob
----
-
-# Tier the authority, not the model
-
-Tiering on model capability tracks vendor marketing: every frontier deployment
+</code></pre>
+<h1>Tier the authority, not the model</h1>
+<p>Tiering on model capability tracks vendor marketing: every frontier deployment
 becomes high and every small model low. It gets the important case backwards — a
 small local model with production deploy rights and regulated data — because the
 model determines the likelihood of a bad output and the authority determines
-what a bad output costs.
-
-## When to use this
-
-Writing an intake questionnaire, auditing an existing one, or re-tiering a
-portfolio whose distribution looks like the vendor&#x27;s price list.
-
-## Procedure
-
-**1 — Score three inputs, none of which is the model.** What the output can
+what a bad output costs.</p>
+<h2>When to use this</h2>
+<p>Writing an intake questionnaire, auditing an existing one, or re-tiering a
+portfolio whose distribution looks like the vendor's price list.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Score three inputs, none of which is the model.</strong> What the output can
 trigger without a human, what data it can read, and whether it can act
-externally. Each on a small ordinal scale, and write the scale down.
-
-**2 — Set thresholds and apply them.** Publish the thresholds with the tiers, so
-a disputed tier is a dispute about a number rather than about judgement.
-
-**3 — Tier the same portfolio by model, as a comparison.** Run the
+externally. Each on a small ordinal scale, and write the scale down.</p>
+<p><strong>2 — Set thresholds and apply them.</strong> Publish the thresholds with the tiers, so
+a disputed tier is a dispute about a number rather than about judgement.</p>
+<p><strong>3 — Tier the same portfolio by model, as a comparison.</strong> Run the
 questionnaire that leads with the model question and record where the two
-disagree. The disagreements are the argument.
-
-**4 — Look hardest at the inversions.** An asset that is low by model and
+disagree. The disagreements are the argument.</p>
+<p><strong>4 — Look hardest at the inversions.</strong> An asset that is low by model and
 critical by authority is the case that motivates the change, and there is
-usually one.
-
-**5 — Write the four questions the intake form should ask** and, explicitly, the
+usually one.</p>
+<p><strong>5 — Write the four questions the intake form should ask</strong> and, explicitly, the
 one it should not lead with. Reviewers copy questionnaires; make yours the one
-worth copying.
-
-## Output contract
-
-```json
-{
+worth copying.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;scale&quot;: {&quot;autonomy&quot;: [&quot;str&quot;], &quot;data&quot;: [&quot;str&quot;], &quot;reach&quot;: [&quot;str&quot;]},
   &quot;assets&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;autonomy&quot;: 0, &quot;data&quot;: 0, &quot;reach&quot;: 0, &quot;score&quot;: 0, &quot;tier&quot;: &quot;low|medium|high|critical&quot;}],
   &quot;by_model&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;tier&quot;: &quot;low|medium|high|critical&quot;}],
   &quot;disagreements&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;by_authority&quot;: &quot;str&quot;, &quot;by_model&quot;: &quot;str&quot;, &quot;inversion&quot;: true}],
   &quot;questions&quot;: [&quot;str&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Leading with the model question.</strong> Everything downstream inherits it.</li>
+<li><strong>Unpublished thresholds.</strong> The tier becomes an opinion.</li>
+<li><strong>Ignoring the inversions.</strong> They are the whole finding.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>asset                                         tier       score
+------------------------------------------------------------------
+frontier chatbot, public docs, read-only      low            0
+small local model with prod deploy rights     critical      12
+                                              autonomy L3 (+5)
+                                              regulated data (+3)
+                                              customer data (+2)
+                                              can act externally (+2)
+mid model, gated writes, internal only        low            1
+                                              autonomy L2 (+1)
+frontier model summarising customer tickets   low            2
+                                              customer data (+2)
+unregistered remediation agent                high           8
+                                              autonomy L2.5 (+3)
+                                              customer data (+2)
+                                              can act externally (+2)
+                                              unregistered (+1)
+asset                                         by model  by authority  agreement
+------------------------------------------------------------------------------------
+frontier chatbot, public docs, read-only      high      low           ← DISAGREE
+small local model with prod deploy rights     low       critical      ← DISAGREE
+mid model, gated writes, internal only        medium    low           ← DISAGREE
+frontier model summarising customer tickets   high      low           ← DISAGREE
+unregistered remediation agent                medium    high          ← DISAGREE
 
-## Failure modes
+5/5 disagree.
+The worst inversion: the small local model with deploy rights tiers LOW
+on model capability and CRITICAL on what it can actually do.
+ASK:
+   What can it change without a human approving that specific action?
+      → autonomy — the largest term
+   What data can it read, and is any of it regulated or customer data?
+      → consequence of a leak
+   Can it act outside our boundary?
+      → reach
+   Is it registered, with a named owner?
+      → governability — an unowned asset cannot be remediated
 
-- **Leading with the model question.** Everything downstream inherits it.
-- **Unpublished thresholds.** The tier becomes an opinion.
-- **Ignoring the inversions.** They are the whole finding.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+DO NOT tier on:
+   Which model does it use?
+   How many parameters?
+   Is the vendor SOC 2 certified?
+   (these matter for LIKELIHOOD and vendor risk — a separate, smaller term)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/grc/agentic-risk-tiering/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/agentic-risk-tiering/scripts/agentic_risk_tiering.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Tier a use case by autonomy, data and reach, and compare the answer against tiering by model.
-
-This is the executable half of the `agentic-risk-tiering` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-from dataclasses import dataclass
-
-@dataclass
-class AIAsset:
-    name: str; kind: str; owner: str = &quot;&quot;; autonomy: str = &quot;L1&quot;
-    data: tuple = (); external: bool = False; registered: bool = True
-
-TIER_THRESHOLDS = [(9, &quot;critical&quot;), (6, &quot;high&quot;), (3, &quot;medium&quot;), (0, &quot;low&quot;)]
-
-def risk_tier(a):
-    score, why = 0, []
-    pts = {&quot;L1&quot;: 0, &quot;L2&quot;: 1, &quot;L2.5&quot;: 3, &quot;L3&quot;: 5}[a.autonomy]
-    if pts: score += pts; why.append(f&quot;autonomy {a.autonomy} (+{pts})&quot;)
-    if &quot;regulated&quot; in a.data: score += 3; why.append(&quot;regulated data (+3)&quot;)
-    if &quot;customer&quot; in a.data:  score += 2; why.append(&quot;customer data (+2)&quot;)
-    if a.external:            score += 2; why.append(&quot;can act externally (+2)&quot;)
-    if not a.registered:      score += 1; why.append(&quot;unregistered (+1)&quot;)
-    tier = next(t for th, t in TIER_THRESHOLDS if score &gt;= th)
-    return {&quot;tier&quot;: tier, &quot;score&quot;: score, &quot;because&quot;: why}
-
-ASSETS = [
- AIAsset(&quot;frontier chatbot, public docs, read-only&quot;, &quot;copilot&quot;, &quot;x&quot;, &quot;L1&quot;, (&quot;public&quot;,)),
- AIAsset(&quot;small local model with prod deploy rights&quot;, &quot;agent&quot;, &quot;x&quot;, &quot;L3&quot;,
-         (&quot;customer&quot;, &quot;regulated&quot;), True),
- AIAsset(&quot;mid model, gated writes, internal only&quot;, &quot;agent&quot;, &quot;x&quot;, &quot;L2&quot;, (&quot;employee&quot;,)),
- AIAsset(&quot;frontier model summarising customer tickets&quot;, &quot;copilot&quot;, &quot;x&quot;, &quot;L1&quot;,
-         (&quot;customer&quot;,)),
- AIAsset(&quot;unregistered remediation agent&quot;, &quot;agent&quot;, &quot;&quot;, &quot;L2.5&quot;, (&quot;customer&quot;,),
-         True, registered=False),
-]
-print(f&quot;{&#x27;asset&#x27;:46s}{&#x27;tier&#x27;:10s}{&#x27;score&#x27;:&gt;6}&quot;)
-print(&quot;-&quot; * 66)
-for a in ASSETS:
-    t = risk_tier(a)
-    print(f&quot;{a.name:46s}{t[&#x27;tier&#x27;]:10s}{t[&#x27;score&#x27;]:&gt;6}&quot;)
-    for w in t[&quot;because&quot;]:
-        print(f&quot;{&#x27;&#x27;:46s}{w}&quot;)
-
-MODEL_TIER = {   # the questionnaire that asks &#x27;which model?&#x27; first
- &quot;frontier chatbot, public docs, read-only&quot;: &quot;high&quot;,
- &quot;small local model with prod deploy rights&quot;: &quot;low&quot;,
- &quot;mid model, gated writes, internal only&quot;: &quot;medium&quot;,
- &quot;frontier model summarising customer tickets&quot;: &quot;high&quot;,
- &quot;unregistered remediation agent&quot;: &quot;medium&quot;,
-}
-print(f&quot;{&#x27;asset&#x27;:46s}{&#x27;by model&#x27;:10s}{&#x27;by authority&#x27;:14s}agreement&quot;)
-print(&quot;-&quot; * 84)
-disagreements = 0
-for a in ASSETS:
-    by_auth = risk_tier(a)[&quot;tier&quot;]
-    by_model = MODEL_TIER[a.name]
-    agree = by_auth == by_model
-    disagreements += not agree
-    print(f&quot;{a.name:46s}{by_model:10s}{by_auth:14s}{&#x27;&#x27; if agree else &#x27;← DISAGREE&#x27;}&quot;)
-print(f&quot;\n{disagreements}/{len(ASSETS)} disagree.&quot;)
-print(&quot;The worst inversion: the small local model with deploy rights tiers LOW&quot;)
-print(&quot;on model capability and CRITICAL on what it can actually do.&quot;)
-assert risk_tier(ASSETS[1])[&quot;tier&quot;] == &quot;critical&quot;
-assert MODEL_TIER[ASSETS[1].name] == &quot;low&quot;
-
-QUESTIONS = [
- (&quot;What can it change without a human approving that specific action?&quot;,
-  &quot;autonomy — the largest term&quot;),
- (&quot;What data can it read, and is any of it regulated or customer data?&quot;,
-  &quot;consequence of a leak&quot;),
- (&quot;Can it act outside our boundary?&quot;,
-  &quot;reach&quot;),
- (&quot;Is it registered, with a named owner?&quot;,
-  &quot;governability — an unowned asset cannot be remediated&quot;),
-]
-NOT_ASKED = [
- &quot;Which model does it use?&quot;,
- &quot;How many parameters?&quot;,
- &quot;Is the vendor SOC 2 certified?&quot;,
-]
-print(&quot;ASK:&quot;)
-for q, why in QUESTIONS: print(f&quot;   {q}\n      → {why}&quot;)
-print(&quot;\nDO NOT tier on:&quot;)
-for q in NOT_ASKED: print(f&quot;   {q}&quot;)
-print(&quot;   (these matter for LIKELIHOOD and vendor risk — a separate, smaller term)&quot;)
-
-def tier_from_answers(can_change, reads_regulated, reads_customer, external, registered):
-    a = AIAsset(&quot;x&quot;, &quot;agent&quot;, &quot;o&quot; if registered else &quot;&quot;, can_change,
-                tuple(filter(None, (&quot;regulated&quot; if reads_regulated else &quot;&quot;,
-                                    &quot;customer&quot; if reads_customer else &quot;&quot;))),
-                external, registered)
-    return risk_tier(a)[&quot;tier&quot;]
-
-print(&quot;\nworked example — a new request:&quot;)
-print(&quot;   &#x27;an agent that can issue refunds up to £500, reads customer orders,&#x27;&quot;)
-print(&quot;   &#x27;runs internally, owned by payments-eng&#x27;&quot;)
-print(&quot;   tier:&quot;, tier_from_answers(&quot;L2.5&quot;, False, True, False, True))</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+worked example — a new request:
+   &#x27;an agent that can issue refunds up to £500, reads customer orders,&#x27;
+   &#x27;runs internally, owned by payments-eng&#x27;
+   tier: medium</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The public read-only chatbot tiers low; the small local model with deploy rights and regulated data tiers critical at score 12. Tiering by model disagrees on 4 of 5 assets, most sharply inverting the small local model from low to critical. The worked example tiers the refund agent as high.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Re-tier your top ten AI use cases using only the four questions. Note which ones move, and be ready to explain the movement to whoever wrote the original questionnaire — the model question is usually question one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.4.html">E1.4 · Control mapping for agents</a></strong></p>

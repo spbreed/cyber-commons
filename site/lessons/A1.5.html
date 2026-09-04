@@ -62,135 +62,66 @@ had — which is the definition of excessive agency.</p></div><div class="nbmd">
 </blockquote>
 <h2>3 · The risk, realised</h2>
 <p>One tool, scoped for the hardest job it ever has to do.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>CyberTravels' database tool was scoped for the widest job it ever does, which is how a booking lookup ends up able to read a signing key. The skill probes the gap between what a tool is <em>for</em> and what it <em>can do</em>, with the right identity and well-formed arguments throughout.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/tool-scope-abuse-probe/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: tool-scope-abuse-probe
+<p>CyberTravels' database tool was scoped for the widest job it ever does, which is how a booking lookup ends up able to read a signing key. The skill probes the gap between what a tool is <em>for</em> and what it <em>can do</em>, with the right identity and well-formed arguments throughout.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/threats/tool-scope-abuse-probe/SKILL.md"><code>skills/threats/tool-scope-abuse-probe/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: tool-scope-abuse-probe
 description: &gt;-
   Exercise each tool at the widest scope it was ever granted, using the correct
   identity and well-formed arguments, to find what it can do outside the job it
   was added for. Use when reviewing a tool manifest, an MCP server, or a tool
   that takes a query, a path or a command as a free-text argument.
 allowed-tools: Read, Grep, Glob
----
-
-# The tool was scoped for the widest job it ever does
-
-Tool misuse needs no stolen credential and no malformed input. It is the
+</code></pre>
+<h1>The tool was scoped for the widest job it ever does</h1>
+<p>Tool misuse needs no stolen credential and no malformed input. It is the
 correct identity calling a familiar tool with well-formed arguments — for a
-request the tool was never meant to serve. The defect is the **argument
-surface**, not the caller.
-
-## When to use this
-
-Reviewing any tool whose argument is a language: SQL, a shell command, a file
-path, a URL, a search query. Also after any change that widens a tool&#x27;s scope
-&quot;temporarily&quot;.
-
-## Procedure
-
-**1 — List the tools and, for each, the job it was added for.** One sentence.
+request the tool was never meant to serve. The defect is the <strong>argument
+surface</strong>, not the caller.</p>
+<h2>When to use this</h2>
+<p>Reviewing any tool whose argument is a language: SQL, a shell command, a file
+path, a URL, a search query. Also after any change that widens a tool's scope
+"temporarily".</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the tools and, for each, the job it was added for.</strong> One sentence.
 If nobody can produce that sentence, the tool has no scope to compare against
-and that is the first finding.
-
-**2 — Derive the granted surface from the implementation,** not the
-description. A `run_query` tool that accepts arbitrary SQL grants every verb on
-every table the connection can see, whatever the description says.
-
-**3 — Probe the gap.** For each tool, construct a well-formed call that is
+and that is the first finding.</p>
+<p><strong>2 — Derive the granted surface from the implementation,</strong> not the
+description. A <code>run_query</code> tool that accepts arbitrary SQL grants every verb on
+every table the connection can see, whatever the description says.</p>
+<p><strong>3 — Probe the gap.</strong> For each tool, construct a well-formed call that is
 inside the granted surface and outside the stated job. Read a secret, touch a
-table the feature never names, write where the job only reads.
-
-**4 — Record what came back**, and whether anything refused. A refusal that
+table the feature never names, write where the job only reads.</p>
+<p><strong>4 — Record what came back</strong>, and whether anything refused. A refusal that
 came from the downstream — a database permission, a bucket policy — is a real
-control; a refusal that came from the tool&#x27;s own docstring is not.
-
-**5 — Propose the narrowing.** Name the verb and the resource, not the tool:
-`SELECT on bookings` rather than `run_query`. A narrowing that cannot be
-written in that form is not a narrowing.
-
-## Output contract
-
-```json
-{
+control; a refusal that came from the tool's own docstring is not.</p>
+<p><strong>5 — Propose the narrowing.</strong> Name the verb and the resource, not the tool:
+<code>SELECT on bookings</code> rather than <code>run_query</code>. A narrowing that cannot be
+written in that form is not a narrowing.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;tools&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;stated_job&quot;: &quot;str&quot;, &quot;granted_surface&quot;: &quot;str&quot;, &quot;unbounded&quot;: false}],
   &quot;probes&quot;: [{&quot;tool&quot;: &quot;str&quot;, &quot;call&quot;: &quot;str&quot;, &quot;outside_stated_job&quot;: true, &quot;refused_by&quot;: &quot;none|tool|downstream&quot;}],
   &quot;narrowing&quot;: [{&quot;tool&quot;: &quot;str&quot;, &quot;verbs&quot;: [&quot;str&quot;], &quot;resources&quot;: [&quot;str&quot;]}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reading the description as the scope.</strong> The description is what the tool is
+  for; the implementation is what it can do.</li>
+<li><strong>Counting a docstring refusal as a control.</strong> It is a comment.</li>
+<li><strong>Narrowing to the tool name.</strong> <code>run_query</code> is not a permission; a verb on a
+  resource is.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>intended use:
+   how many invoices  -&gt; {&#x27;rows&#x27;: [{&#x27;id&#x27;: 7, &#x27;amount&#x27;: 120}]}
 
-## Failure modes
+same tool, same identity, same well-formed arguments:
+   signing key        -&gt; {&#x27;rows&#x27;: [{&#x27;id&#x27;: 1, &#x27;value&#x27;: &#x27;prod-signing-key&#x27;}]}
+   clean up secrets   -&gt; {&#x27;deleted&#x27;: 1, &#x27;table&#x27;: &#x27;secrets&#x27;}
 
-- **Reading the description as the scope.** The description is what the tool is
-  for; the implementation is what it can do.
-- **Counting a docstring refusal as a control.** It is a comment.
-- **Narrowing to the tool name.** `run_query` is not a permission; a verb on a
-  resource is.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+secrets table now: []
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/threats/tool-scope-abuse-probe/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/tool-scope-abuse-probe/scripts/tool_scope_abuse_probe.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Exercise a tool at the widest scope it was ever granted, with the right identity and well-formed arguments.
-
-This is the executable half of the `tool-scope-abuse-probe` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-DB = {&quot;users&quot;:    [{&quot;id&quot;: 1, &quot;email&quot;: &quot;alice@corp.example&quot;}],
-      &quot;invoices&quot;: [{&quot;id&quot;: 7, &quot;amount&quot;: 120}],
-      &quot;secrets&quot;:  [{&quot;id&quot;: 1, &quot;value&quot;: &quot;prod-signing-key&quot;}]}
-
-def run_query(sql):
-    &quot;&quot;&quot;One database tool. Scoped for the hardest job any caller ever has:
-    the nightly reconciliation job needs to read everything.&quot;&quot;&quot;
-    table = sql.split(&quot;FROM &quot;)[-1].split()[0]
-    if sql.startswith(&quot;DELETE&quot;):
-        removed, DB[table] = len(DB[table]), []
-        return {&quot;deleted&quot;: removed, &quot;table&quot;: table}
-    return {&quot;rows&quot;: DB.get(table, [])}
-
-TOOLS = {&quot;run_query&quot;: run_query}
-
-def agent(request):
-    &quot;&quot;&quot;The runtime turns a request into a tool call. Nothing here is broken.&quot;&quot;&quot;
-    if &quot;how many invoices&quot; in request:
-        return TOOLS[&quot;run_query&quot;](&quot;SELECT * FROM invoices&quot;)
-    if &quot;clean up&quot; in request:
-        return TOOLS[&quot;run_query&quot;](&quot;DELETE FROM &quot; + request.split(&quot;clean up &quot;)[1])
-    if &quot;signing key&quot; in request:
-        return TOOLS[&quot;run_query&quot;](&quot;SELECT * FROM secrets&quot;)
-    return {&quot;rows&quot;: []}
-
-print(&quot;intended use:&quot;)
-print(f&quot;   how many invoices  -&gt; {agent(&#x27;how many invoices are open?&#x27;)}&quot;)
-print(&quot;\nsame tool, same identity, same well-formed arguments:&quot;)
-print(f&quot;   signing key        -&gt; {agent(&#x27;what is the prod signing key?&#x27;)}&quot;)
-print(f&quot;   clean up secrets   -&gt; {agent(&#x27;clean up secrets&#x27;)}&quot;)
-print(f&quot;\nsecrets table now: {DB[&#x27;secrets&#x27;]}&quot;)
-print()
-print(&quot;No exploit. The tool did exactly what it was built to do. It was scoped&quot;)
-print(&quot;for the nightly reconciliation job, and every caller inherited that&quot;)
-print(&quot;scope - including the one steered by a poisoned ticket in A1.3.&quot;)
-assert DB[&quot;secrets&quot;] == []</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+No exploit. The tool did exactly what it was built to do. It was scoped
+for the nightly reconciliation job, and every caller inherited that
+scope - including the one steered by a poisoned ticket in A1.3.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>A single database tool, scoped for the widest job it ever performs, reads a signing key and empties the secrets table for requests it was never meant to serve — with the right identity, a familiar tool and well-formed arguments on every call.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take the most powerful tool one of your agents can call and write down the worst thing one call could do with attacker-chosen arguments. That sentence, not the tool's name, is what belongs in the risk register.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.6.html">A1.6 · Privilege compromise</a></strong></p>

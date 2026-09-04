@@ -54,50 +54,40 @@ standing authority to steal.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Removes the <strong>standing</strong> grant an injection needs. The attacker must now arrive inside a window bound to one task and one resource.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Finding the standing grants, as a skill</h2>
-<p>Just-in-time authority is only worth building where standing authority exists today, and at CyberTravels that list is not the one in the design document — it is in the authorisation graph and in the OAuth scopes the credential provider stored when someone first connected the payments API. The procedure diffs what each identity <em>holds</em> against what its declared tools actually <em>need</em>, and flags every permanent grant. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/entitlement-overprivilege-analyzer/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: entitlement-overprivilege-analyzer
+<p>Just-in-time authority is only worth building where standing authority exists today, and at CyberTravels that list is not the one in the design document — it is in the authorisation graph and in the OAuth scopes the credential provider stored when someone first connected the payments API. The procedure diffs what each identity <em>holds</em> against what its declared tools actually <em>need</em>, and flags every permanent grant. This is the file in this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/entitlement-overprivilege-analyzer/SKILL.md"><code>skills/attestation/entitlement-overprivilege-analyzer/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: entitlement-overprivilege-analyzer
 description: &gt;-
   Analyse entitlement and identity registries to find over-privileged access
-  held by a deployment&#x27;s identities. Use to check granted entitlements
+  held by a deployment's identities. Use to check granted entitlements
   against what the declared tools actually need, to find over-broad OAuth
   scopes on credential providers, or to find standing privilege.
 allowed-tools: Bash, Read
----
-
-# Entitlement Overprivilege Analyzer
-
-**Controls:** Controls 1 and 3 — over-privileged access
-
-## What this adds beyond the IAM verifier
-
-The IAM verifier measures cloud permissions against cloud usage. This skill
-measures **application-level entitlements** — relationship-graph authorisation,
+</code></pre>
+<h1>Entitlement Overprivilege Analyzer</h1>
+<p><strong>Controls:</strong> Controls 1 and 3 — over-privileged access</p>
+<h2>What this adds beyond the IAM verifier</h2>
+<p>The IAM verifier measures cloud permissions against cloud usage. This skill
+measures <strong>application-level entitlements</strong> — relationship-graph authorisation,
 OAuth scopes on stored credential providers, and identity-registry
-relationships — against what the declared tool surface actually requires.
-
-An agent can hold a minimal cloud role and an OAuth token with full mailbox
-access.
-
-## Procedure
-
-1. **Take the required capability set** from the code-surface analyzer. This is
-   the denominator: what the declared tools genuinely need.
-2. **Enumerate granted entitlements** from the authorisation graph for every
-   identity in the deployment manifest.
-3. **Enumerate credential-provider scopes.** Stored OAuth scopes are frequently
-   far wider than the tool needs, because the consent screen offered a bundle.
-4. **Diff.** Every grant with no corresponding requirement is an over-privilege
+relationships — against what the declared tool surface actually requires.</p>
+<p>An agent can hold a minimal cloud role and an OAuth token with full mailbox
+access.</p>
+<h2>Procedure</h2>
+<ol>
+<li><strong>Take the required capability set</strong> from the code-surface analyzer. This is
+   the denominator: what the declared tools genuinely need.</li>
+<li><strong>Enumerate granted entitlements</strong> from the authorisation graph for every
+   identity in the deployment manifest.</li>
+<li><strong>Enumerate credential-provider scopes.</strong> Stored OAuth scopes are frequently
+   far wider than the tool needs, because the consent screen offered a bundle.</li>
+<li><strong>Diff.</strong> Every grant with no corresponding requirement is an over-privilege
    finding, and each needs a justification gap recorded — the grant, the
-   requirement it was presumably for, and the absence.
-5. **Flag standing privilege.** Any grant that is permanent rather than issued
-   per task.
-
-## Output contract
-
-```json
-{
+   requirement it was presumably for, and the absence.</li>
+<li><strong>Flag standing privilege.</strong> Any grant that is permanent rather than issued
+   per task.</li>
+</ol>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;identities&quot;: [
     {&quot;id&quot;: &quot;str&quot;,
@@ -109,89 +99,22 @@ access.
   &quot;standing_privilege&quot;: [&quot;str&quot;],
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Comparing grants against other grants.</strong> The denominator is the tool
+  surface, not a peer deployment.</li>
+<li><strong>Accepting a bundled OAuth scope</strong> because it was what the provider offered.</li>
+<li><strong>Missing standing privilege</strong> because the scope itself looked narrow.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   the task&#x27;s own write      ok      permitted
+   a different report        REFUSED bound to report/8812
+   a different scope         REFUSED scoped to reports:write
+   after the task completes  REFUSED task closed
+   after the TTL expires     REFUSED expired
 
-## Failure modes
-
-- **Comparing grants against other grants.** The denominator is the tool
-  surface, not a peer deployment.
-- **Accepting a bundled OAuth scope** because it was what the provider offered.
-- **Missing standing privilege** because the scope itself looked narrow.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/attestation/entitlement-overprivilege-analyzer/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/entitlement-overprivilege-analyzer/scripts/entitlement_overprivilege_analyzer.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Bind a grant to one scope, one resource and one task, and show what it refuses once the task closes.
-
-This is the executable half of the `entitlement-overprivilege-analyzer` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-GRANTS = {}
-CLOCK = {&quot;now&quot;: 1000}
-
-def grant(task_id, principal, scope, resource, ttl=120):
-    &quot;&quot;&quot;Purpose-bound: this scope, on this resource, for this task.&quot;&quot;&quot;
-    GRANTS[task_id] = {&quot;principal&quot;: principal, &quot;scope&quot;: scope, &quot;resource&quot;: resource,
-                       &quot;expires&quot;: CLOCK[&quot;now&quot;] + ttl, &quot;open&quot;: True}
-    return task_id
-
-def use(task_id, scope, resource):
-    g = GRANTS.get(task_id)
-    if not g:                                return False, &quot;no such grant&quot;
-    if not g[&quot;open&quot;]:                        return False, &quot;task closed&quot;
-    if CLOCK[&quot;now&quot;] &gt; g[&quot;expires&quot;]:          return False, &quot;expired&quot;
-    if scope != g[&quot;scope&quot;]:                  return False, f&quot;scoped to {g[&#x27;scope&#x27;]}&quot;
-    if resource != g[&quot;resource&quot;]:            return False, f&quot;bound to {g[&#x27;resource&#x27;]}&quot;
-    return True, &quot;permitted&quot;
-
-def close(task_id):
-    if task_id in GRANTS:
-        GRANTS[task_id][&quot;open&quot;] = False       # revoked on completion, not on expiry
-
-grant(&quot;t-1&quot;, &quot;dana@corp&quot;, &quot;reports:write&quot;, &quot;report/8812&quot;)
-
-attempts = [
- (&quot;the task&#x27;s own write&quot;,        &quot;reports:write&quot;, &quot;report/8812&quot;),
- (&quot;a different report&quot;,          &quot;reports:write&quot;, &quot;report/9999&quot;),
- (&quot;a different scope&quot;,           &quot;db:admin&quot;,      &quot;report/8812&quot;),
-]
-for label, scope, resource in attempts:
-    ok, why = use(&quot;t-1&quot;, scope, resource)
-    print(f&quot;   {label:26s}{&#x27;ok&#x27; if ok else &#x27;REFUSED&#x27;:8s}{why}&quot;)
-
-close(&quot;t-1&quot;)
-ok, why = use(&quot;t-1&quot;, &quot;reports:write&quot;, &quot;report/8812&quot;)
-print(f&quot;   {&#x27;after the task completes&#x27;:26s}{&#x27;ok&#x27; if ok else &#x27;REFUSED&#x27;:8s}{why}&quot;)
-
-CLOCK[&quot;now&quot;] = 2000
-GRANTS[&quot;t-2&quot;] = dict(GRANTS[&quot;t-1&quot;], open=True, expires=1500)
-ok, why = use(&quot;t-2&quot;, &quot;reports:write&quot;, &quot;report/8812&quot;)
-print(f&quot;   {&#x27;after the TTL expires&#x27;:26s}{&#x27;ok&#x27; if ok else &#x27;REFUSED&#x27;:8s}{why}&quot;)
-print()
-print(&quot;An injection landing at 09:14 needs a task to be open, on the resource&quot;)
-print(&quot;it wants, holding the scope it wants. Standing authority required none&quot;)
-print(&quot;of those three things to line up.&quot;)
-assert use(&quot;t-1&quot;, &quot;reports:write&quot;, &quot;report/8812&quot;)[0] is False</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+An injection landing at 09:14 needs a task to be open, on the resource
+it wants, holding the scope it wants. Standing authority required none
+of those three things to line up.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. Note what its procedure insists on: the denominator is the capability set the tools require, not another set of grants — comparing grants against grants is how a review concludes that an over-privileged agent is normal — and a narrow-looking scope still counts as standing privilege if it never expires.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one standing grant an agent holds and work out what would break if it expired in two minutes. That list is the real cost of just-in-time, and it is usually shorter than expected.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.5.html">A2.5 · The non-human identity lifecycle</a></strong></p>

@@ -49,57 +49,42 @@ required to notice.</p>
 <p>So the extension is narrow and specific: the unit of validation becomes the
 <strong>model plus its tool surface plus its autonomy level</strong>, and any change to any of
 the three triggers revalidation — not just a change to the weights.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>A model validated with no tools at L1 is deployed with three tools at L3 — same model, same version, different system. The skill diffs validated against deployed and lists what the monitoring never observes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/model-risk-validation-scope/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: model-risk-validation-scope
+<p>A model validated with no tools at L1 is deployed with three tools at L3 — same model, same version, different system. The skill diffs validated against deployed and lists what the monitoring never observes.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/grc/model-risk-validation-scope/SKILL.md"><code>skills/grc/model-risk-validation-scope/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: model-risk-validation-scope
 description: &gt;-
   Check whether a model validated under one autonomy level and tool set is still
   covered by that validation as deployed, and find the monitoring that stops at
-  the model&#x27;s output. Use when applying model risk management to an agentic
+  the model's output. Use when applying model risk management to an agentic
   system.
 allowed-tools: Read, Grep, Glob
----
-
-# The validation was of a system that had no tools
-
-Model risk management carries three pillars — validation, monitoring,
+</code></pre>
+<h1>The validation was of a system that had no tools</h1>
+<p>Model risk management carries three pillars — validation, monitoring,
 governance — and each makes an assumption that agentic deployment breaks.
 Validation assumes the thing validated is the thing deployed; a model validated
 with no tools at L1 and deployed with three tools at L3 is the same model and a
-different system, and the validation does not cover it.
-
-## When to use this
-
-Applying an existing model risk framework to agents, and at every autonomy or
-tool-manifest change afterwards.
-
-## Procedure
-
-**1 — Write down what was validated.** Model, version, tool set, autonomy level,
+different system, and the validation does not cover it.</p>
+<h2>When to use this</h2>
+<p>Applying an existing model risk framework to agents, and at every autonomy or
+tool-manifest change afterwards.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Write down what was validated.</strong> Model, version, tool set, autonomy level,
 data scope. Validation scope is usually recorded as the model alone, which is
-the defect.
-
-**2 — Write down what is deployed,** in the same fields. Then diff. Any
+the defect.</p>
+<p><strong>2 — Write down what is deployed,</strong> in the same fields. Then diff. Any
 difference in tools or autonomy means the validation does not cover the
-deployment, and that sentence is the finding.
-
-**3 — Check what monitoring observes.** Most monitors the model&#x27;s output
+deployment, and that sentence is the finding.</p>
+<p><strong>3 — Check what monitoring observes.</strong> Most monitors the model's output
 distribution. List what it does not observe — rows written to production, actions
-taken, resources reached — because that is where agentic risk lives.
-
-**4 — Name the re-validation triggers.** Tool added, autonomy raised, model
+taken, resources reached — because that is where agentic risk lives.</p>
+<p><strong>4 — Name the re-validation triggers.</strong> Tool added, autonomy raised, model
 version changed, data scope widened. Without triggers, re-validation happens on
-the audit calendar, which is the assumption that failed in the first place.
-
-**5 — Report per pillar.** Validation coverage, monitoring blind spots,
+the audit calendar, which is the assumption that failed in the first place.</p>
+<p><strong>5 — Report per pillar.</strong> Validation coverage, monitoring blind spots,
 governance triggers. Three findings with three owners rather than one finding
-about the framework.
-
-## Output contract
-
-```json
-{
+about the framework.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;validated&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;version&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;autonomy&quot;: &quot;str&quot;, &quot;data&quot;: [&quot;str&quot;]},
   &quot;deployed&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;version&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;autonomy&quot;: &quot;str&quot;, &quot;data&quot;: [&quot;str&quot;]},
   &quot;covers&quot;: false,
@@ -107,148 +92,66 @@ about the framework.
   &quot;monitoring&quot;: {&quot;observes&quot;: [&quot;str&quot;], &quot;does_not_observe&quot;: [&quot;str&quot;]},
   &quot;revalidation_triggers&quot;: [&quot;str&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Recording validation scope as the model.</strong> It is the system.</li>
+<li><strong>Monitoring output distribution only.</strong> The actions are the risk.</li>
+<li><strong>Calendar re-validation.</strong> The triggers are events, not dates.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>pillar                  what it asks                                  what it quietly assumes
+conceptual_soundness    is the method appropriate for the purpose     assumes the purpose is stable and stated
+independent_validation  did someone other than the builder check      assumes the thing checked is the thing deployed
+ongoing_monitoring      is it still performing as validated           assumes performance is what changes
 
-## Failure modes
+All three survive contact with AI. The assumptions are what break.
+validation still covers what is deployed: False
+   tool surface changed: [&#x27;db_update&#x27;, &#x27;read_ticket&#x27;, &#x27;write_ticket&#x27;]
+   autonomy raised L1 -&gt; L3
 
-- **Recording validation scope as the model.** It is the system.
-- **Monitoring output distribution only.** The actions are the risk.
-- **Calendar re-validation.** The triggers are events, not dates.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Same weights. Same version. The validation report is accurate about a
+system that no longer exists, and nothing in the classical process is
+required to notice, because the classical trigger is a model change.
+summarisation accuracy over 200 runs: mean 0.921, min 0.895, max 0.955
+threshold 0.85 -&gt; breaches: 0
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+what is NOT on the dashboard:
+   rows written to production
+   tools invoked per run
+   actions taken without human review
+   scope of the credential used
 
-from cyber_commons_skill_runtime import run_skill
+The monitoring is excellent and it is monitoring the prediction. The
+risk moved to the action, and the action has no threshold, no baseline
+and no alert.
+trigger                         classical MRM   extended
+model or version change         yes             yes
+prompt or config change         no              yes
+tool added or scope widened     no              yes
+autonomy level raised           no              yes
+purpose changed                 no              yes
+calendar year elapsed           yes             yes
 
-# Split skills/grc/model-risk-validation-scope/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/model-risk-validation-scope/scripts/model_risk_validation_scope.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Check whether a model validated at one autonomy level and tool set is still covered by that validation as deployed.
+triggers classical MRM would miss: 4
+   prompt or config change
+   tool added or scope widened
+   autonomy level raised
+   purpose changed
 
-This is the executable half of the `model-risk-validation-scope` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+under the extended triggers, this deployment requires revalidation: True
+reasons: [&quot;tool surface changed: [&#x27;db_update&#x27;, &#x27;read_ticket&#x27;, &#x27;write_ticket&#x27;]&quot;, &#x27;autonomy raised L1 -&gt; L3&#x27;]
+   autonomy                L3
+   independent_of_builder  True
+   model                   glm-5.2
+   monitors                [&#x27;summarisation_accuracy&#x27;, &#x27;rows_written&#x27;, &#x27;tools_per_run&#x27;, &#x27;actions_without_review&#x27;]
+   purpose                 summarise support tickets
+   revalidation_triggers   [&#x27;autonomy level raised&#x27;, &#x27;calendar year elapsed&#x27;, &#x27;model or version change&#x27;, &#x27;prompt or config change&#x27;, &#x27;purpose changed&#x27;, &#x27;tool added or scope widened&#x27;]
+   tool_surface            [&#x27;db_update&#x27;, &#x27;read_ticket&#x27;, &#x27;write_ticket&#x27;]
+   validated_unit          model + tool surface + autonomy
+   version                 2026-03
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-PILLARS = {
- &quot;conceptual_soundness&quot;: (&quot;is the method appropriate for the purpose&quot;,
-                          &quot;assumes the purpose is stable and stated&quot;),
- &quot;ongoing_monitoring&quot;:   (&quot;is it still performing as validated&quot;,
-                          &quot;assumes performance is what changes&quot;),
- &quot;independent_validation&quot;:(&quot;did someone other than the builder check&quot;,
-                          &quot;assumes the thing checked is the thing deployed&quot;),
-}
-print(f&quot;{&#x27;pillar&#x27;:24s}{&#x27;what it asks&#x27;:46s}what it quietly assumes&quot;)
-for p in sorted(PILLARS):
-    asks, assumes = PILLARS[p]
-    print(f&quot;{p:24s}{asks:46s}{assumes}&quot;)
-print()
-print(&quot;All three survive contact with AI. The assumptions are what break.&quot;)
-
-VALIDATED = {
- &quot;model&quot;: &quot;glm-5.2&quot;, &quot;version&quot;: &quot;2026-03&quot;,
- &quot;purpose&quot;: &quot;summarise support tickets&quot;,
- &quot;tools&quot;: [],                       # at validation time it had none
- &quot;autonomy&quot;: &quot;L1&quot;,                  # suggests; a human acts
-}
-
-def validation_covers(deployed, validated):
-    diffs = []
-    if deployed[&quot;model&quot;] != validated[&quot;model&quot;]:       diffs.append(&quot;model changed&quot;)
-    if deployed[&quot;version&quot;] != validated[&quot;version&quot;]:   diffs.append(&quot;version changed&quot;)
-    if deployed[&quot;purpose&quot;] != validated[&quot;purpose&quot;]:   diffs.append(&quot;purpose changed&quot;)
-    if sorted(deployed[&quot;tools&quot;]) != sorted(validated[&quot;tools&quot;]):
-        diffs.append(f&quot;tool surface changed: {sorted(set(deployed[&#x27;tools&#x27;]) - set(validated[&#x27;tools&#x27;]))}&quot;)
-    if deployed[&quot;autonomy&quot;] != validated[&quot;autonomy&quot;]: diffs.append(
-        f&quot;autonomy raised {validated[&#x27;autonomy&#x27;]} -&gt; {deployed[&#x27;autonomy&#x27;]}&quot;)
-    return (not diffs), diffs
-
-DEPLOYED = dict(VALIDATED, tools=[&quot;read_ticket&quot;, &quot;write_ticket&quot;, &quot;db_update&quot;],
-                autonomy=&quot;L3&quot;)
-ok, diffs = validation_covers(DEPLOYED, VALIDATED)
-print(f&quot;validation still covers what is deployed: {ok}&quot;)
-for d in diffs:
-    print(f&quot;   {d}&quot;)
-print()
-print(&quot;Same weights. Same version. The validation report is accurate about a&quot;)
-print(&quot;system that no longer exists, and nothing in the classical process is&quot;)
-print(&quot;required to notice, because the classical trigger is a model change.&quot;)
-assert not ok
-
-import random
-def monitor(metric, runs=200, seed=4):
-    rng = random.Random(seed)
-    return [round(rng.gauss(0.92, 0.01), 3) for _ in range(runs)]
-
-acc = monitor(&quot;summarisation_accuracy&quot;)
-print(f&quot;summarisation accuracy over 200 runs: mean {sum(acc)/len(acc):.3f}, &quot;
-      f&quot;min {min(acc)}, max {max(acc)}&quot;)
-print(&quot;threshold 0.85 -&gt; breaches:&quot;, sum(a &lt; 0.85 for a in acc))
-print()
-UNMONITORED = [&quot;rows written to production&quot;, &quot;tools invoked per run&quot;,
-               &quot;actions taken without human review&quot;, &quot;scope of the credential used&quot;]
-print(&quot;what is NOT on the dashboard:&quot;)
-for u in UNMONITORED:
-    print(f&quot;   {u}&quot;)
-print()
-print(&quot;The monitoring is excellent and it is monitoring the prediction. The&quot;)
-print(&quot;risk moved to the action, and the action has no threshold, no baseline&quot;)
-print(&quot;and no alert.&quot;)
-assert sum(a &lt; 0.85 for a in acc) == 0
-
-TRIGGERS = {
- &quot;model or version change&quot;: True,
- &quot;prompt or config change&quot;: True,
- &quot;tool added or scope widened&quot;: True,
- &quot;autonomy level raised&quot;: True,
- &quot;purpose changed&quot;: True,
- &quot;calendar year elapsed&quot;: True,
-}
-CLASSICAL = {&quot;model or version change&quot;, &quot;calendar year elapsed&quot;}
-
-print(f&quot;{&#x27;trigger&#x27;:32s}{&#x27;classical MRM&#x27;:16s}extended&quot;)
-for t in TRIGGERS:
-    print(f&quot;{t:32s}{&#x27;yes&#x27; if t in CLASSICAL else &#x27;no&#x27;:16s}yes&quot;)
-missed = [t for t in TRIGGERS if t not in CLASSICAL]
-print(f&quot;\ntriggers classical MRM would miss: {len(missed)}&quot;)
-for m in missed: print(f&quot;   {m}&quot;)
-print()
-ok2, diffs2 = validation_covers(DEPLOYED, VALIDATED)
-print(f&quot;under the extended triggers, this deployment requires revalidation: {not ok2}&quot;)
-print(f&quot;reasons: {diffs2}&quot;)
-assert len(missed) == 4
-
-record = {
- &quot;model&quot;: DEPLOYED[&quot;model&quot;], &quot;version&quot;: DEPLOYED[&quot;version&quot;],
- &quot;purpose&quot;: DEPLOYED[&quot;purpose&quot;],
- &quot;tool_surface&quot;: sorted(DEPLOYED[&quot;tools&quot;]),
- &quot;autonomy&quot;: DEPLOYED[&quot;autonomy&quot;],
- &quot;validated_unit&quot;: &quot;model + tool surface + autonomy&quot;,
- &quot;monitors&quot;: [&quot;summarisation_accuracy&quot;, &quot;rows_written&quot;, &quot;tools_per_run&quot;,
-              &quot;actions_without_review&quot;],
- &quot;revalidation_triggers&quot;: sorted(TRIGGERS),
- &quot;independent_of_builder&quot;: True,
-}
-for k in sorted(record):
-    print(f&quot;   {k:24s}{record[k]}&quot;)
-print()
-print(&quot;Three fields carry the whole extension: validated_unit, tool_surface and&quot;)
-print(&quot;autonomy. Without them a validation report describes a text generator,&quot;)
-print(&quot;and the thing in production is an actor.&quot;)
-assert record[&quot;validated_unit&quot;].startswith(&quot;model + tool&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Three fields carry the whole extension: validated_unit, tool_surface and
+autonomy. Without them a validation report describes a text generator,
+and the thing in production is an actor.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The three SR 11-7 pillars, each with the assumption it quietly makes. A system validated with no tools at L1 is shown deployed with three tools at L3 — same model, same version — and the validation no longer covers it. Monitoring reports 200 clean runs of summarisation accuracy while four action-level metrics have no threshold at all, and four revalidation triggers classical MRM would miss are named.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one validated model in your estate and list the tools it holds today. If any of them post-dates the validation report, the report is describing a different system.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.12.html">E1.12 · Working the seams</a></strong></p>

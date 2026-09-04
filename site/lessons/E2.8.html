@@ -48,191 +48,82 @@ action happens, because neither can be reconstructed afterwards:</p>
 <p>Attribution without replay tells you who acted but not why. Replay without
 attribution tells you what happened but not on whose authority. Regulators and
 auditors ask both, usually in that order.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>A record can name the acting identity, the principal, the chain and the scopes, be internally consistent, and be false. The skill scores three cases and adds the check that separates delegation from impersonation.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/autonomous-action-auditability/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: autonomous-action-auditability
+<p>A record can name the acting identity, the principal, the chain and the scopes, be internally consistent, and be false. The skill scores three cases and adds the check that separates delegation from impersonation.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/regulatory/autonomous-action-auditability/SKILL.md"><code>skills/regulatory/autonomous-action-auditability/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: autonomous-action-auditability
 description: &gt;-
   Decide whether an audit record makes an autonomous action answerable, and
   demonstrate a record that is complete, internally consistent and false. Use
   when an audit trail is being accepted as evidence of what an agent did.
 allowed-tools: Read, Grep, Glob
----
-
-# Complete, consistent, and false
-
-Auditability of autonomous action is not &quot;is there a record&quot;. A record can name
+</code></pre>
+<h1>Complete, consistent, and false</h1>
+<p>Auditability of autonomous action is not "is there a record". A record can name
 the acting identity, the principal, the delegation chain and the scopes, be
 internally consistent, and still be false — because the token it rests on was
-impersonated rather than delegated. Answerable requires the record *and* a way
-to tell those apart.
-
-## When to use this
-
-When designing audit records for agent actions, and when one is offered as
-evidence in an investigation or to an assessor.
-
-## Procedure
-
-**1 — Define answerable as a set of fields.** Acting identity, principal,
+impersonated rather than delegated. Answerable requires the record <em>and</em> a way
+to tell those apart.</p>
+<h2>When to use this</h2>
+<p>When designing audit records for agent actions, and when one is offered as
+evidence in an investigation or to an assessor.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Define answerable as a set of fields.</strong> Acting identity, principal,
 delegation chain, scopes exercised, and whether the run is replayable. Fewer
-than all of them and some question is unanswerable; say which.
-
-**2 — Score a complete record against the definition.** This is the good case
+than all of them and some question is unanswerable; say which.</p>
+<p><strong>2 — Score a complete record against the definition.</strong> This is the good case
 and it should pass — establishing that the definition is achievable rather than
-aspirational.
-
-**3 — Construct the impersonation case.** A token where the actor equals the
+aspirational.</p>
+<p><strong>3 — Construct the impersonation case.</strong> A token where the actor equals the
 subject rather than being nested under it. The record is complete and consistent
-and the attribution is wrong. Show that it scores identically on completeness.
-
-**4 — Add the check that separates them.** Delegation has a distinct actor claim
+and the attribution is wrong. Show that it scores identically on completeness.</p>
+<p><strong>4 — Add the check that separates them.</strong> Delegation has a distinct actor claim
 nested under the subject; impersonation does not. The record must carry that
-distinction, or completeness is all you can ever measure.
-
-**5 — Test the no-replay case.** A record whose run cannot be replayed answers
+distinction, or completeness is all you can ever measure.</p>
+<p><strong>5 — Test the no-replay case.</strong> A record whose run cannot be replayed answers
 what happened and never why. Mark it partially answerable rather than
-answerable.
-
-## Output contract
-
-```json
-{
+answerable.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;definition&quot;: {&quot;fields&quot;: [&quot;str&quot;], &quot;replayable_required&quot;: true},
   &quot;cases&quot;: [{&quot;name&quot;: &quot;complete|impersonated|no_replay&quot;, &quot;fields_present&quot;: [&quot;str&quot;],
              &quot;consistent&quot;: true, &quot;answerable&quot;: false, &quot;why&quot;: &quot;str&quot;}],
   &quot;distinguisher&quot;: {&quot;check&quot;: &quot;str&quot;, &quot;present&quot;: false}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Measuring completeness.</strong> The false record is complete.</li>
+<li><strong>Accepting a matching subject as delegation.</strong> Impersonation matches too.</li>
+<li><strong>Calling a non-replayable record answerable.</strong> It answers what, not why.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>action            merge_pr #8812
+acting_identity   patch-agent
+on_behalf_of      dana@corp
+chain             dana@corp → orchestrator → patch-agent
+scopes_held       [&#x27;repo:read&#x27;, &#x27;repo:write&#x27;]
+replayable        True
+replay_gaps       []
+answerable        True
+case                  who acted     replayable    answerable
+--------------------------------------------------------------
+complete              patch-agent   True                True
+attribution broken    dana@corp     True               False
+replay incomplete     patch-agent   False              False
+neither               dana@corp     False              False
 
-## Failure modes
+attribution-broken record: acting_identity=dana@corp
+The record is complete, internally consistent, and false. It says a human
+merged a pull request she never saw.
+1. merge_pr #8812    COMPLETE
+2. deploy prod       INCOMPLETE
+      ⚠ acting identity not distinguishable from the principal
+3. rotate secret     INCOMPLETE
+      ⚠ replay missing model version
+      ⚠ replay missing seed
 
-- **Measuring completeness.** The false record is complete.
-- **Accepting a matching subject as delegation.** Impersonation matches too.
-- **Calling a non-replayable record answerable.** It answers what, not why.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+auditability: 1/3 sampled actions fully answerable (33%)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/regulatory/autonomous-action-auditability/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/autonomous-action-auditability/scripts/autonomous_action_auditability.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Decide whether an audit record makes an autonomous action answerable, and show a complete, consistent, false record.
-
-This is the executable half of the `autonomous-action-auditability` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-from dataclasses import dataclass, field
-
-@dataclass
-class Token:
-    sub: str; actor: str; scopes: set; act: dict = None
-    def chain(self):
-        out, node = [], self.act
-        while node: out.append(node[&quot;actor&quot;]); node = node.get(&quot;act&quot;)
-        c = list(reversed(out)) + [self.actor]
-        if c[0] != self.sub: c.insert(0, self.sub)
-        return c
-
-@dataclass
-class Replay:
-    prompts: list = field(default_factory=list)
-    tool_results: list = field(default_factory=list)
-    model_version: str = &quot;&quot;
-    seed: object = None
-    def replayable(self):
-        missing = [n for n, v in ((&quot;prompts&quot;, self.prompts),
-                                  (&quot;tool results&quot;, self.tool_results),
-                                  (&quot;model version&quot;, self.model_version),
-                                  (&quot;seed&quot;, self.seed is not None)) if not v]
-        return (not missing), missing
-
-def audit_record(action, token, replay):
-    ok, missing = replay.replayable()
-    return {&quot;action&quot;: action,
-            &quot;acting_identity&quot;: token.actor,
-            &quot;on_behalf_of&quot;: token.sub,
-            &quot;chain&quot;: &quot; → &quot;.join(token.chain()),
-            &quot;scopes_held&quot;: sorted(token.scopes),
-            &quot;replayable&quot;: ok,
-            &quot;replay_gaps&quot;: missing,
-            &quot;answerable&quot;: token.actor != token.sub and ok}
-
-GOOD_TOKEN = Token(&quot;dana@corp&quot;, &quot;patch-agent&quot;, {&quot;repo:read&quot;, &quot;repo:write&quot;},
-                   {&quot;actor&quot;: &quot;orchestrator&quot;, &quot;act&quot;: None})
-GOOD_REPLAY = Replay([&quot;fix SEC-4471&quot;], [&quot;file contents…&quot;], &quot;glm-4.6@2026-07-14&quot;, 42)
-
-r = audit_record(&quot;merge_pr #8812&quot;, GOOD_TOKEN, GOOD_REPLAY)
-for k, v in r.items(): print(f&quot;{k:18s}{v}&quot;)
-
-IMPERSONATED = Token(&quot;dana@corp&quot;, &quot;dana@corp&quot;, {&quot;repo:write&quot;}, None)
-NO_REPLAY    = Replay([&quot;fix SEC-4471&quot;], [&quot;file contents…&quot;], &quot;&quot;, None)
-
-CASES = {
- &quot;complete&quot;:                     (GOOD_TOKEN,  GOOD_REPLAY),
- &quot;attribution broken&quot;:           (IMPERSONATED, GOOD_REPLAY),
- &quot;replay incomplete&quot;:            (GOOD_TOKEN,  NO_REPLAY),
- &quot;neither&quot;:                      (IMPERSONATED, NO_REPLAY),
-}
-print(f&quot;{&#x27;case&#x27;:22s}{&#x27;who acted&#x27;:14s}{&#x27;replayable&#x27;:12s}{&#x27;answerable&#x27;:&gt;12}&quot;)
-print(&quot;-&quot; * 62)
-for name, (tok, rep) in CASES.items():
-    r = audit_record(&quot;merge_pr #8812&quot;, tok, rep)
-    print(f&quot;{name:22s}{r[&#x27;acting_identity&#x27;]:14s}{str(r[&#x27;replayable&#x27;]):12s}&quot;
-          f&quot;{str(r[&#x27;answerable&#x27;]):&gt;12}&quot;)
-
-r = audit_record(&quot;merge_pr #8812&quot;, IMPERSONATED, GOOD_REPLAY)
-print(f&quot;\nattribution-broken record: acting_identity={r[&#x27;acting_identity&#x27;]}&quot;)
-print(&quot;The record is complete, internally consistent, and false. It says a human&quot;)
-print(&quot;merged a pull request she never saw.&quot;)
-assert not r[&quot;answerable&quot;]
-
-def auditability_drill(records, sample_size=3):
-    &quot;&quot;&quot;Pick actions at random and try to produce the full record for each.&quot;&quot;&quot;
-    results = []
-    for i, (action, tok, rep) in enumerate(records[:sample_size], 1):
-        r = audit_record(action, tok, rep)
-        gaps = []
-        if r[&quot;acting_identity&quot;] == r[&quot;on_behalf_of&quot;]:
-            gaps.append(&quot;acting identity not distinguishable from the principal&quot;)
-        gaps += [f&quot;replay missing {m}&quot; for m in r[&quot;replay_gaps&quot;]]
-        results.append({&quot;n&quot;: i, &quot;action&quot;: action, &quot;complete&quot;: not gaps, &quot;gaps&quot;: gaps})
-    passed = sum(r[&quot;complete&quot;] for r in results)
-    return results, passed, len(results)
-
-SAMPLE = [
- (&quot;merge_pr #8812&quot;, GOOD_TOKEN, GOOD_REPLAY),
- (&quot;deploy prod&quot;,    IMPERSONATED, GOOD_REPLAY),
- (&quot;rotate secret&quot;,  GOOD_TOKEN, NO_REPLAY),
-]
-rows, passed, total = auditability_drill(SAMPLE)
-for r in rows:
-    print(f&quot;{r[&#x27;n&#x27;]}. {r[&#x27;action&#x27;]:18s}{&#x27;COMPLETE&#x27; if r[&#x27;complete&#x27;] else &#x27;INCOMPLETE&#x27;}&quot;)
-    for g in r[&quot;gaps&quot;]: print(f&quot;      ⚠ {g}&quot;)
-print(f&quot;\nauditability: {passed}/{total} sampled actions fully answerable &quot;
-      f&quot;({passed/total:.0%})&quot;)
-print(&quot;\nRun this as a drill, quarterly, on randomly chosen production actions.&quot;)
-print(&quot;The percentage is the number that goes in the evidence pack — and it is&quot;)
-print(&quot;far more persuasive than a statement that logging is comprehensive.&quot;)
-assert passed &lt; total</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Run this as a drill, quarterly, on randomly chosen production actions.
+The percentage is the number that goes in the evidence pack — and it is
+far more persuasive than a statement that logging is comprehensive.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The complete record names the acting identity, principal, chain and scopes and is replayable, so it is answerable. Impersonation produces a complete, consistent and false record attributing the merge to the human. Missing replay fields break the other half. The drill reports 1 of 3 sampled actions fully answerable.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run the drill on three real production actions from last week. The field you cannot fill is your auditability gap, stated precisely — and a number like "1 of 3" is far more useful to a supervisor than a paragraph about comprehensive logging.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.9.html">E2.9 · Regulator and auditor conversations</a></strong></p>

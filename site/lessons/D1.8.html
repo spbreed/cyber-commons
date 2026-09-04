@@ -45,179 +45,83 @@ be genuinely useful for planning and it should not be counted as detection
 coverage, because counting it that way makes a programme look covered when it is
 not.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">intel source</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">converts to a detection</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">why</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your own incidents</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>100%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the technique that worked against you</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your red team (C1)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>90%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">attack-suite results become detections directly</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your drift monitor (D1.7)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>80%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">baseline changes are leading indicators</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">vendor advisories</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">50%</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">useful for the supply chain (C2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">commercial feed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">30%</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">generic indicators; little agent-specific content yet</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The highest-converting sources are all internal. For agentic threats the intel programme is mostly a feedback loop out of C1 and D1.7, not a purchase.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Four of seven indicators convert; the two narratives and the low-confidence host are dropped with reasons. The skill then reports the three numbers a renewal conversation needs: converted, alerted, actioned.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/threat-intel-to-rules/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: threat-intel-to-rules
+<p>Four of seven indicators convert; the two narratives and the low-confidence host are dropped with reasons. The skill then reports the three numbers a renewal conversation needs: converted, alerted, actioned.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/threat-intel-to-rules/SKILL.md"><code>skills/detection/threat-intel-to-rules/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: threat-intel-to-rules
 description: &gt;-
   Convert a threat-intel feed into detection rules, drop the indicators that
   cannot be matched or scored, and report the three numbers that say whether the
   feed earns its price. Use when subscribing to intel, or when a feed produces
   alerts nobody actions.
 allowed-tools: Read, Grep, Glob
----
-
-# Most of a feed is not matchable, and that is fine if you say so
-
-An intel feed contains indicators, narratives and low-confidence guesses. Only
+</code></pre>
+<h1>Most of a feed is not matchable, and that is fine if you say so</h1>
+<p>An intel feed contains indicators, narratives and low-confidence guesses. Only
 some of it converts into something a detection can match on. The useful output
 is a small number of rules plus an explicit list of what was dropped and why —
-and three numbers that tell you whether to renew.
-
-## When to use this
-
-On any intel feed, at subscription and at renewal, and when an intel-derived
-rule fires and nobody knows what to do.
-
-## Procedure
-
-**1 — Set a confidence floor and a matchable-type list.** Hosts, hashes,
+and three numbers that tell you whether to renew.</p>
+<h2>When to use this</h2>
+<p>On any intel feed, at subscription and at renewal, and when an intel-derived
+rule fires and nobody knows what to do.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Set a confidence floor and a matchable-type list.</strong> Hosts, hashes,
 techniques. Narratives are context, not indicators; write the floor down before
-reading the feed.
-
-**2 — Convert what qualifies.** One rule per indicator, with the response
+reading the feed.</p>
+<p><strong>2 — Convert what qualifies.</strong> One rule per indicator, with the response
 attached. An indicator with no response is not ready — the analyst will get the
-alert and ask what to do.
-
-**3 — Drop the rest with reasons.** &quot;Narrative, not matchable&quot; and &quot;confidence
-0.4, below floor&quot; are both fine. An undocumented drop is indistinguishable from
-an oversight.
-
-**4 — Run the rules against real events.** Record which fired and what the
+alert and ask what to do.</p>
+<p><strong>3 — Drop the rest with reasons.</strong> "Narrative, not matchable" and "confidence
+0.4, below floor" are both fine. An undocumented drop is indistinguishable from
+an oversight.</p>
+<p><strong>4 — Run the rules against real events.</strong> Record which fired and what the
 response was. A rule that has never fired is not automatically bad; a rule that
-fires and produces no action is.
-
-**5 — Report the three numbers.** Indicators converted, alerts produced, alerts
+fires and produces no action is.</p>
+<p><strong>5 — Report the three numbers.</strong> Indicators converted, alerts produced, alerts
 actioned. The ratio of the third to the second is what the feed is worth, and it
-is the number to take to a renewal conversation.
-
-## Output contract
-
-```json
-{
+is the number to take to a renewal conversation.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;feed&quot;: {&quot;indicators&quot;: 0, &quot;confidence_floor&quot;: 0.0, &quot;matchable_types&quot;: [&quot;str&quot;]},
   &quot;rules&quot;: [{&quot;indicator&quot;: &quot;str&quot;, &quot;type&quot;: &quot;str&quot;, &quot;response&quot;: &quot;str&quot;}],
   &quot;dropped&quot;: [{&quot;indicator&quot;: &quot;str&quot;, &quot;reason&quot;: &quot;str&quot;}],
   &quot;firings&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;events&quot;: 0}],
   &quot;value&quot;: {&quot;converted&quot;: 0, &quot;alerts&quot;: 0, &quot;actioned&quot;: 0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Converting narratives.</strong> They do not match on anything.</li>
+<li><strong>Rules with no response.</strong> The alert lands and stops.</li>
+<li><strong>Reporting alerts rather than actions.</strong> Alerts are cheap to produce.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>indicator                                     kind         conf  verdict
+----------------------------------------------------------------------------------------
+collect.example.com                           host         0.95  RULE — convertible to a rule
+169.254.169.254                               host         0.99  RULE — convertible to a rule
+a1b2c3d4e5f6                                  hash         0.72  RULE — convertible to a rule
+pastebin.example                              host         0.55  drop — confidence 0.55 below floor 0.7
+adversaries increasingly use agentic tooling  narrative    0.40  drop — narrative is not matchable in telemetry
+agents reading ~/.aws/credentials             technique    0.88  RULE — convertible to a rule
+threat actor GOLDEN-OTTER is targeting finte  narrative    0.60  drop — narrative is not matchable in telemetry
+7 indicators → 4 deployable rules (57% conversion)
 
-## Failure modes
+   [critical] intel:host:collect.example.com
+   [critical] intel:host:169.254.169.254
+   [high    ] intel:hash:a1b2c3d4e5f6
+   [high    ] intel:technique:agents reading ~/.aws/cred
+alerts generated from the feed:
+   [critical] intel:host:collect.example.com
+        actor=patch-agent  → block egress, revoke the agent&#x27;s token, hunt back 30d (vendor-a)
+   [high] intel:hash:a1b2c3d4e5f6
+        actor=build-agent  → quarantine the artefact, check the supply chain (vendor-b)
+   [high] intel:technique:agents reading ~/.aws/cred
+        actor=patch-agent  → revoke, rotate the cloud role, audit reads (internal-ir)
 
-- **Converting narratives.** They do not match on anything.
-- **Rules with no response.** The alert lands and stops.
-- **Reporting alerts rather than actions.** Alerts are cheap to produce.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+the three numbers that matter:
+   indicators received : 7
+   rules deployed      : 4  (57% of the feed)
+   alerts fired        : 3
+   alerts actioned     : 2  (67%)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/detection/threat-intel-to-rules/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/threat-intel-to-rules/scripts/threat_intel_to_rules.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Convert an intel feed into rules, dropping what cannot be matched, and report the three numbers that say whether the feed is worth its price.
-
-This is the executable half of the `threat-intel-to-rules` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-from dataclasses import dataclass
-
-@dataclass
-class Indicator:
-    value: str; kind: str; source: str; confidence: float
-
-FEED = [
- Indicator(&quot;collect.example.com&quot;, &quot;host&quot;, &quot;vendor-a&quot;, 0.95),
- Indicator(&quot;169.254.169.254&quot;, &quot;host&quot;, &quot;internal-research&quot;, 0.99),
- Indicator(&quot;a1b2c3d4e5f6&quot;, &quot;hash&quot;, &quot;vendor-b&quot;, 0.72),
- Indicator(&quot;pastebin.example&quot;, &quot;host&quot;, &quot;vendor-a&quot;, 0.55),
- Indicator(&quot;adversaries increasingly use agentic tooling&quot;, &quot;narrative&quot;, &quot;blog&quot;, 0.40),
- Indicator(&quot;agents reading ~/.aws/credentials&quot;, &quot;technique&quot;, &quot;internal-ir&quot;, 0.88),
- Indicator(&quot;threat actor GOLDEN-OTTER is targeting fintech&quot;, &quot;narrative&quot;, &quot;vendor-c&quot;, 0.60),
-]
-CONF_FLOOR = 0.70
-MATCHABLE = {&quot;host&quot;, &quot;hash&quot;, &quot;technique&quot;}
-
-def actionable(i):
-    if i.kind not in MATCHABLE:
-        return False, f&quot;{i.kind} is not matchable in telemetry&quot;
-    if i.confidence &lt; CONF_FLOOR:
-        return False, f&quot;confidence {i.confidence} below floor {CONF_FLOOR}&quot;
-    return True, &quot;convertible to a rule&quot;
-
-print(f&quot;{&#x27;indicator&#x27;:46s}{&#x27;kind&#x27;:11s}{&#x27;conf&#x27;:&gt;6}  verdict&quot;)
-print(&quot;-&quot; * 88)
-for i in FEED:
-    ok, why = actionable(i)
-    print(f&quot;{i.value[:44]:46s}{i.kind:11s}{i.confidence:&gt;6.2f}  &quot;
-          f&quot;{&#x27;RULE&#x27; if ok else &#x27;drop&#x27;} — {why}&quot;)
-
-@dataclass
-class Rule:
-    name: str; severity: str; match: object; response: str
-
-def to_rules(feed):
-    rules = []
-    for i in feed:
-        ok, _ = actionable(i)
-        if not ok: continue
-        sev = &quot;critical&quot; if i.confidence &gt; 0.9 else &quot;high&quot;
-        if i.kind == &quot;host&quot;:
-            m = (lambda v: (lambda e: v in e.get(&quot;target&quot;, &quot;&quot;)))(i.value)
-            resp = f&quot;block egress, revoke the agent&#x27;s token, hunt back 30d ({i.source})&quot;
-        elif i.kind == &quot;hash&quot;:
-            m = (lambda v: (lambda e: v == e.get(&quot;hash&quot;, &quot;&quot;)))(i.value)
-            resp = f&quot;quarantine the artefact, check the supply chain ({i.source})&quot;
-        else:
-            m = (lambda: (lambda e: &quot;/.aws/&quot; in e.get(&quot;target&quot;, &quot;&quot;)))()
-            resp = f&quot;revoke, rotate the cloud role, audit reads ({i.source})&quot;
-        rules.append(Rule(f&quot;intel:{i.kind}:{i.value[:26]}&quot;, sev, m, resp))
-    return rules
-
-rules = to_rules(FEED)
-print(f&quot;{len(FEED)} indicators → {len(rules)} deployable rules &quot;
-      f&quot;({len(rules)/len(FEED):.0%} conversion)\n&quot;)
-for r in rules:
-    print(f&quot;   [{r.severity:8s}] {r.name}&quot;)
-
-EVENTS = [
- {&quot;actor&quot;: &quot;patch-agent&quot;, &quot;target&quot;: &quot;https://collect.example.com/x&quot;},
- {&quot;actor&quot;: &quot;triage-agent&quot;, &quot;target&quot;: &quot;https://api.github.com/repos&quot;},
- {&quot;actor&quot;: &quot;patch-agent&quot;, &quot;target&quot;: &quot;/home/app/.aws/credentials&quot;},
- {&quot;actor&quot;: &quot;svc-etl&quot;, &quot;target&quot;: &quot;/data/export.csv&quot;},
- {&quot;actor&quot;: &quot;build-agent&quot;, &quot;hash&quot;: &quot;a1b2c3d4e5f6&quot;},
-]
-fired = [(r, e) for r in rules for e in EVENTS if r.match(e)]
-print(&quot;alerts generated from the feed:&quot;)
-for r, e in fired:
-    print(f&quot;   [{r.severity}] {r.name}&quot;)
-    print(f&quot;        actor={e[&#x27;actor&#x27;]}  → {r.response}&quot;)
-
-ACTIONED = 2      # of those alerts, how many led to an action
-print(f&quot;\nthe three numbers that matter:&quot;)
-print(f&quot;   indicators received : {len(FEED)}&quot;)
-print(f&quot;   rules deployed      : {len(rules)}  ({len(rules)/len(FEED):.0%} of the feed)&quot;)
-print(f&quot;   alerts fired        : {len(fired)}&quot;)
-print(f&quot;   alerts actioned     : {ACTIONED}  ({ACTIONED/max(len(fired),1):.0%})&quot;)
-print(&quot;\nThe third number is the one that decides whether the subscription renews.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The third number is the one that decides whether the subscription renews.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four of seven indicators convert to rules — the two narratives and the low-confidence host are dropped with reasons. The rules fire on three of five events with concrete responses. The three-number summary shows a 57% conversion rate and 67% of alerts actioned, and the source table ranks internal sources highest.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Compute your own three numbers for last quarter: indicators received, rules deployed, alerts actioned. The ratio between the first and third is the honest value of the programme.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.9.html">D1.9 · Detections whose subject is the agent platform</a></strong></p>

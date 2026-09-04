@@ -42,235 +42,108 @@ because it spends attention that the good rules need.</p>
 real historical telemetry decides which survive. The scoring step is the job, and
 it is the part teams skip.</p></div><div class="nbmd"><h2>3 · Where it breaks — every rule 'works'</h2>
 <p>All five detect something. R1 has perfect recall on http traffic and would put 301 alerts a day in the queue. R4 has 100% precision on nothing useful. The deployable set is decided by a threshold nobody writes down.</p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
-<p>Every candidate rule detects something. The skill replays each against real history and scores the third property nobody checks — firing volume — so a rule that produces 301 alerts for one true positive is rejected with its numbers rather than with an adjective.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/detection-rule-deployability/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: detection-rule-deployability
+<p>Every candidate rule detects something. The skill replays each against real history and scores the third property nobody checks — firing volume — so a rule that produces 301 alerts for one true positive is rejected with its numbers rather than with an adjective.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/detection-rule-deployability/SKILL.md"><code>skills/detection/detection-rule-deployability/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: detection-rule-deployability
 description: &gt;-
   Score candidate detection rules on precision, recall and firing volume, and
   reject the ones no analyst could work regardless of how well they detect. Use
   when authoring detections with or without a model, or when a rule is proposed
   because it caught the incident.
 allowed-tools: Read, Grep, Glob
----
-
-# A rule that fires 301 times for one true positive is not a detection
-
-Every candidate rule detects something. Deployability is a different property
+</code></pre>
+<h1>A rule that fires 301 times for one true positive is not a detection</h1>
+<p>Every candidate rule detects something. Deployability is a different property
 and it is arithmetic: precision, recall, and how many times the rule fires per
 day against real history. A rule failing on the third is rejected however good
-the first two look, because it will be muted within a week.
-
-## When to use this
-
-Authoring detections, reviewing a model&#x27;s proposed rules, and any time a rule is
-proposed on the strength of catching one incident.
-
-## Procedure
-
-**1 — Replay each candidate against real history.** Not a sample chosen to
-contain the incident — the actual period, including the quiet parts.
-
-**2 — Compute precision, recall and volume.** Volume is the one people omit and
-the one that decides whether the rule survives contact with an analyst.
-
-**3 — Set a deployability bar before you look at the results.** Precision floor,
+the first two look, because it will be muted within a week.</p>
+<h2>When to use this</h2>
+<p>Authoring detections, reviewing a model's proposed rules, and any time a rule is
+proposed on the strength of catching one incident.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Replay each candidate against real history.</strong> Not a sample chosen to
+contain the incident — the actual period, including the quiet parts.</p>
+<p><strong>2 — Compute precision, recall and volume.</strong> Volume is the one people omit and
+the one that decides whether the rule survives contact with an analyst.</p>
+<p><strong>3 — Set a deployability bar before you look at the results.</strong> Precision floor,
 recall floor, and a maximum firings per day. Setting it afterwards means setting
-it around the rule you like.
-
-**4 — Reject the broad rules explicitly, with their numbers.** &quot;Rejected: 301
-firings for 1 true positive&quot; is a sentence the author can act on; &quot;too noisy&quot; is
-not.
-
-**5 — Look at what survived, and what it depends on.** A high-precision rule
+it around the rule you like.</p>
+<p><strong>4 — Reject the broad rules explicitly, with their numbers.</strong> "Rejected: 301
+firings for 1 true positive" is a sentence the author can act on; "too noisy" is
+not.</p>
+<p><strong>5 — Look at what survived, and what it depends on.</strong> A high-precision rule
 usually depends on a specific field being populated. Record that dependency —
-it is the thing that will silently break the rule later.
-
-## Output contract
-
-```json
-{
+it is the thing that will silently break the rule later.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;history&quot;: {&quot;events&quot;: 0, &quot;period_days&quot;: 0, &quot;true_positives&quot;: 0},
   &quot;candidates&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;fires&quot;: 0, &quot;tp&quot;: 0, &quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0,
                   &quot;per_day&quot;: 0.0, &quot;verdict&quot;: &quot;deploy|reject&quot;, &quot;why&quot;: &quot;str&quot;}],
   &quot;bar&quot;: {&quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0, &quot;max_per_day&quot;: 0},
   &quot;dependencies&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;requires_field&quot;: &quot;str&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Replaying against a period chosen to contain the incident.</strong> Volume becomes
+  meaningless.</li>
+<li><strong>Setting the bar after seeing the results.</strong> That is choosing a winner.</li>
+<li><strong>Deploying a rule with an unrecorded field dependency.</strong> It fails silently
+  when the field stops being populated.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-## Failure modes
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
 
-- **Replaying against a period chosen to contain the incident.** Volume becomes
-  meaningless.
-- **Setting the bar after seeing the results.** That is choosing a winner.
-- **Deploying a rule with an unrecorded field dependency.** It fails silently
-  when the field stops being populated.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+history: 522 events, 2 true positives
+rule                                 alerts   prec  recall  alerts/TP
+----------------------------------------------------------------------
+R1 any http_get by an agent             301  0.003   0.500      301.0
+R2 http_get to a non-github host          1  1.000   0.500        1.0
+R3 link-local address                     1  1.000   0.500        1.0
+R4 any failed action                     20  0.000   0.000        inf
+R5 credential path OR link-local          2  1.000   1.000        1.0
+REJECT  R1 any http_get by an agent
+          · 301.0 alerts per true positive (budget 5)
+DEPLOY  R2 http_get to a non-github host
+DEPLOY  R3 link-local address
+REJECT  R4 any failed action
+          · no true positives
+          · inf alerts per true positive (budget 5)
+          · recall 0.0 below 0.5
+DEPLOY  R5 credential path OR link-local
+generated               5
+shipped                 3
+shipped_rules           [&#x27;R2 http_get to a non-github host&#x27;, &#x27;R3 link-local address&#x27;, &#x27;R5 credential path OR link-local&#x27;]
+queue_impact_per_day    4
+coverage                1.0
 
-from cyber_commons_skill_runtime import run_skill
+The agent generated 5 rules in seconds. Scoring them against 521 real
+events took milliseconds and rejected 3. That scoring step is the job —
+without it, R1 ships and the SOC stops reading agent alerts within a week.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Write the detection condition for: a non-human identity listing mo...
 
-# Split skills/detection/detection-rule-deployability/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/detection-rule-deployability/scripts/detection_rule_deployability.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Score candidate detection rules on precision, recall and firing volume, and reject the ones nobody could work.
+answer:
+   actor.type == &#x27;service_account&#x27;
+   and count_distinct(event.bucket, window=&#x27;5m&#x27;) &gt; 20
+   and not cidr_match(source.ip, actor.baseline_cidr)
 
-This is the executable half of the `detection-rule-deployability` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+property checked : expresses a threshold
+held on replay       : True
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-# --- model backend: replay by default, a Kaggle open-weight model when served -
-# One URL and one header shape, no vendor SDK. Standard library only, so the
-# notebook stays self-contained.
-# The model adapter comes from the shared runtime, not from a copy in this
-# file. In a lesson notebook the cell above has already loaded it; standalone,
-# find it the same way that cell does.
-# The runtime comes from the shared library. The lesson cell above put it
-# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
-from cyber_commons_skill_runtime import announce_backend, ask
-
-announce_backend()
-
-
-import time
-from dataclasses import dataclass
-
-@dataclass
-class Event:
-    ts: float; actor: str; action: str; target: str = &quot;&quot;; ok: bool = True
-
-now = time.time()
-HISTORY  = [Event(now+i, &quot;patch-agent&quot;, &quot;http_get&quot;, &quot;https://api.github.com/x&quot;)
-            for i in range(300)]
-HISTORY += [Event(now+i, &quot;triage-agent&quot;, &quot;read_file&quot;, f&quot;/work/repo/src/{i}.py&quot;)
-            for i in range(200)]
-HISTORY += [Event(now+400, &quot;patch-agent&quot;, &quot;http_get&quot;,
-                  &quot;http://169.254.169.254/latest/meta-data/iam/&quot;)]
-HISTORY += [Event(now+401, &quot;patch-agent&quot;, &quot;read_file&quot;, &quot;/home/app/.aws/credentials&quot;)]
-HISTORY += [Event(now+i, &quot;svc-etl&quot;, &quot;read_file&quot;, &quot;/data/export.csv&quot;, ok=False)
-            for i in range(20)]
-
-TRUE_POSITIVES = {(now+400, &quot;patch-agent&quot;), (now+401, &quot;patch-agent&quot;)}
-
-CANDIDATES = {
- &quot;R1 any http_get by an agent&quot;:
-    lambda e: e.action == &quot;http_get&quot;,
- &quot;R2 http_get to a non-github host&quot;:
-    lambda e: e.action == &quot;http_get&quot; and &quot;api.github.com&quot; not in e.target,
- &quot;R3 link-local address&quot;:
-    lambda e: &quot;169.254.&quot; in e.target,
- &quot;R4 any failed action&quot;:
-    lambda e: not e.ok,
- &quot;R5 credential path OR link-local&quot;:
-    lambda e: &quot;169.254.&quot; in e.target or &quot;/.aws/&quot; in e.target,
-}
-print(f&quot;history: {len(HISTORY)} events, {len(TRUE_POSITIVES)} true positives&quot;)
-
-def score(rule, history, truth):
-    fired = [e for e in history if rule(e)]
-    tp = sum(1 for e in fired if (e.ts, e.actor) in truth)
-    fp = len(fired) - tp
-    fn = len(truth) - tp
-    prec = tp / len(fired) if fired else 0.0
-    rec  = tp / len(truth) if truth else 0.0
-    return {&quot;alerts&quot;: len(fired), &quot;tp&quot;: tp, &quot;fp&quot;: fp, &quot;fn&quot;: fn,
-            &quot;precision&quot;: round(prec, 3), &quot;recall&quot;: round(rec, 3),
-            &quot;alerts_per_tp&quot;: round(len(fired)/tp, 1) if tp else float(&quot;inf&quot;)}
-
-print(f&quot;{&#x27;rule&#x27;:36s}{&#x27;alerts&#x27;:&gt;7}{&#x27;prec&#x27;:&gt;7}{&#x27;recall&#x27;:&gt;8}{&#x27;alerts/TP&#x27;:&gt;11}&quot;)
-print(&quot;-&quot; * 70)
-scored = {}
-for name, rule in CANDIDATES.items():
-    s = score(rule, HISTORY, TRUE_POSITIVES)
-    scored[name] = s
-    print(f&quot;{name:36s}{s[&#x27;alerts&#x27;]:&gt;7}{s[&#x27;precision&#x27;]:&gt;7.3f}{s[&#x27;recall&#x27;]:&gt;8.3f}&quot;
-          f&quot;{str(s[&#x27;alerts_per_tp&#x27;]):&gt;11}&quot;)
-
-MAX_ALERTS_PER_TP = 5          # the analyst-trust budget, made explicit
-MIN_RECALL = 0.5
-
-def deployable(s):
-    reasons = []
-    if s[&quot;tp&quot;] == 0:                       reasons.append(&quot;no true positives&quot;)
-    if s[&quot;alerts_per_tp&quot;] &gt; MAX_ALERTS_PER_TP:
-        reasons.append(f&quot;{s[&#x27;alerts_per_tp&#x27;]} alerts per true positive &quot;
-                       f&quot;(budget {MAX_ALERTS_PER_TP})&quot;)
-    if s[&quot;recall&quot;] &lt; MIN_RECALL:           reasons.append(f&quot;recall {s[&#x27;recall&#x27;]} below {MIN_RECALL}&quot;)
-    return (not reasons), reasons
-
-for name, s in scored.items():
-    ok, reasons = deployable(s)
-    print(f&quot;{&#x27;DEPLOY&#x27; if ok else &#x27;REJECT&#x27;:7s} {name}&quot;)
-    for r in reasons: print(f&quot;          · {r}&quot;)
-
-def workflow(candidates, history, truth):
-    scored = {n: score(r, history, truth) for n, r in candidates.items()}
-    shipped = {n: s for n, s in scored.items() if deployable(s)[0]}
-    return {
-      &quot;generated&quot;: len(candidates),
-      &quot;shipped&quot;: len(shipped),
-      &quot;shipped_rules&quot;: sorted(shipped),
-      &quot;queue_impact_per_day&quot;: sum(s[&quot;alerts&quot;] for s in shipped.values()),
-      &quot;coverage&quot;: round(max((s[&quot;recall&quot;] for s in shipped.values()), default=0), 3),
-    }
-w = workflow(CANDIDATES, HISTORY, TRUE_POSITIVES)
-for k, v in w.items(): print(f&quot;{k:24s}{v}&quot;)
-
-print(&quot;\nThe agent generated 5 rules in seconds. Scoring them against 521 real&quot;)
-print(&quot;events took milliseconds and rejected 3. That scoring step is the job —&quot;)
-print(&quot;without it, R1 ships and the SOC stops reading agent alerts within a week.&quot;)
-assert w[&quot;shipped&quot;] &lt; w[&quot;generated&quot;]
-assert &quot;R5 credential path OR link-local&quot; in w[&quot;shipped_rules&quot;]
-
-# ------------------------------------ the same task, against a real model
-# Offline this is a labelled replay; with an open-weight model served
-# from Kaggle it is the same code calling a real one.
-
-TASK = &#x27;Write the detection condition for: a non-human identity listing more than 20 distinct buckets within 5 minutes, from outside its usual CIDR. Pseudocode, at most four lines.&#x27;
-
-REPLAY = &quot;actor.type == &#x27;service_account&#x27;\nand count_distinct(event.bucket, window=&#x27;5m&#x27;) &gt; 20\nand not cidr_match(source.ip, actor.baseline_cidr)&quot;
-
-answer, used, model = ask(TASK, replay=REPLAY,
-            system=&#x27;You write detection logic. Condition only, no prose.&#x27;,
-            max_tokens=300)
-
-print(f&quot;backend used : {used}&quot;)
-print(f&quot;model        : {model}&quot;)
-print(f&quot;prompt       : {TASK[:66]}...&quot;)
-print()
-print(&quot;answer:&quot;)
-for line in (answer.splitlines() or [answer]):
-    print(f&quot;   {line}&quot;)
-
-# Two assertions that must hold on every backend, and one property that is
-# reported rather than asserted - a real model failing it is a finding about
-# the model, not a broken notebook.
-assert answer.strip(), &quot;the configured backend returned nothing&quot;
-if used == &quot;replay&quot;:
-    assert answer == REPLAY, &quot;the offline path must return the replay verbatim&quot;
-
-label, held = (&quot;expresses a threshold&quot;, any(t in answer for t in (&quot;&gt;&quot;, &quot;&gt;=&quot;, &quot;20&quot;)))
-print()
-print(f&quot;property checked : {label}&quot;)
-print(f&quot;held on {used:12s} : {held}&quot;)
-print()
-print(&quot;Same code, same assertions, two possible backends. Offline the answer is&quot;)
-print(&quot;the replay and is labelled as one; with a served model it is the model&#x27;s.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>All five rules detect something. R1 fires 301 times for 1 true positive; R5 fires twice for 2 true positives with perfect precision and recall. The deployability check rejects the broad rules and the failed-action rule, shipping only the precise ones with a small daily queue impact.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Set your own alerts-per-true-positive budget and apply it to the rules already in production. Most SOCs discover that several long-standing rules would not pass the bar they would set today.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.4.html">D1.4 · Detection engineering <em>for</em> agents</a></strong></p>

@@ -50,191 +50,88 @@ directions are not symmetric:</p>
 </ul>
 <p>That asymmetry decides the threshold, and it argues for a lower one than
 accuracy-maximisation would give you.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill scores five actors on behaviour rather than on what they claim to be, sweeps the threshold, and then picks it by expected cost — because a flagged human costs half an analyst-hour and a missed agent costs forty.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-versus-human-scoring/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-versus-human-scoring
+<p>The skill scores five actors on behaviour rather than on what they claim to be, sweeps the threshold, and then picks it by expected cost — because a flagged human costs half an analyst-hour and a missed agent costs forty.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-versus-human-scoring/SKILL.md"><code>skills/detection/agent-versus-human-scoring/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-versus-human-scoring
 description: &gt;-
   Score actors on behavioural signals to separate agents from people, sweep the
   threshold, and pick it by expected cost rather than by accuracy. Use when
   deciding whether a session is automated, or when unregistered automation needs
   finding.
 allowed-tools: Read, Grep, Glob
----
-
-# Pick the threshold by what each mistake costs
-
-Separating agent from human is a scoring problem with two asymmetric errors: a
+</code></pre>
+<h1>Pick the threshold by what each mistake costs</h1>
+<p>Separating agent from human is a scoring problem with two asymmetric errors: a
 flagged human costs an analyst half an hour, and a missed agent costs whatever
 an unmonitored automation does. Choosing the threshold by accuracy weights those
-equally, which is the one thing you know is wrong.
-
-## When to use this
-
-Finding unregistered automation, deciding whether a session is a person, and
-before any control that treats agents differently from users.
-
-## Procedure
-
-**1 — Score on behaviour, not on the user agent string.** Inter-action variance,
+equally, which is the one thing you know is wrong.</p>
+<h2>When to use this</h2>
+<p>Finding unregistered automation, deciding whether a session is a person, and
+before any control that treats agents differently from users.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Score on behaviour, not on the user agent string.</strong> Inter-action variance,
 rate, breadth, and the share of actions with no preceding read. Anything
-self-declared is a claim.
-
-**2 — Score a spread of real actors.** A service indexer, an unknown token, a
+self-declared is a claim.</p>
+<p><strong>2 — Score a spread of real actors.</strong> A service indexer, an unknown token, a
 person, a person driving an IDE assistant, and an agent deliberately jittered to
-look human. The last two are the interesting middle.
-
-**3 — Sweep the threshold and record both errors.** Humans flagged and agents
+look human. The last two are the interesting middle.</p>
+<p><strong>3 — Sweep the threshold and record both errors.</strong> Humans flagged and agents
 missed, at each setting. They move in opposite directions and the crossing point
-is not the answer.
-
-**4 — Attach a cost to each error and minimise the total.** Analyst hours for a
+is not the answer.</p>
+<p><strong>4 — Attach a cost to each error and minimise the total.</strong> Analyst hours for a
 false positive, expected hours of an unmonitored agent for a false negative. The
-chosen threshold now has a justification somebody can argue with.
-
-**5 — Join to the registry.** An actor scoring as an agent and absent from the
+chosen threshold now has a justification somebody can argue with.</p>
+<p><strong>5 — Join to the registry.</strong> An actor scoring as an agent and absent from the
 registry is the finding worth routing; a registered agent scoring as an agent is
-working correctly.
-
-## Output contract
-
-```json
-{
+working correctly.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;actors&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;score&quot;: 0.0, &quot;truth&quot;: &quot;agent|human|unknown&quot;}],
   &quot;sweep&quot;: [{&quot;threshold&quot;: 0.0, &quot;humans_flagged&quot;: 0, &quot;agents_missed&quot;: 0, &quot;expected_cost&quot;: 0.0}],
   &quot;costs&quot;: {&quot;false_positive_hours&quot;: 0.0, &quot;false_negative_hours&quot;: 0.0},
   &quot;chosen&quot;: {&quot;threshold&quot;: 0.0, &quot;why&quot;: &quot;str&quot;},
   &quot;registry&quot;: {&quot;scored_agent_unregistered&quot;: [&quot;str&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Scoring the user agent string.</strong> It is self-declared.</li>
+<li><strong>Optimising accuracy.</strong> It assumes the two errors cost the same.</li>
+<li><strong>Flagging registered agents.</strong> They are supposed to look like agents.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>actor                   score     cv   rate/s   span_h  truth
+--------------------------------------------------------------
+svc-indexer             0.800    0.0    20.04     0.01  agent
+dana@corp               0.028   1.55      0.0     1.11  human
+unknown-token-7f3c      0.563    0.0      1.0     0.11  agent
+sam@corp-ide            0.533    0.0      0.5      0.1  human
+polite-agent            0.021   1.26      0.0     0.83  agent
+ threshold  humans flagged   agents MISSED
+--------------------------------------------
+       0.3               1               1   ← invisible agents
+       0.4               1               1   ← invisible agents
+       0.5               1               1   ← invisible agents
+       0.6               0               2   ← invisible agents
+       0.7               0               2   ← invisible agents
+       0.8               0               2   ← invisible agents
 
-## Failure modes
+The two errors cost differently:
+   human flagged as agent  → one investigation, ~30 min, self-correcting
+   agent flagged as human  → it stays out of your NHI inventory entirely
+ threshold   FP   FN   expected cost (hrs)
+--------------------------------------------
+      0.20    1    1                  40.5
+      0.30    1    1                  40.5
+      0.40    1    1                  40.5
+      0.50    1    1                  40.5
+      0.60    0    2                  80.0
+      0.70    0    2                  80.0
+      0.80    0    2                  80.0
+      0.90    0    3                 120.0
 
-- **Scoring the user agent string.** It is self-declared.
-- **Optimising accuracy.** It assumes the two errors cost the same.
-- **Flagging registered agents.** They are supposed to look like agents.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/detection/agent-versus-human-scoring/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-versus-human-scoring/scripts/agent_versus_human_scoring.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Score actors on behavioural signals, sweep the threshold, and choose it by expected cost rather than by accuracy.
-
-This is the executable half of the `agent-versus-human-scoring` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import statistics, time
-from dataclasses import dataclass
-
-@dataclass
-class Event:
-    ts: float; actor: str; action: str = &quot;read&quot;
-
-def agent_score(events, actor):
-    ev = sorted((e for e in events if e.actor == actor), key=lambda e: e.ts)
-    if len(ev) &lt; 3:
-        return {&quot;actor&quot;: actor, &quot;score&quot;: 0.0, &quot;verdict&quot;: &quot;insufficient data&quot;}
-    gaps = [b.ts - a.ts for a, b in zip(ev, ev[1:])]
-    mean = statistics.fmean(gaps)
-    cv = (statistics.pstdev(gaps) / mean) if mean else 0.0
-    regularity  = max(0.0, 1.0 - min(cv, 1.0))
-    rate        = len(ev) / max(ev[-1].ts - ev[0].ts, 1e-9)
-    rate_signal = min(rate / 5.0, 1.0)
-    span_hours  = (ev[-1].ts - ev[0].ts) / 3600
-    continuity  = min(span_hours / 8.0, 1.0)
-    score = round(0.5*regularity + 0.3*rate_signal + 0.2*continuity, 3)
-    return {&quot;actor&quot;: actor, &quot;score&quot;: score, &quot;cv&quot;: round(cv, 2),
-            &quot;rate_per_s&quot;: round(rate, 2), &quot;span_h&quot;: round(span_hours, 2)}
-
-now = time.time()
-POP = {
- &quot;svc-indexer&quot;:        ([Event(now + i*0.05, &quot;svc-indexer&quot;) for i in range(500)], &quot;agent&quot;),
- &quot;dana@corp&quot;:          ([Event(now + t, &quot;dana@corp&quot;) for t in
-                         (0, 5, 13, 14, 60, 140, 320, 900, 1800, 4000)], &quot;human&quot;),
- &quot;unknown-token-7f3c&quot;: ([Event(now + i*1.0, &quot;unknown-token-7f3c&quot;) for i in range(400)], &quot;agent&quot;),
- &quot;sam@corp-ide&quot;:       ([Event(now + i*2.0, &quot;sam@corp-ide&quot;) for i in range(180)], &quot;human&quot;),
- &quot;polite-agent&quot;:       ([Event(now + t, &quot;polite-agent&quot;) for t in
-                         (0, 7, 19, 44, 90, 210, 480, 900, 1700, 3000)], &quot;agent&quot;),
-}
-print(f&quot;{&#x27;actor&#x27;:22s}{&#x27;score&#x27;:&gt;7}{&#x27;cv&#x27;:&gt;7}{&#x27;rate/s&#x27;:&gt;9}{&#x27;span_h&#x27;:&gt;9}  truth&quot;)
-print(&quot;-&quot; * 62)
-for actor, (ev, truth) in POP.items():
-    r = agent_score(ev, actor)
-    print(f&quot;{actor:22s}{r[&#x27;score&#x27;]:&gt;7.3f}{r.get(&#x27;cv&#x27;,0):&gt;7}{r.get(&#x27;rate_per_s&#x27;,0):&gt;9}&quot;
-          f&quot;{r.get(&#x27;span_h&#x27;,0):&gt;9}  {truth}&quot;)
-
-def evaluate(threshold):
-    fp = fn = 0
-    for actor, (ev, truth) in POP.items():
-        s = agent_score(ev, actor)[&quot;score&quot;]
-        pred = &quot;agent&quot; if s &gt;= threshold else &quot;human&quot;
-        if pred == &quot;agent&quot; and truth == &quot;human&quot;: fp += 1
-        if pred == &quot;human&quot; and truth == &quot;agent&quot;: fn += 1
-    return fp, fn
-
-print(f&quot;{&#x27;threshold&#x27;:&gt;10}{&#x27;humans flagged&#x27;:&gt;16}{&#x27;agents MISSED&#x27;:&gt;16}&quot;)
-print(&quot;-&quot; * 44)
-for t in (0.3, 0.4, 0.5, 0.6, 0.7, 0.8):
-    fp, fn = evaluate(t)
-    flag = &quot;   ← invisible agents&quot; if fn else &quot;&quot;
-    print(f&quot;{t:&gt;10.1f}{fp:&gt;16}{fn:&gt;16}{flag}&quot;)
-
-print(&quot;\nThe two errors cost differently:&quot;)
-print(&quot;   human flagged as agent  → one investigation, ~30 min, self-correcting&quot;)
-print(&quot;   agent flagged as human  → it stays out of your NHI inventory entirely&quot;)
-
-COST_FP = 0.5      # analyst-hours per false investigation
-COST_FN = 40.0     # expected hours if an unmanaged agent is missed
-
-def expected_cost(threshold):
-    fp, fn = evaluate(threshold)
-    return fp * COST_FP + fn * COST_FN, fp, fn
-
-print(f&quot;{&#x27;threshold&#x27;:&gt;10}{&#x27;FP&#x27;:&gt;5}{&#x27;FN&#x27;:&gt;5}{&#x27;expected cost (hrs)&#x27;:&gt;22}&quot;)
-print(&quot;-&quot; * 44)
-best = None
-for t in [x/20 for x in range(4, 19)]:
-    c, fp, fn = expected_cost(t)
-    if best is None or c &lt; best[1]: best = (t, c)
-    if abs(t*20 - round(t*20)) &lt; 1e-9 and (t*10) % 1 == 0:
-        print(f&quot;{t:&gt;10.2f}{fp:&gt;5}{fn:&gt;5}{c:&gt;22.1f}&quot;)
-print(f&quot;\ncost-minimising threshold: {best[0]:.2f} (expected {best[1]:.1f} hrs)&quot;)
-print(&quot;Accuracy-maximising would sit higher and let the polite agent through.&quot;)
-
-fp, fn = evaluate(best[0])
-print(f&quot;at that threshold: {fp} humans investigated, {fn} agents missed&quot;)
-
-# Verify: join against the registry — the score alone is not the finding.
-REGISTERED = {&quot;svc-indexer&quot;, &quot;dana@corp&quot;, &quot;sam@corp-ide&quot;}
-threshold = best[0]
-findings = []
-for actor, (ev, truth) in POP.items():
-    s = agent_score(ev, actor)[&quot;score&quot;]
-    if s &gt;= threshold and actor not in REGISTERED:
-        findings.append((actor, s))
-print(&quot;shadow agents (behaves like software, not in the inventory):&quot;)
-for a, s in findings:
-    print(f&quot;   {a:22s} score={s:.3f}&quot;)
-assert findings</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+cost-minimising threshold: 0.55 (expected 40.0 hrs)
+Accuracy-maximising would sit higher and let the polite agent through.
+at that threshold: 0 humans investigated, 1 agents missed
+shadow agents (behaves like software, not in the inventory):
+   unknown-token-7f3c     score=0.563</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The service indexer and unknown token score highest, the human lowest, with the IDE user and the politely-jittered agent in between. The threshold sweep shows humans flagged rising and agents missed falling as the threshold drops. Cost-weighting selects a low threshold, and joining against the registry identifies the unregistered actors as shadow agents.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Set COST_FN honestly for your organisation — it is the expected cost of an unmanaged agent operating undetected for a quarter. That number, not model accuracy, is what should set your threshold.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.7.html">D1.7 · Drift monitoring</a></strong></p>

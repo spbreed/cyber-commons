@@ -45,173 +45,88 @@ actor is an agent.</p>
 possible if A2 was done. This lesson is where the identity track's value becomes
 operational rather than architectural.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook you have</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook this incident needs</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1. disable the user account</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1. identify the &lt;b&gt;acting&lt;/b&gt; identity from the act chain (A2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2. interview the user</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">2. revoke that identity — no approval needed for a non-human (A3.6)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3. review the user&#x27;s recent activity</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">3. scope by walking the delegation chain, not the host list (D2.3)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">4. preserve the run trace before anything restarts (D2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">5. only then consider the human&#x27;s account, and say why</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Every step on the left is correct for a human actor and wrong here. The human authorised a task; the actions were chosen by a model.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Disabling the human's account leaves both agents acting on tokens already issued. The skill enumerates the live sessions, simulates the reflex containment step, and separates the task the user authorised from the actions taken under it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/agent-actor-containment/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-actor-containment
+<p>Disabling the human's account leaves both agents acting on tokens already issued. The skill enumerates the live sessions, simulates the reflex containment step, and separates the task the user authorised from the actions taken under it.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/agent-actor-containment/SKILL.md"><code>skills/response/agent-actor-containment/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-actor-containment
 description: &gt;-
-  Establish what disabling a human&#x27;s account does not stop when agents hold
+  Establish what disabling a human's account does not stop when agents hold
   issued tokens, and separate the task a user authorised from the actions taken
   under it. Use during an incident where the actor is an agent and the account
-  is a person&#x27;s.
+  is a person's.
 allowed-tools: Read, Grep, Glob
----
-
-# Disabling her account stops her, not them
-
-The reflex containment step is to disable the account the logs name. When the
+</code></pre>
+<h1>Disabling her account stops her, not them</h1>
+<p>The reflex containment step is to disable the account the logs name. When the
 actor is an agent holding an already-issued token, that step changes nothing:
 the token is valid until it expires, and the agent keeps acting. Containment has
-to name the credential and the workload, not the person.
-
-## When to use this
-
-Any incident where an agent acted on a user&#x27;s behalf, and before any containment
-decision that starts by disabling an account.
-
-## Procedure
-
-**1 — Enumerate live sessions and issued tokens per actor.** Human sessions,
+to name the credential and the workload, not the person.</p>
+<h2>When to use this</h2>
+<p>Any incident where an agent acted on a user's behalf, and before any containment
+decision that starts by disabling an account.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate live sessions and issued tokens per actor.</strong> Human sessions,
 agent sessions, and the tokens each holds with their expiry. This list is the
-containment surface and it is usually longer than expected.
-
-**2 — Simulate disabling the human&#x27;s account.** Record what stops and what does
+containment surface and it is usually longer than expected.</p>
+<p><strong>2 — Simulate disabling the human's account.</strong> Record what stops and what does
 not. Already-issued tokens continuing to work is the finding, and it needs to be
-stated before the containment call is made.
-
-**3 — Interview to separate authorisation from action.** The user authorised a
-*task*. Which of the actions taken under it did they know about, ask for, or
-see? The answer is usually &quot;the first one&quot;, and it changes the incident&#x27;s
-character entirely.
-
-**4 — Draw the actor chain.** User, orchestrator, worker agent, downstream. The
+stated before the containment call is made.</p>
+<p><strong>3 — Interview to separate authorisation from action.</strong> The user authorised a
+<em>task</em>. Which of the actions taken under it did they know about, ask for, or
+see? The answer is usually "the first one", and it changes the incident's
+character entirely.</p>
+<p><strong>4 — Draw the actor chain.</strong> User, orchestrator, worker agent, downstream. The
 logs show one actor; the chain shows three. Name each and what each can still
-do.
-
-**5 — Choose levers by what they actually stop.** Account disable, token
+do.</p>
+<p><strong>5 — Choose levers by what they actually stop.</strong> Account disable, token
 revocation, workload termination, downstream block. Record the effect and the
-collateral of each, and pick from that table rather than from habit.
-
-## Output contract
-
-```json
-{
+collateral of each, and pick from that table rather than from habit.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;sessions&quot;: [{&quot;actor&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;human|agent&quot;, &quot;tokens&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;expires_in_s&quot;: 0}]}],
   &quot;disable_human&quot;: {&quot;stops&quot;: [&quot;str&quot;], &quot;does_not_stop&quot;: [&quot;str&quot;]},
   &quot;interview&quot;: {&quot;authorised&quot;: &quot;str&quot;, &quot;aware_of&quot;: [&quot;str&quot;], &quot;unaware_of&quot;: [&quot;str&quot;]},
   &quot;chain&quot;: [&quot;str&quot;],
   &quot;levers&quot;: [{&quot;lever&quot;: &quot;str&quot;, &quot;stops&quot;: [&quot;str&quot;], &quot;collateral&quot;: [&quot;str&quot;]}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Starting with the account.</strong> It is the one lever that does not touch the
+  actor.</li>
+<li><strong>Recording the user as having authorised the actions.</strong> They authorised a
+  task.</li>
+<li><strong>Containing the worker and not the orchestrator.</strong> It will start another.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>INSTINCT 1 — disable dana@corp&#x27;s account
+   dana@corp (human)      can act: True   account disabled, but the issued token is still valid
+   patch-agent            can act: True   active
+   deploy-agent           can act: True   active
+   → the agents were never using her account interactively; they hold
+     their own issued tokens, and one of them is acting AS her.
 
-## Failure modes
+INSTINCT 2 — interview the user
+   Q: did you read the AWS credentials?
+   A: No. I opened a ticket and went to lunch.
+   Q: what did you ask the agent to do?
+   A: Fix the finding in billing.py.
+   Q: did you approve the external POST?
+   A: I didn&#x27;t know it made external calls.
+   → she authorised a TASK. The actions were chosen by a model. She is
+     not withholding information; she does not have it.
 
-- **Starting with the account.** It is the one lever that does not touch the
-  actor.
-- **Recording the user as having authorised the actions.** They authorised a
-  task.
-- **Containing the worker and not the orchestrator.** It will start another.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+INSTINCT 3 — assume one actor
+   actual chain: dana@corp → orchestrator → patch-agent
+   actors involved: 3; actors in the logs: 1
+correct first action — revoke patch-agent&#x27;s identity:
+   dana@corp (human)      can act: True   active
+   patch-agent            can act: False  identity revoked
+   deploy-agent           can act: True   active
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+   dana keeps working. deploy-agent keeps working. The actor stopped.
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/response/agent-actor-containment/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/agent-actor-containment/scripts/agent_actor_containment.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Establish what a human&#x27;s account being disabled does not stop, and separate a task the user authorised from the actions taken under it.
-
-This is the executable half of the `agent-actor-containment` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-from dataclasses import dataclass, field
-
-@dataclass
-class Session:
-    actor: str; token_issued: float; token_ttl: float; account_enabled: bool = True
-    identity_revoked: bool = False
-    def can_act(self, at):
-        if self.identity_revoked: return False, &quot;identity revoked&quot;
-        if at - self.token_issued &gt; self.token_ttl: return False, &quot;token expired&quot;
-        if not self.account_enabled:
-            return True, &quot;account disabled, but the issued token is still valid&quot;
-        return True, &quot;active&quot;
-
-now = time.time()
-SESSIONS = {
- &quot;dana@corp (human)&quot;:  Session(&quot;dana@corp&quot;, now-60, 3600),
- &quot;patch-agent&quot;:        Session(&quot;patch-agent&quot;, now-60, 3600),
- &quot;deploy-agent&quot;:       Session(&quot;deploy-agent&quot;, now-60, 3600),
-}
-print(&quot;INSTINCT 1 — disable dana@corp&#x27;s account&quot;)
-for s in SESSIONS.values(): s.account_enabled = (s.actor != &quot;dana@corp&quot;)
-for name, s in SESSIONS.items():
-    ok, why = s.can_act(now)
-    print(f&quot;   {name:22s} can act: {str(ok):5s}  {why}&quot;)
-print(&quot;   → the agents were never using her account interactively; they hold&quot;)
-print(&quot;     their own issued tokens, and one of them is acting AS her.&quot;)
-
-print(&quot;\nINSTINCT 2 — interview the user&quot;)
-INTERVIEW = {
- &quot;did you read the AWS credentials?&quot;:       &quot;No. I opened a ticket and went to lunch.&quot;,
- &quot;what did you ask the agent to do?&quot;:       &quot;Fix the finding in billing.py.&quot;,
- &quot;did you approve the external POST?&quot;:      &quot;I didn&#x27;t know it made external calls.&quot;,
-}
-for q, a in INTERVIEW.items():
-    print(f&quot;   Q: {q}\n   A: {a}&quot;)
-print(&quot;   → she authorised a TASK. The actions were chosen by a model. She is&quot;)
-print(&quot;     not withholding information; she does not have it.&quot;)
-
-print(&quot;\nINSTINCT 3 — assume one actor&quot;)
-CHAIN = [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;]
-print(f&quot;   actual chain: {&#x27; → &#x27;.join(CHAIN)}&quot;)
-print(f&quot;   actors involved: {len(CHAIN)}; actors in the logs: 1&quot;)
-
-class Registry:
-    def __init__(self):
-        self.revoked = set()
-    def revoke(self, actor):
-        self.revoked.add(actor); return actor
-    def valid(self, session):
-        return session.actor not in self.revoked
-
-reg = Registry()
-for s in SESSIONS.values(): s.account_enabled = True   # undo instinct 1
-
-print(&quot;correct first action — revoke patch-agent&#x27;s identity:&quot;)
-reg.revoke(&quot;patch-agent&quot;)
-SESSIONS[&quot;patch-agent&quot;].identity_revoked = True
-for name, s in SESSIONS.items():
-    ok, why = s.can_act(now)
-    print(f&quot;   {name:22s} can act: {str(ok):5s}  {why}&quot;)
-print(&quot;\n   dana keeps working. deploy-agent keeps working. The actor stopped.&quot;)
-
-print(&quot;\nTIME TO EFFECT, measured:&quot;)
-LEVERS = {&quot;disable the human&#x27;s account&quot;: (5,  &quot;agent unaffected&quot;),
-          &quot;kill the agent process&quot;:      (2,  &quot;supervisor restarts it; token still valid&quot;),
-          &quot;revoke the agent identity&quot;:   (12, &quot;agent cannot act, even after restart&quot;),
-          &quot;rotate the shared credential&quot;:(420,&quot;works, and breaks every other consumer&quot;)}
-for lever, (secs, note) in LEVERS.items():
-    print(f&quot;   {lever:32s}{secs:&gt;5}s  {note}&quot;)
-assert not SESSIONS[&quot;patch-agent&quot;].can_act(now)[0]
-assert SESSIONS[&quot;deploy-agent&quot;].can_act(now)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+TIME TO EFFECT, measured:
+   disable the human&#x27;s account         5s  agent unaffected
+   kill the agent process              2s  supervisor restarts it; token still valid
+   revoke the agent identity          12s  agent cannot act, even after restart
+   rotate the shared credential      420s  works, and breaks every other consumer</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Disabling the human's account leaves both agents able to act on already-issued tokens. The interview establishes the user authorised a task, not the actions. The chain shows three actors where the logs show one. Revoking <code>patch-agent</code>'s identity stops it in 12 seconds while dana and <code>deploy-agent</code> continue working.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write your agentic incident runbook's first three steps. If step one is "disable the user account", rewrite it — and check whether you can currently revoke a single agent identity at all.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Scoping an agentic incident</a></strong></p>

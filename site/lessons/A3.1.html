@@ -69,52 +69,48 @@ which is a better place to stand.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>Stands on the edge every topology shares: <code>agent_runtime -&gt; tools</code>. Persuasion still happens; it just stops reaching anything.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Proving the baseline is default-deny, as a skill</h2>
-<p>Writing the entitlement is one job; showing that CyberTravels' running role <em>is</em> the entitlement is another, and it is the one an auditor asks for. The procedure reads every inline and attached policy for the baseline, then measures granted-but-unused permissions against what the audit trail observed — which only means anything if the trail is intact, so incomplete coverage is a finding rather than a clean pass. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/iam-least-privilege-verifier/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: iam-least-privilege-verifier
+<p>Writing the entitlement is one job; showing that CyberTravels' running role <em>is</em> the entitlement is another, and it is the one an auditor asks for. The procedure reads every inline and attached policy for the baseline, then measures granted-but-unused permissions against what the audit trail observed — which only means anything if the trail is intact, so incomplete coverage is a finding rather than a clean pass. This is the file in this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/iam-least-privilege-verifier/SKILL.md"><code>skills/attestation/iam-least-privilege-verifier/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: iam-least-privilege-verifier
 description: &gt;-
-  Prove a deployment&#x27;s role baseline is default-deny and quantify granted-
+  Prove a deployment's role baseline is default-deny and quantify granted-
   but-unused permissions against observed usage. Use to evidence least
   privilege, to find excess permissions on an agent role, or when asked
-  whether a deployment&#x27;s IAM posture supports a default-deny claim.
+  whether a deployment's IAM posture supports a default-deny claim.
 allowed-tools: Bash, Read
----
-
-# Iam Least Privilege Verifier
-
-**Controls:** Control 1 — default-deny and least privilege
-
-## Confidence: HIGH
-
-This is one of the controls that is genuinely provable at runtime. Policy
-documents are readable, and usage data turns &quot;least privilege&quot; from an
-assertion into a measured delta.
-
-## Procedure
-
-1. **Establish the default-deny baseline.** Read every inline and attached
-   policy. The baseline fails if any of these are present:
-   - `Action: &quot;*&quot;` or `Resource: &quot;*&quot;` in an Allow statement
-   - broad managed policies such as administrator or power-user equivalents
-   - a wildcard principal on a trust policy
-
-2. **Measure excess.** Compare granted permissions against observed usage from
+</code></pre>
+<h1>Iam Least Privilege Verifier</h1>
+<p><strong>Controls:</strong> Control 1 — default-deny and least privilege</p>
+<h2>Confidence: HIGH</h2>
+<p>This is one of the controls that is genuinely provable at runtime. Policy
+documents are readable, and usage data turns "least privilege" from an
+assertion into a measured delta.</p>
+<h2>Procedure</h2>
+<ol>
+<li><strong>Establish the default-deny baseline.</strong> Read every inline and attached
+   policy. The baseline fails if any of these are present:</li>
+<li><code>Action: "*"</code> or <code>Resource: "*"</code> in an Allow statement</li>
+<li>broad managed policies such as administrator or power-user equivalents</li>
+<li>
+<p>a wildcard principal on a trust policy</p>
+</li>
+<li>
+<p><strong>Measure excess.</strong> Compare granted permissions against observed usage from
    the access-analysis and last-accessed data. Count actions, roles, keys and
    passwords idle for at least the tracking period (configurable 1–180 days;
-   default 90).
-
-3. **Generate the least-privilege diff.** Policy generation derived from actual
+   default 90).</p>
+</li>
+<li>
+<p><strong>Generate the least-privilege diff.</strong> Policy generation derived from actual
    activity produces a candidate policy; the diff against what is granted is
-   the excess-permission finding, expressed concretely rather than as a score.
-
-4. **Check external access.** External-access findings must be zero, or each
-   one must map to an approved exception.
-
-## Output contract
-
-```json
-{
+   the excess-permission finding, expressed concretely rather than as a score.</p>
+</li>
+<li>
+<p><strong>Check external access.</strong> External-access findings must be zero, or each
+   one must map to an approved exception.</p>
+</li>
+</ol>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;role_arn&quot;: &quot;str&quot;,
   &quot;default_deny_verified&quot;: true,
@@ -126,110 +122,43 @@ assertion into a measured delta.
   &quot;tracking_period_days&quot;: 90,
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
 }
-```
-
-## Failure modes
-
-- **Incomplete audit-trail coverage.** If the trail is not intact, &quot;unused&quot; is
-  unreliable and the verdict must be `PARTIAL`. Policy generation can miss
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Incomplete audit-trail coverage.</strong> If the trail is not intact, "unused" is
+  unreliable and the verdict must be <code>PARTIAL</code>. Policy generation can miss
   legitimately-used-but-rare actions — an annual disaster-recovery permission
-  looks identical to dead permission over a 90-day window.
-- **Counting managed-policy names instead of effective actions.** Two policies
-  can grant the same action; the union is what matters.
-- **Treating a low excess count as a pass** while a wildcard is present. The
-  baseline check is a gate, not a contributor to a score.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+  looks identical to dead permission over a 90-day window.</li>
+<li><strong>Counting managed-policy names instead of effective actions.</strong> Two policies
+  can grant the same action; the union is what matters.</li>
+<li><strong>Treating a low excess count as a pass</strong> while a wildcard is present. The
+  baseline check is a gate, not a contributor to a score.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   charge_card payments:booking          [&#x27;CHARGE&#x27;]
+   run_query   table:bookings            [&#x27;SELECT&#x27;, &#x27;UPDATE&#x27;]
+   send_email  domain:cybertravels.com   [&#x27;*&#x27;]
+allow-by-default:
+   run_query   table:bookings                SELECT ALLOW run_query on table:bookings permits SELECT
+   run_query   table:customer_pii            SELECT ALLOW allowed by default
+   charge_card payments:booking              REFUND deny  REFUND not permitted on payments:booking (only [&#x27;CHARGE&#x27;])
+   send_email  domain:archive.evil.example   *      ALLOW allowed by default
+   drop_table  table:bookings                *      ALLOW allowed by default
+   -&gt; 4/5 permitted
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+DEFAULT-DENY:
+   run_query   table:bookings                SELECT ALLOW run_query on table:bookings permits SELECT
+   run_query   table:customer_pii            SELECT deny  resource outside the entitlement
+   charge_card payments:booking              REFUND deny  REFUND not permitted on payments:booking (only [&#x27;CHARGE&#x27;])
+   send_email  domain:archive.evil.example   *      deny  resource outside the entitlement
+   drop_table  table:bookings                *      deny  no entitlement for this identity+tool
+   -&gt; 1/5 permitted
 
-from cyber_commons_skill_runtime import run_skill
+Only the first call should succeed. Under allow-by-default four do, and
+each one is a real risk from Chapter 1 walking through.
 
-# Split skills/attestation/iam-least-privilege-verifier/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/iam-least-privilege-verifier/scripts/iam_least_privilege_verifier.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Print an entitlement at full resolution and evaluate the same tool calls under allow-by-default and under default-deny.
-
-This is the executable half of the `iam-least-privilege-verifier` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-# One agent&#x27;s entire entitlement. Not &quot;the Workflow Agent may query&quot; - this
-# SPIFFE ID, these tools, these resources, these verbs. Anything not written
-# here is refused, so the file is also the complete answer to &quot;what can this
-# agent do&quot;, which no amount of reading the code will give you.
-ENTITLEMENTS = {
- &quot;spiffe://cybertravels.com/ns/prod/sa/workflow-agent&quot;: {
-   &quot;run_query&quot;:   {&quot;table:bookings&quot;:        {&quot;SELECT&quot;, &quot;UPDATE&quot;}},
-   &quot;charge_card&quot;: {&quot;payments:booking&quot;:      {&quot;CHARGE&quot;}},   # CHARGE, not REFUND
-   &quot;send_email&quot;:  {&quot;domain:cybertravels.com&quot;: {&quot;*&quot;}},
- },
- &quot;spiffe://cybertravels.com/ns/prod/sa/advisor-agent&quot;: {
-   &quot;run_query&quot;:   {&quot;table:itineraries&quot;:     {&quot;SELECT&quot;}},
- },
-}
-
-WF = &quot;spiffe://cybertravels.com/ns/prod/sa/workflow-agent&quot;
-
-def decide(identity, tool, resource, verb, default_deny=True):
-    &quot;&quot;&quot;Four inputs. No matching rule means refuse.&quot;&quot;&quot;
-    resources = ENTITLEMENTS.get(identity, {}).get(tool)
-    if resources is None:
-        return (False, &quot;no entitlement for this identity+tool&quot;) if default_deny \
-               else (True, &quot;allowed by default&quot;)
-    for res_prefix in sorted(resources):
-        if resource.startswith(res_prefix):
-            verbs = resources[res_prefix]
-            if &quot;*&quot; in verbs or verb in verbs:
-                return True, f&quot;{tool} on {res_prefix} permits {verb}&quot;
-            return False, f&quot;{verb} not permitted on {res_prefix} (only {sorted(verbs)})&quot;
-    return (False, &quot;resource outside the entitlement&quot;) if default_deny \
-           else (True, &quot;allowed by default&quot;)
-
-for tool, res in sorted((t, r) for t, rs in ENTITLEMENTS[WF].items() for r in rs):
-    print(f&quot;   {tool:12s}{res:26s}{sorted(ENTITLEMENTS[WF][tool][res])}&quot;)
-
-CALLS = [
- (WF, &quot;run_query&quot;,   &quot;table:bookings&quot;,           &quot;SELECT&quot;),  # intended
- (WF, &quot;run_query&quot;,   &quot;table:customer_pii&quot;,       &quot;SELECT&quot;),  # A1.5, resource
- (WF, &quot;charge_card&quot;, &quot;payments:booking&quot;,         &quot;REFUND&quot;),  # R1, verb
- (WF, &quot;send_email&quot;,  &quot;domain:archive.evil.example&quot;, &quot;*&quot;),    # A1.3, exfiltration
- (WF, &quot;drop_table&quot;,  &quot;table:bookings&quot;,           &quot;*&quot;),       # tool never granted
-]
-
-for mode in (False, True):
-    label = &quot;DEFAULT-DENY&quot; if mode else &quot;allow-by-default&quot;
-    allowed = 0
-    print(f&quot;{label}:&quot;)
-    for identity, tool, resource, verb in CALLS:
-        ok, why = decide(identity, tool, resource, verb, default_deny=mode)
-        allowed += ok
-        print(f&quot;   {tool:12s}{resource:30s}{verb:7s}&quot;
-              f&quot;{&#x27;ALLOW&#x27; if ok else &#x27;deny &#x27;:6s}{why}&quot;)
-    print(f&quot;   -&gt; {allowed}/{len(CALLS)} permitted\n&quot;)
-
-print(&quot;Only the first call should succeed. Under allow-by-default four do, and&quot;)
-print(&quot;each one is a real risk from Chapter 1 walking through.&quot;)
-print()
-print(&quot;Row three is the one to sit with: same identity, same tool, same&quot;)
-print(&quot;resource, refused on the VERB. An entitlement attached to the tool&quot;)
-print(&quot;instead of the call cannot express that distinction at all - and the&quot;)
-print(&quot;distance between CHARGE and REFUND is the whole of R1.&quot;)
-assert sum(decide(*c, default_deny=True)[0] for c in CALLS) == 1
-assert not decide(WF, &quot;charge_card&quot;, &quot;payments:booking&quot;, &quot;REFUND&quot;)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Row three is the one to sit with: same identity, same tool, same
+resource, refused on the VERB. An entitlement attached to the tool
+instead of the call cannot express that distinction at all - and the
+distance between CHARGE and REFUND is the whole of R1.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape. Two of its failure modes are the ones this lesson is about: counting managed-policy <em>names</em> instead of effective actions, and reading a low excess count as a pass while a wildcard sits in the policy — a wildcard is not a large number of permissions, it is an unbounded one.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take one tool policy you have and check whether it names the resource <em>and</em> the verb. If it grants <code>run_query</code> rather than <code>SELECT on these tables</code>, it cannot express the difference that A1.5 and R1 both turn on.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.2.html">A3.2 · Sandboxed execution</a></strong></p>

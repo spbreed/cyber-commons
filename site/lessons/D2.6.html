@@ -43,133 +43,62 @@ record, and a post-incident action list where half the items cannot be verified
 as done six weeks later.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">change surface</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">in change management?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what happens today</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">application code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">pull request, review, CI, deploy</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent prompt</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">edited in a console, no diff retained</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">tool manifest</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a config change, with no threat-model diff</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">model version</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">provider-side; you may not be told</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">policy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">if it is in git — often it is not</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">approval settings</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a toggle in an admin UI</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">egress allowlist</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">sometimes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">depends whether it is IaC or a console</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The same surfaces D1.7 watches for drift. There they were the things that change without anyone deciding; here they are the things you change on purpose, after an incident — and four of seven still leave no record that you did.</div></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the action, as written in the report</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">where it landed</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">still verifiable in six weeks?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">revoke the compromised agent identity</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">identity provider</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">add collect.example.com to the egress denylist</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a console</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">remove read access to /home/app/.aws</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">tool manifest</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">require approval for http_post</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">an admin toggle</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">add a regression test for the credential read</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">update the prompt to warn about credential files</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a console</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Two of six survive as something you can check. The other four exist only in the incident document — and the last of them is not a control at all: it is a request for the model to behave better, and the next prompt edit will silently revert it.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Only two of six post-incident actions are still verifiable six weeks later, and one of those is a prompt edit recorded as a control. The skill classifies each action, tests whether a check would fail if it were reverted, and compares blast radius before and after.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/post-incident-change-surface/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: post-incident-change-surface
+<p>Only two of six post-incident actions are still verifiable six weeks later, and one of those is a prompt edit recorded as a control. The skill classifies each action, tests whether a check would fail if it were reverted, and compares blast radius before and after.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/post-incident-change-surface/SKILL.md"><code>skills/response/post-incident-change-surface/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: post-incident-change-surface
 description: &gt;-
-  Count the surfaces that change an agent&#x27;s behaviour without passing change
+  Count the surfaces that change an agent's behaviour without passing change
   management, and check weeks later which post-incident actions are still
   verifiable rather than guidance. Use at post-incident review, or before
   closing actions from the last one.
 allowed-tools: Read, Grep, Glob
----
-
-# A prompt edit is guidance, and it closed an action item
-
-Post-incident actions for agentic systems fail in a specific way: several of them
+</code></pre>
+<h1>A prompt edit is guidance, and it closed an action item</h1>
+<p>Post-incident actions for agentic systems fail in a specific way: several of them
 are changes to surfaces that generate no record, and one or two are prompt edits
 recorded as controls. Six weeks later nobody can demonstrate that any of it is
-still in place, and the review declares the incident closed.
-
-## When to use this
-
-At post-incident review, and again several weeks afterwards — the second pass is
-the one that finds this.
-
-## Procedure
-
-**1 — Enumerate the change surfaces and mark which bypass change management.**
+still in place, and the review declares the incident closed.</p>
+<h2>When to use this</h2>
+<p>At post-incident review, and again several weeks afterwards — the second pass is
+the one that finds this.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate the change surfaces and mark which bypass change management.</strong>
 Code and infrastructure usually do not; model version, prompt, manifest and
-approval settings usually do.
-
-**2 — Classify every action from the review.** Control, detection, guidance, or
+approval settings usually do.</p>
+<p><strong>2 — Classify every action from the review.</strong> Control, detection, guidance, or
 documentation. A prompt edit is guidance: it changes behaviour on average and
-enforces nothing.
-
-**3 — Test verifiability now.** For each action, is there a check that would fail
+enforces nothing.</p>
+<p><strong>3 — Test verifiability now.</strong> For each action, is there a check that would fail
 if it were reverted? If not, the action cannot be audited and will silently
-regress.
-
-**4 — Re-test weeks later.** Run the same check. The count that survives is the
-honest measure of the review, and it is usually a third of what was agreed.
-
-**5 — Measure the blast radius before and after.** The reduction is what the
+regress.</p>
+<p><strong>4 — Re-test weeks later.</strong> Run the same check. The count that survives is the
+honest measure of the review, and it is usually a third of what was agreed.</p>
+<p><strong>5 — Measure the blast radius before and after.</strong> The reduction is what the
 incident actually bought. If it is unchanged, the actions were process rather
-than containment, and that belongs in the report.
-
-## Output contract
-
-```json
-{
+than containment, and that belongs in the report.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;surfaces&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;bypasses_change_management&quot;: true}],
   &quot;actions&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;control|detection|guidance|documentation&quot;,
                &quot;verifiable&quot;: false, &quot;check&quot;: &quot;str|null&quot;}],
   &quot;recheck&quot;: {&quot;weeks_later&quot;: 0, &quot;still_verifiable&quot;: 0, &quot;of&quot;: 0},
   &quot;blast_radius&quot;: {&quot;before&quot;: 0, &quot;after&quot;: 0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Recording a prompt edit as a control.</strong> It is guidance under a different
+  name.</li>
+<li><strong>Closing actions at the review.</strong> Re-check weeks later or the number is
+  aspirational.</li>
+<li><strong>No before-and-after blast radius.</strong> Nothing shows whether it helped.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>blast before 44  after 4
+the manifest diff records the change even though no PR was raised.
 
-## Failure modes
+OK   gate http_post behind approval            type=preventive  owner=platform-sec   verify_by=2026-09-30
+OK   alert on credential-path reads            type=detective   owner=soc            verify_by=2026-09-15
+WEAK update the prompt to warn the model       type=guidance    owner=—              verify_by=—
 
-- **Recording a prompt edit as a control.** It is guidance under a different
-  name.
-- **Closing actions at the review.** Re-check weeks later or the number is
-  aspirational.
-- **No before-and-after blast radius.** Nothing shows whether it helped.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/response/post-incident-change-surface/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/post-incident-change-surface/scripts/post_incident_change_surface.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Count the change surfaces that bypass change management and check which post-incident actions are still verifiable weeks later.
-
-This is the executable half of the `post-incident-change-surface` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20}
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n, s, rev in tools if n not in gated)
-
-BEFORE = [(&quot;read_file&quot;, &quot;self&quot;, True), (&quot;write_file&quot;, &quot;project&quot;, True),
-          (&quot;http_post&quot;, &quot;org&quot;, False)]
-AFTER  = [(&quot;read_file&quot;, &quot;self&quot;, True), (&quot;write_file&quot;, &quot;project&quot;, True),
-          (&quot;http_post&quot;, &quot;org&quot;, False)]
-gated_after = {&quot;http_post&quot;}
-
-print(f&quot;blast before {blast(BEFORE)}  after {blast(AFTER, gated_after)}&quot;)
-print(&quot;the manifest diff records the change even though no PR was raised.\n&quot;)
-
-def action_record(action, surface, control_type, owner, verify_by):
-    is_control = control_type in (&quot;preventive&quot;, &quot;detective&quot;)
-    return {&quot;action&quot;: action, &quot;surface&quot;: surface, &quot;type&quot;: control_type,
-            &quot;owner&quot;: owner, &quot;verify_by&quot;: verify_by,
-            &quot;acceptable&quot;: is_control and bool(owner) and bool(verify_by)}
-
-RECORDS = [
- action_record(&quot;gate http_post behind approval&quot;, &quot;tool manifest&quot;, &quot;preventive&quot;,
-               &quot;platform-sec&quot;, &quot;2026-09-30&quot;),
- action_record(&quot;alert on credential-path reads&quot;, &quot;detection&quot;, &quot;detective&quot;,
-               &quot;soc&quot;, &quot;2026-09-15&quot;),
- action_record(&quot;update the prompt to warn the model&quot;, &quot;prompt&quot;, &quot;guidance&quot;,
-               &quot;&quot;, &quot;&quot;),
-]
-for r in RECORDS:
-    print(f&quot;{&#x27;OK  &#x27; if r[&#x27;acceptable&#x27;] else &#x27;WEAK&#x27;} {r[&#x27;action&#x27;]:42s}&quot;
-          f&quot;type={r[&#x27;type&#x27;]:11s} owner={r[&#x27;owner&#x27;] or &#x27;—&#x27;:14s} verify_by={r[&#x27;verify_by&#x27;] or &#x27;—&#x27;}&quot;)
-weak = [r for r in RECORDS if not r[&quot;acceptable&quot;]]
-print(f&quot;\n{len(weak)} action(s) are guidance rather than controls: &quot;
-      f&quot;{[r[&#x27;action&#x27;] for r in weak]}&quot;)
-assert weak</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+1 action(s) are guidance rather than controls: [&#x27;update the prompt to warn the model&#x27;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four of seven change surfaces bypass change management. Only 2 of 6 post-incident actions are verifiable six weeks later, and one of them is a prompt edit that is guidance rather than a control. The manifest diff records the gating change with the blast radius dropping from 40 to 3, and the action review flags the prompt update as weak.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take your last incident's action list and mark each item's landing surface. Anything landing in a console has no record and no verification path — move those into git before the next one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.7.html">D2.7 · Stop authority</a></strong></p>

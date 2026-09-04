@@ -74,162 +74,83 @@ one is a real failure that happens because <em>both</em> sides made a reasonable
 assumption about the other.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">function</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the question it is asking</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the controls it holds</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">legal</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">can we be held liable, and under what theory</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">contract clauses · acceptable-use terms · IP screening · e-discovery retention</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">compliance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which obligations apply, can we demonstrate we meet them</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">AI policy · use-case classification · attestations · disclosure triggers</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">privacy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whose data, on what basis, for how long</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">impact-assessment gate · PII redaction · retention schedules · transfers</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">cyber</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">can this be attacked, can we contain it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent identity and JIT authz · tool permissions · sandbox and egress · guardrails · telemetry · kill switch</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">model risk</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">is it fit for purpose, will we know when it stops being</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">pre-deployment validation · thresholds · drift alerting · revalidation</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Plus two more that hold no controls and decide everything: the business owner, accountable for the use case and its risk appetite, and internal audit, independently assuring that the five above do what they claim. 22 controls across five functions, and no function holds more than a quarter of them.</div></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the seam</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">one side assumed…</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the other assumed…</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what happened</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent traces are full of personal data</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>cyber:</i> privacy owns retention of anything containing personal data</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>privacy:</i> security owns the log store, so security sets its schedule</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no schedule was set; three years of prompts are discoverable</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the model was validated, the tools were not</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>model risk:</i> validation covered the model, which is our scope</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>cyber:</i> MRM signed it off, so the deployment was approved</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>an agent holds production write access that was never in scope</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“no training on our data” was negotiated, never instrumented</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>legal:</i> the clause is in the contract and it is binding</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>cyber:</i> legal handled the vendor, so the restriction is handled</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>nobody built the control that verifies the vendor honours it</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the use case was risk-tiered before it had tools</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>compliance:</i> classified low-risk — it was a chatbot when we saw it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><i>business owner:</i> we shipped features, not a new use case</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>it files tickets, sends mail and moves money at the low-risk tier</b></td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Neither assumption in any pair is unreasonable. That is what makes these seams rather than mistakes — and why naming the handoff is the control.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Five functions, every one reporting coverage, and four use cases nobody governed. The skill counts the controls each function <em>operates</em> rather than opines on, then walks real use cases through the map to find the seams.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/stakeholder-seam-map/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: stakeholder-seam-map
+<p>Five functions, every one reporting coverage, and four use cases nobody governed. The skill counts the controls each function <em>operates</em> rather than opines on, then walks real use cases through the map to find the seams.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/stakeholder-seam-map/SKILL.md"><code>skills/programme/stakeholder-seam-map/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: stakeholder-seam-map
 description: &gt;-
   Map which control function operates which controls and what question each is
   asking, then find the seams where two individually reasonable assumptions
   leave a use case ungoverned. Use when everyone reports full coverage and
   something was still missed.
 allowed-tools: Read, Grep, Glob
----
-
-# Every function is covered and the use case is not
-
-Governance failures cluster in the seams. Legal assumes security assessed the
+</code></pre>
+<h1>Every function is covered and the use case is not</h1>
+<p>Governance failures cluster in the seams. Legal assumes security assessed the
 tool; security assumes procurement assessed the vendor; procurement assumes it
 was an internal build. Each assumption is reasonable, each function reports full
-coverage, and the use case is governed by nobody.
-
-## When to use this
-
-Standing up an AI governance programme, and after any incident where several
-functions were involved and none of them owned it.
-
-## Procedure
-
-**1 — List the functions and the question each asks.** Legal, compliance,
+coverage, and the use case is governed by nobody.</p>
+<h2>When to use this</h2>
+<p>Standing up an AI governance programme, and after any incident where several
+functions were involved and none of them owned it.</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the functions and the question each asks.</strong> Legal, compliance,
 security, privacy, model risk, internal audit. The question is what makes their
-coverage claim meaningful — &quot;is it lawful&quot; is a different sweep from &quot;is it
-contained&quot;.
-
-**2 — Count the controls each function operates.** Operates, not opines on. The
-total is usually smaller than the sum of what everyone believes they cover.
-
-**3 — Take each function&#x27;s self-report at face value** and record it. This is
-the state everybody is in before the exercise.
-
-**4 — Walk real use cases through the map.** For each, which function actually
-governed it. The ones nobody claims are the seams, and there are always some.
-
-**5 — Write the seam as a pair of assumptions, with an owner.** &quot;Legal assumed
-security reviewed the connector; security assumed it was procurement&quot; — then
-name who closes it. A seam with no owner is a seam next quarter.
-
-## Output contract
-
-```json
-{
+coverage claim meaningful — "is it lawful" is a different sweep from "is it
+contained".</p>
+<p><strong>2 — Count the controls each function operates.</strong> Operates, not opines on. The
+total is usually smaller than the sum of what everyone believes they cover.</p>
+<p><strong>3 — Take each function's self-report at face value</strong> and record it. This is
+the state everybody is in before the exercise.</p>
+<p><strong>4 — Walk real use cases through the map.</strong> For each, which function actually
+governed it. The ones nobody claims are the seams, and there are always some.</p>
+<p><strong>5 — Write the seam as a pair of assumptions, with an owner.</strong> "Legal assumed
+security reviewed the connector; security assumed it was procurement" — then
+name who closes it. A seam with no owner is a seam next quarter.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;functions&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;question&quot;: &quot;str&quot;, &quot;controls_operated&quot;: 0}],
   &quot;self_reports&quot;: [{&quot;function&quot;: &quot;str&quot;, &quot;claims_coverage&quot;: true}],
   &quot;use_cases&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;governed_by&quot;: [&quot;str&quot;], &quot;ungoverned&quot;: false}],
   &quot;seams&quot;: [{&quot;assumption_a&quot;: &quot;str&quot;, &quot;assumption_b&quot;: &quot;str&quot;, &quot;owner&quot;: &quot;str|null&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Counting controls a function has an opinion about.</strong> Count what it
+  operates.</li>
+<li><strong>Auditing functions rather than use cases.</strong> The seam is only visible from
+  the use case.</li>
+<li><strong>A seam with no owner.</strong> It is a description, not a fix.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   compliance  4 controls  green
+   cyber       6 controls  green
+   legal       4 controls  green
+   model_risk  4 controls  green
+   privacy     4 controls  green
 
-## Failure modes
+functions reporting green : 5/5
+open seams                : 4
 
-- **Counting controls a function has an opinion about.** Count what it
-  operates.
-- **Auditing functions rather than use cases.** The seam is only visible from
-  the use case.
-- **A seam with no owner.** It is a description, not a fix.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+A dashboard assembled from function self-reports is all green, and four
+material gaps are open. The dashboard is not lying - it is asking each
+function about the inside of its own box, and every failure here is
+between boxes.
+handoff artefact                accountable  consumers
+re-tier on capability change    compliance   business_owner, cyber
+tool scope in validation        model_risk   cyber, business_owner
+trace retention schedule        privacy      cyber, legal
+vendor no-train verification    cyber        legal, compliance
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+seams: 4   handoffs with an accountable owner: 4
 
-from cyber_commons_skill_runtime import run_skill
+One artefact, many consumers, exactly one owner. The consumers matter as
+much as the owner: a handoff nobody consumes was never a handoff, and a
+handoff with two owners is the contested case from E1.0 again.
+   customer support agent    five functions: 5/5   missing: none   governed: True
+   internal code assistant   five functions: 5/5   missing: [&#x27;business_owner&#x27;, &#x27;internal_audit&#x27;]   governed: False
 
-# Split skills/programme/stakeholder-seam-map/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/stakeholder-seam-map/scripts/stakeholder_seam_map.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Map which function operates which controls, and find the seams where two reasonable assumptions leave a use case ungoverned.
-
-This is the executable half of the `stakeholder-seam-map` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-# The five control functions from the table above, with the count of
-# controls each one operates. Everything here is true, and self-reported.
-OPERATES = {&quot;legal&quot;: 4, &quot;compliance&quot;: 4, &quot;privacy&quot;: 4, &quot;cyber&quot;: 6, &quot;model_risk&quot;: 4}
-OPEN_SEAMS = 4                      # the four from the previous section
-
-def self_report(function):
-    &quot;&quot;&quot;Each function reports on the controls it operates. All of it is true.&quot;&quot;&quot;
-    return {&quot;function&quot;: function, &quot;controls_operating&quot;: OPERATES[function],
-            &quot;status&quot;: &quot;green&quot;}
-
-for f in sorted(OPERATES):
-    r = self_report(f)
-    print(f&quot;   {r[&#x27;function&#x27;]:12s}{r[&#x27;controls_operating&#x27;]} controls  {r[&#x27;status&#x27;]}&quot;)
-print()
-print(f&quot;functions reporting green : {len(OPERATES)}/{len(OPERATES)}&quot;)
-print(f&quot;open seams                : {OPEN_SEAMS}&quot;)
-print()
-print(&quot;A dashboard assembled from function self-reports is all green, and four&quot;)
-print(&quot;material gaps are open. The dashboard is not lying - it is asking each&quot;)
-print(&quot;function about the inside of its own box, and every failure here is&quot;)
-print(&quot;between boxes.&quot;)
-assert OPEN_SEAMS == 4 and len(OPERATES) == 5
-
-HANDOFFS = {
- &quot;trace retention schedule&quot;:      {&quot;owner&quot;: &quot;privacy&quot;,  &quot;consumers&quot;: [&quot;cyber&quot;, &quot;legal&quot;]},
- &quot;tool scope in validation&quot;:      {&quot;owner&quot;: &quot;model_risk&quot;,&quot;consumers&quot;: [&quot;cyber&quot;, &quot;business_owner&quot;]},
- &quot;vendor no-train verification&quot;:  {&quot;owner&quot;: &quot;cyber&quot;,    &quot;consumers&quot;: [&quot;legal&quot;, &quot;compliance&quot;]},
- &quot;re-tier on capability change&quot;:  {&quot;owner&quot;: &quot;compliance&quot;,&quot;consumers&quot;: [&quot;business_owner&quot;, &quot;cyber&quot;]},
-}
-print(f&quot;{&#x27;handoff artefact&#x27;:32s}{&#x27;accountable&#x27;:13s}consumers&quot;)
-for h in sorted(HANDOFFS):
-    v = HANDOFFS[h]
-    print(f&quot;{h:32s}{v[&#x27;owner&#x27;]:13s}{&#x27;, &#x27;.join(v[&#x27;consumers&#x27;])}&quot;)
-
-covered = len(HANDOFFS)
-print(f&quot;\nseams: {OPEN_SEAMS}   handoffs with an accountable owner: {covered}&quot;)
-print()
-print(&quot;One artefact, many consumers, exactly one owner. The consumers matter as&quot;)
-print(&quot;much as the owner: a handoff nobody consumes was never a handoff, and a&quot;)
-print(&quot;handoff with two owners is the contested case from E1.0 again.&quot;)
-assert covered == OPEN_SEAMS
-
-def governed(use_case):
-    missing = [seat for seat in (&quot;business_owner&quot;, &quot;internal_audit&quot;)
-               if seat not in use_case[&quot;seats&quot;]]
-    five = [f for f in OPERATES if f in use_case[&quot;seats&quot;]]
-    return {&quot;control_functions_present&quot;: len(five),
-            &quot;missing_seats&quot;: missing,
-            &quot;is_governed&quot;: not missing and len(five) == len(OPERATES)}
-
-CASES = [
- {&quot;name&quot;: &quot;customer support agent&quot;,
-  &quot;seats&quot;: list(OPERATES) + [&quot;business_owner&quot;, &quot;internal_audit&quot;]},
- {&quot;name&quot;: &quot;internal code assistant&quot;, &quot;seats&quot;: list(OPERATES)},
-]
-for c in CASES:
-    g = governed(c)
-    print(f&quot;   {c[&#x27;name&#x27;]:26s}five functions: {g[&#x27;control_functions_present&#x27;]}/5   &quot;
-          f&quot;missing: {g[&#x27;missing_seats&#x27;] or &#x27;none&#x27;}   governed: {g[&#x27;is_governed&#x27;]}&quot;)
-print()
-print(&quot;The second one has every control function at the table and no accountable&quot;)
-print(&quot;owner. Five functions are governing something nobody has agreed to own,&quot;)
-print(&quot;which is how a use case survives a review and still has no one to fund&quot;)
-print(&quot;the remediation it was told to do.&quot;)
-assert not governed(CASES[1])[&quot;is_governed&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The second one has every control function at the table and no accountable
+owner. Five functions are governing something nobody has agreed to own,
+which is how a use case survives a review and still has no one to fund
+the remediation it was told to do.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Five control functions, the question each is asking and the controls each operates — 22 in total. Four seam failures laid out as pairs of individually reasonable assumptions, and every function still self-reports green while all four gaps are open. Naming one accountable owner per handoff closes them, and a use case with all five control functions and no business owner is shown to be ungoverned.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick one of the four seams and find out, today, who owns it in your organisation. The answer 'I assume security does' from one side and 'I assume privacy does' from the other is the finding.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.11.html">E1.11 · Model risk management for AI systems</a></strong></p>

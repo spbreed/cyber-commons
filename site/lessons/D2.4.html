@@ -41,57 +41,42 @@ pre-authorised, automated revocation of non-human identities.</p>
 because a false positive locks a person out mid-shift. Revoking a <strong>non-human</strong>
 identity is cheap to get wrong — the agent re-requests, or an on-call re-enables
 it in a minute. So the two should have different policies, and almost nowhere do.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Eight minutes of approval is 2,400 actions. The skill races the rate against the delay, times the whole containment path — of which the revocation itself is twelve seconds — and classifies which signals may auto-revoke against a non-human subject.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/machine-speed-containment/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: machine-speed-containment
+<p>Eight minutes of approval is 2,400 actions. The skill races the rate against the delay, times the whole containment path — of which the revocation itself is twelve seconds — and classifies which signals may auto-revoke against a non-human subject.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/machine-speed-containment/SKILL.md"><code>skills/response/machine-speed-containment/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: machine-speed-containment
 description: &gt;-
-  Race an agent&#x27;s action rate against the approval delay in front of
+  Race an agent's action rate against the approval delay in front of
   containment, time the whole containment path end to end, and decide which
   signals may auto-revoke. Use when containment requires a human and the subject
   acts hundreds of times a minute.
 allowed-tools: Read, Grep, Glob
----
-
-# Eight minutes of approval is 2,400 actions
-
-Containment that waits for a person is measured against a subject that does not
+</code></pre>
+<h1>Eight minutes of approval is 2,400 actions</h1>
+<p>Containment that waits for a person is measured against a subject that does not
 wait. The arithmetic is not close, and it is the argument for pre-authorising
 revocation for a named set of signals — with the false-revocation cost stated,
-because that is the objection.
-
-## When to use this
-
-Designing containment for agent workloads, and after any incident where the
-containment step was correct and late.
-
-## Procedure
-
-**1 — Measure the subject&#x27;s rate.** Actions per minute, observed rather than
+because that is the objection.</p>
+<h2>When to use this</h2>
+<p>Designing containment for agent workloads, and after any incident where the
+containment step was correct and late.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Measure the subject's rate.</strong> Actions per minute, observed rather than
 designed. Multiply by the approval delay to get the actions taken while
-somebody decides.
-
-**2 — Time the whole path, not the revocation.** Detection, triage, decision,
+somebody decides.</p>
+<p><strong>2 — Time the whole path, not the revocation.</strong> Detection, triage, decision,
 approval, execution, propagation. The revocation itself is usually seconds and
 the path is usually minutes; reporting only the last step makes the problem
-invisible.
-
-**3 — Find the dominant term.** It is almost always human approval or
+invisible.</p>
+<p><strong>3 — Find the dominant term.</strong> It is almost always human approval or
 propagation delay, and it is almost never the API call. Optimise the dominant
-term or nothing changes.
-
-**4 — Classify signals for auto-revocation.** For each, its precision and what a
+term or nothing changes.</p>
+<p><strong>4 — Classify signals for auto-revocation.</strong> For each, its precision and what a
 false revocation costs. High-precision signals against a non-human subject are
-the candidates: revoking an agent&#x27;s token wrongly costs a restarted run.
-
-**5 — Set the policy asymmetrically.** Auto-revoke agent credentials on
-high-precision signals; keep a human in front of anything that affects a person&#x27;s
-access. State both halves so the policy survives review.
-
-## Output contract
-
-```json
-{
+the candidates: revoking an agent's token wrongly costs a restarted run.</p>
+<p><strong>5 — Set the policy asymmetrically.</strong> Auto-revoke agent credentials on
+high-precision signals; keep a human in front of anything that affects a person's
+access. State both halves so the policy survives review.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;race&quot;: {&quot;actions_per_min&quot;: 0, &quot;approval_minutes&quot;: 0, &quot;actions_during_approval&quot;: 0},
   &quot;path&quot;: [{&quot;step&quot;: &quot;str&quot;, &quot;seconds&quot;: 0}],
   &quot;total_seconds&quot;: 0,
@@ -99,119 +84,48 @@ access. State both halves so the policy survives review.
   &quot;signals&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;precision&quot;: 0.0, &quot;subject&quot;: &quot;agent|human&quot;,
                &quot;auto_revoke&quot;: false, &quot;false_revocation_cost&quot;: &quot;str&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Timing the revocation.</strong> It is the fast part.</li>
+<li><strong>One policy for agents and people.</strong> The costs differ by orders of
+  magnitude.</li>
+<li><strong>Auto-revoking on a low-precision signal.</strong> Precision is the entry
+  requirement.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   agent rate   human 8min   auto 12s   ratio
+----------------------------------------------
+       30/min          240          6    40.0×
+      120/min          960         24    40.0×
+      300/min         2400         60    40.0×
+     1200/min         9600        240    40.0×
 
-## Failure modes
+At 300/min an 8-minute approval costs 2,400 further actions.
+step                            seconds  why
+--------------------------------------------------------------------------
+detection fires                       8  rule evaluation + SIEM ingestion lag
+analyst picks it up                 240  queue depth at 02:00
+analyst decides to contain          180  confirming it is not a false positive
+approval requested                  480  on-call manager, out of hours
+revocation executed                  12  the only step anyone measures
+TOTAL                               920  = 15 minutes
 
-- **Timing the revocation.** It is the fast part.
-- **One policy for agents and people.** The costs differ by orders of
-  magnitude.
-- **Auto-revoking on a low-precision signal.** Precision is the entry
-  requirement.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+at 300 actions/min that is 4,600 further actions.
+The 12-second revocation is 1.3% of the elapsed time. Optimising it
+is not where the win is.
+reached the cloud metadata service          AUTO-REVOKE (confidence 0.99) — no approval in the path
+read a path matching */.ssh/* or */.aws/*   AUTO-REVOKE (confidence 0.97) — no approval in the path
+egress to a host not on the allowlist       AUTO-REVOKE (confidence 0.90) — no approval in the path
+tool-call rate 20× its own baseline         AUTO-REVOKE (confidence 0.75) — no approval in the path
+activity outside usual hours                alert only (confidence 0.30 &lt; 0.7)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+same signal, human subject                  page on-call (confidence 0.99) — human lockout needs a person
 
-from cyber_commons_skill_runtime import run_skill
+automated path: 21s vs manual 920s (44× faster)
+actions prevented at 300/min: 4,495
+human subject         high      person locked out mid-shift
+non-human identity    low       task fails, agent re-requests with a reason (A2.4)
 
-# Split skills/response/machine-speed-containment/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/machine-speed-containment/scripts/machine_speed_containment.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Race an agent&#x27;s action rate against an approval delay, time the whole containment path, and decide what may auto-revoke.
-
-This is the executable half of the `machine-speed-containment` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-def race(actions_per_min, human_minutes, auto_seconds=12):
-    manual = actions_per_min * human_minutes
-    auto   = actions_per_min * (auto_seconds/60)
-    return {&quot;manual&quot;: round(manual), &quot;auto&quot;: round(auto),
-            &quot;ratio&quot;: round(manual/max(auto, 1e-9), 1)}
-
-print(f&quot;{&#x27;agent rate&#x27;:&gt;13}{&#x27;human 8min&#x27;:&gt;13}{&#x27;auto 12s&#x27;:&gt;11}{&#x27;ratio&#x27;:&gt;8}&quot;)
-print(&quot;-&quot; * 46)
-for rate in (30, 120, 300, 1200):
-    r = race(rate, 8)
-    print(f&quot;{rate:&gt;9}/min{r[&#x27;manual&#x27;]:&gt;13}{r[&#x27;auto&#x27;]:&gt;11}{r[&#x27;ratio&#x27;]:&gt;8}×&quot;)
-print(&quot;\nAt 300/min an 8-minute approval costs 2,400 further actions.&quot;)
-
-PATH = [
- (&quot;detection fires&quot;,              8,   &quot;rule evaluation + SIEM ingestion lag&quot;),
- (&quot;analyst picks it up&quot;,          240, &quot;queue depth at 02:00&quot;),
- (&quot;analyst decides to contain&quot;,   180, &quot;confirming it is not a false positive&quot;),
- (&quot;approval requested&quot;,           480, &quot;on-call manager, out of hours&quot;),
- (&quot;revocation executed&quot;,          12,  &quot;the only step anyone measures&quot;),
-]
-total = sum(s for _, s, _ in PATH)
-print(f&quot;{&#x27;step&#x27;:30s}{&#x27;seconds&#x27;:&gt;9}  why&quot;)
-print(&quot;-&quot; * 74)
-for name, secs, why in PATH:
-    print(f&quot;{name:30s}{secs:&gt;9}  {why}&quot;)
-print(f&quot;{&#x27;TOTAL&#x27;:30s}{total:&gt;9}  = {total/60:.0f} minutes&quot;)
-print(f&quot;\nat 300 actions/min that is {300*total/60:,.0f} further actions.&quot;)
-print(&quot;The 12-second revocation is 1.3% of the elapsed time. Optimising it&quot;)
-print(&quot;is not where the win is.&quot;)
-
-SIGNALS = {
- &quot;reached the cloud metadata service&quot;: 0.99,
- &quot;read a path matching */.ssh/* or */.aws/*&quot;: 0.97,
- &quot;egress to a host not on the allowlist&quot;: 0.90,
- &quot;tool-call rate 20× its own baseline&quot;: 0.75,
- &quot;activity outside usual hours&quot;: 0.30,
-}
-THRESHOLD = 0.70
-
-def policy(signal, subject_is_human):
-    conf = SIGNALS[signal]
-    if subject_is_human:
-        return f&quot;page on-call (confidence {conf:.2f}) — human lockout needs a person&quot;
-    if conf &gt;= THRESHOLD:
-        return f&quot;AUTO-REVOKE (confidence {conf:.2f}) — no approval in the path&quot;
-    return f&quot;alert only (confidence {conf:.2f} &lt; {THRESHOLD})&quot;
-
-for s in SIGNALS:
-    print(f&quot;{s:44s}{policy(s, False)}&quot;)
-print()
-print(f&quot;{&#x27;same signal, human subject&#x27;:44s}&quot;
-      f&quot;{policy(&#x27;reached the cloud metadata service&#x27;, True)}&quot;)
-
-auto_path = [(&quot;detection fires&quot;, 8), (&quot;policy evaluates&quot;, 1), (&quot;revocation executed&quot;, 12)]
-auto_total = sum(s for _, s in auto_path)
-print(f&quot;\nautomated path: {auto_total}s vs manual {total}s &quot;
-      f&quot;({total/auto_total:.0f}× faster)&quot;)
-print(f&quot;actions prevented at 300/min: {300*(total-auto_total)/60:,.0f}&quot;)
-assert auto_total &lt; total / 10
-
-# Verify: model the cost of getting it wrong, which is what makes it safe.
-def cost_of_false_revocation(subject_is_human, agent_can_rerequest=True):
-    if subject_is_human:
-        return {&quot;impact&quot;: &quot;person locked out mid-shift&quot;, &quot;recovery&quot;: &quot;helpdesk, 20-60 min&quot;,
-                &quot;cost&quot;: &quot;high&quot;}
-    if agent_can_rerequest:
-        return {&quot;impact&quot;: &quot;task fails, agent re-requests with a reason (A2.4)&quot;,
-                &quot;recovery&quot;: &quot;seconds to minutes&quot;, &quot;cost&quot;: &quot;low&quot;}
-    return {&quot;impact&quot;: &quot;agent stops until an on-call re-enables it&quot;,
-            &quot;recovery&quot;: &quot;minutes&quot;, &quot;cost&quot;: &quot;moderate&quot;}
-
-for label, human in ((&quot;human subject&quot;, True), (&quot;non-human identity&quot;, False)):
-    c = cost_of_false_revocation(human)
-    print(f&quot;{label:22s}{c[&#x27;cost&#x27;]:10s}{c[&#x27;impact&#x27;]}&quot;)
-print(&quot;\nThat asymmetry is the entire justification for two different policies.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+That asymmetry is the entire justification for two different policies.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The race table shows 2,400 versus 60 actions at 300/min for an eight-minute approval. The full containment path totals about 920 seconds, of which the revocation itself is 12. Four of five signals auto-revoke for non-human identities and none do for a human subject, cutting the path to 21 seconds and preventing roughly 4,500 actions.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Time your own containment path end to end, step by step. The revocation is almost never the slow part — queue depth and approval are, and both are policy choices rather than technical limits.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.5.html">D2.5 · Replay and forensics</a></strong></p>

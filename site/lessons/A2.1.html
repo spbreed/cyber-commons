@@ -55,76 +55,60 @@ forgets the human, because it produces logs that are complete and useless.</p></
 <p><strong>What this control closes.</strong></p>
 <p>Answers <strong>who is calling</strong>, so every later control has a subject. Without it, default-deny has nothing to deny and the audit trail has nobody to name.</p>
 </blockquote></div><div class="nbmd"><h2>3 · Separating the three, as a skill</h2>
-<p>Keeping the three identities apart is a review you will run against every agent CyberTravels ships, not a decision you make once. So it is written down as a procedure: which principal authorises, which one is attributed, which one scopes memory — and the two narrowing rules a delegated token has to satisfy before any of it means anything. This is the file in this repository, embedded verbatim:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/agent-identity-review/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-identity-review
+<p>Keeping the three identities apart is a review you will run against every agent CyberTravels ships, not a decision you make once. So it is written down as a procedure: which principal authorises, which one is attributed, which one scopes memory — and the two narrowing rules a delegated token has to satisfy before any of it means anything. This is the file in this repository, embedded verbatim:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/identity/agent-identity-review/SKILL.md"><code>skills/identity/agent-identity-review/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-identity-review
 description: &gt;-
-  Review how an agent authenticates and how a user&#x27;s authority is delegated to
+  Review how an agent authenticates and how a user's authority is delegated to
   it, including token exchange, on-behalf-of chains, service accounts and
   non-human identity. Use when asked who an agent is calling as, whether a
   delegation is auditable, why a downstream system sees the wrong principal, or
-  how to scope an agent&#x27;s credentials.
+  how to scope an agent's credentials.
 allowed-tools: Read, Grep, Glob
----
-
-# Agent identity and delegation review
-
-Three identities are in play whenever an agent acts, and most incidents come
-from collapsing them:
-
-- the **user** whose request started the work
-- the **agent** doing the work — a workload identity, not a person
-- the **actor chain** connecting them, which is what an auditor needs
-
-A service account shared by every agent answers &quot;what ran&quot; and destroys &quot;for
-whom&quot;. That is the gap non-human identity exists to close.
-
-## When to use this
-
-Reviewing an agent&#x27;s auth design, an OBO/token-exchange implementation, a
+</code></pre>
+<h1>Agent identity and delegation review</h1>
+<p>Three identities are in play whenever an agent acts, and most incidents come
+from collapsing them:</p>
+<ul>
+<li>the <strong>user</strong> whose request started the work</li>
+<li>the <strong>agent</strong> doing the work — a workload identity, not a person</li>
+<li>the <strong>actor chain</strong> connecting them, which is what an auditor needs</li>
+</ul>
+<p>A service account shared by every agent answers "what ran" and destroys "for
+whom". That is the gap non-human identity exists to close.</p>
+<h2>When to use this</h2>
+<p>Reviewing an agent's auth design, an OBO/token-exchange implementation, a
 gateway that fronts an agent, or any log where you cannot tell which user
-caused an action.
-
-## Procedure
-
-**1 — Name the three identities.** For the flow under review, write down the
+caused an action.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Name the three identities.</strong> For the flow under review, write down the
 user principal, the workload identity, and where each is asserted. If the
-workload identity is a long-lived shared secret, that is finding one.
-
-**2 — Check the delegation narrows.** In RFC 8693 token exchange the issued
-token must satisfy **both** rules:
-
-- **subset of presented** — never more scope than the incoming token carried
-- **within the actor&#x27;s ceiling** — never more than the agent is itself allowed
-
-Either rule alone is insufficient. Subset-only lets a highly privileged user
+workload identity is a long-lived shared secret, that is finding one.</p>
+<p><strong>2 — Check the delegation narrows.</strong> In RFC 8693 token exchange the issued
+token must satisfy <strong>both</strong> rules:</p>
+<ul>
+<li><strong>subset of presented</strong> — never more scope than the incoming token carried</li>
+<li><strong>within the actor's ceiling</strong> — never more than the agent is itself allowed</li>
+</ul>
+<p>Either rule alone is insufficient. Subset-only lets a highly privileged user
 hand an agent authority the agent should never hold; ceiling-only lets an agent
-exceed the user who asked. Test both directions explicitly.
-
-**3 — Check the chain is preserved and not duplicated.** The `act` chain should
-read `user → agent`, once. A chain that repeats the principal
-(`alice → alice → agent`) usually means the head was appended twice, and it
-breaks any audit query that counts hops.
-
-**4 — Find where OBO stops.** Some downstream systems cannot consume a
+exceed the user who asked. Test both directions explicitly.</p>
+<p><strong>3 — Check the chain is preserved and not duplicated.</strong> The <code>act</code> chain should
+read <code>user → agent</code>, once. A chain that repeats the principal
+(<code>alice → alice → agent</code>) usually means the head was appended twice, and it
+breaks any audit query that counts hops.</p>
+<p><strong>4 — Find where OBO stops.</strong> Some downstream systems cannot consume a
 delegated token — legacy databases, vendor APIs, anything with a static
-credential. Identify each, and require a **choke point**: a gateway that holds
-the credential, enforces per-user authorisation *before* the call, and logs the
-original principal. The credential must not be reachable by the agent directly.
-
-**5 — Check expiry and revocation.** How long is the delegated token valid, and
-what stops it being replayed after the user&#x27;s session ends? Just-in-time
-authority that outlives the task is standing authority with extra steps.
-
-**6 — Check the log answers the audit question.** Pick a real question — &quot;which
-user caused this row to be deleted?&quot; — and try to answer it from the logs alone.
-If you cannot, the delegation is not auditable regardless of how it is built.
-
-## Output contract
-
-```json
-{
+credential. Identify each, and require a <strong>choke point</strong>: a gateway that holds
+the credential, enforces per-user authorisation <em>before</em> the call, and logs the
+original principal. The credential must not be reachable by the agent directly.</p>
+<p><strong>5 — Check expiry and revocation.</strong> How long is the delegated token valid, and
+what stops it being replayed after the user's session ends? Just-in-time
+authority that outlives the task is standing authority with extra steps.</p>
+<p><strong>6 — Check the log answers the audit question.</strong> Pick a real question — "which
+user caused this row to be deleted?" — and try to answer it from the logs alone.
+If you cannot, the delegation is not auditable regardless of how it is built.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;identities&quot;: {&quot;user&quot;: &quot;str&quot;, &quot;workload&quot;: &quot;str&quot;, &quot;assertion&quot;: &quot;str&quot;},
   &quot;delegation&quot;: {&quot;mechanism&quot;: &quot;obo|impersonation|shared_service_account|none&quot;,
                  &quot;subset_of_presented&quot;: true, &quot;within_actor_ceiling&quot;: true,
@@ -136,91 +120,29 @@ If you cannot, the delegation is not auditable regardless of how it is built.
   &quot;audit&quot;: {&quot;question&quot;: &quot;str&quot;, &quot;answerable_from_logs&quot;: true},
   &quot;findings&quot;: [{&quot;issue&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium|low&quot;, &quot;fix&quot;: &quot;str&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Checking only one narrowing rule.</strong> Both, every time.</li>
+<li><strong>Accepting a shared service account because it is "internal".</strong> Internal is
+  a network property; it says nothing about attribution.</li>
+<li><strong>Treating the gateway as optional</strong> where the downstream cannot do OBO. It
+  is the only place authorisation can happen.</li>
+<li><strong>Measuring delegation by whether the call succeeded.</strong> A call that succeeds
+  with too much scope is the failure being looked for.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>request                     authorized?  attributed to
+dana@corp -&gt; reports:read   True         dana@corp via reports-agent
+dana@corp -&gt; db:admin       False        dana@corp via reports-agent
 
-## Failure modes
+memory keys - the same workspace, two users:
+   dana  -&gt; acme:dana@corp
+   priya -&gt; acme:priya@corp
+   shared? False
 
-- **Checking only one narrowing rule.** Both, every time.
-- **Accepting a shared service account because it is &quot;internal&quot;.** Internal is
-  a network property; it says nothing about attribution.
-- **Treating the gateway as optional** where the downstream cannot do OBO. It
-  is the only place authorisation can happen.
-- **Measuring delegation by whether the call succeeded.** A call that succeeds
-  with too much scope is the failure being looked for.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/identity/agent-identity-review/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/agent-identity-review/scripts/agent_identity_review.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Separate the user, the workload and the agent instance, and use each for what only it can answer.
-
-This is the executable half of the `agent-identity-review` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-from dataclasses import dataclass, field
-
-@dataclass(frozen=True)
-class Principal:
-    user: str            # the human who asked
-    workload: str        # the process, from platform attestation
-    instance: str        # this run of this agent
-    scopes: frozenset    # the workload&#x27;s ceiling
-
-def authorize(p, required):
-    &quot;&quot;&quot;Authorization is about the WORKLOAD: what may this agent ever do.&quot;&quot;&quot;
-    return required in p.scopes
-
-def attribute(p, action):
-    &quot;&quot;&quot;Attribution is about the USER: who caused this.&quot;&quot;&quot;
-    return {&quot;action&quot;: action, &quot;caused_by&quot;: p.user,
-            &quot;performed_by&quot;: p.workload, &quot;run&quot;: p.instance}
-
-def memory_key(p, workspace):
-    &quot;&quot;&quot;Memory is scoped to the USER, not the workspace - this is the write that
-    let A1.4 leak a poisoned note between people.&quot;&quot;&quot;
-    return f&quot;{workspace}:{p.user}&quot;
-
-dana = Principal(&quot;dana@corp&quot;, &quot;reports-agent&quot;, &quot;run-8812&quot;,
-                 frozenset({&quot;reports:read&quot;}))
-priya = Principal(&quot;priya@corp&quot;, &quot;reports-agent&quot;, &quot;run-8813&quot;,
-                  frozenset({&quot;reports:read&quot;}))
-
-print(f&quot;{&#x27;request&#x27;:28s}{&#x27;authorized?&#x27;:13s}attributed to&quot;)
-for p, need in ((dana, &quot;reports:read&quot;), (dana, &quot;db:admin&quot;)):
-    ok = authorize(p, need)
-    rec = attribute(p, need)
-    print(f&quot;{p.user + &#x27; -&gt; &#x27; + need:28s}{str(ok):13s}{rec[&#x27;caused_by&#x27;]} via {rec[&#x27;performed_by&#x27;]}&quot;)
-
-print(&quot;\nmemory keys - the same workspace, two users:&quot;)
-print(f&quot;   dana  -&gt; {memory_key(dana, &#x27;acme&#x27;)}&quot;)
-print(f&quot;   priya -&gt; {memory_key(priya, &#x27;acme&#x27;)}&quot;)
-print(f&quot;   shared? {memory_key(dana, &#x27;acme&#x27;) == memory_key(priya, &#x27;acme&#x27;)}&quot;)
-print()
-print(&quot;db:admin is refused because the WORKLOAD never held it - so no user can&quot;)
-print(&quot;borrow it through the agent, which is A1.6 closed. The audit line names&quot;)
-print(&quot;dana, which is A1.14 closed. And a note written in dana&#x27;s session cannot&quot;)
-print(&quot;be read back in priya&#x27;s, which is A1.4 closed.&quot;)
-assert not authorize(dana, &quot;db:admin&quot;)
-assert memory_key(dana, &quot;acme&quot;) != memory_key(priya, &quot;acme&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+db:admin is refused because the WORKLOAD never held it - so no user can
+borrow it through the agent, which is A1.6 closed. The audit line names
+dana, which is A1.14 closed. And a note written in dana&#x27;s session cannot
+be read back in priya&#x27;s, which is A1.4 closed.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its own shape: a routing description an agent reads to decide whether this review applies, the tools it is allowed to use, and a procedure long enough to separate user, workload and agent instance and to check both narrowing rules — scope is a subset of what was presented, and within the actor's own ceiling.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>For one agent, write down its three identities. If the workload and the user are the same value, you have inherited credentials; if the instance does not exist, you cannot revoke one run.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.2.html">A2.2 · Bootstrapping the first credential</a></strong></p>

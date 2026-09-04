@@ -50,10 +50,8 @@ tested was tested against behaviour the vendor can replace on a Tuesday.</p>
   run with your agent's authority.</li>
 </ul>
 <p>Saying which signals are unavailable is part of the assessment, not a gap in it.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill scores each AI component on the two properties that make it different — silent change, and running with the agent's authority — then invalidates every control test taken before the model changed, because a test against a different model is evidence about something else.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/third-party-ai-assessment/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: third-party-ai-assessment
+<p>The skill scores each AI component on the two properties that make it different — silent change, and running with the agent's authority — then invalidates every control test taken before the model changed, because a test against a different model is evidence about something else.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/grc/third-party-ai-assessment/SKILL.md"><code>skills/grc/third-party-ai-assessment/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: third-party-ai-assessment
 description: &gt;-
   Assess the AI components of a supply chain for the two properties that make
   them different — silent change, and running with agent authority — and
@@ -61,173 +59,87 @@ description: &gt;-
   provider changed the model and you need to know what that invalidates, and at
   vendor assessment or renewal.
 allowed-tools: Read, Grep, Glob
----
-
-# The vendor changed the model and your control tests expired
-
-Third-party AI differs from ordinary third-party software in two ways. A hosted
+</code></pre>
+<h1>The vendor changed the model and your control tests expired</h1>
+<p>Third-party AI differs from ordinary third-party software in two ways. A hosted
 model can change underneath you with no change record on your side, which
 invalidates every control test taken before it. And a tool package or MCP
-connector runs **with your agent&#x27;s authority**, so its risk is not the
-vendor&#x27;s — it is yours.
-
-## When to use this
-
-Vendor assessment, renewal, and any time a provider announces a model update.
-
-## Procedure
-
-**1 — Enumerate the AI components.** Hosted models, tool packages, MCP servers,
+connector runs <strong>with your agent's authority</strong>, so its risk is not the
+vendor's — it is yours.</p>
+<h2>When to use this</h2>
+<p>Vendor assessment, renewal, and any time a provider announces a model update.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate the AI components.</strong> Hosted models, tool packages, MCP servers,
 embedded features in products you already bought. The last category is the one
-nobody lists.
-
-**2 — Score each on the two properties.** Can it change without telling you, and
-does it execute with your agent&#x27;s authority? Either one alone justifies a higher
-tier than the ordinary assessment would give.
-
-**3 — Record the last known model version, with a date.** Without it you cannot
+nobody lists.</p>
+<p><strong>2 — Score each on the two properties.</strong> Can it change without telling you, and
+does it execute with your agent's authority? Either one alone justifies a higher
+tier than the ordinary assessment would give.</p>
+<p><strong>3 — Record the last known model version, with a date.</strong> Without it you cannot
 tell whether a control test predates a change, which makes the next step
-impossible.
-
-**4 — Invalidate control tests taken before the change.** Not &quot;review&quot; — mark
+impossible.</p>
+<p><strong>4 — Invalidate control tests taken before the change.</strong> Not "review" — mark
 them unevidenced. A test performed against a different model is not weak
-evidence, it is evidence about something else.
-
-**5 — Ask the questions a contract can answer.** Notice period for model change,
+evidence, it is evidence about something else.</p>
+<p><strong>5 — Ask the questions a contract can answer.</strong> Notice period for model change,
 whether the version is pinnable, what telemetry you get, and exit. Then record
-which ones the vendor declined; that list is the assessment.
-
-## Output contract
-
-```json
-{
+which ones the vendor declined; that list is the assessment.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;components&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;model|tool|mcp|embedded&quot;,
                   &quot;silent_change&quot;: true, &quot;runs_with_agent_authority&quot;: false, &quot;tier&quot;: &quot;str&quot;}],
   &quot;versions&quot;: [{&quot;component&quot;: &quot;str&quot;, &quot;version&quot;: &quot;str&quot;, &quot;as_of&quot;: &quot;str&quot;, &quot;changed_at&quot;: &quot;str|null&quot;}],
   &quot;control_tests&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;tested_at&quot;: &quot;str&quot;, &quot;status&quot;: &quot;valid|unevidenced&quot;, &quot;why&quot;: &quot;str&quot;}],
   &quot;contract_questions&quot;: [{&quot;question&quot;: &quot;str&quot;, &quot;answered&quot;: false}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Assessing the vendor and not the authority.</strong> The connector runs as your
+  agent.</li>
+<li><strong>Keeping a control test that predates a model change.</strong> It evidences the old
+  model.</li>
+<li><strong>Missing embedded AI features.</strong> They arrived with a product you already
+  own.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>component                               kind          tier    flags
+------------------------------------------------------------------------------------------------
+cryptography==42.0.5                    library       low     —
+langchain==0.2.1                        library       medium  unsigned
+hosted GLM-4.6 endpoint                 hosted model  high    unsigned, not version-pinned, CAN CHANGE WITHOUT NOTICE
+local glm-4.6 weights (pinned digest)   weights       low     —
+mcp-jira-connector==0.0.3               tool package  high    unsigned, runs with agent authority
+your controls were tested against a model that changed 5 days ago:
+   SB-2  tested 20d ago  INVALIDATED by the model change
+   EV-2  tested 20d ago  INVALIDATED by the model change
+   DR-1  tested 20d ago  INVALIDATED by the model change
 
-## Failure modes
+3/3 control tests invalidated by a change you did not make and were not told about.
+Q: Can this component change without notifying us?
+   → if yes, every control test has an implicit expiry tied to the vendor
 
-- **Assessing the vendor and not the authority.** The connector runs as your
-  agent.
-- **Keeping a control test that predates a model change.** It evidences the old
-  model.
-- **Missing embedded AI features.** They arrived with a product you already
-  own.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Q: Does it execute with our agent&#x27;s authority?
+   → if yes, assess it as code, not as a dependency
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+Q: Can we pin a digest, and do we?
+   → the difference between a supply chain and a subscription
 
-from cyber_commons_skill_runtime import run_skill
+Q: What is our exit if we stop using it?
+   → DORA Art.11 asks this directly; most AI contracts have no answer
 
-# Split skills/grc/third-party-ai-assessment/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/third-party-ai-assessment/scripts/third_party_ai_assessment.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Assess AI components of a supply chain for silent change and agent authority, and invalidate the control tests taken before a model changed.
+artefact class     signals available  unavailable
+--------------------------------------------------------------------------
+library                          4/4  —
+hosted model                     0/4  [&#x27;signature&#x27;, &#x27;downloads&#x27;, &#x27;pinning&#x27;, &#x27;lineage&#x27;]
+weights                          2/4  [&#x27;downloads&#x27;, &#x27;lineage&#x27;]
+tool package                     1/4  [&#x27;signature&#x27;, &#x27;downloads&#x27;, &#x27;lineage&#x27;]
 
-This is the executable half of the `third-party-ai-assessment` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+  library: assessed on 4/4 signals. none unavailable for this artefact class.
+  hosted model: assessed on 0/4 signals. signature, downloads, pinning, lineage unavailable for this artefact class.
+  weights: assessed on 2/4 signals. downloads, lineage unavailable for this artefact class.
+  tool package: assessed on 1/4 signals. signature, downloads, lineage unavailable for this artefact class.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Component:
-    name: str; kind: str; signed: bool = False
-    pinned: bool = False; can_change_silently: bool = False
-    runs_with_agent_authority: bool = False; downloads: int = 0
-
-COMPONENTS = [
- Component(&quot;cryptography==42.0.5&quot;, &quot;library&quot;, True, True, False, False, 900_000),
- Component(&quot;langchain==0.2.1&quot;, &quot;library&quot;, False, True, False, False, 400_000),
- Component(&quot;hosted GLM-4.6 endpoint&quot;, &quot;hosted model&quot;, False, False, True, False),
- Component(&quot;local glm-4.6 weights (pinned digest)&quot;, &quot;weights&quot;, True, True, False, False),
- Component(&quot;mcp-jira-connector==0.0.3&quot;, &quot;tool package&quot;, False, True, False, True, 180),
-]
-def assess(c):
-    flags = []
-    if not c.signed:                  flags.append(&quot;unsigned&quot;)
-    if not c.pinned:                  flags.append(&quot;not version-pinned&quot;)
-    if c.can_change_silently:         flags.append(&quot;CAN CHANGE WITHOUT NOTICE&quot;)
-    if c.runs_with_agent_authority:   flags.append(&quot;runs with agent authority&quot;)
-    if c.kind == &quot;library&quot; and c.downloads &lt; 1000: flags.append(&quot;little scrutiny&quot;)
-    tier = (&quot;high&quot; if c.can_change_silently or c.runs_with_agent_authority
-            else &quot;medium&quot; if flags else &quot;low&quot;)
-    return tier, flags
-
-print(f&quot;{&#x27;component&#x27;:40s}{&#x27;kind&#x27;:14s}{&#x27;tier&#x27;:8s}flags&quot;)
-print(&quot;-&quot; * 96)
-for c in COMPONENTS:
-    tier, flags = assess(c)
-    print(f&quot;{c.name:40s}{c.kind:14s}{tier:8s}{&#x27;, &#x27;.join(flags) or &#x27;—&#x27;}&quot;)
-
-import time
-now = time.time(); DAY = 86400
-
-CONTROL_TESTS = {&quot;SB-2&quot;: now - 20*DAY, &quot;EV-2&quot;: now - 20*DAY, &quot;DR-1&quot;: now - 20*DAY}
-MODEL_CHANGED_AT = now - 5*DAY
-
-print(&quot;your controls were tested against a model that changed 5 days ago:&quot;)
-for cid, tested in CONTROL_TESTS.items():
-    valid = tested &gt; MODEL_CHANGED_AT
-    print(f&quot;   {cid}  tested {int((now-tested)/DAY)}d ago  &quot;
-          f&quot;{&#x27;still valid&#x27; if valid else &#x27;INVALIDATED by the model change&#x27;}&quot;)
-invalidated = [c for c, t in CONTROL_TESTS.items() if t &lt;= MODEL_CHANGED_AT]
-print(f&quot;\n{len(invalidated)}/{len(CONTROL_TESTS)} control tests invalidated by a &quot;
-      f&quot;change you did not make and were not told about.&quot;)
-assert invalidated
-
-QUESTIONS = [
- (&quot;Can this component change without notifying us?&quot;,
-  &quot;if yes, every control test has an implicit expiry tied to the vendor&quot;),
- (&quot;Does it execute with our agent&#x27;s authority?&quot;,
-  &quot;if yes, assess it as code, not as a dependency&quot;),
- (&quot;Can we pin a digest, and do we?&quot;,
-  &quot;the difference between a supply chain and a subscription&quot;),
- (&quot;What is our exit if we stop using it?&quot;,
-  &quot;DORA Art.11 asks this directly; most AI contracts have no answer&quot;),
-]
-for q, why in QUESTIONS: print(f&quot;Q: {q}\n   → {why}\n&quot;)
-
-SIGNALS = {
- &quot;library&quot;:      {&quot;signature&quot;: True, &quot;downloads&quot;: True, &quot;pinning&quot;: True, &quot;lineage&quot;: True},
- &quot;hosted model&quot;: {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;pinning&quot;: False, &quot;lineage&quot;: False},
- &quot;weights&quot;:      {&quot;signature&quot;: True, &quot;downloads&quot;: False, &quot;pinning&quot;: True, &quot;lineage&quot;: False},
- &quot;tool package&quot;: {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;pinning&quot;: True, &quot;lineage&quot;: False},
-}
-print(f&quot;{&#x27;artefact class&#x27;:16s}{&#x27;signals available&#x27;:&gt;20}  unavailable&quot;)
-print(&quot;-&quot; * 74)
-for kind, sig in SIGNALS.items():
-    have = [k for k, v in sig.items() if v]
-    lack = [k for k, v in sig.items() if not v]
-    print(f&quot;{kind:16s}{f&#x27;{len(have)}/{len(sig)}&#x27;:&gt;20}  {lack or &#x27;—&#x27;}&quot;)
-
-def assessment_statement(kind):
-    sig = SIGNALS[kind]
-    lack = [k for k, v in sig.items() if not v]
-    return (f&quot;{kind}: assessed on {len(sig)-len(lack)}/{len(sig)} signals. &quot;
-            f&quot;{&#x27;, &#x27;.join(lack) or &#x27;none&#x27;} unavailable for this artefact class.&quot;)
-print()
-for kind in SIGNALS: print(&quot;  &quot; + assessment_statement(kind))
-print(&quot;\nThat last sentence is the deliverable. A rating that hides which signals&quot;)
-print(&quot;were unavailable is a number someone will later rely on.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+That last sentence is the deliverable. A rating that hides which signals
+were unavailable is a number someone will later rely on.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The hosted model and the MCP tool package both tier high — one for silent change, one for running with agent authority. The silent model change invalidates all three control tests taken before it. The signal table shows libraries with 4 of 4 signals available and hosted models with 0 of 4, and each assessment statement names what was unavailable.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add "can this change without notifying us?" to your third-party assessment form. For hosted models the answer is usually yes, and it should carry an explicit control-test expiry.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.9.html">E1.9 · Model and agent lifecycle governance</a></strong></p>

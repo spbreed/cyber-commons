@@ -49,171 +49,81 @@ immediately.</p>
 failure is presenting them as controls. Label them, and the rest of the document
 becomes more credible rather than less.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the follow-up question</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">answerable from the document?</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“appropriate oversight” — show me the last time it operated.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“reviewed periodically” — what period, and when was the last one?</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“comprehensive logging” — produce one action&#x27;s full record.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">“act chain for every action” — produce the August sample.</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Three of four cannot be answered, and by the time the fourth is asked the person asking doubts that one too. Vague language does not fail on its own line; it fails the lines around it.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill counts the sentences that name a control, an artefact and a date. The weak paragraph scores zero and reads perfectly well; the strong one scores three and answers the follow-ups a supervisor actually asks.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/supervisory-documentation-score/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: supervisory-documentation-score
+<p>The skill counts the sentences that name a control, an artefact and a date. The weak paragraph scores zero and reads perfectly well; the strong one scores three and answers the follow-ups a supervisor actually asks.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/regulatory/supervisory-documentation-score/SKILL.md"><code>skills/regulatory/supervisory-documentation-score/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: supervisory-documentation-score
 description: &gt;-
   Score written documentation on how many of its sentences are checkable — each
   naming a control, an artefact and a date — and test it against the follow-up
   questions a supervisor actually asks. Use before submitting anything to an
   assessor.
 allowed-tools: Read, Grep, Glob
----
-
-# Count the checkable sentences
-
-Documentation that survives supervision is not better written; it is
+</code></pre>
+<h1>Count the checkable sentences</h1>
+<p>Documentation that survives supervision is not better written; it is
 differently written. Each load-bearing sentence names a control, the artefact
 that evidences it, and a date. A paragraph with none of those reads well, passes
-internal review, and produces four follow-ups you cannot answer.
-
-## When to use this
-
-Before submitting documentation to a regulator, an auditor or a customer&#x27;s
-assurance team.
-
-## Procedure
-
-**1 — Split the text into sentences and score each.** Does it name a control
+internal review, and produces four follow-ups you cannot answer.</p>
+<h2>When to use this</h2>
+<p>Before submitting documentation to a regulator, an auditor or a customer's
+assurance team.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Split the text into sentences and score each.</strong> Does it name a control
 identifier, an artefact, and a date? Three marks per sentence, and the count of
-sentences scoring all three is the headline.
-
-**2 — Report the weak version&#x27;s score.** Usually zero. Showing it beside the
-strong version is what changes how the next document gets written.
-
-**3 — Rewrite so the load-bearing claims carry all three.** Not every sentence —
-the ones an assessor would test. The rest can be prose.
-
-**4 — Generate the follow-up questions and try to answer them from the text
-alone.** &quot;Which control&quot;, &quot;show me the artefact&quot;, &quot;when was it last tested&quot;,
-&quot;who owns it&quot;. A question you cannot answer from the document is a question you
-will answer live, badly.
-
-**5 — Attach the artefacts.** A checkable sentence with an unattached artefact
-is one email away from being unevidenced.
-
-## Output contract
-
-```json
-{
+sentences scoring all three is the headline.</p>
+<p><strong>2 — Report the weak version's score.</strong> Usually zero. Showing it beside the
+strong version is what changes how the next document gets written.</p>
+<p><strong>3 — Rewrite so the load-bearing claims carry all three.</strong> Not every sentence —
+the ones an assessor would test. The rest can be prose.</p>
+<p><strong>4 — Generate the follow-up questions and try to answer them from the text
+alone.</strong> "Which control", "show me the artefact", "when was it last tested",
+"who owns it". A question you cannot answer from the document is a question you
+will answer live, badly.</p>
+<p><strong>5 — Attach the artefacts.</strong> A checkable sentence with an unattached artefact
+is one email away from being unevidenced.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;sentences&quot;: [{&quot;text&quot;: &quot;str&quot;, &quot;names_control&quot;: false, &quot;names_artefact&quot;: false, &quot;has_date&quot;: false}],
   &quot;score&quot;: {&quot;checkable&quot;: 0, &quot;total&quot;: 0},
   &quot;comparison&quot;: {&quot;weak_checkable&quot;: 0, &quot;strong_checkable&quot;: 0},
   &quot;followups&quot;: [{&quot;question&quot;: &quot;str&quot;, &quot;answerable_from_text&quot;: false}],
   &quot;artefacts_attached&quot;: [&quot;str&quot;]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Editing for tone.</strong> The problem is not the prose.</li>
+<li><strong>Making every sentence checkable.</strong> Only the load-bearing ones need it.</li>
+<li><strong>Naming an artefact you did not attach.</strong> The follow-up arrives immediately.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>=== WEAK — 0/3 sentences checkable ===
+   [---] Our AI systems are subject to appropriate oversight and 
+   [---] Access is
+granted on a least-privilege basis and reviewe
+   [---] Agents are
+monitored for anomalous behaviour and we main
 
-## Failure modes
+=== STRONG — 0/6 sentences checkable ===
+   [C--] Agent identities are distinct from human identities (AC-
+   [-AD] Evidence: gateway
+logs containing an act chain for every
+   [C--] Delegated authority narrows at every hop (AC-2)
+   [-AD] Evidence: the token exchange
+refuses widening; regressio
+   [C--] Autonomy above L2 requires approval for privileged tools
+   [-AD] Evidence: tool
+policy in git; 90-day denial log attached
 
-- **Editing for tone.** The problem is not the prose.
-- **Making every sentence checkable.** Only the load-bearing ones need it.
-- **Naming an artefact you did not attach.** The follow-up arrives immediately.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+C = names a control · A = names an artefact · D = carries a date
+controls cited in the document: [&#x27;AC-1&#x27;, &#x27;AC-2&#x27;, &#x27;SB-2&#x27;]
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+control  state now     document claim still true?
+----------------------------------------------------
+AC-1     PASS                                True
+AC-2     PASS                                True
+SB-2     STALE                              False
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/regulatory/supervisory-documentation-score/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/supervisory-documentation-score/scripts/supervisory_documentation_score.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Score a paragraph on how many of its sentences are checkable, and test it against the follow-up questions a supervisor asks.
-
-This is the executable half of the `supervisory-documentation-score` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import re, time
-now = time.time(); DAY = 86400
-
-WEAK = &quot;&quot;&quot;
-Our AI systems are subject to appropriate oversight and controls. Access is
-granted on a least-privilege basis and reviewed periodically. Agents are
-monitored for anomalous behaviour and we maintain comprehensive logging.
-&quot;&quot;&quot;
-
-STRONG = &quot;&quot;&quot;
-Agent identities are distinct from human identities (AC-1). Evidence: gateway
-logs containing an act chain for every action; sampled monthly, last test
-2026-08-13, valid 30d.
-
-Delegated authority narrows at every hop (AC-2). Evidence: the token exchange
-refuses widening; regression cases IDN-01/IDN-04 run on every release, last run
-2026-08-15.
-
-Autonomy above L2 requires approval for privileged tools (SB-2). Evidence: tool
-policy in git; 90-day denial log attached, last reviewed 2026-07-06.
-&quot;&quot;&quot;
-
-CONTROL_RE = re.compile(r&quot;\b([A-Z]{2}-\d)\b&quot;)
-DATE_RE    = re.compile(r&quot;\b20\d{2}-\d{2}-\d{2}\b&quot;)
-ARTEFACT_RE = re.compile(r&quot;\b(log|logs|sample|report|test|cases|policy|record)\b&quot;, re.I)
-
-def score_paragraph(text):
-    sentences = [s.strip() for s in text.split(&quot;.&quot;) if s.strip()]
-    rows = []
-    for s in sentences:
-        rows.append({&quot;has_control&quot;: bool(CONTROL_RE.search(s)),
-                     &quot;has_artefact&quot;: bool(ARTEFACT_RE.search(s)),
-                     &quot;has_date&quot;: bool(DATE_RE.search(s)),
-                     &quot;text&quot;: s[:56]})
-    checkable = [r for r in rows if r[&quot;has_control&quot;] and r[&quot;has_artefact&quot;]]
-    return rows, len(checkable), len(rows)
-
-for label, text in ((&quot;WEAK&quot;, WEAK), (&quot;STRONG&quot;, STRONG)):
-    rows, checkable, total = score_paragraph(text)
-    print(f&quot;=== {label} — {checkable}/{total} sentences checkable ===&quot;)
-    for r in rows:
-        marks = (&quot;C&quot; if r[&quot;has_control&quot;] else &quot;-&quot;) + \
-                (&quot;A&quot; if r[&quot;has_artefact&quot;] else &quot;-&quot;) + \
-                (&quot;D&quot; if r[&quot;has_date&quot;] else &quot;-&quot;)
-        print(f&quot;   [{marks}] {r[&#x27;text&#x27;]}&quot;)
-    print()
-print(&quot;C = names a control · A = names an artefact · D = carries a date&quot;)
-
-from dataclasses import dataclass
-@dataclass
-class ControlTest:
-    cid: str; passed: bool; tested_at: float; valid_for_days: float
-    def state(self, at):
-        if (at - self.tested_at)/DAY &gt; self.valid_for_days: return &quot;STALE&quot;
-        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
-
-TESTS = {t.cid: t for t in [
- ControlTest(&quot;AC-1&quot;, True, now -  3*DAY, 30),
- ControlTest(&quot;AC-2&quot;, True, now -  1*DAY, 30),
- ControlTest(&quot;SB-2&quot;, True, now - 40*DAY, 30)]}
-
-cited = CONTROL_RE.findall(STRONG)
-print(f&quot;controls cited in the document: {sorted(set(cited))}\n&quot;)
-print(f&quot;{&#x27;control&#x27;:9s}{&#x27;state now&#x27;:12s}{&#x27;document claim still true?&#x27;:&gt;28}&quot;)
-print(&quot;-&quot; * 52)
-stale = []
-for cid in sorted(set(cited)):
-    st = TESTS[cid].state(now) if cid in TESTS else &quot;NO EVIDENCE&quot;
-    ok = st == &quot;PASS&quot;
-    if not ok: stale.append(cid)
-    print(f&quot;{cid:9s}{st:12s}{str(ok):&gt;28}&quot;)
-print(f&quot;\n{len(stale)} cited control(s) no longer evidenced: {stale}&quot;)
-print(&quot;A document that cites controls can be CHECKED against live state.&quot;)
-print(&quot;A document of intent cannot go stale, because it never said anything.&quot;)
-assert stale</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+1 cited control(s) no longer evidenced: [&#x27;SB-2&#x27;]
+A document that cites controls can be CHECKED against live state.
+A document of intent cannot go stale, because it never said anything.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The weak paragraph has zero checkable sentences; the strong one has three, each naming a control, an artefact and a date. Three of four supervisor follow-ups are unanswerable from the weak version. Verifying the strong document against live control state finds SB-2 stale, so one of its claims is no longer true — which is only detectable because the document named a control.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Rewrite one paragraph of your AI policy in the strong shape. Any sentence that cannot name an artefact is intent — label it as such rather than deleting it, and the document gets more credible.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.8.html">E2.8 · Auditability of autonomous action</a></strong></p>

@@ -1422,20 +1422,6 @@
     "python3 resilience.py --compare-to prevention-only"
    ],
    "expect": "Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged."
-  },
-  "A0.1": {
-   "goal": "Run the mechanism every other lesson uses, on itself: load the shared runtime, split a SKILL.md, check an instance against its output contract, and see what conformance does not prove.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A0.1.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A0.1   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "# --- the notebook: stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/A0.1.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session A0.1   # run it headless and check it"
-   ],
-   "expect": "The runtime reports that it was loaded once and shared. The frontmatter splits from the body. An instance built from this skill conforms to its own contract — and so does a vacuous one, while a value outside an enumeration is caught."
   }
  }
 }

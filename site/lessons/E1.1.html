@@ -47,55 +47,45 @@ invalidate the conditions the control was tested under.</p>
 it is <strong>unevidenced</strong>, which is a third state most GRC tooling cannot represent.
 Introducing that third state is the whole of this lesson.</p></div><div class="nbmd"><h2>3 · The control — a freshness window per control, derived from drift</h2>
 <p>The window is not an audit-calendar choice. It comes from <strong>how fast the thing the control tests actually changes.</strong></p></div><div class="nbmd"><h2>4 · What replaces the annual test, as a skill</h2>
-<p>If the window is short, something has to re-run inside it, and that something is an attestation: collect each control's verdict, resolve every evidence pointer, compute drift against the image digest and the tool manifest, and sign the result. Two rules in the procedure are the whole difference between an attestation and a slide — a missing verdict is not a pass, and a capped verdict does not get raised because the other evidence looked good. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/attestation-signer-lifecycle/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: attestation-signer-lifecycle
+<p>If the window is short, something has to re-run inside it, and that something is an attestation: collect each control's verdict, resolve every evidence pointer, compute drift against the image digest and the tool manifest, and sign the result. Two rules in the procedure are the whole difference between an attestation and a slide — a missing verdict is not a pass, and a capped verdict does not get raised because the other evidence looked good. This is the file in this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/attestation-signer-lifecycle/SKILL.md"><code>skills/attestation/attestation-signer-lifecycle/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: attestation-signer-lifecycle
 description: &gt;-
   Bundle control evidence, compute verdicts, and produce a signed verifiable
   attestation for a deployment, re-attesting on drift. Use to emit or verify
   a control attestation, to sign evidence into an in-toto envelope, or to
   decide whether drift requires re-attestation.
 allowed-tools: Bash, Read, Write
----
-
-# Attestation Signer Lifecycle
-
-**Controls:** All — the artifact
-
-## Use the existing framework
-
-Do not invent a format. Wrap the evidence in an **in-toto style statement**
+</code></pre>
+<h1>Attestation Signer Lifecycle</h1>
+<p><strong>Controls:</strong> All — the artifact</p>
+<h2>Use the existing framework</h2>
+<p>Do not invent a format. Wrap the evidence in an <strong>in-toto style statement</strong>
 inside a signed envelope, with the subject naming the deployment and its
 digests, and a typed predicate carrying the control verdicts. Express the
 predicate body in an assessment-results vocabulary so the verdicts map to
-control catalogues and an auditor can consume them.
-
-The roles are worth naming explicitly: this skill set is the **attester**
-producing evidence, a separate service is the **verifier** appraising it
-against reference values, and the deployment gate is the **relying party**
+control catalogues and an auditor can consume them.</p>
+<p>The roles are worth naming explicitly: this skill set is the <strong>attester</strong>
+producing evidence, a separate service is the <strong>verifier</strong> appraising it
+against reference values, and the deployment gate is the <strong>relying party</strong>
 applying policy. Keep them separate — an attester that also decides whether it
-passed is not an attestation.
-
-## Procedure
-
-1. **Collect every sub-skill verdict.** A missing verdict is not a pass. If a
-   skill did not run, the control is `UNKNOWN` and the attestation says so.
-2. **Apply the confidence ceilings.** Sandbox-egress and injection-screening are
-   capped at `PARTIAL` by their own skills; the signer must refuse to raise them.
-3. **Resolve every evidence pointer.** A URI that does not resolve is a broken
-   attestation, not a cosmetic issue.
-4. **Attach framework mappings**, so one artefact answers several catalogues.
-5. **Compute drift.** Compare image digest, configuration hashes and tool
+passed is not an attestation.</p>
+<h2>Procedure</h2>
+<ol>
+<li><strong>Collect every sub-skill verdict.</strong> A missing verdict is not a pass. If a
+   skill did not run, the control is <code>UNKNOWN</code> and the attestation says so.</li>
+<li><strong>Apply the confidence ceilings.</strong> Sandbox-egress and injection-screening are
+   capped at <code>PARTIAL</code> by their own skills; the signer must refuse to raise them.</li>
+<li><strong>Resolve every evidence pointer.</strong> A URI that does not resolve is a broken
+   attestation, not a cosmetic issue.</li>
+<li><strong>Attach framework mappings</strong>, so one artefact answers several catalogues.</li>
+<li><strong>Compute drift.</strong> Compare image digest, configuration hashes and tool
    description hashes against the previous attestation. Any change triggers
    re-attestation — the tool-description hash specifically defends against a
-   server mutating a tool after approval.
-6. **Sign**, and store alongside the image or in a transparency log.
-
-## Output contract
-
-```json
-{
+   server mutating a tool after approval.</li>
+<li><strong>Sign</strong>, and store alongside the image or in a transparency log.</li>
+</ol>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;subject&quot;: [{&quot;name&quot;: &quot;deployment_id&quot;, &quot;digest&quot;: {&quot;image&quot;: &quot;sha256:…&quot;, &quot;repo&quot;: &quot;str&quot;}}],
   &quot;predicate_type&quot;: &quot;str&quot;,
   &quot;predicate&quot;: {
@@ -113,134 +103,47 @@ passed is not an attestation.
   },
   &quot;signatures&quot;: [{&quot;keyid&quot;: &quot;str&quot;, &quot;sig&quot;: &quot;str&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reading a missing attestation as a pass.</strong> The relying party must <strong>fail
+  closed</strong>: a signed file can be deleted, and absence is not evidence.</li>
+<li><strong>Raising a capped verdict</strong> because the other evidence looked good.</li>
+<li><strong>Signing without resolving evidence pointers</strong>, which produces a
+  tamper-evident document full of dead links.</li>
+<li><strong>Attesting once.</strong> Without drift-triggered re-attestation the artefact
+  describes a deployment that may no longer exist.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>control    age (days)   point-in-time   continuous
+----------------------------------------------------
+AC-1                3            PASS         PASS
+AC-2                9            PASS         PASS
+SB-1               45            PASS        STALE
+SB-2              210            PASS        STALE
+EV-1                5            PASS         PASS
+DR-1                0            FAIL         FAIL
+EV-2                —    (not tested)  NO EVIDENCE
+ST-1                —    (not tested)  NO EVIDENCE
+point-in-time    5/8 controls passing = 62%
+continuous       3/8 controls passing = 38%
 
-## Failure modes
+The difference is entirely SB-1 and SB-2, which nobody did anything
+wrong to. Time simply passed, and the agent they were tested against
+has had two model upgrades since.
+control     drift/day  window (days)  current age    state
+------------------------------------------------------------
+AC-1           0.0005            500            3     PASS
+AC-2           0.0005            500            9     PASS
+SB-1           0.0020            125           45     PASS
+SB-2           0.0090             27          210    STALE
+EV-1           0.0010            250            5     PASS
+DR-1           0.0090             27            0     FAIL
+EV-2                —             90            —NO EVIDENCE
+ST-1                —             90            —NO EVIDENCE
 
-- **Reading a missing attestation as a pass.** The relying party must **fail
-  closed**: a signed file can be deleted, and absence is not evidence.
-- **Raising a capped verdict** because the other evidence looked good.
-- **Signing without resolving evidence pointers**, which produces a
-  tamper-evident document full of dead links.
-- **Attesting once.** Without drift-triggered re-attestation the artefact
-  describes a deployment that may no longer exist.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+with drift-derived windows: 4/8 = 50% currently evidenced
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/attestation/attestation-signer-lifecycle/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/attestation-signer-lifecycle/scripts/attestation_signer_lifecycle.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Read the same evidence as a point-in-time test and as a continuous one, and derive a freshness window per control from observed drift.
-
-This is the executable half of the `attestation-signer-lifecycle` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-from dataclasses import dataclass, field
-
-now = time.time(); DAY = 86400
-
-@dataclass
-class ControlTest:
-    cid: str
-    passed: bool
-    evidence: str
-    tested_at: float
-    valid_for_days: float = 30
-
-    def age_days(self, at): return (at - self.tested_at) / DAY
-    def point_in_time(self, at): return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
-    def continuous(self, at):
-        if self.age_days(at) &gt; self.valid_for_days: return &quot;STALE&quot;
-        return &quot;PASS&quot; if self.passed else &quot;FAIL&quot;
-
-TESTS = [
- ControlTest(&quot;AC-1&quot;, True,  &quot;act chain sampled from gateway logs&quot;, now -   3*DAY),
- ControlTest(&quot;AC-2&quot;, True,  &quot;delegation refusal regression suite&quot;, now -   9*DAY),
- ControlTest(&quot;SB-1&quot;, True,  &quot;egress denial evidence&quot;,              now -  45*DAY),
- ControlTest(&quot;SB-2&quot;, True,  &quot;approval gate screenshot&quot;,            now - 210*DAY),
- ControlTest(&quot;EV-1&quot;, True,  &quot;audit sample of 50 agent actions&quot;,    now -   5*DAY),
- ControlTest(&quot;DR-1&quot;, False, &quot;drift alerting not deployed&quot;,         now),
-]
-REQUIRED = [&quot;AC-1&quot;, &quot;AC-2&quot;, &quot;SB-1&quot;, &quot;SB-2&quot;, &quot;EV-1&quot;, &quot;DR-1&quot;, &quot;EV-2&quot;, &quot;ST-1&quot;]
-
-print(f&quot;{&#x27;control&#x27;:9s}{&#x27;age (days)&#x27;:&gt;12}{&#x27;point-in-time&#x27;:&gt;16}{&#x27;continuous&#x27;:&gt;13}&quot;)
-print(&quot;-&quot; * 52)
-by_id = {t.cid: t for t in TESTS}
-for cid in REQUIRED:
-    t = by_id.get(cid)
-    if t is None:
-        print(f&quot;{cid:9s}{&#x27;—&#x27;:&gt;12}{&#x27;(not tested)&#x27;:&gt;16}{&#x27;NO EVIDENCE&#x27;:&gt;13}&quot;)
-        continue
-    print(f&quot;{cid:9s}{t.age_days(now):&gt;12.0f}{t.point_in_time(now):&gt;16}{t.continuous(now):&gt;13}&quot;)
-
-def posture(tests, required, at, mode):
-    by_id = {t.cid: t for t in tests}
-    passing = 0
-    for cid in required:
-        t = by_id.get(cid)
-        if t is None: continue
-        state = t.point_in_time(at) if mode == &quot;point-in-time&quot; else t.continuous(at)
-        passing += state == &quot;PASS&quot;
-    return passing, round(passing/len(required), 3)
-
-for mode in (&quot;point-in-time&quot;, &quot;continuous&quot;):
-    n, pct = posture(TESTS, REQUIRED, now, mode)
-    print(f&quot;{mode:16s} {n}/{len(REQUIRED)} controls passing = {pct:.0%}&quot;)
-
-print(&quot;\nThe difference is entirely SB-1 and SB-2, which nobody did anything&quot;)
-print(&quot;wrong to. Time simply passed, and the agent they were tested against&quot;)
-print(&quot;has had two model upgrades since.&quot;)
-
-DRIFT_RATE = {          # observed TVD/day for what each control depends on
- &quot;AC-1&quot;: 0.0005,        # identity model changes slowly
- &quot;AC-2&quot;: 0.0005,
- &quot;SB-1&quot;: 0.0020,        # egress needs change with new integrations
- &quot;SB-2&quot;: 0.0090,        # tool manifests change weekly
- &quot;EV-1&quot;: 0.0010,
- &quot;DR-1&quot;: 0.0090,
-}
-TOLERANCE = 0.25
-
-def window(cid):
-    r = DRIFT_RATE.get(cid)
-    return int(TOLERANCE / r) if r else 90
-
-print(f&quot;{&#x27;control&#x27;:9s}{&#x27;drift/day&#x27;:&gt;12}{&#x27;window (days)&#x27;:&gt;15}{&#x27;current age&#x27;:&gt;13}{&#x27;state&#x27;:&gt;9}&quot;)
-print(&quot;-&quot; * 60)
-for cid in REQUIRED:
-    t = by_id.get(cid)
-    w = window(cid)
-    if t is None:
-        print(f&quot;{cid:9s}{&#x27;—&#x27;:&gt;12}{w:&gt;15}{&#x27;—&#x27;:&gt;13}{&#x27;NO EVIDENCE&#x27;:&gt;9}&quot;)
-        continue
-    t.valid_for_days = w
-    print(f&quot;{cid:9s}{DRIFT_RATE.get(cid, 0):&gt;12.4f}{w:&gt;15}{t.age_days(now):&gt;13.0f}&quot;
-          f&quot;{t.continuous(now):&gt;9}&quot;)
-
-n, pct = posture(TESTS, REQUIRED, now, &quot;continuous&quot;)
-print(f&quot;\nwith drift-derived windows: {n}/{len(REQUIRED)} = {pct:.0%} currently evidenced&quot;)
-assert pct &lt; 0.6
-print(&quot;\nSB-2 tests a tool manifest that changes weekly; a 210-day-old screenshot&quot;)
-print(&quot;cannot evidence it. Saying so is the control, not a criticism of anyone.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+SB-2 tests a tool manifest that changes weekly; a 210-day-old screenshot
+cannot evidence it. Saying so is the control, not a criticism of anyone.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The skill loads and reports its shape, and its failure modes are the governance lesson stated as engineering: the relying party must fail closed on a missing attestation, because reading absence as a pass is exactly the annual-test habit arriving in a new format. Drift against the digest and the manifest is what re-triggers it, not the calendar.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick your three most important AI controls and set a freshness window for each from the observed change rate of what it tests. Then recompute your posture. The number will drop, and it will be the first honest one you have had.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.2.html">E1.2 · Building the AI and agent inventory</a></strong></p>

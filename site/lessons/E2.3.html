@@ -45,171 +45,88 @@ than a programme.</p>
 <p>The method: pick one spine with the best coverage of the controls you actually
 operate, map outward, and be explicit about what the spine does <strong>not</strong> reach —
 because every spine has gaps, and the gaps are where the sector overlay lives.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill computes coverage per framework against your own control catalogue, selects the widest as a spine, and supplies the remaining three controls from the others — then costs that against building a programme per framework.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/framework-spine-selection/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: framework-spine-selection
+<p>The skill computes coverage per framework against your own control catalogue, selects the widest as a spine, and supplies the remaining three controls from the others — then costs that against building a programme per framework.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/regulatory/framework-spine-selection/SKILL.md"><code>skills/regulatory/framework-spine-selection/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: framework-spine-selection
 description: &gt;-
   Choose the framework that covers the most of your controls as a spine, supply
   the remainder from the others, and compare that against building a programme
   per framework. Use when several frameworks apply and each is proposing its own
   programme.
 allowed-tools: Read, Grep, Glob
----
-
-# One spine, and the rest as supplements
-
-Voluntary frameworks overlap heavily. Building a programme per framework
+</code></pre>
+<h1>One spine, and the rest as supplements</h1>
+<p>Voluntary frameworks overlap heavily. Building a programme per framework
 multiplies the same work by the number of logos, and the artefacts are nearly
 identical. Choosing the one with the widest coverage as a spine and supplying
 the gaps from the others produces the same coverage for a fraction of the
-effort — and the comparison is arithmetic, so it survives a meeting.
-
-## When to use this
-
-When more than one framework is in scope, and when a second framework is
-proposed as a separate workstream.
-
-## Procedure
-
-**1 — Take your control catalogue as the fixed thing.** Frameworks are mapped to
+effort — and the comparison is arithmetic, so it survives a meeting.</p>
+<h2>When to use this</h2>
+<p>When more than one framework is in scope, and when a second framework is
+proposed as a separate workstream.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Take your control catalogue as the fixed thing.</strong> Frameworks are mapped to
 it, not the other way round. If you do not have one, build it first; there is
-nothing to compare otherwise.
-
-**2 — Compute coverage per framework.** How many of your controls each one
-addresses. Report the counts, not impressions of comprehensiveness.
-
-**3 — Select the widest as the spine,** and name the controls it leaves
-uncovered. Those are the gaps, and they are usually few.
-
-**4 — Assign each gap to whichever framework covers it best.** One control, one
+nothing to compare otherwise.</p>
+<p><strong>2 — Compute coverage per framework.</strong> How many of your controls each one
+addresses. Report the counts, not impressions of comprehensiveness.</p>
+<p><strong>3 — Select the widest as the spine,</strong> and name the controls it leaves
+uncovered. Those are the gaps, and they are usually few.</p>
+<p><strong>4 — Assign each gap to whichever framework covers it best.</strong> One control, one
 source. The result is a single programme with a few supplements rather than
-several programmes.
-
-**5 — Cost both plans.** Spine-plus-supplements against per-framework. Include
-the duplicated evidence collection, which is where the difference actually sits.
-
-## Output contract
-
-```json
-{
+several programmes.</p>
+<p><strong>5 — Cost both plans.</strong> Spine-plus-supplements against per-framework. Include
+the duplicated evidence collection, which is where the difference actually sits.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;catalogue&quot;: [&quot;str&quot;],
   &quot;coverage&quot;: [{&quot;framework&quot;: &quot;str&quot;, &quot;covers&quot;: [&quot;str&quot;], &quot;count&quot;: 0}],
   &quot;spine&quot;: {&quot;framework&quot;: &quot;str&quot;, &quot;count&quot;: 0, &quot;gaps&quot;: [&quot;str&quot;]},
   &quot;supplements&quot;: [{&quot;control&quot;: &quot;str&quot;, &quot;from&quot;: &quot;str&quot;}],
   &quot;cost&quot;: {&quot;spine_plan&quot;: 0, &quot;per_framework_plan&quot;: 0, &quot;duplicated_evidence&quot;: 0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Choosing the spine by reputation.</strong> Choose it by coverage of your controls.</li>
+<li><strong>Building per framework.</strong> The evidence is duplicated, not the assurance.</li>
+<li><strong>No control catalogue.</strong> There is nothing to map against.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>framework           covers  controls
+--------------------------------------------------------------
+NIST AI RMF              5  [&#x27;AC-1&#x27;, &#x27;AC-2&#x27;, &#x27;DR-1&#x27;, &#x27;EV-2&#x27;, &#x27;SB-1&#x27;]
+ISO 42001                4  [&#x27;AC-1&#x27;, &#x27;AC-2&#x27;, &#x27;DR-1&#x27;, &#x27;EV-1&#x27;]
+EU AI Act                4  [&#x27;AC-1&#x27;, &#x27;EV-1&#x27;, &#x27;SB-2&#x27;, &#x27;ST-1&#x27;]
+ISO 27001                1  [&#x27;SB-1&#x27;]
+DORA                     1  [&#x27;ST-1&#x27;]
 
-## Failure modes
+best spine: NIST AI RMF covering 5/8
+not reached by the spine: [&#x27;EV-1&#x27;, &#x27;SB-2&#x27;, &#x27;ST-1&#x27;]
+distinct controls actually needed : 8
+control implementations if built per-framework : 15
+duplication factor : 1.9×
 
-- **Choosing the spine by reputation.** Choose it by coverage of your controls.
-- **Building per framework.** The evidence is duplicated, not the assurance.
-- **No control catalogue.** There is nothing to map against.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+controls claimed by more than one framework:
+   AC-1  3 frameworks: [&#x27;NIST AI RMF&#x27;, &#x27;ISO 42001&#x27;, &#x27;EU AI Act&#x27;]
+   AC-2  2 frameworks: [&#x27;NIST AI RMF&#x27;, &#x27;ISO 42001&#x27;]
+   SB-1  2 frameworks: [&#x27;NIST AI RMF&#x27;, &#x27;ISO 27001&#x27;]
+   EV-1  2 frameworks: [&#x27;ISO 42001&#x27;, &#x27;EU AI Act&#x27;]
+   DR-1  2 frameworks: [&#x27;NIST AI RMF&#x27;, &#x27;ISO 42001&#x27;]
+   ST-1  2 frameworks: [&#x27;EU AI Act&#x27;, &#x27;DORA&#x27;]
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+Built separately, these drift: the ISO version of AC-1 and the AI Act
+version diverge, evidence is produced twice, and neither is trusted.
+spine              NIST AI RMF
+covered by spine   5/8  [&#x27;AC-1&#x27;, &#x27;AC-2&#x27;, &#x27;DR-1&#x27;, &#x27;EV-2&#x27;, &#x27;SB-1&#x27;]
+gaps               [&#x27;EV-1&#x27;, &#x27;SB-2&#x27;, &#x27;ST-1&#x27;]
+secondary sources needed for the gaps:
+   ISO 42001            supplies [&#x27;EV-1&#x27;]
+   EU AI Act            supplies [&#x27;EV-1&#x27;, &#x27;SB-2&#x27;, &#x27;ST-1&#x27;]
+   DORA                 supplies [&#x27;ST-1&#x27;]
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/regulatory/framework-spine-selection/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/framework-spine-selection/scripts/framework_spine_selection.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Pick the framework that covers the most controls as a spine, and supply the remainder from the others rather than building per-framework.
-
-This is the executable half of the `framework-spine-selection` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-from collections import defaultdict
-
-CONTROLS = {
- &quot;AC-1&quot;: (&quot;NIST AI RMF: GOVERN-1.2&quot;, &quot;ISO 42001: 6.1&quot;, &quot;EU AI Act: Art.14&quot;),
- &quot;AC-2&quot;: (&quot;NIST AI RMF: MANAGE-2.2&quot;, &quot;ISO 42001: 8.1&quot;),
- &quot;SB-1&quot;: (&quot;NIST AI RMF: MANAGE-2.1&quot;, &quot;ISO 27001: A.8.20&quot;),
- &quot;SB-2&quot;: (&quot;EU AI Act: Art.14&quot;,),
- &quot;EV-1&quot;: (&quot;ISO 42001: 9.1&quot;, &quot;EU AI Act: Art.12&quot;),
- &quot;EV-2&quot;: (&quot;NIST AI RMF: MEASURE-2.3&quot;,),
- &quot;DR-1&quot;: (&quot;NIST AI RMF: MEASURE-2.4&quot;, &quot;ISO 42001: 9.1&quot;),
- &quot;ST-1&quot;: (&quot;EU AI Act: Art.14&quot;, &quot;DORA: Art.11&quot;),
-}
-by_fw = defaultdict(set)
-for cid, fws in CONTROLS.items():
-    for f in fws:
-        by_fw[f.split(&quot;:&quot;)[0]].add(cid)
-
-print(f&quot;{&#x27;framework&#x27;:18s}{&#x27;covers&#x27;:&gt;8}  controls&quot;)
-print(&quot;-&quot; * 62)
-for fw, cids in sorted(by_fw.items(), key=lambda kv: -len(kv[1])):
-    print(f&quot;{fw:18s}{len(cids):&gt;8}  {sorted(cids)}&quot;)
-
-spine = max(by_fw, key=lambda f: len(by_fw[f]))
-gaps = sorted(set(CONTROLS) - by_fw[spine])
-print(f&quot;\nbest spine: {spine} covering {len(by_fw[spine])}/{len(CONTROLS)}&quot;)
-print(f&quot;not reached by the spine: {gaps}&quot;)
-
-def per_regulation(controls):
-    &quot;&quot;&quot;Build a separate control set for each instrument. The usual approach.&quot;&quot;&quot;
-    sets = defaultdict(set)
-    for cid, fws in controls.items():
-        for f in fws:
-            sets[f.split(&quot;:&quot;)[0]].add(cid)
-    return sets
-
-sets = per_regulation(CONTROLS)
-total_implementations = sum(len(v) for v in sets.values())
-distinct_controls = len(CONTROLS)
-print(f&quot;distinct controls actually needed : {distinct_controls}&quot;)
-print(f&quot;control implementations if built per-framework : {total_implementations}&quot;)
-print(f&quot;duplication factor : {total_implementations/distinct_controls:.1f}×&quot;)
-
-print(&quot;\ncontrols claimed by more than one framework:&quot;)
-for cid, fws in CONTROLS.items():
-    if len(fws) &gt; 1:
-        print(f&quot;   {cid}  {len(fws)} frameworks: {[f.split(&#x27;:&#x27;)[0] for f in fws]}&quot;)
-print(&quot;\nBuilt separately, these drift: the ISO version of AC-1 and the AI Act&quot;)
-print(&quot;version diverge, evidence is produced twice, and neither is trusted.&quot;)
-assert total_implementations &gt; distinct_controls
-
-def spine_plan(controls, spine):
-    covered = {c for c, fws in controls.items() if any(f.startswith(spine) for f in fws)}
-    gaps = sorted(set(controls) - covered)
-    secondary = defaultdict(list)
-    for g in gaps:
-        for f in controls[g]:
-            secondary[f.split(&quot;:&quot;)[0]].append(g)
-    return {&quot;spine&quot;: spine, &quot;covered&quot;: sorted(covered), &quot;gaps&quot;: gaps,
-            &quot;secondary_sources&quot;: {k: v for k, v in secondary.items()
-                                  if not k.startswith(spine)}}
-
-plan = spine_plan(CONTROLS, &quot;NIST AI RMF&quot;)
-print(f&quot;spine              {plan[&#x27;spine&#x27;]}&quot;)
-print(f&quot;covered by spine   {len(plan[&#x27;covered&#x27;])}/{len(CONTROLS)}  {plan[&#x27;covered&#x27;]}&quot;)
-print(f&quot;gaps               {plan[&#x27;gaps&#x27;]}&quot;)
-print(&quot;secondary sources needed for the gaps:&quot;)
-for fw, cids in plan[&quot;secondary_sources&quot;].items():
-    print(f&quot;   {fw:20s} supplies {cids}&quot;)
-
-print(&quot;\nstatement for the assessor:&quot;)
-print(f&quot;   &#x27;We operate {len(CONTROLS)} AI controls, built against {plan[&#x27;spine&#x27;]}.&quot;)
-print(f&quot;    {len(plan[&#x27;covered&#x27;])} map directly to it; {len(plan[&#x27;gaps&#x27;])} come from&quot;)
-print(f&quot;    {list(plan[&#x27;secondary_sources&#x27;])}. Each control produces one artefact,&quot;)
-print(&quot;    which satisfies every clause it maps to.&#x27;&quot;)
-assert plan[&quot;gaps&quot;]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+statement for the assessor:
+   &#x27;We operate 8 AI controls, built against NIST AI RMF.
+    5 map directly to it; 3 come from
+    [&#x27;ISO 42001&#x27;, &#x27;EU AI Act&#x27;, &#x27;DORA&#x27;]. Each control produces one artefact,
+    which satisfies every clause it maps to.&#x27;</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>NIST AI RMF covers the most controls (4 of 8) and is selected as the spine, leaving SB-2, EV-1 and ST-1 as gaps supplied by ISO 42001, the EU AI Act and DORA. Building per-framework would produce 14 control implementations for 8 distinct controls — a 1.8× duplication factor with controls claimed by several frameworks drifting apart.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick your spine and justify it in one sentence to an assessor. "It has the best coverage of the controls we actually operate" is far stronger than "it is the one our regulator mentioned".</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.4.html">E2.4 · Sector overlays</a></strong></p>

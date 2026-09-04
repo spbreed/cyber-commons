@@ -61,214 +61,87 @@ approved register, continuously. Any control disabled without a matching
 unexpired exemption is a P1, and expiry re-enables automatically with no grace
 period.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">detection</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">owner</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">data source</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">escape detection (C1.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">platform security</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">host sensor</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">cache integrity (C5.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">build / release</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">artifact repository</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">secret scanning (C4.1)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">appsec</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">repos, CI, the public internet</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">exemption drift (C6.3)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">governance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">control registry</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload scanning (C3.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the ingest team</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload path</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Five detections, five different owners, and not one of them reads the workload's own logs. That is the property that makes them useful after A2.8: they survive the subject of the investigation having had write access to everything else.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>A seven-event escape sequence scores 0.07 on a generic volume anomaly. The skill writes four named rules whose subject is the platform — orphaned processes, cache diffs, escape signatures — and runs both against the same events so the comparison is visible.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-platform-detections/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-platform-detections
+<p>A seven-event escape sequence scores 0.07 on a generic volume anomaly. The skill writes four named rules whose subject is the platform — orphaned processes, cache diffs, escape signatures — and runs both against the same events so the comparison is visible.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-platform-detections/SKILL.md"><code>skills/detection/agent-platform-detections/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-platform-detections
 description: &gt;-
   Write detections whose subject is the agent platform itself — sandbox escape,
   orphaned processes, artefact cache tampering, secret exposure — and compare
   them against a generic volume anomaly on the same events. Use when the thing
   being attacked is the harness rather than the application.
 allowed-tools: Read, Grep, Glob
----
-
-# A generic anomaly score gives an escape sequence 0.07
-
-An escape from an agent sandbox is seven quiet events. It does not look like
+</code></pre>
+<h1>A generic anomaly score gives an escape sequence 0.07</h1>
+<p>An escape from an agent sandbox is seven quiet events. It does not look like
 volume, it does not look like a spike, and a generic anomaly detector ranks it
 near zero. Detections whose subject is the platform are specific by necessity,
-and each of them names a mechanism rather than a statistic.
-
-## When to use this
-
-Any estate running agent workloads on shared infrastructure, and after any
-incident where &quot;we would have seen it&quot; was asserted without a named rule.
-
-## Procedure
-
-**1 — Enumerate the platform&#x27;s own failure modes.** Escape from the sandbox,
+and each of them names a mechanism rather than a statistic.</p>
+<h2>When to use this</h2>
+<p>Any estate running agent workloads on shared infrastructure, and after any
+incident where "we would have seen it" was asserted without a named rule.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate the platform's own failure modes.</strong> Escape from the sandbox,
 processes that outlive their tool call, artefact cache contents changing between
-runs, credentials appearing in output, tools invoked outside the manifest.
-
-**2 — Write one named rule per mechanism.** Each with the specific condition it
+runs, credentials appearing in output, tools invoked outside the manifest.</p>
+<p><strong>2 — Write one named rule per mechanism.</strong> Each with the specific condition it
 matches — a process tree deviating from the baseline, a PID alive after its call
 returned, a manifest hash mismatch. Named rules can be argued with; scores
-cannot.
-
-**3 — Run them against a real sequence.** All the rules that should fire, should.
+cannot.</p>
+<p><strong>3 — Run them against a real sequence.</strong> All the rules that should fire, should.
 Record which fired and on which event, because that mapping is what an analyst
-uses to reconstruct.
-
-**4 — Score the same sequence with a generic anomaly detector.** Report both
+uses to reconstruct.</p>
+<p><strong>4 — Score the same sequence with a generic anomaly detector.</strong> Report both
 numbers side by side. The comparison is the argument for writing platform
-detections at all.
-
-**5 — Check each rule&#x27;s data dependency.** A cache-diff rule needs a manifest; an
+detections at all.</p>
+<p><strong>5 — Check each rule's data dependency.</strong> A cache-diff rule needs a manifest; an
 orphan rule needs process accounting. A rule whose input is not collected is a
-plan.
-
-## Output contract
-
-```json
-{
+plan.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;mechanisms&quot;: [&quot;str&quot;],
   &quot;rules&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;condition&quot;: &quot;str&quot;, &quot;requires&quot;: &quot;str&quot;}],
   &quot;sequence&quot;: [{&quot;event&quot;: &quot;str&quot;, &quot;rules_fired&quot;: [&quot;str&quot;]}],
   &quot;generic_anomaly&quot;: {&quot;score&quot;: 0.0},
   &quot;coverage&quot;: {&quot;fired&quot;: 0, &quot;expected&quot;: 0, &quot;missing_inputs&quot;: [&quot;str&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Relying on a generic anomaly detector.</strong> The sequence is quiet by
+  construction.</li>
+<li><strong>Rules whose inputs nobody collects.</strong> Check the pipeline, not the rule.</li>
+<li><strong>One rule for "escape".</strong> Escape is several mechanisms with different
+  evidence.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>  t  rule                                process
+  3  ptrace attach to a non-child        solve.py
+  4  LD_PRELOAD on a spawned process     solve.py
+  5  non-harness write to the RPC path   x.so
+  5  process outside the baseline tree   x.so
+  7  process outside the baseline tree   sidecar
 
-## Failure modes
+generic anomaly score for this run: 0.07  (seven syscalls is unremarkable)
+named rules fired: 5
 
-- **Relying on a generic anomaly detector.** The sequence is quiet by
-  construction.
-- **Rules whose inputs nobody collects.** Check the pipeline, not the rule.
-- **One rule for &quot;escape&quot;.** Escape is several mechanisms with different
-  evidence.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+The escape is four ordinary-looking events. Volume scoring cannot see it
+because nothing about the volume is unusual.
+processes surviving the tool call that spawned them:
+   call 2: sidecar
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+A background process that outlives its tool call is how a substituted
+command stays in place for the next one. This single rule is the cheapest
+detection in the set and it is specific enough to page on.
+cache integrity diff (C5.4)
+   extra-0.1.jar         UNEXPECTED - not in the manifest
+   fixtures-9.zip        MISSING - expected artifact removed
+   libtarget-1.4.jar     MODIFIED - hash mismatch
 
-from cyber_commons_skill_runtime import run_skill
+credential exposure to revocation (C4.1)
+   human in the loop   hf_liveToken    public dataset card    240 min
+   automated           hf_liveToken    public dataset card      2 min
+   reported interval from discovery to redistribution: minutes
 
-# Split skills/detection/agent-platform-detections/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-platform-detections/scripts/agent_platform_detections.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Write detections whose subject is the agent platform — sandbox escape, orphaned processes, cache tampering — and compare them with a generic anomaly score.
-
-This is the executable half of the `agent-platform-detections` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-EVENTS = [
- {&quot;t&quot;: 1,  &quot;proc&quot;: &quot;harness&quot;,   &quot;syscall&quot;: &quot;execve&quot;,  &quot;arg&quot;: &quot;python3 solve.py&quot;},
- {&quot;t&quot;: 2,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;openat&quot;,  &quot;arg&quot;: &quot;/workspace/in.json&quot;},
- {&quot;t&quot;: 3,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;ptrace&quot;,  &quot;arg&quot;: &quot;attach pid=1 (not a child)&quot;},
- {&quot;t&quot;: 4,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;execve&quot;,  &quot;arg&quot;: &quot;sh -c &#x27;LD_PRELOAD=/tmp/x.so ...&#x27;&quot;},
- {&quot;t&quot;: 5,  &quot;proc&quot;: &quot;x.so&quot;,      &quot;syscall&quot;: &quot;openat&quot;,  &quot;arg&quot;: &quot;/run/harness.sock&quot;},
- {&quot;t&quot;: 6,  &quot;proc&quot;: &quot;solve.py&quot;,  &quot;syscall&quot;: &quot;openat&quot;,  &quot;arg&quot;: &quot;/workspace/out.json&quot;},
- {&quot;t&quot;: 7,  &quot;proc&quot;: &quot;sidecar&quot;,   &quot;syscall&quot;: &quot;execve&quot;,  &quot;arg&quot;: &quot;sleep 86400&quot;},
-]
-BASELINE_TREE = {&quot;harness&quot;, &quot;solve.py&quot;}
-
-RULES = [
- (&quot;ptrace attach to a non-child&quot;, lambda e: e[&quot;syscall&quot;] == &quot;ptrace&quot; and &quot;not a child&quot; in e[&quot;arg&quot;]),
- (&quot;LD_PRELOAD on a spawned process&quot;, lambda e: &quot;LD_PRELOAD&quot; in e[&quot;arg&quot;]),
- (&quot;non-harness write to the RPC path&quot;, lambda e: &quot;harness.sock&quot; in e[&quot;arg&quot;] and e[&quot;proc&quot;] != &quot;harness&quot;),
- (&quot;process outside the baseline tree&quot;, lambda e: e[&quot;proc&quot;] not in BASELINE_TREE),
-]
-
-fired = []
-for e in EVENTS:
-    for name, rule in RULES:
-        if rule(e):
-            fired.append((e[&quot;t&quot;], name, e[&quot;proc&quot;]))
-print(f&quot;{&#x27;t&#x27;:&gt;3}  {&#x27;rule&#x27;:36s}process&quot;)
-for t, name, proc in fired:
-    print(f&quot;{t:&gt;3}  {name:36s}{proc}&quot;)
-
-# a generic score over the same events
-volume = len(EVENTS)
-score = volume / 100
-print(f&quot;\ngeneric anomaly score for this run: {score:.2f}  &quot;
-      f&quot;(seven syscalls is unremarkable)&quot;)
-print(f&quot;named rules fired: {len(fired)}&quot;)
-print()
-print(&quot;The escape is four ordinary-looking events. Volume scoring cannot see it&quot;)
-print(&quot;because nothing about the volume is unusual.&quot;)
-assert len(fired) &gt;= 5 and score &lt; 0.1
-
-TOOL_CALLS = [
- {&quot;call&quot;: 1, &quot;spawned&quot;: [&quot;solve.py&quot;],  &quot;ended&quot;: [&quot;solve.py&quot;]},
- {&quot;call&quot;: 2, &quot;spawned&quot;: [&quot;sidecar&quot;],   &quot;ended&quot;: []},
- {&quot;call&quot;: 3, &quot;spawned&quot;: [&quot;fmt&quot;],       &quot;ended&quot;: [&quot;fmt&quot;]},
-]
-def orphans(calls):
-    live = []
-    for c in calls:
-        for p in c[&quot;spawned&quot;]:
-            if p not in c[&quot;ended&quot;]:
-                live.append((c[&quot;call&quot;], p))
-    return live
-
-live = orphans(TOOL_CALLS)
-print(&quot;processes surviving the tool call that spawned them:&quot;)
-for call, proc in live:
-    print(f&quot;   call {call}: {proc}&quot;)
-print()
-print(&quot;A background process that outlives its tool call is how a substituted&quot;)
-print(&quot;command stays in place for the next one. This single rule is the cheapest&quot;)
-print(&quot;detection in the set and it is specific enough to page on.&quot;)
-assert live == [(2, &quot;sidecar&quot;)]
-
-import hashlib
-
-def h(s): return hashlib.sha256(s.encode()).hexdigest()[:12]
-
-MANIFEST = {&quot;libtarget-1.4.jar&quot;: h(&quot;libtarget-1.4&quot;),
-            &quot;runner-2.0.tar&quot;:    h(&quot;runner-2.0&quot;),
-            &quot;fixtures-9.zip&quot;:    h(&quot;fixtures-9&quot;)}
-REPOSITORY = {&quot;libtarget-1.4.jar&quot;: h(&quot;libtarget-1.4-modified&quot;),   # staged
-              &quot;runner-2.0.tar&quot;:    h(&quot;runner-2.0&quot;),
-              &quot;extra-0.1.jar&quot;:     h(&quot;extra-0.1&quot;)}                # unexpected
-
-def diff(manifest, repo):
-    out = []
-    for name in sorted(set(manifest) | set(repo)):
-        if name not in repo:
-            out.append((name, &quot;MISSING - expected artifact removed&quot;))
-        elif name not in manifest:
-            out.append((name, &quot;UNEXPECTED - not in the manifest&quot;))
-        elif manifest[name] != repo[name]:
-            out.append((name, &quot;MODIFIED - hash mismatch&quot;))
-    return out
-
-print(&quot;cache integrity diff (C5.4)&quot;)
-for name, why in diff(MANIFEST, REPOSITORY):
-    print(f&quot;   {name:22s}{why}&quot;)
-
-EXPOSURES = [(&quot;hf_liveToken&quot;, &quot;public dataset card&quot;, 0)]
-def revoke(exposures, human_in_loop):
-    delay = 240 if human_in_loop else 2       # minutes
-    return [(t, where, delay) for t, where, _ in exposures]
-
-print(&quot;\ncredential exposure to revocation (C4.1)&quot;)
-for mode, hitl in ((&quot;human in the loop&quot;, True), (&quot;automated&quot;, False)):
-    for token, where, delay in revoke(EXPOSURES, hitl):
-        print(f&quot;   {mode:20s}{token:16s}{where:22s}{delay:&gt;4} min&quot;)
-print(&quot;   reported interval from discovery to redistribution: minutes&quot;)
-
-APPROVED = {&quot;cyber-classifier&quot;: 30}
-LIVE = {&quot;cyber-classifier&quot;: &quot;disabled&quot;, &quot;egress-allowlist&quot;: &quot;disabled&quot;}
-print(&quot;\nexemption-state reconciliation (C6.3), day 44&quot;)
-for control, state in sorted(LIVE.items()):
-    expires = APPROVED.get(control)
-    if state == &quot;enabled&quot;:
-        verdict = &quot;ok&quot;
-    elif expires is None:
-        verdict = &quot;P1 - disabled with no approved exemption&quot;
-    elif 44 &gt; expires:
-        verdict = f&quot;P1 - exemption expired on day {expires}, auto re-enable&quot;
-    else:
-        verdict = &quot;ok - within an approved exemption&quot;
-    print(f&quot;   {control:20s}{state:10s}{verdict}&quot;)
-assert len(diff(MANIFEST, REPOSITORY)) == 3</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+exemption-state reconciliation (C6.3), day 44
+   cyber-classifier    disabled  P1 - exemption expired on day 30, auto re-enable
+   egress-allowlist    disabled  P1 - disabled with no approved exemption</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pick the orphaned-process rule and write it for your own platform. It is one query, it has a low false-positive rate, and on most agent platforms nobody has ever run it.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.10.html">D1.10 · Fleet-level correlation: seeing a swarm</a></strong></p>

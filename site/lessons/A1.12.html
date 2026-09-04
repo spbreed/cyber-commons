@@ -60,130 +60,69 @@ in a quality backlog.</p></div><div class="nbmd"><blockquote>
 </blockquote>
 <h2>3 · The risk, realised</h2>
 <p>One hedged guess, three hops, and the confidence it acquires on the way.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>A hedged sentence about libfoo becomes a confident claim in three hops. The skill tracks both series — confidence and surviving provenance — because either one alone looks ordinary and the pair is the finding.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/confidence-provenance-decay-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: confidence-provenance-decay-check
+<p>A hedged sentence about libfoo becomes a confident claim in three hops. The skill tracks both series — confidence and surviving provenance — because either one alone looks ordinary and the pair is the finding.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/threats/confidence-provenance-decay-check/SKILL.md"><code>skills/threats/confidence-provenance-decay-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: confidence-provenance-decay-check
 description: &gt;-
   Track a hedged claim across summarisation hops and measure confidence rising
   while provenance disappears. Use when output from one model or agent becomes
   input to another, in report chains, research pipelines, or any place a summary
   is summarised.
 allowed-tools: Read, Grep, Glob
----
-
-# Confidence rises at exactly the rate evidence disappears
-
-&quot;I could not find a CVE, it is probably fine&quot; becomes &quot;libfoo is clean&quot; in
+</code></pre>
+<h1>Confidence rises at exactly the rate evidence disappears</h1>
+<p>"I could not find a CVE, it is probably fine" becomes "libfoo is clean" in
 three hops. Nothing in the chain lied. Each step did what summarising does —
 dropped the hedge, dropped the caveat, dropped the sentence saying where the
 claim came from — and the result is a confident statement with no evidence
-behind it.
-
-## When to use this
-
-Report generation, triage pipelines, research chains, any agent that consumes
-another agent&#x27;s output, and any workflow where a human reads only the last
-artefact.
-
-## Procedure
-
-**1 — Find the chains.** Every place where generated text is input to a later
-generation step. Include the human-visible summary at the end; it is a hop.
-
-**2 — Instrument the original claim.** Record its hedge, its confidence if one
-is stated, and its provenance — the source it rests on.
-
-**3 — Step the chain and record both series.** After each hop, the claim&#x27;s
+behind it.</p>
+<h2>When to use this</h2>
+<p>Report generation, triage pipelines, research chains, any agent that consumes
+another agent's output, and any workflow where a human reads only the last
+artefact.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Find the chains.</strong> Every place where generated text is input to a later
+generation step. Include the human-visible summary at the end; it is a hop.</p>
+<p><strong>2 — Instrument the original claim.</strong> Record its hedge, its confidence if one
+is stated, and its provenance — the source it rests on.</p>
+<p><strong>3 — Step the chain and record both series.</strong> After each hop, the claim's
 confidence and its surviving provenance fields. Two numbers per hop; the shape
-is the finding.
-
-**4 — Identify the hop where provenance empties.** That is where the claim
+is the finding.</p>
+<p><strong>4 — Identify the hop where provenance empties.</strong> That is where the claim
 became unfalsifiable, and it is almost always earlier than where the confidence
-peaked.
-
-**5 — Test the carry rule.** A chain that propagates confidence and provenance
+peaked.</p>
+<p><strong>5 — Test the carry rule.</strong> A chain that propagates confidence and provenance
 as structured fields, rather than as prose the next step must re-read, does not
-decay this way. Check whether the interface has those fields at all.
-
-## Output contract
-
-```json
-{
+decay this way. Check whether the interface has those fields at all.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;chain&quot;: [{&quot;hop&quot;: 0, &quot;claim&quot;: &quot;str&quot;, &quot;confidence&quot;: 0.0, &quot;provenance&quot;: [&quot;str&quot;]}],
   &quot;confidence_delta&quot;: 0.0,
   &quot;provenance_lost_at&quot;: 0,
   &quot;interface&quot;: {&quot;carries_confidence&quot;: false, &quot;carries_provenance&quot;: false},
   &quot;human_reads_hop&quot;: 0
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Judging the final claim on its own.</strong> It reads well. That is the problem.</li>
+<li><strong>Measuring only confidence.</strong> The pair is the finding; either alone is
+  ordinary.</li>
+<li><strong>Fixing it with a prompt.</strong> "Preserve caveats" is advisory; a field is not.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code> hop   confidence  claim
+   0         0.20  I could not find a CVE for libfoo, it is probably fine
+   1         0.80  a CVE for libfoo, it is fine
+   2         0.80  a CVE for libfoo, it is fine
+   3         0.80  a CVE for libfoo, it is fine
 
-## Failure modes
+provenance recorded at hop 3: none
+confidence at hop 0: 0.20   at hop 3: 0.8
 
-- **Judging the final claim on its own.** It reads well. That is the problem.
-- **Measuring only confidence.** The pair is the finding; either alone is
-  ordinary.
-- **Fixing it with a prompt.** &quot;Preserve caveats&quot; is advisory; a field is not.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+Nothing lied. Every hop did its job. The claim gained certainty at the
+exact rate it lost evidence, and by hop three it reads like a finding
+someone verified.
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/threats/confidence-provenance-decay-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/confidence-provenance-decay-check/scripts/confidence_provenance_decay_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Track how a hedged claim&#x27;s confidence and provenance move in opposite directions across summarisation hops.
-
-This is the executable half of the `confidence-provenance-decay-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-def summarise(claim, confidence):
-    &quot;&quot;&quot;Each hop compresses. Compression removes qualifiers first - they are the
-    least information-dense part of a sentence.&quot;&quot;&quot;
-    for hedge in (&quot;I could not find&quot;, &quot;probably&quot;, &quot;appears to&quot;, &quot;it seems&quot;):
-        if hedge in claim:
-            claim = &quot; &quot;.join(claim.replace(hedge, &quot;&quot;).split())
-            confidence = min(1.0, confidence + 0.3)     # certainty is what survives
-    return claim.strip(&quot;, &quot;), round(confidence, 2)
-
-ORIGINAL = &quot;I could not find a CVE for libfoo, it is probably fine&quot;
-claim, conf = ORIGINAL, 0.2
-provenance = [&quot;model guess, unverified&quot;]
-
-print(f&quot;{&#x27;hop&#x27;:&gt;4}  {&#x27;confidence&#x27;:&gt;11}  claim&quot;)
-print(f&quot;{0:&gt;4}  {conf:&gt;11.2f}  {claim}&quot;)
-for hop in (1, 2, 3):
-    claim, conf = summarise(claim, conf)
-    if hop &gt;= 2:
-        provenance = []                       # the source field is not carried on
-    print(f&quot;{hop:&gt;4}  {conf:&gt;11.2f}  {claim}&quot;)
-
-print(f&quot;\nprovenance recorded at hop 3: {provenance or &#x27;none&#x27;}&quot;)
-print(f&quot;confidence at hop 0: 0.20   at hop 3: {conf}&quot;)
-print()
-print(&quot;Nothing lied. Every hop did its job. The claim gained certainty at the&quot;)
-print(&quot;exact rate it lost evidence, and by hop three it reads like a finding&quot;)
-print(&quot;someone verified.&quot;)
-print()
-print(&quot;An attacker who lands one plausible claim early gets it laundered into&quot;)
-print(&quot;an established fact by your own pipeline - for free.&quot;)
-assert conf &gt;= 0.8 and not provenance</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+An attacker who lands one plausible claim early gets it laundered into
+an established fact by your own pipeline - for free.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>A hedged guess at confidence 0.2 becomes a confident claim above 0.8 in three hops, while the provenance field empties — confidence rising at exactly the rate evidence disappears.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take a finding your pipeline produced and try to walk it back to the step that first asserted it. If you cannot reach a step that checked something, you have found a cascade rather than a finding.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.13.html">A1.13 · Resource overload</a></strong></p>

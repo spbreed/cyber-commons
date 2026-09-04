@@ -80,161 +80,74 @@ outside any process:</p>
 still exists is a standing credential with no owner and nobody watching it,
 because everyone believes it is gone.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">lifecycle event</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">does it raise a ticket?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">why it matters</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">new agent deployed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">usually</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the existing change process catches it</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">tool added to the manifest</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">changes blast radius, and no pull request is raised</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">prompt edited in a console</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">changes behaviour, not code</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">provider upgrades the model</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">you may not be told at all</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">scope widened in IAM</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">sometimes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">depends entirely on your access-review cadence</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent decommissioned</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>rarely</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the identity usually outlives the agent</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Four of six generate no reliable record. A lifecycle you cannot observe is a lifecycle you are not governing.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Four of six lifecycle events leave no reliable record. The skill starts from the identity provider rather than the register, joins to services and owners, and ranks what it finds by what the credential can still do.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/agent-lifecycle-governance/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-lifecycle-governance
+<p>Four of six lifecycle events leave no reliable record. The skill starts from the identity provider rather than the register, joins to services and owners, and ranks what it finds by what the credential can still do.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/grc/agent-lifecycle-governance/SKILL.md"><code>skills/grc/agent-lifecycle-governance/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-lifecycle-governance
 description: &gt;-
   Check which agent lifecycle events leave a record anybody reviews, and find
   active credentials belonging to decommissioned services or to nobody. Use when
   agents are created and retired faster than the process that governs them.
 allowed-tools: Read, Grep, Glob
----
-
-# Four of six lifecycle events leave no record
-
-Model and agent lifecycle governance fails at the same place as change
+</code></pre>
+<h1>Four of six lifecycle events leave no record</h1>
+<p>Model and agent lifecycle governance fails at the same place as change
 management: most of the events that matter — a model swap, a manifest edit, a
 scope grant, a decommission that stopped the workload and not the credential —
 produce nothing anybody reviews. The register is then accurate about creation
-and wrong about everything after.
-
-## When to use this
-
-Standing up lifecycle governance, and as a periodic sweep — this check finds
-things every time it is run.
-
-## Procedure
-
-**1 — List the lifecycle events.** Created, deployed, model changed, scope
+and wrong about everything after.</p>
+<h2>When to use this</h2>
+<p>Standing up lifecycle governance, and as a periodic sweep — this check finds
+things every time it is run.</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the lifecycle events.</strong> Created, deployed, model changed, scope
 changed, superseded, decommissioned. For each, whether a record exists and who
-reads it.
-
-**2 — Take the identity list from the identity provider,** not from the
+reads it.</p>
+<p><strong>2 — Take the identity list from the identity provider,</strong> not from the
 register. The register knows what was declared; the provider knows what
-authenticates.
-
-**3 — Join to services and owners.** Three findings fall out: credentials for
+authenticates.</p>
+<p><strong>3 — Join to services and owners.</strong> Three findings fall out: credentials for
 decommissioned services, identities whose owner reference does not resolve, and
-identities nobody has used in months.
-
-**4 — Rank by what the credential can still do.** An active credential for a
+identities nobody has used in months.</p>
+<p><strong>4 — Rank by what the credential can still do.</strong> An active credential for a
 decommissioned service with production scope is critical; an orphan with read
-access is not. Blast radius, not age, is the ranking.
-
-**5 — Attach an automatic consequence per class.** Decommissioned service:
+access is not. Blast radius, not age, is the ranking.</p>
+<p><strong>5 — Attach an automatic consequence per class.</strong> Decommissioned service:
 revoke. Orphan: suspend and notify. Unused past window: expire. A sweep with no
-consequence produces the same list next quarter.
-
-## Output contract
-
-```json
-{
+consequence produces the same list next quarter.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;events&quot;: [{&quot;event&quot;: &quot;str&quot;, &quot;record_exists&quot;: false, &quot;reviewed_by&quot;: &quot;str|null&quot;}],
   &quot;identities&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;service&quot;: &quot;str|null&quot;, &quot;owner&quot;: &quot;str|null&quot;,
                   &quot;last_used_days&quot;: 0, &quot;scopes&quot;: [&quot;str&quot;],
                   &quot;finding&quot;: &quot;active_for_decommissioned|orphan|lapsed|ok&quot;, &quot;blast&quot;: 0}],
   &quot;consequences&quot;: [{&quot;finding&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;, &quot;automatic&quot;: true}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Starting from the register.</strong> It lists intentions.</li>
+<li><strong>Ranking by age.</strong> A recent orphan with deploy rights outranks an old
+  read-only one.</li>
+<li><strong>A sweep with no automatic consequence.</strong> It becomes a recurring report.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>identity            last auth (d)   service running       owner  finding
+--------------------------------------------------------------------------------------------
+triage-agent                    0              True      appsec  
+patch-agent                     1              True    platform  
+legacy-scanner                400             False           —  orphan — decommissioning never finished
+poc-agent-2025                300             False           —  orphan — decommissioning never finished
+sunset-agent                    2             False           —  ACTIVE CREDENTIAL FOR A RETIRED SERVICE
 
-## Failure modes
+Read the sunset-agent row twice. The service was retired. The identity
+authenticated two days ago. Somebody or something is still using it.
+[medium  ] legacy-scanner     no authentication in 400d — decommission it
+[medium  ] poc-agent-2025     no authentication in 300d — decommission it
+[critical] sunset-agent       identity active for a decommissioned service
 
-- **Starting from the register.** It lists intentions.
-- **Ranking by age.** A recent orphan with deploy rights outranks an old
-  read-only one.
-- **A sweep with no automatic consequence.** It becomes a recurring report.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+and the manifest-diff check, for the events that change behaviour:
+   manifest changed: blast 1 → 41 (+40)
+   → requires re-tiering (E1.3) and a fresh SB-2 test (E1.7)
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/grc/agent-lifecycle-governance/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/grc/agent-lifecycle-governance/scripts/agent_lifecycle_governance.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Check which lifecycle events leave a record, and find the active credentials belonging to decommissioned services.
-
-This is the executable half of the `agent-lifecycle-governance` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-now = time.time(); DAY = 86400
-
-IDENTITIES = {
- &quot;triage-agent&quot;:   {&quot;created&quot;: now - 200*DAY, &quot;last_auth&quot;: now - 0.2*DAY,
-                    &quot;owner&quot;: &quot;appsec&quot;, &quot;service_running&quot;: True},
- &quot;patch-agent&quot;:    {&quot;created&quot;: now - 180*DAY, &quot;last_auth&quot;: now - 1*DAY,
-                    &quot;owner&quot;: &quot;platform&quot;, &quot;service_running&quot;: True},
- &quot;legacy-scanner&quot;: {&quot;created&quot;: now - 900*DAY, &quot;last_auth&quot;: now - 400*DAY,
-                    &quot;owner&quot;: &quot;&quot;, &quot;service_running&quot;: False},
- &quot;poc-agent-2025&quot;: {&quot;created&quot;: now - 500*DAY, &quot;last_auth&quot;: now - 300*DAY,
-                    &quot;owner&quot;: &quot;&quot;, &quot;service_running&quot;: False},
- &quot;sunset-agent&quot;:   {&quot;created&quot;: now - 300*DAY, &quot;last_auth&quot;: now - 2*DAY,
-                    &quot;owner&quot;: &quot;&quot;, &quot;service_running&quot;: False},
-}
-print(f&quot;{&#x27;identity&#x27;:18s}{&#x27;last auth (d)&#x27;:&gt;15}{&#x27;service running&#x27;:&gt;18}{&#x27;owner&#x27;:&gt;12}  finding&quot;)
-print(&quot;-&quot; * 92)
-for name, i in IDENTITIES.items():
-    age = (now - i[&quot;last_auth&quot;])/DAY
-    finding = &quot;&quot;
-    if not i[&quot;service_running&quot;] and age &lt; 30:
-        finding = &quot;ACTIVE CREDENTIAL FOR A RETIRED SERVICE&quot;
-    elif not i[&quot;service_running&quot;]:
-        finding = &quot;orphan — decommissioning never finished&quot;
-    elif not i[&quot;owner&quot;]:
-        finding = &quot;no owner&quot;
-    print(f&quot;{name:18s}{age:&gt;15.0f}{str(i[&#x27;service_running&#x27;]):&gt;18}&quot;
-          f&quot;{i[&#x27;owner&#x27;] or &#x27;—&#x27;:&gt;12}  {finding}&quot;)
-print(&quot;\nRead the sunset-agent row twice. The service was retired. The identity&quot;)
-print(&quot;authenticated two days ago. Somebody or something is still using it.&quot;)
-
-def lifecycle_checks(identities, now, stale_days=90):
-    findings = []
-    for name, i in identities.items():
-        age = (now - i[&quot;last_auth&quot;])/DAY
-        if not i[&quot;service_running&quot;] and age &lt; stale_days:
-            findings.append((name, &quot;critical&quot;,
-                             &quot;identity active for a decommissioned service&quot;))
-        elif age &gt; stale_days:
-            findings.append((name, &quot;medium&quot;,
-                             f&quot;no authentication in {age:.0f}d — decommission it&quot;))
-        elif not i[&quot;owner&quot;]:
-            findings.append((name, &quot;medium&quot;, &quot;no named owner&quot;))
-    return findings
-
-for name, sev, why in lifecycle_checks(IDENTITIES, now):
-    print(f&quot;[{sev:8s}] {name:18s} {why}&quot;)
-
-print(&quot;\nand the manifest-diff check, for the events that change behaviour:&quot;)
-SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20}
-def blast(tools, gated=frozenset()):
-    return sum(SCOPE_WEIGHT[s]*(1 if rev else 2) for n,s,rev in tools if n not in gated)
-BEFORE = [(&quot;read_file&quot;,&quot;self&quot;,True)]
-AFTER  = [(&quot;read_file&quot;,&quot;self&quot;,True), (&quot;deploy&quot;,&quot;org&quot;,False)]
-d = blast(AFTER) - blast(BEFORE)
-print(f&quot;   manifest changed: blast {blast(BEFORE)} → {blast(AFTER)} (+{d})&quot;)
-print(f&quot;   → requires re-tiering (E1.3) and a fresh SB-2 test (E1.7)&quot;)
-
-crit = [f for f in lifecycle_checks(IDENTITIES, now) if f[1] == &quot;critical&quot;]
-assert crit
-print(f&quot;\n{len(crit)} critical lifecycle finding(s) — each is a standing credential&quot;)
-print(&quot;for something everyone believes is switched off.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+1 critical lifecycle finding(s) — each is a standing credential
+for something everyone believes is switched off.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Four of six lifecycle events generate no reliable record at all. The identity review flags <code>sunset-agent</code> as critical — an active credential for a decommissioned service — plus two orphans with no authentication in 300+ days. The manifest diff shows the blast radius rising from 0 to 40, requiring re-tiering and a fresh control test.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Query your identity provider for non-human identities whose service is retired but which authenticated in the last 30 days. Every hit is either an undocumented dependency or someone else's foothold, and you cannot tell which from the directory alone.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E1.10.html">E1.10 · The stakeholder map: who owns what</a></strong></p>

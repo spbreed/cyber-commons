@@ -64,55 +64,40 @@ told you.</p></div><div class="nbmd"><table style="border-collapse:collapse;marg
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Every detection, baseline and playbook CyberTravels owns was tuned against the second column.</div></div><div class="nbmd"><h2>3 · Why a volume rule is not the answer</h2>
 <p>The obvious rule does fire. The problem is <em>when</em> — which is the one thing a table cannot show you, so this part is worth running.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what the SOC needs</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">is it in an application log?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">which lesson gets it</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the prompt that motivated the action</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.5</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the tool call, with arguments</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.5</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the decision, and what it was based on</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D2.5</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which agent acted</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">D1.6</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">which human it acted for</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">A2.7 · D1.6</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the HTTP request the tool made</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">already there</td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">Five of six do not exist yet. R10 in the register is the sixth one's twin problem — the log you do have is full of passport numbers.</div></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
-<p>Alex and CyberTravels' Workflow Agent, over the same hour. The skill measures the five signals that separate them, then runs the existing volume rule against the agent's run — where it fires 154 seconds in and stays silent for the remaining fifty-seven minutes.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-tempo-baseline/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-tempo-baseline
+<p>Alex and CyberTravels' Workflow Agent, over the same hour. The skill measures the five signals that separate them, then runs the existing volume rule against the agent's run — where it fires 154 seconds in and stays silent for the remaining fifty-seven minutes.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-tempo-baseline/SKILL.md"><code>skills/detection/agent-tempo-baseline/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-tempo-baseline
 description: &gt;-
-  Measure the behavioural signals that separate an agent&#x27;s tempo from a
-  person&#x27;s — action rate, inter-action variance, session length, tool breadth,
+  Measure the behavioural signals that separate an agent's tempo from a
+  person's — action rate, inter-action variance, session length, tool breadth,
   night-hours share — and check what a volume rule tuned for human tempo does
   when an agent runs. Use before writing any detection that will see agents.
 allowed-tools: Read, Grep, Glob
----
-
-# The rule fires 154 seconds into a sixty-minute run
-
-Detection content is calibrated on human tempo. An agent performs in an hour
+</code></pre>
+<h1>The rule fires 154 seconds into a sixty-minute run</h1>
+<p>Detection content is calibrated on human tempo. An agent performs in an hour
 what a person performs in a month, so a volume rule does fire — immediately, and
 then not again for the rest of the run, which is the part that matters. The
-baseline has to be measured before any rule is written against it.
-
-## When to use this
-
-Before authoring or tuning detections in an estate where agents act, and when
-an existing rule is either silent or permanently firing.
-
-## Procedure
-
-**1 — Pick one human and one agent doing comparable work.** Same task class,
-same hour. Comparability is what makes the ratio meaningful.
-
-**2 — Measure five signals for each.** Actions per hour, variance between
+baseline has to be measured before any rule is written against it.</p>
+<h2>When to use this</h2>
+<p>Before authoring or tuning detections in an estate where agents act, and when
+an existing rule is either silent or permanently firing.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Pick one human and one agent doing comparable work.</strong> Same task class,
+same hour. Comparability is what makes the ratio meaningful.</p>
+<p><strong>2 — Measure five signals for each.</strong> Actions per hour, variance between
 actions, session length, distinct tools touched, and share of activity outside
-working hours. Report the ratio per signal — most will be in the hundreds.
-
-**3 — Run the existing volume rule against the agent&#x27;s hour.** Record when it
+working hours. Report the ratio per signal — most will be in the hundreds.</p>
+<p><strong>3 — Run the existing volume rule against the agent's hour.</strong> Record when it
 first fires, in seconds. This is usually early enough that the rest of the run
-is unmonitored, which is the finding.
-
-**4 — Say what the rule now means.** After the first firing it is silent for the
-remainder — so it is an *onset* detector, not a volume detector, and anyone
-relying on it for volume is relying on something else.
-
-**5 — Derive per-population thresholds.** Humans and agents need different
-baselines, and an agent&#x27;s baseline needs a per-agent one: a patch agent and a
-triage agent do not share a tempo.
-
-## Output contract
-
-```json
-{
+is unmonitored, which is the finding.</p>
+<p><strong>4 — Say what the rule now means.</strong> After the first firing it is silent for the
+remainder — so it is an <em>onset</em> detector, not a volume detector, and anyone
+relying on it for volume is relying on something else.</p>
+<p><strong>5 — Derive per-population thresholds.</strong> Humans and agents need different
+baselines, and an agent's baseline needs a per-agent one: a patch agent and a
+triage agent do not share a tempo.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;subjects&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;human|agent&quot;,
                 &quot;actions_per_hour&quot;: 0, &quot;variance&quot;: 0.0, &quot;session_minutes&quot;: 0,
                 &quot;distinct_tools&quot;: 0, &quot;night_share&quot;: 0.0}],
@@ -120,62 +105,25 @@ triage agent do not share a tempo.
   &quot;existing_rule&quot;: {&quot;threshold&quot;: 0, &quot;first_fires_after_seconds&quot;: 0, &quot;silent_after&quot;: true},
   &quot;recommendation&quot;: {&quot;per_population_thresholds&quot;: true, &quot;populations&quot;: [&quot;str&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Comparing an agent to an average human.</strong> Compare like work.</li>
+<li><strong>Reading an early firing as coverage.</strong> It is one alert and then silence.</li>
+<li><strong>One agent baseline for every agent.</strong> Their tempos differ as much as their
+  jobs do.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   Alex                12 actions/hour -&gt; silent
+   workflow agent    1400 actions/hour -&gt; ALERT
 
-## Failure modes
+the agent crosses the threshold after 154 seconds
+and keeps going for the remaining 3446.
 
-- **Comparing an agent to an average human.** Compare like work.
-- **Reading an early firing as coverage.** It is one alert and then silence.
-- **One agent baseline for every agent.** Their tempos differ as much as their
-  jobs do.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+So the rule fires, about two and a half minutes into a sixty-minute run -
+by which point most of what the actor was going to do is done. If those
+were refunds, the alert arrives after the money has moved.
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/detection/agent-tempo-baseline/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/detection/agent-tempo-baseline/scripts/agent_tempo_baseline.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Measure the behavioural signals that separate an agent&#x27;s tempo from a human&#x27;s, and show what a rule tuned for human volume does to an agent.
-
-This is the executable half of the `agent-tempo-baseline` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-def burst_rule(actions_per_hour, threshold=60):
-    return actions_per_hour &gt; threshold
-
-RATE = {&quot;Alex&quot;: 12, &quot;workflow agent&quot;: 1400}
-for who, n in RATE.items():
-    print(f&quot;   {who:16s}{n:&gt;6} actions/hour -&gt; &quot;
-          f&quot;{&#x27;ALERT&#x27; if burst_rule(n) else &#x27;silent&#x27;}&quot;)
-
-seconds_to_trip = 60 * 3600 / RATE[&quot;workflow agent&quot;]
-print(f&quot;\nthe agent crosses the threshold after {seconds_to_trip:.0f} seconds&quot;)
-print(f&quot;and keeps going for the remaining {3600 - seconds_to_trip:.0f}.&quot;)
-print()
-print(&quot;So the rule fires, about two and a half minutes into a sixty-minute run -&quot;)
-print(&quot;by which point most of what the actor was going to do is done. If those&quot;)
-print(&quot;were refunds, the alert arrives after the money has moved.&quot;)
-print()
-print(&quot;Chapter 8 is about detections that fire on shape rather than volume.&quot;)
-print(&quot;Chapter 9 is about who can pull the stop lever without asking.&quot;)
-assert burst_rule(1400) and not burst_rule(12) and seconds_to_trip &lt; 200</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Chapter 8 is about detections that fire on shape rather than volume.
+Chapter 9 is about who can pull the stop lever without asking.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Five behavioural signals for Alex and for CyberTravels' Workflow Agent over the same hour, with ratios in the hundreds. The volume rule tuned for human tempo does fire — 154 seconds into a sixty-minute run, leaving 3,446 seconds unmonitored. Five of the six things an agentic SOC needs are not in any application log.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Pull one hour of activity for a service account in your own environment and compute those five signals. If you cannot, that is the first finding of chapter 8 and it is a telemetry problem rather than a detection one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · From alert queue to loop operator</a></strong></p>

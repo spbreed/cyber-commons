@@ -121,55 +121,52 @@ the binding was bought to prevent is back.</p>
 <p>Neither is a reason not to build this. Both are reasons to check your own
 deployment rather than assume the control is on because the feature exists.</p></div><div class="nbmd"><h2>4 · What the audit trail can now answer</h2>
 <p>Every hop is on the token, so the chain reconstructs from the token alone rather than by correlating four services' logs on timestamp. This is the thing A1.14 could not do.</p></div><div class="nbmd"><h2>5 · Verifying the chain, as a skill</h2>
-<p>The two findings above are what you get from <em>checking</em> a deployment rather than reading its design document, and CyberTravels has four agents and a payments API to check. The procedure walks every hop — user, agent, MCP server, tool, downstream — looks for token passthrough, and refuses to accept a matching <code>sub</code> as proof of delegation, because impersonation produces one too. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/identity-chain-verifier/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: identity-chain-verifier
+<p>The two findings above are what you get from <em>checking</em> a deployment rather than reading its design document, and CyberTravels has four agents and a payments API to check. The procedure walks every hop — user, agent, MCP server, tool, downstream — looks for token passthrough, and refuses to accept a matching <code>sub</code> as proof of delegation, because impersonation produces one too. This is the file in this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/identity-chain-verifier/SKILL.md"><code>skills/attestation/identity-chain-verifier/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: identity-chain-verifier
 description: &gt;-
   Verify workload identity and end-to-end on-behalf-of propagation across
   user, agent, MCP server, tool and downstream. Use to check for token
   passthrough, to distinguish delegation from impersonation, or when asked
   whether a downstream can attribute an action to the original user.
 allowed-tools: Bash, Read, Grep
----
-
-# Identity Chain Verifier
-
-**Controls:** Control 3 — workload identity and OBO attribution
-
-## Confidence: HIGH
-
-Delegation is cryptographically distinguishable from impersonation, and token
+</code></pre>
+<h1>Identity Chain Verifier</h1>
+<p><strong>Controls:</strong> Control 3 — workload identity and OBO attribution</p>
+<h2>Confidence: HIGH</h2>
+<p>Delegation is cryptographically distinguishable from impersonation, and token
 passthrough is visible in the audience claim. This control is genuinely
-verifiable.
-
-## Procedure
-
-1. **Establish workload identity.** Read the registration entry and its
+verifiable.</p>
+<h2>Procedure</h2>
+<ol>
+<li>
+<p><strong>Establish workload identity.</strong> Read the registration entry and its
    selectors. For an X.509 credential the identity is in the SAN URI; for a JWT
-   credential it is the subject. Confirm it matches the deployment manifest.
-
-2. **Walk every hop.** For user → agent → MCP server → tool → downstream,
-   record the principal, the audience, and the token type at each hop.
-
-3. **Check for token passthrough — the finding that matters most.** A server
+   credential it is the subject. Confirm it matches the deployment manifest.</p>
+</li>
+<li>
+<p><strong>Walk every hop.</strong> For user → agent → MCP server → tool → downstream,
+   record the principal, the audience, and the token type at each hop.</p>
+</li>
+<li>
+<p><strong>Check for token passthrough — the finding that matters most.</strong> A server
    must not forward the token it received to a downstream. Each hop must carry
-   a **distinct, audience-scoped** token. A repeated audience across two hops
-   is passthrough, and it is the mechanism behind the confused-deputy class.
-
-4. **Distinguish delegation from impersonation.** In token exchange, delegation
+   a <strong>distinct, audience-scoped</strong> token. A repeated audience across two hops
+   is passthrough, and it is the mechanism behind the confused-deputy class.</p>
+</li>
+<li>
+<p><strong>Distinguish delegation from impersonation.</strong> In token exchange, delegation
    is impossible without an actor token: the presence of an actor token, and a
    corresponding actor claim in the issued token, is what proves the chain is
-   delegation rather than the agent simply becoming the user.
-
-5. **Check credential hygiene.** Short lifetime, rotation, and — where mutual
+   delegation rather than the agent simply becoming the user.</p>
+</li>
+<li>
+<p><strong>Check credential hygiene.</strong> Short lifetime, rotation, and — where mutual
    TLS is possible — prefer certificate credentials over bearer tokens, which
-   are replayable. Flag every JWT-only hop.
-
-## Output contract
-
-```json
-{
+   are replayable. Flag every JWT-only hop.</p>
+</li>
+</ol>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,
   &quot;chain&quot;: [
     {&quot;hop&quot;: &quot;user|agent|mcp|tool|downstream&quot;, &quot;principal&quot;: &quot;str&quot;,
@@ -181,181 +178,43 @@ verifiable.
   &quot;jwt_only_hops&quot;: [&quot;str&quot;],
   &quot;verdict&quot;: &quot;PASS|PARTIAL|FAIL&quot;
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Accepting a matching subject as proof of delegation.</strong> Impersonation also
+  produces the right subject. The actor claim is the difference.</li>
+<li><strong>Not checking the audience.</strong> Passthrough is invisible without it.</li>
+<li><strong>Treating a long-lived JWT as equivalent to a rotated certificate.</strong></li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the access token the payments API will actually see:
 
-## Failure modes
-
-- **Accepting a matching subject as proof of delegation.** Impersonation also
-  produces the right subject. The actor claim is the difference.
-- **Not checking the audience.** Passthrough is invisible without it.
-- **Treating a long-lived JWT as equivalent to a rotated certificate.**
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/attestation/identity-chain-verifier/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/identity-chain-verifier/scripts/identity_chain_verifier.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Exchange a token so the subject stays the user and the actor names the agent, then check the certificate binding downstream.
-
-This is the executable half of the `identity-chain-verifier` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import base64, hashlib, hmac, json
-
-def b64u(raw: bytes) -&gt; str:
-    return base64.urlsafe_b64encode(raw).rstrip(b&quot;=&quot;).decode()
-
-# --- layer 1: the SVID -----------------------------------------------------
-# A real X.509-SVID is a certificate carrying the SPIFFE ID in its URI SAN.
-# Here it is the DER bytes standing in for one. The only property the protocol
-# needs is that the thumbprint is DERIVED from the certificate rather than
-# asserted alongside it.
-class SVID:
-    def __init__(self, spiffe_id, der):
-        self.spiffe_id, self.der = spiffe_id, der
-    @property
-    def thumbprint(self):                        # RFC 8705 x5t#S256
-        return b64u(hashlib.sha256(self.der).digest())
-
-AGENT = SVID(&quot;spiffe://cybertravels.com/ns/prod/sa/agent-alpha&quot;,
-             b&quot;cert-agent-alpha&quot;)
-
-# --- layer 2: RFC 8693 token exchange --------------------------------------
-CEILINGS = {                        # what each actor may EVER hold
- &quot;alice@cybertravels.com&quot;:
-    {&quot;bookings:read&quot;, &quot;bookings:write&quot;, &quot;payments:refund&quot;},
- &quot;spiffe://cybertravels.com/ns/prod/sa/orchestrator&quot;:
-    {&quot;bookings:read&quot;, &quot;bookings:write&quot;},
- &quot;spiffe://cybertravels.com/ns/prod/sa/agent-alpha&quot;:
-    {&quot;bookings:read&quot;},
+{
+  &quot;act&quot;: {
+    &quot;sub&quot;: &quot;spiffe://cybertravels.com/ns/prod/sa/agent-alpha&quot;
+  },
+  &quot;aud&quot;: &quot;https://payments.cybertravels.internal&quot;,
+  &quot;cnf&quot;: {
+    &quot;x5t#S256&quot;: &quot;jj1fnE1HHlRSE7neeRr5SAXlFSCngmHlLz_34axiTFU&quot;
+  },
+  &quot;scope&quot;: &quot;bookings:read&quot;,
+  &quot;sub&quot;: &quot;alice@cybertravels.com&quot;
 }
-SIGNING_KEY = b&quot;demo-key-not-a-secret&quot;
 
-class DelegationError(Exception): pass
+as a JWT: eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJhY3QiOiB7InN1YiI6ICJzcGlmZmU6Ly9je...
+the legitimate agent, on its own connection:
+   bearer check : True
+   bound  check : True
 
-def exchange(subject_token, actor, requested):
-    &quot;&quot;&quot;RFC 8693: subject_token is the user, actor_token is the agent&#x27;s SVID.&quot;&quot;&quot;
-    requested = set(requested)
-    presented = set(subject_token[&quot;scope&quot;].split())
-    if not requested &lt;= presented:                                 # rule 1
-        raise DelegationError(
-            f&quot;widening: {sorted(requested - presented)} was never presented&quot;)
-    ceiling = CEILINGS[actor.spiffe_id]
-    issued = requested &amp; ceiling                                   # rule 2
-    if issued != requested:
-        print(f&quot;   ceiling narrowed it: {actor.spiffe_id.rsplit(&#x27;/&#x27;, 1)[-1]} &quot;
-              f&quot;may never hold {sorted(requested - ceiling)}&quot;)
-    act = {&quot;sub&quot;: actor.spiffe_id}
-    if &quot;act&quot; in subject_token:                    # nest the previous hop
-        act[&quot;act&quot;] = subject_token[&quot;act&quot;]
-    return {
-      &quot;sub&quot;: subject_token[&quot;sub&quot;],                # STILL the human
-      &quot;aud&quot;: &quot;https://payments.cybertravels.internal&quot;,
-      &quot;scope&quot;: &quot; &quot;.join(sorted(issued)),
-      &quot;act&quot;: act,                                 # the agent, and the chain
-      &quot;cnf&quot;: {&quot;x5t#S256&quot;: actor.thumbprint},      # layer 3, stamped here
-    }
+the same token, replayed by a different pod:
+   bearer check : True   &lt;- accepted. a bearer token is a password.
+   bound  check : refused - cnf mismatch: issued to jj1fnE1HHlRS..., presented on a connection using LRovnEkv-Pz2...
 
-def sign(claims):
-    head = b64u(json.dumps({&quot;alg&quot;: &quot;HS256&quot;, &quot;typ&quot;: &quot;JWT&quot;}, sort_keys=True).encode())
-    body = b64u(json.dumps(claims, sort_keys=True).encode())
-    mac = hmac.new(SIGNING_KEY, f&quot;{head}.{body}&quot;.encode(), hashlib.sha256)
-    return f&quot;{head}.{body}.{b64u(mac.digest())}&quot;
-
-user = {&quot;sub&quot;: &quot;alice@cybertravels.com&quot;,
-        &quot;scope&quot;: &quot;bookings:read bookings:write payments:refund&quot;}
-tok = exchange(user, AGENT, {&quot;bookings:read&quot;})
-
-print(&quot;the access token the payments API will actually see:\n&quot;)
-print(json.dumps(tok, indent=2, sort_keys=True))
-print(f&quot;\nas a JWT: {sign(tok)[:78]}...&quot;)
-
-# The token above leaked. A debug log, a crash dump, an LLM transcript - it
-# does not matter which. Another pod picks it up and replays it.
-THIEF = SVID(&quot;spiffe://cybertravels.com/ns/prod/sa/scraper&quot;, b&quot;cert-scraper&quot;)
-
-def serve_bearer(token, _tls_peer):
-    &quot;&quot;&quot;How most services check a token today: is it signed, does it say yes?&quot;&quot;&quot;
-    return &quot;bookings:read&quot; in token[&quot;scope&quot;].split()
-
-def serve_bound(token, tls_peer):
-    &quot;&quot;&quot;RFC 8705: re-derive the thumbprint from THIS connection, first.&quot;&quot;&quot;
-    want = token.get(&quot;cnf&quot;, {}).get(&quot;x5t#S256&quot;)
-    if want is None:
-        raise PermissionError(&quot;token is not certificate-bound - refusing&quot;)
-    if not hmac.compare_digest(want, tls_peer.thumbprint):
-        raise PermissionError(
-            f&quot;cnf mismatch: issued to {want[:12]}..., presented on a &quot;
-            f&quot;connection using {tls_peer.thumbprint[:12]}...&quot;)
-    return &quot;bookings:read&quot; in token[&quot;scope&quot;].split()
-
-print(&quot;the legitimate agent, on its own connection:&quot;)
-print(f&quot;   bearer check : {serve_bearer(tok, AGENT)}&quot;)
-print(f&quot;   bound  check : {serve_bound(tok, AGENT)}&quot;)
-
-print(&quot;\nthe same token, replayed by a different pod:&quot;)
-print(f&quot;   bearer check : {serve_bearer(tok, THIEF)}   &lt;- accepted. a bearer &quot;
-      f&quot;token is a password.&quot;)
-try:
-    serve_bound(tok, THIEF)
-except PermissionError as e:
-    print(f&quot;   bound  check : refused - {e}&quot;)
-
-# And the widening attempt: alice really does hold payments:refund, but
-# agent-alpha may never hold it, no matter who asks.
-print(&quot;\nalice asks agent-alpha to issue a refund on her behalf:&quot;)
-subset_ok = {&quot;payments:refund&quot;} &lt;= set(user[&quot;scope&quot;].split())
-refund = exchange(user, AGENT, {&quot;payments:refund&quot;})
-print(f&quot;   subset-of-presented alone would allow it : {subset_ok}&quot;)
-print(f&quot;   scope actually issued                    : {refund[&#x27;scope&#x27;] or &#x27;none&#x27;}&quot;)
-
-assert serve_bearer(tok, THIEF) is True          # the hole
-try:
-    serve_bound(tok, THIEF)
-    raise AssertionError(&quot;the binding did not hold&quot;)
-except PermissionError:
-    pass
-assert subset_ok and refund[&quot;scope&quot;] == &quot;&quot;
-assert tok[&quot;act&quot;][&quot;sub&quot;].endswith(&quot;/sa/agent-alpha&quot;)
-
-ORCH = SVID(&quot;spiffe://cybertravels.com/ns/prod/sa/orchestrator&quot;,
-            b&quot;cert-orchestrator&quot;)
-
-hop1 = exchange(user, ORCH, {&quot;bookings:read&quot;, &quot;bookings:write&quot;})
-hop2 = exchange(hop1, AGENT, {&quot;bookings:read&quot;})
-
-def chain(claims):
-    &quot;&quot;&quot;sub is the human; act nests one entry per hop, most recent first.&quot;&quot;&quot;
-    hops, node = [], claims.get(&quot;act&quot;)
-    while node:
-        hops.append(node[&quot;sub&quot;].rsplit(&quot;/&quot;, 1)[-1])
-        node = node.get(&quot;act&quot;)
-    return &quot; -&gt; &quot;.join([claims[&quot;sub&quot;], *reversed(hops)])
-
-print(f&quot;delegation chain : {chain(hop2)}&quot;)
-print(f&quot;final scope      : {hop2[&#x27;scope&#x27;]}&quot;)
-print(f&quot;bound to         : {hop2[&#x27;cnf&#x27;][&#x27;x5t#S256&#x27;][:16]}...  &quot;
-      f&quot;(agent-alpha&#x27;s certificate, not the orchestrator&#x27;s)&quot;)
-assert chain(hop2) == (&quot;alice@cybertravels.com -&gt; orchestrator -&gt; agent-alpha&quot;)
-assert hop2[&quot;cnf&quot;][&quot;x5t#S256&quot;] == AGENT.thumbprint</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+alice asks agent-alpha to issue a refund on her behalf:
+   ceiling narrowed it: agent-alpha may never hold [&#x27;payments:refund&#x27;]
+   subset-of-presented alone would allow it : True
+   scope actually issued                    : none
+delegation chain : alice@cybertravels.com -&gt; orchestrator -&gt; agent-alpha
+final scope      : bookings:read
+bound to         : jj1fnE1HHlRSE7ne...  (agent-alpha&#x27;s certificate, not the orchestrator&#x27;s)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The verifier skill loads and reports its shape: the description an agent routes on, the tools it may use, and a procedure that walks every hop of the chain rather than checking the token it was handed. Read its failure modes against the Keycloak findings above — a matching <code>sub</code> is not delegation, and a chain with no audience check cannot see passthrough at all.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find your token exchange and check three things: does it set an <code>act</code> claim, does it check the actor's ceiling as well as the subset rule, and does anything downstream look at <code>cnf</code>? Most implementations do the subset rule only — it is the one the specification example shows.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.4.html">A2.4 · Just-in-time authority</a></strong></p>

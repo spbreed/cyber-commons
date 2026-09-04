@@ -62,129 +62,70 @@ to be trustworthy.</p></div><div class="nbmd"><blockquote>
 </blockquote>
 <h2>3 · The risk, realised</h2>
 <p>A deletion happened. Answer three questions from the log you have.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>CyberTravels logs every tool call. The skill puts the three questions an investigation opens with to one real record, and reports per question the field that would have answered it.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/audit-answerability-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: audit-answerability-check
+<p>CyberTravels logs every tool call. The skill puts the three questions an investigation opens with to one real record, and reports per question the field that would have answered it.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/threats/audit-answerability-check/SKILL.md"><code>skills/threats/audit-answerability-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: audit-answerability-check
 description: &gt;-
-  Put an investigation&#x27;s three questions to an existing agent log — which human,
+  Put an investigation's three questions to an existing agent log — which human,
   what motivated the action, which hop originated it — and record which of them
   the record cannot answer. Use when reviewing agent telemetry before an
   incident rather than during one.
 allowed-tools: Read, Grep, Glob
----
-
-# A complete log that answers nothing
-
-Agent logs are usually complete in the sense that every tool call is present.
+</code></pre>
+<h1>A complete log that answers nothing</h1>
+<p>Agent logs are usually complete in the sense that every tool call is present.
 They are useless in the sense that the three questions an investigation opens
-with have no fields behind them. The check is not &quot;are we logging&quot; — it is
-&quot;which question dies here&quot;.
-
-## When to use this
-
-Before an incident. Run it against a real log line from production, not against
-the logging design.
-
-## Procedure
-
-**1 — Take one real record.** A single tool-call row, with every field it
-actually carries. Not the schema — the row.
-
-**2 — Ask: which human?** Is there a field naming the principal on whose behalf
-this ran? An agent identity is not an answer; it is the thing that ran.
-
-**3 — Ask: what motivated it?** Which input caused this call — the user&#x27;s
+with have no fields behind them. The check is not "are we logging" — it is
+"which question dies here".</p>
+<h2>When to use this</h2>
+<p>Before an incident. Run it against a real log line from production, not against
+the logging design.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Take one real record.</strong> A single tool-call row, with every field it
+actually carries. Not the schema — the row.</p>
+<p><strong>2 — Ask: which human?</strong> Is there a field naming the principal on whose behalf
+this ran? An agent identity is not an answer; it is the thing that ran.</p>
+<p><strong>3 — Ask: what motivated it?</strong> Which input caused this call — the user's
 request, a retrieved document, a tool result, a memory record. Without it you
 cannot tell an instructed action from an injected one, and that is the
-distinction the whole investigation turns on.
-
-**4 — Ask: which hop originated it?** In any multi-agent or delegated flow,
+distinction the whole investigation turns on.</p>
+<p><strong>4 — Ask: which hop originated it?</strong> In any multi-agent or delegated flow,
 which agent started the chain. A chain reconstructed by correlating timestamps
-across four services is a chain you will not reconstruct at 2am.
-
-**5 — Report per question, with the field that would answer it.** Three rows.
+across four services is a chain you will not reconstruct at 2am.</p>
+<p><strong>5 — Report per question, with the field that would answer it.</strong> Three rows.
 Each says: answerable yes/no, and the field to add. Anything vaguer produces a
-logging project rather than a fix.
-
-## Output contract
-
-```json
-{
+logging project rather than a fix.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;record&quot;: {&quot;fields&quot;: [&quot;str&quot;]},
   &quot;questions&quot;: [{&quot;question&quot;: &quot;which human|what motivated|which hop&quot;, &quot;answerable&quot;: false, &quot;missing_field&quot;: &quot;str&quot;}],
   &quot;answerable_count&quot;: 0,
   &quot;reconstruction&quot;: {&quot;possible&quot;: false, &quot;requires_correlating&quot;: [&quot;str&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Checking the schema.</strong> Fields exist in schemas and are null in rows.</li>
+<li><strong>Accepting the agent identity as the principal.</strong> It answers "what", never
+  "who".</li>
+<li><strong>Recording "add more logging".</strong> Name the three fields or nothing changes.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the log you have:
+   09:14:02  agent-svc search      {&#x27;q&#x27;: &#x27;invoice 8812&#x27;}
+   09:14:07  agent-svc fetch_doc   {&#x27;id&#x27;: &#x27;wiki/473&#x27;}
+   09:14:11  agent-svc run_query   {&#x27;sql&#x27;: &#x27;DELETE FROM invoices WHERE id=8812&#x27;}
+   09:14:12  agent-svc send_email  {&#x27;to&#x27;: &#x27;ops@corp.example&#x27;}
 
-## Failure modes
+question                                    field needed        present?
+which user caused the deletion?             principal           NO
+what made the agent decide to delete?       motivating_input    NO
+which agent in the chain originated it?     delegation_chain    NO
 
-- **Checking the schema.** Fields exist in schemas and are null in rows.
-- **Accepting the agent identity as the principal.** It answers &quot;what&quot;, never
-  &quot;who&quot;.
-- **Recording &quot;add more logging&quot;.** Name the three fields or nothing changes.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+questions answerable from this log: 0/3
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+The log is not broken. It is complete for debugging and empty for
+investigation, and the difference is three fields nobody was asked for.
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/threats/audit-answerability-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/audit-answerability-check/scripts/audit_answerability_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Put the three questions an investigation asks to a complete-looking tool-call log.
-
-This is the executable half of the `audit-answerability-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-LOG = [
- {&quot;ts&quot;: &quot;09:14:02&quot;, &quot;actor&quot;: &quot;agent-svc&quot;, &quot;tool&quot;: &quot;search&quot;,     &quot;args&quot;: {&quot;q&quot;: &quot;invoice 8812&quot;}},
- {&quot;ts&quot;: &quot;09:14:07&quot;, &quot;actor&quot;: &quot;agent-svc&quot;, &quot;tool&quot;: &quot;fetch_doc&quot;,  &quot;args&quot;: {&quot;id&quot;: &quot;wiki/473&quot;}},
- {&quot;ts&quot;: &quot;09:14:11&quot;, &quot;actor&quot;: &quot;agent-svc&quot;, &quot;tool&quot;: &quot;run_query&quot;,  &quot;args&quot;: {&quot;sql&quot;: &quot;DELETE FROM invoices WHERE id=8812&quot;}},
- {&quot;ts&quot;: &quot;09:14:12&quot;, &quot;actor&quot;: &quot;agent-svc&quot;, &quot;tool&quot;: &quot;send_email&quot;, &quot;args&quot;: {&quot;to&quot;: &quot;ops@corp.example&quot;}},
-]
-
-print(&quot;the log you have:&quot;)
-for e in LOG:
-    print(f&quot;   {e[&#x27;ts&#x27;]}  {e[&#x27;actor&#x27;]:10s}{e[&#x27;tool&#x27;]:12s}{e[&#x27;args&#x27;]}&quot;)
-
-QUESTIONS = {
- &quot;which user caused the deletion?&quot;:            &quot;principal&quot;,
- &quot;what made the agent decide to delete?&quot;:      &quot;motivating_input&quot;,
- &quot;which agent in the chain originated it?&quot;:    &quot;delegation_chain&quot;,
-}
-print()
-print(f&quot;{&#x27;question&#x27;:44s}{&#x27;field needed&#x27;:20s}present?&quot;)
-answerable = 0
-for q, field in QUESTIONS.items():
-    present = any(field in e for e in LOG)
-    answerable += present
-    print(f&quot;{q:44s}{field:20s}{&#x27;yes&#x27; if present else &#x27;NO&#x27;}&quot;)
-
-print(f&quot;\nquestions answerable from this log: {answerable}/{len(QUESTIONS)}&quot;)
-print()
-print(&quot;The log is not broken. It is complete for debugging and empty for&quot;)
-print(&quot;investigation, and the difference is three fields nobody was asked for.&quot;)
-print()
-print(&quot;One more: agent-svc holds db:admin. The log store is a database.&quot;)
-print(&quot;A record the actor can edit is not evidence of anything.&quot;)
-assert answerable == 0</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+One more: agent-svc holds db:admin. The log store is a database.
+A record the actor can edit is not evidence of anything.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>A complete-looking tool-call log answers none of the three questions an investigation needs — which user, what motivated it, which hop originated it — because the principal, the motivating input and the delegation chain were never recorded.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take yesterday's agent logs and try to answer 'which user caused this action'. Time how long it takes. That number is your time-to-attribution during an incident, when it will be worse.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.15.html">A1.15 · Overwhelming the human in the loop</a></strong></p>

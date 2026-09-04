@@ -58,54 +58,39 @@ it becomes a click, and the risk register still counts it.</p></div><div class="
 </blockquote>
 <h2>3 · The risk, realised</h2>
 <p>Approval quality against volume, and the position an attacker chooses.</p></div><div class="nbmd"><h2>4 · The check, as a skill</h2>
-<p>Approval coverage at CyberTravels reads 100% at every volume, because coverage measures whether a human was asked. The skill models what reading does instead, and finds the volume at which the gate stops being one.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/approval-queue-saturation-model/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: approval-queue-saturation-model
+<p>Approval coverage at CyberTravels reads 100% at every volume, because coverage measures whether a human was asked. The skill models what reading does instead, and finds the volume at which the gate stops being one.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/threats/approval-queue-saturation-model/SKILL.md"><code>skills/threats/approval-queue-saturation-model/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: approval-queue-saturation-model
 description: &gt;-
   Model what happens to an approval gate as volume rises — coverage staying at
   100% while actual review collapses — and find the volume at which the control
   stops working. Use when reviewing human-in-the-loop design, approval fatigue,
   or a gate that has never been measured.
 allowed-tools: Read, Grep, Glob
----
-
-# Coverage stays at 100%; reading does not
-
-An approval gate reports the same number at every volume, because coverage
-measures whether a human was *asked*. What degrades is whether they read it,
+</code></pre>
+<h1>Coverage stays at 100%; reading does not</h1>
+<p>An approval gate reports the same number at every volume, because coverage
+measures whether a human was <em>asked</em>. What degrades is whether they read it,
 and an attacker who can choose position only has to generate enough requests to
-sit behind.
-
-## When to use this
-
-Any control whose enforcement is a person: approvals, exception reviews, alert
-triage sign-off, change advisory.
-
-## Procedure
-
-**1 — Measure current volume,** per reviewer per day. Not the design volume —
-the observed one, at peak rather than mean.
-
-**2 — Establish the reading budget.** How many items can one reviewer consider
+sit behind.</p>
+<h2>When to use this</h2>
+<p>Any control whose enforcement is a person: approvals, exception reviews, alert
+triage sign-off, change advisory.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Measure current volume,</strong> per reviewer per day. Not the design volume —
+the observed one, at peak rather than mean.</p>
+<p><strong>2 — Establish the reading budget.</strong> How many items can one reviewer consider
 properly in a shift? Ask them; the number is usually between 20 and 30 and it
-is always far below the queue.
-
-**3 — Model detection against position.** Place a malicious item at various
+is always far below the queue.</p>
+<p><strong>3 — Model detection against position.</strong> Place a malicious item at various
 depths and compute the probability it is actually read. The curve falls off a
-cliff at the reading budget, not gradually.
-
-**4 — Note who controls position.** If a requester can generate the items in
-front of theirs, depth is attacker-chosen and the average case is irrelevant.
-
-**5 — Report the two numbers that change the design.** Items per reviewer per
+cliff at the reading budget, not gradually.</p>
+<p><strong>4 — Note who controls position.</strong> If a requester can generate the items in
+front of theirs, depth is attacker-chosen and the average case is irrelevant.</p>
+<p><strong>5 — Report the two numbers that change the design.</strong> Items per reviewer per
 day, and the reading budget. The gap between them is the finding, and it points
-at routing by reversibility rather than at hiring.
-
-## Output contract
-
-```json
-{
+at routing by reversibility rather than at hiring.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;volume&quot;: {&quot;per_reviewer_per_day&quot;: 0, &quot;measured_at&quot;: &quot;peak|mean&quot;},
   &quot;reading_budget&quot;: 0,
   &quot;coverage_reported&quot;: 1.0,
@@ -113,71 +98,24 @@ at routing by reversibility rather than at hiring.
   &quot;position_attacker_controlled&quot;: true,
   &quot;gap&quot;: 0
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting coverage.</strong> It is 100% by construction and means nothing.</li>
+<li><strong>Using mean volume.</strong> The gate fails at peak.</li>
+<li><strong>Recommending more reviewers.</strong> The fix is fewer items, chosen by
+  reversibility.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code> daily volume  considered  stamped  caught  missed
+           10          10        0       1       0
+           25          25        0       1       0
+          100          25       75       0       1
+          500          25      475       0       1
 
-## Failure modes
+At every volume the audit trail shows a human approval on 100% of
+actions. The control reports full coverage in all four rows.
 
-- **Reporting coverage.** It is 100% by construction and means nothing.
-- **Using mean volume.** The gate fails at peak.
-- **Recommending more reviewers.** The fix is fewer items, chosen by
-  reversibility.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/threats/approval-queue-saturation-model/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/threats/approval-queue-saturation-model/scripts/approval_queue_saturation_model.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Model what approval coverage and actual review both do as the queue grows.
-
-This is the executable half of the `approval-queue-saturation-model` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-def review(queue, careful_capacity=25):
-    &quot;&quot;&quot;A reviewer considers the first `careful_capacity` properly. The rest are
-    approved to keep the queue moving - which is what actually happens.&quot;&quot;&quot;
-    considered = queue[:careful_capacity]
-    rubber_stamped = queue[careful_capacity:]
-    caught = [r for r in considered if r[&quot;malicious&quot;]]
-    missed = [r for r in rubber_stamped if r[&quot;malicious&quot;]]
-    return {&quot;considered&quot;: len(considered), &quot;rubber_stamped&quot;: len(rubber_stamped),
-            &quot;caught&quot;: len(caught), &quot;missed&quot;: len(missed)}
-
-def build_queue(volume, malicious_at):
-    return [{&quot;id&quot;: i, &quot;malicious&quot;: i == malicious_at} for i in range(volume)]
-
-print(f&quot;{&#x27;daily volume&#x27;:&gt;13}{&#x27;considered&#x27;:&gt;12}{&#x27;stamped&#x27;:&gt;9}{&#x27;caught&#x27;:&gt;8}{&#x27;missed&#x27;:&gt;8}&quot;)
-for volume in (10, 25, 100, 500):
-    q = build_queue(volume, malicious_at=volume - 1)     # attacker picks the position
-    r = review(q)
-    print(f&quot;{volume:&gt;13}{r[&#x27;considered&#x27;]:&gt;12}{r[&#x27;rubber_stamped&#x27;]:&gt;9}&quot;
-          f&quot;{r[&#x27;caught&#x27;]:&gt;8}{r[&#x27;missed&#x27;]:&gt;8}&quot;)
-
-print()
-print(&quot;At every volume the audit trail shows a human approval on 100% of&quot;)
-print(&quot;actions. The control reports full coverage in all four rows.&quot;)
-print()
-print(&quot;The attacker does not need to defeat the reviewer. They need to arrive&quot;)
-print(&quot;at position 173 of 200, and generating positions 1 to 172 is free.&quot;)
-r = review(build_queue(500, malicious_at=499))
-assert r[&quot;missed&quot;] == 1 and r[&quot;caught&quot;] == 0</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The attacker does not need to defeat the reviewer. They need to arrive
+at position 173 of 200, and generating positions 1 to 172 is free.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Count how many approval requests one of your agents generates per day and ask the person approving them how many they read in full. The gap between those two numbers is the control's real coverage.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.16.html">A1.16 · Misaligned and deceptive behaviour</a></strong></p>

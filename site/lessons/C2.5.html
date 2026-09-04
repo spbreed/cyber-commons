@@ -48,207 +48,103 @@ changed.</p>
 </ul>
 <p>The honest output of this lesson includes stating where no answer currently
 exists, because a risk assessment that invents one is worse than a gap.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The same connector is a review when a person loads it and a block when an agent holding production credentials does. The skill scores the ordinary signals first, then re-scores weighted by the authority the artefact will execute with.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/agent-supply-chain-assessment/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: agent-supply-chain-assessment
+<p>The same connector is a review when a person loads it and a block when an agent holding production credentials does. The skill scores the ordinary signals first, then re-scores weighted by the authority the artefact will execute with.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/agent-supply-chain-assessment/SKILL.md"><code>skills/research/agent-supply-chain-assessment/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-supply-chain-assessment
 description: &gt;-
   Score new packages and MCP connectors for typosquatting and ordinary
   supply-chain signals, then re-score them weighted by the authority the agent
   that loads them runs with. Use when an agent installs its own dependencies or
   connects to a server somebody added last week.
 allowed-tools: Read, Grep, Glob
----
-
-# The same package is a different risk inside an agent
-
-Supply-chain assessment for agents differs in one term: the artefact runs with
-the agent&#x27;s authority. A connector that trips three ordinary signals is a
+</code></pre>
+<h1>The same package is a different risk inside an agent</h1>
+<p>Supply-chain assessment for agents differs in one term: the artefact runs with
+the agent's authority. A connector that trips three ordinary signals is a
 review; the same connector loaded by an agent holding production credentials is
 a block. Weighting by authority is what turns the ordinary assessment into the
-right answer.
-
-## When to use this
-
-When an agent can install packages, when an MCP server is added, and at any
-review of what a coding agent is allowed to pull.
-
-## Procedure
-
-**1 — Establish the known-good set.** The packages this project actually uses.
+right answer.</p>
+<h2>When to use this</h2>
+<p>When an agent can install packages, when an MCP server is added, and at any
+review of what a coding agent is allowed to pull.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Establish the known-good set.</strong> The packages this project actually uses.
 Typosquat detection is a comparison against something; without the set it is a
-spell-check.
-
-**2 — Score edit distance against known-good names.** A distance of one or two
+spell-check.</p>
+<p><strong>2 — Score edit distance against known-good names.</strong> A distance of one or two
 from a popular package, with a recent first-publication date, is the classic
-shape. Report the package it imitates, not just the score.
-
-**3 — Apply the ordinary signals.** Age, maintainer count, download history,
-whether it was published after the agent asked for it, install scripts.
-
-**4 — Re-score weighted by agent authority.** What credentials are in the
+shape. Report the package it imitates, not just the score.</p>
+<p><strong>3 — Apply the ordinary signals.</strong> Age, maintainer count, download history,
+whether it was published after the agent asked for it, install scripts.</p>
+<p><strong>4 — Re-score weighted by agent authority.</strong> What credentials are in the
 environment the artefact will execute in, and what the agent can reach. This is
-the step that moves a review to a block and it needs no new information.
-
-**5 — Report the two verdicts side by side.** Unweighted and authority-weighted.
+the step that moves a review to a block and it needs no new information.</p>
+<p><strong>5 — Report the two verdicts side by side.</strong> Unweighted and authority-weighted.
 The difference is the argument for gating what agents may install, and it is
-easier to make with both numbers present.
-
-## Output contract
-
-```json
-{
+easier to make with both numbers present.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;known_good&quot;: [&quot;str&quot;],
   &quot;artefacts&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;package|mcp&quot;, &quot;distance&quot;: 0, &quot;imitates&quot;: &quot;str|null&quot;,
                  &quot;signals&quot;: [&quot;str&quot;], &quot;verdict&quot;: &quot;allow|review|block&quot;}],
   &quot;authority&quot;: {&quot;credentials_present&quot;: [&quot;str&quot;], &quot;reachable&quot;: [&quot;str&quot;]},
   &quot;weighted&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;verdict&quot;: &quot;allow|review|block&quot;, &quot;moved&quot;: true}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Typosquat detection with no known-good set.</strong> Everything is close to
+  something.</li>
+<li><strong>Assessing the package and not the environment.</strong> The authority is the term
+  that differs.</li>
+<li><strong>Treating an MCP connector as configuration.</strong> It is code that runs with the
+  agent.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>requests==2.31.0        allow
+requsts==2.31.0         block
+      · unsigned — no attestation to source
+      · published 3d ago — no soak time
+      · only 12 downloads
+      · distance 1 from popular package &#x27;requests&#x27;
+colourama==0.4.6        block
+      · unsigned — no attestation to source
+      · published 9d ago — no soak time
+      · only 40 downloads
+      · distance 1 from popular package &#x27;colorama&#x27;
+langchain==0.2.1        review
+      · unsigned — no attestation to source
+=== model weights ===
+   signing              Sigstore/in-toto possible, rarely used
+   popularity signal    NONE — &#x27;popular checkpoint&#x27; is not provenance
+   lineage              a fine-tune of a fine-tune; base model often unrecorded
+   runs with            no authority of its own — but shapes every decision
+   honest verdict       assess the PUBLISHER, because you cannot assess the artefact
 
-## Failure modes
+=== prompt / tool packages (MCP, skills) ===
+   signing              NO convention exists
+   popularity signal    star counts, which are trivially gamed
+   lineage              none recorded
+   runs with            YOUR AGENT&#x27;S AUTHORITY — this is the dangerous one
+   honest verdict       treat as executable code, because it is
 
-- **Typosquat detection with no known-good set.** Everything is close to
-  something.
-- **Assessing the package and not the environment.** The authority is the term
-  that differs.
-- **Treating an MCP connector as configuration.** It is code that runs with the
-  agent.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+mcp-jira-connector: block
+   · unsigned — no attestation to source
+   · published 6d ago — no soak time
+   · only 180 downloads
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+Good news: the existing process EXTENDS to it rather than needing
+invention. Bad news: nothing in that process accounts for the fact that
+this package will run with your agent&#x27;s tools.
 
-from cyber_commons_skill_runtime import run_skill
+authority-weighted verdict: block
+   · unsigned — no attestation to source
+   · published 6d ago — no soak time
+   · only 180 downloads
+   · runs with agent authority (blast 43)
+python package    assessed on 4/4 signals;  not available for this artefact class
+model weights     assessed on 1/4 signals; signature, downloads, lineage not available for this artefact class
+MCP tool pack     assessed on 1/4 signals; signature, downloads, lineage not available for this artefact class
 
-# Split skills/research/agent-supply-chain-assessment/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/agent-supply-chain-assessment/scripts/agent_supply_chain_assessment.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Score new packages and MCP connectors for typosquatting and then re-score them weighted by the authority the agent runs with.
-
-This is the executable half of the `agent-supply-chain-assessment` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Package:
-    name: str; version: str; signed: bool = False
-    downloads: int = 0; age_days: int = 999
-
-KNOWN_GOOD = {&quot;requests&quot;, &quot;urllib3&quot;, &quot;numpy&quot;, &quot;pandas&quot;, &quot;cryptography&quot;,
-              &quot;pytest&quot;, &quot;flask&quot;, &quot;colorama&quot;, &quot;langchain&quot;}
-
-def levenshtein(a, b):
-    if len(a) &lt; len(b): a, b = b, a
-    prev = list(range(len(b) + 1))
-    for i, ca in enumerate(a, 1):
-        cur = [i]
-        for j, cb in enumerate(b, 1):
-            cur.append(min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + (ca != cb)))
-        prev = cur
-    return prev[-1]
-
-def typosquat(pkg, known=KNOWN_GOOD):
-    if pkg.name in known:
-        return None
-    near = sorted((levenshtein(pkg.name, k), k) for k in known)[:1]
-    if near and near[0][0] &lt;= 2:
-        return f&quot;distance {near[0][0]} from popular package {near[0][1]!r}&quot;
-    return None
-
-def assess(pkg):
-    flags = []
-    if not pkg.signed:        flags.append(&quot;unsigned — no attestation to source&quot;)
-    if pkg.age_days &lt; 30:     flags.append(f&quot;published {pkg.age_days}d ago — no soak time&quot;)
-    if pkg.downloads &lt; 1000:  flags.append(f&quot;only {pkg.downloads} downloads&quot;)
-    if (t := typosquat(pkg)): flags.append(t)
-    verdict = &quot;block&quot; if len(flags) &gt;= 3 else &quot;review&quot; if flags else &quot;allow&quot;
-    return verdict, flags
-
-for p in [Package(&quot;requests&quot;, &quot;2.31.0&quot;, True, 900_000, 400),
-          Package(&quot;requsts&quot;, &quot;2.31.0&quot;, False, 12, 3),
-          Package(&quot;colourama&quot;, &quot;0.4.6&quot;, False, 40, 9),
-          Package(&quot;langchain&quot;, &quot;0.2.1&quot;, False, 400_000, 200)]:
-    v, flags = assess(p)
-    print(f&quot;{p.name+&#x27;==&#x27;+p.version:24s}{v}&quot;)
-    for f in flags: print(f&quot;      · {f}&quot;)
-
-NEW_ARTEFACTS = {
- &quot;model weights&quot;: {
-   &quot;signing&quot;: &quot;Sigstore/in-toto possible, rarely used&quot;,
-   &quot;popularity signal&quot;: &quot;NONE — &#x27;popular checkpoint&#x27; is not provenance&quot;,
-   &quot;lineage&quot;: &quot;a fine-tune of a fine-tune; base model often unrecorded&quot;,
-   &quot;runs with&quot;: &quot;no authority of its own — but shapes every decision&quot;,
-   &quot;honest verdict&quot;: &quot;assess the PUBLISHER, because you cannot assess the artefact&quot;},
- &quot;prompt / tool packages (MCP, skills)&quot;: {
-   &quot;signing&quot;: &quot;NO convention exists&quot;,
-   &quot;popularity signal&quot;: &quot;star counts, which are trivially gamed&quot;,
-   &quot;lineage&quot;: &quot;none recorded&quot;,
-   &quot;runs with&quot;: &quot;YOUR AGENT&#x27;S AUTHORITY — this is the dangerous one&quot;,
-   &quot;honest verdict&quot;: &quot;treat as executable code, because it is&quot;},
-}
-for artefact, props in NEW_ARTEFACTS.items():
-    print(f&quot;=== {artefact} ===&quot;)
-    for k, v in props.items():
-        print(f&quot;   {k:20s} {v}&quot;)
-    print()
-
-# An MCP tool package assessed with the ordinary signals — they still fire.
-mcp_pkg = Package(&quot;mcp-jira-connector&quot;, &quot;0.0.3&quot;, signed=False,
-                  downloads=180, age_days=6)
-v, flags = assess(mcp_pkg)
-print(f&quot;{mcp_pkg.name}: {v}&quot;)
-for f in flags: print(f&quot;   · {f}&quot;)
-print(&quot;\nGood news: the existing process EXTENDS to it rather than needing&quot;)
-print(&quot;invention. Bad news: nothing in that process accounts for the fact that&quot;)
-print(&quot;this package will run with your agent&#x27;s tools.&quot;)
-
-def authority_weighted(pkg, runs_with_agent_authority, agent_blast):
-    v, flags = assess(pkg)
-    if runs_with_agent_authority and v != &quot;allow&quot;:
-        return &quot;block&quot;, flags + [f&quot;runs with agent authority (blast {agent_blast})&quot;]
-    return v, flags
-
-v2, flags2 = authority_weighted(mcp_pkg, True, agent_blast=43)
-print(f&quot;\nauthority-weighted verdict: {v2}&quot;)
-for f in flags2: print(f&quot;   · {f}&quot;)
-assert v2 == &quot;block&quot;
-
-def risk_assessment(artefact, signals_available):
-    known = [s for s, ok in signals_available.items() if ok]
-    unknown = [s for s, ok in signals_available.items() if not ok]
-    return {
-      &quot;artefact&quot;: artefact,
-      &quot;assessed_on&quot;: known,
-      &quot;cannot_assess&quot;: unknown,
-      &quot;statement&quot;: (f&quot;assessed on {len(known)}/{len(signals_available)} signals; &quot;
-                    f&quot;{&#x27;, &#x27;.join(unknown)} not available for this artefact class&quot;),
-    }
-
-for artefact, sig in (
-  (&quot;python package&quot;, {&quot;signature&quot;: True, &quot;downloads&quot;: True, &quot;age&quot;: True, &quot;lineage&quot;: True}),
-  (&quot;model weights&quot;,  {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;age&quot;: True, &quot;lineage&quot;: False}),
-  (&quot;MCP tool pack&quot;,  {&quot;signature&quot;: False, &quot;downloads&quot;: False, &quot;age&quot;: True, &quot;lineage&quot;: False}),
-):
-    r = risk_assessment(artefact, sig)
-    print(f&quot;{r[&#x27;artefact&#x27;]:18s}{r[&#x27;statement&#x27;]}&quot;)
-print(&quot;\nThat last sentence is the deliverable. A risk rating that hides which&quot;)
-print(&quot;signals were unavailable is a number someone will later rely on.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+That last sentence is the deliverable. A risk rating that hides which
+signals were unavailable is a number someone will later rely on.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The two legitimate packages are allowed or reviewed; both typosquats are blocked with the distance and the package they imitate. The MCP connector trips three ordinary signals and is escalated to block once agent authority is weighted in. The final assessments state explicitly which signals are unavailable for model weights and tool packages.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add one question to your third-party assessment: "does this artefact execute with our agent's authority?" Anything answering yes should not be assessed on the same scale as a library.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.6.html">C2.6 · Benchmarks, reproducibility and the research harness</a></strong></p>

@@ -8,16 +8,21 @@ Inputs (the same single source of truth the site builds from):
     curriculum/labs.json          the goal and expected-output line
     scripts/exercises/            the per-session exercise body (code + prose)
 
-**One shared library, everything else carried.** A notebook carries the skill
-it teaches and that skill's own script, verbatim. What it does *not* carry is
-the runtime that parses a SKILL.md and calls a model: that lives once in
-`skills/_runtime/` and is loaded — on Kaggle from the kernel attached as a
-source, locally from the repository. Carrying it in each notebook cost 9,730
-lines of identical code — measured, not estimated: 34,112 lines of notebook code
-before, 24,382 after — and it could only be fixed by rebuilding all of them.
+**The code lives in the repository; the notebook runs it.** A lesson carries
+its skill as prose — the `SKILL.md`, rendered — and one cell that locates the
+skills tree and runs that skill's own script out of it. Nothing else. The
+procedure, the runtime and the script are all files in `skills/`, so a fix is
+one edit rather than 117 rebuilt notebooks.
 
-Still standard library only, and still runs on a Kaggle kernel with the
-internet switched off.
+The tree reaches Kaggle as an **attached dataset**, mounted read-only at
+`/kaggle/input/…/cyber-commons-skills/`. Not a clone: DNS does not resolve
+inside a kernel on an account without a verified phone number, which was probed
+rather than assumed —
+
+    fatal: unable to access '…': Could not resolve host: github.com
+
+`scripts/kaggle_dataset.py` publishes it. Still standard library only, and
+still runs with the internet switched off.
 
 **One concept, in one order.** Each lesson is built the same way and only that
 way — see LESSON_DESIGN.md for the authoring contract:
@@ -66,92 +71,52 @@ from exercises.skills import SKILL_RUNTIME  # noqa: E402
 SKILLS = ROOT / "skills"
 
 
-def skill_file(ref: str) -> str:
-    """The SKILL.md itself, verbatim, as the first of the two skill cells.
+def skill_markdown(ref: str) -> str:
+    """The SKILL.md itself, as markdown — not as a Python string.
 
-    The file in `skills/` is the single source of truth. Embedding it at build
-    time keeps the notebook self-contained *and* makes drift impossible: change
-    the skill and the notebook is stale until it is rebuilt, which CI checks.
-
-    This cell defines and prints nothing. It is the skill, on top, so a reader
-    meets the procedure before meeting the machinery that runs it — the order
-    an agent meets them in too.
+    It used to be embedded as `SKILL_MD = r\"\"\"…\"\"\"`, which put the whole
+    procedure inside a code cell and made a lesson page look like source. It is
+    prose; it renders as prose. The frontmatter stays in a fenced block because
+    it is the part an agent parses.
     """
     path = SKILLS / ref / "SKILL.md"
     if not path.is_file():
         raise FileNotFoundError(f"no such skill: skills/{ref}/SKILL.md")
     text = path.read_text()
-    # r"""…""" keeps the markdown readable in the notebook, but only if the
-    # content cannot terminate the literal or escape it.
-    if '"""' in text:
-        raise ValueError(f"skills/{ref}/SKILL.md contains a triple quote")
-    if text.rstrip().endswith("\\"):
-        raise ValueError(f"skills/{ref}/SKILL.md ends with a backslash")
-    return (f'# skills/{ref}/SKILL.md — embedded verbatim from the repository.\n'
-            f'# This is the file itself, not a paraphrase of it.\n'
-            f'SKILL_MD = r"""{text}"""')
+    _, front, body = text.split("---", 2)
+    return (f"### The skill — [`skills/{ref}/SKILL.md`]({REPO}/blob/{BRANCH}/skills/{ref}/SKILL.md)\n\n"
+            f"```yaml\n{front.strip()}\n```\n\n{body.strip()}")
 
 
-# The shared runtime, found rather than carried. On Kaggle an attached kernel
-# is mounted under /kaggle/input/notebooks/<user>/<slug>/__script__.py — it is
-# not on sys.path and it is not named after the kernel, which is why this is a
-# loader rather than an import. Locally it is the file in the repository.
-#
-# Eight lines per notebook instead of two hundred, and one place to fix.
-RUNTIME_BOOTSTRAP = """import glob, os, shutil, sys
+# One cell, and it carries no procedure of its own: it locates the repository
+# and runs the skill's script out of it. On Kaggle the repository arrives as an
+# attached dataset — `git clone` is not available, DNS does not resolve inside a
+# kernel on a free account — and locally it is the checkout.
+RUN_SKILL = '''import glob, os, subprocess, sys
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob("/kaggle/input/**/cyber-commons-skill-runtime/__script__.py", recursive=True)
-if _k:
-    shutil.copy(_k[0], "cyber_commons_skill_runtime.py")
-sys.path[:0] = [".", "skills/_runtime", "../skills/_runtime", "../../skills/_runtime"]
+# The skills tree: the attached dataset on Kaggle, the checkout locally.
+_ROOTS = sorted(glob.glob("/kaggle/input/**/cyber-commons-skills", recursive=True)) + [".", "..", "../.."]
+_root = next((r for r in _ROOTS if os.path.isfile(os.path.join(r, SCRIPT))), None)
+if _root is None:
+    raise SystemExit("skills tree not found. On Kaggle add the dataset "
+                     "cybercommons/cyber-commons-skills; locally run from a checkout.")
 
-from cyber_commons_skill_runtime import run_skill"""
-
-
-def skill_exec(ref: str) -> str:
-    """The Python that executes the skill above: load the runtime, then parse.
-
-    Second of the two cells, and deliberately after the file rather than before
-    it.
-
-    The parser, the router, the contract checker and the model adapter live in
-    `skills/_runtime/` and are loaded from there. Carrying a copy in each of 117
-    notebooks cost 9,730 lines of identical code, and could only be fixed by
-    rebuilding all of them.
-    """
-    return (f"# Execute the skill above, using the shared runtime rather than a copy.\n"
-            f"{RUNTIME_BOOTSTRAP}\n\n"
-            f"# Split skills/{ref}/SKILL.md into the two halves an agent uses —\n"
-            f"# the frontmatter it routes on, and the body it follows.\n"
-            f"meta, body = run_skill(SKILL_MD)")
+_out = subprocess.run([sys.executable, os.path.join(_root, SCRIPT)],
+                      capture_output=True, text=True,
+                      env=dict(os.environ,
+                               PYTHONPATH=os.path.join(_root, "skills/_runtime"),
+                               PYTHONHASHSEED="0"))
+print(_out.stdout, end="")
+if _out.returncode:
+    raise SystemExit(_out.stderr.strip()[-2000:])'''
 
 
-def skill_script(ref: str) -> str:
-    """Embed a skill's own script verbatim, so the notebook runs the real file.
-
-    A lesson that reimplements what the skill does teaches the reimplementation.
-    Embedding the script keeps the notebook self-contained and makes drift
-    impossible: edit the skill and the notebook is stale until rebuilt.
-    """
-    path = SKILLS / ref
-    if not path.is_file():
-        raise FileNotFoundError(f"no such skill script: skills/{ref}")
-    src = path.read_text()
-    # The notebook executes it as a module body rather than a subprocess, so
-    # strip the CLI entry point and keep the callables.
-    src = src.split('if __name__ == "__main__":')[0].rstrip()
-    # `from __future__` is only legal at the top of a file, and this lands in
-    # the middle of a notebook. Drop it — every construct these scripts use is
-    # available without it on the Python the notebooks target.
-    src = "\n".join(ln for ln in src.splitlines()
-                    if not ln.startswith("from __future__ import"))
-    return (f"# skills/{ref} — embedded verbatim from the repository.\n"
-            f"# This is the skill's own script, not a paraphrase of it.\n"
-            f"{src}")
+def run_skill_cell(script: str) -> str:
+    """The only code cell a lesson has: run this skill's script from the repo."""
+    return (f"# The code is not in this notebook. It is the file in the repository:\n"
+            f"#   {REPO}/blob/{BRANCH}/skills/{script}\n"
+            f'SCRIPT = "skills/{script}"\n\n'
+            f"{RUN_SKILL}")
 
 
 DIRECTION = {"defend": "AI for Security", "secure": "Security of AI",
@@ -302,12 +267,11 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     counter = [2]
     for kind, source in steps:
         if kind == "skill":
-            # Two cells, in this order: the SKILL.md itself, then the Python
-            # that executes it.
-            cells.append(code(skill_file(source)))
-            cells.append(code(skill_exec(source)))
+            # The procedure, as prose. No Python.
+            cells.append(md(skill_markdown(source)))
         elif kind == "skill_script":
-            cells.append(code(skill_script(source)))
+            # And one cell that runs the real file out of the repository.
+            cells.append(code(run_skill_cell(source)))
         elif kind == "model":
             # One adapter, then the same task run for real. The lesson keeps its
             # deterministic replay as the offline default, so CI and the offline

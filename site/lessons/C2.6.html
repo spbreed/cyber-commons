@@ -62,243 +62,101 @@ the benchmark's own data:</p>
 </ol></div><div class="nbmd"><h2>3 · Where it breaks — a suite that only ever grows easier</h2>
 <p>The metric that makes a research programme look productive while measuring nothing: add cases the current build already passes, and the aggregate ASR falls every quarter.</p></div><div class="nbmd"><h2>4 · The same discipline, pointed at somebody else's benchmark</h2>
 <p>Dilution is one way a number lies. Three more are structural, and all three are checkable from the benchmark's own key: class balance, whether the key was held out, and how answers are matched to files.</p></div><div class="nbmd"><h2>5 · The procedure, as a skill</h2>
-<p>A control should move the surface it addresses and leave the others alone. The skill checks both halves with intervals, then dilutes the suite with cases everything blocks and watches the aggregate improve while nothing changed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/eval-suite-health-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: eval-suite-health-check
+<p>A control should move the surface it addresses and leave the others alone. The skill checks both halves with intervals, then dilutes the suite with cases everything blocks and watches the aggregate improve while nothing changed.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/eval-suite-health-check/SKILL.md"><code>skills/research/eval-suite-health-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: eval-suite-health-check
 description: &gt;-
   Run an evaluation suite with confidence intervals, confirm a control moves one
   surface and not the others, and detect the suite being diluted by cases
   everything blocks. Use when an eval score improves and you need to know
   whether the system did.
 allowed-tools: Read, Grep, Glob
----
-
-# A suite that gets easier reports that you got better
-
-An evaluation suite is an instrument, and instruments drift. Two properties keep
+</code></pre>
+<h1>A suite that gets easier reports that you got better</h1>
+<p>An evaluation suite is an instrument, and instruments drift. Two properties keep
 it honest: a control should move the surface it addresses and leave the others
 alone, and the aggregate should not improve because somebody added cases
-everything already blocks.
-
-## When to use this
-
-Whenever an eval number moves, before adding cases to a suite, and at any
-regular review of a safety benchmark you rely on.
-
-## Procedure
-
-**1 — Run the baseline with intervals.** Per case and per surface. A point
-estimate cannot support the comparison you are about to make.
-
-**2 — Apply one control and re-run.** The prediction is specific: the surface it
+everything already blocks.</p>
+<h2>When to use this</h2>
+<p>Whenever an eval number moves, before adding cases to a suite, and at any
+regular review of a safety benchmark you rely on.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Run the baseline with intervals.</strong> Per case and per surface. A point
+estimate cannot support the comparison you are about to make.</p>
+<p><strong>2 — Apply one control and re-run.</strong> The prediction is specific: the surface it
 addresses drops, with non-overlapping intervals, and the other surfaces do not
 move. Both halves are the test — a control that moves everything is measuring
-something other than the control.
-
-**3 — Report per surface, never only in aggregate.** The aggregate hides both a
-control that works and a control that broke something else.
-
-**4 — Dilute the suite deliberately.** Add cases the target trivially blocks and
+something other than the control.</p>
+<p><strong>3 — Report per surface, never only in aggregate.</strong> The aggregate hides both a
+control that works and a control that broke something else.</p>
+<p><strong>4 — Dilute the suite deliberately.</strong> Add cases the target trivially blocks and
 re-compute. Watch the aggregate improve while nothing about the system changed.
-That demonstration is what justifies the next step.
-
-**5 — Add a suite-health check.** Difficulty distribution, share of cases no
+That demonstration is what justifies the next step.</p>
+<p><strong>5 — Add a suite-health check.</strong> Difficulty distribution, share of cases no
 target has ever failed, and the date each case was added. A suite with a growing
-share of trivial cases is reporting improvement it has not earned.
-
-## Output contract
-
-```json
-{
+share of trivial cases is reporting improvement it has not earned.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;baseline&quot;: [{&quot;case&quot;: &quot;str&quot;, &quot;surface&quot;: &quot;str&quot;, &quot;rate&quot;: 0.0, &quot;interval&quot;: [0.0, 0.0]}],
   &quot;with_control&quot;: [{&quot;surface&quot;: &quot;str&quot;, &quot;rate&quot;: 0.0, &quot;interval&quot;: [0.0, 0.0], &quot;moved&quot;: true}],
   &quot;expected_unchanged&quot;: [&quot;str&quot;],
   &quot;dilution&quot;: {&quot;added_trivial&quot;: 0, &quot;aggregate_before&quot;: 0.0, &quot;aggregate_after&quot;: 0.0},
   &quot;health&quot;: {&quot;trivial_share&quot;: 0.0, &quot;never_failed&quot;: 0, &quot;oldest_case&quot;: &quot;str&quot;}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Aggregate-only reporting.</strong> It hides the two things you are looking for.</li>
+<li><strong>A control that moves every surface.</strong> Investigate before celebrating.</li>
+<li><strong>Adding cases without recording difficulty.</strong> The suite drifts easier and the
+  score drifts up.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>case    surface         rate              ci95
+------------------------------------------------
+INJ-01  injection      0.055    (0.033, 0.077)
+INJ-02  injection      0.355    (0.308, 0.402)
+INJ-03  injection      0.657    (0.611, 0.704)
+INJ-04  injection      0.725    (0.681, 0.769)
+IDN-01  identity       0.000        (0.0, 0.0)
+IDN-02  identity       0.953    (0.932, 0.973)
+CNT-01  containment    0.000        (0.0, 0.0)
+CNT-02  containment    0.077    (0.051, 0.104)
+case       before    after    delta  demonstrated?
+--------------------------------------------------------
+INJ-01      0.055    0.020   -0.035  no — intervals overlap
+INJ-02      0.355    0.020   -0.335  yes
+INJ-03      0.657    0.013   -0.644  yes
+INJ-04      0.725    0.020   -0.705  yes
+IDN-01      0.000    0.000   +0.000  no — intervals overlap
+IDN-02      0.953    0.953   +0.000  no — intervals overlap
+CNT-01      0.000    0.000   +0.000  no — intervals overlap
+CNT-02      0.077    0.077   +0.000  no — intervals overlap
 
-## Failure modes
+before by surface: {&#x27;injection&#x27;: 0.448, &#x27;identity&#x27;: 0.476, &#x27;containment&#x27;: 0.038}
+after  by surface: {&#x27;injection&#x27;: 0.018, &#x27;identity&#x27;: 0.476, &#x27;containment&#x27;: 0.038}
+original suite             cases=  8  aggregate ASR 0.353
+suite + 12 easy cases      cases= 20  aggregate ASR 0.141
 
-- **Aggregate-only reporting.** It hides the two things you are looking for.
-- **A control that moves every surface.** Investigate before celebrating.
-- **Adding cases without recording difficulty.** The suite drifts easier and the
-  score drifts up.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+The build did not change. The number improved by 60%.
+Report per-surface and per-case, and state when cases were added.
+original    {&#x27;cases&#x27;: 8, &#x27;still_landing&#x27;: 6, &#x27;trivially_blocked&#x27;: 2, &#x27;dilution_ratio&#x27;: 0.25, &#x27;healthy&#x27;: True}
+diluted     {&#x27;cases&#x27;: 20, &#x27;still_landing&#x27;: 6, &#x27;trivially_blocked&#x27;: 14, &#x27;dilution_ratio&#x27;: 0.7, &#x27;healthy&#x27;: False}
+check 1 - class balance sets the floor a result must clear
+   skewed   {&#x27;CWE-89&#x27;: 35, &#x27;CWE-78&#x27;: 5}
+            always answer CWE-89: 0.875  &lt;- the floor
+   balanced {&#x27;CWE-78&#x27;: 10, &#x27;CWE-22&#x27;: 10, &#x27;CWE-798&#x27;: 10, &#x27;CWE-89&#x27;: 10}
+            always answer CWE-78: 0.250  &lt;- the floor
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+check 2 - a leaked key is a training metric, not a result
+   key held out    0.650   lift over floor +0.400
+   key leaked      1.000   lift over floor +0.750
 
-from cyber_commons_skill_runtime import run_skill
+check 3 - matching answers by bare filename invents accuracy
+   answers naming the wrong directory, path_key : 0.250
+   the same answers, basename only              : 1.000
+   distinct basenames in a colliding corpus     : 8 of 40
 
-# Split skills/research/eval-suite-health-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/eval-suite-health-check/scripts/eval_suite_health_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run a suite with intervals, show a control moving one surface and not the others, and detect the suite being diluted by easy cases.
-
-This is the executable half of the `eval-suite-health-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import random
-from dataclasses import dataclass
-
-@dataclass(frozen=True)
-class Case:
-    cid: str; surface: str; payload: str; landing_rate: float
-
-SUITE = [
- Case(&quot;INJ-01&quot;, &quot;injection&quot;, &quot;direct override&quot;, 0.05),
- Case(&quot;INJ-02&quot;, &quot;injection&quot;, &quot;context reframe&quot;, 0.35),
- Case(&quot;INJ-03&quot;, &quot;injection&quot;, &quot;task nesting&quot;,    0.62),
- Case(&quot;INJ-04&quot;, &quot;injection&quot;, &quot;authority claim&quot;, 0.70),
- Case(&quot;IDN-01&quot;, &quot;identity&quot;,  &quot;scope widening&quot;,  0.00),
- Case(&quot;IDN-02&quot;, &quot;identity&quot;,  &quot;impersonation&quot;,   0.95),
- Case(&quot;CNT-01&quot;, &quot;containment&quot;, &quot;metadata service&quot;, 0.00),
- Case(&quot;CNT-02&quot;, &quot;containment&quot;, &quot;path traversal&quot;,   0.10),
-]
-
-def trial(p, n, seed):
-    rng = random.Random(seed)
-    hits = sum(rng.random() &lt; p for _ in range(n))
-    rate = hits / n
-    half = 1.96 * ((rate * (1 - rate) / n) ** 0.5)
-    return {&quot;rate&quot;: round(rate, 3),
-            &quot;ci95&quot;: (round(max(rate-half, 0), 3), round(min(rate+half, 1), 3))}
-
-def run_suite(target, suite=SUITE, n=400, seed=17):
-    return {c.cid: {**trial(target(c), n, seed + i), &quot;surface&quot;: c.surface}
-            for i, c in enumerate(suite)}
-
-def target_baseline(case):        return case.landing_rate
-def target_with_provenance(case):
-    return 0.02 if case.surface == &quot;injection&quot; else case.landing_rate
-
-base = run_suite(target_baseline)
-print(f&quot;{&#x27;case&#x27;:8s}{&#x27;surface&#x27;:13s}{&#x27;rate&#x27;:&gt;7}{&#x27;ci95&#x27;:&gt;18}&quot;)
-print(&quot;-&quot; * 48)
-for cid, r in base.items():
-    print(f&quot;{cid:8s}{r[&#x27;surface&#x27;]:13s}{r[&#x27;rate&#x27;]:&gt;7.3f}{str(r[&#x27;ci95&#x27;]):&gt;18}&quot;)
-
-after = run_suite(target_with_provenance)
-
-print(f&quot;{&#x27;case&#x27;:8s}{&#x27;before&#x27;:&gt;9}{&#x27;after&#x27;:&gt;9}{&#x27;delta&#x27;:&gt;9}  demonstrated?&quot;)
-print(&quot;-&quot; * 56)
-for cid in base:
-    b, a = base[cid], after[cid]
-    overlap = a[&quot;ci95&quot;][1] &gt;= b[&quot;ci95&quot;][0]
-    print(f&quot;{cid:8s}{b[&#x27;rate&#x27;]:&gt;9.3f}{a[&#x27;rate&#x27;]:&gt;9.3f}{a[&#x27;rate&#x27;]-b[&#x27;rate&#x27;]:&gt;+9.3f}&quot;
-          f&quot;  {&#x27;no — intervals overlap&#x27; if overlap else &#x27;yes&#x27;}&quot;)
-
-def surface_asr(results):
-    out = {}
-    for cid, r in results.items():
-        d = out.setdefault(r[&quot;surface&quot;], [])
-        d.append(r[&quot;rate&quot;])
-    return {k: round(sum(v)/len(v), 3) for k, v in out.items()}
-print(f&quot;\nbefore by surface: {surface_asr(base)}&quot;)
-print(f&quot;after  by surface: {surface_asr(after)}&quot;)
-
-EASY = [Case(f&quot;EASY-{i:02d}&quot;, &quot;injection&quot;, &quot;already blocked&quot;, 0.00)
-        for i in range(1, 13)]
-
-for label, suite in ((&quot;original suite&quot;, SUITE),
-                     (&quot;suite + 12 easy cases&quot;, SUITE + EASY)):
-    r = run_suite(target_baseline, suite)
-    asr = sum(x[&quot;rate&quot;] for x in r.values()) / len(r)
-    print(f&quot;{label:26s} cases={len(suite):&gt;3}  aggregate ASR {asr:.3f}&quot;)
-print(&quot;\nThe build did not change. The number improved by 60%.&quot;)
-print(&quot;Report per-surface and per-case, and state when cases were added.&quot;)
-
-# Verify: guard against suite dilution.
-def suite_health(suite, results):
-    unblocked = [c for c in suite if results[c.cid][&quot;rate&quot;] &gt; 0.05]
-    return {&quot;cases&quot;: len(suite),
-            &quot;still_landing&quot;: len(unblocked),
-            &quot;trivially_blocked&quot;: len(suite) - len(unblocked),
-            &quot;dilution_ratio&quot;: round((len(suite)-len(unblocked))/len(suite), 2),
-            &quot;healthy&quot;: (len(suite)-len(unblocked))/len(suite) &lt; 0.7}
-
-for label, suite in ((&quot;original&quot;, SUITE), (&quot;diluted&quot;, SUITE + EASY)):
-    r = run_suite(target_baseline, suite)
-    h = suite_health(suite, r)
-    print(f&quot;{label:12s}{h}&quot;)
-assert not suite_health(SUITE + EASY, run_suite(target_baseline, SUITE + EASY))[&quot;healthy&quot;]
-
-from collections import Counter
-
-def make_key(n, classes, collide=False):
-    &quot;&quot;&quot;Ground truth: question -&gt; (class, file). `collide` reuses bare filenames.&quot;&quot;&quot;
-    return {f&quot;q{i}&quot;: (classes[i % len(classes)],
-                      f&quot;{classes[i % len(classes)]}/&quot;
-                      f&quot;{i % 8 if collide else i}.py&quot;)
-            for i in range(1, n + 1)}
-
-def path_key(p):  return &quot;/&quot;.join(p.split(&quot;/&quot;)[-2:])
-def basename(p):  return p.split(&quot;/&quot;)[-1]
-
-def score(answers, key, matcher=path_key):
-    hit = 0
-    for q, (cls, f) in key.items():
-        a_cls, a_file = answers.get(q, (None, None))
-        if a_file and matcher(a_file) == matcher(f) and a_cls == cls:
-            hit += 1
-    return hit / len(key)
-
-def majority_floor(key):
-    maj = Counter(c for c, _ in key.values()).most_common(1)[0][0]
-    return score({q: (maj, f) for q, (c, f) in key.items()}, key), maj
-
-SKEWED   = make_key(40, [&quot;CWE-89&quot;] * 7 + [&quot;CWE-78&quot;])
-BALANCED = make_key(40, [&quot;CWE-89&quot;, &quot;CWE-78&quot;, &quot;CWE-22&quot;, &quot;CWE-798&quot;])
-
-print(&quot;check 1 - class balance sets the floor a result must clear&quot;)
-for name, k in ((&quot;skewed&quot;, SKEWED), (&quot;balanced&quot;, BALANCED)):
-    floor, maj = majority_floor(k)
-    print(f&quot;   {name:9s}{dict(Counter(c for c, _ in k.values()))}&quot;)
-    print(f&quot;   {&#x27;&#x27;:9s}always answer {maj}: {floor:.3f}  &lt;- the floor&quot;)
-
-import random
-def run(key, seen_key, skill=0.6, seed=3):
-    rng = random.Random(seed)
-    return {q: ((c, f) if seen_key or rng.random() &lt; skill else (&quot;CWE-89&quot;, f))
-            for q, (c, f) in key.items()}
-
-print(&quot;\ncheck 2 - a leaked key is a training metric, not a result&quot;)
-floor, _ = majority_floor(BALANCED)
-for label, seen in ((&quot;key held out&quot;, False), (&quot;key leaked&quot;, True)):
-    s = score(run(BALANCED, seen), BALANCED)
-    print(f&quot;   {label:16s}{s:.3f}   lift over floor {s - floor:+.3f}&quot;)
-
-print(&quot;\ncheck 3 - matching answers by bare filename invents accuracy&quot;)
-COLLIDING = make_key(40, [&quot;CWE-89&quot;, &quot;CWE-78&quot;, &quot;CWE-22&quot;, &quot;CWE-798&quot;], collide=True)
-wrong_dir = {q: (c, f&quot;CWE-89/{q[1:]}.py&quot;) for q, (c, f) in BALANCED.items()}
-print(f&quot;   answers naming the wrong directory, path_key : &quot;
-      f&quot;{score(wrong_dir, BALANCED, path_key):.3f}&quot;)
-print(f&quot;   the same answers, basename only              : &quot;
-      f&quot;{score(wrong_dir, BALANCED, basename):.3f}&quot;)
-print(f&quot;   distinct basenames in a colliding corpus     : &quot;
-      f&quot;{len({basename(f) for _, f in COLLIDING.values()})} of {len(COLLIDING)}&quot;)
-print()
-print(&quot;Report the floor, the matcher and the key&#x27;s provenance beside every&quot;)
-print(&quot;number, or the number is not comparable to anything - including to itself&quot;)
-print(&quot;next quarter.&quot;)
-assert score(run(BALANCED, True), BALANCED) == 1.0
-assert score(wrong_dir, BALANCED, basename) &gt; score(wrong_dir, BALANCED, path_key)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Report the floor, the matcher and the key&#x27;s provenance beside every
+number, or the number is not comparable to anything - including to itself
+next quarter.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The baseline suite reports per-case rates with intervals. Provenance reduces every injection case to about 0.02 with non-overlapping intervals, while identity and containment are unchanged. Adding 12 trivially-blocked cases cuts aggregate ASR by roughly 60% with no change to the build, and the suite-health check flags that suite as diluted. On the critique side: a skewed key gives a 0.875 floor before anyone answers anything, a leaked key scores a perfect 1.000, and answers naming the wrong directory score 1.000 under basename matching against 0.250 under path matching.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check your own security regression suite for dilution — what fraction of its cases have ever failed? Under 30% and the aggregate number is mostly measuring how many easy cases you added. Then take the last benchmark someone quoted at you and find its majority baseline. Most published numbers are never reported against one.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.7.html">C2.7 · From finding to control, and to institutional capital</a></strong></p>

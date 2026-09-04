@@ -43,170 +43,91 @@ sounds like progress. With n=20 the confidence intervals overlap so heavily that
 you have demonstrated nothing, and you are about to tell a board you reduced
 risk by 23%.</p></div><div class="nbmd"><h2>3 · The control — compute the sample size before you run</h2>
 <p>The question is not "how many attempts should I do?" It is: <strong>how small an effect do I need to be able to detect?</strong></p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
-<p>One success is an anecdote. The skill runs each technique enough times to classify it — not reproduced, flaky, reproducible — and then computes the sample size the before-and-after comparison actually needed, before running it rather than after.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/technique-reproducibility-test/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: technique-reproducibility-test
+<p>One success is an anecdote. The skill runs each technique enough times to classify it — not reproduced, flaky, reproducible — and then computes the sample size the before-and-after comparison actually needed, before running it rather than after.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/research/technique-reproducibility-test/SKILL.md"><code>skills/research/technique-reproducibility-test/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: technique-reproducibility-test
 description: &gt;-
   Run a technique enough times to say whether it reproduces, and compute the
   sample size a before-and-after comparison actually needed before claiming a
   control worked. Use when a jailbreak &quot;works&quot;, or when a fix is declared
   effective from a handful of trials.
 allowed-tools: Read, Grep, Glob
----
-
-# One success is an anecdote; the interval is the result
-
-Model-layer research is statistical whether or not anybody does the statistics.
+</code></pre>
+<h1>One success is an anecdote; the interval is the result</h1>
+<p>Model-layer research is statistical whether or not anybody does the statistics.
 A technique that succeeds once may not reproduce; a control that appears to
 help at n=20 has an interval overlapping the baseline. Both errors are avoided
 by the same discipline — report a rate with an interval, and compute the sample
-size before running the comparison.
-
-## When to use this
-
-Any claim about model behaviour: a technique that works, a control that helps, a
-model that is safer than another.
-
-## Procedure
-
-**1 — Define success mechanically.** A string, a state, a check — something a
-script decides. &quot;The model complied&quot; judged by reading is not reproducible
-between two people.
-
-**2 — Run enough trials to produce a rate, and hold the conditions fixed.**
+size before running the comparison.</p>
+<h2>When to use this</h2>
+<p>Any claim about model behaviour: a technique that works, a control that helps, a
+model that is safer than another.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Define success mechanically.</strong> A string, a state, a check — something a
+script decides. "The model complied" judged by reading is not reproducible
+between two people.</p>
+<p><strong>2 — Run enough trials to produce a rate, and hold the conditions fixed.</strong>
 Same model version, same temperature, same prompt. Record the version: a rate
-without one is unrepeatable by construction.
-
-**3 — Classify the technique honestly.** Not reproduced, flaky, or reproducible.
+without one is unrepeatable by construction.</p>
+<p><strong>3 — Classify the technique honestly.</strong> Not reproduced, flaky, or reproducible.
 Flaky is a real and common answer and it deserves the word rather than a
-rounded-up rate.
-
-**4 — Compute the required sample size before comparing.** From the baseline
+rounded-up rate.</p>
+<p><strong>4 — Compute the required sample size before comparing.</strong> From the baseline
 rate, the effect you would care about, and the power you want. Then run that
 many. Doing this afterwards produces the number that makes the result you got
-look significant.
-
-**5 — Report intervals, and say when they overlap.** Show the same true effect
+look significant.</p>
+<p><strong>5 — Report intervals, and say when they overlap.</strong> Show the same true effect
 at n=20, n=100 and n=1000 if you need to make the point: the effect did not
-change, the ability to see it did.
-
-## Output contract
-
-```json
-{
+change, the ability to see it did.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;success_criterion&quot;: &quot;str&quot;,
   &quot;conditions&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;version&quot;: &quot;str&quot;, &quot;temperature&quot;: 0.0},
   &quot;techniques&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;trials&quot;: 0, &quot;rate&quot;: 0.0, &quot;interval&quot;: [0.0, 0.0],
                   &quot;verdict&quot;: &quot;not reproduced|flaky|reproducible&quot;}],
   &quot;comparison&quot;: {&quot;before&quot;: 0.0, &quot;after&quot;: 0.0, &quot;n&quot;: 0, &quot;required_n&quot;: 0, &quot;separated&quot;: false}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting a rate with no model version.</strong> Nobody can repeat it.</li>
+<li><strong>Computing the sample size afterwards.</strong> That is choosing the number that
+  fits.</li>
+<li><strong>Rounding flaky up to works.</strong> It is the finding, not a rough edge.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>technique              rate              ci95  verdict
+------------------------------------------------------------
+direct override       0.055    (0.023, 0.087)  flaky
+context reframe       0.395    (0.327, 0.463)  flaky
+task nesting          0.660    (0.594, 0.726)  reproducible
 
-## Failure modes
+&#x27;It worked&#x27; is true for all three. Only one is reproducible.
+     n            before             after  conclusion
+--------------------------------------------------------------------
+    20    (0.385, 0.815)    (0.281, 0.719)  NOT demonstrated
+   100    (0.557, 0.743)    (0.463, 0.657)  NOT demonstrated
+  1000    (0.579, 0.639)     (0.45, 0.512)  improvement holds
 
-- **Reporting a rate with no model version.** Nobody can repeat it.
-- **Computing the sample size afterwards.** That is choosing the number that
-  fits.
-- **Rounding flaky up to works.** It is the finding, not a rough edge.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+The true effect is identical in all three rows. Only sample size changed.
+At n=20 you would report a 23% reduction you cannot support.
+effect you want to detect          n required
+-----------------------------------------------
+62% → 10%                                   7
+62% → 31%                                  20
+62% → 48%                                  98
+62% → 58%                                1153
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+Detecting a halving is cheap. Detecting a 14-point move is not, and
+detecting a 4-point move is a research project in itself.
 
-from cyber_commons_skill_runtime import run_skill
+re-run at the computed n=98: before (0.548, 0.738), after (0.473, 0.669), overlap=True
+task nesting, after provenance mitigation
+   before  0.60 (95% CI (0.385, 0.815), n=20)
+   after   0.50 (95% CI (0.281, 0.719), n=20)
+   verdict no demonstrated change — intervals overlap
 
-# Split skills/research/technique-reproducibility-test/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/research/technique-reproducibility-test/scripts/technique_reproducibility_test.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Run a technique enough times to know whether it reproduces, and compute the sample size the comparison actually needed.
-
-This is the executable half of the `technique-reproducibility-test` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import random
-
-def trial(effect, n=200, seed=7):
-    &quot;&quot;&quot;Run a stochastic effect n times; report the rate with a 95% interval.&quot;&quot;&quot;
-    rng = random.Random(seed)
-    hits = sum(effect(rng) for _ in range(n))
-    rate = hits / n
-    half = 1.96 * ((rate * (1 - rate) / n) ** 0.5) if n else 0.0
-    lo, hi = round(max(rate - half, 0), 3), round(min(rate + half, 1), 3)
-    verdict = (&quot;reproducible&quot; if lo &gt; 0.5 else
-               &quot;flaky&quot; if hi &gt; 0.05 else &quot;not reproduced&quot;)
-    return {&quot;n&quot;: n, &quot;hits&quot;: hits, &quot;rate&quot;: round(rate, 3), &quot;ci95&quot;: (lo, hi),
-            &quot;verdict&quot;: verdict}
-
-# ground-truth landing probabilities for three injection techniques
-TECHNIQUES = {&quot;direct override&quot;: 0.05, &quot;context reframe&quot;: 0.35, &quot;task nesting&quot;: 0.62}
-
-print(f&quot;{&#x27;technique&#x27;:20s}{&#x27;rate&#x27;:&gt;7}{&#x27;ci95&#x27;:&gt;18}  verdict&quot;)
-print(&quot;-&quot; * 60)
-for name, p in TECHNIQUES.items():
-    r = trial(lambda rng, p=p: rng.random() &lt; p, n=200)
-    print(f&quot;{name:20s}{r[&#x27;rate&#x27;]:&gt;7.3f}{str(r[&#x27;ci95&#x27;]):&gt;18}  {r[&#x27;verdict&#x27;]}&quot;)
-print(&quot;\n&#x27;It worked&#x27; is true for all three. Only one is reproducible.&quot;)
-
-def compare(before_p, after_p, n, seed=11):
-    b = trial(lambda rng: rng.random() &lt; before_p, n=n, seed=seed)
-    a = trial(lambda rng: rng.random() &lt; after_p,  n=n, seed=seed + 1)
-    overlap = a[&quot;ci95&quot;][1] &gt;= b[&quot;ci95&quot;][0]
-    return b, a, overlap
-
-print(f&quot;{&#x27;n&#x27;:&gt;6}{&#x27;before&#x27;:&gt;18}{&#x27;after&#x27;:&gt;18}  conclusion&quot;)
-print(&quot;-&quot; * 68)
-for n in (20, 100, 1000):
-    b, a, overlap = compare(0.62, 0.48, n)
-    concl = &quot;NOT demonstrated&quot; if overlap else &quot;improvement holds&quot;
-    print(f&quot;{n:&gt;6}{str(b[&#x27;ci95&#x27;]):&gt;18}{str(a[&#x27;ci95&#x27;]):&gt;18}  {concl}&quot;)
-print(&quot;\nThe true effect is identical in all three rows. Only sample size changed.&quot;)
-print(&quot;At n=20 you would report a 23% reduction you cannot support.&quot;)
-
-def required_n(p_before, p_after, power_z=1.96):
-    &quot;&quot;&quot;Rough two-proportion sample size for a 95% interval that separates.&quot;&quot;&quot;
-    p = (p_before + p_after) / 2
-    diff = abs(p_before - p_after)
-    if diff == 0: return float(&quot;inf&quot;)
-    return int((2 * power_z ** 2 * p * (1 - p)) / (diff ** 2)) + 1
-
-print(f&quot;{&#x27;effect you want to detect&#x27;:34s}{&#x27;n required&#x27;:&gt;11}&quot;)
-print(&quot;-&quot; * 47)
-for before, after in ((0.62, 0.10), (0.62, 0.31), (0.62, 0.48), (0.62, 0.58)):
-    print(f&quot;{f&#x27;{before:.0%} → {after:.0%}&#x27;:34s}{required_n(before, after):&gt;11}&quot;)
-print(&quot;\nDetecting a halving is cheap. Detecting a 14-point move is not, and&quot;)
-print(&quot;detecting a 4-point move is a research project in itself.&quot;)
-
-n_needed = required_n(0.62, 0.48)
-b, a, overlap = compare(0.62, 0.48, n_needed)
-print(f&quot;\nre-run at the computed n={n_needed}: &quot;
-      f&quot;before {b[&#x27;ci95&#x27;]}, after {a[&#x27;ci95&#x27;]}, overlap={overlap}&quot;)
-
-# Verify: the honest reporting template.
-def report(technique, before, after, n):
-    b, a, overlap = compare(before, after, n)
-    return (f&quot;{technique}\n&quot;
-            f&quot;   before  {b[&#x27;rate&#x27;]:.2f} (95% CI {b[&#x27;ci95&#x27;]}, n={n})\n&quot;
-            f&quot;   after   {a[&#x27;rate&#x27;]:.2f} (95% CI {a[&#x27;ci95&#x27;]}, n={n})\n&quot;
-            f&quot;   verdict {&#x27;no demonstrated change — intervals overlap&#x27; if overlap else &#x27;reduction demonstrated&#x27;}&quot;)
-
-print(report(&quot;task nesting, after provenance mitigation&quot;, 0.62, 0.48, 20))
-print()
-print(report(&quot;task nesting, after provenance mitigation&quot;, 0.62, 0.48, 1000))</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+task nesting, after provenance mitigation
+   before  0.61 (95% CI (0.579, 0.639), n=1000)
+   after   0.48 (95% CI (0.45, 0.512), n=1000)
+   verdict reduction demonstrated</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Direct override is not reproduced, context reframe is flaky, task nesting is reproducible. The before/after comparison shows overlapping intervals at n=20 and n=100 and separation at n=1000, for an identical true effect. Sample-size calculation shows detecting 62%→48% needs roughly 200 trials while 62%→58% needs thousands.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Take the last jailbreak or injection result your team reported. Ask for n. If the answer is a single-digit number or 'we tried it a few times', the finding is real but the number attached to it is not.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/C2.3.html">C2.3 · Weight-level techniques</a></strong></p>

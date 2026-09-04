@@ -58,56 +58,41 @@ under five minutes, quarterly tests including partial-failure conditions, and a
 documented authority to activate that does not require consensus. A kill switch
 nobody has pulled is a hypothesis.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">activation path</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">runs through the fleet?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">credentials</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">usable if the fleet is compromised</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">via the orchestrator API</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">shared</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">via the agent&#x27;s own sidecar</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the workload&#x27;s</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">out-of-band control plane</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">separate</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td></tr></tbody></table>
 <div style="font-size:12px;color:#8A93A6;margin-top:6px">The first two are the ones teams actually build, and both run through the thing they are trying to stop. The switch has to be independent in credentials AND in network path, or it is a request.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Terminating eight agents without revoking leaves eight tokens valid for up to 72 hours. The skill tests both paths, checks that killing preserves the evidence for the incident that triggered it, and measures the whole thing against a target.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/fleet-kill-switch-test/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: fleet-kill-switch-test
+<p>Terminating eight agents without revoking leaves eight tokens valid for up to 72 hours. The skill tests both paths, checks that killing preserves the evidence for the incident that triggered it, and measures the whole thing against a target.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/fleet-kill-switch-test/SKILL.md"><code>skills/response/fleet-kill-switch-test/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: fleet-kill-switch-test
 description: &gt;-
   Test a fleet-wide stop for what it leaves behind — valid tokens, destroyed
   evidence, and the runs that should have been preserved — and measure how long
   the whole thing takes. Use before relying on a kill switch, and after
   designing one.
 allowed-tools: Read, Grep, Glob
----
-
-# Terminating the agents leaves every token valid
-
-A fleet kill switch usually terminates workloads. Termination does not revoke
+</code></pre>
+<h1>Terminating the agents leaves every token valid</h1>
+<p>A fleet kill switch usually terminates workloads. Termination does not revoke
 credentials, so every token the fleet held stays valid until it expires — up to
 seventy-two hours of an attacker being able to act as agents that no longer
 exist. And a kill that does not preserve first destroys the evidence for the
-incident that triggered it.
-
-## When to use this
-
-Before a kill switch is relied on, after it is built, and once a year as a
-rehearsal.
-
-## Procedure
-
-**1 — Terminate only, and count what stays valid.** Tokens, sessions,
+incident that triggered it.</p>
+<h2>When to use this</h2>
+<p>Before a kill switch is relied on, after it is built, and once a year as a
+rehearsal.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Terminate only, and count what stays valid.</strong> Tokens, sessions,
 outstanding delegated grants. This is the baseline failure and it is invisible
-in a design review.
-
-**2 — Terminate and revoke together, and re-count.** Zero is the target. If
+in a design review.</p>
+<p><strong>2 — Terminate and revoke together, and re-count.</strong> Zero is the target. If
 revocation is a separate runbook step performed by a different team, it will not
-happen at speed.
-
-**3 — Check evidence preservation.** Kill with and without preservation, then
+happen at speed.</p>
+<p><strong>3 — Check evidence preservation.</strong> Kill with and without preservation, then
 attempt the reconstruction. A kill switch that destroys the run records is a
-containment that ends the investigation.
-
-**4 — Test selectivity.** Stop one agent, one class, the whole fleet. A switch
+containment that ends the investigation.</p>
+<p><strong>4 — Test selectivity.</strong> Stop one agent, one class, the whole fleet. A switch
 with only the last setting will not be used until it is far too late, which is
-the same as not having one.
-
-**5 — Measure the time.** Decision to last agent stopped and last token revoked.
-Set a target and report against it; an untimed rehearsal is a demonstration.
-
-## Output contract
-
-```json
-{
+the same as not having one.</p>
+<p><strong>5 — Measure the time.</strong> Decision to last agent stopped and last token revoked.
+Set a target and report against it; an untimed rehearsal is a demonstration.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;fleet&quot;: {&quot;agents&quot;: 0, &quot;tokens&quot;: 0},
   &quot;terminate_only&quot;: {&quot;tokens_valid_after&quot;: 0, &quot;max_validity_hours&quot;: 0},
   &quot;terminate_and_revoke&quot;: {&quot;tokens_valid_after&quot;: 0},
@@ -115,115 +100,36 @@ Set a target and report against it; an untimed rehearsal is a demonstration.
   &quot;selectivity&quot;: [{&quot;scope&quot;: &quot;one|class|fleet&quot;, &quot;supported&quot;: true}],
   &quot;timing&quot;: {&quot;target_minutes&quot;: 0.0, &quot;measured_minutes&quot;: 0.0}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Terminating without revoking.</strong> The credentials outlive the workloads.</li>
+<li><strong>Killing before preserving.</strong> The incident becomes unreconstructable.</li>
+<li><strong>A fleet-only switch.</strong> Nobody uses it until the whole estate is on fire.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>terminate only        : 8 agents stopped, 8 tokens still valid for up to 72h
+terminate and revoke  : 8 agents stopped, 0 tokens still valid
 
-## Failure modes
+In the source incident, third-party access ended when the third party
+revoked its keys - not when the agents stopped. Stopping the process is
+the visible half of containment and the smaller one.
+terminate first   terminate -&gt; revoke credentials                           reconstructable=False
+preserve first    snapshot state and transcripts -&gt; terminate -&gt; revoke credentialsreconstructable=True
 
-- **Terminating without revoking.** The credentials outlive the workloads.
-- **Killing before preserving.** The incident becomes unreconstructable.
-- **A fleet-only switch.** Nobody uses it until the whole estate is on fire.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+The ordering is the whole design. Terminating first is faster by seconds
+and costs the investigation everything, which is the trade nobody makes
+deliberately at three in the morning.
+quarter  ran    minutes  condition
+Q1       yes        4.2  full fleet, clean conditions
+Q2       yes        4.9  full fleet, one region degraded
+Q3       no           -  not run - no window agreed
+Q4       yes        6.8  partial failure: revocation API throttled
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+tests run: 3 of 4   target: under 5 min
+over target: 1  (6.8)
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/response/fleet-kill-switch-test/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/response/fleet-kill-switch-test/scripts/fleet_kill_switch_test.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Test a fleet kill switch for what it leaves valid — tokens, evidence, and the runs you needed to keep.
-
-This is the executable half of the `fleet-kill-switch-test` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-FLEET = [
- {&quot;id&quot;: f&quot;agent-{i:03d}&quot;,
-  &quot;experiment&quot;: &quot;exploitgym&quot;,
-  &quot;token&quot;: f&quot;tok-{i:03d}&quot;,
-  &quot;token_ttl_hours&quot;: 72}
- for i in range(8)
-]
-ISSUED = {a[&quot;token&quot;] for a in FLEET}
-
-def terminate_only(fleet):
-    return {&quot;terminated&quot;: len(fleet), &quot;tokens_still_valid&quot;: len(ISSUED)}
-
-def terminate_and_revoke(fleet, revoked):
-    revoked |= {a[&quot;token&quot;] for a in fleet}
-    return {&quot;terminated&quot;: len(fleet), &quot;tokens_still_valid&quot;: len(ISSUED - revoked)}
-
-r1 = terminate_only(FLEET)
-print(f&quot;terminate only        : {r1[&#x27;terminated&#x27;]} agents stopped, &quot;
-      f&quot;{r1[&#x27;tokens_still_valid&#x27;]} tokens still valid for up to 72h&quot;)
-
-revoked = set()
-r2 = terminate_and_revoke(FLEET, revoked)
-print(f&quot;terminate and revoke  : {r2[&#x27;terminated&#x27;]} agents stopped, &quot;
-      f&quot;{r2[&#x27;tokens_still_valid&#x27;]} tokens still valid&quot;)
-print()
-print(&quot;In the source incident, third-party access ended when the third party&quot;)
-print(&quot;revoked its keys - not when the agents stopped. Stopping the process is&quot;)
-print(&quot;the visible half of containment and the smaller one.&quot;)
-assert r1[&quot;tokens_still_valid&quot;] == 8 and r2[&quot;tokens_still_valid&quot;] == 0
-
-def kill(fleet, preserve=True, revoke=True):
-    steps, evidence = [], 0
-    if preserve:
-        steps.append(&quot;snapshot state and transcripts&quot;)
-        evidence = len(fleet)
-    steps.append(&quot;terminate&quot;)
-    if revoke:
-        steps.append(&quot;revoke credentials&quot;)
-    return {&quot;steps&quot;: steps, &quot;evidence_preserved&quot;: evidence,
-            &quot;reconstructable&quot;: evidence == len(fleet)}
-
-for label, preserve in ((&quot;terminate first&quot;, False), (&quot;preserve first&quot;, True)):
-    r = kill(FLEET, preserve=preserve)
-    print(f&quot;{label:18s}{&#x27; -&gt; &#x27;.join(r[&#x27;steps&#x27;]):58s}&quot;
-          f&quot;reconstructable={r[&#x27;reconstructable&#x27;]}&quot;)
-print()
-print(&quot;The ordering is the whole design. Terminating first is faster by seconds&quot;)
-print(&quot;and costs the investigation everything, which is the trade nobody makes&quot;)
-print(&quot;deliberately at three in the morning.&quot;)
-assert kill(FLEET, preserve=True)[&quot;reconstructable&quot;]
-assert not kill(FLEET, preserve=False)[&quot;reconstructable&quot;]
-
-TESTS = [
- (&quot;Q1&quot;, True,  4.2, &quot;full fleet, clean conditions&quot;),
- (&quot;Q2&quot;, True,  4.9, &quot;full fleet, one region degraded&quot;),
- (&quot;Q3&quot;, False, None, &quot;not run - no window agreed&quot;),
- (&quot;Q4&quot;, True,  6.8, &quot;partial failure: revocation API throttled&quot;),
-]
-TARGET_MIN = 5.0
-print(f&quot;{&#x27;quarter&#x27;:9s}{&#x27;ran&#x27;:5s}{&#x27;minutes&#x27;:&gt;9}  condition&quot;)
-for q, ran, mins, cond in TESTS:
-    shown = f&quot;{mins:.1f}&quot; if mins else &quot;-&quot;
-    print(f&quot;{q:9s}{(&#x27;yes&#x27; if ran else &#x27;no&#x27;):5s}{shown:&gt;9}  {cond}&quot;)
-
-timed = [m for _, ran, m, _ in TESTS if ran and m]
-over = [m for m in timed if m &gt; TARGET_MIN]
-print(f&quot;\ntests run: {len(timed)} of {len(TESTS)}   target: under {TARGET_MIN:.0f} min&quot;)
-print(f&quot;over target: {len(over)}  ({&#x27;, &#x27;.join(f&#x27;{m:.1f}&#x27; for m in over) or &#x27;none&#x27;})&quot;)
-print()
-print(&quot;The quarter that was not run is the finding, and the quarter that ran&quot;)
-print(&quot;long is the second one: under partial failure the revocation half is&quot;)
-print(&quot;what slows down, which is the half that matters.&quot;)
-assert len(timed) == 3 and over == [6.8]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+The quarter that was not run is the finding, and the quarter that ran
+long is the second one: under partial failure the revocation half is
+what slows down, which is the half that matters.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Ask who in your organisation is allowed to stop every agent at once, without asking anyone. If the answer is a committee, you do not have a kill switch — you have an escalation path, and they take different amounts of time.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> An incident practice for an autonomous actor: reconstruct the timeline with every claim sourced, scope the blast radius from identity and egress logs, contain in seconds rather than hours, a named person with stop authority at 3am, and one tested switch that stops a whole fleet and revokes what it was holding.</p>

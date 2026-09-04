@@ -47,198 +47,96 @@ them prevention:</p>
 <p>A programme with all three survives a failure it did not predict, which is the
 only kind that actually happens. Perfection would mean containment never fails.
 Resilience means the other five steps work when it does.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Three properties for the day a control fails: drift detected, stop tested, run replayable. The skill checks each with its evidence — a measured twelve-second stop, tested 41 days ago — and reports three verdicts rather than one score.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/resilience-readiness-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: resilience-readiness-check
+<p>Three properties for the day a control fails: drift detected, stop tested, run replayable. The skill checks each with its evidence — a measured twelve-second stop, tested 41 days ago — and reports three verdicts rather than one score.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/resilience-readiness-check/SKILL.md"><code>skills/programme/resilience-readiness-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: resilience-readiness-check
 description: &gt;-
   Check the three properties a programme needs for the day a control fails —
   drift is detected, the stop mechanism is tested, and the run is replayable —
   and report which are not ready. Use as a standing readiness check rather than
   after an incident.
 allowed-tools: Read, Grep, Glob
----
-
-# Perfection is not available; these three are
-
-A programme cannot prevent every failure and does not need to. What it needs is
+</code></pre>
+<h1>Perfection is not available; these three are</h1>
+<p>A programme cannot prevent every failure and does not need to. What it needs is
 that when a control fails, somebody notices, somebody can stop it, and somebody
 can reconstruct what happened. Each of the three is testable today, and each
-fails quietly if nobody tests it.
-
-## When to use this
-
-As a standing quarterly check, before granting unattended autonomy, and as the
-closing item of a programme review.
-
-## Procedure
-
-**1 — Detection: compare today against the signed-off baseline.** Not &quot;do we
-have monitoring&quot; — run the comparison and report the drift and any new tool. A
-monitor that has never been compared against a baseline is untested.
-
-**2 — Stop: check the mechanism, the measurement and the date.** A named
+fails quietly if nobody tests it.</p>
+<h2>When to use this</h2>
+<p>As a standing quarterly check, before granting unattended autonomy, and as the
+closing item of a programme review.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Detection: compare today against the signed-off baseline.</strong> Not "do we
+have monitoring" — run the comparison and report the drift and any new tool. A
+monitor that has never been compared against a baseline is untested.</p>
+<p><strong>2 — Stop: check the mechanism, the measurement and the date.</strong> A named
 mechanism, a measured time-to-stop in seconds, and when it was last exercised. A
-test older than a quarter is a claim.
-
-**3 — Replay: check the run record has the five inputs** — prompts, tool
+test older than a quarter is a claim.</p>
+<p><strong>3 — Replay: check the run record has the five inputs</strong> — prompts, tool
 results, model version, seed, retrieved context — and confirm the delegation
-chain and the resources reached are recorded.
-
-**4 — Report each as ready or not, with the missing item named.** Three
+chain and the resources reached are recorded.</p>
+<p><strong>4 — Report each as ready or not, with the missing item named.</strong> Three
 booleans and three sentences. A single readiness score hides which of the three
-is missing, and they have different owners.
-
-**5 — Re-run after every change to any of the three.** A model upgrade
-invalidates the drift baseline; a platform change invalidates the stop test.
-
-## Output contract
-
-```json
-{
+is missing, and they have different owners.</p>
+<p><strong>5 — Re-run after every change to any of the three.</strong> A model upgrade
+invalidates the drift baseline; a platform change invalidates the stop test.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;detection&quot;: {&quot;baseline_at&quot;: &quot;str&quot;, &quot;drift&quot;: 0.0, &quot;new_tools&quot;: [&quot;str&quot;], &quot;ready&quot;: true},
   &quot;stop&quot;: {&quot;mechanism&quot;: &quot;str&quot;, &quot;measured_seconds&quot;: 0, &quot;last_tested&quot;: &quot;str&quot;, &quot;ready&quot;: true},
   &quot;replay&quot;: {&quot;inputs_present&quot;: [&quot;str&quot;], &quot;missing&quot;: [&quot;str&quot;], &quot;chain_recorded&quot;: true,
              &quot;resources_recorded&quot;: true, &quot;ready&quot;: true},
   &quot;verdict&quot;: {&quot;ready&quot;: false, &quot;missing&quot;: [&quot;str&quot;]}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Checking that monitoring exists.</strong> Run the comparison.</li>
+<li><strong>An estimated time-to-stop.</strong> Measure it.</li>
+<li><strong>A single readiness score.</strong> Three properties, three owners.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>NOTICE   drift 0.500  new tools [&#x27;run_shell&#x27;]  → detected
+STOP     12s, tested 41d ago, survives restart True  → ready
+RECOVER  replayable True, scope from the chain [&#x27;queue&#x27;, &#x27;repo-core&#x27;, &#x27;repo-payments&#x27;]  → ready
+programme                 containment ASR  outcome when containment fails
+------------------------------------------------------------------------------------------------
+prevention only                        0%  undetected — found by a third party, weeks later
+                                         elapsed to resolution: 720h
+prevention + notice                    0%  detected, cannot halt it — damage continues while you improvise
+                                         elapsed to resolution: 96h
+resilient                              0%  detected, halted in seconds, scope known, run replayable
+                                         elapsed to resolution: 6h
 
-## Failure modes
+All three have a 0% attack success rate. On a prevention-only
+scorecard they are identical. They are not remotely identical.
+=== prevention only ===
+   notice      FAIL  no signal — nothing fired
+   stop        FAIL  no tested mechanism
+   recover     FAIL  cannot reconstruct
+   weakest capability: notice
 
-- **Checking that monitoring exists.** Run the comparison.
-- **An estimated time-to-stop.** Measure it.
-- **A single readiness score.** Three properties, three owners.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+=== prevention + notice ===
+   notice      0.2h  drift alert fired
+   stop        FAIL  no tested mechanism
+   recover     FAIL  cannot reconstruct
+   weakest capability: stop
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+=== resilient ===
+   notice      0.2h  drift alert fired
+   stop         12h  identity revoked, survives restart
+   recover       6h  replayed the run, scope from the act chain
+   weakest capability: none — all three hold
 
-from cyber_commons_skill_runtime import run_skill
+The weakest capability is next quarter&#x27;s plan. That is the whole
+programme-management loop, and it does not require predicting the attack.
+   A1-A3   a control plane: planes, identity, containment
+   B1      a 15-stage AppSec pipeline, ending in confirmed-by-exploitation severity
+   B2      a harness whose verifier does not lie
+   C1-C2   the ability to attack it and to research it repeatably
+   D1-D2   the ability to notice, stop and recover
+   E1-E3   the ability to evidence all of it, and to decide
 
-# Split skills/programme/resilience-readiness-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/resilience-readiness-check/scripts/resilience_readiness_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Check the three properties a programme needs when a control fails: drift detected, stop tested, run replayable.
-
-This is the executable half of the `resilience-readiness-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time, statistics
-now = time.time()
-
-# --- NOTICE ------------------------------------------------------------
-BASELINE = {&quot;read_file&quot;: 0.85, &quot;search&quot;: 0.15}
-TODAY    = {&quot;read_file&quot;: 300, &quot;search&quot;: 100, &quot;run_shell&quot;: 400}
-total = sum(TODAY.values())
-mix = {k: v/total for k, v in TODAY.items()}
-keys = set(mix) | set(BASELINE)
-drift = sum(abs(mix.get(k,0) - BASELINE.get(k,0)) for k in keys)/2
-new_tools = sorted(set(mix) - set(BASELINE))
-notice = drift &gt; 0.25 or bool(new_tools)
-print(f&quot;NOTICE   drift {drift:.3f}  new tools {new_tools}  → &quot;
-      f&quot;{&#x27;detected&#x27; if notice else &#x27;MISSED&#x27;}&quot;)
-
-# --- STOP --------------------------------------------------------------
-STOP = {&quot;mechanism&quot;: &quot;revoke the SPIFFE identity at the gateway&quot;,
-        &quot;measured_seconds&quot;: 12, &quot;tested_days_ago&quot;: 41, &quot;survives_restart&quot;: True}
-stop_ok = (STOP[&quot;measured_seconds&quot;] is not None and STOP[&quot;tested_days_ago&quot;] &lt;= 180
-           and STOP[&quot;survives_restart&quot;])
-print(f&quot;STOP     {STOP[&#x27;measured_seconds&#x27;]}s, tested {STOP[&#x27;tested_days_ago&#x27;]}d ago, &quot;
-      f&quot;survives restart {STOP[&#x27;survives_restart&#x27;]}  → {&#x27;ready&#x27; if stop_ok else &#x27;NOT READY&#x27;}&quot;)
-
-# --- RECOVER -----------------------------------------------------------
-RUN = {&quot;prompts&quot;: [&quot;fix SEC-4471&quot;], &quot;tool_results&quot;: [&quot;contents…&quot;],
-       &quot;model_version&quot;: &quot;glm-4.6@2026-07-14&quot;, &quot;seed&quot;: 42}
-missing = [k for k, v in RUN.items() if not v and v != 0]
-CHAIN = [&quot;dana@corp&quot;, &quot;orchestrator&quot;, &quot;patch-agent&quot;]
-REACHED = {&quot;dana@corp&quot;: [&quot;repo-core&quot;], &quot;orchestrator&quot;: [&quot;queue&quot;],
-           &quot;patch-agent&quot;: [&quot;repo-core&quot;,&quot;repo-payments&quot;]}
-scope = sorted({r for a in CHAIN for r in REACHED.get(a, [])})
-recover = not missing and bool(scope)
-print(f&quot;RECOVER  replayable {not missing}, scope from the chain {scope}  → &quot;
-      f&quot;{&#x27;ready&#x27; if recover else &#x27;NOT READY&#x27;}&quot;)
-
-PROGRAMMES = {
- &quot;prevention only&quot;: {&quot;notice&quot;: False, &quot;stop&quot;: False, &quot;recover&quot;: False,
-                     &quot;containment_asr&quot;: 0.0},
- &quot;prevention + notice&quot;: {&quot;notice&quot;: True, &quot;stop&quot;: False, &quot;recover&quot;: False,
-                         &quot;containment_asr&quot;: 0.0},
- &quot;resilient&quot;: {&quot;notice&quot;: True, &quot;stop&quot;: True, &quot;recover&quot;: True,
-               &quot;containment_asr&quot;: 0.0},
-}
-def incident_outcome(p, containment_failed=True):
-    if not containment_failed:
-        return &quot;no incident&quot;, 0
-    if not p[&quot;notice&quot;]:
-        return &quot;undetected — found by a third party, weeks later&quot;, 720
-    if not p[&quot;stop&quot;]:
-        return &quot;detected, cannot halt it — damage continues while you improvise&quot;, 96
-    if not p[&quot;recover&quot;]:
-        return &quot;detected and halted, cannot say what was touched or why&quot;, 48
-    return &quot;detected, halted in seconds, scope known, run replayable&quot;, 6
-
-print(f&quot;{&#x27;programme&#x27;:24s}{&#x27;containment ASR&#x27;:&gt;17}  outcome when containment fails&quot;)
-print(&quot;-&quot; * 96)
-for name, p in PROGRAMMES.items():
-    outcome, hours = incident_outcome(p)
-    print(f&quot;{name:24s}{p[&#x27;containment_asr&#x27;]:&gt;17.0%}  {outcome}&quot;)
-    print(f&quot;{&#x27;&#x27;:41s}elapsed to resolution: {hours}h&quot;)
-print(&quot;\nAll three have a 0% attack success rate. On a prevention-only&quot;)
-print(&quot;scorecard they are identical. They are not remotely identical.&quot;)
-
-def game_day(programme):
-    &quot;&quot;&quot;Assume the prevention worked until it didn&#x27;t. Measure the other three.&quot;&quot;&quot;
-    results = {}
-    results[&quot;notice&quot;]  = (0.2, &quot;drift alert fired&quot;) if programme[&quot;notice&quot;] \
-                         else (None, &quot;no signal — nothing fired&quot;)
-    results[&quot;stop&quot;]    = (12, &quot;identity revoked, survives restart&quot;) if programme[&quot;stop&quot;] \
-                         else (None, &quot;no tested mechanism&quot;)
-    results[&quot;recover&quot;] = (6, &quot;replayed the run, scope from the act chain&quot;) \
-                         if programme[&quot;recover&quot;] else (None, &quot;cannot reconstruct&quot;)
-    weakest = next((k for k, (v, _) in results.items() if v is None), None)
-    return results, weakest
-
-for name, p in PROGRAMMES.items():
-    res, weakest = game_day(p)
-    print(f&quot;=== {name} ===&quot;)
-    for cap, (val, note) in res.items():
-        print(f&quot;   {cap:9s}{(str(val) + &#x27;h&#x27;) if val is not None else &#x27;FAIL&#x27;:&gt;7}  {note}&quot;)
-    print(f&quot;   weakest capability: {weakest or &#x27;none — all three hold&#x27;}\n&quot;)
-
-_, weakest = game_day(PROGRAMMES[&quot;resilient&quot;])
-assert weakest is None
-print(&quot;The weakest capability is next quarter&#x27;s plan. That is the whole&quot;)
-print(&quot;programme-management loop, and it does not require predicting the attack.&quot;)
-
-# Close the curriculum: what you built, and what it is for.
-BUILT = [
- (&quot;A1-A3&quot;, &quot;a control plane: planes, identity, containment&quot;),
- (&quot;B1&quot;,    &quot;a 15-stage AppSec pipeline, ending in confirmed-by-exploitation severity&quot;),
- (&quot;B2&quot;,    &quot;a harness whose verifier does not lie&quot;),
- (&quot;C1-C2&quot;, &quot;the ability to attack it and to research it repeatably&quot;),
- (&quot;D1-D2&quot;, &quot;the ability to notice, stop and recover&quot;),
- (&quot;E1-E3&quot;, &quot;the ability to evidence all of it, and to decide&quot;),
-]
-for track, what in BUILT:
-    print(f&quot;   {track:8s}{what}&quot;)
-print(&quot;\nNone of it assumes a frontier-lab account, a vendor platform, or a&quot;)
-print(&quot;budget. That was the point: shared defense is stronger defense, and a&quot;)
-print(&quot;commons only works if everyone can actually run it.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+None of it assumes a frontier-lab account, a vendor platform, or a
+budget. That was the point: shared defense is stronger defense, and a
+commons only works if everyone can actually run it.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Drift is detected with <code>run_shell</code> as a new tool, the stop mechanism is ready at 12 seconds tested 41 days ago, and the run is replayable with a four-resource scope. All three programmes show a 0% containment ASR yet resolve a failure in 720, 96 and 6 hours respectively. The game day identifies the weakest capability for each, and the resilient programme has none.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run a game day that assumes containment failed. Measure notice, stop and recover as three separate numbers. The weakest one is next quarter's plan — and unlike a prevention target, you can actually reach it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
 <p><strong>What you can do now.</strong> A programme you can sequence, staff and defend: autonomy governed by level rather than by product list, one owner per thing, metrics that show control rather than activity, conditional approvals that are actually tracked, and a design that assumes failure and recovers.</p>

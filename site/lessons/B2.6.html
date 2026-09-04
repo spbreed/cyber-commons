@@ -55,56 +55,41 @@ a database replica, and always someone's on-call rota.</p>
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
 </blockquote></div><div class="nbmd"><h2>3 · The stage, as a skill</h2>
-<p>Before anything is executed against CyberTravels' environment, four checks decide whether it is a replica or staging with a different DNS name. The skill runs them — egress, credentials, data, and the destructive probes you would only run somewhere built to be destroyed.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/exploit-replica-isolation-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: exploit-replica-isolation-check
+<p>Before anything is executed against CyberTravels' environment, four checks decide whether it is a replica or staging with a different DNS name. The skill runs them — egress, credentials, data, and the destructive probes you would only run somewhere built to be destroyed.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/exploit-replica-isolation-check/SKILL.md"><code>skills/appsec/exploit-replica-isolation-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: exploit-replica-isolation-check
 description: &gt;-
   Check that the environment a finding is proved in is a replica rather than
   staging — on egress, credentials, data realism and destructive probes — before
   anything is executed against it. Use before dynamic testing, exploit
   validation, or letting an agent run a proof of concept.
 allowed-tools: Read, Grep, Glob, Bash
----
-
-# Staging is production with a different DNS name
-
-The reason exploitation is safe is the environment, and &quot;staging&quot; is not that
+</code></pre>
+<h1>Staging is production with a different DNS name</h1>
+<p>The reason exploitation is safe is the environment, and "staging" is not that
 environment: it holds real credentials, real-shaped customer records, and a
 route to things that matter. A replica is built to be destroyed, and the four
-checks that distinguish them take minutes.
-
-## When to use this
-
-Before running any probe that could change state, before pointing an agent at a
-target, and every time somebody offers staging because the replica is not ready.
-
-## Procedure
-
-**1 — Check egress.** The environment should reach its own internal hosts and
+checks that distinguish them take minutes.</p>
+<h2>When to use this</h2>
+<p>Before running any probe that could change state, before pointing an agent at a
+target, and every time somebody offers staging because the replica is not ready.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Check egress.</strong> The environment should reach its own internal hosts and
 nothing else. Test the three that matter specifically: a code host, the cloud
 metadata address, and any private range. A replica that can reach GitHub can
-exfiltrate.
-
-**2 — Check credentials.** Every secret in the environment should be synthetic.
+exfiltrate.</p>
+<p><strong>2 — Check credentials.</strong> Every secret in the environment should be synthetic.
 Grep the environment, the mounted files and the database. One real key makes the
-whole environment production for the purposes of this decision.
-
-**3 — Check the data.** Real-shaped is not the same as real. Sample records and
+whole environment production for the purposes of this decision.</p>
+<p><strong>3 — Check the data.</strong> Real-shaped is not the same as real. Sample records and
 confirm they are generated, not copied — a customer row with a real email
-address is a breach waiting for a log line.
-
-**4 — Run the destructive probes.** Drop a table, delete a file, exhaust a
+address is a breach waiting for a log line.</p>
+<p><strong>4 — Run the destructive probes.</strong> Drop a table, delete a file, exhaust a
 quota. In a replica these are unremarkable. If you would not do them here, this
-is not the environment to prove an exploit in, and that is the finding.
-
-**5 — Record the verdict per check, not overall.** &quot;Isolated: no&quot; sends people
-looking; &quot;credentials: fail, egress: pass&quot; tells them what to fix.
-
-## Output contract
-
-```json
-{
+is not the environment to prove an exploit in, and that is the finding.</p>
+<p><strong>5 — Record the verdict per check, not overall.</strong> "Isolated: no" sends people
+looking; "credentials: fail, egress: pass" tells them what to fix.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;environment&quot;: &quot;str&quot;,
   &quot;checks&quot;: {&quot;egress&quot;: {&quot;pass&quot;: false, &quot;reachable&quot;: [&quot;str&quot;]},
              &quot;credentials&quot;: {&quot;pass&quot;: false, &quot;real_found&quot;: [&quot;str&quot;]},
@@ -113,150 +98,50 @@ looking; &quot;credentials: fail, egress: pass&quot; tells them what to fix.
   &quot;verdict&quot;: &quot;replica|not a replica&quot;,
   &quot;safe_to_exploit&quot;: false
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Accepting the name.</strong> "staging" and "replica" are labels; the four checks
+  are the definition.</li>
+<li><strong>Testing general egress only.</strong> The metadata address is the one that turns a
+  probe into a credential theft.</li>
+<li><strong>Skipping the destructive probes</strong> because they are destructive. That
+  reluctance is the answer.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>ALLOW http://replica.local/reports                   replica-internal
+ALLOW http://db.replica.local:5432/                  replica-internal
+DENY  https://api.github.com/                        not on the replica allowlist
+DENY  http://169.254.169.254/latest/meta-data/       private address outside the replica — blocked
+DENY  http://10.0.3.14:9200/_search                  private address outside the replica — blocked
+probe                       on staging    on replica
+--------------------------------------------------------
+drop a table                   REACHES     contained
+exfiltrate user rows           REACHES     contained
+brute-force login              REACHES     contained
 
-## Failure modes
+what a leaked credential is worth:
+   staging   REAL — usable against real systems
+   replica   worthless — synthetic
 
-- **Accepting the name.** &quot;staging&quot; and &quot;replica&quot; are labels; the four checks
-  are the definition.
-- **Testing general egress only.** The metadata address is the one that turns a
-  probe into a credential theft.
-- **Skipping the destructive probes** because they are destructive. That
-  reluctance is the answer.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+what an exfiltrated record is worth:
+   staging   REAL customer data  dana@corp
+   replica   synthetic  test-user-a
+appsec-replica-8812
+   PASS  network
+   PASS  credentials
+   PASS  data
+   PASS  lifetime
+   → suitable for dynamic testing: True
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+staging
+   PASS  network
+   FAIL  credentials
+   FAIL  data
+   FAIL  lifetime
+   → suitable for dynamic testing: False
 
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/appsec/exploit-replica-isolation-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/appsec/exploit-replica-isolation-check/scripts/exploit_replica_isolation_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Check that the environment an exploit is proved in is a replica and not staging, on egress, credentials, data and destructive probes.
-
-This is the executable half of the `exploit-replica-isolation-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import re
-from dataclasses import dataclass, field
-from urllib.parse import urlparse
-
-PRIVATE = [re.compile(p) for p in (r&quot;^127\.&quot;, r&quot;^10\.&quot;, r&quot;^169\.254\.&quot;,
-                                   r&quot;^192\.168\.&quot;, r&quot;^localhost$&quot;)]
-
-@dataclass
-class Sandbox:
-    name: str
-    allow_hosts: set = field(default_factory=set)
-    credentials: dict = field(default_factory=dict)
-    data: dict = field(default_factory=dict)
-    ephemeral: bool = True
-    destroyed: bool = False
-    log: list = field(default_factory=list)
-
-    def egress(self, url):
-        host = (urlparse(url).hostname or &quot;&quot;).lower()
-        if host in self.allow_hosts:
-            d = (True, &quot;replica-internal&quot;)
-        elif any(p.match(host) for p in PRIVATE):
-            d = (False, &quot;private address outside the replica — blocked&quot;)
-        else:
-            d = (False, &quot;not on the replica allowlist&quot;)
-        self.log.append((url, d[0], d[1])); return d
-
-    def destroy(self):
-        self.credentials.clear(); self.data.clear(); self.destroyed = True
-        return &quot;replica destroyed; state cannot leak into the next run&quot;
-
-REPLICA = Sandbox(&quot;appsec-replica-8812&quot;,
-                  allow_hosts={&quot;replica.local&quot;, &quot;db.replica.local&quot;},
-                  credentials={&quot;DB_PASSWORD&quot;: &quot;synthetic-not-real-0000&quot;,
-                               &quot;API_TOKEN&quot;: &quot;synthetic-not-real-1111&quot;},
-                  data={&quot;users&quot;: [{&quot;id&quot;: 1, &quot;name&quot;: &quot;test-user-a&quot;,
-                                   &quot;card&quot;: &quot;4000000000000000&quot;}]})
-
-for url in [&quot;http://replica.local/reports&quot;,
-            &quot;http://db.replica.local:5432/&quot;,
-            &quot;https://api.github.com/&quot;,
-            &quot;http://169.254.169.254/latest/meta-data/&quot;,
-            &quot;http://10.0.3.14:9200/_search&quot;]:
-    ok, why = REPLICA.egress(url)
-    print(f&quot;{&#x27;ALLOW&#x27; if ok else &#x27;DENY &#x27;:5s} {url[:44]:46s} {why}&quot;)
-
-STAGING = Sandbox(&quot;staging&quot;,
-                  allow_hosts={&quot;staging.internal&quot;, &quot;db.staging.internal&quot;,
-                               &quot;sso.corp&quot;, &quot;bus.corp&quot;, &quot;api.github.com&quot;},
-                  credentials={&quot;DB_PASSWORD&quot;: &quot;real-staging-password&quot;,
-                               &quot;API_TOKEN&quot;: &quot;ghp_real_staging_token&quot;},
-                  data={&quot;users&quot;: [{&quot;id&quot;: 4471, &quot;name&quot;: &quot;dana@corp&quot;,
-                                   &quot;card&quot;: &quot;4111111111111111&quot;}]},
-                  ephemeral=False)
-
-DESTRUCTIVE_PROBES = [
- (&quot;drop a table&quot;,        &quot;db.staging.internal&quot;, &quot;db.replica.local&quot;),
- (&quot;exfiltrate user rows&quot;,&quot;api.github.com&quot;,      &quot;replica.local&quot;),
- (&quot;brute-force login&quot;,   &quot;sso.corp&quot;,            &quot;replica.local&quot;),
-]
-print(f&quot;{&#x27;probe&#x27;:24s}{&#x27;on staging&#x27;:&gt;14}{&#x27;on replica&#x27;:&gt;14}&quot;)
-print(&quot;-&quot; * 56)
-for probe, staging_target, replica_target in DESTRUCTIVE_PROBES:
-    s_ok, _ = STAGING.egress(f&quot;http://{staging_target}/&quot;)
-    r_ok, _ = REPLICA.egress(f&quot;http://{replica_target}/&quot;)
-    print(f&quot;{probe:24s}{&#x27;REACHES&#x27;:&gt;14}{&#x27;contained&#x27;:&gt;14}&quot; if s_ok
-          else f&quot;{probe:24s}{&#x27;blocked&#x27;:&gt;14}{&#x27;contained&#x27;:&gt;14}&quot;)
-
-print(&quot;\nwhat a leaked credential is worth:&quot;)
-for name, box in ((&quot;staging&quot;, STAGING), (&quot;replica&quot;, REPLICA)):
-    creds = list(box.credentials.values())
-    synthetic = all(&quot;synthetic&quot; in c for c in creds)
-    print(f&quot;   {name:10s}{&#x27;worthless — synthetic&#x27; if synthetic else &#x27;REAL — usable against real systems&#x27;}&quot;)
-
-print(&quot;\nwhat an exfiltrated record is worth:&quot;)
-for name, box in ((&quot;staging&quot;, STAGING), (&quot;replica&quot;, REPLICA)):
-    rec = box.data[&quot;users&quot;][0]
-    real = not rec[&quot;name&quot;].startswith(&quot;test-&quot;)
-    print(f&quot;   {name:10s}{&#x27;REAL customer data&#x27; if real else &#x27;synthetic&#x27;}  {rec[&#x27;name&#x27;]}&quot;)
-
-def isolation_report(box):
-    checks = {
-      &quot;network&quot;: all(not ok for url, ok, _ in box.log
-                     if urlparse(url).hostname not in box.allow_hosts),
-      &quot;credentials&quot;: all(&quot;synthetic&quot; in v for v in box.credentials.values()) if box.credentials else True,
-      &quot;data&quot;: all(u[&quot;name&quot;].startswith(&quot;test-&quot;) for u in box.data.get(&quot;users&quot;, [])),
-      &quot;lifetime&quot;: box.ephemeral,
-    }
-    return checks, all(checks.values())
-
-for box in (REPLICA, STAGING):
-    checks, ok = isolation_report(box)
-    print(f&quot;{box.name}&quot;)
-    for k, v in checks.items():
-        print(f&quot;   {&#x27;PASS&#x27; if v else &#x27;FAIL&#x27;:5s} {k}&quot;)
-    print(f&quot;   → suitable for dynamic testing: {ok}\n&quot;)
-
-_, replica_ok = isolation_report(REPLICA)
-_, staging_ok = isolation_report(STAGING)
-assert replica_ok and not staging_ok
-
-print(REPLICA.destroy())
-print(f&quot;credentials after destroy: {REPLICA.credentials or &#x27;cleared&#x27;}&quot;)
-print(f&quot;data after destroy:        {REPLICA.data or &#x27;cleared&#x27;}&quot;)
-assert REPLICA.destroyed and not REPLICA.credentials</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+replica destroyed; state cannot leak into the next run
+credentials after destroy: cleared
+data after destroy:        cleared</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The replica permits only its own internal hosts and blocks GitHub, the metadata service and private addresses. Staging holds real credentials and a real-shaped customer record while the replica holds synthetic ones. The four isolation checks pass for the replica and fail for staging on credentials, data and lifetime, and destroying the replica clears its state.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Check whether your dynamic testing currently runs against staging. If it does, list what staging shares with production — identity provider, message bus, data replica. Each shared component is a path from a test probe to a real incident.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.7.html">B2.7 · Dynamic exploitation (DAST)</a></strong></p>

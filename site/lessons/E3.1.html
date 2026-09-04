@@ -41,188 +41,94 @@ written acceptance".</p>
 writing, with a named owner and a review date, is a legitimate outcome.</strong> Offering
 it makes the ask credible, because it shows you are presenting a decision rather
 than lobbying for a budget.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill computes exposure, containment ASR and control coverage, prints the findings-shaped update with what is wrong with it, and then writes the position — same numbers, an ask attached.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/risk-translation-upward/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: risk-translation-upward
+<p>The skill computes exposure, containment ASR and control coverage, prints the findings-shaped update with what is wrong with it, and then writes the position — same numbers, an ask attached.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/risk-translation-upward/SKILL.md"><code>skills/programme/risk-translation-upward/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: risk-translation-upward
 description: &gt;-
-  Compute a fleet&#x27;s exposure, containment effectiveness and control coverage,
+  Compute a fleet's exposure, containment effectiveness and control coverage,
   then translate the three numbers into a statement a board can act on rather
   than a list of findings. Use when preparing an executive update on agentic
   risk.
 allowed-tools: Read, Grep, Glob
----
-
-# A findings list is not a position
-
-An executive update made of findings asks the reader to do the synthesis, and
+</code></pre>
+<h1>A findings list is not a position</h1>
+<p>An executive update made of findings asks the reader to do the synthesis, and
 they will do it wrong or not at all. Three computed numbers — how much the fleet
 can reach, how much of an attack it stops, how much of the control set is
-evidenced — support a position, a decision and a request.
-
-## When to use this
-
-Preparing a board or executive committee update, and whenever the current one is
-a list of incidents.
-
-## Procedure
-
-**1 — Compute exposure.** Sum the blast radius across the fleet, weighted by
-scope, with gated actions discounted. One number, and say what it is a sum of.
-
-**2 — Compute containment effectiveness.** Attack success rate against the
-controls as they run today, from the eval suite rather than from design intent.
-
-**3 — Compute control coverage in three states.** Evidenced, stale, unevidenced.
+evidenced — support a position, a decision and a request.</p>
+<h2>When to use this</h2>
+<p>Preparing a board or executive committee update, and whenever the current one is
+a list of incidents.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Compute exposure.</strong> Sum the blast radius across the fleet, weighted by
+scope, with gated actions discounted. One number, and say what it is a sum of.</p>
+<p><strong>2 — Compute containment effectiveness.</strong> Attack success rate against the
+controls as they run today, from the eval suite rather than from design intent.</p>
+<p><strong>3 — Compute control coverage in three states.</strong> Evidenced, stale, unevidenced.
 The stale count is the one that moves an executive conversation, because it is
-the one nobody expected.
-
-**4 — Write the findings-shaped version and mark what is wrong with it.**
+the one nobody expected.</p>
+<p><strong>4 — Write the findings-shaped version and mark what is wrong with it.</strong>
 Usually: no trend, no comparison, no decision requested, no cost, and no
 statement of what happens if nothing changes. Showing that is how the format
-changes.
-
-**5 — Write the position.** Where the exposure is concentrated, what would
+changes.</p>
+<p><strong>5 — Write the position.</strong> Where the exposure is concentrated, what would
 reduce it most per unit of friction, what you are asking for, and what you will
-report next time. Same numbers, different artefact.
-
-## Output contract
-
-```json
-{
+report next time. Same numbers, different artefact.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;exposure&quot;: {&quot;total&quot;: 0, &quot;by_agent&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;blast&quot;: 0, &quot;gated&quot;: [&quot;str&quot;]}]},
   &quot;containment&quot;: {&quot;asr&quot;: 0.0, &quot;from&quot;: &quot;eval suite&quot;},
   &quot;coverage&quot;: {&quot;evidenced&quot;: 0, &quot;stale&quot;: 0, &quot;unevidenced&quot;: 0, &quot;of&quot;: 0},
   &quot;findings_version&quot;: {&quot;problems&quot;: [&quot;str&quot;]},
   &quot;position&quot;: {&quot;concentration&quot;: &quot;str&quot;, &quot;best_reduction&quot;: &quot;str&quot;, &quot;ask&quot;: &quot;str&quot;, &quot;next_report&quot;: &quot;str&quot;}
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting incidents.</strong> They are anecdotes at this altitude.</li>
+<li><strong>One coverage number.</strong> The stale bucket is the story.</li>
+<li><strong>No ask.</strong> An update with no decision requested gets noted.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>agent                     blast radius
+----------------------------------------
+pr-remediation-agent                44
+claims-triage-agent                  1
+doc-summariser                       1
+FLEET TOTAL                         46
 
-## Failure modes
+red-team attack success rate (containment surface): 25%
+controls currently evidenced: 4/8 = 50%
 
-- **Reporting incidents.** They are anecdotes at this altitude.
-- **One coverage number.** The stale bucket is the story.
-- **No ask.** An update with no decision requested gets noted.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/programme/risk-translation-upward/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/risk-translation-upward/scripts/risk_translation_upward.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Compute fleet exposure, containment ASR and control coverage, and translate them into a board statement rather than a findings list.
-
-This is the executable half of the `risk-translation-upward` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-SCOPE_WEIGHT = {&quot;self&quot;: 1, &quot;project&quot;: 3, &quot;tenant&quot;: 8, &quot;org&quot;: 20}
-
-FLEET = {
- &quot;pr-remediation-agent&quot;: [(&quot;read_file&quot;,&quot;self&quot;,True),
-                          (&quot;write_file&quot;,&quot;project&quot;,True),
-                          (&quot;deploy&quot;,&quot;org&quot;,False)],
- &quot;claims-triage-agent&quot;:  [(&quot;read_file&quot;,&quot;self&quot;,True),
-                          (&quot;issue_refund&quot;,&quot;tenant&quot;,False)],
- &quot;doc-summariser&quot;:       [(&quot;read_file&quot;,&quot;self&quot;,True)],
-}
-GATED = {&quot;pr-remediation-agent&quot;: set(), &quot;claims-triage-agent&quot;: {&quot;issue_refund&quot;},
-         &quot;doc-summariser&quot;: set()}
-
-def blast(tools, gated):
-    return sum(SCOPE_WEIGHT[s] * (1 if rev else 2)
-               for n, s, rev in tools if n not in gated)
-
-exposure = {a: blast(t, GATED[a]) for a, t in FLEET.items()}
-print(f&quot;{&#x27;agent&#x27;:24s}{&#x27;blast radius&#x27;:&gt;14}&quot;)
-print(&quot;-&quot; * 40)
-for a, b in sorted(exposure.items(), key=lambda kv: -kv[1]):
-    print(f&quot;{a:24s}{b:&gt;14}&quot;)
-total_exposure = sum(exposure.values())
-print(f&quot;{&#x27;FLEET TOTAL&#x27;:24s}{total_exposure:&gt;14}&quot;)
-
-# likelihood — measured, from C1.2
-ATTACKS = [(&quot;metadata service&quot;, False), (&quot;path traversal&quot;, False),
-           (&quot;unlisted egress&quot;, True), (&quot;denied tool&quot;, False)]
-asr = sum(1 for _, through in ATTACKS if through) / len(ATTACKS)
-print(f&quot;\nred-team attack success rate (containment surface): {asr:.0%}&quot;)
-
-# assurance — from E1.7
-REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
-EVIDENCED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;]
-coverage = len(EVIDENCED) / len(REQUIRED)
-print(f&quot;controls currently evidenced: {len(EVIDENCED)}/{len(REQUIRED)} = {coverage:.0%}&quot;)
-
-FINDINGS_UPDATE = &quot;&quot;&quot;
 This quarter the team identified prompt injection in the code review agent,
 insufficient scope narrowing in the delegation chain, and gaps in our egress
 allowlist. We ran garak and promptfoo against three agents and found a 25%
 attack success rate on the containment surface. We recommend prioritising
 provenance controls and completing the SPIFFE rollout.
-&quot;&quot;&quot;
-print(FINDINGS_UPDATE)
-print(&quot;Problems with this, from the audience&#x27;s side:&quot;)
-for p in [&quot;no exposure figure — how much can actually happen?&quot;,
-          &quot;&#x27;25% attack success rate&#x27; against what, and is that good or bad?&quot;,
-          &quot;four tool names nobody in the room can evaluate&quot;,
-          &quot;&#x27;recommend prioritising&#x27; is not a decision anyone can take&quot;,
-          &quot;no option to decline, so it reads as lobbying rather than a choice&quot;]:
-    print(f&quot;   · {p}&quot;)
 
-def board_translation(tier, exposure, asr, coverage, ask, cost, owner):
-    likelihood = (&quot;demonstrated&quot; if asr &gt; 0.2 else
-                  &quot;reduced but not eliminated&quot; if asr &gt; 0 else &quot;not demonstrated&quot;)
-    return f&quot;&quot;&quot;
-EXPOSURE     A {tier}-tier system can take {exposure} units of unreviewed action.
+Problems with this, from the audience&#x27;s side:
+   · no exposure figure — how much can actually happen?
+   · &#x27;25% attack success rate&#x27; against what, and is that good or bad?
+   · four tool names nobody in the room can evaluate
+   · &#x27;recommend prioritising&#x27; is not a decision anyone can take
+   · no option to decline, so it reads as lobbying rather than a choice
+
+EXPOSURE     A critical-tier system can take 46 units of unreviewed action.
              (One unit ≈ one irreversible change inside one project.)
 
-LIKELIHOOD   We attacked it. {asr:.0%} of our attack suite succeeded — {likelihood}.
+LIKELIHOOD   We attacked it. 25% of our attack suite succeeded — demonstrated.
              This is a measurement, not an assessment.
 
-ASSURANCE    {coverage:.0%} of the controls we say we operate are currently
+ASSURANCE    50% of the controls we say we operate are currently
              evidenced. The remainder are untested or their evidence has expired.
 
-DECISION     {ask}
-             Cost: {cost}.
+DECISION     Fund continuous control verification for the agent fleet.
+             Cost: 0.5 FTE for two quarters, no new licences.
              The alternative is to accept the unevidenced portion in writing,
-             owned by {owner}, with a review date. Both are acceptable outcomes;
-             we need one of them recorded.&quot;&quot;&quot;
+             owned by the Chief Operating Officer, with a review date. Both are acceptable outcomes;
+             we need one of them recorded.
+mechanism terms present: none
+offers a genuine alternative : True
+carries measured numbers     : True
 
-print(board_translation(
-    tier=&quot;critical&quot;, exposure=total_exposure, asr=asr, coverage=coverage,
-    ask=&quot;Fund continuous control verification for the agent fleet.&quot;,
-    cost=&quot;0.5 FTE for two quarters, no new licences&quot;,
-    owner=&quot;the Chief Operating Officer&quot;))
-
-# Verify: the translation must contain no mechanism and must offer a choice.
-JARGON = [&quot;prompt injection&quot;, &quot;spiffe&quot;, &quot;garak&quot;, &quot;promptfoo&quot;, &quot;cwe&quot;,
-          &quot;provenance&quot;, &quot;allowlist&quot;, &quot;delegation chain&quot;, &quot;token exchange&quot;]
-text = board_translation(&quot;critical&quot;, total_exposure, asr, coverage,
-                         &quot;Fund continuous control verification.&quot;, &quot;0.5 FTE&quot;, &quot;the COO&quot;)
-found = [j for j in JARGON if j in text.lower()]
-print(f&quot;mechanism terms present: {found or &#x27;none&#x27;}&quot;)
-has_choice = &quot;alternative&quot; in text.lower() and &quot;accept&quot; in text.lower()
-has_number = str(total_exposure) in text and f&quot;{asr:.0%}&quot; in text
-print(f&quot;offers a genuine alternative : {has_choice}&quot;)
-print(f&quot;carries measured numbers     : {has_number}&quot;)
-assert not found and has_choice and has_number
-print(&quot;\nFour facts, no mechanism, and a decision that can go either way.&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Four facts, no mechanism, and a decision that can go either way.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The fleet's exposure totals 46 units, containment ASR is 25%, and control coverage is 50%. The findings-shaped update is shown with five specific problems. The board translation states exposure, likelihood, assurance and a decision, contains no mechanism jargon, carries the measured numbers, and explicitly offers written acceptance as an alternative.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write these four lines for your highest-tier system. If you cannot fill the likelihood line with a measurement, that is the first thing to fund — an assessment is not a number.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E3.2.html">E3.2 · Governing autonomy rather than approving tools</a></strong></p>

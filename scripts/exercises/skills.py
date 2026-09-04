@@ -139,3 +139,7 @@ def skill_steps(ref: str, intro: str) -> list:
     return [("md", intro),
             ("skill", ref),
             ("skill_script", f"{ref}/scripts/{name}.py")]
+
+# `skill` now renders the SKILL.md as markdown and `skill_script` emits the one
+# cell that runs the file out of the repository. Neither puts the procedure or
+# the runtime into the notebook.

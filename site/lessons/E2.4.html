@@ -48,186 +48,100 @@ without ever using the word AI.</p>
 </ul>
 <p>Citing an existing clause is also far more effective internally than proposing a
 new AI policy: it needs no new governance, and somebody already owns it.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Seven clauses already bind the claims-triage agent and none of them mentions AI. The skill searches on function rather than on technology, and assesses whether the hosted frontier API could be exited at all.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/sector-overlay-assessment/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: sector-overlay-assessment
+<p>Seven clauses already bind the claims-triage agent and none of them mentions AI. The skill searches on function rather than on technology, and assesses whether the hosted frontier API could be exited at all.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/regulatory/sector-overlay-assessment/SKILL.md"><code>skills/regulatory/sector-overlay-assessment/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: sector-overlay-assessment
 description: &gt;-
   Find the pre-existing sector clauses that already apply to an AI system
   without mentioning AI, and assess provider exit against them. Use when a team
   believes no regulation applies yet because the AI rules are not in force.
 allowed-tools: Read, Grep, Glob
----
-
-# The clauses that already apply and never say &quot;AI&quot;
-
-Sector regulation was written before this and applies anyway. Outsourcing,
+</code></pre>
+<h1>The clauses that already apply and never say "AI"</h1>
+<p>Sector regulation was written before this and applies anyway. Outsourcing,
 material change, operational resilience, exit strategy, data handling — none of
 them mention AI, all of them bind an agent that processes claims or moves money.
 The finding is usually that a system nobody thought was regulated attracts seven
-clauses today.
-
-## When to use this
-
-Any AI system in a regulated sector, especially one whose team believes the
-obligations arrive later.
-
-## Procedure
-
-**1 — Describe the system functionally.** What it processes, what it decides,
+clauses today.</p>
+<h2>When to use this</h2>
+<p>Any AI system in a regulated sector, especially one whose team believes the
+obligations arrive later.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Describe the system functionally.</strong> What it processes, what it decides,
 whose money or health or data it touches. Sector clauses trigger on function,
-not on technology.
-
-**2 — Search existing obligations for the functional triggers.** Outsourcing and
+not on technology.</p>
+<p><strong>2 — Search existing obligations for the functional triggers.</strong> Outsourcing and
 third-party dependency, material change notification, resilience and continuity,
-record keeping, exit. Do not search for &quot;AI&quot; — that is why nobody found them.
-
-**3 — Record each clause with what it requires,** in operational terms. &quot;Notify
-the regulator of material change to an outsourced arrangement&quot; becomes a
-question about whether a hosted model version change is a material change.
-
-**4 — Assess provider exit specifically.** Could you move off this provider,
+record keeping, exit. Do not search for "AI" — that is why nobody found them.</p>
+<p><strong>3 — Record each clause with what it requires,</strong> in operational terms. "Notify
+the regulator of material change to an outsourced arrangement" becomes a
+question about whether a hosted model version change is a material change.</p>
+<p><strong>4 — Assess provider exit specifically.</strong> Could you move off this provider,
 how long would it take, and is the alternative viable? A hosted frontier API
 with no equivalent substitute usually fails an exit test that a database would
-pass.
-
-**5 — Make the case for each clause explicitly.** Clause, why it applies, what
+pass.</p>
+<p><strong>5 — Make the case for each clause explicitly.</strong> Clause, why it applies, what
 it requires here. That framing survives a challenge from a team that would
-rather it did not apply.
-
-## Output contract
-
-```json
-{
+rather it did not apply.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;system&quot;: {&quot;function&quot;: &quot;str&quot;, &quot;decides&quot;: &quot;str&quot;, &quot;data&quot;: [&quot;str&quot;]},
   &quot;clauses&quot;: [{&quot;framework&quot;: &quot;str&quot;, &quot;clause&quot;: &quot;str&quot;, &quot;mentions_ai&quot;: false,
                &quot;applies_because&quot;: &quot;str&quot;, &quot;requires&quot;: &quot;str&quot;}],
   &quot;exit&quot;: [{&quot;provider&quot;: &quot;str&quot;, &quot;substitutable&quot;: false, &quot;days_to_exit&quot;: 0, &quot;verdict&quot;: &quot;str&quot;}],
   &quot;cases&quot;: [{&quot;clause&quot;: &quot;str&quot;, &quot;argument&quot;: &quot;str&quot;}]
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Searching for AI.</strong> The binding clauses do not use the word.</li>
+<li><strong>Waiting for the horizontal regime.</strong> These apply now.</li>
+<li><strong>An exit assessment that assumes substitutability.</strong> Test it.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>claims-triage-agent: autonomy L2.5, data [&#x27;customer&#x27;, &#x27;health&#x27;], external model True
 
-## Failure modes
+DORA (financial)
+   ICT third-party risk    your model provider is an ICT third party
+   exit strategy           can you stop using this provider and keep operating?
+   resilience testing      your stop mechanism is in scope for testing
+   incident reporting      clocks measured in hours
 
-- **Searching for AI.** The binding clauses do not use the word.
-- **Waiting for the horizontal regime.** These apply now.
-- **An exit assessment that assumes substitutability.** Test it.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+HIPAA (health)
+   minimum necessary       the context window is a disclosure
+   audit controls          the ACTING identity must be recorded
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+PCI DSS (cards)
+   access control          non-human identities need the same rigour
 
-from cyber_commons_skill_runtime import run_skill
+7 pre-existing clauses apply. None of them mentions AI.
+provider                      exit strategy
+------------------------------------------------
+hosted frontier API          NOT DEFENSIBLE
+      ⚠ cannot pin a version — behaviour changes without notice
+      ⚠ cannot retain the artefact — no continuity if withdrawn
+      ⚠ 45d to switch — outside most RTOs
+hosted open-weight API       NOT DEFENSIBLE
+      ⚠ cannot retain the artefact — no continuity if withdrawn
+self-hosted open weights         defensible
 
-# Split skills/regulatory/sector-overlay-assessment/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/regulatory/sector-overlay-assessment/scripts/sector_overlay_assessment.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Find the pre-existing sector clauses that already apply to an AI system without mentioning AI, and assess provider exit.
+DORA Art.11 asks this directly. It is the clause most AI procurement
+cannot answer, and it was written years before anyone deployed an agent.
+&#x27;ICT third-party risk&#x27; (DORA) already applies to us and is owned by third-party risk management.
+   The agent fact that engages it: the model provider is an ICT third party
+   Ask: extend the existing control, not create an AI policy.
 
-This is the executable half of the `sector-overlay-assessment` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+&#x27;audit controls&#x27; (HIPAA) already applies to us and is owned by the security team.
+   The agent fact that engages it: the acting identity is not currently recorded
+   Ask: extend the existing control, not create an AI policy.
 
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
+&#x27;access control&#x27; (PCI DSS) already applies to us and is owned by identity and access management.
+   The agent fact that engages it: non-human identities have no recertification
+   Ask: extend the existing control, not create an AI policy.
 
-OVERLAYS = {
- &quot;DORA (financial)&quot;: [
-   (&quot;ICT third-party risk&quot;, &quot;your model provider is an ICT third party&quot;,
-    lambda s: s[&quot;uses_external_model&quot;]),
-   (&quot;exit strategy&quot;, &quot;can you stop using this provider and keep operating?&quot;,
-    lambda s: s[&quot;uses_external_model&quot;]),
-   (&quot;resilience testing&quot;, &quot;your stop mechanism is in scope for testing&quot;,
-    lambda s: s[&quot;autonomy&quot;] in (&quot;L2.5&quot;, &quot;L3&quot;)),
-   (&quot;incident reporting&quot;, &quot;clocks measured in hours&quot;,
-    lambda s: True)],
- &quot;HIPAA (health)&quot;: [
-   (&quot;minimum necessary&quot;, &quot;the context window is a disclosure&quot;,
-    lambda s: &quot;health&quot; in s[&quot;data&quot;]),
-   (&quot;audit controls&quot;, &quot;the ACTING identity must be recorded&quot;,
-    lambda s: True)],
- &quot;PCI DSS (cards)&quot;: [
-   (&quot;scope containment&quot;, &quot;an agent with CDE access expands the CDE&quot;,
-    lambda s: &quot;cardholder&quot; in s[&quot;data&quot;]),
-   (&quot;access control&quot;, &quot;non-human identities need the same rigour&quot;,
-    lambda s: True)],
-}
-SYSTEM = {&quot;name&quot;: &quot;claims-triage-agent&quot;, &quot;uses_external_model&quot;: True,
-          &quot;autonomy&quot;: &quot;L2.5&quot;, &quot;data&quot;: (&quot;customer&quot;, &quot;health&quot;)}
-
-print(f&quot;{SYSTEM[&#x27;name&#x27;]}: autonomy {SYSTEM[&#x27;autonomy&#x27;]}, data {list(SYSTEM[&#x27;data&#x27;])}, &quot;
-      f&quot;external model {SYSTEM[&#x27;uses_external_model&#x27;]}\n&quot;)
-hits = []
-for fw, clauses in OVERLAYS.items():
-    applicable = [(c, why) for c, why, test in clauses if test(SYSTEM)]
-    if not applicable: continue
-    print(f&quot;{fw}&quot;)
-    for c, why in applicable:
-        hits.append((fw, c)); print(f&quot;   {c:24s}{why}&quot;)
-    print()
-print(f&quot;{len(hits)} pre-existing clauses apply. None of them mentions AI.&quot;)
-
-PROVIDERS = {
- &quot;hosted frontier API&quot;: {&quot;can_pin_version&quot;: False, &quot;can_export_weights&quot;: False,
-                         &quot;equivalent_alternative&quot;: True, &quot;switching_days&quot;: 45},
- &quot;hosted open-weight API&quot;: {&quot;can_pin_version&quot;: True, &quot;can_export_weights&quot;: False,
-                            &quot;equivalent_alternative&quot;: True, &quot;switching_days&quot;: 14},
- &quot;self-hosted open weights&quot;: {&quot;can_pin_version&quot;: True, &quot;can_export_weights&quot;: True,
-                              &quot;equivalent_alternative&quot;: True, &quot;switching_days&quot;: 2},
-}
-def exit_assessment(p):
-    problems = []
-    if not p[&quot;can_pin_version&quot;]:
-        problems.append(&quot;cannot pin a version — behaviour changes without notice&quot;)
-    if not p[&quot;can_export_weights&quot;]:
-        problems.append(&quot;cannot retain the artefact — no continuity if withdrawn&quot;)
-    if p[&quot;switching_days&quot;] &gt; 30:
-        problems.append(f&quot;{p[&#x27;switching_days&#x27;]}d to switch — outside most RTOs&quot;)
-    return (not problems), problems
-
-print(f&quot;{&#x27;provider&#x27;:28s}{&#x27;exit strategy&#x27;:&gt;15}&quot;)
-print(&quot;-&quot; * 48)
-for name, p in PROVIDERS.items():
-    ok, problems = exit_assessment(p)
-    print(f&quot;{name:28s}{&#x27;defensible&#x27; if ok else &#x27;NOT DEFENSIBLE&#x27;:&gt;15}&quot;)
-    for x in problems: print(f&quot;      ⚠ {x}&quot;)
-print(&quot;\nDORA Art.11 asks this directly. It is the clause most AI procurement&quot;)
-print(&quot;cannot answer, and it was written years before anyone deployed an agent.&quot;)
-
-def make_the_case(clause, framework, agent_fact, existing_owner):
-    return (f&quot;&#x27;{clause}&#x27; ({framework}) already applies to us and is owned by &quot;
-            f&quot;{existing_owner}.\n&quot;
-            f&quot;   The agent fact that engages it: {agent_fact}\n&quot;
-            f&quot;   Ask: extend the existing control, not create an AI policy.&quot;)
-
-CASES = [
- (&quot;ICT third-party risk&quot;, &quot;DORA&quot;, &quot;the model provider is an ICT third party&quot;,
-  &quot;third-party risk management&quot;),
- (&quot;audit controls&quot;, &quot;HIPAA&quot;, &quot;the acting identity is not currently recorded&quot;,
-  &quot;the security team&quot;),
- (&quot;access control&quot;, &quot;PCI DSS&quot;, &quot;non-human identities have no recertification&quot;,
-  &quot;identity and access management&quot;),
-]
-for c, fw, fact, owner in CASES:
-    print(make_the_case(c, fw, fact, owner)); print()
-
-print(&quot;Compare with the alternative ask:&quot;)
-print(&quot;   &#x27;We need a new AI governance policy and a new committee.&#x27;&quot;)
-print(&quot;   → new owner, new process, new budget line, six months.&quot;)
-print(&quot;versus&quot;)
-print(&quot;   &#x27;Extend third-party risk to cover model providers.&#x27;&quot;)
-print(&quot;   → existing owner, existing process, next review cycle.&quot;)
-assert len(CASES) == 3</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Compare with the alternative ask:
+   &#x27;We need a new AI governance policy and a new committee.&#x27;
+   → new owner, new process, new budget line, six months.
+versus
+   &#x27;Extend third-party risk to cover model providers.&#x27;
+   → existing owner, existing process, next review cycle.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Seven pre-existing clauses apply to the claims-triage agent across DORA, HIPAA and PCI DSS, none of which mentions AI. The exit-strategy assessment marks the hosted frontier API as not defensible on all three counts, the hosted open-weight API on one, and self-hosted weights as defensible. Three cases show how to route the requirement to an existing owner rather than a new policy.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find the clause in your own sector overlay that already covers autonomous action without naming AI. Citing it is faster, cheaper and more persuasive than any new AI policy you could write.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.5.html">E2.5 · Privacy and data protection</a></strong></p>

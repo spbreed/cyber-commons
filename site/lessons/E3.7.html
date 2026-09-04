@@ -42,55 +42,40 @@ fails its first real incident.</p>
 <p>The four roles from E3.4 map onto the quarters, and the hire that unblocks the
 most others is the identity engineer — which is not the one most teams hire
 first.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Two orders, the same work. The skill simulates both quarter by quarter: the correct one climbs to full coverage with nothing demoable until Q3, and the inverted one leads on capability for three quarters and finishes lower.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/capability-build-order/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: capability-build-order
+<p>Two orders, the same work. The skill simulates both quarter by quarter: the correct one climbs to full coverage with nothing demoable until Q3, and the inverted one leads on capability for three quarters and finishes lower.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/capability-build-order/SKILL.md"><code>skills/programme/capability-build-order/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: capability-build-order
 description: &gt;-
   Compare a build order that produces control coverage against one that produces
   demos, quarter by quarter, and state what each has at the end of every period.
   Use when planning what to build first with a fixed team.
 allowed-tools: Read, Grep, Glob
----
-
-# Nothing demoable until Q3, and 100% coverage at Q4
-
-Two orders, the same work. One builds the controls in dependency order and
+</code></pre>
+<h1>Nothing demoable until Q3, and 100% coverage at Q4</h1>
+<p>Two orders, the same work. One builds the controls in dependency order and
 produces coverage; the other builds the visible things first and produces
 capabilities. The second looks better for three quarters and finishes lower, and
 the only way to survive the first is to say in advance that it will look like
-that.
-
-## When to use this
-
-Planning a multi-quarter build with a fixed team, and defending a plan whose
-early quarters have nothing to show.
-
-## Procedure
-
-**1 — List the required controls and what each depends on.** Coverage is
+that.</p>
+<h2>When to use this</h2>
+<p>Planning a multi-quarter build with a fixed team, and defending a plan whose
+early quarters have nothing to show.</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the required controls and what each depends on.</strong> Coverage is
 measured against this list, so it has to exist before either order can be
-scored.
-
-**2 — Mark which controls are demoable.** Some produce something a stakeholder
+scored.</p>
+<p><strong>2 — Mark which controls are demoable.</strong> Some produce something a stakeholder
 can see; most do not. This is the honest input to the tension rather than a
-complaint about it.
-
-**3 — Simulate the dependency-respecting order.** Coverage per quarter and what
-is demoable per quarter. Expect a flat, invisible start.
-
-**4 — Simulate the demo-first order.** It will lead for several quarters on
+complaint about it.</p>
+<p><strong>3 — Simulate the dependency-respecting order.</strong> Coverage per quarter and what
+is demoable per quarter. Expect a flat, invisible start.</p>
+<p><strong>4 — Simulate the demo-first order.</strong> It will lead for several quarters on
 capability and trail on coverage, and it will end lower because later controls
-block on earlier ones.
-
-**5 — Publish both, with the Q1 and Q2 warning explicit.** A plan that predicts
+block on earlier ones.</p>
+<p><strong>5 — Publish both, with the Q1 and Q2 warning explicit.</strong> A plan that predicts
 its own quiet period survives it; one that does not gets re-planned in month
-four into the other order.
-
-## Output contract
-
-```json
-{
+four into the other order.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;required&quot;: [&quot;str&quot;],
   &quot;demoable&quot;: {&quot;str&quot;: false},
   &quot;orders&quot;: [{&quot;name&quot;: &quot;str&quot;,
@@ -98,124 +83,50 @@ four into the other order.
               &quot;final_coverage&quot;: 0.0, &quot;final_capabilities&quot;: 0}],
   &quot;warning&quot;: &quot;str&quot;
 }
-```
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Building demoable things first.</strong> It finishes lower.</li>
+<li><strong>Not warning about the quiet quarters.</strong> The plan gets replaced in month
+  four.</li>
+<li><strong>Coverage against a list that does not exist yet.</strong> Write the required set
+  first.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>quarter                         coverage   demoable
+------------------------------------------------------
+Q1 · inventory + identity            25%          0
+Q2 · containment                     50%          0
+Q3 · evidence + evaluation           75%          1
+Q4 · continuous + stop              100%          3
 
-## Failure modes
+Q1 and Q2 produce nothing demoable. That is the political problem, and
+it is why the inverted order keeps getting chosen.
+quarter                         coverage  capabilities
+------------------------------------------------------------------------------------------
+Q1 · evaluation + dashboard          25%  [&#x27;can defend an accuracy number&#x27;]
+Q2 · more evaluation                 25%  [&#x27;can defend an accuracy number&#x27;]
+Q3 · identity (finally)              50%  [&#x27;can revoke one agent&#x27;, &#x27;can defend an accuracy number&#x27;]
+Q4 · containment                     75%  [&#x27;can revoke one agent&#x27;, &#x27;can bound a compromised agent&#x27;, &#x27;can defend an accuracy number&#x27;]
 
-- **Building demoable things first.** It finishes lower.
-- **Not warning about the quiet quarters.** The plan gets replaced in month
-  four.
-- **Coverage against a list that does not exist yet.** Write the required set
-  first.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
+after four quarters:
+   inverted order: 3 capabilities  [&#x27;can revoke one agent&#x27;, &#x27;can bound a compromised agent&#x27;, &#x27;can defend an accuracy number&#x27;]
+   correct order : 5 capabilities
 
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+The inverted programme spent a year and still cannot halt the fleet.
+role                  track  controls                    unblocks
+--------------------------------------------------------------------------------------------
+identity engineer     A2     [&#x27;AC-1&#x27;, &#x27;AC-2&#x27;, &#x27;EV-1&#x27;]    [&#x27;can revoke one agent&#x27;, &#x27;can attribute an action&#x27;]
+GRC practitioner      E1     [&#x27;SB-2&#x27;, &#x27;ST-1&#x27;]            [&#x27;can bound a compromised agent&#x27;, &#x27;can halt the fleet&#x27;]
+harness engineer      B2     [&#x27;EV-2&#x27;]                    [&#x27;can defend an accuracy number&#x27;]
+detection engineer    D1     [&#x27;DR-1&#x27;]                    []
 
-from cyber_commons_skill_runtime import run_skill
+hire first (unblocks the most): identity engineer
+hired first most often        : harness engineer
 
-# Split skills/programme/capability-build-order/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/programme/capability-build-order/scripts/capability_build_order.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Compare a build order that produces coverage against one that produces demos, quarter by quarter.
-
-This is the executable half of the `capability-build-order` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import time
-now = time.time(); DAY = 86400
-REQUIRED = [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;ST-1&quot;]
-
-QUARTERS = {
- &quot;Q1 · inventory + identity&quot;: [&quot;AC-1&quot;,&quot;AC-2&quot;],
- &quot;Q2 · containment&quot;:          [&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;],
- &quot;Q3 · evidence + evaluation&quot;:[&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;,&quot;EV-1&quot;,&quot;EV-2&quot;],
- &quot;Q4 · continuous + stop&quot;:    REQUIRED,
-}
-DEMOABLE = {&quot;AC-1&quot;: False, &quot;AC-2&quot;: False, &quot;SB-1&quot;: False, &quot;SB-2&quot;: False,
-            &quot;EV-1&quot;: False, &quot;EV-2&quot;: True, &quot;DR-1&quot;: True, &quot;ST-1&quot;: True}
-
-print(f&quot;{&#x27;quarter&#x27;:30s}{&#x27;coverage&#x27;:&gt;10}{&#x27;demoable&#x27;:&gt;11}&quot;)
-print(&quot;-&quot; * 54)
-for q, done in QUARTERS.items():
-    cov = len(done)/len(REQUIRED)
-    demo = sum(1 for c in done if DEMOABLE[c])
-    print(f&quot;{q:30s}{cov:&gt;10.0%}{demo:&gt;11}&quot;)
-print(&quot;\nQ1 and Q2 produce nothing demoable. That is the political problem, and&quot;)
-print(&quot;it is why the inverted order keeps getting chosen.&quot;)
-
-INVERTED = {
- &quot;Q1 · evaluation + dashboard&quot;: [&quot;EV-2&quot;,&quot;DR-1&quot;],
- &quot;Q2 · more evaluation&quot;:        [&quot;EV-2&quot;,&quot;DR-1&quot;],
- &quot;Q3 · identity (finally)&quot;:     [&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;AC-1&quot;,&quot;AC-2&quot;],
- &quot;Q4 · containment&quot;:            [&quot;EV-2&quot;,&quot;DR-1&quot;,&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;SB-1&quot;,&quot;SB-2&quot;],
-}
-CAPABILITY_AT = {
- &quot;can revoke one agent&quot;:            {&quot;AC-1&quot;},
- &quot;can attribute an action&quot;:         {&quot;AC-1&quot;,&quot;EV-1&quot;},
- &quot;can bound a compromised agent&quot;:   {&quot;SB-1&quot;,&quot;SB-2&quot;},
- &quot;can halt the fleet&quot;:              {&quot;ST-1&quot;},
- &quot;can defend an accuracy number&quot;:   {&quot;EV-2&quot;},
-}
-def capabilities(done):
-    return [c for c, need in CAPABILITY_AT.items() if need &lt;= set(done)]
-
-print(f&quot;{&#x27;quarter&#x27;:30s}{&#x27;coverage&#x27;:&gt;10}  capabilities&quot;)
-print(&quot;-&quot; * 90)
-for q, done in INVERTED.items():
-    print(f&quot;{q:30s}{len(done)/len(REQUIRED):&gt;10.0%}  {capabilities(done) or &#x27;—&#x27;}&quot;)
-
-end_inverted = capabilities(INVERTED[&quot;Q4 · containment&quot;])
-end_correct  = capabilities(QUARTERS[&quot;Q4 · continuous + stop&quot;])
-print(f&quot;\nafter four quarters:&quot;)
-print(f&quot;   inverted order: {len(end_inverted)} capabilities  {end_inverted}&quot;)
-print(f&quot;   correct order : {len(end_correct)} capabilities&quot;)
-print(&quot;\nThe inverted programme spent a year and still cannot halt the fleet.&quot;)
-assert len(end_correct) &gt; len(end_inverted)
-
-ROLES = {
- &quot;harness engineer&quot;:   (&quot;B2&quot;, {&quot;EV-2&quot;},                 &quot;loop, verifier, eval&quot;),
- &quot;identity engineer&quot;:  (&quot;A2&quot;, {&quot;AC-1&quot;,&quot;AC-2&quot;,&quot;EV-1&quot;},   &quot;identity, delegation, act chains&quot;),
- &quot;detection engineer&quot;: (&quot;D1&quot;, {&quot;DR-1&quot;},                 &quot;agent telemetry and drift&quot;),
- &quot;GRC practitioner&quot;:   (&quot;E1&quot;, {&quot;SB-2&quot;,&quot;ST-1&quot;},          &quot;tiering, evidence, verification&quot;),
-}
-def unblocks(role):
-    delivered = ROLES[role][1]
-    return [c for c, need in CAPABILITY_AT.items() if need &amp; delivered]
-
-print(f&quot;{&#x27;role&#x27;:22s}{&#x27;track&#x27;:7s}{&#x27;controls&#x27;:28s}unblocks&quot;)
-print(&quot;-&quot; * 92)
-for role, (track, controls, what) in sorted(
-        ROLES.items(), key=lambda kv: -len(unblocks(kv[0]))):
-    print(f&quot;{role:22s}{track:7s}{str(sorted(controls)):28s}{unblocks(role)}&quot;)
-
-first = max(ROLES, key=lambda r: len(unblocks(r)))
-print(f&quot;\nhire first (unblocks the most): {first}&quot;)
-print(f&quot;hired first most often        : harness engineer&quot;)
-assert first == &quot;identity engineer&quot;
-
-print(&quot;\nplan that survives contact:&quot;)
-for q, hire, deliver in [
- (&quot;Q1&quot;, &quot;identity engineer&quot;, &quot;inventory + agent identities (AC-1, AC-2)&quot;),
- (&quot;Q2&quot;, &quot;GRC practitioner&quot;,  &quot;containment + tiering (SB-1, SB-2)&quot;),
- (&quot;Q3&quot;, &quot;harness engineer&quot;,  &quot;evidence + held-out evaluation (EV-1, EV-2)&quot;),
- (&quot;Q4&quot;, &quot;detection engineer&quot;,&quot;drift + tested stop (DR-1, ST-1)&quot;),
-]:
-    print(f&quot;   {q}  hire {hire:20s}deliver {deliver}&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+plan that survives contact:
+   Q1  hire identity engineer   deliver inventory + agent identities (AC-1, AC-2)
+   Q2  hire GRC practitioner    deliver containment + tiering (SB-1, SB-2)
+   Q3  hire harness engineer    deliver evidence + held-out evaluation (EV-1, EV-2)
+   Q4  hire detection engineer  deliver drift + tested stop (DR-1, ST-1)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>The correct order climbs 25% → 50% → 75% → 100% coverage with nothing demoable until Q3. The inverted order reaches 75% after four quarters with 3 capabilities against the correct order's 5, and still cannot halt the fleet. The identity engineer unblocks the most capabilities and is named as the first hire.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Map your existing team onto the four roles. Most organisations have three of them under other names and are missing the identity one entirely — which is also the one that unblocks everything else.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E3.8.html">E3.8 · Resilience over perfection</a></strong></p>

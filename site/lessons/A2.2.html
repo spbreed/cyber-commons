@@ -58,10 +58,8 @@ lesson models the exchange, not the product.</p></div><div class="nbmd"><blockqu
 <p><strong>What this control closes.</strong></p>
 <p>Makes <strong>possession stop being proof</strong>. Without it, A1.7 is unavoidable: a copyable secret means every holder is the agent.</p>
 </blockquote></div><div class="nbmd"><h2>3 · The check, as a skill</h2>
-<p>Whether CyberTravels' agents hold a credential or a secret is settled by four probes, not by reading the deployment manifest. The skill runs them: an unattested process, a genuine image nobody registered, a credential presented from another node, and one presented after its TTL.</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/workload-attestation-check/SKILL.md — embedded verbatim from the repository.
-# This is the file itself, not a paraphrase of it.
-SKILL_MD = r&quot;&quot;&quot;---
-name: workload-attestation-check
+<p>Whether CyberTravels' agents hold a credential or a secret is settled by four probes, not by reading the deployment manifest. The skill runs them: an unattested process, a genuine image nobody registered, a credential presented from another node, and one presented after its TTL.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/identity/workload-attestation-check/SKILL.md"><code>skills/identity/workload-attestation-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: workload-attestation-check
 description: &gt;-
   Establish how a workload receives its first credential and whether possession
   of that credential is still proof of identity — testing an unattested process,
@@ -69,48 +67,35 @@ description: &gt;-
   Use when reviewing bootstrap, SPIFFE/SPIRE, or any secret mounted at deploy
   time.
 allowed-tools: Read, Grep, Glob
----
-
-# Where the first credential comes from
-
-There is a circularity at the start of every workload identity: to receive a
+</code></pre>
+<h1>Where the first credential comes from</h1>
+<p>There is a circularity at the start of every workload identity: to receive a
 credential securely the workload must already prove who it is. A pre-shared
-secret resolves it by making **possession** the proof, which means everyone who
+secret resolves it by making <strong>possession</strong> the proof, which means everyone who
 can read the image is the agent. Attestation resolves it by having the platform
-sign what only the platform knows.
-
-## When to use this
-
-Reviewing how any agent, job or pod authenticates for the first time. The
+sign what only the platform knows.</p>
+<h2>When to use this</h2>
+<p>Reviewing how any agent, job or pod authenticates for the first time. The
 answer decides whether every later identity control rests on something or on a
-copied file.
-
-## Procedure
-
-**1 — Find the first credential.** Trace back from a downstream call to where
+copied file.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Find the first credential.</strong> Trace back from a downstream call to where
 the credential entered the process: an environment variable, a mounted file, a
-secrets manager fetch, or an attestation exchange.
-
-**2 — Ask who else can read it.** For a secret, that set is the set of people
+secrets manager fetch, or an attestation exchange.</p>
+<p><strong>2 — Ask who else can read it.</strong> For a secret, that set is the set of people
 who are currently the agent. Enumerate it — image layers, CI logs, anyone with
-`exec` on the namespace, anyone who can read the manifest.
-
-**3 — Test the unattested process.** A process that is not what the platform
+<code>exec</code> on the namespace, anyone who can read the manifest.</p>
+<p><strong>3 — Test the unattested process.</strong> A process that is not what the platform
 started should receive nothing. If it receives a credential, the exchange is
-authenticating a claim rather than a workload.
-
-**4 — Test the unregistered-but-genuine image.** A real workload nobody
-registered is the case people forget: attestation proves *what* is running, and
-registration decides whether it should be. Both must refuse.
-
-**5 — Test binding and lifetime.** Present a legitimately issued credential
+authenticating a claim rather than a workload.</p>
+<p><strong>4 — Test the unregistered-but-genuine image.</strong> A real workload nobody
+registered is the case people forget: attestation proves <em>what</em> is running, and
+registration decides whether it should be. Both must refuse.</p>
+<p><strong>5 — Test binding and lifetime.</strong> Present a legitimately issued credential
 from a different node, and again after its TTL. Both must fail. A credential
-that travels is a secret with extra steps.
-
-## Output contract
-
-```json
-{
+that travels is a secret with extra steps.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
   &quot;source&quot;: &quot;env|file|manager|attestation&quot;,
   &quot;readable_by&quot;: [&quot;str&quot;],
   &quot;probes&quot;: {&quot;unattested&quot;: &quot;issued|refused&quot;, &quot;unregistered_image&quot;: &quot;issued|refused&quot;,
@@ -118,97 +103,29 @@ that travels is a secret with extra steps.
   &quot;properties&quot;: {&quot;non_copyable&quot;: false, &quot;short_lived&quot;: false, &quot;bound&quot;: false},
   &quot;ttl_seconds&quot;: 0
 }
-```
-
-All three properties, or the credential is a secret: non-copyable because it
+</code></pre>
+<p>All three properties, or the credential is a secret: non-copyable because it
 describes a running process, short-lived so theft has a deadline, bound so
-presenting it elsewhere fails.
+presenting it elsewhere fails.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Accepting a secrets manager as attestation.</strong> It answers "who may fetch
+  this", which is the same circularity one layer down.</li>
+<li><strong>Testing only the unattested case.</strong> The unregistered genuine workload is
+  the one that gets through.</li>
+<li><strong>Recording a long TTL as acceptable</strong> because rotation exists. Rotation is
+  not a deadline for a copy already taken.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   proc-1        spiffe://corp/reports-agent     issued
+   proc-2        -                               image is not registered to any identity
+   proc-stolen   -                               no attestation - unattested process
 
-## Failure modes
+   presented from n-7 at t=1100: ok (accepted)
+   presented from n-9 at t=1100: REFUSED (bound to n-7)
+   presented from n-7 at t=2000: REFUSED (expired)
 
-- **Accepting a secrets manager as attestation.** It answers &quot;who may fetch
-  this&quot;, which is the same circularity one layer down.
-- **Testing only the unattested case.** The unregistered genuine workload is
-  the one that gets through.
-- **Recording a long TTL as acceptable** because rotation exists. Rotation is
-  not a deadline for a copy already taken.
-&quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, os, shutil, sys
-
-# Make the shared runtime importable, then import it. On Kaggle an attached
-# kernel is mounted as __script__.py — not on sys.path and not named after the
-# kernel — so copy it to the name it is imported by. Locally it is already a
-# file of that name in the repository.
-_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
-if _k:
-    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
-sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
-
-from cyber_commons_skill_runtime import run_skill
-
-# Split skills/identity/workload-attestation-check/SKILL.md into the two halves an agent uses —
-# the frontmatter it routes on, and the body it follows.
-meta, body = run_skill(SKILL_MD)</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/identity/workload-attestation-check/scripts/workload_attestation_check.py — embedded verbatim from the repository.
-# This is the skill&#x27;s own script, not a paraphrase of it.
-#!/usr/bin/env python3
-&quot;&quot;&quot;Show what an identity service does with an unattested process, an unregistered image, and a credential presented from the wrong node or after expiry.
-
-This is the executable half of the `workload-attestation-check` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
-
-Standard library only, and deterministic, so it runs on a Kaggle
-kernel with the internet switched off.
-&quot;&quot;&quot;
-
-import hashlib, time
-
-PLATFORM_TRUTH = {          # only the platform can observe these
- &quot;proc-1&quot;: {&quot;image&quot;: &quot;reports-agent@sha256:aa11&quot;, &quot;namespace&quot;: &quot;prod&quot;, &quot;node&quot;: &quot;n-7&quot;},
- &quot;proc-2&quot;: {&quot;image&quot;: &quot;billing-agent@sha256:bb22&quot;, &quot;namespace&quot;: &quot;prod&quot;, &quot;node&quot;: &quot;n-7&quot;},
-}
-
-def platform_attest(pid):
-    &quot;&quot;&quot;The platform signs a statement about a process it actually started.&quot;&quot;&quot;
-    facts = PLATFORM_TRUTH.get(pid)
-    if not facts:
-        return None                       # cannot attest a process it did not start
-    payload = f&quot;{pid}|{facts[&#x27;image&#x27;]}|{facts[&#x27;namespace&#x27;]}&quot;
-    return {&quot;claims&quot;: facts, &quot;sig&quot;: hashlib.sha256(payload.encode()).hexdigest()[:16]}
-
-REGISTERED = {&quot;reports-agent@sha256:aa11&quot;: &quot;spiffe://corp/reports-agent&quot;}
-
-def issue_credential(attestation, now=1000, ttl=300):
-    &quot;&quot;&quot;Exchange an attestation for a short-lived, workload-bound credential.&quot;&quot;&quot;
-    if not attestation:
-        return None, &quot;no attestation - unattested process&quot;
-    identity = REGISTERED.get(attestation[&quot;claims&quot;][&quot;image&quot;])
-    if not identity:
-        return None, &quot;image is not registered to any identity&quot;
-    return {&quot;identity&quot;: identity, &quot;expires&quot;: now + ttl,
-            &quot;bound_to&quot;: attestation[&quot;claims&quot;][&quot;node&quot;]}, &quot;issued&quot;
-
-for pid in (&quot;proc-1&quot;, &quot;proc-2&quot;, &quot;proc-stolen&quot;):
-    cred, why = issue_credential(platform_attest(pid))
-    print(f&quot;   {pid:14s}{(cred[&#x27;identity&#x27;] if cred else &#x27;-&#x27;):32s}{why}&quot;)
-
-# a stolen credential presented from another node
-stolen, _ = issue_credential(platform_attest(&quot;proc-1&quot;))
-def present(cred, from_node, now):
-    if now &gt; cred[&quot;expires&quot;]:            return False, &quot;expired&quot;
-    if from_node != cred[&quot;bound_to&quot;]:    return False, f&quot;bound to {cred[&#x27;bound_to&#x27;]}&quot;
-    return True, &quot;accepted&quot;
-
-print()
-for node, now in ((&quot;n-7&quot;, 1100), (&quot;n-9&quot;, 1100), (&quot;n-7&quot;, 2000)):
-    ok, why = present(stolen, node, now)
-    print(f&quot;   presented from {node} at t={now}: {&#x27;ok&#x27; if ok else &#x27;REFUSED&#x27;} ({why})&quot;)
-print()
-print(&quot;Copying the credential does not help: it is bound to a node and expires&quot;)
-print(&quot;in five minutes. Copying the image does not help either - proc-2 is a&quot;)
-print(&quot;real process and still gets nothing, because its image is not registered.&quot;)
-assert issue_credential(platform_attest(&quot;proc-stolen&quot;))[0] is None
-assert not present(stolen, &quot;n-9&quot;, 1100)[0]</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+Copying the credential does not help: it is bound to a node and expires
+in five minutes. Copying the image does not help either - proc-2 is a
+real process and still gets nothing, because its image is not registered.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Find where one of your agents gets its first credential. If the answer is an environment variable or a mounted file, list everyone who can read it — that is the set of people who are currently that agent.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A2.3.html">A2.3 · Delegation that narrows, and survives audit</a></strong></p>
