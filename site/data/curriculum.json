@@ -683,38 +683,9 @@
    "blurb": "The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.",
    "tracks": [
     {
-     "id": "B1",
-     "title": "What Runs the Pipeline",
-     "sessions": [
-      {
-       "id": "B1.0",
-       "title": "What a harness is, and the loop it runs",
-       "kind": "control",
-       "track": "both",
-       "lab": "Build the smallest thing that is still a harness, then add the one component that was missing.",
-       "tools": [
-        "OpenTelemetry"
-       ]
-      },
-      {
-       "id": "B1.1",
-       "title": "Who chooses the next tool call — you, the model, or a server",
-       "kind": "control",
-       "track": "both",
-       "lab": "Enumerate every path a deterministic graph can take, then watch an MCP server edit an instruction into your context overnight.",
-       "tools": [
-        "LangGraph",
-        "MCP",
-        "Claude Haiku 4.5",
-        "Qwen2.5-7B"
-       ]
-      }
-     ]
-    },
-    {
      "id": "B2",
      "chapter": 4,
-     "title": "The AI SDLC: an Agentic AppSec Pipeline",
+     "title": "The AI SDLC: Harnesses and an Agentic AppSec Pipeline",
      "titles": "AppSec Engineer, Product Security Engineer, Secure Code Reviewer",
      "changes": "The secure development lifecycle as one artefact, built stage by stage: ingest, model, audit, confirm, remediate, report. 18 lessons.",
      "autonomy": "Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.",
@@ -722,14 +693,17 @@
      "sessions": [
       {
        "id": "B2.0",
-       "title": "Start here — what an AI SDLC means",
+       "title": "What a harness is, and why you are the one building it",
        "track": "both",
        "kind": "introduction",
        "summary": "Function B rebuilds the secure development lifecycle around agents, in both directions at once. AI for Security: an agentic pipeline that reviews code, models threats, confirms exploits and reports them. Security of AI: that pipeline is itself an agentic system, with every risk Function A described. Chapter 4 builds the SDLC; chapter 5 builds the harness underneath it.",
        "risk": "A security pipeline built as if it were exempt from the risks it exists to find.",
        "control": "Build the pipeline and the harness as one system, and hold both to the same evidence standard.",
-       "lab": "Trace one finding from ingestion to a signed report and name the stage that decides whether it is true.",
-       "tools": [],
+       "lab": "Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.",
+       "tools": [
+        "Claude Haiku 4.5",
+        "Qwen2.5-7B"
+       ],
        "models": []
       },
       {

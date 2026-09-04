@@ -52,6 +52,7 @@ BRANCH = "claude/vulnbench-setup-scheduling-81aqov"
 SITE = "https://spbreed.github.io/cyber-commons"
 
 from exercises import EXERCISES  # noqa: E402
+from exercises.about import ABOUT
 from exercises.cybertravels import GROUNDING  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 from exercises.models import LIVE_MD, MODEL_RUNTIME, live_cell  # noqa: E402
@@ -84,6 +85,30 @@ def skill_source(ref: str) -> str:
             f'print(f"  tools it may use: {{\', \'.join(meta.get(\'allowed-tools\', [])) or \'—\'}}")\n'
             f'print(f"  routing description: {{len(meta[\'description\'].split())}} words")\n'
             f'print(f"  procedure: {{len(body.splitlines())}} lines")')
+
+def skill_script(ref: str) -> str:
+    """Embed a skill's own script verbatim, so the notebook runs the real file.
+
+    A lesson that reimplements what the skill does teaches the reimplementation.
+    Embedding the script keeps the notebook self-contained and makes drift
+    impossible: edit the skill and the notebook is stale until rebuilt.
+    """
+    path = SKILLS / ref
+    if not path.is_file():
+        raise FileNotFoundError(f"no such skill script: skills/{ref}")
+    src = path.read_text()
+    # The notebook executes it as a module body rather than a subprocess, so
+    # strip the CLI entry point and keep the callables.
+    src = src.split('if __name__ == "__main__":')[0].rstrip()
+    # `from __future__` is only legal at the top of a file, and this lands in
+    # the middle of a notebook. Drop it — every construct these scripts use is
+    # available without it on the Python the notebooks target.
+    src = "\n".join(ln for ln in src.splitlines()
+                    if not ln.startswith("from __future__ import"))
+    return (f"# skills/{ref} — embedded verbatim from the repository.\n"
+            f"# This is the skill's own script, not a paraphrase of it.\n"
+            f"{src}")
+
 
 DIRECTION = {"defend": "AI for Security", "secure": "Security of AI",
              "both": "Both directions"}
@@ -174,13 +199,19 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     cells = [md(
         f"# {sid} · {s['title']}\n\n{where}\n\n"
         f"| | |\n|---|---|\n"
-        f"| Tools used | {tools_used} |\n\n"
-        f"> **Runs anywhere.** Every line of code is in this notebook — nothing to "
-        f"install, nothing to clone, no API key, no network. Standard library only, "
-        f"so it works on a Kaggle kernel with the internet switched off — and where "
-        f"a lesson involves a model, the same code calls an open-weight endpoint or "
-        f"a frontier API when you configure one."
+        f"| Tools used | {tools_used} |"
     )]
+
+    # ---- 0. what this lesson is, and why a security engineer needs it -----
+    # Before the hook, which is a consequence rather than an orientation. A
+    # reader landing on one lesson from a search result has no idea what they
+    # are looking at until something says so plainly.
+    about = ABOUT.get(sid)
+    if not about:
+        raise KeyError(f"{sid} has no ABOUT entry — every lesson opens by saying "
+                       f"what it is and why it matters in a security context; "
+                       f"add one to scripts/exercises/about.py")
+    cells.append(md(f"## What this lesson is\n\n{about.strip()}"))
 
     # ---- 1. the hook, and what it looks like at CyberTravels --------------
     hook = f"## 1 · The hook\n\n{ex['hook'].strip()}"
@@ -202,6 +233,8 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     for kind, source in ex["steps"]:
         if kind == "skill":
             cells.append(code(skill_source(source)))
+        elif kind == "skill_script":
+            cells.append(code(skill_script(source)))
         elif kind == "model":
             # One adapter, then the same task run for real. The lesson keeps its
             # deterministic replay as the offline default, so CI and the offline

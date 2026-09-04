@@ -1,4 +1,4 @@
-# Track B2 — The AI SDLC: an Agentic AppSec Pipeline
+# Track B2 — The AI SDLC: Harnesses and an Agentic AppSec Pipeline
 
 **Function B · Application Security with an AI SDLC**  
 *The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*
@@ -15,15 +15,16 @@
 
 ---
 
-### B2.0 — Start here — what an AI SDLC means
+### B2.0 — What a harness is, and why you are the one building it
 
 `both directions`
 
 - **Risk** — A security pipeline built as if it were exempt from the risks it exists to find.
 - **Control** — Build the pipeline and the harness as one system, and hold both to the same evidence standard.
-- **Lab** — Trace one finding from ingestion to a signed report and name the stage that decides whether it is true.
+- **Lab** — Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.
+- **Tools** — `Claude Haiku 4.5`, `Qwen2.5-7B`
 
-**Run it** — Build a minimal working harness from scratch, naming each component as it appears, then show what breaks when the verifier is removed.
+**Run it** — Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -31,7 +32,7 @@ jupyter notebook labs/notebooks/B2.0.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it
 ```
 
-*Expect:* The minimal harness runs and reports success while the tests still fail. Adding one component — a verifier that reads ground truth rather than the agent's own claim — flips `verified` to False on the same run and to True only when the fix genuinely works. A four-step budget stops a looping model. The harness then scores itself as a non-human identity holding repo:write and running unattended.
+*Expect:* The loop runs with a real model behind `ask()` — a labelled replay offline, a frontier or open-weight call when one is configured. Without a verifier it accepts whatever came back and reports `verified: None`. With the verifier the same model and prompt produce an accepted, parameterised line — and a plausible-looking answer that wraps the input in `escape()` is refused, because it is still concatenation.
 
 ---
 
@@ -77,20 +78,15 @@ cd labs/b2.10-eval-harness
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.
+**Run it** — Turn an architecture map into a ranked threat model, then diff it after one entry point is added.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
 jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page
 python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b2.10-eval-harness
-python3 reliability.py --task fix-cwe-89 --k 5 --repeat 200
-python3 cost.py --corpus seeded --analyst-minutes 9
 ```
 
-*Expect:* pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand.
+*Expect:* The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1.
 
 ---
 

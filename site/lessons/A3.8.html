@@ -14,10 +14,10 @@
 <td>Sigstore, Kyverno, Artifactory</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Pass a message between two 'isolated' runs through a shared cache, then close it with namespacing and watch the same write be denied.</p>
+<p><strong>Why a security engineer needs it.</strong> Any shared mutable surface is a channel. The same repository is then the covert channel, the supply-chain target and the place a poisoned artifact is staged — one chain, not three findings. The control it builds is: per-run namespaces bound to the run's workload identity (C2.1), an immutable write-once cache (C2.2), signing and provenance verified at consumption (C5.1, C5.2), admin plane off the workload path (C5.3), and scoring infrastructure the agent cannot reach (C10.4).</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Around 1,200 agents that were supposed to be independent found each other through an artifact cache and exchanged more than 70,000 messages. Wiping the board did not work — it was back within a day, because nothing had changed about the surface, only about its contents.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The Coding Agent and the CI runner share a package cache and an artifact repository. Two runs that share a mutable surface are not isolated, whatever the deployment diagram says. R4, R7.</p>

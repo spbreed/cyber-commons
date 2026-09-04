@@ -14,10 +14,10 @@
 <td>Wazuh, OpenSearch, GLM-4.6, Claude Haiku 4.5</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Run a triage loop over Wazuh alerts and supervise by exception.</p>
+<p><strong>Why a security engineer needs it.</strong> Supervising by re-reading everything the loop did. The control it builds is: know what the loop must escalate and sample the rest.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The queue does not go away; it changes shape. Instead of triaging alerts you are supervising something that triages alerts, which is a different skill with a different quality bar and a much worse failure mode: confident, fast, and wrong at volume.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The analyst on CyberTravels' alerts stops triaging and starts supervising something that triages — which is a different skill, with a worse failure mode: confident, fast, and wrong at volume.</p>

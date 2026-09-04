@@ -9,6 +9,7 @@ the risks start in the chapter that follows.
 
 from . import cybertravels as CT
 from . import diagrams as D
+from .models import MODEL_RUNTIME
 
 EXERCISES: dict[str, dict] = {
 
@@ -130,62 +131,57 @@ So this function is one picture and its consequences, in three chapters:
 
 "B2.0": {
  "concept": """
-CyberTravels has a problem that is not about its users. It is about its own
-code.
+CyberTravels ships faster than Alex can read. The Coding Agent opens pull
+requests that touch a hundred files, and the review that used to be a careful
+hour is now a scroll. Function B is what he builds instead of scrolling.
 
-The Coding Agent opens pull requests. Some of them touch a hundred files. Alex
-is one engineer, the release cadence has not slowed down, and the review that
-used to be a careful hour is now a scroll. Function B is what he builds instead
-of scrolling: **an SDLC in which agents do the reviewing**, and the harnesses
-that make their output worth acting on.
+Everything he builds is a **harness**, so start there.
 
-Both directions of this commons meet here, on the same system.
+> **A harness is everything wrapped around a model that turns generating text
+> into getting work done.** It decides what the model sees, what it may do,
+> whether what it did worked, and when to stop.
 
-**AI for Security.** A pipeline that ingests the CyberTravels repository, models its
-threats, audits for vulnerabilities, confirms the real ones by exploiting them
-in a replica, engineers the fix and reports a severity somebody acts on. That
-is chapter 4, built stage by stage as one artefact.
+A model on its own is a text generator: tokens in, tokens out, no memory, no
+ability to act, no notion of whether it succeeded. Wrap it in a loop with tools
+and it reviews code. Wrap it badly and it reviews code *and tells you it found
+nothing*.
 
-**Security of AI.** That pipeline is itself an agentic system with all of
-CyberTravels' risks. It reads untrusted input by definition — the code it reviews is
-the code nobody trusts yet. It holds a credential that can write to the default
-branch. Every risk in Function A applies to it, and being a security tool grants
-no exemption.
+### Why this is a security engineer's job, not a platform team's
 
-Chapter 4 comes first, and it is the two decisions every stage rests on: **what
-a harness is** — a model with a loop, tools, a context, a verifier, state, a
-budget and telemetry around it — and **who chooses the next tool call**, which
-is you, the model, or a server you do not operate. Get the second wrong and a
-stage whose output gates a merge is executing a path nobody can name.
+Every part of the wrapper is a security decision, and three of them are
+decisions nobody else in the building is equipped to make:
 
-Chapter 5 is then the pipeline itself: fifteen stages, in order.
+- **What the model may do** is a tool surface — an authorisation problem
+  (A3.1), and the signature decides what is even expressible.
+- **Whether it worked** is a verifier — and a harness whose verifier is the
+  model agreeing with itself does not fail loudly. It **succeeds incorrectly**,
+  files a clean trace, and the bug is found by whoever merged the patch.
+- **When to stop** is a budget — the only control still standing once the model
+  is the component you cannot trust.
 
-### And the question that decides where each technique goes
+Nobody else is going to notice that the pipeline's verifier is a shape check.
+That is the job.
+
+### The loop is four moves
+
+**Plan** — the model proposes what to do next. **Act** — the harness runs that
+against a tool. **Verify** — something independent decides whether it worked.
+**Stop** — verification succeeded, or a budget ran out.
+
+Frameworks make plan and act easy and leave verify and stop as your problem,
+usually defaulting to "the model says it's done" and "loop forever". The demo
+below is that loop with a real model in it, twice: once with no verifier, once
+with one. Same model, same prompt, opposite outcome.
+
+### And where each technique belongs
 
 Half of what gets called "AI security tooling" cannot run before a deploy, and
-half of it tells you nothing after one. The split is not about the tool — it is
-about **what exists yet**:
-
-**Pre-deployment** works on artefacts that are sitting still: source, a
-dependency manifest, an IaC plan, a prompt template, an OpenAPI spec, a tool
-schema. Cheap, repeatable, diffable, and it can block a merge. It is blind to
-everything that only exists at runtime — the identity the workload actually
-gets, the traffic it really makes, what the third-party MCP server returns this
-morning.
-
-**Post-deployment** works on a running system: an agent holding a token, a real
-egress path, a live tool surface. It sees what actually happens, and it cannot
-block the merge that caused it, because the merge already happened.
-
-Be precise about this, because the same words appear on both sides. "Scanning"
-means SAST before a deploy and runtime posture after one. "Testing" means a unit
-test before and an attack simulation after. A programme that owns only one side
-has a specific, nameable blind spot rather than a general shortfall.
-
-Then the awkward part: **that pipeline is itself an agentic system with all of
-CyberTravels' risks.** It reads untrusted input by definition and holds a
-credential that can write to the default branch. Chapter 4 closes on exactly
-that (A1.9, B2.12), because being a security tool grants no exemption.
+half tells you nothing after one. The split is not about the tool, it is about
+**what exists yet**. Pre-deployment works on artefacts sitting still — source, a
+manifest, an IaC plan, a tool schema — so it is cheap, repeatable and can block
+a merge, and it is blind to the identity the workload actually gets.
+Post-deployment works on a running system and sees what really happened, and
+cannot block the merge that caused it.
 """,
  "steps": [
   ("md", "## 2 · What Alex is actually up against"),
@@ -193,65 +189,119 @@ that (A1.9, B2.12), because being a security tool grants no exemption.
     ["", "before the Coding Agent", "after"],
     [["pull requests per week", "6", "<b>40</b>"],
      ["files touched per PR", "3", "<b>up to 120</b>"],
-     ["review time available", "unchanged", "unchanged"],
-     ["what review becomes", "reading", "<b>scrolling</b>"],
-     ["what gets through", "the occasional bug",
-      "<b>an IDOR that exposes card details by booking ID</b>"]],
+     ["reviewers", "1", "1"]],
     emphasise=2,
-    caption="Nothing in the left column was wrong. The volume changed and the "
-            "review process did not, which is the whole argument for building "
-            "the pipeline in chapter 4.")),
+    caption="Nothing about the review capacity changed. That is the whole "
+            "problem, and it is why the reviewer becomes a harness.")),
+  ("md", "## 3 · The loop, with a real model in it\n\n"
+         "Four moves and about twenty lines. `ask()` is the model — offline it "
+         "is a labelled replay, and with a key configured it is a real "
+         "frontier or open-weight call, through the same code."),
+  ("py", MODEL_RUNTIME),
+  ("py", '''FINDING = """
+def load_booking(ref, owner):
+    return DB.execute("SELECT * FROM bookings WHERE ref=" + ref)
+"""
 
-  ("md", "## 3 · Chapter 4 — the lifecycle, with agents doing the work"),
-  ("html", D.svg(D.DEFS
-    + D.box(2, 26, 96, 46, "ingest", sub="B2.1-2", colour=D.DEFEND)
-    + D.box(112, 26, 116, 46, "threat model", sub="B2.2-4", colour=D.DEFEND)
-    + D.box(242, 26, 92, 46, "audit", sub="B2.3-7", colour=D.DEFEND)
-    + D.box(348, 26, 104, 46, "confirm", sub="B2.6-10", colour=D.DEFEND)
-    + D.box(466, 26, 108, 46, "remediate", sub="B2.9", colour=D.DEFEND)
-    + D.box(588, 26, 96, 46, "report", sub="B2.10", colour=D.DEFEND)
-    + "".join(D.arrow(a, 49, a + 12) for a in (99, 229, 335, 453, 575))
-    + D.box(2, 108, 682, 52, "", colour=D.INK, dashed=True)
-    + D.label(343, 130, "chapter 5 — the harness underneath every one of those stages",
-              anchor="middle", colour=D.INK, size=12, weight="600")
-    + D.label(343, 148, "plan · act · verify · stop  ·  tools · budgets · replay  ·  "
-                        "one skeleton, four oracles  ·  evals · cost",
-              anchor="middle"),
-    height=178,
-    caption="Chapter 4 is a product built out of chapter 5's material. Alex "
-            "needs the product; he cannot ship it without the material.")),
+def plan(task, feedback):
+    """PLAN - the model proposes the corrected line.
 
-  ("md", "## 4 · The harnesses, in the order you have to build them\n\n"
-         "Each row is a thing CyberTravels needs and a chapter-5 lesson that "
-         "builds it. The order is not preference — each one is unusable without "
-         "the one above it."),
-  ("html", D.table(
-    ["question", "what it decides for CyberTravels", "answered in"],
-    [["what a harness even is",
-      "which parts the pipeline actually has — and the one nobody can name is "
-      "almost always the verifier", "B1.0"],
-     ["what may it conclude",
-      "the verifier, ranked against the three weaker kinds — two of which are "
-      "the only two available everywhere", "B1.0"],
-     ["who chooses the next tool call",
-      "you draw the graph and can list every path, the model picks and you "
-      "bound the blast radius instead, or an MCP server decides what is even "
-      "callable", "B1.1"],
-     ["which stages get which",
-      "deterministic where the output is evidence, probabilistic where it is a "
-      "hypothesis", "B1.1"]],
-    emphasise=2,
-    caption="Two decisions, and every one of chapter 5's fifteen stages rests "
-            "on both. A stage whose output gates a merge and whose path nobody "
-            "can name is the one to look at first.")),
+    Note what the prompt does NOT do: offer a way out. An earlier version of
+    this cell let the model reply DONE, and a real model replied DONE on the
+    first turn every time. A loop whose exit is easier than the work exits.
+    """
+    prompt = f"{task}\\n\\nCode:\\n{FINDING}\\n"
+    if feedback:
+        prompt += f"Your previous attempt was rejected: {feedback}\\n"
+    prompt += "Reply with ONLY the corrected line of code."
+    answer, used, _ = ask(
+        prompt,
+        replay='return DB.execute("SELECT * FROM bookings WHERE ref=?", (ref,))',
+        system="You fix security defects. One line of code, no prose, no fences.",
+        max_tokens=120)
+    # Parsing is the harness's job, not the model's favour. Asked for one
+    # line, a 7B model returns the whole function and a frontier model returns
+    # a fenced block; both are reasonable readings of the request. Take the
+    # line that actually calls the sink.
+    lines = [ln.strip() for ln in answer.strip().splitlines()
+             if ln.strip() and not ln.strip().startswith("```")]
+    sink = [ln for ln in lines if "execute" in ln]
+    return ((sink or lines or [""])[0]), used
 
-  ("md", "## 5 · What applies where\n\nThe same word on both sides of the "
-         "deploy usually means two different techniques with two different "
-         "owners. The middle column is the one to argue about."),
+def act(proposal):
+    """ACT - the harness applies it. Here, that is recording what it would do."""
+    return {"would_write": proposal}
+
+PLACEHOLDERS = ("?", "%s", ":ref", "$1")
+
+def parameterised(code):
+    """VERIFY - independent. Does the line actually use a placeholder?
+
+    The tuple matters more than it looks. An earlier version accepted only "?"
+    and a real model returned a perfectly correct psycopg fix using "%s" - so
+    the verifier rejected correct work three times and burned the whole budget.
+    A verifier that is too narrow does not fail safe; it fails expensively, and
+    it looks exactly like a model that cannot do the task.
+    """
+    after = code.split("execute", 1)[-1]
+    return any(p in after for p in PLACEHOLDERS) and "+" not in after
+
+def loop(task, verifier=None, max_steps=3):
+    """PLAN -> ACT -> VERIFY -> STOP, with the rejection fed back in."""
+    feedback, log, used = "", [], "?"
+    for step in range(1, max_steps + 1):              # STOP: the budget
+        proposal, used = plan(task, feedback)         # PLAN
+        act(proposal)                                 # ACT
+        log.append((step, proposal[:70]))
+        if verifier is None:                          # no VERIFY: accept it
+            return {"ok": None, "steps": step, "answer": proposal,
+                    "backend": used, "log": log}
+        if verifier(proposal):                        # VERIFY
+            return {"ok": True, "steps": step, "answer": proposal,
+                    "backend": used, "log": log}
+        feedback = "it still concatenates the input into the SQL string"
+    return {"ok": False, "steps": max_steps,
+            "answer": log[-1][1] if log else None, "backend": used, "log": log}
+
+TASK = "Rewrite the one vulnerable line so the query is parameterised."
+print("the loop, wired:", ["plan", "act", "verify", "stop"])'''),
+  ("md", "## 4 · Run it with no verifier"),
+  ("py", '''no_check = loop(TASK, verifier=None)
+print(f"backend  : {no_check['backend']}")
+print(f"steps    : {no_check['steps']}")
+print(f"accepted : {no_check['answer']}")
+print(f"verified : {no_check['ok']}   <- nothing checked it")
+print()
+print("The loop stopped because the model produced something, which is not the")
+print("same as producing something correct. Whatever came back was accepted.")'''),
+  ("md", "## 5 · Add the verifier — same model, same prompt"),
+  ("py", '''checked = loop(TASK, verifier=parameterised)
+print(f"accepted : {checked['answer']}")
+print(f"verified : {checked['ok']}   <- an independent check said so")
+print(f"steps    : {checked['steps']}")
+
+# Two ways a verifier is wrong, and only one of them is loud.
+NARROW = lambda c: "?" in c.split("execute", 1)[-1] and "+" not in c
+PSYCOPG = 'return DB.execute("SELECT * FROM bookings WHERE ref=%s", (ref,))'
+print(f"\\na correct psycopg fix: {PSYCOPG}")
+print(f"   narrow verifier (only '?') : "
+      f"{'accepts' if NARROW(PSYCOPG) else 'REJECTS a correct fix'}")
+print(f"   this lesson's verifier     : "
+      f"{'accepts' if parameterised(PSYCOPG) else 'rejects'}")
+
+# And the case that matters: a plausible answer that is still vulnerable.
+BAD = 'return DB.execute("SELECT * FROM bookings WHERE ref=" + escape(ref))'
+print(f"\\na plausible-looking answer: {BAD}")
+print(f"   would the verifier accept it? {parameterised(BAD)}")
+print()
+print("It reads like a fix and it is still concatenation. Without the verifier")
+print("this loop ships it, reports success, and the trace looks clean.")
+assert not parameterised(BAD) and parameterised(PSYCOPG) and not NARROW(PSYCOPG)'''),
+  ("md", "## 6 · What applies where"),
   ("html", D.table(
     ["technique", "pre-deploy", "post-deploy", "what only the other side sees"],
     [["SAST / code analysis", "<b>yes</b>", "no",
-      "whether the vulnerable path is ever reached with real traffic"],
+      "whether the vulnerable path is reached with real traffic"],
      ["Dependency and SBOM scanning", "<b>yes</b>", "partly",
       "what actually loaded, versus what the manifest pinned"],
      ["IaC and policy-as-code", "<b>yes</b>", "no",
@@ -259,7 +309,7 @@ that (A1.9, B2.12), because being a security tool grants no exemption.
      ["Threat modelling", "<b>yes</b>", "re-run on drift",
       "entry points added by a config change, not a commit"],
      ["Tool-schema and MCP surface review", "<b>yes</b>", "<b>yes</b>",
-      "a description edited by a server after review — B1.1"],
+      "a description edited by a server after review"],
      ["DAST / attack simulation", "against a replica", "<b>yes</b>",
       "responses only a live system produces"],
      ["Guardrails and egress enforcement", "config only", "<b>yes</b>",
@@ -271,33 +321,19 @@ that (A1.9, B2.12), because being a security tool grants no exemption.
      ["Attestation", "signs the claim", "re-checks it",
       "whether the deployment still matches what was signed"]],
     emphasise=1,
-    caption="Pre-deployment is cheap, repeatable and can block a merge. "
-            "Post-deployment sees what actually happened and cannot. Chapter 5 "
-            "is mostly the first column; Function D is the third.")),
-  ("md", "## 6 · The same pipeline, read as an agentic system\n\n"
-         "Every stage above runs inside something that has an identity, reads "
-         "untrusted input and writes to CyberTravels' repository. These are "
-         "Function A's components, and a security tool gets no exemption."),
-  ("html", D.table(
-    ["Function A component", "what it is, in this pipeline"],
-    [["ingress", "a pull request, opened by CyberTravels' own Coding Agent"],
-     ["knowledge", "the CyberTravels repository — untrusted by definition"],
-     ["tools", "the test runner, the sandbox replica, the ticket API"],
-     ["identity", "a service account that can write to the default branch"],
-     ["egress", "the report, and anything it happens to contain"]],
-    caption="Five components, every one of them a risk surface from Function A. "
-            "R7 and R8 in the CyberTravels register are exactly this pipeline "
-            "going wrong.")),
+    caption="This chapter is mostly the first column. Function D is the third.")),
  ],
- "expect": "The volume problem stated plainly — 6 pull requests a week becoming "
-           "40, touching up to 120 files, with review time unchanged — then the "
-           "five phases of the lifecycle, the seven harnesses in the order they "
-           "have to be built, and the same pipeline read back as an agentic "
-           "system with five Function A components.",
- "challenge": "Count your own numbers for the first table: pull requests per "
-              "week before and after, files touched, and review minutes "
-              "available. If the third number has not moved, you are already in "
-              "the situation this function is for.",
+ "expect": "The loop runs with a real model behind `ask()` — a labelled replay "
+           "offline, a frontier or open-weight call when one is configured. "
+           "Without a verifier it accepts whatever came back and reports "
+           "`verified: None`. With the verifier the same model and prompt "
+           "produce an accepted, parameterised line — and a plausible-looking "
+           "answer that wraps the input in `escape()` is refused, because it is "
+           "still concatenation.",
+ "challenge": "Name your pipeline's verifier out loud. If the sentence contains "
+              "\"the model checks\" or \"it looks right\", you have a judge, and "
+              "a judge approves confident prose — including prose that "
+              "contradicts the finding it is attached to.",
 },
 
 "C1.0": {

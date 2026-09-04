@@ -243,7 +243,7 @@ The two failures are honest and specific:
 - **B2.9** asks the model to fix a SQL injection by parameterising the query.
   The 1.5B model returned the vulnerable line unchanged — string concatenation
   straight back. It did not fix the bug it was asked to fix, which is a
-  **capability** failure in B1.0's taxonomy, not a harness defect.
+  **capability** failure — the model, not the harness.
 - **C1.1** asks for pentest findings ranked by severity and expects the
   unauthenticated endpoint first. The model put TLS 1.0 first and the
   unauthenticated `/v1/users` endpoint second. A judgement failure, and a

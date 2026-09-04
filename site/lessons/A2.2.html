@@ -14,10 +14,10 @@
 <td>SPIFFE/SPIRE</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Exchange an attestation for a credential, then show a copied secret failing the same exchange.</p>
+<p><strong>Why a security engineer needs it.</strong> A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity. The control it builds is: platform attestation exchanged for a short-lived, workload-bound credential.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>An agent needs a credential to prove who it is, and it cannot be given one safely without already proving who it is. Every long-lived secret in your estate exists because somebody resolved that circle by giving up.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Each of CyberTravels' four agents needs a credential to prove it is that agent, and cannot be handed one safely without already proving it. The long-lived bearer token in R5 exists because somebody resolved that circle by giving up.</p>

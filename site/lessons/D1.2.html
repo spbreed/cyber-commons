@@ -14,10 +14,10 @@
 <td>Wazuh, GLM-4.6, Llama 3.3, Claude Haiku 4.5</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> A/B a generic prompt vs a context-loaded one on the same alert set.</p>
+<p><strong>Why a security engineer needs it.</strong> Generic triage agents underperform your worst analyst. The control it builds is: feed the baseline, known FPs, crown-jewel map and prior decisions.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Most bad triage is not a bad model. It is an agent asked to decide without the identity, asset and history context a human analyst would have pulled without noticing they pulled it.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> An alert saying <code>cybertravels-svc listed all customer records</code> is untriageable without knowing whether that is its job. Most bad triage at CyberTravels is missing context, not a weak model.</p>

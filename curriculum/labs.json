@@ -364,32 +364,14 @@
    ],
    "expect": "The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt."
   },
-  "B1.0": {
-   "goal": "Build the smallest thing that is still a harness, then add the one component that was missing.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.0.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.0   # run it headless and check it"
-   ],
-   "expect": "The minimal harness reports success while the tests still fail. Adding one component — a verifier that reads ground truth rather than the agent's claim — reports the same run as unverified, and verifies the run where the patch genuinely works. A budget of four stops a model that never emits `done`. Against a finding whose rationale contradicts the finding itself, the shape check and the LLM judge both accept it. The pipeline's own identity holds `repo:comment` and not `repo:write`."
-  },
-  "B1.1": {
-   "goal": "Enumerate every path a deterministic graph can take, then watch an MCP server edit an instruction into your context overnight.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B1.1.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B1.1   # run it headless and check it"
-   ],
-   "expect": "The deterministic graph runs two different inputs down two different paths, and then enumerates every path it can ever take — two. The same four capabilities under model-chosen tool calling reach over 50,000 sequences at eight calls and are unbounded in principle, so blast radius replaces path review. An MCP server CyberTravels does not operate then edits one tool description overnight and injects an instruction into the model's context with no client change; pinning the digest of the whole surface — description included — refuses it."
-  },
   "B2.0": {
-   "goal": "Build a minimal working harness from scratch, naming each component as it appears, then show what breaks when the verifier is removed.",
+   "goal": "Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.0.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it"
    ],
-   "expect": "The minimal harness runs and reports success while the tests still fail. Adding one component — a verifier that reads ground truth rather than the agent's own claim — flips `verified` to False on the same run and to True only when the fix genuinely works. A four-step budget stops a looping model. The harness then scores itself as a non-human identity holding repo:write and running unattended."
+   "expect": "The loop runs with a real model behind `ask()` — a labelled replay offline, a frontier or open-weight call when one is configured. Without a verifier it accepts whatever came back and reports `verified: None`. With the verifier the same model and prompt produce an accepted, parameterised line — and a plausible-looking answer that wraps the input in `escape()` is refused, because it is still concatenation."
   },
   "B2.1": {
    "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
@@ -409,18 +391,13 @@
    "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
   },
   "B2.2": {
-   "goal": "Compute pass@k and pass^k from the same runs, then price the harness in dollars per confirmed finding and analyst minutes per accepted one.",
+   "goal": "Turn an architecture map into a ranked threat model, then diff it after one entry point is added.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b2.10-eval-harness",
-    "python3 reliability.py --task fix-cwe-89 --k 5 --repeat 200",
-    "python3 cost.py --corpus seeded --analyst-minutes 9"
+    "python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it"
    ],
-   "expect": "pass@5 and pass^5 are computed from the same 2000 trials and diverge sharply: at 80% per-run reliability the harness is 99.9% reliable with a human picking the good answer and 33% reliable unattended. Twelve single-run demos of a 60% harness return a mix of passes and failures, and a change worth 1.5 findings is shown to be invisible against a standard deviation of 3. On the same seeded corpus of 40 units with 10 planted defects, raising sensitivity from 0.70 to 0.95 lifts recall from 60% to 90% and pushes the review queue from 'saves time' to 180 analyst minutes against 160 for reading the code by hand."
+   "expect": "The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1."
   },
   "B2.3": {
    "goal": "Watch your own review harness obey an injected instruction, then close it.",

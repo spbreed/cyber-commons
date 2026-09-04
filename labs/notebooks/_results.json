@@ -2,11 +2,11 @@
  "generated_by": "scripts/run_notebooks.py",
  "python": "3.11.15",
  "platform": "linux",
- "notebooks": 120,
- "passed": 120,
+ "notebooks": 118,
+ "passed": 118,
  "failed": 0,
- "total_seconds": 2.81,
- "total_output_lines": 4178,
+ "total_seconds": 2.91,
+ "total_output_lines": 4111,
  "results": [
   {
    "session": "A1.0",
@@ -17,7 +17,7 @@
    "stdout_chars": 0,
    "error": "",
    "code_cells": 0,
-   "markdown_cells": 16
+   "markdown_cells": 17
   },
   {
    "session": "A1.1",
@@ -28,7 +28,7 @@
    "stdout_chars": 0,
    "error": "",
    "code_cells": 0,
-   "markdown_cells": 13
+   "markdown_cells": 14
   },
   {
    "session": "A1.10",
@@ -39,7 +39,7 @@
    "stdout_chars": 393,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.11",
@@ -50,7 +50,7 @@
    "stdout_chars": 561,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.12",
@@ -61,7 +61,7 @@
    "stdout_chars": 606,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.13",
@@ -72,7 +72,7 @@
    "stdout_chars": 477,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.14",
@@ -83,7 +83,7 @@
    "stdout_chars": 850,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.15",
@@ -94,7 +94,7 @@
    "stdout_chars": 522,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.16",
@@ -105,7 +105,7 @@
    "stdout_chars": 562,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.17",
@@ -116,7 +116,7 @@
    "stdout_chars": 878,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.18",
@@ -127,7 +127,7 @@
    "stdout_chars": 1788,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 14
+   "markdown_cells": 15
   },
   {
    "session": "A1.2",
@@ -138,7 +138,7 @@
    "stdout_chars": 498,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.3",
@@ -149,7 +149,7 @@
    "stdout_chars": 685,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.4",
@@ -160,7 +160,7 @@
    "stdout_chars": 392,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.5",
@@ -171,7 +171,7 @@
    "stdout_chars": 495,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.6",
@@ -182,7 +182,7 @@
    "stdout_chars": 705,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.7",
@@ -193,7 +193,7 @@
    "stdout_chars": 673,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.8",
@@ -204,7 +204,7 @@
    "stdout_chars": 768,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A1.9",
@@ -215,7 +215,7 @@
    "stdout_chars": 2286,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "A2.1",
@@ -226,29 +226,29 @@
    "stdout_chars": 576,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A2.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.01,
+   "seconds": 0.02,
    "stdout_lines": 11,
    "stdout_chars": 602,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A2.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.02,
+   "seconds": 0.03,
    "stdout_lines": 30,
    "stdout_chars": 1170,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 12
+   "markdown_cells": 13
   },
   {
    "session": "A2.4",
@@ -259,18 +259,18 @@
    "stdout_chars": 437,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A2.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.02,
    "stdout_lines": 60,
    "stdout_chars": 2184,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "A2.6",
@@ -281,7 +281,7 @@
    "stdout_chars": 810,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A2.7",
@@ -292,7 +292,7 @@
    "stdout_chars": 633,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A2.8",
@@ -303,7 +303,7 @@
    "stdout_chars": 1406,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "A3.1",
@@ -314,7 +314,7 @@
    "stdout_chars": 1565,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 8
+   "markdown_cells": 9
   },
   {
    "session": "A3.10",
@@ -325,7 +325,7 @@
    "stdout_chars": 1928,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "A3.2",
@@ -336,7 +336,7 @@
    "stdout_chars": 2181,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "A3.3",
@@ -347,7 +347,7 @@
    "stdout_chars": 955,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A3.4",
@@ -358,7 +358,7 @@
    "stdout_chars": 585,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A3.5",
@@ -369,7 +369,7 @@
    "stdout_chars": 722,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A3.6",
@@ -380,7 +380,7 @@
    "stdout_chars": 1019,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A3.7",
@@ -391,7 +391,7 @@
    "stdout_chars": 630,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 7
+   "markdown_cells": 8
   },
   {
    "session": "A3.8",
@@ -402,7 +402,7 @@
    "stdout_chars": 1379,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "A3.9",
@@ -413,51 +413,29 @@
    "stdout_chars": 1602,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 10
-  },
-  {
-   "session": "B1.0",
-   "ok": true,
-   "returncode": 0,
-   "seconds": 0.03,
-   "stdout_lines": 40,
-   "stdout_chars": 1810,
-   "error": "",
-   "code_cells": 6,
-   "markdown_cells": 12
-  },
-  {
-   "session": "B1.1",
-   "ok": true,
-   "returncode": 0,
-   "seconds": 0.06,
-   "stdout_lines": 73,
-   "stdout_chars": 3491,
-   "error": "",
-   "code_cells": 6,
-   "markdown_cells": 17
+   "markdown_cells": 11
   },
   {
    "session": "B2.0",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.01,
-   "stdout_lines": 0,
-   "stdout_chars": 0,
+   "seconds": 0.06,
+   "stdout_lines": 38,
+   "stdout_chars": 1769,
    "error": "",
-   "code_cells": 0,
-   "markdown_cells": 16
+   "code_cells": 4,
+   "markdown_cells": 14
   },
   {
    "session": "B2.1",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.07,
+   "seconds": 0.08,
    "stdout_lines": 103,
    "stdout_chars": 4716,
    "error": "",
    "code_cells": 9,
-   "markdown_cells": 15
+   "markdown_cells": 16
   },
   {
    "session": "B2.10",
@@ -468,7 +446,7 @@
    "stdout_chars": 3445,
    "error": "",
    "code_cells": 8,
-   "markdown_cells": 12
+   "markdown_cells": 13
   },
   {
    "session": "B2.11",
@@ -479,7 +457,7 @@
    "stdout_chars": 1554,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 8
+   "markdown_cells": 9
   },
   {
    "session": "B2.12",
@@ -490,18 +468,18 @@
    "stdout_chars": 2504,
    "error": "",
    "code_cells": 6,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "B2.13",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.02,
+   "seconds": 0.03,
    "stdout_lines": 77,
    "stdout_chars": 3492,
    "error": "",
    "code_cells": 6,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "B2.14",
@@ -512,40 +490,40 @@
    "stdout_chars": 3381,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "B2.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.02,
-   "stdout_lines": 47,
-   "stdout_chars": 2585,
+   "seconds": 0.03,
+   "stdout_lines": 55,
+   "stdout_chars": 2518,
    "error": "",
-   "code_cells": 5,
-   "markdown_cells": 14
+   "code_cells": 6,
+   "markdown_cells": 12
   },
   {
    "session": "B2.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 85,
    "stdout_chars": 4026,
    "error": "",
    "code_cells": 8,
-   "markdown_cells": 14
+   "markdown_cells": 15
   },
   {
    "session": "B2.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 32,
    "stdout_chars": 1587,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "B2.5",
@@ -556,18 +534,18 @@
    "stdout_chars": 3883,
    "error": "",
    "code_cells": 10,
-   "markdown_cells": 14
+   "markdown_cells": 15
   },
   {
    "session": "B2.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 35,
    "stdout_chars": 1301,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "B2.7",
@@ -578,29 +556,29 @@
    "stdout_chars": 1254,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "B2.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.04,
    "stdout_lines": 70,
    "stdout_chars": 3271,
    "error": "",
    "code_cells": 8,
-   "markdown_cells": 12
+   "markdown_cells": 13
   },
   {
    "session": "B2.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.06,
+   "seconds": 0.07,
    "stdout_lines": 62,
    "stdout_chars": 3066,
    "error": "",
    "code_cells": 6,
-   "markdown_cells": 12
+   "markdown_cells": 13
   },
   {
    "session": "C1.0",
@@ -611,7 +589,7 @@
    "stdout_chars": 0,
    "error": "",
    "code_cells": 0,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "C1.1",
@@ -622,18 +600,18 @@
    "stdout_chars": 3993,
    "error": "",
    "code_cells": 7,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "C1.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 47,
    "stdout_chars": 3297,
    "error": "",
    "code_cells": 5,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "C1.3",
@@ -644,7 +622,7 @@
    "stdout_chars": 1528,
    "error": "",
    "code_cells": 5,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "C1.4",
@@ -655,7 +633,7 @@
    "stdout_chars": 1962,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "C2.1",
@@ -666,7 +644,7 @@
    "stdout_chars": 2132,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "C2.10",
@@ -677,7 +655,7 @@
    "stdout_chars": 852,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 16
+   "markdown_cells": 17
   },
   {
    "session": "C2.2",
@@ -688,7 +666,7 @@
    "stdout_chars": 1641,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "C2.3",
@@ -699,29 +677,29 @@
    "stdout_chars": 1738,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "C2.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.06,
    "stdout_lines": 32,
    "stdout_chars": 1385,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "C2.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 47,
    "stdout_chars": 2148,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "C2.6",
@@ -732,18 +710,18 @@
    "stdout_chars": 2450,
    "error": "",
    "code_cells": 5,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "C2.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.03,
    "stdout_lines": 46,
    "stdout_chars": 2405,
    "error": "",
    "code_cells": 5,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "C2.8",
@@ -754,7 +732,7 @@
    "stdout_chars": 2446,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 16
+   "markdown_cells": 17
   },
   {
    "session": "C2.9",
@@ -765,7 +743,7 @@
    "stdout_chars": 1066,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 15
+   "markdown_cells": 16
   },
   {
    "session": "D1.0",
@@ -776,7 +754,7 @@
    "stdout_chars": 527,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "D1.1",
@@ -787,7 +765,7 @@
    "stdout_chars": 3803,
    "error": "",
    "code_cells": 6,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "D1.10",
@@ -798,7 +776,7 @@
    "stdout_chars": 1882,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "D1.11",
@@ -809,7 +787,7 @@
    "stdout_chars": 2177,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "D1.2",
@@ -820,7 +798,7 @@
    "stdout_chars": 2339,
    "error": "",
    "code_cells": 6,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "D1.3",
@@ -831,7 +809,7 @@
    "stdout_chars": 2687,
    "error": "",
    "code_cells": 6,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "D1.4",
@@ -842,40 +820,40 @@
    "stdout_chars": 1320,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "D1.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 33,
    "stdout_chars": 2386,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "D1.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.06,
    "stdout_lines": 35,
    "stdout_chars": 1800,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "D1.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.03,
    "stdout_lines": 17,
    "stdout_chars": 663,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "D1.8",
@@ -886,18 +864,18 @@
    "stdout_chars": 1772,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "D1.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.01,
+   "seconds": 0.02,
    "stdout_lines": 31,
    "stdout_chars": 1427,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "D2.1",
@@ -908,29 +886,29 @@
    "stdout_chars": 2480,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "D2.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 32,
    "stdout_chars": 1526,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "D2.3",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.02,
+   "seconds": 0.03,
    "stdout_lines": 50,
    "stdout_chars": 2715,
    "error": "",
    "code_cells": 7,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "D2.4",
@@ -941,7 +919,7 @@
    "stdout_chars": 1908,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "D2.5",
@@ -952,7 +930,7 @@
    "stdout_chars": 1942,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "D2.6",
@@ -963,7 +941,7 @@
    "stdout_chars": 490,
    "error": "",
    "code_cells": 1,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "D2.7",
@@ -974,7 +952,7 @@
    "stdout_chars": 1907,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "D2.8",
@@ -985,7 +963,7 @@
    "stdout_chars": 2042,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "D2.9",
@@ -996,7 +974,7 @@
    "stdout_chars": 1239,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 12
+   "markdown_cells": 13
   },
   {
    "session": "E1.0",
@@ -1007,7 +985,7 @@
    "stdout_chars": 0,
    "error": "",
    "code_cells": 0,
-   "markdown_cells": 12
+   "markdown_cells": 13
   },
   {
    "session": "E1.1",
@@ -1018,7 +996,7 @@
    "stdout_chars": 1574,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E1.10",
@@ -1029,29 +1007,29 @@
    "stdout_chars": 1474,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 13
+   "markdown_cells": 14
   },
   {
    "session": "E1.11",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.01,
+   "seconds": 0.02,
    "stdout_lines": 54,
    "stdout_chars": 2753,
    "error": "",
    "code_cells": 5,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "E1.12",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.01,
+   "seconds": 0.02,
    "stdout_lines": 51,
    "stdout_chars": 2617,
    "error": "",
    "code_cells": 5,
-   "markdown_cells": 12
+   "markdown_cells": 13
   },
   {
    "session": "E1.2",
@@ -1062,7 +1040,7 @@
    "stdout_chars": 2415,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E1.3",
@@ -1073,7 +1051,7 @@
    "stdout_chars": 2528,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E1.4",
@@ -1084,7 +1062,7 @@
    "stdout_chars": 3330,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E1.5",
@@ -1095,7 +1073,7 @@
    "stdout_chars": 1479,
    "error": "",
    "code_cells": 6,
-   "markdown_cells": 12
+   "markdown_cells": 13
   },
   {
    "session": "E1.6",
@@ -1106,18 +1084,18 @@
    "stdout_chars": 1569,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E1.7",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 28,
    "stdout_chars": 1111,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E1.8",
@@ -1128,7 +1106,7 @@
    "stdout_chars": 2257,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E1.9",
@@ -1139,7 +1117,7 @@
    "stdout_chars": 1260,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "E2.1",
@@ -1150,18 +1128,18 @@
    "stdout_chars": 1582,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "E2.2",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.04,
    "stdout_lines": 45,
    "stdout_chars": 2069,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E2.3",
@@ -1172,29 +1150,29 @@
    "stdout_chars": 1639,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E2.4",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.02,
+   "seconds": 0.01,
    "stdout_lines": 46,
    "stdout_chars": 2237,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E2.5",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.05,
+   "seconds": 0.04,
    "stdout_lines": 45,
    "stdout_chars": 2393,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E2.6",
@@ -1205,7 +1183,7 @@
    "stdout_chars": 2196,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 8
+   "markdown_cells": 9
   },
   {
    "session": "E2.7",
@@ -1216,29 +1194,29 @@
    "stdout_chars": 1229,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "E2.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.04,
+   "seconds": 0.03,
    "stdout_lines": 30,
    "stdout_chars": 1286,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E2.9",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.03,
+   "seconds": 0.04,
    "stdout_lines": 30,
    "stdout_chars": 1071,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 11
+   "markdown_cells": 12
   },
   {
    "session": "E3.1",
@@ -1249,7 +1227,7 @@
    "stdout_chars": 2007,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E3.2",
@@ -1260,7 +1238,7 @@
    "stdout_chars": 2329,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E3.3",
@@ -1271,7 +1249,7 @@
    "stdout_chars": 2136,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E3.4",
@@ -1282,7 +1260,7 @@
    "stdout_chars": 1368,
    "error": "",
    "code_cells": 2,
-   "markdown_cells": 10
+   "markdown_cells": 11
   },
   {
    "session": "E3.5",
@@ -1293,18 +1271,18 @@
    "stdout_chars": 1888,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E3.6",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.01,
+   "seconds": 0.02,
    "stdout_lines": 45,
    "stdout_chars": 2209,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E3.7",
@@ -1315,18 +1293,18 @@
    "stdout_chars": 2196,
    "error": "",
    "code_cells": 3,
-   "markdown_cells": 9
+   "markdown_cells": 10
   },
   {
    "session": "E3.8",
    "ok": true,
    "returncode": 0,
-   "seconds": 0.02,
+   "seconds": 0.03,
    "stdout_lines": 44,
    "stdout_chars": 2295,
    "error": "",
    "code_cells": 4,
-   "markdown_cells": 10
+   "markdown_cells": 11
   }
  ]
 }

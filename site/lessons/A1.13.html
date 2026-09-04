@@ -14,10 +14,10 @@
 <td>OpenTelemetry</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Run a loop with no ceiling and count what it consumes before anything notices.</p>
+<p><strong>Why a security engineer needs it.</strong> An agent consumes budget, tokens, API quota or downstream capacity without bound, and the failure is denial of service against your own systems. The control it builds is: budgets and stop conditions bound to the loop (A3.4).</p>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The loop had no ceiling, so it ran until something outside it stopped the run. That something was the invoice. In a different configuration it is a rate limit on a system you do not own, which is somebody else's outage.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> A booking loop with no ceiling runs until something outside it stops the run. At CyberTravels that something is either the travel API's rate limit — somebody else's outage — or the invoice.</p>

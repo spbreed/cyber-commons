@@ -378,329 +378,115 @@ assert MAP["entry_points"] == ["get_booking", "upload_voucher"]'''),
 
 "B2.2": {
  "concept": """
-Phase 2 opens with the stage everyone claims to do and almost nobody re-runs.
+Stage 5 is the one everybody claims to do and almost nobody re-runs.
 
-**Stage 5 — Threat modelling.** Derive, mechanically: high-value assets,
-untrusted entry points, and the attack vectors that connect them.
+A threat model produced in a workshop describes the system as it was on the day
+of the workshop. It is stale the moment an entry point is added, and adding an
+entry point is a Tuesday. So this stage does not *write* a threat model — it
+**derives** one, from evidence the estate already holds, and the useful artefact
+is the diff between two runs.
 
-The word doing the work is *mechanically*. A threat model produced by hand in a
-workshop is a snapshot; it is stale the moment an entry point is added, and
-adding an entry point is a Tuesday. A model **derived** is regenerated whenever
-its inputs change, so the useful artefact is not the model — it is the **diff
-between two models**.
+**STRIDE** gives six questions. Against an agentic system each has a shape a
+web-application threat model does not:
 
-### Derived from what, exactly
+| STRIDE | In an agentic system |
+|---|---|
+| **S**poofing | agents share a service account, so "which agent" is unanswerable |
+| **T**ampering | untrusted content the agent read becomes an instruction it follows |
+| **R**epudiation | the delegation chain is not on the token, so no log answers "on whose behalf" |
+| **I**nformation disclosure | an over-broad tool return, or egress that permits anything |
+| **D**enial of service | an unbounded loop, or a budget nobody set |
+| **E**levation of privilege | a role assumable by `*`, or a scope that included refunds because it included payments |
 
-The architecture map from stage 4 is the first input and it is not sufficient.
-It tells you what the code *could* reach. It says nothing about whether that
-path is exposed, what identity walks it, or whether anything could leave at the
-end of it — and those three questions are the difference between a finding and
-a fire.
+### Derived from five inputs, not one
 
-Every one of the answers is already written down somewhere in the estate, as
-configuration, in a machine-readable file. The stage's job is to read all of it:
+The architecture map says what the code *could* reach. It cannot say whether
+that path is exposed, what identity walks it, or whether anything can leave at
+the end of it — and those three decide whether a finding is a fire.
 
 | Input | What only it can tell you |
 |---|---|
-| **Code analysis** — the stage-4 map | which sinks an entry point reaches |
-| **CSPM findings** | that the bucket behind that sink is public, today |
-| **Cloud security policy** — security groups, ingress, WAF | whether the entry point is reachable from the internet at all |
-| **Entitlement and role access** | what the caller's role may do once it is through |
-| **IAM** — trust policies, assume-role chains | who can become that role, and from where |
-| **Egress policy** — NetworkPolicy, firewall rules | whether anything can leave once it is in |
+| **architecture** | components, flows, sinks, trust levels |
+| **CSPM** | that the bucket behind that sink is public *today* |
+| **IAM** | who can assume the role, and whether MFA is required |
+| **network** | is it internet-facing, and can anything leave |
+| **entitlements** | what the identity may do once it is through |
 
-Read only the code and you produce a threat model that is identical for two
-deployments of the same repository, one of which is behind a private load
-balancer with no egress and one of which is not. That model is wrong about both.
+Read only the first and you produce a model that is identical for two
+deployments of the same repository — one behind a private load balancer with no
+egress, one on the internet with a wildcard trust policy. It is wrong about
+both.
 
-The output has to be data — ranked, machine-readable, diffable — because the
-next stage prioritises against it and CI gates on the delta.
+This lesson runs the `threat-model-stride` skill. You do not write the code;
+you read the procedure, execute it, and read what it produced.
 """,
  "steps": [
-  ("md", PIPELINE_NOTE),
-  ("md", "## 2 · The six inputs, and what each one contributes"),
-  ("html", D.flow(
-    [D.column("code", [
-       D.card("&#128269;", "stage-4 map", "entry points, flows, sinks, trust "
-              "boundaries", colour=D.DEFEND, note="WHAT COULD BE REACHED"),
-     ]),
-     D.column("exposure", [
-       D.card("&#9729;&#65039;", "cloud security policy", "security groups, "
-              "ingress, WAF — is this entry point on the internet",
-              colour=D.SECURE),
-       D.card("&#128680;", "CSPM findings", "the bucket behind that sink is "
-              "public, today", colour=D.BAD),
-     ]),
-     D.column("identity", [
-       D.card("&#128273;", "entitlement and roles", "what the caller may do "
-              "once it is through", colour=D.SECURE),
-       D.card("&#128100;", "IAM trust policy", "who can assume that role, and "
-              "from where", colour=D.SECURE, note="A2.3"),
-     ]),
-     D.column("exfiltration", [
-       D.card("&#128683;", "egress policy", "NetworkPolicy and firewall rules "
-              "— can anything leave at the end of the path", colour=D.GOOD,
-              note="A3.2"),
-     ]),
-     D.column("output", [
-       D.card("&#128202;", "ranked threats", "scored, machine-readable, and "
-              "diffed against the last run", colour=D.DEFEND),
-     ])],
-    caption="Read only the first column and you get a threat model that is "
-            "identical for two deployments of the same repository — one behind "
-            "a private load balancer with no egress, one not. It is wrong about "
-            "both.")),
-  ("md", "## 3 · Stage 5 — derive threats from all six"),
-  ("py", '''from collections import defaultdict
+  ("md", "## 2 · The skill\n\nThis is `skills/appsec/threat-model-stride/SKILL.md`, "
+         "verbatim. The frontmatter is what routes a request to it; the body is "
+         "the procedure a model follows."),
+  ("py", SKILL_RUNTIME),
+  ("skill", "appsec/threat-model-stride"),
+  ("md", "## 3 · Its script\n\nThe deterministic half of the skill — the part "
+         "that has to give the same answer twice so two runs can be diffed. "
+         "Embedded from `skills/appsec/threat-model-stride/scripts/`."),
+  ("skill_script", "appsec/threat-model-stride/scripts/threat_model.py"),
+  ("md", "## 4 · Execute it against CyberTravels\n\nFive synthetic inputs, "
+         "standing in for what a real estate already holds."),
+  ("py", '''threats = model(ARCHITECTURE, cspm=CSPM, iam=IAM, network=NETWORK,
+                 entitlements=ENTITLEMENTS)
+bnds = boundaries(ARCHITECTURE)
 
-# --- input 1: the stage-4 architecture map ---------------------------------
-ARCH = {
- "entry_points": [
-   {"unit": "get_booking",    "component": "src/api", "auth": "session"},
-   {"unit": "upload_voucher", "component": "src/api", "auth": "session"},
-   {"unit": "health",         "component": "src/api", "auth": "none"},
- ],
- "flows": [("get_booking", "load_booking"), ("get_booking", "render"),
-           ("upload_voucher", "store"), ("load_booking", "execute"),
-           ("store", "open")],
- "sinks": [{"unit": "load_booking", "sink": "execute", "resource": "database"},
-           {"unit": "store", "sink": "open", "resource": "voucher_bucket"}],
- "assets": {"database":       {"data": ("customer", "financial"), "value": 5},
-            "voucher_bucket": {"data": ("documents",),            "value": 3}},
-}
-
-# --- inputs 2-6: what the rest of the estate already knows -----------------
-CLOUD_POLICY = {           # security groups / ingress: is it on the internet?
- "get_booking":    {"exposed": "internet", "waf": True},
- "upload_voucher": {"exposed": "internet", "waf": False},
- "health":         {"exposed": "vpc-only", "waf": False},
-}
-CSPM = [                   # live posture findings, not code
- {"resource": "voucher_bucket", "finding": "bucket policy allows public read",
-  "severity": 4},
-]
-ENTITLEMENTS = {           # what the running role may do
- "src/api": {"db:select", "db:update", "s3:GetObject", "s3:PutObject"},
-}
-IAM = {                    # who can become that role
- "src/api": {"assumable_by": ["ci-deploy-role"], "mfa_required": True},
-}
-EGRESS = {                 # NetworkPolicy / firewall: can anything leave?
- "src/api": {"default_deny": True, "allowed": ["db.prod:5432"]},
-}
-
-VECTOR_FOR = {
- "database":       [("CWE-89", "SQL injection", 5)],
- "voucher_bucket": [("CWE-22", "path traversal", 4),
-                    ("CWE-434", "unrestricted upload", 4)],
-}
-
-def reachable(entry, flows):
-    adj = defaultdict(list)
-    for a, b in flows:
-        adj[a].append(b)
-    seen, stack = set(), [entry]
-    while stack:
-        for m in adj[stack.pop()]:
-            if m not in seen:
-                seen.add(m); stack.append(m)
-    return seen
-
-def threat_model(arch, cloud, cspm, entitlements, iam, egress):
-    threats = []
-    cspm_by_resource = defaultdict(int)
-    for f in cspm:
-        cspm_by_resource[f["resource"]] += f["severity"]
-    for ep in arch["entry_points"]:
-        reach = reachable(ep["unit"], arch["flows"])
-        exposure = cloud.get(ep["unit"], {})
-        for sink in arch["sinks"]:
-            if sink["unit"] not in reach:
-                continue
-            asset = arch["assets"][sink["resource"]]
-            comp = ep["component"]
-            for cwe, name, base in VECTOR_FOR.get(sink["resource"], []):
-                why, score = [], base + asset["value"]
-                if ep["auth"] == "none":
-                    score += 2; why.append("unauthenticated")
-                # exposure: the single biggest correction the map cannot make
-                if exposure.get("exposed") == "internet":
-                    score += 2; why.append("internet-facing")
-                else:
-                    score -= 3; why.append("vpc-only")
-                if exposure.get("exposed") == "internet" and not exposure.get("waf"):
-                    score += 1; why.append("no WAF")
-                score += cspm_by_resource[sink["resource"]]
-                if cspm_by_resource[sink["resource"]]:
-                    why.append("live CSPM finding")
-                # entitlement: write beats read, and the role decides which
-                if {"db:update", "s3:PutObject"} & entitlements.get(comp, set()):
-                    score += 1; why.append("role holds write")
-                if "*" in iam.get(comp, {}).get("assumable_by", []):
-                    score += 2; why.append("role assumable by *")
-                if not egress.get(comp, {}).get("default_deny", True):
-                    score += 2; why.append("egress open")
-                threats.append({
-                  "entry": ep["unit"], "sink": sink["unit"], "cwe": cwe,
-                  "vector": name, "score": score, "why": why,
-                  "path": f"{ep['unit']} -> ... -> {sink['unit']}"})
-    # score first, then a full tiebreak, so two machines agree
-    return sorted(threats,
-                  key=lambda t: (-t["score"], t["cwe"], t["entry"], t["sink"]))
-
-TM = threat_model(ARCH, CLOUD_POLICY, CSPM, ENTITLEMENTS, IAM, EGRESS)
-print(f"{'entry':16s}{'sink':14s}{'cwe':9s}{'score':>6}  why")
+print(f"{'id':6s}{'':2s}{'entry':16s}{'sink':14s}{'score':>6}  why")
 print("-" * 92)
-for t in TM:
-    print(f"{t['entry']:16s}{t['sink']:14s}{t['cwe']:9s}{t['score']:>6}  "
-          f"{', '.join(t['why'])}")
-print(f"\\n{len(TM)} threats. Nobody wrote this; it fell out of six files that")
-print("already existed in the estate.")'''),
-  ("md", "## 4 · The same code, two estates\n\n"
-         "This is the argument for reading past the map. Nothing below changes "
-         "a line of the repository — only the configuration around it."),
-  ("py", '''# Same repository. Private load balancer, default-deny egress, no wildcard
-# trust policy, and the CSPM finding remediated.
-HARDENED = threat_model(
-  ARCH,
-  {k: {"exposed": "vpc-only", "waf": True} for k in CLOUD_POLICY},
-  [],                                                        # CSPM clean
-  {"src/api": {"db:select", "s3:GetObject"}},                # read-only role
-  {"src/api": {"assumable_by": ["ci-deploy-role"], "mfa_required": True}},
-  {"src/api": {"default_deny": True, "allowed": ["db.prod:5432"]}},
-)
+for t in threats:
+    print(f"{t['id']:6s}{t['stride']:2s}{t['entry']:16s}{t['sink']:14s}"
+          f"{t['score']:>6}  {t['reasons'][0]}")
 
-print(f"{'threat':38s}{'as deployed':>13}{'hardened':>11}")
-print("-" * 62)
-by_key = {(t["entry"], t["sink"], t["cwe"]): t["score"] for t in HARDENED}
-for t in TM:
-    k = (t["entry"], t["sink"], t["cwe"])
-    print(f"{t['cwe'] + '  ' + t['path']:38s}{t['score']:>13}{by_key[k]:>11}")
+print(f"\\n{len(threats)} threats across "
+      f"{len({t['stride'] for t in threats})} STRIDE categories")
+print(f"{len(bnds)} trust-boundary crossing(s):")
+for b in bnds:
+    print(f"   {b['from']} -> {b['to']}   ({b['trust']})")
+assert len({t["stride"] for t in threats}) == 6'''),
+  ("md", "## 5 · The diagram it emits\n\nMermaid, so it renders here and on "
+         "the lesson page without a library. Double arrows are trust-boundary "
+         "crossings — the edges every finding turned out to live on."),
+  ("py", '''print(diagram(ARCHITECTURE, bnds))'''),
+  ("md", "## 6 · The same code, a hardened estate\n\nNot one line of "
+         "CyberTravels\' source changes. Only the four evidence inputs around "
+         "it do."),
+  ("py", '''hard = model(ARCHITECTURE, cspm=HARDENED["cspm"], iam=HARDENED["iam"],
+              network=HARDENED["network"],
+              entitlements=HARDENED["entitlements"])
+by_id = {(t["stride"], t["entry"], t["sink"]): t["score"] for t in hard}
 
-print(f"\\nmax severity  {max(t['score'] for t in TM)} -> "
-      f"{max(t['score'] for t in HARDENED)}")
+print(f"{'':2s}{'entry -> sink':34s}{'deployed':>10}{'hardened':>10}")
+print("-" * 58)
+for t in threats[:6]:
+    k = (t["stride"], t["entry"], t["sink"])
+    print(f"{t['stride']:2s}{t['entry'] + ' -> ' + t['sink']:34s}"
+          f"{t['score']:>10}{by_id[k]:>10}")
+
+print(f"\\nthreat rows: {len(threats)} -> {len(hard)}   (unchanged)")
+print(f"max severity: {max(t['score'] for t in threats)} -> "
+      f"{max(t['score'] for t in hard)}")
 print()
-print("Identical code. A model derived from the map alone would have scored")
-print("these two deployments the same, and it would have been wrong about the")
-print("first by understating it and wrong about the second by crying wolf.")
-assert max(t["score"] for t in HARDENED) < max(t["score"] for t in TM)'''),
-  ("md", "## 5 · Where it breaks — the model that was true last quarter\n\n"
-         "Add one entry point. The hand-written threat model does not change, "
-         "because documents do not change themselves."),
-  ("py", '''ARCH_V2 = {**ARCH,
- "entry_points": ARCH["entry_points"] + [
-   {"unit": "admin_export", "component": "src/api", "auth": "none"}],
- "flows": ARCH["flows"] + [("admin_export", "load_booking"),
-                           ("admin_export", "store")]}
-CLOUD_V2 = {**CLOUD_POLICY,
-            "admin_export": {"exposed": "internet", "waf": False}}
-
-TM2 = threat_model(ARCH_V2, CLOUD_V2, CSPM, ENTITLEMENTS, IAM, EGRESS)
-
-def diff(before, after):
-    key = lambda t: (t["entry"], t["sink"], t["cwe"])
-    b = {key(t): t for t in before}
-    a = {key(t): t for t in after}
-    # sorted() over a set difference is NOT deterministic across processes:
-    # set iteration order depends on PYTHONHASHSEED, and a stable sort then
-    # preserves that order for equal scores. Sort the keys first.
-    return {"new": [a[k] for k in sorted(a.keys() - b.keys())],
-            "removed": [b[k] for k in sorted(b.keys() - a.keys())],
-            "max_before": max(t["score"] for t in before),
-            "max_after": max(t["score"] for t in after)}
-
-d = diff(TM, TM2)
-print(f"threats before {len(TM)} -> after {len(TM2)}")
-print(f"max severity   {d['max_before']} -> {d['max_after']}")
-print("\\nNEW THREATS:")
-for t in sorted(d["new"], key=lambda t: (-t["score"], t["cwe"], t["entry"])):
-    print(f"   [{t['score']:>2}] {t['cwe']:9s}{t['path']:38s}{', '.join(t['why'])}")
-assert d["new"] and d["max_after"] >= d["max_before"]'''),
-  ("md", "## 6 · The control — and the gate that is not enough\n\n"
-         "Regenerate on every change to *any* input, and gate on the delta. "
-         "The obvious gate counts new threats. Watch what it does with a pull "
-         "request that adds none."),
-  ("py", '''def gate_new_only(before, after, critical_at=16):
-    """The obvious gate: refuse a pull request that introduces a new critical."""
-    d = diff(before, after)
-    crit = [t for t in d["new"] if t["score"] >= critical_at]
-    return not crit, {"new": len(d["new"]), "new_critical": len(crit)}
-
-ok, info = gate_new_only(TM, TM2)
-print(f"PR 1 - adds an unauthenticated handler   -> "
-      f"{'PASS' if ok else 'FAIL'}  {info}")
-
-# PR 2 touches no application code at all. It widens the IAM trust policy and
-# removes the default-deny egress rule - two lines of terraform.
-TM_TF = threat_model(ARCH, CLOUD_POLICY, CSPM, ENTITLEMENTS,
-                     {"src/api": {"assumable_by": ["ci-deploy-role", "*"],
-                                  "mfa_required": False}},
-                     {"src/api": {"default_deny": False,
-                                  "allowed": ["0.0.0.0/0"]}})
-ok2, info2 = gate_new_only(TM, TM_TF)
-print(f"PR 2 - two lines of terraform            -> "
-      f"{'PASS' if ok2 else 'FAIL'}  {info2}")
-print()
-print("PR 2 introduced no new threat, so a gate that counts new threats waves")
-print("it through. Every existing threat got worse:")
-by_key = {(t["entry"], t["sink"], t["cwe"]): t["score"] for t in TM_TF}
-for t in TM:
-    k = (t["entry"], t["sink"], t["cwe"])
-    print(f"   {t['cwe']:9s}{t['path']:38s}{t['score']:>3} -> {by_key[k]}")'''),
-  ("md", "## 7 · The gate that is\n\nCount escalation as well as arrival. A "
-         "threat that was medium and is now critical is a regression, and the "
-         "pull request that caused it did not touch a line of application code."),
-  ("py", '''def threat_gate(before, after, critical_at=16, max_escalation=2):
-    d = diff(before, after)
-    prev = {(t["entry"], t["sink"], t["cwe"]): t["score"] for t in before}
-    new_crit = [t for t in d["new"] if t["score"] >= critical_at]
-    escalated = [t for t in after
-                 if (k := (t["entry"], t["sink"], t["cwe"])) in prev
-                 and t["score"] - prev[k] > max_escalation]
-    return (not new_crit and not escalated,
-            {"new_critical": len(new_crit), "escalated": len(escalated),
-             "detail": [f"{t['cwe']} via {t['path']}: "
-                        f"{prev[(t['entry'], t['sink'], t['cwe'])]} -> {t['score']}"
-                        for t in escalated]})
-
-for label, model in (("PR 1 - unauthenticated handler", TM2),
-                     ("PR 2 - two lines of terraform ", TM_TF)):
-    ok, info = threat_gate(TM, model)
-    print(f"{label} -> {'PASS' if ok else 'FAIL'}")
-    print(f"   new_critical={info['new_critical']}  escalated={info['escalated']}")
-    for line in info["detail"]:
-        print(f"      {line}")
-
-# And the fix for PR 1: require a session and put it behind the WAF.
-ARCH_FIXED = {**ARCH_V2, "entry_points": [
-  {**e, "auth": "session"} if e["unit"] == "admin_export" else e
-  for e in ARCH_V2["entry_points"]]}
-CLOUD_FIXED = {**CLOUD_V2, "admin_export": {"exposed": "internet", "waf": True}}
-ok_fixed, info_fixed = threat_gate(
-    TM, threat_model(ARCH_FIXED, CLOUD_FIXED, CSPM, ENTITLEMENTS, IAM, EGRESS))
-print(f"\\nPR 1, after requiring auth and adding the WAF -> "
-      f"{'PASS' if ok_fixed else 'FAIL'}  {info_fixed['new_critical']} critical")
-
-print()
-print("Nobody wrote a document. The gate compared generated models and refused")
-print("two named regressions - and the one it would have missed is the one")
-print("that changed no code, which is the majority of how estates get worse.")
-assert gate_new_only(TM, TM_TF)[0]          # v1 waves the terraform PR through
-assert not threat_gate(TM, TM_TF)[0]       # v2 does not
-assert not threat_gate(TM, TM2)[0] and ok_fixed'''),
+print("The rows do not disappear. Hardening removes severity, not threats -")
+print("and the row is what you re-check after the next terraform change.")
+assert len(hard) == len(threats)
+assert max(t["score"] for t in hard) < max(t["score"] for t in threats)'''),
  ],
- "expect": "Six threats are derived from six static inputs, each carrying the "
-           "reasons its score moved — internet-facing, no WAF, live CSPM "
-           "finding, role holds write, role assumable by `*`, egress open. The "
-           "same repository deployed behind a private load balancer with "
-           "default-deny egress and a read-only role scores materially lower on "
-           "every row. Adding an unauthenticated handler fails the CI gate, and "
-           "so does a pull request that changes only terraform.",
- "challenge": "Take one service and write down where each of the six inputs "
-              "lives — the repository, the CSPM console, the terraform, the IAM "
-              "policy, the NetworkPolicy. If any of them is \"in somebody's "
-              "head\", that is the input your threat model is currently "
-              "guessing at, and the guess is always the optimistic one.",
+ "expect": "The skill loads with its routing description and procedure, then "
+           "derives twelve threats across all six STRIDE categories from five "
+           "synthetic inputs, each carrying the evidence line that set its "
+           "score. It emits a mermaid diagram marking the two trust-boundary "
+           "crossings. Re-running against a hardened estate — same code, four "
+           "different evidence inputs — keeps every row and drops the maximum "
+           "severity from 11 to 1.",
+ "challenge": "Point the skill at one of your own services. The work is not the "
+              "model, it is collecting the five inputs: if any of them is \"in "
+              "somebody\'s head\", that is the input your threat model is "
+              "currently guessing at, and the guess is always the optimistic one.",
 },
 
 "B2.3": {

@@ -14,10 +14,10 @@
 <td>SPIFFE/SPIRE, Keycloak, RFC 8693 token exchange, RFC 8705 mTLS binding</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Run both narrowing rules against a request that passes one and fails the other.</p>
+<p><strong>Why a security engineer needs it.</strong> Subset-only lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked. The control it builds is: token exchange that intersects presented scope with the actor's ceiling, and records the chain.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The access token your agent holds is a password: whoever reads it out of a log can spend it. Three published standards fix that — an SVID says which workload is calling, RFC 8693 says on whose authority, and RFC 8705 binds the token to the certificate that earned it. Most estates implement the middle one and stop.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Alex can issue refunds; the triage agent must never be able to. Delegation from Alex to CyberTravels has to narrow to a subset of what he presented AND stay inside the receiving agent's own ceiling. R1.</p>

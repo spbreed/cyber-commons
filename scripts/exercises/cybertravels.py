@@ -361,17 +361,12 @@ GROUNDING: dict[str, str] = {
 
 # ---- B1 · the AI SDLC ----------------------------------------------------
 # ---- B1 · the agentic harness --------------------------------------------
-"B1.0": "CyberTravels already runs four harnesses and calls them agents. The "
-        "Workflow Agent is a loop over booking tools whose verifier nobody ever "
-        "specified — which is the answer to why it refunded twice.",
-"B1.1": "CyberTravels reaches its tools three ways at once: an internal MCP "
-        "server, a third-party MCP server it does not operate, and direct API "
-        "calls with no MCP in the path. Three different answers to \"who "
-        "chooses\", in one architecture diagram. R3.",
-
 "B2.0": "Alex's Coding Agent turned six pull requests a week into forty, some "
         "touching a hundred and twenty files. This chapter is what he builds "
         "instead of scrolling.",
+"B2.0": "Alex reviews 40 pull requests a week against 6 before the Coding "
+        "Agent existed, with the same one reviewer. The reviewer becomes a "
+        "harness, and the harness becomes something he has to secure.",
 "B2.1": "CyberTravels' repository is four services and a shared library. Structure "
         "is what decides whether the pipeline reads the booking handlers or the "
         "vendored SDK first.",

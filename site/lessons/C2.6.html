@@ -14,10 +14,10 @@
 <td>Inspect, Cyber Commons eval harness, Llama 3.3, GLM-4.6, Kimi K2, Claude Opus 5</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Run one harness across three model families, separate the two effects, then contamination-check a public benchmark against a training window.</p>
+<p><strong>Why a security engineer needs it.</strong> Model effects and harness effects confounded, and published benchmarks overstating real-world capability. The control it builds is: multi-backbone runs on fixed seeds and corpora, plus contamination and construct-validity checks before any number is trusted.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Change the model and the harness at the same time and you have learned nothing about either. Separating those two effects is the whole job — and it is also how you read somebody else's published number without being misled by it.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Change CyberTravels' model and its review harness in the same week and CyberTravels has learned nothing about either.</p>

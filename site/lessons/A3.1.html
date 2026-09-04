@@ -14,10 +14,10 @@
 <td>OPA / Rego, SPIFFE/SPIRE</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.</p>
+<p><strong>Why a security engineer needs it.</strong> Allow-by-default authorization is defeated by any argument the model can be persuaded to produce. The control it builds is: policy evaluated per call on (identity, tool, arguments, resource), denying unless a rule permits.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>Identity has already failed. Something untrusted is in the context and the agent has decided to call a tool. The tool call is the last place a decision can still be made on facts rather than intent — this SPIFFE ID, this tool, this resource, this verb — and a policy written one notch vaguer than that cannot express the distinction the attack turns on.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The last place a decision about that refund rests on facts rather than on intent. Identity has already failed, an injected instruction is in the context, and the tool call is where CyberTravels can still say no. R1, R3.</p>

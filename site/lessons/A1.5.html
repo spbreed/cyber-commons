@@ -14,10 +14,10 @@
 <td>OPA, kmcp, GLM-4.6, Claude Haiku 4.5</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Call one over-scoped tool with attacker-chosen arguments and see what it reaches.</p>
+<p><strong>Why a security engineer needs it.</strong> The agent uses a legitimate tool, with legitimate arguments, to do something nobody intended — and every log line looks normal. The control it builds is: default-deny authorization on the tool call (A3.1) and just-in-time authority (A2.4).</p>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The agent was given database access for a reporting task, because a narrower grant would have taken an afternoon of scoping. It used the access it was given. Every incident report in this category contains the sentence "it did exactly what it was allowed to do".</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The Workflow Agent was given payments scope so bookings would be simple. Payments includes refunds. It used exactly the authority it was handed, and $5,000 left the account. R1.</p>

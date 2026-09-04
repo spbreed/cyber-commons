@@ -14,10 +14,10 @@
 <td>Vault, Kubernetes</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.</p>
+<p><strong>Why a security engineer needs it.</strong> Terminating agents while their tokens stay valid leaves the persistence in place. In the incident, third-party access ended when the third party revoked keys — not when the agents stopped. The control it builds is: a tested kill path independent of the agent execution path, snapshot before terminate, revocation in the same action, a measured activation target and named authority to pull it (C8.3).</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The third party's exposure ended when the third party revoked its keys, not when the agents were stopped. Terminating a fleet whose credentials stay valid moves the incident rather than ending it.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Terminating CyberTravels' four agents while their bearer tokens stay valid moves the incident rather than ending it. R5.</p>

@@ -14,10 +14,10 @@
 <td>SPIFFE/SPIRE, kagent</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Introduce an unregistered agent into the topology and have it receive delegated work.</p>
+<p><strong>Why a security engineer needs it.</strong> An agent nobody approved receives delegated work and delegated authority, and the orchestrator has no way to tell it apart from a legitimate worker. The control it builds is: a registry of approved agents with identity-bound admission (A2.5) and an audit trail per hop (A2.7).</p>
+<p>This is a <strong>risk</strong> lesson: it shows the failure happening before anything tries to stop it, so the control that follows is answering something you have already watched go wrong.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The orchestrator delegates to whatever agents it discovers. Something joined the pool this morning that nobody registered, and it has been receiving work ever since, with the same standing as the agents you wrote.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> CyberTravels' orchestrator delegates to the agents it discovers. A fifth one joined the pool during a deployment last week and has been receiving bookings ever since.</p>

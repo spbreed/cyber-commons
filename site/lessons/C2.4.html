@@ -14,10 +14,10 @@
 <td>Qdrant, sentence-transformers</td>
 </tr>
 </tbody>
-</table>
-<blockquote>
-<p><strong>Runs anywhere.</strong> Every line of code is in this notebook — nothing to install, nothing to clone, no API key, no network. Standard library only, so it works on a Kaggle kernel with the internet switched off — and where a lesson involves a model, the same code calls an open-weight endpoint or a frontier API when you configure one.</p>
-</blockquote></div><div class="nbmd"><h2>1 · The hook</h2>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Invert embeddings from a local vector store and recover source text.</p>
+<p><strong>Why a security engineer needs it.</strong> Memorisation, extraction, embedding inversion, index poisoning. The control it builds is: measure extraction rates rather than assert privacy.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
 <p>The corpus is a write surface. Training data, a RAG index and an agent's memory are three versions of the same problem: text somebody else authored, read back later as fact, long after anyone remembers where it came from.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> The vector store behind the RAG Advisor is a write surface. Anything ingested once is read back as fact long after anyone remembers where it came from. R12.</p>
