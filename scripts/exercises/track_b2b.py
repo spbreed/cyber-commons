@@ -41,7 +41,7 @@ MODEL_NOTE = """
 > ```
 """
 
-from .skills import SKILL_RUNTIME
+from .skills import SKILL_RUNTIME, skill_steps
 
 from . import diagrams as D
 
@@ -73,6 +73,8 @@ Four isolation properties, and you need all four:
   ("md", "## 2 · Stage 11 — model the replica and its isolation"),
 ("md", "## 3 · Where it breaks — the same probes against staging"),
 ("md", "## 4 · The control — the four isolation properties, checked"),
+  *skill_steps('appsec/exploit-replica-isolation-check',
+               "## 2 · The stage, as a skill\n\nBefore anything is executed against CyberTravels' environment, four checks decide whether it is a replica or staging with a different DNS name. The skill runs them — egress, credentials, data, and the destructive probes you would only run somewhere built to be destroyed."),
 ],
  "expect": "The replica permits only its own internal hosts and blocks GitHub, "
            "the metadata service and private addresses. Staging holds real "
@@ -160,8 +162,8 @@ This is the stage that most often changes what gets fixed first.
          "than dropped. A finding that survived Phase 3 and then failed to "
          "reproduce is the most useful signal the pipeline produces about its "
          "own false-positive rate — and it is the one a tidy report deletes."),
-  ("py", SKILL_RUNTIME),
   ("skill", "appsec/appsec-exploit-validate"),
+  ("skill_script", "appsec/appsec-exploit-validate/scripts/appsec_exploit_validate.py"),
 
 
   ("md", "## 7 · Where it breaks — the tidy report\n\n"
@@ -204,13 +206,7 @@ the only question that cannot be gamed by editing the code around the detector.
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
-  ("model", {
-   "title": 'The model backend, and the patch it proposes',
-   "task": 'Fix this without changing the function\'s behaviour for valid input. Return only the patched function.\n\ndef report(request):\n    q = "SELECT * FROM orders WHERE ref = \'" + request.args[\'ref\'] + "\'"\n    return db.execute(q)',
-   "replay": 'def report(request):\n    q = "SELECT * FROM orders WHERE ref = ?"\n    return db.execute(q, (request.args[\'ref\'],))',
-   "system": 'You are a remediation engineer. Output code only, no explanation.',
-   "check": '("parameterises the query", "?" in answer or "%s" in answer or ":ref" in answer)'}),
-  ("md", "## 2 · The confirmed finding, with its working exploit"),
+("md", "## 2 · The confirmed finding, with its working exploit"),
 ("md", "## 3 · Four candidate patches, three of which make CI green"),
 ("md", "## 4 · The control — validate on three axes, exploit first"),
 ],
@@ -263,8 +259,8 @@ quarter's budget.
          "The contract enforces the habit by requiring `severity_inputs` next "
          "to every severity. One overclaimed Critical costs more trust than ten "
          "honest Lows."),
-  ("py", SKILL_RUNTIME),
   ("skill", "appsec/appsec-triage-report"),
+  ("skill_script", "appsec/appsec-triage-report/scripts/appsec_triage_report.py"),
 
 
   ("md", "## 7 · Where it breaks — the uncalibrated headline\n\n"
@@ -369,8 +365,8 @@ goal is the strongest containment a developer does not notice.
          "outcome: **rate an injection finding by what the allowlist permits, "
          "not by the text of the injection.** The payload is the attacker's "
          "choice and costs nothing to change; the allowlist is yours."),
-  ("py", SKILL_RUNTIME),
   ("skill", "appsec/coding-agent-hardening"),
+  ("skill_script", "appsec/coding-agent-hardening/scripts/coding_agent_hardening.py"),
 
 ],
  "expect": "The default developer agent scores a blast radius of 43 and can reach "
@@ -425,8 +421,8 @@ artefact rather than in a footnote.
 """,
  "steps": [
   ("md", "## 2 · The skill that does the static half"),
-  ("py", SKILL_RUNTIME),
   ("skill", "attestation/agent-code-surface-analyzer"),
+  ("skill_script", "attestation/agent-code-surface-analyzer/scripts/agent_code_surface_analyzer.py"),
 
   ("md", "## 3 · Control intent, and why it is the honest static claim\\n\\n"
          "Static analysis cannot show that a control **holds**. It can show "

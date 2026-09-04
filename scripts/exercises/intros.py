@@ -11,6 +11,8 @@ from . import cybertravels as CT
 from . import diagrams as D
 from .models import MODEL_RUNTIME
 
+from .skills import skill_steps
+
 EXERCISES: dict[str, dict] = {
 
 "A1.0": {
@@ -197,107 +199,15 @@ cannot block the merge that caused it.
          "Four moves and about twenty lines. `ask()` is the model — offline it "
          "is a labelled replay, and with a key configured it is a real "
          "call to an open-weight model served from Kaggle, through the same code."),
-  ("py", MODEL_RUNTIME),
-  ("py", '''FINDING = """
-def load_booking(ref, owner):
-    return DB.execute("SELECT * FROM bookings WHERE ref=" + ref)
-"""
-
-def plan(task, feedback):
-    """PLAN - the model proposes the corrected line.
-
-    Note what the prompt does NOT do: offer a way out. An earlier version of
-    this cell let the model reply DONE, and a real model replied DONE on the
-    first turn every time. A loop whose exit is easier than the work exits.
-    """
-    prompt = f"{task}\\n\\nCode:\\n{FINDING}\\n"
-    if feedback:
-        prompt += f"Your previous attempt was rejected: {feedback}\\n"
-    prompt += "Reply with ONLY the corrected line of code."
-    answer, used, _ = ask(
-        prompt,
-        replay='return DB.execute("SELECT * FROM bookings WHERE ref=?", (ref,))',
-        system="You fix security defects. One line of code, no prose, no fences.",
-        max_tokens=120)
-    # Parsing is the harness's job, not the model's favour. Asked for one
-    # line, a 7B model returns the whole function and a 1.5B model returns a
-    # fenced block; both are reasonable readings of the request. Take the
-    # line that actually calls the sink.
-    lines = [ln.strip() for ln in answer.strip().splitlines()
-             if ln.strip() and not ln.strip().startswith("```")]
-    sink = [ln for ln in lines if "execute" in ln]
-    return ((sink or lines or [""])[0]), used
-
-def act(proposal):
-    """ACT - the harness applies it. Here, that is recording what it would do."""
-    return {"would_write": proposal}
-
-PLACEHOLDERS = ("?", "%s", ":ref", "$1")
-
-def parameterised(code):
-    """VERIFY - independent. Does the line actually use a placeholder?
-
-    The tuple matters more than it looks. An earlier version accepted only "?"
-    and a real model returned a perfectly correct psycopg fix using "%s" - so
-    the verifier rejected correct work three times and burned the whole budget.
-    A verifier that is too narrow does not fail safe; it fails expensively, and
-    it looks exactly like a model that cannot do the task.
-    """
-    after = code.split("execute", 1)[-1]
-    return any(p in after for p in PLACEHOLDERS) and "+" not in after
-
-def loop(task, verifier=None, max_steps=3):
-    """PLAN -> ACT -> VERIFY -> STOP, with the rejection fed back in."""
-    feedback, log, used = "", [], "?"
-    for step in range(1, max_steps + 1):              # STOP: the budget
-        proposal, used = plan(task, feedback)         # PLAN
-        act(proposal)                                 # ACT
-        log.append((step, proposal[:70]))
-        if verifier is None:                          # no VERIFY: accept it
-            return {"ok": None, "steps": step, "answer": proposal,
-                    "backend": used, "log": log}
-        if verifier(proposal):                        # VERIFY
-            return {"ok": True, "steps": step, "answer": proposal,
-                    "backend": used, "log": log}
-        feedback = "it still concatenates the input into the SQL string"
-    return {"ok": False, "steps": max_steps,
-            "answer": log[-1][1] if log else None, "backend": used, "log": log}
-
-TASK = "Rewrite the one vulnerable line so the query is parameterised."
-print("the loop, wired:", ["plan", "act", "verify", "stop"])'''),
-  ("md", "## 4 · Run it with no verifier"),
-  ("py", '''no_check = loop(TASK, verifier=None)
-print(f"backend  : {no_check['backend']}")
-print(f"steps    : {no_check['steps']}")
-print(f"accepted : {no_check['answer']}")
-print(f"verified : {no_check['ok']}   <- nothing checked it")
-print()
-print("The loop stopped because the model produced something, which is not the")
-print("same as producing something correct. Whatever came back was accepted.")'''),
-  ("md", "## 5 · Add the verifier — same model, same prompt"),
-  ("py", '''checked = loop(TASK, verifier=parameterised)
-print(f"accepted : {checked['answer']}")
-print(f"verified : {checked['ok']}   <- an independent check said so")
-print(f"steps    : {checked['steps']}")
-
-# Two ways a verifier is wrong, and only one of them is loud.
-NARROW = lambda c: "?" in c.split("execute", 1)[-1] and "+" not in c
-PSYCOPG = 'return DB.execute("SELECT * FROM bookings WHERE ref=%s", (ref,))'
-print(f"\\na correct psycopg fix: {PSYCOPG}")
-print(f"   narrow verifier (only '?') : "
-      f"{'accepts' if NARROW(PSYCOPG) else 'REJECTS a correct fix'}")
-print(f"   this lesson's verifier     : "
-      f"{'accepts' if parameterised(PSYCOPG) else 'rejects'}")
-
-# And the case that matters: a plausible answer that is still vulnerable.
-BAD = 'return DB.execute("SELECT * FROM bookings WHERE ref=" + escape(ref))'
-print(f"\\na plausible-looking answer: {BAD}")
-print(f"   would the verifier accept it? {parameterised(BAD)}")
-print()
-print("It reads like a fix and it is still concatenation. Without the verifier")
-print("this loop ships it, reports success, and the trace looks clean.")
-assert not parameterised(BAD) and parameterised(PSYCOPG) and not NARROW(PSYCOPG)'''),
-  ("md", "## 6 · What applies where"),
+  *skill_steps("appsec/agentic-harness-loop",
+               "## 4 \u00b7 The loop, as a skill\n\nThe procedure is written "
+               "down first, because the loop is the part you own and the model "
+               "is a component inside it. Its script carries the adapter and "
+               "the four moves \u2014 run offline it uses a labelled replay, and "
+               "against a served open-weight model it is the same code."),
+("md", "## 4 · Run it with no verifier"),
+("md", "## 5 · Add the verifier — same model, same prompt"),
+("md", "## 6 · What applies where"),
   ("html", D.table(
     ["technique", "pre-deploy", "post-deploy", "what only the other side sees"],
     [["SAST / code analysis", "<b>yes</b>", "no",

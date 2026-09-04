@@ -59,7 +59,6 @@ Introducing that third state is the whole of this lesson.
          "verdict is not a pass, and a capped verdict does not get raised "
          "because the other evidence looked good. This is the file in this "
          "repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/attestation-signer-lifecycle"),
 ],
  "expect": "The skill loads and reports its shape, and its failure modes are the "
@@ -105,7 +104,6 @@ personal card, and the SaaS product that quietly added an AI feature.
          "gateway and guardrail, and every downstream its tools call. Every "
          "other attestation skill consumes this graph, which is why it runs "
          "first. This is the file in this repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/deployment-inventory-resolver"),
 ],
  "expect": "The skill loads and reports its shape. Two of its rules are what "
@@ -225,7 +223,6 @@ from now about a system that has since had six model upgrades.
          "The contract carries a field most packs would rather not have: "
          "`conformance_reported`. Setting it true should be read as a defect in "
          "the evidence, not a feature of it."),
-  ("py", SKILL_RUNTIME),
   ("skill", "grc/control-evidence"),
 
 
@@ -304,7 +301,6 @@ is often the largest category in a first assessment.
          "endpoints, route tables, key policies, and whether the audit trail is "
          "not merely enabled but **delivering**. It collects; it does not "
          "conclude. This is the file in this repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/aws-runtime-posture-collector"),
 ],
  "expect": "The skill loads and reports its shape, and the line to take from it "

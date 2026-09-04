@@ -131,7 +131,6 @@ operational reason B2.0 bounds delegation depth in the first place.
          "scope until proven otherwise and the smaller number must never stand "
          "in for the larger in a notification decision. And `does_not_stop` "
          "makes containment state its own limits."),
-  ("py", SKILL_RUNTIME),
   ("skill", "secops/incident-scoping"),
 
 ],

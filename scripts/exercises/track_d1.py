@@ -100,7 +100,6 @@ second one happens quietly.
          "Sampling seeded from `hash()` picks a different subset on every run, "
          "so you can never tell whether a change in findings came from the rule "
          "or from the dice."),
-  ("py", SKILL_RUNTIME),
   ("skill", "secops/detection-triage"),
 
 ],

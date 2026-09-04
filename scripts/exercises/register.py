@@ -80,8 +80,8 @@ is the useful part — it tells Alex which afternoon to spend first.
          "register per downstream rather than by asking each team. The procedure "
          "is written down as a skill, embedded here verbatim from this "
          "repository:"),
-  RUNTIME_STEP,
   ("skill", "attestation/risk-registry-integrator"),
+  ("skill_script", "attestation/risk-registry-integrator/scripts/risk_registry_integrator.py"),
 ],
  "expect": "Twelve risks, each as a scene rather than a mechanism, each with a "
            "control and an owning lesson. Identity and authorisation is the "

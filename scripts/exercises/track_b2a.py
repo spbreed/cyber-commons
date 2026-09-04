@@ -28,7 +28,7 @@ Mantis as a bonus: a real implementation of this pipeline, mapped stage by stage
 onto what you built.
 """
 
-from .skills import SKILL_RUNTIME, runtime_step
+from .skills import SKILL_RUNTIME, skill_steps, runtime_step
 
 RUNTIME_STEP = runtime_step()
 
@@ -103,23 +103,7 @@ in this lesson demonstrates and the reason the next lesson works at all.
 ("md", "## 3 · Stage 2 — structural indexing\n\n"
          "Index the code into semantic units. `ast` does the work here; in a "
          "polyglot repository this is what tree-sitter is for."),
-("model", {
-   "title": "Stage 3, with a model actually doing the summarising",
-   "task": ("Summarise what this component does in one sentence, then name its "
-            "trust boundary.\n\nFiles: src/api/bookings.py\nExports: "
-            "get_booking(request), upload_voucher(request)\nCallers: the public "
-            "HTTP router. Calls into: src/data/reports.py, src/data/docs.py"),
-   "replay": ("Accepts traveller HTTP requests for bookings and voucher "
-              "uploads, passing both straight into the data layer.\nTrust "
-              "boundary: every parameter here arrives from the public internet, "
-              "so the edge between src/api and src/data is where untrusted "
-              "input crosses into a component that reaches the database and "
-              "the filesystem."),
-   "system": ("You summarise code components for a security architecture map. "
-              "Two sentences, no preamble."),
-   "check": ('("names a trust boundary", "trust" in answer.lower() '
-             'or "boundary" in answer.lower())')}),
-  ("md", "## 5 · Stage 3 — summarise each component, locally\n\n"
+("md", "## 5 · Stage 3 — summarise each component, locally\n\n"
          "The model call above is what stage 3 looks like in production. Below "
          "is the deterministic version, so the rest of the lesson has a fixed "
          "input to work from."),
@@ -134,8 +118,8 @@ in this lesson demonstrates and the reason the next lesson works at all.
          "You have just run Phase 1 by hand. The next repository needs the same "
          "four stages and so does the next agent, so the procedure belongs in a "
          "file rather than in your head. This is the one in this repository:"),
-  RUNTIME_STEP,
   ("skill", "appsec/appsec-repo-recon"),
+  ("skill_script", "appsec/appsec-repo-recon/scripts/appsec_repo_recon.py"),
  ],
  "expect": "Four of ten commits match the security markers, and `src/api/"
            "bookings.py` ranks highest on decayed risk purely from history — "
@@ -201,7 +185,6 @@ you read the procedure, execute it, and read what it produced.
   ("md", "## 2 · The skill\n\nThis is `skills/appsec/threat-model-stride/SKILL.md`, "
          "verbatim. The frontmatter is what routes a request to it; the body is "
          "the procedure a model follows."),
-  ("py", SKILL_RUNTIME),
   ("skill", "appsec/threat-model-stride"),
   ("md", "## 3 · Its script\n\nThe deterministic half of the skill — the part "
          "that has to give the same answer twice so two runs can be diffed. "
@@ -209,50 +192,13 @@ you read the procedure, execute it, and read what it produced.
   ("skill_script", "appsec/threat-model-stride/scripts/threat_model.py"),
   ("md", "## 4 · Execute it against CyberTravels\n\nFive synthetic inputs, "
          "standing in for what a real estate already holds."),
-  ("py", '''threats = model(ARCHITECTURE, cspm=CSPM, iam=IAM, network=NETWORK,
-                 entitlements=ENTITLEMENTS)
-bnds = boundaries(ARCHITECTURE)
-
-print(f"{'id':6s}{'':2s}{'entry':16s}{'sink':14s}{'score':>6}  why")
-print("-" * 92)
-for t in threats:
-    print(f"{t['id']:6s}{t['stride']:2s}{t['entry']:16s}{t['sink']:14s}"
-          f"{t['score']:>6}  {t['reasons'][0]}")
-
-print(f"\\n{len(threats)} threats across "
-      f"{len({t['stride'] for t in threats})} STRIDE categories")
-print(f"{len(bnds)} trust-boundary crossing(s):")
-for b in bnds:
-    print(f"   {b['from']} -> {b['to']}   ({b['trust']})")
-assert len({t["stride"] for t in threats}) == 6'''),
-  ("md", "## 5 · The diagram it emits\n\nMermaid, so it renders here and on "
+("md", "## 5 · The diagram it emits\n\nMermaid, so it renders here and on "
          "the lesson page without a library. Double arrows are trust-boundary "
          "crossings — the edges every finding turned out to live on."),
-  ("py", '''print(diagram(ARCHITECTURE, bnds))'''),
-  ("md", "## 6 · The same code, a hardened estate\n\nNot one line of "
+("md", "## 6 · The same code, a hardened estate\n\nNot one line of "
          "CyberTravels\' source changes. Only the four evidence inputs around "
          "it do."),
-  ("py", '''hard = model(ARCHITECTURE, cspm=HARDENED["cspm"], iam=HARDENED["iam"],
-              network=HARDENED["network"],
-              entitlements=HARDENED["entitlements"])
-by_id = {(t["stride"], t["entry"], t["sink"]): t["score"] for t in hard}
-
-print(f"{'':2s}{'entry -> sink':34s}{'deployed':>10}{'hardened':>10}")
-print("-" * 58)
-for t in threats[:6]:
-    k = (t["stride"], t["entry"], t["sink"])
-    print(f"{t['stride']:2s}{t['entry'] + ' -> ' + t['sink']:34s}"
-          f"{t['score']:>10}{by_id[k]:>10}")
-
-print(f"\\nthreat rows: {len(threats)} -> {len(hard)}   (unchanged)")
-print(f"max severity: {max(t['score'] for t in threats)} -> "
-      f"{max(t['score'] for t in hard)}")
-print()
-print("The rows do not disappear. Hardening removes severity, not threats -")
-print("and the row is what you re-check after the next terraform change.")
-assert len(hard) == len(threats)
-assert max(t["score"] for t in hard) < max(t["score"] for t in threats)'''),
- ],
+],
  "expect": "The skill loads with its routing description and procedure, then "
            "derives twelve threats across all six STRIDE categories from five "
            "synthetic inputs, each carrying the evidence line that set its "
@@ -292,13 +238,7 @@ model for what rules cannot express; and everything the model says treated as a
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
-  ("model", {
-   "title": 'The model backend, and the third generation of SAST',
-   "task": 'Is this function vulnerable? Name the CWE if so, and say which value reaches the sink.\n\ndef report(request):\n    q = "SELECT * FROM orders WHERE ref = \'" + request.args[\'ref\'] + "\'"\n    return db.execute(q)',
-   "replay": "Yes - CWE-89, SQL injection. request.args['ref'] is concatenated directly into the query string and reaches db.execute unsanitised.",
-   "system": 'You are a code reviewer. Answer in at most three lines.',
-   "check": '("names the CWE identifier", "CWE-89" in answer.upper() or "SQL INJECT" in answer.upper())'}),
-  ("md", "## 2 · Generation 1 — grep, and why it gets muted\n\n"
+("md", "## 2 · Generation 1 — grep, and why it gets muted\n\n"
          "The safe functions in this corpus matter more than the buggy ones: a "
          "scanner that fires on parameterised SQL is one nobody runs twice."),
 ("md", "## 3 · Generation 2 — taint rules\n\n"
@@ -382,6 +322,8 @@ sits above both, and its policy is three rules:
    were silent — silence in a high-risk zone is the signal, not the noise;
 3. mark everything the model says as a hypothesis, never a finding, because
    stages 8 to 12 are what turn one into the other."""),
+  *skill_steps('appsec/sast-generation-comparison',
+               '## 2 · The stage, as a skill\n\nThree generations of analysis over the same CyberTravels code, and they fail differently: grep flags the safe queries, taint finds the real flows and nothing in `authz.py`, and the model finds the authorization defect that has no syntactic signature — along with the hallucination that is the price of it. The skill runs all three and reports precision, recall and that last column.'),
 ],
  "expect": "Grep produces 6 findings at 50% precision, flagging the parameterised "
            "query, the constant insert and the safe subprocess call. Taint rules "
@@ -432,6 +374,8 @@ effort on three copies of the same claim.
 ("md", "## 4 · Stage 9 — contextual verification against the real syntax\n\n"
          "Now check each surviving claim against the code. Three checks, all "
          "mechanical, none requiring judgement."),
+  *skill_steps('appsec/finding-dedup-and-verification',
+               "## 2 · The stage, as a skill\n\nSeven raw findings, four defects. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than a line number, and then rejects the survivors whose symbols are not in the file — because a finding about `os.system` in a file that never imports `os` should die here rather than in a maintainer's inbox."),
 ],
  "expect": "Seven raw findings collapse to four distinct defects, with the "
            "CWE-943 alias merging into CWE-89 and the taint result kept over grep "
@@ -483,8 +427,8 @@ Reporting `unknown` as `unreachable` is how a pipeline quietly drops real bugs.
          "easier to do by accident than it sounds, because a verification step "
          "that expands one finding per code path looks perfectly reasonable "
          "from the inside."),
-  ("py", SKILL_RUNTIME),
   ("skill", "appsec/appsec-vuln-audit"),
+  ("skill_script", "appsec/appsec-vuln-audit/scripts/appsec_vuln_audit.py"),
 
 
   ("md", "## 7 · Where it breaks — deduplicating on the wrong key\n\n"

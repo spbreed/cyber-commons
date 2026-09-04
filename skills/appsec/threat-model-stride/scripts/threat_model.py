@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from collections import defaultdict
 
 # ---------------------------------------------------------------- the inputs
@@ -198,6 +199,52 @@ def diff(before, after):
     return {"new": new, "escalated": esc}
 
 
+# ---------------------------------------------------- the demonstration
+# What the lesson runs, at module level, so the notebook and a terminal
+# both print the same thing. `main()` below is still the CLI, and only
+# fires when arguments are given.
+
+threats = model(ARCHITECTURE, cspm=CSPM, iam=IAM, network=NETWORK,
+                 entitlements=ENTITLEMENTS)
+bnds = boundaries(ARCHITECTURE)
+
+print(f"{'id':6s}{'':2s}{'entry':16s}{'sink':14s}{'score':>6}  why")
+print("-" * 92)
+for t in threats:
+    print(f"{t['id']:6s}{t['stride']:2s}{t['entry']:16s}{t['sink']:14s}"
+          f"{t['score']:>6}  {t['reasons'][0]}")
+
+print(f"\n{len(threats)} threats across "
+      f"{len({t['stride'] for t in threats})} STRIDE categories")
+print(f"{len(bnds)} trust-boundary crossing(s):")
+for b in bnds:
+    print(f"   {b['from']} -> {b['to']}   ({b['trust']})")
+assert len({t["stride"] for t in threats}) == 6
+
+print(diagram(ARCHITECTURE, bnds))
+
+hard = model(ARCHITECTURE, cspm=HARDENED["cspm"], iam=HARDENED["iam"],
+              network=HARDENED["network"],
+              entitlements=HARDENED["entitlements"])
+by_id = {(t["stride"], t["entry"], t["sink"]): t["score"] for t in hard}
+
+print(f"{'':2s}{'entry -> sink':34s}{'deployed':>10}{'hardened':>10}")
+print("-" * 58)
+for t in threats[:6]:
+    k = (t["stride"], t["entry"], t["sink"])
+    print(f"{t['stride']:2s}{t['entry'] + ' -> ' + t['sink']:34s}"
+          f"{t['score']:>10}{by_id[k]:>10}")
+
+print(f"\nthreat rows: {len(threats)} -> {len(hard)}   (unchanged)")
+print(f"max severity: {max(t['score'] for t in threats)} -> "
+      f"{max(t['score'] for t in hard)}")
+print()
+print("The rows do not disappear. Hardening removes severity, not threats -")
+print("and the row is what you re-check after the next terraform change.")
+assert len(hard) == len(threats)
+assert max(t["score"] for t in hard) < max(t["score"] for t in threats)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--hardened", action="store_true")
@@ -233,5 +280,5 @@ def main() -> int:
     return 0
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and sys.argv[1:]:
     raise SystemExit(main())
