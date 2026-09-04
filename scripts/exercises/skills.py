@@ -122,3 +122,20 @@ def check(instance, contract, path="$"):
 def runtime_step() -> tuple[str, str]:
     """The `("py", ...)` step that puts the skill runtime into a notebook."""
     return ("py", SKILL_RUNTIME)
+
+
+def skill_steps(ref: str, intro: str) -> list:
+    """The three steps that make a lesson a skill lesson.
+
+    In this order, always: the `SKILL.md` itself, the runtime that parses it,
+    and the skill's own script. A lesson executes the files in `skills/` — it
+    does not carry a second copy of the procedure that can drift from the
+    first.
+
+    `intro` is the markdown that introduces them, and it must end on a section
+    heading so the build can renumber it.
+    """
+    name = ref.rsplit("/", 1)[-1].replace("-", "_")
+    return [("md", intro),
+            ("skill", ref),
+            ("skill_script", f"{ref}/scripts/{name}.py")]

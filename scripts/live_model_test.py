@@ -3,19 +3,19 @@
 
 Every lesson in the commons runs offline against a deterministic replay. Some of
 them also carry a live section that calls a real model through the same code
-path. This runs those for real, so "the labs work with a frontier model" is an
+path. This runs those for real, so "the labs work against a real model" is an
 evidenced statement rather than a design intention.
 
-    # frontier — cheapest current Claude model
-    export ANTHROPIC_API_KEY=...          # or put it in ~/.anthropic/key
-    python3 scripts/live_model_test.py --backend frontier
+    # an open-weight model from Kaggle, served OpenAI-compatibly
+    export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 OPENAI_API_KEY=local
+    python3 scripts/live_model_test.py --model qwen2.5-7b-instruct --save
 
-    # open weight — anything OpenAI-compatible
-    export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama
-    python3 scripts/live_model_test.py --backend open-weight --model glm-4.6
+There is one backend on purpose. The frontier path was removed: the commons is
+free to run, and every model result in this repository was established against
+open weights served locally. MODELS.md has the Kaggle download.
 
-**Credentials never enter this repository.** The key is read from the
-environment or from a file outside the working tree, it is never printed, never
+**Credentials never enter this repository.** A local server usually needs no
+key at all; anything set is read from the environment, never printed, never
 written to the evidence file, and `scripts/check_secrets.py` blocks anything
 credential-shaped from being committed. This script is not run in CI — CI runs
 the offline path, which is the one that has to be deterministic.
@@ -65,24 +65,6 @@ LESSONS = sorted(
     (sid for sid, ex in EXERCISES.items() if _calls_a_model(ex)),
     key=lambda s: (s[0], int(s[1]), [int(p) for p in s[2:].split(".") if p]))
 
-KEY_FILES = [Path.home() / ".anthropic" / "key", Path.home() / ".anthropic_key"]
-
-
-def load_key() -> str | None:
-    """Environment first, then a file outside the repository. Never the repo."""
-    if os.environ.get("ANTHROPIC_API_KEY"):
-        return os.environ["ANTHROPIC_API_KEY"]
-    for f in KEY_FILES:
-        try:
-            if f.is_file():
-                key = f.read_text().strip()
-                if key:
-                    return key
-        except OSError:
-            pass
-    return None
-
-
 def live_cells(sid: str) -> str:
     """The adapter plus the live round-trip — not the whole notebook.
 
@@ -117,33 +99,23 @@ def live_cells(sid: str) -> str:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--backend", choices=["frontier", "open-weight"], default="frontier")
-    ap.add_argument("--model", help="override the backend's default model")
+    ap.add_argument("--model", help="override the served model's name")
     ap.add_argument("--session", help="run one lesson only")
     ap.add_argument("--save", action="store_true", help="write the evidence file")
     a = ap.parse_args()
 
     env = dict(os.environ)
-    if a.backend == "frontier":
-        key = load_key()
-        if not key:
-            print("No key. Set ANTHROPIC_API_KEY, or write it to ~/.anthropic/key "
-                  "(outside this repository).", file=sys.stderr)
-            return 2
-        env["ANTHROPIC_API_KEY"] = key
-        env.pop("OPENAI_BASE_URL", None)
-    else:
-        if not env.get("OPENAI_BASE_URL"):
-            print("No endpoint. Set OPENAI_BASE_URL to any OpenAI-compatible API.",
-                  file=sys.stderr)
-            return 2
-        env.pop("ANTHROPIC_API_KEY", None)
+    if not env.get("OPENAI_BASE_URL"):
+        print("No endpoint. Serve an open-weight model from Kaggle and set "
+              "OPENAI_BASE_URL to it — MODELS.md has the download and the "
+              "llama.cpp command.", file=sys.stderr)
+        return 2
     if a.model:
         env["MODEL"] = a.model
 
     todo = [a.session] if a.session else LESSONS
     rows, failed = [], []
-    print(f"backend: {a.backend}   lessons: {len(todo)}\n")
+    print(f"backend: open-weight   lessons: {len(todo)}\n")
 
     for sid in todo:
         src = live_cells(sid)
@@ -192,7 +164,7 @@ def main() -> int:
         # the cause is usually one line further up and is about the account.
         why = next((ln.split("failed:", 1)[1].strip()
                     for ln in out.splitlines() if "failed:" in ln), "")
-        if ok and used != a.backend:
+        if ok and used != "open-weight":
             ok = False
             err = (f"fell back to {used!r} instead of calling the backend"
                    + (f" — {why}" if why else ""))
@@ -214,7 +186,7 @@ def main() -> int:
     held = [r for r in rows if r["property_held"] == "True"]
     broke = [r["session"] for r in rows if r["property_held"] != "True"]
     print(f"\n{len(rows) - len(failed)}/{len(rows)} lessons reached a real "
-          f"{a.backend} model")
+          f"open-weight model")
     print(f"{len(held)}/{len(rows)} lessons had their acceptance property hold "
           f"on {rows[0]['model'] if rows else '?'}")
     if broke:
@@ -232,7 +204,7 @@ def main() -> int:
         # reason to run this twice. Keying on the backend alone means the second
         # run silently deletes the first, and the interesting result — which
         # lessons a smaller model cannot satisfy — is exactly what gets lost.
-        key = f"{a.backend}:{rows[0]['model']}" if rows else a.backend
+        key = f"open-weight:{rows[0]['model']}" if rows else "open-weight"
         prev[key] = {
             "model": rows[0]["model"] if rows else None,
             "checked": len(rows),

@@ -1,21 +1,21 @@
 """One model adapter, emitted into every lesson that involves a model.
 
-The commons has always run offline against deterministic replays, which is what
-lets a notebook execute on a Kaggle kernel with the internet switched off and
-what makes the determinism gate meaningful. That property is kept. What is added
-here is a second and third way to run exactly the same lesson:
+The commons runs offline against deterministic replays, which is what lets a
+notebook execute on a Kaggle kernel with the internet switched off and what
+makes the determinism gate meaningful. That property is kept. What is added
+here is one — and only one — way to run exactly the same lesson for real:
 
     offline (default)   a deterministic replay, labelled as a replay everywhere
-    open weight         any OpenAI-compatible endpoint — Ollama, vLLM, a hosted
-                        open-weight provider
-    frontier            the Anthropic Messages API
+    open weight         a Kaggle model, served through any OpenAI-compatible
+                        server (llama.cpp, vLLM, Ollama)
 
-The default is the replay, so nothing about CI, determinism or the offline
-Kaggle run changes. The other two are opt-in through environment variables and
-are never configured in CI.
+There is no frontier path. It was removed deliberately: a curriculum that is
+free to run should not have a backend that requires a paid account, and the
+open-weight route is the one every result in this repository was actually
+established on. `MODELS.md` has the Kaggle download and the serving command.
 
-Three rules the adapter follows, because each of them is a way this kind of
-code usually goes wrong:
+Three rules the adapter follows, because each is a way this kind of code
+usually goes wrong:
 
 * **It never prints a key**, and it never writes one anywhere.
 * **It never silently substitutes.** If a backend is configured and the call
@@ -27,37 +27,18 @@ code usually goes wrong:
 """
 
 # The block emitted verbatim into any lesson carrying a ("model", ...) step.
-MODEL_RUNTIME = '''# --- model backend: replay by default, real model when you configure one ----
-# Nothing here is Anthropic- or vendor-specific beyond one URL and one header
-# shape. Standard library only, so the notebook stays self-contained.
+MODEL_RUNTIME = '''# --- model backend: replay by default, a Kaggle open-weight model when served -
+# One URL and one header shape, no vendor SDK. Standard library only, so the
+# notebook stays self-contained.
 import json, os, urllib.error, urllib.request
 
-# The cheapest current model on each side, which is what a lesson needs.
-FRONTIER_DEFAULT   = "claude-haiku-4-5-20251001"
-OPEN_WEIGHT_DEFAULT = "glm-4.6"
+# Qwen2.5-7B-Instruct is the floor established in MODELS.md: below it two of
+# the lessons' acceptance properties stop holding.
+OPEN_WEIGHT_DEFAULT = "qwen2.5-7b-instruct"
 TIMEOUT = 60
-
-def _kaggle_secret(name):
-    """On Kaggle, a key lives in Add-ons -> Secrets rather than the environment.
-
-    kaggle_secrets is pre-installed in the Kaggle image and absent everywhere
-    else, so the import is guarded and the notebook needs no dependency. It also
-    requires the notebook to have internet enabled, which on Kaggle requires a
-    phone-verified account - see the note printed below.
-    """
-    try:
-        from kaggle_secrets import UserSecretsClient
-        return UserSecretsClient().get_secret(name)
-    except Exception:
-        return None
 
 def backend():
     """(kind, model). Configuration comes from the environment, never a literal."""
-    if os.environ.get("ANTHROPIC_API_KEY") or _kaggle_secret("ANTHROPIC_API_KEY"):
-        os.environ.setdefault("ANTHROPIC_API_KEY",
-                              os.environ.get("ANTHROPIC_API_KEY")
-                              or _kaggle_secret("ANTHROPIC_API_KEY") or "")
-        return "frontier", os.environ.get("MODEL", FRONTIER_DEFAULT)
     if os.environ.get("OPENAI_BASE_URL"):
         return "open-weight", os.environ.get("MODEL", OPEN_WEIGHT_DEFAULT)
     return "replay", "deterministic stand-in (no backend configured)"
@@ -67,23 +48,6 @@ def _post(url, payload, headers):
                                  headers={"content-type": "application/json", **headers})
     with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
         return json.loads(r.read().decode())
-
-def _anthropic(prompt, system, model, max_tokens, temperature):
-    body = {"model": model, "max_tokens": max_tokens, "temperature": temperature,
-            "messages": [{"role": "user", "content": prompt}]}
-    if system:
-        body["system"] = system
-    headers = {"x-api-key": os.environ["ANTHROPIC_API_KEY"],
-               "anthropic-version": "2023-06-01"}
-    # An identity-linked key is scoped to a workspace and the API refuses the
-    # call without being told which one. A plain organisation key needs nothing
-    # here, so the header is only sent when it is set.
-    ws = os.environ.get("ANTHROPIC_WORKSPACE_ID")
-    if ws:
-        headers["anthropic-workspace-id"] = ws
-    base = os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com").rstrip("/")
-    out = _post(f"{base}/v1/messages", body, headers)
-    return "".join(b.get("text", "") for b in out.get("content", [])).strip()
 
 def _openai_compatible(prompt, system, model, max_tokens, temperature):
     msgs = ([{"role": "system", "content": system}] if system else []) + \\
@@ -107,12 +71,12 @@ def ask(prompt, *, replay, system=None, max_tokens=512, temperature=0.0):
     if kind == "replay":
         return replay, kind, model
     try:
-        fn = _anthropic if kind == "frontier" else _openai_compatible
-        return fn(prompt, system, model, max_tokens, temperature), kind, model
+        return _openai_compatible(prompt, system, model, max_tokens,
+                                  temperature), kind, model
     except (urllib.error.URLError, urllib.error.HTTPError, KeyError, TimeoutError) as e:
-        # Print what the API actually said. "failed: 400" costs whoever hits
-        # this an hour; the body usually names the exact missing header or
-        # parameter, and it never contains the key.
+        # Print what the server actually said. "failed: 400" costs whoever hits
+        # this an hour; the body usually names the exact missing parameter, and
+        # it never contains a key.
         detail = getattr(e, "code", None) or type(e).__name__
         why = ""
         if hasattr(e, "read"):
@@ -132,28 +96,26 @@ if _kind == "replay":
     print()
     print("This lesson runs offline against a deterministic replay, which is why")
     print("it works on a Kaggle kernel with the internet switched off. To run the")
-    print("identical code against a real model, set one of:")
+    print("identical code against a real model, serve an open-weight model from")
+    print("Kaggle Models and point the adapter at it:")
     print()
-    print("   frontier     export ANTHROPIC_API_KEY=...   # cheapest: " + FRONTIER_DEFAULT)
-    print("                (an identity-linked key also needs")
-    print("                 ANTHROPIC_WORKSPACE_ID=...)")
-    print("   open weight  export OPENAI_BASE_URL=http://localhost:11434/v1 \\\\")
-    print("                       OPENAI_API_KEY=ollama MODEL=glm-4.6")
+    print("   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \\\\")
+    print("           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen")
+    print("   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \\\\")
+    print("          MODEL=qwen2.5-7b-instruct")
     print()
-    print("   On Kaggle: Add-ons -> Secrets, add ANTHROPIC_API_KEY, and switch")
-    print("   Internet on in the notebook settings. Internet requires a")
-    print("   phone-verified Kaggle account; without it DNS fails in the kernel")
-    print("   and this lesson correctly stays on the replay.")
+    print("   MODELS.md has the exact Kaggle download. There is no paid backend:")
+    print("   every model result in this repository was produced this way.")
 '''
 
 # The section appended to a model lesson: the same task, run for real.
 LIVE_MD = """## 2 · The same lesson, against a real model
 
-Everything below this point runs identically on three backends. Offline it uses
-a deterministic replay that is labelled as a replay wherever it appears — never
-presented as a model's output. With `ANTHROPIC_API_KEY` set it calls a frontier
-model; with `OPENAI_BASE_URL` set it calls any OpenAI-compatible endpoint,
-which covers Ollama, vLLM and the hosted open-weight providers.
+Everything below this point runs identically on two backends. Offline it uses a
+deterministic replay that is labelled as a replay wherever it appears — never
+presented as a model's output. With `OPENAI_BASE_URL` set it calls an
+OpenAI-compatible server, which is how the open-weight models on Kaggle are
+served — and how every model result in this repository was produced.
 
 The point of running it both ways is not that the answers match. It is that
 **the lesson's assertion holds either way** — if it only holds against the
@@ -164,10 +126,10 @@ def live_cell(task: str, replay: str, system: str | None, check: str) -> str:
     """The per-lesson live round-trip, as a code cell.
 
     `check` is a (label, expression) pair describing the property the lesson
-    cares about. It is *reported*, not asserted: a frontier model failing to
-    name a CWE is a finding about the model, not a broken notebook. The only
-    hard assertions are the two that must hold on every backend — an answer
-    came back, and offline it is the replay the source shows you.
+    cares about. It is *reported*, not asserted: a model failing to name a CWE
+    is a finding about the model, not a broken notebook. The only hard
+    assertions are the two that must hold on every backend — an answer came
+    back, and offline it is the replay the source shows you.
     """
     sys_arg = f"\n            system={system!r}," if system else ""
     return f'''TASK = {task!r}
@@ -197,6 +159,6 @@ print()
 print(f"property checked : {{label}}")
 print(f"held on {{used:12s}} : {{held}}")
 print()
-print("Same code, same assertions, three possible backends. Offline the answer")
-print("is the replay and is labelled as one; with a key it is the model's.")
+print("Same code, same assertions, two possible backends. Offline the answer is")
+print("the replay and is labelled as one; with a served model it is the model's.")
 '''

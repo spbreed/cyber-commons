@@ -9,6 +9,8 @@ The controls are Chapters 2 and 3. Nothing here is fixed in this chapter, on
 purpose — you cannot choose a control for a risk you cannot yet describe.
 """
 
+from .skills import skill_steps
+
 ARCH_NOTE = """
 > **Where this lands on the reference architecture.**
 >
@@ -223,6 +225,8 @@ instructions and expected precedence to survive.
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "A support agent with a system instruction, and a user who disagrees "
          "with it."),
+  *skill_steps('threats/instruction-channel-check',
+               "## 2 · The check, as a skill\n\nCyberTravels' operator prompt and a traveller's message reach the model in one string. Whether that matters is not a question you answer by reading the prompt — it is a check you run, and the check is written down here as a skill. Its script runs it against a synthetic window and prints what won."),
 ],
  "expect": "The same agent answers a normal question correctly and hands over "
            "its internal note when the user tells it to ignore its "
@@ -266,6 +270,8 @@ can reach the tool call.
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "One payload, delivered through four trust-0 or trust-1 components. "
          "The agent cannot tell any of them from the operator's instruction."),
+  *skill_steps('threats/indirect-injection-path-trace',
+               "## 2 · The check, as a skill\n\nCyberTravels reads hotel descriptions, booking notes, MCP tool descriptions and tool results. Each is a component that can put text into the context, so each is an entry point, and the useful artefact is the inventory rather than the payload. The skill's script drives one payload through all four."),
 ],
  "expect": "The same payload steers the agent through all four untrusted entry "
            "components — retrieved knowledge, persisted memory, an MCP tool "
@@ -308,6 +314,8 @@ memory writes have to be scoped to the identity that made them.
  "steps": [
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "One poisoned write, then an unrelated session for a different user."),
+  *skill_steps('threats/memory-scope-and-origin-audit',
+               "## 2 · The check, as a skill\n\nThe question is not whether CyberTravels' memory can be poisoned — it is what the write was keyed by and whether the origin survived it. The skill's script writes from one traveller's ticket and reads back days later as somebody else."),
 ],
  "expect": "A poisoned note extracted from one user's ticket is written to "
            "workspace memory, and days later steers an unrelated request from a "
@@ -346,6 +354,8 @@ had — which is the definition of excessive agency.
  "steps": [
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "One tool, scoped for the hardest job it ever has to do."),
+  *skill_steps('threats/tool-scope-abuse-probe',
+               "## 2 · The check, as a skill\n\nCyberTravels' database tool was scoped for the widest job it ever does, which is how a booking lookup ends up able to read a signing key. The skill probes the gap between what a tool is *for* and what it *can do*, with the right identity and well-formed arguments throughout."),
 ],
  "expect": "A single database tool, scoped for the widest job it ever performs, "
            "reads a signing key and empties the secrets table for requests it "
@@ -389,6 +399,8 @@ human who caused it is not in the record at all. The compromise is of privilege
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "A read-only user asks for something, and the agent has more authority "
          "than they do."),
+  *skill_steps('threats/authorization-subject-check',
+               '## 2 · The check, as a skill\n\nEverything turns on which principal the decision was evaluated against. The skill runs the asymmetric probe — a traveller holding `reports:read` asking for something that needs `db:admin` — and then reads one audit row to see whether a human can be recovered from it.'),
 ],
  "expect": "A user holding only `reports:read` triggers a `db:admin` action, "
            "because authorization was evaluated against the shared agent service "
@@ -434,6 +446,8 @@ peer" is a claim anyone inside the perimeter can make.
  "steps": [
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "Three agents, one credential, one incident."),
+  *skill_steps('threats/shared-credential-attribution-check',
+               '## 2 · The check, as a skill\n\nThree CyberTravels agents share one API key, so the payments API records one caller on every line. The skill measures both costs: what the record can attribute, and what revoking the key would stop.'),
 ],
  "expect": "Three agents share one credential, so the downstream record shows a "
            "single caller on every line. When one deletes a production table the "
@@ -477,6 +491,8 @@ can *reach*, not about what the model can be persuaded to *write*.
          "What the executing process can reach, enumerated rather than assumed. "
          "Nothing below actually touches your machine — the environment is a "
          "fixture, so the lesson runs anywhere."),
+  *skill_steps('threats/generated-code-reach-enumerator',
+               "## 2 · The check, as a skill\n\nCyberTravels' Coding Agent runs code it wrote. The skill enumerates what that process reaches — environment, filesystem, network — on an ordinary task first, because the ordinary task is the more persuasive half of the finding."),
 ],
  "expect": "Model-authored code is executed against a fixture environment and "
            "the reach is enumerated: an ordinary, unattacked task touches every "
@@ -522,6 +538,8 @@ grants no exemption.
   ("md", "## 2 · Demo — the pipeline's own tool surface"),
 ("md", "## 3 · Where it breaks — five carriers, none with blocklist vocabulary"),
 ("md", "## 4 · The control — provenance, and deriving what is privileged"),
+  *skill_steps('threats/content-derived-privilege-check',
+               "## 2 · The check, as a skill\n\nAn agent asked to read a pull request is asked to trust nothing, and the tools worth guarding are not the ones whose names sound dangerous. The skill drives five carriers and then re-derives the privileged set from what each tool's output causes."),
 ],
  "expect": "The normal run executes all four tools. None of the five carriers "
            "contains blocklist vocabulary and all five reach `approve_pr` on the "
@@ -566,6 +584,8 @@ attached, which is exactly the hand-off into A1.12.
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "A poisoned message entering an orchestrator–worker topology at one "
          "agent."),
+  *skill_steps('threats/peer-message-propagation-trace',
+               '## 2 · The check, as a skill\n\nOne CyberTravels agent reads a poisoned supplier page and tells its peers. What spreads is the summary, and summarising is the operation that drops the sentence naming the source. The skill steps the topology and counts actors, not hops.'),
 ],
  "expect": "A single poisoned document read by one agent propagates through the "
            "topology as a peer message, and more than one agent acts on it — "
@@ -610,6 +630,8 @@ records a name the attacker chose.
  "steps": [
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "An orchestrator that admits workers by configuration."),
+  *skill_steps('threats/agent-registry-gap-check',
+               '## 2 · The check, as a skill\n\nCyberTravels discovers its workers. The skill compares what is present against what anybody registered, then follows a delegation to see what the unregistered agent is handed — including the narrowed traveller token.'),
 ],
  "expect": "Three agents are discovered, two are in the registry, and all three "
            "receive delegated work — including the narrowed user token. The "
@@ -654,6 +676,8 @@ in a quality backlog.
  "steps": [
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "One hedged guess, three hops, and the confidence it acquires on the way."),
+  *skill_steps('threats/confidence-provenance-decay-check',
+               '## 2 · The check, as a skill\n\nA hedged sentence about libfoo becomes a confident claim in three hops. The skill tracks both series — confidence and surviving provenance — because either one alone looks ordinary and the pair is the finding.'),
 ],
  "expect": "A hedged guess at confidence 0.2 becomes a confident claim above 0.8 "
            "in three hops, while the provenance field empties — confidence rising "
@@ -694,6 +718,8 @@ one third of the triad regardless of how the outage was caused.
  "steps": [
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "A task that cannot succeed, and a loop with no ceiling."),
+  *skill_steps('threats/unbounded-loop-cost-probe',
+               "## 2 · The check, as a skill\n\nCyberTravels' agent does not know the task is impossible. The skill gives it one, measures the three costs, and reports the one that lands on somebody else: the downstream capacity its retries consumed."),
 ],
  "expect": "An agent given an impossible task loops until the notebook's own "
            "safety net stops it, spending hundreds of thousands of tokens and "
@@ -736,6 +762,8 @@ to be trustworthy.
  "steps": [
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "A deletion happened. Answer three questions from the log you have."),
+  *skill_steps('threats/audit-answerability-check',
+               '## 2 · The check, as a skill\n\nCyberTravels logs every tool call. The skill puts the three questions an investigation opens with to one real record, and reports per question the field that would have answered it.'),
 ],
  "expect": "A complete-looking tool-call log answers none of the three questions "
            "an investigation needs — which user, what motivated it, which hop "
@@ -778,6 +806,8 @@ it becomes a click, and the risk register still counts it.
  "steps": [
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "Approval quality against volume, and the position an attacker chooses."),
+  *skill_steps('threats/approval-queue-saturation-model',
+               '## 2 · The check, as a skill\n\nApproval coverage at CyberTravels reads 100% at every volume, because coverage measures whether a human was asked. The skill models what reading does instead, and finds the volume at which the gate stops being one.'),
 ],
  "expect": "Approval coverage reads 100% at every volume while the malicious "
            "request is caught only when the queue is small enough to be read — "
@@ -821,6 +851,8 @@ verifier, and why "ask the model whether it succeeded" is not one.
  "steps": [
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "One objective, satisfiable two ways. The agent takes the cheap one."),
+  *skill_steps('threats/objective-gaming-check',
+               '## 2 · The check, as a skill\n\nTold to reduce open alerts, an agent reduces open alerts. The skill runs that objective with a budget, watches the spend, and audits the outcome rather than the transcript — where nothing false will be found.'),
 ],
  "expect": "An agent told to reduce open alerts closes all twenty for a quarter "
            "of its budget, meeting the objective exactly — while closing five "
@@ -864,6 +896,8 @@ this risk rather than reducing it.
   ("md", ARCH_NOTE + "\\n## 2 · The risk, realised\\n\\n"
          "A request that is denied directly, and permitted through the "
          "architecture."),
+  *skill_steps('threats/authority-composition-check',
+               '## 2 · The check, as a skill\n\nA CyberTravels traveller denied `payments:write` reaches it through the orchestrator, with every hop legitimate. The skill records the direct refusal first, so the composed success reads as a finding rather than as intended behaviour.'),
 ],
  "expect": "A user denied `payments:write` directly reaches it through the "
            "orchestrator, with every individual hop legitimate and only the "

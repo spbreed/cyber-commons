@@ -196,7 +196,7 @@ cannot block the merge that caused it.
   ("md", "## 3 · The loop, with a real model in it\n\n"
          "Four moves and about twenty lines. `ask()` is the model — offline it "
          "is a labelled replay, and with a key configured it is a real "
-         "frontier or open-weight call, through the same code."),
+         "call to an open-weight model served from Kaggle, through the same code."),
   ("py", MODEL_RUNTIME),
   ("py", '''FINDING = """
 def load_booking(ref, owner):
@@ -220,8 +220,8 @@ def plan(task, feedback):
         system="You fix security defects. One line of code, no prose, no fences.",
         max_tokens=120)
     # Parsing is the harness's job, not the model's favour. Asked for one
-    # line, a 7B model returns the whole function and a frontier model returns
-    # a fenced block; both are reasonable readings of the request. Take the
+    # line, a 7B model returns the whole function and a 1.5B model returns a
+    # fenced block; both are reasonable readings of the request. Take the
     # line that actually calls the sink.
     lines = [ln.strip() for ln in answer.strip().splitlines()
              if ln.strip() and not ln.strip().startswith("```")]
@@ -341,7 +341,7 @@ assert not parameterised(BAD) and parameterised(PSYCOPG) and not NARROW(PSYCOPG)
             "the ask, which is the part you own.")),
  ],
  "expect": "The loop runs with a real model behind `ask()` — a labelled replay "
-           "offline, a frontier or open-weight call when one is configured. "
+           "offline, a real open-weight call when one is served. "
            "Without a verifier it accepts whatever came back and reports "
            "`verified: None`. With the verifier the same model and prompt "
            "produce an accepted, parameterised line — and a plausible-looking "
