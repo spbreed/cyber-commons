@@ -9,6 +9,16 @@ not do this job; this does, and the build refuses a lesson without one.
 
 ABOUT: dict[str, str] = {
 
+"A0.1": """
+**What it covers.** The mechanism every other lesson uses: an agent skill as a
+file, one shared runtime that parses and executes it, and how both reach a
+Kaggle kernel.
+
+**Why a security engineer needs it.** A procedure you can only run inside
+somebody else's curriculum is a demo. These are files — a `SKILL.md` a coding
+agent loads, a script it calls, and a runtime you can point at your own
+notebooks. This lesson is how you take them with you.
+""",
 "A1.0": """
 **What it covers.** Place the five functions of the commons on one diagram and find where your own work sits.
 
@@ -459,7 +469,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 """,
 
 "C1.3": """
-**What it covers.** Game the B2.1 harness deliberately, then close the hole you used.
+**What it covers.** Game the B2.14 scoring harness deliberately, then close the hole you used.
 
 **Why a security engineer needs it.** If the eval can be fooled, the assurance is theatre. The control it builds is: eval gaming, sandbagging, contamination and judge manipulation as test cases.
 
@@ -763,7 +773,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 """,
 
 "E1.5": """
-**What it covers.** Take the B2.1 harness output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
+**What it covers.** Take the B2.14 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 
 **Why a security engineer needs it.** Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy. The control it builds is: read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.
 

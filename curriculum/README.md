@@ -6,6 +6,7 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 
 | Track | Role | Sessions | Function |
 |---|---|---|---|
+| [A0](track-a0.md) | How This Commons Runs | 1 | A — Securing AI Architectures |
 | [A1](track-a1.md) | CyberTravels' Architecture, and Every Risk It Carries | 19 | A — Securing AI Architectures |
 | [A2](track-a2.md) | Securing the Architecture — Identity and Ingress | 8 | A — Securing AI Architectures |
 | [A3](track-a3.md) | Securing the Architecture — Runtime and the Gateway | 10 | A — Securing AI Architectures |

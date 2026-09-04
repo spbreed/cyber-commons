@@ -482,7 +482,7 @@ contractors.
   ("md", "## 2 · Seven properties, and who at CyberTravels owns each"),
   ("html", D.table(
     ["trustworthy-AI property", "who owns it at CyberTravels", "security's share"],
-    [["valid and reliable", "engineering + the eval harness (B2.1)",
+    [["valid and reliable", "engineering + the eval harness (B2.14)",
       "contributes evidence"],
      ["safe", "the CyberTravels product owner + risk", "contributes evidence"],
      ["secure and resilient", "security", "<b>owns it</b>"],

@@ -1,4 +1,4 @@
-"""B1 (part 1) — The AppSec pipeline, phases 1 to 3. Sessions B2.1–B2.5.
+"""B1 (part 1) — The AppSec pipeline, phases 1 to 3. Sessions B2.2–B2.5.
 
 The whole track is one artefact built in order: a five-phase, fifteen-stage
 automated application-security pipeline, and the lessons run in exactly the

@@ -373,23 +373,6 @@
    ],
    "expect": "The loop runs with a real model behind `ask()` — a labelled replay offline, a frontier or open-weight call when one is configured. Without a verifier it accepts whatever came back and reports `verified: None`. With the verifier the same model and prompt produce an accepted, parameterised line — and a plausible-looking answer that wraps the input in `escape()` is refused, because it is still concatenation."
   },
-  "B2.1": {
-   "goal": "The full eval harness: ground truth, blind protocol, execution-verified scoring, model comparison.",
-   "run": [
-    "# --- the notebook: runs anywhere, stdlib only, no install ---",
-    "jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page",
-    "python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it",
-    "",
-    "# --- the full variant, against the real tooling (needs a container registry) ---",
-    "cd labs/b2.10-eval-harness",
-    "./scripts/vulnbench.sh doctor && ./scripts/vulnbench.sh setup",
-    "./scripts/vulnbench.sh build      # 552-row ground truth: SecLLMHolmes + TerraGoat/Checkov",
-    "./scripts/vulnbench.sh verify     # regression fingerprint, expect Expert Accuracy 0.9479",
-    "./scripts/vulnbench.sh compare    # blind model comparison across backbones",
-    "./scripts/vulnbench.sh cybergym-preflight   # can this host run execution benchmarks?"
-   ],
-   "expect": "Real numbers with committed evidence: per-model precision/recall/F1/Expert Accuracy, plus the failing-question list. This lab is fully built and tested — see its README for the recorded results."
-  },
   "B2.2": {
    "goal": "Turn an architecture map into a ranked threat model, then diff it after one entry point is added.",
    "run": [
@@ -1439,6 +1422,15 @@
     "python3 resilience.py --compare-to prevention-only"
    ],
    "expect": "Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged."
+  },
+  "A0.1": {
+   "goal": "Run the mechanism every other lesson uses, on itself: load the shared runtime, split a SKILL.md, check an instance against its output contract, and see what conformance does not prove.",
+   "run": [
+    "# --- the notebook: stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A0.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A0.1   # run it headless and check it"
+   ],
+   "expect": "The runtime reports that it was loaded once and shared. The frontmatter splits from the body. An instance built from this skill conforms to its own contract — and so does a vacuous one, while a value outside an enumeration is caught."
   }
  }
 }

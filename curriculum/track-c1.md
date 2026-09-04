@@ -97,7 +97,7 @@ python3 campaign.py --report --include-benign-controls
 
 - **Risk** — If the eval can be fooled, the assurance is theatre.
 - **Control** — Eval gaming, sandbagging, contamination and judge manipulation as test cases.
-- **Lab** — Game the B2.1 harness deliberately, then close the hole you used.
+- **Lab** — Game the B2.14 scoring harness deliberately, then close the hole you used.
 - **Tools** — `Cyber Commons eval harness`
 - **Open-weight models** — `Kimi K2`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*

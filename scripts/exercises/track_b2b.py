@@ -489,7 +489,7 @@ Phase 1, which is the property that turns a pipeline into something that
 improves.
 
 The bonus framing is deliberate: a reference implementation is a **starting
-point you evaluate**, not a product you trust. B2.1 and C2.6 gave you the tools;
+point you evaluate**, not a product you trust. C2.6 gave you the tools;
 this is where you point them at someone else's pipeline.
 """,
  "steps": [
@@ -519,7 +519,7 @@ this is where you point them at someone else's pipeline.
            "risk zones.",
  "challenge": "Run the real thing: clone `google/mantis`, point it at a "
               "repository you have ground truth for, and score its output with "
-              "the harness from B2.1. The gap between its conformance and its "
+              "a scoring harness. The gap between its conformance and its "
               "expert accuracy on *your* code is the only number that should "
               "decide whether you adopt it.",
 },

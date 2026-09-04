@@ -28,8 +28,8 @@ from collections import defaultdict
 # read rather than just the first.
 
 # ------------------------------------------------- the architecture, derived
-# B2.1 used to draw this map in its own lesson and this file used to retype the
-# result. Retyping is the failure the lesson warns about: a threat model that
+# The recon stage used to be a lesson of its own and this file retyped its
+# result. Retyping is the failure this lesson warns about: a threat model that
 # describes the system as somebody once described it, rather than as the code
 # is now. So the minimum of the recon stage lives here — parse the sources,
 # take the units nothing calls as entry points, take a call into a dangerous

@@ -27,6 +27,12 @@ and the curriculum stay in step.
 # --------------------------------------------------------------------------
 HOOKS: dict[str, str] = {
 
+"A0.1": (
+    "Every lesson here ends in a cell you press Run on, and for 116 of them the "
+    "cell does the same three things. Not knowing which three is the difference "
+    "between learning a procedure and learning to press Run. It is also the "
+    "difference between using these skills here and using them in a notebook of "
+    "your own, which is the point of writing them down as files at all."),
 "A1.0":
  "Two teams argue for an hour about whether an agent is safe, and discover at "
  "the end that one of them meant the model and the other meant the loop calling "
@@ -684,6 +690,23 @@ HOOKS: dict[str, str] = {
 
 # --------------------------------------------------------------------------
 DIAGRAMS: dict[str, str] = {
+"A0.1": """
+   the two cells every lesson ends in
+
+   +---------------------------------------------+
+   | 1  SKILL.md, verbatim                        |   the procedure
+   +---------------------------------------------+
+   | 2  load the shared runtime, then run it      |   the machinery
+   +---------------------------------------------+
+                    |
+        +-----------+-----------+
+        |                       |
+   on Kaggle:              in a checkout:
+   a kernel attached       skills/_runtime/
+   as a source             on disk
+
+   one runtime. not one per notebook.
+""",
 
 "A1.0": """
    AI FOR SECURITY                        SECURITY OF AI
@@ -2217,6 +2240,17 @@ DIAGRAMS: dict[str, str] = {
 # has, and introduce the next chapter as the answer to that flaw.
 # --------------------------------------------------------------------------
 BRIDGES: dict[str, dict[str, str]] = {
+"A0": {
+  "gained": "You can load an agent skill, split its frontmatter from its "
+            "procedure, check an instance against its output contract, and run "
+            "the whole thing from a Kaggle kernel with one shared runtime "
+            "rather than a copy per notebook.",
+  "gap": "You can run a procedure and you cannot yet say which procedure this "
+         "system needs. Nothing so far names a component, a risk, or a control "
+         "— the mechanism is neutral about what you point it at, which is "
+         "exactly why it cannot tell you where to start.",
+  "next": "Function A begins with the system itself. Open A1.0.",
+},
 
 "A1": {
  "gained": "You can draw an agentic system as named components, say which of "

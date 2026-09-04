@@ -162,7 +162,7 @@ benchmark you are reading — and so can your own team, without meaning to.
 Three exploits work on almost every published security-harness result:
 
 1. **Report conformance as quality.** Schema validity is ~100% by construction
-   with structured output. It measures nothing about correctness (B2.1).
+   with structured output. It measures nothing about correctness (B2.14).
 2. **Exploit class imbalance.** If 80% of a corpus is one CWE, always guessing
    that CWE scores 0.8 with no capability at all.
 3. **Exploit basename collisions.** If the matcher compares bare filenames and
