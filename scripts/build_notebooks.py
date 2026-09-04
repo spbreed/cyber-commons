@@ -12,8 +12,9 @@ Inputs (the same single source of truth the site builds from):
 it teaches and that skill's own script, verbatim. What it does *not* carry is
 the runtime that parses a SKILL.md and calls a model: that lives once in
 `skills/_runtime/` and is loaded — on Kaggle from the kernel attached as a
-source, locally from the repository. Carrying it in each notebook was 13,000
-lines of identical code that could only be fixed by rebuilding all of them.
+source, locally from the repository. Carrying it in each notebook cost 9,730
+lines of identical code — measured, not estimated: 34,112 lines of notebook code
+before, 24,382 after — and it could only be fixed by rebuilding all of them.
 
 Still standard library only, and still runs on a Kaggle kernel with the
 internet switched off.
@@ -135,7 +136,7 @@ def skill_exec(ref: str) -> str:
 
     The parser, the router, the contract checker and the model adapter live in
     `skills/_runtime/` and are loaded from there. Carrying a copy in each of 117
-    notebooks was 13,000 lines of identical code that could only be fixed by
+    notebooks cost 9,730 lines of identical code, and could only be fixed by
     rebuilding all of them.
     """
     return (f"# Execute the skill above, using the shared runtime rather than a copy.\n"
@@ -440,7 +441,7 @@ def main() -> int:
         print(f"ok: {len(seq)} notebooks up to date")
         return 0
 
-    print(f"wrote {len(seq)} self-contained notebooks to labs/notebooks "
+    print(f"wrote {len(seq)} notebooks to labs/notebooks "
           f"({len(stale)} changed)")
     return 0
 

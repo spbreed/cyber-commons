@@ -2,8 +2,9 @@
 
 Every lesson in the commons executes an agent skill, and until this file existed
 each of the 117 notebooks carried its own copy of the sixty lines that parse a
-`SKILL.md` and the sixty that call a model. That is 13,000 lines of identical
-code, and a fix to any of it meant rebuilding everything and hoping.
+`SKILL.md` and the sixty that call a model. That was 9,730 lines of identical
+code — 34,112 lines of notebook code before this file existed, 24,382 after —
+and a fix to any of it meant rebuilding everything and hoping.
 
 So it lives here once. On Kaggle it is attached to each notebook as a **utility
 script**, which is Kaggle's mechanism for exactly this; locally it is on the

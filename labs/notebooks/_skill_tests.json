@@ -20,7 +20,7 @@
    "contract": true,
    "script": true,
    "lines": 66,
-   "seconds": 0.05
+   "seconds": 0.04
   },
   {
    "skill": "appsec/appsec-triage-report",
@@ -60,7 +60,7 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.06
+   "seconds": 0.05
   },
   {
    "skill": "appsec/exploit-replica-isolation-check",
@@ -132,7 +132,7 @@
    "contract": true,
    "script": true,
    "lines": 73,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "attestation/attestation-signer-lifecycle",
@@ -172,7 +172,7 @@
    "contract": true,
    "script": true,
    "lines": 26,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "attestation/identity-chain-verifier",
@@ -196,7 +196,7 @@
    "contract": true,
    "script": true,
    "lines": 15,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "attestation/risk-registry-integrator",
@@ -212,7 +212,7 @@
    "contract": true,
    "script": true,
    "lines": 16,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/agent-aware-rule-review",
@@ -244,7 +244,7 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/agent-versus-human-scoring",
@@ -252,7 +252,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.05
+   "seconds": 0.09
   },
   {
    "skill": "detection/behavioural-drift-monitor",
@@ -260,7 +260,7 @@
    "contract": true,
    "script": true,
    "lines": 17,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "detection/canary-and-honeypot-design",
@@ -268,7 +268,7 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/detection-rule-deployability",
@@ -276,7 +276,7 @@
    "contract": true,
    "script": true,
    "lines": 55,
-   "seconds": 0.07
+   "seconds": 0.08
   },
   {
    "skill": "detection/fleet-correlation-analysis",
@@ -292,7 +292,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "detection/triage-loop-with-floor",
@@ -300,7 +300,7 @@
    "contract": true,
    "script": true,
    "lines": 76,
-   "seconds": 0.07
+   "seconds": 0.08
   },
   {
    "skill": "grc/agent-lifecycle-governance",
@@ -308,7 +308,7 @@
    "contract": true,
    "script": true,
    "lines": 20,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "grc/agentic-risk-tiering",
@@ -316,7 +316,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.04
+   "seconds": 0.03
   },
   {
    "skill": "grc/control-evidence",
@@ -332,7 +332,7 @@
    "contract": true,
    "script": true,
    "lines": 74,
-   "seconds": 0.05
+   "seconds": 0.03
   },
   {
    "skill": "grc/guardrail-specification",
@@ -348,7 +348,7 @@
    "contract": true,
    "script": true,
    "lines": 54,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "grc/third-party-ai-assessment",
@@ -372,7 +372,7 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "identity/nhi-lifecycle-audit",
@@ -412,7 +412,7 @@
    "contract": true,
    "script": true,
    "lines": 36,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "programme/conditional-approval-design",
@@ -428,7 +428,7 @@
    "contract": true,
    "script": true,
    "lines": 51,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "programme/ownership-seam-audit",
@@ -444,7 +444,7 @@
    "contract": true,
    "script": true,
    "lines": 34,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "programme/programme-sequencing",
@@ -452,7 +452,7 @@
    "contract": true,
    "script": true,
    "lines": 51,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "programme/resilience-readiness-check",
@@ -468,7 +468,7 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "programme/stakeholder-seam-map",
@@ -476,7 +476,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "redteam/agentic-finding-report",
@@ -484,7 +484,7 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "redteam/attack-success-rate-campaign",
@@ -500,7 +500,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.04
+   "seconds": 0.06
   },
   {
    "skill": "redteam/offensive-agent-containment",
@@ -548,7 +548,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.04
+   "seconds": 0.03
   },
   {
    "skill": "regulatory/obligation-mapping",
@@ -564,7 +564,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "regulatory/supervisory-documentation-score",
@@ -572,7 +572,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "regulatory/trace-personal-data-audit",
@@ -604,7 +604,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.04
+   "seconds": 0.03
   },
   {
    "skill": "research/generated-schema-audit",
@@ -628,7 +628,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "research/row-level-policy-check",
@@ -684,7 +684,7 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "response/machine-speed-containment",
@@ -724,7 +724,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "runtime/budget-and-stop-condition-audit",
@@ -764,7 +764,7 @@
    "contract": true,
    "script": true,
    "lines": 26,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "runtime/tool-return-validation-check",
@@ -796,7 +796,7 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "threats/approval-queue-saturation-model",
@@ -812,7 +812,7 @@
    "contract": true,
    "script": true,
    "lines": 18,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "threats/authority-composition-check",
@@ -820,7 +820,7 @@
    "contract": true,
    "script": true,
    "lines": 19,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "threats/authorization-subject-check",
@@ -844,7 +844,7 @@
    "contract": true,
    "script": true,
    "lines": 43,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "threats/generated-code-reach-enumerator",
@@ -852,7 +852,7 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "threats/indirect-injection-path-trace",
@@ -868,7 +868,7 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "threats/memory-scope-and-origin-audit",
@@ -884,7 +884,7 @@
    "contract": true,
    "script": true,
    "lines": 14,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "threats/peer-message-propagation-trace",
@@ -892,7 +892,7 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "threats/shared-credential-attribution-check",
@@ -900,7 +900,7 @@
    "contract": true,
    "script": true,
    "lines": 16,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "threats/tool-scope-abuse-probe",
@@ -916,7 +916,7 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.01
+   "seconds": 0.02
   }
  ]
 }
