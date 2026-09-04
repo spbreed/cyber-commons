@@ -1,12 +1,21 @@
 {
  "generated_by": "scripts/kaggle_verify.py",
  "account": "cybercommons",
- "verified": 117,
- "checked": 117,
+ "verified": 118,
+ "checked": 118,
  "empty_output": [],
  "line_count_mismatch": [],
  "note": "A kernel status of 'complete' only means Kaggle finished running it \u2014 a notebook printing nothing also completes. Each row here compares the kernel's remote stdout against a fresh local run of the same notebook, after identical normalisation. 'identical: true' means both machines printed exactly the same thing.",
  "results": [
+  {
+   "session": "A0.1",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 28,
+   "local_lines": 28,
+   "first_differing_line": null
+  },
   {
    "session": "A1.0",
    "ok": true,
