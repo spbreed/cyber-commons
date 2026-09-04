@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.3 — Egress control | Cyber Commons</title><meta name="description" content="An allow-list at the network boundary, enforced where the agent cannot rewrite it."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.3</div><h1>Egress control</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent with unrestricted egress turns any successful injection into data loss.</p></div><div class="ctrl"><div class="lab">Control</div><p>An allow-list at the network boundary, enforced where the agent cannot rewrite it.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attempt exfiltration to several destinations under an allow-list and see which survive.</p><p class="sub kagnote">This lesson is a reading lesson — diagrams and prose, no code to run.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.3 · Egress control</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.3 — Egress control | Cyber Commons</title><meta name="description" content="An allow-list at the network boundary, enforced where the agent cannot rewrite it."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.3</div><h1>Egress control</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>An agent with unrestricted egress turns any successful injection into data loss.</p></div><div class="ctrl"><div class="lab">Control</div><p>An allow-list at the network boundary, enforced where the agent cannot rewrite it.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attempt exfiltration to several destinations under an allow-list and see which survive.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. It carries every line of code it runs — nothing to clone, nothing to install — so it works with the internet switched off, and the copy is yours to edit and re-run. Nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.3 · Egress control</h1>
 <p><strong>Function A — Securing AI Architectures → Securing the Architecture — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.2.html">A3.2 · Sandboxed execution</a></strong>.</p>
 <table>
@@ -56,7 +56,185 @@ control, and that is a design decision to make deliberately rather than by
 default.</p></div><div class="nbmd"><blockquote>
 <p><strong>What this control closes.</strong></p>
 <p>The one control that does not need to know how the attack worked, because every exfiltration path ends here.</p>
-</blockquote></div><div class="nbmd"><h2>Your turn</h2>
+</blockquote></div><div class="nbmd"><h2>3 · Probing the sandbox, as a skill</h2>
+<p>An allow-list in a config file is a claim. CyberTravels' Coding Agent runs model-authored code, so the claim worth making is <em>this runtime has no egress</em>, and that one is settled by probing, in an environment you own. The procedure names the residual paths — DNS first, because it is the one that has actually been used — and requires you to record what you did <strong>not</strong> test, because a probe list is a statement about coverage. This is the file in this repository:</p></div><div class="nbcode"><span class="nbtag">In</span><pre><code>import json, re
+
+def parse_skill(md):
+    &quot;&quot;&quot;Split a SKILL.md into (frontmatter dict, body).
+
+    Frontmatter is a small, fixed subset of YAML: `key: value`, plus folded
+    scalars (`description: &gt;-`) whose continuation lines are indented. That is
+    all a skill needs, and parsing it directly means no dependency.
+    &quot;&quot;&quot;
+    if not md.startswith(&quot;---&quot;):
+        raise ValueError(&quot;a SKILL.md must open with a frontmatter block&quot;)
+    _, front, body = md.split(&quot;---&quot;, 2)
+    meta, key = {}, None
+    for line in front.strip().splitlines():
+        if not line.strip():
+            continue
+        if not line[0].isspace() and &quot;:&quot; in line:
+            key, val = line.split(&quot;:&quot;, 1)
+            key, val = key.strip(), val.strip()
+            # `&gt;-` and `|` open a folded block; the value is on the next lines
+            meta[key] = &quot;&quot; if val in (&quot;&gt;-&quot;, &quot;&gt;&quot;, &quot;|&quot;, &quot;|-&quot;) else val
+        elif key is not None:
+            meta[key] = (meta[key] + &quot; &quot; + line.strip()).strip()
+    if &quot;allowed-tools&quot; in meta:
+        meta[&quot;allowed-tools&quot;] = [t.strip() for t in meta[&quot;allowed-tools&quot;].split(&quot;,&quot;)
+                                 if t.strip()]
+    for required in (&quot;name&quot;, &quot;description&quot;):
+        if not meta.get(required):
+            raise ValueError(f&quot;skill is missing a {required!r}&quot;)
+    return meta, body.strip()
+
+_WORD = re.compile(r&quot;[a-z][a-z-]{3,}&quot;)
+
+def route(task, skills):
+    &quot;&quot;&quot;Pick the skill whose description best matches a task. Deterministic.
+
+    The description is not documentation — it is the routing key. An agent
+    decides whether to load a skill by reading it, so a vague description means
+    the skill never fires when it should, and two overlapping descriptions mean
+    the wrong one fires.
+
+    Returns (pick, scores, margin). A margin of 0 means the top two scored the
+    same and the &quot;winner&quot; is just whichever sorted first — an arbitrary answer
+    wearing a confident face. Callers should refuse to auto-route on margin 0
+    rather than pretend the tiebreak meant something.
+    &quot;&quot;&quot;
+    want = set(_WORD.findall(task.lower()))
+    def score(meta):
+        return len(want &amp; set(_WORD.findall(meta[&quot;description&quot;].lower())))
+    scores = {n: score(skills[n]) for n in sorted(skills)}
+    # sort names first, then by score: ties must break identically on every
+    # machine or the same task routes differently on two runs
+    ranked = sorted(sorted(skills), key=lambda n: -scores[n])
+    top = scores[ranked[0]]
+    margin = top - (scores[ranked[1]] if len(ranked) &gt; 1 else 0)
+    return ranked[0], scores, margin
+
+def contract_of(body):
+    &quot;&quot;&quot;The JSON block under &#x27;## Output contract&#x27; — the skill&#x27;s machine promise.&quot;&quot;&quot;
+    # non-greedy across any prose between the heading and the fence
+    m = re.search(r&quot;## Output contract\b.*?```json\n(.*?)```&quot;, body, re.S)
+    if not m:
+        raise ValueError(&quot;skill declares no output contract&quot;)
+    return json.loads(m.group(1))
+
+def check(instance, contract, path=&quot;$&quot;):
+    &quot;&quot;&quot;Structural conformance of an instance against a contract template.
+
+    Returns the list of problems. An empty list means the shape is right — and
+    that is *all* it means. Conformance is not accuracy: an empty findings list
+    conforms perfectly and tells you nothing.
+    &quot;&quot;&quot;
+    problems = []
+    if isinstance(contract, dict):
+        if not isinstance(instance, dict):
+            return [f&quot;{path}: expected an object, got {type(instance).__name__}&quot;]
+        for k, v in sorted(contract.items()):
+            if k not in instance:
+                problems.append(f&quot;{path}.{k}: missing&quot;)
+            else:
+                problems += check(instance[k], v, f&quot;{path}.{k}&quot;)
+    elif isinstance(contract, list):
+        if not isinstance(instance, list):
+            return [f&quot;{path}: expected a list, got {type(instance).__name__}&quot;]
+        for i, item in enumerate(instance):          # every element, same template
+            problems += check(item, contract[0], f&quot;{path}[{i}]&quot;)
+    elif isinstance(contract, str) and &quot;|&quot; in contract:
+        if instance not in contract.split(&quot;|&quot;):
+            problems.append(f&quot;{path}: {instance!r} is not one of {contract}&quot;)
+    elif isinstance(contract, bool):                  # before the numeric case:
+        if not isinstance(instance, bool):            # bool is a subclass of int
+            problems.append(f&quot;{path}: expected bool, got {type(instance).__name__}&quot;)
+    elif isinstance(contract, (int, float)):
+        # JSON has one number type. A contract written `0` must accept 0.4, or
+        # every cost and rate in the pipeline has to be rounded to satisfy a
+        # checker rather than to be correct.
+        if isinstance(instance, bool) or not isinstance(instance, (int, float)):
+            problems.append(f&quot;{path}: expected a number, got {type(instance).__name__}&quot;)
+    elif not isinstance(instance, type(contract)):
+        problems.append(f&quot;{path}: expected {type(contract).__name__}, &quot;
+                        f&quot;got {type(instance).__name__}&quot;)
+    return problems</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># skills/attestation/sandbox-egress-verifier/SKILL.md — embedded verbatim from the repository.
+# This is the file itself, not a paraphrase of it.
+SKILL_MD = r&quot;&quot;&quot;---
+name: sandbox-egress-verifier
+description: &gt;-
+  Verify AI-generated code executes only in an approved sandbox with no
+  network egress, and probe the known bypass paths. Use when attesting a no-
+  egress execution claim, choosing a code-execution runtime, or asked
+  whether a sandbox actually contains model-authored code.
+allowed-tools: Bash, Read
+---
+
+# Sandbox Egress Verifier
+
+**Controls:** Control 2 — sandboxed no-egress runtime
+
+## Confidence: PARTIAL — and this ceiling is not negotiable
+
+You can prove a sandbox is **misconfigured**. You cannot prove the negative
+&quot;no covert channel exists&quot;. Network isolation has documented bypass paths, and
+a verdict of PASS on this control would be a claim the evidence cannot support.
+
+**Cap every verdict this skill produces at PARTIAL.**
+
+## Procedure
+
+1. **Identify the runtime and its network mode.** Record which isolation
+   technology is in use and which mode it runs in. A mode that permits general
+   outbound network access is an immediate FAIL — no probing required.
+
+2. **Confirm the runtime is on the approved list.** An approved sandbox in the
+   wrong mode and an unapproved sandbox in the right mode are both findings.
+
+3. **Probe the known residual paths**, in an environment you own:
+   - **DNS.** Name resolution is frequently permitted where general egress is
+     not, and A/AAAA queries carry data outward. This has been demonstrated to
+     yield interactive command-and-control on a major managed sandbox.
+   - **Object storage reachability.** Managed storage endpoints are commonly
+     left reachable and have been used as a command-and-control channel.
+   - **Host escape.** Subprocess spawning and any path from the sandboxed
+     process to the host.
+
+4. **Record what you did not test.** A probe list is a statement about coverage,
+   and coverage is the honest part of this verdict.
+
+## Output contract
+
+```json
+{
+  &quot;deployment_id&quot;: &quot;str&quot;,
+  &quot;sandbox_runtime&quot;: &quot;str&quot;,
+  &quot;network_mode&quot;: &quot;str&quot;,
+  &quot;approved_runtime&quot;: true,
+  &quot;bypass_probes&quot;: [{&quot;path&quot;: &quot;dns|object_storage|host_escape&quot;, &quot;reachable&quot;: false, &quot;detail&quot;: &quot;str&quot;}],
+  &quot;untested_paths&quot;: [&quot;str&quot;],
+  &quot;verdict&quot;: &quot;PARTIAL|FAIL&quot;,
+  &quot;verdict_ceiling_reason&quot;: &quot;absence of a covert channel is not provable at runtime&quot;
+}
+```
+
+`PASS` is not a permitted value. If a tool emits one, that tool is wrong.
+
+## Failure modes
+
+- **Reporting PASS** because the configuration looked right. That is the whole
+  reason this skill has a ceiling.
+- **Probing only general HTTP egress.** DNS is the path that has actually been
+  used.
+- **Testing against someone else&#x27;s infrastructure.** Probe only what you own.
+&quot;&quot;&quot;
+
+meta, body = parse_skill(SKILL_MD)
+print(f&quot;loaded skill: {meta[&#x27;name&#x27;]}&quot;)
+print(f&quot;  tools it may use: {&#x27;, &#x27;.join(meta.get(&#x27;allowed-tools&#x27;, [])) or &#x27;—&#x27;}&quot;)
+print(f&quot;  routing description: {len(meta[&#x27;description&#x27;].split())} words&quot;)
+print(f&quot;  procedure: {len(body.splitlines())} lines&quot;)</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The skill loads and reports its shape. Its ceiling is PARTIAL and not negotiable: a configuration that looks right is not a PASS, and probing general HTTP while leaving DNS alone tests the path nobody uses. The untested list is part of the output, not an omission from it.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Write the allow-list for one agent by listing the hosts it genuinely calls. If it is under five, you can ship this control this week; if it is unbounded, that is the finding.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A3.4.html">A3.4 · Budgets and stop conditions</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.3.ipynb">Source</a></p>

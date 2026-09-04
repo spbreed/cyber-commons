@@ -10,6 +10,9 @@ See `cybertravels.py` for the canonical architecture and register.
 
 from . import cybertravels as CT
 from . import diagrams as D
+from .skills import runtime_step
+
+RUNTIME_STEP = runtime_step()
 
 EXERCISES: dict[str, dict] = {
 
@@ -67,13 +70,27 @@ is the useful part — it tells Alex which afternoon to spend first.
          "the box on the architecture that the risk lands on."),
 
   ("md", "## 6 · The register as a working document"),
+
+  ("md", "## 7 · The risk CyberTravels did not write down\\n\\n"
+         "Twelve rows cover what CyberTravels built. None of them covers what it "
+         "**inherits**: the payments API's open findings, the booking "
+         "provider's expired exception, the identity service somebody accepted a "
+         "risk on last year. An agent's risk is the union of its own and every "
+         "downstream its tools reach, and that union is assembled by pulling the "
+         "register per downstream rather than by asking each team. The procedure "
+         "is written down as a skill, embedded here verbatim from this "
+         "repository:"),
+  RUNTIME_STEP,
+  ("skill", "attestation/risk-registry-integrator"),
 ],
  "expect": "Twelve risks, each as a scene rather than a mechanism, each with a "
            "control and an owning lesson. Identity and authorisation is the "
            "largest family at three of twelve. Five of the twelve belong to no "
            "single agent — ingress, transport, identity, logging and blast "
-           "radius are properties of how the four are wired together. Every risk "
-           "has an owner, across more than fifteen lessons in four functions.",
+           "radius are properties of how the four are wired together. The "
+           "integrator skill then loads and reports its shape, and its first "
+           "failure mode is the one that keeps registers looking clean: a "
+           "downstream with no register entry is unassessed, not safe.",
  "challenge": "Write the same four columns for one agentic system you run. The "
               "column that will be hardest is the fourth: for each control, "
               "where is it taught, tested and evidenced in your organisation? "

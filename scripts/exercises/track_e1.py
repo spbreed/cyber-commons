@@ -15,9 +15,11 @@ and none of the changes that break it are code changes.
     E1.9  model and agent lifecycle governance
 """
 
-from .skills import SKILL_RUNTIME
+from .skills import SKILL_RUNTIME, runtime_step
 
 from . import diagrams as D
+
+RUNTIME_STEP = runtime_step()
 
 EXERCISES: dict[str, dict] = {
 
@@ -47,12 +49,25 @@ Introducing that third state is the whole of this lesson.
 ("md", "## 4 · The control — a freshness window per control, derived from drift\n\n"
          "The window is not an audit-calendar choice. It comes from **how fast "
          "the thing the control tests actually changes.**"),
+
+  ("md", "## 5 · What replaces the annual test, as a skill\n\n"
+         "If the window is short, something has to re-run inside it, and that "
+         "something is an attestation: collect each control's verdict, resolve "
+         "every evidence pointer, compute drift against the image digest and the "
+         "tool manifest, and sign the result. Two rules in the procedure are the "
+         "whole difference between an attestation and a slide — a missing "
+         "verdict is not a pass, and a capped verdict does not get raised "
+         "because the other evidence looked good. This is the file in this "
+         "repository:"),
+  RUNTIME_STEP,
+  ("skill", "attestation/attestation-signer-lifecycle"),
 ],
- "expect": "Point-in-time reading reports 5 of 8 controls passing (63%); the "
-           "continuous reading reports 3 of 8 (38%), with SB-1 and SB-2 STALE and "
-           "EV-2 and ST-1 having no evidence at all. Drift-derived windows tighten "
-           "SB-2 to roughly 27 days, confirming a 210-day-old screenshot cannot "
-           "evidence a weekly-changing manifest.",
+ "expect": "The skill loads and reports its shape, and its failure modes are the "
+           "governance lesson stated as engineering: the relying party must fail "
+           "closed on a missing attestation, because reading absence as a pass "
+           "is exactly the annual-test habit arriving in a new format. Drift "
+           "against the digest and the manifest is what re-triggers it, not the "
+           "calendar.",
  "challenge": "Pick your three most important AI controls and set a freshness "
               "window for each from the observed change rate of what it tests. "
               "Then recompute your posture. The number will drop, and it will be "
@@ -82,12 +97,23 @@ personal card, and the SaaS product that quietly added an AI feature.
   ("md", "## 2 · Demo — build the inventory from three sources"),
 ("md", "## 3 · Where it breaks — the gap distribution is always like this"),
 ("md", "## 4 · The control — a discovery query you can re-run"),
+
+  ("md", "## 5 · Resolving one row into a deployment, as a skill\n\n"
+         "Discovery finds that a thing exists. Governing it needs the row "
+         "resolved into artefacts: which repository at which commit, which image "
+         "**digest** rather than which tag, which IAM role and SPIFFE ID, which "
+         "gateway and guardrail, and every downstream its tools call. Every "
+         "other attestation skill consumes this graph, which is why it runs "
+         "first. This is the file in this repository:"),
+  RUNTIME_STEP,
+  ("skill", "attestation/deployment-inventory-resolver"),
 ],
- "expect": "The registry lists 2 assets; procurement and egress logs find 4 more. "
-           "Four assets have no owner, four were never registered, and two "
-           "L2.5-autonomy agents have nobody accountable. The egress query "
-           "identifies three sources talking to model providers that are absent "
-           "from the inventory, giving an ownership coverage of 0.33.",
+ "expect": "The skill loads and reports its shape. Two of its rules are what "
+           "make an inventory hold: resolve digests rather than tags, because a "
+           "tag is mutable and the thing you attested is not the thing running; "
+           "and never record an unresolvable artefact as absent — \"no gateway "
+           "configured\" and \"could not read the gateway\" are different "
+           "findings with different owners.",
  "challenge": "Run the egress query for real: one week of traffic to model-"
               "provider domains, joined against your inventory. It takes an hour "
               "and it always finds something.",
@@ -270,12 +296,22 @@ is often the largest category in a first assessment.
   ("md", "## 2 · Demo — the posture, computed honestly"),
 ("md", "## 3 · Where it breaks — what a point-in-time report would have said"),
 ("md", "## 4 · The control — automate one test and watch the posture hold"),
+
+  ("md", "## 5 · Collecting the runtime evidence, as a skill\n\n"
+         "Automating a control means something has to go and look. For the "
+         "network and logging controls that underwrite every default-deny claim "
+         "CyberTravels makes, that is a posture collector: egress rules, private "
+         "endpoints, route tables, key policies, and whether the audit trail is "
+         "not merely enabled but **delivering**. It collects; it does not "
+         "conclude. This is the file in this repository:"),
+  RUNTIME_STEP,
+  ("skill", "attestation/aws-runtime-posture-collector"),
 ],
- "expect": "Four controls are PASS, SB-1 and SB-2 are STALE, DR-1 is FAIL and "
-           "ST-1 has NO EVIDENCE — coverage 50%. A point-in-time report would "
-           "have claimed 75%. Automating the SB-1 egress test returns it to PASS "
-           "and raises coverage to 63%, and the re-test frequency table shows "
-           "SB-2 needing roughly 13.5 manual re-tests a year.",
+ "expect": "The skill loads and reports its shape, and the line to take from it "
+           "is the boundary it draws: configuration is not enforcement. A "
+           "private endpoint next to a route table with a NAT gateway is a "
+           "recorded fact and an open path at the same time, and logging that is "
+           "switched on but not delivering evidences nothing at all.",
  "challenge": "Automate the control with the shortest freshness window first — it "
               "is the one costing the most manual effort and going stale most "
               "often. One automated test converts an annual assertion into a live "

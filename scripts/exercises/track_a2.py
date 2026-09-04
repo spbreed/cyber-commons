@@ -16,6 +16,9 @@ exactly one block of code implementing it.
 """
 
 from . import diagrams as D
+from .skills import runtime_step
+
+RUNTIME_STEP = runtime_step()
 
 MITIGATES = """
 > **What this control closes.**
@@ -57,11 +60,23 @@ forgets the human, because it produces logs that are complete and useless.
          "a subject. Without it, default-deny has nothing to deny and the audit "
          "trail has nobody to name.\\n\\n"
          "## 2 · The control"),
+
+  ("md", "## 2 · Separating the three, as a skill\\n\\n"
+         "Keeping the three identities apart is a review you will run against "
+         "every agent CyberTravels ships, not a decision you make once. So it "
+         "is written down as a procedure: which principal authorises, which one "
+         "is attributed, which one scopes memory — and the two narrowing rules "
+         "a delegated token has to satisfy before any of it means anything. "
+         "This is the file in this repository, embedded verbatim:"),
+  RUNTIME_STEP,
+  ("skill", "identity/agent-identity-review"),
 ],
- "expect": "Authorization resolves against the workload ceiling and refuses "
-           "`db:admin` no matter who asks, attribution names the human on every "
-           "action, and memory keys differ per user so a note written in one "
-           "session cannot be read back in another's.",
+ "expect": "The skill loads and reports its own shape: a routing description an "
+           "agent reads to decide whether this review applies, the tools it is "
+           "allowed to use, and a procedure long enough to separate user, "
+           "workload and agent instance and to check both narrowing rules — "
+           "scope is a subset of what was presented, and within the actor's own "
+           "ceiling.",
  "challenge": "For one agent, write down its three identities. If the workload "
               "and the user are the same value, you have inherited credentials; "
               "if the instance does not exist, you cannot revoke one run.",
@@ -253,13 +268,23 @@ deployment rather than assume the control is on because the feature exists."""),
          "token, so the chain reconstructs from the token alone rather than by "
          "correlating four services' logs on timestamp. This is the thing A1.14 "
          "could not do."),
+
+  ("md", "## 6 · Verifying the chain, as a skill\n\nThe two findings above are "
+         "what you get from *checking* a deployment rather than reading its "
+         "design document, and CyberTravels has four agents and a payments API "
+         "to check. The procedure walks every hop — user, agent, MCP server, "
+         "tool, downstream — looks for token passthrough, and refuses to accept "
+         "a matching `sub` as proof of delegation, because impersonation "
+         "produces one too. This is the file in this repository:"),
+  RUNTIME_STEP,
+  ("skill", "attestation/identity-chain-verifier"),
 ],
- "expect": "An RFC 8693 exchange issues a token whose `sub` is still alice and "
-           "whose `act` names `spiffe://cybertravels.com/ns/prod/sa/agent-alpha`, "
-           "carrying `cnf.x5t#S256`. The bearer check accepts the stolen token; "
-           "the RFC 8705 bound check refuses it on a `cnf` mismatch. Alice's "
-           "`payments:refund` passes subset-of-presented and still issues "
-           "nothing. The chain reconstructs from the token alone.",
+ "expect": "The verifier skill loads and reports its shape: the description an "
+           "agent routes on, the tools it may use, and a procedure that walks "
+           "every hop of the chain rather than checking the token it was handed. "
+           "Read its failure modes against the Keycloak findings above — a "
+           "matching `sub` is not delegation, and a chain with no audience check "
+           "cannot see passthrough at all.",
  "challenge": "Find your token exchange and check three things: does it set an "
               "`act` claim, does it check the actor's ceiling as well as the "
               "subset rule, and does anything downstream look at `cnf`? Most "
@@ -301,10 +326,23 @@ standing authority to steal.
   ("md", MITIGATES + "> Removes the **standing** grant an injection needs. The "
          "attacker must now arrive inside a window bound to one task and one "
          "resource.\\n\\n## 2 · The control"),
+
+  ("md", "## 2 · Finding the standing grants, as a skill\\n\\n"
+         "Just-in-time authority is only worth building where standing "
+         "authority exists today, and at CyberTravels that list is not the one "
+         "in the design document — it is in the authorisation graph and in the "
+         "OAuth scopes the credential provider stored when someone first "
+         "connected the payments API. The procedure diffs what each identity "
+         "*holds* against what its declared tools actually *need*, and flags "
+         "every permanent grant. This is the file in this repository:"),
+  RUNTIME_STEP,
+  ("skill", "attestation/entitlement-overprivilege-analyzer"),
 ],
- "expect": "A grant bound to one scope, one resource and one task permits only "
-           "the task's own write — refusing a different report, a different "
-           "scope, any use after the task closes, and any use after the TTL "
+ "expect": "The skill loads and reports its shape. Note what its procedure "
+           "insists on: the denominator is the capability set the tools require, "
+           "not another set of grants — comparing grants against grants is how a "
+           "review concludes that an over-privileged agent is normal — and a "
+           "narrow-looking scope still counts as standing privilege if it never "
            "expires.",
  "challenge": "Take one standing grant an agent holds and work out what would "
               "break if it expired in two minutes. That list is the real cost of "
@@ -461,12 +499,25 @@ the content at all, which is exactly why rephrasing does not defeat it.
   ("md", MITIGATES + "> The largest control in the chapter. It never inspects "
          "content, so rewriting the payload does not help — the check is on "
          "**origin**, which the attacker cannot change.\\n\\n## 2 · The control"),
+
+  ("md", "## 2 · Checking the ingress paths, as a skill\\n\\n"
+         "Tagging origin is the control; knowing which of CyberTravels' paths "
+         "actually reaches the model without one is the audit. The procedure "
+         "inventories every untrusted ingestion path — hotel descriptions, "
+         "booking notes, uploaded vouchers, web fetches, and the one everybody "
+         "forgets, **tool results** — and checks each for a screening step and "
+         "for whether provenance survives into context. Note its confidence "
+         "ceiling: PARTIAL, and not negotiable, because no detector is a "
+         "boundary. This is the file in this repository:"),
+  RUNTIME_STEP,
+  ("skill", "attestation/input-injection-screening-verifier"),
 ],
- "expect": "The same payload is refused through all five untrusted ingress "
-           "components and through two rewordings, the user's own request still "
-           "reaches the tool, and a memory record written from an untrusted "
-           "document is still refused a week later because the origin was stored "
-           "with it.",
+ "expect": "The skill loads and reports its shape. Its ceiling is the lesson: a "
+           "screening step is evidence of effort, not of protection, so the "
+           "verdict is capped at PARTIAL however good the detector's benchmark "
+           "looks — and the combination it flags, private data reachable plus "
+           "untrusted content plus egress, is the one that turns a summary into "
+           "an exfiltration.",
  "challenge": "List every place text enters your agent's context and check which "
               "of them attaches an origin. The untagged ones are the paths where "
               "this control does not exist, whatever the design document says.",
