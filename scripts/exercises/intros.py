@@ -199,6 +199,43 @@ cannot block the merge that caused it.
          "Four moves and about twenty lines. `ask()` is the model — offline it "
          "is a labelled replay, and with a key configured it is a real "
          "call to an open-weight model served from Kaggle, through the same code."),
+  ("md", "## 4 \u00b7 What every lesson in this chapter runs, and how\n\n"
+         "Function B is where you build harnesses, so it is worth being precise "
+         "about the one you are already inside. Every lesson from here on "
+         "executes an **agent skill**, and that is three cells and nothing "
+         "else:\n\n"
+         "1. **`SKILL_MD`** \u2014 the `SKILL.md` file, embedded verbatim from "
+         "`skills/`. Frontmatter an agent routes on, then the procedure it "
+         "follows.\n"
+         "2. **the import** \u2014 four lines that make the shared runtime "
+         "importable and then import it. On Kaggle the runtime is a kernel "
+         "attached to this notebook as a source, mounted as `__script__.py`; "
+         "the cell copies it to the name it is imported by and imports it. In a "
+         "checkout it is already `skills/_runtime/`.\n"
+         "3. **the skill's own script** \u2014 the file in "
+         "`skills/<area>/<name>/scripts/`, embedded verbatim, which begins "
+         "`from cyber_commons_skill_runtime import ...` and is otherwise the "
+         "procedure doing its work.\n\n"
+         "`run_skill(SKILL_MD)` is the whole of the execution surface: it "
+         "splits the frontmatter from the body and reports what was loaded. "
+         "`contract_of(body)` and `check(instance, contract)` are there when a "
+         "skill validates its own output. Nothing else in a lesson is Python.\n\n"
+         "**To use the library in a notebook of your own**, on Kaggle add "
+         "`cybercommons/cyber-commons-skill-runtime` as a source \u2014 *File "
+         "\u2192 Add data \u2192 Notebooks*, or `kernelDataSources` through the "
+         "API \u2014 and paste those four lines. Locally, put "
+         "`skills/_runtime` on `PYTHONPATH`. A0.1 runs that procedure on "
+         "itself if you want to see it work before you copy it."),
+  ("html", D.table(
+    ["cell", "what it is", "how long"],
+    [["1", "<code>SKILL_MD</code> \u2014 the procedure, verbatim", "the skill"],
+     ["2", "make the runtime importable, then <code>run_skill</code>", "<b>4 lines</b>"],
+     ["3", "the skill's script \u2014 opens on one import", "the work"]],
+    emphasise=2,
+    caption="The runtime used to be copied into cell 2 of every notebook. That "
+            "was 9,730 lines of identical code and one place it could not be "
+            "fixed from.")),
+
   *skill_steps("appsec/agentic-harness-loop",
                "## 4 \u00b7 The loop, as a skill\n\nThe procedure is written "
                "down first, because the loop is the part you own and the model "

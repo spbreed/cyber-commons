@@ -12,24 +12,8 @@ the internet switched off.
 
 # The shared runtime, found the way every lesson finds it. In a notebook the
 # cell above has already loaded it; standalone, look in the same two places.
-import glob as _glob, importlib.util as _ilu, os as _os, sys as _sys
-
-_KAGGLE = "/kaggle/input/**/cyber-commons-skill-runtime/__script__.py"
-_REPO = "skills/_runtime/cyber_commons_skill_runtime.py"
-
-if "cyber_commons_skill_runtime" not in _sys.modules:
-    _where = (sorted(_glob.glob(_KAGGLE, recursive=True))
-              + [_os.path.join(p, _REPO) for p in (".", "..", "../..",
-                 _os.path.join(_os.path.dirname(__file__), "../../../_runtime"))])
-    _found = next((p for p in _where if _os.path.isfile(p)), None)
-    if _found is None:
-        raise SystemExit("shared skill runtime not found; looked at " + repr(_where))
-    _spec = _ilu.spec_from_file_location("cyber_commons_skill_runtime", _found)
-    _mod = _ilu.module_from_spec(_spec)
-    _sys.modules["cyber_commons_skill_runtime"] = _mod
-    _spec.loader.exec_module(_mod)
-
-_runtime = _sys.modules["cyber_commons_skill_runtime"]
+# The runtime comes from the shared library. The lesson cell above put it
+# on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
 from cyber_commons_skill_runtime import check, contract_of, parse_skill
 
 import pathlib

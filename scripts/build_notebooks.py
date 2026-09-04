@@ -98,33 +98,17 @@ def skill_file(ref: str) -> str:
 # loader rather than an import. Locally it is the file in the repository.
 #
 # Eight lines per notebook instead of two hundred, and one place to fix.
-RUNTIME_BOOTSTRAP = """import glob, importlib.util, os, sys
+RUNTIME_BOOTSTRAP = """import glob, os, shutil, sys
 
-# Kaggle mounts an attached kernel under /kaggle/input, and it uses two
-# different layouts — /kaggle/input/<slug>/ on some kernels and
-# /kaggle/input/notebooks/<user>/<slug>/ on others. Both were observed on the
-# same account in the same hour, so match either. The recursive glob is cheap
-# here because /kaggle/input holds only what is attached; globbing the working
-# tree instead cost eleven seconds a notebook.
-_WHERE = (sorted(glob.glob("/kaggle/input/**/cyber-commons-skill-runtime/__script__.py",
-                           recursive=True))
-          + [os.path.join(p, "skills/_runtime/cyber_commons_skill_runtime.py")
-             for p in (".", "..", "../..")])
-_found = next((p for p in _WHERE if os.path.isfile(p)), None)
-if _found is None:
-    # Say what was looked for and what is actually there. "The runtime is
-    # missing" on its own costs whoever hits it an afternoon.
-    raise SystemExit("The shared skill runtime is missing."
-                     "  looked at: " + repr(_WHERE) +
-                     "  /kaggle/input holds: " +
-                     repr(glob.glob("/kaggle/input/**", recursive=True)[:20]) +
-                     "  cwd: " + os.getcwd() +
-                     ". On Kaggle it is attached to this notebook as a "
-                     "source; locally it is skills/_runtime/ in the repository.")
-_spec = importlib.util.spec_from_file_location("cyber_commons_skill_runtime", _found)
-cyber_commons_skill_runtime = importlib.util.module_from_spec(_spec)
-sys.modules["cyber_commons_skill_runtime"] = cyber_commons_skill_runtime
-_spec.loader.exec_module(cyber_commons_skill_runtime)
+# Make the shared runtime importable, then import it. On Kaggle an attached
+# kernel is mounted as __script__.py — not on sys.path and not named after the
+# kernel — so copy it to the name it is imported by. Locally it is already a
+# file of that name in the repository.
+_k = glob.glob("/kaggle/input/**/cyber-commons-skill-runtime/__script__.py", recursive=True)
+if _k:
+    shutil.copy(_k[0], "cyber_commons_skill_runtime.py")
+sys.path[:0] = [".", "skills/_runtime", "../skills/_runtime", "../../skills/_runtime"]
+
 from cyber_commons_skill_runtime import run_skill"""
 
 

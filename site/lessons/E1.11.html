@@ -115,33 +115,17 @@ about the framework.
 - **Monitoring output distribution only.** The actions are the risk.
 - **Calendar re-validation.** The triggers are events, not dates.
 &quot;&quot;&quot;</code></pre></div><div class="nbcode"><span class="nbtag">In</span><pre><code># Execute the skill above, using the shared runtime rather than a copy.
-import glob, importlib.util, os, sys
+import glob, os, shutil, sys
 
-# Kaggle mounts an attached kernel under /kaggle/input, and it uses two
-# different layouts — /kaggle/input/&lt;slug&gt;/ on some kernels and
-# /kaggle/input/notebooks/&lt;user&gt;/&lt;slug&gt;/ on others. Both were observed on the
-# same account in the same hour, so match either. The recursive glob is cheap
-# here because /kaggle/input holds only what is attached; globbing the working
-# tree instead cost eleven seconds a notebook.
-_WHERE = (sorted(glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;,
-                           recursive=True))
-          + [os.path.join(p, &quot;skills/_runtime/cyber_commons_skill_runtime.py&quot;)
-             for p in (&quot;.&quot;, &quot;..&quot;, &quot;../..&quot;)])
-_found = next((p for p in _WHERE if os.path.isfile(p)), None)
-if _found is None:
-    # Say what was looked for and what is actually there. &quot;The runtime is
-    # missing&quot; on its own costs whoever hits it an afternoon.
-    raise SystemExit(&quot;The shared skill runtime is missing.&quot;
-                     &quot;  looked at: &quot; + repr(_WHERE) +
-                     &quot;  /kaggle/input holds: &quot; +
-                     repr(glob.glob(&quot;/kaggle/input/**&quot;, recursive=True)[:20]) +
-                     &quot;  cwd: &quot; + os.getcwd() +
-                     &quot;. On Kaggle it is attached to this notebook as a &quot;
-                     &quot;source; locally it is skills/_runtime/ in the repository.&quot;)
-_spec = importlib.util.spec_from_file_location(&quot;cyber_commons_skill_runtime&quot;, _found)
-cyber_commons_skill_runtime = importlib.util.module_from_spec(_spec)
-sys.modules[&quot;cyber_commons_skill_runtime&quot;] = cyber_commons_skill_runtime
-_spec.loader.exec_module(cyber_commons_skill_runtime)
+# Make the shared runtime importable, then import it. On Kaggle an attached
+# kernel is mounted as __script__.py — not on sys.path and not named after the
+# kernel — so copy it to the name it is imported by. Locally it is already a
+# file of that name in the repository.
+_k = glob.glob(&quot;/kaggle/input/**/cyber-commons-skill-runtime/__script__.py&quot;, recursive=True)
+if _k:
+    shutil.copy(_k[0], &quot;cyber_commons_skill_runtime.py&quot;)
+sys.path[:0] = [&quot;.&quot;, &quot;skills/_runtime&quot;, &quot;../skills/_runtime&quot;, &quot;../../skills/_runtime&quot;]
+
 from cyber_commons_skill_runtime import run_skill
 
 # Split skills/grc/model-risk-validation-scope/SKILL.md into the two halves an agent uses —

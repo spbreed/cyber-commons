@@ -1426,6 +1426,11 @@
   "A0.1": {
    "goal": "Run the mechanism every other lesson uses, on itself: load the shared runtime, split a SKILL.md, check an instance against its output contract, and see what conformance does not prove.",
    "run": [
+    "# --- the notebook: runs anywhere, stdlib only, no install ---",
+    "jupyter notebook labs/notebooks/A0.1.ipynb    # or open it on the lesson page",
+    "python3 scripts/run_notebooks.py --session A0.1   # run it headless and check it",
+    "",
+    "# --- the full variant, against the real tooling (needs a container registry) ---",
     "# --- the notebook: stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A0.1.ipynb    # or open it on the lesson page",
     "python3 scripts/run_notebooks.py --session A0.1   # run it headless and check it"
