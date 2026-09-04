@@ -299,6 +299,15 @@ def main() -> int:
                 if e.code == 429:                       # rate limited
                     time.sleep(min(2 ** attempt * 5, 60)); continue
                 return f"ERROR HTTP {e.code} {body[:80]}"
+            except urllib.error.URLError as e:
+                # A reset mid-upload is transient and pushing 118 notebooks hits
+                # it. Seven of one run's eight failures were `[Errno 104]
+                # Connection reset by peer`, reported as if the notebook were
+                # broken. Back off and try again.
+                time.sleep(min(2 ** attempt * 5, 60))
+                if attempt == 5:
+                    return f"ERROR {e.reason} (after 6 attempts)"
+                continue
             except RuntimeError as e:                   # hasError in the body
                 if "Maximum batch" in str(e):           # concurrency ceiling
                     time.sleep(20); continue

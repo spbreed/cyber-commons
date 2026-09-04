@@ -5,17 +5,20 @@ This is the executable half of the `threat-model-stride` skill. The SKILL.md
 next to it is the procedure a model follows; this is the deterministic part it
 calls, so the scoring is reproducible and two runs can be diffed.
 
-    python3 threat_model.py                 # synthetic CyberTravels estate
-    python3 threat_model.py --hardened      # same code, hardened estate
-    python3 threat_model.py --json          # the output contract, as JSON
+    python3 threat_model.py     # the synthetic CyberTravels estate, then the
+                                # same estate hardened, then the diff
+
+There is no CLI. The module prints its demonstration at import, because it is
+embedded into a notebook cell where `__name__` is `__main__` and `sys.argv`
+belongs to the kernel — an `if __name__ == "__main__"` block guarded on
+arguments ran argparse against a Kaggle kernel's argv and failed the notebook.
+Call `model()`, `boundaries()` and `diagram()` directly for the JSON contract.
 
 Standard library only, so it runs on a Kaggle kernel with the internet off.
 """
 from __future__ import annotations
 
-import argparse
 import json
-import sys
 from collections import defaultdict
 
 # ---------------------------------------------------------------- the inputs
@@ -243,42 +246,3 @@ print("The rows do not disappear. Hardening removes severity, not threats -")
 print("and the row is what you re-check after the next terraform change.")
 assert len(hard) == len(threats)
 assert max(t["score"] for t in hard) < max(t["score"] for t in threats)
-
-
-def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--hardened", action="store_true")
-    ap.add_argument("--json", action="store_true")
-    a = ap.parse_args()
-
-    inputs = dict(cspm=CSPM, iam=IAM, network=NETWORK, entitlements=ENTITLEMENTS)
-    if a.hardened:
-        inputs.update(HARDENED)
-    threats = model(ARCHITECTURE, **inputs)
-    bnds = boundaries(ARCHITECTURE)
-    out = {
-        "inputs_present": ["architecture", "cspm", "iam", "network",
-                           "entitlements"],
-        "threats": threats,
-        "boundaries": bnds,
-        "diagram": diagram(ARCHITECTURE, bnds),
-    }
-    if a.json:
-        print(json.dumps(out, indent=1))
-        return 0
-
-    print(f"{'id':6s}{'':2s}{'entry':16s}{'sink':14s}{'score':>6}  why")
-    print("-" * 92)
-    for t in threats:
-        print(f"{t['id']:6s}{t['stride']:2s}{t['entry']:16s}{t['sink']:14s}"
-              f"{t['score']:>6}  {', '.join(t['reasons'])}")
-    print(f"\n{len(threats)} threats across "
-          f"{len({t['stride'] for t in threats})} STRIDE categories")
-    print(f"{len(bnds)} trust-boundary crossing(s):")
-    for b in bnds:
-        print(f"   {b['from']} -> {b['to']}   ({b['trust']})")
-    return 0
-
-
-if __name__ == "__main__" and sys.argv[1:]:
-    raise SystemExit(main())
