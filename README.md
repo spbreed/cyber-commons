@@ -163,25 +163,24 @@ Keycloak, garak — the notebook models the *decision* that tool makes, and
 underneath as the full-infrastructure variant. Those variants are **not**
 executed in CI and are labelled as such.
 
-**Where a lesson involves a model, the same code runs three ways.** Offline it
-uses a deterministic stand-in, labelled as a stand-in everywhere it appears and
-never presented as a model's output — which is what lets it run on Kaggle with
-the internet off and keeps the determinism gate meaningful. Set one environment
+**Where a skill calls a model, the same code runs two ways.** Offline it uses a
+deterministic stand-in, labelled as a stand-in everywhere it appears and never
+presented as a model's output — which is what lets it run on Kaggle with the
+internet off and keeps the determinism gate meaningful. Set one environment
 variable and the identical code calls a real model:
 
 ```bash
-# open weight — Ollama, vLLM, or any OpenAI-compatible endpoint
-export OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama MODEL=glm-4.6
-
-# frontier — MODEL defaults to the cheapest current Claude model
-export ANTHROPIC_API_KEY=...
+# any OpenAI-compatible endpoint — llama.cpp, Ollama, vLLM, a free hosted tier
+export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 OPENAI_API_KEY=local MODEL=qwen2.5-7b-instruct
 ```
 
-The adapter is standard library only, so nothing about the self-contained
-property changes, and it **never silently substitutes**: if a backend is
-configured and the call fails, the lesson says so and labels what it used. Nine
-lessons carry a live section, and `scripts/live_model_test.py` runs all nine
-against a real backend and records what came back.
+**There is no paid backend.** A curriculum that is free to read should be free
+to run, so there is one protocol and the weights come from Kaggle Models. The
+adapter is standard library only, lives inside the seven skill scripts that
+call a model rather than in any lesson, and **never silently substitutes**: if a
+backend is configured and the call fails, the lesson says so and labels what it
+used. `scripts/live_model_test.py` runs all seven against a served endpoint and
+records what came back.
 
 See [MODELS.md](MODELS.md) for which model suits which lab, and
 [labs/kimi/](labs/kimi) for what happened when these skills were run against a
