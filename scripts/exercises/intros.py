@@ -417,7 +417,9 @@ told you.
     caption="Five of six do not exist yet. R10 in the register is the sixth "
             "one's twin problem — the log you do have is full of passport "
             "numbers.")),
- ],
+   *skill_steps('detection/agent-tempo-baseline',
+               "## 2 · The procedure, as a skill\n\nAlex and CyberTravels' Workflow Agent, over the same hour. The skill measures the five signals that separate them, then runs the existing volume rule against the agent's run — where it fires 154 seconds in and stays silent for the remaining fifty-seven minutes."),
+],
  "expect": "Five behavioural signals for Alex and for CyberTravels' Workflow Agent "
            "over the same hour, with ratios in the hundreds. The volume rule "
            "tuned for human tempo does fire — 154 seconds into a sixty-minute "

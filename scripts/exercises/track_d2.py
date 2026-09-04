@@ -20,6 +20,8 @@ from .skills import SKILL_RUNTIME
 
 from . import diagrams as D
 
+from .skills import skill_steps
+
 EXERCISES: dict[str, dict] = {
 
 "D2.1": {
@@ -47,6 +49,8 @@ job to state that gap explicitly in the incident record.
 ("md", "## 4 · The control — state what the evidence can support\n\n"
          "The fix is not a better model. It is a reconstruction step that reports "
          "its own evidentiary limits before it reports a conclusion."),
+  *skill_steps('response/incident-reconstruction-check',
+               '## 2 · The procedure, as a skill\n\nThe timeline attributes every action to `dana@corp` and the fluent narrative recommends suspending her. The skill renders that view first, produces the truth view from an independent source, and then gates every claim on a field that supports it.'),
 ],
  "expect": "The timeline attributes every action to `dana@corp`. The fluent "
            "narrative recommends suspending her. The truth view shows "
@@ -93,7 +97,9 @@ operational rather than architectural.
     emphasise=1,
     caption="Every step on the left is correct for a human actor and wrong here. "
             "The human authorised a task; the actions were chosen by a model.")),
- ],
+   *skill_steps('response/agent-actor-containment',
+               "## 2 · The procedure, as a skill\n\nDisabling the human's account leaves both agents acting on tokens already issued. The skill enumerates the live sessions, simulates the reflex containment step, and separates the task the user authorised from the actions taken under it."),
+],
  "expect": "Disabling the human's account leaves both agents able to act on "
            "already-issued tokens. The interview establishes the user authorised "
            "a task, not the actions. The chain shows three actors where the logs "
@@ -163,6 +169,8 @@ it in a minute. So the two should have different policies, and almost nowhere do
   ("md", "## 2 · Demo — the race, in actions rather than minutes"),
 ("md", "## 3 · Where it breaks — approval latency is not the only delay"),
 ("md", "## 4 · The control — pre-authorise on high-confidence signals"),
+  *skill_steps('response/machine-speed-containment',
+               '## 2 · The procedure, as a skill\n\nEight minutes of approval is 2,400 actions. The skill races the rate against the delay, times the whole containment path — of which the revocation itself is twelve seconds — and classifies which signals may auto-revoke against a non-human subject.'),
 ],
  "expect": "The race table shows 2,400 versus 60 actions at 300/min for an "
            "eight-minute approval. The full containment path totals about 920 "
@@ -194,6 +202,8 @@ upgrade does not reproduce the incident that happened before it.
   ("md", "## 2 · Demo — the four fields, and what each buys"),
 ("md", "## 3 · Where it breaks — the silent upgrade"),
 ("md", "## 4 · The control — record the four, cheapest first"),
+  *skill_steps('response/run-replayability-audit',
+               '## 2 · The procedure, as a skill\n\nReplay needs five inputs and the typical production run records three. The skill checks each against a real record, then replays under two later model versions — where a different action means the original decision cannot be reproduced at all.'),
 ],
  "expect": "Only the fully instrumented run is replayable; the typical production "
            "run is missing the model version and seed. Replaying the incident "
@@ -252,6 +262,8 @@ as done six weeks later.
             "control at all: it is a request for the model to behave better, and "
             "the next prompt edit will silently revert it.")),
   ("md", "## 4 · The control — the manifest diff, and a verification date"),
+  *skill_steps('response/post-incident-change-surface',
+               '## 2 · The procedure, as a skill\n\nOnly two of six post-incident actions are still verifiable six weeks later, and one of those is a prompt edit recorded as a control. The skill classifies each action, tests whether a check would fail if it were reverted, and compares blast radius before and after.'),
 ],
  "expect": "Four of seven change surfaces bypass change management. Only 2 of 6 "
            "post-incident actions are verifiable six weeks later, and one of them "
@@ -286,6 +298,8 @@ a board will each ask for in different words.
   ("md", "## 2 · Demo — the five questions, answered badly and well"),
 ("md", "## 3 · Where it breaks — mechanism matters more than speed"),
 ("md", "## 4 · The control — run the game day and record the number"),
+  *skill_steps('response/stop-authority-readiness',
+               '## 2 · The procedure, as a skill\n\nThe skill prints the vague answers beside the concrete ones, then establishes what each mechanism actually survives — killing the process does not survive a restart, revoking the identity does — and reports a measured twelve-second time-to-stop from a game day rather than an estimate.'),
 ],
  "expect": "The vague and concrete answers print side by side. Killing the "
            "process stops the agent but does not survive a restart, while "
@@ -318,6 +332,8 @@ under time pressure.
   ("md", "## 2 · Demo — the clock under four scenarios"),
 ("md", "## 3 · Where it breaks — the clock starts earlier than people think"),
 ("md", "## 4 · The control — separate owners, and a shortest-clock register"),
+  *skill_steps('response/regulatory-clock-check',
+               '## 2 · The procedure, as a skill\n\nOne-hour containment still misses a 72-hour deadline when scoping takes three days, and broken attribution misses it by twenty hours. The skill runs the clock from each candidate awareness point and names the owner of every runbook step.'),
 ],
  "expect": "One-hour containment still misses the 72-hour deadline in the "
            "slow-scoping scenario, and broken attribution misses it by 20 hours. "

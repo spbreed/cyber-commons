@@ -23,6 +23,8 @@ from .skills import SKILL_RUNTIME
 
 from . import diagrams as D
 
+from .skills import skill_steps
+
 EXERCISES: dict[str, dict] = {
 
 "D1.1": {
@@ -44,13 +46,7 @@ loop may believe — because a triage loop with a weak verifier closes true
 positives at machine speed, and closing a true positive is silent.
 """,
  "steps": [
-  ("model", {
-   "title": 'The model backend, and the disposition it proposes',
-   "task": 'Triage this alert to one of: escalate, close-benign, needs-context.\n\nAlert: service account svc-reports authenticated from 203.0.113.9 at 03:14 and listed all S3 buckets. svc-reports normally runs hourly from 10.2.0.0/16 and touches one bucket.',
-   "replay": "escalate - the source range and the breadth of the list call are both outside this account's established pattern.",
-   "system": 'You are a SOC triage assistant. One line: disposition, then why.',
-   "check": '("returned one of the three dispositions", any(d in answer.lower() for d in ("escalate", "close-benign", "needs-context")))'}),
-  ("md", "## 2 · Demo — the queue, and the loop that reads it"),
+("md", "## 2 · Demo — the queue, and the loop that reads it"),
 ("md", "## 3 · Where it breaks — closing a true positive is silent\n\n"
          "Every triage decision has two error directions and they are not "
          "symmetric. Escalating a false positive costs an analyst ten minutes. "
@@ -59,6 +55,8 @@ positives at machine speed, and closing a true positive is silent.
 ("md", "## 4 · The control — the loop may close, but not silently\n\n"
          "Three rules make an agentic triage loop safe to run, and none of them "
          "is about model quality."),
+  *skill_steps('detection/triage-loop-with-floor',
+               '## 2 · The procedure, as a skill\n\nThe skill scores a triage loop against ground truth, sweeps the confidence bar so the trade between analyst minutes and missed incidents is made explicitly, and adds the severity floor that no automatic closure may cross whatever its confidence.'),
 ],
  "expect": "The triage loop escalates 4 alerts and closes 4, matching ground "
            "truth on all 8. Lowering the confidence bar trades analyst minutes "
@@ -127,19 +125,15 @@ real historical telemetry decides which survive. The scoring step is the job, an
 it is the part teams skip.
 """,
  "steps": [
-  ("model", {
-   "title": 'The model backend, and the detection it writes',
-   "task": 'Write the detection condition for: a non-human identity listing more than 20 distinct buckets within 5 minutes, from outside its usual CIDR. Pseudocode, at most four lines.',
-   "replay": "actor.type == 'service_account'\nand count_distinct(event.bucket, window='5m') > 20\nand not cidr_match(source.ip, actor.baseline_cidr)",
-   "system": 'You write detection logic. Condition only, no prose.',
-   "check": '("expresses a threshold", any(t in answer for t in (">", ">=", "20")))'}),
-  ("md", "## 2 · Demo — five candidate rules for one concern"),
+("md", "## 2 · Demo — five candidate rules for one concern"),
 ("md", "## 3 · Where it breaks — every rule 'works'\n\n"
          "All five detect something. R1 has perfect recall on http traffic and "
          "would put 301 alerts a day in the queue. R4 has 100% precision on "
          "nothing useful. The deployable set is decided by a threshold nobody "
          "writes down."),
 ("md", "## 4 · The control — generate many, score against history, ship few"),
+  *skill_steps('detection/detection-rule-deployability',
+               '## 2 · The procedure, as a skill\n\nEvery candidate rule detects something. The skill replays each against real history and scores the third property nobody checks — firing volume — so a rule that produces 301 alerts for one true positive is rejected with its numbers rather than with an adjective.'),
 ],
  "expect": "All five rules detect something. R1 fires 301 times for 1 true "
            "positive; R5 fires twice for 2 true positives with perfect precision "
@@ -180,6 +174,8 @@ used, a mix that has shifted, a scope exercised that was never needed before.
 ("md", "## 4 · Verify — the alert text an analyst can act on\n\n"
          "\"Anomaly detected\" fails both tests: it does not say what changed, and "
          "it does not say what to do."),
+  *skill_steps('detection/agent-aware-rule-review',
+               "## 2 · The procedure, as a skill\n\nAll three classic rules fire on CyberTravels' patch agent doing exactly its job, and only the rate rule fires on the human. The skill runs both, then measures drift from a signed-off baseline week by week — naming the new tool rather than reporting a distance."),
 ],
  "expect": "All three classic rules fire on an agent doing its job and only the "
            "rate rule fires on the human. Drift is within tolerance at week 1, "
@@ -220,6 +216,8 @@ retention conversation actually is.
   ("md", "## 2 · Demo — one agent run, as a telemetry record"),
 ("md", "## 3 · Where it breaks — what is actually in there"),
 ("md", "## 4 · The control — retention per field, and a hash for the rest"),
+  *skill_steps('detection/agent-telemetry-retention',
+               '## 2 · The procedure, as a skill\n\nThe run record contains a payment-card pattern, in a source file the agent read legitimately. The skill scans every field, then sets retention per field so timestamps and verdicts survive for 400 days and prompts do not survive 30.'),
 ],
  "expect": "The full record contains a payment-card pattern found in a source file "
            "the agent read legitimately. Per-field retention keeps timestamps, "
@@ -259,6 +257,8 @@ accuracy-maximisation would give you.
   ("md", "## 2 · Demo — score actors from timing alone"),
 ("md", "## 3 · Where it breaks — sweep the threshold and read both errors"),
 ("md", "## 4 · The control — pick the threshold from the cost, not from accuracy"),
+  *skill_steps('detection/agent-versus-human-scoring',
+               '## 2 · The procedure, as a skill\n\nThe skill scores five actors on behaviour rather than on what they claim to be, sweeps the threshold, and then picks it by expected cost — because a flagged human costs half an analyst-hour and a missed agent costs forty.'),
 ],
  "expect": "The service indexer and unknown token score highest, the human lowest, "
            "with the IDE user and the politely-jittered agent in between. The "
@@ -306,6 +306,8 @@ E1.7 turns the second into a compliance posture. This lesson produces the signal
             "the failure mode with no adversary, and this table is why it is "
             "also the failure mode with no ticket.")),
   ("md", "## 4 · The control — freshness derived from the observed drift rate"),
+  *skill_steps('detection/behavioural-drift-monitor',
+               "## 2 · The procedure, as a skill\n\nFour of six things that change an agent's behaviour never reach change management. The skill counts them, then tracks drift across a quarter and attributes the rise that coincides with the model upgrade — and the one that does not."),
 ],
  "expect": "Drift rises across the quarter from 0.0 at sign-off to roughly 0.35 "
            "after the model upgrade, with `run_shell` appearing as a new tool. "
@@ -352,7 +354,9 @@ not.
     caption="The highest-converting sources are all internal. For agentic "
             "threats the intel programme is mostly a feedback loop out of C1 and "
             "D1.7, not a purchase.")),
- ],
+   *skill_steps('detection/threat-intel-to-rules',
+               '## 2 · The procedure, as a skill\n\nFour of seven indicators convert; the two narratives and the low-confidence host are dropped with reasons. The skill then reports the three numbers a renewal conversation needs: converted, alerted, actioned.'),
+],
  "expect": "Four of seven indicators convert to rules — the two narratives and "
            "the low-confidence host are dropped with reasons. The rules fire on "
            "three of five events with concrete responses. The three-number "

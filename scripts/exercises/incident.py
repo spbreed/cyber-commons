@@ -516,6 +516,8 @@ tells you the environment is clean when it is only well-mapped.
   ("md", "## 4 · Where it breaks — bait that was learned"),
 
   ("md", "## 5 · Verify — what deception buys next to a tuned detector"),
+  *skill_steps('detection/canary-and-honeypot-design',
+               '## 2 · The procedure, as a skill\n\nA canary credential nothing legitimate uses produces an alert with no structurally possible false positive. The skill places them, attaches source and user agent to each hit, adds honeypot tasks that measure inclination, and models the decay that sets the rotation interval.'),
 ],
  "expect": "Two canary authentications out of four events are confirmed "
            "compromises with source IP and user agent attached, and no false "
@@ -583,7 +585,9 @@ period.
             "the workload's own logs. That is the property that makes them "
             "useful after A2.8: they survive the subject of the investigation "
             "having had write access to everything else.")),
- ],
+   *skill_steps('detection/agent-platform-detections',
+               '## 2 · The procedure, as a skill\n\nA seven-event escape sequence scores 0.07 on a generic volume anomaly. The skill writes four named rules whose subject is the platform — orphaned processes, cache diffs, escape signatures — and runs both against the same events so the comparison is visible.'),
+],
  "expect": "Four named rules fire on a seven-event escape sequence that scores "
            "0.07 on a generic volume anomaly. The orphaned-process rule isolates "
            "the one background process that outlived its tool call. The cache "
@@ -640,6 +644,8 @@ reports actually submitted. In the incident that gap was the entire failure.
   ("md", "## 4 · Vocabulary, pivots and role differentiation (C8.4)"),
 
   ("md", "## 5 · The gap between noticed and reported (C9.3)"),
+  *skill_steps('detection/fleet-correlation-analysis',
+               '## 2 · The procedure, as a skill\n\nFive runs pass every per-run check with nothing to report. The skill establishes that first, then builds the shared-artefact graph keyed by object rather than by run — where one write is read by three unrelated runs and three of them coin the same novel token.'),
 ],
  "expect": "Five runs pass every per-run check with nothing to report. The "
            "shared-artefact graph then shows one object written by one run and "
@@ -704,6 +710,8 @@ nobody has pulled is a hypothesis.
             "request.")),
 
   ("md", "## 5 · Verify — a switch nobody has pulled is a hypothesis"),
+  *skill_steps('response/fleet-kill-switch-test',
+               '## 2 · The procedure, as a skill\n\nTerminating eight agents without revoking leaves eight tokens valid for up to 72 hours. The skill tests both paths, checks that killing preserves the evidence for the incident that triggered it, and measures the whole thing against a target.'),
 ],
  "expect": "Terminating eight agents without revoking leaves all eight tokens "
            "valid for up to 72 hours; terminating and revoking together leaves "
