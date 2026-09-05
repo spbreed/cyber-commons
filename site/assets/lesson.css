@@ -1,4 +1,7 @@
-/* Cyber Commons — shared styling for generated lesson pages */
+/* Cyber Commons — shared styling for generated lesson pages.
+   Two hues, matching site/index.html exactly:
+     blue  = AI for Security  ·  amber = Security of AI, and urgency
+   Everything else is the neutral ink ramp. No third hue. */
 :root{
   --ink:#0A0E19; --ink-2:#0E1424; --surface:#131B2E;
   --line:#26314b; --line-soft:#1c2740;
@@ -82,7 +85,7 @@ header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
 .rc > div{border:1px solid var(--line-soft);border-radius:12px;padding:20px;background:var(--ink-2)}
 .rc .lab{font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
   margin-bottom:9px}
-.rc .risk .lab{color:#ff8a8a}
+.rc .risk .lab{color:var(--secure)}
 .rc .ctrl .lab{color:var(--defend)}
 .rc p{margin:0;font-size:14.8px;color:var(--text-dim)}
 

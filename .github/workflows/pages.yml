@@ -99,9 +99,12 @@ jobs:
         run: |
           pip install --quiet markdown
           python3 scripts/build_site.py
-          # if the commit did not include the regenerated pages, say so loudly
-          if ! git diff --quiet -- site/lessons; then
-            echo "::warning::site/lessons was out of date and has been rebuilt for this deploy."
+          # if the commit did not include the regenerated pages, say so loudly.
+          # index.html is in here too: its chapter grid and every count in its
+          # copy are generated, and it advertised the wrong lesson count for
+          # two chapters before this check existed.
+          if ! git diff --quiet -- site/lessons site/index.html; then
+            echo "::warning::site was out of date and has been rebuilt for this deploy."
             echo "::warning::Run 'python3 scripts/build_site.py' before committing to keep the repo in sync."
           fi
 

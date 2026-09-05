@@ -4,20 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cyber Commons — Free, open training for Cyber AI</title>
-<meta name="description" content="Free, open training for the age of agentic security: defend with AI, and secure AI itself. Breakout time is down to 29 minutes — build the capability to test yourself at that speed. Organised by the five functions of a CISO org, by role. Runs on the laptop you already own.">
+<meta name="description" content="The world's number one free training resource for Cyber AI — the only curriculum covering both directions in one place: securing AI systems, and using AI to do security work. 120 lessons across 12 chapters, written by practitioners in regulated industries. Free, open, no account needed, runs on the laptop you already own.">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Cyber Commons — Navigating Cyber Singularity">
-<meta property="og:description" content="Offense scales on its own. Defense has to be deliberately spread. Free, open Cyber AI training — organised by the five functions of a CISO org.">
+<meta property="og:description" content="The number one free training resource for Cyber AI: securing AI, and AI for security, in one place. 120 lessons from practitioners in regulated industries. Free forever.">
 <meta property="og:image" content="assets/logo-full.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Cyber Commons — Navigating Cyber Singularity">
-<meta name="twitter:description" content="Offense scales on its own. Defense has to be deliberately spread. Free, open Cyber AI training.">
+<meta name="twitter:description" content="The number one free training resource for Cyber AI: securing AI, and AI for security, in one place. Free forever, no account needed.">
 <meta name="twitter:image" content="assets/logo-full.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+  /* ---------- PALETTE ----------------------------------------------------
+     Two hues, and each one means exactly one thing:
+       blue  = AI for Security   (using AI to do the work)
+       amber = Security of AI    (securing the AI, and anything urgent)
+     Everything else is the neutral ink ramp. Nothing else gets a colour —
+     a third hue here would be decoration, and decoration in a palette this
+     small reads as a fourth meaning the reader then has to guess.
+     --accent follows the hero toggle, so one hue leads at a time.        */
   :root{
     --ink:#0A0E19;
     --ink-2:#0E1424;
@@ -29,7 +37,7 @@
     --text-faint:#606B85;
     --defend:#4D9BFF;        /* AI FOR security */
     --defend-soft:#2b4a7a;
-    --secure:#FFAF5C;        /* security OF AI  */
+    --secure:#FFAF5C;        /* security OF AI, and urgency */
     --secure-soft:#7a5730;
     --accent:var(--defend);
     --accent-soft:var(--defend-soft);
@@ -85,6 +93,11 @@
     transition:border-color .2s,color .2s;display:inline-flex;align-items:center;gap:7px}
   .share-btn:hover{border-color:var(--defend);color:var(--defend)}
   .share-btn svg{width:13px;height:13px;flex:none}
+  /* Below this the brand, Share and Start free stop fitting on one line, and
+     the nav spilled 55px that body{overflow-x:hidden} was quietly swallowing.
+     Share is the one of the three nobody came for — and only in the nav: the
+     share buttons in the page body stay. */
+  @media(max-width:480px){.nav-links .share-btn{display:none}}
 
   /* ---------- HERO ---------- */
   .hero{padding:60px 0 46px}
@@ -136,12 +149,12 @@
   .gap .atk{border-right:1px solid var(--line-soft)}
   @media(max-width:760px){.gap .atk{border-right:0;border-bottom:1px solid var(--line-soft)}}
   .gap .lab{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
-  .gap .atk .lab{color:#ff8a8a}
+  .gap .atk .lab{color:var(--secure)}
   .gap .def .lab{color:var(--defend)}
   .gap ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
   .gap li{font-size:14.5px;color:var(--text-dim);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
   .gap li::before{content:"▸";flex:none;font-size:11px;padding-top:3px}
-  .gap .atk li::before{color:#ff8a8a}
+  .gap .atk li::before{color:var(--secure)}
   .gap .def li::before{color:var(--defend)}
   .gap li b{color:var(--text);font-weight:600}
   .closing{padding:22px 26px;border-top:1px solid var(--line-soft);background:rgba(255,175,92,.05);
@@ -165,9 +178,9 @@
     letter-spacing:-.03em;margin:8px 0 4px;color:var(--text-dim)}
   .clock .d{font-size:13px;color:var(--text-faint);margin:0}
   .clock .now .t{color:var(--secure)}
-  .clock .rec{background:linear-gradient(180deg,rgba(255,138,138,.07),var(--ink-2))}
-  .clock .rec .t{color:#ff8a8a}
-  .clock .rec .yr{color:#ff8a8a}
+  .clock .rec{background:linear-gradient(180deg,rgba(255,175,92,.07),var(--ink-2))}
+  .clock .rec .t{color:var(--secure)}
+  .clock .rec .yr{color:var(--secure)}
   .src{margin-top:14px;font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint)}
   .src a{color:var(--text-dim)}
 
@@ -176,7 +189,7 @@
   .split > div{border:1px solid var(--line-soft);border-radius:12px;padding:22px;background:var(--ink-2)}
   .split .k{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;
     text-transform:uppercase;margin-bottom:10px}
-  .split .them .k{color:#ff8a8a}
+  .split .them .k{color:var(--secure)}
   .split .you .k{color:var(--defend)}
   .split p{margin:0;font-size:15px;color:var(--text-dim)}
   .split p b{color:var(--text)}
@@ -228,6 +241,70 @@
   .rules p{margin:0;font-size:14px;color:var(--text-dim)}
   .rules p b{color:var(--text)}
 
+  /* ---------- BANNERS ----------------------------------------------------
+     One component, used four times. Same frame, same grid, same type scale,
+     same eyebrow; only the words change. Four banners that each looked
+     different would read as four different sites.                        */
+  .banner{border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);
+    background:linear-gradient(180deg,var(--ink-2),var(--ink));padding:52px 0;position:relative}
+  .banner .bin{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+    gap:40px;align-items:start}
+  @media(max-width:900px){.banner .bin{grid-template-columns:1fr;gap:28px}}
+  .banner h2{font-size:clamp(24px,3.3vw,35px);max-width:19ch;margin-top:13px}
+  .banner .say{color:var(--text-dim);font-size:16px;margin:15px 0 0;max-width:60ch}
+  .banner .say b{color:var(--text);font-weight:600}
+  .banner .say + .say{margin-top:12px}
+  .banner .src{margin-top:16px}
+  .banner.wide .bin{grid-template-columns:1fr}
+  .banner.wide h2{max-width:26ch}
+
+  /* right column, variant 1 — a row of counted facts */
+  .bstats{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-self:center}
+  @media(max-width:420px){.bstats{grid-template-columns:1fr}}
+  .bstats > div{border:1px solid var(--line-soft);border-radius:11px;padding:16px 18px;
+    background:var(--ink-2)}
+  .bstats .n{font-family:"Space Grotesk";font-size:27px;font-weight:600;letter-spacing:-.02em;
+    color:var(--accent);transition:color .5s var(--ease)}
+  .bstats .n.s{color:var(--secure)}
+  .bstats .l{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--text-faint);margin-top:5px;line-height:1.5}
+
+  /* right column, variant 2 — two named starting points, with real lessons */
+  .paths{display:flex;flex-direction:column;gap:12px}
+  .path{border:1px solid var(--line-soft);border-radius:11px;padding:18px 20px;background:var(--ink-2)}
+  .path .k{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:9px;transition:color .5s var(--ease)}
+  .path p{margin:0 0 12px;font-size:14.5px;color:var(--text-dim)}
+  .path .lin{display:flex;flex-wrap:wrap;gap:7px}
+  .path .lin a{font-family:"IBM Plex Mono";font-size:12px;color:var(--text);text-decoration:none;
+    border:1px solid var(--line);border-radius:6px;padding:5px 10px;background:var(--surface);
+    transition:border-color .2s,color .2s}
+  .path .lin a:hover{border-color:var(--accent);color:var(--accent)}
+  .path .lin a i{font-style:normal;color:var(--text-faint);margin-left:7px}
+
+  /* the curriculum grid — one row per chapter, generated from curriculum.json */
+  .chapters{margin-top:34px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .fnrow{display:flex;align-items:baseline;gap:12px;padding:14px 20px;
+    background:var(--surface);border-bottom:1px solid var(--line-soft)}
+  .fnrow .fk{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--secure)}
+  .fnrow .fn{font-family:"Space Grotesk";font-weight:600;font-size:15.5px}
+  .chrow{display:grid;grid-template-columns:48px minmax(0,1fr) 92px;gap:14px;align-items:center;
+    padding:13px 20px;border-bottom:1px solid var(--line-soft);text-decoration:none;
+    transition:background .18s}
+  .chrow:last-child{border-bottom:0}
+  .chrow:hover{background:var(--ink-2)}
+  .chrow .cid{font-family:"IBM Plex Mono";font-size:12.5px;color:var(--accent);
+    transition:color .5s var(--ease)}
+  .chrow .ct{font-size:14.5px;color:var(--text)}
+  .chrow .cn{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--text-faint);text-align:right}
+  @media(max-width:640px){
+    .chrow{grid-template-columns:56px minmax(0,1fr);gap:10px;padding:12px 16px}
+    .chrow .cn{display:none}}
+  .chnote{margin-top:18px;font-size:14.5px;color:var(--text-dim)}
+  .chnote b{color:var(--text)}
+  .chnote a{color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent-soft)}
+
   /* ---------- CTA ---------- */
   .cta{text-align:center;background:linear-gradient(180deg,var(--ink-2),var(--ink));
     border-top:1px solid var(--line-soft)}
@@ -273,8 +350,8 @@
   <div class="wrap nav-in">
     <a class="brand" href="#top"><img src="assets/logo-mark.png" alt="Cyber Commons"><span class="bt"><span>Cyber&nbsp;<b>Commons</b></span><small>Navigating Cyber Singularity</small></span></a>
     <nav class="nav-links">
-      <a href="#why">Why now</a>
-      <a href="#singularity">Singularity</a>
+      <a href="#need">Why now</a>
+      <a href="#curriculum">Curriculum</a>
       <a href="#stack">Open stack</a>
       <button class="share-btn" data-share aria-label="Share Cyber Commons">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
@@ -306,17 +383,35 @@
 
     <div class="btns">
       <a class="btn p" href="lessons/index.html">Start the first lesson →</a>
-      <a class="btn g" href="lessons/index.html">Browse all 118 lessons</a>
+      <a class="btn g" href="lessons/index.html">Browse all <span data-n="sessions">120</span> lessons</a>
     </div>
 
     <div class="hero-stats">
-      <div class="stat"><div class="n secure">12</div><div class="l">Chapters, one per role</div></div>
-      <div class="stat"><div class="n defend">118</div><div class="l">Lessons, all runnable</div></div>
+      <div class="stat"><div class="n secure"><span data-n="chapters">12</span></div><div class="l">Chapters, one per role</div></div>
+      <div class="stat"><div class="n defend"><span data-n="sessions">120</span></div><div class="l">Lessons, all runnable</div></div>
+      <div class="stat"><div class="n defend"><span data-n="skills">121</span></div><div class="l">Agent skills you can read</div></div>
     </div>
   </div>
 </div>
 
-<hr class="divider">
+<!-- ================= BANNER 1 · NEED OF THE HOUR ================= -->
+<section class="banner" id="need">
+  <div class="wrap bin">
+    <div class="rv">
+      <span class="eyebrow">01 / Need of the hour</span>
+      <h2>Attack is already automated. Defence mostly is not.</h2>
+      <p class="say">The adversary side of this got its productivity upgrade first. Discovery, exploitation and lateral movement now run as tooling that <b>never tires and costs almost nothing to run again</b> — while the defending side still reviews it at human speed, once a quarter, by hand.</p>
+      <p class="say">Closing that has two halves and they are one skill set: <b>using AI to do the security work</b>, and <b>securing the AI you have already deployed</b>. Most training covers one. A curriculum that covers only the first teaches you to trust a system nobody has tested; only the second, and you are defending at last year's speed.</p>
+      <p class="src">Source: CrowdStrike 2026 Global Threat Report. The clock is public, which is the point.</p>
+    </div>
+    <div class="bstats rv">
+      <div><div class="n s">29 min</div><div class="l">Average breakout time, 2025</div></div>
+      <div><div class="n s">27 sec</div><div class="l">Fastest on record</div></div>
+      <div><div class="n s">+89%</div><div class="l">AI-enabled adversary ops, year on year</div></div>
+      <div><div class="n s">82%</div><div class="l">Detections with no malware at all</div></div>
+    </div>
+  </div>
+</section>
 
 <!-- ================= WHY NOW ================= -->
 <section id="why">
@@ -399,7 +494,39 @@
   </div>
 </section>
 
-<hr class="divider">
+<!-- ================= BANNER 2 · UPSKILL ================= -->
+<section class="banner" id="upskill">
+  <div class="wrap bin">
+    <div class="rv">
+      <span class="eyebrow">02 / The skill gap</span>
+      <h2>Everyone in this field is now a beginner at something.</h2>
+      <p class="say">The tools changed underneath the job. <b>A SOC analyst who cannot say why an agent reached a conclusion cannot supervise it.</b> An AppSec engineer scoring a probabilistic scanner on finding count is measuring the number that improves when it finds less. A governance lead writing controls for a model has to name the component the control attaches to.</p>
+      <p class="say">None of that is learnable from a vendor page, and none of it waits for a training budget. So these lessons are written two ways at once: for practitioners already carrying the pager, and for the people trying to get into the field who need a starting point that is not a certification syllabus.</p>
+    </div>
+    <div class="paths rv">
+      <div class="path">
+        <div class="k">New to it — start here</div>
+        <p>Three lessons, in order. The first gets a notebook running in your own account with nothing installed; the next two give you the map every later lesson refers back to.</p>
+        <div class="lin">
+          <a href="lessons/A0.1.html">A0.1<i>Run your first lesson</i></a>
+          <a href="lessons/A1.0.html">A1.0<i>What securing AI means</i></a>
+          <a href="lessons/A1.1.html">A1.1<i>The reference architecture</i></a>
+        </div>
+      </div>
+      <div class="path">
+        <div class="k">Already practising — take your chair</div>
+        <p>Each chapter opens with the framing lesson for that role, then goes straight to the work that role actually owns.</p>
+        <div class="lin">
+          <a href="lessons/B2.3.html">B2.3<i>AppSec</i></a>
+          <a href="lessons/D1.0.html">D1.0<i>SOC</i></a>
+          <a href="lessons/C1.0.html">C1.0<i>Red team</i></a>
+          <a href="lessons/E2.1.html">E2.1<i>Governance</i></a>
+          <a href="lessons/A3.7.html">A3.7<i>Platform</i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ================= HOW IT WORKS ================= -->
 <section id="how">
@@ -415,12 +542,46 @@
       <div class="mcard rv"><div class="num">03 / RUN</div><h4>One click, your own copy</h4><p>Most lessons are reading lessons. The ones that run execute an <b>agent skill</b> from the repository, or call a model through one adapter — hit <b>Run on Kaggle</b> and it opens in your own account, no install, no GPU.</p></div>
     </div>
     <div class="nbnote rv">
-      <b>Every notebook is executed before it ships.</b> All 118 run top to bottom in CI and the output is committed to the repository — so a lesson that claims a result has actually produced it. Nothing here is pseudo-code.
+      <b>Every notebook is executed before it ships.</b> All <span data-n="sessions">120</span> run top to bottom in CI, the output is committed to the repository, and the same <span data-n="sessions">120</span> are re-run on a clean Kaggle kernel and checked line for line against it — so a lesson that claims a result has actually produced it. Nothing here is pseudo-code.
     </div>
   </div>
 </section>
 
-<hr class="divider">
+<!-- ================= BANNER 3 · ONE PLACE ================= -->
+<section class="banner wide" id="curriculum">
+  <div class="wrap bin">
+    <div class="rv">
+      <span class="eyebrow">03 / One place</span>
+      <h2>One home for the architecture and the tactics.</h2>
+      <p class="say">Best-in-class defensive practice is real, and it is scattered — across vendor blogs, conference talks, a paper nobody outside the lab reads, and closed Slacks you have to be invited to. Cyber Commons puts it in one place and organises it the way a security org actually is: <b><span data-n="functions">5</span> functions, <span data-n="chapters">12</span> chapters, <span data-n="sessions">120</span> lessons</b>, taught in the order the work happens.</p>
+      <p class="say">The architecture comes first and the tactics hang off it. Every risk and every control in the whole curriculum names a component from <b>one reference architecture</b>, so "secure the agent" always has a referent — and <span data-n="run_a_skill">117</span> of the lessons run one of <span data-n="skills">121</span> <b>agent skills</b> you can open and read, rather than describing what a tool would do.</p>
+    </div>
+
+    <!-- CURRICULUM:BEGIN — generated by scripts/build_site.py, do not hand-edit -->
+<div class="chapters rv">
+<div class="fnrow"><span class="fk">Function A</span><span class="fn">Securing AI Architectures</span></div>
+<a class="chrow" href="lessons/A0.1.html"><span class="cid">A0</span><span class="ct">Running the Commons — GitHub, Kaggle, and What You Need First</span><span class="cn">1 lesson</span></a>
+<a class="chrow" href="lessons/A1.0.html"><span class="cid">A1</span><span class="ct">CyberTravels&#x27; Architecture, and Every Risk It Carries</span><span class="cn">19 lessons</span></a>
+<a class="chrow" href="lessons/A2.1.html"><span class="cid">A2</span><span class="ct">Securing the Architecture — Identity and Ingress</span><span class="cn">8 lessons</span></a>
+<a class="chrow" href="lessons/A3.1.html"><span class="cid">A3</span><span class="ct">Securing the Architecture — Runtime and the Gateway</span><span class="cn">11 lessons</span></a>
+<div class="fnrow"><span class="fk">Function B</span><span class="fn">Application Security with an AI SDLC</span></div>
+<a class="chrow" href="lessons/B2.0.html"><span class="cid">B2</span><span class="ct">The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</span><span class="cn">15 lessons</span></a>
+<div class="fnrow"><span class="fk">Function C</span><span class="fn">Red Teaming and Security Research with AI</span></div>
+<a class="chrow" href="lessons/C1.0.html"><span class="cid">C1</span><span class="ct">Red Teaming with AI</span><span class="cn">5 lessons</span></a>
+<a class="chrow" href="lessons/C2.1.html"><span class="cid">C2</span><span class="ct">Security Research with AI</span><span class="cn">10 lessons</span></a>
+<div class="fnrow"><span class="fk">Function D</span><span class="fn">The Agentic SOC</span></div>
+<a class="chrow" href="lessons/D1.0.html"><span class="cid">D1</span><span class="ct">The Agentic SOC — Detection</span><span class="cn">12 lessons</span></a>
+<a class="chrow" href="lessons/D2.1.html"><span class="cid">D2</span><span class="ct">The Agentic SOC — Response</span><span class="cn">9 lessons</span></a>
+<div class="fnrow"><span class="fk">Function E</span><span class="fn">AI Governance for Agentic Systems</span></div>
+<a class="chrow" href="lessons/E1.0.html"><span class="cid">E1</span><span class="ct">Building the Governance Framework — Risk and Control</span><span class="cn">13 lessons</span></a>
+<a class="chrow" href="lessons/E2.1.html"><span class="cid">E2</span><span class="ct">Building the Governance Platform — Regulatory and Compliance</span><span class="cn">9 lessons</span></a>
+<a class="chrow" href="lessons/E3.1.html"><span class="cid">E3</span><span class="ct">Running the Programme — the CISO Office</span><span class="cn">8 lessons</span></a>
+</div>
+<!-- CURRICULUM:END -->
+
+    <p class="chnote rv">The map itself is <a href="lessons/A1.1.html">A1.1 — the reference architecture</a>, and it is not only a diagram: it is committed as a working sample repository, <b>CyberTravels</b>, one directory per component. Function B's pipeline scans that same tree, so the finding you read about in a lesson is a finding in code you can clone.</p>
+  </div>
+</section>
 
 <!-- ================= OPEN STACK ================= -->
 <section id="stack">
@@ -446,7 +607,23 @@
   </div>
 </section>
 
-<hr class="divider">
+<!-- ================= BANNER 4 · WHAT THIS IS ================= -->
+<section class="banner" id="what">
+  <div class="wrap bin">
+    <div class="rv">
+      <span class="eyebrow">04 / What this is</span>
+      <h2>The world's number one free training resource for Cyber AI.</h2>
+      <p class="say">Free, open, and — as far as we can find — the only curriculum that teaches <b>both directions in one place</b>: securing AI systems, and using AI to do security work. Most material picks a side. The two share an architecture, a threat model and a set of failure modes, and splitting them is what leaves teams defending a system they never mapped.</p>
+      <p class="say">It is written by practitioners shipping this in <b>regulated industries</b> — where a control has to survive an audit as well as an attacker, and "the model said so" is not an answer you can give a supervisor. That is why every lesson names a risk, a control and a lab, in that order, and why the labs produce evidence rather than a screenshot.</p>
+    </div>
+    <div class="bstats rv">
+      <div><div class="n">Free</div><div class="l">No licence, no account, no card</div></div>
+      <div><div class="n">2</div><div class="l">Directions, one curriculum</div></div>
+      <div><div class="n"><span data-n="skills">121</span></div><div class="l">Readable agent skills</div></div>
+      <div><div class="n"><span data-n="sessions">120</span>/<span data-n="sessions">120</span></div><div class="l">Lessons verified on a clean kernel</div></div>
+    </div>
+  </div>
+</section>
 
 <!-- ================= CTA ================= -->
 <section class="cta" id="start">
@@ -456,7 +633,7 @@
     <p class="rv">The job isn't doing the work by hand anymore — it's directing work you have to be able to trust, doubt and prove.</p>
     <div class="btns rv">
       <a class="btn p" href="lessons/index.html">Start the first lesson</a>
-      <a class="btn g" href="lessons/index.html">Browse all 118 lessons</a>
+      <a class="btn g" href="lessons/index.html">Browse all <span data-n="sessions">120</span> lessons</a>
     </div>
     <div class="rv"><button class="share-btn" data-share>Share the commons</button></div>
   </div>
@@ -500,7 +677,7 @@
   }
 
   /* ---------- share ---------- */
-  const DEFAULT_SHARE = 'Cyber Commons — free, open training for Cyber AI. No account needed.';
+  const DEFAULT_SHARE = 'Cyber Commons — the number one free training resource for Cyber AI. Securing AI and AI for security, in one place. No account needed.';
   document.addEventListener('click', async (e)=>{
     const btn = e.target.closest('[data-share]');
     if(!btn) return;
