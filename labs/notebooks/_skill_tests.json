@@ -76,7 +76,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/finding-dedup-and-verification",
@@ -108,7 +108,7 @@
    "contract": true,
    "script": true,
    "lines": 50,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "appsec/sast-model-pass",
@@ -124,7 +124,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/sdlc-control-placement",
@@ -132,7 +132,7 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "appsec/supply-chain-decompile",
@@ -140,7 +140,7 @@
    "contract": true,
    "script": true,
    "lines": 59,
-   "seconds": 0.02
+   "seconds": 0.04
   },
   {
    "skill": "appsec/threat-model-stride",
@@ -148,7 +148,7 @@
    "contract": true,
    "script": true,
    "lines": 119,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "architecture/agentic-architecture-map",
@@ -260,7 +260,7 @@
    "contract": true,
    "script": true,
    "lines": 21,
-   "seconds": 0.04
+   "seconds": 0.05
   },
   {
    "skill": "detection/agent-platform-detections",
@@ -340,7 +340,7 @@
    "contract": true,
    "script": true,
    "lines": 76,
-   "seconds": 0.07
+   "seconds": 0.06
   },
   {
    "skill": "grc/agent-lifecycle-governance",
@@ -388,7 +388,7 @@
    "contract": true,
    "script": true,
    "lines": 54,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "grc/third-party-ai-assessment",
@@ -428,7 +428,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "identity/workload-attestation-check",
@@ -476,7 +476,7 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.09
+   "seconds": 0.08
   },
   {
    "skill": "programme/ownership-seam-audit",
@@ -508,7 +508,7 @@
    "contract": true,
    "script": true,
    "lines": 44,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "programme/risk-translation-upward",
@@ -540,7 +540,7 @@
    "contract": true,
    "script": true,
    "lines": 47,
-   "seconds": 0.04
+   "seconds": 0.03
   },
   {
    "skill": "redteam/eval-corpus-integrity-check",
@@ -588,7 +588,7 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "regulatory/horizontal-requirement-to-control",
@@ -668,7 +668,7 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "research/research-durability-check",
@@ -764,7 +764,7 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.04
+   "seconds": 0.03
   },
   {
    "skill": "response/stop-authority-readiness",
@@ -780,7 +780,7 @@
    "contract": true,
    "script": true,
    "lines": 16,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "runtime/control-exemption-audit",
@@ -796,7 +796,7 @@
    "contract": true,
    "script": true,
    "lines": 34,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "runtime/sandbox-containment-probe",
@@ -804,7 +804,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "runtime/shared-surface-channel-audit",
@@ -828,7 +828,7 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.07
+   "seconds": 0.06
   },
   {
    "skill": "secops/incident-scoping",
@@ -836,7 +836,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.07
+   "seconds": 0.05
   },
   {
    "skill": "threats/agent-registry-gap-check",
@@ -852,7 +852,7 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "threats/audit-answerability-check",
@@ -868,7 +868,7 @@
    "contract": true,
    "script": true,
    "lines": 19,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "threats/authorization-subject-check",
@@ -956,7 +956,7 @@
    "contract": true,
    "script": true,
    "lines": 12,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "threats/unbounded-loop-cost-probe",

@@ -186,10 +186,27 @@ somewhere on the arrow."""),
    ("md", "## 2 \u00b7 Drawing it, as a skill\n\n"
           "The map is not a picture of CyberTravels \u2014 it is the procedure for "
           "drawing one of any agentic system, which is why every later lesson can "
-          "name a box. It is written down here as a skill, and it is the one lesson "
-          "whose skill has no script: the output is a diagram and a list of boundary "
-          "crossings, not a computation."),
+          "name a box.\n\nAnd it computes something, which is the part that "
+          "makes a map arguable rather than decorative: the boundary crossings "
+          "are **derived from the trust levels**, not listed. Change a level and "
+          "the count changes. A diagram nobody can be wrong about is a diagram "
+          "nobody has to agree with."),
    ("skill", "architecture/agentic-architecture-map"),
+   ("skill_script", "architecture/agentic-architecture-map/scripts/agentic_architecture_map.py"),
+
+   ("md", """## 3 \u00b7 Read the crossings, then read what is missing
+
+Five crossings, and two of them are the whole of Function A's injection
+material: **ingress \u2192 orchestrator** carries traveller text and
+**knowledge \u2192 agent runtime** carries retrieved documents, both from trust
+0 into components that hold authority. A1.2 is the first of those edges and
+A1.3 is the second.
+
+Then the line most maps never print: **egress is absent.** CyberTravels has no
+gateway, so "route it through the gateway" is not a control it can apply yet.
+Saying so on the map is what stops a later meeting designing controls for a
+component nobody has \u2014 and it is why A3.7 exists as a separate lesson
+rather than an assumption."""),
 ],
  "expect": "You can draw one agentic system you run as thirteen named components, "
            "say which of the five patterns it is, and name the three components "

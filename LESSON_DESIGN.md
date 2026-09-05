@@ -85,6 +85,13 @@ buttons when the built notebook contains nothing executable, and the lesson
 says plainly that it is a reading lesson. Offering "Run on Kaggle" on a page of
 diagrams teaches the reader that the button is decorative everywhere else too.
 
+Four lessons are in that state, and all four are function or chapter
+introductions. A1.1 used to be a fifth — a drawing lesson — until its map
+became a skill that *computes* the trust-boundary crossings from the levels
+rather than listing them. That is the test for whether a picture should
+execute: if changing an input should change the picture, it is a computation
+and belongs in a script.
+
 ## 3 · Sections are renumbered by the build
 
 Write `## 2 · …`, `## 3 · …` in your steps and stop thinking about it. The
