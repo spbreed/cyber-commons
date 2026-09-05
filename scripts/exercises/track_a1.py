@@ -26,10 +26,11 @@ ARCH_NOTE = """
 
 EXERCISES: dict[str, dict] = {
 
-# A1.1 is the only lesson in the commons with no code in it. It is a drawing
-# lesson: the components, and the patterns they compose into. Every risk in this
-# chapter and every control in the next two names something from these diagrams,
-# so the picture has to land before anything executes.
+# A1.1 is the drawing lesson, and for a long time it was the only one that ran
+# nothing. Its map computes something now — the trust-boundary crossings are
+# derived from the levels rather than listed — so it executes the skill and
+# renders the graph. Every risk in this chapter and every control in the next
+# two names a component from it, so the picture still has to land first.
 "A1.1": {
  "concept": """
 These components exist under different product names in every agent platform,

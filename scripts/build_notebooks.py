@@ -310,8 +310,6 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     # ---- close ------------------------------------------------------------
     expect = ex.get("expect") or lab.get("expect", "")
     if expect:
-        # A1.1 runs no code at all — it is a drawing lesson — so "proved" would
-        # be a lie there.
         # "Proved" is only honest when something ran. A lesson that carries
         # no code cell states what the procedure gives you instead, and one
         # whose `expect` describes an execution it no longer performs is a

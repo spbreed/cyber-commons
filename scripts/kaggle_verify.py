@@ -128,8 +128,11 @@ def local_output(session: str) -> str:
 def has_code(session: str) -> bool:
     """Does this lesson run anything at all?
 
-    A1.1 is a drawing lesson with no code cells, so an empty remote log is the
-    correct result for it rather than the failure it would be anywhere else.
+    Four lessons have no code cells — the function and chapter introductions —
+    so an empty remote log is the correct result for those rather than the
+    failure it would be anywhere else. It is derived from the notebook rather
+    than listed: A1.1 was on the hardcoded list, gained a skill, and would have
+    been excused an empty result for as long as nobody noticed.
     """
     nb = json.loads((NB_DIR / f"{session}.ipynb").read_text())
     return any(c["cell_type"] == "code" and "".join(c["source"]).strip()

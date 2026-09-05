@@ -20,7 +20,7 @@
    "contract": true,
    "script": true,
    "lines": 66,
-   "seconds": 0.07
+   "seconds": 0.15
   },
   {
    "skill": "appsec/appsec-triage-report",
@@ -28,7 +28,7 @@
    "contract": true,
    "script": true,
    "lines": 81,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "appsec/appsec-vuln-audit",
@@ -44,7 +44,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/context-window-sizing",
@@ -52,7 +52,7 @@
    "contract": true,
    "script": true,
    "lines": 57,
-   "seconds": 0.01
+   "seconds": 0.13
   },
   {
    "skill": "appsec/dead-code-ast-reachability",
@@ -60,7 +60,7 @@
    "contract": true,
    "script": true,
    "lines": 84,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/dynamic-exploitation-probe",
@@ -68,7 +68,7 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/exploit-replica-isolation-check",
@@ -84,7 +84,7 @@
    "contract": true,
    "script": true,
    "lines": 32,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/fix-promotion-gate",
@@ -108,7 +108,7 @@
    "contract": true,
    "script": true,
    "lines": 50,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "appsec/sast-model-pass",
@@ -124,7 +124,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.04
+   "seconds": 0.13
   },
   {
    "skill": "appsec/sdlc-control-placement",
@@ -132,7 +132,7 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "appsec/supply-chain-decompile",
@@ -140,7 +140,7 @@
    "contract": true,
    "script": true,
    "lines": 59,
-   "seconds": 0.04
+   "seconds": 0.1
   },
   {
    "skill": "appsec/threat-model-stride",
@@ -148,7 +148,7 @@
    "contract": true,
    "script": true,
    "lines": 119,
-   "seconds": 0.06
+   "seconds": 0.09
   },
   {
    "skill": "architecture/agentic-architecture-map",
@@ -164,7 +164,7 @@
    "contract": true,
    "script": true,
    "lines": 67,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "attestation/agent-code-surface-analyzer",
@@ -188,7 +188,7 @@
    "contract": true,
    "script": true,
    "lines": 28,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "attestation/deployment-inventory-resolver",
@@ -196,7 +196,7 @@
    "contract": true,
    "script": true,
    "lines": 34,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "attestation/entitlement-overprivilege-analyzer",
@@ -220,7 +220,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "attestation/input-injection-screening-verifier",
@@ -260,7 +260,7 @@
    "contract": true,
    "script": true,
    "lines": 21,
-   "seconds": 0.05
+   "seconds": 0.04
   },
   {
    "skill": "detection/agent-platform-detections",
@@ -276,7 +276,7 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "detection/agent-tempo-baseline",
@@ -308,7 +308,7 @@
    "contract": true,
    "script": true,
    "lines": 42,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/detection-rule-deployability",
@@ -324,7 +324,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/threat-intel-to-rules",
@@ -364,7 +364,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "grc/control-to-framework-mapping",
@@ -428,7 +428,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "identity/workload-attestation-check",
@@ -436,7 +436,7 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "programme/autonomy-ladder-decisions",
@@ -476,7 +476,7 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.08
+   "seconds": 0.27
   },
   {
    "skill": "programme/ownership-seam-audit",
@@ -508,7 +508,7 @@
    "contract": true,
    "script": true,
    "lines": 44,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "programme/risk-translation-upward",
@@ -540,7 +540,7 @@
    "contract": true,
    "script": true,
    "lines": 47,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "redteam/eval-corpus-integrity-check",
@@ -548,7 +548,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "redteam/offensive-agent-containment",
@@ -556,7 +556,7 @@
    "contract": true,
    "script": true,
    "lines": 72,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "regulatory/assurance-conversation-prep",
@@ -564,7 +564,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "regulatory/autonomous-action-auditability",
@@ -580,7 +580,7 @@
    "contract": true,
    "script": true,
    "lines": 41,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "regulatory/framework-spine-selection",
@@ -588,7 +588,7 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "regulatory/horizontal-requirement-to-control",
@@ -628,7 +628,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "research/agent-supply-chain-assessment",
@@ -828,7 +828,7 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "secops/incident-scoping",
@@ -836,7 +836,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "threats/agent-registry-gap-check",
