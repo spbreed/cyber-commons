@@ -130,17 +130,31 @@ jobs:
       # ("Resource not accessible by integration" — site creation needs repo
       # admin), and Pages on a PRIVATE repo additionally requires a paid plan.
       # Once the site exists, every push here deploys it automatically.
-      # The custom domain has to travel WITH the artifact. Settings → Pages
-      # holds a copy, but an Actions deploy publishes whatever the artifact
-      # contains, and an artifact with no CNAME can clear the setting — after
-      # which cybercommons.ai serves nothing and the .github.io URL stops
-      # redirecting. Keeping the file in site/ makes the domain part of the
-      # build rather than a value in a web form nobody can diff.
-      - name: The published artifact must carry the custom domain
+      # WHICH URL THIS DEPLOY SERVES — decided by one file, site/CNAME.
+      #
+      #   site/CNAME present  -> Pages sets that custom domain, and
+      #                          spbreed.github.io/cyber-commons/ 301s to it.
+      #   site/CNAME absent   -> the .github.io URL serves the site directly.
+      #
+      # It is absent on purpose right now. cybercommons.ai resolves to
+      # GoDaddy's domain-forwarding addresses (3.33.130.190, 15.197.148.33)
+      # rather than to GitHub Pages (185.199.108-111.153), so the apex serves
+      # GoDaddy's parking stub and every visitor lands on /lander. Pointing
+      # the site at a domain that cannot reach it makes the site unreachable
+      # from both URLs, so the custom domain is off until the A records move.
+      #
+      # TO TURN IT BACK ON, once cybercommons.ai resolves to 185.199.108-111.153:
+      #   echo cybercommons.ai > site/CNAME && git add site/CNAME && commit
+      #   then Settings -> Pages -> tick Enforce HTTPS.
+      # Shipping the file (rather than only setting the domain in the web form)
+      # is what stops a later deploy quietly clearing it.
+      - name: Say which URL this deploy will serve
         run: |
-          test -f site/CNAME || { echo "::error::site/CNAME is missing — a deploy \
-          without it can clear the custom domain in Settings → Pages"; exit 1; }
-          echo "custom domain in artifact: $(cat site/CNAME)"
+          if [ -f site/CNAME ]; then
+            echo "custom domain: $(cat site/CNAME) — the .github.io URL will redirect to it"
+          else
+            echo "no custom domain — serving on the .github.io URL directly"
+          fi
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
