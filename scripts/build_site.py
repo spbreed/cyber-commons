@@ -156,9 +156,59 @@ def notebook_block(sid: str) -> str:
             # lines that located the file and ran it. The code lives in the
             # repository and is linked from the cell; putting it on the page
             # again made the page look like source and buried the result.
-            parts.append(f'<div class="nbcode"><span class="nbtag">Out</span>'
-                         f'<pre><code>{html.escape(recorded_output(sid))}</code></pre></div>')
+            parts.append(output_block(sid))
     parts.append("</div>")
+    return "".join(parts)
+
+
+DIAGRAM_MARK = re.compile(r"^\[diagram:(dot|puml):([a-z0-9-]+)\]$", re.M)
+DIAGRAMS_DIR = ROOT / "site" / "assets" / "diagrams"
+
+
+def output_block(sid: str) -> str:
+    """The recorded stdout, with any emitted diagram source shown as the picture.
+
+    A skill that emits a graph prints DOT or PlantUML, because source is text
+    and the notebook has to stay standard-library-only. On the page that source
+    is forty lines of coordinates nobody reads, and the rendered SVG — produced
+    from exactly those bytes by `scripts/render_diagrams.py` with the real
+    binaries — is the thing worth looking at. So the source is replaced by its
+    render, and the rest of the output is untouched.
+    """
+    out = recorded_output(sid)
+    marks = list(DIAGRAM_MARK.finditer(out))
+    if not marks:
+        return (f'<div class="nbcode"><span class="nbtag">Out</span>'
+                f'<pre><code>{html.escape(out)}</code></pre></div>')
+
+    parts, cursor = [], 0
+    for i, m in enumerate(marks):
+        head = out[cursor:m.start()].rstrip()
+        if head.strip():
+            parts.append(f'<div class="nbcode"><span class="nbtag">Out</span>'
+                         f'<pre><code>{html.escape(head)}</code></pre></div>')
+        stem = m.group(2)
+        body_end = marks[i + 1].start() if i + 1 < len(marks) else len(out)
+        body = out[m.end():body_end]
+        terminator = "}" if m.group(1) == "dot" else "@enduml"
+        cut = body.rindex(terminator) + len(terminator) if terminator in body else 0
+        cursor = m.end() + cut
+        if (DIAGRAMS_DIR / f"{stem}.svg").is_file():
+            parts.append(
+                f'<figure class="nbdiag"><img src="../assets/diagrams/{stem}.svg" '
+                f'alt="{html.escape(stem.replace("-", " "))}" loading="lazy">'
+                f'<figcaption>Rendered from the skill\u2019s own '
+                f'{"Graphviz DOT" if m.group(1) == "dot" else "PlantUML"} output '
+                f'by <code>scripts/render_diagrams.py</code>. '
+                f'<a href="../assets/diagrams/{stem}.svg" target="_blank" '
+                f'rel="noopener">open full size</a></figcaption></figure>')
+        else:
+            parts.append(f'<div class="nbcode"><span class="nbtag">Out</span>'
+                         f'<pre><code>{html.escape(body[:cut])}</code></pre></div>')
+    tail = out[cursor:].strip()
+    if tail:
+        parts.append(f'<div class="nbcode"><span class="nbtag">Out</span>'
+                     f'<pre><code>{html.escape(tail)}</code></pre></div>')
     return "".join(parts)
 
 

@@ -20,6 +20,9 @@ from __future__ import annotations
 
 import ast
 import json
+
+from cyber_commons_skill_runtime import (
+    dot_graph, emit_diagram, puml_sequence)
 from collections import defaultdict
 
 # ---------------------------------------------------------------- the inputs
@@ -233,6 +236,76 @@ def boundaries(architecture):
     return out
 
 
+def dot_diagram(architecture, bnds):
+    """Step 4, as Graphviz: the same graph, rendered by a real layout engine.
+
+    Mermaid renders in a notebook and lays nothing out well past a dozen nodes.
+    DOT is the format the tools a security team already runs speak, and
+    `scripts/render_diagrams.py` turns this into the SVG on the lesson page
+    with the actual `dot` binary.
+    """
+    comp = {}
+    for e in architecture["entry_points"]:
+        comp[e["unit"]] = e["component"]
+    for s in architecture["sinks"]:
+        comp[s["unit"]] = s["component"]
+    entry_units = {e["unit"] for e in architecture["entry_points"]}
+    sink_units = {s["unit"] for s in architecture["sinks"]}
+
+    nodes, clusters = {}, {}
+    for unit, component in comp.items():
+        kind = "entry" if unit in entry_units else (
+            "sink" if unit in sink_units else "unit")
+        nodes[unit] = {"label": unit, "kind": kind}
+        level = architecture["components"].get(component, 0)
+        clusters.setdefault(f"{component} · trust {level}", []).append(unit)
+
+    crossing = {(b["from"], b["to"]): b["trust"] for b in bnds}
+    edges = [(a, b, crossing.get((a, b), ""))
+             for a, b in architecture["flows"] if a in nodes and b in nodes]
+    return dot_graph("threat_model", nodes, edges, clusters=clusters)
+
+
+def puml_diagram(architecture, bnds):
+    """The same finding as a sequence, which is the shape a boundary crossing
+    actually has: a request moving between components over time.
+
+    A graph says which edges cross a boundary. A sequence says *when*, and the
+    reader can follow one request through it, which is what a threat model is
+    usually being read for.
+    """
+    comp = {}
+    for e in architecture["entry_points"]:
+        comp[e["unit"]] = e["component"]
+    for s in architecture["sinks"]:
+        comp[s["unit"]] = s["component"]
+    order, seen = [], set()
+    for a, b in architecture["flows"]:
+        for u in (a, b):
+            if u in comp and u not in seen:
+                seen.add(u)
+                order.append(u)
+    entry_units = {e["unit"] for e in architecture["entry_points"]}
+    sink_units = {s["unit"] for s in architecture["sinks"]}
+    participants = [
+        (u.replace(".", "_"), f"{u}\\n{comp[u]}",
+         "entry" if u in entry_units else "sink" if u in sink_units else "unit")
+        for u in order]
+    crossing = {(b["from"], b["to"]): b["trust"] for b in bnds}
+    messages = []
+    for a, b in architecture["flows"]:
+        if a not in comp or b not in comp:
+            continue
+        t = crossing.get((a, b))
+        messages.append((a.replace(".", "_"), b.replace(".", "_"),
+                         f"TRUST BOUNDARY {t}" if t else "call",
+                         "danger" if t else ""))
+    notes = [(order[0].replace(".", "_"),
+              "every threat in the table\nlives on a red arrow")] if order else []
+    return puml_sequence("CyberTravels — one request, and where it crosses",
+                         participants, messages, notes=notes)
+
+
 def diagram(architecture, bnds):
     """Step 4: mermaid, because it renders in the notebook without a library."""
     lines = ["flowchart LR"]
@@ -286,6 +359,16 @@ for b in bnds:
 assert len({t["stride"] for t in threats}) == 6
 
 print(diagram(ARCHITECTURE, bnds))
+
+# The same graph twice more, in the two languages a real renderer reads. DOT
+# for the structure, PlantUML for the sequence — a graph says which edges cross
+# a boundary and a sequence says when, and the second is what somebody reading
+# a threat model is usually after.
+print()
+emit_diagram("b2-2-trust-boundaries", dot=dot_diagram(ARCHITECTURE, bnds))
+print()
+emit_diagram("b2-2-request-sequence", puml=puml_diagram(ARCHITECTURE, bnds))
+print()
 
 hard = model(ARCHITECTURE, cspm=HARDENED["cspm"], iam=HARDENED["iam"],
               network=HARDENED["network"],

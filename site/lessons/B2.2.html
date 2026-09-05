@@ -294,8 +294,7 @@ flowchart LR
   get_booking --&gt; render
   load_booking --&gt; execute
   store --&gt; open
-  upload_voucher ==&gt;|BOUNDARY| store
-  entry -&gt; sink                       deployed  hardened
+  upload_voucher ==&gt;|BOUNDARY| store</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-2-trust-boundaries.svg" alt="b2 2 trust boundaries" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-2-trust-boundaries.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><figure class="nbdiag"><img src="../assets/diagrams/b2-2-request-sequence.svg" alt="b2 2 request sequence" loading="lazy"><figcaption>Rendered from the skill’s own PlantUML output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-2-request-sequence.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>entry -&gt; sink                       deployed  hardened
 ----------------------------------------------------------
 I upload_voucher -&gt; store                   11         1
 S get_booking -&gt; load_booking               11         2

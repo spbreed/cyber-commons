@@ -86,6 +86,12 @@ jobs:
       - name: Check the incident control register
         run: python3 scripts/check_register.py --check
 
+      - name: Install the diagram renderers
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq graphviz plantuml
+
+      - name: Render and validate every diagram a skill emits
+        run: python3 scripts/render_diagrams.py --check
+
       - name: Build lesson pages
         run: |
           pip install --quiet markdown

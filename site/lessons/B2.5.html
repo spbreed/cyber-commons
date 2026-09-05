@@ -341,7 +341,9 @@ rot the way a suppression does.
 
 queue: 6 findings -&gt; 2 reachable, 3 to delete, 1 unresolved.
 The last number is work, not a result. A two-bucket pipeline reports it
-as zero and calls the queue clean.</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — deduplicating on the wrong key</h2>
+as zero and calls the queue clean.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-5-call-graph.svg" alt="b2 5 call graph" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-5-call-graph.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is an entry point, grey is reached, dim is dead, blue is undecided.
+The three functions in jobs/runner.py are blue because the module
+dispatches on a runtime value, not because anything proved them dead.</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — deduplicating on the wrong key</h2>
 <p>The skill says to collapse on the <strong>defect identity</strong>, <code>(cwe, file, unit, sink_expression)</code>, and never on the message text. Here is why that sentence is in the procedure.</p></div><div class="nbmd"><h2>6 · The same failure, from a real model</h2>
 <p>Everything above is constructed. Here is the identical failure produced by an actual open-weight model — <strong>Moonlight-16B-A3B</strong>, Moonshot AI's MoE from the Kimi team — run on a Kaggle CPU kernel against this skill's output contract.</p>
 <p>It was given the contract and two vulnerable functions: an <code>open()</code> on a caller-supplied path, and an <code>os.system()</code> on a caller-supplied argument. Its answer is reproduced verbatim below (<a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/kimi/moonlight-16b-completion-prompt.txt">full run</a>).</p></div><div class="nbmd"><h2>7 · Read that output again</h2>
@@ -578,7 +580,9 @@ rot the way a suppression does.
 
 queue: 6 findings -&gt; 2 reachable, 3 to delete, 1 unresolved.
 The last number is work, not a result. A two-bucket pipeline reports it
-as zero and calls the queue clean.</code></pre></div><div class="nbmd"><h2>9 · The bucket that is work rather than a result</h2>
+as zero and calls the queue clean.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-5-call-graph.svg" alt="b2 5 call graph" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-5-call-graph.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is an entry point, grey is reached, dim is dead, blue is undecided.
+The three functions in jobs/runner.py are blue because the module
+dispatches on a runtime value, not because anything proved them dead.</code></pre></div><div class="nbmd"><h2>9 · The bucket that is work rather than a result</h2>
 <p>Read the last line of that output again: <strong>2 reachable, 3 to delete, 1
 unresolved.</strong></p>
 <p>The three to delete are the easy win, and they are a deletion rather than a

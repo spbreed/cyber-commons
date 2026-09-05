@@ -12,6 +12,8 @@ Standard library only, and deterministic.
 import ast
 from collections import defaultdict
 
+from cyber_commons_skill_runtime import dot_graph, emit_diagram
+
 # The corpus. Small enough to read, and it contains all three of the shapes the
 # procedure has to tell apart: a plain call chain, a function nothing calls, and
 # a module whose dispatch the AST cannot resolve.
@@ -187,6 +189,29 @@ print(f"queue: {report['queue']['before']} findings -> "
       f"{len(unk)} unresolved.")
 print("The last number is work, not a result. A two-bucket pipeline reports it")
 print("as zero and calls the queue clean.")
+
+# The graph, in a language a renderer reads. The buckets are what the reader
+# needs to see at a glance and a three-colour picture carries that faster than
+# the table above does. scripts/render_diagrams.py turns this into the SVG on
+# the lesson page, with real Graphviz.
+KIND = {"reachable": "unit", "unreachable": "dead", "unknown": "unknown"}
+nodes = {fn: {"label": fn, "kind": "entry" if fn in entries else KIND[bucket(fn)]}
+         for fn in functions}
+graph_edges = sorted((src, dst, "")
+                     for src, dsts in edges.items() for dst in dsts
+                     if src in functions and dst in functions)
+clusters = defaultdict(list)
+for fn, path in functions.items():
+    clusters[path].append(fn)
+
+print()
+emit_diagram("b2-5-call-graph",
+             dot=dot_graph("call_graph", nodes, graph_edges,
+                           clusters=dict(clusters)))
+print()
+print("Red is an entry point, grey is reached, dim is dead, blue is undecided.")
+print("The three functions in jobs/runner.py are blue because the module")
+print("dispatches on a runtime value, not because anything proved them dead.")
 
 assert report["buckets"]["unknown"] == 3, "every unreached function in the getattr module is undecided, not dead"
 assert report["buckets"]["unreachable"] == 3, "three functions have no caller"

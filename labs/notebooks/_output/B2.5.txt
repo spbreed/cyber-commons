@@ -113,3 +113,54 @@ rot the way a suppression does.
 queue: 6 findings -> 2 reachable, 3 to delete, 1 unresolved.
 The last number is work, not a result. A two-bucket pipeline reports it
 as zero and calls the queue clean.
+
+[diagram:dot:b2-5-call-graph]
+digraph "call_graph" {
+  rankdir=LR;
+  bgcolor="transparent";
+  node [shape=box style="rounded,filled" fontname="Helvetica" fontsize=11 penwidth=1.2];
+  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" penwidth=1.1];
+  "_query" [label="_query" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "_settle" [label="_settle" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "audit_line" [label="audit_line" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "debug_dump" [label="debug_dump" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "legacy_export" [label="legacy_export" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "nightly_reconcile" [label="nightly_reconcile" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "render_itinerary" [label="render_itinerary" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  "run_job" [label="run_job" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "search_bookings" [label="search_bookings" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  subgraph cluster_0 {
+    label="api/bookings.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "_query";
+    "audit_line";
+    "legacy_export";
+    "search_bookings";
+  }
+  subgraph cluster_1 {
+    label="api/itinerary.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "debug_dump";
+    "render_itinerary";
+  }
+  subgraph cluster_2 {
+    label="jobs/runner.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "_settle";
+    "nightly_reconcile";
+    "run_job";
+  }
+  "nightly_reconcile" -> "_settle";
+  "search_bookings" -> "_query";
+  subgraph cluster_legend {
+    label="key"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10; rank=sink;
+    "legend_entry" [label="untrusted entry point" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_unit" [label="reachable" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_entry" -> "legend_unit" [style=invis];
+    "legend_dead" [label="unreachable" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" fontsize=9 style="rounded,filled,dashed"];
+    "legend_unit" -> "legend_dead" [style=invis];
+    "legend_unknown" [label="undecided" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_dead" -> "legend_unknown" [style=invis];
+  }
+}
+
+Red is an entry point, grey is reached, dim is dead, blue is undecided.
+The three functions in jobs/runner.py are blue because the module
+dispatches on a runtime value, not because anything proved them dead.

@@ -35,6 +35,74 @@ flowchart LR
   load_booking --> execute
   store --> open
   upload_voucher ==>|BOUNDARY| store
+
+[diagram:dot:b2-2-trust-boundaries]
+digraph "threat_model" {
+  rankdir=LR;
+  bgcolor="transparent";
+  node [shape=box style="rounded,filled" fontname="Helvetica" fontsize=11 penwidth=1.2];
+  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" penwidth=1.1];
+  "get_booking" [label="get_booking" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  "health" [label="health" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  "load_booking" [label="load_booking" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "store" [label="store" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "upload_voucher" [label="upload_voucher" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  subgraph cluster_0 {
+    label="src/api · trust 0"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "get_booking";
+    "health";
+    "upload_voucher";
+  }
+  subgraph cluster_1 {
+    label="src/data · trust 2"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "load_booking";
+    "store";
+  }
+  "get_booking" -> "load_booking" [label="0->2"];
+  "upload_voucher" -> "store" [label="0->2"];
+  subgraph cluster_legend {
+    label="key"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10; rank=sink;
+    "legend_entry" [label="untrusted entry point" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_sink" [label="acts on something" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_entry" -> "legend_sink" [style=invis];
+  }
+}
+
+[diagram:puml:b2-2-request-sequence]
+@startuml
+skinparam backgroundColor transparent
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam defaultFontColor #E9EDF6
+skinparam titleFontColor #E9EDF6
+skinparam titleFontSize 14
+skinparam sequenceMessageAlign center
+skinparam sequence {
+  ArrowColor #8A93A6
+  ArrowFontColor #C7CEDC
+  LifeLineBorderColor #3a4258
+  LifeLineBackgroundColor transparent
+  ParticipantFontColor #E9EDF6
+  ParticipantBorderThickness 1.4
+  BoxBorderColor #26314b
+  ParticipantBorderColor #4a5468
+}
+skinparam noteBackgroundColor #1a1e28
+skinparam noteBorderColor #4D9BFF
+skinparam noteFontColor #C7CEDC
+title CyberTravels — one request, and where it crosses
+participant "get_booking\nsrc/api" as get_booking #2a1614
+participant "load_booking\nsrc/data" as load_booking #2a2114
+participant "store\nsrc/data" as store #2a2114
+participant "upload_voucher\nsrc/api" as upload_voucher #2a1614
+get_booking -[#E05C4B]> load_booking: TRUST BOUNDARY 0->2
+upload_voucher -[#E05C4B]> store: TRUST BOUNDARY 0->2
+note over get_booking
+every threat in the table
+lives on a red arrow
+end note
+@enduml
+
   entry -> sink                       deployed  hardened
 ----------------------------------------------------------
 I upload_voucher -> store                   11         1

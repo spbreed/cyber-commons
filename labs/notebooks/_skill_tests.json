@@ -20,7 +20,7 @@
    "contract": true,
    "script": true,
    "lines": 66,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "appsec/appsec-triage-report",
@@ -36,7 +36,7 @@
    "contract": true,
    "script": true,
    "lines": 82,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "appsec/coding-agent-hardening",
@@ -44,7 +44,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.06
+   "seconds": 0.05
   },
   {
    "skill": "appsec/context-window-sizing",
@@ -52,15 +52,15 @@
    "contract": true,
    "script": true,
    "lines": 57,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "appsec/dead-code-ast-reachability",
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 33,
-   "seconds": 0.02
+   "lines": 84,
+   "seconds": 0.05
   },
   {
    "skill": "appsec/dynamic-exploitation-probe",
@@ -68,7 +68,7 @@
    "contract": true,
    "script": true,
    "lines": 23,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/exploit-replica-isolation-check",
@@ -84,7 +84,7 @@
    "contract": true,
    "script": true,
    "lines": 32,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "appsec/fix-promotion-gate",
@@ -147,8 +147,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 51,
-   "seconds": 0.03
+   "lines": 119,
+   "seconds": 0.06
   },
   {
    "skill": "architecture/agentic-architecture-map",
@@ -163,8 +163,8 @@
    "parses": true,
    "contract": true,
    "script": true,
-   "lines": 22,
-   "seconds": 0.01
+   "lines": 67,
+   "seconds": 0.05
   },
   {
    "skill": "attestation/agent-code-surface-analyzer",
@@ -220,7 +220,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "attestation/input-injection-screening-verifier",
@@ -244,7 +244,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "attestation/sandbox-egress-verifier",
@@ -260,7 +260,7 @@
    "contract": true,
    "script": true,
    "lines": 21,
-   "seconds": 0.04
+   "seconds": 0.03
   },
   {
    "skill": "detection/agent-platform-detections",
@@ -324,7 +324,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "detection/threat-intel-to-rules",
@@ -548,7 +548,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.04
+   "seconds": 0.03
   },
   {
    "skill": "redteam/offensive-agent-containment",
@@ -588,7 +588,7 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "regulatory/horizontal-requirement-to-control",
@@ -644,7 +644,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.04
+   "seconds": 0.03
   },
   {
    "skill": "research/finding-to-control-handover",
@@ -828,7 +828,7 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.07
+   "seconds": 0.06
   },
   {
    "skill": "secops/incident-scoping",
@@ -836,7 +836,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "threats/agent-registry-gap-check",

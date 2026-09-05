@@ -1,3 +1,5 @@
+from cyber_commons_skill_runtime import dot_graph, emit_diagram
+
 #!/usr/bin/env python3
 """Route actions by reversibility and count how many reach a human per day.
 
@@ -53,3 +55,26 @@ print(f"labelled   : [machine-generated, unverified] {FINDING}")
 print("\nThe label does not stop anyone acting on it. It restores the scepticism")
 print("they would give a colleague saying the same sentence.")
 assert to_human <= CAREFUL_CAPACITY
+
+
+# The routing decision as a picture. Which actions reach a human is the whole
+# argument of this skill, and a two-column graph carries it faster than the
+# table does. Rendered by real Graphviz in scripts/render_diagrams.py.
+_nodes = {"all": {"label": f"{sum(DAILY_VOLUME.values())} actions/day",
+                  "kind": "entry"},
+          "human": {"label": f"human approval\\n{to_human}/day", "kind": "control"},
+          "policy": {"label": f"policy only\\n{sum(DAILY_VOLUME.values()) - to_human}/day", "kind": "unit"}}
+_edges = []
+for _a in sorted(ACTIONS):
+    _kind = "sink" if not ACTIONS[_a]["reversible"] else "unit"
+    _nodes[_a] = {"label": f"{_a}\\n{DAILY_VOLUME.get(_a, 0)}/day", "kind": _kind}
+    _edges.append(("all", _a, ""))
+    _edges.append((_a, "human" if route(_a) == "human approval" else "policy",
+                   "irreversible" if not ACTIONS[_a]["reversible"] else ""))
+
+print()
+emit_diagram("a-blast-radius-routing",
+             dot=dot_graph("routing", _nodes, _edges, rankdir="LR"))
+print()
+print("Orange is irreversible. Every orange path ends at the human gate, and")
+print("nothing else does - which is why the gate is small enough to be read.")

@@ -232,3 +232,169 @@ def announce_backend():
         print("   MODELS.md has the exact Kaggle download. There is no paid backend:")
         print("   every model result in this repository was produced this way.")
     return kind, model
+
+
+# ---------------------------------------------------------------- diagrams
+# A skill that produces a graph should emit it in a language a real renderer
+# reads, not only as ASCII. These build **source** — DOT for Graphviz, PlantUML
+# for PlantUML — which is text, so it stays standard library only and runs on a
+# kernel with nothing installed. `scripts/render_diagrams.py` renders and
+# validates it with the actual binaries and commits the SVG.
+#
+# Deterministic by construction: every emitter sorts its inputs, so two runs of
+# the same skill produce byte-identical source and the committed SVG only
+# changes when the graph does.
+
+def _dot_id(name):
+    """A DOT-safe quoted identifier."""
+    return '"' + str(name).replace('\\', '').replace('"', "'") + '"'
+
+
+# The shared vocabulary. Same kind, same colour, in every diagram the commons
+# renders — and `dead` is dashed as well as dim, because two greys a shade apart
+# are not a distinction anyone reads at a glance.
+KINDS = {
+    "entry":   ("#E05C4B", "#2a1614", "solid",  "untrusted entry point"),
+    "unit":    ("#8A93A6", "#1a1e28", "solid",  "reachable"),
+    "sink":    ("#E0912F", "#2a2114", "solid",  "acts on something"),
+    "dead":    ("#525a6e", "#15171d", "dashed", "unreachable"),
+    "unknown": ("#4D9BFF", "#141c2a", "solid",  "undecided"),
+    "control": ("#3FA06B", "#14231b", "solid",  "a control"),
+}
+
+
+def dot_graph(name, nodes, edges, *, rankdir="LR", clusters=None, legend=True):
+    """Graphviz DOT source for a directed graph.
+
+    nodes:    {id: {"label": str, "kind": str}}   kind picks the palette
+    edges:    [(src, dst, label)]
+    clusters: {cluster_label: [node_id, ...]}     optional grouping
+    legend:   emit a key for the kinds actually used
+
+    The palette is by *kind* rather than per node, so the same vocabulary means
+    the same thing everywhere, and the legend is generated from the kinds this
+    particular graph uses rather than listing all of them.
+    """
+    style = {k: (v[0], v[1]) for k, v in KINDS.items()}
+    out = [f"digraph {_dot_id(name)} {{",
+           f"  rankdir={rankdir};",
+           '  bgcolor="transparent";',
+           '  node [shape=box style="rounded,filled" fontname="Helvetica" '
+           'fontsize=11 penwidth=1.2];',
+           '  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" '
+           'penwidth=1.1];']
+    for nid in sorted(nodes):
+        meta = nodes[nid]
+        kind = meta.get("kind", "unit")
+        pen, fill, line, _ = KINDS.get(kind, KINDS["unit"])
+        dash = ',dashed' if line == "dashed" else ''
+        fg = "#9aa3b5" if kind == "dead" else "#E9EDF6"
+        out.append(f'  {_dot_id(nid)} [label={_dot_id(meta.get("label", nid))} '
+                   f'color="{pen}" fillcolor="{fill}" fontcolor="{fg}" '
+                   f'style="rounded,filled{dash}"];')
+    for i, (label, members) in enumerate(sorted((clusters or {}).items())):
+        out.append(f"  subgraph cluster_{i} {{")
+        out.append(f'    label={_dot_id(label)}; color="#26314b"; '
+                   'fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;')
+        for m in sorted(members):
+            out.append(f"    {_dot_id(m)};")
+        out.append("  }")
+    for src, dst, label in sorted(edges):
+        attr = f' [label={_dot_id(label)}]' if label else ""
+        out.append(f"  {_dot_id(src)} -> {_dot_id(dst)}{attr};")
+
+    # A key, built from the kinds this graph actually uses. A diagram whose
+    # colours mean something and does not say what is a diagram the reader
+    # decodes by guessing.
+    used = sorted({n.get("kind", "unit") for n in nodes.values()},
+                  key=lambda k: list(KINDS).index(k))
+    if legend and used:
+        out.append("  subgraph cluster_legend {")
+        out.append('    label="key"; color="#26314b"; fontcolor="#96A0B8"; '
+                   'fontname="Helvetica"; fontsize=10; rank=sink;')
+        prev = None
+        for kind in used:
+            pen, fill, line, text = KINDS[kind]
+            dash = ',dashed' if line == "dashed" else ''
+            nid = f"legend_{kind}"
+            fg = "#9aa3b5" if kind == "dead" else "#E9EDF6"
+            out.append(f'    {_dot_id(nid)} [label={_dot_id(text)} '
+                       f'color="{pen}" fillcolor="{fill}" fontcolor="{fg}" '
+                       f'fontsize=9 style="rounded,filled{dash}"];')
+            if prev:
+                out.append(f"    {_dot_id(prev)} -> {_dot_id(nid)} "
+                           f'[style=invis];')
+            prev = nid
+        out.append("  }")
+    out.append("}")
+    return "\n".join(out) + "\n"
+
+
+def puml_sequence(title, participants, messages, *, notes=()):
+    """PlantUML sequence source — the right shape for a flow over time.
+
+    participants: [(alias, label, kind)]   kind as in dot_graph
+    messages:     [(src, dst, text, style)]  style: "" | "danger" | "control"
+    notes:        [(alias, text)]           real newlines, not "\\n"
+
+    The skin is set explicitly for a dark page. PlantUML's defaults are black
+    text on white, and dropping that onto the lesson background produced a
+    title nobody could read and participant boxes in colours that belong to no
+    palette — which is exactly the kind of thing a renderer will not tell you
+    about, because it exited 0.
+    """
+    fill = {k: v[1] for k, v in KINDS.items()}
+    pen = {k: v[0] for k, v in KINDS.items()}
+    out = ["@startuml",
+           "skinparam backgroundColor transparent",
+           "skinparam shadowing false",
+           "skinparam defaultFontName Helvetica",
+           "skinparam defaultFontColor #E9EDF6",
+           "skinparam titleFontColor #E9EDF6",
+           "skinparam titleFontSize 14",
+           "skinparam sequenceMessageAlign center",
+           "skinparam sequence {",
+           "  ArrowColor #8A93A6",
+           "  ArrowFontColor #C7CEDC",
+           "  LifeLineBorderColor #3a4258",
+           "  LifeLineBackgroundColor transparent",
+           "  ParticipantFontColor #E9EDF6",
+           "  ParticipantBorderThickness 1.4",
+           "  BoxBorderColor #26314b",
+           "  ParticipantBorderColor #4a5468",
+           "}",
+           "skinparam noteBackgroundColor #1a1e28",
+           "skinparam noteBorderColor #4D9BFF",
+           "skinparam noteFontColor #C7CEDC",
+           f"title {title}"]
+    for alias, label, kind in participants:
+        # Fill only. The `##[bold]#RRGGBB` per-participant border syntax is a
+        # newer PlantUML dialect and 1.x reports "Some diagram description
+        # contains errors" for it — while still exiting 0, which is the reason
+        # render_diagrams.py checks the output rather than the return code.
+        out.append(f'participant "{label}" as {alias} {fill.get(kind, "#1a1e28")}')
+    for src, dst, text, kind in messages:
+        arrow = "-[#E05C4B]>" if kind == "danger" else (
+            "-[#3FA06B]>" if kind == "control" else "-[#8A93A6]>")
+        out.append(f"{src} {arrow} {dst}: {text}")
+    for alias, text in notes:
+        # A real newline. "\\n" in a note renders as the two characters, and
+        # the reader sees a backslash in the middle of a sentence.
+        out.append(f"note over {alias}\n{text}\nend note")
+    out.append("@enduml")
+    return "\n".join(out) + "\n"
+
+
+def emit_diagram(stem, *, dot=None, puml=None):
+    """Print the source and say where the rendered copy lives.
+
+    A notebook prints text; the lesson page shows the SVG that
+    `scripts/render_diagrams.py` produced from exactly this source.
+    """
+    if dot:
+        print(f"[diagram:dot:{stem}]")
+        print(dot, end="")
+    if puml:
+        print(f"[diagram:puml:{stem}]")
+        print(puml, end="")
+    return {"stem": stem, "dot": bool(dot), "puml": bool(puml)}
