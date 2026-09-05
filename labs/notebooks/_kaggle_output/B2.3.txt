@@ -100,19 +100,19 @@ Kaggle Models and point the adapter at it:
    MODELS.md has the exact Kaggle download. There is no paid backend:
    every model result in this repository was produced this way.
 
-find_booking
-   model says   : MISSING CWE-862 at confidence 0.82
-   quoting      : def find_booking(reference):
+get_booking
+   model says   : MISSING CWE-639 at confidence 0.82
+   quoting      : def get_booking(session, booking_id):
    -> HYPOTHESIS: quote verified, status hypothesis (not a finding)
 
-my_bookings
-   model says   : PRESENT CWE-862 at confidence 0.77
-   quoting      : require_owner(session.user_id)
+get_my_booking
+   model says   : PRESENT CWE-639 at confidence 0.77
+   quoting      : require_owner(session, row["owner_id"] if row else None)
    -> NO CLAIM  : reviewed, nothing asserted, nothing to promote
 
 1 hypothesis · 0 rejected · 0 promoted
 
-property checked : MISSING on find_booking and PRESENT on my_bookings - telling the unauthorised function from the authorised one
+property checked : MISSING on get_booking and PRESENT on get_my_booking - telling the unauthorised function from its authorised twin
 held on replay       : True
 
 the verifier, tested against a fabrication recorded from a smaller model

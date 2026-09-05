@@ -435,8 +435,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 63,
-   "local_lines": 63,
+   "remote_lines": 112,
+   "local_lines": 112,
    "first_differing_line": null
   },
   {
@@ -444,8 +444,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 28,
-   "local_lines": 28,
+   "remote_lines": 36,
+   "local_lines": 36,
    "first_differing_line": null
   },
   {
@@ -453,8 +453,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 146,
-   "local_lines": 146,
+   "remote_lines": 213,
+   "local_lines": 213,
    "first_differing_line": null
   },
   {
