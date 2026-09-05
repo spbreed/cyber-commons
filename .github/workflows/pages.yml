@@ -130,11 +130,16 @@ jobs:
       # ("Resource not accessible by integration" — site creation needs repo
       # admin), and Pages on a PRIVATE repo additionally requires a paid plan.
       # Once the site exists, every push here deploys it automatically.
-      # WHICH URL THIS DEPLOY SERVES — decided by one file, site/CNAME.
+      # WHICH URL THIS DEPLOY SERVES — site/CNAME plus one repo setting.
       #
-      #   site/CNAME present  -> Pages sets that custom domain, and
-      #                          spbreed.github.io/cyber-commons/ 301s to it.
-      #   site/CNAME absent   -> the .github.io URL serves the site directly.
+      #   site/CNAME present  -> every deploy (re)applies that custom domain,
+      #                          and spbreed.github.io/cyber-commons/ 301s to it.
+      #   site/CNAME absent   -> a deploy stops re-applying it, but it does NOT
+      #                          clear a domain already stored in Settings ->
+      #                          Pages. Measured: run 121 deployed with no
+      #                          CNAME and the .github.io URL still 301'd.
+      #                          Clearing it means emptying that field in the
+      #                          web UI, or PATCH /repos/{o}/{r}/pages.
       #
       # It is absent on purpose right now. cybercommons.ai resolves to
       # GoDaddy's domain-forwarding addresses (3.33.130.190, 15.197.148.33)
