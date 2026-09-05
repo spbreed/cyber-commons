@@ -1,25 +1,72 @@
 # Agent skills
 
-Eleven skills the curriculum teaches you to write, and then uses. Each one is a
+120 skills the curriculum teaches you to write, and then uses. Each one is a
 real `SKILL.md` — markdown with YAML frontmatter, the format a coding agent
-actually loads — not an illustration of one.
+actually loads — not an illustration of one. 119 of them carry a script
+the lesson executes, and `test_skills.py` runs every one of those on every
+build.
 
-```
-skills/appsec/appsec-repo-recon/SKILL.md        phase 1 · stages 1-4
-skills/appsec/appsec-threat-model/SKILL.md      phase 2 · stages 5-6
-skills/appsec/appsec-vuln-audit/SKILL.md        phase 3 · stages 7-10
-skills/appsec/appsec-exploit-validate/SKILL.md  phase 4 · stages 11-14
-skills/appsec/appsec-triage-report/SKILL.md     phase 5 · stage 15
-skills/appsec/coding-agent-hardening/SKILL.md   securing the agents themselves
-skills/architecture/blast-radius-review/SKILL.md
-skills/identity/agent-identity-review/SKILL.md
-skills/secops/detection-triage/SKILL.md
-skills/secops/incident-scoping/SKILL.md
-skills/grc/control-evidence/SKILL.md
-```
+| area | skills |
+|---|---|
+| [`appsec/`](appsec) | 18 |
+| [`architecture/`](architecture) | 2 |
+| [`attestation/`](attestation) | 11 |
+| [`detection/`](detection) | 11 |
+| [`grc/`](grc) | 7 |
+| [`identity/`](identity) | 5 |
+| [`programme/`](programme) | 11 |
+| [`redteam/`](redteam) | 4 |
+| [`regulatory/`](regulatory) | 9 |
+| [`research/`](research) | 10 |
+| [`response/`](response) | 8 |
+| [`runtime/`](runtime) | 6 |
+| [`secops/`](secops) | 2 |
+| [`threats/`](threats) | 16 |
+| | **120** |
 
-The first five compose into the fifteen-stage AppSec pipeline that the
-[B1 track](../curriculum/) builds one stage at a time.
+## How an agent loads these, and why the shape matters
+
+An agent does not read a skill the way you are reading this page. It pulls in
+detail progressively, only as the task calls for it, and a skill is worth
+structuring around that:
+
+| stage | what is loaded | when | budget |
+|---|---|---|---|
+| **metadata** | `name` and `description` | at startup, for **every** skill | ~100 tokens |
+| **instructions** | the whole `SKILL.md` body | when the skill is activated | < 5,000 tokens |
+| **resources** | `scripts/`, `references/`, `assets/` | only when actually needed | unbounded |
+
+Three consequences, and each one is a rule in this repository:
+
+**The description is the routing key, not a summary.** It is the only thing an
+agent sees for a skill it has not activated, and it is paid for on every task
+whether the skill fires or not. So it says *what the skill does* and *when to
+reach for it*, in about a hundred tokens.
+[`check_skills.py`](../scripts/check_skills.py) routes a sample of real tasks
+across every description and fails on a tie, because two descriptions that
+score the same mean the winner is whichever sorted first.
+
+**The body stays small enough to be worth activating.** Every body here is
+under 1,300 tokens against a 5,000 budget, and the gate is enforced. Anything
+longer belongs in a resource.
+
+**The bulk lives in `scripts/`, which is loaded only when it runs.** That is
+why the procedure is prose and the fixture is a file: the agent reads the
+procedure to decide *what* to do and opens the script only when it is going to
+execute it.
+
+## What every skill carries
+
+- **`## When to use this`** — the activation conditions, in prose.
+- **`## Procedure`** or **`## Step-by-step`** — numbered steps, each one an
+  instruction rather than a description.
+- **`## Example`** — a real input and the real opening lines of a real run.
+  Not written by hand: taken from the script's own output and re-checked on
+  every build, so it cannot drift from what the skill actually prints.
+- **`## Output contract`** — the JSON shape the skill promises, which is what
+  makes it checkable rather than aspirational.
+- **`## Failure modes`** or **`## Common edge cases`** — the ways this
+  procedure goes wrong in practice, including the ones that fail silently.
 
 ## The three parts, and what each is for
 

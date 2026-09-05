@@ -42,6 +42,25 @@ usually one.
 one it should not lead with. Reviewers copy questionnaires; make yours the one
 worth copying.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agentic_risk_tiering.py`](scripts/agentic_risk_tiering.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+asset                                         tier       score
+------------------------------------------------------------------
+frontier chatbot, public docs, read-only      low            0
+small local model with prod deploy rights     critical      12
+                                              autonomy L3 (+5)
+                                              regulated data (+3)
+                                              customer data (+2)
+                                              can act externally (+2)
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

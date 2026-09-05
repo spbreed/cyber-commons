@@ -129,6 +129,19 @@ after the patch is written, in the same harness. It must still work. This is
 what excludes the environment having changed underneath the test.</p>
 <p><strong>5 — Report per candidate and per gate.</strong> A candidate rejected at gate one and
 one rejected at gate two need different conversations with whoever wrote them.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/patch_validation_harness.py"><code>scripts/patch_validation_harness.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>behaviour of the vulnerable build:
+   get_user('dana'    ) → [(1, 'dana')]      ok
+   get_user('sam'     ) → [(2, 'sam')]       ok
+   get_user('nobody'  ) → []                 ok
+   get_user(&quot;o'brien&quot; ) → raised OperationalError FAILS
+
+exploit works: True — probe returned 3 rows
+scanner fires: False
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;baseline&quot;: {&quot;behaviour_pass&quot;: true, &quot;exploit_works&quot;: true},
@@ -319,6 +332,19 @@ exploit run before and after, the regression result, the finding diff. A
 reviewer's remaining job is the question no gate can answer — whether this is
 the mechanism the codebase should use — and they can only get to it if the
 first three are already answered on the page.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/fix_promotion_gate.py"><code>scripts/fix_promotion_gate.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>the exploit, against the unpatched build in the replica
+   reproduces: True   &lt;- if this were False the probe is
+               broken and every result below would be meaningless
+
+      CI   exploit  behaviour  new  promoted to
+   A  ok   blocked  same       0    merge-request
+   B  ok   blocked  CHANGED    0    rejected  &lt;- qa: behaviour changed
+   C  ok   WORKS    same       0    rejected  &lt;- sandbox: exploit still works
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;candidates&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;ci_green&quot;: true, &quot;exploit_blocked&quot;: true,

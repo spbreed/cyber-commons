@@ -42,6 +42,25 @@ softened.
 record cannot answer. An investigation that says so is more useful than one that
 fills the gap fluently.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/incident_reconstruction_check.py`](scripts/incident_reconstruction_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+WHAT THE RESPONDER SEES
+   t+s  actor           action          target
+     0  dana@corp       login           sso
+    22  dana@corp       open_ticket     SEC-4471
+    40  dana@corp       read_file       /work/repo/billing.py
+    41  dana@corp       read_file       /home/app/.aws/credentials
+    43  dana@corp       http_post       collect.example.com
+   180  dana@corp       logout          sso
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

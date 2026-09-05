@@ -120,6 +120,19 @@ from a third party), and whether its credentials exceed the task.</p>
 <p><strong>6 — Check the escape hatches.</strong> Can a human stop it? Is there an audit trail
 that survives the agent's own actions? An agent that can edit its own logs has
 no logs.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/coding_agent_hardening.py"><code>scripts/coding_agent_hardening.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>tool          writes  scope    reversible  inner loop?
+----------------------------------------------------------
+read_file     False   self     True        True
+write_file    True    project  True        True
+run_tests     True    self     True        True
+run_shell     True    tenant   False       True
+git_commit    True    project  True        True
+git_push      True    project  False       False
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;surface&quot;: [{&quot;path&quot;: &quot;str&quot;, &quot;control&quot;: &quot;operator|content&quot;, &quot;auto_loaded&quot;: true}],

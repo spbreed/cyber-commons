@@ -78,6 +78,19 @@ fires and produces no action is.</p>
 <p><strong>5 — Report the three numbers.</strong> Indicators converted, alerts produced, alerts
 actioned. The ratio of the third to the second is what the feed is worth, and it
 is the number to take to a renewal conversation.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/threat_intel_to_rules.py"><code>scripts/threat_intel_to_rules.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>indicator                                     kind         conf  verdict
+----------------------------------------------------------------------------------------
+collect.example.com                           host         0.95  RULE — convertible to a rule
+169.254.169.254                               host         0.99  RULE — convertible to a rule
+a1b2c3d4e5f6                                  hash         0.72  RULE — convertible to a rule
+pastebin.example                              host         0.55  drop — confidence 0.55 below floor 0.7
+adversaries increasingly use agentic tooling  narrative    0.40  drop — narrative is not matchable in telemetry
+agents reading ~/.aws/credentials             technique    0.88  RULE — convertible to a rule
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;feed&quot;: {&quot;indicators&quot;: 0, &quot;confidence_floor&quot;: 0.0, &quot;matchable_types&quot;: [&quot;str&quot;]},

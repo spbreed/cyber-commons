@@ -58,6 +58,12 @@ allowed-tools: Bash, Read
 <p>Configuration state, at a point in time, for the network and crypto boundary
 around one deployment. It is evidence for other skills' verdicts rather than a
 verdict in itself.</p>
+<h2>When to use this</h2>
+<p>When an attestation needs to say something about the network, and therefore
+after the deployment is running. The claims it supports — default-deny egress,
+private endpoints, log retention — are runtime facts that no static analysis
+can reach, and re-collecting is what makes the attestation re-issuable when the
+posture drifts.</p>
 <h2>Procedure</h2>
 <ol>
 <li><strong>Security groups and network ACLs.</strong> Enumerate egress rules. Any rule
@@ -74,6 +80,19 @@ verdict in itself.</p>
 <li><strong>Logging.</strong> Confirm the audit trail and log destinations are enabled and
    delivering, and record the retention.</li>
 </ol>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/aws_runtime_posture_collector.py"><code>scripts/aws_runtime_posture_collector.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>control  state           age (days)
+------------------------------------
+AC-1     PASS                   2.0
+AC-2     PASS                   9.0
+SB-1     STALE                 31.0
+SB-2     STALE                120.0
+EV-1     PASS                   5.0
+EV-2     PASS                  12.0
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,

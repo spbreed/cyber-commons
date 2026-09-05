@@ -43,6 +43,25 @@ reach.
 **5 — Check the write path's own identity.** If the agent's role can write to
 the log destination, the ledger is advisory whatever the API says.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/attribution_ledger_check.py`](scripts/attribution_ledger_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+   which user caused the deletion?     dana@corp
+   what performed it?                  spiffe://corp/reports-agent (run-8812)
+   how did authority reach it?         dana@corp -> orchestrator -> reports-agent
+   what made the agent decide?         'wiki/473: retire invoice 8812 when the custo' from knowledge
+
+questions answerable: 4/4
+
+input origin was 'knowledge' - a trust-0 component. That single
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

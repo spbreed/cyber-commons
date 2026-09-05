@@ -44,6 +44,25 @@ next presentation — not swept overnight, refused.
 identities that nobody acts on is a recurring finding. Name the automatic
 consequence.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/nhi_lifecycle_audit.py`](scripts/nhi_lifecycle_audit.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+POST /scim/v2/Agents
+{
+ "active": true,
+ "displayName": "pricing-agent",
+ "externalId": "spiffe://cybertravels.com/ns/prod/sa/pricing-agent",
+ "id": "b7f3a1c2",
+ "meta": {
+  "created": "2026-01-14T09:02:00Z",
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

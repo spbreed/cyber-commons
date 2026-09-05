@@ -42,6 +42,25 @@ distinction, or completeness is all you can ever measure.
 what happened and never why. Mark it partially answerable rather than
 answerable.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/autonomous_action_auditability.py`](scripts/autonomous_action_auditability.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+action            merge_pr #8812
+acting_identity   patch-agent
+on_behalf_of      dana@corp
+chain             dana@corp → orchestrator → patch-agent
+scopes_held       ['repo:read', 'repo:write']
+replayable        True
+replay_gaps       []
+answerable        True
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

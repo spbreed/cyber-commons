@@ -45,6 +45,25 @@ agent and from a person, and record which is challenged. If the agent's version
 is accepted more readily, the agent is the better delivery vehicle and that
 belongs in the report.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/authority_composition_check.py`](scripts/authority_composition_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+mallory holds        : ['reports:read']
+mallory asks directly for payments:write -> DENIED
+
+same outcome, requested through the architecture:
+   user asks orchestrator    mallory         ok
+   orchestrator routes       orchestrator    ok
+   agent acts                finance-agent   ok
+   -> reached payments:write: True
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -107,6 +107,19 @@ workstream with one owner.</p>
 <p><strong>5 — Assign each control an owning lesson or team.</strong> A control with no owner is
 a sentence in a report. This is the column that makes the mapping a register
 rather than an analysis.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/incident_control_mapping.py"><code>scripts/incident_control_mapping.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>shared surface        rows        reading
+agent container       [1]         single row
+artifact repository   [1, 2, 5]   one chain, not separate findings
+benchmark scoring     [10]        single row
+eval configuration    [6]         single row
+harness tooling       [9]         single row
+peer channel          [7, 8]      linked
+public internet       [4]         single row
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;failures&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;what&quot;: &quot;str&quot;, &quot;precondition&quot;: &quot;str&quot;}],

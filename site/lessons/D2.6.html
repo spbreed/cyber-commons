@@ -75,6 +75,19 @@ honest measure of the review, and it is usually a third of what was agreed.</p>
 <p><strong>5 — Measure the blast radius before and after.</strong> The reduction is what the
 incident actually bought. If it is unchanged, the actions were process rather
 than containment, and that belongs in the report.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/post_incident_change_surface.py"><code>scripts/post_incident_change_surface.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>blast before 44  after 4
+the manifest diff records the change even though no PR was raised.
+
+OK   gate http_post behind approval            type=preventive  owner=platform-sec   verify_by=2026-09-30
+OK   alert on credential-path reads            type=detective   owner=soc            verify_by=2026-09-15
+WEAK update the prompt to warn the model       type=guidance    owner=—              verify_by=—
+
+1 action(s) are guidance rather than controls: ['update the prompt to warn the model']
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;surfaces&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;bypasses_change_management&quot;: true}],

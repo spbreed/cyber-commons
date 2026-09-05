@@ -40,6 +40,25 @@ not.
 usually depends on a specific field being populated. Record that dependency —
 it is the thing that will silently break the rule later.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/detection_rule_deployability.py`](scripts/detection_rule_deployability.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+history: 522 events, 2 true positives
+rule                                 alerts   prec  recall  alerts/TP
+----------------------------------------------------------------------
+R1 any http_get by an agent             301  0.003   0.500      301.0
+R2 http_get to a non-github host          1  1.000   0.500        1.0
+R3 link-local address                     1  1.000   0.500        1.0
+R4 any failed action                     20  0.000   0.000        inf
+R5 credential path OR link-local          2  1.000   1.000        1.0
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

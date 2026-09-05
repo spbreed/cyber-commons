@@ -76,6 +76,18 @@ source. The result is a single programme with a few supplements rather than
 several programmes.</p>
 <p><strong>5 — Cost both plans.</strong> Spine-plus-supplements against per-framework. Include
 the duplicated evidence collection, which is where the difference actually sits.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/framework_spine_selection.py"><code>scripts/framework_spine_selection.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>framework           covers  controls
+--------------------------------------------------------------
+NIST AI RMF              5  ['AC-1', 'AC-2', 'DR-1', 'EV-2', 'SB-1']
+ISO 42001                4  ['AC-1', 'AC-2', 'DR-1', 'EV-1']
+EU AI Act                4  ['AC-1', 'EV-1', 'SB-2', 'ST-1']
+ISO 27001                1  ['SB-1']
+DORA                     1  ['ST-1']
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;catalogue&quot;: [&quot;str&quot;],

@@ -18,6 +18,12 @@ A deployment's own controls can be clean while every system it calls is
 carrying an accepted risk. Inherited risk is invisible unless something joins
 the downstream inventory to the register, and this skill is that join.
 
+## When to use this
+When assembling a deployment's risk position, and every time a downstream it
+depends on changes. An agent's risk is the union of its own and every
+downstream its tools reach, and that union is built by pulling each downstream
+register rather than by asking each team.
+
 ## Procedure
 
 1. **Take the downstream inventory** from the inventory resolver. Do not build
@@ -30,6 +36,25 @@ the downstream inventory to the register, and this skill is that join.
    dependency with no risk; it is one nobody has assessed.
 5. **Roll up.** The deployment inherits the highest open severity among its
    dependencies, and that number belongs in the attestation.
+
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/risk_registry_integrator.py`](scripts/risk_registry_integrator.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+family                                       risks  ids
+identity and authorisation                       3  R1, R5, R11
+code and CI/CD pipeline                          2  R7, R8
+lateral movement and logging                     2  R9, R10
+RAG misconfiguration and data exposure           1  R12
+guardrail tampering                              1  R2
+local filesystem manipulation                    1  R6
+prompt injection and instruction hijacking       1  R3
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 
 ## Output contract
 

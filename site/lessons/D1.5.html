@@ -112,6 +112,19 @@ content ones. Then age a record and check what an investigation could still do
 with it — that check is what makes the policy defensible.</p>
 <p><strong>5 — State what is lost.</strong> A short prompt retention means you cannot re-derive
 motivation after that window. Say so, rather than discovering it in an incident.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_telemetry_retention.py"><code>scripts/agent_telemetry_retention.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>full record (everything the harness saw):
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
+    {'n': 2, 'tool': 'search_code', 'target': 'charge(', 'verifier': 'n/a', 'ok': True, 'prompt': 'find callers of charge()', 'result': 'api/checkout.py:88 charge(user.card, total)'}
+    {'n': 3, 'tool': 'write_file', 'target': '/work/repo/billing.py', 'verifier': 'tests pass', 'ok': True, 'prompt': 'apply the fix', 'result': 'patch applied'}
+sensitive content found in the trace:
+   step 1  result   payment card
+
+Nobody put a card number in the trace deliberately. The agent read a
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;record&quot;: {&quot;steps&quot;: 0, &quot;fields&quot;: [&quot;str&quot;]},

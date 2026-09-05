@@ -43,6 +43,25 @@ different fixes and different owners.
 on the stages it implements is still a partial answer, and the gap is what you
 would have to build.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/reference_pipeline_scoring.py`](scripts/reference_pipeline_scoring.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+stage  name                              mantis    note
+------------------------------------------------------------------------------------------------
+  1  historical parsing                yes       historical_learnings.jsonl is read on subsequent runs
+  2  structural indexing               partial   operates over the agent's code-reading tools
+  3  component summarisation           partial   context assembled per review target
+  4  architecture synthesis            no        assumes you supply the architecture context
+  5  threat modelling                  partial   review skills encode threat patterns rather than deriving them
+  6  strategic planning                no        you decide what to point it at
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

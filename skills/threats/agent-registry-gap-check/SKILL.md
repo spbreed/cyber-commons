@@ -43,6 +43,25 @@ downstreams that would honour it.
 agent exist"; workload identity answers "is this the agent it claims to be".
 Report which of the two is missing, because they are different projects.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_registry_gap_check.py`](scripts/agent_registry_gap_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+agent                 in registry?  approved?  received work?
+pricing-agent         True          True       yes
+billing-agent         True          True       yes
+reporting-agent-v2    False         False      yes
+
+agents that received delegated work : 3
+of which unregistered               : 1
+   reporting-agent-v2 now holds obo:dana@corp:reports:read,reports:write
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

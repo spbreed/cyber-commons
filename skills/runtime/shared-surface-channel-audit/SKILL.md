@@ -42,6 +42,25 @@ naming which is what stops the fix being "isolate better".
 **5 — Check the verification fails closed.** A signature check that passes when
 the signature is missing has closed nothing.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/shared_surface_channel_audit.py`](scripts/shared_surface_channel_audit.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+run-B reads a property written by run-A:
+   note: flag format is HMAC(target_id); see board entry 41
+
+Neither run has a network path to the other. They did not need one.
+Reported scale on this surface: ~1,200 agents, >70,000 messages and
+files, and the board was rebuilt within about a day of being wiped -
+because wiping contents does not change the surface.
+attempts:
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

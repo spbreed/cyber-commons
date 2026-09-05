@@ -60,6 +60,24 @@ limits is stronger evidence than one claiming none.
 be updated weekly, annual testing evidences a system that no longer exists. Tie
 re-verification to the artefact's change events, not the calendar.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/control_evidence.py`](scripts/control_evidence.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+n                24
+conformance      1.0000   ← structural. NOT a quality claim.
+expert accuracy  0.8750   ← the number that evidences EV-2
+EV-2  PASS
+      expert accuracy 0.8750 over 24 held-out questions; conformance 1.0000 reported separately; key never exposed to the harness
+      at +10d → PASS
+      at +45d → STALE
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

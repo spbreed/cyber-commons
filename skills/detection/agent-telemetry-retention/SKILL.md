@@ -42,6 +42,25 @@ with it — that check is what makes the policy defensible.
 **5 — State what is lost.** A short prompt retention means you cannot re-derive
 motivation after that window. Say so, rather than discovering it in an incident.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_telemetry_retention.py`](scripts/agent_telemetry_retention.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+full record (everything the harness saw):
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
+    {'n': 2, 'tool': 'search_code', 'target': 'charge(', 'verifier': 'n/a', 'ok': True, 'prompt': 'find callers of charge()', 'result': 'api/checkout.py:88 charge(user.card, total)'}
+    {'n': 3, 'tool': 'write_file', 'target': '/work/repo/billing.py', 'verifier': 'tests pass', 'ok': True, 'prompt': 'apply the fix', 'result': 'patch applied'}
+sensitive content found in the trace:
+   step 1  result   payment card
+
+Nobody put a card number in the trace deliberately. The agent read a
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

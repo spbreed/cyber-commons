@@ -18,6 +18,13 @@ Configuration state, at a point in time, for the network and crypto boundary
 around one deployment. It is evidence for other skills' verdicts rather than a
 verdict in itself.
 
+## When to use this
+When an attestation needs to say something about the network, and therefore
+after the deployment is running. The claims it supports — default-deny egress,
+private endpoints, log retention — are runtime facts that no static analysis
+can reach, and re-collecting is what makes the attestation re-issuable when the
+posture drifts.
+
 ## Procedure
 
 1. **Security groups and network ACLs.** Enumerate egress rules. Any rule
@@ -33,6 +40,25 @@ verdict in itself.
    specific service. Unconditioned key access is a finding.
 5. **Logging.** Confirm the audit trail and log destinations are enabled and
    delivering, and record the retention.
+
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/aws_runtime_posture_collector.py`](scripts/aws_runtime_posture_collector.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+control  state           age (days)
+------------------------------------
+AC-1     PASS                   2.0
+AC-2     PASS                   9.0
+SB-1     STALE                 31.0
+SB-2     STALE                120.0
+EV-1     PASS                   5.0
+EV-2     PASS                  12.0
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 
 ## Output contract
 

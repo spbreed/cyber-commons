@@ -41,6 +41,25 @@ queue needs a different cut.
 **5 — Record every automatic closure with its reason and confidence.** The loop
 will be wrong sometimes; the question at review is whether you can find out how.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/triage_loop_with_floor.py`](scripts/triage_loop_with_floor.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+queue: 8 alerts, 4 true positives
+   A-01 medium   impossible travel        dana@corp
+   A-02 critical metadata service access  patch-agent
+   A-03 medium   failed logins x40        svc-etl
+   A-04 high     secret path read         patch-agent
+   A-05 high     new admin group member   sam@corp
+   A-06 low      port scan detected       scanner-01
+   A-07 high     egress to unlisted host  triage-agent
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

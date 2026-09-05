@@ -66,7 +66,7 @@ python3 scripts/check_skills.py --check   # parses, names, tools, contracts, rou
 
 Each declares an **output contract**, which is what makes a skill checkable
 rather than aspirational. Every skill lesson embeds its skill verbatim at build
-time — so the lesson can never drift from the skill — and 119 of the 120 carry
+time — so the lesson can never drift from the skill — and every one of the 120 carries
 a script the lesson runs. Several build the contract shape from the data they
 just produced and validate it, then show what the contract *cannot* see: **an
 empty result conforms perfectly.** Conformance is a statement about the

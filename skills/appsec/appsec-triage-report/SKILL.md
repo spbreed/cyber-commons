@@ -59,6 +59,25 @@ treat silence as coverage.
 about the serialiser and is true of an empty result. If a false-positive rate
 is known — Phase 4 measures one every run — report that instead.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/appsec_triage_report.py`](scripts/appsec_triage_report.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+id     rule sev  calibrated   score
+----------------------------------------
+F-01   high      critical         7   ← moved
+F-02   high      low              0   ← moved
+F-03   medium    critical         6   ← moved
+F-04   high      medium           2   ← moved
+F-05   medium    critical         6   ← moved
+F-06   high      medium           2   ← moved
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

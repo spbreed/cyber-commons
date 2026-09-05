@@ -232,6 +232,19 @@ Boundaries are where findings live; render them differently from ordinary edges.
 A pull request that changes only infrastructure introduces no new threat and
 raises every existing score, so a gate that counts arrivals alone waves it
 through.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/threat_model.py"><code>scripts/threat_model.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>id      entry           sink           score  why
+--------------------------------------------------------------------------------------------
+T-10  I upload_voucher  store             11  a live CSPM finding on the resource this path reaches
+T-01  S get_booking     load_booking      11  the running role is assumable by *
+T-05  D get_booking     load_booking      10  internet-facing with no WAF in front of it
+T-06  E get_booking     load_booking      10  the identity holds write, not just read
+T-03  R get_booking     load_booking      10  no MFA on the assumable role, so the actor is not established
+T-04  I get_booking     load_booking       9  no open CSPM finding on the resource
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;inputs_present&quot;: [&quot;architecture&quot;, &quot;cspm&quot;, &quot;iam&quot;, &quot;network&quot;, &quot;entitlements&quot;],

@@ -34,6 +34,13 @@ dictionary, or a handler a framework wires by decorator at import time. Those
 are not unreachable. They are **undecided**, and filing them as unreachable is
 how a pipeline drops real bugs quietly.
 
+## When to use this
+When reachability analysis produces a large unreachable bucket, before any bulk
+suppression, and during any dead-code or deprecation sweep — the security queue
+is the cheapest available list of which dead code to delete first. Also
+whenever a finding is about to be dismissed as "that code isn't called": this
+is how that sentence gets evidence behind it.
+
 ## Step-by-step
 
 **1 — Parse, do not grep.** `ast.parse(source)` per file. Collect every

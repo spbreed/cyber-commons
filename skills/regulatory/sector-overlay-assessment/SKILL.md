@@ -43,6 +43,24 @@ pass.
 it requires here. That framing survives a challenge from a team that would
 rather it did not apply.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/sector_overlay_assessment.py`](scripts/sector_overlay_assessment.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+claims-triage-agent: autonomy L2.5, data ['customer', 'health'], external model True
+
+DORA (financial)
+   ICT third-party risk    your model provider is an ICT third party
+   exit strategy           can you stop using this provider and keep operating?
+   resilience testing      your stop mechanism is in scope for testing
+   incident reporting      clocks measured in hours
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

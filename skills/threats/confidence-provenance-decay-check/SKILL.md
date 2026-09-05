@@ -42,6 +42,25 @@ peaked.
 as structured fields, rather than as prose the next step must re-read, does not
 decay this way. Check whether the interface has those fields at all.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/confidence_provenance_decay_check.py`](scripts/confidence_provenance_decay_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+ hop   confidence  claim
+   0         0.20  I could not find a CVE for libfoo, it is probably fine
+   1         0.80  a CVE for libfoo, it is fine
+   2         0.80  a CVE for libfoo, it is fine
+   3         0.80  a CVE for libfoo, it is fine
+
+provenance recorded at hop 3: none
+confidence at hop 0: 0.20   at hop 3: 0.8
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

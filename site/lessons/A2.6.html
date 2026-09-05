@@ -77,6 +77,11 @@ You cannot verify that it works. Published defences that reduce attack success
 to a few percent under static attacks have been driven back above 95% by
 adaptive, search-based attacks, and human red-teamers defeat them routinely.</p>
 <p><strong>Record the detector class. Do not assert protection. Cap at PARTIAL.</strong></p>
+<h2>When to use this</h2>
+<p>When a deployment claims to screen untrusted input, and specifically when
+somebody wants that claim recorded as PASS. It cannot be: the ceiling here is
+PARTIAL and not negotiable, and running this is how that gets written into the
+artefact rather than argued about in a review.</p>
 <h2>Procedure</h2>
 <ol>
 <li>
@@ -103,6 +108,19 @@ adaptive, search-based attacks, and human red-teamers defeat them routinely.</p>
    finding on its own, whatever the detector says.</p>
 </li>
 </ol>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/input_injection_screening_verifier.py"><code>scripts/input_injection_screening_verifier.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>the same payload, through every ingress component:
+   knowledge  -&gt; refused   (knowledge may not select a tool)
+   memory     -&gt; refused   (memory may not select a tool)
+   mcp        -&gt; refused   (mcp may not select a tool)
+   tools      -&gt; refused   (tools may not select a tool)
+   messaging  -&gt; refused   (messaging may not select a tool)
+
+rewriting the payload does not help - the check never reads it:
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,

@@ -41,6 +41,25 @@ require anybody to concede a preference.
 order usually produces nothing demoable for two quarters, and saying so in
 advance is what stops it being abandoned in the second.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/programme_sequencing.py`](scripts/programme_sequencing.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+ step  name          needs     unlocks
+------------------------------------------------------------------------------------
+    1  inventory     []        you can now tier and assign owners
+    2  identity      [1]       per-agent revocation; attribution in logs
+    3  containment   [1]       bounded blast radius; a red team has something to test
+    4  evidence      [2]       act chains; replayable runs; a drift baseline
+    5  evaluation    [4]       accuracy you can defend; regression cases
+    6  continuous    [4, 5]    freshness windows; drift alerts; live posture
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -53,6 +53,25 @@ account almost always survive a credential revocation aimed at one of them.
 **6 — Preserve evidence the agent could alter.** If the agent can write to the
 log store, the logs are not evidence. Snapshot first, then contain.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/incident_scoping.py`](scripts/incident_scoping.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+chain                     dana@corp → orchestrator → patch-agent → deploy-agent
+scoped_last_actor_only    ['cluster-prod']
+scoped_whole_chain        ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+missed_by_naive_scoping   ['queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+undercount_factor         6.0
+
+Scoping the last actor finds one cluster. The chain reached six
+resources, including a payments repository and a dev vault.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

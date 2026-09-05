@@ -75,6 +75,25 @@ A pull request that changes only infrastructure introduces no new threat and
 raises every existing score, so a gate that counts arrivals alone waves it
 through.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/threat_model.py`](scripts/threat_model.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+id      entry           sink           score  why
+--------------------------------------------------------------------------------------------
+T-10  I upload_voucher  store             11  a live CSPM finding on the resource this path reaches
+T-01  S get_booking     load_booking      11  the running role is assumable by *
+T-05  D get_booking     load_booking      10  internet-facing with no WAF in front of it
+T-06  E get_booking     load_booking      10  the identity holds write, not just read
+T-03  R get_booking     load_booking      10  no MFA on the assumable role, so the actor is not established
+T-04  I get_booking     load_booking       9  no open CSPM finding on the resource
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

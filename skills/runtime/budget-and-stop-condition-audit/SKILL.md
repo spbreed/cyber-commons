@@ -42,6 +42,25 @@ retrying at a new target — is advisory.
 and set each ceiling above it. A round number either strangles real work or
 never fires.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/budget_and_stop_condition_audit.py`](scripts/budget_and_stop_condition_audit.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+steps taken : 6
+stopped by  : per_target (reports-db)
+complete    : False   <- visible in the output, not silent
+
+ceiling           limit     used
+tokens            50000    10800
+seconds              60      2.4
+actions              20        6
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

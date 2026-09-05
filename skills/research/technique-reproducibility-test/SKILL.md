@@ -44,6 +44,25 @@ look significant.
 at n=20, n=100 and n=1000 if you need to make the point: the effect did not
 change, the ability to see it did.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/technique_reproducibility_test.py`](scripts/technique_reproducibility_test.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+technique              rate              ci95  verdict
+------------------------------------------------------------
+direct override       0.055    (0.023, 0.087)  flaky
+context reframe       0.395    (0.327, 0.463)  flaky
+task nesting          0.660    (0.594, 0.726)  reproducible
+
+'It worked' is true for all three. Only one is reproducible.
+     n            before             after  conclusion
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

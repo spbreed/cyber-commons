@@ -39,6 +39,25 @@ corresponding event, and the second is the one to escalate.
 **5 — Set a tolerance and a consequence.** Beyond tolerance: re-attest, or
 revert. A drift figure with no consequence is a chart.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/behavioural_drift_monitor.py`](scripts/behavioural_drift_monitor.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+    when  event                       drift  new tools
+------------------------------------------------------------------
+    90d  control signed off          0.000  []
+    60d  prompt edited               0.100  []
+    30d  tool added (no PR)          0.330  ['run_shell']
+     5d  model upgraded by vendor    0.550  ['run_shell']
+observed drift rate  0.00647 TVD/day
+tolerance            0.25
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -43,6 +43,25 @@ numbers are attached.
 **5 — Record what the estate has chosen.** Which agents are replayable and which
 are not, so nobody assumes during an incident.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/run_replayability_audit.py`](scripts/run_replayability_audit.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+fully instrumented     replayable=True
+typical production     replayable=False
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+prompts only           replayable=False
+      ✗ tool results — the agent saw a world you cannot rebuild
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

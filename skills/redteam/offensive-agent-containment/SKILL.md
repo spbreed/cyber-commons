@@ -42,6 +42,25 @@ it.
 comparison is the deliverable: the model's judgement improved triage and did not
 provide containment, and those are separate purchases.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/offensive_agent_containment.py`](scripts/offensive_agent_containment.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+=== generation 1: manual — a human reads all six and decides ===
+   6 findings, no ordering, ~20 min of reading
+
+=== generation 2: scripted — sort by severity ===
+   F-02 high    /v1/users returns data without auth
+   F-01 medium  TLS 1.0 enabled
+   F-04 medium  password auth permitted
+   → severity is a label, not a prediction. F-04 and F-05 are both
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

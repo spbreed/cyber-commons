@@ -99,6 +99,19 @@ end-to-end policy, because that is the fix.</p>
 agent and from a person, and record which is challenged. If the agent's version
 is accepted more readily, the agent is the better delivery vehicle and that
 belongs in the report.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/authority_composition_check.py"><code>scripts/authority_composition_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>mallory holds        : ['reports:read']
+mallory asks directly for payments:write -&gt; DENIED
+
+same outcome, requested through the architecture:
+   user asks orchestrator    mallory         ok
+   orchestrator routes       orchestrator    ok
+   agent acts                finance-agent   ok
+   -&gt; reached payments:write: True
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;edges&quot;: [{&quot;from&quot;: &quot;str&quot;, &quot;to&quot;: &quot;str&quot;, &quot;runs_as&quot;: &quot;str&quot;, &quot;scopes&quot;: [&quot;str&quot;]}],

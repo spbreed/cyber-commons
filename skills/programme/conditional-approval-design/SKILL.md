@@ -40,6 +40,25 @@ keeps.
 **5 — Put an expiry on the approval.** Conditional approvals that do not expire
 become permanent policy set by whoever asked first.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/conditional_approval_design.py`](scripts/conditional_approval_design.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+request        customer-refund-agent
+asks for       issue refunds up to GBP 500 without human approval
+business case  42% of refund tickets are mechanical; 3.5 FTE of manual work
+claimed rung   L2.5
+blast radius   18  (irreversible, tenant-wide)
+risk tier      high (score 8)
+decision            refused
+what happens        the team ships it as a 'workflow automation' outside the AI register
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

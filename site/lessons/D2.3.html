@@ -83,6 +83,19 @@ what the cut does <strong>not</strong> stop — sibling agents on the same share
 account almost always survive a credential revocation aimed at one of them.</p>
 <p><strong>6 — Preserve evidence the agent could alter.</strong> If the agent can write to the
 log store, the logs are not evidence. Snapshot first, then contain.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/incident_scoping.py"><code>scripts/incident_scoping.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>chain                     dana@corp → orchestrator → patch-agent → deploy-agent
+scoped_last_actor_only    ['cluster-prod']
+scoped_whole_chain        ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+missed_by_naive_scoping   ['queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+undercount_factor         6.0
+
+Scoping the last actor finds one cluster. The chain reached six
+resources, including a payments repository and a dev vault.
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;window&quot;: {&quot;first_suspicious_action&quot;: &quot;str&quot;, &quot;detected_at&quot;: &quot;str&quot;, &quot;gap_seconds&quot;: 0},

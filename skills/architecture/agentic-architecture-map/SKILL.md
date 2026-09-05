@@ -44,6 +44,23 @@ something a threat model can walk.
 no messaging is a smaller map, and saying that explicitly stops a later
 conversation about controls for components nobody has.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agentic_architecture_map.py`](scripts/agentic_architecture_map.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+```
+9 components, 8 present at CyberTravels
+   component        trust  authority  present
+   agent runtime        2        yes  yes
+   egress               3        yes  NO
+   ingress              0          -  yes
+   knowledge            0          -  yes
+   mcp servers          1        yes  yes
+   messaging            2          -  yes
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

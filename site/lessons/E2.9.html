@@ -80,6 +80,19 @@ programme that knows its own shape; a claim of full detection invites a search
 for the counterexample, and there is one.</p>
 <p><strong>5 — Bring the artefacts, dated.</strong> The single most common failure is a correct
 answer with the evidence three teams away.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/assurance_conversation_prep.py"><code>scripts/assurance_conversation_prep.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>n                20
+conformance      1.0000
+expert accuracy  0.7500
+control  state         
+------------------------
+AC-1     PASS          
+AC-2     PASS          
+SB-1     STALE         
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;evaluation&quot;: {&quot;conformance&quot;: 0.0, &quot;accuracy&quot;: 0.0, &quot;key&quot;: &quot;held-out&quot;, &quot;n&quot;: 0},

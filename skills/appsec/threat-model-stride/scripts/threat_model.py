@@ -263,7 +263,10 @@ def dot_diagram(architecture, bnds):
     crossing = {(b["from"], b["to"]): b["trust"] for b in bnds}
     edges = [(a, b, crossing.get((a, b), ""))
              for a, b in architecture["flows"] if a in nodes and b in nodes]
-    return dot_graph("threat_model", nodes, edges, clusters=clusters)
+    return dot_graph("threat_model", nodes, edges, clusters=clusters,
+                     legend_labels={"entry": "entry point",
+                                    "sink": "dangerous sink",
+                                    "unit": "neither"})
 
 
 def puml_diagram(architecture, bnds):

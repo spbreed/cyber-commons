@@ -246,13 +246,32 @@ def announce_backend():
 # changes when the graph does.
 
 def _dot_id(name):
-    """A DOT-safe quoted identifier."""
-    return '"' + str(name).replace('\\', '').replace('"', "'") + '"'
+    r"""A DOT-safe quoted identifier.
+
+    `\n`, `\l` and `\r` are DOT's own line breaks and must survive; every other
+    backslash is dropped rather than escaped, because a stray one in a label is
+    always a mistake. Stripping all of them turned "ingress\ntrust 0" into
+    "ingressntrust 0" on every node of the architecture map.
+    """
+    s = str(name).replace('"', "'")
+    out, i = [], 0
+    while i < len(s):
+        if s[i] == "\\":
+            if i + 1 < len(s) and s[i + 1] in "nlr":
+                out.append(s[i:i + 2])
+                i += 2
+                continue
+            i += 1
+            continue
+        out.append(s[i])
+        i += 1
+    return '"' + "".join(out) + '"'
 
 
 # The shared vocabulary. Same kind, same colour, in every diagram the commons
 # renders — and `dead` is dashed as well as dim, because two greys a shade apart
-# are not a distinction anyone reads at a glance.
+# are not a distinction anyone reads at a glance. The fourth field is the
+# fallback legend text; a diagram passes its own via `legend_labels`.
 KINDS = {
     "entry":   ("#E05C4B", "#2a1614", "solid",  "untrusted entry point"),
     "unit":    ("#8A93A6", "#1a1e28", "solid",  "reachable"),
@@ -263,7 +282,8 @@ KINDS = {
 }
 
 
-def dot_graph(name, nodes, edges, *, rankdir="LR", clusters=None, legend=True):
+def dot_graph(name, nodes, edges, *, rankdir="LR", clusters=None,
+              legend=True, legend_labels=None):
     """Graphviz DOT source for a directed graph.
 
     nodes:    {id: {"label": str, "kind": str}}   kind picks the palette
@@ -282,7 +302,9 @@ def dot_graph(name, nodes, edges, *, rankdir="LR", clusters=None, legend=True):
            '  node [shape=box style="rounded,filled" fontname="Helvetica" '
            'fontsize=11 penwidth=1.2];',
            '  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" '
-           'penwidth=1.1];']
+           # Edge labels default to black, which is invisible on the dark
+           # page the lesson renders on.
+           'fontcolor="#A8B2C6" penwidth=1.1];']
     for nid in sorted(nodes):
         meta = nodes[nid]
         kind = meta.get("kind", "unit")
@@ -308,13 +330,18 @@ def dot_graph(name, nodes, edges, *, rankdir="LR", clusters=None, legend=True):
     # decodes by guessing.
     used = sorted({n.get("kind", "unit") for n in nodes.values()},
                   key=lambda k: list(KINDS).index(k))
+    # Each diagram names its own vocabulary. "reachable"/"unreachable" is the
+    # call graph's language and means nothing on an architecture map, so the
+    # shared text in KINDS is only a fallback.
+    words = dict(legend_labels or {})
     if legend and used:
         out.append("  subgraph cluster_legend {")
         out.append('    label="key"; color="#26314b"; fontcolor="#96A0B8"; '
                    'fontname="Helvetica"; fontsize=10; rank=sink;')
         prev = None
         for kind in used:
-            pen, fill, line, text = KINDS[kind]
+            pen, fill, line, default = KINDS[kind]
+            text = words.get(kind, default)
             dash = ',dashed' if line == "dashed" else ''
             nid = f"legend_{kind}"
             fg = "#9aa3b5" if kind == "dead" else "#E9EDF6"

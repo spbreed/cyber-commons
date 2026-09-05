@@ -42,6 +42,25 @@ chosen threshold now has a justification somebody can argue with.
 registry is the finding worth routing; a registered agent scoring as an agent is
 working correctly.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_versus_human_scoring.py`](scripts/agent_versus_human_scoring.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+actor                   score     cv   rate/s   span_h  truth
+--------------------------------------------------------------
+svc-indexer             0.800    0.0    20.04     0.01  agent
+dana@corp               0.028   1.55      0.0     1.11  human
+unknown-token-7f3c      0.563    0.0      1.0     0.11  agent
+sam@corp-ide            0.533    0.0      0.5      0.1  human
+polite-agent            0.021   1.26      0.0     0.83  agent
+ threshold  humans flagged   agents MISSED
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

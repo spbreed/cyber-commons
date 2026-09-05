@@ -81,6 +81,19 @@ the step that moves a review to a block and it needs no new information.</p>
 <p><strong>5 — Report the two verdicts side by side.</strong> Unweighted and authority-weighted.
 The difference is the argument for gating what agents may install, and it is
 easier to make with both numbers present.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_supply_chain_assessment.py"><code>scripts/agent_supply_chain_assessment.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>requests==2.31.0        allow
+requsts==2.31.0         block
+      · unsigned — no attestation to source
+      · published 3d ago — no soak time
+      · only 12 downloads
+      · distance 1 from popular package 'requests'
+colourama==0.4.6        block
+      · unsigned — no attestation to source
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;known_good&quot;: [&quot;str&quot;],

@@ -42,6 +42,25 @@ deadline.
 distribution list, the approver. Drafting under time pressure is where the
 avoidable hours are.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/disclosure_phase_breakdown.py`](scripts/disclosure_phase_breakdown.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+scenario                          contain   report   met   margin
+------------------------------------------------------------------
+attribution sound                     2.0     20.0  True     52.0
+attribution broken, 3d scope          6.0     92.0 False    -20.0
+fast containment, slow scope          1.0     80.0 False     -8.0
+
+The third row contained in ONE HOUR and missed by 8 hours.
+phase                                   hours  cumulative  note
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

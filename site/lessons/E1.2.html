@@ -66,6 +66,13 @@ facts about three things that may or may not be the same system.</p>
 <p>This skill turns that ID into a manifest of content-addressed artifacts, so
 every later finding resolves to one evaluable unit and cannot be silently
 confused with a neighbouring deployment.</p>
+<h2>When to use this</h2>
+<p><strong>First, before any control is evaluated.</strong> Nothing else in this chain can run
+without a resolved <code>deployment_id</code>: an IAM finding, an identity entry and a
+gateway policy are three unrelated facts until something establishes they
+describe the same system. Also run it whenever anyone asks which repo, image,
+role, workload identity, gateway or guardrail a deployment actually consists
+of — that question is usually answered from memory and usually wrongly.</p>
 <h2>Procedure</h2>
 <ol>
 <li><strong>Resolve the code.</strong> Repository URL plus the exact commit SHA that was
@@ -82,6 +89,19 @@ confused with a neighbouring deployment.</p>
 <li><strong>Cross-link and check completeness.</strong> Every artifact must reference the
    others. Report orphans rather than omitting them.</li>
 </ol>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/deployment_inventory_resolver.py"><code>scripts/deployment_inventory_resolver.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>asset                             kind              autonomy  owner         found via
+--------------------------------------------------------------------------------------------
+fraud-scoring-model               model             L1        risk-eng      registry
+support-summariser                copilot           L1        support-eng   registry
+vendor-contract-analyser          embedded-feature  L1        —             expense report
+unknown-openai-usage-marketing    copilot           L1        —             egress logs
+pr-remediation-agent              agent             L2.5      —             egress logs
+agent-worker-7f3c                 agent             L2.5      —             egress logs
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,

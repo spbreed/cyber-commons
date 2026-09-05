@@ -101,6 +101,19 @@ different fixes and different owners.</p>
 <p><strong>5 — Report the uncovered phase as the headline.</strong> A pipeline that scores well
 on the stages it implements is still a partial answer, and the gap is what you
 would have to build.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/reference_pipeline_scoring.py"><code>scripts/reference_pipeline_scoring.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>stage  name                              mantis    note
+------------------------------------------------------------------------------------------------
+  1  historical parsing                yes       historical_learnings.jsonl is read on subsequent runs
+  2  structural indexing               partial   operates over the agent's code-reading tools
+  3  component summarisation           partial   context assembled per review target
+  4  architecture synthesis            no        assumes you supply the architecture context
+  5  threat modelling                  partial   review skills encode threat patterns rather than deriving them
+  6  strategic planning                no        you decide what to point it at
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;stages&quot;: [{&quot;stage&quot;: 0, &quot;coverage&quot;: &quot;strong|weak|none&quot;}],

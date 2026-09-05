@@ -42,6 +42,25 @@ promising clause coverage directly.
 **5 — Report coverage as an output.** "These 8 controls satisfy 12 clauses" is
 defensible; "we cover 12 clauses" invites the follow-up you cannot answer.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/control_to_framework_mapping.py`](scripts/control_to_framework_mapping.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+control kind        satisfies
+------------------------------------------------------------------------------------
+AC-1    preventive  3 clause(s): NIST AI RMF: GOVERN-1.2
+                    ISO 42001: 6.1
+                    EU AI Act: Art.14
+AC-2    preventive  2 clause(s): NIST AI RMF: MANAGE-2.2
+                    ISO 42001: 8.1
+SB-1    preventive  2 clause(s): NIST AI RMF: MANAGE-2.1
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

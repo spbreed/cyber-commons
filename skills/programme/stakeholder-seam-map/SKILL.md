@@ -40,6 +40,25 @@ governed it. The ones nobody claims are the seams, and there are always some.
 security reviewed the connector; security assumed it was procurement" — then
 name who closes it. A seam with no owner is a seam next quarter.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/stakeholder_seam_map.py`](scripts/stakeholder_seam_map.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+   compliance  4 controls  green
+   cyber       6 controls  green
+   legal       4 controls  green
+   model_risk  4 controls  green
+   privacy     4 controls  green
+
+functions reporting green : 5/5
+open seams                : 4
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

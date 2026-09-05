@@ -78,6 +78,19 @@ rather than correctness, and it will flatter every harness equally.</p>
 <p><strong>5 — Report the null score alongside every real one.</strong> A harness scoring 0.85
 against a null of 0.85 has demonstrated nothing, and that comparison is the only
 honest way to read the number.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/eval_corpus_integrity_check.py"><code>scripts/eval_corpus_integrity_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>class balance: Counter({'CWE-89': 32, 'CWE-78': 3, 'CWE-22': 3, 'CWE-798': 2})
+the null harness, scored on the skewed corpus:
+   conformance      1.00   ← quotable as '100%'
+   expert accuracy  0.90
+
+Zero capability. Both numbers look like a working product.
+same null harness:
+   skewed corpus (80% CWE-89)   conformance 1.00  expert accuracy 0.90
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;corpus&quot;: {&quot;n&quot;: 0, &quot;skew&quot;: 0.0, &quot;classes&quot;: {&quot;str&quot;: 0}},

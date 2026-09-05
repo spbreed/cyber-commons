@@ -76,6 +76,19 @@ all the rules that were agreed. The first is usually 100% and the second is
 usually about half, and the gap is the honest programme statement.</p>
 <p><strong>5 — Report the unmeasurable ones as open commitments</strong> with an owner and a
 date. Leaving them in the policy unmarked is how a policy stops being read.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/guardrail_specification.py"><code>scripts/guardrail_specification.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>rule                                                        kind        enforceable
+--------------------------------------------------------------------------------------
+all agent egress goes through the gateway                   operating          True
+privileged tools require approval below L3                  operating          True
+every action is logged with the acting identity             operating          True
+agent identities are separately revocable                   operating          True
+no agent action causes unrecoverable customer data loss     outcome           False
+automated remediation does not increase customer-facing incidentsoutcome            True
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;rules&quot;: [{&quot;text&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;operating|outcome&quot;,

@@ -23,6 +23,14 @@ This skill turns that ID into a manifest of content-addressed artifacts, so
 every later finding resolves to one evaluable unit and cannot be silently
 confused with a neighbouring deployment.
 
+## When to use this
+**First, before any control is evaluated.** Nothing else in this chain can run
+without a resolved `deployment_id`: an IAM finding, an identity entry and a
+gateway policy are three unrelated facts until something establishes they
+describe the same system. Also run it whenever anyone asks which repo, image,
+role, workload identity, gateway or guardrail a deployment actually consists
+of — that question is usually answered from memory and usually wrongly.
+
 ## Procedure
 
 1. **Resolve the code.** Repository URL plus the exact commit SHA that was
@@ -38,6 +46,25 @@ confused with a neighbouring deployment.
    These become the input to the risk-registry skill.
 6. **Cross-link and check completeness.** Every artifact must reference the
    others. Report orphans rather than omitting them.
+
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/deployment_inventory_resolver.py`](scripts/deployment_inventory_resolver.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+asset                             kind              autonomy  owner         found via
+--------------------------------------------------------------------------------------------
+fraud-scoring-model               model             L1        risk-eng      registry
+support-summariser                copilot           L1        support-eng   registry
+vendor-contract-analyser          embedded-feature  L1        —             expense report
+unknown-openai-usage-marketing    copilot           L1        —             egress logs
+pr-remediation-agent              agent             L2.5      —             egress logs
+agent-worker-7f3c                 agent             L2.5      —             egress logs
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 
 ## Output contract
 

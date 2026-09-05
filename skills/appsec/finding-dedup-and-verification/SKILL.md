@@ -45,6 +45,25 @@ than in a maintainer's inbox.
 the rejected list with the reason. Discarding hallucinations silently loses the
 measurement of how often the analyser produces them.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/finding_dedup_and_verification.py`](scripts/finding_dedup_and_verification.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+7 raw findings from 3 tracks
+   grep  CWE-89   billing.py:7  execute       conf=0.50
+   taint CWE-89   billing.py:7  execute       conf=1.00
+   model CWE-89   billing.py:8  execute       conf=0.93
+   model CWE-943  billing.py:7  execute       conf=0.71
+   model CWE-89   billing.py:11 execute       conf=0.44
+   model CWE-798  billing.py:3  DB_PASSWORD   conf=0.88
+   model CWE-78   billing.py:6  os.system     conf=0.67
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

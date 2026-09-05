@@ -79,6 +79,19 @@ require anybody to concede a preference.</p>
 <p><strong>5 — Say what each order produces at the end of each period.</strong> The correct
 order usually produces nothing demoable for two quarters, and saying so in
 advance is what stops it being abandoned in the second.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/programme_sequencing.py"><code>scripts/programme_sequencing.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code> step  name          needs     unlocks
+------------------------------------------------------------------------------------
+    1  inventory     []        you can now tier and assign owners
+    2  identity      [1]       per-agent revocation; attribution in logs
+    3  containment   [1]       bounded blast radius; a red team has something to test
+    4  evidence      [2]       act chains; replayable runs; a drift baseline
+    5  evaluation    [4]       accuracy you can defend; regression cases
+    6  continuous    [4, 5]    freshness windows; drift alerts; live posture
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;steps&quot;: [{&quot;id&quot;: 0, &quot;name&quot;: &quot;str&quot;, &quot;requires&quot;: [0]}],

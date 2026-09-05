@@ -43,6 +43,25 @@ that is always wrong in the optimistic direction.
 Somebody will ask, and having the number is what makes the decision fast during
 an incident.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/stop_authority_readiness.py`](scripts/stop_authority_readiness.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+who         VAGUE    the security team
+            CONCRETE on-call SRE, no approval required for non-human identities
+
+mechanism   VAGUE    we can turn off the agents
+            CONCRETE revoke the SPIFFE identity at the gateway (survives restart)
+
+time        VAGUE    quickly
+            CONCRETE measured 12s decision→first failed call, game day 2026-07-04
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

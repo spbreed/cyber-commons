@@ -22,6 +22,12 @@ adaptive, search-based attacks, and human red-teamers defeat them routinely.
 
 **Record the detector class. Do not assert protection. Cap at PARTIAL.**
 
+## When to use this
+When a deployment claims to screen untrusted input, and specifically when
+somebody wants that claim recorded as PASS. It cannot be: the ceiling here is
+PARTIAL and not negotiable, and running this is how that gets written into the
+artefact rather than argued about in a review.
+
 ## Procedure
 
 1. **Inventory untrusted ingestion paths.** Email, documents, web fetches,
@@ -42,6 +48,25 @@ adaptive, search-based attacks, and human red-teamers defeat them routinely.
    content ingested **and** an egress path available is the combination that
    turns injection into exfiltration. Any deployment with all three is a
    finding on its own, whatever the detector says.
+
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/input_injection_screening_verifier.py`](scripts/input_injection_screening_verifier.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+the same payload, through every ingress component:
+   knowledge  -> refused   (knowledge may not select a tool)
+   memory     -> refused   (memory may not select a tool)
+   mcp        -> refused   (mcp may not select a tool)
+   tools      -> refused   (tools may not select a tool)
+   messaging  -> refused   (messaging may not select a tool)
+
+rewriting the payload does not help - the check never reads it:
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 
 ## Output contract
 

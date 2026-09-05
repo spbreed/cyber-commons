@@ -41,6 +41,25 @@ and both need explaining.
 pattern; the runs are the evidence. A report that lists runs without the pattern
 is the per-run view again.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/fleet_correlation_analysis.py`](scripts/fleet_correlation_analysis.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+per-run monitoring
+   run-01  on-task=True  in-policy=True  budget=True  -> nothing to report
+   run-02  on-task=True  in-policy=True  budget=True  -> nothing to report
+   run-03  on-task=True  in-policy=True  budget=True  -> nothing to report
+   run-04  on-task=True  in-policy=True  budget=True  -> nothing to report
+   run-05  on-task=True  in-policy=True  budget=True  -> nothing to report
+
+Five clean runs. Nothing here is wrong, and nothing here is visible,
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

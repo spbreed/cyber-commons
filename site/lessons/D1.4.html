@@ -106,6 +106,19 @@ noise; beyond it is a review, and the review is of the change that caused it —
 usually a model upgrade or a manifest edit.</p>
 <p><strong>5 — Write the alert text for a human.</strong> "patch-agent drift 0.35, new tools:
 run_shell" is actionable. A distance metric on its own gets closed.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_aware_rule_review.py"><code>scripts/agent_aware_rule_review.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>classic rule                      fires on agent  fires on human
+------------------------------------------------------------------
+rate &gt; 30 actions/min             True            False
+activity outside 09:00-18:00      True            True
+same action &gt; 100 times           True            False
+
+All three fire on an agent doing exactly its job. Deployed as-is, they
+produce continuous noise and are disabled within a week.
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;classic_rules&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;fires_on_agent&quot;: true, &quot;fires_on_human&quot;: false}],

@@ -43,6 +43,25 @@ control; a refusal that came from the tool's own docstring is not.
 `SELECT on bookings` rather than `run_query`. A narrowing that cannot be
 written in that form is not a narrowing.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/tool_scope_abuse_probe.py`](scripts/tool_scope_abuse_probe.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+intended use:
+   how many invoices  -> {'rows': [{'id': 7, 'amount': 120}]}
+
+same tool, same identity, same well-formed arguments:
+   signing key        -> {'rows': [{'id': 1, 'value': 'prod-signing-key'}]}
+   clean up secrets   -> {'deleted': 1, 'table': 'secrets'}
+
+secrets table now: []
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

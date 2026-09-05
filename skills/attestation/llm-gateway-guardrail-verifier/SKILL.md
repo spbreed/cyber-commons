@@ -20,6 +20,12 @@ that can open a socket can bypass it by calling the provider directly. If the
 allowlist is not enforced at the network layer, **downgrade this control to
 PARTIAL** and say why.
 
+## When to use this
+When a deployment routes model traffic through a gateway and the attestation
+wants to say so. Check first whether egress is enforced below the application:
+if it is not, an agent opens a socket and the gateway is advisory, and this
+control's confidence drops with it.
+
 ## Procedure
 
 1. **Test reachability, do not read configuration.** From the deployment's
@@ -41,6 +47,25 @@ PARTIAL** and say why.
 
 5. **Confirm the action.** A filter set to observe rather than block is
    telemetry, not a control. Record the configured action per policy.
+
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/llm_gateway_guardrail_verifier.py`](scripts/llm_gateway_guardrail_verifier.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+   the intended call           ALLOWED
+   unregistered agent          denied at identity
+   verb not permitted          denied at policy
+   exfiltration destination    denied at egress
+   over the per-target ceiling denied at budget
+
+audit entries written: 1
+credential held by the agent: never - attached at the gateway
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 
 ## Output contract
 

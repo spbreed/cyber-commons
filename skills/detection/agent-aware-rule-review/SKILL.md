@@ -41,6 +41,25 @@ usually a model upgrade or a manifest edit.
 **5 — Write the alert text for a human.** "patch-agent drift 0.35, new tools:
 run_shell" is actionable. A distance metric on its own gets closed.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_aware_rule_review.py`](scripts/agent_aware_rule_review.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+classic rule                      fires on agent  fires on human
+------------------------------------------------------------------
+rate > 30 actions/min             True            False
+activity outside 09:00-18:00      True            True
+same action > 100 times           True            False
+
+All three fire on an agent doing exactly its job. Deployed as-is, they
+produce continuous noise and are disabled within a week.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

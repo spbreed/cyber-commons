@@ -43,6 +43,25 @@ request.
 it? Kubernetes NetworkPolicy is default-allow until a policy selects the pod,
 so a namespace with no policy is not "no rules" — it is "all traffic".
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/sandbox_containment_probe.py`](scripts/sandbox_containment_probe.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+no sandbox                      reached 8
+      file:/etc/passwd
+      file:/home/agent/.ssh/id_ed25519
+      file:/home/agent/work/data.csv
+      env:AWS_ACCESS_KEY_ID
+      env:DATABASE_URL
+      net:0.0.0.0/0
+      net:169.254.169.254:80
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

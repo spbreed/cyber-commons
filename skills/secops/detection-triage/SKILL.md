@@ -55,6 +55,25 @@ false-positive rate is high, not if it fires often. Rank tuning candidates by
 `false_positive_rate × volume`, with a full tiebreak so the list is stable
 between runs.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/detection_triage.py`](scripts/detection_triage.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+BARE ALERT (what most SOCs receive):
+   patch-agent read /vault/.env
+   rotator-agent read /vault/.env
+   → identical. An analyst cannot tell these apart.
+
+ENRICHED ALERT:
+   actor        patch-agent
+   on behalf of dana@corp
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -38,6 +38,25 @@ pipeline step, a scheduled export.
 **5 — Close by making the trigger automatic or naming a date.** Anything else
 recreates the same state, and the check will find it again next time.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/handoff_delivery_check.py`](scripts/handoff_delivery_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+MRM validation -> security evidence
+   artefact  : validation report with tool surface and autonomy
+   owner     : model_risk
+   consumers : cyber, compliance, internal_audit
+
+legal position -> system prompt
+   artefact  : approved language and refusal set
+   owner     : legal
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

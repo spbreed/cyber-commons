@@ -82,6 +82,19 @@ citing a longer one.</p>
 <p><strong>5 — Record what changes the answer.</strong> Adding a decision effect, a new
 territory, a new data category. Obligations are re-derived on those events, not
 annually.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/obligation_mapping.py"><code>scripts/obligation_mapping.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>claims-triage-agent — autonomy L2.5, data ['customer', 'health', 'regulated']
+
+instrument             layer  obligation
+--------------------------------------------------------------------------------------------
+EU AI Act                  1  automated decision affecting individuals; human oversight and record-keeping obligations
+DORA                       2  ICT third-party risk, incident reporting, resilience testing, exit strategy
+HIPAA-equivalent           2  minimum necessary; audit controls
+GDPR                       3  lawful basis, erasure, automated decision-making
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;system&quot;: {&quot;purpose&quot;: &quot;str&quot;, &quot;sector&quot;: &quot;str&quot;, &quot;decision_effect&quot;: true,

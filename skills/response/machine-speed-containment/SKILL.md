@@ -43,6 +43,25 @@ the candidates: revoking an agent's token wrongly costs a restarted run.
 high-precision signals; keep a human in front of anything that affects a person's
 access. State both halves so the policy survives review.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/machine_speed_containment.py`](scripts/machine_speed_containment.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+   agent rate   human 8min   auto 12s   ratio
+----------------------------------------------
+       30/min          240          6    40.0×
+      120/min          960         24    40.0×
+      300/min         2400         60    40.0×
+     1200/min         9600        240    40.0×
+
+At 300/min an 8-minute approval costs 2,400 further actions.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

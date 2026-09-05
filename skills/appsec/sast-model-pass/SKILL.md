@@ -53,6 +53,25 @@ not stable across runs. Run the same slice ten times before you let any
 threshold into a pipeline; the variance is usually wider than the gap between
 your accept and reject bands.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/sast_model_pass.py`](scripts/sast_model_pass.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+find_booking
+   model says   : MISSING CWE-862 at confidence 0.82
+   quoting      : def find_booking(reference):
+   -> HYPOTHESIS: quote verified, status hypothesis (not a finding)
+
+my_bookings
+   model says   : PRESENT CWE-862 at confidence 0.77
+   quoting      : require_owner(session.user_id)
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -76,6 +76,19 @@ were not met, and who runs it. A condition nobody tests is a condition nobody
 keeps.</p>
 <p><strong>5 — Put an expiry on the approval.</strong> Conditional approvals that do not expire
 become permanent policy set by whoever asked first.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/conditional_approval_design.py"><code>scripts/conditional_approval_design.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>request        customer-refund-agent
+asks for       issue refunds up to GBP 500 without human approval
+business case  42% of refund tickets are mechanical; 3.5 FTE of manual work
+claimed rung   L2.5
+blast radius   18  (irreversible, tenant-wide)
+risk tier      high (score 8)
+decision            refused
+what happens        the team ships it as a 'workflow automation' outside the AI register
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;request&quot;: {&quot;name&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;blast&quot;: 0, &quot;tier&quot;: &quot;str&quot;, &quot;irreversible&quot;: [&quot;str&quot;]},

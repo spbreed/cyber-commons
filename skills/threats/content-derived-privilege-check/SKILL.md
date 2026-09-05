@@ -44,6 +44,25 @@ set from that list; it will be larger than the original.
 refused while the principal's own calls still succeed. Both halves matter: a
 control that also blocks the user has not been demonstrated to work.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/content_derived_privilege_check.py`](scripts/content_derived_privilege_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+normal pipeline run:
+   {'tool': 'read_diff', 'executed': True}
+   {'tool': 'index_repo', 'executed': True}
+   {'tool': 'post_comment', 'executed': True}
+   {'tool': 'approve_pr', 'executed': True}
+carrier                   blocklist flags it?   reaches approve_pr?
+------------------------------------------------------------------------
+code comment              False                 True
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

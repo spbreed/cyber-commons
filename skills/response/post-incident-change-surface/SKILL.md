@@ -41,6 +41,25 @@ honest measure of the review, and it is usually a third of what was agreed.
 incident actually bought. If it is unchanged, the actions were process rather
 than containment, and that belongs in the report.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/post_incident_change_surface.py`](scripts/post_incident_change_surface.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+blast before 44  after 4
+the manifest diff records the change even though no PR was raised.
+
+OK   gate http_post behind approval            type=preventive  owner=platform-sec   verify_by=2026-09-30
+OK   alert on credential-path reads            type=detective   owner=soc            verify_by=2026-09-15
+WEAK update the prompt to warn the model       type=guidance    owner=—              verify_by=—
+
+1 action(s) are guidance rather than controls: ['update the prompt to warn the model']
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

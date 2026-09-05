@@ -80,6 +80,11 @@ allowed-tools: Bash, Read
 that can open a socket can bypass it by calling the provider directly. If the
 allowlist is not enforced at the network layer, <strong>downgrade this control to
 PARTIAL</strong> and say why.</p>
+<h2>When to use this</h2>
+<p>When a deployment routes model traffic through a gateway and the attestation
+wants to say so. Check first whether egress is enforced below the application:
+if it is not, an agent opens a socket and the gateway is advisory, and this
+control's confidence drops with it.</p>
 <h2>Procedure</h2>
 <ol>
 <li>
@@ -108,6 +113,19 @@ PARTIAL</strong> and say why.</p>
    telemetry, not a control. Record the configured action per policy.</p>
 </li>
 </ol>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/llm_gateway_guardrail_verifier.py"><code>scripts/llm_gateway_guardrail_verifier.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>   the intended call           ALLOWED
+   unregistered agent          denied at identity
+   verb not permitted          denied at policy
+   exfiltration destination    denied at egress
+   over the per-target ceiling denied at budget
+
+audit entries written: 1
+credential held by the agent: never - attached at the gateway
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,

@@ -91,6 +91,19 @@ imports the defect does not depend on. This is what a bigger window costs, in
 tokens and in the model's attention.</p>
 <p><strong>5 — Pick the smallest decidable slice, and say what it excluded.</strong> The
 exclusion list is what somebody re-reads when the pipeline misses something.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/context_window_sizing.py"><code>scripts/context_window_sizing.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>the bug is on line 22
+whole file             839 chars   29 lines
+±2 line window         207 chars    5 lines
+±6 line window         432 chars   13 lines
+strategy            sink   concat  source  intent  decidable
+----------------------------------------------------------------
+whole file          True   True    True    True    True
+±2 line window      True   True    False   False   False
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;decidability&quot;: {&quot;requires&quot;: [&quot;str&quot;]},

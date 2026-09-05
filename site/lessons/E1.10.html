@@ -105,6 +105,19 @@ governed it. The ones nobody claims are the seams, and there are always some.</p
 <p><strong>5 — Write the seam as a pair of assumptions, with an owner.</strong> "Legal assumed
 security reviewed the connector; security assumed it was procurement" — then
 name who closes it. A seam with no owner is a seam next quarter.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/stakeholder_seam_map.py"><code>scripts/stakeholder_seam_map.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>   compliance  4 controls  green
+   cyber       6 controls  green
+   legal       4 controls  green
+   model_risk  4 controls  green
+   privacy     4 controls  green
+
+functions reporting green : 5/5
+open seams                : 4
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;functions&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;question&quot;: &quot;str&quot;, &quot;controls_operated&quot;: 0}],

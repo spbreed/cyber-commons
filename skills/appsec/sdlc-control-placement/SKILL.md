@@ -57,6 +57,25 @@ on either side is a gap everybody understands. A risk covered only on the side
 that cannot act is the one that gets signed off, and it is the one this
 procedure exists to surface.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/sdlc_control_placement.py`](scripts/sdlc_control_placement.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+techniques, placed
+   technique                     side   gate  blind to
+   SAST / code analysis          pre    yes   whether the vulnerable path is reached with real traffic
+   SCA and SBOM scanning         pre    yes   what actually loaded, versus what the manifest pinned
+   IaC and policy-as-code        pre    yes   the identity and network the workload really got
+   threat modelling              pre    -     entry points added by a config change, not a commit
+   tool-schema / MCP review      both   yes   a description edited by the server after review
+   DAST / attack simulation      post   -     the commit that introduced it
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

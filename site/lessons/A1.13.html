@@ -87,6 +87,19 @@ the one that turns your incident into somebody else's.</p>
 <p><strong>5 — Set the budget from the measurement.</strong> A ceiling chosen from an observed
 distribution is defensible; one chosen from a round number is a guess. State
 what a legitimate run costs at p95 and set the ceiling above that.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/unbounded_loop_cost_probe.py"><code>scripts/unbounded_loop_cost_probe.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>steps taken           : 501
+tokens spent          : 901,800  (about $1.80)
+downstream calls      : 501
+downstream rejections : 451  &lt;- other callers got these
+stopped by            : runaway
+
+The agent was not attacked and nothing malfunctioned. It was given a
+task that cannot succeed, and the loop did what loops do.
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;stop_conditions&quot;: {&quot;steps&quot;: false, &quot;tokens&quot;: false, &quot;wallclock&quot;: false, &quot;cost&quot;: false, &quot;impossibility&quot;: false},

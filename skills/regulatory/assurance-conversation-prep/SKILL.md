@@ -41,6 +41,25 @@ for the counterexample, and there is one.
 **5 — Bring the artefacts, dated.** The single most common failure is a correct
 answer with the evidence three teams away.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/assurance_conversation_prep.py`](scripts/assurance_conversation_prep.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+n                20
+conformance      1.0000
+expert accuracy  0.7500
+control  state         
+------------------------
+AC-1     PASS          
+AC-2     PASS          
+SB-1     STALE         
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

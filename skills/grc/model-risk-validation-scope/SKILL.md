@@ -43,6 +43,25 @@ the audit calendar, which is the assumption that failed in the first place.
 governance triggers. Three findings with three owners rather than one finding
 about the framework.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/model_risk_validation_scope.py`](scripts/model_risk_validation_scope.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+pillar                  what it asks                                  what it quietly assumes
+conceptual_soundness    is the method appropriate for the purpose     assumes the purpose is stable and stated
+independent_validation  did someone other than the builder check      assumes the thing checked is the thing deployed
+ongoing_monitoring      is it still performing as validated           assumes performance is what changes
+
+All three survive contact with AI. The assumptions are what break.
+validation still covers what is deployed: False
+   tool surface changed: ['db_update', 'read_ticket', 'write_ticket']
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

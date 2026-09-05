@@ -67,6 +67,25 @@ in front of the irreversible action, or shorten time-to-stop with a
 notification. Recommend the one with the best radius reduction per unit of
 friction, and say what it costs.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/blast_radius_review.py`](scripts/blast_radius_review.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+action              reversible  external  routing         per day
+delete_row          False       False     human approval  6
+issue_refund        False       True      human approval  2
+read_report         True        False     policy only     400
+rotate_credential   False       False     human approval  1
+send_email          False       True      human approval  3
+update_ticket       True        False     policy only     260
+write_draft         True        False     policy only     120
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -98,6 +98,19 @@ tells the requester what to change. A bare refusal produces an appeal; a
 conditional one produces a pull request.</p>
 <p><strong>5 — Re-evaluate on tool change.</strong> A rung approved with three tools does not
 carry over to five. Make the tool manifest the trigger for re-evaluation.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/autonomy_ladder_decisions.py"><code>scripts/autonomy_ladder_decisions.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>L1   self-service  budget   0  register it; no further review
+                   Assist — model proposes, a human performs every action.
+L2   lightweight   budget   0  named owner + approval gate on every writer
+                   Act with approval — model calls tools, a human approves each call.
+L2.5 governed      budget  20  risk tier + blast budget + drift monitoring + tested stop
+                   Act within a blast radius — pre-approved tools, bounded scope, review after.
+L3   board         budget  60  all of L2.5 + held-out eval per release + board sign-off
+                   Autonomous — model acts and self-verifies; humans see aggregates.
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;ladder&quot;: [{&quot;rung&quot;: &quot;str&quot;, &quot;governance&quot;: &quot;str&quot;, &quot;budget&quot;: &quot;str&quot;}],

@@ -80,6 +80,19 @@ deadline.</p>
 <p><strong>5 — Pre-draft what can be pre-drafted.</strong> The regime, the template, the
 distribution list, the approver. Drafting under time pressure is where the
 avoidable hours are.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/disclosure_phase_breakdown.py"><code>scripts/disclosure_phase_breakdown.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>scenario                          contain   report   met   margin
+------------------------------------------------------------------
+attribution sound                     2.0     20.0  True     52.0
+attribution broken, 3d scope          6.0     92.0 False    -20.0
+fast containment, slow scope          1.0     80.0 False     -8.0
+
+The third row contained in ONE HOUR and missed by 8 hours.
+phase                                   hours  cumulative  note
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;obligation&quot;: {&quot;regime&quot;: &quot;str&quot;, &quot;hours&quot;: 0},

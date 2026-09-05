@@ -65,6 +65,24 @@ ROUTING_CASES = [
 ]
 
 
+# The loading model an agent uses, as budgets. Metadata is loaded for every
+# skill at startup; the body only on activation; scripts/ and references/ only
+# when something actually needs them.
+DESCRIPTION_BUDGET = 110      # ~100 tokens, with room for one long sentence
+BODY_BUDGET = 5000
+
+REQUIRED_SECTIONS = [
+    (("When to use this", "Safety preconditions"),
+     "an agent needs the activation condition, not just the procedure"),
+    (("Procedure", "Step-by-step"),
+     "numbered steps, each an instruction rather than a description"),
+    (("Example", "Inputs"),
+     "a real input and the real output, so the shape is not left to guesswork"),
+    (("Failure modes", "Common edge cases"),
+     "the ways it goes wrong, including the ones that fail silently"),
+]
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -89,6 +107,29 @@ def main() -> int:
                             f"directory {p.parent.name!r}")
         if not meta.get("allowed-tools"):
             problems.append(f"{ref}: declares no allowed-tools")
+
+        # The progressive-disclosure budgets. An agent loads every skill's
+        # metadata at startup and pays for it whether the skill fires or not,
+        # so the description is the expensive field; the body is only paid for
+        # on activation, and the resources only when they run. See
+        # skills/README.md — these are the numbers that contract is written to.
+        d_tokens = len(meta["description"].split()) * 4 // 3
+        b_tokens = len(body.split()) * 4 // 3
+        if d_tokens > DESCRIPTION_BUDGET:
+            problems.append(f"{ref}: description is ~{d_tokens} tokens, over "
+                            f"the {DESCRIPTION_BUDGET} startup budget — every "
+                            f"agent pays for it on every task")
+        if b_tokens > BODY_BUDGET:
+            problems.append(f"{ref}: body is ~{b_tokens} tokens, over the "
+                            f"{BODY_BUDGET} activation budget — move detail "
+                            f"into scripts/ or references/")
+
+        # The sections a skill needs to be usable by an agent that has just
+        # activated it: when to reach for it, the steps, a worked example, and
+        # the ways it fails.
+        for names, why in REQUIRED_SECTIONS:
+            if not any(f"## {n}" in body for n in names):
+                problems.append(f"{ref}: no '## {names[0]}' section — {why}")
         try:
             contract_of(body)
             has_contract = True

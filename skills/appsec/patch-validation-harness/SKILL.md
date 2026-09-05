@@ -42,6 +42,25 @@ what excludes the environment having changed underneath the test.
 **5 — Report per candidate and per gate.** A candidate rejected at gate one and
 one rejected at gate two need different conversations with whoever wrote them.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/patch_validation_harness.py`](scripts/patch_validation_harness.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+behaviour of the vulnerable build:
+   get_user('dana'    ) → [(1, 'dana')]      ok
+   get_user('sam'     ) → [(2, 'sam')]       ok
+   get_user('nobody'  ) → []                 ok
+   get_user("o'brien" ) → raised OperationalError FAILS
+
+exploit works: True — probe returned 3 rows
+scanner fires: False
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -63,6 +63,25 @@ undeclared artefact has no CVE because it has no identifier, not because it is
 safe. Those two produce identical output on a dependency report, and only one
 of them is a reason to relax.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/supply_chain_decompile.py`](scripts/supply_chain_decompile.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+SBOM: cybertravels-booking 4.7.1 · 5 declared components
+
+   CRITICAL org.apache.commons/commons-text 1.9     GHSA-599f-7c49-w659
+             Variable interpolation permits script execution (Text4Shell)  -> fixed in 1.10.0
+   HIGH     pyyaml 5.3.1   GHSA-8q59-q68h-6hv4
+             Arbitrary code execution via full_load / FullLoader  -> fixed in 5.4
+   MEDIUM   requests 2.31.0  GHSA-h5c8-rqwp-cp95
+             Proxy-Authorization header leaked on redirect  -> fixed in 2.32.0
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

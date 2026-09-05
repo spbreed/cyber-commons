@@ -153,6 +153,19 @@ fetch was fine; the environment was not.</p>
 procedure runs. Record the line count and a CRC of the bytes. Two runs of the
 same procedure that print different bytes are a defect in the procedure, and
 without a checksum nobody notices until the diff is large.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/lesson_preflight.py"><code>scripts/lesson_preflight.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>the tree this host fetched
+  areas            : 14
+  skills           : 120
+  with a script    : 119
+  shared runtime   : present
+  resolved from    : the running file, not the working directory
+
+(a) the tree was never fetched  --  a host with no network
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;tree&quot;: {&quot;areas&quot;: 0, &quot;skills&quot;: 0, &quot;with_script&quot;: 0, &quot;runtime_present&quot;: true},
@@ -180,7 +193,7 @@ failures has tested one path out of three.</p>
 </ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the tree this host fetched
   areas            : 14
   skills           : 120
-  with a script    : 119
+  with a script    : 120
   shared runtime   : present
   resolved from    : the running file, not the working directory
 
@@ -191,7 +204,7 @@ failures has tested one path out of three.</p>
 
 (b) fetched, but the shared runtime is not on PYTHONPATH
     exit 1: ModuleNotFoundError: No module named &#x27;cyber_commons_skill_runtime&#x27;
-    The file was there and the interpreter started. 16 of the skills
+    The file was there and the interpreter started. 17 of the skills
     import the shared runtime rather than carrying a copy of it, and
     the lesson cell is what puts it on the path.
 

@@ -41,6 +41,25 @@ block on earlier ones.
 its own quiet period survives it; one that does not gets re-planned in month
 four into the other order.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/capability_build_order.py`](scripts/capability_build_order.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+quarter                         coverage   demoable
+------------------------------------------------------
+Q1 · inventory + identity            25%          0
+Q2 · containment                     50%          0
+Q3 · evidence + evaluation           75%          1
+Q4 · continuous + stop              100%          3
+
+Q1 and Q2 produce nothing demoable. That is the political problem, and
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

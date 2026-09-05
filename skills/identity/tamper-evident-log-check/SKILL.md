@@ -42,6 +42,25 @@ back to reconciling everything.
 write to the log store, the chain protects against an outsider and not against
 the subject. Enumerate the logging plane against the role's permissions.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/tamper_evident_log_check.py`](scripts/tamper_evident_log_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+in-band check - does every step have a recorded command?
+   steps: 5   steps with no record: 0   verdict: clean
+
+Two of these five steps executed something other than what was recorded.
+The in-band check cannot see that, because it is reading the record that
+the thing it is checking produced.
+trace   harness recorded              host observed
+t-03    python3 analyse.py            curl -s http://cache/put?m=...
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

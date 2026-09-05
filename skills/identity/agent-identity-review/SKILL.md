@@ -62,6 +62,25 @@ authority that outlives the task is standing authority with extra steps.
 user caused this row to be deleted?" — and try to answer it from the logs alone.
 If you cannot, the delegation is not auditable regardless of how it is built.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_identity_review.py`](scripts/agent_identity_review.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+request                     authorized?  attributed to
+dana@corp -> reports:read   True         dana@corp via reports-agent
+dana@corp -> db:admin       False        dana@corp via reports-agent
+
+memory keys - the same workspace, two users:
+   dana  -> acme:dana@corp
+   priya -> acme:priya@corp
+   shared? False
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

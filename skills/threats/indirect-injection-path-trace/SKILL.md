@@ -43,6 +43,25 @@ running as the requesting user is a privilege escalation with no login.
 still steers with origin tagging on is a path where the tag is not consulted at
 the decision point, which is a different defect from having no tag.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/indirect_injection_path_trace.py`](scripts/indirect_injection_path_trace.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+   via knowledge   (a wiki page the agent retrieved)
+       -> forward_email to archive@evil.example
+   via mcp         (the description a third-party tool server advertises)
+       -> forward_email to archive@evil.example
+   via memory      (a note written during an earlier session)
+       -> forward_email to archive@evil.example
+   via tools       (the body of a ticket returned by a tool call)
+       -> forward_email to archive@evil.example
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

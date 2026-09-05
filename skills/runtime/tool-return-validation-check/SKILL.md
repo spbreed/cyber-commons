@@ -42,6 +42,24 @@ later.
 **5 — Confirm only verified claims propagate.** Follow each case for several
 hops and record which survive. The unverified ones surviving is the finding.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/tool_return_validation_check.py`](scripts/tool_return_validation_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+   schema_ok=True  -> {'stopped': 'refuted', 'claim': 'libfoo has no known CVEs', 'by': 'checked against the advisory database'}
+   schema_ok=True  -> {'propagated': 'test_login passes', 'verified_by': 'checked against the advisory database', 'hops': 3}
+   schema_ok=True  -> {'stopped': 'unverifiable', 'claim': 'the refund was approved', 'why': 'no oracle for this claim'}
+   schema_ok=False -> {'stopped': 'malformed'}
+
+The first message is schema-perfect and confident and false. Schema
+validation passed it; the oracle refuted it.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

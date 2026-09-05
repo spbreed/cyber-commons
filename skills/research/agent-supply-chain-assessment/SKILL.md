@@ -42,6 +42,25 @@ the step that moves a review to a block and it needs no new information.
 The difference is the argument for gating what agents may install, and it is
 easier to make with both numbers present.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_supply_chain_assessment.py`](scripts/agent_supply_chain_assessment.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+requests==2.31.0        allow
+requsts==2.31.0         block
+      · unsigned — no attestation to source
+      · published 3d ago — no soak time
+      · only 12 downloads
+      · distance 1 from popular package 'requests'
+colourama==0.4.6        block
+      · unsigned — no attestation to source
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

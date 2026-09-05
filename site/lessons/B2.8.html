@@ -95,6 +95,19 @@ person writing one.</p>
 <p><strong>6 — Mark each hypothesis confirmed, refuted, or untested</strong> — and never
 "probably". A hypothesis whose probe could not run is untested, which is
 different from refuted and much more common.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/dynamic_exploitation_probe.py"><code>scripts/dynamic_exploitation_probe.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>normal use:
+   list_reports('test-user-a') → [(1, 'test-user-a', 100), (2, 'test-user-a', 250)]
+   fetch_doc('readme.txt')     → public readme
+probe  cwe      exploited  observation
+--------------------------------------------------------------------------
+P-01   CWE-89   True       4 rows, owners=['test-user-a', 'test-user-b', 'test-user-c']
+P-02   CWE-22   True       returned 'synthetic-not-real-9999'
+P-03   CWE-89   False      2 rows, owners=['test-user-a']
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;hypotheses&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;prediction&quot;: &quot;str&quot;}],

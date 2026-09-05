@@ -41,6 +41,25 @@ citing a longer one.
 territory, a new data category. Obligations are re-derived on those events, not
 annually.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/obligation_mapping.py`](scripts/obligation_mapping.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+claims-triage-agent — autonomy L2.5, data ['customer', 'health', 'regulated']
+
+instrument             layer  obligation
+--------------------------------------------------------------------------------------------
+EU AI Act                  1  automated decision affecting individuals; human oversight and record-keeping obligations
+DORA                       2  ICT third-party risk, incident reporting, resilience testing, exit strategy
+HIPAA-equivalent           2  minimum necessary; audit controls
+GDPR                       3  lawful basis, erasure, automated decision-making
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

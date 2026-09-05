@@ -18,6 +18,12 @@ Delegation is cryptographically distinguishable from impersonation, and token
 passthrough is visible in the audience claim. This control is genuinely
 verifiable.
 
+## When to use this
+When a deployment claims to act on behalf of a human, and whenever that claim
+appears in an audit trail. Delegation is impossible without an actor token, so
+the presence of one is proof rather than assertion — which is why this control
+reaches HIGH confidence and most do not.
+
 ## Procedure
 
 1. **Establish workload identity.** Read the registration entry and its
@@ -40,6 +46,25 @@ verifiable.
 5. **Check credential hygiene.** Short lifetime, rotation, and — where mutual
    TLS is possible — prefer certificate credentials over bearer tokens, which
    are replayable. Flag every JWT-only hop.
+
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/identity_chain_verifier.py`](scripts/identity_chain_verifier.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+the access token the payments API will actually see:
+
+{
+  "act": {
+    "sub": "spiffe://cybertravels.com/ns/prod/sa/agent-alpha"
+  },
+  "aud": "https://payments.cybertravels.internal",
+  "cnf": {
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 
 ## Output contract
 

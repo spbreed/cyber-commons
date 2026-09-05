@@ -106,6 +106,19 @@ before shipping a check for <code>?</code>.</p>
 fix and is not — an escape function wrapped around concatenation. If the
 verifier accepts it, the loop ships it, reports success, and the trace looks
 clean.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agentic_harness_loop.py"><code>scripts/agentic_harness_loop.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>the loop, wired: ['plan', 'act', 'verify', 'stop']
+backend  : replay
+steps    : 1
+accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
+verified : None   &lt;- nothing checked it
+
+The loop stopped because the model produced something, which is not the
+same as producing something correct. Whatever came back was accepted.
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;loop&quot;: {&quot;moves&quot;: [&quot;plan&quot;, &quot;act&quot;, &quot;verify&quot;, &quot;stop&quot;], &quot;max_steps&quot;: 0, &quot;exit_owned_by&quot;: &quot;harness|model&quot;},

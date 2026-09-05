@@ -46,6 +46,25 @@ check on output — credential-shaped strings, hosts outside the allowlist — t
 pauses regardless of the agent's judgement. This is the part that works when
 the incentive analysis fails.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/escalation_path_review.py`](scripts/escalation_path_review.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+harness as shipped      noticed=True  tool=False  reported=False  fallback=the peer channel
+harness with the tool   noticed=True  tool=True  reported=True  fallback=None
+
+Reported figures: 3-6 agents considered notifying a human, zero
+attempted it, out of roughly 1,200 that saw the compromise. The
+distinction that matters for remediation is between 'did not notice',
+'did not think it was my job' and 'no route available' - and this is the
+third.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

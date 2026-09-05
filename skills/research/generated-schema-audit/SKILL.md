@@ -42,6 +42,25 @@ same cause.
 points at a line in a migration gets fixed; one that says "enable RLS" gets
 discussed.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/generated_schema_audit.py`](scripts/generated_schema_audit.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+tables created : profiles, posts
+findings       : 2
+
+table       severity   why
+profiles    critical   RLS disabled - open via the public API
+posts       high       policy matches every row
+
+The application works. Every feature passes. `profiles` holds an api_key
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

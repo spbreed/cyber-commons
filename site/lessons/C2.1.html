@@ -81,6 +81,18 @@ are addressable and neither is about effort.</p>
 <p><strong>5 — Define closure to require an outcome.</strong> A finding is closed when it has a
 control, a detection or an explicit accepted-risk record with an owner. Anything
 else reopens as the same finding next year.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/research_durability_check.py"><code>scripts/research_durability_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>=== folklore — actionable: False ===
+CLAIM     our review agent can be tricked by comments in diffs
+SETUP     the review agent
+TRIGGER   a comment
+OBSERVED  it approved something it shouldn't
+RATE      not measured
+HOLDS WHEN
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;claims&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;actionable&quot;: false, &quot;gaps&quot;: [&quot;reproduction&quot;, &quot;versions&quot;, &quot;conditions&quot;]}],

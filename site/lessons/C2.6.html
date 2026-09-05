@@ -94,6 +94,19 @@ That demonstration is what justifies the next step.</p>
 <p><strong>5 — Add a suite-health check.</strong> Difficulty distribution, share of cases no
 target has ever failed, and the date each case was added. A suite with a growing
 share of trivial cases is reporting improvement it has not earned.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/eval_suite_health_check.py"><code>scripts/eval_suite_health_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>case    surface         rate              ci95
+------------------------------------------------
+INJ-01  injection      0.055    (0.033, 0.077)
+INJ-02  injection      0.355    (0.308, 0.402)
+INJ-03  injection      0.657    (0.611, 0.704)
+INJ-04  injection      0.725    (0.681, 0.769)
+IDN-01  identity       0.000        (0.0, 0.0)
+IDN-02  identity       0.953    (0.932, 0.973)
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;baseline&quot;: [{&quot;case&quot;: &quot;str&quot;, &quot;surface&quot;: &quot;str&quot;, &quot;rate&quot;: 0.0, &quot;interval&quot;: [0.0, 0.0]}],

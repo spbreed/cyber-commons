@@ -42,6 +42,24 @@ access is not. Blast radius, not age, is the ranking.
 revoke. Orphan: suspend and notify. Unused past window: expire. A sweep with no
 consequence produces the same list next quarter.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_lifecycle_governance.py`](scripts/agent_lifecycle_governance.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+identity            last auth (d)   service running       owner  finding
+--------------------------------------------------------------------------------------------
+triage-agent                    0              True      appsec  
+patch-agent                     1              True    platform  
+legacy-scanner                400             False           —  orphan — decommissioning never finished
+poc-agent-2025                300             False           —  orphan — decommissioning never finished
+sunset-agent                    2             False           —  ACTIVE CREDENTIAL FOR A RETIRED SERVICE
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

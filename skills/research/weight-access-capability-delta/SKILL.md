@@ -43,6 +43,25 @@ listing them as mitigations.
 resources is not the same as one that reaches a run's own. Score tools by scope
 and mark which are gated.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/weight_access_capability_delta.py`](scripts/weight_access_capability_delta.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+setting                              attempts in 24h
+------------------------------------------------------
+hosted API, 20 req/min                        28,800
+hosted API, 20 req/min, 5 keys               144,000
+local open weights, 1 GPU                    691,200
+local open weights, 8 GPUs                 5,529,600
+
+ratio: 192× more attempts, with no abuse signal reaching anyone.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

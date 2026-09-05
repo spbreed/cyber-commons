@@ -40,6 +40,25 @@ will answer live, badly.
 **5 — Attach the artefacts.** A checkable sentence with an unattached artefact
 is one email away from being unevidenced.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/supervisory_documentation_score.py`](scripts/supervisory_documentation_score.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+=== WEAK — 0/3 sentences checkable ===
+   [---] Our AI systems are subject to appropriate oversight and 
+   [---] Access is
+granted on a least-privilege basis and reviewe
+   [---] Agents are
+monitored for anomalous behaviour and we main
+
+=== STRONG — 0/6 sentences checkable ===
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

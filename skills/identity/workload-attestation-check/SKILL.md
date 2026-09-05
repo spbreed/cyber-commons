@@ -45,6 +45,24 @@ registration decides whether it should be. Both must refuse.
 from a different node, and again after its TTL. Both must fail. A credential
 that travels is a secret with extra steps.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/workload_attestation_check.py`](scripts/workload_attestation_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+   proc-1        spiffe://corp/reports-agent     issued
+   proc-2        -                               image is not registered to any identity
+   proc-stolen   -                               no attestation - unattested process
+
+   presented from n-7 at t=1100: ok (accepted)
+   presented from n-9 at t=1100: REFUSED (bound to n-7)
+   presented from n-7 at t=2000: REFUSED (expired)
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

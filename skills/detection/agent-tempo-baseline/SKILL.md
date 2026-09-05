@@ -41,6 +41,25 @@ relying on it for volume is relying on something else.
 baselines, and an agent's baseline needs a per-agent one: a patch agent and a
 triage agent do not share a tempo.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_tempo_baseline.py`](scripts/agent_tempo_baseline.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+   Alex                12 actions/hour -> silent
+   workflow agent    1400 actions/hour -> ALERT
+
+the agent crosses the threshold after 154 seconds
+and keeps going for the remaining 3446.
+
+So the rule fires, about two and a half minutes into a sixty-minute run -
+by which point most of what the actor was going to do is done. If those
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

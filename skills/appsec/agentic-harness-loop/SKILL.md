@@ -45,6 +45,25 @@ fix and is not — an escape function wrapped around concatenation. If the
 verifier accepts it, the loop ships it, reports success, and the trace looks
 clean.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agentic_harness_loop.py`](scripts/agentic_harness_loop.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+the loop, wired: ['plan', 'act', 'verify', 'stop']
+backend  : replay
+steps    : 1
+accepted : return DB.execute("SELECT * FROM bookings WHERE ref=?", (ref,))
+verified : None   <- nothing checked it
+
+The loop stopped because the model produced something, which is not the
+same as producing something correct. Whatever came back was accepted.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

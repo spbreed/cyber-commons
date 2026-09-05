@@ -41,6 +41,25 @@ is missing, and they have different owners.
 **5 — Re-run after every change to any of the three.** A model upgrade
 invalidates the drift baseline; a platform change invalidates the stop test.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/resilience_readiness_check.py`](scripts/resilience_readiness_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+NOTICE   drift 0.500  new tools ['run_shell']  → detected
+STOP     12s, tested 41d ago, survives restart True  → ready
+RECOVER  replayable True, scope from the chain ['queue', 'repo-core', 'repo-payments']  → ready
+programme                 containment ASR  outcome when containment fails
+------------------------------------------------------------------------------------------------
+prevention only                        0%  undetected — found by a third party, weeks later
+                                         elapsed to resolution: 720h
+prevention + notice                    0%  detected, cannot halt it — damage continues while you improvise
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

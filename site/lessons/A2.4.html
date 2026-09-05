@@ -72,6 +72,12 @@ OAuth scopes on stored credential providers, and identity-registry
 relationships — against what the declared tool surface actually requires.</p>
 <p>An agent can hold a minimal cloud role and an OAuth token with full mailbox
 access.</p>
+<h2>When to use this</h2>
+<p>After the IAM baseline is verified, not instead of it. The IAM verifier asks
+whether the role is default-deny; this asks whether the entitlements actually
+granted exceed what the declared tools need. Reach for it when scopes were
+granted at integration time, when a credential provider holds OAuth scopes
+nobody has reviewed, or when looking for standing privilege.</p>
 <h2>Procedure</h2>
 <ol>
 <li><strong>Take the required capability set</strong> from the code-surface analyzer. This is
@@ -86,6 +92,19 @@ access.</p>
 <li><strong>Flag standing privilege.</strong> Any grant that is permanent rather than issued
    per task.</li>
 </ol>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/entitlement_overprivilege_analyzer.py"><code>scripts/entitlement_overprivilege_analyzer.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>   the task's own write      ok      permitted
+   a different report        REFUSED bound to report/8812
+   a different scope         REFUSED scoped to reports:write
+   after the task completes  REFUSED task closed
+   after the TTL expires     REFUSED expired
+
+An injection landing at 09:14 needs a task to be open, on the resource
+it wants, holding the scope it wants. Standing authority required none
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;deployment_id&quot;: &quot;str&quot;,

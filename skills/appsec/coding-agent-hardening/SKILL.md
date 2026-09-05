@@ -63,6 +63,25 @@ from a third party), and whether its credentials exceed the task.
 that survives the agent's own actions? An agent that can edit its own logs has
 no logs.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/coding_agent_hardening.py`](scripts/coding_agent_hardening.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+tool          writes  scope    reversible  inner loop?
+----------------------------------------------------------
+read_file     False   self     True        True
+write_file    True    project  True        True
+run_tests     True    self     True        True
+run_shell     True    tenant   False       True
+git_commit    True    project  True        True
+git_push      True    project  False       False
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

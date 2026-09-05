@@ -42,6 +42,24 @@ are addressable and neither is about effort.
 control, a detection or an explicit accepted-risk record with an owner. Anything
 else reopens as the same finding next year.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/research_durability_check.py`](scripts/research_durability_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+=== folklore — actionable: False ===
+CLAIM     our review agent can be tricked by comments in diffs
+SETUP     the review agent
+TRIGGER   a comment
+OBSERVED  it approved something it shouldn't
+RATE      not measured
+HOLDS WHEN
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

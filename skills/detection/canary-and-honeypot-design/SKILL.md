@@ -43,6 +43,25 @@ it; this measures inclination, which no credential can.
 since placement, with and without rotation, and set the rotation interval from
 the curve rather than from a calendar.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/canary_and_honeypot_design.py`](scripts/canary_and_honeypot_design.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+token                     source        agent                 verdict
+hf_liveTokenNotShown      10.2.0.11     ci-runner             normal use
+hf_CANARY7Fq2mXvLpR8s     203.0.113.9   python-requests/2.31  CONFIRMED COMPROMISE
+ghp_alsoLive              10.2.0.11     ci-runner             normal use
+sk-CANARYd3Vn8yHc2Uae     203.0.113.9   python-requests/2.31  CONFIRMED COMPROMISE
+
+canary hits: 2  false positives possible: 0
+Not zero because the detector is good - zero because nothing legitimate
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

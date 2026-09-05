@@ -43,6 +43,25 @@ evidence, it is evidence about something else.
 whether the version is pinnable, what telemetry you get, and exit. Then record
 which ones the vendor declined; that list is the assessment.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/third_party_ai_assessment.py`](scripts/third_party_ai_assessment.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+component                               kind          tier    flags
+------------------------------------------------------------------------------------------------
+cryptography==42.0.5                    library       low     —
+langchain==0.2.1                        library       medium  unsigned
+hosted GLM-4.6 endpoint                 hosted model  high    unsigned, not version-pinned, CAN CHANGE WITHOUT NOTICE
+local glm-4.6 weights (pinned digest)   weights       low     —
+mcp-jira-connector==0.0.3               tool package  high    unsigned, runs with agent authority
+your controls were tested against a model that changed 5 days ago:
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

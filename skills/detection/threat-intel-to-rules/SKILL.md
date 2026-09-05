@@ -42,6 +42,25 @@ fires and produces no action is.
 actioned. The ratio of the third to the second is what the feed is worth, and it
 is the number to take to a renewal conversation.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/threat_intel_to_rules.py`](scripts/threat_intel_to_rules.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+indicator                                     kind         conf  verdict
+----------------------------------------------------------------------------------------
+collect.example.com                           host         0.95  RULE — convertible to a rule
+169.254.169.254                               host         0.99  RULE — convertible to a rule
+a1b2c3d4e5f6                                  hash         0.72  RULE — convertible to a rule
+pastebin.example                              host         0.55  drop — confidence 0.55 below floor 0.7
+adversaries increasingly use agentic tooling  narrative    0.40  drop — narrative is not matchable in telemetry
+agents reading ~/.aws/credentials             technique    0.88  RULE — convertible to a rule
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

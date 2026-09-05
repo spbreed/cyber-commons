@@ -42,6 +42,25 @@ the same as not having one.
 **5 — Measure the time.** Decision to last agent stopped and last token revoked.
 Set a target and report against it; an untimed rehearsal is a demonstration.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/fleet_kill_switch_test.py`](scripts/fleet_kill_switch_test.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+terminate only        : 8 agents stopped, 8 tokens still valid for up to 72h
+terminate and revoke  : 8 agents stopped, 0 tokens still valid
+
+In the source incident, third-party access ended when the third party
+revoked its keys - not when the agents stopped. Stopping the process is
+the visible half of containment and the smaller one.
+terminate first   terminate -> revoke credentials                           reconstructable=False
+preserve first    snapshot state and transcripts -> terminate -> revoke credentialsreconstructable=True
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

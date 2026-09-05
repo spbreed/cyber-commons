@@ -43,6 +43,25 @@ that will not exist in six months.
 covers, and which it does not. Partial coverage is fine; unstated partial
 coverage is how the next finding is a surprise.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/finding_to_control_handover.py`](scripts/finding_to_control_handover.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+1 · eval case (build FIRST)   asserts a privileged tool refuses source != principal
+2 · preventive control        provenance check in the tool dispatcher
+3 · detection                 alert when a privileged tool is invoked with a data source
+4 · accepted risk             only if 2 and 3 are not shipping this quarter
+eval case on the OLD build: False   (must be False)
+eval case on the NEW build: True   (must be True)
+
+12 privileged/source combinations blocked, and the principal path still works.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

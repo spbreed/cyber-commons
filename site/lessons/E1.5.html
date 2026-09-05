@@ -101,6 +101,18 @@ limits is stronger evidence than one claiming none.</p>
 <p><strong>7 — Set the re-verification interval from the change rate.</strong> If the model can
 be updated weekly, annual testing evidences a system that no longer exists. Tie
 re-verification to the artefact's change events, not the calendar.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/control_evidence.py"><code>scripts/control_evidence.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>n                24
+conformance      1.0000   ← structural. NOT a quality claim.
+expert accuracy  0.8750   ← the number that evidences EV-2
+EV-2  PASS
+      expert accuracy 0.8750 over 24 held-out questions; conformance 1.0000 reported separately; key never exposed to the harness
+      at +10d → PASS
+      at +45d → STALE
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;control&quot;: {&quot;id&quot;: &quot;str&quot;, &quot;claim&quot;: &quot;str&quot;, &quot;testable&quot;: true},

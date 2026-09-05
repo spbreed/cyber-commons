@@ -43,6 +43,25 @@ do.
 revocation, workload termination, downstream block. Record the effect and the
 collateral of each, and pick from that table rather than from habit.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_actor_containment.py`](scripts/agent_actor_containment.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+INSTINCT 1 — disable dana@corp's account
+   dana@corp (human)      can act: True   account disabled, but the issued token is still valid
+   patch-agent            can act: True   active
+   deploy-agent           can act: True   active
+   → the agents were never using her account interactively; they hold
+     their own issued tokens, and one of them is acting AS her.
+
+INSTINCT 2 — interview the user
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

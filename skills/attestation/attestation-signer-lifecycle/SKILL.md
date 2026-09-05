@@ -26,6 +26,11 @@ against reference values, and the deployment gate is the **relying party**
 applying policy. Keep them separate — an attester that also decides whether it
 passed is not an attestation.
 
+## When to use this
+Last, once every collector has run — and again on drift. Signing is a separate
+skill and a separate role on purpose: an attester that also decides whether it
+passed is not an attestation. Also use it to verify somebody else's envelope.
+
 ## Procedure
 
 1. **Collect every sub-skill verdict.** A missing verdict is not a pass. If a
@@ -40,6 +45,25 @@ passed is not an attestation.
    re-attestation — the tool-description hash specifically defends against a
    server mutating a tool after approval.
 6. **Sign**, and store alongside the image or in a transparency log.
+
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/attestation_signer_lifecycle.py`](scripts/attestation_signer_lifecycle.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+control    age (days)   point-in-time   continuous
+----------------------------------------------------
+AC-1                3            PASS         PASS
+AC-2                9            PASS         PASS
+SB-1               45            PASS        STALE
+SB-2              210            PASS        STALE
+EV-1                5            PASS         PASS
+DR-1                0            FAIL         FAIL
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 
 ## Output contract
 

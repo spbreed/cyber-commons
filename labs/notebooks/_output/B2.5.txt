@@ -119,7 +119,7 @@ digraph "call_graph" {
   rankdir=LR;
   bgcolor="transparent";
   node [shape=box style="rounded,filled" fontname="Helvetica" fontsize=11 penwidth=1.2];
-  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" penwidth=1.1];
+  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" fontcolor="#A8B2C6" penwidth=1.1];
   "_query" [label="_query" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
   "_settle" [label="_settle" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
   "audit_line" [label="audit_line" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];

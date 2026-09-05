@@ -82,6 +82,19 @@ lawfully. Naming the basis, per system, is the difference between a defensible
 position and a gap.</p>
 <p><strong>5 — Reduce at source.</strong> Redaction at write time is cheaper than erasure across
 six systems. Say which detector should run before the trace is stored.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/trace_personal_data_audit.py"><code>scripts/trace_personal_data_audit.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>personal data present in the agent trace:
+   step 1  email           dana.okonkwo@example.com
+   step 1  payment card    4111111111111111
+   step 1  account number  acct 8812
+   step 1  name            J. Okonkwo
+
+4 items. Nobody put them there deliberately — the agent read
+a support ticket, which is exactly what it was asked to do.
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;trace&quot;: {&quot;steps&quot;: 0},

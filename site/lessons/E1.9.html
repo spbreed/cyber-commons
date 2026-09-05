@@ -113,6 +113,18 @@ access is not. Blast radius, not age, is the ranking.</p>
 <p><strong>5 — Attach an automatic consequence per class.</strong> Decommissioned service:
 revoke. Orphan: suspend and notify. Unused past window: expire. A sweep with no
 consequence produces the same list next quarter.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_lifecycle_governance.py"><code>scripts/agent_lifecycle_governance.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>identity            last auth (d)   service running       owner  finding
+--------------------------------------------------------------------------------------------
+triage-agent                    0              True      appsec  
+patch-agent                     1              True    platform  
+legacy-scanner                400             False           —  orphan — decommissioning never finished
+poc-agent-2025                300             False           —  orphan — decommissioning never finished
+sunset-agent                    2             False           —  ACTIVE CREDENTIAL FOR A RETIRED SERVICE
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;events&quot;: [{&quot;event&quot;: &quot;str&quot;, &quot;record_exists&quot;: false, &quot;reviewed_by&quot;: &quot;str|null&quot;}],

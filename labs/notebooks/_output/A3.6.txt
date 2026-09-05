@@ -26,17 +26,17 @@ digraph "routing" {
   rankdir=LR;
   bgcolor="transparent";
   node [shape=box style="rounded,filled" fontname="Helvetica" fontsize=11 penwidth=1.2];
-  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" penwidth=1.1];
+  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" fontcolor="#A8B2C6" penwidth=1.1];
   "all" [label="792 actions/day" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
-  "delete_row" [label="delete_rown6/day" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
-  "human" [label="human approvaln12/day" color="#3FA06B" fillcolor="#14231b" fontcolor="#E9EDF6" style="rounded,filled"];
-  "issue_refund" [label="issue_refundn2/day" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
-  "policy" [label="policy onlyn780/day" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
-  "read_report" [label="read_reportn400/day" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
-  "rotate_credential" [label="rotate_credentialn1/day" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
-  "send_email" [label="send_emailn3/day" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
-  "update_ticket" [label="update_ticketn260/day" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
-  "write_draft" [label="write_draftn120/day" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "delete_row" [label="delete_row\n6/day" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "human" [label="human approval\n12/day" color="#3FA06B" fillcolor="#14231b" fontcolor="#E9EDF6" style="rounded,filled"];
+  "issue_refund" [label="issue_refund\n2/day" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "policy" [label="policy only\n780/day" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "read_report" [label="read_report\n400/day" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "rotate_credential" [label="rotate_credential\n1/day" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "send_email" [label="send_email\n3/day" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "update_ticket" [label="update_ticket\n260/day" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "write_draft" [label="write_draft\n120/day" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
   "all" -> "delete_row";
   "all" -> "issue_refund";
   "all" -> "read_report";
@@ -53,12 +53,12 @@ digraph "routing" {
   "write_draft" -> "policy";
   subgraph cluster_legend {
     label="key"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10; rank=sink;
-    "legend_entry" [label="untrusted entry point" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
-    "legend_unit" [label="reachable" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_entry" [label="every action" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_unit" [label="reversible" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
     "legend_entry" -> "legend_unit" [style=invis];
-    "legend_sink" [label="acts on something" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_sink" [label="irreversible" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
     "legend_unit" -> "legend_sink" [style=invis];
-    "legend_control" [label="a control" color="#3FA06B" fillcolor="#14231b" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_control" [label="the human gate" color="#3FA06B" fillcolor="#14231b" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
     "legend_sink" -> "legend_control" [style=invis];
   }
 }

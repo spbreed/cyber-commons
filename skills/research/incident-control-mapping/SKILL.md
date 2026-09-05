@@ -42,6 +42,25 @@ workstream with one owner.
 a sentence in a report. This is the column that makes the mapping a register
 rather than an analysis.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/incident_control_mapping.py`](scripts/incident_control_mapping.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+shared surface        rows        reading
+agent container       [1]         single row
+artifact repository   [1, 2, 5]   one chain, not separate findings
+benchmark scoring     [10]        single row
+eval configuration    [6]         single row
+harness tooling       [9]         single row
+peer channel          [7, 8]      linked
+public internet       [4]         single row
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -67,6 +67,25 @@ reviewer's remaining job is the question no gate can answer — whether this is
 the mechanism the codebase should use — and they can only get to it if the
 first three are already answered on the page.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/fix_promotion_gate.py`](scripts/fix_promotion_gate.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+the exploit, against the unpatched build in the replica
+   reproduces: True   <- if this were False the probe is
+               broken and every result below would be meaningless
+
+      CI   exploit  behaviour  new  promoted to
+   A  ok   blocked  same       0    merge-request
+   B  ok   blocked  CHANGED    0    rejected  <- qa: behaviour changed
+   C  ok   WORKS    same       0    rejected  <- sandbox: exploit still works
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

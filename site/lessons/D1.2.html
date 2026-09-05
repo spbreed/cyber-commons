@@ -89,6 +89,19 @@ change in findings came from the rule or from the dice.</p>
 false-positive rate is high, not if it fires often. Rank tuning candidates by
 <code>false_positive_rate × volume</code>, with a full tiebreak so the list is stable
 between runs.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/detection_triage.py"><code>scripts/detection_triage.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>BARE ALERT (what most SOCs receive):
+   patch-agent read /vault/.env
+   rotator-agent read /vault/.env
+   → identical. An analyst cannot tell these apart.
+
+ENRICHED ALERT:
+   actor        patch-agent
+   on behalf of dana@corp
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;triaged&quot;: [

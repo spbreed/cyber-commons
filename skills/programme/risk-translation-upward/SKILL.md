@@ -41,6 +41,25 @@ changes.
 reduce it most per unit of friction, what you are asking for, and what you will
 report next time. Same numbers, different artefact.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/risk_translation_upward.py`](scripts/risk_translation_upward.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+agent                     blast radius
+----------------------------------------
+pr-remediation-agent                44
+claims-triage-agent                  1
+doc-summariser                       1
+FLEET TOTAL                         46
+
+red-team attack success rate (containment surface): 25%
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

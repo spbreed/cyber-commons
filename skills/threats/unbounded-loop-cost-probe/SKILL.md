@@ -40,6 +40,25 @@ the one that turns your incident into somebody else's.
 distribution is defensible; one chosen from a round number is a guess. State
 what a legitimate run costs at p95 and set the ceiling above that.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/unbounded_loop_cost_probe.py`](scripts/unbounded_loop_cost_probe.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+steps taken           : 501
+tokens spent          : 901,800  (about $1.80)
+downstream calls      : 501
+downstream rejections : 451  <- other callers got these
+stopped by            : runaway
+
+The agent was not attacked and nothing malfunctioned. It was given a
+task that cannot succeed, and the loop did what loops do.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

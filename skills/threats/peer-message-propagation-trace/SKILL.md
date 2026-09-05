@@ -41,6 +41,24 @@ a topology problem.
 origin, the receiving agent has no way to treat it as untrusted, and the fix is
 on the sender's format rather than on the receiver's judgement.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/peer_message_propagation_trace.py`](scripts/peer_message_propagation_trace.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+one poisoned document, summarised by pricing-agent, sent to its peers:
+
+   pricing-agent   applied 90% discount
+   billing-agent   applied 90% discount
+
+agents that acted on it: 2
+agents actually attacked : 1
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

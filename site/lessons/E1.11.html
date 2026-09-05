@@ -83,6 +83,19 @@ the audit calendar, which is the assumption that failed in the first place.</p>
 <p><strong>5 — Report per pillar.</strong> Validation coverage, monitoring blind spots,
 governance triggers. Three findings with three owners rather than one finding
 about the framework.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/model_risk_validation_scope.py"><code>scripts/model_risk_validation_scope.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>pillar                  what it asks                                  what it quietly assumes
+conceptual_soundness    is the method appropriate for the purpose     assumes the purpose is stable and stated
+independent_validation  did someone other than the builder check      assumes the thing checked is the thing deployed
+ongoing_monitoring      is it still performing as validated           assumes performance is what changes
+
+All three survive contact with AI. The assumptions are what break.
+validation still covers what is deployed: False
+   tool surface changed: ['db_update', 'read_ticket', 'write_ticket']
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;validated&quot;: {&quot;model&quot;: &quot;str&quot;, &quot;version&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;autonomy&quot;: &quot;str&quot;, &quot;data&quot;: [&quot;str&quot;]},

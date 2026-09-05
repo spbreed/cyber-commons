@@ -192,6 +192,19 @@ the second class justifies a model pass.</p>
 meaningless without the config that produced it. A report that says "Semgrep:
 1 finding" and not "p/python + p/secrets" has withheld the part that decides
 whether the scan meant anything.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/sast_semgrep_deterministic.py"><code>scripts/sast_semgrep_deterministic.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>semgrep 1.176.0 · booking.py · 6 defects in the key, 5 of them expressible as a pattern
+
+config                   found  tp  fp   prec  recall
+p/python + p/secrets         1   1   0   1.00    0.17
+seven registry packs         4   4   0   1.00    0.67
+custom taint rule            2   2   0   1.00    0.33
+
+Nothing about the file changed between those rows. Three of the four
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;key&quot;: {&quot;defects&quot;: 0, &quot;pattern_expressible&quot;: 0},
@@ -348,6 +361,19 @@ downstream can be argued with rather than inherited.</p>
 not stable across runs. Run the same slice ten times before you let any
 threshold into a pipeline; the variance is usually wider than the gap between
 your accept and reject bands.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/sast_model_pass.py"><code>scripts/sast_model_pass.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>find_booking
+   model says   : MISSING CWE-862 at confidence 0.82
+   quoting      : def find_booking(reference):
+   -&gt; HYPOTHESIS: quote verified, status hypothesis (not a finding)
+
+my_bookings
+   model says   : PRESENT CWE-862 at confidence 0.77
+   quoting      : require_owner(session.user_id)
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;backend&quot;: {&quot;kind&quot;: &quot;replay|open-weight&quot;, &quot;model&quot;: &quot;str&quot;},

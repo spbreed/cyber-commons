@@ -96,6 +96,19 @@ relying on it for volume is relying on something else.</p>
 <p><strong>5 — Derive per-population thresholds.</strong> Humans and agents need different
 baselines, and an agent's baseline needs a per-agent one: a patch agent and a
 triage agent do not share a tempo.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_tempo_baseline.py"><code>scripts/agent_tempo_baseline.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>   Alex                12 actions/hour -&gt; silent
+   workflow agent    1400 actions/hour -&gt; ALERT
+
+the agent crosses the threshold after 154 seconds
+and keeps going for the remaining 3446.
+
+So the rule fires, about two and a half minutes into a sixty-minute run -
+by which point most of what the actor was going to do is done. If those
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;subjects&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;human|agent&quot;,

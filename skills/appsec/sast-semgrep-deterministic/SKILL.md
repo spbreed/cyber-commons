@@ -54,6 +54,25 @@ meaningless without the config that produced it. A report that says "Semgrep:
 1 finding" and not "p/python + p/secrets" has withheld the part that decides
 whether the scan meant anything.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/sast_semgrep_deterministic.py`](scripts/sast_semgrep_deterministic.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+semgrep 1.176.0 · booking.py · 6 defects in the key, 5 of them expressible as a pattern
+
+config                   found  tp  fp   prec  recall
+p/python + p/secrets         1   1   0   1.00    0.17
+seven registry packs         4   4   0   1.00    0.67
+custom taint rule            2   2   0   1.00    0.33
+
+Nothing about the file changed between those rows. Three of the four
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

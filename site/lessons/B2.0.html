@@ -136,6 +136,19 @@ cover it. Then count the two failure shapes: <strong>preventable but invisible</
 on either side is a gap everybody understands. A risk covered only on the side
 that cannot act is the one that gets signed off, and it is the one this
 procedure exists to surface.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/sdlc_control_placement.py"><code>scripts/sdlc_control_placement.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>techniques, placed
+   technique                     side   gate  blind to
+   SAST / code analysis          pre    yes   whether the vulnerable path is reached with real traffic
+   SCA and SBOM scanning         pre    yes   what actually loaded, versus what the manifest pinned
+   IaC and policy-as-code        pre    yes   the identity and network the workload really got
+   threat modelling              pre    -     entry points added by a config change, not a commit
+   tool-schema / MCP review      both   yes   a description edited by the server after review
+   DAST / attack simulation      post   -     the commit that introduced it
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;techniques&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;side&quot;: &quot;pre|post|both&quot;, &quot;blind_to&quot;: &quot;str&quot;}],

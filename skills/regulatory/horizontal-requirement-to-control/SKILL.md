@@ -42,6 +42,24 @@ none, and the count is more persuasive than the argument.
 evidences the past. Report themes as fully evidenced, stale, or unevidenced —
 three states, not two.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/horizontal_requirement_to_control.py`](scripts/horizontal_requirement_to_control.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+risk management system
+   AC-1  agent identities distinct from human and separately revocable
+         evidence: gateway logs with an act chain; monthly sample
+   SB-2  privileged tools require approval below L3
+         evidence: tool policy in git + denial log
+   DR-1  behavioural drift raises an alert
+         evidence: drift alerts and dispositions
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

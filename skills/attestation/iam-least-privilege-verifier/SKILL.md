@@ -18,6 +18,13 @@ This is one of the controls that is genuinely provable at runtime. Policy
 documents are readable, and usage data turns "least privilege" from an
 assertion into a measured delta.
 
+## When to use this
+Whenever a default-deny or least-privilege claim is about to be made, and again
+whenever the role changes. It needs observed usage as well as the policy, so it
+runs against a deployment that has been live long enough to have a usage
+window — a fresh deployment shows every permission as unused and the result
+means nothing.
+
 ## Procedure
 
 1. **Establish the default-deny baseline.** Read every inline and attached
@@ -37,6 +44,25 @@ assertion into a measured delta.
 
 4. **Check external access.** External-access findings must be zero, or each
    one must map to an approved exception.
+
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/iam_least_privilege_verifier.py`](scripts/iam_least_privilege_verifier.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+   charge_card payments:booking          ['CHARGE']
+   run_query   table:bookings            ['SELECT', 'UPDATE']
+   send_email  domain:cybertravels.com   ['*']
+allow-by-default:
+   run_query   table:bookings                SELECT ALLOW run_query on table:bookings permits SELECT
+   run_query   table:customer_pii            SELECT ALLOW allowed by default
+   charge_card payments:booking              REFUND deny  REFUND not permitted on payments:booking (only ['CHARGE'])
+   send_email  domain:archive.evil.example   *      ALLOW allowed by default
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 
 ## Output contract
 

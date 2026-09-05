@@ -39,6 +39,25 @@ be inside one and outside another.
 **5 — Name an owner per step in the runbook.** Containment, scoping, disclosure
 drafting, submission. A runbook with an unowned step is where the hours go.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/regulatory_clock_check.py`](scripts/regulatory_clock_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+scenario                            contain   report   met   margin
+--------------------------------------------------------------------
+fast containment, slow scoping          1.0     80.0 False     -8.0
+slow containment, fast reporting       40.0     60.0  True     12.0
+both fast                               2.0     20.0  True     52.0
+attribution broken (D2.1)               6.0     92.0 False    -20.0
+
+The first row contained in ONE HOUR and still missed the deadline.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

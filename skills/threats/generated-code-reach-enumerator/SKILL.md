@@ -43,6 +43,25 @@ key is a design fact, not an incident.
 an attacker gains. It is usually smaller than people expect, because the
 ordinary run already had everything.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/generated_code_reach_enumerator.py`](scripts/generated_code_reach_enumerator.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+ordinary bug / benign task:
+   code   : rows = open('/home/agent/work/data.csv').read()
+   reached: 3 things
+      file:/etc/passwd
+      file:/home/agent/.ssh/id_ed25519
+      file:/home/agent/work/data.csv
+
+steered by an injection:
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

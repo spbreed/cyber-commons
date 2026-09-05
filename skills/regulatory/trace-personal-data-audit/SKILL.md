@@ -41,6 +41,25 @@ position and a gap.
 **5 — Reduce at source.** Redaction at write time is cheaper than erasure across
 six systems. Say which detector should run before the trace is stored.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/trace_personal_data_audit.py`](scripts/trace_personal_data_audit.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+personal data present in the agent trace:
+   step 1  email           dana.okonkwo@example.com
+   step 1  payment card    4111111111111111
+   step 1  account number  acct 8812
+   step 1  name            J. Okonkwo
+
+4 items. Nobody put them there deliberately — the agent read
+a support ticket, which is exactly what it was asked to do.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

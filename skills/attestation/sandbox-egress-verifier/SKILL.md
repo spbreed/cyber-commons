@@ -20,6 +20,11 @@ a verdict of PASS on this control would be a claim the evidence cannot support.
 
 **Cap every verdict this skill produces at PARTIAL.**
 
+## When to use this
+When a deployment claims isolation. Run it knowing what it cannot do: absence
+of a covert channel is not provable, DNS and object-storage bypasses are
+documented, and the honest output is a capped PARTIAL rather than a pass.
+
 ## Procedure
 
 1. **Identify the runtime and its network mode.** Record which isolation
@@ -40,6 +45,25 @@ a verdict of PASS on this control would be a claim the evidence cannot support.
 
 4. **Record what you did not test.** A probe list is a statement about coverage,
    and coverage is the honest part of this verdict.
+
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/sandbox_egress_verifier.py`](scripts/sandbox_egress_verifier.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+destination                           deny-list   allow-list  note
+api.corp.example                      allow       allow       the one it actually needs
+archive.evil.example                  block       block       A1.3's exfiltration target
+attacker-bucket.s3.amazonaws.com      allow       block       a bucket anyone can create
+169.254.169.254                       allow       block       cloud metadata - every credential
+pastebin.example                      allow       block       not on anyone's deny-list
+
+deny-list lets through : 3  ['attacker-bucket.s3.amazonaws.com', '169.254.169.254', 'pastebin.example']
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 
 ## Output contract
 

@@ -40,6 +40,25 @@ constituencies, and removing them silently gets them reinstated.
 target is a chart; a number with a target is a commitment somebody is
 accountable for.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/programme_metrics_selection.py`](scripts/programme_metrics_selection.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+exposure   fleet blast radius             46   units of unreviewed action
+likelihood red-team ASR                  25%   measured, containment surface
+assurance  controls evidenced            50%   4/8
+coverage   agents in inventory           34%   41 of ~120 est.
+speed      measured time-to-stop         12s   game day 41 days ago
+metrics that look like governance and are not:
+   findings closed this quarter      goes up with activity; says nothing about posture
+   training completion %             reaches 98% and stays there forever
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

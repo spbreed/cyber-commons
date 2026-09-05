@@ -42,6 +42,25 @@ stops. The count of unrelated things that stop is the number to report.
 per agent, issued by the platform rather than pasted, so revocation is
 per-agent and attribution is free.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/shared_credential_attribution_check.py`](scripts/shared_credential_attribution_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+what the downstream service recorded:
+   caller=svc-agent-7f3a1c  read    reports
+   caller=svc-agent-7f3a1c  read    reports
+   caller=svc-agent-7f3a1c  read    reports
+   caller=svc-agent-7f3a1c  delete  prod.customers
+
+incident: delete on prod.customers
+which agent did it? candidates: ['deploy-agent', 'patch-agent', 'triage-agent']
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -69,6 +69,24 @@ with no admin, a sink whose input is fully constant. Record *why* each drop was
 made, because the next scan will rediscover it and the reason is what stops
 that work being repeated.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/appsec_vuln_audit.py`](scripts/appsec_vuln_audit.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+call graph:
+   http_get_report   → ['load_report']
+   http_health       → —
+   load_report       → —
+   legacy_export     → —
+   debug_dump        → —
+   dispatch          → —
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

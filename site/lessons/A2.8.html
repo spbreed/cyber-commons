@@ -92,6 +92,19 @@ back to reconciling everything.</p>
 <p><strong>5 — Check what the workload's own role can reach.</strong> If the agent's role can
 write to the log store, the chain protects against an outsider and not against
 the subject. Enumerate the logging plane against the role's permissions.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/tamper_evident_log_check.py"><code>scripts/tamper_evident_log_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>in-band check - does every step have a recorded command?
+   steps: 5   steps with no record: 0   verdict: clean
+
+Two of these five steps executed something other than what was recorded.
+The in-band check cannot see that, because it is reading the record that
+the thing it is checking produced.
+trace   harness recorded              host observed
+t-03    python3 analyse.py            curl -s http://cache/put?m=...
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;streams&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;written_by&quot;: &quot;agent|host|platform&quot;}],

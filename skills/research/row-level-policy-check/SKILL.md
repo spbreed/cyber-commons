@@ -42,6 +42,24 @@ returns nothing to everyone is an outage.
 who can revoke it. The revocation owner is usually not you, and that is the
 sentence that gets the work scheduled.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/row_level_policy_check.py`](scripts/row_level_policy_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+RLS disabled (as shipped)   rows returned: 3
+      @researchbot  dana@example    sk-REDACTED-openai
+      @newsdigest   sam@example     sk-ant-REDACTED
+      @dealfinder   kim@example     AKIA-REDACTED-aws
+RLS enabled                 rows returned: 0
+
+signed in as dana@example, RLS enabled: 1 row
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

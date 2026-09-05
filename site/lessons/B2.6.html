@@ -88,6 +88,19 @@ quota. In a replica these are unremarkable. If you would not do them here, this
 is not the environment to prove an exploit in, and that is the finding.</p>
 <p><strong>5 — Record the verdict per check, not overall.</strong> "Isolated: no" sends people
 looking; "credentials: fail, egress: pass" tells them what to fix.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/exploit_replica_isolation_check.py"><code>scripts/exploit_replica_isolation_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>ALLOW http://replica.local/reports                   replica-internal
+ALLOW http://db.replica.local:5432/                  replica-internal
+DENY  https://api.github.com/                        not on the replica allowlist
+DENY  http://169.254.169.254/latest/meta-data/       private address outside the replica — blocked
+DENY  http://10.0.3.14:9200/_search                  private address outside the replica — blocked
+probe                       on staging    on replica
+--------------------------------------------------------
+drop a table                   REACHES     contained
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
   &quot;environment&quot;: &quot;str&quot;,

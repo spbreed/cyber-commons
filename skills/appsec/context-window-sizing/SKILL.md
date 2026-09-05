@@ -41,6 +41,25 @@ tokens and in the model's attention.
 **5 — Pick the smallest decidable slice, and say what it excluded.** The
 exclusion list is what somebody re-reads when the pipeline misses something.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/context_window_sizing.py`](scripts/context_window_sizing.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+the bug is on line 22
+whole file             839 chars   29 lines
+±2 line window         207 chars    5 lines
+±6 line window         432 chars   13 lines
+strategy            sink   concat  source  intent  decidable
+----------------------------------------------------------------
+whole file          True   True    True    True    True
+±2 line window      True   True    False   False   False
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

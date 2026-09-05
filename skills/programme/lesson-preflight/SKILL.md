@@ -63,6 +63,25 @@ procedure runs. Record the line count and a CRC of the bytes. Two runs of the
 same procedure that print different bytes are a defect in the procedure, and
 without a checksum nobody notices until the diff is large.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/lesson_preflight.py`](scripts/lesson_preflight.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+the tree this host fetched
+  areas            : 14
+  skills           : 120
+  with a script    : 119
+  shared runtime   : present
+  resolved from    : the running file, not the working directory
+
+(a) the tree was never fetched  --  a host with no network
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

@@ -74,7 +74,11 @@ for _a in sorted(ACTIONS):
 
 print()
 emit_diagram("a-blast-radius-routing",
-             dot=dot_graph("routing", _nodes, _edges, rankdir="LR"))
+             dot=dot_graph("routing", _nodes, _edges, rankdir="LR",
+                           legend_labels={"entry": "every action",
+                                          "sink": "irreversible",
+                                          "unit": "reversible",
+                                          "control": "the human gate"}))
 print()
 print("Orange is irreversible. Every orange path ends at the human gate, and")
 print("nothing else does - which is why the gate is small enough to be read.")

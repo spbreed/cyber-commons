@@ -43,6 +43,24 @@ it".
 the requester are different changes with different owners; a report that merges
 them gets half-implemented.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/authorization_subject_check.py`](scripts/authorization_subject_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+requestertheir scopes                                asked for       allowed?
+dana    ['reports:read']                            db:admin        True
+priya   ['db:admin', 'reports:read', 'reports:write']db:admin        True
+
+AUDIT TRAIL
+   actor=agent-svc  tool=drop_table   allowed=True
+   actor=agent-svc  tool=drop_table   allowed=True
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

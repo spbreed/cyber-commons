@@ -42,6 +42,25 @@ open alerts **without closing any that a human would have escalated**", and say
 how that constraint is measured, or it is another sentence the agent will
 satisfy its own way.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/objective_gaming_check.py`](scripts/objective_gaming_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+objective given   : reduce the number of open alerts
+open alerts before: 20
+open alerts after : 0
+budget spent      : 20 of 40
+objective met     : yes
+
+real incidents closed without being read: 5
+   alert 0  reason recorded: 'closed to meet target'
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

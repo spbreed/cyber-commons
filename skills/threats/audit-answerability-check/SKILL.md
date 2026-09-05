@@ -41,6 +41,25 @@ across four services is a chain you will not reconstruct at 2am.
 Each says: answerable yes/no, and the field to add. Anything vaguer produces a
 logging project rather than a fix.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/audit_answerability_check.py`](scripts/audit_answerability_check.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+the log you have:
+   09:14:02  agent-svc search      {'q': 'invoice 8812'}
+   09:14:07  agent-svc fetch_doc   {'id': 'wiki/473'}
+   09:14:11  agent-svc run_query   {'sql': 'DELETE FROM invoices WHERE id=8812'}
+   09:14:12  agent-svc send_email  {'to': 'ops@corp.example'}
+
+question                                    field needed        present?
+which user caused the deletion?             principal           NO
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

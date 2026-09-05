@@ -45,6 +45,25 @@ long, with what compensating control. The same launch is now refused, and a
 smaller one on an allowlist is permitted. The disagreement between step 4 and
 step 5 is the finding.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/control_exemption_audit.py`](scripts/control_exemption_audit.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+day  12  disable cyber-classifier    ALLOW via EX-118
+day  44  disable cyber-classifier    REFUSE - no approved exemption
+day  12  disable transcript-signing  REFUSE - no approved exemption
+
+The record is the mechanism, not a wiki page describing one. An
+exemption the platform cannot express is an exemption you cannot grant.
+checked one decision at a time:
+   exemption valid : True
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

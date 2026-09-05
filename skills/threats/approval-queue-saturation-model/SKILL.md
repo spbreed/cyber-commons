@@ -40,6 +40,25 @@ front of theirs, depth is attacker-chosen and the average case is irrelevant.
 day, and the reading budget. The gap between them is the finding, and it points
 at routing by reversibility rather than at hiring.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/approval_queue_saturation_model.py`](scripts/approval_queue_saturation_model.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+ daily volume  considered  stamped  caught  missed
+           10          10        0       1       0
+           25          25        0       1       0
+          100          25       75       0       1
+          500          25      475       0       1
+
+At every volume the audit trail shows a human approval on 100% of
+actions. The control reports full coverage in all four rows.
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json

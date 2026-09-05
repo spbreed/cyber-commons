@@ -43,6 +43,25 @@ detections at all.
 orphan rule needs process accounting. A rule whose input is not collected is a
 plan.
 
+## Example
+
+**Input** — the fixture committed at the top of [`scripts/agent_platform_detections.py`](scripts/agent_platform_detections.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+
+**Output** — the opening lines of a real run:
+
+```
+  t  rule                                process
+  3  ptrace attach to a non-child        solve.py
+  4  LD_PRELOAD on a spawned process     solve.py
+  5  non-harness write to the RPC path   x.so
+  5  process outside the baseline tree   x.so
+  7  process outside the baseline tree   sidecar
+
+generic anomaly score for this run: 0.07  (seven syscalls is unremarkable)
+```
+
+The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
+
 ## Output contract
 
 ```json
