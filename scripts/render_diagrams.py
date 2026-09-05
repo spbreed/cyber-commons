@@ -118,6 +118,18 @@ def validate(path: Path, kind: str, source: str) -> list[str]:
     if "syntax error" in svg.lower() or "cannot find" in svg.lower():
         problems.append("the renderer drew an error message instead of a diagram")
 
+    if kind == "puml":
+        # A line starting with an apostrophe is PlantUML's comment syntax. A
+        # note that opens on a quoted phrase is silently deleted from the
+        # diagram — valid SVG, exit 0, sentence gone. Caught here because no
+        # amount of looking at the render tells you a line is missing unless
+        # you already knew it should be there.
+        for i, ln in enumerate(source.splitlines(), 1):
+            if ln.lstrip().startswith("'"):
+                problems.append(f"line {i} starts with an apostrophe, which "
+                                f"PlantUML treats as a comment and drops: "
+                                f"{ln.strip()[:60]}")
+
     try:
         root = ET.fromstring(svg)
     except ET.ParseError as e:

@@ -9,6 +9,8 @@ the pattern, and one that closes the bug by deleting the feature.
 Standard library only, and deterministic.
 """
 
+from cyber_commons_skill_runtime import emit_diagram, puml_sequence
+
 # (id, patch, ci_green, exploit_blocked_in_replica, behaviour_preserved_in_qa,
 #  new_findings, what it actually did)
 CANDIDATES = [
@@ -97,3 +99,30 @@ assert ci_alone > opened, "if CI alone merges no more than the gates, a gate is 
 # for the review; they are what makes the review about something a human is
 # needed for.
 assert opened == 2, "the gates should stop the evasion and the behaviour change, and not D"
+
+
+# The promotion path as a sequence, because that is the shape it has: one patch
+# moving between three environments over time, with a different question asked
+# at each. A graph would say which environments exist; a sequence says the order
+# they are asked in, and the order is the whole control.
+_parts = [("dev", "the patch", "unit"),
+          ("replica", "sandbox replica", "sink"),
+          ("qa", "QA", "unit"),
+          ("master", "merge request\\nto master", "control")]
+_msgs = [("dev", "replica", "re-run the exploit", ""),
+         ("replica", "replica", "and against the UNPATCHED build", ""),
+         ("replica", "dev", "C dies here: exploit still works", "danger"),
+         ("replica", "qa", "survivors only", "control"),
+         ("qa", "dev", "B dies here: booking ref truncated", "danger"),
+         ("qa", "master", "A and D, with the evidence attached", "control")]
+_notes = [("master", "D passed every gate and still should not merge.\n"
+                     "Whether this is the mechanism we want is not a test result.")]
+
+print()
+emit_diagram("b2-11-promotion-path",
+             puml=puml_sequence("A security patch, from the sandbox to master",
+                                _parts, _msgs, notes=_notes))
+print()
+print("Read the order rather than the boxes. The exploit re-run is first because")
+print("it is the only gate that cannot be satisfied by editing the code around a")
+print("detector, and it is the one that gets skipped.")

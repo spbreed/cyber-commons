@@ -407,7 +407,17 @@ def puml_sequence(title, participants, messages, *, notes=()):
     for alias, text in notes:
         # A real newline. "\\n" in a note renders as the two characters, and
         # the reader sees a backslash in the middle of a sentence.
-        out.append(f"note over {alias}\n{text}\nend note")
+        #
+        # And a leading apostrophe is PlantUML's line comment. A note line that
+        # opens on a quoted phrase is silently deleted from the diagram — the
+        # render succeeds, the SVG is valid, and the sentence is simply gone.
+        # One leading space is enough to stop it being a comment.
+        # A leading space does not help: PlantUML trims before testing. Swap
+        # the ASCII apostrophe for the typographic one, which reads identically
+        # and is not a comment marker.
+        safe = "\n".join("\u2019" + ln.lstrip()[1:] if ln.lstrip().startswith("'")
+                         else ln for ln in str(text).splitlines())
+        out.append(f"note over {alias}\n{safe}\nend note")
     out.append("@enduml")
     return "\n".join(out) + "\n"
 

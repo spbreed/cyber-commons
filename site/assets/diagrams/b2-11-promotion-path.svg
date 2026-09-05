@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="395px" preserveAspectRatio="none" style="width:958px;height:395px;" version="1.1" viewBox="0 0 958 395" width="958px" zoomAndPan="magnify"><defs/><g><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="309" x="322.5" y="22.9951">A security patch, from the sandbox to master</text><line style="stroke: #3A4258; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="48" x2="48" y1="80.8906" y2="338.9531"/><line style="stroke: #3A4258; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="259" x2="259" y1="80.8906" y2="338.9531"/><line style="stroke: #3A4258; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="492" x2="492" y1="80.8906" y2="338.9531"/><line style="stroke: #3A4258; stroke-width: 1.0; stroke-dasharray: 5.0,5.0;" x1="746.5" x2="746.5" y1="80.8906" y2="338.9531"/><rect fill="#1A1E28" height="30.2969" style="stroke: #4A5468; stroke-width: 1.4;" width="80" x="8" y="49.5938"/><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="66" x="15" y="69.5889">the patch</text><rect fill="#1A1E28" height="30.2969" style="stroke: #4A5468; stroke-width: 1.4;" width="80" x="8" y="337.9531"/><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="66" x="15" y="357.9482">the patch</text><rect fill="#2A2114" height="30.2969" style="stroke: #4A5468; stroke-width: 1.4;" width="122" x="198" y="49.5938"/><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="108" x="205" y="69.5889">sandbox replica</text><rect fill="#2A2114" height="30.2969" style="stroke: #4A5468; stroke-width: 1.4;" width="122" x="198" y="337.9531"/><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="108" x="205" y="357.9482">sandbox replica</text><rect fill="#1A1E28" height="30.2969" style="stroke: #4A5468; stroke-width: 1.4;" width="34" x="475" y="49.5938"/><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="20" x="482" y="69.5889">QA</text><rect fill="#1A1E28" height="30.2969" style="stroke: #4A5468; stroke-width: 1.4;" width="34" x="475" y="337.9531"/><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="20" x="482" y="357.9482">QA</text><rect fill="#14231B" height="46.5938" style="stroke: #4A5468; stroke-width: 1.4;" width="117" x="688.5" y="33.2969"/><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="103" x="695.5" y="53.292">merge request</text><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="66" x="714" y="69.5889">to master</text><rect fill="#14231B" height="46.5938" style="stroke: #4A5468; stroke-width: 1.4;" width="117" x="688.5" y="337.9531"/><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="103" x="695.5" y="357.9482">merge request</text><text fill="#E9EDF6" font-family="Helvetica" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="66" x="714" y="374.2451">to master</text><polygon fill="#8A93A6" points="247,108.0234,257,112.0234,247,116.0234,251,112.0234" style="stroke: #8A93A6; stroke-width: 1.0;"/><line style="stroke: #8A93A6; stroke-width: 1.0;" x1="48" x2="253" y1="112.0234" y2="112.0234"/><text fill="#C7CEDC" font-family="Helvetica" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="110" x="98.5" y="106.9575">re-run the exploit</text><line style="stroke: #8A93A6; stroke-width: 1.0;" x1="259" x2="301" y1="141.1563" y2="141.1563"/><line style="stroke: #8A93A6; stroke-width: 1.0;" x1="301" x2="301" y1="141.1563" y2="154.1563"/><line style="stroke: #8A93A6; stroke-width: 1.0;" x1="260" x2="301" y1="154.1563" y2="154.1563"/><polygon fill="#8A93A6" points="270,150.1563,260,154.1563,270,158.1563,266,154.1563" style="stroke: #8A93A6; stroke-width: 1.0;"/><text fill="#C7CEDC" font-family="Helvetica" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="219" x="266" y="136.0903">and against the UNPATCHED build</text><polygon fill="#E05C4B" points="59,179.2891,49,183.2891,59,187.2891,55,183.2891" style="stroke: #E05C4B; stroke-width: 1.0;"/><line style="stroke: #E05C4B; stroke-width: 1.0;" x1="53" x2="258" y1="183.2891" y2="183.2891"/><text fill="#C7CEDC" font-family="Helvetica" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="187" x="60" y="178.2231">C dies here: exploit still works</text><polygon fill="#3FA06B" points="480,208.4219,490,212.4219,480,216.4219,484,212.4219" style="stroke: #3FA06B; stroke-width: 1.0;"/><line style="stroke: #3FA06B; stroke-width: 1.0;" x1="259" x2="486" y1="212.4219" y2="212.4219"/><text fill="#C7CEDC" font-family="Helvetica" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="87" x="332" y="207.356">survivors only</text><polygon fill="#E05C4B" points="59,237.5547,49,241.5547,59,245.5547,55,241.5547" style="stroke: #E05C4B; stroke-width: 1.0;"/><line style="stroke: #E05C4B; stroke-width: 1.0;" x1="53" x2="491" y1="241.5547" y2="241.5547"/><text fill="#C7CEDC" font-family="Helvetica" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="217" x="161.5" y="236.4888">B dies here: booking ref truncated</text><polygon fill="#3FA06B" points="735,266.6875,745,270.6875,735,274.6875,739,270.6875" style="stroke: #3FA06B; stroke-width: 1.0;"/><line style="stroke: #3FA06B; stroke-width: 1.0;" x1="492" x2="741" y1="270.6875" y2="270.6875"/><text fill="#C7CEDC" font-family="Helvetica" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="231" x="504" y="265.6216">A and D, with the evidence attached</text><path d="M548,283.6875 L548,323.6875 L946,323.6875 L946,293.6875 L936,283.6875 L548,283.6875 " fill="#1A1E28" style="stroke: #4D9BFF; stroke-width: 1.0;"/><path d="M936,283.6875 L936,293.6875 L946,293.6875 L936,283.6875 " fill="#1A1E28" style="stroke: #4D9BFF; stroke-width: 1.0;"/><text fill="#C7CEDC" font-family="Helvetica" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="306" x="554" y="300.7544">D passed every gate and still should not merge.</text><text fill="#C7CEDC" font-family="Helvetica" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="377" x="554" y="315.8872">Whether this is the mechanism we want is not a test result.</text><!--MD5=[745fbb90f56817ec62956f7ec85e6775]
+@startuml
+skinparam backgroundColor transparent
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam defaultFontColor #E9EDF6
+skinparam titleFontColor #E9EDF6
+skinparam titleFontSize 14
+skinparam sequenceMessageAlign center
+skinparam sequence {
+  ArrowColor #8A93A6
+  ArrowFontColor #C7CEDC
+  LifeLineBorderColor #3a4258
+  LifeLineBackgroundColor transparent
+  ParticipantFontColor #E9EDF6
+  ParticipantBorderThickness 1.4
+  BoxBorderColor #26314b
+  ParticipantBorderColor #4a5468
+}
+skinparam noteBackgroundColor #1a1e28
+skinparam noteBorderColor #4D9BFF
+skinparam noteFontColor #C7CEDC
+title A security patch, from the sandbox to master
+participant "the patch" as dev #1a1e28
+participant "sandbox replica" as replica #2a2114
+participant "QA" as qa #1a1e28
+participant "merge request\nto master" as master #14231b
+dev -[#8A93A6]> replica: re-run the exploit
+replica -[#8A93A6]> replica: and against the UNPATCHED build
+replica -[#E05C4B]> dev: C dies here: exploit still works
+replica -[#3FA06B]> qa: survivors only
+qa -[#E05C4B]> dev: B dies here: booking ref truncated
+qa -[#3FA06B]> master: A and D, with the evidence attached
+note over master
+D passed every gate and still should not merge.
+Whether this is the mechanism we want is not a test result.
+end note
+@enduml
+
+PlantUML version 1.2020.02(Sun Mar 01 10:22:07 UTC 2020)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 21.0.10+7-Ubuntu-124.04
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>

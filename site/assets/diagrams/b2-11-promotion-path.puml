@@ -1,0 +1,37 @@
+@startuml
+skinparam backgroundColor transparent
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam defaultFontColor #E9EDF6
+skinparam titleFontColor #E9EDF6
+skinparam titleFontSize 14
+skinparam sequenceMessageAlign center
+skinparam sequence {
+  ArrowColor #8A93A6
+  ArrowFontColor #C7CEDC
+  LifeLineBorderColor #3a4258
+  LifeLineBackgroundColor transparent
+  ParticipantFontColor #E9EDF6
+  ParticipantBorderThickness 1.4
+  BoxBorderColor #26314b
+  ParticipantBorderColor #4a5468
+}
+skinparam noteBackgroundColor #1a1e28
+skinparam noteBorderColor #4D9BFF
+skinparam noteFontColor #C7CEDC
+title A security patch, from the sandbox to master
+participant "the patch" as dev #1a1e28
+participant "sandbox replica" as replica #2a2114
+participant "QA" as qa #1a1e28
+participant "merge request\nto master" as master #14231b
+dev -[#8A93A6]> replica: re-run the exploit
+replica -[#8A93A6]> replica: and against the UNPATCHED build
+replica -[#E05C4B]> dev: C dies here: exploit still works
+replica -[#3FA06B]> qa: survivors only
+qa -[#E05C4B]> dev: B dies here: booking ref truncated
+qa -[#3FA06B]> master: A and D, with the evidence attached
+note over master
+D passed every gate and still should not merge.
+Whether this is the mechanism we want is not a test result.
+end note
+@enduml

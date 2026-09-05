@@ -255,7 +255,9 @@ attached to the merge request for A:
 
 A reviewer opening that request does not have to establish whether the
 bug is closed. That is answered on the page, so the review can be about
-D&#x27;s question instead - which is the only one they are needed for.</code></pre></div><div class="nbmd"><h2>4 · From the sandbox to the merge request</h2>
+D&#x27;s question instead - which is the only one they are needed for.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-11-promotion-path.svg" alt="b2 11 promotion path" loading="lazy"><figcaption>Rendered from the skill’s own PlantUML output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-11-promotion-path.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Read the order rather than the boxes. The exploit re-run is first because
+it is the only gate that cannot be satisfied by editing the code around a
+detector, and it is the one that gets skipped.</code></pre></div><div class="nbmd"><h2>4 · From the sandbox to the merge request</h2>
 <p>Validation says a patch is good. It does not say the patch may be merged, and those are different decisions taken in different places. This skill runs the promotion path: the exploit re-run in the replica, the regression suite in QA, the finding diff in both directions, and only then a merge request against <code>master</code> with the evidence attached to it.</p></div><div class="nbmd"><h2>5 · The promotion path, as a skill</h2>
 <p>The same four candidates, walked through three environments. Watch what CI alone would have merged against what survives the gates — and then watch candidate D pass every one of them.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/fix-promotion-gate/SKILL.md"><code>skills/appsec/fix-promotion-gate/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: fix-promotion-gate
@@ -465,7 +467,9 @@ attached to the merge request for A:
 
 A reviewer opening that request does not have to establish whether the
 bug is closed. That is answered on the page, so the review can be about
-D&#x27;s question instead - which is the only one they are needed for.</code></pre></div><div class="nbmd"><h2>6 · The two patches that reach review, and why one of them still should not merge</h2>
+D&#x27;s question instead - which is the only one they are needed for.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-11-promotion-path.svg" alt="b2 11 promotion path" loading="lazy"><figcaption>Rendered from the skill’s own PlantUML output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-11-promotion-path.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Read the order rather than the boxes. The exploit re-run is first because
+it is the only gate that cannot be satisfied by editing the code around a
+detector, and it is the one that gets skipped.</code></pre></div><div class="nbmd"><h2>6 · The two patches that reach review, and why one of them still should not merge</h2>
 <p>Candidate C is the argument for the replica. It is green, the rule no longer
 fires, and the exploit works unchanged — <code>escape()</code> moved the pattern past
 the detector without closing the injection. Nothing but re-running the exploit
