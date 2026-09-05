@@ -108,9 +108,9 @@ lesson** that meets CyberTravels and asks its own question of it.
 |---|---|---|---|
 | **A · Securing AI Architectures** | what can go wrong here, and what closes it | [0](curriculum/track-a0.md) Running the commons · [1](curriculum/track-a1.md) CyberTravels' architecture and every risk it carries · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 39 |
 | **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [4](curriculum/track-b2.md) The AI SDLC pipeline, before and after deploy | 15 |
-| **C · Red Teaming and Security Research with AI** | can we break it before somebody else does | [6](curriculum/track-c1.md) Red teaming with AI · [7](curriculum/track-c2.md) Security research with AI | 15 |
-| **D · The Agentic SOC** | would we see it happening, and could we stop it | [8](curriculum/track-d1.md) Detection · [9](curriculum/track-d2.md) Response | 21 |
-| **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [10](curriculum/track-e1.md) The governance framework · [11](curriculum/track-e2.md) The governance platform · [12](curriculum/track-e3.md) Running the programme | 30 |
+| **C · Red Teaming and Security Research with AI** | can we break it before somebody else does | [5](curriculum/track-c1.md) Red teaming with AI · [6](curriculum/track-c2.md) Security research with AI | 15 |
+| **D · The Agentic SOC** | would we see it happening, and could we stop it | [7](curriculum/track-d1.md) Detection · [8](curriculum/track-d2.md) Response | 21 |
+| **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [9](curriculum/track-e1.md) The governance framework · [10](curriculum/track-e2.md) The governance platform · [11](curriculum/track-e3.md) Running the programme | 30 |
 | | | **12 chapters** | **120** |
 
 Nobody takes all of it. Everyone takes the **common spine** first — twenty

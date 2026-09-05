@@ -366,14 +366,12 @@ GROUNDING: dict[str, str] = {
          "`search_hotels`. It has no way to tell a human that an invoice it "
          "just read looks forged.",
 
-# ---- B1 · the AI SDLC ----------------------------------------------------
-# ---- B1 · the agentic harness --------------------------------------------
+# ---- B2 · the AI SDLC ----------------------------------------------------
 "B2.0": "Alex's Coding Agent turned six pull requests a week into forty, some "
-        "touching a hundred and twenty files. This chapter is what he builds "
-        "instead of scrolling.",
-"B2.0": "Alex reviews 40 pull requests a week against 6 before the Coding "
-        "Agent existed, with the same one reviewer. The reviewer becomes a "
-        "harness, and the harness becomes something he has to secure.",
+        "touching a hundred and twenty files. Every tool he reaches for sits "
+        "on one side of the deploy: the ones that can block a merge cannot see "
+        "what CyberTravels' agents actually got at runtime, and the ones that "
+        "can see it cannot block anything.",
 
 "B2.1": "Alex is building the reviewer that reads CyberTravels' pull "
         "requests. Its verifier is the part that decides whether it "
