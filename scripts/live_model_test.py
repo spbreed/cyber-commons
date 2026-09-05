@@ -22,11 +22,14 @@ that runs a file, so there is no adapter cell to find, and this reported
 the lesson does, which is the property that makes this evidence rather than a
 parallel implementation.
 
-**The acceptance property is the script's own assertions.** Each skill script
-ends on the `assert`s that state what a correct run must produce, and they are
-the same ones `test_skills.py` runs offline. So a non-zero exit is an acceptance
-failure rather than a crash to be reported separately, and there is no second
-copy of the property here to drift from the first.
+**The acceptance property is the one the script prints, not its exit code.**
+Each model-facing skill reports `property checked` and `held on <backend>`, and
+reports it deliberately rather than asserting it: a real model failing a content
+property is a finding about the model, not a broken notebook. Most of these
+scripts assert only that the backend returned a non-empty string. Scoring them
+on the exit code therefore measures plumbing and prints it as accuracy — it
+scored every lesson as held at 1.5B, including the two that do not hold there.
+The exit code is still recorded, as `script_exit_ok`; it is a different claim.
 
 **Credentials never enter this repository.** A local server usually needs no key
 at all; anything set is read from the environment, never printed, never written
@@ -139,25 +142,43 @@ def main() -> int:
         why = next((ln.split("failed:", 1)[1].strip()
                     for ln in out.splitlines() if "failed:" in ln), "")
         reached = backend == "open-weight"
-        held = p.returncode == 0
+
+        # The acceptance property is the one the script PRINTS, not its exit
+        # code. Four of these skills assert only that the backend returned a
+        # non-empty string and then report the content property separately, on
+        # purpose — "a real model failing it is a finding about the model, not
+        # a broken notebook". Reading the exit code instead scored all six as
+        # held at 1.5B, which is a plumbing result wearing an accuracy label.
+        prop = next((ln.split(":", 1)[1].strip() for ln in out.splitlines()
+                     if ln.startswith("property checked")), None)
+        verdict = next((ln.split(":", 1)[1].strip() for ln in out.splitlines()
+                        if ln.startswith("held on")), None)
+        if verdict is not None:
+            held, source = verdict == "True", "reported property"
+        else:
+            held, source = p.returncode == 0, "assertions"
+        ran = p.returncode == 0
         err = None
+        if not ran:
+            err = "script exited non-zero: " + p.stderr.strip()[-300:]
         if not reached:
             unreached.append(sid)
             err = (f"fell back to {backend!r} instead of calling the backend"
                    + (f" — {why}" if why else ""))
         if not held:
             broke.append(sid)
-            err = ((err + "  ") if err else "") + \
-                  "acceptance assertion failed: " + p.stderr.strip()[-300:]
 
-        print(f"  {'ok  ' if reached and held else 'FAIL'} {sid:7s}{took:6.1f}s  "
-              f"backend={backend:12s}property held={held}")
+        print(f"  {'ok  ' if reached and held and ran else 'FAIL'} {sid:7s}"
+              f"{took:6.1f}s  backend={backend:12s}held={str(held):5s} ({source})")
+        if prop:
+            print(f"       property: {prop}")
         if err:
             print(f"       {err}")
         rows.append({"session": sid, "script": script, "reached_backend": reached,
-                     "backend": backend, "model": model, "property_held": held,
-                     "seconds": round(took, 2), "error": err,
-                     "output": out.strip()[-4000:]})
+                     "backend": backend, "model": model, "property": prop,
+                     "property_held": held, "property_source": source,
+                     "script_exit_ok": ran, "seconds": round(took, 2),
+                     "error": err, "output": out.strip()[-4000:]})
 
     if not rows:
         print("nothing ran", file=sys.stderr)

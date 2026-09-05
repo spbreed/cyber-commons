@@ -150,6 +150,9 @@ accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (re
 verified : True   &lt;- an independent check said so
 steps    : 1
 
+property checked : the verified loop returns a parameterised query
+held on replay       : True
+
 a correct psycopg fix: return DB.execute(&quot;SELECT * FROM bookings WHERE ref=%s&quot;, (ref,))
    narrow verifier (only &#x27;?&#x27;) : REJECTS a correct fix
    this lesson&#x27;s verifier     : accepts

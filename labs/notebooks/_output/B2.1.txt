@@ -25,6 +25,9 @@ accepted : return DB.execute("SELECT * FROM bookings WHERE ref=?", (ref,))
 verified : True   <- an independent check said so
 steps    : 1
 
+property checked : the verified loop returns a parameterised query
+held on replay       : True
+
 a correct psycopg fix: return DB.execute("SELECT * FROM bookings WHERE ref=%s", (ref,))
    narrow verifier (only '?') : REJECTS a correct fix
    this lesson's verifier     : accepts

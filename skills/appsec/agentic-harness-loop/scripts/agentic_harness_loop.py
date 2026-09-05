@@ -19,7 +19,7 @@ kernel with the internet switched off.
 # on the path; standalone, PYTHONPATH does (see scripts/test_skills.py).
 from cyber_commons_skill_runtime import announce_backend, ask
 
-announce_backend()
+backend_kind, _backend_model = announce_backend()
 
 
 FINDING = """
@@ -103,6 +103,12 @@ checked = loop(TASK, verifier=parameterised)
 print(f"accepted : {checked['answer']}")
 print(f"verified : {checked['ok']}   <- an independent check said so")
 print(f"steps    : {checked['steps']}")
+print()
+# Reported in the same shape every model-facing skill uses, and reported
+# rather than asserted: a real model failing this is a finding about the
+# model, not a broken lesson.
+print("property checked : the verified loop returns a parameterised query")
+print(f"held on {backend_kind:12s} : {bool(checked['ok'])}")
 
 # Two ways a verifier is wrong, and only one of them is loud.
 NARROW = lambda c: "?" in c.split("execute", 1)[-1] and "+" not in c

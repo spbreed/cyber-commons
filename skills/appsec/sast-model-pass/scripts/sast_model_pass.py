@@ -86,6 +86,15 @@ for unit, code in (("find_booking", SLICE), ("my_bookings", CONTROL)):
 print(f"{len(report['hypotheses'])} hypothesis · {len(report['rejected'])} rejected "
       f"· {report['promoted']} promoted")
 print()
+# Reported rather than asserted, in the shape every model-facing skill uses.
+# The pipeline property (below) must hold on any backend; this one is about
+# the model, and a small model missing it is a finding about the model.
+found = any(h["unit"] == "find_booking" and h["cwe"].upper() == "CWE-862"
+            for h in report["hypotheses"])
+print("property checked : the model finds the missing authorisation check "
+      "that no rule can express")
+print(f"held on {kind:12s} : {found}")
+print()
 
 # Step 3, as a check of the check. The rejection must be demonstrated on every
 # run, and it cannot be demonstrated by *waiting for the model to be wrong*: a
