@@ -9,7 +9,13 @@ the half that needs a machine with tools on it.
     python3 scripts/render_diagrams.py            # render and validate
     python3 scripts/render_diagrams.py --check    # CI: fail if any is stale
 
-Output goes to `site/assets/diagrams/<stem>.svg`, which the lesson pages embed.
+Output goes to `site/assets/diagrams/<stem>.svg`, which the lesson pages embed,
+alongside `<stem>.dot` or `<stem>.puml` — the emitted source, committed so that
+`--check` can tell whether a skill's diagram changed. Staleness is measured on
+that source and never on the SVG: the source is deterministic and the render is
+not, because a different Graphviz or PlantUML lays the same graph out
+differently. Comparing rendered bytes failed CI on a diagram that was correct on
+both machines.
 
 **Validation is the point, not the rendering.** `dot` exits 0 on a graph that
 renders as a single unreadable smear, and PlantUML writes a PNG containing the
@@ -85,10 +91,16 @@ def render(kind: str, stem: str, source: str) -> tuple[Path | None, str]:
         p = subprocess.run(["dot", "-Tsvg", "-o", str(dst)], input=source,
                            capture_output=True, text=True)
     else:
-        src = OUT / f"{stem}.puml"
+        # A temp name, not "<stem>.puml": that path is the committed source
+        # and plantuml's input file is deleted after the run, which quietly
+        # removed the very file --check compares against.
+        src = OUT / f".{stem}.render.puml"
         src.write_text(source)
         p = subprocess.run(["plantuml", "-tsvg", "-o", str(OUT), str(src)],
                            capture_output=True, text=True)
+        rendered = OUT / f".{stem}.render.svg"
+        if rendered.is_file():
+            rendered.replace(dst)
         src.unlink(missing_ok=True)
     if p.returncode:
         return None, f"{kind} exited {p.returncode}: {p.stderr.strip()[:160]}"
@@ -174,16 +186,22 @@ def main() -> int:
     bad, stale = [], []
     print(f"{len(items)} diagram(s) emitted by skills\n")
     for ref, kind, stem, source in items:
-        dst = OUT / f"{stem}.svg"
-        before = dst.read_text() if dst.is_file() else None
+        # Staleness is measured on the SOURCE, not the render. The source is
+        # what the skill emits and it is deterministic; the SVG is not, because
+        # a different Graphviz or PlantUML lays the same graph out differently.
+        # Comparing rendered bytes failed CI on a diagram that was correct on
+        # both machines and merely 10 bytes apart.
+        src_path = OUT / f"{stem}.{kind}"
+        if not src_path.is_file() or src_path.read_text() != source:
+            stale.append(stem)
+            if not a.check:
+                src_path.write_text(source)
         path, err = render(kind, stem, source)
         if err:
             print(f"  FAIL {stem:<34}{kind:<6}{err}")
             bad.append(stem)
             continue
         problems = validate(path, kind, source)
-        if dst.read_text() != before:
-            stale.append(stem)
         size = path.stat().st_size
         if problems:
             print(f"  FAIL {stem:<34}{kind:<6}{size:>6}B  {ref}")
@@ -199,7 +217,8 @@ def main() -> int:
               file=sys.stderr)
         return 1
     if a.check and stale:
-        print(f"::error::{len(stale)} diagram(s) out of date: {stale}\n"
+        print(f"::error::{len(stale)} diagram(s) whose committed source no "
+              f"longer matches what the skill emits: {stale}\n"
               f"Run: python3 scripts/render_diagrams.py", file=sys.stderr)
         return 1
     return 0

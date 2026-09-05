@@ -1,0 +1,30 @@
+digraph "threat_model" {
+  rankdir=LR;
+  bgcolor="transparent";
+  node [shape=box style="rounded,filled" fontname="Helvetica" fontsize=11 penwidth=1.2];
+  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" fontcolor="#A8B2C6" penwidth=1.1];
+  "get_booking" [label="get_booking" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  "health" [label="health" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  "load_booking" [label="load_booking" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "store" [label="store" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "upload_voucher" [label="upload_voucher" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  subgraph cluster_0 {
+    label="src/api · trust 0"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "get_booking";
+    "health";
+    "upload_voucher";
+  }
+  subgraph cluster_1 {
+    label="src/data · trust 2"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "load_booking";
+    "store";
+  }
+  "get_booking" -> "load_booking" [label="0->2"];
+  "upload_voucher" -> "store" [label="0->2"];
+  subgraph cluster_legend {
+    label="key"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10; rank=sink;
+    "legend_entry" [label="entry point" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_sink" [label="dangerous sink" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_entry" -> "legend_sink" [style=invis];
+  }
+}

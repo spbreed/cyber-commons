@@ -1,0 +1,33 @@
+@startuml
+skinparam backgroundColor transparent
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam defaultFontColor #E9EDF6
+skinparam titleFontColor #E9EDF6
+skinparam titleFontSize 14
+skinparam sequenceMessageAlign center
+skinparam sequence {
+  ArrowColor #8A93A6
+  ArrowFontColor #C7CEDC
+  LifeLineBorderColor #3a4258
+  LifeLineBackgroundColor transparent
+  ParticipantFontColor #E9EDF6
+  ParticipantBorderThickness 1.4
+  BoxBorderColor #26314b
+  ParticipantBorderColor #4a5468
+}
+skinparam noteBackgroundColor #1a1e28
+skinparam noteBorderColor #4D9BFF
+skinparam noteFontColor #C7CEDC
+title CyberTravels — one request, and where it crosses
+participant "get_booking\nsrc/api" as get_booking #2a1614
+participant "load_booking\nsrc/data" as load_booking #2a2114
+participant "store\nsrc/data" as store #2a2114
+participant "upload_voucher\nsrc/api" as upload_voucher #2a1614
+get_booking -[#E05C4B]> load_booking: TRUST BOUNDARY 0->2
+upload_voucher -[#E05C4B]> store: TRUST BOUNDARY 0->2
+note over get_booking
+every threat in the table
+lives on a red arrow
+end note
+@enduml

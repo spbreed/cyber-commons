@@ -1,0 +1,36 @@
+digraph "architecture" {
+  rankdir=LR;
+  bgcolor="transparent";
+  node [shape=box style="rounded,filled" fontname="Helvetica" fontsize=11 penwidth=1.2];
+  edge [fontname="Helvetica" fontsize=9 color="#8A93A6" fontcolor="#A8B2C6" penwidth=1.1];
+  "agent runtime" [label="agent runtime\ntrust 2" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "egress" [label="egress\ntrust 3" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "ingress" [label="ingress\ntrust 0" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  "knowledge" [label="knowledge\ntrust 0" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  "mcp servers" [label="mcp servers\ntrust 1" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "messaging" [label="messaging\ntrust 2" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "model" [label="model\ntrust 1" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "orchestrator" [label="orchestrator\ntrust 2" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "tools" [label="tools\ntrust 3" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" style="rounded,filled"];
+  "agent runtime" -> "mcp servers";
+  "agent runtime" -> "messaging";
+  "agent runtime" -> "model";
+  "agent runtime" -> "tools" [label="BOUNDARY"];
+  "ingress" -> "orchestrator" [label="BOUNDARY"];
+  "knowledge" -> "agent runtime" [label="BOUNDARY"];
+  "mcp servers" -> "agent runtime" [label="BOUNDARY"];
+  "messaging" -> "agent runtime";
+  "model" -> "agent runtime" [label="BOUNDARY"];
+  "orchestrator" -> "agent runtime";
+  "tools" -> "agent runtime";
+  subgraph cluster_legend {
+    label="key"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10; rank=sink;
+    "legend_entry" [label="trust 0 — content from outside" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_unit" [label="no authority" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_entry" -> "legend_unit" [style=invis];
+    "legend_sink" [label="holds authority" color="#E0912F" fillcolor="#2a2114" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];
+    "legend_unit" -> "legend_sink" [style=invis];
+    "legend_dead" [label="not built yet" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" fontsize=9 style="rounded,filled,dashed"];
+    "legend_sink" -> "legend_dead" [style=invis];
+  }
+}
