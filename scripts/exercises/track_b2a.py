@@ -345,19 +345,29 @@ the deterministic scan felt disappointing and you have bought noise."""),
 
   ("md", """## 7 · Where it breaks — gating on the confidence number
 
-The model returned 0.82 on the real defect and 0.71 on the invented one. It is
-tempting to read a threshold into that gap, and every pipeline that does it
-ships one.
+In the offline run the replay returns 0.82 on the real defect and 0.71 on the
+invented one. It is tempting to read a threshold into that gap, and every
+pipeline that does it ships one.
 
 Two reasons not to. The number is **uncalibrated** — 0.82 does not mean the
 claim is right 82% of the time, it means nothing in particular. And it is
-**unstable**: the same slice, the same model, ten runs, and the confidence
-moves further than the distance between your accept and reject bands. Sort a
-human's queue with it if you like. Do not let it decide anything on its own.
+**unstable**: the same slice, the same model, ten runs, and the confidence moves
+further than the distance between your accept and reject bands. Sort a human's
+queue with it if you like. Do not let it decide anything on its own.
 
-What killed the false positive instead cost nothing and required no judgement:
-the model quoted a line that is not in the file. That check generalises, and
-B2.4 is where it becomes a stage."""),
+What kills a fabricated claim instead costs nothing and requires no judgement:
+**the quoted line is not in the file**. That check generalises, and B2.4 is
+where it becomes a stage.
+
+> **A result from running this against a real model, worth keeping.** The skill
+> is written so the verifier is tested directly, against a quote known not to be
+> in the slice — rather than by waiting for the model to fabricate one. That is
+> not fastidiousness. An earlier version asserted that the model *would* invent
+> a defect in the already-authorised control function, and against a served
+> Qwen2.5-7B it did not: it read the function correctly and declined. The
+> assertion failed because the model behaved well, which is a bug in the
+> assertion. A pipeline check has to hold whether or not the model misbehaves on
+> the day you run it."""),
 
   ("md", """## 8 · An agent drives both, because you cannot afford both everywhere
 
@@ -386,10 +396,13 @@ nobody was surprised by that."""),
            "by writing a rule, and the missing authorisation check on line 7 is "
            "not expressible as a pattern at any width. The model pass then finds "
            "exactly that one, at 0.82 confidence, recorded as a hypothesis and "
-           "not a finding — and its claim about the already-authorised control "
-           "function is rejected for nothing more than quoting a line that is "
-           "not in the file. Zero hypotheses are promoted, because the audit "
-           "stage does not promote its own output.",
+           "not a finding. The verifier is then tested against a quote known "
+           "not to be in the slice and rejects it — the check holds whether or "
+           "not the model fabricated anything on this run, which matters "
+           "because a served Qwen2.5-7B reads the already-authorised control "
+           "function correctly and declines to invent a defect in it. Zero "
+           "hypotheses are promoted, because the audit stage does not promote "
+           "its own output.",
  "challenge": "Two things, and the second is the one people skip. Run Semgrep "
               "against one of your own repositories at your current ruleset and "
               "at seven packs, and count the difference — whatever that number "

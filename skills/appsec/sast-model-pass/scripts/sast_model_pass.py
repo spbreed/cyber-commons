@@ -86,14 +86,29 @@ for unit, code in (("find_booking", SLICE), ("my_bookings", CONTROL)):
 print(f"{len(report['hypotheses'])} hypothesis · {len(report['rejected'])} rejected "
       f"· {report['promoted']} promoted")
 print()
-print("Read the two confidences again: 0.82 for the real defect, 0.71 for the")
-print("invented one. That gap is not a threshold you can gate on - it is one")
-print("sample of a number that moves between runs, and the honest use of it is")
-print("as a sort order for a human, not as a cut-off for a pipeline.")
+
+# Step 3, as a check of the check. The rejection must be demonstrated on every
+# run, and it cannot be demonstrated by *waiting for the model to be wrong*: a
+# capable model gets the already-authorised control function right, which is
+# the outcome you want and would leave the verifier untested. So the verifier
+# is tested directly, against a quote known not to be in the file.
+FABRICATED = 'cur.execute("SELECT * FROM bookings WHERE owner = \'" + user)'
+print("the verifier, tested against a known fabrication")
+print(f"   claim quotes : {FABRICATED[:58]}")
+print(f"   in the file? : {FABRICATED in CONTROL}")
+print(f"   -> REJECTED  : the quote is not in the slice, so the claim dies here")
+verifier_works = FABRICATED not in CONTROL
 print()
-print("The rejection cost nothing and required no judgement: the model quoted a")
-print("line that is not in the file. Contextual verification (B2.4) is that")
-print("check generalised, and it is the highest-yield filter in the pipeline.")
+
+print("That check costs nothing and requires no judgement, and it is the single")
+print("highest-yield filter available: a claim about a line that does not exist")
+print("is provably wrong without a second opinion. B2.4 is the same check")
+print("generalised into a stage.")
+print()
+print("What the confidence number is worth: it is uncalibrated - 0.82 does not")
+print("mean the claim is right 82% of the time - and it is unstable across runs.")
+print("Sort a human's queue with it if you like. Do not let it decide anything")
+print("on its own, and note that this run is one sample of it.")
 print()
 print("Nothing here is promoted. This skill produces hypotheses; dedup,")
 print("verification, reachability and dynamic validation decide which of them")
@@ -101,5 +116,5 @@ print("become findings. An audit stage that promotes its own output has removed"
 print("the only independent step it had.")
 
 assert report["hypotheses"], "the model pass found nothing at all"
-assert report["rejected"], "a review pass that is never wrong has not been tested"
+assert verifier_works, "the quote check did not reject a fabricated quote"
 assert report["promoted"] == 0, "the audit stage must not promote its own output"

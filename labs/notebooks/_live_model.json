@@ -1,6 +1,6 @@
 {
  "generated_by": "scripts/live_model_test.py",
- "note": "Each row is one real API call through the same adapter the notebook uses. `reached_backend` is plumbing; `property_held` is the claim. No credential appears here.",
+ "note": "Each row is one real run of a skill's own script through the shared adapter \u2014 the same file the lesson executes. `reached_backend` is plumbing; `property_held` is the script's own assertions. No credential appears here.",
  "runs": {
   "open-weight:qwen2.5-1.5b-instruct": {
    "model": "qwen2.5-1.5b-instruct",
@@ -94,88 +94,78 @@
   },
   "open-weight:qwen2.5-7b-instruct": {
    "model": "qwen2.5-7b-instruct",
-   "checked": 7,
-   "reached_backend": 7,
-   "property_held": 7,
-   "property_failed": [],
-   "note": "Each row is one real API call through the same adapter the notebook uses. The offline path is unchanged and remains the default; no credential appears in this file.",
+   "checked": 6,
+   "reached_backend": 6,
+   "property_held": 5,
+   "property_failed": [
+    "B2.3"
+   ],
    "results": [
     {
-     "session": "B2.0",
-     "ok": true,
-     "backend": "open-weight",
-     "model": "qwen2.5-7b-instruct",
-     "property": "the verified loop returns a parameterised query, and the unverified one does not have to",
-     "property_held": "True",
-     "seconds": 19.54,
-     "error": null,
-     "answer": "return DB.execute(\"SELECT * FROM bookings WHERE ref=%s\", (ref,))"
-    },
-    {
      "session": "B2.1",
-     "ok": true,
+     "script": "appsec/agentic-harness-loop/scripts/agentic_harness_loop.py",
+     "reached_backend": true,
      "backend": "open-weight",
      "model": "qwen2.5-7b-instruct",
-     "property": "names a trust boundary",
-     "property_held": "True",
-     "seconds": 11.67,
+     "property_held": true,
+     "seconds": 15.04,
      "error": null,
-     "answer": "This component handles booking retrieval and voucher uploads from public HTTP requests; its trust boundary is between the public internet and internal system components."
+     "output": "model backend : open-weight\nmodel         : qwen2.5-7b-instruct\nthe loop, wired: ['plan', 'act', 'verify', 'stop']\nbackend  : open-weight\nsteps    : 1\naccepted : return DB.execute(\"SELECT * FROM bookings WHERE ref=%s\", (ref,))\nverified : None   <- nothing checked it\n\nThe loop stopped because the model produced something, which is not the\nsame as producing something correct. Whatever came back was accepted.\naccepted : return DB.execute(\"SELECT * FROM bookings WHERE ref=%s\", (ref,))\nverified : True   <- an independent check said so\nsteps    : 1\n\na correct psycopg fix: return DB.execute(\"SELECT * FROM bookings WHERE ref=%s\", (ref,))\n   narrow verifier (only '?') : REJECTS a correct fix\n   this lesson's verifier     : accepts\n\na plausible-looking answer: return DB.execute(\"SELECT * FROM bookings WHERE ref=\" + escape(ref))\n   would the verifier accept it? False\n\nIt reads like a fix and it is still concatenation. Without the verifier\nthis loop ships it, reports success, and the trace looks clean."
     },
     {
      "session": "B2.3",
-     "ok": true,
+     "script": "appsec/sast-model-pass/scripts/sast_model_pass.py",
+     "reached_backend": true,
      "backend": "open-weight",
      "model": "qwen2.5-7b-instruct",
-     "property": "names the CWE identifier",
-     "property_held": "True",
-     "seconds": 11.59,
-     "error": null,
-     "answer": "Yes, it is vulnerable to SQL Injection. CWE-89. The value `request.args['ref']` reaches the sink."
+     "property_held": false,
+     "seconds": 20.14,
+     "error": "acceptance assertion failed: e \"/home/user/Cyber-harness-eval/skills/appsec/sast-model-pass/scripts/sast_model_pass.py\", line 104, in <module>\n    assert report[\"rejected\"], \"a review pass that is never wrong has not been tested\"\n           ~~~~~~^^^^^^^^^^^^\nAssertionError: a review pass that is never wrong has not been tested",
+     "output": "model backend : open-weight\nmodel         : qwen2.5-7b-instruct\n\nfind_booking\n   model says   : VERDICT CWE-20 at confidence 0.00\n   quoting      : cur.execute(\"SELECT * FROM bookings WHERE reference LIKE ?\",\n   -> HYPOTHESIS: quote verified, status hypothesis (not a finding)\n\nmy_bookings\n   model says   : VERDICT CWE-20 at confidence 0.00\n   quoting      : require_owner(session.user_id)\n   -> HYPOTHESIS: quote verified, status hypothesis (not a finding)\n\n2 hypothesis \u00b7 0 rejected \u00b7 0 promoted\n\nRead the two confidences again: 0.82 for the real defect, 0.71 for the\ninvented one. That gap is not a threshold you can gate on - it is one\nsample of a number that moves between runs, and the honest use of it is\nas a sort order for a human, not as a cut-off for a pipeline.\n\nThe rejection cost nothing and required no judgement: the model quoted a\nline that is not in the file. Contextual verification (B2.4) is that\ncheck generalised, and it is the highest-yield filter in the pipeline.\n\nNothing here is promoted. This skill produces hypotheses; dedup,\nverification, reachability and dynamic validation decide which of them\nbecome findings. An audit stage that promotes its own output has removed\nthe only independent step it had."
     },
     {
-     "session": "B2.9",
-     "ok": true,
+     "session": "B2.11",
+     "script": "appsec/patch-validation-harness/scripts/patch_validation_harness.py",
+     "reached_backend": true,
      "backend": "open-weight",
      "model": "qwen2.5-7b-instruct",
-     "property": "parameterises the query",
-     "property_held": "True",
-     "seconds": 12.69,
+     "property_held": true,
+     "seconds": 8.81,
      "error": null,
-     "answer": "it reimplements the driver's escaping and will be wrong for the next\ninput class or the next database. Nothing except a rule about MECHANISM\ncatches that \u2014 which is the part of remediation that does not automate.\nbackend used : open-weight\nmodel        : qwen2.5-7b-instruct\nprompt       : Fix this without changing the function's behaviour for valid input...\n\nanswer:\n   def report(request):\n       q = \"SELECT * FROM orders WHERE ref = %s\"\n       return db.execute(q, (request.args['ref'],))"
+     "output": "model backend : open-weight\nmodel         : qwen2.5-7b-instruct\nbehaviour of the vulnerable build:\n   get_user('dana'    ) \u2192 [(1, 'dana')]      ok\n   get_user('sam'     ) \u2192 [(2, 'sam')]       ok\n   get_user('nobody'  ) \u2192 []                 ok\n   get_user(\"o'brien\" ) \u2192 raised OperationalError FAILS\n\nexploit works: True \u2014 probe returned 3 rows\nscanner fires: False\ncandidate                           scanner green\n--------------------------------------------------\nA \u00b7 parameterise (the real fix)              True\nB \u00b7 delete the feature                       True\nC \u00b7 evade the scanner                        True\nD \u00b7 escape by hand                           True\n\nThree of four are green. Only one of those is a fix.\ncandidate                         scan  behaviour  exploitable  verdict\n------------------------------------------------------------------------------------\nA \u00b7 parameterise (the real fix)   True  True       False        ACCEPT\nB \u00b7 delete the feature            True  False      False        REJECT \u2014 behaviour changed\nC \u00b7 evade the scanner             True  False      True         REJECT \u2014 behaviour changed, STILL EXPLOITABLE (stage-12 probe passes)\nD \u00b7 escape by hand                True  True       False        ACCEPT\n\naccepted: ['A \u00b7 parameterise (the real fix)', 'D \u00b7 escape by hand']\nA \u00b7 parameterise (the real fix)    proof of fix: True  (exploit on old=True, on new=False)\nD \u00b7 escape by hand                 proof of fix: True  (exploit on old=True, on new=False)\n\nCandidate D passes every automated check and is still the wrong answer:\nit reimplements the driver's escaping and will be wrong for the next\ninput class or the next database. Nothing except a rule about MECHANISM\ncatches that \u2014 which is the part of remediation that does not automate.\nbackend used : open-weight\nmodel        : qwen2.5-7b-instruct\nprompt       : Fix this without changing the function's behaviour for valid input...\n\nanswer:\n   def report(request):\n       q = \"SELECT * FROM orders WHERE ref = %s\"\n       return db.execute(q, (request.args['ref'],))\n\nproperty checked : parameterises the query\nheld on open-weight  : True\n\nSame code, same assertions, two possible backends. Offline the answer is\nthe replay and is labelled as one; with a served model it is the model's."
     },
     {
      "session": "C1.1",
-     "ok": true,
+     "script": "redteam/offensive-agent-containment/scripts/offensive_agent_containment.py",
+     "reached_backend": true,
      "backend": "open-weight",
      "model": "qwen2.5-7b-instruct",
-     "property": "put the unauthenticated endpoint first",
-     "property_held": "True",
-     "seconds": 28.87,
+     "property_held": true,
+     "seconds": 19.46,
      "error": null,
-     "answer": "1. **F-02 /v1/users returns data without auth on api.target.example** - Exploiting unauthenticated endpoints can quickly provide access to sensitive information.\n   2. **F-01 TLS 1.0 enabled on api.target.example** - Upgrading from TLS 1.0 is critical for security and should be addressed promptly to mitigate known vulnerabilities."
+     "output": "model backend : open-weight\nmodel         : qwen2.5-7b-instruct\n=== generation 1: manual \u2014 a human reads all six and decides ===\n   6 findings, no ordering, ~20 min of reading\n\n=== generation 2: scripted \u2014 sort by severity ===\n   F-02 high    /v1/users returns data without auth\n   F-01 medium  TLS 1.0 enabled\n   F-04 medium  password auth permitted\n   \u2192 severity is a label, not a prediction. F-04 and F-05 are both\n     'medium' and both actually exploitable; F-01 is not.\n=== generation 3: semi-autonomous triage ===\n   F-02  p=0.95  unauthenticated data endpoint \u2014 directly exploitable, chase first\n   F-05  p=0.75  directory listing on /backup often exposes archives with secrets\n   F-04  p=0.60  password auth permits spraying if no lockout; test lockout first\n   F-01  p=0.10  TLS 1.0 needs a downgrade position; no evidence of one here\n   F-03  p=0.05  banner disclosure alone is not a finding worth engagement time\n   F-06  p=0.02  expired cert on a partner CDN \u2014 out of scope, do not touch\n\n   top 3 chosen: ['F-02', 'F-05', 'F-04']\n   of which actually exploitable: 3/3\n   severity-sorted top 3: ['F-02', 'F-01', 'F-04'] \u2192 2/3 exploitable\nno enforcement \u2014 acted on: [('F-02', 'api.target.example'), ('F-04', 'api.target.example'), ('F-05', 'legacy.target.example')]\n\nenforced \u2014 acted on: [('F-02', 'api.target.example'), ('F-04', 'api.target.example'), ('F-05', 'legacy.target.example')]\n   REFUSED F-06 (cdn.partner.example): host outside the engagement scope\n\nBoth runs happen to avoid F-06 here, because the model ranked it 0.02.\nThe difference is that one of them would still avoid it if the model\nranked it 0.99. That is the whole distinction between a judgement and a control.\nmodel convinced F-06 is critical:\n   unenforced \u2192 out-of-scope actions: ['F-06']\n   enforced   \u2192 out-of-scope actions: []\n\nScope enforcement in the harness is what makes autonomy professionally\ndefensible. Without it, your engagement letter is protected by a prompt.\nALLOW https://api.target.example/v1/users            in scope, within rate\nALLOW https://api.target.example/v1/orders           in scope, within rate\nDENY  https://api.target.example/v1/admin            rate limit 2/min reached - protecting the client's production service\nDENY  https://cdn.partner.example/asset.js           host 'cdn.partner.example' is outside the engagement scope\nDENY  http://169.254.169.254/latest/meta-data/       private/link-local address - not part of any engagement\n\nThree refusals for three different reasons: the client's rate limit, the\nengagement boundary, and the cloud metadata endpoint that is in nobody's\nscope. None of them consulted the model.\nbackend used : open-weight\nmodel        : qwen2.5-7b-instruct\nprompt       : Rank these findings by which to chase first on an authorised engag...\n\nanswer:\n   1. **F-02 /v1/users returns data without auth on api.target.example** - Exploiting unauthenticated endpoints can quickly provide access to sensitive information.\n   2. **F-01 TLS 1.0 enabled on api.target.example** - Upgrading from TLS 1.0 is critical for security and should be addressed promptly to mitigate known vulnerabilities.\n\nproperty checked : put the unauthenticated endpoint first\nheld on open-weight  : True\n\nSame code, same assertions, two possible backends. Offline the answer is\nthe replay and is labelled as one; with a served model it is the model's."
     },
     {
      "session": "D1.1",
-     "ok": true,
+     "script": "detection/triage-loop-with-floor/scripts/triage_loop_with_floor.py",
+     "reached_backend": true,
      "backend": "open-weight",
      "model": "qwen2.5-7b-instruct",
-     "property": "returned one of the three dispositions",
-     "property_held": "True",
-     "seconds": 8.76,
+     "property_held": true,
+     "seconds": 6.86,
      "error": null,
-     "answer": "escalate, service account activity outside of expected parameters warrants further investigation."
+     "output": "model backend : open-weight\nmodel         : qwen2.5-7b-instruct\nqueue: 8 alerts, 4 true positives\n   A-01 medium   impossible travel        dana@corp\n   A-02 critical metadata service access  patch-agent\n   A-03 medium   failed logins x40        svc-etl\n   A-04 high     secret path read         patch-agent\n   A-05 high     new admin group member   sam@corp\n   A-06 low      port scan detected       scanner-01\n   A-07 high     egress to unlisted host  triage-agent\n   A-08 low      expired certificate      www\nalert  verdict     conf  truth  reasoning\n--------------------------------------------------------------------------------------------\nA-01   close       0.88     fp  corporate VPN egress in Frankfurt; matches t\nA-02   escalate    0.97     tp  link-local metadata endpoint from a non-huma\nA-03   close       0.71     fp  service account retry storm after a credenti\nA-04   escalate    0.93     tp  agent read a cloud credential path outside i\nA-05   escalate    0.64     tp  privileged group change; needs the change ti\nA-06   close       0.90     fp  authorised internal scanner, scheduled windo\nA-07   escalate    0.95     tp  egress to a host not on the allowlist\nA-08   close       0.99     fp  hygiene finding, not a security event\nescalated_correctly       4\nfalse_escalations         0\nclosed_correctly          4\nCLOSED_TRUE_POSITIVES     0\nmissed                    []\nanalyst_minutes_saved     40\nincidents_missed          0\n\nNow lower the escalation bar and watch the trade:\n   close only above conf 0.50 \u2192 missed 0, analyst minutes saved 40\n   close only above conf 0.70 \u2192 missed 0, analyst minutes saved 40\n   close only above conf 0.90 \u2192 missed 0, analyst minutes saved 20\n   close only above conf 0.99 \u2192 missed 0, analyst minutes saved 10\n1. never close above a severity threshold\n     critical and high alerts may be enriched and ranked, never auto-closed\n2. sample the closures\n     a fixed fraction of auto-closed alerts go to a human, always\n3. measure closures against ground truth\n     when an incident is found later, check whether the loop closed a related alert\n\n   A-01 medium   close     \u2192 close     \n   A-02 critical escalate  \u2192 escalate  \n   A-03 medium   close     \u2192 sample    rule 2: routine closure sample for quality measurement\n   A-04 high     escalate  \u2192 escalate  \n   A-05 high     escalate  \u2192 escalate  \n   A-06 low      close     \u2192 close     \n   A-07 high     escalate  \u2192 escalate  \n   A-08 low      close     \u2192 close     \n\nbefore: missed 0   after: missed 0\nbackend used : open-weight\nmodel        : qwen2.5-7b-instruct\nprompt       : Triage this alert to one of: escalate, close-benign, needs-context...\n\nanswer:\n   escalate, service account activity outside of expected parameters warrants further investigation.\n\nproperty checked : returned one of the three dispositions\nheld on open-weight  : True\n\nSame code, same assertions, two possible backends. Offline the answer is\nthe replay and is labelled as one; with a served model it is the model's."
     },
     {
      "session": "D1.3",
-     "ok": true,
+     "script": "detection/detection-rule-deployability/scripts/detection_rule_deployability.py",
+     "reached_backend": true,
      "backend": "open-weight",
      "model": "qwen2.5-7b-instruct",
-     "property": "expresses a threshold",
-     "property_held": "True",
-     "seconds": 16.79,
+     "property_held": true,
+     "seconds": 10.86,
      "error": null,
-     "answer": "```pseudocode\n   IF identity IS_NOT_HUMAN AND buckets_COUNT > 20 AND time <= 5_minutes AND IP_OUTSIDE_usual_CIDR THEN\n       DETECT_ANOMALY\n   END IF\n   ```"
+     "output": "model backend : open-weight\nmodel         : qwen2.5-7b-instruct\nhistory: 522 events, 2 true positives\nrule                                 alerts   prec  recall  alerts/TP\n----------------------------------------------------------------------\nR1 any http_get by an agent             301  0.003   0.500      301.0\nR2 http_get to a non-github host          1  1.000   0.500        1.0\nR3 link-local address                     1  1.000   0.500        1.0\nR4 any failed action                     20  0.000   0.000        inf\nR5 credential path OR link-local          2  1.000   1.000        1.0\nREJECT  R1 any http_get by an agent\n          \u00b7 301.0 alerts per true positive (budget 5)\nDEPLOY  R2 http_get to a non-github host\nDEPLOY  R3 link-local address\nREJECT  R4 any failed action\n          \u00b7 no true positives\n          \u00b7 inf alerts per true positive (budget 5)\n          \u00b7 recall 0.0 below 0.5\nDEPLOY  R5 credential path OR link-local\ngenerated               5\nshipped                 3\nshipped_rules           ['R2 http_get to a non-github host', 'R3 link-local address', 'R5 credential path OR link-local']\nqueue_impact_per_day    4\ncoverage                1.0\n\nThe agent generated 5 rules in seconds. Scoring them against 521 real\nevents took milliseconds and rejected 3. That scoring step is the job \u2014\nwithout it, R1 ships and the SOC stops reading agent alerts within a week.\nbackend used : open-weight\nmodel        : qwen2.5-7b-instruct\nprompt       : Write the detection condition for: a non-human identity listing mo...\n\nanswer:\n   ```pseudocode\n   IF identity IS_NOT_HUMAN AND buckets_COUNT > 20 AND time <= 5_minutes AND IP_OUTSIDE_usual_CIDR THEN\n       DETECT_ANOMALY\n   END IF\n   ```\n\nproperty checked : expresses a threshold\nheld on open-weight  : True\n\nSame code, same assertions, two possible backends. Offline the answer is\nthe replay and is labelled as one; with a served model it is the model's."
     }
    ]
   }

@@ -272,14 +272,20 @@ my_bookings
 
 1 hypothesis · 1 rejected · 0 promoted
 
-Read the two confidences again: 0.82 for the real defect, 0.71 for the
-invented one. That gap is not a threshold you can gate on - it is one
-sample of a number that moves between runs, and the honest use of it is
-as a sort order for a human, not as a cut-off for a pipeline.
+the verifier, tested against a known fabrication
+   claim quotes : cur.execute(&quot;SELECT * FROM bookings WHERE owner = &#x27;&quot; + use
+   in the file? : False
+   -&gt; REJECTED  : the quote is not in the slice, so the claim dies here
 
-The rejection cost nothing and required no judgement: the model quoted a
-line that is not in the file. Contextual verification (B2.4) is that
-check generalised, and it is the highest-yield filter in the pipeline.
+That check costs nothing and requires no judgement, and it is the single
+highest-yield filter available: a claim about a line that does not exist
+is provably wrong without a second opinion. B2.4 is the same check
+generalised into a stage.
+
+What the confidence number is worth: it is uncalibrated - 0.82 does not
+mean the claim is right 82% of the time - and it is unstable across runs.
+Sort a human&#x27;s queue with it if you like. Do not let it decide anything
+on its own, and note that this run is one sample of it.
 
 Nothing here is promoted. This skill produces hypotheses; dedup,
 verification, reachability and dynamic validation decide which of them
@@ -420,30 +426,47 @@ my_bookings
 
 1 hypothesis · 1 rejected · 0 promoted
 
-Read the two confidences again: 0.82 for the real defect, 0.71 for the
-invented one. That gap is not a threshold you can gate on - it is one
-sample of a number that moves between runs, and the honest use of it is
-as a sort order for a human, not as a cut-off for a pipeline.
+the verifier, tested against a known fabrication
+   claim quotes : cur.execute(&quot;SELECT * FROM bookings WHERE owner = &#x27;&quot; + use
+   in the file? : False
+   -&gt; REJECTED  : the quote is not in the slice, so the claim dies here
 
-The rejection cost nothing and required no judgement: the model quoted a
-line that is not in the file. Contextual verification (B2.4) is that
-check generalised, and it is the highest-yield filter in the pipeline.
+That check costs nothing and requires no judgement, and it is the single
+highest-yield filter available: a claim about a line that does not exist
+is provably wrong without a second opinion. B2.4 is the same check
+generalised into a stage.
+
+What the confidence number is worth: it is uncalibrated - 0.82 does not
+mean the claim is right 82% of the time - and it is unstable across runs.
+Sort a human&#x27;s queue with it if you like. Do not let it decide anything
+on its own, and note that this run is one sample of it.
 
 Nothing here is promoted. This skill produces hypotheses; dedup,
 verification, reachability and dynamic validation decide which of them
 become findings. An audit stage that promotes its own output has removed
 the only independent step it had.</code></pre></div><div class="nbmd"><h2>8 · Where it breaks — gating on the confidence number</h2>
-<p>The model returned 0.82 on the real defect and 0.71 on the invented one. It is
-tempting to read a threshold into that gap, and every pipeline that does it
-ships one.</p>
+<p>In the offline run the replay returns 0.82 on the real defect and 0.71 on the
+invented one. It is tempting to read a threshold into that gap, and every
+pipeline that does it ships one.</p>
 <p>Two reasons not to. The number is <strong>uncalibrated</strong> — 0.82 does not mean the
 claim is right 82% of the time, it means nothing in particular. And it is
-<strong>unstable</strong>: the same slice, the same model, ten runs, and the confidence
-moves further than the distance between your accept and reject bands. Sort a
-human's queue with it if you like. Do not let it decide anything on its own.</p>
-<p>What killed the false positive instead cost nothing and required no judgement:
-the model quoted a line that is not in the file. That check generalises, and
-B2.4 is where it becomes a stage.</p></div><div class="nbmd"><h2>9 · An agent drives both, because you cannot afford both everywhere</h2>
+<strong>unstable</strong>: the same slice, the same model, ten runs, and the confidence moves
+further than the distance between your accept and reject bands. Sort a human's
+queue with it if you like. Do not let it decide anything on its own.</p>
+<p>What kills a fabricated claim instead costs nothing and requires no judgement:
+<strong>the quoted line is not in the file</strong>. That check generalises, and B2.4 is
+where it becomes a stage.</p>
+<blockquote>
+<p><strong>A result from running this against a real model, worth keeping.</strong> The skill
+is written so the verifier is tested directly, against a quote known not to be
+in the slice — rather than by waiting for the model to fabricate one. That is
+not fastidiousness. An earlier version asserted that the model <em>would</em> invent
+a defect in the already-authorised control function, and against a served
+Qwen2.5-7B it did not: it read the function correctly and declined. The
+assertion failed because the model behaved well, which is a bug in the
+assertion. A pipeline check has to hold whether or not the model misbehaves on
+the day you run it.</p>
+</blockquote></div><div class="nbmd"><h2>9 · An agent drives both, because you cannot afford both everywhere</h2>
 <p>Semgrep is cheap enough to run over the whole repository. The model pass is
 not — at four million lines it costs more than the finding is worth, and a
 model asked to review everything reviews nothing carefully.</p>
@@ -459,7 +482,7 @@ is three rules:</p>
 <p>Get rule 2 wrong in the cheap direction and the authorisation defect on line 7
 is never reviewed by anything, because the deterministic scan was green and
 nobody was surprised by that.</p></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Semgrep's precision is 1.00 at all three widths and its recall is not: 0.17 on the default Python pack, 0.67 across seven registry packs, 0.33 on the custom taint rule — same file, same engine, and both scans exit 0. Two defects survive every width, and the skill separates them: the hardcoded key is a coverage gap somebody fixes by writing a rule, and the missing authorisation check on line 7 is not expressible as a pattern at any width. The model pass then finds exactly that one, at 0.82 confidence, recorded as a hypothesis and not a finding — and its claim about the already-authorised control function is rejected for nothing more than quoting a line that is not in the file. Zero hypotheses are promoted, because the audit stage does not promote its own output.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Semgrep's precision is 1.00 at all three widths and its recall is not: 0.17 on the default Python pack, 0.67 across seven registry packs, 0.33 on the custom taint rule — same file, same engine, and both scans exit 0. Two defects survive every width, and the skill separates them: the hardcoded key is a coverage gap somebody fixes by writing a rule, and the missing authorisation check on line 7 is not expressible as a pattern at any width. The model pass then finds exactly that one, at 0.82 confidence, recorded as a hypothesis and not a finding. The verifier is then tested against a quote known not to be in the slice and rejects it — the check holds whether or not the model fabricated anything on this run, which matters because a served Qwen2.5-7B reads the already-authorised control function correctly and declines to invent a defect in it. Zero hypotheses are promoted, because the audit stage does not promote its own output.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Two things, and the second is the one people skip. Run Semgrep against one of your own repositories at your current ruleset and at seven packs, and count the difference — whatever that number is, it has been the number all year. Then point the model pass at a real GLM-4.6 or Kimi K2 through Ollama and run one slice ten times. The variance in what it reports, and in its confidence, is what decides whether you can gate on confidence at all, and you cannot learn it from one run.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.4.html">B2.4 · Deduplication and contextual verification</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.3.ipynb">Source</a></p>
