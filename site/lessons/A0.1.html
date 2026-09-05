@@ -99,7 +99,9 @@ python3 scripts/run_notebooks.py                  # or all 120
 <p><strong>If phone verification is not available to you</strong>, the same tree is published as the Kaggle dataset <code>cybercommons/cyber-commons-skills</code>. Attach it in the same settings panel and the cell finds it at the mount point instead of fetching anything. The failure message in the cell says so too, because being told at the point of failure is worth more than being told here.</p></div><div class="nbmd"><h2>5 · Reading a lesson page</h2>
 <p>Every lesson page shows the output of a real run — not a transcript somebody pasted. <code>run_notebooks.py</code> executes the notebook here and records what it printed; <code>kaggle_verify.py</code> then pushes the same notebook to Kaggle, runs it there, and compares the two byte for byte. All 120 currently match. So the block on the page under <strong>Out</strong> is what you will get, and if you get something else, one of us has a bug worth reporting.</p></div><div class="nbmd"><h2>6 · The whole mechanism, demonstrated on itself</h2>
 <p>The rest of this lesson is the mechanism running. The skill below is a preflight: it inventories the tree this host fetched, then runs a real lesson's procedure three times — twice in the two ways it actually breaks, once correctly.</p>
-<p>The two failures are the two you will meet. <strong>(a)</strong> is a host with no network and nothing fetched. <strong>(b)</strong> is a tree that arrived but a shared library that is not on the import path — 13 skills import the runtime rather than carrying a copy, and the lesson cell is what puts it there. The procedure it runs correctly in <strong>(c)</strong> is A1.2's, the next executable lesson after this one, so what you see below is literally the next page's output.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/lesson-preflight/SKILL.md"><code>skills/programme/lesson-preflight/SKILL.md</code></a></h3>
+<p>The two failures are the two you will meet. <strong>(a)</strong> is a host with no network and nothing fetched. <strong>(b)</strong> is a tree that arrived but a shared library that is not on the import path: some skills import the runtime rather than carrying a copy, and the lesson cell is what puts it there.</p>
+<p>Every number below is counted from the tree that was actually fetched rather than written into this page — which is why they move as the commons grows, and why a count printed here would be stale by the time you read it.</p>
+<p>The procedure it runs correctly in <strong>(c)</strong> is A1.2's, the next executable lesson after this one, so what you see below is literally the next page's output.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/lesson-preflight/SKILL.md"><code>skills/programme/lesson-preflight/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: lesson-preflight
 description: &gt;-
   Verify that a notebook host can fetch and execute a procedure that lives in a
@@ -204,7 +206,7 @@ failures has tested one path out of three.</p>
 
 (b) fetched, but the shared runtime is not on PYTHONPATH
     exit 1: ModuleNotFoundError: No module named &#x27;cyber_commons_skill_runtime&#x27;
-    The file was there and the interpreter started. 17 of the skills
+    The file was there and the interpreter started. 18 of the skills
     import the shared runtime rather than carrying a copy of it, and
     the lesson cell is what puts it on the path.
 

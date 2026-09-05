@@ -1,20 +1,23 @@
 {
  "generated_by": "scripts/kaggle_verify.py",
  "account": "cybercommons",
- "verified": 120,
+ "verified": 118,
  "checked": 120,
  "empty_output": [],
- "line_count_mismatch": [],
+ "line_count_mismatch": [
+  "A0.1",
+  "B2.11"
+ ],
  "note": "A kernel status of 'complete' only means Kaggle finished running it \u2014 a notebook printing nothing also completes. Each row here compares the kernel's remote stdout against a fresh local run of the same notebook, after identical normalisation. 'identical: true' means both machines printed exactly the same thing.",
  "results": [
   {
    "session": "A0.1",
-   "ok": true,
-   "identical": true,
+   "ok": false,
+   "identical": false,
    "runs_code": true,
    "remote_lines": 28,
    "local_lines": 28,
-   "first_differing_line": null
+   "first_differing_line": 12
   },
   {
    "session": "A1.0",
@@ -29,9 +32,9 @@
    "session": "A1.1",
    "ok": true,
    "identical": true,
-   "runs_code": false,
-   "remote_lines": 0,
-   "local_lines": 0,
+   "runs_code": true,
+   "remote_lines": 65,
+   "local_lines": 65,
    "first_differing_line": null
   },
   {
@@ -327,8 +330,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 18,
-   "local_lines": 18,
+   "remote_lines": 61,
+   "local_lines": 61,
    "first_differing_line": null
   },
   {
@@ -387,11 +390,11 @@
   },
   {
    "session": "B2.11",
-   "ok": true,
-   "identical": true,
+   "ok": false,
+   "identical": false,
    "runs_code": true,
    "remote_lines": 81,
-   "local_lines": 81,
+   "local_lines": 122,
    "first_differing_line": null
   },
   {
@@ -426,8 +429,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 48,
-   "local_lines": 48,
+   "remote_lines": 113,
+   "local_lines": 113,
    "first_differing_line": null
   },
   {
@@ -453,8 +456,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 114,
-   "local_lines": 114,
+   "remote_lines": 146,
+   "local_lines": 146,
    "first_differing_line": null
   },
   {

@@ -67,11 +67,13 @@ for md in sorted(SKILLS.rglob("SKILL.md")):
     if list(md.parent.glob("scripts/*.py")):
         with_script += 1
 
-# These counts are a function of the tree, not constants: adding a skill changes
-# them, and a Kaggle kernel run before that addition prints the older number
-# until it is re-run. That is the check doing its job — it inventories what was
-# actually fetched — but it does mean this lesson has to be re-pushed whenever
-# the skills tree grows.
+# These counts are a function of the tree, not constants: adding a skill — or
+# making one import the shared runtime — changes them, and a Kaggle kernel run
+# before that change prints the older number until it is re-run. That is the
+# check doing its job; it inventories what was actually fetched. The operational
+# consequence is that A0.1 must be the LAST notebook pushed in any cycle, or it
+# verifies against a tree that changed after its kernel ran. Both times this
+# lesson has failed kaggle_verify, that was why.
 print("the tree this host fetched")
 print(f"  areas            : {len(areas)}")
 print(f"  skills           : {skills}")

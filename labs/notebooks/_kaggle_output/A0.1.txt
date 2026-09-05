@@ -1,7 +1,7 @@
 the tree this host fetched
   areas            : 14
   skills           : 120
-  with a script    : 119
+  with a script    : 120
   shared runtime   : present
   resolved from    : the running file, not the working directory
 
@@ -12,7 +12,7 @@ the tree this host fetched
 
 (b) fetched, but the shared runtime is not on PYTHONPATH
     exit 1: ModuleNotFoundError: No module named 'cyber_commons_skill_runtime'
-    The file was there and the interpreter started. 13 of the skills
+    The file was there and the interpreter started. 17 of the skills
     import the shared runtime rather than carrying a copy of it, and
     the lesson cell is what puts it on the path.
 

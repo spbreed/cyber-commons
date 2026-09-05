@@ -126,17 +126,21 @@ has the open-weight setup if you want the real thing.
          "bug worth reporting."),
 
   *skill_steps("programme/lesson-preflight",
-               "## 6 · The whole mechanism, demonstrated on itself\\n\\n"
+               "## 6 \u00b7 The whole mechanism, demonstrated on itself\\n\\n"
                "The rest of this lesson is the mechanism running. The skill "
                "below is a preflight: it inventories the tree this host "
-               "fetched, then runs a real lesson's procedure three times — "
+               "fetched, then runs a real lesson's procedure three times \u2014 "
                "twice in the two ways it actually breaks, once correctly.\\n\\n"
-               "The two failures are the two you will meet. **(a)** is a "
-               "host with no network and nothing fetched. **(b)** is a tree "
-               "that arrived but a shared library that is not on the import "
-               "path — 13 skills import the runtime rather than carrying a "
-               "copy, and the lesson cell is what puts it there. The "
-               "procedure it runs correctly in **(c)** is A1.2's, the next "
+               "The two failures are the two you will meet. **(a)** is a host "
+               "with no network and nothing fetched. **(b)** is a tree that "
+               "arrived but a shared library that is not on the import path: "
+               "some skills import the runtime rather than carrying a copy, "
+               "and the lesson cell is what puts it there.\\n\\n"
+               "Every number below is counted from the tree that was actually "
+               "fetched rather than written into this page \u2014 which is why "
+               "they move as the commons grows, and why a count printed here "
+               "would be stale by the time you read it.\\n\\n"
+               "The procedure it runs correctly in **(c)** is A1.2's, the next "
                "executable lesson after this one, so what you see below is "
                "literally the next page's output."),
  ],
