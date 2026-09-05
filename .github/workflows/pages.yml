@@ -92,6 +92,9 @@ jobs:
       - name: Render and validate every diagram a skill emits
         run: python3 scripts/render_diagrams.py --check
 
+      - name: Check the documentation's counted claims against the tree
+        run: python3 scripts/check_claims.py --check
+
       - name: Build lesson pages
         run: |
           pip install --quiet markdown

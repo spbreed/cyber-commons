@@ -218,8 +218,12 @@ git add -A && git commit -m "lesson: A2.5" && git push
 ```
 
 CI re-runs all of it with `--check` — secret scan, 120 notebooks, determinism
-gate, skill contracts — and fails on drift, so the notebook you read on the site
-is always the notebook that ran. Pushing deploys the site.
+gate, skill contracts, every diagram rendered by real Graphviz and PlantUML, and
+[`check_claims.py`](scripts/check_claims.py), which compares the counted claims
+in this file against the tree they describe. Prose that counts the repository
+goes stale silently; that one exists because it kept happening. CI fails on any
+of it, so the notebook you read on the site is always the notebook that ran.
+Pushing deploys the site.
 
 **Credentials never go in this repository.** Kaggle tokens live in
 `~/.kaggle/kaggle.json` or `$KAGGLE_USERNAME`/`$KAGGLE_KEY`; the push client

@@ -117,8 +117,9 @@ python3 scripts/check_skills.py --check
 ```
 
 Validates that every skill parses, names itself consistently, declares its
-tools, carries a parseable contract — and that eleven plausible tasks each
-route to exactly one skill with a non-zero margin. A tie is a real defect: the
+tools, carries a parseable contract, sits inside its loading budgets, and
+carries the sections an activated agent needs — and that 19 plausible tasks
+each route to exactly one skill with a non-zero margin. A tie is a real defect: the
 winner would be decided by alphabetical order rather than by meaning. CI runs
 this on every push.
 
