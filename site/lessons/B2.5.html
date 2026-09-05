@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.5 — Feasibility filtering, reachability and dead code | Cyber Commons</title><meta name="description" content="Stage 10: decide whether an external caller can actually reach the sink before anyone is paged."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.5</div><h1>Feasibility filtering, reachability and dead code</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A finding in dead code costs the same to triage as one on the login path.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 10: decide whether an external caller can actually reach the sink before anyone is paged.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Prove a grandchild agent cannot exceed its parent.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/appsec-vuln-audit/scripts/appsec_vuln_audit.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.5 · Feasibility filtering, reachability and dead code</h1>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.5 — Feasibility filtering, reachability and dead code | Cyber Commons</title><meta name="description" content="Stage 10: decide whether an external caller can actually reach the sink before anyone is paged."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.5</div><h1>Feasibility filtering, reachability and dead code</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A finding in dead code costs the same to triage as one on the login path.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 10: decide whether an external caller can actually reach the sink before anyone is paged.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build a call graph from entry points and partition findings into reachable, unreachable and unknown.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/appsec-vuln-audit/scripts/appsec_vuln_audit.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.5 · Feasibility filtering, reachability and dead code</h1>
 <p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.4.html">B2.4 · Deduplication and contextual verification</a></strong>.</p>
 <table>
@@ -18,20 +18,33 @@
 <p><strong>What it covers.</strong> Build a call graph from entry points and partition findings into reachable, unreachable and unknown.</p>
 <p><strong>Why a security engineer needs it.</strong> A finding in dead code costs the same to triage as one on the login path. The control it builds is: stage 10: decide whether an external caller can actually reach the sink before anyone is paged.</p>
 <p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>The finding is real. The code is dead. Reachability is the difference between a queue an engineer works and a queue an engineer learns to ignore, and it is the single largest false-positive killer in the pipeline.</p>
+<p>The finding is real and the code is dead — a true positive about the code and a false positive about the risk. Telling those apart needs a call graph, a call graph needs the syntax tree, and the tree's own blind spot is the third bucket everyone collapses into the second.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The finding is real and the code is unreachable from any traveller input. Reachability is what stops CyberTravels' queue becoming something engineers learn to ignore.</p>
+<p><strong>At CyberTravels.</strong> The finding is real and nothing in CyberTravels' booking service calls the function it landed in. The syntax tree can prove that for three of them, and for the nightly ledger job it cannot — which is the finding, not a gap in the report.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   is there a path from untrusted input to this line?
+<pre><code>   grep says            ast says
 
-   HTTP handler --&gt; parse() --&gt; validate() --&gt; build_query() --&gt; DB
-                                                    ^
-                                              the finding
+   &quot;report&quot; appears     FunctionDef report    &lt;- a node
+   in 14 files          Call report(...)      &lt;- an edge, owned by the
+                                                 function it sits inside
 
-   reachable   -&gt; a finding
-   unreachable -&gt; a note
+   nodes + edges, walked from the entry points:
 
-   the largest single false-positive killer in the pipeline
+     @route handler --&gt; _query           REACHABLE, keeps its severity
+
+     legacy_export      (no caller)      UNREACHABLE
+     audit_line         (no caller)      -&gt; true about the code
+     debug_dump         (no caller)      -&gt; FALSE about the risk
+
+     jobs/runner.py:  handler = getattr(HANDLERS, name)
+                      return handler(arg)
+
+     run_job                             UNKNOWN
+     nightly_reconcile                   -&gt; not dead.
+     _settle                                undecided.
+
+   the third bucket is not a rounding error: _settle runs a SQL
+   update, and a two-bucket pipeline reports it as clean
 </code></pre>
 <p><strong>Stage 10 — Feasibility filtering.</strong> The last stage of Phase 3, and the one
 that decides whether anyone gets paged.</p>
@@ -57,24 +70,51 @@ on the wrong half.</p>
 the sink is real, and any reviewer who opens the file will agree. It is a
 <strong>false positive about the risk</strong>, because nothing untrusted reaches it. Two
 different claims, and only the second one is wrong.</p>
-<p>That distinction decides the response. The instinct is to <strong>suppress</strong> — it
-empties the queue, and it is the wrong fix for a reason that only appears
-months later: a suppression is keyed to a file, a line and a rule, and <em>none of
-those change when somebody wires the function back up</em>. The code becomes live,
-the finding does not come back, and the entry that was hiding a false positive
-is now hiding a real one.</p>
-<p><strong>Attack surface reduction — ASR, which here means deleting the code — closes
-both halves at once.</strong> The finding goes because the code is gone, and so does
-the latent risk of it being reconnected. It is the only response to a dead-code
-finding that cannot rot, and the pleasant surprise is that the security queue
-turns out to be the cheapest to-delete list in the building: already
-enumerated, already ranked by what each line would cost if it ever became
-reachable again.</p>
-<p>One caution that does most of the work: "unreachable" and "dead" are not
-synonyms. A test fixture and a feature flag that has been off for two years are
-both unreachable <em>under a condition</em>, and both become reachable the day
-somebody changes one line. Only code with no caller anywhere is a deletion
-candidate.</p></div><div class="nbmd"><blockquote>
+<h3>Deciding which is which needs the AST</h3>
+<p>You cannot answer it with grep. <code>def report</code>, <code>report(</code> and <code># report</code> are the
+same string to a regex, and a function called <code>run</code> appears in every file you
+own. The question — <em>which functions call this one</em> — is about structure, so it
+needs the <strong>abstract syntax tree</strong>.</p>
+<p>Parsing gives you exactly the two node types the question needs:</p>
+<table>
+<thead>
+<tr>
+<th>AST node</th>
+<th>what it gives you</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FunctionDef</code></td>
+<td>every function that exists, with its real nesting and its decorators</td>
+</tr>
+<tr>
+<td><code>Call</code></td>
+<td>every invocation, attributable to the function it sits inside</td>
+</tr>
+</tbody>
+</table>
+<p>Nodes and edges. Walk from the entry points and everything you reach is
+reachable; everything you do not is dead <strong>or</strong> undecided.</p>
+<p>The resolver should be deliberately naive. <code>Call.func</code> is a <code>Name</code> for <code>f()</code>
+and an <code>Attribute</code> for <code>obj.f()</code>; take <code>.id</code> or <code>.attr</code> and accept that two
+methods with the same name merge. That over-reports reachability, which is the
+safe error. A cleverer resolver that guesses wrong marks a live function dead,
+and that error is silent.</p>
+<h3>And the AST is honest about what it cannot see</h3>
+<p>This is the more useful half, and it is where the third bucket comes from. The
+AST resolves a literal call. It cannot resolve</p>
+<pre><code class="language-python">handler = getattr(HANDLERS, name)   # the callee is a runtime value
+return handler(arg)
+</code></pre>
+<p>nor a dispatch dictionary, nor a handler a framework registers by decorator at
+import time. None of those are unreachable — they are <strong>undecided</strong>, and the
+rule that follows is the one that keeps the analysis honest: if a module
+contains a call the AST could not follow, <em>every</em> unreached function in that
+module is <code>unknown</code>, not <code>unreachable</code>.</p>
+<p>Deleting is the right resolution for the genuinely dead ones, and it is the only
+one that cannot rot: a suppression is keyed to a file, a line and a rule, and
+none of those change when somebody wires the function back up.</p></div><div class="nbmd"><blockquote>
 <p><strong>Where you are in the pipeline.</strong></p>
 <p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
@@ -269,139 +309,161 @@ counts.verified == len(findings)?  False  &lt;- catches it
 Three defects, zero schema violations. That is what a headline of
 &#x27;100% schema-valid&#x27; actually means as a quality metric, and it is why
 accuracy has to be measured against a key the model never sees.
-8 findings, partitioned by reachability from an untrusted entry point
-   F1  search_bookings   CWE-89   sev 9   reachable   
-   F2  render_itinerary  CWE-95   sev 8   reachable   
-   F3  legacy_export     CWE-78   sev 9   unreachable dead: no caller anywhere in the repo
-   F4  debug_dump        CWE-22   sev 6   unreachable dead: no caller anywhere in the repo
-   F5  _fixture_seed     CWE-89   sev 7   unreachable test fixture, not shipped
-   F6  beta_pricing      CWE-89   sev 7   unreachable behind a flag that has been off for two years
-   F7  handle_webhook    CWE-78   sev 9   unknown     resolved by the framework at runtime
-   F8  audit_line        CWE-117  sev 3   unreachable dead: no caller anywhere in the repo
+ast: 9 functions, 2 resolved call edges, 2 entry point(s)
+   entry  render_itinerary  (api/itinerary.py)
+   entry  search_bookings  (api/bookings.py)
+   UNRESOLVED  jobs/runner.py: getattr(...)() - the callee is a runtime value
 
-   reachable 2   unreachable 5   unknown 1
+the three buckets, and the third is the honest one
+   reachable    3  _query, render_itinerary, search_bookings
+   unreachable  3  audit_line, debug_dump, legacy_export
+   unknown      3  _settle, nightly_reconcile, run_job
 
-Every one of those eight is a true positive about the code. A reviewer
-who opens the file will agree with all eight. Only two of them are true
-about the risk, and that is a different claim.
+nightly_reconcile and _settle are NOT dead. They are in a module whose
+dispatch is getattr(HANDLERS, name)(), so the AST cannot say who calls
+them. Filing that as unreachable is how a pipeline drops real bugs.
 
-why unreachable, and what that permits
-   3 dead with no caller       -&gt; deletion candidates
-   2 unreachable *under a condition* -&gt; not dead. A flag can be
-       turned on and a fixture can be imported; both are reachable the
-       day somebody changes one line.
+the queue, split on the graph
+       unit                cwe      sev  bucket       true about code / risk
+   F1  _query              CWE-89   9    reachable    yes  / yes
+   F2  render_itinerary    CWE-95   8    reachable    yes  / yes
+   F3  legacy_export       CWE-78   9    unreachable  yes  / NO
+   F4  debug_dump          CWE-22   6    unreachable  yes  / NO
+   F5  audit_line          CWE-117  3    unreachable  yes  / NO
+   F6  _settle             CWE-89   7    unknown      yes  / yes
 
-three responses to F3 (dead os.system on a caller-supplied path, sev 9)
-   action      finding gone  risk gone   rots?
-   suppress    yes           NO          yes   keyed to file+line+rule; none of those change when it is wired back up
-   wont-fix    yes           NO          yes   the same decision with a nicer label and no expiry either
-   delete      yes           yes         no   the code is gone, so the finding and the latent risk go together
+Every one of the 6 is a true positive about the code - a
+reviewer who opens the file agrees with all of them. 3 are false
+positives about the RISK, because the graph says nothing reaches them.
+Those belong in a deletion list, not a triage queue: the code is gone
+and the finding goes with it, which is the only resolution that cannot
+rot the way a suppression does.
 
-six weeks later, one commit:
-   + from .legacy import legacy_export      # re-enable the vendor export
-
-   suppress    -&gt; legacy_export is now reachable from the vendor
-                  webhook. The suppression is keyed to the same file,
-                  line and rule, so it still matches. THE FINDING
-                  DOES NOT COME BACK.
-   wont-fix    -&gt; legacy_export is now reachable from the vendor
-                  webhook. The suppression is keyed to the same file,
-                  line and rule, so it still matches. THE FINDING
-                  DOES NOT COME BACK.
-   delete      -&gt; the import does not resolve. The build fails, loudly,
-                  at the moment somebody tries to bring it back.
-
-attack surface reduction — what deleting those three removes
-   audit_line (CWE-117, sev 3)
-   debug_dump (CWE-22, sev 6)
-   legacy_export (CWE-78, sev 9)
-
-queue: 8 findings -&gt; 2 after reachability, and 3 of the
-remainder are a deletion rather than a triage. The security queue is the
-cheapest to-delete list anyone in the building has, already ranked by
-what each line would cost if it were ever reachable again.
-
-resurrected under a suppression: 2 of 3 responses.
-That is the number suppression optimises and deletion removes.</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — deduplicating on the wrong key</h2>
+queue: 6 findings -&gt; 2 reachable, 3 to delete, 1 unresolved.
+The last number is work, not a result. A two-bucket pipeline reports it
+as zero and calls the queue clean.</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — deduplicating on the wrong key</h2>
 <p>The skill says to collapse on the <strong>defect identity</strong>, <code>(cwe, file, unit, sink_expression)</code>, and never on the message text. Here is why that sentence is in the procedure.</p></div><div class="nbmd"><h2>6 · The same failure, from a real model</h2>
 <p>Everything above is constructed. Here is the identical failure produced by an actual open-weight model — <strong>Moonlight-16B-A3B</strong>, Moonshot AI's MoE from the Kimi team — run on a Kaggle CPU kernel against this skill's output contract.</p>
 <p>It was given the contract and two vulnerable functions: an <code>open()</code> on a caller-supplied path, and an <code>os.system()</code> on a caller-supplied argument. Its answer is reproduced verbatim below (<a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/kimi/moonlight-16b-completion-prompt.txt">full run</a>).</p></div><div class="nbmd"><h2>7 · Read that output again</h2>
-<p>It passes the contract with zero problems, and almost nothing in it is true.</p></div><div class="nbmd"><h2>8 · Dead code, suppression and ASR, as a skill</h2>
-<p>The same eight findings from CyberTravels' booking service, partitioned into the three buckets — then the part that decides what to do with the unreachable ones.</p>
-<p>It compares the three available responses to a single dead <code>os.system</code> finding on three axes: does the finding go, does the risk go, and does the decision <strong>rot</strong>. Then it applies one commit six weeks later that re-imports the dead function, and shows which of the three responses is still protecting anything.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/dead-code-attack-surface/SKILL.md"><code>skills/appsec/dead-code-attack-surface/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: dead-code-attack-surface
+<p>It passes the contract with zero problems, and almost nothing in it is true.</p></div><div class="nbmd"><h2>8 · The call graph, parsed rather than grepped</h2>
+<p>Three files of CyberTravels' booking service, parsed for real with <code>ast.parse</code>. The skill collects <code>FunctionDef</code> nodes and <code>Call</code> edges, marks the decorated handlers as entry points, walks the graph, and then splits the finding queue on the result.</p>
+<p>Watch <code>jobs/runner.py</code>. It dispatches through <code>getattr(HANDLERS, name)()</code>, so the AST cannot say who calls anything in it — and every unreached function in that module lands in <code>unknown</code> rather than in the deletion list.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/dead-code-ast-reachability/SKILL.md"><code>skills/appsec/dead-code-ast-reachability/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: dead-code-ast-reachability
 description: &gt;-
-  Separate findings that are false positives about risk from findings that are
-  false positives about code, and decide between suppressing a dead-code
-  finding and deleting the code. Use when a queue is dominated by unreachable
-  findings, when suppressions are being added in bulk, or when asked why a
-  known-dead vulnerability came back live.
+  Build a call graph by parsing source to an abstract syntax tree, and use it to
+  separate findings that are false positives about risk from findings that are
+  false positives about code. Use when a queue is full of unreachable findings,
+  when deciding whether a function is dead, or when a scanner reports a defect
+  in code nothing calls.
 allowed-tools: Read, Grep, Glob
 </code></pre>
 <h1>Dead code is a true positive about the code and a false positive about the risk</h1>
-<p>Both halves of that sentence matter and teams usually act on only one.</p>
-<p>The finding is <strong>correct</strong>: the concatenation is there, the sink is real, a
+<p>Both halves matter and teams act on only one.</p>
+<p>The finding is <strong>correct</strong>: the concatenation is there, the sink is real, and a
 reviewer who opens the file will agree. What is wrong is the implied
-consequence, because nothing untrusted can reach it. Triaging it costs exactly
-as much as triaging one on the login path, and there are usually far more of
-them — so a queue that does not separate the two is a queue engineers learn to
-ignore, which costs you the reachable ones too.</p>
-<p>The response almost everyone reaches for is a <strong>suppression</strong>. It empties the
-queue and it is the wrong fix, for a reason that only shows up months later: a
-suppression is keyed to a file, a line and a rule, and <strong>none of those change
-when somebody wires the function back up</strong>. The code becomes reachable, the
-finding does not come back, and the suppression is now hiding a live
-vulnerability.</p>
-<p><strong>Attack surface reduction (ASR) — deleting the code — resolves both halves at
-once.</strong> The finding goes because the code is gone, and the latent risk goes
-with it. It is the only response to a dead-code finding that cannot rot.</p>
-<h2>When to use this</h2>
-<p>When reachability analysis produces a large unreachable bucket, before any bulk
-suppression, and during any dead-code or deprecation sweep — the security queue
-is the cheapest available list of which dead code to delete first.</p>
-<h2>Procedure</h2>
-<p><strong>1 — Partition by reachability, in three buckets, never two.</strong> Reachable,
-unreachable, and unknown. Collapsing unknown into unreachable is how real bugs
-are dropped, and dynamic dispatch is exactly where framework-wired handlers
-live.</p>
-<p><strong>2 — For the unreachable bucket, ask why it is unreachable.</strong> Dead code that
-nothing calls, a test fixture, a feature flag that has been off for two years,
-or an internal function with no external driver. Only the first is a deletion
-candidate; the others are reachable under a condition you have not enumerated.</p>
-<p><strong>3 — Rank deletion candidates by what they would cost if reachable.</strong> The
-dead-code queue is a to-delete list, and the security severity is the ordering
-you already have. A dead <code>os.system</code> on a caller-supplied path is a better
-first deletion than a dead string formatter.</p>
-<p><strong>4 — Delete, and re-run the scan to prove the finding is gone.</strong> The proof is
-that the finding disappears without a suppression entry. If it needed one, the
-code was not dead.</p>
-<p><strong>5 — For anything you suppress instead, bind the suppression to reachability,
-not to the line.</strong> A suppression that does not expire, and does not re-open when
-the call graph changes, is a permanent decision made on temporary evidence.</p>
+consequence, because nothing untrusted reaches it. Triaging it costs exactly as
+much as triaging one on the login path, and there are usually far more of them —
+so a queue that does not separate the two is a queue engineers learn to ignore,
+which costs you the reachable ones as well.</p>
+<p>Deciding which is which needs a <strong>call graph</strong>, and a call graph needs the
+<strong>abstract syntax tree</strong>. Grep cannot do it: <code>def report</code> and <code>report(</code> and
+<code># report</code> are the same string to a regex, and a function named <code>run</code> appears in
+every file in the repository. Parsing to an AST gives you the two node types the
+question actually needs — <code>FunctionDef</code> for what exists, <code>Call</code> for what invokes
+it — with their real nesting, so "which functions call this one" stops being a
+text search and becomes a graph walk.</p>
+<p>The AST is also honest about its own limits, which is the more useful half. It
+resolves a literal call and it cannot resolve <code>getattr(mod, name)()</code>, a dispatch
+dictionary, or a handler a framework wires by decorator at import time. Those
+are not unreachable. They are <strong>undecided</strong>, and filing them as unreachable is
+how a pipeline drops real bugs quietly.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Parse, do not grep.</strong> <code>ast.parse(source)</code> per file. Collect every
+<code>FunctionDef</code> and <code>AsyncFunctionDef</code> as a node; collect every <code>Call</code> as an edge
+from its enclosing function.</p>
+<p><strong>2 — Resolve each call to a name.</strong> <code>Call.func</code> is a <code>Name</code> for <code>f()</code> and an
+<code>Attribute</code> for <code>obj.f()</code>. Take <code>.id</code> or <code>.attr</code>. This is deliberately naive
+about which <code>f</code> is meant — two functions of the same name in different modules
+merge — and it errs toward <em>reachable</em>, which is the safe direction.</p>
+<p><strong>3 — Mark entry points.</strong> Anything decorated as a route or handler, anything
+exported, anything a scheduler names. An entry point is reachable by definition,
+and getting this list wrong is the largest source of error in the whole
+procedure.</p>
+<p><strong>4 — Walk from the entry points.</strong> Everything reached is <code>reachable</code>.
+Everything not reached is <em>either</em> dead <em>or</em> undecided, and step 5 decides.</p>
+<p><strong>5 — Separate <code>unreachable</code> from <code>unknown</code>, never collapse them.</strong> If the file
+contains a dynamic call the AST could not resolve — <code>getattr</code>, a dispatch table,
+a decorator that registers — every unreached function in that module is
+<code>unknown</code>, not <code>unreachable</code>. Report the three buckets separately.</p>
+<p><strong>6 — Only then classify the findings.</strong> A finding on a reachable unit keeps its
+severity. One on a genuinely dead unit is a false positive about risk and a true
+positive about code, and belongs in a deletion list rather than a triage queue.
+One on an <code>unknown</code> unit is unresolved work, not a clean result.</p>
+<h2>Example</h2>
+<p>Input — two files, one entry point, one dynamic call:</p>
+<pre><code class="language-python"># api.py
+@route(&quot;/reports&quot;)            # entry point
+def list_reports(request):
+    return render(load(request.args[&quot;id&quot;]))
+
+def load(rid): ...            # called by list_reports
+def legacy_export(path): ...  # called by nothing
+
+# jobs.py
+def dispatch(name):
+    return getattr(handlers, name)()   # unresolvable by AST
+def nightly(): ...
+</code></pre>
+<p>Output:</p>
+<pre><code>reachable    list_reports, load           reached from an entry point
+unreachable  legacy_export                no caller, no dynamic call in api.py
+unknown      dispatch, nightly            jobs.py contains getattr(...)()
+</code></pre>
+<p><code>nightly</code> is not dead. It is in a module the AST could not fully resolve, so
+<em>every</em> unreached function in that module is undecided — and saying so is the
+whole difference between this procedure and a shorter one.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
+  &quot;graph&quot;: {&quot;functions&quot;: 0, &quot;edges&quot;: 0, &quot;entry_points&quot;: [&quot;str&quot;]},
   &quot;buckets&quot;: {&quot;reachable&quot;: 0, &quot;unreachable&quot;: 0, &quot;unknown&quot;: 0},
-  &quot;queue&quot;: {&quot;before&quot;: 0, &quot;after_reachability&quot;: 0},
-  &quot;responses&quot;: [{&quot;finding&quot;: &quot;str&quot;, &quot;action&quot;: &quot;suppress|wont-fix|delete&quot;,
-                 &quot;finding_cleared&quot;: true, &quot;risk_cleared&quot;: true, &quot;rots&quot;: true}],
-  &quot;asr&quot;: {&quot;deleted&quot;: 0, &quot;surface_removed&quot;: [&quot;str&quot;]},
-  &quot;resurrected&quot;: 0
+  &quot;unresolved_calls&quot;: [{&quot;file&quot;: &quot;str&quot;, &quot;why&quot;: &quot;getattr|dispatch-table|decorator&quot;}],
+  &quot;findings&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;unit&quot;: &quot;str&quot;, &quot;bucket&quot;: &quot;str&quot;,
+                &quot;true_about_code&quot;: true, &quot;true_about_risk&quot;: false}],
+  &quot;queue&quot;: {&quot;before&quot;: 0, &quot;after&quot;: 0}
 }
 </code></pre>
-<p><code>resurrected</code> counts findings whose code became reachable again while a
-suppression was still in place. It should be zero, and the only way to keep it
-zero is to have deleted the code or expired the suppression.</p>
+<p><code>unresolved_calls</code> is what makes the <code>unknown</code> bucket auditable. A report with
+an empty <code>unknown</code> bucket and no <code>unresolved_calls</code> entry has either a very
+simple codebase or a bug.</p>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>Two functions with the same name.</strong> The naive resolver merges them and
+  over-reports reachability. That is the safe direction; the unsafe one is a
+  clever resolver that guesses wrong and marks a live function dead.</li>
+<li><strong>A decorator that registers the function.</strong> <code>@app.route</code>, <code>@celery.task</code>,
+  <code>@click.command</code>. The function has no caller in the source and is reachable
+  from outside it. Treat every decorated function as an entry point unless you
+  know the decorator.</li>
+<li><strong>Tests as callers.</strong> A function called only from tests is dead in
+  production. Exclude test files from the graph or you will never find any.</li>
+<li><strong>A method called through an instance.</strong> <code>Attribute</code> gives you <code>.attr</code>, which
+  is the method name without the class. Same over-reporting, same safe
+  direction.</li>
+<li><strong><code>__init__.py</code> re-exports.</strong> A function imported and re-exported has no call
+  edge at all and is reachable by import. Follow <code>ImportFrom</code> or accept it as
+  <code>unknown</code>.</li>
+</ul>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Suppressing in bulk to clear the queue.</strong> It works, and it converts a
-  visible false positive into an invisible true one.</li>
-<li><strong>Collapsing <code>unknown</code> into <code>unreachable</code>.</strong> The bucket that gets dropped is
-  the one that contains the framework-wired handlers.</li>
-<li><strong>Deleting on the scanner's word alone.</strong> Reachability from <em>untrusted</em> entry
-  points is not reachability from anywhere; check the call graph before the
-  delete, not after.</li>
-<li><strong>Treating ASR as a security project.</strong> It is a deletion, it belongs in
-  ordinary maintenance, and framing it as a programme is how it never happens.</li>
+<li><strong>Grepping for the name instead of parsing.</strong> Comments, strings and unrelated
+  functions with the same name all match, and the answer is unusable in either
+  direction.</li>
+<li><strong>Collapsing <code>unknown</code> into <code>unreachable</code>.</strong> It makes the queue shorter and
+  it is how framework-wired handlers get dropped.</li>
+<li><strong>Trusting the entry-point list.</strong> Every function is unreachable if you forgot
+  the routes file.</li>
+<li><strong>Deleting on the graph's word alone.</strong> Reachability from <em>untrusted</em> entry
+  points is not reachability from anywhere; check both before a deletion.</li>
 </ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>call graph:
    http_get_report   → [&#x27;load_report&#x27;]
    http_health       → —
@@ -484,73 +546,57 @@ counts.verified == len(findings)?  False  &lt;- catches it
 Three defects, zero schema violations. That is what a headline of
 &#x27;100% schema-valid&#x27; actually means as a quality metric, and it is why
 accuracy has to be measured against a key the model never sees.
-8 findings, partitioned by reachability from an untrusted entry point
-   F1  search_bookings   CWE-89   sev 9   reachable   
-   F2  render_itinerary  CWE-95   sev 8   reachable   
-   F3  legacy_export     CWE-78   sev 9   unreachable dead: no caller anywhere in the repo
-   F4  debug_dump        CWE-22   sev 6   unreachable dead: no caller anywhere in the repo
-   F5  _fixture_seed     CWE-89   sev 7   unreachable test fixture, not shipped
-   F6  beta_pricing      CWE-89   sev 7   unreachable behind a flag that has been off for two years
-   F7  handle_webhook    CWE-78   sev 9   unknown     resolved by the framework at runtime
-   F8  audit_line        CWE-117  sev 3   unreachable dead: no caller anywhere in the repo
+ast: 9 functions, 2 resolved call edges, 2 entry point(s)
+   entry  render_itinerary  (api/itinerary.py)
+   entry  search_bookings  (api/bookings.py)
+   UNRESOLVED  jobs/runner.py: getattr(...)() - the callee is a runtime value
 
-   reachable 2   unreachable 5   unknown 1
+the three buckets, and the third is the honest one
+   reachable    3  _query, render_itinerary, search_bookings
+   unreachable  3  audit_line, debug_dump, legacy_export
+   unknown      3  _settle, nightly_reconcile, run_job
 
-Every one of those eight is a true positive about the code. A reviewer
-who opens the file will agree with all eight. Only two of them are true
-about the risk, and that is a different claim.
+nightly_reconcile and _settle are NOT dead. They are in a module whose
+dispatch is getattr(HANDLERS, name)(), so the AST cannot say who calls
+them. Filing that as unreachable is how a pipeline drops real bugs.
 
-why unreachable, and what that permits
-   3 dead with no caller       -&gt; deletion candidates
-   2 unreachable *under a condition* -&gt; not dead. A flag can be
-       turned on and a fixture can be imported; both are reachable the
-       day somebody changes one line.
+the queue, split on the graph
+       unit                cwe      sev  bucket       true about code / risk
+   F1  _query              CWE-89   9    reachable    yes  / yes
+   F2  render_itinerary    CWE-95   8    reachable    yes  / yes
+   F3  legacy_export       CWE-78   9    unreachable  yes  / NO
+   F4  debug_dump          CWE-22   6    unreachable  yes  / NO
+   F5  audit_line          CWE-117  3    unreachable  yes  / NO
+   F6  _settle             CWE-89   7    unknown      yes  / yes
 
-three responses to F3 (dead os.system on a caller-supplied path, sev 9)
-   action      finding gone  risk gone   rots?
-   suppress    yes           NO          yes   keyed to file+line+rule; none of those change when it is wired back up
-   wont-fix    yes           NO          yes   the same decision with a nicer label and no expiry either
-   delete      yes           yes         no   the code is gone, so the finding and the latent risk go together
+Every one of the 6 is a true positive about the code - a
+reviewer who opens the file agrees with all of them. 3 are false
+positives about the RISK, because the graph says nothing reaches them.
+Those belong in a deletion list, not a triage queue: the code is gone
+and the finding goes with it, which is the only resolution that cannot
+rot the way a suppression does.
 
-six weeks later, one commit:
-   + from .legacy import legacy_export      # re-enable the vendor export
-
-   suppress    -&gt; legacy_export is now reachable from the vendor
-                  webhook. The suppression is keyed to the same file,
-                  line and rule, so it still matches. THE FINDING
-                  DOES NOT COME BACK.
-   wont-fix    -&gt; legacy_export is now reachable from the vendor
-                  webhook. The suppression is keyed to the same file,
-                  line and rule, so it still matches. THE FINDING
-                  DOES NOT COME BACK.
-   delete      -&gt; the import does not resolve. The build fails, loudly,
-                  at the moment somebody tries to bring it back.
-
-attack surface reduction — what deleting those three removes
-   audit_line (CWE-117, sev 3)
-   debug_dump (CWE-22, sev 6)
-   legacy_export (CWE-78, sev 9)
-
-queue: 8 findings -&gt; 2 after reachability, and 3 of the
-remainder are a deletion rather than a triage. The security queue is the
-cheapest to-delete list anyone in the building has, already ranked by
-what each line would cost if it were ever reachable again.
-
-resurrected under a suppression: 2 of 3 responses.
-That is the number suppression optimises and deletion removes.</code></pre></div><div class="nbmd"><h2>9 · The commit six weeks later</h2>
-<p>That last block is the argument, and it is worth restating plainly because it
-is the part that gets waved through in a triage meeting.</p>
-<p>A suppression matched on <code>(file, line, rule)</code>. The re-enabling commit changed
-none of the three — it added an import in a different file. So the suppression
-still matches, the scanner still stays quiet, and a <code>sev 9</code> command injection is
-now reachable from the vendor webhook with no finding attached to it.</p>
-<p>The deletion cannot fail that way. The import does not resolve, the build breaks
-at the moment somebody tries to bring the code back, and the failure is loud and
-immediate rather than silent and eighteen months old.</p>
-<p>If you must suppress, bind the suppression to <strong>reachability</strong> rather than to a
-line, and give it an expiry. A suppression with neither is a permanent decision
-recorded against temporary evidence.</p></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The call graph identifies three entry points, one of which uses dynamic dispatch. <code>load_report</code> is reachable, <code>debug_dump</code> and <code>legacy_export</code> are unknown rather than unreachable because runtime handler resolution cannot be ruled out. Two-bucket filtering silently drops both, and the three-bucket routing sends the unknowns to Phase 4 instead of paging or discarding them. On the eight-finding queue, reachability takes 8 down to 2, and three of the remainder are dead with no caller anywhere — a deletion rather than a triage. Suppressing that dead <code>os.system</code> and marking it won't-fix both clear the finding and neither clears the risk: one commit six weeks later re-imports the function, the suppression still matches on file, line and rule, and the finding never comes back. Deleting it breaks that commit's build instead.</p></div><div class="nbmd"><h2>Your turn</h2>
+queue: 6 findings -&gt; 2 reachable, 3 to delete, 1 unresolved.
+The last number is work, not a result. A two-bucket pipeline reports it
+as zero and calls the queue clean.</code></pre></div><div class="nbmd"><h2>9 · The bucket that is work rather than a result</h2>
+<p>Read the last line of that output again: <strong>2 reachable, 3 to delete, 1
+unresolved.</strong></p>
+<p>The three to delete are the easy win, and they are a deletion rather than a
+triage — the finding goes because the code goes, and unlike a suppression
+that cannot rot. The security queue turns out to be the cheapest to-delete list
+in the building: already enumerated, already ranked by what each line would cost
+if it ever became reachable again.</p>
+<p>The unresolved one is the part that matters. <code>_settle</code> runs a SQL update and the
+AST cannot tell you whether anything reaches it, because the module dispatches on
+a runtime value. A two-bucket pipeline reports that as zero and calls the queue
+clean. It is not clean; it is one finding nobody has looked at, filed under a
+word that means <em>we did not check</em>.</p>
+<p>One caution that does most of the remaining work: <strong>"unreachable" and "dead" are
+not synonyms.</strong> A test fixture and a feature flag that has been off for two years
+are both unreachable <em>under a condition</em>, and both become reachable the day
+somebody changes one line. Only code with no caller anywhere, in a module the AST
+fully resolved, is a deletion candidate.</p></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The call graph identifies three entry points, one of which uses dynamic dispatch. <code>load_report</code> is reachable, <code>debug_dump</code> and <code>legacy_export</code> are unknown rather than unreachable because runtime handler resolution cannot be ruled out. Two-bucket filtering silently drops both, and the three-bucket routing sends the unknowns to Phase 4 instead of paging or discarding them. The AST pass then parses three real files: 9 functions, 2 resolved call edges, 2 decorated entry points, and one <code>getattr(HANDLERS, name)()</code> that it records as unresolvable. That single unresolved call moves all three functions in <code>jobs/runner.py</code> into <code>unknown</code> — including <code>_settle</code>, which runs a SQL update. The six-finding queue splits 2 reachable, 3 to delete, 1 unresolved: every one is a true positive about the code, and three of them are false positives about the risk.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Two counts, and the second is the uncomfortable one. Count how many <code>unknown</code> cases your own reachability analysis produces and find out what your tooling does with them — if it reports them as clean, the number of real bugs you are dropping is the size of that bucket. Then open your suppression file and find the oldest entry. Check whether the code it covers is still unreachable, and whether anything in your pipeline would have told you if it stopped being.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.6.html">B2.6 · Sandbox replication</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.5.ipynb">Source</a></p>

@@ -173,7 +173,7 @@ python3 scripts/run_notebooks.py --session A2.7   # run it headless and check it
 - **Lab** — Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.
 - **Tools** — `Falco`, `Tetragon`, `Sigstore`
 
-**Run it** — Spoof a transcript, then watch a hash chain and a host-syscall reconciliation both refuse it — and check whether the workload role can reach the logging plane at all.
+**Run it** — Spoof a transcript, watch the in-band check pass it, then watch the hash chain and the host-syscall reconciliation both refuse it.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

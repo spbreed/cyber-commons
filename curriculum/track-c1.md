@@ -23,7 +23,7 @@
 - **Control** — A campaign with a stated criterion, a harness that separates the model effect from the harness effect, and a handoff that ends in a control.
 - **Lab** — Take one published agentic attack and list what you would need to reproduce it.
 
-**Run it** — Score the same claim at four standards of proof and find where the line between an anecdote and a result actually sits.
+**Run it** — Take one published agentic attack and list what you would need to reproduce it.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -46,7 +46,7 @@ python3 scripts/run_notebooks.py --session C1.0   # run it headless and check it
 - **Open-weight models** — `Kimi K2`, `GLM-4.6`
 - **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Drive a planner/executor pair against a target you own, and watch scope refuse an out-of-scope host in the harness and again in the sandbox.
+**Run it** — Drive a planner/executor pair against a local target and watch the scope guard refuse an out-of-scope host before the request leaves.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -74,7 +74,7 @@ cd labs/c1-redteam
 - **Open-weight models** — `Llama 3.3`
 - **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Run one campaign across the injection, identity and containment surfaces and report a rate with its sample size for each.
+**Run it** — Run a campaign across the three surfaces and report a rate with its sample size, not an anecdote.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -102,7 +102,7 @@ python3 campaign.py --report --include-benign-controls
 - **Open-weight models** — `Kimi K2`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Game the eval deliberately, then close the hole you used.
+**Run it** — Game the B2.14 scoring harness deliberately, then close the hole you used.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -129,7 +129,7 @@ python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
 - **Lab** — Write a finding a CISO can act on, with a replayable trace.
 - **Tools** — `OpenTelemetry`
 
-**Run it** — Write a finding for an emergent behaviour, not a line of code.
+**Run it** — Write a finding a CISO can act on, with a replayable trace.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

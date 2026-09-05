@@ -23,7 +23,7 @@
 - **Control** — Choose problems that end in a deployable control; get funded.
 - **Lab** — Write a one-page research charter with a named consuming track.
 
-**Run it** — Write a charter that ends in a deployable control.
+**Run it** — Write a one-page research charter with a named consuming track.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -50,7 +50,7 @@ $EDITOR charter.md   # problem, control outcome, consuming track, funding ask
 - **Open-weight models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
 - **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Chart jailbreak taxonomy differences across three open-weight families.
+**Run it** — Run a jailbreak taxonomy across Llama, GLM and Kimi and chart where they differ.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -78,7 +78,7 @@ python3 compare_reports.py
 - **Open-weight models** — `Llama 3.3`
 - **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Attempt targeted unlearning, then try to get the capability back.
+**Run it** — Attempt targeted unlearning on an open-weight model and try to elicit the capability back.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -104,7 +104,7 @@ python3 elicit.py --model ./erased --strategies paraphrase,encoding,few-shot
 - **Lab** — Invert embeddings from a local vector store and recover source text.
 - **Tools** — `Qdrant`, `sentence-transformers`
 
-**Run it** — Recover source text from embeddings.
+**Run it** — Invert embeddings from a local vector store and recover source text.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -130,7 +130,7 @@ python3 invert.py --store qdrant --top-k 20 --report inversion.md
 - **Lab** — Sign a model artefact with Sigstore and detect a tampered adapter.
 - **Tools** — `Sigstore`, `in-toto`, `OWASP AIBOM`
 
-**Run it** — Detect a tampered adapter through provenance.
+**Run it** — Sign a model artefact with Sigstore and detect a tampered adapter.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -159,7 +159,7 @@ cosign verify-blob --bundle model.sig adapter.safetensors   # fails
 - **Open-weight models** — `Llama 3.3`, `GLM-4.6`, `Kimi K2`
 - **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Separate the model effect from the harness effect, then check a public benchmark for its majority baseline, its key provenance and its matcher.
+**Run it** — Run one harness across three model families, separate the two effects, then contamination-check a public benchmark against a training window.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -185,7 +185,7 @@ python3 contamination.py --benchmark ../b2.10-eval-harness/ground-truth --report
 - **Lab** — Convert one finding into a policy another track adopts, and release it with a reproducibility README.
 - **Tools** — `OPA`, `Kyverno`, `git`
 
-**Run it** — Turn one finding into a control with an eval case that fails on the old build, then score a year of findings by what still holds without you.
+**Run it** — Convert one finding into a policy another track adopts, and release it with a reproducibility README.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -211,7 +211,7 @@ cd release && ./reproduce.sh   # must work on a clean machine
 - **Lab** — Build the register from the report's own figures, find the chain three rows share, and check that every control has an owner.
 - **Tools** — `NIST SP 800-53r5`
 
-**Run it** — Build the control register from the report's own figures, find the surface three rows share, and check that every mitigating control has an owning lesson.
+**Run it** — Build the register from the report's own figures, find the chain three rows share, and check that every control has an owner.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -238,7 +238,7 @@ python3 scripts/check_register.py    # register vs the curriculum
 - **Lab** — Run the same query with and without a row policy, then work out which of the leaked things the platform could actually revoke.
 - **Tools** — `Supabase`, `PostgREST`
 
-**Run it** — Run the same query with and without a row policy, then work out which of the leaked things the platform could actually have revoked.
+**Run it** — Run the same query with and without a row policy, then work out which of the leaked things the platform could actually revoke.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -263,7 +263,7 @@ curl -s "$SUPABASE_URL/rest/v1/agents?select=*" -H "apikey: $ANON_KEY" | head
 - **Lab** — Audit a four-statement scaffold, then run the one catalogue query that answers the critical half across every table at once.
 - **Tools** — `Supabase`, `PostgREST`, `sqlfluff`
 
-**Run it** — Audit a generated scaffold, then run the one catalogue query that answers the critical half across every table at once.
+**Run it** — Audit a four-statement scaffold, then run the one catalogue query that answers the critical half across every table at once.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

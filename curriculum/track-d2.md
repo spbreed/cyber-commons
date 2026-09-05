@@ -26,7 +26,7 @@
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Pre-load the agent so it reasons as a partner, not a tool you reach for late.
+**Run it** — Reconstruct a timeline from raw logs with a context-loaded agent.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -53,7 +53,7 @@ diff <(jq -r .timeline[] preloaded.json) <(jq -r .timeline[] cold.json)
 - **Lab** — Attribute an incident through the A2 `act` chain.
 - **Tools** — `Keycloak`, `OpenSearch`
 
-**Run it** — Attribute an incident to an agent, an authority and a delegation chain.
+**Run it** — Attribute an incident through the A2 `act` chain.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -81,7 +81,7 @@ python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
 - **Open-weight models** — `Kimi K2`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Scope an incident where the initiating agent is not the acting one.
+**Run it** — Scope a multi-agent incident end to end.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -107,7 +107,7 @@ python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action
 - **Lab** — Exercise the ladder against a live misbehaving agent.
 - **Tools** — `agentgateway`, `Keycloak`
 
-**Run it** — Exercise the containment ladder in order, against a live misbehaving agent.
+**Run it** — Exercise the ladder against a live misbehaving agent.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -134,7 +134,7 @@ cd labs/d2-ir
 - **Lab** — Replay an agent run for a regulator-grade record.
 - **Tools** — `OpenTelemetry`
 
-**Run it** — Replay an agent run to a regulator-grade standard.
+**Run it** — Replay an agent run for a regulator-grade record.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -158,7 +158,7 @@ python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
 - **Control** — Choose among model, prompt, tool, policy, sandbox, identity, eval.
 - **Lab** — Pick the right layer for five real incidents.
 
-**Run it** — Pick the right layer to change after an incident.
+**Run it** — Pick the right layer for five real incidents.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -183,7 +183,7 @@ for c in case-*/; do echo -n "$c "; python3 ../choose_layer.py --case $c; done
 - **Lab** — Time your own stop authority end to end.
 - **Tools** — `kagent`
 
-**Run it** — Time your stop authority end to end.
+**Run it** — Time your own stop authority end to end.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -209,7 +209,7 @@ python3 assert_stopped.py --within 60s
 - **Control** — Feed Track E2 in hour one.
 - **Lab** — Run the first-hour checklist in a tabletop.
 
-**Run it** — Run the first-hour regulatory checklist.
+**Run it** — Run the first-hour checklist in a tabletop.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -235,7 +235,7 @@ python3 first_hour.py --case case-01 --materiality
 - **Lab** — Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.
 - **Tools** — `Vault`, `Kubernetes`
 
-**Run it** — Kill a fleet in a non-production environment and measure what the revocation step changes about what an attacker still holds.
+**Run it** — Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

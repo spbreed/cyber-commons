@@ -18,11 +18,12 @@ OUT = ROOT / "curriculum"
 DIRECTION = {"defend": "AI for Security", "secure": "Security of AI", "both": "both directions"}
 
 
-def lab_block(sid: str) -> str:
+def lab_block(sid: str, goal: str = "") -> str:
     lab = LABS.get(sid)
     if not lab:
         return ""
-    lines = [f"\n**Run it** — {lab['goal']}\n", "```bash"]
+    # The goal comes from the session, which is the only copy of it now.
+    lines = [f"\n**Run it** — {goal}\n", "```bash"]
     lines += lab["run"]
     lines += ["```", f"\n*Expect:* {lab['expect']}\n"]
     return "\n".join(lines)
@@ -48,7 +49,7 @@ def session_md(s: dict) -> str:
     if frontier:
         out.append(f"- **Frontier models** — {frontier}"
                    "  ·  *every lab runs on either, and offline on neither*")
-    out.append(lab_block(s["id"]))
+    out.append(lab_block(s["id"], s.get("lab", "")))
     if s.get("repo"):
         out.append(f"> Lab source: [`{s['repo']}`](../{s['repo']})\n")
     return "\n".join(out)

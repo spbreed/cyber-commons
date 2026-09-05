@@ -385,9 +385,10 @@ GROUNDING: dict[str, str] = {
         "third generation will also confidently invent.",
 "B2.4": "Three analysers found the same booking-handler defect four times. The "
         "queue Alex will actually read is the deduplicated one.",
-"B2.5": "The finding is real and the code is unreachable from any traveller "
-        "input. Reachability is what stops CyberTravels' queue becoming "
-        "something engineers learn to ignore.",
+"B2.5": "The finding is real and nothing in CyberTravels' booking service "
+        "calls the function it landed in. The syntax tree can prove that for "
+        "three of them, and for the nightly ledger job it cannot \u2014 which "
+        "is the finding, not a gap in the report.",
 "B2.6": "You cannot confirm the IDOR by exploiting it in production. The replica "
         "is where the booking API can be attacked safely, and its fidelity "
         "decides which findings are confirmable at all.",

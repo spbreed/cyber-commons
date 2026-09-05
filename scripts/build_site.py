@@ -293,9 +293,10 @@ def lesson_page(entry, prev, nxt) -> str:
         parts.append('</div>')
 
     parts.append('<div class="sec"><h2>The lab</h2>')
-    if lab.get("goal"):
-        parts.append(f'<p class="sub">{html.escape(lab["goal"])}</p>')
-    elif s.get("lab"):
+    # From the session, never from labs.json: the two used to hold separate
+    # copies of the same sentence and six of them had drifted onto other
+    # lessons entirely.
+    if s.get("lab"):
         parts.append(f'<p class="sub">{html.escape(s["lab"])}</p>')
 
     # The buttons come first: the point of the page is that you can run it.
@@ -308,7 +309,13 @@ def lesson_page(entry, prev, nxt) -> str:
                      f'<a class="btn p" href="{ex_url}" target="_blank" rel="noopener">'
                      f'↗ Open the notebook on GitHub</a>'
                      '</div>')
-        parts.append('<p class="sub kagnote">“Run on Kaggle” opens the notebook in '
+        # Collapsed by default. It is prerequisite detail — the same four
+        # sentences on all 120 pages — and a reader who has run one lesson
+        # never needs it again, so it should not sit above the lesson every
+        # time. <details> needs no JavaScript and stays keyboard-accessible.
+        parts.append('<details class="kagnote"><summary>What “Run on Kaggle” '
+                     'does, and what it needs</summary>'
+                     '<div class="kagbody"><p>“Run on Kaggle” opens the notebook in '
                      '<b>your own</b> Kaggle account as a new kernel. The notebook '
                      'carries no procedure: it clones this repository — shallow '
                      'and sparse, the skills directory only, about three seconds '
@@ -319,7 +326,9 @@ def lesson_page(entry, prev, nxt) -> str:
                      'number, and without one you can attach the dataset '
                      '<code>cybercommons/cyber-commons-skills</code> instead. '
                      'The copy is yours to edit and re-run, and nothing is '
-                     'written back here.</p>')
+                     'written back here.</p>'
+                     '<p>New here? <a href="A0.1.html">A0.1</a> walks the whole '
+                     'mechanism and runs it on itself.</p></div></details>')
     else:
         parts.append('<p class="sub kagnote">This lesson is a reading lesson — '
                      'diagrams and prose, no code to run.</p>')

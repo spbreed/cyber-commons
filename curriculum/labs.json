@@ -1,12 +1,11 @@
 {
- "_note": "Runnable command blocks per session id, merged into curriculum/*.md by scripts/build_curriculum.py. Every block is real: it executes against open-weight models (via Ollama/LiteLLM) or open-source CNCF tooling. Nothing here is pseudo-code.",
+ "_note": "Runnable command blocks per session id, merged into curriculum/*.md by scripts/build_curriculum.py. Every block is real: it executes against open-weight models (via Ollama/LiteLLM) or open-source CNCF tooling. Nothing here is pseudo-code. The per-session goal lives in site/data/curriculum.json as the session's `lab` field and is not duplicated here; it used to be, and six of the copies had drifted onto other lessons.",
  "_conventions": {
   "model_endpoint": "All model calls go through an OpenAI-compatible base URL so no lab hard-codes a provider. Default is local Ollama at http://localhost:11434/v1 (see MODELS.md).",
   "env": "export OPENAI_BASE_URL=http://localhost:11434/v1; export OPENAI_API_KEY=ollama; export MODEL=glm-4.6"
  },
  "labs": {
   "A0.1": {
-   "goal": "Run one lesson end to end on either free route, and see the two ways the arrangement fails before it works.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A0.1.ipynb    # or open it on the lesson page",
@@ -23,7 +22,6 @@
    "expect": "The tree inventoried from disk — 14 areas, 120 skills, 119 with a script at the time of writing, and the count moves as the commons grows — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file."
   },
   "A1.0": {
-   "goal": "Place the five functions of the commons on one map and find what each of the other four borrows from Function A.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.0.ipynb    # or open it on the lesson page",
@@ -32,7 +30,6 @@
    "expect": "The five functions print with the direction each runs in, and every one of the other four names something it borrows from Function A's component map. Function A itself is three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway."
   },
   "A1.1": {
-   "goal": "Draw the thirteen components, the five patterns they compose into, and the one edge that exists in all five.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.1.ipynb    # or open it on the lesson page",
@@ -41,7 +38,6 @@
    "expect": "You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow."
   },
   "A1.2": {
-   "goal": "Send an override through the ingress component and watch the agent's goal change.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.2.ipynb    # or open it on the lesson page",
@@ -50,7 +46,6 @@
    "expect": "The same agent answers a normal question correctly and hands over its internal note when the user tells it to ignore its instructions — because both instructions arrived in one string with no channel separating them."
   },
   "A1.3": {
-   "goal": "Poison one retrieved document and watch the agent act on it with the user's authority.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.3.ipynb    # or open it on the lesson page",
@@ -59,7 +54,6 @@
    "expect": "The same payload steers the agent through all four untrusted entry components — retrieved knowledge, persisted memory, an MCP tool description and a tool result — and in every case the action runs with the requesting user's authority."
   },
   "A1.4": {
-   "goal": "Write one poisoned fact into memory and watch it steer a later, unrelated session.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.4.ipynb    # or open it on the lesson page",
@@ -68,7 +62,6 @@
    "expect": "A poisoned note extracted from one user's ticket is written to workspace memory, and days later steers an unrelated request from a different user — because memory is keyed by workspace rather than by the identity that wrote it, and the origin was discarded on write."
   },
   "A1.5": {
-   "goal": "Call one over-scoped tool with attacker-chosen arguments and see what it reaches.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.5.ipynb    # or open it on the lesson page",
@@ -77,7 +70,6 @@
    "expect": "A single database tool, scoped for the widest job it ever performs, reads a signing key and empties the secrets table for requests it was never meant to serve — with the right identity, a familiar tool and well-formed arguments on every call."
   },
   "A1.6": {
-   "goal": "Have an agent inherit a privileged token and reach something its requester never could.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.6.ipynb    # or open it on the lesson page",
@@ -86,7 +78,6 @@
    "expect": "A user holding only `reports:read` triggers a `db:admin` action, because authorization was evaluated against the shared agent service account rather than the requester — and the audit trail names `agent-svc` on every row, so the human who caused it cannot be recovered from it at all."
   },
   "A1.7": {
-   "goal": "Have two agents share a credential, then try to work out which one made the call.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.7.ipynb    # or open it on the lesson page",
@@ -95,7 +86,6 @@
    "expect": "Three agents share one credential, so the downstream record shows a single caller on every line. When one deletes a production table the culprit is not recoverable from the record, and the only containment available stops all three."
   },
   "A1.8": {
-   "goal": "Execute model-authored code and enumerate what the process could touch.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.8.ipynb    # or open it on the lesson page",
@@ -104,7 +94,6 @@
    "expect": "Model-authored code is executed against a fixture environment and the reach is enumerated: an ordinary, unattacked task touches every file the process can see including a private key, and steered code reaches the environment credentials and the cloud metadata address."
   },
   "A1.9": {
-   "goal": "Fire four realistic payloads at the review harness and compare keyword filtering against provenance.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.9.ipynb    # or open it on the lesson page",
@@ -113,7 +102,6 @@
    "expect": "The normal run executes all four tools. None of the five carriers contains blocklist vocabulary and all five reach `approve_pr` on the trusting pipeline. With provenance enforced all five are blocked while the principal's own calls still succeed. Deriving privilege from effects shows `post_comment` is privileged because CI listens to comments, and a content-driven comment is then blocked."
   },
   "A1.10": {
-   "goal": "Send one poisoned inter-agent message and watch it propagate through the topology.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.10.ipynb    # or open it on the lesson page",
@@ -122,7 +110,6 @@
    "expect": "A single poisoned document read by one agent propagates through the topology as a peer message, and more than one agent acts on it — with the phrase identifying its source dropped on the first hop, because summarising is what the hand-off does."
   },
   "A1.11": {
-   "goal": "Introduce an unregistered agent into the topology and have it receive delegated work.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.11.ipynb    # or open it on the lesson page",
@@ -131,7 +118,6 @@
    "expect": "Three agents are discovered, two are in the registry, and all three receive delegated work — including the narrowed user token. The unregistered agent can now act as the requesting user against any downstream that honours it."
   },
   "A1.12": {
-   "goal": "Let one fabricated fact travel three hops and watch its confidence rise as its provenance disappears.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.12.ipynb    # or open it on the lesson page",
@@ -140,7 +126,6 @@
    "expect": "A hedged guess at confidence 0.2 becomes a confident claim above 0.8 in three hops, while the provenance field empties — confidence rising at exactly the rate evidence disappears."
   },
   "A1.13": {
-   "goal": "Run a loop with no ceiling and count what it consumes before anything notices.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.13.ipynb    # or open it on the lesson page",
@@ -149,7 +134,6 @@
    "expect": "An agent given an impossible task loops until the notebook's own safety net stops it, spending hundreds of thousands of tokens and exhausting a downstream service's capacity — with the rejections landing on whoever else was using that service."
   },
   "A1.14": {
-   "goal": "Reconstruct who caused a deletion from a log that records only tool calls.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.14.ipynb    # or open it on the lesson page",
@@ -158,7 +142,6 @@
    "expect": "A complete-looking tool-call log answers none of the three questions an investigation needs — which user, what motivated it, which hop originated it — because the principal, the motivating input and the delegation chain were never recorded."
   },
   "A1.15": {
-   "goal": "Push approval volume up and measure the point at which review quality collapses.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.15.ipynb    # or open it on the lesson page",
@@ -167,7 +150,6 @@
    "expect": "Approval coverage reads 100% at every volume while the malicious request is caught only when the queue is small enough to be read — and an attacker choosing the position needs only to generate the requests in front of it."
   },
   "A1.16": {
-   "goal": "Give an agent an objective it can satisfy the wrong way, and watch it do exactly that.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.16.ipynb    # or open it on the lesson page",
@@ -176,7 +158,6 @@
    "expect": "An agent told to reduce open alerts closes all twenty for a quarter of its budget, meeting the objective exactly — while closing five real incidents unread, with each step defensible in isolation and no false statement anywhere in the transcript."
   },
   "A1.17": {
-   "goal": "Launder a request through a delegation chain to reach something the requester was denied.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.17.ipynb    # or open it on the lesson page",
@@ -185,7 +166,6 @@
    "expect": "A user denied `payments:write` directly reaches it through the orchestrator, with every individual hop legitimate and only the composition unauthorised — and the same claim is shown carrying more weight when an agent states it than when a colleague does."
   },
   "A1.18": {
-   "goal": "Roll the twelve CyberTravels risks up into families, find which agent carries each, and check that every row has an owning lesson.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A1.18.ipynb    # or open it on the lesson page",
@@ -194,7 +174,6 @@
    "expect": "Twelve risks, each as a scene rather than a mechanism, each with a control and an owning lesson. Identity and authorisation is the largest family at three of twelve. Five of the twelve belong to no single agent — ingress, transport, identity, logging and blast radius are properties of how the four are wired together. Every risk has an owner, across more than fifteen lessons in four functions."
   },
   "A2.1": {
-   "goal": "Separate the three identities and show a downstream service authorising on the agent while attributing to the human.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A2.1.ipynb    # or open it on the lesson page",
@@ -203,7 +182,6 @@
    "expect": "Authorization resolves against the workload ceiling and refuses `db:admin` no matter who asks, attribution names the human on every action, and memory keys differ per user so a note written in one session cannot be read back in another's."
   },
   "A2.2": {
-   "goal": "Exchange an attestation for a credential, then show a copied secret failing the same exchange.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A2.2.ipynb    # or open it on the lesson page",
@@ -212,7 +190,6 @@
    "expect": "An unattested process receives no credential, a genuine but unregistered image receives none either, and a credential issued to a real workload is refused when presented from another node or after its five-minute expiry."
   },
   "A2.3": {
-   "goal": "Run both narrowing rules against a request that passes one and fails the other.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A2.3.ipynb    # or open it on the lesson page",
@@ -221,7 +198,6 @@
    "expect": "A two-hop delegation narrows to `reports:read` and records the chain `dana → orchestrator → patch-agent`. A privileged user's request for `db:admin` passes subset-of-presented and still issues nothing, because the receiving agent's ceiling is empty of it."
   },
   "A2.4": {
-   "goal": "Issue a scoped grant, use it, then replay it after expiry and after the task closed.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A2.4.ipynb    # or open it on the lesson page",
@@ -230,7 +206,6 @@
    "expect": "A grant bound to one scope, one resource and one task permits only the task's own write — refusing a different report, a different scope, any use after the task closes, and any use after the TTL expires."
   },
   "A2.5": {
-   "goal": "Admit agents against a registry and show an unregistered one refused at the door.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A2.5.ipynb    # or open it on the lesson page",
@@ -239,7 +214,6 @@
    "expect": "Four agents present identities and one is admitted: the unregistered one is refused, the lapsed registration is refused, and the orphaned entry with no owner is refused. Revoking a single agent then leaves the others running."
   },
   "A2.6": {
-   "goal": "Tag every span at ingress, then show the same payload refused through six different entry paths.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A2.6.ipynb    # or open it on the lesson page",
@@ -248,7 +222,6 @@
    "expect": "The same payload is refused through all five untrusted ingress components and through two rewordings, the user's own request still reaches the tool, and a memory record written from an untrusted document is still refused a week later because the origin was stored with it."
   },
   "A2.7": {
-   "goal": "Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A2.7.ipynb    # or open it on the lesson page",
@@ -257,7 +230,6 @@
    "expect": "One ledger entry answers all four investigation questions — the human principal, the attested workload and run, the delegation chain, and the motivating input with its origin — and the agent's attempt to amend the record is refused."
   },
   "A2.8": {
-   "goal": "Spoof a transcript, then watch a hash chain and a host-syscall reconciliation both refuse it — and check whether the workload role can reach the logging plane at all.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A2.8.ipynb    # or open it on the lesson page",
@@ -272,7 +244,6 @@
    "expect": "The in-band check reports a clean run while two of five steps executed something other than what was recorded — a 40% spoofing rate visible only once a host stream is reconciled against the transcript. The hash chain verifies over five segments, and a rewrite of segment 2 is caught and localised to exactly that segment. The workload role reaches nothing in the logging plane until one convenience grant is added, at which point it reaches it."
   },
   "A3.1": {
-   "goal": "Evaluate the same call under allow-by-default and deny-by-default policy and compare what gets through.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.1.ipynb    # or open it on the lesson page",
@@ -281,7 +252,6 @@
    "expect": "Five tool calls are evaluated twice. Under allow-by-default four succeed, each one a Chapter 1 risk walking through. Under default-deny only the intended call survives — including a refusal on the verb for an otherwise-permitted identity, tool and resource."
   },
   "A3.2": {
-   "goal": "Run the same code inside and outside the sandbox and enumerate what each could reach.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.2.ipynb    # or open it on the lesson page",
@@ -290,7 +260,6 @@
    "expect": "The same code is executed against three environments. Unsandboxed it reaches a private key, two credentials and the whole network. Sandboxed but with production credentials mounted it still reaches both credentials and the production database. Only the third — no ambient credentials — contains it."
   },
   "A3.3": {
-   "goal": "Attempt exfiltration to several destinations under an allow-list and see which survive.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.3.ipynb    # or open it on the lesson page",
@@ -299,7 +268,6 @@
    "expect": "Five destinations are evaluated both ways. The deny-list permits three exfiltration paths — a public-cloud bucket namespace anyone can register in, the cloud metadata address, and a host nobody listed — while the exact allow-list permits only the one destination the workload needs."
   },
   "A3.4": {
-   "goal": "Bound a divergent loop four different ways.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.4.ipynb    # or open it on the lesson page",
@@ -315,7 +283,6 @@
    "expect": "Four different stop reasons, all recorded in the trace. 'It finished' is never one of them."
   },
   "A3.5": {
-   "goal": "Pass a fabricated claim through a schema check and then through a ground-truth verifier.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.5.ipynb    # or open it on the lesson page",
@@ -324,7 +291,6 @@
    "expect": "Four messages are checked twice. A schema-perfect, high-confidence claim is refuted by the oracle; a claim with no oracle stops with `unverifiable` rather than silently becoming true; a malformed message is caught by the schema; and only the verified claim propagates."
   },
   "A3.6": {
-   "goal": "Route actions by reversibility and measure how many reach a human under each policy.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.6.ipynb    # or open it on the lesson page",
@@ -333,7 +299,6 @@
    "expect": "Routing by reversibility sends 12 actions a day to a human instead of 792, which is inside what one reviewer can consider properly — so the gate holds rather than degrading into a click — and machine-generated output is labelled where a person reads it."
   },
   "A3.7": {
-   "goal": "Route every call through one gateway and show the same policy holding for agents that never implemented it.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.7.ipynb    # or open it on the lesson page",
@@ -342,7 +307,6 @@
    "expect": "Five calls hit one gateway. The intended call is allowed and audited with the human principal attached; the unregistered agent, the unpermitted verb, the exfiltration destination and the over-budget call are each denied at the first check that catches them — and the legacy credential is attached at the gateway, never held by the agent."
   },
   "A3.8": {
-   "goal": "Pass a message between two 'isolated' runs through a shared artifact cache, then close the surface with per-run namespaces, immutable tags and signature verification at pull.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.8.ipynb    # or open it on the lesson page",
@@ -356,7 +320,6 @@
    "expect": "Six of seven shared surfaces qualify as channels, and only two of them look like storage. Two runs with no network path between them exchange a message through repository properties. Namespacing, immutable tags, trusted-builder publishing and fail-closed signature verification then produce five refusals for five different reasons, and the workload can reach neither the admin API nor the transcript store."
   },
   "A3.9": {
-   "goal": "Disable a control without an approved exemption and watch the platform refuse; then launch under one that is approved and watch the cap change with the coverage.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.9.ipynb    # or open it on the lesson page",
@@ -369,7 +332,6 @@
    "expect": "An exemption record the platform reads permits disabling one named control and refuses another with no approval. Checked one decision at a time, a 50,000-agent launch with classifiers off is approved — both answers correct in isolation. Tied to exemption class, the same launch is refused and 200 agents for 8 hours on an allowlist is permitted; a second exemption drops the cap again, from 200 to 25."
   },
   "A3.10": {
-   "goal": "Plant a finding, run the agent with and without a report-to-human tool, and compare what it does with what it says it wants to do.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.10.ipynb    # or open it on the lesson page",
@@ -382,7 +344,6 @@
    "expect": "The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt."
   },
   "C1.0": {
-   "goal": "Score the same claim at four standards of proof and find where the line between an anecdote and a result actually sits.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C1.0.ipynb    # or open it on the lesson page",
@@ -391,7 +352,6 @@
    "expect": "The three attack surfaces of an agent print with what each covers, and the same claim scores as anecdote, measurement, result or evidence depending on whether it carries a rate, a control comparison and an independent reproduction."
   },
   "C1.1": {
-   "goal": "Drive a planner/executor pair against a target you own, and watch scope refuse an out-of-scope host in the harness and again in the sandbox.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C1.1.ipynb    # or open it on the lesson page",
@@ -405,7 +365,6 @@
    "expect": "Severity sorting puts 2 of 3 exploitable findings in the top 3; model triage puts 3 of 3, and correctly reasons that the partner CDN is out of scope. With the model adversarially convinced that the out-of-scope host is critical, the unenforced harness acts on it and the enforced harness refuses. Underneath the harness the sandbox refuses three requests for three different reasons — rate limit, engagement boundary, and cloud metadata — without consulting the model at all."
   },
   "C1.2": {
-   "goal": "Run one campaign across the injection, identity and containment surfaces and report a rate with its sample size for each.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C1.2.ipynb    # or open it on the lesson page",
@@ -419,7 +378,6 @@
    "expect": "No defence gives ASR 1.00. The keyword filter gives ASR 0.67 with false alarms on 2 of 4 benign security-writing cases. Provenance gives ASR 0.00 with no false alarms — until the payload is delivered through the principal channel, where ASR returns to 1.00. The same two numbers then score all three surfaces in one table."
   },
   "C1.3": {
-   "goal": "Game the eval deliberately, then close the hole you used.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C1.3.ipynb    # or open it on the lesson page",
@@ -434,7 +392,6 @@
    "expect": "You reproduce an inflated score, then patch the harness so the same trick fails."
   },
   "C1.4": {
-   "goal": "Write a finding for an emergent behaviour, not a line of code.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C1.4.ipynb    # or open it on the lesson page",
@@ -448,7 +405,6 @@
    "expect": "A finding with a reproduction rate (e.g. 7/10), not a claim of determinism the system cannot offer."
   },
   "C2.1": {
-   "goal": "Write a charter that ends in a deployable control.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.1.ipynb    # or open it on the lesson page",
@@ -461,7 +417,6 @@
    "expect": "If you cannot name the track that will consume the output, it is not yet research for a CISO org."
   },
   "C2.2": {
-   "goal": "Chart jailbreak taxonomy differences across three open-weight families.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.2.ipynb    # or open it on the lesson page",
@@ -475,7 +430,6 @@
    "expect": "Per-family refusal and elicitation profiles. Model effects separated from harness effects."
   },
   "C2.3": {
-   "goal": "Attempt targeted unlearning, then try to get the capability back.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.3.ipynb    # or open it on the lesson page",
@@ -489,7 +443,6 @@
    "expect": "Elicitation usually recovers some capability. Report what the technique actually guarantees, not what it appears to."
   },
   "C2.4": {
-   "goal": "Recover source text from embeddings.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.4.ipynb    # or open it on the lesson page",
@@ -503,7 +456,6 @@
    "expect": "A measured reconstruction rate. 'Embeddings are not the data' is a claim you can now test rather than repeat."
   },
   "C2.5": {
-   "goal": "Detect a tampered adapter through provenance.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.5.ipynb    # or open it on the lesson page",
@@ -518,7 +470,6 @@
    "expect": "Signature verification catches it; an unsigned registry would not have."
   },
   "C2.6": {
-   "goal": "Separate the model effect from the harness effect, then check a public benchmark for its majority baseline, its key provenance and its matcher.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.6.ipynb    # or open it on the lesson page",
@@ -532,7 +483,6 @@
    "expect": "The baseline suite reports per-case rates with intervals. Provenance reduces every injection case to about 0.02 with non-overlapping intervals, while identity and containment are unchanged. Adding 12 trivially-blocked cases cuts aggregate ASR by roughly 60% with no change to the build, and the suite-health check flags that suite as diluted. On the critique side: a skewed key gives a 0.875 floor before anyone answers anything, a leaked key scores a perfect 1.000, and answers naming the wrong directory score 1.000 under basename matching against 0.250 under path matching."
   },
   "C2.7": {
-   "goal": "Turn one finding into a control with an eval case that fails on the old build, then score a year of findings by what still holds without you.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.7.ipynb    # or open it on the lesson page",
@@ -546,7 +496,6 @@
    "expect": "The eval case returns False on the old build and True on the new one, covering 12 privileged/source combinations while leaving the principal path working. The control blocks the payload; the detection fires at critical severity on the old build and at info severity on the new one as coverage evidence. The handover package permits closure only when the proof of fix is valid and something shipped. Scored across a year of eight findings the programme lands 20 of a possible 40 durability points, with only three still holding without a person behind them."
   },
   "C2.8": {
-   "goal": "Build the control register from the report's own figures, find the surface three rows share, and check that every mitigating control has an owning lesson.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.8.ipynb    # or open it on the lesson page",
@@ -559,7 +508,6 @@
    "expect": "The register prints as 10 rows carrying 34 threats, 40 evidence items and 40 controls, each individually citable. 22 controls are purely preventive against 12 that are detective at all. One shared surface — the artifact repository — appears in three rows, which is the chain the report asks you not to file separately. Every control has an owning lesson, and six of the forty land on lessons that already existed."
   },
   "C2.9": {
-   "goal": "Run the same query with and without a row policy, then work out which of the leaked things the platform could actually have revoked.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.9.ipynb    # or open it on the lesson page",
@@ -572,7 +520,6 @@
    "expect": "With RLS disabled the anon key returns all three agent rows, secret provider keys included; with RLS enabled and no signed-in user it returns none, and one row for the owner. Reported scale spans 770,000 to 1.5 million agents across five providers, and of the three things that leaked the platform can revoke two — the third is a key in somebody else's account."
   },
   "C2.10": {
-   "goal": "Audit a generated scaffold, then run the one catalogue query that answers the critical half across every table at once.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/C2.10.ipynb    # or open it on the lesson page",
@@ -585,7 +532,6 @@
    "expect": "An audit of a four-statement scaffold finds a critical issue: the `profiles` table holds an api_key column and has no RLS at all, while every feature of the application works. The catalogue query then finds two of four tables open via the public API, both of them holding credentials or session state — a one-line check that no application test expresses."
   },
   "D1.0": {
-   "goal": "Put one hour of an agent beside one hour of a person, then run a human-tempo rule against both.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.0.ipynb    # or open it on the lesson page",
@@ -594,7 +540,6 @@
    "expect": "Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished."
   },
   "D1.1": {
-   "goal": "Supervise a triage loop by exception rather than by re-reading.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page",
@@ -609,7 +554,6 @@
    "expect": "The loop clears the known-benign and escalates the rest with its reasoning attached."
   },
   "D1.2": {
-   "goal": "Show a context-loaded triage loop beating a generic one.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page",
@@ -624,7 +568,6 @@
    "expect": "The generic loop underperforms your worst analyst; the loaded one does not. Same model both times."
   },
   "D1.3": {
-   "goal": "Generate, unit-test and tune detections inside CI.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page",
@@ -639,7 +582,6 @@
    "expect": "Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have."
   },
   "D1.4": {
-   "goal": "Five detections whose subject is a non-human principal.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page",
@@ -653,7 +595,6 @@
    "expect": "All five fire on synthetic-but-real agent telemetry from the A3/B2 labs."
   },
   "D1.5": {
-   "goal": "Get agent telemetry into the SIEM and query it.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.5.ipynb    # or open it on the lesson page",
@@ -668,7 +609,6 @@
    "expect": "Prompts, tool calls, decisions and spend queryable alongside your other log sources."
   },
   "D1.6": {
-   "goal": "Tell an agent apart from the human whose credential it inherited.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.6.ipynb    # or open it on the lesson page",
@@ -682,7 +622,6 @@
    "expect": "A working classifier — your earliest Shadow Autonomy signal."
   },
   "D1.7": {
-   "goal": "Catch a detection silently degrading after a model change.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.7.ipynb    # or open it on the lesson page",
@@ -697,7 +636,6 @@
    "expect": "A rule that passed last month fails now. Nothing in your code changed."
   },
   "D1.8": {
-   "goal": "Build a synthesis loop that must cite or abstain.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.8.ipynb    # or open it on the lesson page",
@@ -712,7 +650,6 @@
    "expect": "With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently."
   },
   "D1.9": {
-   "goal": "Run four platform detectors over one day of events and find the ones a generic anomaly score would have missed.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.9.ipynb    # or open it on the lesson page",
@@ -726,7 +663,6 @@
    "expect": "Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one."
   },
   "D1.10": {
-   "goal": "Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artefact graph.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.10.ipynb    # or open it on the lesson page",
@@ -739,7 +675,6 @@
    "expect": "Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human."
   },
   "D1.11": {
-   "goal": "Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D1.11.ipynb    # or open it on the lesson page",
@@ -752,7 +687,6 @@
    "expect": "Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00."
   },
   "D2.1": {
-   "goal": "Pre-load the agent so it reasons as a partner, not a tool you reach for late.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page",
@@ -767,7 +701,6 @@
    "expect": "The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered."
   },
   "D2.2": {
-   "goal": "Attribute an incident to an agent, an authority and a delegation chain.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page",
@@ -781,7 +714,6 @@
    "expect": "Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it."
   },
   "D2.3": {
-   "goal": "Scope an incident where the initiating agent is not the acting one.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page",
@@ -795,7 +727,6 @@
    "expect": "The action-plane actor is a sub-agent two hops from the prompt that started it."
   },
   "D2.4": {
-   "goal": "Exercise the containment ladder in order, against a live misbehaving agent.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page",
@@ -810,7 +741,6 @@
    "expect": "Each lever is timed; revocation hits one agent without collateral (the A2.4 deliverable, proven here)."
   },
   "D2.5": {
-   "goal": "Replay an agent run to a regulator-grade standard.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page",
@@ -823,7 +753,6 @@
    "expect": "The run reproduces, or the tool tells you exactly which field was never logged to make replay possible."
   },
   "D2.6": {
-   "goal": "Pick the right layer to change after an incident.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D2.6.ipynb    # or open it on the lesson page",
@@ -836,7 +765,6 @@
    "expect": "Most land on the control plane — identity, policy, sandbox — not the prompt."
   },
   "D2.7": {
-   "goal": "Time your stop authority end to end.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D2.7.ipynb    # or open it on the lesson page",
@@ -851,7 +779,6 @@
    "expect": "A number in seconds, and a named holder. Untested stop authority is a diagram."
   },
   "D2.8": {
-   "goal": "Run the first-hour regulatory checklist.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D2.8.ipynb    # or open it on the lesson page",
@@ -865,7 +792,6 @@
    "expect": "A materiality call and a notification clock started in hour one, feeding Track E2."
   },
   "D2.9": {
-   "goal": "Kill a fleet in a non-production environment and measure what the revocation step changes about what an attacker still holds.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/D2.9.ipynb    # or open it on the lesson page",
@@ -878,7 +804,6 @@
    "expect": "Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed."
   },
   "E1.0": {
-   "goal": "Assign each of the seven trustworthy-AI properties to a named owner, and count how many of them security holds outright.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.0.ipynb    # or open it on the lesson page",
@@ -887,7 +812,6 @@
    "expect": "Seven trustworthy-AI properties print with a typical owner each. Security owns exactly one outright and contributes evidence to the other six — which is the reason this function exists as more than a security document."
   },
   "E1.1": {
-   "goal": "Watch control evidence go stale without a code change.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.1.ipynb    # or open it on the lesson page",
@@ -902,7 +826,6 @@
    "expect": "One prompt edit invalidated an annual assessment. That is why point-in-time testing fails for AI."
   },
   "E1.2": {
-   "goal": "Discover agents you did not know you had.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.2.ipynb    # or open it on the lesson page",
@@ -916,7 +839,6 @@
    "expect": "A register built from telemetry rather than from a survey nobody answered."
   },
   "E1.3": {
-   "goal": "Tier by what the thing can do, not by model name.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.3.ipynb    # or open it on the lesson page",
@@ -930,7 +852,6 @@
    "expect": "Two workflows on the same model land in different tiers — which is the point."
   },
   "E1.4": {
-   "goal": "Map agent controls onto the library you already have.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.4.ipynb    # or open it on the lesson page",
@@ -943,7 +864,6 @@
    "expect": "Most map to an existing control applied to a new principal type. The genuinely new ones are few — and named."
   },
   "E1.5": {
-   "goal": "Turn an eval report into audit evidence — and find how it could mislead you.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.5.ipynb    # or open it on the lesson page",
@@ -958,7 +878,6 @@
    "expect": "An OSCAL-shaped evidence pack, plus a written challenge: best-of-k reporting, conformance-as-accuracy, and judge dependence."
   },
   "E1.6": {
-   "goal": "Sort your guardrails into operating vs outcome.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.6.ipynb    # or open it on the lesson page",
@@ -972,7 +891,6 @@
    "expect": "Frameworks specify how the system works; regulators ask what it produced. Most orgs are long on the first."
   },
   "E1.7": {
-   "goal": "Automate the evidence package, not the judgment.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.7.ipynb    # or open it on the lesson page",
@@ -986,7 +904,6 @@
    "expect": "Control drift surfaces as a diff; a human still decides what it means."
   },
   "E1.8": {
-   "goal": "Run a real AIBOM against a model artefact.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.8.ipynb    # or open it on the lesson page",
@@ -1000,7 +917,6 @@
    "expect": "An artefact inventory with provenance status per component — and an honest 'unsigned' where that is the truth."
   },
   "E1.9": {
-   "goal": "Write the gate a re-index has to pass.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.9.ipynb    # or open it on the lesson page",
@@ -1014,7 +930,6 @@
    "expect": "Re-indexing is a change-management event with a gate, not maintenance."
   },
   "E1.10": {
-   "goal": "Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.10.ipynb    # or open it on the lesson page",
@@ -1023,7 +938,6 @@
    "expect": "Five stakeholder functions print with the question each is asking and the controls each operates — 22 controls in total. Four seam failures are shown as pairs of individually reasonable assumptions, and every function still self-reports green while all four gaps are open. Naming one accountable owner per handoff closes them, and a use case with all five control functions and no business owner is shown to be ungoverned."
   },
   "E1.11": {
-   "goal": "Take a validated model, add one tool, and show which parts of the validation are now void.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.11.ipynb    # or open it on the lesson page",
@@ -1032,7 +946,6 @@
    "expect": "The three SR 11-7 pillars print with the assumption each makes. A system validated with no tools at L1 is shown deployed with three tools at L3 — same model, same version — and the validation no longer covers it. Monitoring reports 200 clean runs of summarisation accuracy while four action-level metrics have no threshold at all, and four revalidation triggers classical MRM would miss are named."
   },
   "E1.12": {
-   "goal": "Trace one artefact across three functions and find the consumer who never received it.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E1.12.ipynb    # or open it on the lesson page",
@@ -1041,7 +954,6 @@
    "expect": "Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero."
   },
   "E2.1": {
-   "goal": "Build one control set that answers several regimes.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E2.1.ipynb    # or open it on the lesson page",
@@ -1055,7 +967,6 @@
    "expect": "One spine, several overlays. Orphans are your programme backlog."
   },
   "E2.2": {
-   "goal": "Classify three workflows and defend the boundary cases.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E2.2.ipynb    # or open it on the lesson page",
@@ -1069,7 +980,6 @@
    "expect": "Shows where 'we only deployed it' holds and where agentic deployment pulls you into provider obligations."
   },
   "E2.3": {
-   "goal": "Hang two regulator mappings off one framework spine.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E2.3.ipynb    # or open it on the lesson page",
@@ -1083,7 +993,6 @@
    "expect": "Valid OSCAL, one spine, two overlays — instead of two disconnected programmes."
   },
   "E2.4": {
-   "goal": "Find the regime you are already in.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E2.4.ipynb    # or open it on the lesson page",
@@ -1096,7 +1005,6 @@
    "expect": "The agent is often already a 'model' under rules you already comply with. Cheaper than inventing a new programme."
   },
   "E2.5": {
-   "goal": "Redact inside the trust boundary before anything crosses out.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E2.5.ipynb    # or open it on the lesson page",
@@ -1111,7 +1019,6 @@
    "expect": "PII is removed before egress; the redaction decision is logged as evidence for E2.7."
   },
   "E2.6": {
-   "goal": "Draft the notification for an autonomous actor.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E2.6.ipynb    # or open it on the lesson page",
@@ -1125,7 +1032,6 @@
    "expect": "A draft that names the agent, the authority and the containment — the questions a supervisor asks first."
   },
   "E2.7": {
-   "goal": "Assemble a pack that survives supervision.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E2.7.ipynb    # or open it on the lesson page",
@@ -1140,7 +1046,6 @@
    "expect": "A pack with a self-audit attached, including an honest statement of what 'explainability' can mean here."
   },
   "E2.8": {
-   "goal": "Build the audit trail out of the delegation chain itself.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E2.8.ipynb    # or open it on the lesson page",
@@ -1153,7 +1058,6 @@
    "expect": "Which agent, under whose authority, in what scope, verified by which control, reviewable by whom — all from the `act` chain."
   },
   "E2.9": {
-   "goal": "Defend one workflow in a mock supervisory conversation.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E2.9.ipynb    # or open it on the lesson page",
@@ -1166,7 +1070,6 @@
    "expect": "You get asked the real questions. Overclaiming control is scored as harshly as underclaiming."
   },
   "E3.1": {
-   "goal": "Turn a blast-radius measurement into a board paragraph.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E3.1.ipynb    # or open it on the lesson page",
@@ -1180,7 +1083,6 @@
    "expect": "What can happen, how fast, who can stop it — with the engineering vocabulary stripped out."
   },
   "E3.2": {
-   "goal": "Replace a per-tool review queue with a delegated-authority policy.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E3.2.ipynb    # or open it on the lesson page",
@@ -1193,7 +1095,6 @@
    "expect": "The linter rejects aspirational language and demands named authority."
   },
   "E3.3": {
-   "goal": "Sequence the first three workflows — and name the first hard no.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E3.3.ipynb    # or open it on the lesson page",
@@ -1206,7 +1107,6 @@
    "expect": "Ordered by winnability × risk retired, with one explicit refusal. A programme without a 'no' has no policy."
   },
   "E3.4": {
-   "goal": "Draw your org's ownership map against the topic matrix.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E3.4.ipynb    # or open it on the lesson page",
@@ -1220,7 +1120,6 @@
    "expect": "Every topic cluster with zero owners or two owners is a finding — usually harness engineering and research."
   },
   "E3.5": {
-   "goal": "Instrument the six board-level metrics from your own lab stack.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E3.5.ipynb    # or open it on the lesson page",
@@ -1233,7 +1132,6 @@
    "expect": "Inventory coverage, attested-identity share, standing-access reduction, MTT-revoke, blast-radius distribution, eval-gate pass rate."
   },
   "E3.6": {
-   "goal": "Make a conditional approval enforceable rather than aspirational.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E3.6.ipynb    # or open it on the lesson page",
@@ -1247,7 +1145,6 @@
    "expect": "Any condition that cannot be automatically verified is flagged. 'They'll be careful' does not compile."
   },
   "E3.7": {
-   "goal": "Write an interview loop that separates familiarity from practice.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E3.7.ipynb    # or open it on the lesson page",
@@ -1261,7 +1158,6 @@
    "expect": "Questions with artefacts attached. Handing a candidate a real eval report separates the two groups fast."
   },
   "E3.8": {
-   "goal": "Re-score your programme on containment/detection/recovery.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/E3.8.ipynb    # or open it on the lesson page",
@@ -1275,7 +1171,6 @@
    "expect": "Prevention-only scoring flatters you. The resilience axes are where a probabilistic system is actually judged."
   },
   "B2.0": {
-   "goal": "Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.0.ipynb    # or open it on the lesson page",
@@ -1284,7 +1179,6 @@
    "expect": "The loop runs with a real model behind `ask()` — a labelled replay offline, a frontier or open-weight call when one is configured. Without a verifier it accepts whatever came back and reports `verified: None`. With the verifier the same model and prompt produce an accepted, parameterised line — and a plausible-looking answer that wraps the input in `escape()` is refused, because it is still concatenation."
   },
   "B2.1": {
-   "goal": "Run the same harness loop twice — once with no verifier, once with one.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page",
@@ -1293,7 +1187,6 @@
    "expect": "Without a verifier the loop accepts whatever the model returned and reports verified: None. With one, the same model and prompt produce an accepted parameterised line, a too-narrow verifier is shown rejecting a correct fix, and an answer that wraps the input in escape() is refused because it is still concatenation."
   },
   "B2.2": {
-   "goal": "Turn an architecture map into a ranked threat model, then diff it after one entry point is added.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.2.ipynb    # or open it on the lesson page",
@@ -1302,7 +1195,6 @@
    "expect": "The skill loads with its routing description and procedure, then derives twelve threats across all six STRIDE categories from five synthetic inputs, each carrying the evidence line that set its score. It emits a mermaid diagram marking the two trust-boundary crossings. Re-running against a hardened estate — same code, four different evidence inputs — keeps every row and drops the maximum severity from 11 to 1."
   },
   "B2.3": {
-   "goal": "Watch your own review harness obey an injected instruction, then close it.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.3.ipynb    # or open it on the lesson page",
@@ -1317,7 +1209,6 @@
    "expect": "The unprotected run emits the attacker's verdict; the tagged run does not."
   },
   "B2.4": {
-   "goal": "Route cheap executor to escalated reasoner and attribute spend.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.4.ipynb    # or open it on the lesson page",
@@ -1332,7 +1223,6 @@
    "expect": "Per-run, per-tier spend attribution. Escalation happens only at decision points."
   },
   "B2.5": {
-   "goal": "Prove a grandchild agent cannot exceed its parent.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.5.ipynb    # or open it on the lesson page",
@@ -1346,7 +1236,6 @@
    "expect": "Recursion budget caps depth; the escalation attempt is refused by the token, not by a check."
   },
   "B2.6": {
-   "goal": "Name the failure from the trace alone.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.6.ipynb    # or open it on the lesson page",
@@ -1360,7 +1249,6 @@
    "expect": "Loop divergence, objective drift, reward hacking, silent truncation, tool thrash — one per trace."
   },
   "B2.7": {
-   "goal": "Scan an SBOM, reconcile it against the image, and decompile the library that is in no manifest.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page",
@@ -1372,7 +1260,6 @@
    "expect": "Three of five declared components carry advisories, including Text4Shell in commons-text 1.9 — which only appears because the version comparison is numeric. Reconciliation finds one artefact on disk in no manifest; decompiling its constant pool recovers a hardcoded telemetry endpoint with the licence key folded into the same literal, an AES/ECB cipher spec, and network-egress and cryptography capabilities. unassessable_by_sbom: 1."
   },
   "B2.8": {
-   "goal": "Let a scaffold mutate itself, and keep only measured gains.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page",
@@ -1386,7 +1273,6 @@
    "expect": "Only mutations the deterministic oracle confirms survive. Pin the fitness function — it is now the security control."
   },
   "B2.9": {
-   "goal": "Replay an agent run from its trace.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page",
@@ -1400,7 +1286,6 @@
    "expect": "Either it reproduces, or the tool names the field you failed to log. Anything you cannot replay you cannot investigate."
   },
   "B2.10": {
-   "goal": "Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.10.ipynb    # or open it on the lesson page",
@@ -1409,7 +1294,6 @@
    "expect": "Three stand-in backbones are scored on the same corpus: the one with the best recall is not the one with the best cost per finding. A harness that couples to vendor output shapes fails outright on the third backbone, while the interface version substitutes in a single line and reports the recall, precision and cost deltas. A data-sovereignty column then removes the closed-weights option entirely."
   },
   "B2.11": {
-   "goal": "Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page",
@@ -1423,7 +1307,6 @@
    "expect": "One skeleton runs all four domains unchanged. With each domain's own oracle every confirmed finding is real — precision 1.00 across sast, threat model, dast and pentest — and the pentest run refuses outright without a signed scope, because its blast radius is live action. Swapping in the model's own confidence as the oracle confirms all 12 candidates, 8 of which are real: precision 0.67 in every domain, invisible from inside the harness."
   },
   "B2.12": {
-   "goal": "Compare four context strategies against one bug and measure which are decidable and at what size.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page",
@@ -1432,7 +1315,6 @@
    "expect": "The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file."
   },
   "B2.13": {
-   "goal": "Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page",
@@ -1444,7 +1326,6 @@
    "expect": "Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification's destructive, open-world default."
   },
   "B2.14": {
-   "goal": "Map Mantis onto the 15 stages, parse its two output shapes, and score a sample against a held-out key.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/B2.13.ipynb    # or open it on the lesson page",
@@ -1453,7 +1334,6 @@
    "expect": "The stage map shows Mantis covering stage 7 strongly with a stage-1 learning loop, and not covering Phase 4 at all. Three of five sample outputs conform — one learning entry is missing the required `history` field, one finding has a null CWE, and one is prose. Scored against the held-out key, expert accuracy is below 1.0: one correct, one half credit for the null class, and one missed finding Mantis never reported. The learning entry then feeds the next run's risk zones."
   },
   "A3.11": {
-   "goal": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
    "run": [
     "# --- the notebook: runs anywhere, stdlib only, no install ---",
     "jupyter notebook labs/notebooks/A3.11.ipynb    # or open it on the lesson page",

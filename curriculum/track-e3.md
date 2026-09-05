@@ -23,7 +23,7 @@
 - **Control** — What can happen, how fast, who can stop it.
 - **Lab** — Convert one blast-radius measurement into a board paragraph.
 
-**Run it** — Turn a blast-radius measurement into a board paragraph.
+**Run it** — Convert one blast-radius measurement into a board paragraph.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -48,7 +48,7 @@ python3 translate.py --input ../a1-control-plane/blast.md --audience board --che
 - **Control** — A policy on delegated authority instead of tool-by-tool approval.
 - **Lab** — Write the delegated-authority policy.
 
-**Run it** — Replace a per-tool review queue with a delegated-authority policy.
+**Run it** — Write the delegated-authority policy.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -72,7 +72,7 @@ cd labs/e3-ciso && python3 policy_lint.py --policy policy.md --require promotion
 - **Control** — Use the maturity model to order investment; choose your first hard "no".
 - **Lab** — Sequence your first three workflows and name the no.
 
-**Run it** — Sequence the first three workflows — and name the first hard no.
+**Run it** — Sequence your first three workflows and name the no.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -122,7 +122,7 @@ python3 ownership.py --find-gaps
 - **Lab** — Instrument the six metrics from your lab stack.
 - **Tools** — `OpenSearch`
 
-**Run it** — Instrument the six board-level metrics from your own lab stack.
+**Run it** — Instrument the six metrics from your lab stack.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -146,7 +146,7 @@ python3 metrics.py --spire --gateway --register agent-register.csv --evals ../b2
 - **Control** — Autonomy promotion as an earned event with named evidence.
 - **Lab** — Write one enforceable conditional approval.
 
-**Run it** — Make a conditional approval enforceable rather than aspirational.
+**Run it** — Write one enforceable conditional approval.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -171,7 +171,7 @@ python3 conditional.py --verify patch-agent   # checks the conditions are machin
 - **Control** — Interview questions that separate the two; internal transition paths.
 - **Lab** — Write the interview loop for an agentic security engineer.
 
-**Run it** — Write an interview loop that separates familiarity from practice.
+**Run it** — Write the interview loop for an agentic security engineer.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -196,7 +196,7 @@ python3 interview.py --calibrate --against ../b2.10-eval-harness   # ask them to
 - **Control** — Maturity measured by containment, detection and recovery — not prevention.
 - **Lab** — Re-score your programme on the resilience axis.
 
-**Run it** — Re-score your programme on containment/detection/recovery.
+**Run it** — Re-score your programme on the resilience axis.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

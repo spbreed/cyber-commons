@@ -158,6 +158,23 @@ footer a{color:var(--text-dim);text-decoration:none}
 .btn.k:hover{color:#04101f;filter:brightness(1.08)}
 .kagnote{margin-top:10px;font-size:13.5px;line-height:1.55}
 .kagnote b{color:var(--text)}
+/* Collapsed by default: the same four sentences appear on every lesson page,
+   and a reader who has run one never needs them again. */
+details.kagnote{margin-top:10px}
+details.kagnote>summary{cursor:pointer;list-style:none;display:inline-flex;
+  align-items:center;gap:6px;color:var(--text-faint);font-size:13px;
+  padding:3px 0;user-select:none}
+details.kagnote>summary::-webkit-details-marker{display:none}
+details.kagnote>summary::before{content:"▸";font-size:11px;
+  transition:transform .12s ease;display:inline-block}
+details.kagnote[open]>summary::before{transform:rotate(90deg)}
+details.kagnote>summary:hover{color:var(--text)}
+details.kagnote>summary:focus-visible{outline:2px solid var(--accent,#4D9BFF);
+  outline-offset:3px;border-radius:3px}
+.kagbody{padding:2px 0 0 16px;border-left:1px solid var(--line,#8A93A6);
+  margin:6px 0 0 3px}
+.kagbody p{margin:0 0 8px}
+.kagbody p:last-child{margin-bottom:0}
 
 .nbh{font-size:15px;margin:34px 0 12px;font-family:"IBM Plex Mono";font-weight:500;
   letter-spacing:.12em;text-transform:uppercase;color:var(--text-faint)}

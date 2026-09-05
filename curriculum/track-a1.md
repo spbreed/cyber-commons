@@ -23,7 +23,7 @@
 - **Control** — One picture, three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
 - **Lab** — Place the five functions of the commons on one diagram and find where your own work sits.
 
-**Run it** — Place the five functions of the commons on one map and find what each of the other four borrows from Function A.
+**Run it** — Place the five functions of the commons on one diagram and find where your own work sits.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -43,7 +43,7 @@ python3 scripts/run_notebooks.py --session A1.0   # run it headless and check it
 - **Control** — One component map and five topologies, named once and reused by every lesson that follows.
 - **Lab** — Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
 
-**Run it** — Draw the thirteen components, the five patterns they compose into, and the one edge that exists in all five.
+**Run it** — Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -413,7 +413,7 @@ python3 scripts/run_notebooks.py --session A1.17   # run it headless and check i
 - **Control** — Four columns — scene, component, control, owning lesson — and a rule that no row ships without the fourth.
 - **Lab** — Roll the twelve risks up into families, find which agent carries each, and check that every row has an owner.
 
-**Run it** — Roll the twelve CyberTravels risks up into families, find which agent carries each, and check that every row has an owning lesson.
+**Run it** — Roll the twelve risks up into families, find which agent carries each, and check that every row has an owner.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

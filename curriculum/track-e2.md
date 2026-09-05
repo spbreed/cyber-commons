@@ -24,7 +24,7 @@
 - **Lab** — Build the crosswalk for your own sector.
 - **Tools** — `OSCAL`
 
-**Run it** — Build one control set that answers several regimes.
+**Run it** — Build the crosswalk for your own sector.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -100,7 +100,7 @@ oscal-cli validate oscal/system-security-plan.json
 - **Control** — Find the regime you're already in before inventing a new one.
 - **Lab** — Map one agent to existing model-risk obligations.
 
-**Run it** — Find the regime you are already in.
+**Run it** — Map one agent to existing model-risk obligations.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -125,7 +125,7 @@ python3 sector_overlay.py --agent patch-agent --sector financial-services --chec
 - **Lab** — Run PII redaction inside the trust boundary with Presidio before anything crosses out.
 - **Tools** — `Presidio`, `GLiNER-PII`
 
-**Run it** — Redact inside the trust boundary before anything crosses out.
+**Run it** — Run PII redaction inside the trust boundary with Presidio before anything crosses out.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -151,7 +151,7 @@ curl -s localhost:8088/v1/chat/completions -d @with-pii.json | jq
 - **Control** — Coordinate with D2 in hour one.
 - **Lab** — Draft the notification for an agentic incident.
 
-**Run it** — Draft the notification for an autonomous actor.
+**Run it** — Draft the notification for an agentic incident.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -177,7 +177,7 @@ python3 notify.py --incident ../d2-ir/case-01 --materiality-worksheet
 - **Lab** — Assemble the pack for one high-risk workflow.
 - **Tools** — `OSCAL`, `Model Cards`
 
-**Run it** — Assemble a pack that survives supervision.
+**Run it** — Assemble the pack for one high-risk workflow.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -204,7 +204,7 @@ python3 evidence_pack.py --audit-self pack/   # what a supervisor would find mis
 - **Lab** — Produce an audit trail from the A2 chain that names authority at every hop.
 - **Tools** — `Keycloak`
 
-**Run it** — Build the audit trail out of the delegation chain itself.
+**Run it** — Produce an audit trail from the A2 chain that names authority at every hop.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

@@ -23,7 +23,7 @@
 - **Control** — A preflight that inventories the tree from disk and reproduces both failure conditions before reporting the host ready.
 - **Lab** — Run the preflight on both routes and compare the output checksum.
 
-**Run it** — Run one lesson end to end on either free route, and see the two ways the arrangement fails before it works.
+**Run it** — Run the preflight on both routes and compare the output checksum.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

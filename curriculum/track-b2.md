@@ -44,7 +44,7 @@ python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it
 - **Control** — An independent verifier, and a budget that stops the loop when it cannot pass.
 - **Lab** — Run the same loop twice — once with no verifier, once with one.
 
-**Run it** — Run the same harness loop twice — once with no verifier, once with one.
+**Run it** — Run the same loop twice — once with no verifier, once with one.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -90,7 +90,7 @@ python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it
 - **Open-weight models** — `GLM-4.6`, `Kimi K2`
 - **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Watch your own review harness obey an injected instruction, then close it.
+**Run it** — Score grep, taint rules and model review against the same corpus, then combine them behind a confidence gate.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -119,7 +119,7 @@ python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Route cheap executor to escalated reasoner and attribute spend.
+**Run it** — Deduplicate findings across three analysis tracks, then verify each against the AST and drop the ones that reference code that is not there.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -148,7 +148,7 @@ python3 ../shared/spend_report.py --by-run
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Prove a grandchild agent cannot exceed its parent.
+**Run it** — Build a call graph from entry points and partition findings into reachable, unreachable and unknown.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -176,7 +176,7 @@ python3 subagent.py --depth 3 --parent-scope repo:read --attempt-escalate
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Name the failure from the trace alone.
+**Run it** — Stand up an isolated replica, prove egress and credential isolation, and show what a destructive probe touches.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -201,7 +201,7 @@ for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t -
 - **Control** — Reconcile the SBOM against what is on disk, then recover strings, imports and egress from the compiled artefact that no SBOM entry covers.
 - **Lab** — Scan an SBOM, then decompile the closed-source library it never mentions.
 
-**Run it** — Scan an SBOM, reconcile it against the image, and decompile the library that is in no manifest.
+**Run it** — Scan an SBOM, then decompile the closed-source library it never mentions.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -227,7 +227,7 @@ javac -d /tmp/vt skills/appsec/supply-chain-decompile/evidence/provenance/Vendor
 - **Open-weight models** — `GLM-4.6`, `Kimi K2`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Let a scaffold mutate itself, and keep only measured gains.
+**Run it** — Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -255,7 +255,7 @@ python3 evolve.py --show-lineage   # what changed, what was kept, what was rever
 - **Open-weight models** — `Kimi K2`
 - **Frontier models** — `Claude Opus 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Replay an agent run from its trace.
+**Run it** — Chain individually-medium findings into a critical path and show the severity the chain earns.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -283,7 +283,7 @@ python3 replay.py --trace run.json --assert-identical
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Score two backbones on the same corpus, then swap one for the other behind an unchanged harness interface.
+**Run it** — Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -306,7 +306,7 @@ python3 scripts/run_notebooks.py --session B2.10   # run it headless and check i
 - **Open-weight models** — `GLM-4.6`, `Kimi K2`
 - **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.
+**Run it** — Validate four candidate patches on three axes and show which of them only made the scanner green.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

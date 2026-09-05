@@ -244,9 +244,10 @@ HOOKS: dict[str, str] = {
  "it is a landfill with a ticket number.",
 
 "B2.5":
- "The finding is real. The code is dead. Reachability is the difference between "
- "a queue an engineer works and a queue an engineer learns to ignore, and it is "
- "the single largest false-positive killer in the pipeline.",
+ "The finding is real and the code is dead \u2014 a true positive about the "
+ "code and a false positive about the risk. Telling those apart needs a call "
+ "graph, a call graph needs the syntax tree, and the tree's own blind spot is "
+ "the third bucket everyone collapses into the second.",
 
 "B2.6":
  "You cannot exploit a finding to confirm it without somewhere safe to do it. "
@@ -1225,16 +1226,29 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 "B2.5": """
-   is there a path from untrusted input to this line?
+   grep says            ast says
 
-   HTTP handler --> parse() --> validate() --> build_query() --> DB
-                                                    ^
-                                              the finding
+   "report" appears     FunctionDef report    <- a node
+   in 14 files          Call report(...)      <- an edge, owned by the
+                                                 function it sits inside
 
-   reachable   -> a finding
-   unreachable -> a note
+   nodes + edges, walked from the entry points:
 
-   the largest single false-positive killer in the pipeline
+     @route handler --> _query           REACHABLE, keeps its severity
+
+     legacy_export      (no caller)      UNREACHABLE
+     audit_line         (no caller)      -> true about the code
+     debug_dump         (no caller)      -> FALSE about the risk
+
+     jobs/runner.py:  handler = getattr(HANDLERS, name)
+                      return handler(arg)
+
+     run_job                             UNKNOWN
+     nightly_reconcile                   -> not dead.
+     _settle                                undecided.
+
+   the third bucket is not a rounding error: _settle runs a SQL
+   update, and a two-bucket pipeline reports it as clean
 """,
 
 "B2.6": """

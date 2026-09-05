@@ -23,7 +23,7 @@
 - **Control** — One register, risk-tiered, with each property mapped to a control, an owner and evidence that can be re-checked.
 - **Lab** — Take the seven properties and assign each an owner in your own organisation. The gaps are the programme.
 
-**Run it** — Assign each of the seven trustworthy-AI properties to a named owner, and count how many of them security holds outright.
+**Run it** — Take the seven properties and assign each an owner in your own organisation. The gaps are the programme.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -44,7 +44,7 @@ python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it
 - **Lab** — Change a prompt and show the control evidence going stale in real time.
 - **Tools** — `promptfoo`
 
-**Run it** — Watch control evidence go stale without a code change.
+**Run it** — Change a prompt and show the control evidence going stale in real time.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -71,7 +71,7 @@ python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # now FA
 - **Lab** — Discover agents from gateway and identity telemetry; build the register.
 - **Tools** — `agentgateway`, `SPIRE`
 
-**Run it** — Discover agents you did not know you had.
+**Run it** — Discover agents from gateway and identity telemetry; build the register.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -96,7 +96,7 @@ python3 register.py --out agent-register.csv
 - **Control** — Autonomy level × action class × data sensitivity.
 - **Lab** — Tier ten real workflows and assign approval authority.
 
-**Run it** — Tier by what the thing can do, not by model name.
+**Run it** — Tier ten real workflows and assign approval authority.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -122,7 +122,7 @@ python3 tier.py --show-approvers
 - **Lab** — Map the A2/A3 controls onto your control library.
 - **Tools** — `OSCAL`
 
-**Run it** — Map agent controls onto the library you already have.
+**Run it** — Map the A2/A3 controls onto your control library.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -147,7 +147,7 @@ python3 map_controls.py --new agent-controls.yaml --existing control-library.yam
 - **Lab** — Take the B2.14 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 - **Tools** — `Cyber Commons eval harness`, `OSCAL`
 
-**Run it** — Turn an eval report into audit evidence — and find how it could mislead you.
+**Run it** — Take the B2.14 scoring output and turn it into an evidence pack — then find the three ways the same numbers could mislead you.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -176,7 +176,7 @@ python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three way
 - **Open-weight models** — `Llama Guard 4`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Sort your guardrails into operating vs outcome.
+**Run it** — Classify your own guardrails into the two buckets.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -204,7 +204,7 @@ python3 classify_guardrails.py --gap-analysis   # which regulator question is un
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Automate the evidence package, not the judgment.
+**Run it** — Automate one evidence package on a schedule.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -230,7 +230,7 @@ python3 drift.py --baseline evidence/2026-08-01 --current evidence/today
 - **Lab** — Run a real AIBOM against a vendor model artefact.
 - **Tools** — `OWASP AIBOM`, `Sigstore`
 
-**Run it** — Run a real AIBOM against a model artefact.
+**Run it** — Run a real AIBOM against a vendor model artefact.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -255,7 +255,7 @@ cosign verify-blob --bundle model.sig model.gguf   # provenance where signed
 - **Control** — Retraining, fine-tuning and re-indexing as change-management events.
 - **Lab** — Write the gate that a re-index has to pass.
 
-**Run it** — Write the gate a re-index has to pass.
+**Run it** — Write the gate that a re-index has to pass.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

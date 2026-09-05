@@ -23,7 +23,7 @@
 - **Control** — Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.
 - **Lab** — Put one agent trace and one human session side by side and list what separates them.
 
-**Run it** — Put one hour of an agent beside one hour of a person, then run a human-tempo rule against both.
+**Run it** — Put one agent trace and one human session side by side and list what separates them.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -46,7 +46,7 @@ python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Supervise a triage loop by exception rather than by re-reading.
+**Run it** — Run a triage loop over Wazuh alerts and supervise by exception.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -75,7 +75,7 @@ python3 triage_loop.py --model $MODEL --escalate-on high
 - **Open-weight models** — `GLM-4.6`, `Llama 3.3`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Show a context-loaded triage loop beating a generic one.
+**Run it** — A/B a generic prompt vs a context-loaded one on the same alert set.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -104,7 +104,7 @@ python3 compare.py
 - **Open-weight models** — `Kimi K2`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Generate, unit-test and tune detections inside CI.
+**Run it** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -131,7 +131,7 @@ python3 coverage.py --map-to attack
 - **Lab** — Write five detections for agent misbehaviour and fire each one.
 - **Tools** — `Falco`, `Sigma`
 
-**Run it** — Five detections whose subject is a non-human principal.
+**Run it** — Write five detections for agent misbehaviour and fire each one.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -157,7 +157,7 @@ cd labs/d1-soc/detections
 - **Lab** — Ship OTEL agent traces into OpenSearch and query them.
 - **Tools** — `OpenTelemetry`, `OpenSearch`
 
-**Run it** — Get agent telemetry into the SIEM and query it.
+**Run it** — Ship OTEL agent traces into OpenSearch and query them.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -186,7 +186,7 @@ curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply
 - **Open-weight models** — `Llama 3.3`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Tell an agent apart from the human whose credential it inherited.
+**Run it** — Build the classifier on timing, sequencing and volume features.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -214,7 +214,7 @@ python3 agent_vs_human.py --classify live.jsonl
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Catch a detection silently degrading after a model change.
+**Run it** — Change the model underneath and catch the detection regression.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -270,7 +270,7 @@ python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch co
 - **Lab** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
 - **Tools** — `Falco`, `Gitleaks`, `Sigstore`
 
-**Run it** — Run four platform detectors over one day of events and find the ones a generic anomaly score would have missed.
+**Run it** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -296,7 +296,7 @@ gitleaks detect --redact --report-format sarif
 - **Lab** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
 - **Tools** — `OpenTelemetry`, `Sigma`
 
-**Run it** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artefact graph.
+**Run it** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -323,7 +323,7 @@ python3 fleet_graph.py --signatures vocab,pivot,role
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Fire a canary and watch a zero-threshold alert carry attribution; then salt a benchmark with honeypot tasks and read the cheat-attempt rate as a leading indicator.
+**Run it** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

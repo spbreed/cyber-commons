@@ -488,26 +488,48 @@ the sink is real, and any reviewer who opens the file will agree. It is a
 **false positive about the risk**, because nothing untrusted reaches it. Two
 different claims, and only the second one is wrong.
 
-That distinction decides the response. The instinct is to **suppress** — it
-empties the queue, and it is the wrong fix for a reason that only appears
-months later: a suppression is keyed to a file, a line and a rule, and *none of
-those change when somebody wires the function back up*. The code becomes live,
-the finding does not come back, and the entry that was hiding a false positive
-is now hiding a real one.
+### Deciding which is which needs the AST
 
-**Attack surface reduction — ASR, which here means deleting the code — closes
-both halves at once.** The finding goes because the code is gone, and so does
-the latent risk of it being reconnected. It is the only response to a dead-code
-finding that cannot rot, and the pleasant surprise is that the security queue
-turns out to be the cheapest to-delete list in the building: already
-enumerated, already ranked by what each line would cost if it ever became
-reachable again.
+You cannot answer it with grep. `def report`, `report(` and `# report` are the
+same string to a regex, and a function called `run` appears in every file you
+own. The question — *which functions call this one* — is about structure, so it
+needs the **abstract syntax tree**.
 
-One caution that does most of the work: "unreachable" and "dead" are not
-synonyms. A test fixture and a feature flag that has been off for two years are
-both unreachable *under a condition*, and both become reachable the day
-somebody changes one line. Only code with no caller anywhere is a deletion
-candidate.
+Parsing gives you exactly the two node types the question needs:
+
+| AST node | what it gives you |
+|---|---|
+| `FunctionDef` | every function that exists, with its real nesting and its decorators |
+| `Call` | every invocation, attributable to the function it sits inside |
+
+Nodes and edges. Walk from the entry points and everything you reach is
+reachable; everything you do not is dead **or** undecided.
+
+The resolver should be deliberately naive. `Call.func` is a `Name` for `f()`
+and an `Attribute` for `obj.f()`; take `.id` or `.attr` and accept that two
+methods with the same name merge. That over-reports reachability, which is the
+safe error. A cleverer resolver that guesses wrong marks a live function dead,
+and that error is silent.
+
+### And the AST is honest about what it cannot see
+
+This is the more useful half, and it is where the third bucket comes from. The
+AST resolves a literal call. It cannot resolve
+
+```python
+handler = getattr(HANDLERS, name)   # the callee is a runtime value
+return handler(arg)
+```
+
+nor a dispatch dictionary, nor a handler a framework registers by decorator at
+import time. None of those are unreachable — they are **undecided**, and the
+rule that follows is the one that keeps the analysis honest: if a module
+contains a call the AST could not follow, *every* unreached function in that
+module is `unknown`, not `unreachable`.
+
+Deleting is the right resolution for the genuinely dead ones, and it is the only
+one that cannot rot: a suppression is keyed to a file, a line and a rule, and
+none of those change when somebody wires the function back up.
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
@@ -552,48 +574,53 @@ candidate.
          "It passes the contract with zero problems, and almost nothing in it "
          "is true."),
 
-  *skill_steps("appsec/dead-code-attack-surface",
-               "## 10 · Dead code, suppression and ASR, as a skill\n\n"
-               "The same eight findings from CyberTravels' booking service, "
-               "partitioned into the three buckets — then the part that decides "
-               "what to do with the unreachable ones.\n\n"
-               "It compares the three available responses to a single dead "
-               "`os.system` finding on three axes: does the finding go, does the "
-               "risk go, and does the decision **rot**. Then it applies one "
-               "commit six weeks later that re-imports the dead function, and "
-               "shows which of the three responses is still protecting anything."),
+  *skill_steps("appsec/dead-code-ast-reachability",
+               "## 10 \u00b7 The call graph, parsed rather than grepped\n\n"
+               "Three files of CyberTravels' booking service, parsed for real "
+               "with `ast.parse`. The skill collects `FunctionDef` nodes and "
+               "`Call` edges, marks the decorated handlers as entry points, "
+               "walks the graph, and then splits the finding queue on the "
+               "result.\n\nWatch `jobs/runner.py`. It dispatches through "
+               "`getattr(HANDLERS, name)()`, so the AST cannot say who calls "
+               "anything in it \u2014 and every unreached function in that "
+               "module lands in `unknown` rather than in the deletion list."),
 
-  ("md", """## 11 · The commit six weeks later
+  ("md", """## 11 \u00b7 The bucket that is work rather than a result
 
-That last block is the argument, and it is worth restating plainly because it
-is the part that gets waved through in a triage meeting.
+Read the last line of that output again: **2 reachable, 3 to delete, 1
+unresolved.**
 
-A suppression matched on `(file, line, rule)`. The re-enabling commit changed
-none of the three — it added an import in a different file. So the suppression
-still matches, the scanner still stays quiet, and a `sev 9` command injection is
-now reachable from the vendor webhook with no finding attached to it.
+The three to delete are the easy win, and they are a deletion rather than a
+triage \u2014 the finding goes because the code goes, and unlike a suppression
+that cannot rot. The security queue turns out to be the cheapest to-delete list
+in the building: already enumerated, already ranked by what each line would cost
+if it ever became reachable again.
 
-The deletion cannot fail that way. The import does not resolve, the build breaks
-at the moment somebody tries to bring the code back, and the failure is loud and
-immediate rather than silent and eighteen months old.
+The unresolved one is the part that matters. `_settle` runs a SQL update and the
+AST cannot tell you whether anything reaches it, because the module dispatches on
+a runtime value. A two-bucket pipeline reports that as zero and calls the queue
+clean. It is not clean; it is one finding nobody has looked at, filed under a
+word that means *we did not check*.
 
-If you must suppress, bind the suppression to **reachability** rather than to a
-line, and give it an expiry. A suppression with neither is a permanent decision
-recorded against temporary evidence."""),
+One caution that does most of the remaining work: **"unreachable" and "dead" are
+not synonyms.** A test fixture and a feature flag that has been off for two years
+are both unreachable *under a condition*, and both become reachable the day
+somebody changes one line. Only code with no caller anywhere, in a module the AST
+fully resolved, is a deletion candidate."""),
 ],
  "expect": "The call graph identifies three entry points, one of which uses "
            "dynamic dispatch. `load_report` is reachable, `debug_dump` and "
            "`legacy_export` are unknown rather than unreachable because runtime "
            "handler resolution cannot be ruled out. Two-bucket filtering silently "
            "drops both, and the three-bucket routing sends the unknowns to Phase 4 "
-           "instead of paging or discarding them. On the eight-finding queue, "
-           "reachability takes 8 down to 2, and three of the remainder are dead "
-           "with no caller anywhere \u2014 a deletion rather than a triage. "
-           "Suppressing that dead `os.system` and marking it won't-fix both "
-           "clear the finding and neither clears the risk: one commit six weeks "
-           "later re-imports the function, the suppression still matches on "
-           "file, line and rule, and the finding never comes back. Deleting it "
-           "breaks that commit's build instead.",
+           "instead of paging or discarding them. The AST pass then parses three "
+           "real files: 9 functions, 2 resolved call edges, 2 decorated entry "
+           "points, and one `getattr(HANDLERS, name)()` that it records as "
+           "unresolvable. That single unresolved call moves all three functions "
+           "in `jobs/runner.py` into `unknown` \u2014 including `_settle`, which "
+           "runs a SQL update. The six-finding queue splits 2 reachable, 3 to "
+           "delete, 1 unresolved: every one is a true positive about the code, "
+           "and three of them are false positives about the risk.",
  "challenge": "Two counts, and the second is the uncomfortable one. Count how "
               "many `unknown` cases your own reachability analysis produces and "
               "find out what your tooling does with them \u2014 if it reports "

@@ -87,7 +87,7 @@ python3 scripts/run_notebooks.py --session A3.3   # run it headless and check it
 - **Lab** — Run a looping agent against each ceiling and record which one fires first.
 - **Tools** — `OpenTelemetry`
 
-**Run it** — Bound a divergent loop four different ways.
+**Run it** — Run a looping agent against each ceiling and record which one fires first.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -177,7 +177,7 @@ python3 scripts/run_notebooks.py --session A3.7   # run it headless and check it
 - **Lab** — Pass a message between two 'isolated' runs through a shared cache, then close it with namespacing and watch the same write be denied.
 - **Tools** — `Sigstore`, `Kyverno`, `Artifactory`
 
-**Run it** — Pass a message between two 'isolated' runs through a shared artifact cache, then close the surface with per-run namespaces, immutable tags and signature verification at pull.
+**Run it** — Pass a message between two 'isolated' runs through a shared cache, then close it with namespacing and watch the same write be denied.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -203,7 +203,7 @@ kubectl apply -f kyverno/verify-images.yaml   # fail closed at admission
 - **Lab** — Disable a classifier without an approved exemption and watch the platform refuse; then launch 50,000 agents under one that is approved.
 - **Tools** — `OPA`, `Kyverno`
 
-**Run it** — Disable a control without an approved exemption and watch the platform refuse; then launch under one that is approved and watch the cap change with the coverage.
+**Run it** — Disable a classifier without an approved exemption and watch the platform refuse; then launch 50,000 agents under one that is approved.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
@@ -230,7 +230,7 @@ opa eval -d exemptions.rego -i launch.json 'data.launch.allow'
 - **Open-weight models** — `Llama 3.3`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Plant a finding, run the agent with and without a report-to-human tool, and compare what it does with what it says it wants to do.
+**Run it** — Plant a finding, run the agent with and without the tool, and compare what it does with what it says it wants to do.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---

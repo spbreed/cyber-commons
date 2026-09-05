@@ -80,57 +80,36 @@ counts.verified == len(findings)?  False  <- catches it
 Three defects, zero schema violations. That is what a headline of
 '100% schema-valid' actually means as a quality metric, and it is why
 accuracy has to be measured against a key the model never sees.
-8 findings, partitioned by reachability from an untrusted entry point
-   F1  search_bookings   CWE-89   sev 9   reachable   
-   F2  render_itinerary  CWE-95   sev 8   reachable   
-   F3  legacy_export     CWE-78   sev 9   unreachable dead: no caller anywhere in the repo
-   F4  debug_dump        CWE-22   sev 6   unreachable dead: no caller anywhere in the repo
-   F5  _fixture_seed     CWE-89   sev 7   unreachable test fixture, not shipped
-   F6  beta_pricing      CWE-89   sev 7   unreachable behind a flag that has been off for two years
-   F7  handle_webhook    CWE-78   sev 9   unknown     resolved by the framework at runtime
-   F8  audit_line        CWE-117  sev 3   unreachable dead: no caller anywhere in the repo
+ast: 9 functions, 2 resolved call edges, 2 entry point(s)
+   entry  render_itinerary  (api/itinerary.py)
+   entry  search_bookings  (api/bookings.py)
+   UNRESOLVED  jobs/runner.py: getattr(...)() - the callee is a runtime value
 
-   reachable 2   unreachable 5   unknown 1
+the three buckets, and the third is the honest one
+   reachable    3  _query, render_itinerary, search_bookings
+   unreachable  3  audit_line, debug_dump, legacy_export
+   unknown      3  _settle, nightly_reconcile, run_job
 
-Every one of those eight is a true positive about the code. A reviewer
-who opens the file will agree with all eight. Only two of them are true
-about the risk, and that is a different claim.
+nightly_reconcile and _settle are NOT dead. They are in a module whose
+dispatch is getattr(HANDLERS, name)(), so the AST cannot say who calls
+them. Filing that as unreachable is how a pipeline drops real bugs.
 
-why unreachable, and what that permits
-   3 dead with no caller       -> deletion candidates
-   2 unreachable *under a condition* -> not dead. A flag can be
-       turned on and a fixture can be imported; both are reachable the
-       day somebody changes one line.
+the queue, split on the graph
+       unit                cwe      sev  bucket       true about code / risk
+   F1  _query              CWE-89   9    reachable    yes  / yes
+   F2  render_itinerary    CWE-95   8    reachable    yes  / yes
+   F3  legacy_export       CWE-78   9    unreachable  yes  / NO
+   F4  debug_dump          CWE-22   6    unreachable  yes  / NO
+   F5  audit_line          CWE-117  3    unreachable  yes  / NO
+   F6  _settle             CWE-89   7    unknown      yes  / yes
 
-three responses to F3 (dead os.system on a caller-supplied path, sev 9)
-   action      finding gone  risk gone   rots?
-   suppress    yes           NO          yes   keyed to file+line+rule; none of those change when it is wired back up
-   wont-fix    yes           NO          yes   the same decision with a nicer label and no expiry either
-   delete      yes           yes         no   the code is gone, so the finding and the latent risk go together
+Every one of the 6 is a true positive about the code - a
+reviewer who opens the file agrees with all of them. 3 are false
+positives about the RISK, because the graph says nothing reaches them.
+Those belong in a deletion list, not a triage queue: the code is gone
+and the finding goes with it, which is the only resolution that cannot
+rot the way a suppression does.
 
-six weeks later, one commit:
-   + from .legacy import legacy_export      # re-enable the vendor export
-
-   suppress    -> legacy_export is now reachable from the vendor
-                  webhook. The suppression is keyed to the same file,
-                  line and rule, so it still matches. THE FINDING
-                  DOES NOT COME BACK.
-   wont-fix    -> legacy_export is now reachable from the vendor
-                  webhook. The suppression is keyed to the same file,
-                  line and rule, so it still matches. THE FINDING
-                  DOES NOT COME BACK.
-   delete      -> the import does not resolve. The build fails, loudly,
-                  at the moment somebody tries to bring it back.
-
-attack surface reduction — what deleting those three removes
-   audit_line (CWE-117, sev 3)
-   debug_dump (CWE-22, sev 6)
-   legacy_export (CWE-78, sev 9)
-
-queue: 8 findings -> 2 after reachability, and 3 of the
-remainder are a deletion rather than a triage. The security queue is the
-cheapest to-delete list anyone in the building has, already ranked by
-what each line would cost if it were ever reachable again.
-
-resurrected under a suppression: 2 of 3 responses.
-That is the number suppression optimises and deletion removes.
+queue: 6 findings -> 2 reachable, 3 to delete, 1 unresolved.
+The last number is work, not a result. A two-bucket pipeline reports it
+as zero and calls the queue clean.
