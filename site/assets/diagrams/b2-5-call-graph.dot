@@ -3,35 +3,97 @@ digraph "call_graph" {
   bgcolor="transparent";
   node [shape=box style="rounded,filled" fontname="Helvetica" fontsize=11 penwidth=1.2];
   edge [fontname="Helvetica" fontsize=9 color="#8A93A6" fontcolor="#A8B2C6" penwidth=1.1];
-  "_query" [label="_query" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
-  "_settle" [label="_settle" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
-  "audit_line" [label="audit_line" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
-  "debug_dump" [label="debug_dump" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
-  "legacy_export" [label="legacy_export" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
-  "nightly_reconcile" [label="nightly_reconcile" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
-  "render_itinerary" [label="render_itinerary" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
-  "run_job" [label="run_job" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
-  "search_bookings" [label="search_bookings" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  "_classify" [label="_classify" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "_open_branch" [label="_open_branch" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "_render" [label="_render" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "cancel_booking" [label="cancel_booking" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "chat" [label="chat" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
+  "dispatch" [label="dispatch" color="#8A93A6" fillcolor="#1a1e28" fontcolor="#E9EDF6" style="rounded,filled"];
+  "download_invoice" [label="download_invoice" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "get_booking" [label="get_booking" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "get_my_booking" [label="get_my_booking" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "get_receipt" [label="get_receipt" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "handle" [label="handle" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "issue_refund" [label="issue_refund" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "list_my_bookings" [label="list_my_bookings" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "plan_tools" [label="plan_tools" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "receive" [label="receive" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "render_template" [label="render_template" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "require_owner" [label="require_owner" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "search" [label="search" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "search_bookings" [label="search_bookings" color="#4D9BFF" fillcolor="#141c2a" fontcolor="#E9EDF6" style="rounded,filled"];
+  "send" [label="send" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "sync_vendor" [label="sync_vendor" color="#525a6e" fillcolor="#15171d" fontcolor="#9aa3b5" style="rounded,filled,dashed"];
+  "vendor_webhook" [label="vendor_webhook" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" style="rounded,filled"];
   subgraph cluster_0 {
-    label="api/bookings.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
-    "_query";
-    "audit_line";
-    "legacy_export";
-    "search_bookings";
+    label="agents/coding_agent.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "_open_branch";
+    "sync_vendor";
   }
   subgraph cluster_1 {
-    label="api/itinerary.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
-    "debug_dump";
-    "render_itinerary";
+    label="agents/file_agent.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "render_template";
   }
   subgraph cluster_2 {
-    label="jobs/runner.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
-    "_settle";
-    "nightly_reconcile";
-    "run_job";
+    label="agents/rag_advisor.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "_render";
   }
-  "nightly_reconcile" -> "_settle";
-  "search_bookings" -> "_query";
+  subgraph cluster_3 {
+    label="agents/workflow_agent.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "handle";
+  }
+  subgraph cluster_4 {
+    label="ingress/chat.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "chat";
+    "vendor_webhook";
+  }
+  subgraph cluster_5 {
+    label="knowledge/retriever.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "search";
+  }
+  subgraph cluster_6 {
+    label="mcp/internal_server.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "plan_tools";
+  }
+  subgraph cluster_7 {
+    label="messaging/bus.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "receive";
+    "send";
+  }
+  subgraph cluster_8 {
+    label="orchestrator/router.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "_classify";
+    "dispatch";
+  }
+  subgraph cluster_9 {
+    label="tools/bookings_api.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "cancel_booking";
+    "get_booking";
+    "get_my_booking";
+    "list_my_bookings";
+    "require_owner";
+    "search_bookings";
+  }
+  subgraph cluster_10 {
+    label="tools/payments_api.py"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10;
+    "download_invoice";
+    "get_receipt";
+    "issue_refund";
+  }
+  "chat" -> "dispatch";
+  "dispatch" -> "_classify";
+  "get_my_booking" -> "require_owner";
+  "get_receipt" -> "require_owner";
+  "handle" -> "_open_branch";
+  "handle" -> "_render";
+  "handle" -> "cancel_booking";
+  "handle" -> "download_invoice";
+  "handle" -> "get_booking";
+  "handle" -> "issue_refund";
+  "handle" -> "plan_tools";
+  "handle" -> "search";
+  "handle" -> "search_bookings";
+  "vendor_webhook" -> "dispatch";
   subgraph cluster_legend {
     label="key"; color="#26314b"; fontcolor="#96A0B8"; fontname="Helvetica"; fontsize=10; rank=sink;
     "legend_entry" [label="untrusted entry point" color="#E05C4B" fillcolor="#2a1614" fontcolor="#E9EDF6" fontsize=9 style="rounded,filled"];

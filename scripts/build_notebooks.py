@@ -15,8 +15,8 @@ procedure, the runtime and the script are all files in `skills/`, so a fix is
 one edit rather than 117 rebuilt notebooks.
 
 On Kaggle the lesson **clones** the tree — shallow, blobless and sparse, so it
-is the skills directory and about three seconds, not the repository. That needs
-the kernel's internet on, which needs a phone-verified account; without one the
+is the skills directory plus the CyberTravels sample repository — about three
+seconds, not the whole repository. That needs the kernel's internet on, which needs a phone-verified account; without one the
 cell says so and points at `cybercommons/cyber-commons-skills`, the dataset
 `scripts/kaggle_dataset.py` publishes, which holds the same tree and needs no
 network.
@@ -103,7 +103,8 @@ _root = next((r for r in (".", "..", "../..", CLONE)
 
 if _root is None:
     # --filter=blob:none --sparse fetches the tree without the history or the
-    # notebooks; `sparse-checkout set skills` then materialises only what runs.
+    # notebooks; sparse-checkout then materialises only the two directories a
+    # lesson needs: the procedures, and the repository they are run against.
     _c = subprocess.run(["git", "clone", "--depth", "1", "--filter=blob:none",
                          "--sparse", "--branch", BRANCH, REPO, CLONE],
                         capture_output=True, text=True)
@@ -113,7 +114,11 @@ if _root is None:
             "\nOn Kaggle this needs Internet on in the notebook settings, which "
             "needs a phone-verified account. Without one, attach the dataset "
             "cybercommons/cyber-commons-skills instead — it holds the same tree.")
-    subprocess.run(["git", "-C", CLONE, "sparse-checkout", "set", "skills"],
+    # `skills` is the procedures; `cybertravels` is the sample repository they
+    # scan. Both, or the scanning skills clone successfully and then find
+    # nothing to look at.
+    subprocess.run(["git", "-C", CLONE, "sparse-checkout", "set",
+                    "skills", "cybertravels"],
                    capture_output=True, text=True)
     _root = CLONE
 

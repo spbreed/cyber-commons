@@ -106,25 +106,30 @@ pipeline as a hypothesis, and stages 8–12 are what turn one into a finding.</p
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · The file, and the key written before anything ran</h2>
-<p>This is a real pull request from CyberTravels' Coding Agent, in
-<a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/tools/semgrep-sast"><code>labs/tools/semgrep-sast/booking.py</code></a>.
-Six defects, enumerated by hand <strong>before</strong> any scanner saw it — because a key
-written after the scan is a description of the scan.</p>
-<pre><code class="language-python">def find_booking(reference):                                    # 7  CWE-862
-    cur.execute(&quot;SELECT * FROM bookings WHERE reference LIKE '%&quot; + reference + &quot;%'&quot;)   # 9  CWE-89
-def render_itinerary(template, booking):
-    return eval(template, {&quot;booking&quot;: booking})                 # 14 CWE-95
-def sync_vendor(vendor_host):
-    subprocess.run(&quot;curl -s https://&quot; + vendor_host + &quot;/manifest&quot;, shell=True)  # 17 CWE-78
-def notify(url, payload):
-    return requests.post(url, json=payload, verify=False)       # 20 CWE-295
-API_KEY = &quot;sk-live-4f9a2b1c8e7d6a5b3c2d1e0f9a8b7c6d&quot;            # 22 CWE-798
+</blockquote></div><div class="nbmd"><h2>3 · The repository, and the key written before anything ran</h2>
+<p>Everything this chapter scans is one tree:
+<a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/cybertravels"><code>cybertravels/</code></a>
+— the reference architecture from A1.1, as source. Ingress, orchestrator, the
+four agents, the tools, both MCP servers, knowledge, messaging. <code>egress/</code> is
+absent, because CyberTravels has no gateway.</p>
+<p>Eight defects, enumerated by hand in
+<a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/cybertravels/LABELS.md"><code>LABELS.md</code></a>
+<strong>before</strong> any scanner saw it — a key written afterwards is a description of
+the scan. Four correct functions are in the key too, because a corpus where
+everything is broken cannot measure precision.</p>
+<pre><code class="language-python"># tools/bookings_api.py
+def get_booking(session, booking_id):          # 20  CWE-639  no owner check
+def get_my_booking(session, booking_id):       #     the same read, authorised
+def cancel_booking(session, booking_id):       # 34  CWE-639  and it writes
+def search_bookings(session, reference):       # 41  CWE-89 + CWE-639
+# tools/payments_api.py
+def issue_refund(session, booking_id, amount): #  8  CWE-639  on the money path
+def download_invoice(session, path):           # 23  CWE-22 + CWE-639
 </code></pre>
-<p>Five of the six are the <em>presence</em> of a pattern. The sixth, on line 7, is the
-<strong>absence</strong> of one: <code>find_booking</code> returns a booking to whoever asks, and the
-Workflow Agent calls it holding <code>payments.refund</code>. Hold on to that line — it is
-the whole reason this lesson has two skills in it.</p></div><div class="nbmd"><h2>4 · Real Semgrep, at three widths, with the rule as a file</h2>
+<p>Look at <code>get_booking</code> and <code>get_my_booking</code>. They are four lines apart and
+almost identical; one of them is a critical finding. The difference is a call
+that is <strong>present in the second and absent in the first</strong>, and holding that in
+mind is the whole of this lesson.</p></div><div class="nbmd"><h2>4 · Real Semgrep, at three widths, with the rule as a file</h2>
 <p>Not a forty-line taint engine written to fit in a lesson. Semgrep <strong>1.176.0</strong>,
 against that file, three configurations —
 <a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/tools/semgrep-sast"><code>run.sh</code></a>
@@ -227,36 +232,92 @@ it is cheaper.</p>
 <li><strong>Enabling every pack to fix recall.</strong> Recall rises and so does triage cost;
   the widest width here still misses a third of the key, so width alone was
   never going to be the answer.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · booking.py · 6 defects in the key, 5 of them expressible as a pattern
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
 
 config                   found  tp  fp   prec  recall
-p/python + p/secrets         1   1   0   1.00    0.17
-seven registry packs         4   4   0   1.00    0.67
-custom taint rule            2   2   0   1.00    0.33
+p/python + p/secrets         1   1   0   1.00    0.12
+seven registry packs         3   3   0   1.00    0.38
+custom taint rule            2   2   0   1.00    0.25
 
-Nothing about the file changed between those rows. Three of the four
-defects the wide run reports were simply not looked for on the narrow
-one, and it exits 0 either way. A finding count with no config beside
-it is not a result.
+Nothing about the tree changed between those rows. The narrow run looked
+for two of the eight and found one; the wide run looked for more. Both
+exit 0. A finding count with no config beside it is not a result.
 
 missed by every width:
-   line   7  CWE-862  not-expressible  find_booking performs no authorisation check
-   line  22  CWE-798  coverage-gap     live-looking API key on a module-level constant
+   bookings_api.py   get_booking       CWE-639  not-expressible  returns the row a caller names, no owner comparison
+   bookings_api.py   cancel_booking    CWE-639  not-expressible  cancels the booking a caller names, and it writes
+   payments_api.py   issue_refund      CWE-639  not-expressible  refunds against any booking id, on the money path
+   payments_api.py   download_invoice  CWE-22   coverage-gap     vendor filename joined to a root
+   coding_agent.py   sync_vendor       CWE-295  wrong-library    verify=False, on the house HTTP wrapper rather than requests
 
-1 coverage gap(s): a rule could match this, and nobody wrote it.
-   line 22 is lexical. p/secrets was enabled and did not fire, because
-   the string matches no known provider&#x27;s format. That is a rule to
-   write, not a reason to buy a different generation of scanner.
+1 coverage gap: a pattern matches this and nobody enabled a rule for it.
+   Write the rule. It is an afternoon.
 
-1 not expressible as a pattern:
-   line 7 is the *absence* of a call, in a function whose caller holds
-   payments scope. There is no syntax to match. No ruleset reaches it,
-   at any width, ever - and that is the whole argument for the model
-   pass, which is the next skill rather than a wider config.
+1 wrong library: sync_vendor disables TLS verification, which is
+   textbook - on CyberTravels&#x27; own HTTP wrapper. Every registry rule for
+   it is written against `requests`, so no pack fires. This is the single
+   most common reason a mature codebase scans cleaner than it is, and the
+   fix is a rule that names YOUR wrapper, not a different scanner.
 
-widest recall: 0.67
-Precision is 1.00 at every width. Semgrep&#x27;s problem here was never
-that it was wrong - it is that a third of the key was never in scope.
+3 not expressible as a pattern - all three are IDOR:
+      get_booking
+      cancel_booking
+      issue_refund
+   Each takes an identifier and returns or mutates the record it names,
+   and never compares an owner. `get_my_booking` two functions away does
+   the same read correctly. The defect is not in either function - it is
+   the missing comparison BETWEEN loading and returning, and there is no
+   syntax for a thing that is absent. No ruleset reaches these at any
+   width, ever. That is the boundary, and B2.3&#x27;s next skill crosses it.
+
+widest recall: 0.38
+Precision is 1.00 at every width. Semgrep&#x27;s problem here was never that
+it was wrong - it is that five of eight were never in scope, and three of
+those five could not have been.
+cybertravels/ · 7 object-handling units, 2 of them authorised
+detector                         found  tp  fp   prec  recall
+pattern rule (execute + id)          0   0   0   0.00    0.00
+ownership-comparison analysis        5   5   0   1.00    1.00
+
+The pattern rule reports nothing, and that is the honest result rather
+than a broken one. Every unit above reads a record by an id the caller
+supplied - the five defective ones and the two correct ones alike. The
+syntax is identical. There is nothing for a rule to match on.
+
+findings, weighted by the authority the caller holds
+   cancel_booking    high      Workflow Agent · booking.*        and it writes: cancels a booking that is not theirs
+   download_invoice  high      File System Agent                 reads an invoice belonging to somebody else
+   get_booking       high      Workflow Agent · booking.*        any traveller&#x27;s itinerary, on an agent-invoked tool
+   issue_refund      critical  Workflow Agent · payments.refund  money moves, against an id the model proposed
+   search_bookings   high      Workflow Agent · booking.*        returns every owner&#x27;s bookings for a reference
+
+all five are CWE-639 and they are not the same finding. Ranking this
+queue by CWE puts the refund path level with a read, and A1.1&#x27;s map is
+what tells you otherwise: these are tools, trust 3, invoked by an agent
+holding scope the traveller never had.
+
+two of the five were already in a scanner&#x27;s output - for a different defect
+   download_invoice  CWE-22, had a rule been enabled
+   search_bookings   CWE-89 at the widest width
+   Same function, two defects, one expressible and one not. A report that
+   says &quot;search_bookings: 1 finding, fixed&quot; closes the injection, leaves
+   the authorisation defect in place, and shows a finding count of zero
+   afterwards. The count went down and the risk did not.
+
+what the published numbers say about the ceiling
+   Semgrep&#x27;s 2026 IDOR benchmark: 275 hand-reviewed labels, four repos,
+   identical revisions.
+      Semgrep Multimodal            recall 59.9%   precision 57.5%
+      Claude Security with Mythos   recall 13.9%   precision 80.1%
+      Codex Security                recall 11.3%
+
+   The most precise system on that board found about one IDOR in seven.
+   The best recall was six in ten. This corpus is eight files and the
+   analysis gets 5/5, which is what a corpus this size is for - it shows
+   the mechanism, not the ceiling. Do not read 1.00 here as a claim
+   about a real repository, and do not read 59.9% as a failure: it is
+   four times what the highest-precision system managed, on a class no
+   pattern reaches at all.
 model backend : replay
 model         : deterministic stand-in (no backend configured)
 
@@ -306,7 +367,69 @@ on its own, and note that this run is one sample of it.
 Nothing here is promoted. This skill produces hypotheses; dedup,
 verification, reachability and dynamic validation decide which of them
 become findings. An audit stage that promotes its own output has removed
-the only independent step it had.</code></pre></div><div class="nbmd"><h2>6 · Which of the two misses justifies a model</h2>
+the only independent step it had.</code></pre></div><div class="nbmd"><h2>6 · What changed when SAST learned to reason</h2>
+<p>For twenty years the answer to "can a scanner find this?" was decided by one
+question: <strong>is there a pattern?</strong> Everything else followed. Rules were written
+per defect class and per library, coverage was a config decision, and a class
+with no syntax to match — a missing check, a wrong comparison, an absent expiry
+— was simply outside the tool.</p>
+<p>That boundary moved. Systems that <em>reason about a class</em> rather than match a
+pattern now find defects that no rule expresses, and IDOR is the honest place to
+look at it: the class is defined by absence, so it is the case where pattern
+matching scores exactly zero and any number above that is new capability.</p>
+<p>Semgrep published a benchmark for it in 2026 — 275 hand-reviewed labels across
+four repositories, the same revisions for every system
+(<a href="https://semgrep.dev/blog/2026/idor-detection-benchmark-semgrep-multimodal/">write-up</a>):</p>
+<table>
+<thead>
+<tr>
+<th>system</th>
+<th>recall</th>
+<th>precision</th>
+<th>F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semgrep Multimodal</td>
+<td><strong>59.9%</strong></td>
+<td>57.5%</td>
+<td>57.1%</td>
+</tr>
+<tr>
+<td>Claude Security with Mythos</td>
+<td>13.9%</td>
+<td><strong>80.1%</strong></td>
+<td>23.7%</td>
+</tr>
+<tr>
+<td>Codex Security</td>
+<td>11.3%</td>
+<td>—</td>
+<td>17.7%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Read it as a recall table, because that is what it is.</strong> The two bold cells
+are the argument. The most <em>precise</em> system on that board found roughly <strong>one
+IDOR in seven</strong> — it is right when it speaks and it stays quiet about six of
+every seven real defects. The best recall is <strong>six in ten</strong>, four times as many,
+from a system reasoning about the class.</p>
+<p>Three things follow, and the third is the one that changes what you do on
+Monday.</p>
+<p><strong>Precision is the easy half.</strong> A detector that reports nothing is perfectly
+precise. Any access-control tool that leads with its precision number is leading
+with the metric that improves when it finds less.</p>
+<p><strong>Recall needs a key, which is why nobody publishes it.</strong> You cannot compute
+what fraction of the real defects were found without knowing the real defects.
+That is expensive, it is manual, and it is the only thing that turns "the scan
+was clean" into a statement with content. This is why <code>cybertravels/LABELS.md</code>
+exists and why it was written before anything ran.</p>
+<p><strong>Six in ten is a real change and it is not a solved problem.</strong> It is the
+difference between a class you could not scan for at all and one you can scan
+for imperfectly — and at 57.5% precision it means roughly two in five reports
+are wrong. That is a hypothesis stream, not a finding stream, which is exactly
+how B2.4 and B2.5 are going to treat it.</p></div><div class="nbmd"><h2>7 · Which of the two misses justifies a model</h2>
 <p>One of them does not. Line 22 is a hardcoded key — lexical, and <code>p/secrets</code> was
 enabled and did not fire only because the string matches no known provider's
 format. That is a rule somebody writes this afternoon, and reaching for a model
@@ -316,7 +439,296 @@ called <code>require_owner</code> and did not", and there is no width of ruleset
 reaches it — the defect only exists relative to the authority the caller holds,
 which is in a different file. That is the boundary, and it is narrow. Cross it
 deliberately and you have a reason to spend the model pass; cross it because
-the deterministic scan felt disappointing and you have bought noise.</p></div><div class="nbmd"><h2>7 · The probabilistic half, as a skill</h2>
+the deterministic scan felt disappointing and you have bought noise.</p></div><div class="nbmd"><h2>8 · IDOR on the CyberTravels tree, scored on recall</h2>
+<p>The same repository, the class that has no pattern. The skill builds the <strong>denominator</strong> first — every unit that takes an identifier and touches a record — because recall without a denominator is not a number. Then it runs two detectors over it: what a rule can express, and the ownership comparison it cannot see.</p>
+<p>Watch the row where two of the five were already in a scanner's output, for a different defect in the same function.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/idor-detection-recall/SKILL.md"><code>skills/appsec/idor-detection-recall/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: idor-detection-recall
+description: &gt;-
+  Find missing ownership checks on caller-supplied identifiers, and score the
+  result on recall against a labelled key rather than on finding count. Use when
+  auditing endpoints or tools that take a record id, when evaluating a scanner
+  that claims to detect broken object-level authorisation, or when a clean
+  access-control scan needs a number behind it.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>The defect is what is missing, so the metric has to be recall</h1>
+<p>An IDOR — broken object-level authorisation — is a function that takes an
+identifier from the caller, loads the record it names, and returns or mutates
+it without comparing an owner. Two things follow, and both change how you
+measure.</p>
+<p><strong>There is no pattern.</strong> <code>get_booking</code> and <code>get_my_booking</code> differ by one call
+that is present in the second and absent in the first. A rule matches syntax
+that is there; nothing matches syntax that is not. This is why the class
+survives every ruleset width in
+<a href="../sast-semgrep-deterministic/SKILL.md"><code>sast-semgrep-deterministic</code></a>.</p>
+<p><strong>So precision is the easy half and recall is the whole problem.</strong> A scanner
+that reports nothing has perfect precision. The number that decides whether an
+access-control audit meant anything is what fraction of the real defects it
+found, and that requires a key — which is why almost nobody publishes one.</p>
+<p>Semgrep did, in
+<a href="https://semgrep.dev/blog/2026/idor-detection-benchmark-semgrep-multimodal/">a 2026 IDOR benchmark</a>:
+275 manually reviewed labels across four repositories, the same revisions for
+every system.</p>
+<table>
+<thead>
+<tr>
+<th>system</th>
+<th>recall</th>
+<th>precision</th>
+<th>F1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semgrep Multimodal</td>
+<td><strong>59.9%</strong></td>
+<td>57.5%</td>
+<td>57.1%</td>
+</tr>
+<tr>
+<td>Claude Security with Mythos</td>
+<td>13.9%</td>
+<td><strong>80.1%</strong></td>
+<td>23.7%</td>
+</tr>
+<tr>
+<td>Codex Security</td>
+<td>11.3%</td>
+<td>—</td>
+<td>17.7%</td>
+</tr>
+</tbody>
+</table>
+<p>Read the two bold cells together, because they are the shape of the problem.
+The most <em>precise</em> system found roughly <strong>one IDOR in seven</strong>. The best recall
+on the board is <strong>six in ten</strong> — from a system that reasons about the class
+rather than matching a pattern, and that is a real change from what rules could
+do. It is also not a solved problem, and a report that quotes only precision is
+quoting the number that improves when you find less.</p>
+<h2>When to use this</h2>
+<p>On any surface where a caller passes a record identifier: REST handlers, RPC
+methods, and — the one people forget — <strong>agent tools</strong>, where the identifier
+arrives in a model-proposed argument and the tool runs with the agent's scope
+rather than the requester's. Also whenever an access-control scan comes back
+clean, because clean and unmeasured look identical.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Enumerate the object-handling units first, not the findings.</strong> Every
+function that takes an identifier and touches a record. This is the
+denominator; without it you cannot compute recall and every later number is
+decoration.</p>
+<p><strong>2 — For each, find the ownership comparison, or its absence.</strong> A call that
+compares something from the record against something from the session. Trace
+it through helpers — a check inside <code>require_owner</code> counts, and a check in a
+decorator counts.</p>
+<p><strong>3 — Include the correct ones in the key.</strong> A corpus where everything is
+broken cannot measure precision. The near-identical safe twin of each defect is
+what catches a detector that flags on shape rather than on the missing check.</p>
+<p><strong>4 — Score recall and precision separately, and report the denominator.</strong>
+"Three findings" is not a result. "Three of the five object-handling units,
+against a key of eight" is.</p>
+<p><strong>5 — Weight by the authority the caller holds, not by the CWE.</strong> The same
+missing check is a different severity in a tool the Workflow Agent invokes with
+<code>payments.refund</code> than in one a traveller invokes with their own session. CVSS
+does not know that; your architecture map does.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of
+<a href="scripts/idor_detection_recall.py"><code>scripts/idor_detection_recall.py</code></a>, scanning
+the <code>cybertravels/</code> sample repository against <code>cybertravels/LABELS.md</code>.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>cybertravels/ · 7 object-handling units, 4 of them authorised
+detector                        found  tp  fp   prec  recall
+pattern rule (execute + id)         0   0   0   0.00    0.00
+ownership-comparison analysis       3   3   0   1.00    1.00
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code>
+executes it on every build, so this block cannot drift from what the skill
+actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;units&quot;: [{&quot;file&quot;: &quot;str&quot;, &quot;unit&quot;: &quot;str&quot;, &quot;takes_id&quot;: true,
+             &quot;ownership_check&quot;: &quot;present|absent|via-helper&quot;}],
+  &quot;detectors&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;found&quot;: 0, &quot;true_positives&quot;: 0,
+                 &quot;precision&quot;: 0.0, &quot;recall&quot;: 0.0}],
+  &quot;findings&quot;: [{&quot;unit&quot;: &quot;str&quot;, &quot;cwe&quot;: &quot;CWE-639&quot;, &quot;caller_authority&quot;: &quot;str&quot;,
+                &quot;severity&quot;: &quot;str&quot;}],
+  &quot;denominator&quot;: 0
+}
+</code></pre>
+<p><code>denominator</code> is the field that makes recall meaningful, and the one a scanner
+that reports only findings cannot give you.</p>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>The check is in a decorator.</strong> <code>@requires_owner</code> above the function is an
+  ownership check and a naive body scan misses it, reporting a false positive
+  on correct code.</li>
+<li><strong>The check is on the wrong object.</strong> Comparing <code>session.user_id</code> to the id
+  the <em>caller supplied</em> rather than to the one on the <em>loaded record</em> passes
+  every structural test and authorises nothing.</li>
+<li><strong>The identifier is not obviously an id.</strong> A slug, a reference string, a
+  filename. <code>download_invoice(session, path)</code> is the same defect wearing a
+  different parameter name.</li>
+<li><strong>List endpoints.</strong> <code>list_my_bookings</code> takes no id at all — it is scoped by
+  the session, so there is nothing to tamper with. Including it in the
+  denominator understates recall.</li>
+</ul>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reporting precision without recall.</strong> The number that looks best is the one
+  that improves when the detector finds less.</li>
+<li><strong>Scoring without a key.</strong> Then "no findings" and "no defects" are the same
+  sentence, and only one of them is good news.</li>
+<li><strong>Treating a reasoning detector's output as findings.</strong> 59.9% recall at 57.5%
+  precision means roughly two in five reports are wrong; they are hypotheses,
+  and B2.4 is what promotes them.</li>
+<li><strong>Ranking by CWE.</strong> Every IDOR is CWE-639. The one on the refund path is not
+  the same finding as the one on a read.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
+
+config                   found  tp  fp   prec  recall
+p/python + p/secrets         1   1   0   1.00    0.12
+seven registry packs         3   3   0   1.00    0.38
+custom taint rule            2   2   0   1.00    0.25
+
+Nothing about the tree changed between those rows. The narrow run looked
+for two of the eight and found one; the wide run looked for more. Both
+exit 0. A finding count with no config beside it is not a result.
+
+missed by every width:
+   bookings_api.py   get_booking       CWE-639  not-expressible  returns the row a caller names, no owner comparison
+   bookings_api.py   cancel_booking    CWE-639  not-expressible  cancels the booking a caller names, and it writes
+   payments_api.py   issue_refund      CWE-639  not-expressible  refunds against any booking id, on the money path
+   payments_api.py   download_invoice  CWE-22   coverage-gap     vendor filename joined to a root
+   coding_agent.py   sync_vendor       CWE-295  wrong-library    verify=False, on the house HTTP wrapper rather than requests
+
+1 coverage gap: a pattern matches this and nobody enabled a rule for it.
+   Write the rule. It is an afternoon.
+
+1 wrong library: sync_vendor disables TLS verification, which is
+   textbook - on CyberTravels&#x27; own HTTP wrapper. Every registry rule for
+   it is written against `requests`, so no pack fires. This is the single
+   most common reason a mature codebase scans cleaner than it is, and the
+   fix is a rule that names YOUR wrapper, not a different scanner.
+
+3 not expressible as a pattern - all three are IDOR:
+      get_booking
+      cancel_booking
+      issue_refund
+   Each takes an identifier and returns or mutates the record it names,
+   and never compares an owner. `get_my_booking` two functions away does
+   the same read correctly. The defect is not in either function - it is
+   the missing comparison BETWEEN loading and returning, and there is no
+   syntax for a thing that is absent. No ruleset reaches these at any
+   width, ever. That is the boundary, and B2.3&#x27;s next skill crosses it.
+
+widest recall: 0.38
+Precision is 1.00 at every width. Semgrep&#x27;s problem here was never that
+it was wrong - it is that five of eight were never in scope, and three of
+those five could not have been.
+cybertravels/ · 7 object-handling units, 2 of them authorised
+detector                         found  tp  fp   prec  recall
+pattern rule (execute + id)          0   0   0   0.00    0.00
+ownership-comparison analysis        5   5   0   1.00    1.00
+
+The pattern rule reports nothing, and that is the honest result rather
+than a broken one. Every unit above reads a record by an id the caller
+supplied - the five defective ones and the two correct ones alike. The
+syntax is identical. There is nothing for a rule to match on.
+
+findings, weighted by the authority the caller holds
+   cancel_booking    high      Workflow Agent · booking.*        and it writes: cancels a booking that is not theirs
+   download_invoice  high      File System Agent                 reads an invoice belonging to somebody else
+   get_booking       high      Workflow Agent · booking.*        any traveller&#x27;s itinerary, on an agent-invoked tool
+   issue_refund      critical  Workflow Agent · payments.refund  money moves, against an id the model proposed
+   search_bookings   high      Workflow Agent · booking.*        returns every owner&#x27;s bookings for a reference
+
+all five are CWE-639 and they are not the same finding. Ranking this
+queue by CWE puts the refund path level with a read, and A1.1&#x27;s map is
+what tells you otherwise: these are tools, trust 3, invoked by an agent
+holding scope the traveller never had.
+
+two of the five were already in a scanner&#x27;s output - for a different defect
+   download_invoice  CWE-22, had a rule been enabled
+   search_bookings   CWE-89 at the widest width
+   Same function, two defects, one expressible and one not. A report that
+   says &quot;search_bookings: 1 finding, fixed&quot; closes the injection, leaves
+   the authorisation defect in place, and shows a finding count of zero
+   afterwards. The count went down and the risk did not.
+
+what the published numbers say about the ceiling
+   Semgrep&#x27;s 2026 IDOR benchmark: 275 hand-reviewed labels, four repos,
+   identical revisions.
+      Semgrep Multimodal            recall 59.9%   precision 57.5%
+      Claude Security with Mythos   recall 13.9%   precision 80.1%
+      Codex Security                recall 11.3%
+
+   The most precise system on that board found about one IDOR in seven.
+   The best recall was six in ten. This corpus is eight files and the
+   analysis gets 5/5, which is what a corpus this size is for - it shows
+   the mechanism, not the ceiling. Do not read 1.00 here as a claim
+   about a real repository, and do not read 59.9% as a failure: it is
+   four times what the highest-precision system managed, on a class no
+   pattern reaches at all.
+model backend : replay
+model         : deterministic stand-in (no backend configured)
+
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
+
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
+
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+
+find_booking
+   model says   : MISSING CWE-862 at confidence 0.82
+   quoting      : def find_booking(reference):
+   -&gt; HYPOTHESIS: quote verified, status hypothesis (not a finding)
+
+my_bookings
+   model says   : PRESENT CWE-862 at confidence 0.77
+   quoting      : require_owner(session.user_id)
+   -&gt; NO CLAIM  : reviewed, nothing asserted, nothing to promote
+
+1 hypothesis · 0 rejected · 0 promoted
+
+property checked : MISSING on find_booking and PRESENT on my_bookings - telling the unauthorised function from the authorised one
+held on replay       : True
+
+the verifier, tested against a fabrication recorded from a smaller model
+   claim quotes : cur.execute(&quot;SELECT * FROM bookings WHERE owner = &#x27;&quot; + use
+   in the file? : False
+   -&gt; REJECTED  : the quote is not in the slice, so the claim dies here
+
+That check costs nothing and requires no judgement, and it is the single
+highest-yield filter available: a claim about a line that does not exist
+is provably wrong without a second opinion. B2.4 is the same check
+generalised into a stage.
+
+What the confidence number is worth: it is uncalibrated - 0.82 does not
+mean the claim is right 82% of the time - and it is unstable across runs.
+Sort a human&#x27;s queue with it if you like. Do not let it decide anything
+on its own, and note that this run is one sample of it.
+
+Nothing here is promoted. This skill produces hypotheses; dedup,
+verification, reachability and dynamic validation decide which of them
+become findings. An audit stage that promotes its own output has removed
+the only independent step it had.</code></pre></div><div class="nbmd"><h2>9 · The finding count went down and the risk did not</h2>
+<p><code>search_bookings</code> concatenates its reference into SQL <strong>and</strong> returns every
+owner's bookings. Semgrep finds the first at the widest width. Nothing finds the
+second.</p>
+<p>So the ticket says <em>SQL injection in search_bookings</em>, somebody parameterises
+the query, the finding closes, and the scan is green. The authorisation defect
+is untouched and now has no finding attached to it at all. The count went to
+zero and the risk did not move.</p>
+<p>That is the failure mode this section exists for, and it is not exotic — it is
+what happens by default whenever one function carries a defect a rule can see
+and a defect it cannot. The fix is not a better rule. It is running the second
+detector over a denominator, and reporting recall against a key.</p></div><div class="nbmd"><h2>10 · The probabilistic half, as a skill</h2>
 <p>The same adapter every model-facing skill in this commons uses: offline a labelled replay, and against a served open-weight model the identical code. It is asked one question with a checkable answer, over the smallest slice in which the defect is decidable — the function, its signature, and the authority its caller holds.</p>
 <p>It reviews two functions. One has the defect. The other is already parameterised and already authorised, and it is in there because a review pass that is never wrong has not been tested.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/sast-model-pass/SKILL.md"><code>skills/appsec/sast-model-pass/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: sast-model-pass
@@ -397,36 +809,92 @@ independent step in it at all.</p>
   the slice that makes it decidable is smaller than the file.</li>
 <li><strong>Dropping the signature from the slice.</strong> The identical body is a critical
   defect in a handler and irrelevant in a migration script.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · booking.py · 6 defects in the key, 5 of them expressible as a pattern
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
 
 config                   found  tp  fp   prec  recall
-p/python + p/secrets         1   1   0   1.00    0.17
-seven registry packs         4   4   0   1.00    0.67
-custom taint rule            2   2   0   1.00    0.33
+p/python + p/secrets         1   1   0   1.00    0.12
+seven registry packs         3   3   0   1.00    0.38
+custom taint rule            2   2   0   1.00    0.25
 
-Nothing about the file changed between those rows. Three of the four
-defects the wide run reports were simply not looked for on the narrow
-one, and it exits 0 either way. A finding count with no config beside
-it is not a result.
+Nothing about the tree changed between those rows. The narrow run looked
+for two of the eight and found one; the wide run looked for more. Both
+exit 0. A finding count with no config beside it is not a result.
 
 missed by every width:
-   line   7  CWE-862  not-expressible  find_booking performs no authorisation check
-   line  22  CWE-798  coverage-gap     live-looking API key on a module-level constant
+   bookings_api.py   get_booking       CWE-639  not-expressible  returns the row a caller names, no owner comparison
+   bookings_api.py   cancel_booking    CWE-639  not-expressible  cancels the booking a caller names, and it writes
+   payments_api.py   issue_refund      CWE-639  not-expressible  refunds against any booking id, on the money path
+   payments_api.py   download_invoice  CWE-22   coverage-gap     vendor filename joined to a root
+   coding_agent.py   sync_vendor       CWE-295  wrong-library    verify=False, on the house HTTP wrapper rather than requests
 
-1 coverage gap(s): a rule could match this, and nobody wrote it.
-   line 22 is lexical. p/secrets was enabled and did not fire, because
-   the string matches no known provider&#x27;s format. That is a rule to
-   write, not a reason to buy a different generation of scanner.
+1 coverage gap: a pattern matches this and nobody enabled a rule for it.
+   Write the rule. It is an afternoon.
 
-1 not expressible as a pattern:
-   line 7 is the *absence* of a call, in a function whose caller holds
-   payments scope. There is no syntax to match. No ruleset reaches it,
-   at any width, ever - and that is the whole argument for the model
-   pass, which is the next skill rather than a wider config.
+1 wrong library: sync_vendor disables TLS verification, which is
+   textbook - on CyberTravels&#x27; own HTTP wrapper. Every registry rule for
+   it is written against `requests`, so no pack fires. This is the single
+   most common reason a mature codebase scans cleaner than it is, and the
+   fix is a rule that names YOUR wrapper, not a different scanner.
 
-widest recall: 0.67
-Precision is 1.00 at every width. Semgrep&#x27;s problem here was never
-that it was wrong - it is that a third of the key was never in scope.
+3 not expressible as a pattern - all three are IDOR:
+      get_booking
+      cancel_booking
+      issue_refund
+   Each takes an identifier and returns or mutates the record it names,
+   and never compares an owner. `get_my_booking` two functions away does
+   the same read correctly. The defect is not in either function - it is
+   the missing comparison BETWEEN loading and returning, and there is no
+   syntax for a thing that is absent. No ruleset reaches these at any
+   width, ever. That is the boundary, and B2.3&#x27;s next skill crosses it.
+
+widest recall: 0.38
+Precision is 1.00 at every width. Semgrep&#x27;s problem here was never that
+it was wrong - it is that five of eight were never in scope, and three of
+those five could not have been.
+cybertravels/ · 7 object-handling units, 2 of them authorised
+detector                         found  tp  fp   prec  recall
+pattern rule (execute + id)          0   0   0   0.00    0.00
+ownership-comparison analysis        5   5   0   1.00    1.00
+
+The pattern rule reports nothing, and that is the honest result rather
+than a broken one. Every unit above reads a record by an id the caller
+supplied - the five defective ones and the two correct ones alike. The
+syntax is identical. There is nothing for a rule to match on.
+
+findings, weighted by the authority the caller holds
+   cancel_booking    high      Workflow Agent · booking.*        and it writes: cancels a booking that is not theirs
+   download_invoice  high      File System Agent                 reads an invoice belonging to somebody else
+   get_booking       high      Workflow Agent · booking.*        any traveller&#x27;s itinerary, on an agent-invoked tool
+   issue_refund      critical  Workflow Agent · payments.refund  money moves, against an id the model proposed
+   search_bookings   high      Workflow Agent · booking.*        returns every owner&#x27;s bookings for a reference
+
+all five are CWE-639 and they are not the same finding. Ranking this
+queue by CWE puts the refund path level with a read, and A1.1&#x27;s map is
+what tells you otherwise: these are tools, trust 3, invoked by an agent
+holding scope the traveller never had.
+
+two of the five were already in a scanner&#x27;s output - for a different defect
+   download_invoice  CWE-22, had a rule been enabled
+   search_bookings   CWE-89 at the widest width
+   Same function, two defects, one expressible and one not. A report that
+   says &quot;search_bookings: 1 finding, fixed&quot; closes the injection, leaves
+   the authorisation defect in place, and shows a finding count of zero
+   afterwards. The count went down and the risk did not.
+
+what the published numbers say about the ceiling
+   Semgrep&#x27;s 2026 IDOR benchmark: 275 hand-reviewed labels, four repos,
+   identical revisions.
+      Semgrep Multimodal            recall 59.9%   precision 57.5%
+      Claude Security with Mythos   recall 13.9%   precision 80.1%
+      Codex Security                recall 11.3%
+
+   The most precise system on that board found about one IDOR in seven.
+   The best recall was six in ten. This corpus is eight files and the
+   analysis gets 5/5, which is what a corpus this size is for - it shows
+   the mechanism, not the ceiling. Do not read 1.00 here as a claim
+   about a real repository, and do not read 59.9% as a failure: it is
+   four times what the highest-precision system managed, on a class no
+   pattern reaches at all.
 model backend : replay
 model         : deterministic stand-in (no backend configured)
 
@@ -476,7 +944,7 @@ on its own, and note that this run is one sample of it.
 Nothing here is promoted. This skill produces hypotheses; dedup,
 verification, reachability and dynamic validation decide which of them
 become findings. An audit stage that promotes its own output has removed
-the only independent step it had.</code></pre></div><div class="nbmd"><h2>8 · Where it breaks — gating on the confidence number</h2>
+the only independent step it had.</code></pre></div><div class="nbmd"><h2>11 · Where it breaks — gating on the confidence number</h2>
 <p>In the offline run the replay returns 0.82 on the real defect and 0.71 on the
 invented one. It is tempting to read a threshold into that gap, and every
 pipeline that does it ships one.</p>
@@ -498,7 +966,7 @@ Qwen2.5-7B it did not: it read the function correctly and declined. The
 assertion failed because the model behaved well, which is a bug in the
 assertion. A pipeline check has to hold whether or not the model misbehaves on
 the day you run it.</p>
-</blockquote></div><div class="nbmd"><h2>9 · An agent drives both, because you cannot afford both everywhere</h2>
+</blockquote></div><div class="nbmd"><h2>12 · An agent drives both, because you cannot afford both everywhere</h2>
 <p>Semgrep is cheap enough to run over the whole repository. The model pass is
 not — at four million lines it costs more than the finding is worth, and a
 model asked to review everything reviews nothing carefully.</p>
@@ -514,7 +982,7 @@ is three rules:</p>
 <p>Get rule 2 wrong in the cheap direction and the authorisation defect on line 7
 is never reviewed by anything, because the deterministic scan was green and
 nobody was surprised by that.</p></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Semgrep's precision is 1.00 at all three widths and its recall is not: 0.17 on the default Python pack, 0.67 across seven registry packs, 0.33 on the custom taint rule — same file, same engine, and both scans exit 0. Two defects survive every width, and the skill separates them: the hardcoded key is a coverage gap somebody fixes by writing a rule, and the missing authorisation check on line 7 is not expressible as a pattern at any width. The model pass then finds exactly that one, at 0.82 confidence, recorded as a hypothesis and not a finding. The verifier is then tested against a quote known not to be in the slice and rejects it — the check holds whether or not the model fabricated anything on this run, which matters because a served Qwen2.5-7B reads the already-authorised control function correctly and declines to invent a defect in it. Zero hypotheses are promoted, because the audit stage does not promote its own output.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Semgrep’s precision is 1.00 at all three widths and its recall is not: 0.12 on the default Python pack, 0.38 across seven registry packs, 0.25 on the custom taint rule — same tree, same engine, every scan exits 0. Five of the eight defects survive every width, in three classes: one coverage gap somebody fixes by writing a rule; one where the defect is textbook and the rule is written against <code>requests</code> while CyberTravels calls its own HTTP wrapper; and three IDORs that no pattern reaches at any width. The IDOR skill then builds the denominator — seven units that take an identifier and touch a record, two of them correctly authorised — and scores two detectors on it: the pattern rule finds 0 of 5, the ownership-comparison analysis finds 5 of 5. Two of those five were already in a scanner’s output for a <em>different</em> defect in the same function. The model pass then finds the missing-authorisation defect at 0.82 confidence, recorded as a hypothesis, and its claim about the already-authorised control function is rejected for quoting a line that is not in the file.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Two things, and the second is the one people skip. Run Semgrep against one of your own repositories at your current ruleset and at seven packs, and count the difference — whatever that number is, it has been the number all year. Then point the model pass at a real GLM-4.6 or Kimi K2 through Ollama and run one slice ten times. The variance in what it reports, and in its confidence, is what decides whether you can gate on confidence at all, and you cannot learn it from one run.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.4.html">B2.4 · Deduplication and contextual verification</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.3.ipynb">Source</a></p>

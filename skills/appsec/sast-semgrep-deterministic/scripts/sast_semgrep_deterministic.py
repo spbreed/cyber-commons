@@ -3,8 +3,8 @@
 
 This is the executable half of the `sast-semgrep-deterministic` skill. The
 findings are not synthetic: they are the output of **Semgrep 1.176.0** run
-against `labs/tools/semgrep-sast/booking.py` — a pull request from
-CyberTravels' Coding Agent — at three widths. The raw JSON is committed next to
+against the `cybertravels/` sample repository — the reference architecture
+from A1.1, as source — at three widths. The raw JSON is committed next to
 this script in `evidence/semgrep_runs.json`, and
 `labs/tools/semgrep-sast/run.sh` reproduces it:
 
@@ -24,39 +24,53 @@ from pathlib import Path
 
 EVIDENCE = Path(__file__).resolve().parent.parent / "evidence" / "semgrep_runs.json"
 
-# Step 1 — the key, written by reading booking.py by hand, before any scan.
-# `expressible` is the question that decides whether a rule could ever find it.
+# Step 1 — the key, from cybertravels/LABELS.md, written by reading the tree
+# before any scan. `expressible` is the question that decides what a scanner
+# could ever do, and it has three values rather than two.
+#   yes      a pattern matches it
+#   library  a pattern matches it in a library the rule knows about
+#   no       the defect is the absence of a call; there is nothing to match
 KEY = [
-    (7,  "CWE-862", "find_booking performs no authorisation check", False),
-    (9,  "CWE-89",  "traveller reference concatenated into SQL", True),
-    (14, "CWE-95",  "eval() on a customer-supplied template", True),
-    (17, "CWE-78",  "vendor host concatenated into a shell command", True),
-    (20, "CWE-295", "TLS certificate validation disabled", True),
-    (22, "CWE-798", "live-looking API key on a module-level constant", True),
+    ("tools/bookings_api.py",  20, "get_booking",      "CWE-639", "no",
+     "returns the row a caller names, no owner comparison"),
+    ("tools/bookings_api.py",  34, "cancel_booking",   "CWE-639", "no",
+     "cancels the booking a caller names, and it writes"),
+    ("tools/bookings_api.py",  41, "search_bookings",  "CWE-89",  "yes",
+     "reference concatenated into the query"),
+    ("tools/payments_api.py",   8, "issue_refund",     "CWE-639", "no",
+     "refunds against any booking id, on the money path"),
+    ("tools/payments_api.py",  23, "download_invoice", "CWE-22",  "yes",
+     "vendor filename joined to a root"),
+    ("agents/coding_agent.py", 13, "_open_branch",     "CWE-78",  "yes",
+     "branch name reaches a shell"),
+    ("agents/coding_agent.py", 18, "sync_vendor",      "CWE-295", "library",
+     "verify=False, on the house HTTP wrapper rather than requests"),
+    ("agents/file_agent.py",   11, "render_template",  "CWE-95",  "yes",
+     "customer template evaluated"),
 ]
-KEY_LINES = {line for line, _, _, _ in KEY}
+KEY_SITES = {(f, ln) for f, ln, *_ in KEY}
 
 runs = json.loads(EVIDENCE.read_text())
 ORDER = ["narrow", "wide", "taint"]
 
-print(f"semgrep {runs['narrow']['semgrep_version']} · booking.py · "
-      f"{len(KEY)} defects in the key, "
-      f"{sum(1 for k in KEY if k[3])} of them expressible as a pattern")
+expressible = sum(1 for k in KEY if k[4] != "no")
+print(f"semgrep {runs['narrow']['semgrep_version']} · cybertravels/ · "
+      f"{len(KEY)} defects in the key, {expressible} of them expressible "
+      f"as a pattern")
 print()
 
-report = {"key": {"defects": len(KEY),
-                  "pattern_expressible": sum(1 for k in KEY if k[3])},
+report = {"key": {"defects": len(KEY), "pattern_expressible": expressible},
           "runs": []}
 found_by_any = set()
 
 print(f"{'config':<24}{'found':>6}{'tp':>4}{'fp':>4}{'prec':>7}{'recall':>8}")
 for name in ORDER:
     run = runs[name]
-    lines = {f["line"] for f in run["findings"]}
-    found_by_any |= lines
-    tp = len(lines & KEY_LINES)
-    fp = len(lines - KEY_LINES)
-    precision = tp / len(lines) if lines else 0.0
+    sites = {(f["file"], f["line"]) for f in run["findings"]}
+    found_by_any |= sites
+    tp = len(sites & KEY_SITES)
+    fp = len(sites - KEY_SITES)
+    precision = tp / len(sites) if sites else 0.0
     recall = tp / len(KEY)
     print(f"{run['config']:<24}{len(run['findings']):>6}{tp:>4}{fp:>4}"
           f"{precision:>7.2f}{recall:>8.2f}")
@@ -65,44 +79,60 @@ for name in ORDER:
                            "recall": round(recall, 2)})
 print()
 
-# Step 5 — the width is the finding. Same file, same engine, four times the
-# result, and both scans exit 0.
-print("Nothing about the file changed between those rows. Three of the four")
-print("defects the wide run reports were simply not looked for on the narrow")
-print("one, and it exits 0 either way. A finding count with no config beside")
-print("it is not a result.")
+# Step 5 — the width is the finding. Same tree, same engine, three times the
+# result on the widest setting, and every scan exits 0.
+print("Nothing about the tree changed between those rows. The narrow run looked")
+print("for two of the eight and found one; the wide run looked for more. Both")
+print("exit 0. A finding count with no config beside it is not a result.")
 print()
 
-# Step 4 — partition the misses. This is the only part that argues for a model.
+# Step 4 — partition the misses. This is the part that decides what to buy.
 print("missed by every width:")
 report["missed_by_all"] = []
-for line, cwe, what, expressible in KEY:
-    if line in found_by_any:
+for f, ln, unit, cwe, expr, what in KEY:
+    if (f, ln) in found_by_any:
         continue
-    cls = "coverage-gap" if expressible else "not-expressible"
-    print(f"   line {line:>3}  {cwe:<9}{cls:<17}{what}")
-    report["missed_by_all"].append({"line": line, "cwe": cwe, "class": cls})
+    cls = {"yes": "coverage-gap", "library": "wrong-library",
+           "no": "not-expressible"}[expr]
+    print(f"   {f.split('/')[-1]:<18}{unit:<18}{cwe:<9}{cls:<17}{what}")
+    report["missed_by_all"].append({"file": f, "line": ln, "unit": unit,
+                                    "cwe": cwe, "class": cls})
 print()
 
-gaps = [m for m in report["missed_by_all"] if m["class"] == "coverage-gap"]
-hard = [m for m in report["missed_by_all"] if m["class"] == "not-expressible"]
-print(f"{len(gaps)} coverage gap(s): a rule could match this, and nobody wrote it.")
-print(f"   line 22 is lexical. p/secrets was enabled and did not fire, because")
-print(f"   the string matches no known provider's format. That is a rule to")
-print(f"   write, not a reason to buy a different generation of scanner.")
+by_class = {}
+for m in report["missed_by_all"]:
+    by_class.setdefault(m["class"], []).append(m["unit"])
+
+print(f"{len(by_class.get('coverage-gap', []))} coverage gap: a pattern matches this "
+      f"and nobody enabled a rule for it.")
+print("   Write the rule. It is an afternoon.")
 print()
-print(f"{len(hard)} not expressible as a pattern:")
-print(f"   line 7 is the *absence* of a call, in a function whose caller holds")
-print(f"   payments scope. There is no syntax to match. No ruleset reaches it,")
-print(f"   at any width, ever - and that is the whole argument for the model")
-print(f"   pass, which is the next skill rather than a wider config.")
+print(f"{len(by_class.get('wrong-library', []))} wrong library: sync_vendor disables TLS "
+      f"verification, which is")
+print("   textbook - on CyberTravels' own HTTP wrapper. Every registry rule for")
+print("   it is written against `requests`, so no pack fires. This is the single")
+print("   most common reason a mature codebase scans cleaner than it is, and the")
+print("   fix is a rule that names YOUR wrapper, not a different scanner.")
+print()
+print(f"{len(by_class.get('not-expressible', []))} not expressible as a pattern - all "
+      f"three are IDOR:")
+for unit in by_class.get("not-expressible", []):
+    print(f"      {unit}")
+print("   Each takes an identifier and returns or mutates the record it names,")
+print("   and never compares an owner. `get_my_booking` two functions away does")
+print("   the same read correctly. The defect is not in either function - it is")
+print("   the missing comparison BETWEEN loading and returning, and there is no")
+print("   syntax for a thing that is absent. No ruleset reaches these at any")
+print("   width, ever. That is the boundary, and B2.3's next skill crosses it.")
 print()
 
 widest = max(r["recall"] for r in report["runs"])
 report["widest_recall"] = widest
 print(f"widest recall: {widest:.2f}")
-print("Precision is 1.00 at every width. Semgrep's problem here was never")
-print("that it was wrong - it is that a third of the key was never in scope.")
+print("Precision is 1.00 at every width. Semgrep's problem here was never that")
+print("it was wrong - it is that five of eight were never in scope, and three of")
+print("those five could not have been.")
 
 assert all(r["precision"] == 1.0 for r in report["runs"]), "a run reported a false positive"
 assert widest < 1.0, "if the widest width found everything, the key is too easy"
+assert len(by_class.get("not-expressible", [])) == 3, "the three IDORs must survive every width"

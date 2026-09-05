@@ -1,4 +1,8 @@
 rules:
+  # A taint rule whose sink is "any execute()" fires on parameterised queries
+  # too — it was reaching 8 findings on the CyberTravels tree, five of them on
+  # calls that bind their arguments correctly. The sink has to name the unsafe
+  # *shape*, not the function.
   - id: cybertravels-sql-concat
     languages: [python]
     severity: ERROR
@@ -11,7 +15,10 @@ rules:
           def $F(..., $X, ...):
             ...
     pattern-sinks:
-      - pattern: $CUR.execute(...)
+      - pattern-either:
+          - pattern: $CUR.execute("..." + ...)
+          - pattern: $CUR.execute(... + "...")
+          - pattern: $CUR.execute(f"...")
   - id: cybertravels-shell-concat
     languages: [python]
     severity: ERROR

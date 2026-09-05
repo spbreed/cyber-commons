@@ -253,29 +253,35 @@ pipeline as a hypothesis, and stages 8–12 are what turn one into a finding.
  "steps": [
   ("md", PIPELINE_NOTE),
 
-  ("md", """## 2 · The file, and the key written before anything ran
+  ("md", """## 2 · The repository, and the key written before anything ran
 
-This is a real pull request from CyberTravels' Coding Agent, in
-[`labs/tools/semgrep-sast/booking.py`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/tools/semgrep-sast).
-Six defects, enumerated by hand **before** any scanner saw it — because a key
-written after the scan is a description of the scan.
+Everything this chapter scans is one tree:
+[`cybertravels/`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/cybertravels)
+— the reference architecture from A1.1, as source. Ingress, orchestrator, the
+four agents, the tools, both MCP servers, knowledge, messaging. `egress/` is
+absent, because CyberTravels has no gateway.
+
+Eight defects, enumerated by hand in
+[`LABELS.md`](https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/cybertravels/LABELS.md)
+**before** any scanner saw it — a key written afterwards is a description of
+the scan. Four correct functions are in the key too, because a corpus where
+everything is broken cannot measure precision.
 
 ```python
-def find_booking(reference):                                    # 7  CWE-862
-    cur.execute("SELECT * FROM bookings WHERE reference LIKE '%" + reference + "%'")   # 9  CWE-89
-def render_itinerary(template, booking):
-    return eval(template, {"booking": booking})                 # 14 CWE-95
-def sync_vendor(vendor_host):
-    subprocess.run("curl -s https://" + vendor_host + "/manifest", shell=True)  # 17 CWE-78
-def notify(url, payload):
-    return requests.post(url, json=payload, verify=False)       # 20 CWE-295
-API_KEY = "sk-live-4f9a2b1c8e7d6a5b3c2d1e0f9a8b7c6d"            # 22 CWE-798
+# tools/bookings_api.py
+def get_booking(session, booking_id):          # 20  CWE-639  no owner check
+def get_my_booking(session, booking_id):       #     the same read, authorised
+def cancel_booking(session, booking_id):       # 34  CWE-639  and it writes
+def search_bookings(session, reference):       # 41  CWE-89 + CWE-639
+# tools/payments_api.py
+def issue_refund(session, booking_id, amount): #  8  CWE-639  on the money path
+def download_invoice(session, path):           # 23  CWE-22 + CWE-639
 ```
 
-Five of the six are the *presence* of a pattern. The sixth, on line 7, is the
-**absence** of one: `find_booking` returns a booking to whoever asks, and the
-Workflow Agent calls it holding `payments.refund`. Hold on to that line — it is
-the whole reason this lesson has two skills in it."""),
+Look at `get_booking` and `get_my_booking`. They are four lines apart and
+almost identical; one of them is a critical finding. The difference is a call
+that is **present in the second and absent in the first**, and holding that in
+mind is the whole of this lesson."""),
 
   ("md", """## 3 · Real Semgrep, at three widths, with the rule as a file
 
@@ -317,6 +323,54 @@ sink?*"""),
                "nobody wrote (write the rule) and a defect no rule can express "
                "(the next skill)."),
 
+  ("md", """## 5 · What changed when SAST learned to reason
+
+For twenty years the answer to "can a scanner find this?" was decided by one
+question: **is there a pattern?** Everything else followed. Rules were written
+per defect class and per library, coverage was a config decision, and a class
+with no syntax to match — a missing check, a wrong comparison, an absent expiry
+— was simply outside the tool.
+
+That boundary moved. Systems that *reason about a class* rather than match a
+pattern now find defects that no rule expresses, and IDOR is the honest place to
+look at it: the class is defined by absence, so it is the case where pattern
+matching scores exactly zero and any number above that is new capability.
+
+Semgrep published a benchmark for it in 2026 — 275 hand-reviewed labels across
+four repositories, the same revisions for every system
+([write-up](https://semgrep.dev/blog/2026/idor-detection-benchmark-semgrep-multimodal/)):
+
+| system | recall | precision | F1 |
+|---|---|---|---|
+| Semgrep Multimodal | **59.9%** | 57.5% | 57.1% |
+| Claude Security with Mythos | 13.9% | **80.1%** | 23.7% |
+| Codex Security | 11.3% | — | 17.7% |
+
+**Read it as a recall table, because that is what it is.** The two bold cells
+are the argument. The most *precise* system on that board found roughly **one
+IDOR in seven** — it is right when it speaks and it stays quiet about six of
+every seven real defects. The best recall is **six in ten**, four times as many,
+from a system reasoning about the class.
+
+Three things follow, and the third is the one that changes what you do on
+Monday.
+
+**Precision is the easy half.** A detector that reports nothing is perfectly
+precise. Any access-control tool that leads with its precision number is leading
+with the metric that improves when it finds less.
+
+**Recall needs a key, which is why nobody publishes it.** You cannot compute
+what fraction of the real defects were found without knowing the real defects.
+That is expensive, it is manual, and it is the only thing that turns "the scan
+was clean" into a statement with content. This is why `cybertravels/LABELS.md`
+exists and why it was written before anything ran.
+
+**Six in ten is a real change and it is not a solved problem.** It is the
+difference between a class you could not scan for at all and one you can scan
+for imperfectly — and at 57.5% precision it means roughly two in five reports
+are wrong. That is a hypothesis stream, not a finding stream, which is exactly
+how B2.4 and B2.5 are going to treat it."""),
+
   ("md", """## 5 · Which of the two misses justifies a model
 
 One of them does not. Line 22 is a hardcoded key — lexical, and `p/secrets` was
@@ -330,6 +384,33 @@ reaches it — the defect only exists relative to the authority the caller holds
 which is in a different file. That is the boundary, and it is narrow. Cross it
 deliberately and you have a reason to spend the model pass; cross it because
 the deterministic scan felt disappointing and you have bought noise."""),
+
+  *skill_steps("appsec/idor-detection-recall",
+               "## 6 \u00b7 IDOR on the CyberTravels tree, scored on recall\n\n"
+               "The same repository, the class that has no pattern. The skill "
+               "builds the **denominator** first \u2014 every unit that takes an "
+               "identifier and touches a record \u2014 because recall without a "
+               "denominator is not a number. Then it runs two detectors over "
+               "it: what a rule can express, and the ownership comparison it "
+               "cannot see.\n\nWatch the row where two of the five were "
+               "already in a scanner's output, for a different defect in the "
+               "same function."),
+
+  ("md", """## 7 \u00b7 The finding count went down and the risk did not
+
+`search_bookings` concatenates its reference into SQL **and** returns every
+owner's bookings. Semgrep finds the first at the widest width. Nothing finds the
+second.
+
+So the ticket says *SQL injection in search_bookings*, somebody parameterises
+the query, the finding closes, and the scan is green. The authorisation defect
+is untouched and now has no finding attached to it at all. The count went to
+zero and the risk did not move.
+
+That is the failure mode this section exists for, and it is not exotic — it is
+what happens by default whenever one function carries a defect a rule can see
+and a defect it cannot. The fix is not a better rule. It is running the second
+detector over a denominator, and reporting recall against a key."""),
 
   *skill_steps('appsec/sast-model-pass',
                "## 6 · The probabilistic half, as a skill\n\n"
@@ -388,21 +469,23 @@ Get rule 2 wrong in the cheap direction and the authorisation defect on line 7
 is never reviewed by anything, because the deterministic scan was green and
 nobody was surprised by that."""),
 ],
- "expect": "Semgrep's precision is 1.00 at all three widths and its recall is "
-           "not: 0.17 on the default Python pack, 0.67 across seven registry "
-           "packs, 0.33 on the custom taint rule — same file, same engine, and "
-           "both scans exit 0. Two defects survive every width, and the skill "
-           "separates them: the hardcoded key is a coverage gap somebody fixes "
-           "by writing a rule, and the missing authorisation check on line 7 is "
-           "not expressible as a pattern at any width. The model pass then finds "
-           "exactly that one, at 0.82 confidence, recorded as a hypothesis and "
-           "not a finding. The verifier is then tested against a quote known "
-           "not to be in the slice and rejects it — the check holds whether or "
-           "not the model fabricated anything on this run, which matters "
-           "because a served Qwen2.5-7B reads the already-authorised control "
-           "function correctly and declines to invent a defect in it. Zero "
-           "hypotheses are promoted, because the audit stage does not promote "
-           "its own output.",
+ "expect": "Semgrep\u2019s precision is 1.00 at all three widths and its "
+           "recall is not: 0.12 on the default Python pack, 0.38 across seven "
+           "registry packs, 0.25 on the custom taint rule \u2014 same tree, "
+           "same engine, every scan exits 0. Five of the eight defects survive "
+           "every width, in three classes: one coverage gap somebody fixes by "
+           "writing a rule; one where the defect is textbook and the rule is "
+           "written against `requests` while CyberTravels calls its own HTTP "
+           "wrapper; and three IDORs that no pattern reaches at any width. The "
+           "IDOR skill then builds the denominator \u2014 seven units that take "
+           "an identifier and touch a record, two of them correctly authorised "
+           "\u2014 and scores two detectors on it: the pattern rule finds 0 of "
+           "5, the ownership-comparison analysis finds 5 of 5. Two of those "
+           "five were already in a scanner\u2019s output for a *different* "
+           "defect in the same function. The model pass then finds the "
+           "missing-authorisation defect at 0.82 confidence, recorded as a "
+           "hypothesis, and its claim about the already-authorised control "
+           "function is rejected for quoting a line that is not in the file.",
  "challenge": "Two things, and the second is the one people skip. Run Semgrep "
               "against one of your own repositories at your current ruleset and "
               "at seven packs, and count the difference — whatever that number "
@@ -576,51 +659,48 @@ none of those change when somebody wires the function back up.
 
   *skill_steps("appsec/dead-code-ast-reachability",
                "## 10 \u00b7 The call graph, parsed rather than grepped\n\n"
-               "Three files of CyberTravels' booking service, parsed for real "
-               "with `ast.parse`. The skill collects `FunctionDef` nodes and "
-               "`Call` edges, marks the decorated handlers as entry points, "
-               "walks the graph, and then splits the finding queue on the "
-               "result.\n\nWatch `jobs/runner.py`. It dispatches through "
-               "`getattr(HANDLERS, name)()`, so the AST cannot say who calls "
-               "anything in it \u2014 and every unreached function in that "
-               "module lands in `unknown` rather than in the deletion list."),
+               "The whole `cybertravels/` tree \u2014 the same repository B2.3 "
+               "scanned \u2014 parsed for real with `ast.parse`. The skill "
+               "collects `FunctionDef` nodes and `Call` edges, marks the two "
+               "decorated ingress handlers as entry points, and walks.\n\n"
+               "Then watch what happens at the orchestrator. CyberTravels' "
+               "router dispatches through `AGENTS[intent](message, session)`, "
+               "and a table lookup is not something the AST can follow \u2014 "
+               "so almost everything below it is undecided rather than dead."),
 
   ("md", """## 11 \u00b7 The bucket that is work rather than a result
 
-Read the last line of that output again: **2 reachable, 3 to delete, 1
-unresolved.**
+Read the middle column rather than the total: **4 reachable, 8 unreachable, 10
+undecided.**
 
-The three to delete are the easy win, and they are a deletion rather than a
-triage \u2014 the finding goes because the code goes, and unlike a suppression
-that cannot rot. The security queue turns out to be the cheapest to-delete list
-in the building: already enumerated, already ranked by what each line would cost
-if it ever became reachable again.
+The eight unreachable ones are the easy win, and they are a deletion rather
+than a triage — the finding goes because the code goes, and unlike a
+suppression that cannot rot. The security queue turns out to be the cheapest
+to-delete list in the building: already enumerated, already ranked by what each
+line would cost if it ever became reachable again.
 
-The unresolved one is the part that matters. `_settle` runs a SQL update and the
-AST cannot tell you whether anything reaches it, because the module dispatches on
-a runtime value. A two-bucket pipeline reports that as zero and calls the queue
-clean. It is not clean; it is one finding nobody has looked at, filed under a
-word that means *we did not check*.
+The ten undecided ones are the point. They include the command injection in the
+Coding Agent, the traversal on the File System Agent's invoice path, and the
+refund tool — every one of them behind a table lookup the AST cannot resolve. A
+two-bucket pipeline files all ten as unreachable and reports the queue clean.
 
-One caution that does most of the remaining work: **"unreachable" and "dead" are
-not synonyms.** A test fixture and a feature flag that has been off for two years
-are both unreachable *under a condition*, and both become reachable the day
-somebody changes one line. Only code with no caller anywhere, in a module the AST
-fully resolved, is a deletion candidate."""),
+One caution that does most of the remaining work: **"unreachable" and "dead"
+are not synonyms.** A test fixture and a feature flag that has been off for two
+years are both unreachable *under a condition*, and both become reachable the
+day somebody changes one line. Only code with no caller anywhere, in a module
+the AST fully resolved, is a deletion candidate."""),
+
 ],
- "expect": "The call graph identifies three entry points, one of which uses "
-           "dynamic dispatch. `load_report` is reachable, `debug_dump` and "
-           "`legacy_export` are unknown rather than unreachable because runtime "
-           "handler resolution cannot be ruled out. Two-bucket filtering silently "
-           "drops both, and the three-bucket routing sends the unknowns to Phase 4 "
-           "instead of paging or discarding them. The AST pass then parses three "
-           "real files: 9 functions, 2 resolved call edges, 2 decorated entry "
-           "points, and one `getattr(HANDLERS, name)()` that it records as "
-           "unresolvable. That single unresolved call moves all three functions "
-           "in `jobs/runner.py` into `unknown` \u2014 including `_settle`, which "
-           "runs a SQL update. The six-finding queue splits 2 reachable, 3 to "
-           "delete, 1 unresolved: every one is a true positive about the code, "
-           "and three of them are false positives about the risk.",
+ "expect": "The AST pass parses the whole `cybertravels/` tree: 22 "
+           "functions, 14 resolved call edges, and the two decorated ingress "
+           "handlers as entry points. It records one unresolvable call \u2014 "
+           "the router\u2019s `AGENTS[intent](...)` table lookup \u2014 and "
+           "that single line decides the shape of everything else: 4 reachable, "
+           "8 unreachable, 10 undecided. The undecided ten include the command "
+           "injection, the invoice traversal and the refund tool, all behind "
+           "the lookup. Of the six findings the audit stage handed over, three "
+           "are false positives about the risk and three are unresolved work "
+           "that a two-bucket pipeline would report as zero.",
  "challenge": "Two counts, and the second is the uncomfortable one. Count how "
               "many `unknown` cases your own reachability analysis produces and "
               "find out what your tooling does with them \u2014 if it reports "

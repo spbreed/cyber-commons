@@ -66,7 +66,7 @@ python3 scripts/check_skills.py --check   # parses, names, tools, contracts, rou
 
 Each declares an **output contract**, which is what makes a skill checkable
 rather than aspirational. Every skill lesson embeds its skill verbatim at build
-time — so the lesson can never drift from the skill — and every one of the 120 carries
+time — so the lesson can never drift from the skill — and every one of the 121 carries
 a script the lesson runs. Several build the contract shape from the data they
 just produced and validate it, then show what the contract *cannot* see: **an
 empty result conforms perfectly.** Conformance is a statement about the
@@ -86,7 +86,7 @@ removed, and a script that runs and prints nothing counts as a failure.
 | [`threats/`](skills/threats) | 16 — one check per risk in the OWASP-grounded chapter: instruction channels, memory scope, tool abuse, blast radius, attribution |
 | [`identity/`](skills/identity) | 5 — attestation, delegation, the non-human identity lifecycle, tamper-evident logging |
 | [`runtime/`](skills/runtime) | 6 — sandbox containment, budgets, return validation, shared surfaces, exemptions, escalation |
-| [`appsec/`](skills/appsec) | 18 — the AI SDLC pipeline, stage by stage, including real Semgrep scoring and supply-chain decompilation |
+| [`appsec/`](skills/appsec) | 20 — the AI SDLC pipeline, stage by stage, including real Semgrep scoring and supply-chain decompilation |
 | [`redteam/`](skills/redteam) · [`research/`](skills/research) | 14 — campaigns, reproducibility, corpus integrity, supply chain, published incidents |
 | [`detection/`](skills/detection) · [`response/`](skills/response) · [`secops/`](skills/secops) | 21 — agent tempo, drift, fleet correlation, canaries, containment, stop authority |
 | [`grc/`](skills/grc) · [`regulatory/`](skills/regulatory) · [`programme/`](skills/programme) | 27 — tiering, control mapping, obligations, disclosure, sequencing, metrics |
@@ -239,7 +239,9 @@ refuses to read a credential file inside the repo. Install the guard once:
 site/data/curriculum.json   source of truth: 120 sessions, 12 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
-skills/                     120 agent skills, plus _runtime/ — the one shared library
+cybertravels/               the sample repository: A1.1's architecture as source,
+                            with cybertravels/LABELS.md as the ground truth
+skills/                     121 agent skills, plus _runtime/ — the one shared library
 labs/notebooks/             120 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)

@@ -4,7 +4,8 @@
   "semgrep_version": "1.176.0",
   "findings": [
    {
-    "line": 17,
+    "file": "agents/coding_agent.py",
+    "line": 13,
     "severity": "ERROR",
     "rule": "subprocess-shell-true"
    }
@@ -15,24 +16,22 @@
   "semgrep_version": "1.176.0",
   "findings": [
    {
-    "line": 9,
-    "severity": "ERROR",
-    "rule": "sqlalchemy-execute-raw-query"
-   },
-   {
-    "line": 14,
-    "severity": "WARNING",
-    "rule": "eval-detected"
-   },
-   {
-    "line": 17,
+    "file": "agents/coding_agent.py",
+    "line": 13,
     "severity": "ERROR",
     "rule": "subprocess-shell-true"
    },
    {
-    "line": 20,
+    "file": "agents/file_agent.py",
+    "line": 11,
+    "severity": "WARNING",
+    "rule": "eval-detected"
+   },
+   {
+    "file": "tools/bookings_api.py",
+    "line": 41,
     "severity": "ERROR",
-    "rule": "disabled-cert-validation"
+    "rule": "sqlalchemy-execute-raw-query"
    }
   ]
  },
@@ -41,14 +40,16 @@
   "semgrep_version": "1.176.0",
   "findings": [
    {
-    "line": 9,
-    "severity": "ERROR",
-    "rule": "cybertravels-sql-concat"
-   },
-   {
-    "line": 17,
+    "file": "agents/coding_agent.py",
+    "line": 13,
     "severity": "ERROR",
     "rule": "cybertravels-shell-concat"
+   },
+   {
+    "file": "tools/bookings_api.py",
+    "line": 41,
+    "severity": "ERROR",
+    "rule": "cybertravels-sql-concat"
    }
   ]
  }

@@ -1,33 +1,89 @@
-semgrep 1.176.0 · booking.py · 6 defects in the key, 5 of them expressible as a pattern
+semgrep 1.176.0 · cybertravels/ · 8 defects in the key, 5 of them expressible as a pattern
 
 config                   found  tp  fp   prec  recall
-p/python + p/secrets         1   1   0   1.00    0.17
-seven registry packs         4   4   0   1.00    0.67
-custom taint rule            2   2   0   1.00    0.33
+p/python + p/secrets         1   1   0   1.00    0.12
+seven registry packs         3   3   0   1.00    0.38
+custom taint rule            2   2   0   1.00    0.25
 
-Nothing about the file changed between those rows. Three of the four
-defects the wide run reports were simply not looked for on the narrow
-one, and it exits 0 either way. A finding count with no config beside
-it is not a result.
+Nothing about the tree changed between those rows. The narrow run looked
+for two of the eight and found one; the wide run looked for more. Both
+exit 0. A finding count with no config beside it is not a result.
 
 missed by every width:
-   line   7  CWE-862  not-expressible  find_booking performs no authorisation check
-   line  22  CWE-798  coverage-gap     live-looking API key on a module-level constant
+   bookings_api.py   get_booking       CWE-639  not-expressible  returns the row a caller names, no owner comparison
+   bookings_api.py   cancel_booking    CWE-639  not-expressible  cancels the booking a caller names, and it writes
+   payments_api.py   issue_refund      CWE-639  not-expressible  refunds against any booking id, on the money path
+   payments_api.py   download_invoice  CWE-22   coverage-gap     vendor filename joined to a root
+   coding_agent.py   sync_vendor       CWE-295  wrong-library    verify=False, on the house HTTP wrapper rather than requests
 
-1 coverage gap(s): a rule could match this, and nobody wrote it.
-   line 22 is lexical. p/secrets was enabled and did not fire, because
-   the string matches no known provider's format. That is a rule to
-   write, not a reason to buy a different generation of scanner.
+1 coverage gap: a pattern matches this and nobody enabled a rule for it.
+   Write the rule. It is an afternoon.
 
-1 not expressible as a pattern:
-   line 7 is the *absence* of a call, in a function whose caller holds
-   payments scope. There is no syntax to match. No ruleset reaches it,
-   at any width, ever - and that is the whole argument for the model
-   pass, which is the next skill rather than a wider config.
+1 wrong library: sync_vendor disables TLS verification, which is
+   textbook - on CyberTravels' own HTTP wrapper. Every registry rule for
+   it is written against `requests`, so no pack fires. This is the single
+   most common reason a mature codebase scans cleaner than it is, and the
+   fix is a rule that names YOUR wrapper, not a different scanner.
 
-widest recall: 0.67
-Precision is 1.00 at every width. Semgrep's problem here was never
-that it was wrong - it is that a third of the key was never in scope.
+3 not expressible as a pattern - all three are IDOR:
+      get_booking
+      cancel_booking
+      issue_refund
+   Each takes an identifier and returns or mutates the record it names,
+   and never compares an owner. `get_my_booking` two functions away does
+   the same read correctly. The defect is not in either function - it is
+   the missing comparison BETWEEN loading and returning, and there is no
+   syntax for a thing that is absent. No ruleset reaches these at any
+   width, ever. That is the boundary, and B2.3's next skill crosses it.
+
+widest recall: 0.38
+Precision is 1.00 at every width. Semgrep's problem here was never that
+it was wrong - it is that five of eight were never in scope, and three of
+those five could not have been.
+cybertravels/ · 7 object-handling units, 2 of them authorised
+detector                         found  tp  fp   prec  recall
+pattern rule (execute + id)          0   0   0   0.00    0.00
+ownership-comparison analysis        5   5   0   1.00    1.00
+
+The pattern rule reports nothing, and that is the honest result rather
+than a broken one. Every unit above reads a record by an id the caller
+supplied - the five defective ones and the two correct ones alike. The
+syntax is identical. There is nothing for a rule to match on.
+
+findings, weighted by the authority the caller holds
+   cancel_booking    high      Workflow Agent · booking.*        and it writes: cancels a booking that is not theirs
+   download_invoice  high      File System Agent                 reads an invoice belonging to somebody else
+   get_booking       high      Workflow Agent · booking.*        any traveller's itinerary, on an agent-invoked tool
+   issue_refund      critical  Workflow Agent · payments.refund  money moves, against an id the model proposed
+   search_bookings   high      Workflow Agent · booking.*        returns every owner's bookings for a reference
+
+all five are CWE-639 and they are not the same finding. Ranking this
+queue by CWE puts the refund path level with a read, and A1.1's map is
+what tells you otherwise: these are tools, trust 3, invoked by an agent
+holding scope the traveller never had.
+
+two of the five were already in a scanner's output - for a different defect
+   download_invoice  CWE-22, had a rule been enabled
+   search_bookings   CWE-89 at the widest width
+   Same function, two defects, one expressible and one not. A report that
+   says "search_bookings: 1 finding, fixed" closes the injection, leaves
+   the authorisation defect in place, and shows a finding count of zero
+   afterwards. The count went down and the risk did not.
+
+what the published numbers say about the ceiling
+   Semgrep's 2026 IDOR benchmark: 275 hand-reviewed labels, four repos,
+   identical revisions.
+      Semgrep Multimodal            recall 59.9%   precision 57.5%
+      Claude Security with Mythos   recall 13.9%   precision 80.1%
+      Codex Security                recall 11.3%
+
+   The most precise system on that board found about one IDOR in seven.
+   The best recall was six in ten. This corpus is eight files and the
+   analysis gets 5/5, which is what a corpus this size is for - it shows
+   the mechanism, not the ceiling. Do not read 1.00 here as a claim
+   about a real repository, and do not read 59.9% as a failure: it is
+   four times what the highest-precision system managed, on a class no
+   pattern reaches at all.
 model backend : replay
 model         : deterministic stand-in (no backend configured)
 

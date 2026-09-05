@@ -321,47 +321,55 @@ counts.verified == len(findings)?  False  &lt;- catches it
 Three defects, zero schema violations. That is what a headline of
 &#x27;100% schema-valid&#x27; actually means as a quality metric, and it is why
 accuracy has to be measured against a key the model never sees.
-ast: 9 functions, 2 resolved call edges, 2 entry point(s)
-   entry  render_itinerary  (api/itinerary.py)
-   entry  search_bookings  (api/bookings.py)
-   UNRESOLVED  jobs/runner.py: getattr(...)() - the callee is a runtime value
+ast: 22 functions, 14 resolved call edges, 2 entry point(s)
+   entry  chat  (ingress/chat.py)
+   entry  vendor_webhook  (ingress/chat.py)
+   UNRESOLVED  orchestrator/router.py: dispatch-table(...)() - the callee is a runtime value
 
 the three buckets, and the third is the honest one
-   reachable    3  _query, render_itinerary, search_bookings
-   unreachable  3  audit_line, debug_dump, legacy_export
-   unknown      3  _settle, nightly_reconcile, run_job
+   reachable    4  _classify, chat, dispatch, vendor_webhook
+   unreachable  8  get_my_booking, get_receipt, list_my_bookings, receive, render_template, require_owner, send, sync_vendor
+   unknown     10  _open_branch, _render, cancel_booking, download_invoice, get_booking, handle, issue_refund, plan_tools, search, search_bookings
 
-nightly_reconcile and _settle are NOT dead. They are in a module whose
-dispatch is getattr(HANDLERS, name)(), so the AST cannot say who calls
-them. Filing that as unreachable is how a pipeline drops real bugs.
+The agent layer is NOT dead. CyberTravels&#x27; router dispatches through
+AGENTS[intent](message, session) - a table lookup - so the AST cannot
+say which handler a request selects, and everything reachable from the
+table&#x27;s values is undecided. Filing that as unreachable would drop the
+whole tool layer, including the refund path.
 
 the queue, split on the graph
        unit                cwe      sev  bucket       true about code / risk
-   F1  _query              CWE-89   9    reachable    yes  / yes
-   F2  render_itinerary    CWE-95   8    reachable    yes  / yes
-   F3  legacy_export       CWE-78   9    unreachable  yes  / NO
-   F4  debug_dump          CWE-22   6    unreachable  yes  / NO
-   F5  audit_line          CWE-117  3    unreachable  yes  / NO
-   F6  _settle             CWE-89   7    unknown      yes  / yes
+   F1  search_bookings     CWE-89   9    unknown      yes  / yes
+   F2  render_template     CWE-95   8    unreachable  yes  / NO
+   F3  _open_branch        CWE-78   9    unknown      yes  / yes
+   F4  download_invoice    CWE-22   6    unknown      yes  / yes
+   F5  sync_vendor         CWE-295  5    unreachable  yes  / NO
+   F6  receive             CWE-940  4    unreachable  yes  / NO
+
 
 Every one of the 6 is a true positive about the code - a
 reviewer who opens the file agrees with all of them. 3 are false
-positives about the RISK, because the graph says nothing reaches them.
-Those belong in a deletion list, not a triage queue: the code is gone
-and the finding goes with it, which is the only resolution that cannot
-rot the way a suppression does.
+positives about the RISK, because nothing in the tree reaches them.
 
-queue: 6 findings -&gt; 2 reachable, 3 to delete, 1 unresolved.
-The last number is work, not a result. A two-bucket pipeline reports it
-as zero and calls the queue clean.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-5-call-graph.svg" alt="b2 5 call graph" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-5-call-graph.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is an entry point, grey is reached, dim is dead, blue is undecided.
-The three functions in jobs/runner.py are blue because the module
-dispatches on a runtime value, not because anything proved them dead.</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — deduplicating on the wrong key</h2>
+queue: 6 findings -&gt; 0 reachable, 3 unreachable, 3 undecided.
+
+Read the middle column rather than the total. Only the unreachable ones
+are a deletion, and that resolution is the one that cannot rot: a
+suppression is keyed to a file, a line and a rule, and none of those
+change when somebody wires the function back up.
+
+The undecided ones are work, not a result. Three of them sit behind the
+router&#x27;s table - including the command injection in the Coding Agent and
+the traversal on the File System Agent&#x27;s invoice path. A two-bucket
+pipeline files all three as unreachable and reports the queue clean.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-5-call-graph.svg" alt="b2 5 call graph" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-5-call-graph.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is an entry point, grey is reached, dim is dead, blue is undecided.
+Almost everything below the router is blue: the table lookup is what
+the AST cannot follow, not a property of the functions themselves.</code></pre></div><div class="nbmd"><h2>5 · Where it breaks — deduplicating on the wrong key</h2>
 <p>The skill says to collapse on the <strong>defect identity</strong>, <code>(cwe, file, unit, sink_expression)</code>, and never on the message text. Here is why that sentence is in the procedure.</p></div><div class="nbmd"><h2>6 · The same failure, from a real model</h2>
 <p>Everything above is constructed. Here is the identical failure produced by an actual open-weight model — <strong>Moonlight-16B-A3B</strong>, Moonshot AI's MoE from the Kimi team — run on a Kaggle CPU kernel against this skill's output contract.</p>
 <p>It was given the contract and two vulnerable functions: an <code>open()</code> on a caller-supplied path, and an <code>os.system()</code> on a caller-supplied argument. Its answer is reproduced verbatim below (<a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/kimi/moonlight-16b-completion-prompt.txt">full run</a>).</p></div><div class="nbmd"><h2>7 · Read that output again</h2>
 <p>It passes the contract with zero problems, and almost nothing in it is true.</p></div><div class="nbmd"><h2>8 · The call graph, parsed rather than grepped</h2>
-<p>Three files of CyberTravels' booking service, parsed for real with <code>ast.parse</code>. The skill collects <code>FunctionDef</code> nodes and <code>Call</code> edges, marks the decorated handlers as entry points, walks the graph, and then splits the finding queue on the result.</p>
-<p>Watch <code>jobs/runner.py</code>. It dispatches through <code>getattr(HANDLERS, name)()</code>, so the AST cannot say who calls anything in it — and every unreached function in that module lands in <code>unknown</code> rather than in the deletion list.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/dead-code-ast-reachability/SKILL.md"><code>skills/appsec/dead-code-ast-reachability/SKILL.md</code></a></h3>
+<p>The whole <code>cybertravels/</code> tree — the same repository B2.3 scanned — parsed for real with <code>ast.parse</code>. The skill collects <code>FunctionDef</code> nodes and <code>Call</code> edges, marks the two decorated ingress handlers as entry points, and walks.</p>
+<p>Then watch what happens at the orchestrator. CyberTravels' router dispatches through <code>AGENTS[intent](message, session)</code>, and a table lookup is not something the AST can follow — so almost everything below it is undecided rather than dead.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/dead-code-ast-reachability/SKILL.md"><code>skills/appsec/dead-code-ast-reachability/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: dead-code-ast-reachability
 description: &gt;-
   Build a call graph by parsing source to an abstract syntax tree, and use it to
@@ -566,59 +574,66 @@ counts.verified == len(findings)?  False  &lt;- catches it
 Three defects, zero schema violations. That is what a headline of
 &#x27;100% schema-valid&#x27; actually means as a quality metric, and it is why
 accuracy has to be measured against a key the model never sees.
-ast: 9 functions, 2 resolved call edges, 2 entry point(s)
-   entry  render_itinerary  (api/itinerary.py)
-   entry  search_bookings  (api/bookings.py)
-   UNRESOLVED  jobs/runner.py: getattr(...)() - the callee is a runtime value
+ast: 22 functions, 14 resolved call edges, 2 entry point(s)
+   entry  chat  (ingress/chat.py)
+   entry  vendor_webhook  (ingress/chat.py)
+   UNRESOLVED  orchestrator/router.py: dispatch-table(...)() - the callee is a runtime value
 
 the three buckets, and the third is the honest one
-   reachable    3  _query, render_itinerary, search_bookings
-   unreachable  3  audit_line, debug_dump, legacy_export
-   unknown      3  _settle, nightly_reconcile, run_job
+   reachable    4  _classify, chat, dispatch, vendor_webhook
+   unreachable  8  get_my_booking, get_receipt, list_my_bookings, receive, render_template, require_owner, send, sync_vendor
+   unknown     10  _open_branch, _render, cancel_booking, download_invoice, get_booking, handle, issue_refund, plan_tools, search, search_bookings
 
-nightly_reconcile and _settle are NOT dead. They are in a module whose
-dispatch is getattr(HANDLERS, name)(), so the AST cannot say who calls
-them. Filing that as unreachable is how a pipeline drops real bugs.
+The agent layer is NOT dead. CyberTravels&#x27; router dispatches through
+AGENTS[intent](message, session) - a table lookup - so the AST cannot
+say which handler a request selects, and everything reachable from the
+table&#x27;s values is undecided. Filing that as unreachable would drop the
+whole tool layer, including the refund path.
 
 the queue, split on the graph
        unit                cwe      sev  bucket       true about code / risk
-   F1  _query              CWE-89   9    reachable    yes  / yes
-   F2  render_itinerary    CWE-95   8    reachable    yes  / yes
-   F3  legacy_export       CWE-78   9    unreachable  yes  / NO
-   F4  debug_dump          CWE-22   6    unreachable  yes  / NO
-   F5  audit_line          CWE-117  3    unreachable  yes  / NO
-   F6  _settle             CWE-89   7    unknown      yes  / yes
+   F1  search_bookings     CWE-89   9    unknown      yes  / yes
+   F2  render_template     CWE-95   8    unreachable  yes  / NO
+   F3  _open_branch        CWE-78   9    unknown      yes  / yes
+   F4  download_invoice    CWE-22   6    unknown      yes  / yes
+   F5  sync_vendor         CWE-295  5    unreachable  yes  / NO
+   F6  receive             CWE-940  4    unreachable  yes  / NO
+
 
 Every one of the 6 is a true positive about the code - a
 reviewer who opens the file agrees with all of them. 3 are false
-positives about the RISK, because the graph says nothing reaches them.
-Those belong in a deletion list, not a triage queue: the code is gone
-and the finding goes with it, which is the only resolution that cannot
-rot the way a suppression does.
+positives about the RISK, because nothing in the tree reaches them.
 
-queue: 6 findings -&gt; 2 reachable, 3 to delete, 1 unresolved.
-The last number is work, not a result. A two-bucket pipeline reports it
-as zero and calls the queue clean.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-5-call-graph.svg" alt="b2 5 call graph" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-5-call-graph.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is an entry point, grey is reached, dim is dead, blue is undecided.
-The three functions in jobs/runner.py are blue because the module
-dispatches on a runtime value, not because anything proved them dead.</code></pre></div><div class="nbmd"><h2>9 · The bucket that is work rather than a result</h2>
-<p>Read the last line of that output again: <strong>2 reachable, 3 to delete, 1
-unresolved.</strong></p>
-<p>The three to delete are the easy win, and they are a deletion rather than a
-triage — the finding goes because the code goes, and unlike a suppression
-that cannot rot. The security queue turns out to be the cheapest to-delete list
-in the building: already enumerated, already ranked by what each line would cost
-if it ever became reachable again.</p>
-<p>The unresolved one is the part that matters. <code>_settle</code> runs a SQL update and the
-AST cannot tell you whether anything reaches it, because the module dispatches on
-a runtime value. A two-bucket pipeline reports that as zero and calls the queue
-clean. It is not clean; it is one finding nobody has looked at, filed under a
-word that means <em>we did not check</em>.</p>
-<p>One caution that does most of the remaining work: <strong>"unreachable" and "dead" are
-not synonyms.</strong> A test fixture and a feature flag that has been off for two years
-are both unreachable <em>under a condition</em>, and both become reachable the day
-somebody changes one line. Only code with no caller anywhere, in a module the AST
-fully resolved, is a deletion candidate.</p></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The call graph identifies three entry points, one of which uses dynamic dispatch. <code>load_report</code> is reachable, <code>debug_dump</code> and <code>legacy_export</code> are unknown rather than unreachable because runtime handler resolution cannot be ruled out. Two-bucket filtering silently drops both, and the three-bucket routing sends the unknowns to Phase 4 instead of paging or discarding them. The AST pass then parses three real files: 9 functions, 2 resolved call edges, 2 decorated entry points, and one <code>getattr(HANDLERS, name)()</code> that it records as unresolvable. That single unresolved call moves all three functions in <code>jobs/runner.py</code> into <code>unknown</code> — including <code>_settle</code>, which runs a SQL update. The six-finding queue splits 2 reachable, 3 to delete, 1 unresolved: every one is a true positive about the code, and three of them are false positives about the risk.</p></div><div class="nbmd"><h2>Your turn</h2>
+queue: 6 findings -&gt; 0 reachable, 3 unreachable, 3 undecided.
+
+Read the middle column rather than the total. Only the unreachable ones
+are a deletion, and that resolution is the one that cannot rot: a
+suppression is keyed to a file, a line and a rule, and none of those
+change when somebody wires the function back up.
+
+The undecided ones are work, not a result. Three of them sit behind the
+router&#x27;s table - including the command injection in the Coding Agent and
+the traversal on the File System Agent&#x27;s invoice path. A two-bucket
+pipeline files all three as unreachable and reports the queue clean.</code></pre></div><figure class="nbdiag"><img src="../assets/diagrams/b2-5-call-graph.svg" alt="b2 5 call graph" loading="lazy"><figcaption>Rendered from the skill’s own Graphviz DOT output by <code>scripts/render_diagrams.py</code>. <a href="../assets/diagrams/b2-5-call-graph.svg" target="_blank" rel="noopener">open full size</a></figcaption></figure><div class="nbcode"><span class="nbtag">Out</span><pre><code>Red is an entry point, grey is reached, dim is dead, blue is undecided.
+Almost everything below the router is blue: the table lookup is what
+the AST cannot follow, not a property of the functions themselves.</code></pre></div><div class="nbmd"><h2>9 · The bucket that is work rather than a result</h2>
+<p>Read the middle column rather than the total: <strong>4 reachable, 8 unreachable, 10
+undecided.</strong></p>
+<p>The eight unreachable ones are the easy win, and they are a deletion rather
+than a triage — the finding goes because the code goes, and unlike a
+suppression that cannot rot. The security queue turns out to be the cheapest
+to-delete list in the building: already enumerated, already ranked by what each
+line would cost if it ever became reachable again.</p>
+<p>The ten undecided ones are the point. They include the command injection in the
+Coding Agent, the traversal on the File System Agent's invoice path, and the
+refund tool — every one of them behind a table lookup the AST cannot resolve. A
+two-bucket pipeline files all ten as unreachable and reports the queue clean.</p>
+<p>One caution that does most of the remaining work: <strong>"unreachable" and "dead"
+are not synonyms.</strong> A test fixture and a feature flag that has been off for two
+years are both unreachable <em>under a condition</em>, and both become reachable the
+day somebody changes one line. Only code with no caller anywhere, in a module
+the AST fully resolved, is a deletion candidate.</p></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The AST pass parses the whole <code>cybertravels/</code> tree: 22 functions, 14 resolved call edges, and the two decorated ingress handlers as entry points. It records one unresolvable call — the router’s <code>AGENTS[intent](...)</code> table lookup — and that single line decides the shape of everything else: 4 reachable, 8 unreachable, 10 undecided. The undecided ten include the command injection, the invoice traversal and the refund tool, all behind the lookup. Of the six findings the audit stage handed over, three are false positives about the risk and three are unresolved work that a two-bucket pipeline would report as zero.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Two counts, and the second is the uncomfortable one. Count how many <code>unknown</code> cases your own reachability analysis produces and find out what your tooling does with them — if it reports them as clean, the number of real bugs you are dropping is the size of that bucket. Then open your suppression file and find the oldest entry. Check whether the code it covers is still unreachable, and whether anything in your pipeline would have told you if it stopped being.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.6.html">B2.6 · Sandbox replication</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.5.ipynb">Source</a></p>

@@ -11,56 +11,28 @@ Standard library only, and deterministic.
 
 import ast
 from collections import defaultdict
+from pathlib import Path
 
 from cyber_commons_skill_runtime import dot_graph, emit_diagram
 
-# The corpus. Small enough to read, and it contains all three of the shapes the
-# procedure has to tell apart: a plain call chain, a function nothing calls, and
-# a module whose dispatch the AST cannot resolve.
-SOURCES = {
-    "api/bookings.py": '''
-@route("/bookings")
-def search_bookings(request):
-    return render(_query(request.args["q"]))
+# The corpus is the shared CyberTravels tree, parsed from disk rather than
+# retyped here. Every skill in this chapter now scans the same repository, so a
+# reader meets one system rather than a slightly different one per lesson.
+ROOT = Path(__file__).resolve().parents[4]
+REPO = ROOT / "cybertravels"
+SOURCES = {str(f.relative_to(REPO)): f.read_text()
+           for f in sorted(REPO.rglob("*.py"))
+           if f.name != "_stubs.py" and f.stat().st_size > 0}
 
-def _query(q):
-    return DB.execute("SELECT * FROM bookings WHERE ref LIKE '%" + q + "%'")
-
-def legacy_export(path):
-    os.system("tar czf /tmp/out.tgz " + path)
-
-def audit_line(msg):
-    LOG.write(msg + "\\n")
-''',
-    "api/itinerary.py": '''
-@route("/itinerary")
-def render_itinerary(request):
-    return eval(request.args["template"])
-
-def debug_dump(name):
-    return open("/var/dumps/" + name).read()
-''',
-    "jobs/runner.py": '''
-def run_job(name, arg):
-    handler = getattr(HANDLERS, name)
-    return handler(arg)
-
-def nightly_reconcile():
-    return _settle()
-
-def _settle():
-    return DB.execute("UPDATE ledger SET settled = 1")
-''',
-}
-
-# Findings from the audit stage, each naming the unit it landed in.
+# Findings from the audit stage, each naming the unit it landed in. These are
+# the rows of cybertravels/LABELS.md that this stage receives.
 FINDINGS = [
-    ("F1", "_query",            "CWE-89",  9),
-    ("F2", "render_itinerary",  "CWE-95",  8),
-    ("F3", "legacy_export",     "CWE-78",  9),
-    ("F4", "debug_dump",        "CWE-22",  6),
-    ("F5", "audit_line",        "CWE-117", 3),
-    ("F6", "_settle",           "CWE-89",  7),
+    ("F1", "search_bookings",  "CWE-89",  9),
+    ("F2", "render_template",  "CWE-95",  8),
+    ("F3", "_open_branch",     "CWE-78",  9),
+    ("F4", "download_invoice", "CWE-22",  6),
+    ("F5", "sync_vendor",      "CWE-295", 5),
+    ("F6", "receive",          "CWE-940", 4),
 ]
 
 ENTRY_DECORATORS = {"route"}
@@ -101,14 +73,32 @@ for path, src in sorted(SOURCES.items()):
                 entries.append(node.name)
         for inner in ast.walk(node):
             if isinstance(inner, ast.Call):
-                # 5 — the call the AST cannot follow. Record it against the
-                # file: every unreached function in that module becomes
-                # `unknown` rather than `unreachable`.
+                # 5 — the calls the AST cannot follow. Both shapes the SKILL.md
+                # names: a callee fetched by getattr, and a callee looked up in
+                # a table. CyberTravels' router is the second — AGENTS[intent]
+                # (...) — and it is why the whole agent layer below it is
+                # undecided rather than dead.
                 if call_name(inner) == "getattr":
                     unresolved.append({"file": path, "why": "getattr"})
+                if isinstance(inner.func, ast.Subscript):
+                    unresolved.append({"file": path, "why": "dispatch-table"})
                 callee = call_name(inner)
                 if callee:
                     edges[node.name].add(callee)
+
+# A dispatch table's targets are whatever the table holds. The AST can read the
+# table's *values* even though it cannot resolve the lookup, so those names are
+# roots of an `unknown` region rather than functions nothing calls.
+dispatch_roots = set()
+for path, src in sorted(SOURCES.items()):
+    if not any(u["file"] == path and u["why"] == "dispatch-table"
+               for u in unresolved):
+        continue
+    for n in ast.walk(ast.parse(src)):
+        if isinstance(n, ast.Attribute):
+            dispatch_roots.add(n.attr)
+        elif isinstance(n, ast.Name) and not isinstance(n.ctx, ast.Store):
+            dispatch_roots.add(n.id)
 
 entries = sorted(set(entries))
 edge_count = sum(len(v & set(functions)) for v in edges.values())
@@ -133,11 +123,23 @@ while stack:
 
 opaque_files = {u["file"] for u in unresolved}
 
+# Everything reachable from a dispatch root is undecided, not dead: the table
+# may hold it, and the AST cannot say whether the lookup ever selects it.
+undecided, stack = set(), [r for r in dispatch_roots if r in functions]
+while stack:
+    fn = stack.pop()
+    if fn in undecided or fn not in functions:
+        continue
+    undecided.add(fn)
+    stack.extend(sorted(edges[fn]))
+
 
 def bucket(fn):
     if fn in reachable:
         return "reachable"
-    return "unknown" if functions[fn] in opaque_files else "unreachable"
+    if fn in undecided or functions[fn] in opaque_files:
+        return "unknown"
+    return "unreachable"
 
 
 buckets = defaultdict(list)
@@ -148,9 +150,11 @@ print("the three buckets, and the third is the honest one")
 for b in ("reachable", "unreachable", "unknown"):
     print(f"   {b:<12}{len(buckets[b]):>2}  {', '.join(buckets[b]) or '-'}")
 print()
-print("nightly_reconcile and _settle are NOT dead. They are in a module whose")
-print("dispatch is getattr(HANDLERS, name)(), so the AST cannot say who calls")
-print("them. Filing that as unreachable is how a pipeline drops real bugs.")
+print("The agent layer is NOT dead. CyberTravels' router dispatches through")
+print("AGENTS[intent](message, session) - a table lookup - so the AST cannot")
+print("say which handler a request selects, and everything reachable from the")
+print("table's values is undecided. Filing that as unreachable would drop the")
+print("whole tool layer, including the refund path.")
 print()
 
 # ------------------------------------------------------- 6 · classify the queue
@@ -177,18 +181,24 @@ print()
 
 dead = [f for f in report["findings"] if f["bucket"] == "unreachable"]
 unk = [f for f in report["findings"] if f["bucket"] == "unknown"]
+print()
 print(f"Every one of the {len(FINDINGS)} is a true positive about the code - a")
 print(f"reviewer who opens the file agrees with all of them. {len(dead)} are false")
-print(f"positives about the RISK, because the graph says nothing reaches them.")
-print(f"Those belong in a deletion list, not a triage queue: the code is gone")
-print(f"and the finding goes with it, which is the only resolution that cannot")
-print(f"rot the way a suppression does.")
+print(f"positives about the RISK, because nothing in the tree reaches them.")
 print()
 print(f"queue: {report['queue']['before']} findings -> "
-      f"{report['queue']['after']} reachable, {len(dead)} to delete, "
-      f"{len(unk)} unresolved.")
-print("The last number is work, not a result. A two-bucket pipeline reports it")
-print("as zero and calls the queue clean.")
+      f"{report['queue']['after']} reachable, {len(dead)} unreachable, "
+      f"{len(unk)} undecided.")
+print()
+print("Read the middle column rather than the total. Only the unreachable ones")
+print("are a deletion, and that resolution is the one that cannot rot: a")
+print("suppression is keyed to a file, a line and a rule, and none of those")
+print("change when somebody wires the function back up.")
+print()
+print("The undecided ones are work, not a result. Three of them sit behind the")
+print("router's table - including the command injection in the Coding Agent and")
+print("the traversal on the File System Agent's invoice path. A two-bucket")
+print("pipeline files all three as unreachable and reports the queue clean.")
 
 # The graph, in a language a renderer reads. The buckets are what the reader
 # needs to see at a glance and a three-colour picture carries that faster than
@@ -210,10 +220,13 @@ emit_diagram("b2-5-call-graph",
                            clusters=dict(clusters)))
 print()
 print("Red is an entry point, grey is reached, dim is dead, blue is undecided.")
-print("The three functions in jobs/runner.py are blue because the module")
-print("dispatches on a runtime value, not because anything proved them dead.")
+print("Almost everything below the router is blue: the table lookup is what")
+print("the AST cannot follow, not a property of the functions themselves.")
 
-assert report["buckets"]["unknown"] == 3, "every unreached function in the getattr module is undecided, not dead"
-assert report["buckets"]["unreachable"] == 3, "three functions have no caller"
-assert unresolved, "the unresolved call must be recorded, or the bucket is unauditable"
+assert report["buckets"]["unknown"] > report["buckets"]["reachable"], \
+    "a dispatch table makes most of this tree undecided; if it does not, the " \
+    "lookup was resolved and the analysis is claiming more than it can know"
+assert any(u["why"] == "dispatch-table" for u in unresolved), \
+    "the router's table lookup must be recorded, or the bucket is unauditable"
+assert report["buckets"]["unreachable"], "nothing is genuinely uncalled - check the roots"
 assert report["queue"]["after"] < report["queue"]["before"]
