@@ -32,7 +32,7 @@
   "A3.5": "complete",
   "A3.6": "complete",
   "A3.7": "complete",
-  "B2.0": "complete",
+  "B2.0": "https://www.kaggle.com/code/cybercommons/cyber-commons-b2-0",
   "B2.2": "complete",
   "B2.3": "complete",
   "C1.0": "complete",
@@ -95,7 +95,7 @@
   "E3.7": "complete",
   "E3.8": "complete",
   "A2.8": "complete",
-  "A3.10": "complete",
+  "A3.10": "https://www.kaggle.com/code/cybercommons/cyber-commons-a3-10",
   "A3.8": "complete",
   "A3.9": "complete",
   "C2.8": "complete",
@@ -105,7 +105,7 @@
   "A1.17": "complete",
   "C2.10": "complete",
   "C2.9": "complete",
-  "A1.18": "complete",
+  "A1.18": "https://www.kaggle.com/code/cybercommons/cyber-commons-a1-18",
   "B2.10": "complete",
   "B2.11": "complete",
   "B2.12": "complete",
@@ -118,6 +118,8 @@
   "B2.8": "complete",
   "B2.9": "complete",
   "D1.11": "complete",
-  "A0.1": "https://www.kaggle.com/code/cybercommons/cyber-commons-a0-1"
+  "A0.1": "https://www.kaggle.com/code/cybercommons/cyber-commons-a0-1",
+  "A3.11": "https://www.kaggle.com/code/cybercommons/cyber-commons-a3-11",
+  "B2.1": "https://www.kaggle.com/code/cybercommons/cyber-commons-b2-1"
  }
 }
