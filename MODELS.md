@@ -78,28 +78,43 @@ needs ~40GB RAM. If your laptop has 16GB, use the small variants
 (`llama3.2:3b`, `glm-4-9b`, `qwen2.5:7b`) — every lab's *mechanics* work on a
 small model.
 
-The seven model-facing lessons were run against two sizes on 4 CPUs with no
-GPU, on weights pulled from Kaggle Models. Each of them calls the model from
-inside its **skill's own script** — there is no adapter in a lesson — so what is
-being tested here is the same file `scripts/test_skills.py` runs offline. The
-difference between the sizes is worth knowing before you pick:
+The six model-facing lessons were run against two sizes on 4 CPUs with no GPU,
+on weights pulled from Kaggle Models. Each calls the model from inside its
+**skill's own script** — there is no adapter in a lesson — so what is tested
+here is the same file `scripts/test_skills.py` runs offline.
 
 | | reached the model | acceptance property held |
 |---|---|---|
-| Qwen2.5-**1.5B**-Instruct | 7/7 | **5/7** — B2.11 and C1.1 fail |
-| Qwen2.5-**7B**-Instruct | 7/7 | **7/7** |
+| Qwen2.5-**1.5B**-Instruct | 6/6 | **3/6** — B2.3, B2.11 and C1.1 fail |
+| Qwen2.5-**7B**-Instruct | 6/6 | **6/6** |
 
-At 1.5B, B2.11 hands back the SQL injection unfixed and C1.1 ranks TLS 1.0 above
-an unauthenticated endpoint. Both clear at 7B. So **7B is the floor for the
-acceptance criteria**; below it the lessons still run and still teach, but two
-of them will not hit their numbers.
+At 1.5B: B2.11 hands back the SQL injection unfixed, C1.1 ranks TLS 1.0 above an
+unauthenticated endpoint, and B2.3 answers `MISSING` for both the unauthorised
+function and the already-authorised one — it cannot tell them apart, which is
+the entire job of that stage. All three clear at 7B. So **7B is the floor for
+the acceptance criteria**; below it the lessons still run and still teach, but
+three of them will not hit their numbers.
 
-The exception is the one worth reading: **B2.0 holds at 1.5B**, on the same SQL
+The exception is the one worth reading: **B2.1 holds at 1.5B**, on the same SQL
 task B2.11 fails at that size — because it asks for one line and checks the
-answer with an independent verifier rather than asking for a corrected function
-and trusting what comes back. Full transcripts in
-[`labs/notebooks/_live_model.json`](labs/notebooks/_live_model.json) and the
-write-up in [`labs/tools/EVIDENCE.md`](labs/tools/EVIDENCE.md).
+answer with an independent verifier, rather than asking for a corrected function
+and trusting what comes back. That is the chapter's argument, measured.
+
+**Two of these results were bugs in the test, not in the model**, and both are
+worth knowing before you write your own acceptance property:
+
+- B2.3's first version asserted that the model *would* invent a defect in an
+  already-authorised function. Qwen2.5-7B read it correctly and declined, and
+  the assertion failed because the model behaved well. A gate cannot depend on
+  the model misbehaving on the day you run it.
+- Its prompt then asked for `VERDICT|CWE|confidence|line`, and the 7B model
+  returned the literal string `VERDICT` — it read the placeholder as the answer.
+  Naming the allowed tokens explicitly fixed it. The ask is the part you own.
+
+Full transcripts, with `property_source` recording whether each verdict came
+from the script's printed property or its exit code, in
+[`labs/notebooks/_live_model.json`](labs/notebooks/_live_model.json); the
+write-up is in [`labs/tools/EVIDENCE.md`](labs/tools/EVIDENCE.md).
 
 **[llama.cpp](https://github.com/ggml-org/llama.cpp)** if you want GGUF control:
 
@@ -205,7 +220,7 @@ litellm --config labs/shared/litellm.config.yaml   # routes llama/glm/kimi behin
 | Lab type | Model | Why |
 |---|---|---|
 | Code review / SAST triage | **GLM-4.6** | strongest code reasoning per unit of RAM |
-| Harness loops, tool use (B2.0) | **Kimi K2** | built for agentic tool sequences |
+| Harness loops, tool use (B2.1) | **Kimi K2** | built for agentic tool sequences |
 | Offensive planning (C1) | **Kimi K2** or GLM-4.6 | multi-step planning |
 | Guardrails / classification | **Llama Guard** | purpose-built, and cheap at volume |
 | SOC triage (D1) | **GLM-4.6** or Llama 3.3 | cheap, high volume |
@@ -214,12 +229,14 @@ litellm --config labs/shared/litellm.config.yaml   # routes llama/glm/kimi behin
 | Anything, on a laptop with no GPU | **Qwen2.5-7B-Instruct** | the size the acceptance criteria were established at |
 
 For most of these lessons the difference a larger model makes is smaller than
-the difference a better prompt makes — which is B2.0's point, demonstrated at
+the difference a better prompt makes — which is B2.1's point, demonstrated at
 1.5B.
 
-**Seven skills call a model.** They carry the adapter in their own script, and
-`live_model_test.py` runs each one against a served endpoint and records what
-came back:
+**Six skills call a model.** They import `ask()` from the shared runtime, and
+`live_model_test.py` runs each script against a served endpoint and records what
+came back. It reads each script's printed `held on` line rather than its exit
+code — most of these scripts assert only that the backend returned something,
+and report the content property separately on purpose:
 
 ```bash
 export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 OPENAI_API_KEY=local

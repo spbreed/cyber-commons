@@ -50,16 +50,16 @@ find_booking
    -> HYPOTHESIS: quote verified, status hypothesis (not a finding)
 
 my_bookings
-   model says   : MISSING CWE-89 at confidence 0.71
-   quoting      : cur.execute("SELECT * FROM bookings WHERE owner = '" + user)
-   -> REJECTED  : that line is not in the file
+   model says   : PRESENT CWE-862 at confidence 0.77
+   quoting      : require_owner(session.user_id)
+   -> NO CLAIM  : reviewed, nothing asserted, nothing to promote
 
-1 hypothesis · 1 rejected · 0 promoted
+1 hypothesis · 0 rejected · 0 promoted
 
-property checked : the model finds the missing authorisation check that no rule can express
+property checked : MISSING on find_booking and PRESENT on my_bookings - telling the unauthorised function from the authorised one
 held on replay       : True
 
-the verifier, tested against a known fabrication
+the verifier, tested against a fabrication recorded from a smaller model
    claim quotes : cur.execute("SELECT * FROM bookings WHERE owner = '" + use
    in the file? : False
    -> REJECTED  : the quote is not in the slice, so the claim dies here

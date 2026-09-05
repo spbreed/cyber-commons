@@ -187,10 +187,17 @@ def main() -> int:
     # Two different questions, and conflating them is how this would report
     # "6/6" while two lessons' acceptance properties did not hold. Reaching the
     # backend is plumbing; the property holding is the claim.
+    crashed = [r["session"] for r in rows if not r["script_exit_ok"]]
     print(f"\n{len(rows) - len(unreached)}/{len(rows)} lessons reached a real "
           f"open-weight model")
     print(f"{len(rows) - len(broke)}/{len(rows)} lessons had their acceptance "
           f"property hold on {rows[0]['model']}")
+    # A script whose printed property held but which then died on one of its
+    # own assertions has not passed, and counting only the printed line would
+    # report it as if it had.
+    if crashed:
+        print(f"script exited non-zero: {', '.join(crashed)} — the property "
+              f"line is not the whole verdict, see the error above")
     if broke:
         print(f"property did NOT hold: {', '.join(broke)} — the lesson ran, the "
               f"model's answer did not satisfy it")
@@ -222,7 +229,7 @@ def main() -> int:
                       "script's own assertions. No credential appears here."),
              "runs": prev}, indent=1) + "\n")
         print(f"wrote {out_path.relative_to(ROOT)}")
-    return 1 if (unreached or broke) else 0
+    return 1 if (unreached or broke or crashed) else 0
 
 
 if __name__ == "__main__":

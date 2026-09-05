@@ -12,7 +12,7 @@
    "contract": true,
    "script": true,
    "lines": 39,
-   "seconds": 0.09
+   "seconds": 0.05
   },
   {
    "skill": "appsec/appsec-exploit-validate",
@@ -28,7 +28,7 @@
    "contract": true,
    "script": true,
    "lines": 81,
-   "seconds": 0.1
+   "seconds": 0.07
   },
   {
    "skill": "appsec/appsec-vuln-audit",
@@ -100,7 +100,7 @@
    "contract": true,
    "script": true,
    "lines": 60,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/reference-pipeline-scoring",
@@ -124,7 +124,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "appsec/sdlc-control-placement",
@@ -140,7 +140,7 @@
    "contract": true,
    "script": true,
    "lines": 59,
-   "seconds": 0.02
+   "seconds": 0.04
   },
   {
    "skill": "appsec/threat-model-stride",
@@ -196,7 +196,7 @@
    "contract": true,
    "script": true,
    "lines": 34,
-   "seconds": 0.06
+   "seconds": 0.03
   },
   {
    "skill": "attestation/entitlement-overprivilege-analyzer",
@@ -292,7 +292,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.04
+   "seconds": 0.05
   },
   {
    "skill": "detection/behavioural-drift-monitor",
@@ -316,7 +316,7 @@
    "contract": true,
    "script": true,
    "lines": 55,
-   "seconds": 0.07
+   "seconds": 0.06
   },
   {
    "skill": "detection/fleet-correlation-analysis",
@@ -324,7 +324,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/threat-intel-to-rules",
@@ -380,7 +380,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "grc/model-risk-validation-scope",
@@ -420,7 +420,7 @@
    "contract": true,
    "script": true,
    "lines": 59,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "identity/tamper-evident-log-check",
@@ -484,7 +484,7 @@
    "contract": true,
    "script": true,
    "lines": 25,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "programme/programme-metrics-selection",
@@ -492,7 +492,7 @@
    "contract": true,
    "script": true,
    "lines": 34,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "programme/programme-sequencing",
@@ -660,7 +660,7 @@
    "contract": true,
    "script": true,
    "lines": 20,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "research/incident-control-mapping",
@@ -668,7 +668,7 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "research/research-durability-check",
@@ -700,7 +700,7 @@
    "contract": true,
    "script": true,
    "lines": 32,
-   "seconds": 0.05
+   "seconds": 0.04
   },
   {
    "skill": "research/weight-access-capability-delta",
@@ -724,7 +724,7 @@
    "contract": true,
    "script": true,
    "lines": 24,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "response/incident-reconstruction-check",
@@ -780,7 +780,7 @@
    "contract": true,
    "script": true,
    "lines": 16,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "runtime/control-exemption-audit",
