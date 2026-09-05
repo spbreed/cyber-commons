@@ -1,0 +1,39 @@
+model backend : replay
+model         : deterministic stand-in (no backend configured)
+
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
+
+   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
+
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+the loop, wired: ['plan', 'act', 'verify', 'stop']
+backend  : replay
+steps    : 1
+accepted : return DB.execute("SELECT * FROM bookings WHERE ref=?", (ref,))
+verified : None   <- nothing checked it
+
+The loop stopped because the model produced something, which is not the
+same as producing something correct. Whatever came back was accepted.
+accepted : return DB.execute("SELECT * FROM bookings WHERE ref=?", (ref,))
+verified : True   <- an independent check said so
+steps    : 1
+
+property checked : the verified loop returns a parameterised query
+held on replay       : True
+
+a correct psycopg fix: return DB.execute("SELECT * FROM bookings WHERE ref=%s", (ref,))
+   narrow verifier (only '?') : REJECTS a correct fix
+   this lesson's verifier     : accepts
+
+a plausible-looking answer: return DB.execute("SELECT * FROM bookings WHERE ref=" + escape(ref))
+   would the verifier accept it? False
+
+It reads like a fix and it is still concatenation. Without the verifier
+this loop ships it, reports success, and the trace looks clean.

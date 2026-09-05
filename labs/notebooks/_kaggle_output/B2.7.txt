@@ -1,23 +1,59 @@
-normal use:
-   list_reports('test-user-a') → [(1, 'test-user-a', 100), (2, 'test-user-a', 250)]
-   fetch_doc('readme.txt')     → public readme
-probe  cwe      exploited  observation
---------------------------------------------------------------------------
-P-01   CWE-89   True       4 rows, owners=['test-user-a', 'test-user-b', 'test-user-c']
-P-02   CWE-22   True       returned 'synthetic-not-real-9999'
-P-03   CWE-89   False      2 rows, owners=['test-user-a']
-probe  weak assertion   effect assertion  agreement
-------------------------------------------------------------------
-P-01   True             True              
-P-02   True             True              
-P-03   True             False             ← DISAGREE
+SBOM: cybertravels-booking 4.7.1 · 5 declared components
 
-The weak assertion confirms all three, including the control probe.
-A pipeline built on it reports 100% confirmation and means nothing by it.
-F-01  CWE-89   CONFIRMED   exploit achieved the asserted effect on the replica
-F-02  CWE-22   CONFIRMED   exploit achieved the asserted effect on the replica
-F-03  CWE-89   UNVALIDATED no probe generated — cannot confirm or refute
+   CRITICAL org.apache.commons/commons-text 1.9     GHSA-599f-7c49-w659
+             Variable interpolation permits script execution (Text4Shell)  -> fixed in 1.10.0
+   HIGH     pyyaml 5.3.1   GHSA-8q59-q68h-6hv4
+             Arbitrary code execution via full_load / FullLoader  -> fixed in 5.4
+   MEDIUM   requests 2.31.0  GHSA-h5c8-rqwp-cp95
+             Proxy-Authorization header leaked on redirect  -> fixed in 2.32.0
 
-2 confirmed by execution — these go to stages 13-15.
-UNVALIDATED is not a pass. It is a gap in probe generation, and it should
-appear in the report as one.
+3 of 5 declared components carry a published advisory. This is the whole of what a
+dependency scanner reports, and every word of it is true.
+
+reconciliation — the SBOM against what is in the image
+   declared and present   : 5
+   in the SBOM, not on disk: 0
+   on disk, in no SBOM     : 1
+      lib/vendor-telemetry.jar  <- shipped by the booking provider's integration bundle, no manifest entry
+
+No scanner reported that file. It has no purl, so there is nothing to
+look up, so there is no advisory, so the report was clean about it.
+
+decompiling 1691 bytes of VendorTelemetry.class (class file version 65, no source, no manifest)
+
+   string literals in the constant pool:
+      |
+      AES/ECB/PKCS5Padding
+      POST
+      https://telemetry.vendor-analytics.io/v2/ingest
+      https://telemetry.vendor-analytics.io/v2/ingest?k=vnd_live_8f2c41a09e7b
+      vnd_live_8f2c41a09e7b
+
+   classes it references:
+      com.vendor.telemetry.VendorTelemetry
+      java.io.OutputStream
+      java.lang.Exception
+      java.lang.Object
+      java.lang.String
+      java.lang.invoke.MethodHandles
+      java.lang.invoke.MethodHandles$Lookup
+      java.lang.invoke.StringConcatFactory
+      java.net.HttpURLConnection
+      java.net.URL
+      javax.crypto.Cipher
+
+   capabilities: network egress, cryptography
+
+   A hardcoded endpoint, a credential-shaped literal, an HTTP client and
+   a cipher, in a library that appears in no manifest and that the
+   booking provider ships as part of an integration bundle.
+
+   What is provable from the constant pool is that this artefact CAN
+   reach that endpoint. What is sent is not in the constant pool, so it
+   is not in this finding - write it as a capability and it survives
+   review; write it as exfiltration and it is dismissed along with
+   everything next to it.
+
+unassessable by SBOM: 1
+That number is the finding. A dependency report that omits it has
+claimed the undeclared code is clean, on evidence it never had.

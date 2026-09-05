@@ -26,7 +26,7 @@ is the part that is read.
 **The skill** — a `SKILL.md` in [`skills/`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/skills):
 YAML frontmatter that tells an agent *when* to load the procedure, and markdown
 that says *what the procedure is*. It is written for an agent and it reads
-perfectly well as a checklist for a person. 115 of them.
+perfectly well as a checklist for a person. 120 of them.
 
 **The script** — the executable half of the same skill, in
 `skills/<area>/<name>/scripts/`. Standard library only, deterministic, and it
@@ -36,7 +36,7 @@ The notebook holds **none** of those. It holds one cell, about twenty lines,
 that finds the skills tree — cloning it if it is not already there — and runs
 the script as a subprocess. That is deliberate and it is the reason the code
 in front of you is short: a fix to a procedure is one edit to one file, not a
-rebuild of 118 notebooks each carrying its own copy. Before this arrangement
+rebuild of 120 notebooks each carrying its own copy. Before this arrangement
 existed the notebooks held 34,112 lines of code, 9,730 of them identical
 copies of the same parser. They now hold 2,373.
 
@@ -56,23 +56,23 @@ So there are two routes, and they differ in exactly one respect:
   which Kaggle gates behind a verified phone number.
 
 Neither needs a paid account, a GPU, a model, or an API key. A model is
-optional everywhere: seven skills call one, and all seven fall back to a
+optional everywhere: six skills call one, and all six fall back to a
 labelled offline replay when no backend is configured, so the default path
-through all 118 lessons is free and offline. [MODELS.md](https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md)
+through all 120 lessons is free and offline. [MODELS.md](https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/MODELS.md)
 has the open-weight setup if you want the real thing.
 """,
  "steps": [
   ("md", "## 2 · What you need, and what you do not"),
   ("html", D.table(
     ["you need", "for what", "cost"],
-    [["A browser", "reading all 118 lessons, and the recorded output of every one",
+    [["A browser", "reading all 120 lessons, and the recorded output of every one",
       "free"],
      ["<span>A Kaggle account, <b>Internet on</b> in notebook settings</span>",
       "running a lesson on a hosted CPU kernel, nothing installed",
       "free · needs a verified phone number"],
      ["<span>Or: <code>git</code> and Python 3.11</span>",
       "running any lesson locally", "free"],
-     ["An OpenAI-compatible endpoint", "the seven skills that call a model, "
+     ["An OpenAI-compatible endpoint", "the six skills that call a model, "
       "against a real model instead of the replay", "optional"]],
     caption="There is no fifth row. No GPU, no paid API, no framework, no "
             "install step — every script is standard library only.")),
@@ -80,12 +80,12 @@ has the open-weight setup if you want the real thing.
   ("md", "## 3 · Route one — GitHub\\n\\n"
          "Clone it, run it. `run_notebooks.py` executes a lesson's cells "
          "headless and writes what it printed, which is the same thing CI does "
-         "for all 118 before anything ships.\\n\\n"
+         "for all 120 before anything ships.\\n\\n"
          "```bash\\n"
          "git clone https://github.com/spbreed/cyber-commons\\n"
          "cd cyber-commons\\n"
          "python3 scripts/run_notebooks.py --session A0.1   # this lesson\\n"
-         "python3 scripts/run_notebooks.py                  # or all 118\\n"
+         "python3 scripts/run_notebooks.py                  # or all 120\\n"
          "```\\n\\n"
          "Or open `labs/notebooks/A0.1.ipynb` in Jupyter and run the cells. "
          "Because the tree is already on disk, nothing is fetched and the "
@@ -107,7 +107,7 @@ has the open-weight setup if you want the real thing.
          "3. Run the cell.\\n\\n"
          "The first run spends about three seconds on the fetch: a shallow, "
          "blobless, sparse clone that takes the `skills` directory and neither "
-         "the history nor the other 117 notebooks. Every run after that is "
+         "the history nor the other 119 notebooks. Every run after that is "
          "instant.\\n\\n"
          "**If phone verification is not available to you**, the same tree is "
          "published as the Kaggle dataset `cybercommons/cyber-commons-skills`. "
@@ -121,7 +121,7 @@ has the open-weight setup if you want the real thing.
          "somebody pasted. `run_notebooks.py` executes the notebook here and "
          "records what it printed; `kaggle_verify.py` then pushes the same "
          "notebook to Kaggle, runs it there, and compares the two byte for "
-         "byte. All 118 currently match. So the block on the page under **Out** "
+         "byte. All 120 currently match. So the block on the page under **Out** "
          "is what you will get, and if you get something else, one of us has a "
          "bug worth reporting."),
 
@@ -134,14 +134,16 @@ has the open-weight setup if you want the real thing.
                "The two failures are the two you will meet. **(a)** is a "
                "host with no network and nothing fetched. **(b)** is a tree "
                "that arrived but a shared library that is not on the import "
-               "path — 15 skills import the runtime rather than carrying a "
+               "path — 13 skills import the runtime rather than carrying a "
                "copy, and the lesson cell is what puts it there. The "
                "procedure it runs correctly in **(c)** is A1.2's, the next "
                "executable lesson after this one, so what you see below is "
                "literally the next page's output."),
  ],
- "expect": "The tree, inventoried from disk rather than asserted: 14 areas, "
-           "115 skills, 114 with a script, the shared runtime present. Then "
+ "expect": "The tree, inventoried from disk rather than asserted \u2014 14 "
+           "areas and 120 skills, 119 of them with a script, at the time of "
+           "writing; it is a count of what was fetched, so it grows as the "
+           "commons does. Then "
            "the same procedure failing twice and working once — exit 2 with "
            "`[Errno 2]` when nothing was fetched, exit 1 with "
            "`ModuleNotFoundError` when the runtime is off the path, and exit "

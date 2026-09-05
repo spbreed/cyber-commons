@@ -67,6 +67,11 @@ for md in sorted(SKILLS.rglob("SKILL.md")):
     if list(md.parent.glob("scripts/*.py")):
         with_script += 1
 
+# These counts are a function of the tree, not constants: adding a skill changes
+# them, and a Kaggle kernel run before that addition prints the older number
+# until it is re-run. That is the check doing its job — it inventories what was
+# actually fetched — but it does mean this lesson has to be re-pushed whenever
+# the skills tree grows.
 print("the tree this host fetched")
 print(f"  areas            : {len(areas)}")
 print(f"  skills           : {skills}")
@@ -94,7 +99,14 @@ print()
 print("(b) fetched, but the shared runtime is not on PYTHONPATH")
 rc, _, err = run(IMPORTER, root=str(ROOT), runtime=False)
 print(f"    exit {rc}: {why(err)}")
-print("    The file was there and the interpreter started. 15 of the skills")
+# Match an actual import statement, not the substring: this file mentions the
+# module name in the line below, and a naive `in` check counted the counter.
+importers = sum(
+    1 for s in sorted(SKILLS.rglob("scripts/*.py"))
+    if any(ln.startswith("from cyber_commons_skill" + "_runtime import")
+           for ln in s.read_text().splitlines()))
+print("    The file was there and the interpreter started. "
+      f"{importers} of the skills")
 print("    import the shared runtime rather than carrying a copy of it, and")
 print("    the lesson cell is what puts it on the path.")
 report["failures"].append({"condition": "no-runtime-on-path", "exit_code": rc, "error": why(err)})

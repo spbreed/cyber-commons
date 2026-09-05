@@ -39,6 +39,6 @@ PYTHONPATH=skills/_runtime python3 \
 #     Internet on in the settings panel (Kaggle needs a verified phone). ---
 ```
 
-*Expect:* The tree inventoried from disk — 14 areas, 115 skills, 114 with a script — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file.
+*Expect:* The tree inventoried from disk — 14 areas, 120 skills, 119 with a script at the time of writing, and the count moves as the commons grows — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file.
 
 ---

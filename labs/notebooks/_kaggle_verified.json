@@ -1,20 +1,22 @@
 {
  "generated_by": "scripts/kaggle_verify.py",
  "account": "cybercommons",
- "verified": 118,
- "checked": 118,
+ "verified": 119,
+ "checked": 120,
  "empty_output": [],
- "line_count_mismatch": [],
+ "line_count_mismatch": [
+  "A0.1"
+ ],
  "note": "A kernel status of 'complete' only means Kaggle finished running it \u2014 a notebook printing nothing also completes. Each row here compares the kernel's remote stdout against a fresh local run of the same notebook, after identical normalisation. 'identical: true' means both machines printed exactly the same thing.",
  "results": [
   {
    "session": "A0.1",
-   "ok": true,
-   "identical": true,
+   "ok": false,
+   "identical": false,
    "runs_code": true,
    "remote_lines": 28,
    "local_lines": 28,
-   "first_differing_line": null
+   "first_differing_line": 2
   },
   {
    "session": "A1.0",
@@ -278,6 +280,15 @@
    "first_differing_line": null
   },
   {
+   "session": "A3.11",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 41,
+   "local_lines": 41,
+   "first_differing_line": null
+  },
+  {
    "session": "A3.2",
    "ok": true,
    "identical": true,
@@ -354,8 +365,17 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 29,
-   "local_lines": 29,
+   "remote_lines": 33,
+   "local_lines": 33,
+   "first_differing_line": null
+  },
+  {
+   "session": "B2.1",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 31,
+   "local_lines": 31,
    "first_differing_line": null
   },
   {
@@ -372,8 +392,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 30,
-   "local_lines": 30,
+   "remote_lines": 81,
+   "local_lines": 81,
    "first_differing_line": null
   },
   {
@@ -381,8 +401,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 41,
-   "local_lines": 41,
+   "remote_lines": 49,
+   "local_lines": 49,
    "first_differing_line": null
   },
   {
@@ -417,8 +437,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 68,
-   "local_lines": 68,
+   "remote_lines": 63,
+   "local_lines": 63,
    "first_differing_line": null
   },
   {
@@ -435,8 +455,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 69,
-   "local_lines": 69,
+   "remote_lines": 114,
+   "local_lines": 114,
    "first_differing_line": null
   },
   {
@@ -453,8 +473,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 21,
-   "local_lines": 21,
+   "remote_lines": 48,
+   "local_lines": 48,
    "first_differing_line": null
   },
   {
@@ -462,8 +482,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 58,
-   "local_lines": 58,
+   "remote_lines": 21,
+   "local_lines": 21,
    "first_differing_line": null
   },
   {
@@ -471,8 +491,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 50,
-   "local_lines": 50,
+   "remote_lines": 58,
+   "local_lines": 58,
    "first_differing_line": null
   },
   {
