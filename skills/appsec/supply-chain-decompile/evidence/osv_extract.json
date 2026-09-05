@@ -1,0 +1,26 @@
+[
+ {
+  "id": "GHSA-8q59-q68h-6hv4",
+  "package": "pkg:pypi/pyyaml",
+  "introduced": "0",
+  "fixed": "5.4",
+  "severity": "HIGH",
+  "summary": "Arbitrary code execution via full_load / FullLoader"
+ },
+ {
+  "id": "GHSA-599f-7c49-w659",
+  "package": "pkg:maven/org.apache.commons/commons-text",
+  "introduced": "1.5",
+  "fixed": "1.10.0",
+  "severity": "CRITICAL",
+  "summary": "Variable interpolation permits script execution (Text4Shell)"
+ },
+ {
+  "id": "GHSA-h5c8-rqwp-cp95",
+  "package": "pkg:pypi/requests",
+  "introduced": "0",
+  "fixed": "2.32.0",
+  "severity": "MEDIUM",
+  "summary": "Proxy-Authorization header leaked on redirect"
+ }
+]

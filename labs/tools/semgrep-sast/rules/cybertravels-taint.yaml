@@ -1,0 +1,26 @@
+rules:
+  - id: cybertravels-sql-concat
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Caller-controlled input is concatenated into a SQL string. Use a
+      parameterised query.
+    mode: taint
+    pattern-sources:
+      - pattern: |
+          def $F(..., $X, ...):
+            ...
+    pattern-sinks:
+      - pattern: $CUR.execute(...)
+  - id: cybertravels-shell-concat
+    languages: [python]
+    severity: ERROR
+    message: >-
+      Caller-controlled input is concatenated into a shell command.
+    mode: taint
+    pattern-sources:
+      - pattern: |
+          def $F(..., $X, ...):
+            ...
+    pattern-sinks:
+      - pattern: subprocess.run(..., shell=True, ...)

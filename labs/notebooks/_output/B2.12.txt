@@ -1,48 +1,57 @@
-tool          writes  scope    reversible  inner loop?
+the bug is on line 22
+whole file             839 chars   29 lines
+±2 line window         207 chars    5 lines
+±6 line window         432 chars   13 lines
+strategy            sink   concat  source  intent  decidable
+----------------------------------------------------------------
+whole file          True   True    True    True    True
+±2 line window      True   True    False   False   False
+±6 line window      True   True    True    True    True
+
+The ±2 window has the sink and the concatenation but not the signature,
+so you cannot tell whether owner is user-controlled — which is the
+difference between critical and won't-fix.
+def list_reports(conn, owner, limit=DEFAULT_LIMIT):
+    """Called from GET /reports?owner=... — owner is user-controlled."""
+    key = _cache_key("reports", owner, limit)
+    if key in CACHE:
+        return CACHE[key]
+    rows = conn.execute("SELECT * FROM reports WHERE owner = '" + owner + "' LIMIT " + str(limit))
+    out = [_format_row(r) for r in rows]
+    CACHE[key] = out
+    return out
+
+
+394 chars (47% of the file), decidable=True
+strategy              chars   share  decidable  noise fns
 ----------------------------------------------------------
-read_file     False   self     True        True
-write_file    True    project  True        True
-run_tests     True    self     True        True
-run_shell     True    tenant   False       True
-git_commit    True    project  True        True
-git_push      True    project  False       False
-read_env      False   org      True        False
-http_get      False   self     True        True
+whole file              839    100%       True          4
+±2 line window          207     25%      False          0
+±6 line window          432     52%       True          1
+path slice              394     47%       True          0
 
-default blast radius: 29
-path                                                            default  contained
-------------------------------------------------------------------------------------
-/home/dana/work/monorepo/src/app.py                             True     True
-/home/dana/work/monorepo/.env                                   True     False
-/home/dana/work/other-team-repo/secrets.yaml                    True     False
-/home/dana/.aws/credentials                                     True     False
-/home/dana/.ssh/id_ed25519                                      True     False
-/home/dana/.config/gcloud/application_default_credentials.json  True     False
-/home/dana/Downloads/customer-export-2026.csv                   True     False
+smallest decidable context: path slice (47% of the file, 0 unrelated functions)
+vs whole file: 53% smaller, 4→0 unrelated functions
 
-credential files reachable by default: 4
-credential files reachable when contained: 0
-blast radius      29 →  23
-reachable files    7 →   1
-credentials        4 →   0
-friction added   0.4 of 1.0 — one confirmation before a push
+what each slice costs, in the only unit that matters
+   slice               decidable  unrelated fns  what the model does with it
+   whole file          True       4              reviews whatever survived truncation; you cannot tell which parts
+   ±2 line window      False      0              cannot see the signature, so it GUESSES whether owner is tainted
+   ±6 line window      True       1              decidable, and carrying one function the defect does not depend on
+   path slice          True       0              decidable, nothing unrelated - the answer is checkable
 
-No cloud or SSH credential is reachable, the inner loop is unchanged,
-and the only thing a developer notices is a prompt before pushing.
-conformance: 0 problem(s)
+The undecidable slice is the expensive one, and not because it is wrong -
+because it is UNANSWERABLE and the model answers anyway. Asked whether a
+value is user-controlled without being shown where it comes from, it
+produces a confident verdict from the only thing it has, which is the
+shape of the line. That is where a false positive comes from.
 
-auto-loaded, content-controlled inputs: ['README.md', 'docs/CONTRIBUTING.md', 'package.json']
-most powerful pre-approved tool      : read_env (org scope)
+B2.3 is the worked case. Given the function, its signature and the caller's
+authority, the model pass found a real missing-authorisation defect and
+quoted a line that exists. Given a slice it could not decide, it returned
+CWE-89 at 0.71 confidence quoting a concatenation that is not in the file.
+Same model, same prompt, different slice.
 
-allowlist:
-   write_file  project scope, reversible         bounded=True
-   run_tests   self scope, reversible            bounded=True
-   run_shell   tenant scope, IRREVERSIBLE        bounded=False
-   git_commit  project scope, reversible         bounded=True
-   git_push    project scope, IRREVERSIBLE       bounded=False
-
-unbounded pre-approved tools: ['run_shell', 'git_push']
-
-The injection finding is Critical not because the README says anything
-clever, but because a directive path exists to a tool that cannot be
-undone. Rewrite the payload and the severity does not move.
+So the rule is not 'send less'. It is: find the smallest slice in which the
+defect is DECIDABLE, and only then make it smaller. Cutting below that line
+does not save money, it buys false positives at a discount.

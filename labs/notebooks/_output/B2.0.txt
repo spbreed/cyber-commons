@@ -1,36 +1,37 @@
-model backend : replay
-model         : deterministic stand-in (no backend configured)
+techniques, placed
+   technique                     side   gate  blind to
+   SAST / code analysis          pre    yes   whether the vulnerable path is reached with real traffic
+   SCA and SBOM scanning         pre    yes   what actually loaded, versus what the manifest pinned
+   IaC and policy-as-code        pre    yes   the identity and network the workload really got
+   threat modelling              pre    -     entry points added by a config change, not a commit
+   tool-schema / MCP review      both   yes   a description edited by the server after review
+   DAST / attack simulation      post   -     the commit that introduced it
+   egress enforcement            post   -     the config change that widened the allowlist
+   runtime posture and drift     post   -     the plan the drift departed from
+   detection and canaries        post   -     anything at all before it happens
+   attestation                   both   -     nothing - it signs on the left and re-checks on the right
 
-This lesson runs offline against a deterministic replay, which is why
-it works on a Kaggle kernel with the internet switched off. To run the
-identical code against a real model, serve an open-weight model from
-Kaggle Models and point the adapter at it:
+4 of 10 can block a merge. Everything else is
+advisory - it produces a ticket, and a ticket is a request, not a control.
 
-   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \
-           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
-   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
-          MODEL=qwen2.5-7b-instruct
+risks, by which side covers them
+      injection in application code             covered
+   -> vulnerable declared dependency            pre-only
+   !! undeclared vendored binary                uncovered
+   -> over-broad IAM role at runtime            post-only
+   -> prompt injection through retrieved text   post-only
+      tool schema edited after review           covered
+   -> guardrail switched off after the demo     post-only
+   -> secret committed to the repository        pre-only
 
-   MODELS.md has the exact Kaggle download. There is no paid backend:
-   every model result in this repository was produced this way.
-the loop, wired: ['plan', 'act', 'verify', 'stop']
-backend  : replay
-steps    : 1
-accepted : return DB.execute("SELECT * FROM bookings WHERE ref=?", (ref,))
-verified : None   <- nothing checked it
+pre-only  2   preventable, and invisible once it ships:
+           nothing on the right would tell you it happened.
+post-only 3   visible, and unpreventable: detection is the whole
+           of the control, and the merge that caused it went through.
+uncovered 1   nothing on either side. B2.7 is this row - an
+           artefact with no manifest entry has no identifier, so the
+           SCA pass on the left never had anything to look up.
 
-The loop stopped because the model produced something, which is not the
-same as producing something correct. Whatever came back was accepted.
-accepted : return DB.execute("SELECT * FROM bookings WHERE ref=?", (ref,))
-verified : True   <- an independent check said so
-steps    : 1
-
-a correct psycopg fix: return DB.execute("SELECT * FROM bookings WHERE ref=%s", (ref,))
-   narrow verifier (only '?') : REJECTS a correct fix
-   this lesson's verifier     : accepts
-
-a plausible-looking answer: return DB.execute("SELECT * FROM bookings WHERE ref=" + escape(ref))
-   would the verifier accept it? False
-
-It reads like a fix and it is still concatenation. Without the verifier
-this loop ships it, reports success, and the trace looks clean.
+All three of those render as one word on a tooling inventory. The middle
+row is the one that gets signed off, because a control exists, it runs,
+and it reports - and it reports afterwards.

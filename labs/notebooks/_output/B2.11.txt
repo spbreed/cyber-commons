@@ -1,34 +1,98 @@
-the bug is on line 22
-whole file             839 chars   29 lines
-±2 line window         207 chars    5 lines
-±6 line window         432 chars   13 lines
-strategy            sink   concat  source  intent  decidable
-----------------------------------------------------------------
-whole file          True   True    True    True    True
-±2 line window      True   True    False   False   False
-±6 line window      True   True    True    True    True
+model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-The ±2 window has the sink and the concatenation but not the signature,
-so you cannot tell whether owner is user-controlled — which is the
-difference between critical and won't-fix.
-def list_reports(conn, owner, limit=DEFAULT_LIMIT):
-    """Called from GET /reports?owner=... — owner is user-controlled."""
-    key = _cache_key("reports", owner, limit)
-    if key in CACHE:
-        return CACHE[key]
-    rows = conn.execute("SELECT * FROM reports WHERE owner = '" + owner + "' LIMIT " + str(limit))
-    out = [_format_row(r) for r in rows]
-    CACHE[key] = out
-    return out
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
 
+   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
 
-394 chars (47% of the file), decidable=True
-strategy              chars   share  decidable  noise fns
-----------------------------------------------------------
-whole file              839    100%       True          4
-±2 line window          207     25%      False          0
-±6 line window          432     52%       True          1
-path slice              394     47%       True          0
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+behaviour of the vulnerable build:
+   get_user('dana'    ) → [(1, 'dana')]      ok
+   get_user('sam'     ) → [(2, 'sam')]       ok
+   get_user('nobody'  ) → []                 ok
+   get_user("o'brien" ) → raised OperationalError FAILS
 
-smallest decidable context: path slice (47% of the file, 0 unrelated functions)
-vs whole file: 53% smaller, 4→0 unrelated functions
+exploit works: True — probe returned 3 rows
+scanner fires: False
+candidate                           scanner green
+--------------------------------------------------
+A · parameterise (the real fix)              True
+B · delete the feature                       True
+C · evade the scanner                        True
+D · escape by hand                           True
+
+Three of four are green. Only one of those is a fix.
+candidate                         scan  behaviour  exploitable  verdict
+------------------------------------------------------------------------------------
+A · parameterise (the real fix)   True  True       False        ACCEPT
+B · delete the feature            True  False      False        REJECT — behaviour changed
+C · evade the scanner             True  False      True         REJECT — behaviour changed, STILL EXPLOITABLE (stage-12 probe passes)
+D · escape by hand                True  True       False        ACCEPT
+
+accepted: ['A · parameterise (the real fix)', 'D · escape by hand']
+A · parameterise (the real fix)    proof of fix: True  (exploit on old=True, on new=False)
+D · escape by hand                 proof of fix: True  (exploit on old=True, on new=False)
+
+Candidate D passes every automated check and is still the wrong answer:
+it reimplements the driver's escaping and will be wrong for the next
+input class or the next database. Nothing except a rule about MECHANISM
+catches that — which is the part of remediation that does not automate.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Fix this without changing the function's behaviour for valid input...
+
+answer:
+   def report(request):
+       q = "SELECT * FROM orders WHERE ref = ?"
+       return db.execute(q, (request.args['ref'],))
+
+property checked : parameterises the query
+held on replay       : True
+
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model's.
+the exploit, against the unpatched build in the replica
+   reproduces: True   <- if this were False the probe is
+               broken and every result below would be meaningless
+
+      CI   exploit  behaviour  new  promoted to
+   A  ok   blocked  same       0    merge-request
+   B  ok   blocked  CHANGED    0    rejected  <- qa: behaviour changed
+   C  ok   WORKS    same       0    rejected  <- sandbox: exploit still works
+   D  ok   blocked  same       0    merge-request
+
+   A  parameterised and bound - the fix
+   B  parameterised, and silently truncates the reference
+   C  still concatenation; escape() moved the pattern past the rule
+   D  closes the finding by removing partial-reference search
+
+merge requests CI alone would have opened : 4
+merge requests the gates opened           : 2
+
+C is the one worth staring at. It is green, the rule no longer fires,
+and the exploit works unchanged - the patch moved the pattern rather than
+closing the injection. Only re-running the exploit catches that, and only
+in an environment built to be attacked.
+
+D is the other kind. It passes every gate above and it is still wrong:
+it closes the finding by deleting partial-reference search, which is a
+feature travellers use. No automated gate rejects D, because 'is this the
+mechanism we want' is not a property of a test run - it is the question
+the merge request exists to ask a human.
+
+attached to the merge request for A:
+   - exploit run against the unpatched build: reproduces
+   - exploit run against the patched build: blocked
+   - QA regression: 4/4 booking behaviours unchanged
+   - finding diff: target finding gone, 0 introduced
+
+A reviewer opening that request does not have to establish whether the
+bug is closed. That is answered on the page, so the review can be about
+D's question instead - which is the only one they are needed for.

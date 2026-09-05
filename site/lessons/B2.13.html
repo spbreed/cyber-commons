@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.13 — Attesting control intent for agents and MCP servers | Cyber Commons</title><meta name="description" content="Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with san"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.13</div><h1>Attesting control intent for agents and MCP servers</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.13.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change.</p></div><div class="ctrl"><div class="lab">Control</div><p>Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.13.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.13.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/attestation/agent-code-surface-analyzer/scripts/agent_code_surface_analyzer.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.13 · Attesting control intent for agents and MCP servers</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: Harnesses and an Agentic AppSec Pipeline</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Securing the developers' coding agents</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.13 — Agentic AI in the pipeline — attesting control intent for agents and MCP servers | Cyber Commons</title><meta name="description" content="Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with san"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.13</div><h1>Agentic AI in the pipeline — attesting control intent for agents and MCP servers</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.13.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change.</p></div><div class="ctrl"><div class="lab">Control</div><p>Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.13.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.13.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/attestation/agent-code-surface-analyzer/scripts/agent_code_surface_analyzer.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.13 · Agentic AI in the pipeline — attesting control intent for agents and MCP servers</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Context engineering — cutting the false positives</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -15,10 +15,20 @@
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.</p>
-<p><strong>Why a security engineer needs it.</strong> Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change. The control it builds is: eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>"We enforce least privilege" is true of some deployment, at some time, and nothing binds it to the system running right now. An attestation is the binding — and the discipline is that it must refuse to say more than it can show.</p>
+<p><strong>What it covers.</strong> Why the pipeline you have just built stops working on
+agentic systems — no call graph, a sink that is a tool schema, a source that is
+retrieved text, a dependency that is a third party's running process — and the
+artefact that covers the gap: a signed, deployment-bound attestation of control
+<em>intent</em>.</p>
+<p><strong>Why a security engineer needs it.</strong> A green scan over an agent repository is a
+true statement about the Python and says nothing about what the agent will do.
+The control it builds is: tool-surface review as a build artefact, capability
+analysis over the set of tools an identity holds, and an attestation that never
+claims PASS on a control it cannot evidence.</p>
+<p>This is a <strong>control</strong> lesson, and its discipline is refusal: the analyser is
+built so that it cannot overclaim, and two of the five controls are capped at
+PARTIAL by construction.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Point this pipeline at an agentic system and four of its stages quietly stop meaning anything: there is no call graph, the sink is a tool schema, the source is retrieved text, and the dependency is somebody else's running process. A green scan over an agent repository is a true statement about the Python and says nothing about what the agent will do.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> “CyberTravels enforces least privilege” is true of some deployment at some time. An attestation is what binds it to the one running now — and refuses to claim more than it can show.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
@@ -34,6 +44,76 @@
    | PASS               not in the vocabulary        |
    +------------------------------------------------+
 </code></pre>
+<p>Everything the pipeline has done so far assumed one thing about the code it was
+reading: that its <strong>control flow is in the code</strong>. A call graph exists, entry
+points can be enumerated, and a path from a source to a sink either exists or
+does not. Every stage from B2.3 to B2.12 stands on that assumption.</p>
+<p>An agentic system breaks it. The control flow is decided at runtime, by a model,
+from text that is not in your repository. Point the same pipeline at
+CyberTravels' Workflow Agent and four of its stages quietly stop meaning
+anything:</p>
+<table>
+<thead>
+<tr>
+<th>the stage</th>
+<th>what it assumes</th>
+<th>what an agentic system does instead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>reachability (B2.5)</strong></td>
+<td>a call graph</td>
+<td>the model picks the tool; there is no static edge to trace</td>
+</tr>
+<tr>
+<td><strong>SAST (B2.3)</strong></td>
+<td>dangerous sinks are functions</td>
+<td>the sink is <code>refund(booking_id, amount)</code> — a <em>schema</em>, matching no rule</td>
+</tr>
+<tr>
+<td><strong>the source</strong></td>
+<td>untrusted input arrives at an entry point</td>
+<td>it arrives as retrieved text, in no repository</td>
+</tr>
+<tr>
+<td><strong>SCA (B2.7)</strong></td>
+<td>dependencies are declared in a manifest</td>
+<td>an MCP server is a third party's <em>running process</em> whose tool descriptions land in your context window</td>
+</tr>
+</tbody>
+</table>
+<p>Read those four rows together and the shape of the problem is clear. It is not
+that the tools are weak. It is that the artefact they analyse — source code —
+<strong>no longer contains the behaviour</strong>. A green pipeline over an agentic
+repository is a true statement about the Python and says nothing at all about
+what the agent will do.</p>
+<p>Three specific things no static analyser can express, and each needs a stage
+that does not exist yet:</p>
+<p><strong>1 — The tool surface is data, and it is somebody else's.</strong> An MCP server's
+tool descriptions are fetched at connect time. They are not in your repository,
+they were not reviewed with your code, and a server can change one after review.
+There is no scanner finding for "the description changed"; there is only a diff
+nobody is taking.</p>
+<p><strong>2 — Composition, not vulnerability.</strong> <code>read_booking</code> is safe.
+<code>post_to_vendor</code> is safe. An agent holding both can move a traveller's card
+details to a vendor endpoint, and no rule matches either function because
+neither is defective. The unit of risk is a <strong>capability</strong>, and capability is a
+property of the <em>set</em> of tools an identity holds — which is a deployment fact,
+not a source-code one.</p>
+<p><strong>3 — Intent is the strongest static claim available.</strong> You cannot show from
+source that a sandbox <em>holds</em>, that egress <em>is</em> enforced, or that an injection
+screen <em>works</em> — those are runtime properties and B2.0's line puts them firmly
+on the right-hand side. What you can show is that somebody <strong>intended</strong> the
+control: an imported sandbox, a validated audience claim, a provenance tag.
+That is a smaller claim, and unlike the larger one it is true.</p>
+<p>So the SDLC needs three things it has not had until now: <strong>tool-surface review
+as a build artefact</strong>, diffed like an API contract; <strong>capability analysis</strong> over
+the set of tools an identity holds, rather than vulnerability analysis over
+functions; and an artefact that carries intent evidence, is bound to one
+deployment, and can be <strong>re-issued when anything it describes changes</strong>. That
+last one is an attestation, and it is the rest of this lesson.</p>
+<hr />
 <p>Every control claim in this pipeline has the same weakness: it is a sentence in
 a document, and nothing binds it to a running system. "We enforce least
 privilege" is true of some deployment, at some time, and there is no way to
@@ -249,4 +329,4 @@ absence must never be read as a pass.</code></pre></div><div class="nbmd"><h2>4 
 <p>Run the analyser against one agent or MCP server you actually deploy. The interesting output is not the verdicts — it is the controls that come back NO_INTENT_FOUND, because those are the ones nobody has started.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.14.html">B2.14 · Bonus — Google Mantis, the pipeline in production</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.13.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.13.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification&#x27;s destructive, open-world default.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>in-toto</span><span>Sigstore</span><span>OSCAL</span><span>OPA</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.13.ipynb</code></p></div><div class="pager"><a href="B2.12.html"><span class="k">← Previous</span><span class="t">B2.12 · Securing the developers&#x27; coding agents</span></a><a class="next" href="B2.14.html"><span class="k">Next →</span><span class="t">B2.14 · Bonus — Google Mantis, the pipeline in production</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Five controls resolve to INTENT_EVIDENCED, PARTIAL or NO_INTENT_FOUND and never to PASS. Across ten real repositories and fifty control evaluations the analyser returns 30 INTENT_EVIDENCED, 16 PARTIAL, 4 NO_INTENT_FOUND and zero PASS — with one widely-deployed MCP server shipping no tool annotations at all, so all of its tool sites inherit the specification&#x27;s destructive, open-world default.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>in-toto</span><span>Sigstore</span><span>OSCAL</span><span>OPA</span><span>GLM-4.6</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.13.ipynb</code></p></div><div class="pager"><a href="B2.12.html"><span class="k">← Previous</span><span class="t">B2.12 · Context engineering — cutting the false positives</span></a><a class="next" href="B2.14.html"><span class="k">Next →</span><span class="t">B2.14 · Bonus — Google Mantis, the pipeline in production</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

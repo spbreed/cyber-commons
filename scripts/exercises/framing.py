@@ -213,18 +213,17 @@ HOOKS: dict[str, str] = {
 # Function B — application security with an AI SDLC
 # ----------------------------------------------------------------------
 "B2.0":
- "The SDLC you are about to build reads code you do not trust, holds "
- "credentials, and writes to your repository. It is a security tool, and that "
- "grants it no exemption whatsoever from the risks in Function A. Both "
- "directions of this commons run through the same system here.",
+ "Half of what is sold as AI security tooling cannot run before a deploy, and "
+ "half of it tells you nothing after one. Buy across that line without noticing "
+ "it and you own two tools that agree with each other and a gap between them "
+ "where the incidents happen.",
 
-"B2.0":
+"B2.1":
  "A model on its own is a text generator. Wrap it in a loop with tools and it "
  "reviews CyberTravels' pull requests; wrap it badly and it reviews them and "
  "tells you it found nothing. Every part of that wrapper is a security "
  "decision, and nobody else in the building is going to notice that the "
  "verifier is a shape check.",
-
 
 "B2.2":
  "A threat model produced in a workshop describes the system as it was on the "
@@ -234,10 +233,10 @@ HOOKS: dict[str, str] = {
  "model. It is wrong about both.",
 
 "B2.3":
- "Three generations of static analysis are on the market and all three are sold "
- "with the same word. Pattern matching cannot follow a value; dataflow cannot "
- "read intent; a model can do both and will also tell you about a vulnerability "
- "that is not there.",
+ "Semgrep's precision on this file is 1.00 at every ruleset width. Its recall "
+ "goes from 0.17 to 0.67 depending on a config line nobody reads, and both "
+ "scans exit zero. The number that decides whether a scan meant anything is the "
+ "one almost nobody computes.",
 
 "B2.4":
  "Three analysers found the same defect and reported it four times, in three "
@@ -255,16 +254,22 @@ HOOKS: dict[str, str] = {
  "you are able to confirm at all.",
 
 "B2.7":
+ "The dependency report is clean and it is correct. It is also a statement "
+ "about a manifest, and the jar the booking provider dropped into `lib/` is in "
+ "no manifest — so it has no identifier, so it has no advisory, so it was "
+ "counted as neither vulnerable nor safe. It was counted as nothing.",
+
+"B2.8":
  "A finding becomes a fact the moment something other than a model says so. "
  "Driving the running application is how you get that second opinion — and the "
  "oracle you choose is what makes it worth having.",
 
-"B2.8":
+"B2.9":
  "Three medium findings, each correctly scored, each individually not worth an "
  "engineer's afternoon. Chained, they read a file that ends the conversation "
  "about severity. Chains are where automated analysis earns its keep.",
 
-"B2.9":
+"B2.11":
  "A patch that passes the tests and changes the behaviour is not a fix, it is a "
  "second incident with a pull request attached. Remediation is the stage where "
  "the pipeline stops finding things and starts touching them.",
@@ -274,7 +279,7 @@ HOOKS: dict[str, str] = {
  "with this data, behind this control, and the number that answers them is not "
  "the one on the badge.",
 
-"B2.11":
+"B2.12":
  "Give an agent more context and it gets better, until it gets worse. The cliff "
  "is real, it arrives earlier than anyone expects, and past it you are paying "
  "more per token for a worse answer.",
@@ -285,16 +290,17 @@ HOOKS: dict[str, str] = {
  "diff is the cheapest way anyone will ever find to instruct the tooling that "
  "reviews it.",
 
-"B2.12":
+"A3.11":
  "The coding agent on an engineer's laptop holds repository write access, a "
  "cloud credential, and whatever MCP servers were convenient. It is the "
  "highest-privilege agent in most organisations and the least governed.",
 
 "B2.13":
- "\"We enforce least privilege\" is true of some deployment, at some time, and "
- "nothing binds it to the system running right now. An attestation is the "
- "binding — and the discipline is that it must refuse to say more than it can "
- "show.",
+ "Point this pipeline at an agentic system and four of its stages quietly stop "
+ "meaning anything: there is no call graph, the sink is a tool schema, the "
+ "source is retrieved text, and the dependency is somebody else's running "
+ "process. A green scan over an agent repository is a true statement about the "
+ "Python and says nothing about what the agent will do.",
 
 "B2.14":
  "Somebody has already built this pipeline and published what happened. Reading "
@@ -1123,22 +1129,30 @@ DIAGRAMS: dict[str, str] = {
 # Function B — product and application security with AI
 # ----------------------------------------------------------------------
 "B2.0": """
-   chapter 4 — the SDLC, with agents doing the work (AI for security)
+   ONE LINE, AND EVERY TOOL SITS ON ONE SIDE OF IT
 
-   [ingest] -> [threat model] -> [audit] -> [confirm] -> [remediate] -> [report]
-      B2.1-2       B2.2-4        B2.3-7     B2.6-10       B2.9         B2.10
+              PRE-DEPLOYMENT          |        POST-DEPLOYMENT
+      artefacts sitting still         |      a system that is running
+                                      |
+   source, manifest, IaC plan,        |   real traffic, the identity the
+   tool schema, SBOM                  |   workload actually got, what left
+                                      |
+   cheap . repeatable . CAN BLOCK     |   sees what really happened . CANNOT
+   THE MERGE                          |   block the merge that caused it
+                                      |
+   SAST  SCA/SBOM  IaC policy         |   DAST  egress enforcement  drift
+   threat model  tool-schema review   |   detection  canaries  attestation
+                                      |
+   blind to: the identity it gets     |   blind to: the commit, until after
+                                      |
+      B2.2 - B2.7                     |      B2.8 - B2.13, and Function D
 
-   chapter 5 — the harness underneath every one of those stages
-   +---------------------------------------------------------------+
-   | plan . act . verify . stop | tools | budgets | replay | evals  |
-   +---------------------------------------------------------------+
-
-   the same SDLC, read as an agentic system (security of AI)
-   ingress = a pull request      knowledge = the repo, untrusted by definition
-   tools   = tests, sandbox      identity  = a bot that can write your branch
+   the gap is not a tool you are missing. it is the line itself:
+   nothing on the left can see a runtime fact, and nothing on the
+   right can stop the change that created one
 """,
 
-"B2.0": """
+"B2.1": """
    a model                 a harness
 
    tokens in               PLAN   the model proposes
@@ -1177,16 +1191,26 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 "B2.3": """
-   gen 1  pattern      grep-shaped     finds: the literal string
-                                       misses: the same bug spelled differently
+   booking.py — 6 defects in the key, 5 of them a pattern
 
-   gen 2  dataflow     source -> sink  finds: the value that reaches
-                                       misses: intent, framework magic
+   DETERMINISTIC — semgrep 1.176.0        precision   recall
+     p/python + p/secrets      1 finding     1.00       0.17
+     seven registry packs      4 findings    1.00       0.67
+     custom taint rule         2 findings    1.00       0.33
+                                            ^^^^^      ^^^^^
+                                     never wrong    a config line
 
-   gen 3  reasoning    reads it        finds: both of the above
-                                       adds:  confident findings that are not real
+   missed by every width:
+     line 22  hardcoded key   -> COVERAGE GAP   . write the rule
+     line  7  no authz check  -> NOT EXPRESSIBLE. no syntax to match
 
-   the third generation does not replace the second. it needs it as an oracle.
+   PROBABILISTIC — the model pass, on line 7 only
+     finds it  0.82   -> HYPOTHESIS, not a finding
+     invents one 0.71 -> REJECTED: quoted a line not in the file
+
+   one can gate a merge and misses things. the other finds what has
+   no syntax and invents things. the gap between 0.82 and 0.71 is
+   not a threshold - it is one sample
 """,
 
 "B2.4": """
@@ -1227,6 +1251,34 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 "B2.7": """
+   WHAT THE DEPENDENCY REPORT COUNTED
+
+   manifest ---> SBOM ---> advisory feed ---> "3 findings / 5 components"
+                                                  all of it true
+
+   WHAT IS ACTUALLY IN THE IMAGE
+
+   site-packages/requests        in the SBOM   scanned
+   site-packages/sqlalchemy      in the SBOM   scanned
+   site-packages/yaml            in the SBOM   scanned  HIGH
+   site-packages/jinja2          in the SBOM   scanned
+   lib/commons-text-1.9.jar      in the SBOM   scanned  CRITICAL
+   lib/vendor-telemetry.jar      ---           NOTHING LOOKED AT IT
+                                               no purl -> no advisory
+                                                       -> not "safe",
+                                                          not counted
+
+   so read the artefact: constant pool, before any bytecode
+     CONSTANT_String  -> https://telemetry.vendor-analytics.io/...?k=vnd_live_...
+     CONSTANT_String  -> AES/ECB/PKCS5Padding
+     CONSTANT_Class   -> java.net.HttpURLConnection, javax.crypto.Cipher
+
+   provable: it CAN reach that endpoint.  not provable: what it sends.
+   report the capability. the sentence you cannot evidence takes the
+   rest of the report down with it
+""",
+
+"B2.8": """
    candidate finding
         |
         v
@@ -1243,7 +1295,7 @@ DIAGRAMS: dict[str, str] = {
    the oracle is the whole value. "the model thinks so" is not one.
 """,
 
-"B2.8": """
+"B2.9": """
    alone                                chained
    +----------------+                   +-------------------------+
    | path traversal | medium            | traversal reads config  |
@@ -1255,7 +1307,7 @@ DIAGRAMS: dict[str, str] = {
    severity is a property of the chain, not of the link
 """,
 
-"B2.9": """
+"B2.11": """
    patch                    what has to be true
    +----------------+       +-----------------------------+
    | fixes the bug  |  and  | behaviour unchanged         |
@@ -1280,7 +1332,7 @@ DIAGRAMS: dict[str, str] = {
    confirmed-by-exploitation beats both
 """,
 
-"B2.11": """
+"B2.12": """
    accuracy
      ^
      |          .-----.
@@ -1306,7 +1358,7 @@ DIAGRAMS: dict[str, str] = {
    provenance: everything from the repository is [data], never [principal]
 """,
 
-"B2.12": """
+"A3.11": """
    the highest-privilege agent in most organisations
 
    +--------------------------------------------+

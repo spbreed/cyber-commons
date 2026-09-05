@@ -104,3 +104,37 @@ print(f"\nsmallest decidable context: {best['strategy']} "
 print(f"vs whole file: {1 - best['chars']/whole['chars']:.0%} smaller, "
       f"{whole['noise_fns']}→{best['noise_fns']} unrelated functions")
 assert best["strategy"] == "path slice"
+
+# ---------------------------------------------------------------------------
+# Why this is measured in false positives rather than in tokens.
+#
+# The two failure shapes below are the ones B2.3's model pass actually produced,
+# and each is a slice defect rather than a model defect.
+print()
+print("what each slice costs, in the only unit that matters")
+print(f"   {'slice':<20}{'decidable':<11}{'unrelated fns':<15}what the model does with it")
+COSTS = {
+    "whole file":     "reviews whatever survived truncation; you cannot tell which parts",
+    "±2 line window": "cannot see the signature, so it GUESSES whether owner is tainted",
+    "±6 line window": "decidable, and carrying one function the defect does not depend on",
+    "path slice":     "decidable, nothing unrelated - the answer is checkable",
+}
+for r in rows:
+    print(f"   {r['strategy']:<20}{str(r['decidable']):<11}{r['noise_fns']:<15}"
+          f"{COSTS[r['strategy']]}")
+print()
+print("The undecidable slice is the expensive one, and not because it is wrong -")
+print("because it is UNANSWERABLE and the model answers anyway. Asked whether a")
+print("value is user-controlled without being shown where it comes from, it")
+print("produces a confident verdict from the only thing it has, which is the")
+print("shape of the line. That is where a false positive comes from.")
+print()
+print("B2.3 is the worked case. Given the function, its signature and the caller's")
+print("authority, the model pass found a real missing-authorisation defect and")
+print("quoted a line that exists. Given a slice it could not decide, it returned")
+print("CWE-89 at 0.71 confidence quoting a concatenation that is not in the file.")
+print("Same model, same prompt, different slice.")
+print()
+print("So the rule is not 'send less'. It is: find the smallest slice in which the")
+print("defect is DECIDABLE, and only then make it smaller. Cutting below that line")
+print("does not save money, it buys false positives at a discount.")

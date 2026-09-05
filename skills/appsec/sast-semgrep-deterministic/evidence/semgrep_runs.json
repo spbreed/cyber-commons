@@ -1,0 +1,55 @@
+{
+ "narrow": {
+  "config": "p/python + p/secrets",
+  "semgrep_version": "1.176.0",
+  "findings": [
+   {
+    "line": 17,
+    "severity": "ERROR",
+    "rule": "subprocess-shell-true"
+   }
+  ]
+ },
+ "wide": {
+  "config": "seven registry packs",
+  "semgrep_version": "1.176.0",
+  "findings": [
+   {
+    "line": 9,
+    "severity": "ERROR",
+    "rule": "sqlalchemy-execute-raw-query"
+   },
+   {
+    "line": 14,
+    "severity": "WARNING",
+    "rule": "eval-detected"
+   },
+   {
+    "line": 17,
+    "severity": "ERROR",
+    "rule": "subprocess-shell-true"
+   },
+   {
+    "line": 20,
+    "severity": "ERROR",
+    "rule": "disabled-cert-validation"
+   }
+  ]
+ },
+ "taint": {
+  "config": "custom taint rule",
+  "semgrep_version": "1.176.0",
+  "findings": [
+   {
+    "line": 9,
+    "severity": "ERROR",
+    "rule": "cybertravels-sql-concat"
+   },
+   {
+    "line": 17,
+    "severity": "ERROR",
+    "rule": "cybertravels-shell-concat"
+   }
+  ]
+ }
+}

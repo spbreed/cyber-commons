@@ -1,11 +1,11 @@
-# Track B2 — The AI SDLC: Harnesses and an Agentic AppSec Pipeline
+# Track B2 — The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy
 
 **Function B · Application Security with an AI SDLC**  
 *The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*
 
 **Job titles:** AppSec Engineer, Product Security Engineer, Secure Code Reviewer
 
-**What changes:** The secure development lifecycle as one artefact, built stage by stage: ingest, model, audit, confirm, remediate, report. 18 lessons.
+**What changes:** The SDLC split into what runs before a deploy and what runs after, then one lesson per stage of an agentic AppSec pipeline — audit, supply chain, dynamic validation, triage, remediation, attestation. 15 lessons.
 
 **Autonomy focus:** Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.
 
@@ -15,7 +15,7 @@
 
 ---
 
-### B2.0 — What a harness is, and why you are the one building it
+### B2.0 — The AI SDLC — what runs before a deploy, and what runs after
 
 `both directions`
 
@@ -33,6 +33,26 @@ python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it
 ```
 
 *Expect:* The loop runs with a real model behind `ask()` — a labelled replay offline, a frontier or open-weight call when one is configured. Without a verifier it accepts whatever came back and reports `verified: None`. With the verifier the same model and prompt produce an accepted, parameterised line — and a plausible-looking answer that wraps the input in `escape()` is refused, because it is still concatenation.
+
+---
+
+### B2.1 — What building a harness means in security engineering
+
+`both directions`
+
+- **Risk** — A harness whose verifier is the model agreeing with itself does not fail loudly. It succeeds incorrectly, files a clean trace, and the bug is found by whoever merged the patch.
+- **Control** — An independent verifier, and a budget that stops the loop when it cannot pass.
+- **Lab** — Run the same loop twice — once with no verifier, once with one.
+
+**Run it** — Run the same harness loop twice — once with no verifier, once with one.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B2.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it
+```
+
+*Expect:* Without a verifier the loop accepts whatever the model returned and reports verified: None. With one, the same model and prompt produce an accepted parameterised line, a too-narrow verifier is shown rejecting a correct fix, and an answer that wraps the input in escape() is refused because it is still concatenation.
 
 ---
 
@@ -59,7 +79,7 @@ python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it
 
 ---
 
-### B2.3 — Vulnerability auditing: three generations of SAST
+### B2.3 — Vulnerability auditing — deterministic Semgrep, then the model pass
 
 `AI for Security`
 
@@ -117,7 +137,7 @@ python3 ../shared/spend_report.py --by-run
 
 ---
 
-### B2.5 — Feasibility filtering and reachability
+### B2.5 — Feasibility filtering, reachability and dead code
 
 `AI for Security`
 
@@ -173,7 +193,30 @@ for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t -
 
 ---
 
-### B2.7 — Dynamic exploitation (DAST)
+### B2.7 — Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries
+
+`both directions`
+
+- **Risk** — A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety, and is evidence of nothing but the manifest's contents.
+- **Control** — Reconcile the SBOM against what is on disk, then recover strings, imports and egress from the compiled artefact that no SBOM entry covers.
+- **Lab** — Scan an SBOM, then decompile the closed-source library it never mentions.
+
+**Run it** — Scan an SBOM, reconcile it against the image, and decompile the library that is in no manifest.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.7   # run it headless and check it
+
+# --- the artefact is a real compiled class; this is how it was built ---
+javac -d /tmp/vt skills/appsec/supply-chain-decompile/evidence/provenance/VendorTelemetry.java
+```
+
+*Expect:* Three of five declared components carry advisories, including Text4Shell in commons-text 1.9 — which only appears because the version comparison is numeric. Reconciliation finds one artefact on disk in no manifest; decompiling its constant pool recovers a hardcoded telemetry endpoint with the licence key folded into the same literal, an AES/ECB cipher spec, and network-egress and cryptography capabilities. unassessable_by_sbom: 1.
+
+---
+
+### B2.8 — Dynamic exploitation (DAST)
 
 `AI for Security`
 
@@ -188,8 +231,8 @@ for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t -
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.7   # run it headless and check it
+jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.8   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/m0-agent-loop
@@ -201,7 +244,7 @@ python3 evolve.py --show-lineage   # what changed, what was kept, what was rever
 
 ---
 
-### B2.8 — Exploit chaining
+### B2.9 — Exploit chaining
 
 `AI for Security`
 
@@ -216,8 +259,8 @@ python3 evolve.py --show-lineage   # what changed, what was kept, what was rever
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.8   # run it headless and check it
+jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.9   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/m0-agent-loop
@@ -229,35 +272,7 @@ python3 replay.py --trace run.json --assert-identical
 
 ---
 
-### B2.9 — Remediation engineering
-
-`AI for Security`
-
-- **Risk** — A patch that silences the scanner is indistinguishable from a patch that fixes the bug.
-- **Control** — Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.
-- **Lab** — Validate four candidate patches on three axes and show which of them only made the scanner green.
-- **Tools** — `Semgrep OSS`, `pytest`
-- **Open-weight models** — `GLM-4.6`, `Kimi K2`
-- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.9   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/b2-harness
-python3 domain_harness.py --domain sast   --oracle reachability+test
-python3 domain_harness.py --domain pentest --require-signed-scope
-```
-
-*Expect:* One skeleton runs all four domains unchanged. With each domain's own oracle every confirmed finding is real — precision 1.00 across sast, threat model, dast and pentest — and the pentest run refuses outright without a signed scope, because its blast radius is live action. Swapping in the model's own confidence as the oracle confirms all 12 candidates, 8 of which are real: precision 0.67 in every domain, invisible from inside the harness.
-
----
-
-### B2.10 — Severity calibration and reporting
+### B2.10 — Severity calibration, triaging and reporting
 
 `AI for Security`
 
@@ -280,7 +295,35 @@ python3 scripts/run_notebooks.py --session B2.10   # run it headless and check i
 
 ---
 
-### B2.11 — Context engineering for the pipeline
+### B2.11 — Remediation engineering — proven in a sandbox before the merge request
+
+`AI for Security`
+
+- **Risk** — A patch that silences the scanner is indistinguishable from a patch that fixes the bug.
+- **Control** — Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.
+- **Lab** — Validate four candidate patches on three axes and show which of them only made the scanner green.
+- **Tools** — `Semgrep OSS`, `pytest`
+- **Open-weight models** — `GLM-4.6`, `Kimi K2`
+- **Frontier models** — `Claude Sonnet 5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/b2-harness
+python3 domain_harness.py --domain sast   --oracle reachability+test
+python3 domain_harness.py --domain pentest --require-signed-scope
+```
+
+*Expect:* One skeleton runs all four domains unchanged. With each domain's own oracle every confirmed finding is real — precision 1.00 across sast, threat model, dast and pentest — and the pentest run refuses outright without a signed scope, because its blast radius is live action. Swapping in the model's own confidence as the oracle confirms all 12 candidates, 8 of which are real: precision 0.67 in every domain, invisible from inside the harness.
+
+---
+
+### B2.12 — Context engineering — cutting the false positives
 
 `AI for Security`
 
@@ -295,38 +338,15 @@ python3 scripts/run_notebooks.py --session B2.10   # run it headless and check i
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.11   # run it headless and check it
+jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it
 ```
 
 *Expect:* The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.
 
 ---
 
-### B2.12 — Securing the developers' coding agents
-
-`Security of AI`
-
-- **Risk** — The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment.
-- **Control** — The strongest containment a developer does not notice: credential deny-lists and workspace confinement first.
-- **Lab** — Measure the default agent's blast radius and reachable credentials, then rank controls by friction.
-- **Tools** — `Docker`, `Cilium`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Measure the default agent's blast radius and reachable credentials, then rank controls by friction.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/B2.12.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session B2.12   # run it headless and check it
-```
-
-*Expect:* The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.
-
----
-
-### B2.13 — Attesting control intent for agents and MCP servers
+### B2.13 — Agentic AI in the pipeline — attesting control intent for agents and MCP servers
 
 `Security of AI`
 

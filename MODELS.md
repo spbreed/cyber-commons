@@ -86,16 +86,16 @@ difference between the sizes is worth knowing before you pick:
 
 | | reached the model | acceptance property held |
 |---|---|---|
-| Qwen2.5-**1.5B**-Instruct | 7/7 | **5/7** — B2.9 and C1.1 fail |
+| Qwen2.5-**1.5B**-Instruct | 7/7 | **5/7** — B2.11 and C1.1 fail |
 | Qwen2.5-**7B**-Instruct | 7/7 | **7/7** |
 
-At 1.5B, B2.9 hands back the SQL injection unfixed and C1.1 ranks TLS 1.0 above
+At 1.5B, B2.11 hands back the SQL injection unfixed and C1.1 ranks TLS 1.0 above
 an unauthenticated endpoint. Both clear at 7B. So **7B is the floor for the
 acceptance criteria**; below it the lessons still run and still teach, but two
 of them will not hit their numbers.
 
 The exception is the one worth reading: **B2.0 holds at 1.5B**, on the same SQL
-task B2.9 fails at that size — because it asks for one line and checks the
+task B2.11 fails at that size — because it asks for one line and checks the
 answer with an independent verifier rather than asking for a corrected function
 and trusting what comes back. Full transcripts in
 [`labs/notebooks/_live_model.json`](labs/notebooks/_live_model.json) and the
@@ -209,7 +209,7 @@ litellm --config labs/shared/litellm.config.yaml   # routes llama/glm/kimi behin
 | Offensive planning (C1) | **Kimi K2** or GLM-4.6 | multi-step planning |
 | Guardrails / classification | **Llama Guard** | purpose-built, and cheap at volume |
 | SOC triage (D1) | **GLM-4.6** or Llama 3.3 | cheap, high volume |
-| Exploit chaining, research (B2.8, C2) | **Kimi K2** | multi-file adversarial reasoning |
+| Exploit chaining, research (B2.9, C2) | **Kimi K2** | multi-file adversarial reasoning |
 | Multi-backbone benchmarking (C2.6) | **all three** | separating model effects from harness effects *is* the lab |
 | Anything, on a laptop with no GPU | **Qwen2.5-7B-Instruct** | the size the acceptance criteria were established at |
 

@@ -1,0 +1,28 @@
+[
+ {
+  "path": "site-packages/requests",
+  "purl": "pkg:pypi/requests@2.31.0"
+ },
+ {
+  "path": "site-packages/sqlalchemy",
+  "purl": "pkg:pypi/sqlalchemy@2.0.30"
+ },
+ {
+  "path": "site-packages/yaml",
+  "purl": "pkg:pypi/pyyaml@5.3.1"
+ },
+ {
+  "path": "site-packages/jinja2",
+  "purl": "pkg:pypi/jinja2@3.1.2"
+ },
+ {
+  "path": "lib/commons-text-1.9.jar",
+  "purl": "pkg:maven/org.apache.commons/commons-text@1.9"
+ },
+ {
+  "path": "lib/vendor-telemetry.jar",
+  "purl": null,
+  "artefact": "VendorTelemetry.class",
+  "note": "shipped by the booking provider's integration bundle, no manifest entry"
+ }
+]

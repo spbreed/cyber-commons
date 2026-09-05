@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.0 — What a harness is, and why you are the one building it | Cyber Commons</title><meta name="description" content="Build the pipeline and the harness as one system, and hold both to the same evidence standard."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.0</div><h1>What a harness is, and why you are the one building it</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A security pipeline built as if it were exempt from the risks it exists to find.</p></div><div class="ctrl"><div class="lab">Control</div><p>Build the pipeline and the harness as one system, and hold both to the same evidence standard.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.0.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.0.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/agentic-harness-loop/scripts/agentic_harness_loop.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.0 · What a harness is, and why you are the one building it</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: Harnesses and an Agentic AppSec Pipeline</strong>  ·  <em>Both directions</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.10.html">A3.10 · The agent's escalation path</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.0 — The AI SDLC — what runs before a deploy, and what runs after | Cyber Commons</title><meta name="description" content="Build the pipeline and the harness as one system, and hold both to the same evidence standard."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.0</div><h1>The AI SDLC — what runs before a deploy, and what runs after</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.0.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A security pipeline built as if it were exempt from the risks it exists to find.</p></div><div class="ctrl"><div class="lab">Control</div><p>Build the pipeline and the harness as one system, and hold both to the same evidence standard.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.0.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.0.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/sdlc-control-placement/scripts/sdlc_control_placement.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.0 · The AI SDLC — what runs before a deploy, and what runs after</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</strong>  ·  <em>Both directions</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.11.html">A3.11 · Securing the developers' coding agents</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -15,184 +15,199 @@
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> What a harness is — the wrapper around a model that turns
-generating text into getting work done — and the four moves of its loop, run
-against a real CyberTravels finding with an actual LLM call in it.</p>
-<p><strong>Why a security engineer needs it.</strong> Every part of that wrapper is a security
-decision: the tool surface is an authorisation problem, the verifier decides
-what the pipeline is allowed to believe, and the budget is the only control
-still standing once the model is the component you cannot trust. A harness whose
-verifier is the model agreeing with itself does not fail loudly — it succeeds
-incorrectly and files a clean trace.</p>
-<p>This is the <strong>opening</strong> lesson of the chapter: it also sets out which techniques
-belong before a deploy and which only work after one.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>A model on its own is a text generator. Wrap it in a loop with tools and it reviews CyberTravels' pull requests; wrap it badly and it reviews them and tells you it found nothing. Every part of that wrapper is a security decision, and nobody else in the building is going to notice that the verifier is a shape check.</p>
+<p><strong>What it covers.</strong> The one line every AI security technique sits on one side of
+— what can run before a deploy, on artefacts sitting still, and what only works
+against a system that is already running.</p>
+<p><strong>Why a security engineer needs it.</strong> Pre-deployment is cheap, repeatable and
+can block a merge, and it is structurally blind to the identity the workload
+actually gets. Post-deployment sees what really happened and cannot block the
+merge that caused it. The control it builds is: place every technique you own on
+that line and find the coverage you thought you had.</p>
+<p>This is the <strong>orientation</strong> lesson for the chapter. Everything after it is one
+stage of a pipeline, and each stage sits on one side of this line.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Half of what is sold as AI security tooling cannot run before a deploy, and half of it tells you nothing after one. Buy across that line without noticing it and you own two tools that agree with each other and a gap between them where the incidents happen.</p>
 <blockquote>
 <p><strong>At CyberTravels.</strong> Alex reviews 40 pull requests a week against 6 before the Coding Agent existed, with the same one reviewer. The reviewer becomes a harness, and the harness becomes something he has to secure.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   a model                 a harness
+<pre><code>   ONE LINE, AND EVERY TOOL SITS ON ONE SIDE OF IT
 
-   tokens in               PLAN   the model proposes
-   tokens out         -&gt;   ACT    the harness runs it against a tool
-   no memory               VERIFY something independent decides
-   no actions              STOP   verified, or a budget ran out
-   no notion of
-   &quot;did that work&quot;         the security decisions live in the last two
+              PRE-DEPLOYMENT          |        POST-DEPLOYMENT
+      artefacts sitting still         |      a system that is running
+                                      |
+   source, manifest, IaC plan,        |   real traffic, the identity the
+   tool schema, SBOM                  |   workload actually got, what left
+                                      |
+   cheap . repeatable . CAN BLOCK     |   sees what really happened . CANNOT
+   THE MERGE                          |   block the merge that caused it
+                                      |
+   SAST  SCA/SBOM  IaC policy         |   DAST  egress enforcement  drift
+   threat model  tool-schema review   |   detection  canaries  attestation
+                                      |
+   blind to: the identity it gets     |   blind to: the commit, until after
+                                      |
+      B2.2 - B2.7                     |      B2.8 - B2.13, and Function D
 
-   no verifier   -&gt; the loop accepts whatever came back
-   a shape check -&gt; it accepts anything well-formed
-   an LLM judge  -&gt; it accepts anything confident
-   a real check  -&gt; it refuses escape(ref) because that is still
-                    concatenation
+   the gap is not a tool you are missing. it is the line itself:
+   nothing on the left can see a runtime fact, and nothing on the
+   right can stop the change that created one
 </code></pre>
 <p>CyberTravels ships faster than Alex can read. The Coding Agent opens pull
 requests that touch a hundred files, and the review that used to be a careful
 hour is now a scroll. Function B is what he builds instead of scrolling.</p>
-<p>Everything he builds is a <strong>harness</strong>, so start there.</p>
-<blockquote>
-<p><strong>A harness is everything wrapped around a model that turns generating text
-into getting work done.</strong> It decides what the model sees, what it may do,
-whether what it did worked, and when to stop.</p>
-</blockquote>
-<p>A model on its own is a text generator: tokens in, tokens out, no memory, no
-ability to act, no notion of whether it succeeded. Wrap it in a loop with tools
-and it reviews code. Wrap it badly and it reviews code <em>and tells you it found
-nothing</em>.</p>
-<h3>Why this is a security engineer's job, not a platform team's</h3>
-<p>Every part of the wrapper is a security decision, and three of them are
-decisions nobody else in the building is equipped to make:</p>
-<ul>
-<li><strong>What the model may do</strong> is a tool surface — an authorisation problem
-  (A3.1), and the signature decides what is even expressible.</li>
-<li><strong>Whether it worked</strong> is a verifier — and a harness whose verifier is the
-  model agreeing with itself does not fail loudly. It <strong>succeeds incorrectly</strong>,
-  files a clean trace, and the bug is found by whoever merged the patch.</li>
-<li><strong>When to stop</strong> is a budget — the only control still standing once the model
-  is the component you cannot trust.</li>
-</ul>
-<p>Nobody else is going to notice that the pipeline's verifier is a shape check.
-That is the job.</p>
-<h3>The loop is four moves</h3>
-<p><strong>Plan</strong> — the model proposes what to do next. <strong>Act</strong> — the harness runs that
-against a tool. <strong>Verify</strong> — something independent decides whether it worked.
-<strong>Stop</strong> — verification succeeded, or a budget ran out.</p>
-<p>Frameworks make plan and act easy and leave verify and stop as your problem,
-usually defaulting to "the model says it's done" and "loop forever". The demo
-below is that loop with a real model in it, twice: once with no verifier, once
-with one. Same model, same prompt, opposite outcome.</p>
-<h3>And where each technique belongs</h3>
-<p>Half of what gets called "AI security tooling" cannot run before a deploy, and
-half tells you nothing after one. The split is not about the tool, it is about
-<strong>what exists yet</strong>. Pre-deployment works on artefacts sitting still — source, a
-manifest, an IaC plan, a tool schema — so it is cheap, repeatable and can block
-a merge, and it is blind to the identity the workload actually gets.
-Post-deployment works on a running system and sees what really happened, and
-cannot block the merge that caused it.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)"></th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">before the Coding Agent</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">after</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">pull requests per week</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">6</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>40</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">files touched per PR</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>up to 120</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">reviewers</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Nothing about the review capacity changed. That is the whole problem, and it is why the reviewer becomes a harness.</div></div><div class="nbmd"><h2>3 · The loop, with a real model in it</h2>
-<p>Four moves and about twenty lines. <code>ask()</code> is the model — offline it is a labelled replay, and with a key configured it is a real call to an open-weight model served from Kaggle, through the same code.</p></div><div class="nbmd"><h2>4 · What every lesson in this chapter runs, and how</h2>
-<p>Function B is where you build harnesses, so it is worth being precise about the one you are already inside. Every lesson from here on executes an <strong>agent skill</strong>, and that is three cells and nothing else:</p>
-<ol>
-<li><strong><code>SKILL_MD</code></strong> — the <code>SKILL.md</code> file, embedded verbatim from <code>skills/</code>. Frontmatter an agent routes on, then the procedure it follows.</li>
-<li><strong>the import</strong> — four lines that make the shared runtime importable and then import it. On Kaggle the runtime is a kernel attached to this notebook as a source, mounted as <code>__script__.py</code>; the cell copies it to the name it is imported by and imports it. In a checkout it is already <code>skills/_runtime/</code>.</li>
-<li><strong>the skill's own script</strong> — the file in <code>skills/&lt;area&gt;/&lt;name&gt;/scripts/</code>, embedded verbatim, which begins <code>from cyber_commons_skill_runtime import ...</code> and is otherwise the procedure doing its work.</li>
-</ol>
-<p><code>run_skill(SKILL_MD)</code> is the whole of the execution surface: it splits the frontmatter from the body and reports what was loaded. <code>contract_of(body)</code> and <code>check(instance, contract)</code> are there when a skill validates its own output. Nothing else in a lesson is Python.</p>
-<p><strong>To use the library in a notebook of your own</strong>, on Kaggle add <code>cybercommons/cyber-commons-skill-runtime</code> as a source — <em>File → Add data → Notebooks</em>, or <code>kernelDataSources</code> through the API — and paste those four lines. Locally, put <code>skills/_runtime</code> on <code>PYTHONPATH</code>. A0.1 runs that procedure on itself if you want to see it work before you copy it.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">cell</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what it is</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">how long</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><code>SKILL_MD</code> — the procedure, verbatim</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the skill</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">make the runtime importable, then &lt;code&gt;run_skill&lt;/code&gt;</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>4 lines</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the skill&#x27;s script — opens on one import</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the work</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">The runtime used to be copied into cell 2 of every notebook. That was 9,730 lines of identical code and one place it could not be fixed from.</div></div><div class="nbmd"><h2>5 · The loop, as a skill</h2>
-<p>The procedure is written down first, because the loop is the part you own and the model is a component inside it. Its script carries the adapter and the four moves — run offline it uses a labelled replay, and against a served open-weight model it is the same code.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/agentic-harness-loop/SKILL.md"><code>skills/appsec/agentic-harness-loop/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: agentic-harness-loop
+<p>It is one pipeline, built in order, and the first thing to get straight is
+<strong>where each piece of it can run at all</strong> — because half of what is sold as AI
+security tooling cannot run before a deploy, and half of it tells you nothing
+after one.</p>
+<h3>The line</h3>
+<p><strong>Pre-deployment works on artefacts sitting still.</strong> Source, a manifest, an IaC
+plan, a tool schema, an SBOM. Nothing is running, so the analysis is cheap,
+repeatable and — the property that matters most — it <strong>can block a merge</strong>. It
+is also structurally blind to every fact that does not exist until deployment:
+the identity the workload actually got, the route it can actually reach, the
+traffic it actually saw.</p>
+<p><strong>Post-deployment works on a system that is running.</strong> It sees what really
+happened, which is the only way to learn some things at all. And it <strong>cannot
+block the change that caused it</strong>. By the time it has an opinion, the merge is
+in.</p>
+<p>That is the whole of the distinction, and it decides more than people expect.
+A risk covered only on the left is one you can prevent and cannot detect. A
+risk covered only on the right is one you can detect and cannot prevent. Both
+of them appear on a tooling inventory as the same word — <em>covered</em> — and only
+one of them is what the person reading the inventory believed they had bought.</p>
+<h3>Why the chapter is ordered this way</h3>
+<p>Stages 1 to 10 are pre-deployment: ingest the estate, derive a threat model,
+audit the code, scan the supply chain, filter to what is reachable. They are
+cheap and they can gate. Stages 11 to 15 need something running: a replica to
+attack, an exploit to execute, a patch to prove, a report to sign. They are the
+expensive half, and they exist because the cheap half produces hypotheses
+rather than facts.</p>
+<p>Nothing in this chapter fixes the middle. The gap between the two sides is not
+a tool you are missing — it is the line itself, and the honest move is to know
+which side each of your controls is on before somebody asks you whether a risk
+is covered.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)"></th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">before the Coding Agent</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">after</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">pull requests per week</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">6</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>40</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">files touched per PR</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>up to 120</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">reviewers</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Nothing about the review capacity changed. That is the whole problem, and it is the reason every stage after this one is automated rather than scheduled.</div></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">technique</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">pre-deploy</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">post-deploy</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what only the other side sees</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">SAST / code analysis</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whether the vulnerable path is reached with real traffic</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Dependency and SBOM scanning</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">partly</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">what actually loaded, versus what the manifest pinned</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">IaC and policy-as-code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the identity and network the workload really got</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Threat modelling</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">re-run on drift</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">entry points added by a config change, not a commit</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Tool-schema and MCP surface review</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a description edited by a server after review</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">DAST / attack simulation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">against a replica</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">responses only a live system produces</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Guardrails and egress enforcement</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">config only</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the request that was actually attempted</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Runtime posture and drift</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a guardrail switched off after the demo — A3.9</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Detection and canaries</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">somebody using a credential nothing legitimate touches</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Attestation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">signs the claim</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">re-checks it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whether the deployment still matches what was signed</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Read the last column rather than the ticks. It is the sentence that says what each technique is structurally unable to see, and it is the one that decides whether two tools are coverage or two invoices.</div></div><div class="nbmd"><h2>3 · The placement, as a skill</h2>
+<p>The table above is a reference. This is the same question asked of CyberTravels' own inventory, which is the version that produces an answer somebody has to do something about.</p>
+<p>It counts three things separately: how many of the techniques can actually block a merge, which risks are covered only on the side that can prevent them, and which only on the side that can merely observe. All three read as “covered” on a tooling inventory.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/sdlc-control-placement/SKILL.md"><code>skills/appsec/sdlc-control-placement/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: sdlc-control-placement
 description: &gt;-
-  Build and check the plan-act-verify loop that turns a model into a harness —
-  including the exit condition, the parser, and an independent verifier that
-  decides what the loop is allowed to accept. Use when writing an agentic
-  pipeline, or when a loop reports success on work nobody checked.
+  Place each security technique on the pre-deployment / post-deployment line and
+  report which risks are covered only on the side that cannot act on them. Use
+  when reviewing AppSec tooling coverage, when choosing where a new control
+  belongs, or when a risk is described as covered and the incident happened
+  anyway.
 allowed-tools: Read, Grep, Glob
 </code></pre>
-<h1>The loop is yours; the model is a component in it</h1>
-<p>A harness is four moves — plan, act, verify, stop — and the security engineer
-owns three of them. What the loop <strong>accepts</strong> is decided by the verifier, not by
-the model, and a loop with no verifier accepts whatever came back and reports
-success.</p>
+<h1>Which side of the deploy is each control on, and what does that cost?</h1>
+<p>Every security technique works on one of two things: <strong>artefacts sitting
+still</strong> — source, a manifest, an IaC plan, a tool schema — or <strong>a system that
+is running</strong>. That is not a taxonomy for its own sake. It decides two
+properties that nothing else changes:</p>
+<ul>
+<li>pre-deployment is cheap, repeatable and <strong>can block a merge</strong>, and it is
+  blind to every fact that only exists at runtime — the identity the workload
+  actually got, the traffic it actually saw;</li>
+<li>post-deployment sees what really happened and <strong>cannot block the change that
+  caused it</strong>. It can only tell you afterwards.</li>
+</ul>
+<p>A risk covered only on the left is a risk you can prevent and cannot detect. A
+risk covered only on the right is one you can detect and cannot prevent. Both
+appear as "covered" on a tooling inventory, and only one of them is what the
+person reading the inventory thought they were buying.</p>
 <h2>When to use this</h2>
-<p>Whenever you are about to put a model in a for-loop: triage, remediation,
-detection authoring, anything that iterates until it is satisfied.</p>
+<p>Before buying anything, when a tooling inventory is presented as coverage, and
+after any incident where the answer to "did we have a control for that" was yes.
+Also when placing a new control: the same technique run at build time and at
+runtime answers different questions, and choosing is a design decision rather
+than a scheduling one.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Write the exit condition before the prompt.</strong> A loop whose exit is easier
-than the work will take the exit. Do not offer the model a way to declare
-itself done; decide that from the outside, on the artefact.</p>
-<p><strong>2 — Parse defensively, because parsing is the harness's job.</strong> Asked for one
-line, a small model returns the whole function and a larger one returns a fenced
-block. Both are reasonable readings. Take what you need from what arrives rather
-than requiring the model to do you a favour.</p>
-<p><strong>3 — Write the verifier as an independent check.</strong> Independent means it does
-not ask the model whether the answer is good. It examines the artefact: does the
-line use a placeholder, does the test pass, does the exploit stop working.</p>
-<p><strong>4 — Test the verifier against a correct answer you did not expect.</strong> This is
-the step that gets skipped. A verifier that accepts only one spelling of correct
-rejects real work and burns the budget doing it — check <code>%s</code>, <code>:name</code> and <code>$1</code>
-before shipping a check for <code>?</code>.</p>
-<p><strong>5 — Test it against a plausible wrong answer.</strong> Something that reads like a
-fix and is not — an escape function wrapped around concatenation. If the
-verifier accepts it, the loop ships it, reports success, and the trace looks
-clean.</p>
+<p><strong>1 — List the techniques you actually run</strong>, not the ones on the architecture
+diagram. A tool that is deployed and muted is not a control.</p>
+<p><strong>2 — Place each one.</strong> Pre, post, or genuinely both. "Both" is rarer than it
+looks: a technique that runs at build time and again at runtime counts as both
+only if the runtime pass can see something the build pass could not.</p>
+<p><strong>3 — For each one, name what the other side sees that it cannot.</strong> This is
+the sentence that turns a list into an argument. If you cannot write it, the
+placement is wrong or the technique is not doing what you think.</p>
+<p><strong>4 — Map risks to sides, not to tools.</strong> For each risk class, which sides
+cover it. Then count the two failure shapes: <strong>preventable but invisible</strong>
+(pre only) and <strong>visible but unpreventable</strong> (post only).</p>
+<p><strong>5 — Report the uncovered and the one-sided separately.</strong> A risk with nothing
+on either side is a gap everybody understands. A risk covered only on the side
+that cannot act is the one that gets signed off, and it is the one this
+procedure exists to surface.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;loop&quot;: {&quot;moves&quot;: [&quot;plan&quot;, &quot;act&quot;, &quot;verify&quot;, &quot;stop&quot;], &quot;max_steps&quot;: 0, &quot;exit_owned_by&quot;: &quot;harness|model&quot;},
-  &quot;parse&quot;: {&quot;expected&quot;: &quot;str&quot;, &quot;shapes_seen&quot;: [&quot;str&quot;], &quot;strategy&quot;: &quot;str&quot;},
-  &quot;verifier&quot;: {&quot;independent&quot;: true, &quot;accepts&quot;: [&quot;str&quot;], &quot;rejects&quot;: [&quot;str&quot;]},
-  &quot;runs&quot;: [{&quot;verifier&quot;: &quot;none|present&quot;, &quot;steps&quot;: 0, &quot;accepted&quot;: &quot;str&quot;, &quot;verified&quot;: null}]
+  &quot;techniques&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;side&quot;: &quot;pre|post|both&quot;, &quot;blind_to&quot;: &quot;str&quot;}],
+  &quot;risks&quot;: [{&quot;risk&quot;: &quot;str&quot;, &quot;sides&quot;: [&quot;pre|post&quot;], &quot;shape&quot;: &quot;covered|pre-only|post-only|uncovered&quot;}],
+  &quot;counts&quot;: {&quot;pre_only&quot;: 0, &quot;post_only&quot;: 0, &quot;uncovered&quot;: 0},
+  &quot;gate_capable&quot;: 0
 }
 </code></pre>
-<p>Report the unverified run too. The pair is the lesson: the same model and the
-same prompt, with and without something checking the answer.</p>
+<p><code>gate_capable</code> counts the techniques that can actually block a merge. It is
+usually much smaller than the tooling budget suggests, and it is the number
+that decides how much of your security posture is advisory.</p>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Offering the model a DONE exit.</strong> It will take it on the first turn.</li>
-<li><strong>A verifier that accepts one spelling.</strong> It rejects correct work, repeatedly,
-  and the budget goes on retries.</li>
-<li><strong>Asking a model to judge the answer.</strong> That is a second opinion, not a
-  verification.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
-model         : deterministic stand-in (no backend configured)
+<li><strong>Counting a muted tool as coverage.</strong> It runs, it reports, nobody reads it.</li>
+<li><strong>Marking everything "both".</strong> The word stops meaning anything and the
+  one-sided risks disappear into it.</li>
+<li><strong>Assuming pre-deployment sees the deployment.</strong> It sees the plan. The
+  identity the workload got, the route it can reach and the guardrail that was
+  switched off after the demo are all facts that do not exist yet.</li>
+<li><strong>Reading post-deployment coverage as prevention.</strong> Detection tells you it
+  happened. Nothing on that side of the line stops the merge.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>techniques, placed
+   technique                     side   gate  blind to
+   SAST / code analysis          pre    yes   whether the vulnerable path is reached with real traffic
+   SCA and SBOM scanning         pre    yes   what actually loaded, versus what the manifest pinned
+   IaC and policy-as-code        pre    yes   the identity and network the workload really got
+   threat modelling              pre    -     entry points added by a config change, not a commit
+   tool-schema / MCP review      both   yes   a description edited by the server after review
+   DAST / attack simulation      post   -     the commit that introduced it
+   egress enforcement            post   -     the config change that widened the allowlist
+   runtime posture and drift     post   -     the plan the drift departed from
+   detection and canaries        post   -     anything at all before it happens
+   attestation                   both   -     nothing - it signs on the left and re-checks on the right
 
-This lesson runs offline against a deterministic replay, which is why
-it works on a Kaggle kernel with the internet switched off. To run the
-identical code against a real model, serve an open-weight model from
-Kaggle Models and point the adapter at it:
+4 of 10 can block a merge. Everything else is
+advisory - it produces a ticket, and a ticket is a request, not a control.
 
-   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
-           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
-   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
-          MODEL=qwen2.5-7b-instruct
+risks, by which side covers them
+      injection in application code             covered
+   -&gt; vulnerable declared dependency            pre-only
+   !! undeclared vendored binary                uncovered
+   -&gt; over-broad IAM role at runtime            post-only
+   -&gt; prompt injection through retrieved text   post-only
+      tool schema edited after review           covered
+   -&gt; guardrail switched off after the demo     post-only
+   -&gt; secret committed to the repository        pre-only
 
-   MODELS.md has the exact Kaggle download. There is no paid backend:
-   every model result in this repository was produced this way.
-the loop, wired: [&#x27;plan&#x27;, &#x27;act&#x27;, &#x27;verify&#x27;, &#x27;stop&#x27;]
-backend  : replay
-steps    : 1
-accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
-verified : None   &lt;- nothing checked it
+pre-only  2   preventable, and invisible once it ships:
+           nothing on the right would tell you it happened.
+post-only 3   visible, and unpreventable: detection is the whole
+           of the control, and the merge that caused it went through.
+uncovered 1   nothing on either side. B2.7 is this row - an
+           artefact with no manifest entry has no identifier, so the
+           SCA pass on the left never had anything to look up.
 
-The loop stopped because the model produced something, which is not the
-same as producing something correct. Whatever came back was accepted.
-accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
-verified : True   &lt;- an independent check said so
-steps    : 1
-
-a correct psycopg fix: return DB.execute(&quot;SELECT * FROM bookings WHERE ref=%s&quot;, (ref,))
-   narrow verifier (only &#x27;?&#x27;) : REJECTS a correct fix
-   this lesson&#x27;s verifier     : accepts
-
-a plausible-looking answer: return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + escape(ref))
-   would the verifier accept it? False
-
-It reads like a fix and it is still concatenation. Without the verifier
-this loop ships it, reports success, and the trace looks clean.</code></pre></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">technique</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">pre-deploy</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">post-deploy</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what only the other side sees</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">SAST / code analysis</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whether the vulnerable path is reached with real traffic</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Dependency and SBOM scanning</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">partly</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">what actually loaded, versus what the manifest pinned</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">IaC and policy-as-code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the identity and network the workload really got</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Threat modelling</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">re-run on drift</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">entry points added by a config change, not a commit</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Tool-schema and MCP surface review</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a description edited by a server after review</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">DAST / attack simulation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">against a replica</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">responses only a live system produces</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Guardrails and egress enforcement</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">config only</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the request that was actually attempted</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Runtime posture and drift</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a guardrail switched off after the demo — A3.9</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Detection and canaries</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">no</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>yes</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">somebody using a credential nothing legitimate touches</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Attestation</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">signs the claim</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">re-checks it</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">whether the deployment still matches what was signed</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">This chapter is mostly the first column. Function D is the third.</div></div><div class="nbmd"><h2>6 · What this harness is worth, measured</h2>
-<p>Both of these were run for real, on CPU, against Qwen2.5 weights pulled from Kaggle Models — same machine, same adapter, one variable changed. B2.9 asks a model to fix the same SQL injection in one shot, by returning the corrected function. This lesson asks for <strong>one line</strong> and checks it.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)"></th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">B2.9 — one shot, fix the function</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">B2.0 — loop, one line, verified</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Qwen2.5-1.5B</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the vulnerable function, unchanged</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>ref=?</b> — accepted, in one step</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">Qwen2.5-7B</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">parameterised, bound</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>ref=%s</b> with the value bound</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">The 1.5B model that cannot fix the function produces the correct line when the harness narrows the ask and an independent verifier checks the answer. One step, not retries - this is the shape of the ask, which is the part you own.</div></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The loop runs with a real model behind <code>ask()</code> — a labelled replay offline, a real open-weight call when one is served. Without a verifier it accepts whatever came back and reports <code>verified: None</code>. With the verifier the same model and prompt produce an accepted, parameterised line — and a plausible-looking answer that wraps the input in <code>escape()</code> is refused, because it is still concatenation.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Name your pipeline's verifier out loud. If the sentence contains "the model checks" or "it looks right", you have a judge, and a judge approves confident prose — including prose that contradicts the finding it is attached to.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">B2.2 · Threat modelling from what the estate already knows</a></strong></p>
+All three of those render as one word on a tooling inventory. The middle
+row is the one that gets signed off, because a control exists, it runs,
+and it reports - and it reports afterwards.</code></pre></div><div class="nbmd"><h2>4 · What the counts are for</h2>
+<p>Three numbers come out of that run and each one has a different owner.</p>
+<p><strong>Gate-capable.</strong> Four of ten. Everything else produces a ticket, and a ticket
+is a request rather than a control. If your security posture depends on tickets
+being worked, it depends on next quarter's headcount.</p>
+<p><strong>Post-only risks.</strong> These are the ones that get signed off in a review,
+because a control exists, it runs, and it reports. It reports <em>afterwards</em>. The
+sign-off is not wrong about the control; it is wrong about what the control
+does.</p>
+<p><strong>Uncovered.</strong> One, and it is the subject of B2.7: an artefact in the build with
+no manifest entry has no identifier, so the SCA pass on the left never had
+anything to look up and the report was clean about it. That is a gap nothing on
+either side is currently pointed at.</p></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Four of ten techniques can block a merge; the other six produce tickets. Two risks are covered only before the deploy — preventable, and invisible once shipped — and three only after it, where detection is the whole of the control and the merge that caused it already went through. One is covered by nothing on either side, and that one is the undeclared vendored binary B2.7 goes after.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Write your own inventory into the same two columns, then delete every row that is deployed and muted. What is left is your coverage. The row that will start an argument is the one somebody believes is preventative and is in the right-hand column.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.1.html">B2.1 · What building a harness means in security engineering</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.0.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.0.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The loop runs with a real model behind `ask()` — a labelled replay offline, a frontier or open-weight call when one is configured. Without a verifier it accepts whatever came back and reports `verified: None`. With the verifier the same model and prompt produce an accepted, parameterised line — and a plausible-looking answer that wraps the input in `escape()` is refused, because it is still concatenation.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Claude Haiku 4.5</span><span>Qwen2.5-7B</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.0.ipynb</code></p></div><div class="pager"><a href="A3.10.html"><span class="k">← Previous</span><span class="t">A3.10 · The agent&#x27;s escalation path</span></a><a class="next" href="B2.2.html"><span class="k">Next →</span><span class="t">B2.2 · Threat modelling from what the estate already knows</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The loop runs with a real model behind `ask()` — a labelled replay offline, a frontier or open-weight call when one is configured. Without a verifier it accepts whatever came back and reports `verified: None`. With the verifier the same model and prompt produce an accepted, parameterised line — and a plausible-looking answer that wraps the input in `escape()` is refused, because it is still concatenation.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Claude Haiku 4.5</span><span>Qwen2.5-7B</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.0.ipynb</code></p></div><div class="pager"><a href="A3.11.html"><span class="k">← Previous</span><span class="t">A3.11 · Securing the developers&#x27; coding agents</span></a><a class="next" href="B2.1.html"><span class="k">Next →</span><span class="t">B2.1 · What building a harness means in security engineering</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

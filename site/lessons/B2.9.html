@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.9 — Remediation engineering | Cyber Commons</title><meta name="description" content="Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.9</div><h1>Remediation engineering</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A patch that silences the scanner is indistinguishable from a patch that fixes the bug.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/patch-validation-harness/scripts/patch_validation_harness.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.9 · Remediation engineering</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: Harnesses and an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.8.html">B2.8 · Exploit chaining</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.9 — Exploit chaining | Cyber Commons</title><meta name="description" content="Stage 13: combine validated findings into multi-step sequences and score the chain, not the links."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.9</div><h1>Exploit chaining</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.9.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Three medium findings are triaged as three mediums, and nobody notices they compose.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 13: combine validated findings into multi-step sequences and score the chain, not the links.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Replay an agent run from its trace.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.9.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.9.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/appsec-exploit-validate/scripts/appsec_exploit_validate.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.9 · Exploit chaining</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.8.html">B2.8 · Dynamic exploitation (DAST)</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,160 +11,195 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Semgrep OSS, pytest, GLM-4.6, Kimi K2, Claude Sonnet 5</td>
+<td>OWASP ZAP, Kimi K2, Claude Opus 5</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Validate four candidate patches on three axes and show which of them only made the scanner green.</p>
-<p><strong>Why a security engineer needs it.</strong> A patch that silences the scanner is indistinguishable from a patch that fixes the bug. The control it builds is: stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.</p>
+<p><strong>What it covers.</strong> Chain individually-medium findings into a critical path and show the severity the chain earns.</p>
+<p><strong>Why a security engineer needs it.</strong> Three medium findings are triaged as three mediums, and nobody notices they compose. The control it builds is: stage 13: combine validated findings into multi-step sequences and score the chain, not the links.</p>
 <p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>A patch that passes the tests and changes the behaviour is not a fix, it is a second incident with a pull request attached. Remediation is the stage where the pipeline stops finding things and starts touching them.</p>
+<p>Three medium findings, each correctly scored, each individually not worth an engineer's afternoon. Chained, they read a file that ends the conversation about severity. Chains are where automated analysis earns its keep.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The Coding Agent's fix must not break booking behaviour. A patch that passes the tests and changes what travellers experience is a second incident with a pull request attached. R8.</p>
+<p><strong>At CyberTravels.</strong> Verbose errors, an open redirect and a path traversal are each low on their own. Chained against CyberTravels they read a config file and end the conversation about severity. R9.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   patch                    what has to be true
-   +----------------+       +-----------------------------+
-   | fixes the bug  |  and  | behaviour unchanged         |
-   |                |       | tests still pass            |
-   |                |       | reviewer can follow the why |
-   +----------------+       +-----------------------------+
+<pre><code>   alone                                chained
+   +----------------+                   +-------------------------+
+   | path traversal | medium            | traversal reads config  |
+   | verbose errors | low        ---&gt;   | errors leak the key     |
+   | open redirect  | low               | redirect delivers it    |
+   +----------------+                   +-------------------------+
+                                        outcome: credential exfiltration
 
-   a patch that passes the tests and changes the behaviour is
-   a second incident with a pull request attached
+   severity is a property of the chain, not of the link
 </code></pre>
-<p><strong>Stage 14 — Remediation engineering.</strong> Generate the fix, then prove it.</p>
-<p>A model that finds bugs is useful. A model that fixes them is only useful if you
-can tell a real fix from a plausible one, and plausible is exactly what language
-models are optimised to produce.</p>
-<p>There are three ways to make a finding stop firing:</p>
-<ol>
-<li><strong>Fix the vulnerability</strong> — behaviour preserved, bug gone.</li>
-<li><strong>Remove the code</strong> — finding gone, so is the feature.</li>
-<li><strong>Evade the detector</strong> — rewrite until the pattern misses.</li>
-</ol>
-<p>All three make the scanner green, and an autonomous loop optimising for a green
-scan will find options 2 and 3 on its own because they are cheaper.</p>
-<p>The pipeline has an advantage a static workflow does not: Phase 4 already built
-a working exploit. So the acceptance test is not "does the scanner still fire?"
-It is <strong>"does the exploit still work against the patched build?"</strong> — which is
-the only question that cannot be gamed by editing the code around the detector.</p></div><div class="nbmd"><blockquote>
+<p><strong>Stage 13 — Exploit chaining.</strong> Individual findings are triaged individually,
+and that is how three mediums become a critical nobody noticed.</p>
+<p>The arithmetic of severity is not additive. A read-only information disclosure
+is a medium. A CSRF is a medium. An unauthenticated internal endpoint is a
+medium. Chained — leak an ID, forge a request using it, hit the internal
+endpoint with the forged session — the outcome is account takeover, which is
+not a medium.</p>
+<p>The pipeline can find these mechanically because Phase 4 already produced
+confirmed findings with known <strong>preconditions</strong> and <strong>effects</strong>. If one
+finding's effect satisfies another's precondition, they compose, and the chain's
+severity is the severity of its final effect.</p>
+<p>This is the stage that most often changes what gets fixed first.</p></div><div class="nbmd"><blockquote>
 <p><strong>Where you are in the pipeline.</strong></p>
 <p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
          └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
                    ──&gt; [Dynamic Validation] ──&gt; [Reporting]
                              └─ stages 11-14        └─ stage 15</code></p>
-</blockquote></div><div class="nbmd"><h2>3 · The stage, as a skill</h2>
-<p>Several candidate patches make the scanner green; one of them is a fix. The skill runs all three gates — behaviour unchanged, exploit blocked, and proof of fix against the old build — and reports which gate each rejected candidate died at.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/patch-validation-harness/SKILL.md"><code>skills/appsec/patch-validation-harness/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: patch-validation-harness
+</blockquote></div><div class="nbmd"><h2>3 · Phase 4 as a skill — and the preconditions that gate it</h2>
+<p>Dynamic validation is the one phase that <em>acts</em>. Everything before it reads; this one sends input to a running system. The skill therefore opens with safety preconditions rather than a procedure, and a refusal is a first-class output.</p>
+<p>The contract also insists that <code>reproduced: false</code> be reported rather than dropped. A finding that survived Phase 3 and then failed to reproduce is the most useful signal the pipeline produces about its own false-positive rate — and it is the one a tidy report deletes.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/appsec-exploit-validate/SKILL.md"><code>skills/appsec/appsec-exploit-validate/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: appsec-exploit-validate
 description: &gt;-
-  Accept a proposed fix only when three things hold — behaviour unchanged, the
-  exploit no longer works, and the fix proved against the build that was
-  vulnerable. Use when an agent proposes a patch, or when a scanner going green
-  is being read as a fix.
-allowed-tools: Read, Grep, Glob, Bash
+  Prove a candidate vulnerability is real by reproducing it in an isolated
+  sandbox, then decide whether it chains into something worse. Use when asked
+  to validate or confirm a finding, write or run a proof-of-concept, check
+  exploitability, reproduce a CVE, or separate theoretical findings from
+  demonstrated ones.
+allowed-tools: Bash, Read, Write, Grep
 </code></pre>
-<h1>A green scanner is not a fixed bug</h1>
-<p>Several candidate patches will make the scanner green. Some of them change
-behaviour, some of them leave the bug exploitable, and one of them does neither.
-Telling them apart needs three gates, and the third is the one that is usually
-missing: proof against the <strong>old</strong> build, so "the exploit stops working" is a
-statement about the patch rather than about the environment.</p>
+<h1>AppSec pipeline · Phase 4 — Dynamic validation</h1>
+<p>Covers <strong>stages 11–14</strong>. A finding that has been reproduced is a different
+object from a finding that has been argued for. This phase produces the
+difference, and it is the phase with the sharpest safety constraints.</p>
 <h2>When to use this</h2>
-<p>Every proposed remediation, whether authored by a person or an agent, and
-especially when the evidence offered is that the scanner no longer fires.</p>
+<p>Only on findings that reached <code>feasible: true, verdict: confirmed</code> in Phase 3.
+Validating an unfiltered list wastes the most expensive stage in the pipeline
+on findings Phase 3 would have deleted.</p>
+<h2>Safety preconditions — check before anything else</h2>
+<p>Refuse to proceed unless <strong>all</strong> hold, and say which one failed:</p>
+<ol>
+<li>The target is a <strong>local sandbox or an explicitly authorised environment</strong>.
+   Never a production host, never a third party's infrastructure.</li>
+<li>The sandbox has <strong>no credentials</strong> beyond throwaway ones, and <strong>no route</strong>
+   to a real network the exploit could reach.</li>
+<li>The proof-of-concept <strong>demonstrates</strong> the flaw. It does not exfiltrate real
+   data, persist, escalate beyond the demonstration, or damage anything.</li>
+<li>There is a <strong>teardown</strong> and it runs even on failure.</li>
+</ol>
+<p>This is not ceremony. A validation harness with production credentials in its
+environment is itself the vulnerability.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Establish the baseline on the vulnerable build.</strong> The behaviour cases must
-pass and the exploit must work. If the exploit does not work here, you are about
-to validate a patch against a bug you have not reproduced.</p>
-<p><strong>2 — Gate one: behaviour unchanged.</strong> Run every behaviour case against the
-patched build. A patch that fixes the defect and changes an answer is a
-regression with a security justification.</p>
-<p><strong>3 — Gate two: the exploit no longer works.</strong> Against the patched build,
-directly. Not "the scanner is quiet" — the scanner was one of the tools that
-missed the defect class in the first place.</p>
-<p><strong>4 — Gate three: proof of fix.</strong> Run the exploit against the old build again,
-after the patch is written, in the same harness. It must still work. This is
-what excludes the environment having changed underneath the test.</p>
-<p><strong>5 — Report per candidate and per gate.</strong> A candidate rejected at gate one and
-one rejected at gate two need different conversations with whoever wrote them.</p>
+<p><strong>Stage 11 — Sandbox replication.</strong> Stand the component up in isolation with
+the smallest fixture that reproduces the conditions: the vulnerable version,
+the reachable entry point, and nothing else. Record the exact commit and the
+fixture, because a PoC that cannot be re-run is an anecdote.</p>
+<p><strong>Stage 12 — Dynamic exploitation.</strong> Drive the entry point with an input that
+should trigger the sink. Capture the observable: the crash, the query executed,
+the file read, the process spawned. <strong>The observable is the evidence</strong> — an
+exit code is not. Record what you sent and what came back.</p>
+<p><strong>Stage 13 — Exploit chaining.</strong> Ask what the demonstrated primitive gives
+access to next. A path traversal that reads a config file containing a token is
+not a file-read bug; it is a credential-disclosure bug. Chain only within the
+sandbox, and stop at the first step that would need a real credential.</p>
+<p><strong>Stage 14 — Remediation engineering.</strong> Propose the fix at the right layer, and
+say what it costs. Prefer the control that makes the class impossible
+(parameterised queries, an allowlist, a type) over the one that blocks the
+sample payload (a regex on the input you happened to send). Then <strong>re-run
+stage 12 against the fix</strong> — a remediation that has not been tested against the
+PoC that motivated it is a hypothesis.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;baseline&quot;: {&quot;behaviour_pass&quot;: true, &quot;exploit_works&quot;: true},
-  &quot;candidates&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;scanner_green&quot;: true,
-                  &quot;behaviour_unchanged&quot;: true, &quot;exploit_blocked&quot;: true,
-                  &quot;proof_of_fix&quot;: true, &quot;verdict&quot;: &quot;accepted|rejected&quot;, &quot;rejected_at&quot;: &quot;str|null&quot;}],
-  &quot;accepted&quot;: [&quot;str&quot;]
+  &quot;validations&quot;: [
+    {&quot;finding_id&quot;: &quot;str&quot;, &quot;reproduced&quot;: true,
+     &quot;sandbox&quot;: {&quot;commit&quot;: &quot;str&quot;, &quot;fixture&quot;: &quot;str&quot;, &quot;isolated&quot;: true},
+     &quot;input&quot;: &quot;str&quot;, &quot;observable&quot;: &quot;str&quot;,
+     &quot;chain&quot;: [{&quot;primitive&quot;: &quot;str&quot;, &quot;leads_to&quot;: &quot;str&quot;, &quot;stopped_because&quot;: &quot;str&quot;}],
+     &quot;remediation&quot;: {&quot;layer&quot;: &quot;input|query|api|config|architecture&quot;,
+                     &quot;change&quot;: &quot;str&quot;, &quot;cost&quot;: &quot;low|medium|high&quot;,
+                     &quot;retested&quot;: true, &quot;still_reproduces&quot;: false}}
+  ],
+  &quot;refused&quot;: [{&quot;finding_id&quot;: &quot;str&quot;, &quot;precondition_failed&quot;: 1, &quot;why&quot;: &quot;str&quot;}]
 }
 </code></pre>
+<p><code>reproduced: false</code> is a first-class result and must be reported, not dropped.
+A finding that survived Phase 3 and then failed to reproduce is the single most
+useful signal the pipeline produces about its own false-positive rate.</p>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Accepting a green scanner.</strong> Several wrong patches produce one.</li>
-<li><strong>Skipping the behaviour cases.</strong> The most reliable way to block an exploit is
-  to break the feature.</li>
-<li><strong>Omitting proof of fix.</strong> Without it you cannot distinguish a working patch
-  from a broken exploit.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
-model         : deterministic stand-in (no backend configured)
+<li><strong>Reporting <code>reproduced: true</code> without an observable.</strong> The observable is the
+  claim; without it there is nothing to check.</li>
+<li><strong>Treating "the exploit ran" as "the fix works".</strong> Re-run after remediation
+  or set <code>retested: false</code> and say so.</li>
+<li><strong>Chaining outside the sandbox.</strong> Stop and record <code>stopped_because</code>.</li>
+<li><strong>Fixing the payload instead of the class.</strong> A regex that blocks <code>../</code> does
+  not fix path traversal.</li>
+</ul>
+<h2>Handoff</h2>
+<p>Pass <code>validations</code> to <strong>appsec-triage-report</strong>. Findings that failed to
+reproduce keep their finding record and gain <code>reproduced: false</code> — the report
+must be able to distinguish "demonstrated" from "asserted".</p></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>id     cwe       sev      requires                              grants
+------------------------------------------------------------------------------------------------
+F-01   CWE-200   low      [&#x27;unauthenticated&#x27;]                   [&#x27;valid_report_id&#x27;]
+F-02   CWE-639   medium   [&#x27;authenticated&#x27;, &#x27;valid_report_id&#x27;]  [&#x27;other_users_report_data&#x27;]
+F-03   CWE-352   medium   [&#x27;authenticated&#x27;]                     [&#x27;password_reset_for_victim&#x27;]
+F-04   CWE-89    high     [&#x27;authenticated&#x27;]                     [&#x27;database_read&#x27;]
+F-05   CWE-306   medium   [&#x27;internal_network&#x27;]                  [&#x27;admin_actions&#x27;]
+F-06   CWE-918   medium   [&#x27;authenticated&#x27;]                     [&#x27;internal_network&#x27;]
+158 composable chains found
 
-This lesson runs offline against a deterministic replay, which is why
-it works on a Kaggle kernel with the internet switched off. To run the
-identical code against a real model, serve an open-weight model from
-Kaggle Models and point the adapter at it:
+[critical] F-01 → F-03                links: low, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+[critical] F-04 → F-03                links: high, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+[critical] F-06 → F-03                links: medium, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+[critical] F-06 → F-05                links: medium, medium
+            final effect: [&#x27;admin_actions&#x27;]
+[critical] F-01 → F-02 → F-03         links: low, medium, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+[critical] F-01 → F-04 → F-03         links: low, high, medium
+            final effect: [&#x27;password_reset_for_victim&#x27;]
+highest individual finding severity : high
+highest chained severity            : critical
 
-   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
-           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
-   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
-          MODEL=qwen2.5-7b-instruct
+critical chains built entirely from non-critical findings:
+   F-01(low) → F-03(medium)
+      → [&#x27;password_reset_for_victim&#x27;]
+   F-04(high) → F-03(medium)
+      → [&#x27;password_reset_for_victim&#x27;]
+   F-06(medium) → F-03(medium)
+      → [&#x27;password_reset_for_victim&#x27;]
 
-   MODELS.md has the exact Kaggle download. There is no paid backend:
-   every model result in this repository was produced this way.
-behaviour of the vulnerable build:
-   get_user(&#x27;dana&#x27;    ) → [(1, &#x27;dana&#x27;)]      ok
-   get_user(&#x27;sam&#x27;     ) → [(2, &#x27;sam&#x27;)]       ok
-   get_user(&#x27;nobody&#x27;  ) → []                 ok
-   get_user(&quot;o&#x27;brien&quot; ) → raised OperationalError FAILS
-
-exploit works: True — probe returned 3 rows
-scanner fires: False
-candidate                           scanner green
+26 critical chain(s) whose every link is medium or lower.
+Triaged individually, none of those findings would be worked this sprint.
+finding  own sev     chains broken   worst chain
 --------------------------------------------------
-A · parameterise (the real fix)              True
-B · delete the feature                       True
-C · evade the scanner                        True
-D · escape by hand                           True
+F-01     low                   127      critical
+F-06     medium                127      critical
+F-03     medium                102      critical
+F-04     high                  102      critical
+F-02     medium                 52      critical
+F-05     medium                 52      critical
 
-Three of four are green. Only one of those is a fix.
-candidate                         scan  behaviour  exploitable  verdict
-------------------------------------------------------------------------------------
-A · parameterise (the real fix)   True  True       False        ACCEPT
-B · delete the feature            True  False      False        REJECT — behaviour changed
-C · evade the scanner             True  False      True         REJECT — behaviour changed, STILL EXPLOITABLE (stage-12 probe passes)
-D · escape by hand                True  True       False        ACCEPT
+fix first: F-01 — own severity low, but it breaks 127 chains including a critical
+conformance: 0 problem(s)
 
-accepted: [&#x27;A · parameterise (the real fix)&#x27;, &#x27;D · escape by hand&#x27;]
-A · parameterise (the real fix)    proof of fix: True  (exploit on old=True, on new=False)
-D · escape by hand                 proof of fix: True  (exploit on old=True, on new=False)
+validated 6 findings, refused 1
+   F-01  chains to: valid_report_id
+   F-02  chains to: other_users_report_data
+   F-03  chains to: password_reset_for_victim
 
-Candidate D passes every automated check and is still the wrong answer:
-it reimplements the driver&#x27;s escaping and will be wrong for the next
-input class or the next database. Nothing except a rule about MECHANISM
-catches that — which is the part of remediation that does not automate.
-backend used : replay
-model        : deterministic stand-in (no backend configured)
-prompt       : Fix this without changing the function&#x27;s behaviour for valid input...
+Refusing is an output, not an error. A validation harness that quietly
+skips the production target reports the same thing as one that never
+saw it, and those are very different states to be in.
+conformance, tidy report  : 0
+conformance, honest report: 0
 
-answer:
-   def report(request):
-       q = &quot;SELECT * FROM orders WHERE ref = ?&quot;
-       return db.execute(q, (request.args[&#x27;ref&#x27;],))
+validations attempted : 6
+reproduced            : 4
+failed to reproduce   : 2  (F-01, F-04)
+measured false-positive rate of Phase 3: 33%
 
-property checked : parameterises the query
-held on replay       : True
-
-Same code, same assertions, two possible backends. Offline the answer is
-the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Candidate D passes every automated gate and is still wrong. Write the rule that rejects it. You will find it has to be about which <em>mechanism</em> is acceptable, not about outcomes — and that rule belongs in your secure coding standard, not in the pipeline.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.10.html">B2.10 · Severity calibration and reporting</a></strong></p>
+Both conform. The tidy one drops the non-reproductions, and with them
+the only number that says how good the earlier phases actually are.
+Its reader sees a pipeline that is right every time.</code></pre></div><div class="nbmd"><h2>4 · Where it breaks — the tidy report</h2>
+<p>Now suppose two of these findings do not reproduce, and the pipeline does the natural thing with them.</p></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Six confirmed findings compose into multiple chains. The highest individual severity is high while the highest chained severity is critical, and at least one critical chain is built entirely from medium-or-lower links — for example SSRF granting internal network access, then the unauthenticated admin endpoint. Remediation ordering puts a medium finding first because it breaks the most chains.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take your current open findings and write down each one's preconditions and effects. The chaining falls out mechanically, and the finding you should fix first is usually not the one at the top of the severity-sorted queue.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.10.html">B2.10 · Severity calibration, triaging and reporting</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.9.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.9.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>One skeleton runs all four domains unchanged. With each domain&#x27;s own oracle every confirmed finding is real — precision 1.00 across sast, threat model, dast and pentest — and the pentest run refuses outright without a signed scope, because its blast radius is live action. Swapping in the model&#x27;s own confidence as the oracle confirms all 12 candidates, 8 of which are real: precision 0.67 in every domain, invisible from inside the harness.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Semgrep OSS</span><span>pytest</span><span>GLM-4.6</span><span>Kimi K2</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.9.ipynb</code></p></div><div class="pager"><a href="B2.8.html"><span class="k">← Previous</span><span class="t">B2.8 · Exploit chaining</span></a><a class="next" href="B2.10.html"><span class="k">Next →</span><span class="t">B2.10 · Severity calibration and reporting</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Either it reproduces, or the tool names the field you failed to log. Anything you cannot replay you cannot investigate.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OWASP ZAP</span><span>Kimi K2</span><span>Claude Opus 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.9.ipynb</code></p></div><div class="pager"><a href="B2.8.html"><span class="k">← Previous</span><span class="t">B2.8 · Dynamic exploitation (DAST)</span></a><a class="next" href="B2.10.html"><span class="k">Next →</span><span class="t">B2.10 · Severity calibration, triaging and reporting</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

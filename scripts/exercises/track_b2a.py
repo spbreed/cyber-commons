@@ -1,4 +1,4 @@
-"""B1 (part 1) — The AppSec pipeline, phases 1 to 3. Sessions B2.2–B2.5.
+"""B1 (part 1) — The AppSec pipeline, phases 1 to 3. Sessions B2.1–B2.5.
 
 The whole track is one artefact built in order: a five-phase, fifteen-stage
 automated application-security pipeline, and the lessons run in exactly the
@@ -7,13 +7,14 @@ order the stages do.
     [Ingestion & Mapping] → [Threat Modelling] → [Discovery]
         → [Dynamic Validation] → [Reporting]
 
+    Before any stage: what a harness is                        → B2.1
     Phase 1 · Ingestion & Structural Mapping
         1 historical parsing        2 structural indexing
-        3 component summarisation   4 architecture synthesis       → B2.1
+        3 component summarisation   4 architecture synthesis
     Phase 2 · Threat Modelling
         5 threat modelling, from six static inputs                 → B2.2
     Phase 3 · Analysis & Filtering
-        7 vulnerability auditing, three generations of SAST        → B2.3
+        7 vulnerability auditing: real Semgrep, then the model pass → B2.3
         8 deduplication             9 contextual verification      → B2.4
        10 feasibility filtering                                    → B2.5
 
@@ -59,6 +60,82 @@ from . import diagrams as D
 
 EXERCISES: dict[str, dict] = {
 
+# Deliberately the shortest lesson in the chapter. It exists to define one word
+# that the next thirteen lessons use constantly, and a definition lesson that
+# runs long stops being a definition.
+"B2.1": {
+ "concept": """
+**Building a harness, in security engineering, is building everything around a
+model that turns generating text into getting work done: what it sees, what it
+may do, how you know whether it worked, and when it stops.** A model on its own
+is a text generator — no memory, no actions, no notion of success. The wrapper
+is what makes it a control, and every part of that wrapper is a security
+decision: the tool surface is an authorisation problem, the verifier decides
+what your pipeline is allowed to believe, and the budget is the only thing
+still holding once the model is the component you cannot trust.
+
+You already run several, whether or not anyone calls them that:
+
+- **The CI security scan.** Sees the changed files, may only read, "worked"
+  means a zero exit and a finding that parses, stops on a timeout.
+- **An autofix bot.** Sees the finding and the file, may open a branch, and
+  "worked" should mean *the exploit no longer reproduces* — not *the scanner
+  went quiet*.
+- **A SOC triage assistant.** Sees the alert and its enrichment, may query the
+  SIEM read-only, and "worked" means its disposition matched an analyst's on a
+  held-out sample.
+
+The third field is where harnesses fail, and they fail quietly. A harness whose
+verifier is the model agreeing with itself does not stop and report an error —
+it **succeeds incorrectly**, files a clean trace, and the bug is found later by
+whoever merged the patch.
+""",
+ "steps": [
+  ("md", "## 2 · The four moves"),
+  ("html", D.table(
+    ["move", "who does it", "the security decision in it"],
+    [["<b>plan</b>", "the model", "none — this is the part you did not write"],
+     ["<b>act</b>", "the harness", "the tool surface: what is even expressible"],
+     ["<b>verify</b>", "something independent",
+      "<b>what the pipeline is allowed to believe</b>"],
+     ["<b>stop</b>", "the harness", "the budget — the last control still standing"]],
+    emphasise=2,
+    caption="Frameworks make plan and act easy and leave verify and stop as "
+            "your problem, usually defaulting to “the model says it is "
+            "done” and “loop forever”.")),
+
+  *skill_steps("appsec/agentic-harness-loop",
+               "## 3 · One loop, run twice\n\nThe simplest harness that shows "
+               "the point: about twenty lines, one real model call, one SQL "
+               "injection from CyberTravels' booking service. It runs with no "
+               "verifier and then with one — same model, same prompt.\n\n"
+               "Offline the model is a labelled replay; against a served "
+               "open-weight endpoint it is the identical code."),
+
+  ("md", """## 4 · The part worth keeping
+
+Read the last block of that output again. The answer it rejects —
+`ref=" + escape(ref)` — is the one that matters: it reads like a fix, it would
+pass a human skim, and it is still concatenation. Without a verifier the loop
+accepts it, reports success and files a clean trace.
+
+That is the whole reason this chapter defines the word before it builds
+anything. Every stage after this one is a harness, and for each of them the
+question is the same: **what, other than the model, decided that this worked?**"""),
+ ],
+ "expect": "The loop runs with a real model behind `ask()` — a labelled replay "
+           "offline, a real open-weight call when one is served. With no "
+           "verifier it accepts whatever came back and reports "
+           "`verified: None`. With the verifier the same model and prompt "
+           "produce an accepted, parameterised line; a narrow verifier that "
+           "only accepts `?` is shown rejecting a correct psycopg fix, and a "
+           "plausible answer wrapping the input in `escape()` is refused, "
+           "because it is still concatenation.",
+ "challenge": "Name your pipeline's verifier out loud. If the sentence contains "
+              "\"the model checks\" or \"it looks right\", you have a judge, and "
+              "a judge approves confident prose — including prose that "
+              "contradicts the finding it is attached to.",
+},
 
 "B2.2": {
  "concept": """
@@ -137,46 +214,77 @@ you read the procedure, execute it, and read what it produced.
 
 "B2.3": {
  "concept": """
-**Stage 7 — Vulnerability auditing.** The deep-dive analysis stage, and the one
-people think of as "SAST". It has had three generations, and knowing what each
-can and cannot see is what stops you buying the wrong one.
+**Stage 7 — Vulnerability auditing.** The stage people mean when they say
+"SAST", and the one where the two halves of this pipeline are easiest to
+confuse with each other.
 
-**Generation 1 — grep.** Pattern-match dangerous constructs. Fast, zero setup,
-fires on every occurrence whether reachable or not. Precision is poor, so it gets
-muted.
+**The deterministic half is a real scanner with real rules.** Semgrep, CodeQL,
+OpenGrep. Parse the code to a graph, ask a rule a question about it, and get
+the same answer every time. That repeatability is what lets you gate a merge on
+it — a probabilistic check cannot block a build, because the same commit would
+pass on Tuesday and fail on Wednesday.
 
-**Generation 2 — rules with dataflow.** Semgrep, CodeQL, OpenGrep. Parse to an
-AST or graph and track *taint*: does untrusted input reach a dangerous sink?
-Precision improves enormously. The cost is that a rule only finds the pattern
-someone wrote it for.
+Its limit is not accuracy. On the file below Semgrep's precision is **1.00 at
+every ruleset width**; it does not report bugs that are not there. Its limit is
+that a rule only finds the pattern somebody wrote, so its **recall is a
+configuration decision** — and one that is invisible, because a narrow scan and
+a wide scan both exit `0`.
 
-**Generation 3 — model review.** An open-weight model reads the code and reasons.
-No rule needs to exist first, which is exactly its value — and it also invents
-bugs that are not there, confidently.
+**The probabilistic half reads the code and reasons.** No rule needs to exist
+first, which is exactly its value, and it is the only thing that reaches a
+defect that is the **absence** of a call. It also invents defects, confidently,
+with a similar-looking confidence number attached.
 
-The mistake is treating generation 3 as a replacement for generation 2. The
-combination that works: rules for what rules do well, deterministically; the
-model for what rules cannot express; and everything the model says treated as a
-**hypothesis** until stages 8–12 confirm it.
+So the two are not competing generations where the newer one wins. They answer
+different questions and fail in opposite directions, and this lesson runs each
+as its own skill:
+
+| | deterministic — Semgrep | probabilistic — the model pass |
+|---|---|---|
+| same answer twice | yes | no |
+| can gate a merge | **yes** | no |
+| finds what no rule expresses | no | **yes** |
+| typical failure | missed it entirely | reported it and it was not there |
+| output is a | **finding** | **hypothesis** |
+
+That last row is the load-bearing one. Everything the model says enters the
+pipeline as a hypothesis, and stages 8–12 are what turn one into a finding.
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
-("md", "## 2 · Generation 1 — grep, and why it gets muted\n\n"
-         "The safe functions in this corpus matter more than the buggy ones: a "
-         "scanner that fires on parameterised SQL is one nobody runs twice."),
-("md", "## 3 · Generation 2 — taint rules\n\n"
-         "The improvement is not a better pattern. It is a different question: "
-         "*does untrusted input reach this sink?* A function parameter is "
-         "untrusted; a string literal is not."),
-("md", "## 4 · Generation 3 — what rules structurally cannot see\n\n"
-         "Generation 2 is perfect on this corpus. So why involve a model? Because "
-         "a rule only finds what someone wrote it for. Here is a bug with no "
-         "rule: an authorization check that is *present* and wrong."),
-("md", """## 5 · Generation 2, as the tool you would actually run
 
-The taint engine above is forty lines so it fits in a lesson. In production
-generation 2 is Semgrep, CodeQL or OpenGrep, and a rule is a file. This is the
-Semgrep rule for the same taint property the engine above implements:
+  ("md", """## 2 · The file, and the key written before anything ran
+
+This is a real pull request from CyberTravels' Coding Agent, in
+[`labs/tools/semgrep-sast/booking.py`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/tools/semgrep-sast).
+Six defects, enumerated by hand **before** any scanner saw it — because a key
+written after the scan is a description of the scan.
+
+```python
+def find_booking(reference):                                    # 7  CWE-862
+    cur.execute("SELECT * FROM bookings WHERE reference LIKE '%" + reference + "%'")   # 9  CWE-89
+def render_itinerary(template, booking):
+    return eval(template, {"booking": booking})                 # 14 CWE-95
+def sync_vendor(vendor_host):
+    subprocess.run("curl -s https://" + vendor_host + "/manifest", shell=True)  # 17 CWE-78
+def notify(url, payload):
+    return requests.post(url, json=payload, verify=False)       # 20 CWE-295
+API_KEY = "sk-live-4f9a2b1c8e7d6a5b3c2d1e0f9a8b7c6d"            # 22 CWE-798
+```
+
+Five of the six are the *presence* of a pattern. The sixth, on line 7, is the
+**absence** of one: `find_booking` returns a booking to whoever asks, and the
+Workflow Agent calls it holding `payments.refund`. Hold on to that line — it is
+the whole reason this lesson has two skills in it."""),
+
+  ("md", """## 3 · Real Semgrep, at three widths, with the rule as a file
+
+Not a forty-line taint engine written to fit in a lesson. Semgrep **1.176.0**,
+against that file, three configurations —
+[`run.sh`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/labs/tools/semgrep-sast)
+reproduces all three and the raw JSON is committed beside the skill.
+
+The third is a custom taint rule, which is what a real one looks like:
 
 ```yaml
 rules:
@@ -184,88 +292,112 @@ rules:
     languages: [python]
     severity: ERROR
     message: >-
-      Traveller-controlled input is concatenated into a SQL string. Use a
+      Caller-controlled input is concatenated into a SQL string. Use a
       parameterised query.
     mode: taint
     pattern-sources:
-      - pattern: $REQ.args[...]
-      - pattern: $REQ.files[...]
+      - pattern: |
+          def $F(..., $X, ...):
+            ...
     pattern-sinks:
-      - pattern: $CONN.execute(...)
-    pattern-sanitizers:
-      - pattern: sqlite3.paramstyle
+      - pattern: $CUR.execute(...)
 ```
 
-[`labs/tools/semgrep-sast/`](https://github.com/spbreed/cyber-commons/tree/main/labs/tools/semgrep-sast)
-installs Semgrep 1.176.0 and runs it against a pull request from the Coding
-Agent. Two things came out of that run and both matter here.
+`mode: taint` is the whole difference between generations of scanner: not a
+better pattern, a different question — *does caller-controlled input reach this
+sink?*"""),
 
-**Coverage is a configuration decision, and it is invisible.** The same file,
-two ruleset widths:
+  *skill_steps('appsec/sast-semgrep-deterministic',
+               "## 4 · The deterministic half, as a skill\n\n"
+               "The skill scores each of the three real runs against the "
+               "six-defect key and reports precision and recall **separately**, "
+               "because merging them into one \"accuracy\" number hides the only "
+               "one that moves. Then it partitions what every width missed into "
+               "the two classes that matter: a defect a rule *could* match and "
+               "nobody wrote (write the rule) and a defect no rule can express "
+               "(the next skill)."),
 
-```
-  p/python + p/secrets: 1 finding
-    line  17  ERROR   subprocess-shell-true
+  ("md", """## 5 · Which of the two misses justifies a model
 
-  seven packs: 4 findings
-    line   9  ERROR   sqlalchemy-execute-raw-query
-    line  14  WARNING eval-detected
-    line  17  ERROR   subprocess-shell-true
-    line  20  ERROR   disabled-cert-validation
-```
+One of them does not. Line 22 is a hardcoded key — lexical, and `p/secrets` was
+enabled and did not fire only because the string matches no known provider's
+format. That is a rule somebody writes this afternoon, and reaching for a model
+to find it is buying a language model to do a regex's job.
 
-Nothing about the file changed. On the narrow setting three real defects were
-simply not looked for, and the scan exits 0 either way.
+Line 7 is different in kind. There is no syntax for "this function should have
+called `require_owner` and did not", and there is no width of ruleset that
+reaches it — the defect only exists relative to the authority the caller holds,
+which is in a different file. That is the boundary, and it is narrow. Cross it
+deliberately and you have a reason to spend the model pass; cross it because
+the deterministic scan felt disappointing and you have bought noise."""),
 
-**And two defects survived both widths:**
+  *skill_steps('appsec/sast-model-pass',
+               "## 6 · The probabilistic half, as a skill\n\n"
+               "The same adapter every model-facing skill in this commons uses: "
+               "offline a labelled replay, and against a served open-weight model "
+               "the identical code. It is asked one question with a checkable "
+               "answer, over the smallest slice in which the defect is decidable "
+               "— the function, its signature, and the authority its caller "
+               "holds.\n\n"
+               "It reviews two functions. One has the defect. The other is "
+               "already parameterised and already authorised, and it is in there "
+               "because a review pass that is never wrong has not been tested."),
 
-```
-  line  22  MISSED a live-looking API key on a module-level constant
-  line   7  MISSED find_booking performs no authorisation check of any kind
-```
+  ("md", """## 7 · Where it breaks — gating on the confidence number
 
-The first is lexical — `p/secrets` was enabled and did not fire, because the
-string matches no known provider's format. A rule could catch it, once someone
-writes that rule. The second cannot be caught by any rule, because the defect is
-the **absence** of a call in a function whose caller holds payments scope. That
-is the boundary generation 3 exists to cross, and it is why the answer is
-"both" rather than "the newer one"."""),
-  ("md", """## 6 · An agent drives both, because you cannot afford to run both everywhere
+The model returned 0.82 on the real defect and 0.71 on the invented one. It is
+tempting to read a threshold into that gap, and every pipeline that does it
+ships one.
 
-Generation 2 is cheap enough to run over the whole repository. Generation 3 is
-not — at four million lines the model pass costs more than the finding is
-worth, and a model asked to review everything reviews nothing carefully.
+Two reasons not to. The number is **uncalibrated** — 0.82 does not mean the
+claim is right 82% of the time, it means nothing in particular. And it is
+**unstable**: the same slice, the same model, ten runs, and the confidence
+moves further than the distance between your accept and reject bands. Sort a
+human's queue with it if you like. Do not let it decide anything on its own.
 
-So neither generation is the interesting part. **The allocation is.** An agent
-sits above both, and its policy is three rules:
+What killed the false positive instead cost nothing and required no judgement:
+the model quoted a line that is not in the file. That check generalises, and
+B2.4 is where it becomes a stage."""),
 
-1. run the deterministic scanner everywhere, with the widest ruleset that is
-   not noisy, because it is nearly free;
-2. spend the model pass only where stage 1 said risk lives **and** the rules
+  ("md", """## 8 · An agent drives both, because you cannot afford both everywhere
+
+Semgrep is cheap enough to run over the whole repository. The model pass is
+not — at four million lines it costs more than the finding is worth, and a
+model asked to review everything reviews nothing carefully.
+
+So neither half is the interesting part. **The allocation is**, and the policy
+is three rules:
+
+1. run the deterministic scanner everywhere, at the widest ruleset that is not
+   noisy, because it is nearly free and it can gate the merge;
+2. spend the model pass only where stage 1 says risk lives **and** the rules
    were silent — silence in a high-risk zone is the signal, not the noise;
-3. mark everything the model says as a hypothesis, never a finding, because
-   stages 8 to 12 are what turn one into the other."""),
-  *skill_steps('appsec/sast-generation-comparison',
-               '## 2 · The stage, as a skill\n\nThree generations of analysis over the same CyberTravels code, and they fail differently: grep flags the safe queries, taint finds the real flows and nothing in `authz.py`, and the model finds the authorization defect that has no syntactic signature — along with the hallucination that is the price of it. The skill runs all three and reports precision, recall and that last column.'),
+3. mark everything the model says as a hypothesis, never a finding.
+
+Get rule 2 wrong in the cheap direction and the authorisation defect on line 7
+is never reviewed by anything, because the deterministic scan was green and
+nobody was surprised by that."""),
 ],
- "expect": "Grep produces 6 findings at 50% precision, flagging the parameterised "
-           "query, the constant insert and the safe subprocess call. Taint rules "
-           "find exactly the 3 real injection bugs at 100% precision and recall "
-           "and find nothing in `authz.py`. The model finds the authorization bug "
-           "at 0.82 confidence and hallucinates one SQL injection at 0.41. The "
-           "audit agent then runs the rules everywhere and spends the model pass "
-           "on one file of four — the one where history says risk lives and the "
-           "rules were silent — emitting 4 findings with zero false positives, "
-           "every model finding marked as a hypothesis. The last cell shows what "
-           "the allocation costs when it loses: give `authz.py` no history and "
-           "the authorization bug is never reviewed.",
- "challenge": "Two things, and the second is the one people skip. Point the "
-              "stand-in at a real GLM-4.6 or Kimi K2 through Ollama and run it on "
-              "`authz.py` ten times — the variance in what it reports, and in its "
-              "confidence, decides whether you can gate on confidence at all. "
-              "Then run Semgrep against one of your own repositories at your "
-              "current ruleset and at seven packs, and count the difference. "
-              "Whatever that number is, it has been the number all year.",
+ "expect": "Semgrep's precision is 1.00 at all three widths and its recall is "
+           "not: 0.17 on the default Python pack, 0.67 across seven registry "
+           "packs, 0.33 on the custom taint rule — same file, same engine, and "
+           "both scans exit 0. Two defects survive every width, and the skill "
+           "separates them: the hardcoded key is a coverage gap somebody fixes "
+           "by writing a rule, and the missing authorisation check on line 7 is "
+           "not expressible as a pattern at any width. The model pass then finds "
+           "exactly that one, at 0.82 confidence, recorded as a hypothesis and "
+           "not a finding — and its claim about the already-authorised control "
+           "function is rejected for nothing more than quoting a line that is "
+           "not in the file. Zero hypotheses are promoted, because the audit "
+           "stage does not promote its own output.",
+ "challenge": "Two things, and the second is the one people skip. Run Semgrep "
+              "against one of your own repositories at your current ruleset and "
+              "at seven packs, and count the difference — whatever that number "
+              "is, it has been the number all year. Then point the model pass at "
+              "a real GLM-4.6 or Kimi K2 through Ollama and run one slice ten "
+              "times. The variance in what it reports, and in its confidence, is "
+              "what decides whether you can gate on confidence at all, and you "
+              "cannot learn it from one run.",
 },
 
 "B2.4": {
@@ -331,6 +463,38 @@ findings into three buckets — and the third bucket is the honest one:
   reflection, or a framework that wires callers at runtime.
 
 Reporting `unknown` as `unreachable` is how a pipeline quietly drops real bugs.
+
+### Dead code, and the two different claims a finding makes
+
+The largest single class in that unreachable bucket is **dead code**, and it is
+worth being precise about what is wrong with such a finding, because teams act
+on the wrong half.
+
+The finding is a **true positive about the code**. The concatenation is there,
+the sink is real, and any reviewer who opens the file will agree. It is a
+**false positive about the risk**, because nothing untrusted reaches it. Two
+different claims, and only the second one is wrong.
+
+That distinction decides the response. The instinct is to **suppress** — it
+empties the queue, and it is the wrong fix for a reason that only appears
+months later: a suppression is keyed to a file, a line and a rule, and *none of
+those change when somebody wires the function back up*. The code becomes live,
+the finding does not come back, and the entry that was hiding a false positive
+is now hiding a real one.
+
+**Attack surface reduction — ASR, which here means deleting the code — closes
+both halves at once.** The finding goes because the code is gone, and so does
+the latent risk of it being reconnected. It is the only response to a dead-code
+finding that cannot rot, and the pleasant surprise is that the security queue
+turns out to be the cheapest to-delete list in the building: already
+enumerated, already ranked by what each line would cost if it ever became
+reachable again.
+
+One caution that does most of the work: "unreachable" and "dead" are not
+synonyms. A test fixture and a feature flag that has been off for two years are
+both unreachable *under a condition*, and both become reachable the day
+somebody changes one line. Only code with no caller anywhere is a deletion
+candidate.
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
@@ -374,16 +538,56 @@ Reporting `unknown` as `unreachable` is how a pipeline quietly drops real bugs.
   ("md", "## 9 · Read that output again\n\n"
          "It passes the contract with zero problems, and almost nothing in it "
          "is true."),
+
+  *skill_steps("appsec/dead-code-attack-surface",
+               "## 10 · Dead code, suppression and ASR, as a skill\n\n"
+               "The same eight findings from CyberTravels' booking service, "
+               "partitioned into the three buckets — then the part that decides "
+               "what to do with the unreachable ones.\n\n"
+               "It compares the three available responses to a single dead "
+               "`os.system` finding on three axes: does the finding go, does the "
+               "risk go, and does the decision **rot**. Then it applies one "
+               "commit six weeks later that re-imports the dead function, and "
+               "shows which of the three responses is still protecting anything."),
+
+  ("md", """## 11 · The commit six weeks later
+
+That last block is the argument, and it is worth restating plainly because it
+is the part that gets waved through in a triage meeting.
+
+A suppression matched on `(file, line, rule)`. The re-enabling commit changed
+none of the three — it added an import in a different file. So the suppression
+still matches, the scanner still stays quiet, and a `sev 9` command injection is
+now reachable from the vendor webhook with no finding attached to it.
+
+The deletion cannot fail that way. The import does not resolve, the build breaks
+at the moment somebody tries to bring the code back, and the failure is loud and
+immediate rather than silent and eighteen months old.
+
+If you must suppress, bind the suppression to **reachability** rather than to a
+line, and give it an expiry. A suppression with neither is a permanent decision
+recorded against temporary evidence."""),
 ],
  "expect": "The call graph identifies three entry points, one of which uses "
            "dynamic dispatch. `load_report` is reachable, `debug_dump` and "
            "`legacy_export` are unknown rather than unreachable because runtime "
            "handler resolution cannot be ruled out. Two-bucket filtering silently "
            "drops both, and the three-bucket routing sends the unknowns to Phase 4 "
-           "instead of paging or discarding them.",
- "challenge": "Count how many `unknown` cases your own reachability analysis "
-              "produces, and find out what your tooling does with them. If it "
-              "reports them as clean, the number of real bugs you are dropping is "
-              "the size of that bucket.",
+           "instead of paging or discarding them. On the eight-finding queue, "
+           "reachability takes 8 down to 2, and three of the remainder are dead "
+           "with no caller anywhere \u2014 a deletion rather than a triage. "
+           "Suppressing that dead `os.system` and marking it won't-fix both "
+           "clear the finding and neither clears the risk: one commit six weeks "
+           "later re-imports the function, the suppression still matches on "
+           "file, line and rule, and the finding never comes back. Deleting it "
+           "breaks that commit's build instead.",
+ "challenge": "Two counts, and the second is the uncomfortable one. Count how "
+              "many `unknown` cases your own reachability analysis produces and "
+              "find out what your tooling does with them \u2014 if it reports "
+              "them as clean, the number of real bugs you are dropping is the "
+              "size of that bucket. Then open your suppression file and find the "
+              "oldest entry. Check whether the code it covers is still "
+              "unreachable, and whether anything in your pipeline would have "
+              "told you if it stopped being."
 },
 }

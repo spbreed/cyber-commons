@@ -234,7 +234,7 @@ call (A3.1), arriving at a database.
      ["a schema check no application test expresses",
       "D1.9 — detections whose subject is the platform"],
      ["73% of generated apps carrying at least one issue",
-      "B2.12 — securing the developers' coding agents"]],
+      "A3.11 — securing the developers' coding agents"]],
     caption="Every row is a control that already exists in this curriculum. The "
             "case study's job was to show you why it is there.")),
    *skill_steps('research/generated-schema-audit',

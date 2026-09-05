@@ -137,53 +137,44 @@ CyberTravels ships faster than Alex can read. The Coding Agent opens pull
 requests that touch a hundred files, and the review that used to be a careful
 hour is now a scroll. Function B is what he builds instead of scrolling.
 
-Everything he builds is a **harness**, so start there.
+It is one pipeline, built in order, and the first thing to get straight is
+**where each piece of it can run at all** — because half of what is sold as AI
+security tooling cannot run before a deploy, and half of it tells you nothing
+after one.
 
-> **A harness is everything wrapped around a model that turns generating text
-> into getting work done.** It decides what the model sees, what it may do,
-> whether what it did worked, and when to stop.
+### The line
 
-A model on its own is a text generator: tokens in, tokens out, no memory, no
-ability to act, no notion of whether it succeeded. Wrap it in a loop with tools
-and it reviews code. Wrap it badly and it reviews code *and tells you it found
-nothing*.
+**Pre-deployment works on artefacts sitting still.** Source, a manifest, an IaC
+plan, a tool schema, an SBOM. Nothing is running, so the analysis is cheap,
+repeatable and — the property that matters most — it **can block a merge**. It
+is also structurally blind to every fact that does not exist until deployment:
+the identity the workload actually got, the route it can actually reach, the
+traffic it actually saw.
 
-### Why this is a security engineer's job, not a platform team's
+**Post-deployment works on a system that is running.** It sees what really
+happened, which is the only way to learn some things at all. And it **cannot
+block the change that caused it**. By the time it has an opinion, the merge is
+in.
 
-Every part of the wrapper is a security decision, and three of them are
-decisions nobody else in the building is equipped to make:
+That is the whole of the distinction, and it decides more than people expect.
+A risk covered only on the left is one you can prevent and cannot detect. A
+risk covered only on the right is one you can detect and cannot prevent. Both
+of them appear on a tooling inventory as the same word — *covered* — and only
+one of them is what the person reading the inventory believed they had bought.
 
-- **What the model may do** is a tool surface — an authorisation problem
-  (A3.1), and the signature decides what is even expressible.
-- **Whether it worked** is a verifier — and a harness whose verifier is the
-  model agreeing with itself does not fail loudly. It **succeeds incorrectly**,
-  files a clean trace, and the bug is found by whoever merged the patch.
-- **When to stop** is a budget — the only control still standing once the model
-  is the component you cannot trust.
+### Why the chapter is ordered this way
 
-Nobody else is going to notice that the pipeline's verifier is a shape check.
-That is the job.
+Stages 1 to 10 are pre-deployment: ingest the estate, derive a threat model,
+audit the code, scan the supply chain, filter to what is reachable. They are
+cheap and they can gate. Stages 11 to 15 need something running: a replica to
+attack, an exploit to execute, a patch to prove, a report to sign. They are the
+expensive half, and they exist because the cheap half produces hypotheses
+rather than facts.
 
-### The loop is four moves
-
-**Plan** — the model proposes what to do next. **Act** — the harness runs that
-against a tool. **Verify** — something independent decides whether it worked.
-**Stop** — verification succeeded, or a budget ran out.
-
-Frameworks make plan and act easy and leave verify and stop as your problem,
-usually defaulting to "the model says it's done" and "loop forever". The demo
-below is that loop with a real model in it, twice: once with no verifier, once
-with one. Same model, same prompt, opposite outcome.
-
-### And where each technique belongs
-
-Half of what gets called "AI security tooling" cannot run before a deploy, and
-half tells you nothing after one. The split is not about the tool, it is about
-**what exists yet**. Pre-deployment works on artefacts sitting still — source, a
-manifest, an IaC plan, a tool schema — so it is cheap, repeatable and can block
-a merge, and it is blind to the identity the workload actually gets.
-Post-deployment works on a running system and sees what really happened, and
-cannot block the merge that caused it.
+Nothing in this chapter fixes the middle. The gap between the two sides is not
+a tool you are missing — it is the line itself, and the honest move is to know
+which side each of your controls is on before somebody asks you whether a risk
+is covered.
 """,
  "steps": [
   ("md", "## 2 · What Alex is actually up against"),
@@ -194,57 +185,10 @@ cannot block the merge that caused it.
      ["reviewers", "1", "1"]],
     emphasise=2,
     caption="Nothing about the review capacity changed. That is the whole "
-            "problem, and it is why the reviewer becomes a harness.")),
-  ("md", "## 3 · The loop, with a real model in it\n\n"
-         "Four moves and about twenty lines. `ask()` is the model — offline it "
-         "is a labelled replay, and with a key configured it is a real "
-         "call to an open-weight model served from Kaggle, through the same code."),
-  ("md", "## 4 \u00b7 What every lesson in this chapter runs, and how\n\n"
-         "Function B is where you build harnesses, so it is worth being precise "
-         "about the one you are already inside. Every lesson from here on "
-         "executes an **agent skill**, and that is three cells and nothing "
-         "else:\n\n"
-         "1. **`SKILL_MD`** \u2014 the `SKILL.md` file, embedded verbatim from "
-         "`skills/`. Frontmatter an agent routes on, then the procedure it "
-         "follows.\n"
-         "2. **the import** \u2014 four lines that make the shared runtime "
-         "importable and then import it. On Kaggle the runtime is a kernel "
-         "attached to this notebook as a source, mounted as `__script__.py`; "
-         "the cell copies it to the name it is imported by and imports it. In a "
-         "checkout it is already `skills/_runtime/`.\n"
-         "3. **the skill's own script** \u2014 the file in "
-         "`skills/<area>/<name>/scripts/`, embedded verbatim, which begins "
-         "`from cyber_commons_skill_runtime import ...` and is otherwise the "
-         "procedure doing its work.\n\n"
-         "`run_skill(SKILL_MD)` is the whole of the execution surface: it "
-         "splits the frontmatter from the body and reports what was loaded. "
-         "`contract_of(body)` and `check(instance, contract)` are there when a "
-         "skill validates its own output. Nothing else in a lesson is Python.\n\n"
-         "**To use the library in a notebook of your own**, on Kaggle add "
-         "`cybercommons/cyber-commons-skill-runtime` as a source \u2014 *File "
-         "\u2192 Add data \u2192 Notebooks*, or `kernelDataSources` through the "
-         "API \u2014 and paste those four lines. Locally, put "
-         "`skills/_runtime` on `PYTHONPATH`. A0.1 runs that procedure on "
-         "itself if you want to see it work before you copy it."),
-  ("html", D.table(
-    ["cell", "what it is", "how long"],
-    [["1", "<code>SKILL_MD</code> \u2014 the procedure, verbatim", "the skill"],
-     ["2", "make the runtime importable, then <code>run_skill</code>", "<b>4 lines</b>"],
-     ["3", "the skill's script \u2014 opens on one import", "the work"]],
-    emphasise=2,
-    caption="The runtime used to be copied into cell 2 of every notebook. That "
-            "was 9,730 lines of identical code and one place it could not be "
-            "fixed from.")),
+            "problem, and it is the reason every stage after this one is "
+            "automated rather than scheduled.")),
 
-  *skill_steps("appsec/agentic-harness-loop",
-               "## 4 \u00b7 The loop, as a skill\n\nThe procedure is written "
-               "down first, because the loop is the part you own and the model "
-               "is a component inside it. Its script carries the adapter and "
-               "the four moves \u2014 run offline it uses a labelled replay, and "
-               "against a served open-weight model it is the same code."),
-("md", "## 4 · Run it with no verifier"),
-("md", "## 5 · Add the verifier — same model, same prompt"),
-("md", "## 6 · What applies where"),
+  ("md", "## 3 \u00b7 Every technique, on one side or the other"),
   ("html", D.table(
     ["technique", "pre-deploy", "post-deploy", "what only the other side sees"],
     [["SAST / code analysis", "<b>yes</b>", "no",
@@ -262,42 +206,56 @@ cannot block the merge that caused it.
      ["Guardrails and egress enforcement", "config only", "<b>yes</b>",
       "the request that was actually attempted"],
      ["Runtime posture and drift", "no", "<b>yes</b>",
-      "a guardrail switched off after the demo — A3.9"],
+      "a guardrail switched off after the demo \u2014 A3.9"],
      ["Detection and canaries", "no", "<b>yes</b>",
       "somebody using a credential nothing legitimate touches"],
      ["Attestation", "signs the claim", "re-checks it",
       "whether the deployment still matches what was signed"]],
     emphasise=1,
-    caption="This chapter is mostly the first column. Function D is the third.")),
+    caption="Read the last column rather than the ticks. It is the sentence "
+            "that says what each technique is structurally unable to see, and "
+            "it is the one that decides whether two tools are coverage or two "
+            "invoices.")),
 
-  ("md", "## 7 · What this harness is worth, measured\n\n"
-         "Both of these were run for real, on CPU, against Qwen2.5 weights "
-         "pulled from Kaggle Models — same machine, same adapter, one variable "
-         "changed. B2.9 asks a model to fix the same SQL injection in one shot, "
-         "by returning the corrected function. This lesson asks for **one line** "
-         "and checks it."),
-  ("html", D.table(
-    ["", "B2.9 — one shot, fix the function", "B2.0 — loop, one line, verified"],
-    [["Qwen2.5-1.5B", "the vulnerable function, unchanged",
-      "<b>ref=?</b> — accepted, in one step"],
-     ["Qwen2.5-7B", "parameterised, bound", "<b>ref=%s</b> with the value bound"]],
-    emphasise=2,
-    caption="The 1.5B model that cannot fix the function produces the correct "
-            "line when the harness narrows the ask and an independent verifier "
-            "checks the answer. One step, not retries - this is the shape of "
-            "the ask, which is the part you own.")),
+  *skill_steps("appsec/sdlc-control-placement",
+               "## 4 \u00b7 The placement, as a skill\n\nThe table above is a "
+               "reference. This is the same question asked of CyberTravels' own "
+               "inventory, which is the version that produces an answer somebody "
+               "has to do something about.\n\nIt counts three things separately: "
+               "how many of the techniques can actually block a merge, which "
+               "risks are covered only on the side that can prevent them, and "
+               "which only on the side that can merely observe. All three read "
+               "as \u201ccovered\u201d on a tooling inventory."),
+
+  ("md", """## 5 \u00b7 What the counts are for
+
+Three numbers come out of that run and each one has a different owner.
+
+**Gate-capable.** Four of ten. Everything else produces a ticket, and a ticket
+is a request rather than a control. If your security posture depends on tickets
+being worked, it depends on next quarter's headcount.
+
+**Post-only risks.** These are the ones that get signed off in a review,
+because a control exists, it runs, and it reports. It reports *afterwards*. The
+sign-off is not wrong about the control; it is wrong about what the control
+does.
+
+**Uncovered.** One, and it is the subject of B2.7: an artefact in the build with
+no manifest entry has no identifier, so the SCA pass on the left never had
+anything to look up and the report was clean about it. That is a gap nothing on
+either side is currently pointed at."""),
  ],
- "expect": "The loop runs with a real model behind `ask()` — a labelled replay "
-           "offline, a real open-weight call when one is served. "
-           "Without a verifier it accepts whatever came back and reports "
-           "`verified: None`. With the verifier the same model and prompt "
-           "produce an accepted, parameterised line — and a plausible-looking "
-           "answer that wraps the input in `escape()` is refused, because it is "
-           "still concatenation.",
- "challenge": "Name your pipeline's verifier out loud. If the sentence contains "
-              "\"the model checks\" or \"it looks right\", you have a judge, and "
-              "a judge approves confident prose — including prose that "
-              "contradicts the finding it is attached to.",
+ "expect": "Four of ten techniques can block a merge; the other six produce "
+           "tickets. Two risks are covered only before the deploy \u2014 "
+           "preventable, and invisible once shipped \u2014 and three only after "
+           "it, where detection is the whole of the control and the merge that "
+           "caused it already went through. One is covered by nothing on either "
+           "side, and that one is the undeclared vendored binary B2.7 goes "
+           "after.",
+ "challenge": "Write your own inventory into the same two columns, then delete "
+              "every row that is deployed and muted. What is left is your "
+              "coverage. The row that will start an argument is the one somebody "
+              "believes is preventative and is in the right-hand column.",
 },
 
 "C1.0": {

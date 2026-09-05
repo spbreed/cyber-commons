@@ -695,6 +695,25 @@
        "frontier": [
         "Claude Haiku 4.5"
        ]
+      },
+      {
+       "id": "A3.11",
+       "title": "Securing the developers' coding agents",
+       "track": "secure",
+       "summary": "Guardrails for IDE and CLI coding agents holding repo and credential access. Policy, telemetry and safe defaults for engineering teams at scale.",
+       "risk": "The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment.",
+       "control": "The strongest containment a developer does not notice: credential deny-lists and workspace confinement first.",
+       "lab": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
+       "tools": [
+        "Docker",
+        "Cilium"
+       ],
+       "open_weight": [
+        "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
       }
      ]
     }
@@ -708,15 +727,15 @@
     {
      "id": "B2",
      "chapter": 4,
-     "title": "The AI SDLC: Harnesses and an Agentic AppSec Pipeline",
+     "title": "The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy",
      "titles": "AppSec Engineer, Product Security Engineer, Secure Code Reviewer",
-     "changes": "The secure development lifecycle as one artefact, built stage by stage: ingest, model, audit, confirm, remediate, report. 18 lessons.",
+     "changes": "The SDLC split into what runs before a deploy and what runs after, then one lesson per stage of an agentic AppSec pipeline — audit, supply chain, dynamic validation, triage, remediation, attestation. 15 lessons.",
      "autonomy": "Triage reaches L2.5 early; merge authority stays L2 far longer than people expect.",
      "deliverable": "A five-phase AppSec pipeline running as a CI gate, with confirmed-by-exploitation severity and published precision and escape metrics.",
      "sessions": [
       {
        "id": "B2.0",
-       "title": "What a harness is, and why you are the one building it",
+       "title": "The AI SDLC — what runs before a deploy, and what runs after",
        "track": "both",
        "kind": "introduction",
        "summary": "Function B rebuilds the secure development lifecycle around agents, in both directions at once. AI for Security: an agentic pipeline that reviews code, models threats, confirms exploits and reports them. Security of AI: that pipeline is itself an agentic system, with every risk Function A described. Chapter 4 builds the SDLC; chapter 5 builds the harness underneath it.",
@@ -727,6 +746,17 @@
         "Claude Haiku 4.5",
         "Qwen2.5-7B"
        ],
+       "models": []
+      },
+      {
+       "id": "B2.1",
+       "title": "What building a harness means in security engineering",
+       "track": "both",
+       "summary": "A harness is everything wrapped around a model that turns generating text into getting work done: what it sees, what it may do, whether that worked, and when to stop. Three short examples, then one running loop.",
+       "risk": "A harness whose verifier is the model agreeing with itself does not fail loudly. It succeeds incorrectly, files a clean trace, and the bug is found by whoever merged the patch.",
+       "control": "An independent verifier, and a budget that stops the loop when it cannot pass.",
+       "lab": "Run the same loop twice — once with no verifier, once with one.",
+       "tools": [],
        "models": []
       },
       {
@@ -749,7 +779,7 @@
       },
       {
        "id": "B2.3",
-       "title": "Vulnerability auditing: three generations of SAST",
+       "title": "Vulnerability auditing — deterministic Semgrep, then the model pass",
        "track": "defend",
        "summary": "Pattern matching, dataflow analysis and LLM-driven reasoning compared honestly. What each generation finds, and what each one structurally cannot.",
        "risk": "Pattern matching floods the queue; the false-positive rate is what actually changed.",
@@ -789,7 +819,7 @@
       },
       {
        "id": "B2.5",
-       "title": "Feasibility filtering and reachability",
+       "title": "Feasibility filtering, reachability and dead code",
        "track": "defend",
        "summary": "Prove a finding is genuinely reachable from untrusted input. Reachability analysis as the primary false-positive killer in the pipeline.",
        "risk": "A finding in dead code costs the same to triage as one on the login path.",
@@ -828,6 +858,17 @@
       },
       {
        "id": "B2.7",
+       "title": "Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries",
+       "track": "both",
+       "summary": "An SBOM lists what the manifest declared and a CVE feed lists what is publicly known. Neither sees a vendored binary nobody declared. This lesson goes past both: parse the SBOM, scan it, then decompile the library that is not in it.",
+       "risk": "A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety, and is evidence of nothing but the manifest's contents.",
+       "control": "Reconcile the SBOM against what is on disk, then recover strings, imports and egress from the compiled artefact that no SBOM entry covers.",
+       "lab": "Scan an SBOM, then decompile the closed-source library it never mentions.",
+       "tools": [],
+       "models": []
+      },
+      {
+       "id": "B2.8",
        "title": "Dynamic exploitation (DAST)",
        "track": "defend",
        "summary": "Drive the running application to confirm a vulnerability empirically. Payload generation, oracle design and evidence capture.",
@@ -847,7 +888,7 @@
        ]
       },
       {
-       "id": "B2.8",
+       "id": "B2.9",
        "title": "Exploit chaining",
        "track": "defend",
        "summary": "Combine individually low-severity findings into a materially damaging path. How agents search chain space, and why chains rewrite severity.",
@@ -865,8 +906,26 @@
        ]
       },
       {
-       "id": "B2.9",
-       "title": "Remediation engineering",
+       "id": "B2.10",
+       "title": "Severity calibration, triaging and reporting",
+       "track": "defend",
+       "summary": "Score findings against real exploitability and business impact rather than CVSS alone. Write reports engineers will actually act on.",
+       "risk": "Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing.",
+       "control": "Stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.",
+       "lab": "Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.",
+       "tools": [
+        "OpenGrep"
+       ],
+       "open_weight": [
+        "GLM-4.6"
+       ],
+       "frontier": [
+        "Claude Haiku 4.5"
+       ]
+      },
+      {
+       "id": "B2.11",
+       "title": "Remediation engineering — proven in a sandbox before the merge request",
        "track": "defend",
        "summary": "Generate fixes that survive review and do not break behaviour. Patch generation, regression testing and clean developer handoff.",
        "risk": "A patch that silences the scanner is indistinguishable from a patch that fixes the bug.",
@@ -885,26 +944,8 @@
        ]
       },
       {
-       "id": "B2.10",
-       "title": "Severity calibration and reporting",
-       "track": "defend",
-       "summary": "Score findings against real exploitability and business impact rather than CVSS alone. Write reports engineers will actually act on.",
-       "risk": "Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing.",
-       "control": "Stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.",
-       "lab": "Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.",
-       "tools": [
-        "OpenGrep"
-       ],
-       "open_weight": [
-        "GLM-4.6"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      },
-      {
-       "id": "B2.11",
-       "title": "Context engineering for the pipeline",
+       "id": "B2.12",
+       "title": "Context engineering — cutting the false positives",
        "track": "defend",
        "summary": "Decide what each agent sees, when, and at what token cost. Context budgets, retrieval strategy and the accuracy cliff past which more context hurts.",
        "risk": "The model is given the repository and asked to be thorough, so the relevant line falls out of the window.",
@@ -922,27 +963,8 @@
        ]
       },
       {
-       "id": "B2.12",
-       "title": "Securing the developers' coding agents",
-       "track": "secure",
-       "summary": "Guardrails for IDE and CLI coding agents holding repo and credential access. Policy, telemetry and safe defaults for engineering teams at scale.",
-       "risk": "The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment.",
-       "control": "The strongest containment a developer does not notice: credential deny-lists and workspace confinement first.",
-       "lab": "Measure the default agent's blast radius and reachable credentials, then rank controls by friction.",
-       "tools": [
-        "Docker",
-        "Cilium"
-       ],
-       "open_weight": [
-        "GLM-4.6"
-       ],
-       "frontier": [
-        "Claude Haiku 4.5"
-       ]
-      },
-      {
        "id": "B2.13",
-       "title": "Attesting control intent for agents and MCP servers",
+       "title": "Agentic AI in the pipeline — attesting control intent for agents and MCP servers",
        "track": "secure",
        "summary": "Decompose real-time control attestation into eleven deployment-scoped skills joined by a deployment_id, then run the static half against ten widely-deployed open-source agent and MCP repositories. Produces a signed-shaped in-toto attestation with per-control verdicts, evidence pointers and the confidence ceilings that stop it overclaiming.",
        "risk": "Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change.",

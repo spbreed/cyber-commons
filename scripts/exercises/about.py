@@ -314,14 +314,21 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 """,
 
 "B2.0": """
-**What it covers.** Trace one finding from ingestion to a signed report and name the stage that decides whether it is true.
+**What it covers.** The one line every AI security technique sits on one side of
+— what can run before a deploy, on artefacts sitting still, and what only works
+against a system that is already running.
 
-**Why a security engineer needs it.** A security pipeline built as if it were exempt from the risks it exists to find. The control it builds is: build the pipeline and the harness as one system, and hold both to the same evidence standard.
+**Why a security engineer needs it.** Pre-deployment is cheap, repeatable and
+can block a merge, and it is structurally blind to the identity the workload
+actually gets. Post-deployment sees what really happened and cannot block the
+merge that caused it. The control it builds is: place every technique you own on
+that line and find the coverage you thought you had.
 
-This is an **orientation** lesson. It has no code — it exists so the chapters after it are read in the right order.
+This is the **orientation** lesson for the chapter. Everything after it is one
+stage of a pipeline, and each stage sits on one side of this line.
 """,
 
-"B2.0": """
+"B2.1": """
 **What it covers.** What a harness is — the wrapper around a model that turns
 generating text into getting work done — and the four moves of its loop, run
 against a real CyberTravels finding with an actual LLM call in it.
@@ -333,8 +340,8 @@ still standing once the model is the component you cannot trust. A harness whose
 verifier is the model agreeing with itself does not fail loudly — it succeeds
 incorrectly and files a clean trace.
 
-This is the **opening** lesson of the chapter: it also sets out which techniques
-belong before a deploy and which only work after one.
+This is a **mechanism** lesson, and it is short on purpose: three examples of
+harnesses you already run, then one loop of about twenty lines, executed twice.
 """,
 
 
@@ -379,6 +386,22 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 """,
 
 "B2.7": """
+**What it covers.** Scan an SBOM against an advisory feed, reconcile it against
+what is actually in the built image, and decompile the library that appears in
+no manifest.
+
+**Why a security engineer needs it.** A dependency report is a statement about a
+manifest, and it is read as a statement about the build. An artefact with no
+manifest entry has no identifier, so it has no advisory, so it is counted as
+neither vulnerable nor safe — it is not counted. The control it builds is:
+reconcile in both directions, then read the constant pool of anything that was
+never declared.
+
+This is a **tooling** lesson: it uses a real compiled Java class and recovers its
+strings, classes and capabilities without the source.
+""",
+
+"B2.8": """
 **What it covers.** Turn static findings into executable probes against the replica and separate confirmed from unconfirmed.
 
 **Why a security engineer needs it.** A SAST finding is a hypothesis, and hypotheses get argued about instead of fixed. The control it builds is: stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped.
@@ -386,7 +409,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.8": """
+"B2.9": """
 **What it covers.** Chain individually-medium findings into a critical path and show the severity the chain earns.
 
 **Why a security engineer needs it.** Three medium findings are triaged as three mediums, and nobody notices they compose. The control it builds is: stage 13: combine validated findings into multi-step sequences and score the chain, not the links.
@@ -394,7 +417,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.9": """
+"B2.11": """
 **What it covers.** Validate four candidate patches on three axes and show which of them only made the scanner green.
 
 **Why a security engineer needs it.** A patch that silences the scanner is indistinguishable from a patch that fixes the bug. The control it builds is: stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.
@@ -410,7 +433,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.11": """
+"B2.12": """
 **What it covers.** Compare four context strategies against one bug and measure which are decidable and at what size.
 
 **Why a security engineer needs it.** The model is given the repository and asked to be thorough, so the relevant line falls out of the window. The control it builds is: slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.
@@ -418,7 +441,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"B2.12": """
+"A3.11": """
 **What it covers.** Measure the default agent's blast radius and reachable credentials, then rank controls by friction.
 
 **Why a security engineer needs it.** The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment. The control it builds is: the strongest containment a developer does not notice: credential deny-lists and workspace confinement first.
@@ -427,11 +450,21 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 """,
 
 "B2.13": """
-**What it covers.** Run the control-intent analyser over ten real agent and MCP repositories and read the attestation it produces for each.
+**What it covers.** Why the pipeline you have just built stops working on
+agentic systems — no call graph, a sink that is a tool schema, a source that is
+retrieved text, a dependency that is a third party's running process — and the
+artefact that covers the gap: a signed, deployment-bound attestation of control
+*intent*.
 
-**Why a security engineer needs it.** Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change. The control it builds is: eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.
+**Why a security engineer needs it.** A green scan over an agent repository is a
+true statement about the Python and says nothing about what the agent will do.
+The control it builds is: tool-surface review as a build artefact, capability
+analysis over the set of tools an identity holds, and an attestation that never
+claims PASS on a control it cannot evidence.
 
-This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
+This is a **control** lesson, and its discipline is refusal: the analyser is
+built so that it cannot overclaim, and two of the five controls are capped at
+PARTIAL by construction.
 """,
 
 "B2.14": """

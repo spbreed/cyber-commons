@@ -1,17 +1,23 @@
 """B1 (part 2) — The AppSec pipeline, phases 4 and 5, plus the bonus.
 
-    Phase 4 · Dynamic Validation & Remediation
+    Supply chain (pre-deployment, and it belongs before the replica)
+       SBOM, dependency vulns, decompiling the undeclared         → B2.7
+    Phase 4 · Dynamic Validation
        11 sandbox replication                                      → B2.6
-       12 dynamic exploitation (DAST)                              → B2.7
-       13 exploit chaining                                         → B2.8
-       14 remediation engineering                                  → B2.9
+       12 dynamic exploitation (DAST)                              → B2.8
+       13 exploit chaining                                         → B2.9
     Phase 5 · Governance & Reporting
-       15 severity calibration and reporting                       → B2.10
+       15 severity calibration, triaging and reporting             → B2.10
+       14 remediation engineering, promoted to a merge request     → B2.11
+
+Remediation follows reporting rather than preceding it: it is the first stage
+that touches the codebase, and fixing in rule-severity order means fixing the
+top of a queue B2.10 has just shown to be sorted wrongly.
 
     Cross-cutting
-       context engineering for the pipeline                        → B2.11
+       context engineering for the pipeline                        → B2.12
        injection in your own pipeline                              → A1.9
-       securing the developers' coding agents                      → B2.12
+       securing the developers' coding agents                      → A3.11
        attesting control intent for agents and MCP servers         → B2.13
 
     Bonus
@@ -90,6 +96,145 @@ Four isolation properties, and you need all four:
 
 "B2.7": {
  "concept": """
+Everything the pipeline has audited so far is code CyberTravels wrote. Most of
+what it ships is not.
+
+A dependency scanner answers one question, and answers it well: *are any of the
+components I declared known to be vulnerable?* Both halves of that sentence are
+limits, and they are the whole subject of this lesson.
+
+**It sees only what was declared.** An SBOM is generated from a manifest. A
+vendor's integration bundle that drops a jar into `lib/` is in no manifest, so
+it is in no SBOM, so the scanner has no identifier to look up — and the report
+comes back clean. That report is accurate. It is a statement about the
+manifest, and it is being read as a statement about the build.
+
+**It sees only what is already published.** "No advisory" means nobody has
+published one against that identifier yet. For an undeclared artefact there is
+no identifier at all, so the absence of an advisory carries no information
+whatsoever — and it renders identically on the report to a component that has
+genuinely been assessed.
+
+So the procedure has three parts, and only the first is what most teams call
+software composition analysis:
+
+1. **Scan what was declared** — match components against an advisory feed, with
+   a version comparison that is numeric. `1.9 < 1.10` is false as a string and
+   true in every versioning scheme in use, and that one mistake drops findings
+   silently.
+2. **Reconcile the SBOM against the filesystem** — in both directions. On disk
+   and not in the SBOM is undeclared code. In the SBOM and not on disk means
+   the SBOM is describing a different build than the one you deployed.
+3. **Read the artefacts nobody declared.** No source, no manifest, no
+   identifier. This is the part that is treated as exotic and is not: compiled
+   code carries its string literals, its class references and its method
+   references in a documented table before any bytecode, and recovering them
+   needs no vendor cooperation and about forty lines of parser.
+
+That third step is what `jadx`, `procyon`, `Ghidra` and `strings` all start
+with. The lesson runs it on a real compiled class and gets a hardcoded endpoint
+and a credential-shaped literal out of a library that appears in no manifest.
+""",
+ "steps": [
+  ("md", PIPELINE_NOTE),
+
+  ("md", """## 2 · Two questions, and the one nobody asks
+
+| | a dependency scanner answers | it cannot answer |
+|---|---|---|
+| **declared** | is this component vulnerable? | is anything here I did not declare? |
+| **published** | is there an advisory? | is this artefact dangerous with no advisory? |
+
+The bottom-right cell is where vendored SDKs, agent plugins and MCP server
+distributions live. Every one of them arrives as somebody else's compiled code
+inside your build, and none of them appears in a report that reads a manifest.
+
+At CyberTravels the booking provider ships an integration bundle. It works, it
+was signed off by procurement, and nobody has ever opened it."""),
+
+  ("md", """## 3 · Where it breaks — the clean report
+
+The scan below finds three real advisories in five declared components, and
+every word of it is correct. Then the reconciliation finds a sixth component
+that is on disk, in no manifest, and therefore in none of the three numbers
+above it.
+
+The failure is not that the scanner is wrong. It is that "3 findings across 5
+components" and "3 findings across 5 of 6 components, one unassessed" are the
+same report unless somebody counts the filesystem."""),
+
+  *skill_steps("appsec/supply-chain-decompile",
+               "## 4 · The stage, as a skill\n\n"
+               "Three fixtures and one real artefact. The SBOM is CycloneDX, the "
+               "advisory feed is OSV-shaped, the inventory is what an image scan "
+               "returns — and `VendorTelemetry.class` is a genuinely compiled "
+               "Java class, built with `javac` and committed beside the skill. "
+               "The parser reads its constant pool the way a decompiler does and "
+               "never sees the source.\n\n"
+               "The source *is* in the repository, in `evidence/provenance/`, so "
+               "you can check the recovered strings against it. A vendor does not "
+               "give you that, which is the reason the step exists."),
+
+  ("md", """## 5 · Read the recovered strings again
+
+```
+https://telemetry.vendor-analytics.io/v2/ingest?k=vnd_live_8f2c41a09e7b
+AES/ECB/PKCS5Padding
+java.net.HttpURLConnection   javax.crypto.Cipher
+```
+
+The endpoint and the key arrived **concatenated** — the compiler folded them
+into a single constant, which is a small gift and a real one: the artefact
+carries its own credential in plaintext, and no SBOM, CVE feed or licence scan
+would ever have shown you either.
+
+Now the discipline that decides whether this finding survives review. What the
+constant pool proves is that this library **can** reach that endpoint and
+**can** encrypt before it does. What it sends is not in the constant pool. Write
+the finding as a *capability* and it is unarguable; write it as "exfiltrates
+traveller PII" and the one sentence you cannot evidence takes the rest of the
+report down with it.
+
+`AES/ECB` is worth its own line, and it is the kind of thing this step finds by
+accident: ECB mode leaks structure across blocks, so whatever this is
+protecting, it is protecting it badly."""),
+
+  ("md", """## 6 · What to do with it on Monday
+
+Three moves, in cost order:
+
+1. **Count your undeclared artefacts.** Diff the SBOM against the built image.
+   The number is almost never zero and almost nobody has it.
+2. **Egress-allowlist the workload**, so a capability like the one above cannot
+   become a transfer regardless of what the library intended. This is the same
+   control as A3.3, arriving from a different direction.
+3. **Make the reconciliation a build gate.** An artefact appearing on disk with
+   no manifest entry is a build-time event, and it is far cheaper to fail there
+   than to find it in a constant pool afterwards."""),
+],
+ "expect": "Three of five declared components carry published advisories — "
+           "Text4Shell in commons-text 1.9 as critical, PyYAML 5.3.1 as high, "
+           "requests 2.31.0 as medium — and commons-text only appears because "
+           "the version comparison is numeric rather than lexical. "
+           "Reconciliation then finds one artefact on disk that is in no "
+           "manifest, which every one of those numbers excluded. Decompiling it "
+           "recovers, with no source, a hardcoded telemetry endpoint with the "
+           "licence key folded into the same literal, an AES/ECB cipher spec, "
+           "and references to `HttpURLConnection` and `javax.crypto.Cipher` — "
+           "network egress and cryptography as provable capabilities. "
+           "`unassessable_by_sbom: 1` is the number the report exists to "
+           "produce.",
+ "challenge": "Generate an SBOM for one service you run, then list what is "
+              "actually in the built image and diff the two. Every artefact on "
+              "disk with no manifest entry has been scanned by nothing, and the "
+              "clean report you have been reading each week was never about it. "
+              "For the first one you find, pull the strings out of it before you "
+              "ask the vendor — the conversation goes differently when you open "
+              "with the endpoint.",
+},
+
+"B2.8": {
+ "concept": """
 **Stage 12 — Dynamic exploitation.** The stage that converts an argument into a
 fact.
 
@@ -131,7 +276,7 @@ equivalent of a shape check, and B2.0 already established what those are worth.
               "and the control probe above is how you prove that in five minutes.",
 },
 
-"B2.8": {
+"B2.9": {
  "concept": """
 **Stage 13 — Exploit chaining.** Individual findings are triaged individually,
 and that is how three mediums become a critical nobody noticed.
@@ -184,9 +329,16 @@ This is the stage that most often changes what gets fixed first.
               "top of the severity-sorted queue.",
 },
 
-"B2.9": {
+"B2.11": {
  "concept": """
-**Stage 14 — Remediation engineering.** Generate the fix, then prove it.
+**Stage 14 — Remediation engineering.** Generate the fix, prove it, and only
+then ask anybody to look at it.
+
+This stage comes after triage on purpose. Remediation is the first stage that
+*touches* the codebase, and touching it in the wrong order is expensive: fixing
+by rule severity means fixing the finding at the top of a queue that B2.10 has
+just told you is sorted wrongly. Calibrate first, then remediate, and the fix
+you write first is the one that matters most.
 
 A model that finds bugs is useful. A model that fixes them is only useful if you
 can tell a real fix from a plausible one, and plausible is exactly what language
@@ -201,10 +353,29 @@ There are three ways to make a finding stop firing:
 All three make the scanner green, and an autonomous loop optimising for a green
 scan will find options 2 and 3 on its own because they are cheaper.
 
-The pipeline has an advantage a static workflow does not: Phase 4 already built
-a working exploit. So the acceptance test is not "does the scanner still fire?"
-It is **"does the exploit still work against the patched build?"** — which is
-the only question that cannot be gamed by editing the code around the detector.
+### The fix does not go straight to a merge request
+
+The pipeline has two things a static workflow does not, and both were built
+earlier in this chapter: Phase 4 produced a **working exploit**, and B2.6 built
+a **replica** to run it against. So a patch has somewhere to be proven before a
+reviewer's time is spent on it, and the promotion path is three environments
+with a different question at each:
+
+| where | the question | what it catches |
+|---|---|---|
+| **sandbox replica** | does the exploit still work? | the patch that only moved the pattern |
+| **QA** | does the application still do what it did? | the patch that closed the bug by breaking the feature |
+| **merge request to `master`** | is this the mechanism we want? | the design question no gate can answer |
+
+The order is not arbitrary. The exploit re-run is first because it is the only
+acceptance test that **cannot be satisfied by editing the code around the
+detector**, and it is the one that gets skipped, always with the same
+justification: the fix is obvious.
+
+One run that sounds redundant and is not: the exploit must also be re-run
+against the **unpatched** build in the same harness. Without it you cannot tell
+"the fix worked" from "the probe broke", and a probe that has quietly stopped
+asserting reports every candidate as a success.
 """,
  "steps": [
   ("md", PIPELINE_NOTE),
@@ -213,12 +384,50 @@ the only question that cannot be gamed by editing the code around the detector.
 ("md", "## 4 · The control — validate on three axes, exploit first"),
   *skill_steps('appsec/patch-validation-harness',
                '## 2 · The stage, as a skill\n\nSeveral candidate patches make the scanner green; one of them is a fix. The skill runs all three gates — behaviour unchanged, exploit blocked, and proof of fix against the old build — and reports which gate each rejected candidate died at.'),
+
+  ("md", "## 5 \u00b7 From the sandbox to the merge request\n\n"
+         "Validation says a patch is good. It does not say the patch may be "
+         "merged, and those are different decisions taken in different places. "
+         "This skill runs the promotion path: the exploit re-run in the "
+         "replica, the regression suite in QA, the finding diff in both "
+         "directions, and only then a merge request against `master` with the "
+         "evidence attached to it."),
+  *skill_steps('appsec/fix-promotion-gate',
+               "## 6 \u00b7 The promotion path, as a skill\n\nThe same four "
+               "candidates, walked through three environments. Watch what CI "
+               "alone would have merged against what survives the gates \u2014 "
+               "and then watch candidate D pass every one of them."),
+
+  ("md", """## 7 \u00b7 The two patches that reach review, and why one of them still should not merge
+
+Candidate C is the argument for the replica. It is green, the rule no longer
+fires, and the exploit works unchanged \u2014 `escape()` moved the pattern past
+the detector without closing the injection. Nothing but re-running the exploit
+finds that, and nothing but an environment built to be attacked lets you.
+
+Candidate D is the argument for the reviewer. It passes every gate: the exploit
+is blocked, the regression suite is green, no new findings. It closes the bug by
+returning an empty list, deleting partial-reference search \u2014 a feature
+travellers use. No automated gate rejects it, and none should, because *is this
+the mechanism we want* is not a property of a test run.
+
+That is the division of labour the promotion path buys. The gates answer whether
+the bug is closed, on the page, before the request is opened. The reviewer's
+remaining job is D's question, which is the only one they were ever needed
+for."""),
 ],
  "expect": "The vulnerable build passes all four behaviour cases and the exploit "
            "returns 3 rows. Candidates A, B and D make the scanner green. "
            "Validation rejects B for changed behaviour and C for remaining "
            "exploitable, accepting A and D. Proof of fix holds for both accepted "
-           "patches — the exploit works on the old build and fails on the new.",
+           "patches — the exploit works on the old build and fails on the new. "
+           "The promotion path then walks the same four through the replica, QA "
+           "and the finding diff: CI alone would have opened four merge "
+           "requests and the gates open two, with C dying in the sandbox "
+           "because the exploit still works and B dying in QA because the "
+           "booking reference is silently truncated. D reaches review having "
+           "passed every gate, which is the point — no automated check rejects "
+           "a fix that works by deleting the feature.",
  "challenge": "Candidate D passes every automated gate and is still wrong. Write "
               "the rule that rejects it. You will find it has to be about which "
               "*mechanism* is acceptable, not about outcomes — and that rule "
@@ -282,43 +491,74 @@ quarter's budget.
               "usually the ones people have been arguing about.",
 },
 
-"B2.11": {
+"B2.12": {
  "concept": """
-Cross-cutting, and it applies to every stage that calls a model: stages 3, 4, 5,
-7 and 14.
+Cross-cutting, and it applies to every stage that calls a model.
 
-The instinct when a model misses something is to give it more context. Usually
-the opposite is correct.
+The instinct when a model gets something wrong is to give it more context. That
+is usually backwards, and the reason is easiest to see if you stop counting
+tokens and start counting **false positives**.
 
-To find a vulnerability, a model needs three things: the **sink**, the
-**source**, and the **path** between them. Everything else competes for
-attention and for window. A repository dumped into a prompt does not produce a
-thorough review — it produces a review of whatever survived truncation, and you
-cannot tell which parts those were.
+To decide whether code is vulnerable, a model needs exactly three things: the
+**sink**, the **source**, and the **path** between them. Give it less than that
+and the question is not hard — it is *unanswerable*, and a model asked an
+unanswerable question does not say so. It answers from the only thing it has,
+which is the shape of the line, and a confident verdict derived from the shape
+of a line is precisely what a false positive is.
 
-So context engineering is mostly subtraction, with one exception you must not
-subtract: the **enclosing signature**, because that is where reachability is
-decided. The identical concatenation is critical inside an HTTP handler and
-irrelevant inside a migration script that takes a constant.
+Give it more than that and nothing improves: a repository dumped into a prompt
+produces a review of whatever survived truncation, and you cannot tell which
+parts those were.
+
+So context engineering is mostly **subtraction**, with one thing you must never
+subtract: the **enclosing signature**, because that is where the source lives.
+The identical concatenation is critical inside an HTTP handler and irrelevant
+inside a migration script that takes a constant — and B2.5 has already shown you
+the same line being a `sev 9` in one place and a deletion candidate in another.
+
+B2.3 is the worked case, and it is worth reading as a context result rather than
+a model result. Given a function, its signature and the caller's authority, the
+model pass found a real missing-authorisation defect and quoted a line that
+exists. Given a slice it could not decide, the same model returned CWE-89 at
+0.71 confidence quoting a concatenation that is not in the file. Same model,
+same prompt, different slice.
 """,
  "steps": [
-  ("md", "## 2 · Demo — four strategies over one bug"),
-("md", "## 3 · The control — slice on the source-sink path"),
+  ("md", "## 2 \u00b7 Four slices of one bug"),
   *skill_steps('appsec/context-window-sizing',
-               '## 2 · The stage, as a skill\n\nContext engineering here is not "send less" — it is finding the slice in which the defect is decidable at all, and only then making it smaller. The skill measures four candidate slices and reports which are decidable and what each carries that the defect does not depend on.'),
-],
- "expect": "The whole file is roughly 840 characters, the ±2 window about 200 and "
-           "the path slice about 390. The ±2 window is not decidable because it "
-           "lacks the signature; the ±6 window and the whole file are decidable "
-           "but carry unrelated functions. The path slice is the smallest "
-           "decidable context with zero unrelated functions, about 53% smaller "
-           "than the whole file.",
- "challenge": "Apply the path-slice rule where the source is three functions away "
-              "from the sink. That is the case where text windows break down "
-              "entirely and the call graph the threat model derives (B2.2) earns its keep.",
+               "## 3 \u00b7 The measurement, as a skill\n\nOne SQL injection, "
+               "four candidate slices. The skill reports for each one whether "
+               "the defect is **decidable** in it \u2014 sink, source and path "
+               "all present \u2014 how much unrelated code it carries, and what "
+               "the model does with it.\n\nThe ordering to watch: the smallest "
+               "slice is not the best one, and the largest is not either."),
+
+  ("md", """## 4 \u00b7 The rule, in one line
+
+**Find the smallest slice in which the defect is decidable, and only then make
+it smaller.**
+
+Cutting below that line does not save money. It buys false positives at a
+discount, and you pay for them again in triage."""),
+ ],
+ "expect": "The whole file is roughly 840 characters, the \u00b12 window about "
+           "200 and the path slice about 390. The \u00b12 window is the "
+           "cheapest and is not decidable \u2014 it has the sink and the "
+           "concatenation but not the signature, so whether the value is "
+           "user-controlled is unanswerable from it, and a model asked anyway "
+           "answers from the shape of the line. The \u00b16 window and the "
+           "whole file are decidable and carry unrelated functions. The path "
+           "slice is the smallest decidable context, about 53% smaller than the "
+           "whole file with zero unrelated functions.",
+ "challenge": "Apply the path-slice rule where the source is three functions "
+              "away from the sink. That is the case where text windows break "
+              "down entirely and the call graph the threat model derives (B2.2) "
+              "earns its keep \u2014 a \u00b1N window can never contain a "
+              "source that is in another file.",
 },
 
-"B2.12": {
+
+"A3.11": {
  "concept": """
 The coding agent in a developer's IDE is the most privileged agent in most
 organisations and the least governed. It sits upstream of everything this track
@@ -389,6 +629,61 @@ goal is the strongest containment a developer does not notice.
 
 "B2.13": {
  "concept": """
+Everything the pipeline has done so far assumed one thing about the code it was
+reading: that its **control flow is in the code**. A call graph exists, entry
+points can be enumerated, and a path from a source to a sink either exists or
+does not. Every stage from B2.3 to B2.12 stands on that assumption.
+
+An agentic system breaks it. The control flow is decided at runtime, by a model,
+from text that is not in your repository. Point the same pipeline at
+CyberTravels' Workflow Agent and four of its stages quietly stop meaning
+anything:
+
+| the stage | what it assumes | what an agentic system does instead |
+|---|---|---|
+| **reachability (B2.5)** | a call graph | the model picks the tool; there is no static edge to trace |
+| **SAST (B2.3)** | dangerous sinks are functions | the sink is `refund(booking_id, amount)` — a *schema*, matching no rule |
+| **the source** | untrusted input arrives at an entry point | it arrives as retrieved text, in no repository |
+| **SCA (B2.7)** | dependencies are declared in a manifest | an MCP server is a third party's *running process* whose tool descriptions land in your context window |
+
+Read those four rows together and the shape of the problem is clear. It is not
+that the tools are weak. It is that the artefact they analyse — source code —
+**no longer contains the behaviour**. A green pipeline over an agentic
+repository is a true statement about the Python and says nothing at all about
+what the agent will do.
+
+Three specific things no static analyser can express, and each needs a stage
+that does not exist yet:
+
+**1 — The tool surface is data, and it is somebody else's.** An MCP server's
+tool descriptions are fetched at connect time. They are not in your repository,
+they were not reviewed with your code, and a server can change one after review.
+There is no scanner finding for "the description changed"; there is only a diff
+nobody is taking.
+
+**2 — Composition, not vulnerability.** `read_booking` is safe.
+`post_to_vendor` is safe. An agent holding both can move a traveller's card
+details to a vendor endpoint, and no rule matches either function because
+neither is defective. The unit of risk is a **capability**, and capability is a
+property of the *set* of tools an identity holds — which is a deployment fact,
+not a source-code one.
+
+**3 — Intent is the strongest static claim available.** You cannot show from
+source that a sandbox *holds*, that egress *is* enforced, or that an injection
+screen *works* — those are runtime properties and B2.0's line puts them firmly
+on the right-hand side. What you can show is that somebody **intended** the
+control: an imported sandbox, a validated audience claim, a provenance tag.
+That is a smaller claim, and unlike the larger one it is true.
+
+So the SDLC needs three things it has not had until now: **tool-surface review
+as a build artefact**, diffed like an API contract; **capability analysis** over
+the set of tools an identity holds, rather than vulnerability analysis over
+functions; and an artefact that carries intent evidence, is bound to one
+deployment, and can be **re-issued when anything it describes changes**. That
+last one is an attestation, and it is the rest of this lesson.
+
+---
+
 Every control claim in this pipeline has the same weakness: it is a sentence in
 a document, and nothing binds it to a running system. "We enforce least
 privilege" is true of some deployment, at some time, and there is no way to

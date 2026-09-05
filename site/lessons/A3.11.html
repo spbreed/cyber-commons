@@ -1,0 +1,200 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>A3.11 — Securing the developers&#x27; coding agents | Cyber Commons</title><meta name="description" content="The strongest containment a developer does not notice: credential deny-lists and workspace confinement first."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function A — Securing AI Architectures › Securing the Architecture — Runtime and the Gateway</div><div class="sid">A3.11</div><h1>Securing the developers&#x27; coding agents</h1><div class="badges"><span class="badge s">Security of AI</span><span class="badge t">A3</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/A3.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment.</p></div><div class="ctrl"><div class="lab">Control</div><p>The strongest containment a developer does not notice: credential deny-lists and workspace confinement first.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Measure the default agent&#x27;s blast radius and reachable credentials, then rank controls by friction.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/coding-agent-hardening/scripts/coding_agent_hardening.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>A3.11 · Securing the developers' coding agents</h1>
+<p><strong>Function A — Securing AI Architectures → Securing the Architecture — Runtime and the Gateway</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/A3.10.html">A3.10 · The agent's escalation path</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>Docker, Cilium, GLM-4.6, Claude Haiku 4.5</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Measure the default agent's blast radius and reachable credentials, then rank controls by friction.</p>
+<p><strong>Why a security engineer needs it.</strong> The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment. The control it builds is: the strongest containment a developer does not notice: credential deny-lists and workspace confinement first.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>The coding agent on an engineer's laptop holds repository write access, a cloud credential, and whatever MCP servers were convenient. It is the highest-privilege agent in most organisations and the least governed.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The Coding Agent on Alex's laptop holds repository write, a cloud credential and whatever MCP servers were convenient. It is the highest-privilege agent at CyberTravels and the least governed. R6, R7.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   the highest-privilege agent in most organisations
+
+   +--------------------------------------------+
+   |  coding agent on an engineer's laptop      |
+   |  repo:write . cloud creds . shell . MCP    |
+   +--------------------------------------------+
+       |            |             |
+     no SSO     no egress     no telemetry
+                 policy
+
+   governed by: whatever the engineer clicked
+</code></pre>
+<p>The coding agent in a developer's IDE is the most privileged agent in most
+organisations and the least governed. It sits upstream of everything this track
+has built: it writes the code the pipeline later analyses.</p>
+<p>What it holds by default:</p>
+<ul>
+<li>the developer's <strong>git credentials</strong> — push access to everything they can push to,</li>
+<li>the <strong>whole monorepo</strong> on disk, including files they never open,</li>
+<li>a <strong>shell</strong>, usually unrestricted,</li>
+<li>their <strong>cloud credentials</strong> in <code>~/.aws</code> or <code>~/.config/gcloud</code>,</li>
+<li>whatever <strong>MCP servers</strong> they connected, each with its own authority.</li>
+</ul>
+<p>That is a production identity in an unmanaged environment, driven by a model
+reading code from the internet.</p>
+<p>The binding constraint here is not technical feasibility — it is <strong>developer
+tolerance</strong>. A containment scheme that adds friction to the inner loop is
+disabled within a week, and a disabled control protects nothing. So the design
+goal is the strongest containment a developer does not notice.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">control</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">friction</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what developers actually experience</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">deny-list credential paths</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the agent cannot read ~/.aws, ~/.ssh, ~/.env. Developers never noticed.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">workspace confinement</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.1</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the agent sees the open repo only. Occasionally annoying for monorepo hops.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">egress allowlist</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.2</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">package registries and your VCS. Breaks the odd curl in a generated script.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">gate &lt;code&gt;git_push&lt;/code&gt;</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.4</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">one confirmation before code leaves the machine. Noticed, usually accepted.</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">gate every write</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">0.9</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>confirmation per file write. Abandoned within a week, every time.</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">no shell at all</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1.0</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>removes the inner loop. Nobody will use the agent.</b></td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The first four ship today and cost nothing anyone will complain about. The last two are the ones people propose in meetings, and they are uninstalled by Friday — a control that gets turned off is worth less than a weaker one that stays on.</div></div><div class="nbmd"><h2>3 · The audit, as a skill an agent runs on itself</h2>
+<p>Everything in this lesson is a review someone has to remember to do. Written as a skill, it is a review that fires whenever an agent opens a repository — including this one.</p>
+<p>The skill's central instruction is easy to miss and decides the outcome: <strong>rate an injection finding by what the allowlist permits, not by the text of the injection.</strong> The payload is the attacker's choice and costs nothing to change; the allowlist is yours.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/coding-agent-hardening/SKILL.md"><code>skills/appsec/coding-agent-hardening/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: coding-agent-hardening
+description: &gt;-
+  Review the configuration of a coding agent — its skills, tools, hooks, MCP
+  servers and autorun rules — for ways a repository can turn the agent against
+  its operator. Use when asked to audit agent configuration, review a SKILL.md
+  or AGENTS.md, assess MCP server risk, check tool allowlists, or secure
+  developer AI tooling.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>Securing the developers' coding agents</h1>
+<p>A coding agent reads the repository it is working in. That makes every file in
+the repository an input to a system that can run commands — and the agent's own
+configuration is the control surface.</p>
+<p>The threat is not that the agent is malicious. It is that instructions in a
+repository are indistinguishable, at the token level, from instructions from
+the operator.</p>
+<h2>When to use this</h2>
+<p>Auditing <code>.claude/</code>, <code>AGENTS.md</code>, <code>.github/</code>, MCP configuration, CI that
+invokes an agent, or any repository that a coding agent will open.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Inventory the surface.</strong> List every file that reaches the agent's context
+automatically: skill files, agent instruction files, hooks, MCP server
+definitions, settings with tool allowlists, and any file the agent is told to
+read on startup. Record which are <strong>operator-controlled</strong> (a maintainer wrote
+them) and which are <strong>content</strong> (a contributor, a dependency, or a fetched
+document can influence them).</p>
+<p><strong>2 — Find the confusion.</strong> For every content-controlled input, ask: if this
+file contained an instruction, would the agent follow it? Grade each:</p>
+<table>
+<thead>
+<tr>
+<th>Grade</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isolated</code></td>
+<td>content is quoted as data and never read as instruction</td>
+</tr>
+<tr>
+<td><code>advisory</code></td>
+<td>content can influence phrasing but not tool calls</td>
+</tr>
+<tr>
+<td><code>directive</code></td>
+<td>content can cause a tool call</td>
+</tr>
+</tbody>
+</table>
+<p>Any <code>directive</code> path from unreviewed content is a finding, and its severity is
+whatever the agent's most powerful allowed tool can do.</p>
+<p><strong>3 — Check the allowlist against the blast radius.</strong> For each pre-approved
+tool, state the worst outcome of one call with attacker-chosen arguments. A
+pre-approved <code>Bash</code> with unrestricted arguments is equivalent to pre-approving
+everything else; note it as such rather than listing it as one item.</p>
+<p><strong>4 — Check the hooks.</strong> Hooks run without the model's judgement. A hook that
+executes repository-supplied code (a script path from a config file, a test
+command from <code>package.json</code>) runs attacker-supplied code the moment the agent
+opens the repository. This is the highest-value finding in most reviews.</p>
+<p><strong>5 — Check the MCP servers.</strong> For each: who operates it, what it can reach,
+whether its tool descriptions are trusted input (they are model-visible text
+from a third party), and whether its credentials exceed the task.</p>
+<p><strong>6 — Check the escape hatches.</strong> Can a human stop it? Is there an audit trail
+that survives the agent's own actions? An agent that can edit its own logs has
+no logs.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;surface&quot;: [{&quot;path&quot;: &quot;str&quot;, &quot;control&quot;: &quot;operator|content&quot;, &quot;auto_loaded&quot;: true}],
+  &quot;findings&quot;: [
+    {&quot;kind&quot;: &quot;prompt_injection|overbroad_tool|unsafe_hook|mcp_trust|no_audit&quot;,
+     &quot;path&quot;: &quot;str&quot;, &quot;grade&quot;: &quot;isolated|advisory|directive&quot;,
+     &quot;worst_case&quot;: &quot;str&quot;, &quot;severity&quot;: &quot;critical|high|medium|low&quot;,
+     &quot;fix&quot;: &quot;str&quot;}
+  ],
+  &quot;allowlist_review&quot;: [{&quot;tool&quot;: &quot;str&quot;, &quot;worst_single_call&quot;: &quot;str&quot;, &quot;bounded&quot;: true}]
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Reviewing the agent's instructions and not its inputs.</strong> The instructions
+  are the part you control; the inputs are the part an attacker controls.</li>
+<li><strong>Treating tool descriptions as trusted.</strong> They are third-party text placed
+  directly in the model's context.</li>
+<li><strong>Assuming a human reviews every action.</strong> Check whether the mode in use
+  actually prompts, and audit the configuration that decides that.</li>
+<li><strong>Rating an injection finding by the text of the injection.</strong> Rate it by what
+  the allowlist permits.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>tool          writes  scope    reversible  inner loop?
+----------------------------------------------------------
+read_file     False   self     True        True
+write_file    True    project  True        True
+run_tests     True    self     True        True
+run_shell     True    tenant   False       True
+git_commit    True    project  True        True
+git_push      True    project  False       False
+read_env      False   org      True        False
+http_get      False   self     True        True
+
+default blast radius: 29
+path                                                            default  contained
+------------------------------------------------------------------------------------
+/home/dana/work/monorepo/src/app.py                             True     True
+/home/dana/work/monorepo/.env                                   True     False
+/home/dana/work/other-team-repo/secrets.yaml                    True     False
+/home/dana/.aws/credentials                                     True     False
+/home/dana/.ssh/id_ed25519                                      True     False
+/home/dana/.config/gcloud/application_default_credentials.json  True     False
+/home/dana/Downloads/customer-export-2026.csv                   True     False
+
+credential files reachable by default: 4
+credential files reachable when contained: 0
+blast radius      29 →  23
+reachable files    7 →   1
+credentials        4 →   0
+friction added   0.4 of 1.0 — one confirmation before a push
+
+No cloud or SSH credential is reachable, the inner loop is unchanged,
+and the only thing a developer notices is a prompt before pushing.
+conformance: 0 problem(s)
+
+auto-loaded, content-controlled inputs: [&#x27;README.md&#x27;, &#x27;docs/CONTRIBUTING.md&#x27;, &#x27;package.json&#x27;]
+most powerful pre-approved tool      : read_env (org scope)
+
+allowlist:
+   write_file  project scope, reversible         bounded=True
+   run_tests   self scope, reversible            bounded=True
+   run_shell   tenant scope, IRREVERSIBLE        bounded=False
+   git_commit  project scope, reversible         bounded=True
+   git_push    project scope, IRREVERSIBLE       bounded=False
+
+unbounded pre-approved tools: [&#x27;run_shell&#x27;, &#x27;git_push&#x27;]
+
+The injection finding is Critical not because the README says anything
+clever, but because a directive path exists to a tool that cannot be
+undone. Rewrite the payload and the severity does not move.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating <code>git_push</code> drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Ship the credential deny-list first — it is a config file, it takes an afternoon, and no developer will notice. Then find out how many agents in your organisation could read <code>~/.aws/credentials</code> yesterday.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
+<p><strong>What you can do now.</strong> Layers now stand between a compromised agent and a consequence — the policy decision at the tool call, the sandbox, egress, the budget, the gateway — plus the three the incident register adds: shared infrastructure that is no longer a channel, exemptions that cost blast radius, and an agent that has somewhere to report.</p>
+<p><strong>What you still cannot do.</strong> You have a secured architecture and nothing that builds on it. Every control here is stated as a rule; none of it is a pipeline anyone operates, and the first agentic system most organisations run is a security tool that reads untrusted code all day.</p>
+<p><strong>Function B builds that system as an SDLC, and holds it to every rule in this chapter. Next → B2.0, what an AI SDLC means.</strong></p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.0.html">B2.0 · The AI SDLC — what runs before a deploy, and what runs after</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/A3.11.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/A3.11.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Docker</span><span>Cilium</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/A3.11.ipynb</code></p></div><div class="pager"><a href="A3.10.html"><span class="k">← Previous</span><span class="t">A3.10 · The agent&#x27;s escalation path</span></a><a class="next" href="B2.0.html"><span class="k">Next →</span><span class="t">B2.0 · The AI SDLC — what runs before a deploy, and what runs after</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

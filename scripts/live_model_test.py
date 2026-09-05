@@ -59,7 +59,12 @@ def _calls_a_model(ex: dict) -> bool:
             continue
         path = ROOT / "skills" / source
         try:
-            if "def ask(" in path.read_text():
+            src = path.read_text()
+            # Scripts import `ask` from the shared runtime now; they used to
+            # carry their own `def ask(`. Accept both, or this returns zero
+            # model-facing lessons and silently tests nothing.
+            if "def ask(" in src or ("cyber_commons_skill_runtime import" in src
+                                     and "ask" in src.split("import", 1)[1][:200]):
                 return True
         except OSError:
             continue

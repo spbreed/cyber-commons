@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.1 — What building a harness means in security engineering | Cyber Commons</title><meta name="description" content="An independent verifier, and a budget that stops the loop when it cannot pass."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.1</div><h1>What building a harness means in security engineering</h1><div class="badges"><span class="badge b">Both directions</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A harness whose verifier is the model agreeing with itself does not fail loudly. It succeeds incorrectly, files a clean trace, and the bug is found by whoever merged the patch.</p></div><div class="ctrl"><div class="lab">Control</div><p>An independent verifier, and a budget that stops the loop when it cannot pass.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run the same harness loop twice — once with no verifier, once with one.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/agentic-harness-loop/scripts/agentic_harness_loop.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.1 · What building a harness means in security engineering</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</strong>  ·  <em>Both directions</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.0.html">B2.0 · The AI SDLC — what runs before a deploy, and what runs after</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>standard library only</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> What a harness is — the wrapper around a model that turns
+generating text into getting work done — and the four moves of its loop, run
+against a real CyberTravels finding with an actual LLM call in it.</p>
+<p><strong>Why a security engineer needs it.</strong> Every part of that wrapper is a security
+decision: the tool surface is an authorisation problem, the verifier decides
+what the pipeline is allowed to believe, and the budget is the only control
+still standing once the model is the component you cannot trust. A harness whose
+verifier is the model agreeing with itself does not fail loudly — it succeeds
+incorrectly and files a clean trace.</p>
+<p>This is a <strong>mechanism</strong> lesson, and it is short on purpose: three examples of
+harnesses you already run, then one loop of about twenty lines, executed twice.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>A model on its own is a text generator. Wrap it in a loop with tools and it reviews CyberTravels' pull requests; wrap it badly and it reviews them and tells you it found nothing. Every part of that wrapper is a security decision, and nobody else in the building is going to notice that the verifier is a shape check.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> Alex is building the reviewer that reads CyberTravels' pull requests. Its verifier is the part that decides whether it found anything, and a verifier that asks the model whether it is happy reports a clean review of a vulnerable diff.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   a model                 a harness
+
+   tokens in               PLAN   the model proposes
+   tokens out         -&gt;   ACT    the harness runs it against a tool
+   no memory               VERIFY something independent decides
+   no actions              STOP   verified, or a budget ran out
+   no notion of
+   &quot;did that work&quot;         the security decisions live in the last two
+
+   no verifier   -&gt; the loop accepts whatever came back
+   a shape check -&gt; it accepts anything well-formed
+   an LLM judge  -&gt; it accepts anything confident
+   a real check  -&gt; it refuses escape(ref) because that is still
+                    concatenation
+</code></pre>
+<p><strong>Building a harness, in security engineering, is building everything around a
+model that turns generating text into getting work done: what it sees, what it
+may do, how you know whether it worked, and when it stops.</strong> A model on its own
+is a text generator — no memory, no actions, no notion of success. The wrapper
+is what makes it a control, and every part of that wrapper is a security
+decision: the tool surface is an authorisation problem, the verifier decides
+what your pipeline is allowed to believe, and the budget is the only thing
+still holding once the model is the component you cannot trust.</p>
+<p>You already run several, whether or not anyone calls them that:</p>
+<ul>
+<li><strong>The CI security scan.</strong> Sees the changed files, may only read, "worked"
+  means a zero exit and a finding that parses, stops on a timeout.</li>
+<li><strong>An autofix bot.</strong> Sees the finding and the file, may open a branch, and
+  "worked" should mean <em>the exploit no longer reproduces</em> — not <em>the scanner
+  went quiet</em>.</li>
+<li><strong>A SOC triage assistant.</strong> Sees the alert and its enrichment, may query the
+  SIEM read-only, and "worked" means its disposition matched an analyst's on a
+  held-out sample.</li>
+</ul>
+<p>The third field is where harnesses fail, and they fail quietly. A harness whose
+verifier is the model agreeing with itself does not stop and report an error —
+it <strong>succeeds incorrectly</strong>, files a clean trace, and the bug is found later by
+whoever merged the patch.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">move</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">who does it</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the security decision in it</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>plan</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the model</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">none — this is the part you did not write</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>act</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the harness</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the tool surface: what is even expressible</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>verify</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">something independent</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>what the pipeline is allowed to believe</b></td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"><b>stop</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the harness</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">the budget — the last control still standing</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Frameworks make plan and act easy and leave verify and stop as your problem, usually defaulting to “the model says it is done” and “loop forever”.</div></div><div class="nbmd"><h2>3 · One loop, run twice</h2>
+<p>The simplest harness that shows the point: about twenty lines, one real model call, one SQL injection from CyberTravels' booking service. It runs with no verifier and then with one — same model, same prompt.</p>
+<p>Offline the model is a labelled replay; against a served open-weight endpoint it is the identical code.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/agentic-harness-loop/SKILL.md"><code>skills/appsec/agentic-harness-loop/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agentic-harness-loop
+description: &gt;-
+  Build and check the plan-act-verify loop that turns a model into a harness —
+  including the exit condition, the parser, and an independent verifier that
+  decides what the loop is allowed to accept. Use when writing an agentic
+  pipeline, or when a loop reports success on work nobody checked.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>The loop is yours; the model is a component in it</h1>
+<p>A harness is four moves — plan, act, verify, stop — and the security engineer
+owns three of them. What the loop <strong>accepts</strong> is decided by the verifier, not by
+the model, and a loop with no verifier accepts whatever came back and reports
+success.</p>
+<h2>When to use this</h2>
+<p>Whenever you are about to put a model in a for-loop: triage, remediation,
+detection authoring, anything that iterates until it is satisfied.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Write the exit condition before the prompt.</strong> A loop whose exit is easier
+than the work will take the exit. Do not offer the model a way to declare
+itself done; decide that from the outside, on the artefact.</p>
+<p><strong>2 — Parse defensively, because parsing is the harness's job.</strong> Asked for one
+line, a small model returns the whole function and a larger one returns a fenced
+block. Both are reasonable readings. Take what you need from what arrives rather
+than requiring the model to do you a favour.</p>
+<p><strong>3 — Write the verifier as an independent check.</strong> Independent means it does
+not ask the model whether the answer is good. It examines the artefact: does the
+line use a placeholder, does the test pass, does the exploit stop working.</p>
+<p><strong>4 — Test the verifier against a correct answer you did not expect.</strong> This is
+the step that gets skipped. A verifier that accepts only one spelling of correct
+rejects real work and burns the budget doing it — check <code>%s</code>, <code>:name</code> and <code>$1</code>
+before shipping a check for <code>?</code>.</p>
+<p><strong>5 — Test it against a plausible wrong answer.</strong> Something that reads like a
+fix and is not — an escape function wrapped around concatenation. If the
+verifier accepts it, the loop ships it, reports success, and the trace looks
+clean.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;loop&quot;: {&quot;moves&quot;: [&quot;plan&quot;, &quot;act&quot;, &quot;verify&quot;, &quot;stop&quot;], &quot;max_steps&quot;: 0, &quot;exit_owned_by&quot;: &quot;harness|model&quot;},
+  &quot;parse&quot;: {&quot;expected&quot;: &quot;str&quot;, &quot;shapes_seen&quot;: [&quot;str&quot;], &quot;strategy&quot;: &quot;str&quot;},
+  &quot;verifier&quot;: {&quot;independent&quot;: true, &quot;accepts&quot;: [&quot;str&quot;], &quot;rejects&quot;: [&quot;str&quot;]},
+  &quot;runs&quot;: [{&quot;verifier&quot;: &quot;none|present&quot;, &quot;steps&quot;: 0, &quot;accepted&quot;: &quot;str&quot;, &quot;verified&quot;: null}]
+}
+</code></pre>
+<p>Report the unverified run too. The pair is the lesson: the same model and the
+same prompt, with and without something checking the answer.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Offering the model a DONE exit.</strong> It will take it on the first turn.</li>
+<li><strong>A verifier that accepts one spelling.</strong> It rejects correct work, repeatedly,
+  and the budget goes on retries.</li>
+<li><strong>Asking a model to judge the answer.</strong> That is a second opinion, not a
+  verification.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+model         : deterministic stand-in (no backend configured)
+
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
+
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
+
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+the loop, wired: [&#x27;plan&#x27;, &#x27;act&#x27;, &#x27;verify&#x27;, &#x27;stop&#x27;]
+backend  : replay
+steps    : 1
+accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
+verified : None   &lt;- nothing checked it
+
+The loop stopped because the model produced something, which is not the
+same as producing something correct. Whatever came back was accepted.
+accepted : return DB.execute(&quot;SELECT * FROM bookings WHERE ref=?&quot;, (ref,))
+verified : True   &lt;- an independent check said so
+steps    : 1
+
+a correct psycopg fix: return DB.execute(&quot;SELECT * FROM bookings WHERE ref=%s&quot;, (ref,))
+   narrow verifier (only &#x27;?&#x27;) : REJECTS a correct fix
+   this lesson&#x27;s verifier     : accepts
+
+a plausible-looking answer: return DB.execute(&quot;SELECT * FROM bookings WHERE ref=&quot; + escape(ref))
+   would the verifier accept it? False
+
+It reads like a fix and it is still concatenation. Without the verifier
+this loop ships it, reports success, and the trace looks clean.</code></pre></div><div class="nbmd"><h2>4 · The part worth keeping</h2>
+<p>Read the last block of that output again. The answer it rejects —
+<code>ref=" + escape(ref)</code> — is the one that matters: it reads like a fix, it would
+pass a human skim, and it is still concatenation. Without a verifier the loop
+accepts it, reports success and files a clean trace.</p>
+<p>That is the whole reason this chapter defines the word before it builds
+anything. Every stage after this one is a harness, and for each of them the
+question is the same: <strong>what, other than the model, decided that this worked?</strong></p></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The loop runs with a real model behind <code>ask()</code> — a labelled replay offline, a real open-weight call when one is served. With no verifier it accepts whatever came back and reports <code>verified: None</code>. With the verifier the same model and prompt produce an accepted, parameterised line; a narrow verifier that only accepts <code>?</code> is shown rejecting a correct psycopg fix, and a plausible answer wrapping the input in <code>escape()</code> is refused, because it is still concatenation.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Name your pipeline's verifier out loud. If the sentence contains "the model checks" or "it looks right", you have a judge, and a judge approves confident prose — including prose that contradicts the finding it is attached to.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.2.html">B2.2 · Threat modelling from what the estate already knows</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.1.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Without a verifier the loop accepts whatever the model returned and reports verified: None. With one, the same model and prompt produce an accepted parameterised line, a too-narrow verifier is shown rejecting a correct fix, and an answer that wraps the input in escape() is refused because it is still concatenation.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.1.ipynb</code></p></div><div class="pager"><a href="B2.0.html"><span class="k">← Previous</span><span class="t">B2.0 · The AI SDLC — what runs before a deploy, and what runs after</span></a><a class="next" href="B2.2.html"><span class="k">Next →</span><span class="t">B2.2 · Threat modelling from what the estate already knows</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

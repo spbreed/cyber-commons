@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.11 — Context engineering for the pipeline | Cyber Commons</title><meta name="description" content="Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: Harnesses and an Agentic AppSec Pipeline</div><div class="sid">B2.11</div><h1>Context engineering for the pipeline</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The model is given the repository and asked to be thorough, so the relevant line falls out of the window.</p></div><div class="ctrl"><div class="lab">Control</div><p>Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Compare four context strategies against one bug and measure which are decidable and at what size.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/context-window-sizing/scripts/context_window_sizing.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.11 · Context engineering for the pipeline</h1>
-<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: Harnesses and an Agentic AppSec Pipeline</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.10.html">B2.10 · Severity calibration and reporting</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B2.11 — Remediation engineering — proven in a sandbox before the merge request | Cyber Commons</title><meta name="description" content="Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function B — Application Security with an AI SDLC › The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</div><div class="sid">B2.11</div><h1>Remediation engineering — proven in a sandbox before the merge request</h1><div class="badges"><span class="badge d">AI for Security</span><span class="badge t">B2</span></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/B2.11.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A patch that silences the scanner is indistinguishable from a patch that fixes the bug.</p></div><div class="ctrl"><div class="lab">Control</div><p>Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run one plan-act-verify skeleton across four domains, swapping only the oracle and the blast radius.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><p class="sub kagnote">“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/appsec/patch-validation-harness/scripts/patch_validation_harness.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>B2.11 · Remediation engineering — proven in a sandbox before the merge request</h1>
+<p><strong>Function B — Application Security with an AI SDLC → The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/B2.10.html">B2.10 · Severity calibration, triaging and reporting</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,125 +11,450 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>tree-sitter, GLM-4.6, Llama 3.3, Claude Haiku 4.5</td>
+<td>Semgrep OSS, pytest, GLM-4.6, Kimi K2, Claude Sonnet 5</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Compare four context strategies against one bug and measure which are decidable and at what size.</p>
-<p><strong>Why a security engineer needs it.</strong> The model is given the repository and asked to be thorough, so the relevant line falls out of the window. The control it builds is: slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.</p>
+<p><strong>What it covers.</strong> Validate four candidate patches on three axes and show which of them only made the scanner green.</p>
+<p><strong>Why a security engineer needs it.</strong> A patch that silences the scanner is indistinguishable from a patch that fixes the bug. The control it builds is: stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.</p>
 <p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Give an agent more context and it gets better, until it gets worse. The cliff is real, it arrives earlier than anyone expects, and past it you are paying more per token for a worse answer.</p>
+<p>A patch that passes the tests and changes the behaviour is not a fix, it is a second incident with a pull request attached. Remediation is the stage where the pipeline stops finding things and starts touching them.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> Give the review agent CyberTravels' whole repository and it gets worse, not better. The cliff arrives earlier than anyone expects and you pay more per token for it.</p>
+<p><strong>At CyberTravels.</strong> The Coding Agent's fix must not break booking behaviour. A patch that passes the tests and changes what travellers experience is a second incident with a pull request attached. R8.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   accuracy
-     ^
-     |          .-----.
-     |        .'       `.
-     |      .'           `.       &lt;- the cliff
-     |    .'               `--....
-     |  .'
-     +--------------------------------&gt; context tokens
-        too little        enough      too much
+<pre><code>   patch                    what has to be true
+   +----------------+       +-----------------------------+
+   | fixes the bug  |  and  | behaviour unchanged         |
+   |                |       | tests still pass            |
+   |                |       | reviewer can follow the why |
+   +----------------+       +-----------------------------+
 
-   past the peak you pay more per token for a worse answer
+   a patch that passes the tests and changes the behaviour is
+   a second incident with a pull request attached
 </code></pre>
-<p>Cross-cutting, and it applies to every stage that calls a model: stages 3, 4, 5,
-7 and 14.</p>
-<p>The instinct when a model misses something is to give it more context. Usually
-the opposite is correct.</p>
-<p>To find a vulnerability, a model needs three things: the <strong>sink</strong>, the
-<strong>source</strong>, and the <strong>path</strong> between them. Everything else competes for
-attention and for window. A repository dumped into a prompt does not produce a
-thorough review — it produces a review of whatever survived truncation, and you
-cannot tell which parts those were.</p>
-<p>So context engineering is mostly subtraction, with one exception you must not
-subtract: the <strong>enclosing signature</strong>, because that is where reachability is
-decided. The identical concatenation is critical inside an HTTP handler and
-irrelevant inside a migration script that takes a constant.</p></div><div class="nbmd"><h2>3 · The stage, as a skill</h2>
-<p>Context engineering here is not "send less" — it is finding the slice in which the defect is decidable at all, and only then making it smaller. The skill measures four candidate slices and reports which are decidable and what each carries that the defect does not depend on.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/context-window-sizing/SKILL.md"><code>skills/appsec/context-window-sizing/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: context-window-sizing
+<p><strong>Stage 14 — Remediation engineering.</strong> Generate the fix, prove it, and only
+then ask anybody to look at it.</p>
+<p>This stage comes after triage on purpose. Remediation is the first stage that
+<em>touches</em> the codebase, and touching it in the wrong order is expensive: fixing
+by rule severity means fixing the finding at the top of a queue that B2.10 has
+just told you is sorted wrongly. Calibrate first, then remediate, and the fix
+you write first is the one that matters most.</p>
+<p>A model that finds bugs is useful. A model that fixes them is only useful if you
+can tell a real fix from a plausible one, and plausible is exactly what language
+models are optimised to produce.</p>
+<p>There are three ways to make a finding stop firing:</p>
+<ol>
+<li><strong>Fix the vulnerability</strong> — behaviour preserved, bug gone.</li>
+<li><strong>Remove the code</strong> — finding gone, so is the feature.</li>
+<li><strong>Evade the detector</strong> — rewrite until the pattern misses.</li>
+</ol>
+<p>All three make the scanner green, and an autonomous loop optimising for a green
+scan will find options 2 and 3 on its own because they are cheaper.</p>
+<h3>The fix does not go straight to a merge request</h3>
+<p>The pipeline has two things a static workflow does not, and both were built
+earlier in this chapter: Phase 4 produced a <strong>working exploit</strong>, and B2.6 built
+a <strong>replica</strong> to run it against. So a patch has somewhere to be proven before a
+reviewer's time is spent on it, and the promotion path is three environments
+with a different question at each:</p>
+<table>
+<thead>
+<tr>
+<th>where</th>
+<th>the question</th>
+<th>what it catches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>sandbox replica</strong></td>
+<td>does the exploit still work?</td>
+<td>the patch that only moved the pattern</td>
+</tr>
+<tr>
+<td><strong>QA</strong></td>
+<td>does the application still do what it did?</td>
+<td>the patch that closed the bug by breaking the feature</td>
+</tr>
+<tr>
+<td><strong>merge request to <code>master</code></strong></td>
+<td>is this the mechanism we want?</td>
+<td>the design question no gate can answer</td>
+</tr>
+</tbody>
+</table>
+<p>The order is not arbitrary. The exploit re-run is first because it is the only
+acceptance test that <strong>cannot be satisfied by editing the code around the
+detector</strong>, and it is the one that gets skipped, always with the same
+justification: the fix is obvious.</p>
+<p>One run that sounds redundant and is not: the exploit must also be re-run
+against the <strong>unpatched</strong> build in the same harness. Without it you cannot tell
+"the fix worked" from "the probe broke", and a probe that has quietly stopped
+asserting reports every candidate as a success.</p></div><div class="nbmd"><blockquote>
+<p><strong>Where you are in the pipeline.</strong></p>
+<p><code>[Ingestion &amp; Mapping] ──&gt; [Threat Modelling] ──&gt; [Discovery]
+         └─ stages 1-4         └─ stages 5-6        └─ stages 7-10
+                   ──&gt; [Dynamic Validation] ──&gt; [Reporting]
+                             └─ stages 11-14        └─ stage 15</code></p>
+</blockquote></div><div class="nbmd"><h2>3 · The stage, as a skill</h2>
+<p>Several candidate patches make the scanner green; one of them is a fix. The skill runs all three gates — behaviour unchanged, exploit blocked, and proof of fix against the old build — and reports which gate each rejected candidate died at.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/patch-validation-harness/SKILL.md"><code>skills/appsec/patch-validation-harness/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: patch-validation-harness
 description: &gt;-
-  Find the smallest slice of a file in which a defect is actually decidable, and
-  measure what larger windows add in unrelated code. Use when tuning what a
-  model is shown per finding, when analysis costs too much, or when a model
-  keeps missing a bug that is on the line you gave it.
-allowed-tools: Read, Grep, Glob
+  Accept a proposed fix only when three things hold — behaviour unchanged, the
+  exploit no longer works, and the fix proved against the build that was
+  vulnerable. Use when an agent proposes a patch, or when a scanner going green
+  is being read as a fix.
+allowed-tools: Read, Grep, Glob, Bash
 </code></pre>
-<h1>Decidable, then small — in that order</h1>
-<p>Context engineering for an analysis pipeline is not "send less". It is finding
-the slice in which the question can be answered at all, and only then making it
-smaller. A ±2-line window around the bug is cheap and <strong>not decidable</strong>: it
-lacks the signature, so nothing in it says where the value came from.</p>
+<h1>A green scanner is not a fixed bug</h1>
+<p>Several candidate patches will make the scanner green. Some of them change
+behaviour, some of them leave the bug exploitable, and one of them does neither.
+Telling them apart needs three gates, and the third is the one that is usually
+missing: proof against the <strong>old</strong> build, so "the exploit stops working" is a
+statement about the patch rather than about the environment.</p>
 <h2>When to use this</h2>
-<p>When designing what a pipeline sends per finding, and whenever cost per finding
-is the constraint.</p>
+<p>Every proposed remediation, whether authored by a person or an agent, and
+especially when the evidence offered is that the scanner no longer fires.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Define decidability for the defect class.</strong> For injection: the sink, the
-value's origin, and any sanitiser between them. Write it down before slicing, or
-you will judge slices by how they look.</p>
-<p><strong>2 — Build the candidate slices.</strong> The whole file, a fixed window around the
-line, a wider window, and a <strong>path slice</strong> — the enclosing function plus the
-definitions it depends on. Measure each in characters.</p>
-<p><strong>3 — Mark each slice decidable or not,</strong> against step 1. Cheap and undecidable
-is the trap: it looks like a saving and it produces confident answers about
-information that is not there.</p>
-<p><strong>4 — Count unrelated content in the decidable ones.</strong> Functions, constants and
-imports the defect does not depend on. This is what a bigger window costs, in
-tokens and in the model's attention.</p>
-<p><strong>5 — Pick the smallest decidable slice, and say what it excluded.</strong> The
-exclusion list is what somebody re-reads when the pipeline misses something.</p>
+<p><strong>1 — Establish the baseline on the vulnerable build.</strong> The behaviour cases must
+pass and the exploit must work. If the exploit does not work here, you are about
+to validate a patch against a bug you have not reproduced.</p>
+<p><strong>2 — Gate one: behaviour unchanged.</strong> Run every behaviour case against the
+patched build. A patch that fixes the defect and changes an answer is a
+regression with a security justification.</p>
+<p><strong>3 — Gate two: the exploit no longer works.</strong> Against the patched build,
+directly. Not "the scanner is quiet" — the scanner was one of the tools that
+missed the defect class in the first place.</p>
+<p><strong>4 — Gate three: proof of fix.</strong> Run the exploit against the old build again,
+after the patch is written, in the same harness. It must still work. This is
+what excludes the environment having changed underneath the test.</p>
+<p><strong>5 — Report per candidate and per gate.</strong> A candidate rejected at gate one and
+one rejected at gate two need different conversations with whoever wrote them.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;decidability&quot;: {&quot;requires&quot;: [&quot;str&quot;]},
-  &quot;slices&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;chars&quot;: 0, &quot;decidable&quot;: false, &quot;unrelated_units&quot;: 0}],
-  &quot;chosen&quot;: {&quot;name&quot;: &quot;str&quot;, &quot;chars&quot;: 0, &quot;unrelated_units&quot;: 0},
-  &quot;excluded&quot;: [&quot;str&quot;]
+  &quot;baseline&quot;: {&quot;behaviour_pass&quot;: true, &quot;exploit_works&quot;: true},
+  &quot;candidates&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;scanner_green&quot;: true,
+                  &quot;behaviour_unchanged&quot;: true, &quot;exploit_blocked&quot;: true,
+                  &quot;proof_of_fix&quot;: true, &quot;verdict&quot;: &quot;accepted|rejected&quot;, &quot;rejected_at&quot;: &quot;str|null&quot;}],
+  &quot;accepted&quot;: [&quot;str&quot;]
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Optimising size first.</strong> An undecidable slice is not cheap; it is wrong at a
-  lower price.</li>
-<li><strong>Judging slices by eye.</strong> Write the decidability requirement down first.</li>
-<li><strong>Ignoring unrelated content</strong> in a decidable slice. It is the cost you can
-  actually remove.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>the bug is on line 22
-whole file             839 chars   29 lines
-±2 line window         207 chars    5 lines
-±6 line window         432 chars   13 lines
-strategy            sink   concat  source  intent  decidable
-----------------------------------------------------------------
-whole file          True   True    True    True    True
-±2 line window      True   True    False   False   False
-±6 line window      True   True    True    True    True
+<li><strong>Accepting a green scanner.</strong> Several wrong patches produce one.</li>
+<li><strong>Skipping the behaviour cases.</strong> The most reliable way to block an exploit is
+  to break the feature.</li>
+<li><strong>Omitting proof of fix.</strong> Without it you cannot distinguish a working patch
+  from a broken exploit.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-The ±2 window has the sink and the concatenation but not the signature,
-so you cannot tell whether owner is user-controlled — which is the
-difference between critical and won&#x27;t-fix.
-def list_reports(conn, owner, limit=DEFAULT_LIMIT):
-    &quot;&quot;&quot;Called from GET /reports?owner=... — owner is user-controlled.&quot;&quot;&quot;
-    key = _cache_key(&quot;reports&quot;, owner, limit)
-    if key in CACHE:
-        return CACHE[key]
-    rows = conn.execute(&quot;SELECT * FROM reports WHERE owner = &#x27;&quot; + owner + &quot;&#x27; LIMIT &quot; + str(limit))
-    out = [_format_row(r) for r in rows]
-    CACHE[key] = out
-    return out
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
 
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
 
-394 chars (47% of the file), decidable=True
-strategy              chars   share  decidable  noise fns
-----------------------------------------------------------
-whole file              839    100%       True          4
-±2 line window          207     25%      False          0
-±6 line window          432     52%       True          1
-path slice              394     47%       True          0
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+behaviour of the vulnerable build:
+   get_user(&#x27;dana&#x27;    ) → [(1, &#x27;dana&#x27;)]      ok
+   get_user(&#x27;sam&#x27;     ) → [(2, &#x27;sam&#x27;)]       ok
+   get_user(&#x27;nobody&#x27;  ) → []                 ok
+   get_user(&quot;o&#x27;brien&quot; ) → raised OperationalError FAILS
 
-smallest decidable context: path slice (47% of the file, 0 unrelated functions)
-vs whole file: 53% smaller, 4→0 unrelated functions</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Apply the path-slice rule where the source is three functions away from the sink. That is the case where text windows break down entirely and the call graph the threat model derives (B2.2) earns its keep.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Securing the developers' coding agents</a></strong></p>
+exploit works: True — probe returned 3 rows
+scanner fires: False
+candidate                           scanner green
+--------------------------------------------------
+A · parameterise (the real fix)              True
+B · delete the feature                       True
+C · evade the scanner                        True
+D · escape by hand                           True
+
+Three of four are green. Only one of those is a fix.
+candidate                         scan  behaviour  exploitable  verdict
+------------------------------------------------------------------------------------
+A · parameterise (the real fix)   True  True       False        ACCEPT
+B · delete the feature            True  False      False        REJECT — behaviour changed
+C · evade the scanner             True  False      True         REJECT — behaviour changed, STILL EXPLOITABLE (stage-12 probe passes)
+D · escape by hand                True  True       False        ACCEPT
+
+accepted: [&#x27;A · parameterise (the real fix)&#x27;, &#x27;D · escape by hand&#x27;]
+A · parameterise (the real fix)    proof of fix: True  (exploit on old=True, on new=False)
+D · escape by hand                 proof of fix: True  (exploit on old=True, on new=False)
+
+Candidate D passes every automated check and is still the wrong answer:
+it reimplements the driver&#x27;s escaping and will be wrong for the next
+input class or the next database. Nothing except a rule about MECHANISM
+catches that — which is the part of remediation that does not automate.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Fix this without changing the function&#x27;s behaviour for valid input...
+
+answer:
+   def report(request):
+       q = &quot;SELECT * FROM orders WHERE ref = ?&quot;
+       return db.execute(q, (request.args[&#x27;ref&#x27;],))
+
+property checked : parameterises the query
+held on replay       : True
+
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model&#x27;s.
+the exploit, against the unpatched build in the replica
+   reproduces: True   &lt;- if this were False the probe is
+               broken and every result below would be meaningless
+
+      CI   exploit  behaviour  new  promoted to
+   A  ok   blocked  same       0    merge-request
+   B  ok   blocked  CHANGED    0    rejected  &lt;- qa: behaviour changed
+   C  ok   WORKS    same       0    rejected  &lt;- sandbox: exploit still works
+   D  ok   blocked  same       0    merge-request
+
+   A  parameterised and bound - the fix
+   B  parameterised, and silently truncates the reference
+   C  still concatenation; escape() moved the pattern past the rule
+   D  closes the finding by removing partial-reference search
+
+merge requests CI alone would have opened : 4
+merge requests the gates opened           : 2
+
+C is the one worth staring at. It is green, the rule no longer fires,
+and the exploit works unchanged - the patch moved the pattern rather than
+closing the injection. Only re-running the exploit catches that, and only
+in an environment built to be attacked.
+
+D is the other kind. It passes every gate above and it is still wrong:
+it closes the finding by deleting partial-reference search, which is a
+feature travellers use. No automated gate rejects D, because &#x27;is this the
+mechanism we want&#x27; is not a property of a test run - it is the question
+the merge request exists to ask a human.
+
+attached to the merge request for A:
+   - exploit run against the unpatched build: reproduces
+   - exploit run against the patched build: blocked
+   - QA regression: 4/4 booking behaviours unchanged
+   - finding diff: target finding gone, 0 introduced
+
+A reviewer opening that request does not have to establish whether the
+bug is closed. That is answered on the page, so the review can be about
+D&#x27;s question instead - which is the only one they are needed for.</code></pre></div><div class="nbmd"><h2>4 · From the sandbox to the merge request</h2>
+<p>Validation says a patch is good. It does not say the patch may be merged, and those are different decisions taken in different places. This skill runs the promotion path: the exploit re-run in the replica, the regression suite in QA, the finding diff in both directions, and only then a merge request against <code>master</code> with the evidence attached to it.</p></div><div class="nbmd"><h2>5 · The promotion path, as a skill</h2>
+<p>The same four candidates, walked through three environments. Watch what CI alone would have merged against what survives the gates — and then watch candidate D pass every one of them.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/fix-promotion-gate/SKILL.md"><code>skills/appsec/fix-promotion-gate/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: fix-promotion-gate
+description: &gt;-
+  Decide whether a candidate security patch may leave the sandbox, pass QA and
+  become a merge request against the mainline. Use when an agent or a developer
+  proposes a fix for a confirmed finding, when a green CI run is being treated
+  as proof a vulnerability is closed, or when deciding what a security fix must
+  prove before review.
+allowed-tools: Read, Grep, Glob, Bash
+</code></pre>
+<h1>What must a fix prove, and where, before anyone is asked to review it</h1>
+<p>A green pipeline says the tests that exist still pass. For a security patch
+that is the wrong question, because the tests that exist were written by people
+who did not know about this bug — if they had, it would not be here.</p>
+<p>There are three ways to make a finding stop firing and only one of them is a
+fix: <strong>fix the vulnerability</strong>, <strong>delete the feature</strong>, or <strong>evade the
+detector</strong>. All three turn CI green, and an autonomous loop optimising for
+green finds the second and third on its own, because they are cheaper.</p>
+<p>The pipeline has something a static workflow does not: Phase 4 already built a
+<strong>working exploit</strong>, and B2.6 already built a <strong>replica</strong> to run it against. So
+the fix has somewhere to be proven before anybody is asked to look at it, and
+the promotion path is three environments with a different question at each:</p>
+<table>
+<thead>
+<tr>
+<th>where</th>
+<th>the question</th>
+<th>what it catches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>sandbox replica</strong></td>
+<td>does the exploit still work?</td>
+<td>the patch that only moved the pattern</td>
+</tr>
+<tr>
+<td><strong>QA</strong></td>
+<td>does the application still do what it did?</td>
+<td>the patch that closed the bug by breaking the feature</td>
+</tr>
+<tr>
+<td><strong>merge request</strong></td>
+<td>is this the mechanism we want?</td>
+<td>the design question no gate can answer</td>
+</tr>
+</tbody>
+</table>
+<p>Skipping the first is the common failure, and it is always justified the same
+way: the fix is obvious.</p>
+<h2>When to use this</h2>
+<p>On every patch for a confirmed finding, whether an agent or a person wrote it,
+before the merge request exists. Also when reviewing a remediation workflow that
+opens merge requests directly from a scanner going quiet.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Re-run the exploit against the patched build, in the replica.</strong> Not the
+scanner. The exploit is the only acceptance test that cannot be satisfied by
+editing the code around a detector. A patch that leaves the exploit working has
+failed regardless of what the scan says.</p>
+<p><strong>2 — Prove the exploit still works against the <em>unpatched</em> build.</strong> Same run,
+same harness. Without this you cannot distinguish "the fix worked" from "the
+probe broke", and a probe that silently stopped asserting reports every patch
+as a success.</p>
+<p><strong>3 — Run the regression suite in QA, against real-shaped data.</strong> Behaviour
+preserved is a separate claim from vulnerability closed, and the patch that
+closes a SQL injection by returning an empty list satisfies the first gate
+perfectly.</p>
+<p><strong>4 — Diff the findings, both directions.</strong> The target finding must be gone and
+nothing new may appear. A patch that closes one injection and opens a path
+traversal has a net score of zero and a merge request that says "fixes CVE".</p>
+<p><strong>5 — Only now open the merge request, and put the evidence in it.</strong> The
+exploit run before and after, the regression result, the finding diff. A
+reviewer's remaining job is the question no gate can answer — whether this is
+the mechanism the codebase should use — and they can only get to it if the
+first three are already answered on the page.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;candidates&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;ci_green&quot;: true, &quot;exploit_blocked&quot;: true,
+                  &quot;behaviour_preserved&quot;: true, &quot;new_findings&quot;: 0,
+                  &quot;promoted_to&quot;: &quot;rejected|qa|merge-request&quot;, &quot;died_at&quot;: &quot;str&quot;}],
+  &quot;would_merge_on_ci_alone&quot;: 0,
+  &quot;merge_requests_opened&quot;: 0,
+  &quot;evidence_attached&quot;: [&quot;str&quot;]
+}
+</code></pre>
+<p><code>would_merge_on_ci_alone</code> against <code>merge_requests_opened</code> is the number this
+procedure exists to produce. If they are equal, the gates changed nothing and
+one of them is not actually running.</p>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Treating a green scan as proof.</strong> It is proof the detector is quiet, and
+  three of the four ways to quieten a detector are not fixes.</li>
+<li><strong>Skipping the replica because the fix is obvious.</strong> The obvious fixes are
+  where evasion hides, because nobody re-reads them.</li>
+<li><strong>Omitting the proof-of-fix run against the old build.</strong> A broken probe then
+  passes every patch.</li>
+<li><strong>Opening the merge request without the evidence.</strong> The reviewer re-derives
+  it, badly, or approves on the strength of the description.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
+model         : deterministic stand-in (no backend configured)
+
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
+
+   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
+
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+behaviour of the vulnerable build:
+   get_user(&#x27;dana&#x27;    ) → [(1, &#x27;dana&#x27;)]      ok
+   get_user(&#x27;sam&#x27;     ) → [(2, &#x27;sam&#x27;)]       ok
+   get_user(&#x27;nobody&#x27;  ) → []                 ok
+   get_user(&quot;o&#x27;brien&quot; ) → raised OperationalError FAILS
+
+exploit works: True — probe returned 3 rows
+scanner fires: False
+candidate                           scanner green
+--------------------------------------------------
+A · parameterise (the real fix)              True
+B · delete the feature                       True
+C · evade the scanner                        True
+D · escape by hand                           True
+
+Three of four are green. Only one of those is a fix.
+candidate                         scan  behaviour  exploitable  verdict
+------------------------------------------------------------------------------------
+A · parameterise (the real fix)   True  True       False        ACCEPT
+B · delete the feature            True  False      False        REJECT — behaviour changed
+C · evade the scanner             True  False      True         REJECT — behaviour changed, STILL EXPLOITABLE (stage-12 probe passes)
+D · escape by hand                True  True       False        ACCEPT
+
+accepted: [&#x27;A · parameterise (the real fix)&#x27;, &#x27;D · escape by hand&#x27;]
+A · parameterise (the real fix)    proof of fix: True  (exploit on old=True, on new=False)
+D · escape by hand                 proof of fix: True  (exploit on old=True, on new=False)
+
+Candidate D passes every automated check and is still the wrong answer:
+it reimplements the driver&#x27;s escaping and will be wrong for the next
+input class or the next database. Nothing except a rule about MECHANISM
+catches that — which is the part of remediation that does not automate.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Fix this without changing the function&#x27;s behaviour for valid input...
+
+answer:
+   def report(request):
+       q = &quot;SELECT * FROM orders WHERE ref = ?&quot;
+       return db.execute(q, (request.args[&#x27;ref&#x27;],))
+
+property checked : parameterises the query
+held on replay       : True
+
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model&#x27;s.
+the exploit, against the unpatched build in the replica
+   reproduces: True   &lt;- if this were False the probe is
+               broken and every result below would be meaningless
+
+      CI   exploit  behaviour  new  promoted to
+   A  ok   blocked  same       0    merge-request
+   B  ok   blocked  CHANGED    0    rejected  &lt;- qa: behaviour changed
+   C  ok   WORKS    same       0    rejected  &lt;- sandbox: exploit still works
+   D  ok   blocked  same       0    merge-request
+
+   A  parameterised and bound - the fix
+   B  parameterised, and silently truncates the reference
+   C  still concatenation; escape() moved the pattern past the rule
+   D  closes the finding by removing partial-reference search
+
+merge requests CI alone would have opened : 4
+merge requests the gates opened           : 2
+
+C is the one worth staring at. It is green, the rule no longer fires,
+and the exploit works unchanged - the patch moved the pattern rather than
+closing the injection. Only re-running the exploit catches that, and only
+in an environment built to be attacked.
+
+D is the other kind. It passes every gate above and it is still wrong:
+it closes the finding by deleting partial-reference search, which is a
+feature travellers use. No automated gate rejects D, because &#x27;is this the
+mechanism we want&#x27; is not a property of a test run - it is the question
+the merge request exists to ask a human.
+
+attached to the merge request for A:
+   - exploit run against the unpatched build: reproduces
+   - exploit run against the patched build: blocked
+   - QA regression: 4/4 booking behaviours unchanged
+   - finding diff: target finding gone, 0 introduced
+
+A reviewer opening that request does not have to establish whether the
+bug is closed. That is answered on the page, so the review can be about
+D&#x27;s question instead - which is the only one they are needed for.</code></pre></div><div class="nbmd"><h2>6 · The two patches that reach review, and why one of them still should not merge</h2>
+<p>Candidate C is the argument for the replica. It is green, the rule no longer
+fires, and the exploit works unchanged — <code>escape()</code> moved the pattern past
+the detector without closing the injection. Nothing but re-running the exploit
+finds that, and nothing but an environment built to be attacked lets you.</p>
+<p>Candidate D is the argument for the reviewer. It passes every gate: the exploit
+is blocked, the regression suite is green, no new findings. It closes the bug by
+returning an empty list, deleting partial-reference search — a feature
+travellers use. No automated gate rejects it, and none should, because <em>is this
+the mechanism we want</em> is not a property of a test run.</p>
+<p>That is the division of labour the promotion path buys. The gates answer whether
+the bug is closed, on the page, before the request is opened. The reviewer's
+remaining job is D's question, which is the only one they were ever needed
+for.</p></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The vulnerable build passes all four behaviour cases and the exploit returns 3 rows. Candidates A, B and D make the scanner green. Validation rejects B for changed behaviour and C for remaining exploitable, accepting A and D. Proof of fix holds for both accepted patches — the exploit works on the old build and fails on the new. The promotion path then walks the same four through the replica, QA and the finding diff: CI alone would have opened four merge requests and the gates open two, with C dying in the sandbox because the exploit still works and B dying in QA because the booking reference is silently truncated. D reaches review having passed every gate, which is the point — no automated check rejects a fix that works by deleting the feature.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Candidate D passes every automated gate and is still wrong. Write the rule that rejects it. You will find it has to be about which <em>mechanism</em> is acceptable, not about outcomes — and that rule belongs in your secure coding standard, not in the pipeline.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.12.html">B2.12 · Context engineering — cutting the false positives</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.11.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.11.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The whole file is roughly 840 characters, the ±2 window about 200 and the path slice about 390. The ±2 window is not decidable because it lacks the signature; the ±6 window and the whole file are decidable but carry unrelated functions. The path slice is the smallest decidable context with zero unrelated functions, about 53% smaller than the whole file.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>tree-sitter</span><span>GLM-4.6</span><span>Llama 3.3</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.11.ipynb</code></p></div><div class="pager"><a href="B2.10.html"><span class="k">← Previous</span><span class="t">B2.10 · Severity calibration and reporting</span></a><a class="next" href="B2.12.html"><span class="k">Next →</span><span class="t">B2.12 · Securing the developers&#x27; coding agents</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>One skeleton runs all four domains unchanged. With each domain&#x27;s own oracle every confirmed finding is real — precision 1.00 across sast, threat model, dast and pentest — and the pentest run refuses outright without a signed scope, because its blast radius is live action. Swapping in the model&#x27;s own confidence as the oracle confirms all 12 candidates, 8 of which are real: precision 0.67 in every domain, invisible from inside the harness.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Semgrep OSS</span><span>pytest</span><span>GLM-4.6</span><span>Kimi K2</span><span>Claude Sonnet 5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/B2.11.ipynb</code></p></div><div class="pager"><a href="B2.10.html"><span class="k">← Previous</span><span class="t">B2.10 · Severity calibration, triaging and reporting</span></a><a class="next" href="B2.12.html"><span class="k">Next →</span><span class="t">B2.12 · Context engineering — cutting the false positives</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

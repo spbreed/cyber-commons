@@ -165,21 +165,21 @@ REGISTER = [
   "roadmaps.",
   "Scoped sandbox access to one folder, an explainable action before access, "
   "and host-based monitoring of what the agent actually reads.",
-  "A3.2, A1.8, B2.12"),
+  "A3.2, A1.8, A3.11"),
  ("R7", "CI/CD pipeline exploitation",
   "The Coding Agent can open pull requests and approve its own. A commit adds a "
   "postInstall script that runs arbitrary code in the CI runner and leaks "
   "secrets.",
   "Protected branches needing two human reviewers, no self-approval, "
   "pre-deploy SAST and DAST, signed commits and reproducible builds.",
-  "B2.12, B2.9, A3.6"),
+  "A3.11, B2.11, A3.6"),
  ("R8", "Uncontrolled AI-generated code",
   "A single pull request touches 100+ files. Alex approves without reading "
   "every diff. Hidden inside is an IDOR that exposes card details by booking "
   "ID.",
   "Cap pull-request size per agent, anomaly diff scanning, a second reviewer "
   "and fuzzing on sensitive APIs, and a sandboxed staging environment.",
-  "B2.5, B2.9, B2.10"),
+  "B2.5, B2.11, B2.10"),
  ("R9", "Lateral movement and blast radius",
   "An attacker who reaches CyberTravels moves on into CRM, payroll and the cloud "
   "resource manager — all reachable through interconnected workflows.",
@@ -214,8 +214,8 @@ FAMILIES = [
  ("Prompt injection and instruction hijacking", "R3", "A1.2 · A1.3 · A2.6"),
  ("Identity and authorisation", "R1, R5, R11", "A2.1 · A2.3 · A2.4 · A2.7"),
  ("Software supply chain and execution", "R4", "C2.5 · A3.8 · B2.13"),
- ("Local filesystem manipulation", "R6", "A3.2 · B2.12"),
- ("Code and CI/CD pipeline", "R7, R8", "B2.9 · B2.12 · B2.5"),
+ ("Local filesystem manipulation", "R6", "A3.2 · A3.11"),
+ ("Code and CI/CD pipeline", "R7, R8", "B2.11 · A3.11 · B2.5"),
  ("RAG misconfiguration and data exposure", "R12", "A1.4 · E1.3"),
 ]
 
@@ -375,6 +375,10 @@ GROUNDING: dict[str, str] = {
         "Agent existed, with the same one reviewer. The reviewer becomes a "
         "harness, and the harness becomes something he has to secure.",
 
+"B2.1": "Alex is building the reviewer that reads CyberTravels' pull "
+        "requests. Its verifier is the part that decides whether it "
+        "found anything, and a verifier that asks the model whether it "
+        "is happy reports a clean review of a vulnerable diff.",
 "B2.2": "The threat model that said “CyberTravels answers questions” is still on "
         "file. Deriving it from the architecture on every release is what would "
         "have caught the refund endpoint appearing.",
@@ -389,22 +393,26 @@ GROUNDING: dict[str, str] = {
 "B2.6": "You cannot confirm the IDOR by exploiting it in production. The replica "
         "is where the booking API can be attacked safely, and its fidelity "
         "decides which findings are confirmable at all.",
-"B2.7": "A finding becomes a fact when something other than a model says so — "
+"B2.7": "The booking provider's integration bundle drops a jar into "
+        "CyberTravels' image. It is in no manifest, so the weekly "
+        "dependency report has been silently excluding it, and it carries "
+        "a hardcoded telemetry endpoint and its own licence key. R5.",
+"B2.8": "A finding becomes a fact when something other than a model says so — "
         "here, a request to the replica's booking endpoint that returns another "
         "traveller's card details.",
-"B2.8": "Verbose errors, an open redirect and a path traversal are each low on "
+"B2.9": "Verbose errors, an open redirect and a path traversal are each low on "
          "their own. Chained against CyberTravels they read a config file and end the "
          "conversation about severity. R9.",
-"B2.9": "The Coding Agent's fix must not break booking behaviour. A patch that "
+"B2.11": "The Coding Agent's fix must not break booking behaviour. A patch that "
          "passes the tests and changes what travellers experience is a second "
          "incident with a pull request attached. R8.",
 "B2.10": "CVSS scores the vulnerability. CyberTravels' engineers are asking "
          "about this booking API, with card data, behind this gateway — and the "
          "number that answers them is not on the badge.",
-"B2.11": "Give the review agent CyberTravels' whole repository and it gets worse, "
+"B2.12": "Give the review agent CyberTravels' whole repository and it gets worse, "
          "not better. The cliff arrives earlier than anyone expects and you pay "
          "more per token for it.",
-"B2.12": "The Coding Agent on Alex's laptop holds repository write, a cloud "
+"A3.11": "The Coding Agent on Alex's laptop holds repository write, a cloud "
          "credential and whatever MCP servers were convenient. It is the "
          "highest-privilege agent at CyberTravels and the least governed. R6, "
          "R7.",

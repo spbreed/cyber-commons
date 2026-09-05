@@ -1,60 +1,66 @@
-model backend : replay
-model         : deterministic stand-in (no backend configured)
+id     cwe       sev      requires                              grants
+------------------------------------------------------------------------------------------------
+F-01   CWE-200   low      ['unauthenticated']                   ['valid_report_id']
+F-02   CWE-639   medium   ['authenticated', 'valid_report_id']  ['other_users_report_data']
+F-03   CWE-352   medium   ['authenticated']                     ['password_reset_for_victim']
+F-04   CWE-89    high     ['authenticated']                     ['database_read']
+F-05   CWE-306   medium   ['internal_network']                  ['admin_actions']
+F-06   CWE-918   medium   ['authenticated']                     ['internal_network']
+158 composable chains found
 
-This lesson runs offline against a deterministic replay, which is why
-it works on a Kaggle kernel with the internet switched off. To run the
-identical code against a real model, serve an open-weight model from
-Kaggle Models and point the adapter at it:
+[critical] F-01 → F-03                links: low, medium
+            final effect: ['password_reset_for_victim']
+[critical] F-04 → F-03                links: high, medium
+            final effect: ['password_reset_for_victim']
+[critical] F-06 → F-03                links: medium, medium
+            final effect: ['password_reset_for_victim']
+[critical] F-06 → F-05                links: medium, medium
+            final effect: ['admin_actions']
+[critical] F-01 → F-02 → F-03         links: low, medium, medium
+            final effect: ['password_reset_for_victim']
+[critical] F-01 → F-04 → F-03         links: low, high, medium
+            final effect: ['password_reset_for_victim']
+highest individual finding severity : high
+highest chained severity            : critical
 
-   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \
-           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
-   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
-          MODEL=qwen2.5-7b-instruct
+critical chains built entirely from non-critical findings:
+   F-01(low) → F-03(medium)
+      → ['password_reset_for_victim']
+   F-04(high) → F-03(medium)
+      → ['password_reset_for_victim']
+   F-06(medium) → F-03(medium)
+      → ['password_reset_for_victim']
 
-   MODELS.md has the exact Kaggle download. There is no paid backend:
-   every model result in this repository was produced this way.
-behaviour of the vulnerable build:
-   get_user('dana'    ) → [(1, 'dana')]      ok
-   get_user('sam'     ) → [(2, 'sam')]       ok
-   get_user('nobody'  ) → []                 ok
-   get_user("o'brien" ) → raised OperationalError FAILS
-
-exploit works: True — probe returned 3 rows
-scanner fires: False
-candidate                           scanner green
+26 critical chain(s) whose every link is medium or lower.
+Triaged individually, none of those findings would be worked this sprint.
+finding  own sev     chains broken   worst chain
 --------------------------------------------------
-A · parameterise (the real fix)              True
-B · delete the feature                       True
-C · evade the scanner                        True
-D · escape by hand                           True
+F-01     low                   127      critical
+F-06     medium                127      critical
+F-03     medium                102      critical
+F-04     high                  102      critical
+F-02     medium                 52      critical
+F-05     medium                 52      critical
 
-Three of four are green. Only one of those is a fix.
-candidate                         scan  behaviour  exploitable  verdict
-------------------------------------------------------------------------------------
-A · parameterise (the real fix)   True  True       False        ACCEPT
-B · delete the feature            True  False      False        REJECT — behaviour changed
-C · evade the scanner             True  False      True         REJECT — behaviour changed, STILL EXPLOITABLE (stage-12 probe passes)
-D · escape by hand                True  True       False        ACCEPT
+fix first: F-01 — own severity low, but it breaks 127 chains including a critical
+conformance: 0 problem(s)
 
-accepted: ['A · parameterise (the real fix)', 'D · escape by hand']
-A · parameterise (the real fix)    proof of fix: True  (exploit on old=True, on new=False)
-D · escape by hand                 proof of fix: True  (exploit on old=True, on new=False)
+validated 6 findings, refused 1
+   F-01  chains to: valid_report_id
+   F-02  chains to: other_users_report_data
+   F-03  chains to: password_reset_for_victim
 
-Candidate D passes every automated check and is still the wrong answer:
-it reimplements the driver's escaping and will be wrong for the next
-input class or the next database. Nothing except a rule about MECHANISM
-catches that — which is the part of remediation that does not automate.
-backend used : replay
-model        : deterministic stand-in (no backend configured)
-prompt       : Fix this without changing the function's behaviour for valid input...
+Refusing is an output, not an error. A validation harness that quietly
+skips the production target reports the same thing as one that never
+saw it, and those are very different states to be in.
+conformance, tidy report  : 0
+conformance, honest report: 0
 
-answer:
-   def report(request):
-       q = "SELECT * FROM orders WHERE ref = ?"
-       return db.execute(q, (request.args['ref'],))
+validations attempted : 6
+reproduced            : 4
+failed to reproduce   : 2  (F-01, F-04)
+measured false-positive rate of Phase 3: 33%
 
-property checked : parameterises the query
-held on replay       : True
-
-Same code, same assertions, two possible backends. Offline the answer is
-the replay and is labelled as one; with a served model it is the model's.
+Both conform. The tidy one drops the non-reproductions, and with them
+the only number that says how good the earlier phases actually are.
+Its reader sees a pipeline that is right every time.

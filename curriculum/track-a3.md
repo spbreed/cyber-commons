@@ -245,3 +245,26 @@ python3 escalation_eval.py --report-rate --by-reason
 *Expect:* The same trajectory — an agent that notices a live third-party breach — produces no report on the harness as shipped and a report on one carrying the tool. A terminal, budgeted, penalised reporting tool scores below the threshold at which an agent would use it. The checkpoint pauses on a credential-shaped string and on a non-allowlisted host without consulting the model, and neutral scoring makes honest abstention beat a failed attempt.
 
 ---
+
+### A3.11 — Securing the developers' coding agents
+
+`Security of AI`
+
+- **Risk** — The IDE agent holds git credentials, cloud credentials and a shell, in an unmanaged environment.
+- **Control** — The strongest containment a developer does not notice: credential deny-lists and workspace confinement first.
+- **Lab** — Measure the default agent's blast radius and reachable credentials, then rank controls by friction.
+- **Tools** — `Docker`, `Cilium`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Measure the default agent's blast radius and reachable credentials, then rank controls by friction.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A3.11.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A3.11   # run it headless and check it
+```
+
+*Expect:* The default developer agent scores a blast radius of 43 and can reach all seven paths including AWS, SSH and gcloud credentials. Containment reduces reachable paths to one source file with zero credentials reachable, and gating `git_push` drops the blast radius to 37 for 0.4 friction. The three lowest-friction controls remove every credential path without touching the inner loop.
+
+---

@@ -3,11 +3,11 @@
 **A free, open commons for Cyber AI — the skills to defend *with* AI, and to
 secure the AI *itself*.**
 
-**118 lessons across 12 chapters.** Most are reading lessons — the idea, the
+**120 lessons across 12 chapters.** Most are reading lessons — the idea, the
 diagram, the control, and what it looks like in one running system — and then
-they **run a skill**. 115 of the 118 do, and the code is not in the notebook:
+they **run a skill**. 117 of the 120 do, and the code is not in the notebook:
 the lesson shows the `SKILL.md` as prose and runs that skill's own script from
-[`skills/`](skills/). Every one of the 118 is executed in CI before it ships,
+[`skills/`](skills/). Every one of the 120 is executed in CI before it ships,
 and so is every skill. No licence, no vendor, no paid model account.
 
 🌐 **[Live site](https://spbreed.github.io/cyber-commons/)** · 📓 [Notebooks](labs/notebooks/) · 📚 [Curriculum](curriculum/) · 🛠 [Skills](skills/) · 🤖 [Models](MODELS.md)
@@ -66,7 +66,7 @@ python3 scripts/check_skills.py --check   # parses, names, tools, contracts, rou
 
 Each declares an **output contract**, which is what makes a skill checkable
 rather than aspirational. Every skill lesson embeds its skill verbatim at build
-time — so the lesson can never drift from the skill — and 113 of the 114 carry
+time — so the lesson can never drift from the skill — and 119 of the 120 carry
 a script the lesson runs. Several build the contract shape from the data they
 just produced and validate it, then show what the contract *cannot* see: **an
 empty result conforms perfectly.** Conformance is a statement about the
@@ -86,10 +86,10 @@ removed, and a script that runs and prints nothing counts as a failure.
 | [`threats/`](skills/threats) | 16 — one check per risk in the OWASP-grounded chapter: instruction channels, memory scope, tool abuse, blast radius, attribution |
 | [`identity/`](skills/identity) | 5 — attestation, delegation, the non-human identity lifecycle, tamper-evident logging |
 | [`runtime/`](skills/runtime) | 6 — sandbox containment, budgets, return validation, shared surfaces, exemptions, escalation |
-| [`appsec/`](skills/appsec) | 13 — the AI SDLC pipeline, stage by stage |
+| [`appsec/`](skills/appsec) | 18 — the AI SDLC pipeline, stage by stage, including real Semgrep scoring and supply-chain decompilation |
 | [`redteam/`](skills/redteam) · [`research/`](skills/research) | 14 — campaigns, reproducibility, corpus integrity, supply chain, published incidents |
 | [`detection/`](skills/detection) · [`response/`](skills/response) · [`secops/`](skills/secops) | 21 — agent tempo, drift, fleet correlation, canaries, containment, stop authority |
-| [`grc/`](skills/grc) · [`regulatory/`](skills/regulatory) · [`programme/`](skills/programme) | 26 — tiering, control mapping, obligations, disclosure, sequencing, metrics |
+| [`grc/`](skills/grc) · [`regulatory/`](skills/regulatory) · [`programme/`](skills/programme) | 27 — tiering, control mapping, obligations, disclosure, sequencing, metrics |
 | [`attestation/`](skills/attestation) · [`architecture/`](skills/architecture) | 13 — turn a control claim into a signed statement bound to one deployment ([B2.13](labs/notebooks/B2.13.ipynb), run against 10 real OSS agent/MCP repos) |
 
 ## The programme
@@ -106,20 +106,20 @@ lesson** that meets CyberTravels and asks its own question of it.
 
 | Function | The question it asks of CyberTravels | Chapters | Lessons |
 |---|---|---|---|
-| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [0](curriculum/track-a0.md) Running the commons · [1](curriculum/track-a1.md) CyberTravels' architecture and every risk it carries · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 38 |
-| **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [4](curriculum/track-b2.md) Harnesses and the AI SDLC pipeline | 14 |
+| **A · Securing AI Architectures** | what can go wrong here, and what closes it | [0](curriculum/track-a0.md) Running the commons · [1](curriculum/track-a1.md) CyberTravels' architecture and every risk it carries · [2](curriculum/track-a2.md) Identity and ingress · [3](curriculum/track-a3.md) Runtime and the gateway | 39 |
+| **B · Application Security with an AI SDLC** | how do we review its code, at its speed | [4](curriculum/track-b2.md) The AI SDLC pipeline, before and after deploy | 15 |
 | **C · Red Teaming and Security Research with AI** | can we break it before somebody else does | [6](curriculum/track-c1.md) Red teaming with AI · [7](curriculum/track-c2.md) Security research with AI | 15 |
 | **D · The Agentic SOC** | would we see it happening, and could we stop it | [8](curriculum/track-d1.md) Detection · [9](curriculum/track-d2.md) Response | 21 |
 | **E · AI Governance for Agentic Systems** | who signed off, and can they still evidence it | [10](curriculum/track-e1.md) The governance framework · [11](curriculum/track-e2.md) The governance platform · [12](curriculum/track-e3.md) Running the programme | 30 |
-| | | **12 chapters** | **118** |
+| | | **12 chapters** | **120** |
 
 Nobody takes all of it. Everyone takes the **common spine** first — twenty
 lessons, in order, that carry the vocabulary the rest runs on. Then the chapters
 for the chair you sit in, then one adjacent chapter, because the failures happen
 in the seams.
 
-> **Spine:** A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 → A2.3 →
-> A2.4 → A3.1 → A3.2 → A3.5 → **B2.0** → B2.2 → B2.3 → **D1.0** →
+> **Spine:** A0.1 → A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 →
+> A2.3 → A2.4 → A3.1 → A3.2 → A3.5 → **B2.0** → **B2.1** → B2.3 → **D1.0** →
 > D1.5 → **E1.0** → E1.10
 
 Two chapters carry a single artefact end to end:
@@ -143,7 +143,7 @@ only one produces a practitioner who gets surprised.
 
 ## Why you can trust the output
 
-**Every one of the 118 notebooks has been run twice — here, and again on Kaggle
+**Every one of the 120 notebooks has been run twice — here, and again on Kaggle
 on a different machine — and printed exactly the same bytes.**
 
 That second run is the claim worth making, because a kernel that prints nothing
@@ -153,7 +153,7 @@ remote stdout line-for-line against a fresh local run
 ([evidence](labs/notebooks/_kaggle_verified.json)). It caught two lessons whose
 output depended on `PYTHONHASHSEED`; both are fixed, and
 [`check_determinism.py`](scripts/check_determinism.py) now gates CI so the next
-one is caught in nine seconds instead of after 118 remote pushes.
+one is caught in nine seconds instead of after 120 remote pushes.
 
 Two properties make that possible, and both are enforced by the build:
 
@@ -217,7 +217,7 @@ python3 scripts/build_site.py
 git add -A && git commit -m "lesson: A2.5" && git push
 ```
 
-CI re-runs all of it with `--check` — secret scan, 118 notebooks, determinism
+CI re-runs all of it with `--check` — secret scan, 120 notebooks, determinism
 gate, skill contracts — and fails on drift, so the notebook you read on the site
 is always the notebook that ran. Pushing deploys the site.
 
@@ -232,11 +232,11 @@ refuses to read a credential file inside the repo. Install the guard once:
 ## Layout
 
 ```
-site/data/curriculum.json   source of truth: 118 sessions, 12 chapters
+site/data/curriculum.json   source of truth: 120 sessions, 12 chapters
 curriculum/                 generated chapter docs + labs.json (runnable commands)
 scripts/exercises/          the lessons themselves, one module per track
-skills/                     115 agent skills, plus _runtime/ — the one shared library
-labs/notebooks/             118 generated notebooks + execution and Kaggle evidence
+skills/                     120 agent skills, plus _runtime/ — the one shared library
+labs/notebooks/             120 generated notebooks + execution and Kaggle evidence
 labs/                       attestation · incident-register · b2.10-eval-harness · a2-delegation · kimi
 site/                       the website (index + generated lesson pages)
 scripts/                    build_* · run_notebooks · check_{lessons,skills,secrets,determinism,register} · kaggle_*

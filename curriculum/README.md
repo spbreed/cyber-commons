@@ -9,8 +9,8 @@ You take the track for the chair you sit in, plus two sessions from a neighbouri
 | [A0](track-a0.md) | Running the Commons — GitHub, Kaggle, and What You Need First | 1 | A — Securing AI Architectures |
 | [A1](track-a1.md) | CyberTravels' Architecture, and Every Risk It Carries | 19 | A — Securing AI Architectures |
 | [A2](track-a2.md) | Securing the Architecture — Identity and Ingress | 8 | A — Securing AI Architectures |
-| [A3](track-a3.md) | Securing the Architecture — Runtime and the Gateway | 10 | A — Securing AI Architectures |
-| [B2](track-b2.md) | The AI SDLC: Harnesses and an Agentic AppSec Pipeline | 14 | B — Application Security with an AI SDLC |
+| [A3](track-a3.md) | Securing the Architecture — Runtime and the Gateway | 11 | A — Securing AI Architectures |
+| [B2](track-b2.md) | The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy | 15 | B — Application Security with an AI SDLC |
 | [C1](track-c1.md) | Red Teaming with AI | 5 | C — Red Teaming and Security Research with AI |
 | [C2](track-c2.md) | Security Research with AI | 10 | C — Red Teaming and Security Research with AI |
 | [D1](track-d1.md) | The Agentic SOC — Detection | 12 | D — The Agentic SOC |
