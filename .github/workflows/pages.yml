@@ -130,6 +130,18 @@ jobs:
       # ("Resource not accessible by integration" — site creation needs repo
       # admin), and Pages on a PRIVATE repo additionally requires a paid plan.
       # Once the site exists, every push here deploys it automatically.
+      # The custom domain has to travel WITH the artifact. Settings → Pages
+      # holds a copy, but an Actions deploy publishes whatever the artifact
+      # contains, and an artifact with no CNAME can clear the setting — after
+      # which cybercommons.ai serves nothing and the .github.io URL stops
+      # redirecting. Keeping the file in site/ makes the domain part of the
+      # build rather than a value in a web form nobody can diff.
+      - name: The published artifact must carry the custom domain
+        run: |
+          test -f site/CNAME || { echo "::error::site/CNAME is missing — a deploy \
+          without it can clear the custom domain in Settings → Pages"; exit 1; }
+          echo "custom domain in artifact: $(cat site/CNAME)"
+
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
