@@ -420,15 +420,20 @@ detector over a denominator, and reporting recall against a key."""),
                "answer, over the smallest slice in which the defect is decidable "
                "— the function, its signature, and the authority its caller "
                "holds.\n\n"
-               "It reviews two functions. One has the defect. The other is "
-               "already parameterised and already authorised, and it is in there "
-               "because a review pass that is never wrong has not been tested."),
+               "The two functions it reviews are not retyped into the skill. "
+               "They are cut out of `cybertravels/tools/bookings_api.py` with "
+               "`ast`: **`get_booking`**, which the Semgrep run above missed at "
+               "all three widths, and **`get_my_booking`** eleven lines below "
+               "it, which does the same read and compares an owner. The second "
+               "one is there because a review pass that is never wrong has not "
+               "been tested."),
 
   ("md", """## 7 · Where it breaks — gating on the confidence number
 
-In the offline run the replay returns 0.82 on the real defect and 0.71 on the
-invented one. It is tempting to read a threshold into that gap, and every
-pipeline that does it ships one.
+In the offline run the replay returns 0.82 on the function with the defect and
+0.77 on the one without it. Five points of confidence separate a real finding
+from a correct all-clear. It is tempting to read a threshold into a gap that
+size, and every pipeline that does it ships one.
 
 Two reasons not to. The number is **uncalibrated** — 0.82 does not mean the
 claim is right 82% of the time, it means nothing in particular. And it is
@@ -526,14 +531,15 @@ effort on three copies of the same claim.
          "Now check each surviving claim against the code. Three checks, all "
          "mechanical, none requiring judgement."),
   *skill_steps('appsec/finding-dedup-and-verification',
-               "## 2 · The stage, as a skill\n\nSeven raw findings, four defects. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than a line number, and then rejects the survivors whose symbols are not in the file — because a finding about `os.system` in a file that never imports `os` should die here rather than in a maintainer's inbox."),
+               "## 2 · The stage, as a skill\n\nEight raw findings, five defects, three survivors. The queue is B2.3's, and the file is B2.3's: `cybertravels/tools/bookings_api.py`, read off disk. The CWE-89 is where Semgrep put it and the CWE-639 on `get_booking` is the hypothesis the model pass emitted, arriving here to be checked rather than believed. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than by a line number, and then rejects the survivors whose symbols are not in the file — because a finding about `os.system` in a file that never imports `os` should die here rather than in a maintainer's inbox.\n\nWatch what survives that it should not: a CWE-89 on `list_my_bookings`, whose query is parameterised and scoped to the session. Neither stage rejects it, and neither is meant to. These two remove what is provably duplicated and provably absent; judging a claim about code that genuinely exists is triage, and that is B2.10."),
 ],
- "expect": "Seven raw findings collapse to four distinct defects, with the "
+ "expect": "Eight raw findings collapse to five distinct defects, with the "
            "CWE-943 alias merging into CWE-89 and the taint result kept over grep "
            "and model duplicates. Contextual verification then rejects the "
            "hallucinated `DB_PASSWORD` and `os.system` findings because neither "
-           "symbol appears in the file and `os` is never imported, leaving the "
-           "real SQL injection.",
+           "symbol appears in the file, leaving three: the real SQL injection in "
+           "`search_bookings`, B2.3's IDOR hypothesis on `get_booking`, and one "
+           "false positive on `list_my_bookings` that no mechanical check can kill.",
  "challenge": "Add a fourth verification check: does the CWE class match the sink "
               "type? A CWE-22 finding on a `conn.execute` call is provably "
               "mislabelled, and that check costs nothing to run.",

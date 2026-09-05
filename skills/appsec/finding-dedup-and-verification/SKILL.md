@@ -47,20 +47,33 @@ measurement of how often the analyser produces them.
 
 ## Example
 
-**Input** — the fixture committed at the top of [`scripts/finding_dedup_and_verification.py`](scripts/finding_dedup_and_verification.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+**Input** — the queue at the top of
+[`scripts/finding_dedup_and_verification.py`](scripts/finding_dedup_and_verification.py),
+verified against `cybertravels/tools/bookings_api.py` read off disk. The line
+numbers are real line numbers in that file: the CWE-89 is where Semgrep put it,
+and the CWE-639 is the hypothesis B2.3's model pass emitted on `get_booking`.
+Edit the queue and re-run — the buckets, counts and verdicts are derived from
+it, not hard-coded.
 
 **Output** — the opening lines of a real run:
 
 ```
-7 raw findings from 3 tracks
-   grep  CWE-89   billing.py:7  execute       conf=0.50
-   taint CWE-89   billing.py:7  execute       conf=1.00
-   model CWE-89   billing.py:8  execute       conf=0.93
-   model CWE-943  billing.py:7  execute       conf=0.71
-   model CWE-89   billing.py:11 execute       conf=0.44
-   model CWE-798  billing.py:3  DB_PASSWORD   conf=0.88
-   model CWE-78   billing.py:6  os.system     conf=0.67
+8 raw findings from 3 tracks, against tools/bookings_api.py
+   grep  CWE-89   tools/bookings_api.py:41 execute       conf=0.50
+   taint CWE-89   tools/bookings_api.py:41 execute       conf=1.00
+   model CWE-89   tools/bookings_api.py:42 execute       conf=0.93
+   model CWE-943  tools/bookings_api.py:41 execute       conf=0.71
+   model CWE-639  tools/bookings_api.py:20 get_booking   conf=0.82
+   model CWE-89   tools/bookings_api.py:47 execute       conf=0.44
+   model CWE-798  tools/bookings_api.py:8  DB_PASSWORD   conf=0.88
+   model CWE-78   tools/bookings_api.py:34 os.system     conf=0.67
 ```
+
+Eight become five, then three. Two of the three are real, and the third — a
+CWE-89 on `list_my_bookings`, whose query is parameterised — is not. Neither
+stage rejects it, and neither is supposed to: these two remove what is provably
+duplicated and provably absent. Judging a claim about code that exists is
+triage, and it is a later stage.
 
 The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 

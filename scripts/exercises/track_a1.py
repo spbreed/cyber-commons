@@ -208,6 +208,37 @@ gateway, so "route it through the gateway" is not a control it can apply yet.
 Saying so on the map is what stops a later meeting designing controls for a
 component nobody has \u2014 and it is why A3.7 exists as a separate lesson
 rather than an assumption."""),
+
+  ("md", """## 4 \u00b7 The same map, as a repository
+
+This map is not only a diagram in this commons. It is committed as code, at
+[`cybertravels/`](https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/cybertravels)
+\u2014 one directory per component on this map:
+
+```
+ingress/chat.py          traveller text arrives          (docstring: trust 0)
+orchestrator/router.py   dispatches to an agent
+agents/                  the four runtimes
+tools/                   the only things that change      (docstring: trust 3)
+mcp/vendor_server.py     a third party's tool descriptions
+knowledge/retriever.py   documents nobody on staff wrote  (docstring: trust 0)
+messaging/bus.py         agent to agent
+```
+
+The three components that carry outsider-authored content say their trust
+level in the first line of the file, because those are the three the next
+fifteen lessons are about.
+
+There is no `egress/`, for the reason above. The absence is the point, and it
+is visible in the tree rather than only in a sentence.
+
+Nine lessons later in Function B scan this tree rather than a fixture \u2014
+B2.3 runs Semgrep over it, B2.4 verifies findings against it, B2.5 walks its
+call graph \u2014 and
+[`cybertravels/LABELS.md`](https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/cybertravels/LABELS.md)
+is the key: eight defects and four correct functions, written by hand before
+any scanner ran. Clone it and read it now if you like; you will meet it
+again."""),
 ],
  "expect": "You can draw one agentic system you run as thirteen named components, "
            "say which of the five patterns it is, and name the three components "

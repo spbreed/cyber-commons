@@ -55,20 +55,29 @@ your accept and reject bands.
 
 ## Example
 
-**Input** — the fixture committed at the top of [`scripts/sast_model_pass.py`](scripts/sast_model_pass.py). Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.
+**Input** — two functions cut out of `cybertravels/tools/bookings_api.py` with
+`ast`, not retyped: `get_booking`, which Semgrep missed at all three widths in
+[`sast-semgrep-deterministic`](../sast-semgrep-deterministic/SKILL.md), and its
+authorised twin `get_my_booking` eleven lines below it. Each is prefixed with
+the authority its caller holds, which is the one line no file contains.
 
 **Output** — the opening lines of a real run:
 
 ```
-find_booking
-   model says   : MISSING CWE-862 at confidence 0.82
-   quoting      : def find_booking(reference):
+get_booking
+   model says   : MISSING CWE-639 at confidence 0.82
+   quoting      : def get_booking(session, booking_id):
    -> HYPOTHESIS: quote verified, status hypothesis (not a finding)
 
-my_bookings
-   model says   : PRESENT CWE-862 at confidence 0.77
-   quoting      : require_owner(session.user_id)
+get_my_booking
+   model says   : PRESENT CWE-639 at confidence 0.77
+   quoting      : require_owner(session, row["owner_id"] if row else None)
+   -> NO CLAIM  : reviewed, nothing asserted, nothing to promote
 ```
+
+One hypothesis from two functions. The control returning `NO CLAIM` is the
+half of the result that matters: a review pass that flags both is not detecting
+the defect, it is detecting that a function reads a booking.
 
 The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.
 

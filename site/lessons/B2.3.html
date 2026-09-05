@@ -334,19 +334,19 @@ Kaggle Models and point the adapter at it:
    MODELS.md has the exact Kaggle download. There is no paid backend:
    every model result in this repository was produced this way.
 
-find_booking
-   model says   : MISSING CWE-862 at confidence 0.82
-   quoting      : def find_booking(reference):
+get_booking
+   model says   : MISSING CWE-639 at confidence 0.82
+   quoting      : def get_booking(session, booking_id):
    -&gt; HYPOTHESIS: quote verified, status hypothesis (not a finding)
 
-my_bookings
-   model says   : PRESENT CWE-862 at confidence 0.77
-   quoting      : require_owner(session.user_id)
+get_my_booking
+   model says   : PRESENT CWE-639 at confidence 0.77
+   quoting      : require_owner(session, row[&quot;owner_id&quot;] if row else None)
    -&gt; NO CLAIM  : reviewed, nothing asserted, nothing to promote
 
 1 hypothesis · 0 rejected · 0 promoted
 
-property checked : MISSING on find_booking and PRESENT on my_bookings - telling the unauthorised function from the authorised one
+property checked : MISSING on get_booking and PRESENT on get_my_booking - telling the unauthorised function from its authorised twin
 held on replay       : True
 
 the verifier, tested against a fabrication recorded from a smaller model
@@ -684,19 +684,19 @@ Kaggle Models and point the adapter at it:
    MODELS.md has the exact Kaggle download. There is no paid backend:
    every model result in this repository was produced this way.
 
-find_booking
-   model says   : MISSING CWE-862 at confidence 0.82
-   quoting      : def find_booking(reference):
+get_booking
+   model says   : MISSING CWE-639 at confidence 0.82
+   quoting      : def get_booking(session, booking_id):
    -&gt; HYPOTHESIS: quote verified, status hypothesis (not a finding)
 
-my_bookings
-   model says   : PRESENT CWE-862 at confidence 0.77
-   quoting      : require_owner(session.user_id)
+get_my_booking
+   model says   : PRESENT CWE-639 at confidence 0.77
+   quoting      : require_owner(session, row[&quot;owner_id&quot;] if row else None)
    -&gt; NO CLAIM  : reviewed, nothing asserted, nothing to promote
 
 1 hypothesis · 0 rejected · 0 promoted
 
-property checked : MISSING on find_booking and PRESENT on my_bookings - telling the unauthorised function from the authorised one
+property checked : MISSING on get_booking and PRESENT on get_my_booking - telling the unauthorised function from its authorised twin
 held on replay       : True
 
 the verifier, tested against a fabrication recorded from a smaller model
@@ -730,7 +730,7 @@ what happens by default whenever one function carries a defect a rule can see
 and a defect it cannot. The fix is not a better rule. It is running the second
 detector over a denominator, and reporting recall against a key.</p></div><div class="nbmd"><h2>10 · The probabilistic half, as a skill</h2>
 <p>The same adapter every model-facing skill in this commons uses: offline a labelled replay, and against a served open-weight model the identical code. It is asked one question with a checkable answer, over the smallest slice in which the defect is decidable — the function, its signature, and the authority its caller holds.</p>
-<p>It reviews two functions. One has the defect. The other is already parameterised and already authorised, and it is in there because a review pass that is never wrong has not been tested.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/sast-model-pass/SKILL.md"><code>skills/appsec/sast-model-pass/SKILL.md</code></a></h3>
+<p>The two functions it reviews are not retyped into the skill. They are cut out of <code>cybertravels/tools/bookings_api.py</code> with <code>ast</code>: <strong><code>get_booking</code></strong>, which the Semgrep run above missed at all three widths, and <strong><code>get_my_booking</code></strong> eleven lines below it, which does the same read and compares an owner. The second one is there because a review pass that is never wrong has not been tested.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/sast-model-pass/SKILL.md"><code>skills/appsec/sast-model-pass/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: sast-model-pass
 description: &gt;-
   Run a language model over a slice that deterministic rules structurally cannot
@@ -774,17 +774,25 @@ not stable across runs. Run the same slice ten times before you let any
 threshold into a pipeline; the variance is usually wider than the gap between
 your accept and reject bands.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/sast_model_pass.py"><code>scripts/sast_model_pass.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — two functions cut out of <code>cybertravels/tools/bookings_api.py</code> with
+<code>ast</code>, not retyped: <code>get_booking</code>, which Semgrep missed at all three widths in
+<a href="../sast-semgrep-deterministic/SKILL.md"><code>sast-semgrep-deterministic</code></a>, and its
+authorised twin <code>get_my_booking</code> eleven lines below it. Each is prefixed with
+the authority its caller holds, which is the one line no file contains.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>find_booking
-   model says   : MISSING CWE-862 at confidence 0.82
-   quoting      : def find_booking(reference):
+<pre><code>get_booking
+   model says   : MISSING CWE-639 at confidence 0.82
+   quoting      : def get_booking(session, booking_id):
    -&gt; HYPOTHESIS: quote verified, status hypothesis (not a finding)
 
-my_bookings
-   model says   : PRESENT CWE-862 at confidence 0.77
-   quoting      : require_owner(session.user_id)
+get_my_booking
+   model says   : PRESENT CWE-639 at confidence 0.77
+   quoting      : require_owner(session, row[&quot;owner_id&quot;] if row else None)
+   -&gt; NO CLAIM  : reviewed, nothing asserted, nothing to promote
 </code></pre>
+<p>One hypothesis from two functions. The control returning <code>NO CLAIM</code> is the
+half of the result that matters: a review pass that flags both is not detecting
+the defect, it is detecting that a function reads a booking.</p>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
@@ -911,19 +919,19 @@ Kaggle Models and point the adapter at it:
    MODELS.md has the exact Kaggle download. There is no paid backend:
    every model result in this repository was produced this way.
 
-find_booking
-   model says   : MISSING CWE-862 at confidence 0.82
-   quoting      : def find_booking(reference):
+get_booking
+   model says   : MISSING CWE-639 at confidence 0.82
+   quoting      : def get_booking(session, booking_id):
    -&gt; HYPOTHESIS: quote verified, status hypothesis (not a finding)
 
-my_bookings
-   model says   : PRESENT CWE-862 at confidence 0.77
-   quoting      : require_owner(session.user_id)
+get_my_booking
+   model says   : PRESENT CWE-639 at confidence 0.77
+   quoting      : require_owner(session, row[&quot;owner_id&quot;] if row else None)
    -&gt; NO CLAIM  : reviewed, nothing asserted, nothing to promote
 
 1 hypothesis · 0 rejected · 0 promoted
 
-property checked : MISSING on find_booking and PRESENT on my_bookings - telling the unauthorised function from the authorised one
+property checked : MISSING on get_booking and PRESENT on get_my_booking - telling the unauthorised function from its authorised twin
 held on replay       : True
 
 the verifier, tested against a fabrication recorded from a smaller model
@@ -945,9 +953,10 @@ Nothing here is promoted. This skill produces hypotheses; dedup,
 verification, reachability and dynamic validation decide which of them
 become findings. An audit stage that promotes its own output has removed
 the only independent step it had.</code></pre></div><div class="nbmd"><h2>11 · Where it breaks — gating on the confidence number</h2>
-<p>In the offline run the replay returns 0.82 on the real defect and 0.71 on the
-invented one. It is tempting to read a threshold into that gap, and every
-pipeline that does it ships one.</p>
+<p>In the offline run the replay returns 0.82 on the function with the defect and
+0.77 on the one without it. Five points of confidence separate a real finding
+from a correct all-clear. It is tempting to read a threshold into a gap that
+size, and every pipeline that does it ships one.</p>
 <p>Two reasons not to. The number is <strong>uncalibrated</strong> — 0.82 does not mean the
 claim is right 82% of the time, it means nothing in particular. And it is
 <strong>unstable</strong>: the same slice, the same model, ten runs, and the confidence moves

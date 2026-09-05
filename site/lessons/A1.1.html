@@ -245,7 +245,30 @@ A1.3 is the second.</p>
 gateway, so "route it through the gateway" is not a control it can apply yet.
 Saying so on the map is what stops a later meeting designing controls for a
 component nobody has — and it is why A3.7 exists as a separate lesson
-rather than an assumption.</p></div><div class="nbmd"><h2>What you just proved</h2>
+rather than an assumption.</p></div><div class="nbmd"><h2>12 · The same map, as a repository</h2>
+<p>This map is not only a diagram in this commons. It is committed as code, at
+<a href="https://github.com/spbreed/cyber-commons/tree/claude/vulnbench-setup-scheduling-81aqov/cybertravels"><code>cybertravels/</code></a>
+— one directory per component on this map:</p>
+<pre><code>ingress/chat.py          traveller text arrives          (docstring: trust 0)
+orchestrator/router.py   dispatches to an agent
+agents/                  the four runtimes
+tools/                   the only things that change      (docstring: trust 3)
+mcp/vendor_server.py     a third party's tool descriptions
+knowledge/retriever.py   documents nobody on staff wrote  (docstring: trust 0)
+messaging/bus.py         agent to agent
+</code></pre>
+<p>The three components that carry outsider-authored content say their trust
+level in the first line of the file, because those are the three the next
+fifteen lessons are about.</p>
+<p>There is no <code>egress/</code>, for the reason above. The absence is the point, and it
+is visible in the tree rather than only in a sentence.</p>
+<p>Nine lessons later in Function B scan this tree rather than a fixture —
+B2.3 runs Semgrep over it, B2.4 verifies findings against it, B2.5 walks its
+call graph — and
+<a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/cybertravels/LABELS.md"><code>cybertravels/LABELS.md</code></a>
+is the key: eight defects and four correct functions, written by hand before
+any scanner ran. Clone it and read it now if you like; you will meet it
+again.</p></div><div class="nbmd"><h2>What you just proved</h2>
 <p>You can draw one agentic system you run as thirteen named components, say which of the five patterns it is, and name the three components in it whose content an outsider can author. That list is the input surface for the fifteen risk lessons that follow.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Draw your own system on one page, then mark the <code>agent_runtime -&gt; tools</code> edge on it. Everything in chapters 2 and 3 is an argument about what is allowed to stand on that arrow, and you will get more out of them having drawn it first.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/A1.2.html">A1.2 · Prompt injection</a></strong></p>

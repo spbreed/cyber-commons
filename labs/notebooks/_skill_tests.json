@@ -12,7 +12,7 @@
    "contract": true,
    "script": true,
    "lines": 39,
-   "seconds": 0.04
+   "seconds": 0.09
   },
   {
    "skill": "appsec/appsec-exploit-validate",
@@ -20,7 +20,7 @@
    "contract": true,
    "script": true,
    "lines": 66,
-   "seconds": 0.06
+   "seconds": 0.09
   },
   {
    "skill": "appsec/appsec-triage-report",
@@ -36,7 +36,7 @@
    "contract": true,
    "script": true,
    "lines": 82,
-   "seconds": 0.05
+   "seconds": 0.09
   },
   {
    "skill": "appsec/coding-agent-hardening",
@@ -92,7 +92,7 @@
    "contract": true,
    "script": true,
    "lines": 81,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "appsec/idor-detection-recall",
@@ -108,7 +108,7 @@
    "contract": true,
    "script": true,
    "lines": 60,
-   "seconds": 0.06
+   "seconds": 0.09
   },
   {
    "skill": "appsec/reference-pipeline-scoring",
@@ -156,7 +156,7 @@
    "contract": true,
    "script": true,
    "lines": 119,
-   "seconds": 0.06
+   "seconds": 0.05
   },
   {
    "skill": "architecture/agentic-architecture-map",
@@ -164,7 +164,7 @@
    "contract": true,
    "script": true,
    "lines": 70,
-   "seconds": 0.05
+   "seconds": 0.07
   },
   {
    "skill": "architecture/blast-radius-review",
@@ -172,7 +172,7 @@
    "contract": true,
    "script": true,
    "lines": 67,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "attestation/agent-code-surface-analyzer",
@@ -188,7 +188,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "attestation/aws-runtime-posture-collector",
@@ -228,7 +228,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "attestation/input-injection-screening-verifier",
@@ -340,7 +340,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "detection/triage-loop-with-floor",
@@ -364,7 +364,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "grc/control-evidence",
@@ -372,7 +372,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.05
+   "seconds": 0.07
   },
   {
    "skill": "grc/control-to-framework-mapping",
@@ -444,7 +444,7 @@
    "contract": true,
    "script": true,
    "lines": 11,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "programme/autonomy-ladder-decisions",
@@ -484,7 +484,7 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.07
+   "seconds": 0.08
   },
   {
    "skill": "programme/ownership-seam-audit",
@@ -612,7 +612,7 @@
    "contract": true,
    "script": true,
    "lines": 26,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "regulatory/sector-overlay-assessment",
@@ -628,7 +628,7 @@
    "contract": true,
    "script": true,
    "lines": 30,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "regulatory/trace-personal-data-audit",
@@ -684,7 +684,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.02
+   "seconds": 0.03
   },
   {
    "skill": "research/row-level-policy-check",
@@ -780,7 +780,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "runtime/budget-and-stop-condition-audit",

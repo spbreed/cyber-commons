@@ -52,7 +52,8 @@ effort on three copies of the same claim.</p></div><div class="nbmd"><blockquote
 </blockquote></div><div class="nbmd"><h2>3 · Stage 8 — deduplicate on the defect, not the report</h2>
 <p>Two findings are the same defect if they name the same sink in the same function, even at different lines and under different CWE labels. Cluster on that, and keep the <em>best-evidenced</em> member.</p></div><div class="nbmd"><h2>4 · Stage 9 — contextual verification against the real syntax</h2>
 <p>Now check each surviving claim against the code. Three checks, all mechanical, none requiring judgement.</p></div><div class="nbmd"><h2>5 · The stage, as a skill</h2>
-<p>Seven raw findings, four defects. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than a line number, and then rejects the survivors whose symbols are not in the file — because a finding about <code>os.system</code> in a file that never imports <code>os</code> should die here rather than in a maintainer's inbox.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/finding-dedup-and-verification/SKILL.md"><code>skills/appsec/finding-dedup-and-verification/SKILL.md</code></a></h3>
+<p>Eight raw findings, five defects, three survivors. The queue is B2.3's, and the file is B2.3's: <code>cybertravels/tools/bookings_api.py</code>, read off disk. The CWE-89 is where Semgrep put it and the CWE-639 on <code>get_booking</code> is the hypothesis the model pass emitted, arriving here to be checked rather than believed. The skill normalises the CWE aliases, keys each finding by its enclosing function rather than by a line number, and then rejects the survivors whose symbols are not in the file — because a finding about <code>os.system</code> in a file that never imports <code>os</code> should die here rather than in a maintainer's inbox.</p>
+<p>Watch what survives that it should not: a CWE-89 on <code>list_my_bookings</code>, whose query is parameterised and scoped to the session. Neither stage rejects it, and neither is meant to. These two remove what is provably duplicated and provably absent; judging a claim about code that genuinely exists is triage, and that is B2.10.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/appsec/finding-dedup-and-verification/SKILL.md"><code>skills/appsec/finding-dedup-and-verification/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: finding-dedup-and-verification
 description: &gt;-
   Collapse raw findings from several tools into distinct defects across CWE
@@ -89,17 +90,29 @@ than in a maintainer's inbox.</p>
 the rejected list with the reason. Discarding hallucinations silently loses the
 measurement of how often the analyser produces them.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/finding_dedup_and_verification.py"><code>scripts/finding_dedup_and_verification.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the queue at the top of
+<a href="scripts/finding_dedup_and_verification.py"><code>scripts/finding_dedup_and_verification.py</code></a>,
+verified against <code>cybertravels/tools/bookings_api.py</code> read off disk. The line
+numbers are real line numbers in that file: the CWE-89 is where Semgrep put it,
+and the CWE-639 is the hypothesis B2.3's model pass emitted on <code>get_booking</code>.
+Edit the queue and re-run — the buckets, counts and verdicts are derived from
+it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>7 raw findings from 3 tracks
-   grep  CWE-89   billing.py:7  execute       conf=0.50
-   taint CWE-89   billing.py:7  execute       conf=1.00
-   model CWE-89   billing.py:8  execute       conf=0.93
-   model CWE-943  billing.py:7  execute       conf=0.71
-   model CWE-89   billing.py:11 execute       conf=0.44
-   model CWE-798  billing.py:3  DB_PASSWORD   conf=0.88
-   model CWE-78   billing.py:6  os.system     conf=0.67
+<pre><code>8 raw findings from 3 tracks, against tools/bookings_api.py
+   grep  CWE-89   tools/bookings_api.py:41 execute       conf=0.50
+   taint CWE-89   tools/bookings_api.py:41 execute       conf=1.00
+   model CWE-89   tools/bookings_api.py:42 execute       conf=0.93
+   model CWE-943  tools/bookings_api.py:41 execute       conf=0.71
+   model CWE-639  tools/bookings_api.py:20 get_booking   conf=0.82
+   model CWE-89   tools/bookings_api.py:47 execute       conf=0.44
+   model CWE-798  tools/bookings_api.py:8  DB_PASSWORD   conf=0.88
+   model CWE-78   tools/bookings_api.py:34 os.system     conf=0.67
 </code></pre>
+<p>Eight become five, then three. Two of the three are real, and the third — a
+CWE-89 on <code>list_my_bookings</code>, whose query is parameterised — is not. Neither
+stage rejects it, and neither is supposed to: these two remove what is provably
+duplicated and provably absent. Judging a claim about code that exists is
+triage, and it is a later stage.</p>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
@@ -116,39 +129,48 @@ measurement of how often the analyser produces them.</p>
 <li><strong>Merging by CWE alone.</strong> Two real SQL injections in one file are two defects.</li>
 <li><strong>Dropping hallucinations without counting them.</strong> That count is how you know
   whether to keep the analyser.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>7 raw findings from 3 tracks
-   grep  CWE-89   billing.py:7  execute       conf=0.50
-   taint CWE-89   billing.py:7  execute       conf=1.00
-   model CWE-89   billing.py:8  execute       conf=0.93
-   model CWE-943  billing.py:7  execute       conf=0.71
-   model CWE-89   billing.py:11 execute       conf=0.44
-   model CWE-798  billing.py:3  DB_PASSWORD   conf=0.88
-   model CWE-78   billing.py:6  os.system     conf=0.67
-7 findings → 4 distinct defects
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>8 raw findings from 3 tracks, against tools/bookings_api.py
+   grep  CWE-89   tools/bookings_api.py:41 execute       conf=0.50
+   taint CWE-89   tools/bookings_api.py:41 execute       conf=1.00
+   model CWE-89   tools/bookings_api.py:42 execute       conf=0.93
+   model CWE-943  tools/bookings_api.py:41 execute       conf=0.71
+   model CWE-639  tools/bookings_api.py:20 get_booking   conf=0.82
+   model CWE-89   tools/bookings_api.py:47 execute       conf=0.44
+   model CWE-798  tools/bookings_api.py:8  DB_PASSWORD   conf=0.88
+   model CWE-78   tools/bookings_api.py:34 os.system     conf=0.67
+8 findings → 5 distinct defects
 
-   CWE-89  list_reports  execute       merged 4 from [&#x27;grep&#x27;, &#x27;model&#x27;, &#x27;taint&#x27;]  (kept taint)
-   CWE-89  total         execute       merged 1 from [&#x27;model&#x27;]  (kept model)
-   CWE-798 None          DB_PASSWORD   merged 1 from [&#x27;model&#x27;]  (kept model)
-   CWE-78  build_filter  os.system     merged 1 from [&#x27;model&#x27;]  (kept model)
+   CWE-89  search_bookings   execute       merged 4 from [&#x27;grep&#x27;, &#x27;model&#x27;, &#x27;taint&#x27;]  (kept taint)
+   CWE-639 get_booking       get_booking   merged 1 from [&#x27;model&#x27;]  (kept model)
+   CWE-89  list_my_bookings  execute       merged 1 from [&#x27;model&#x27;]  (kept model)
+   CWE-798 None              DB_PASSWORD   merged 1 from [&#x27;model&#x27;]  (kept model)
+   CWE-78  cancel_booking    os.system     merged 1 from [&#x27;model&#x27;]  (kept model)
 cwe      symbol         line  verdict
 --------------------------------------------------------------------------
-CWE-89   execute           7  verified
-CWE-89   execute          11  verified
-CWE-798  DB_PASSWORD       3  REJECTED — symbol &#x27;DB_PASSWORD&#x27; does not appear in the file
-CWE-78   os.system         6  REJECTED — symbol &#x27;os.system&#x27; does not appear in the file
+CWE-89   execute          41  verified
+CWE-639  get_booking      20  verified
+CWE-89   execute          47  verified
+CWE-798  DB_PASSWORD       8  REJECTED — symbol &#x27;DB_PASSWORD&#x27; does not appear in the file
+CWE-78   os.system        34  REJECTED — symbol &#x27;os.system&#x27; does not appear in the file
 
-2 verified, 2 rejected as hallucinations
-stage 7 emitted        7
-after stage 8 (dedup)  4   (43% removed)
-after stage 9 (verify) 2   (71% removed overall)
+3 verified, 2 rejected as hallucinations
+stage 7 emitted        8
+after stage 8 (dedup)  5   (38% removed)
+after stage 9 (verify) 3   (62% removed overall)
 
-surviving: tp=1 fp=1
+surviving: tp=2 fp=1
    rejected CWE-798 on &#x27;DB_PASSWORD&#x27; — provably not in the code
    rejected CWE-78 on &#x27;os.system&#x27; — provably not in the code
 
 Both hallucinations named things that are not in the file. No model,
-no judgement, no cost — just the AST disagreeing with the claim.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Seven raw findings collapse to four distinct defects, with the CWE-943 alias merging into CWE-89 and the taint result kept over grep and model duplicates. Contextual verification then rejects the hallucinated <code>DB_PASSWORD</code> and <code>os.system</code> findings because neither symbol appears in the file and <code>os</code> is never imported, leaving the real SQL injection.</p></div><div class="nbmd"><h2>Your turn</h2>
+no judgement, no cost — just the AST disagreeing with the claim.
+
+And one survivor is wrong: the CWE-89 on list_my_bookings, whose query
+is parameterised and scoped to the session. Nothing here rejected it,
+because nothing here is triage. These two stages remove what is provably
+duplicated and provably absent. Deciding that a claim about real code is
+wrong takes context, and that is the next stage, not this one.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Eight raw findings collapse to five distinct defects, with the CWE-943 alias merging into CWE-89 and the taint result kept over grep and model duplicates. Contextual verification then rejects the hallucinated <code>DB_PASSWORD</code> and <code>os.system</code> findings because neither symbol appears in the file, leaving three: the real SQL injection in <code>search_bookings</code>, B2.3's IDOR hypothesis on <code>get_booking</code>, and one false positive on <code>list_my_bookings</code> that no mechanical check can kill.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Add a fourth verification check: does the CWE class match the sink type? A CWE-22 finding on a <code>conn.execute</code> call is provably mislabelled, and that check costs nothing to run.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/B2.5.html">B2.5 · Feasibility filtering, reachability and dead code</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/B2.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/B2.4.ipynb">Source</a></p>

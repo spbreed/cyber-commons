@@ -1,30 +1,29 @@
 #!/usr/bin/env python3
 """Collapse raw findings to distinct defects across aliases and tools, then reject the ones whose symbols are not in the file.
 
-This is the executable half of the `finding-dedup-and-verification` skill: the check the
-SKILL.md next to it describes, run against a synthetic CyberTravels
-estate so two runs can be diffed and the result argued with.
+This is the executable half of the `finding-dedup-and-verification` skill, and
+it is the stage directly downstream of B2.3. The file it verifies against is
+not a fixture: it is `cybertravels/tools/bookings_api.py`, read off disk — the
+same file Semgrep scanned at three widths and the same one the model pass took
+its slice from.
+
+The raw findings are what those two runs actually emitted, plus the duplicates
+you get for free when three tracks report the same defect and two hallucinations
+recorded from a smaller model. Line numbers below are real line numbers in that
+file; change the file and the enclosing-function lookup follows it.
 
 Standard library only, and deterministic, so it runs on a Kaggle
 kernel with the internet switched off.
 """
 
 from dataclasses import dataclass, field
+from pathlib import Path
 
-SOURCE = {
-"billing.py": '''
-import sqlite3
-
-def build_filter(owner):
-    return "WHERE owner = '" + owner + "'"
-
-def list_reports(conn, owner):
-    return conn.execute("SELECT * FROM reports " + build_filter(owner))
-
-def total(conn):
-    return conn.execute("SELECT SUM(amount) FROM reports").fetchone()
-'''
-}
+# The tree, found from this file rather than from the working directory: on
+# Kaggle `cwd` is /kaggle/working and the clone is beside it.
+ROOT = Path(__file__).resolve().parents[4]
+TARGET = "tools/bookings_api.py"
+SOURCE = {TARGET: (ROOT / "cybertravels" / TARGET).read_text()}
 
 @dataclass
 class Finding:
@@ -32,22 +31,32 @@ class Finding:
     rationale: str; confidence: float = 1.0
 
 RAW = [
- Finding("grep",   "CWE-89", "billing.py", 7,  "execute",
+ # search_bookings — the one defect in this file every track saw, three times.
+ Finding("grep",   "CWE-89", TARGET, 41, "execute",
          "execute() with string concatenation", 0.5),
- Finding("taint",  "CWE-89", "billing.py", 7,  "execute",
-         "owner flows into the query via build_filter", 1.0),
- Finding("model",  "CWE-89", "billing.py", 8,  "execute",
-         "user-controlled owner is interpolated into SQL", 0.93),
- Finding("model",  "CWE-943","billing.py", 7,  "execute",
+ Finding("taint",  "CWE-89", TARGET, 41, "execute",
+         "reference flows from the caller into the query", 1.0),
+ Finding("model",  "CWE-89", TARGET, 42, "execute",
+         "the reference is interpolated into SQL", 0.93),
+ # The same defect again under a different CWE. An alias, not a second defect.
+ Finding("model",  "CWE-943",TARGET, 41, "execute",
          "query language injection", 0.71),
- Finding("model",  "CWE-89", "billing.py", 11, "execute",
-         "total() builds a query from input", 0.44),
- Finding("model",  "CWE-798","billing.py", 3,  "DB_PASSWORD",
+ # get_booking — B2.3's model hypothesis arriving here. No tool but the model
+ # reported it, because no tool could.
+ Finding("model",  "CWE-639",TARGET, 20, "get_booking",
+         "returns the row a caller names without comparing an owner", 0.82),
+ # list_my_bookings is parameterised and session-scoped. A low-confidence model
+ # claim on real code: it survives both stages, because neither stage is triage.
+ Finding("model",  "CWE-89", TARGET, 47, "execute",
+         "list_my_bookings builds a query from input", 0.44),
+ # Two hallucinations, recorded from a smaller model. Neither symbol is in the
+ # file at all.
+ Finding("model",  "CWE-798",TARGET,  8, "DB_PASSWORD",
          "hardcoded database password in DB_PASSWORD", 0.88),
- Finding("model",  "CWE-78", "billing.py", 6,  "os.system",
-         "shell invocation with user data", 0.67),
+ Finding("model",  "CWE-78", TARGET, 34, "os.system",
+         "shell invocation with the booking id", 0.67),
 ]
-print(f"{len(RAW)} raw findings from 3 tracks")
+print(f"{len(RAW)} raw findings from 3 tracks, against {TARGET}")
 for f in RAW:
     print(f"   {f.src:6s}{f.cwe:9s}{f.file}:{f.line:<3}{f.symbol:14s}conf={f.confidence:.2f}")
 
@@ -70,7 +79,7 @@ def defect_key(f, src):
     cwe = CWE_ALIASES.get(f.cwe, f.cwe)
     return (f.file, fn, f.symbol, cwe)
 
-SRC = SOURCE["billing.py"]
+SRC = SOURCE[TARGET]
 clusters = {}
 for f in RAW:
     clusters.setdefault(defect_key(f, SRC), []).append(f)
@@ -85,7 +94,7 @@ for key, group in clusters.items():
 print(f"{len(RAW)} findings → {len(deduped)} distinct defects\n")
 for d in deduped:
     file, fn, sym, cwe = d["key"]
-    print(f"   {cwe:8s}{str(fn):14s}{sym:14s}merged {d['merged']} "
+    print(f"   {cwe:8s}{str(fn):18s}{sym:14s}merged {d['merged']} "
           f"from {d['sources']}  (kept {d['keep'].src})")
 
 def verify(finding, src):
@@ -133,7 +142,8 @@ print(f"stage 7 emitted        {STAGE7_COUNT}")
 print(f"after stage 8 (dedup)  {after8}   ({1-after8/STAGE7_COUNT:.0%} removed)")
 print(f"after stage 9 (verify) {after9}   ({1-after9/STAGE7_COUNT:.0%} removed overall)")
 
-TRUE_DEFECTS = {("billing.py", "list_reports", "execute", "CWE-89")}
+TRUE_DEFECTS = {(TARGET, "search_bookings", "execute", "CWE-89"),
+                (TARGET, "get_booking", "get_booking", "CWE-639")}
 found = {d["key"] for d in deduped if any(d["keep"] is f for f, _ in verified)}
 tp = len(found & TRUE_DEFECTS); fp = len(found - TRUE_DEFECTS)
 print(f"\nsurviving: tp={tp} fp={fp}")
@@ -143,3 +153,9 @@ assert any("DB_PASSWORD" in f.symbol for f, _ in rejected)
 assert any("os.system" in f.symbol for f, _ in rejected)
 print("\nBoth hallucinations named things that are not in the file. No model,")
 print("no judgement, no cost — just the AST disagreeing with the claim.")
+print()
+print(f"And one survivor is wrong: the CWE-89 on list_my_bookings, whose query")
+print("is parameterised and scoped to the session. Nothing here rejected it,")
+print("because nothing here is triage. These two stages remove what is provably")
+print("duplicated and provably absent. Deciding that a claim about real code is")
+print("wrong takes context, and that is the next stage, not this one.")

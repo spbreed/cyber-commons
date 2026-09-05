@@ -1,32 +1,41 @@
-7 raw findings from 3 tracks
-   grep  CWE-89   billing.py:7  execute       conf=0.50
-   taint CWE-89   billing.py:7  execute       conf=1.00
-   model CWE-89   billing.py:8  execute       conf=0.93
-   model CWE-943  billing.py:7  execute       conf=0.71
-   model CWE-89   billing.py:11 execute       conf=0.44
-   model CWE-798  billing.py:3  DB_PASSWORD   conf=0.88
-   model CWE-78   billing.py:6  os.system     conf=0.67
-7 findings → 4 distinct defects
+8 raw findings from 3 tracks, against tools/bookings_api.py
+   grep  CWE-89   tools/bookings_api.py:41 execute       conf=0.50
+   taint CWE-89   tools/bookings_api.py:41 execute       conf=1.00
+   model CWE-89   tools/bookings_api.py:42 execute       conf=0.93
+   model CWE-943  tools/bookings_api.py:41 execute       conf=0.71
+   model CWE-639  tools/bookings_api.py:20 get_booking   conf=0.82
+   model CWE-89   tools/bookings_api.py:47 execute       conf=0.44
+   model CWE-798  tools/bookings_api.py:8  DB_PASSWORD   conf=0.88
+   model CWE-78   tools/bookings_api.py:34 os.system     conf=0.67
+8 findings → 5 distinct defects
 
-   CWE-89  list_reports  execute       merged 4 from ['grep', 'model', 'taint']  (kept taint)
-   CWE-89  total         execute       merged 1 from ['model']  (kept model)
-   CWE-798 None          DB_PASSWORD   merged 1 from ['model']  (kept model)
-   CWE-78  build_filter  os.system     merged 1 from ['model']  (kept model)
+   CWE-89  search_bookings   execute       merged 4 from ['grep', 'model', 'taint']  (kept taint)
+   CWE-639 get_booking       get_booking   merged 1 from ['model']  (kept model)
+   CWE-89  list_my_bookings  execute       merged 1 from ['model']  (kept model)
+   CWE-798 None              DB_PASSWORD   merged 1 from ['model']  (kept model)
+   CWE-78  cancel_booking    os.system     merged 1 from ['model']  (kept model)
 cwe      symbol         line  verdict
 --------------------------------------------------------------------------
-CWE-89   execute           7  verified
-CWE-89   execute          11  verified
-CWE-798  DB_PASSWORD       3  REJECTED — symbol 'DB_PASSWORD' does not appear in the file
-CWE-78   os.system         6  REJECTED — symbol 'os.system' does not appear in the file
+CWE-89   execute          41  verified
+CWE-639  get_booking      20  verified
+CWE-89   execute          47  verified
+CWE-798  DB_PASSWORD       8  REJECTED — symbol 'DB_PASSWORD' does not appear in the file
+CWE-78   os.system        34  REJECTED — symbol 'os.system' does not appear in the file
 
-2 verified, 2 rejected as hallucinations
-stage 7 emitted        7
-after stage 8 (dedup)  4   (43% removed)
-after stage 9 (verify) 2   (71% removed overall)
+3 verified, 2 rejected as hallucinations
+stage 7 emitted        8
+after stage 8 (dedup)  5   (38% removed)
+after stage 9 (verify) 3   (62% removed overall)
 
-surviving: tp=1 fp=1
+surviving: tp=2 fp=1
    rejected CWE-798 on 'DB_PASSWORD' — provably not in the code
    rejected CWE-78 on 'os.system' — provably not in the code
 
 Both hallucinations named things that are not in the file. No model,
 no judgement, no cost — just the AST disagreeing with the claim.
+
+And one survivor is wrong: the CWE-89 on list_my_bookings, whose query
+is parameterised and scoped to the session. Nothing here rejected it,
+because nothing here is triage. These two stages remove what is provably
+duplicated and provably absent. Deciding that a claim about real code is
+wrong takes context, and that is the next stage, not this one.

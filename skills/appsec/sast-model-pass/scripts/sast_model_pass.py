@@ -3,9 +3,14 @@
 
 This is the executable half of the `sast-model-pass` skill, and the second of
 the two audit skills in B2.3. The first scored real Semgrep output and ended on
-a defect with no syntax to match: `find_booking` returns a booking to whoever
-asks, in a service whose Workflow Agent holds payments scope. No rule reaches
-the absence of a call.
+three defects with no syntax to match. This one takes the first of them.
+
+The two functions below are not written here. They are cut out of
+`cybertravels/tools/bookings_api.py` — the same file Semgrep scanned at three
+widths and missed — with `ast`, so the model reviews the bytes that are in the
+repository rather than a paraphrase of them. `get_booking` returns the row a
+caller names. `get_my_booking`, eleven lines further down, does the same read
+and compares an owner. That is the whole difference, and no rule reaches it.
 
 The model call goes through the shared adapter: offline it is a labelled
 replay, and with an open-weight endpoint configured it is the same code against
@@ -14,29 +19,36 @@ a real model.
 Standard library only, and deterministic.
 """
 
+import ast
+from pathlib import Path
+
 from cyber_commons_skill_runtime import announce_backend, ask
 
-# The slice, not the file: the function, its signature, and the authority its
-# caller holds. Dropping that last line is what makes the answer wrong.
-SLICE = '''\
-# caller: Workflow Agent, holds scope booking.* and payments.refund
-def find_booking(reference):
-    cur = DB.cursor()
-    cur.execute("SELECT * FROM bookings WHERE reference LIKE ?", (f"%{reference}%",))
-    return cur.fetchall()
-'''
+# The tree, found from this file rather than from the working directory: on
+# Kaggle `cwd` is /kaggle/working and the clone is beside it.
+ROOT = Path(__file__).resolve().parents[4]
+SOURCE = ROOT / "cybertravels" / "tools" / "bookings_api.py"
+TEXT = SOURCE.read_text()
 
-# A second function from the same file, already parameterised and already
-# authorised. It is here because a review pass that is never wrong has not
-# been tested.
-CONTROL = '''\
-# caller: traveller, holds scope booking.read on their own bookings only
-def my_bookings(session):
-    require_owner(session.user_id)
-    cur = DB.cursor()
-    cur.execute("SELECT * FROM bookings WHERE owner = ?", (session.user_id,))
-    return cur.fetchall()
-'''
+
+def slice_of(unit, caller):
+    """The slice, not the file: the function as committed, plus the authority
+    its caller holds. Dropping that second line is what makes the answer wrong,
+    and it is the line no file contains — it comes from A1.1's map."""
+    tree = ast.parse(TEXT)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.FunctionDef) and node.name == unit:
+            return f"# caller: {caller}\n{ast.get_source_segment(TEXT, node)}\n"
+    raise SystemExit(f"{unit} is not in {SOURCE.name} — the corpus moved")
+
+
+SLICE = slice_of("get_booking",
+                 "Workflow Agent, holds scope booking.* and payments.refund")
+
+# The safe twin from the same file, already authorised. It is here because a
+# review pass that is never wrong has not been tested.
+CONTROL = slice_of("get_my_booking",
+                   "traveller, holds scope booking.read on their own bookings only")
 
 # The format names its own tokens. An earlier version wrote the first field as
 # "VERDICT", and a served Qwen2.5-7B returned the literal string VERDICT — it
@@ -58,8 +70,8 @@ QUESTION = ("Does this function verify that the caller is entitled to the rows "
 # so the rejection path is exercised on every run rather than only when a model
 # happens to invent something.
 REPLAY = {
-    "find_booking": "MISSING|CWE-862|0.82|def find_booking(reference):",
-    "my_bookings":  "PRESENT|CWE-862|0.77|    require_owner(session.user_id)",
+    "get_booking":    "MISSING|CWE-639|0.82|def get_booking(session, booking_id):",
+    "get_my_booking": "PRESENT|CWE-639|0.77|    require_owner(session, row[\"owner_id\"] if row else None)",
 }
 
 VERDICTS = {}
@@ -70,7 +82,7 @@ print()
 report = {"backend": {"kind": kind, "model": model},
           "hypotheses": [], "rejected": [], "promoted": 0}
 
-for unit, code in (("find_booking", SLICE), ("my_bookings", CONTROL)):
+for unit, code in (("get_booking", SLICE), ("get_my_booking", CONTROL)):
     answer, kind, model = ask(f"{code}\n{QUESTION}", replay=REPLAY[unit],
                               system="You are a code reviewer. One line, no prose.")
     parts = [p.strip() for p in answer.strip().splitlines()[0].split("|")]
@@ -119,10 +131,10 @@ print()
 # The property is not the CWE id — several are defensible for "no entitlement
 # check". It is whether the model can tell the unauthorised function from the
 # authorised one, which is the claim this stage makes.
-found = (VERDICTS.get("find_booking") == "MISSING"
-         and VERDICTS.get("my_bookings") == "PRESENT")
-print("property checked : MISSING on find_booking and PRESENT on my_bookings "
-      "- telling the unauthorised function from the authorised one")
+found = (VERDICTS.get("get_booking") == "MISSING"
+         and VERDICTS.get("get_my_booking") == "PRESENT")
+print("property checked : MISSING on get_booking and PRESENT on get_my_booking "
+      "- telling the unauthorised function from its authorised twin")
 print(f"held on {kind:12s} : {found}")
 print()
 
