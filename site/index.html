@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cyber Commons — Free, open training for Cyber AI</title>
+<title>Cyber Commons — Open training for Cyber AI</title>
 <meta name="description" content="A Cyber AI curriculum curated by the world's top cyber practitioners, working on the latest across several regulated industries. Both directions in one place: securing AI systems, and using AI to do security work. 120 lessons across 12 chapters, open, no account needed, runs on the laptop you already own.">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <meta property="og:type" content="website">
@@ -93,7 +93,7 @@
     transition:border-color .2s,color .2s;display:inline-flex;align-items:center;gap:7px}
   .share-btn:hover{border-color:var(--defend);color:var(--defend)}
   .share-btn svg{width:13px;height:13px;flex:none}
-  /* Below this the brand, Share and Start free stop fitting on one line, and
+  /* Below this the brand, Share and Start learning stop fitting on one line, and
      the nav spilled 55px that body{overflow-x:hidden} was quietly swallowing.
      Share is the one of the three nobody came for — and only in the nav: the
      share buttons in the page body stay. */
@@ -152,8 +152,9 @@
   .gap .atk .lab{color:var(--secure)}
   .gap .def .lab{color:var(--defend)}
   .gap ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
-  .gap li{font-size:14.5px;color:var(--text-dim);display:flex;gap:10px;align-items:flex-start;line-height:1.5}
-  .gap li::before{content:"▸";flex:none;font-size:11px;padding-top:3px}
+  .gap li{font-size:14.5px;color:var(--text-dim);line-height:1.5;
+    position:relative;padding-left:20px}
+  .gap li::before{content:"▸";position:absolute;left:0;top:0;font-size:11px;line-height:1.9}
   .gap .atk li::before{color:var(--secure)}
   .gap .def li::before{color:var(--defend)}
   .gap li b{color:var(--text);font-weight:600}
@@ -257,6 +258,18 @@
   .banner .src{margin-top:16px}
   .banner.wide .bin{grid-template-columns:1fr}
   .banner.wide h2{max-width:26ch}
+  /* A consolidated banner runs as several movements under one headline. The
+     hairline is what tells the reader a new one has started without giving
+     each its own eyebrow and its own frame. */
+  .bsub{margin-top:42px;padding-top:34px;border-top:1px solid var(--line-soft)}
+  .bsub h3{font-family:"Space Grotesk",sans-serif;font-weight:600;letter-spacing:-.02em;
+    font-size:clamp(20px,2.5vw,26px);max-width:24ch;line-height:1.15}
+  /* In wide mode .bin is a single column, so its 40px grid gap stacked on top
+     of each widget's own margin-top and doubled every vertical space. The
+     widgets already carry the rhythm; the grid should not add to it. */
+  .banner.wide .bin{gap:0}
+  .banner.wide .paths{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+  @media(max-width:760px){.banner.wide .paths{grid-template-columns:1fr}}
 
   /* right column, variant 1 — a row of counted facts */
   .bstats{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-self:center}
@@ -357,7 +370,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
         Share
       </button>
-      <a class="nav-cta" href="lessons/index.html">Start free</a>
+      <a class="nav-cta" href="lessons/index.html">Start learning</a>
     </nav>
   </div>
 </header>
@@ -367,7 +380,7 @@
 <!-- ================= HERO ================= -->
 <div class="hero">
   <div class="wrap">
-    <span class="eyebrow">Free forever · Open source · No account needed</span>
+    <span class="eyebrow">Open source · Practitioner-curated · No account needed</span>
     <h1>Democratizing defensive cyber knowledge, <span class="a">before</span> the curve <span class="b">outruns us</span>.</h1>
     <p class="lede">One open home for the whole defensive field — the skills to defend <b>with</b> AI, and to secure the AI <b>itself</b> — organised the way a CISO org actually is, and provable on the laptop you already own.</p>
 
@@ -394,72 +407,14 @@
   </div>
 </div>
 
-<!-- ================= BANNER 1 · NEED OF THE HOUR ================= -->
-<section class="banner" id="need">
+<!-- ================= 01 · NEED OF THE HOUR ================= -->
+<section class="banner wide" id="need">
   <div class="wrap bin">
     <div class="rv">
       <span class="eyebrow">01 / Need of the hour</span>
       <h2>Attack is already automated. Defence mostly is not.</h2>
-      <p class="say">The adversary side of this got its productivity upgrade first. Discovery, exploitation and lateral movement now run as tooling that <b>never tires and costs almost nothing to run again</b> — while the defending side still reviews it at human speed, once a quarter, by hand.</p>
-      <p class="say">Closing that has two halves and they are one skill set: <b>using AI to do the security work</b>, and <b>securing the AI you have already deployed</b>. Most training covers one. A curriculum that covers only the first teaches you to trust a system nobody has tested; only the second, and you are defending at last year's speed.</p>
-      <p class="src">Source: CrowdStrike 2026 Global Threat Report. The clock is public, which is the point.</p>
-    </div>
-    <div class="bstats rv">
-      <div><div class="n s">29 min</div><div class="l">Average breakout time, 2025</div></div>
-      <div><div class="n s">27 sec</div><div class="l">Fastest on record</div></div>
-      <div><div class="n s">+89%</div><div class="l">AI-enabled adversary ops, year on year</div></div>
-      <div><div class="n s">82%</div><div class="l">Detections with no malware at all</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= WHY NOW ================= -->
-<section id="why">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Why now</span>
-      <h2>Offense feels the capability curve first.</h2>
-      <p>Attacking needs one working path. Defending needs all of them closed. That asymmetry is why offensive capability diffuses on its own — and defensive capability has to be deliberately spread.</p>
-    </div>
-
-    <div class="ledger rv">
-      <div class="gap">
-        <div class="atk">
-          <div class="lab">What scales almost freely</div>
-          <ul>
-            <li><b>Autonomous discovery</b> — agents that read code and find real vulnerabilities</li>
-            <li><b>Exploit generation</b> at the speed of a build pipeline</li>
-            <li><b>Campaigns without headcount</b></li>
-            <li><b>One path is enough</b></li>
-          </ul>
-        </div>
-        <div class="def">
-          <div class="lab">What does not scale by itself</div>
-          <ul>
-            <li><b>Judgement</b> — which finding is real, and which confident answer is a hallucination</li>
-            <li><b>Trust in your own tools</b> — a probabilistic scanner is worthless unmeasured</li>
-            <li><b>Control-plane design</b> — identity, delegation, containment, stop authority</li>
-            <li><b>Every path must hold</b></li>
-          </ul>
-        </div>
-      </div>
-      <div class="closing">
-        <span>If only the best-funded teams learn to direct, doubt and prove these systems, the gap between them and the hospital, the school district, the two-person NGO becomes <b>the softest target in the network we all share</b>.</span>
-        <button class="share-btn" data-share data-share-text="Average breakout time is now 29 minutes. The fastest on record is 27 seconds. Offense scales on its own — defense has to be deliberately spread.">Share this</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<hr class="divider">
-
-<!-- ================= SINGULARITY ================= -->
-<section id="singularity">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Cyber singularity</span>
-      <h2>The point where attacks outrun the people supervising them.</h2>
-      <p>Not a prophecy about machines waking up. A practical threshold: an intrusion's decision-to-action loop closing faster than the humans reviewing it can respond. Parts of security are already past it — and the clock is public.</p>
+      <p class="say">The adversary side got its productivity upgrade first: discovery, exploitation and lateral movement now run as tooling, while the defending side still reviews the result at human speed, once a quarter, by hand. The name for the threshold where that gap closes on you is the <b>cyber singularity</b> — not a prophecy about machines waking up, but a practical point where an intrusion's decision-to-action loop runs faster than the people reviewing it. Parts of security are already past it, and the clock is public.</p>
+      <p class="say">Closing it has two halves and they are one skill set: <b>using AI to do the security work</b>, and <b>securing the AI you have already deployed</b>. Most training covers one. A curriculum that covers only the first teaches you to trust a system nobody has tested; only the second, and you are defending at last year's speed.</p>
     </div>
 
     <div class="clock rv">
@@ -494,65 +449,72 @@
   </div>
 </section>
 
-<!-- ================= BANNER 2 · UPSKILL ================= -->
-<section class="banner" id="upskill">
-  <div class="wrap bin">
-    <div class="rv">
-      <span class="eyebrow">02 / The skill gap</span>
-      <h2>Everyone in this field is now a beginner at something.</h2>
-      <p class="say">The tools changed underneath the job. <b>A SOC analyst who cannot say why an agent reached a conclusion cannot supervise it.</b> An AppSec engineer scoring a probabilistic scanner on finding count is measuring the number that improves when it finds less. A governance lead writing controls for a model has to name the component the control attaches to.</p>
-      <p class="say">None of that is learnable from a vendor page, and none of it waits for a training budget. So these lessons are written two ways at once: for practitioners already carrying the pager, and for the people trying to get into the field who need a starting point that is not a certification syllabus.</p>
-    </div>
-    <div class="paths rv">
-      <div class="path">
-        <div class="k">New to it — start here</div>
-        <p>Three lessons, in order. The first gets a notebook running in your own account with nothing installed; the next two give you the map every later lesson refers back to.</p>
-        <div class="lin">
-          <a href="lessons/A0.1.html">A0.1<i>Run your first lesson</i></a>
-          <a href="lessons/A1.0.html">A1.0<i>What securing AI means</i></a>
-          <a href="lessons/A1.1.html">A1.1<i>The reference architecture</i></a>
-        </div>
-      </div>
-      <div class="path">
-        <div class="k">Already practising — take your chair</div>
-        <p>Each chapter opens with the framing lesson for that role, then goes straight to the work that role actually owns.</p>
-        <div class="lin">
-          <a href="lessons/B2.3.html">B2.3<i>AppSec</i></a>
-          <a href="lessons/D1.0.html">D1.0<i>SOC</i></a>
-          <a href="lessons/C1.0.html">C1.0<i>Red team</i></a>
-          <a href="lessons/E2.1.html">E2.1<i>Governance</i></a>
-          <a href="lessons/A3.7.html">A3.7<i>Platform</i></a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= HOW IT WORKS ================= -->
-<section id="how">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">How a lesson works</span>
-      <h2>See it drawn, watch it run, then run it yourself.</h2>
-      <p>Reading about a control doesn't build the instinct to ship it. Every lesson has the same three-part shape.</p>
-    </div>
-    <div class="mech">
-      <div class="mcard rv"><div class="num">01 / SEE</div><h4>Lightboard, not lecture</h4><p>The concept is drawn out so the mental model lands before any code does. You leave understanding the why, not copying the how.</p></div>
-      <div class="mcard rv"><div class="num">02 / WATCH</div><h4>Live demo, real execution</h4><p>An actual agent against an actual target. No slides of screenshots — the thing works on screen, and it works on your machine.</p></div>
-      <div class="mcard rv"><div class="num">03 / RUN</div><h4>One click, your own copy</h4><p>Most lessons are reading lessons. The ones that run execute an <b>agent skill</b> from the repository, or call a model through one adapter — hit <b>Run on Kaggle</b> and it opens in your own account, no install, no GPU.</p></div>
-    </div>
-    <div class="nbnote rv">
-      <b>Every notebook is executed before it ships.</b> All <span data-n="sessions">120</span> run top to bottom in CI, the output is committed to the repository, and the same <span data-n="sessions">120</span> are re-run on a clean Kaggle kernel and checked line for line against it — so a lesson that claims a result has actually produced it. Nothing here is pseudo-code.
-    </div>
-  </div>
-</section>
-
-<!-- ================= BANNER 3 · ONE PLACE ================= -->
+<!-- ================= 02 · ONE PLACE ================= -->
 <section class="banner wide" id="curriculum">
   <div class="wrap bin">
     <div class="rv">
-      <span class="eyebrow">03 / One place</span>
-      <h2>One home for the architecture and the tactics.</h2>
+      <span class="eyebrow">02 / One place</span>
+      <h2>What does not scale by itself is what you have to learn.</h2>
+      <p class="say">Attacking needs one working path. Defending needs all of them closed. That asymmetry is why offensive capability diffuses on its own and defensive capability has to be deliberately spread — and it is why the work that matters now is the half no tool does on your behalf.</p>
+    </div>
+
+    <div class="ledger rv">
+      <div class="gap">
+        <div class="atk">
+          <div class="lab">What scales at almost no cost</div>
+          <ul>
+            <li><b>Autonomous discovery</b> — agents that read code and find real vulnerabilities</li>
+            <li><b>Exploit generation</b> at the speed of a build pipeline</li>
+            <li><b>Campaigns without headcount</b></li>
+            <li><b>One path is enough</b></li>
+          </ul>
+        </div>
+        <div class="def">
+          <div class="lab">What does not scale by itself</div>
+          <ul>
+            <li><b>Judgement</b> — which finding is real, and which confident answer is a hallucination</li>
+            <li><b>Trust in your own tools</b> — a probabilistic scanner is worthless unmeasured</li>
+            <li><b>Control-plane design</b> — identity, delegation, containment, stop authority</li>
+            <li><b>Every path must hold</b></li>
+          </ul>
+        </div>
+      </div>
+      <div class="closing">
+        <span>If only the best-funded teams learn to direct, doubt and prove these systems, the gap between them and the hospital, the school district, the two-person NGO becomes <b>the softest target in the network we all share</b>.</span>
+        <button class="share-btn" data-share data-share-text="Average breakout time is now 29 minutes. The fastest on record is 27 seconds. Offense scales on its own — defense has to be deliberately spread.">Share this</button>
+      </div>
+    </div>
+
+    <div class="bsub rv">
+      <h3>Everyone in this field is now a beginner at something.</h3>
+      <p class="say">The tools changed underneath the job. <b>A SOC analyst who cannot say why an agent reached a conclusion cannot supervise it.</b> An AppSec engineer scoring a probabilistic scanner on finding count is measuring the number that improves when it finds less. A governance lead writing controls for a model has to name the component the control attaches to.</p>
+      <p class="say">None of that is learnable from a vendor page. So these lessons are written two ways at once: for practitioners already carrying the pager, and for the people trying to get into the field who need a starting point that is not a certification syllabus.</p>
+      <div class="paths">
+        <div class="path">
+          <div class="k">New to it — start here</div>
+          <p>Three lessons, in order. The first gets a notebook running in your own account with nothing installed; the next two give you the map every later lesson refers back to.</p>
+          <div class="lin">
+            <a href="lessons/A0.1.html">A0.1<i>Run your first lesson</i></a>
+            <a href="lessons/A1.0.html">A1.0<i>What securing AI means</i></a>
+            <a href="lessons/A1.1.html">A1.1<i>The reference architecture</i></a>
+          </div>
+        </div>
+        <div class="path">
+          <div class="k">Already practising — take your chair</div>
+          <p>Each chapter opens with the framing lesson for that role, then goes straight to the work that role actually owns.</p>
+          <div class="lin">
+            <a href="lessons/B2.3.html">B2.3<i>AppSec</i></a>
+            <a href="lessons/D1.0.html">D1.0<i>SOC</i></a>
+            <a href="lessons/C1.0.html">C1.0<i>Red team</i></a>
+            <a href="lessons/E2.1.html">E2.1<i>Governance</i></a>
+            <a href="lessons/A3.7.html">A3.7<i>Platform</i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bsub rv">
+      <h3>So it is all in one place.</h3>
       <p class="say">Best-in-class defensive practice is real, and it is scattered — across vendor blogs, conference talks, a paper nobody outside the lab reads, and closed Slacks you have to be invited to. Cyber Commons puts it in one place and organises it the way a security org actually is: <b><span data-n="functions">5</span> functions, <span data-n="chapters">12</span> chapters, <span data-n="sessions">120</span> lessons</b>, taught in the order the work happens.</p>
       <p class="say">The architecture comes first and the tactics hang off it. Every risk and every control in the whole curriculum names a component from <b>one reference architecture</b>, so "secure the agent" always has a referent — and <span data-n="run_a_skill">117</span> of the lessons run one of <span data-n="skills">121</span> <b>agent skills</b> you can open and read, rather than describing what a tool would do.</p>
     </div>
@@ -583,12 +545,51 @@
   </div>
 </section>
 
+<!-- ================= 03 · WHO WRITES IT ================= -->
+<section class="banner" id="who">
+  <div class="wrap bin">
+    <div class="rv">
+      <span class="eyebrow">03 / Who writes it</span>
+      <h2>Curated by the world's top cyber practitioners.</h2>
+      <p class="say">Not a syllabus assembled from vendor documentation. The people writing these lessons are <b>working on the latest of this across several regulated industries</b> — where a control has to survive an audit as well as an attacker, and "the model said so" is not an answer you can give a supervisor. That is why every lesson names a risk, a control and a lab, in that order, and why the labs produce evidence rather than a screenshot.</p>
+      <p class="say">It is also why the curriculum covers <b>both directions in one place</b>: securing AI systems, and using AI to do security work. Most material picks a side. The two share an architecture, a threat model and a set of failure modes, and splitting them is what leaves teams defending a system they never mapped.</p>
+    </div>
+    <div class="bstats rv">
+      <div><div class="n"><span data-n="functions">5</span></div><div class="l">Functions of a real security org</div></div>
+      <div><div class="n">2</div><div class="l">Directions, one curriculum</div></div>
+      <div><div class="n"><span data-n="skills">121</span></div><div class="l">Readable agent skills</div></div>
+      <div><div class="n"><span data-n="sessions">120</span>/<span data-n="sessions">120</span></div><div class="l">Lessons verified on a clean kernel</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <span class="eyebrow">How a lesson works</span>
+      <h2>See it drawn, watch it run, then run it yourself.</h2>
+      <p>Reading about a control doesn't build the instinct to ship it. Every lesson has the same three-part shape.</p>
+    </div>
+    <div class="mech">
+      <div class="mcard rv"><div class="num">01 / SEE</div><h4>Lightboard, not lecture</h4><p>The concept is drawn out so the mental model lands before any code does. You leave understanding the why, not copying the how.</p></div>
+      <div class="mcard rv"><div class="num">02 / WATCH</div><h4>Live demo, real execution</h4><p>An actual agent against an actual target. No slides of screenshots — the thing works on screen, and it works on your machine.</p></div>
+      <div class="mcard rv"><div class="num">03 / RUN</div><h4>One click, your own copy</h4><p>Most lessons are reading lessons. The ones that run execute an <b>agent skill</b> from the repository, or call a model through one adapter — hit <b>Run on Kaggle</b> and it opens in your own account, no install, no GPU.</p></div>
+    </div>
+    <div class="nbnote rv">
+      <b>Every notebook is executed before it ships.</b> All <span data-n="sessions">120</span> run top to bottom in CI, the output is committed to the repository, and the same <span data-n="sessions">120</span> are re-run on a clean Kaggle kernel and checked line for line against it — so a lesson that claims a result has actually produced it. Nothing here is pseudo-code.
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
 <!-- ================= OPEN STACK ================= -->
 <section id="stack">
   <div class="wrap">
     <div class="sec-head rv">
-      <span class="eyebrow">Built entirely on open</span>
-      <h2>No licence. No vendor. No account required.</h2>
+      <span class="eyebrow">The stack</span>
+      <h2>Built on open source.</h2>
       <p>CNCF and Linux Foundation projects for the control plane. For the intelligence, every lab runs three ways from one code path: offline against a deterministic stand-in, against an open-weight model on any OpenAI-compatible endpoint, or against a frontier API. Nothing is gated behind a frontier-lab account — and nothing pretends the frontier models do not exist.</p>
     </div>
     <div class="stack-grid">
@@ -600,27 +601,9 @@
     </div>
 
     <div class="rules rv">
-      <div><div class="k">Free forever</div><p>Hoarded security knowledge makes everyone less safe. <b>NGOs, students and small teams face the same attackers as banks</b> — and can't wait for budget.</p></div>
+      <div><div class="k">Open to everyone</div><p>Hoarded security knowledge makes everyone less safe. <b>NGOs, students and small teams face the same attackers as banks</b> — and can't wait for budget.</p></div>
       <div><div class="k">Laptop minimum</div><p>Pull a quantised model with <b>Ollama</b> and run offline, or serve a whole class from one borrowed GPU with <b>vLLM</b>. No credit card at any point.</p></div>
       <div><div class="k">Corrected in the open</div><p>Tracked against <b>OWASP LLM &amp; Agentic Top 10, MITRE ATLAS, NIST AI RMF</b> and CNCF releases. Lessons are fixed by pull request.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= BANNER 4 · WHAT THIS IS ================= -->
-<section class="banner" id="what">
-  <div class="wrap bin">
-    <div class="rv">
-      <span class="eyebrow">04 / Who writes it</span>
-      <h2>Curated by the world's top cyber practitioners.</h2>
-      <p class="say">Not a syllabus assembled from vendor documentation. The people writing these lessons are <b>working on the latest of this across several regulated industries</b> — where a control has to survive an audit as well as an attacker, and "the model said so" is not an answer you can give a supervisor. That is why every lesson names a risk, a control and a lab, in that order, and why the labs produce evidence rather than a screenshot.</p>
-      <p class="say">It is also why the curriculum covers <b>both directions in one place</b>: securing AI systems, and using AI to do security work. Most material picks a side. The two share an architecture, a threat model and a set of failure modes, and splitting them is what leaves teams defending a system they never mapped.</p>
-    </div>
-    <div class="bstats rv">
-      <div><div class="n"><span data-n="functions">5</span></div><div class="l">Functions of a real security org</div></div>
-      <div><div class="n">2</div><div class="l">Directions, one curriculum</div></div>
-      <div><div class="n"><span data-n="skills">121</span></div><div class="l">Readable agent skills</div></div>
-      <div><div class="n"><span data-n="sessions">120</span>/<span data-n="sessions">120</span></div><div class="l">Lessons verified on a clean kernel</div></div>
     </div>
   </div>
 </section>
@@ -644,12 +627,12 @@
     <div class="foot">
       <div>
         <a class="brand" href="#top"><img src="assets/logo-mark.png" alt="Cyber Commons"><span class="bt"><span>Cyber&nbsp;<b>Commons</b></span><small>Navigating Cyber Singularity</small></span></a>
-        <p class="about">A commons is a shared resource no one owns and everyone may draw from. This one is for the skills of defending in the age of AI — free forever, because defensive capability is the half that has to be deliberately spread.</p>
+        <p class="about">A commons is a shared resource no one owns and everyone may draw from. This one is for the skills of defending in the age of AI — open, and openly corrected, because defensive capability is the half that has to be deliberately spread.</p>
       </div>
       <div class="foot-links">
         <div class="foot-col"><h5>Learn</h5><a href="lessons/index.html">All lessons</a><a href="#how">How a lesson works</a></div>
         <div class="foot-col"><h5>Build</h5><a href="#stack">Open stack</a><a href="lessons/index.html">Lab repos</a></div>
-        <div class="foot-col"><h5>Commons</h5><a href="#why">Why now</a><a href="#singularity">Cyber singularity</a><a href="#stack">Contribute</a></div>
+        <div class="foot-col"><h5>Commons</h5><a href="#need">Why now</a><a href="#who">Who writes it</a><a href="#stack">Contribute</a></div>
       </div>
     </div>
     <div class="foot-bottom">
