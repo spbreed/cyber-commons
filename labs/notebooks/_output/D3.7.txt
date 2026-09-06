@@ -1,32 +1,46 @@
-INSTINCT 1 — disable dana@corp's account
-   dana@corp (human)      can act: True   account disabled, but the issued token is still valid
-   patch-agent            can act: True   active
-   deploy-agent           can act: True   active
-   → the agents were never using her account interactively; they hold
-     their own issued tokens, and one of them is acting AS her.
+chain                     dana@corp → orchestrator → patch-agent → deploy-agent
+scoped_last_actor_only    ['cluster-prod']
+scoped_whole_chain        ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+missed_by_naive_scoping   ['queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+undercount_factor         6.0
 
-INSTINCT 2 — interview the user
-   Q: did you read the AWS credentials?
-   A: No. I opened a ticket and went to lunch.
-   Q: what did you ask the agent to do?
-   A: Fix the finding in billing.py.
-   Q: did you approve the external POST?
-   A: I didn't know it made external calls.
-   → she authorised a TASK. The actions were chosen by a model. She is
-     not withholding information; she does not have it.
+Scoping the last actor finds one cluster. The chain reached six
+resources, including a payments repository and a dev vault.
+ depth   last-actor scope   chain scope  undercount
+----------------------------------------------------
+     1                  3             3         1.0
+     2                  2             4         2.0
+     3                  2             5         2.5
+     4                  1             6         6.0
 
-INSTINCT 3 — assume one actor
-   actual chain: dana@corp → orchestrator → patch-agent
-   actors involved: 3; actors in the logs: 1
-correct first action — revoke patch-agent's identity:
-   dana@corp (human)      can act: True   active
-   patch-agent            can act: False  identity revoked
-   deploy-agent           can act: True   active
+Each hop adds resources the last actor never touched. This is why B2.0
+bounds delegation depth: depth is an incident-scope multiplier.
+resources_direct      ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+actors_in_scope       ['build-agent', 'dana@corp', 'deploy-agent', 'finance-agent', 'monitor-agent', 'orchestrator', 'patch-agent', 'test-agent']
+second_order_actors   ['build-agent', 'finance-agent', 'monitor-agent', 'test-agent']
 
-   dana keeps working. deploy-agent keeps working. The actor stopped.
+Five more identities shared a resource with the compromised chain.
+They are not confirmed compromised — they are IN SCOPE, which is different
+and is the distinction an incident record has to make explicitly.
+SCOPE
+  chain              dana@corp → orchestrator → patch-agent → deploy-agent
+  confirmed touched  ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+  would have been missed by scoping the acting agent alone:
+                     ['queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+  undercount factor  6.0×
+  in scope, not confirmed (shared a resource):
+                     ['build-agent', 'finance-agent', 'monitor-agent', 'test-agent']
+conformance: 0 problem(s)
 
-TIME TO EFFECT, measured:
-   disable the human's account         5s  agent unaffected
-   kill the agent process              2s  supervisor restarts it; token still valid
-   revoke the agent identity          12s  agent cannot act, even after restart
-   rotate the shared credential      420s  works, and breaks every other consumer
+authorised but wrong : 3
+exceeded authority   : 0
+reach                : 6 resources
+confirmed exfil      : 0
+revoking one credential does NOT stop: ['build-agent', 'finance-agent', 'monitor-agent', 'test-agent']
+
+Zero actions exceeded authority, and the incident still happened. That
+combination says the grant was too broad - a different fix from a
+control that failed, which is why the contract counts them separately.
+
+Reach is 4 resources; confirmed exfiltration is 0. Reporting the second
+as the scope is how a notification decision gets made on the wrong number.

@@ -1,45 +1,32 @@
-per-run monitoring
-   run-01  on-task=True  in-policy=True  budget=True  -> nothing to report
-   run-02  on-task=True  in-policy=True  budget=True  -> nothing to report
-   run-03  on-task=True  in-policy=True  budget=True  -> nothing to report
-   run-04  on-task=True  in-policy=True  budget=True  -> nothing to report
-   run-05  on-task=True  in-policy=True  budget=True  -> nothing to report
+INSTINCT 1 — disable dana@corp's account
+   dana@corp (human)      can act: True   account disabled, but the issued token is still valid
+   patch-agent            can act: True   active
+   deploy-agent           can act: True   active
+   → the agents were never using her account interactively; they hold
+     their own issued tokens, and one of them is acting AS her.
 
-Five clean runs. Nothing here is wrong, and nothing here is visible,
-because a single run is the wrong unit of observation.
-object  written by  read by
-obj-A   run-01      run-01, run-02, run-03, run-04   (3 unrelated)
-obj-B   run-03      run-04   (1 unrelated)
+INSTINCT 2 — interview the user
+   Q: did you read the AWS credentials?
+   A: No. I opened a ticket and went to lunch.
+   Q: what did you ask the agent to do?
+   A: Fix the finding in billing.py.
+   Q: did you approve the external POST?
+   A: I didn't know it made external calls.
+   → she authorised a TASK. The actions were chosen by a model. She is
+     not withholding information; she does not have it.
 
-objects read by two or more unrelated runs: ['obj-A']
+INSTINCT 3 — assume one actor
+   actual chain: dana@corp → orchestrator → patch-agent
+   actors involved: 3; actors in the logs: 1
+correct first action — revoke patch-agent's identity:
+   dana@corp (human)      can act: True   active
+   patch-agent            can act: False  identity revoked
+   deploy-agent           can act: True   active
 
-The architecture says these runs are isolated. The graph says three of
-them read an object a fourth wrote. One of those two statements is
-measured.
-novel tokens appearing across independent runs
-   HOLD    3 runs
-   OWNER   2 runs
-   VETO    2 runs
+   dana keeps working. deploy-agent keeps working. The actor stopped.
 
-synchronised pivot: 4 of 5 runs at hour 6 (80%)
-
-role differentiation
-   run-01  directs
-   run-02  executes
-   run-03  directs
-   run-04  executes
-
-Reported shape: participation moved from roughly 20% to over 90% within
-hours. Any reasonable change detector catches that - the reason nothing
-did is that nothing was watching the population.
-trajectories showing the agent noticed something reportable: 3
-reports that reached a human                              : 0
-gap                                                        : 3  ['run-01', 'run-03', 'run-04']
-
-Reported figures: 3-6 agents considered notifying a human, zero did, out
-of roughly 1,200 that saw the compromise. The gap is the metric - not the
-report count, which was structurally zero.
-
-Sample the gap for review and the remediation separates into three:
-did not notice, did not think it was its job, or had no route. Only the
-third is fixed by A3.10.
+TIME TO EFFECT, measured:
+   disable the human's account         5s  agent unaffected
+   kill the agent process              2s  supervisor restarts it; token still valid
+   revoke the agent identity          12s  agent cannot act, even after restart
+   rotate the shared credential      420s  works, and breaks every other consumer

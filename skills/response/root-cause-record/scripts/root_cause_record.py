@@ -20,8 +20,8 @@ INCIDENT = {
 CHAIN = [
     ("A2.6", "provenance marking at ingress",            "absent"),
     ("A3.1", "default-deny on the tool call",            "present-but-scoped-wrong"),
-    ("D2.1", "detection on refund without approval",     "absent"),
-    ("D1.3", "drift monitor on vendor tool descriptions", "absent"),
+    ("D2.3", "detection on refund without approval",     "absent"),
+    ("D1.4", "drift monitor on vendor tool descriptions", "absent"),
     ("D4.4", "stop authority within the refund window",  "present"),
 ]
 
@@ -70,7 +70,7 @@ print()
 print("The first two are true and useless. An engineer missing an alert is a")
 print("thing that will happen again next quarter to a different engineer, and")
 print("'be more careful' is not a change anybody can make. Only the third names")
-print("something that can be built, tested, and checked in D5.3.")
+print("something that can be built, tested, and checked in D5.4.")
 print()
 print("Note that stop authority was PRESENT and the incident still ran 194")
 print("minutes. A control that exists but is never reached is not a mitigating")
@@ -78,4 +78,4 @@ print("factor - it is evidence that the detection in front of it was the gap.")
 
 assert len(accepted) == 1
 assert report["root_control"] == "A2.6"
-assert "D2.1" in report["contributing"]
+assert "D2.3" in report["contributing"]

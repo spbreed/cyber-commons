@@ -46,13 +46,13 @@ none of the rest is possible until the system is drawn.
 
 So this function is one picture and its consequences, in three chapters:
 
-- **Chapter 1 — the architecture, and every risk it carries.** The component
+- **Chapter A1 — the architecture, and every risk it carries.** The component
   map, then one lesson per risk, each naming the component of CyberTravels it
   attacks and grounded in the OWASP Agentic AI threat taxonomy.
-- **Chapter 2 — securing it: identity and ingress.** Who is calling, on whose
+- **Chapter A2 — securing it: identity and ingress.** Who is calling, on whose
   behalf, and what came in from outside. These two controls close more of
   CyberTravels' risks than anything else, which is why they come first.
-- **Chapter 3 — securing it: runtime and the gateway.** What holds after
+- **Chapter A3 — securing it: runtime and the gateway.** What holds after
   identity has been defeated, and how the controls collapse into one enforcement
   point once CyberTravels runs more than four agents.
 
@@ -107,7 +107,7 @@ So this function is one picture and its consequences, in three chapters:
     + D.arrow(320, 58, 96, 120) + D.arrow(335, 58, 250, 120)
     + D.arrow(365, 58, 424, 120) + D.arrow(380, 58, 600, 120),
     height=200,
-    caption="Chapter 1 introduces no control at all, on purpose: you cannot "
+    caption="Chapter A1 introduces no control at all, on purpose: you cannot "
             "choose a control for a risk you cannot yet name.")),
 
   ("md", "## 4 · Function A, in order"),
@@ -116,7 +116,7 @@ So this function is one picture and its consequences, in three chapters:
     [["1", "the architecture, and every risk it carries", "17"],
      ["2", "securing it — identity and ingress", "8"],
      ["3", "securing it — runtime and the gateway", "10"]],
-    caption="Chapters 2 and 3 are controls. Chapter 1 is the picture they "
+    caption="Chapters A2 and A3 are controls. Chapter A1 is the picture they "
             "stand on.")),
  ],
  "expect": "CyberTravels as built — four agents, two MCP servers, direct API calls "
@@ -263,11 +263,11 @@ either side is currently pointed at."""),
 CyberTravels' security team has a standing question from the board, and it is
 not "is CyberTravels secure". It is **"how would we know"**.
 
-Function C answers it twice. Chapter 6 attacks CyberTravels the way somebody else
-eventually will. Chapter 7 asks whether what you found survives contact with
+Function C answers it twice. Chapter C1 attacks CyberTravels the way somebody else
+eventually will. Chapter C2 asks whether what you found survives contact with
 a second person, a second week and a second model.
 
-**Chapter 6 — red teaming.** The agent as your instrument first: recon,
+**Chapter C1 — red teaming.** The agent as your instrument first: recon,
 foothold, escalation and lateral movement run as a loop, inside a scope you can
 defend in writing — because an offensive harness pointed at CyberTravels'
 staging estate is the most dangerous thing in the building. Then the agent as
@@ -281,7 +281,7 @@ three.
 - **containment** — what it can reach once you hold it. The refund endpoint,
   the CRM, the CI runner, Alex's laptop. R6, R7 and R9.
 
-**Chapter 7 — research.** Model-layer, weight-level, data-layer and supply-chain
+**Chapter C2 — research.** Model-layer, weight-level, data-layer and supply-chain
 work, then the two questions that decide whether any of it was worth doing.
 Does it reproduce once you separate the model effect from the harness effect?
 And can somebody else deploy it as a control after you have moved on?
@@ -321,7 +321,7 @@ somebody can act on.
             "it.")),
 
   ("md", "## 3 · The same claim, at four standards of proof\n\n"
-         "Chapter 6 gets you to the second row. Chapter 7 is entirely about the "
+         "Chapter C1 gets you to the second row. Chapter C2 is entirely about the "
          "third and fourth, because a finding nobody can reproduce protects "
          "nobody — however true it was on the day."),
   ("html", D.table(
@@ -359,23 +359,57 @@ Agent is roughly 1,400 tool calls across 260 resources in 96 sessions. One hour
 of Alex is twelve actions. Every threshold, baseline and playbook CyberTravels
 owns was tuned against the second number.
 
-And the actor is not only the adversary. It is also the instrument: chapter 8
-puts an agent on the alert queue and on detection engineering, which works, and
-brings its own failure mode — a loop that closes alerts confidently can close
-the wrong one at machine speed.
+And the actor is not only the adversary. It is also the instrument: chapter D2
+puts an agent on detection engineering and chapter D3 puts one on the alert
+queue. Both work, and both bring the same failure mode — a loop that concludes
+confidently can conclude wrongly at machine speed.
 
-**Chapter 8 — detection.** Triage as a loop you supervise, with the context that
-makes it correct. Detections written *for* an actor with no human rhythm.
-CyberTravels' telemetry as a first-class data source, because you cannot detect on
-what was never emitted — prompts, tool calls, decisions, identities, none of
-which appear in an application log. Telling agent from human when both hold
-Alex's authority. And drift, the failure with no adversary at all: the model was
-upgraded, a prompt was edited, and the baseline moved.
+### The unit this function is written in
 
-**Chapter 9 — response.** Scope an incident whose actor moved at machine speed
-on delegated credentials. Contain faster than it acts. Replay what it saw and
-what it decided. And decide, in advance, who is allowed to stop all four agents
-at three in the morning without asking anyone.
+A ratio of 117× is not a fact you can act on. **The unit is an interval**, and
+there are five of them between an agent doing something it should not and the
+control that stopped it being back at target:
+
+| interval | from | to | chapter |
+|---|---|---|---|
+| **discover** | the behaviour happens | somebody could see it at all | D1 |
+| **detect** | it is visible | an alert exists | D2 |
+| **understand** | the alert exists | a conclusion you can act on | D3 |
+| **contain** | the conclusion | the actor stopped | D4 |
+| **recover** | stopped | the control measurably back at target | D5 |
+
+Every lesson in this function shortens one of those five, or spends one
+deliberately to buy something else — and each says which, in a line under its
+own concept. That is the whole structure, and it is worth stating plainly
+because the intervals are where the numbers live. CyberTravels' detection
+interval is 194 minutes against a 15-minute target. Its manual containment
+runbook finishes in 34 minutes against a measured breakout time of 29. Neither
+of those is an opinion about tooling.
+
+**Chapter D1 — discover.** Telemetry as a real log source, because you cannot
+detect on what was never emitted; agent told from human when both hold Alex's
+authority; intel that has to become a rule; drift, the failure with no adversary
+at all; and a hunt for behaviour no rule was written for.
+
+**Chapter D2 — detect.** Detections for two subjects that are not the same
+subject — what an agent does to your estate, and what happens to the platform
+running it — plus the loop that writes rules, the benign corpus that decides
+whether they ship, and the one detector that needs no threshold.
+
+**Chapter D3 — investigate.** An investigation an agent can run: bounded before
+it starts, given the fields an agent alert needs, willing to abandon its first
+theory in the open, scoped along the delegation graph, and finally widened from
+one run to the population.
+
+**Chapter D4 — respond.** A response whose blast radius is known before it
+fires. Actions classified on reversibility and radius, tiers derived from that
+rather than from their author, containment timed against the attacker, and a
+fleet stop that revokes as well as terminates.
+
+**Chapter D5 — recover and root cause.** A run you can reproduce, a root cause
+that names a control rather than a person, the fix put at the layer it belongs
+in, the indicators re-measured to see which actually came back — and a
+regulatory clock that started before anyone knew.
 
 Two rows of the CyberTravels register are this function's whole reason to exist:
 **R9**, where holding one agent reaches CRM, payroll and the cloud resource
@@ -402,11 +436,11 @@ told you.
   ("md", "## 4 · What CyberTravels has to emit before any of this works"),
   ("html", D.table(
     ["what the SOC needs", "is it in an application log?", "which lesson gets it"],
-    [["the prompt that motivated the action", "<b>no</b>", "D1.2"],
-     ["the tool call, with arguments", "<b>no</b>", "D1.2"],
+    [["the prompt that motivated the action", "<b>no</b>", "D1.1"],
+     ["the tool call, with arguments", "<b>no</b>", "D1.1"],
      ["the decision, and what it was based on", "<b>no</b>", "D5.1"],
-     ["which agent acted", "<b>no</b>", "D1.4"],
-     ["which human it acted for", "<b>no</b>", "A2.7 · D1.4"],
+     ["which agent acted", "<b>no</b>", "D1.2"],
+     ["which human it acted for", "<b>no</b>", "A2.7 · D1.2"],
      ["the HTTP request the tool made", "yes", "already there"]],
     emphasise=1,
     caption="Five of six do not exist yet. R10 in the register is the sixth "
@@ -464,15 +498,15 @@ Function E is written in one unit: a **key control indicator**. E1.1 defines it
 the measurement is taken — and the three chapters are that one unit built,
 evidenced and run:
 
-- **Chapter 10 — risk and control.** Where the indicators come from. The
+- **Chapter E1 — risk and control.** Where the indicators come from. The
   register supplies the denominator, risk tiering supplies the target, control
   mapping supplies the subject, and E1.13 computes six of them against the
   CyberTravels repository and reports the gaps.
-- **Chapter 11 — regulatory and compliance.** The same indicators read as
+- **Chapter E2 — regulatory and compliance.** The same indicators read as
   evidence. A travel company holds passports, payment data and health
   information, and each regime asks for a reading rather than a description —
   quotable to several of them because it was computed once.
-- **Chapter 12 — the CISO office.** The indicators run as a programme:
+- **Chapter E3 — the CISO office.** The indicators run as a programme:
   sequenced by distance from target, owned by name, and reported to a board in
   numbers somebody in the room can re-compute.
 

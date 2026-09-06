@@ -1,19 +1,22 @@
-"""D2 — The Incident Responder. Eight sessions.
+"""Eight Function D lessons, from the two-track era of the Agentic SOC.
 
-Three things change when the actor is an agent, and each has a lesson:
+Three things change when the actor is an agent, and each has a lesson here:
 
     scope is a graph, not a host        — it follows the delegation chain
     containment must beat the loop      — a human in the path arrives too late
     attribution is a design property    — you cannot recover it afterwards
 
+    D3.4  when the actor is an agent
     D3.5  agent-assisted reconstruction
-    D3.7  when the actor is an agent
-    D3.8  scoping an agentic incident
+    D3.7  scoping an agentic incident
     D4.3  containment at machine speed
-    D5.1  replay and forensics
-    D5.4  the post-incident change surface
     D4.4  stop authority
+    D5.1  replay and forensics
+    D5.3  the post-incident change surface
     D5.6  the regulatory clock
+
+As with `track_d1.py`, the file name is historical and the lessons span four
+chapters. Order and chapter live in `site/data/curriculum.json`, not here.
 """
 
 from .skills import SKILL_RUNTIME
@@ -64,7 +67,7 @@ job to state that gap explicitly in the incident record.
               "already carry this risk.",
 },
 
-"D3.7": {
+"D3.4": {
  "concept": """
 Three responder instincts are correct for human incidents and misfire when the
 actor is an agent.
@@ -91,7 +94,7 @@ operational rather than architectural.
      ["2. interview the user",
       "2. revoke that identity — no approval needed for a non-human (A3.6)"],
      ["3. review the user's recent activity",
-      "3. scope by walking the delegation chain, not the host list (D3.8)"],
+      "3. scope by walking the delegation chain, not the host list (D3.7)"],
      ["", "4. preserve the run trace before anything restarts (D5.1)"],
      ["", "5. only then consider the human's account, and say why"]],
     emphasise=1,
@@ -110,7 +113,7 @@ operational rather than architectural.
               "whether you can currently revoke a single agent identity at all.",
 },
 
-"D3.8": {
+"D3.7": {
  "concept": """
 Scoping answers "what was touched?" For a host-based incident you enumerate
 hosts. For an agentic incident, **scope follows the delegation graph**.
@@ -216,7 +219,7 @@ upgrade does not reproduce the incident that happened before it.
               "between forensics and storytelling.",
 },
 
-"D5.4": {
+"D5.3": {
  "concept": """
 After an incident you change something. For ordinary software that change goes
 through code review, CI and a deploy — a process that records what changed and
@@ -243,7 +246,7 @@ as done six weeks later.
      ["approval settings", "<b>no</b>", "a toggle in an admin UI"],
      ["egress allowlist", "sometimes", "depends whether it is IaC or a console"]],
     emphasise=1,
-    caption="The same surfaces D1.3 watches for drift. There they were the "
+    caption="The same surfaces D1.4 watches for drift. There they were the "
             "things that change without anyone deciding; here they are the "
             "things you change on purpose, after an incident — and four of "
             "seven still leave no record that you did.")),
@@ -323,7 +326,7 @@ Two consequences that teams discover on day three:
 1. **Containing fast does not buy reporting time.** You can contain in an hour
    and still miss a 72-hour deadline, because the clock never paused.
 2. **Broken attribution consumes the clock.** If you cannot say who acted
-   (D3.5), scoping takes days, and those days are deadline days.
+   (D3.4), scoping takes days, and those days are deadline days.
 
 Containment and disclosure are separate workstreams competing for the same
 people. If your runbook has one owner for both, one of them is being done badly

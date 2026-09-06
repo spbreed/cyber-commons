@@ -74,7 +74,7 @@ def for_control(kind, code):
     return [sid for sid, tid in LESSONS if code in labels(sid, tid)[kind]]
 
 print("lookup, both directions")
-for sid in ("A1.2", "B2.3", "D5.3"):
+for sid in ("A1.2", "B2.3", "D5.4"):
     report["lookup"]["by_lesson"][sid] = for_lesson(sid)
     print(f"   {sid:<8}{' · '.join(for_lesson(sid))}")
 print()

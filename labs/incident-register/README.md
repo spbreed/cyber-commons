@@ -32,7 +32,7 @@ anchored to NIST SP 800-53r5. The split follows the type:
 ```
  function   controls   lessons that own them
  A            24       A2.3 A2.4 A2.6 A2.8 A3.2 A3.3 A3.8 A3.9 A3.10
- D            13       D2.4 D3.4 D4.5
+ D            13       D2.2 D3.8 D4.5
  B             2       D2.5
  C             1       C1.2
 ```
@@ -52,8 +52,8 @@ duplicates the curriculum it lands in is worse than one that maps onto it.
 | [A3.10](../notebooks/A3.10.ipynb) The agent's escalation path | C9.1 C9.4 C10.2 |
 | [D2.5](../notebooks/D2.5.ipynb) Honeypots, canaries and deception | C4.4 C10.3 |
 | [C2.8](../notebooks/C2.8.ipynb) From evidence to control register | the analysis |
-| [D2.4](../notebooks/D2.4.ipynb) Detections whose subject is the platform | C1.4 C3.4 C4.1 C5.4 C6.3 |
-| [D3.4](../notebooks/D3.4.ipynb) Fleet-level correlation | C2.3 C2.4 C7.4 C8.1 C8.4 C9.2 C9.3 |
+| [D2.2](../notebooks/D2.2.ipynb) Detections whose subject is the platform | C1.4 C3.4 C4.1 C5.4 C6.3 |
+| [D3.8](../notebooks/D3.8.ipynb) Fleet-level correlation | C2.3 C2.4 C7.4 C8.1 C8.4 C9.2 C9.3 |
 | [D4.5](../notebooks/D4.5.ipynb) The fleet kill switch | C8.3 |
 
 ## The one structural point worth keeping

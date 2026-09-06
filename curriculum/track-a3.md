@@ -135,7 +135,7 @@ python3 scripts/run_notebooks.py --session A3.6   # run it headless and check it
 
 ---
 
-### A3.7 — The agent gateway: one choke point when you scale
+### A3.7 — The agent gateway — one choke point when you scale
 
 - **Risk** — Per-agent controls diverge as the fleet grows, and legacy downstreams force a static credential back into agent code.
 - **Control** — A single enforcement point holding identity, policy, egress, budget and audit — with the credential for legacy systems held there rather than by the agent.

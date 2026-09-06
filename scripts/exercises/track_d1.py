@@ -1,11 +1,20 @@
-"""D1 — The SOC Analyst & Detection Engineer. Eight sessions.
+"""Eight Function D lessons, from the two-track era of the Agentic SOC.
 
-Two directions run through this track and they are not the same job:
+    D1.1  agent telemetry as a log source
+    D1.2  distinguishing agent from human
+    D1.3  threat intelligence that becomes a detection
+    D1.4  drift monitoring
+    D2.1  detections whose subject is the agent
+    D2.3  agent-assisted detection engineering
+    D3.1  from alert queue to loop operator
+    D3.3  the context that makes agent triage work
 
-    detection WITH agents   — the analyst's loop gets faster   (D3.1–D2.1)
-    detection FOR agents    — the agent is now the subject      (D2.3–D1.1)
-
-The second is the new work, and it inverts several classic baselines.
+The file name is historical: Function D was two tracks when these were written
+and is now five, so the lessons here span three chapters. Nothing depends on
+which module a lesson lives in — `exercises/__init__.py` merges them and
+`site/data/curriculum.json` is what decides order and chapter. Splitting these
+into five files is a tidy-up nobody has needed yet; do not infer structure from
+the filename.
 """
 
 MODEL_NOTE = """
@@ -69,7 +78,7 @@ positives at machine speed, and closing a true positive is silent.
               "with or without an agent.",
 },
 
-"D3.6": {
+"D3.3": {
  "concept": """
 An alert about a human is triageable with three facts: who, what, when. An alert
 about an agent needs three more, and without them every analyst has to guess.
@@ -111,7 +120,7 @@ second one happens quietly.
               "decides the alert.",
 },
 
-"D2.1": {
+"D2.3": {
  "concept": """
 Using an agent to write detections is genuinely effective: it produces candidate
 rules quickly, across more log sources than a human would attempt.
@@ -146,7 +155,7 @@ it is the part teams skip.
               "long-standing rules would not pass the bar they would set today.",
 },
 
-"D2.3": {
+"D2.1": {
  "concept": """
 This is the new work, and it starts by discarding baselines that have served the
 SOC well for twenty years.
@@ -189,7 +198,7 @@ used, a mix that has shifted, a scope exercised that was never needed before.
               "at all.",
 },
 
-"D1.2": {
+"D1.1": {
  "concept": """
 Agent telemetry has a property no other log source has: it contains the
 **reasoning**, not just the action. The trace records what the agent was trying
@@ -231,7 +240,7 @@ retention conversation actually is.
               "anyone looking at what the traces contain.",
 },
 
-"D1.4": {
+"D1.2": {
  "concept": """
 Distinguishing agent from human in telemetry matters because the ones you most
 need to find are the ones not in any registry (A3.7).
@@ -272,7 +281,7 @@ accuracy-maximisation would give you.
               "That number, not model accuracy, is what should set your threshold.",
 },
 
-"D1.3": {
+"D1.4": {
  "concept": """
 Drift monitoring exists because an agent's behaviour changes **without a code
 change**. A new model version, an edited prompt, an added tool — none of these
@@ -320,7 +329,7 @@ E1.7 turns the second into a compliance posture. This lesson produces the signal
               "number rather than from the audit calendar.",
 },
 
-"D1.1": {
+"D1.3": {
  "concept": """
 Threat intel is judged by exactly one thing: **how many detections came out of
 it.** Everything else — feed volume, report quality, briefing frequency — is
@@ -346,7 +355,7 @@ not.
     [["your own incidents", "<b>100%</b>", "the technique that worked against you"],
      ["your red team (C1)", "<b>90%</b>",
       "attack-suite results become detections directly"],
-     ["your drift monitor (D1.3)", "<b>80%</b>",
+     ["your drift monitor (D1.4)", "<b>80%</b>",
       "baseline changes are leading indicators"],
      ["vendor advisories", "50%", "useful for the supply chain (C2.5)"],
      ["commercial feed", "30%",
@@ -354,7 +363,7 @@ not.
     emphasise=1,
     caption="The highest-converting sources are all internal. For agentic "
             "threats the intel programme is mostly a feedback loop out of C1 and "
-            "D1.3, not a purchase.")),
+            "D1.4, not a purchase.")),
    *skill_steps('detection/threat-intel-to-rules',
                '## 2 · The procedure, as a skill\n\nFour of seven indicators convert; the two narratives and the low-confidence host are dropped with reasons. The skill then reports the three numbers a renewal conversation needs: converted, alerted, actioned.'),
 ],

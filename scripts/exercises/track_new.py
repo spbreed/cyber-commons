@@ -109,8 +109,8 @@ many."""),
               "precision is near the base rate, you have described normal work.",
 },
 
-# ---------------------------------------------------------------- D2.2
-"D2.2": {
+# ---------------------------------------------------------------- D2.4
+"D2.4": {
  "concept": """
 The fastest source of a good detection is an incident you have just had. The
 trap is that **every candidate rule catches the incident** — that is how it was
@@ -176,8 +176,8 @@ will ask about an agent that read production during an outage."""),
               "is not the same set, and working out why is the exercise.",
 },
 
-# ---------------------------------------------------------------- D3.3
-"D3.3": {
+# ---------------------------------------------------------------- D3.6
+"D3.6": {
  "concept": """
 Every investigator is wrong at step one. What separates an investigator from an
 expensive autocomplete is what happens when the evidence stops fitting.
@@ -310,8 +310,8 @@ gap, which is a different finding and a different fix."""),
               "it names a person or an intention, rewrite it as a control.",
 },
 
-# ---------------------------------------------------------------- D5.3
-"D5.3": {
+# ---------------------------------------------------------------- D5.4
+"D5.4": {
  "concept": """
 A fix is a claim. The key control indicators built in E1.1 are how the claim
 gets checked: re-measure the indicators the incident moved, and see which came

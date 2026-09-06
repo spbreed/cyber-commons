@@ -1,6 +1,6 @@
 """A2 — Controls: identity and ingress.
 
-Chapter 1 named the risks. This chapter closes the two that everything else
+Chapter A1 named the risks. This chapter closes the two that everything else
 depends on: knowing who is calling, and knowing what came in from outside.
 
 Each lesson states the threats it mitigates, describes the control, and carries
@@ -472,7 +472,7 @@ someone's life.
  "concept": """
 **Mitigates: T6 Intent Breaking, direct and indirect · T1 Memory Poisoning · T12 Communication Poisoning.**
 
-This is the control for the largest risk in Chapter 1.
+This is the control for the largest risk in Chapter A1.
 
 A1.3 worked because the context window is one flat string. Everything —
 operator instruction, user question, retrieved document, tool result, peer

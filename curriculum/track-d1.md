@@ -1,21 +1,21 @@
-# Track D1 — The Agentic SOC — Discover
+# Track D1 — Discover — Making the Actor Visible
 
 **Function D · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Job titles:** 
+**Job titles:** SOC Analyst, Threat Hunter, Threat Intelligence Analyst, Security Data Engineer
 
-**What changes:** 
+**What changes:** What the SOC can see, before there is anything to see it in: agent telemetry onboarded deliberately, agents told apart from the humans they act for, intel that has to become a rule, drift that arrives without a code change, and a hunt that reports precision. 6 lessons.
 
-**Autonomy focus:** 
+**Autonomy focus:** You watch an L2.5 fleet with a stack tuned for the tempo of a person, and the gap gets measured rather than asserted.
 
-**Deliverable:** 
+**Deliverable:** One hunt, scored: a stated hypothesis, the population it ran over, what it caught and what it cost.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### D1.0 — Start here — what AI for security operations means
+### D1.0 — Start here — what an agentic SOC means
 
 - **Risk** — A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.
 - **Control** — Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.
@@ -33,34 +33,7 @@ python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
 
 ---
 
-### D1.1 — Threat intel sub-lane
-
-- **Risk** — Unsourced confidence in synthesis loops.
-- **Control** — Provenance discipline; refuse claims without a source.
-- **Lab** — Build a synthesis loop that must cite or abstain.
-- **Tools** — `MISP`, `OpenCTI`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Build a synthesis loop that must cite or abstain.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc/intel
-docker compose up -d opencti
-python3 synthesise.py --topic 'agentic malware' --require-source --model $MODEL
-python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch confidence appear from nowhere
-```
-
-*Expect:* With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.
-
----
-
-### D1.2 — Agent telemetry as a data source
+### D1.1 — Agent telemetry as a log source
 
 - **Risk** — Prompts, traces, tool calls and approvals never reach the SIEM.
 - **Control** — Onboard agent telemetry deliberately; decide retention.
@@ -71,8 +44,8 @@ python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch co
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
+jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.1   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
@@ -85,34 +58,7 @@ curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply
 
 ---
 
-### D1.3 — Drift monitoring
-
-- **Risk** — A detection that worked last month is silently degraded.
-- **Control** — Watch model updates, prompt changes, index refreshes, tool versions.
-- **Lab** — Change the model underneath and catch the detection regression.
-- **Tools** — `promptfoo`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Change the model underneath and catch the detection regression.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-promptfoo eval -c detection-regression.yaml --model llama3.3   # baseline
-promptfoo eval -c detection-regression.yaml --model glm-4.6    # after 'upgrade'
-python3 drift_report.py
-```
-
-*Expect:* A rule that passed last month fails now. Nothing in your code changed.
-
----
-
-### D1.4 — Distinguishing agent from human
+### D1.2 — Distinguishing agent from human
 
 - **Risk** — Your earliest Shadow Autonomy signal is invisible.
 - **Control** — Behavioural signatures separating agent from inherited human.
@@ -125,8 +71,8 @@ python3 drift_report.py
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it
+jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
@@ -135,6 +81,60 @@ python3 agent_vs_human.py --classify live.jsonl
 ```
 
 *Expect:* A working classifier — your earliest Shadow Autonomy signal.
+
+---
+
+### D1.3 — Threat intelligence that becomes a detection
+
+- **Risk** — Unsourced confidence in synthesis loops.
+- **Control** — Provenance discipline; refuse claims without a source.
+- **Lab** — Build a synthesis loop that must cite or abstain.
+- **Tools** — `MISP`, `OpenCTI`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Build a synthesis loop that must cite or abstain.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/d1-soc/intel
+docker compose up -d opencti
+python3 synthesise.py --topic 'agentic malware' --require-source --model $MODEL
+python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch confidence appear from nowhere
+```
+
+*Expect:* With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.
+
+---
+
+### D1.4 — Drift monitoring — behaviour that changes without a code change
+
+- **Risk** — A detection that worked last month is silently degraded.
+- **Control** — Watch model updates, prompt changes, index refreshes, tool versions.
+- **Lab** — Change the model underneath and catch the detection regression.
+- **Tools** — `promptfoo`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Change the model underneath and catch the detection regression.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/d1-soc
+promptfoo eval -c detection-regression.yaml --model llama3.3   # baseline
+promptfoo eval -c detection-regression.yaml --model glm-4.6    # after 'upgrade'
+python3 drift_report.py
+```
+
+*Expect:* A rule that passed last month fails now. Nothing in your code changed.
 
 ---
 

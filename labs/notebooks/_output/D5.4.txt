@@ -1,8 +1,22 @@
-blast before 44  after 4
-the manifest diff records the change even though no PR was raised.
+kci     measures                                 target  before  incident   after  verdict
+KCI-01  tool calls carrying provenance          >= 0.99    1.00      0.41    1.00  restored
+KCI-02  vendor tool descriptions pinned         == 1.00    1.00      0.00    1.00  restored
+KCI-03  refunds with a matching approval        >= 0.99    1.00      0.86    0.94  NOT RESTORED
+KCI-04  mean minutes to detect a scope breach     <= 15    9.00    194.00  118.00  NOT RESTORED
+KCI-05  agents inside declared scope            == 1.00    1.00      0.97    1.00  restored
 
-OK   gate http_post behind approval            type=preventive  owner=platform-sec   verify_by=2026-09-30
-OK   alert on credential-path reads            type=detective   owner=soc            verify_by=2026-09-15
-WEAK update the prompt to warn the model       type=guidance    owner=—              verify_by=—
+3 restored · 2 not restored
 
-1 action(s) are guidance rather than controls: ['update the prompt to warn the model']
+   KCI-03  refunds with a matching approval
+          target >= 0.99, measured 0.94 — the fix did not reach this one
+   KCI-04  mean minutes to detect a scope breach
+          target <= 15, measured 118.0 — the fix did not reach this one
+
+This is the whole point of measuring rather than closing. 3 indicators came
+back to target and 2 did not, and the incident record would have said
+'remediated' for all 5.
+
+KCI-04 is the uncomfortable one. Detection time improved from 194 minutes
+to 118 and is still eight times the target, so the control the root cause
+record named has been partially built. Partially built is not built, and
+without the re-measurement it reads as done.

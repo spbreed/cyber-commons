@@ -105,7 +105,7 @@ improves during an outage is measuring the outage.
 shown to discriminate, and a reader has no way to tell the instrument works
 from the estate being uniformly broken. Keep at least one the estate passes.
 
-E1.13 computes six of these against the CyberTravels repository, and D5.3
+E1.13 computes six of these against the CyberTravels repository, and D5.4
 re-measures them after a fix to decide whether the remediation actually
 restored anything — which is the whole reason for defining them here."""),
 

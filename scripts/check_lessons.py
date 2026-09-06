@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check every lesson against the authoring contract in LESSON_DESIGN.md.
 
-Six rules, and each one exists because breaking it made a lesson worse:
+Seven rules, and each one exists because breaking it made a lesson worse:
 
 1. **One concept, three parts.** Every lesson carries a `hook`, a `diagram` and
    a `concept`. The hook is brief — a paragraph, not an essay — because a hook
@@ -20,13 +20,20 @@ Six rules, and each one exists because breaking it made a lesson worse:
    answer. A chapter that ends without that reads as though the subject is
    closed.
 
-5. **An anchor on every Function E lesson.** Function E is one argument told in
-   one unit — the key control indicator defined in E1.1 — and every other lesson
-   in E says in a line what it contributes to that indicator or takes from it.
-   Without the rule a governance lesson can be internally coherent, read fine on
-   its own page, and belong to no argument at all.
+5. **An anchor on every Function D and Function E lesson.** Both are long
+   arguments told in one unit — an interval between an agent acting and the
+   control being back at target (D1.0), and a key control indicator computed
+   from the estate (E1.1). Every other lesson in those functions says in a line
+   which part of that unit it moves. Without the rule a lesson can be internally
+   coherent, read fine on its own page, and belong to no argument at all.
 
-6. **Realistic demos.** A lesson whose code only ever shows the happy path has
+6. **Chapters cited by id, not by number.** The chapter number is an ordinal in
+   `curriculum.json` and is rendered nowhere, so "Chapter 11" in prose is
+   unresolvable by a reader and goes stale the moment a chapter is inserted.
+   Prose says "Chapter D3". The numbers themselves are checked for being
+   contiguous, and a bridge whose track no longer exists is a failure.
+
+7. **Realistic demos.** A lesson whose code only ever shows the happy path has
    not shown the reader anything they could not have assumed. This one is
    reported rather than enforced — a handful of lessons are legitimately
    demonstrations rather than experiments — but the count is printed so it
@@ -39,6 +46,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -53,17 +61,17 @@ from exercises.anchors import ANCHORS  # noqa: E402
 from exercises.cybertravels import GROUNDING  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 
-# Function E is one argument — a control framework, a regulatory map and a
-# programme — and its unit is the key control indicator defined in E1.1. Each
-# other lesson in E states, in a line under its concept, what it contributes to
-# that indicator or takes from it. The rule is enforced rather than reported
-# because the failure it prevents is silent: a lesson that is internally
-# coherent and belongs to no argument reads fine on its own page.
-# E1.1 defines the unit and E1.0 introduces the function that is told in it, so
-# neither points at anything — an anchor on either is a paragraph repeating the
-# concept directly above it.
-ANCHORED_FN, ANCHOR_ORIGIN = "E", "E1.1"
-ANCHOR_EXEMPT = {"E1.0", ANCHOR_ORIGIN}
+# Functions D and E are long arguments rather than collections, and each is told
+# in one unit: an interval between an agent acting and the control being back at
+# target (D1.0), and a key control indicator computed from the estate (E1.1).
+# Every other lesson in those two functions says in a line under its concept
+# which part of that unit it moves. Enforced rather than reported because the
+# failure it prevents is silent — a lesson that belongs to no argument still
+# reads fine on its own page.
+ANCHOR_ORIGIN = {"D": "D1.0", "E": "E1.1"}
+# The origins themselves, plus E1.0: it introduces the function that E1.1's unit
+# is told in, so an anchor there would restate the concept directly above it.
+ANCHOR_EXEMPT = {"D1.0", "E1.0", "E1.1"}
 
 HOOK_MIN_WORDS, HOOK_MAX_WORDS = 20, 90
 
@@ -134,14 +142,14 @@ def main() -> int:
         if last and track not in BRIDGES:
             problems.append(f"{sid}: last lesson of {track} with no chapter bridge")
 
-        # 4 — every Function E lesson says where it sits against E1.1
-        if fn == ANCHORED_FN and sid not in ANCHOR_EXEMPT:
+        # 4 — every lesson in D and E says where it sits on its function's spine
+        if fn in ANCHOR_ORIGIN and sid not in ANCHOR_EXEMPT:
             anchor = (ANCHORS.get(sid) or "").strip()
             if not anchor:
-                problems.append(f"{sid}: no anchor to {ANCHOR_ORIGIN} — every "
-                                f"Function {ANCHORED_FN} lesson states what it "
-                                f"contributes to the indicator, or takes from "
-                                f"it; add one to scripts/exercises/anchors.py")
+                problems.append(f"{sid}: no anchor to {ANCHOR_ORIGIN[fn]} — "
+                                f"every Function {fn} lesson states which part "
+                                f"of that spine it moves; add one to "
+                                f"scripts/exercises/anchors.py")
             else:
                 seen_anchors.add(sid)
                 if "\n> " + anchor.splitlines()[0] not in "\n".join(
@@ -149,7 +157,7 @@ def main() -> int:
                     problems.append(f"{sid}: anchor defined but not rendered — "
                                     f"rebuild the notebooks")
 
-        # 5 — realistic demos (reported, not enforced)
+        # 7 — realistic demos (reported, not enforced)
         body = "\n".join("".join(c["source"]) for c in cells).lower()
         if (kinds.count("code") and s.get("kind") not in EXEMPT_KINDS
                 and not any(w in body for w in FAILURE_WORDS)):
@@ -158,13 +166,39 @@ def main() -> int:
     # An anchor naming a lesson that does not exist is a rename nobody finished.
     for orphan in sorted(set(ANCHORS) - seen_anchors):
         problems.append(f"{orphan}: anchor defined for a lesson that is not in "
-                        f"Function {ANCHORED_FN}")
+                        f"an anchored function ({', '.join(sorted(ANCHOR_ORIGIN))})")
+
+    # 6a — chapters are contiguous, and a bridge belongs to a real track.
+    # Both of these had drifted: Function D grew from two chapters to five and
+    # nothing renumbered, and the bridges for B1 and for the two-track D outlived
+    # their tracks — dead text that still described the curriculum's shape.
+    chapters = [(tr["id"], tr.get("chapter"))
+                for fn in CUR["functions"] for tr in fn["tracks"]]
+    for tid, ch in chapters:
+        if ch is None:
+            problems.append(f"track {tid}: no chapter number")
+    got = sorted(c for _, c in chapters if c is not None)
+    if got != list(range(len(chapters))):
+        problems.append(f"chapters are not 0..{len(chapters) - 1}: {got}")
+    for tid in sorted(set(BRIDGES) - {t for t, _ in chapters}):
+        problems.append(f"bridge {tid}: no such track — delete it rather than "
+                        f"leaving it to describe a curriculum that changed")
+
+    # 6b — chapters are cited by track id, never by number. The number is an
+    # ordinal in curriculum.json and is rendered nowhere, so "Chapter 11" in
+    # prose is unresolvable by a reader and silently stale for an author.
+    numbered = re.compile(r"Chapters?\s+\d")
+    for f in sorted((ROOT / "scripts" / "exercises").glob("*.py")):
+        for i, line in enumerate(f.read_text().splitlines(), 1):
+            if numbered.search(line):
+                problems.append(f"{f.name}:{i}: chapter cited by number — use "
+                                f"the track id, e.g. 'Chapter D3'")
 
     for p in problems:
         print(f"  FAIL  {p}")
     print(f"\n{total} lessons · {len(problems)} problem(s) · "
-          f"{len(BRIDGES)} chapter bridges · {len(seen_anchors)} anchored to "
-          f"{ANCHOR_ORIGIN}")
+          f"{len(BRIDGES)} chapter bridges · {len(seen_anchors)} anchored "
+          f"({', '.join(f'{f}→{o}' for f, o in sorted(ANCHOR_ORIGIN.items()))})")
     print(f"{len(happy_path_only)} lesson(s) show only a happy path: "
           f"{', '.join(happy_path_only) or 'none'}")
 

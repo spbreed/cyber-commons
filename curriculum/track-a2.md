@@ -15,7 +15,7 @@
 
 ---
 
-### A2.1 — Agent identity: user, workload, agent
+### A2.1 — Agent identity — user, workload, agent
 
 - **Risk** — A shared service account answers 'what ran' and destroys 'for whom' — so no later control can be conditioned on the caller.
 - **Control** — A distinct identity per workload, carrying the human principal alongside it, asserted on every call.

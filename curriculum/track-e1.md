@@ -252,7 +252,7 @@ python3 lifecycle_gate.py --simulate reindex --without rollback-plan   # blocked
 
 ---
 
-### E1.10 — The stakeholder map: who owns what
+### E1.10 — The stakeholder map — who owns what
 
 - **Risk** — Legal, compliance, privacy, cyber and model risk each hold part of the AI control estate and none holds all of it. The programme fails at the seams between them, not inside any one.
 - **Control** — A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching.

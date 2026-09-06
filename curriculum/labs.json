@@ -718,11 +718,11 @@
       ],
       "expect": "Five behavioural signals print for a person and an agent over the same hour, with ratios in the hundreds. A volume rule tuned for human tempo does fire on the agent — roughly 150 seconds in, by which point the actor has finished."
     },
-    "D1.1": {
+    "D1.3": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D1.1   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "cd labs/d1-soc/intel",
@@ -732,11 +732,11 @@
       ],
       "expect": "With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently."
     },
-    "D1.2": {
+    "D1.1": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D1.1   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "cd labs/d1-soc",
@@ -746,11 +746,11 @@
       ],
       "expect": "Prompts, tool calls, decisions and spend queryable alongside your other log sources."
     },
-    "D1.3": {
+    "D1.4": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "cd labs/d1-soc",
@@ -760,11 +760,11 @@
       ],
       "expect": "A rule that passed last month fails now. Nothing in your code changed."
     },
-    "D1.4": {
+    "D1.2": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "cd labs/d1-soc",
@@ -781,11 +781,11 @@
       ],
       "expect": "Run three hypotheses over a labelled trace corpus and score what each one catches and misses."
     },
-    "D2.1": {
+    "D2.3": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D2.1   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "pip install sigma-cli && cd labs/d1-soc/detections",
@@ -795,19 +795,19 @@
       ],
       "expect": "Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have."
     },
-    "D2.2": {
+    "D2.4": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D2.2   # run it headless and check it"
+        "jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it"
       ],
       "expect": "Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment."
     },
-    "D2.3": {
+    "D2.1": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D2.1   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "cd labs/d1-soc/detections",
@@ -816,11 +816,11 @@
       ],
       "expect": "All five fire on synthetic-but-real agent telemetry from the A3/B2 labs."
     },
-    "D2.4": {
+    "D2.2": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D2.2   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "falco --rules agent-escape.yaml --validate",
@@ -863,19 +863,19 @@
       ],
       "expect": "Run an investigation against an admission set and watch the out-of-scope queries get refused and recorded."
     },
-    "D3.3": {
+    "D3.6": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D3.3.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D3.3   # run it headless and check it"
+        "jupyter notebook labs/notebooks/D3.6.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D3.6   # run it headless and check it"
       ],
       "expect": "Feed contradicting evidence mid-investigation and check the plan actually changes, and that the abandoned branch is recorded."
     },
-    "D3.4": {
+    "D3.8": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D3.4.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D3.4   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D3.8.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D3.8   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "python3 fleet_graph.py --window 24h --min-unrelated-readers 2",
@@ -897,11 +897,11 @@
       ],
       "expect": "The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered."
     },
-    "D3.6": {
+    "D3.3": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D3.6.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D3.6   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D3.3.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D3.3   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "cd labs/d1-soc",
@@ -911,11 +911,11 @@
       ],
       "expect": "The generic loop underperforms your worst analyst; the loaded one does not. Same model both times."
     },
-    "D3.7": {
+    "D3.4": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D3.7.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D3.7   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D3.4.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D3.4   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "cd labs/d2-ir",
@@ -924,11 +924,11 @@
       ],
       "expect": "Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it."
     },
-    "D3.8": {
+    "D3.7": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D3.8.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D3.8   # run it headless and check it",
+        "jupyter notebook labs/notebooks/D3.7.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D3.7   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "cd labs/d2-ir",
@@ -1013,19 +1013,19 @@
       ],
       "expect": "Build a root cause record from a reconstructed incident and check it names a control rather than a person."
     },
-    "D5.3": {
-      "run": [
-        "# --- the notebook: runs anywhere, stdlib only, no install ---",
-        "jupyter notebook labs/notebooks/D5.3.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D5.3   # run it headless and check it"
-      ],
-      "expect": "Re-run the KCI measurement against a fixed estate and show which indicators recovered and which did not."
-    },
     "D5.4": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
         "jupyter notebook labs/notebooks/D5.4.ipynb    # or open it on the lesson page",
-        "python3 scripts/run_notebooks.py --session D5.4   # run it headless and check it",
+        "python3 scripts/run_notebooks.py --session D5.4   # run it headless and check it"
+      ],
+      "expect": "Re-run the KCI measurement against a fixed estate and show which indicators recovered and which did not."
+    },
+    "D5.3": {
+      "run": [
+        "# --- the notebook: runs anywhere, stdlib only, no install ---",
+        "jupyter notebook labs/notebooks/D5.3.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session D5.3   # run it headless and check it",
         "",
         "# --- the full variant, against the real tooling (needs a container registry) ---",
         "cd labs/d2-ir/postmortem",

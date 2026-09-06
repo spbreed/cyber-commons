@@ -611,7 +611,7 @@ This is an **orientation** lesson. It has no code — it exists so the chapters 
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.6": """
+"D3.3": """
 **What it covers.** A/B a generic prompt vs a context-loaded one on the same alert set.
 
 **Why a security engineer needs it.** Generic triage agents underperform your worst analyst. The control it builds is: feed the baseline, known FPs, crown-jewel map and prior decisions.
@@ -619,7 +619,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.1": """
+"D2.3": """
 **What it covers.** Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
 
 **Why a security engineer needs it.** Coverage gaps nobody mapped. The control it builds is: detection-as-code with agents inside the CI loop.
@@ -627,7 +627,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.3": """
+"D2.1": """
 **What it covers.** Write five detections for agent misbehaviour and fire each one.
 
 **Why a security engineer needs it.** Scope drift, unusual tool sequencing, off-hours autonomous action. The control it builds is: detections whose subject is a non-human principal.
@@ -635,7 +635,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.2": """
+"D1.1": """
 **What it covers.** Ship OTEL agent traces into OpenSearch and query them.
 
 **Why a security engineer needs it.** Prompts, traces, tool calls and approvals never reach the SIEM. The control it builds is: onboard agent telemetry deliberately; decide retention.
@@ -643,7 +643,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.4": """
+"D1.2": """
 **What it covers.** Build the classifier on timing, sequencing and volume features.
 
 **Why a security engineer needs it.** Your earliest Shadow Autonomy signal is invisible. The control it builds is: behavioural signatures separating agent from inherited human.
@@ -651,7 +651,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.3": """
+"D1.4": """
 **What it covers.** Change the model underneath and catch the detection regression.
 
 **Why a security engineer needs it.** A detection that worked last month is silently degraded. The control it builds is: watch model updates, prompt changes, index refreshes, tool versions.
@@ -659,7 +659,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D1.1": """
+"D1.3": """
 **What it covers.** Build a synthesis loop that must cite or abstain.
 
 **Why a security engineer needs it.** Unsourced confidence in synthesis loops. The control it builds is: provenance discipline; refuse claims without a source.
@@ -667,7 +667,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D2.4": """
+"D2.2": """
 **What it covers.** Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
 
 **Why a security engineer needs it.** Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside. The control it builds is: named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).
@@ -675,7 +675,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.4": """
+"D3.8": """
 **What it covers.** Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
 
 **Why a security engineer needs it.** Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not. The control it builds is: fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).
@@ -699,7 +699,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.7": """
+"D3.4": """
 **What it covers.** Attribute an incident through the A2 `act` chain.
 
 **Why a security engineer needs it.** "Which user" is now the wrong first question. The control it builds is: attribute to agent, authority, delegation chain and prompt.
@@ -707,7 +707,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D3.8": """
+"D3.7": """
 **What it covers.** Scope a multi-agent incident end to end.
 
 **Why a security engineer needs it.** The initiating agent is not the acting one. The control it builds is: reconstruct the action chain across all three planes.
@@ -731,7 +731,7 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 This is a **control** lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.
 """,
 
-"D5.4": """
+"D5.3": """
 **What it covers.** Pick the right layer for five real incidents.
 
 **Why a security engineer needs it.** Fixing the prompt when the bug is in the control plane. The control it builds is: choose among model, prompt, tool, policy, sandbox, identity, eval.

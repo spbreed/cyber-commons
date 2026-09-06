@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D3.7 — When the actor is an agent | Cyber Commons</title><meta name="description" content="Attribute to agent, authority, delegation chain and prompt."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Investigate</div><div class="sid">D3.7</div><h1>When the actor is an agent</h1><div class="badges"><span class="badge t">D3</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T10</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D3.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;Which user&quot; is now the wrong first question.</p></div><div class="ctrl"><div class="lab">Control</div><p>Attribute to agent, authority, delegation chain and prompt.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attribute an incident through the A2 `act` chain.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/response/agent-actor-containment/scripts/agent_actor_containment.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D3.7 · When the actor is an agent</h1>
-<p><strong>Function D — The Agentic SOC → The Agentic SOC — Investigate</strong></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D3.6.html">D3.6 · Context that makes triage work</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D3.7 — Scoping an agentic incident — following the delegation graph | Cyber Commons</title><meta name="description" content="Reconstruct the action chain across all three planes."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › Investigate — From an Alert to a Conclusion</div><div class="sid">D3.7</div><h1>Scoping an agentic incident — following the delegation graph</h1><div class="badges"><span class="badge t">D3</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T10</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D3.7.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The initiating agent is not the acting one.</p></div><div class="ctrl"><div class="lab">Control</div><p>Reconstruct the action chain across all three planes.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Scope a multi-agent incident end to end.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.7.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.7.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/secops/incident-scoping/scripts/incident_scoping.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D3.7 · Scoping an agentic incident — following the delegation graph</h1>
+<p><strong>Function D — The Agentic SOC → Investigate — From an Alert to a Conclusion</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D3.6.html">D3.6 · Plan, then replan — an investigation that changes its mind</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,137 +11,167 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Keycloak, OpenSearch</td>
+<td>OpenTelemetry, Kimi K2, Claude Haiku 4.5</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Attribute an incident through the A2 <code>act</code> chain.</p>
-<p><strong>Why a security engineer needs it.</strong> "Which user" is now the wrong first question. The control it builds is: attribute to agent, authority, delegation chain and prompt.</p>
+<p><strong>What it covers.</strong> Scope a multi-agent incident end to end.</p>
+<p><strong>Why a security engineer needs it.</strong> The initiating agent is not the acting one. The control it builds is: reconstruct the action chain across all three planes.</p>
 <p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>The internal actor was autonomous. Was it instructed, was it compromised, or did it simply do what it was allowed to do? None of your existing playbooks have a branch for that question, and the answer changes everything downstream.</p>
+<p>The agent acted for eleven minutes on delegated credentials at machine speed. Scoping that means reconstructing blast radius from identity and egress logs, because asking what it touched is not a question anyone can answer from memory.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The internal actor was the Workflow Agent. Was it instructed, injected, or simply permitted? CyberTravels' existing playbook has no branch for that question, and every step of it assumes a person.</p>
+<p><strong>At CyberTravels.</strong> Eleven minutes of CyberTravels on delegated credentials. What it touched is not answerable from memory — it comes out of the identity and egress logs, if they exist. R9.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   the internal actor was autonomous. which branch?
+<pre><code>   11 minutes at machine speed
 
-   instructed      someone told it to        -&gt; who, and through what channel
-   injected        content told it to        -&gt; which corpus, written by whom
-   permitted       it was allowed to         -&gt; a control gap, not an intrusion
+   identity log ---+                    +--&gt; resources touched
+                   +--&gt; reconstruct --&gt; +--&gt; data read
+   egress log   ---+                    +--&gt; destinations reached
+                                        +--&gt; credentials used
 
-   no existing playbook has this branch, and it changes everything after it
+   the question &quot;what did it touch&quot; is not answerable from memory
 </code></pre>
-<p>Three responder instincts are correct for human incidents and misfire when the
-actor is an agent.</p>
-<ol>
-<li><strong>Disable the account.</strong> For a human this stops them. For an agent holding an
-   already-issued bearer token, it may not — the token remains valid until it
-   expires.</li>
-<li><strong>Interview the user.</strong> They were asleep. They authorised a task; a model
-   chose the actions. They cannot tell you what happened.</li>
-<li><strong>Assume one actor.</strong> There were three, in a chain, and only the last one
-   touched the resource.</li>
-</ol>
-<p>The correct first action is to <strong>revoke the agent identity</strong>, which is only
-possible if A2 was done. This lesson is where the identity track's value becomes
-operational rather than architectural.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook you have</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook this incident needs</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1. disable the user account</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1. identify the &lt;b&gt;acting&lt;/b&gt; identity from the act chain (A2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2. interview the user</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">2. revoke that identity — no approval needed for a non-human (A3.6)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3. review the user&#x27;s recent activity</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">3. scope by walking the delegation chain, not the host list (D3.8)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">4. preserve the run trace before anything restarts (D5.1)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">5. only then consider the human&#x27;s account, and say why</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Every step on the left is correct for a human actor and wrong here. The human authorised a task; the actions were chosen by a model.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Disabling the human's account leaves both agents acting on tokens already issued. The skill enumerates the live sessions, simulates the reflex containment step, and separates the task the user authorised from the actions taken under it.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/agent-actor-containment/SKILL.md"><code>skills/response/agent-actor-containment/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: agent-actor-containment
+<p>Scoping answers "what was touched?" For a host-based incident you enumerate
+hosts. For an agentic incident, <strong>scope follows the delegation graph</strong>.</p>
+<p>The agent that touched the resource is usually the <em>last</em> actor in a chain. If
+you scope only that actor, you miss everything the earlier actors reached — and
+because authority narrows down the chain, the earlier actors typically had
+<em>more</em> access, not less.</p>
+<p>The undercount is systematic and it grows with delegation depth, which is the
+operational reason B2.0 bounds delegation depth in the first place.</p>
+<blockquote>
+<p><strong>Anchor → D1.0.</strong> Scope decides what <em>understood</em> covers. Following the last actor rather than the delegation graph ends the interval early and wrong, and because authority narrows down the chain the earlier actors had more access — so the undercount grows with depth.</p>
+</blockquote></div><div class="nbmd"><h2>3 · Scoping as a skill</h2>
+<p>Scoping a human incident asks where someone logged in. Scoping this one asks what the agent <strong>decided</strong> — every action was individually authorised, so nothing looks wrong at the authentication layer.</p>
+<p>Two fields in the contract carry most of the weight. <code>reach</code> and <code>confirmed_exfiltration</code> are separate numbers, because reach is the scope until proven otherwise and the smaller number must never stand in for the larger in a notification decision. And <code>does_not_stop</code> makes containment state its own limits.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/secops/incident-scoping/SKILL.md"><code>skills/secops/incident-scoping/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: incident-scoping
 description: &gt;-
-  Establish what disabling a human's account does not stop when agents hold
-  issued tokens, and separate the task a user authorised from the actions taken
-  under it. Use during an incident where the actor is an agent and the account
-  is a person's.
-allowed-tools: Read, Grep, Glob
+  Scope an incident in which an agent was the actor — what it touched, what it
+  changed, what it may have exfiltrated, and where containment must cut. Use
+  when responding to an agent-involved incident, reconstructing what an
+  autonomous system did, deciding what to revoke, or sizing notification
+  obligations.
+allowed-tools: Read, Grep, Bash
 </code></pre>
-<h1>Disabling her account stops her, not them</h1>
-<p>The reflex containment step is to disable the account the logs name. When the
-actor is an agent holding an already-issued token, that step changes nothing:
-the token is valid until it expires, and the agent keeps acting. Containment has
-to name the credential and the workload, not the person.</p>
+<h1>Scoping an agentic incident</h1>
+<p>Scoping a human incident asks where someone logged in. Scoping an agentic one
+asks what the agent <strong>decided</strong>, because a compromised agent's actions are all
+individually authorised. Nothing looks anomalous at the authentication layer;
+the anomaly is in the sequence.</p>
 <h2>When to use this</h2>
-<p>Any incident where an agent acted on a user's behalf, and before any containment
-decision that starts by disabling an account.</p>
+<p>Any incident where an agent, an automated pipeline, or an AI-driven tool
+performed actions under investigation.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Enumerate live sessions and issued tokens per actor.</strong> Human sessions,
-agent sessions, and the tokens each holds with their expiry. This list is the
-containment surface and it is usually longer than expected.</p>
-<p><strong>2 — Simulate disabling the human's account.</strong> Record what stops and what does
-not. Already-issued tokens continuing to work is the finding, and it needs to be
-stated before the containment call is made.</p>
-<p><strong>3 — Interview to separate authorisation from action.</strong> The user authorised a
-<em>task</em>. Which of the actions taken under it did they know about, ask for, or
-see? The answer is usually "the first one", and it changes the incident's
-character entirely.</p>
-<p><strong>4 — Draw the actor chain.</strong> User, orchestrator, worker agent, downstream. The
-logs show one actor; the chain shows three. Name each and what each can still
-do.</p>
-<p><strong>5 — Choose levers by what they actually stop.</strong> Account disable, token
-revocation, workload termination, downstream block. Record the effect and the
-collateral of each, and pick from that table rather than from habit.</p>
+<p><strong>1 — Fix the window.</strong> Establish the first suspicious decision, not the first
+alert. Work backwards from the earliest action you cannot explain; the trigger
+is usually earlier than the detection by the length of one task loop.</p>
+<p><strong>2 — Reconstruct the decision chain.</strong> For the window, list every action with
+the input that motivated it. The critical question is which input entered the
+context from <strong>outside the trust boundary</strong> — a fetched page, an issue comment,
+a dependency's README, a tool description. That input is the likely root cause,
+and it is invisible if you only log tool calls and not their justification.</p>
+<p><strong>3 — Separate authority from behaviour.</strong> For each action ask: was it within
+the agent's granted authority? Actions that were authorised but wrong tell you
+the grant was too broad. Actions that exceeded authority tell you a control
+failed. These lead to different fixes and must not be pooled.</p>
+<p><strong>4 — Establish data reach.</strong> What did the agent read, and where could it have
+sent it? Reach is bounded by the agent's egress, not by what it appears to have
+sent — a request body you cannot see is still reach. State reach and confirmed
+exfiltration as separate numbers, and never let the smaller one stand in for
+the larger in a notification decision.</p>
+<p><strong>5 — Decide the containment cut.</strong> Options, in increasing cost: revoke the
+agent's credential, disable the trigger, quarantine the workload, disable the
+whole class of agents. Choose by blast radius, not by convenience, and record
+what the cut does <strong>not</strong> stop — sibling agents on the same shared service
+account almost always survive a credential revocation aimed at one of them.</p>
+<p><strong>6 — Preserve evidence the agent could alter.</strong> If the agent can write to the
+log store, the logs are not evidence. Snapshot first, then contain.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_actor_containment.py"><code>scripts/agent_actor_containment.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/incident_scoping.py"><code>scripts/incident_scoping.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>INSTINCT 1 — disable dana@corp's account
-   dana@corp (human)      can act: True   account disabled, but the issued token is still valid
-   patch-agent            can act: True   active
-   deploy-agent           can act: True   active
-   → the agents were never using her account interactively; they hold
-     their own issued tokens, and one of them is acting AS her.
+<pre><code>chain                     dana@corp → orchestrator → patch-agent → deploy-agent
+scoped_last_actor_only    ['cluster-prod']
+scoped_whole_chain        ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+missed_by_naive_scoping   ['queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+undercount_factor         6.0
 
-INSTINCT 2 — interview the user
+Scoping the last actor finds one cluster. The chain reached six
+resources, including a payments repository and a dev vault.
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;sessions&quot;: [{&quot;actor&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;human|agent&quot;, &quot;tokens&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;expires_in_s&quot;: 0}]}],
-  &quot;disable_human&quot;: {&quot;stops&quot;: [&quot;str&quot;], &quot;does_not_stop&quot;: [&quot;str&quot;]},
-  &quot;interview&quot;: {&quot;authorised&quot;: &quot;str&quot;, &quot;aware_of&quot;: [&quot;str&quot;], &quot;unaware_of&quot;: [&quot;str&quot;]},
-  &quot;chain&quot;: [&quot;str&quot;],
-  &quot;levers&quot;: [{&quot;lever&quot;: &quot;str&quot;, &quot;stops&quot;: [&quot;str&quot;], &quot;collateral&quot;: [&quot;str&quot;]}]
+  &quot;window&quot;: {&quot;first_suspicious_action&quot;: &quot;str&quot;, &quot;detected_at&quot;: &quot;str&quot;, &quot;gap_seconds&quot;: 0},
+  &quot;chain&quot;: [{&quot;action&quot;: &quot;str&quot;, &quot;motivating_input&quot;: &quot;str&quot;,
+             &quot;input_origin&quot;: &quot;operator|internal|external_untrusted&quot;,
+             &quot;within_authority&quot;: true}],
+  &quot;root_cause&quot;: {&quot;input&quot;: &quot;str&quot;, &quot;origin&quot;: &quot;str&quot;, &quot;why_trusted&quot;: &quot;str&quot;},
+  &quot;authority&quot;: {&quot;authorised_but_wrong&quot;: 0, &quot;exceeded_authority&quot;: 0},
+  &quot;data&quot;: {&quot;reach&quot;: [&quot;str&quot;], &quot;confirmed_exfiltration&quot;: [&quot;str&quot;], &quot;egress_bounded_by&quot;: &quot;str&quot;},
+  &quot;containment&quot;: {&quot;cut&quot;: &quot;credential|trigger|workload|class&quot;,
+                  &quot;does_not_stop&quot;: [&quot;str&quot;], &quot;evidence_snapshotted_first&quot;: true},
+  &quot;clock&quot;: {&quot;regulatory_trigger&quot;: false, &quot;basis&quot;: &quot;str&quot;}
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Starting with the account.</strong> It is the one lever that does not touch the
-  actor.</li>
-<li><strong>Recording the user as having authorised the actions.</strong> They authorised a
-  task.</li>
-<li><strong>Containing the worker and not the orchestrator.</strong> It will start another.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>INSTINCT 1 — disable dana@corp&#x27;s account
-   dana@corp (human)      can act: True   account disabled, but the issued token is still valid
-   patch-agent            can act: True   active
-   deploy-agent           can act: True   active
-   → the agents were never using her account interactively; they hold
-     their own issued tokens, and one of them is acting AS her.
+<li><strong>Scoping by authentication.</strong> Every action was authenticated; that is the
+  point.</li>
+<li><strong>Logging tool calls without their motivating input.</strong> Root cause then cannot
+  be established at all.</li>
+<li><strong>Reporting confirmed exfiltration as the scope.</strong> Reach is the scope until
+  proven otherwise.</li>
+<li><strong>Revoking one agent's token</strong> when the identity is shared, and calling it
+  contained.</li>
+<li><strong>Containing before snapshotting</strong> a log store the agent can write to.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>chain                     dana@corp → orchestrator → patch-agent → deploy-agent
+scoped_last_actor_only    [&#x27;cluster-prod&#x27;]
+scoped_whole_chain        [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+missed_by_naive_scoping   [&#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+undercount_factor         6.0
 
-INSTINCT 2 — interview the user
-   Q: did you read the AWS credentials?
-   A: No. I opened a ticket and went to lunch.
-   Q: what did you ask the agent to do?
-   A: Fix the finding in billing.py.
-   Q: did you approve the external POST?
-   A: I didn&#x27;t know it made external calls.
-   → she authorised a TASK. The actions were chosen by a model. She is
-     not withholding information; she does not have it.
+Scoping the last actor finds one cluster. The chain reached six
+resources, including a payments repository and a dev vault.
+ depth   last-actor scope   chain scope  undercount
+----------------------------------------------------
+     1                  3             3         1.0
+     2                  2             4         2.0
+     3                  2             5         2.5
+     4                  1             6         6.0
 
-INSTINCT 3 — assume one actor
-   actual chain: dana@corp → orchestrator → patch-agent
-   actors involved: 3; actors in the logs: 1
-correct first action — revoke patch-agent&#x27;s identity:
-   dana@corp (human)      can act: True   active
-   patch-agent            can act: False  identity revoked
-   deploy-agent           can act: True   active
+Each hop adds resources the last actor never touched. This is why B2.0
+bounds delegation depth: depth is an incident-scope multiplier.
+resources_direct      [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+actors_in_scope       [&#x27;build-agent&#x27;, &#x27;dana@corp&#x27;, &#x27;deploy-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;orchestrator&#x27;, &#x27;patch-agent&#x27;, &#x27;test-agent&#x27;]
+second_order_actors   [&#x27;build-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;test-agent&#x27;]
 
-   dana keeps working. deploy-agent keeps working. The actor stopped.
+Five more identities shared a resource with the compromised chain.
+They are not confirmed compromised — they are IN SCOPE, which is different
+and is the distinction an incident record has to make explicitly.
+SCOPE
+  chain              dana@corp → orchestrator → patch-agent → deploy-agent
+  confirmed touched  [&#x27;cluster-prod&#x27;, &#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+  would have been missed by scoping the acting agent alone:
+                     [&#x27;queue-tasks&#x27;, &#x27;repo-core&#x27;, &#x27;repo-infra&#x27;, &#x27;repo-payments&#x27;, &#x27;vault-dev&#x27;]
+  undercount factor  6.0×
+  in scope, not confirmed (shared a resource):
+                     [&#x27;build-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;test-agent&#x27;]
+conformance: 0 problem(s)
 
-TIME TO EFFECT, measured:
-   disable the human&#x27;s account         5s  agent unaffected
-   kill the agent process              2s  supervisor restarts it; token still valid
-   revoke the agent identity          12s  agent cannot act, even after restart
-   rotate the shared credential      420s  works, and breaks every other consumer</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Disabling the human's account leaves both agents able to act on already-issued tokens. The interview establishes the user authorised a task, not the actions. The chain shows three actors where the logs show one. Revoking <code>patch-agent</code>'s identity stops it in 12 seconds while dana and <code>deploy-agent</code> continue working.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Write your agentic incident runbook's first three steps. If step one is "disable the user account", rewrite it — and check whether you can currently revoke a single agent identity at all.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D3.8.html">D3.8 · Scoping an agentic incident</a></strong></p>
+authorised but wrong : 3
+exceeded authority   : 0
+reach                : 6 resources
+confirmed exfil      : 0
+revoking one credential does NOT stop: [&#x27;build-agent&#x27;, &#x27;finance-agent&#x27;, &#x27;monitor-agent&#x27;, &#x27;test-agent&#x27;]
+
+Zero actions exceeded authority, and the incident still happened. That
+combination says the grant was too broad - a different fix from a
+control that failed, which is why the contract counts them separately.
+
+Reach is 4 resources; confirmed exfiltration is 0. Reporting the second
+as the scope is how a notification decision gets made on the wrong number.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Scoping the last actor finds <code>cluster-prod</code> alone; the whole chain reaches six resources, missing five, with an undercount factor of 6.0. The undercount grows with each hop. Transitive scoping adds five second-order identities that shared a resource, explicitly marked as in scope rather than confirmed compromised.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>For your last incident involving a service account, recompute the scope by walking what else that account could reach. The number is almost always larger than what was written in the report.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D3.8.html">D3.8 · Fleet-level correlation — seeing a swarm</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D3.7.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.7.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Keycloak</span><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.7.ipynb</code></p></div><div class="pager"><a href="D3.6.html"><span class="k">← Previous</span><span class="t">D3.6 · Context that makes triage work</span></a><a class="next" href="D3.8.html"><span class="k">Next →</span><span class="t">D3.8 · Scoping an agentic incident</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The action-plane actor is a sub-agent two hops from the prompt that started it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>Kimi K2</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.7.ipynb</code></p></div><div class="pager"><a href="D3.6.html"><span class="k">← Previous</span><span class="t">D3.6 · Plan, then replan — an investigation that changes its mind</span></a><a class="next" href="D3.8.html"><span class="k">Next →</span><span class="t">D3.8 · Fleet-level correlation — seeing a swarm</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

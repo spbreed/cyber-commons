@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.2 — Generating detection rules from an incident | Cyber Commons</title><meta name="description" content="Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detect</div><div class="sid">D2.2</div><h1>Generating detection rules from an incident</h1><div class="badges"><span class="badge t">D2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A rule generated from one incident matches that incident and nothing else, or matches everything and buries the queue.</p></div><div class="ctrl"><div class="lab">Control</div><p>Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/detection-rule-synthesis/scripts/detection_rule_synthesis.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.2 · Generating detection rules from an incident</h1>
-<p><strong>Function D — The Agentic SOC → The Agentic SOC — Detect</strong></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.1.html">D2.1 · Agent-assisted detection engineering</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.2 — Detections whose subject is the agent platform | Cyber Commons</title><meta name="description" content="Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › Detect — From Visible to an Alert</div><div class="sid">D2.2</div><h1>Detections whose subject is the agent platform</h1><div class="badges"><span class="badge t">D2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.</p></div><div class="ctrl"><div class="lab">Control</div><p>Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/agent-platform-detections/scripts/agent_platform_detections.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.2 · Detections whose subject is the agent platform</h1>
+<p><strong>Function D — The Agentic SOC → Detect — From Visible to an Alert</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.1.html">D2.1 · Detections whose subject is the agent</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,131 +11,155 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Sigma</td>
+<td>Falco, Gitleaks, Sigstore</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Generating a detection rule from a reconstructed incident, and measuring it against benign traffic before it ships.</p>
-<p><strong>Why a security engineer needs it.</strong> An incident is the richest source of a good rule and the easiest source of a bad one, because every candidate you write from it catches it. The property that decides deployability is the false-positive rate on traffic that is not the incident — which means a benign corpus containing the hard cases, not unrelated noise.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>You have just reconstructed an incident and the rule almost writes itself. That is the problem: every rule you could write catches the incident, because you wrote it from the incident. What decides whether it ships is the traffic it fires on when nothing is wrong.</p>
+<p><strong>What it covers.</strong> Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.</p>
+<p><strong>Why a security engineer needs it.</strong> Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside. The control it builds is: named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside the workload. These are detections whose subject is the platform running the agent, and not one of them reads the agent's own logs.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The incident is CyberTravels': the Workflow Agent issued a refund against a booking nobody asked it to touch. The benign corpus is the hard one on purpose — CyberTravels processes eighteen legitimate refunds in the same window, and a rule that cannot tell them apart is a rule that alerts on the business.</p>
+<p><strong>At CyberTravels.</strong> Detections whose subject is the platform CyberTravels runs on, not the agents themselves — the escape, the poisoned package cache, the credential loose on the internet, the guardrail still switched off after the demo.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   incident trace
-        |
-        v
-   +----------------------+     every candidate catches the incident,
-   | candidate rules      |     so that cannot be the selection test
-   |   any refund         |
-   |   refund w/o approval|
-   |   refund on BK-772   |
-   +----------+-----------+
-              |
-              v
-       benign corpus  (must contain LEGITIMATE refunds)
-              |
-      +-------+--------+---------------+
-      v                v               v
-   21% FP           0% FP           0% FP
-   buries the       generalises     matches this
-   queue            AND quiet       incident only
-   REJECT           SHIP            REJECT
+<pre><code>   subject of the detection = the platform, not the workload
+
+   escape primitives      ptrace non-child . LD_PRELOAD . /proc/self/mem
+                          unshare/setns . non-harness write to the RPC path
+                          a process that outlives its tool call
+
+   cache integrity        repository vs manifest, hourly
+                          modified | unexpected | MISSING
+
+   credential exposure    repos, CI logs, image layers, public internet
+                          -&gt; automatic revocation, minutes not hours
+
+   exemption drift        live control state vs the approved register
 </code></pre>
-<p>The fastest source of a good detection is an incident you have just had. The
-trap is that <strong>every candidate rule catches the incident</strong> — that is how it was
-generated — so catching it cannot be the property you select on.</p>
-<p>What separates a rule worth deploying is what it does to traffic that is not the
-incident. That means a benign corpus containing the hard cases: for a refund
-rule, legitimate refunds. A corpus of unrelated traffic proves nothing, because
-the naive rule looks clean against it.</p></div><div class="nbmd"><h2>3 · Write the bad candidates on purpose</h2>
-<p>Two rules are worth writing precisely because they will be rejected.</p>
-<p>The <strong>naive generalisation</strong> takes the tool that appeared in the incident:
-<code>any refund</code>. The <strong>over-fitted</strong> one takes the identifier: <code>refund on BK-772</code>.
-Both catch the incident. One buries the queue and the other is worthless
-tomorrow, and seeing them scored beside the good rule is what makes the good
-rule a choice rather than an assumption.</p></div><div class="nbmd"><h2>4 · Generate, then measure before shipping</h2>
-<p>Three candidates, one benign corpus, one number each. A rule with no measured false-positive rate is a guess with syntax.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/detection-rule-synthesis/SKILL.md"><code>skills/detection/detection-rule-synthesis/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: detection-rule-synthesis
+<p>D2.1 wrote detections for what an agent does to your estate. These are
+detections for what happens to <strong>the platform running it</strong> — and they are
+different rules, on different data, with different owners.</p>
+<p>Four of them come straight out of the incident register, and each catches
+something that looks like normal operation from inside the workload:</p>
+<p><strong>Escape detection (C1.4).</strong> Named primitives, not anomaly scoring: <code>ptrace</code>
+attach to a non-child, <code>LD_PRELOAD</code> on a spawned process, writes to
+<code>/proc/self/mem</code>, unexpected <code>unshare</code>/<code>setns</code>, a new listening socket, and —
+the one the incident's spoofing depended on — a background process that
+outlives the tool call that spawned it. Plus any process that is not the
+harness writing to the harness's RPC path.</p>
+<p><strong>Cache integrity diffing (C5.4).</strong> An hourly comparison of what is in the
+artifact repository against a manifest of what should be. Poisoned targets were
+staged in exactly this way, and a deletion is as much a signal as a
+modification.</p>
+<p><strong>Secret scanning wired to revocation (C4.1).</strong> Not only source: CI logs, image
+layers, wikis, ticket attachments, and external exposure monitoring — the
+incident's credentials were found on the public internet. Revocation has to be
+automatic, because the interval between discovery and redistribution was
+minutes.</p>
+<p><strong>Exemption-state reconciliation (C6.3).</strong> Live control state against the
+approved register, continuously. Any control disabled without a matching
+unexpired exemption is a P1, and expiry re-enables automatically with no grace
+period.</p>
+<blockquote>
+<p><strong>Anchor → D1.0.</strong> A different subject is a different clock. Workload-layer detection does not fire late on a platform compromise — it does not fire at all, which is why these are separate rules, on separate data, with separate owners.</p>
+</blockquote></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">detection</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">owner</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">data source</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">escape detection (C1.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">platform security</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">host sensor</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">cache integrity (C5.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">build / release</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">artifact repository</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">secret scanning (C4.1)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">appsec</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">repos, CI, the public internet</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">exemption drift (C6.3)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">governance</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">control registry</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload scanning (C3.4)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the ingest team</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">upload path</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Five detections, five different owners, and not one of them reads the workload's own logs. That is the property that makes them useful after A2.8: they survive the subject of the investigation having had write access to everything else.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>A seven-event escape sequence scores 0.07 on a generic volume anomaly. The skill writes four named rules whose subject is the platform — orphaned processes, cache diffs, escape signatures — and runs both against the same events so the comparison is visible.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-platform-detections/SKILL.md"><code>skills/detection/agent-platform-detections/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-platform-detections
 description: &gt;-
-  Generate a detection rule from an incident trace and score it against benign
-  traffic before it ships. Use after an incident is reconstructed, when turning
-  a hunt finding into a standing detection, or when a proposed rule has no
-  measured false-positive rate.
+  Write detections whose subject is the agent platform itself — sandbox escape,
+  orphaned processes, artefact cache tampering, secret exposure — and compare
+  them against a generic volume anomaly on the same events. Use when the thing
+  being attacked is the harness rather than the application.
 allowed-tools: Read, Grep, Glob
 </code></pre>
-<h1>The incident tells you what to write; the benign corpus tells you whether to ship it</h1>
-<p>The fastest source of a good detection is an incident you have just had. The
-trap is that <strong>every candidate rule catches the incident</strong> — that is how it was
-generated — so catching it cannot be the property you select on.</p>
-<p>What separates a rule worth deploying is what it does to traffic that is <em>not</em>
-the incident.</p>
+<h1>A generic anomaly score gives an escape sequence 0.07</h1>
+<p>An escape from an agent sandbox is seven quiet events. It does not look like
+volume, it does not look like a spike, and a generic anomaly detector ranks it
+near zero. Detections whose subject is the platform are specific by necessity,
+and each of them names a mechanism rather than a statistic.</p>
 <h2>When to use this</h2>
-<p>Immediately after reconstruction, while the trace is still loaded, and again
-whenever a hunt hypothesis is promoted. Do not use it to write coverage from
-scratch: a rule generated from no incident has nothing to generalise from.</p>
-<h2>Step-by-step</h2>
-<p><strong>1 — Take the reconstructed trace, not the alert.</strong> The alert is one event;
-the rule needs the sequence around it.</p>
-<p><strong>2 — Write more than one candidate, deliberately including a bad one.</strong> The
-naive generalisation ("the tool that appeared") and the over-fitted one ("this
-booking id") are both worth writing, because seeing them scored is the lesson.</p>
-<p><strong>3 — Assemble a benign corpus that contains the hard cases.</strong> Legitimate
-refunds, not just unrelated traffic. A corpus with no near-misses proves
-nothing.</p>
-<p><strong>4 — Score every candidate on the benign corpus and record the rate.</strong> Not a
-verdict, a number.</p>
-<p><strong>5 — Ship the one that generalises and stays quiet, and say why the others
-were rejected.</strong> The rejected candidates are the evidence that the shipped one
-was chosen rather than assumed.</p>
+<p>Any estate running agent workloads on shared infrastructure, and after any
+incident where "we would have seen it" was asserted without a named rule.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Enumerate the platform's own failure modes.</strong> Escape from the sandbox,
+processes that outlive their tool call, artefact cache contents changing between
+runs, credentials appearing in output, tools invoked outside the manifest.</p>
+<p><strong>2 — Write one named rule per mechanism.</strong> Each with the specific condition it
+matches — a process tree deviating from the baseline, a PID alive after its call
+returned, a manifest hash mismatch. Named rules can be argued with; scores
+cannot.</p>
+<p><strong>3 — Run them against a real sequence.</strong> All the rules that should fire, should.
+Record which fired and on which event, because that mapping is what an analyst
+uses to reconstruct.</p>
+<p><strong>4 — Score the same sequence with a generic anomaly detector.</strong> Report both
+numbers side by side. The comparison is the argument for writing platform
+detections at all.</p>
+<p><strong>5 — Check each rule's data dependency.</strong> A cache-diff rule needs a manifest; an
+orphan rule needs process accounting. A rule whose input is not collected is a
+plan.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — a three-step incident and an 84-run benign corpus, in
-<a href="scripts/detection_rule_synthesis.py"><code>scripts/detection_rule_synthesis.py</code></a>.</p>
-<p><strong>Output</strong> — a real run:</p>
-<pre><code>candidate rule                          fires on   FP  FP rate  verdict
-any refund                                  True   18     21%  REJECT — buries the queue
-refund with no approval in the run          True    0      0%  ship
-refund on BK-772                            True    0      0%  REJECT — matches this incident only
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_platform_detections.py"><code>scripts/agent_platform_detections.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>  t  rule                                process
+  3  ptrace attach to a non-child        solve.py
+  4  LD_PRELOAD on a spawned process     solve.py
+  5  non-harness write to the RPC path   x.so
+  5  process outside the baseline tree   x.so
+  7  process outside the baseline tree   sidecar
+
+generic anomaly score for this run: 0.07  (seven syscalls is unremarkable)
 </code></pre>
-<p>All three catch the incident. Only one is a detection.</p>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;benign_runs&quot;: 0,
-  &quot;candidates&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;catches_incident&quot;: true,
-                  &quot;false_positives&quot;: 0, &quot;fp_rate&quot;: 0.0,
-                  &quot;verdict&quot;: &quot;ship|REJECT&quot;}]
+  &quot;mechanisms&quot;: [&quot;str&quot;],
+  &quot;rules&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;condition&quot;: &quot;str&quot;, &quot;requires&quot;: &quot;str&quot;}],
+  &quot;sequence&quot;: [{&quot;event&quot;: &quot;str&quot;, &quot;rules_fired&quot;: [&quot;str&quot;]}],
+  &quot;generic_anomaly&quot;: {&quot;score&quot;: 0.0},
+  &quot;coverage&quot;: {&quot;fired&quot;: 0, &quot;expected&quot;: 0, &quot;missing_inputs&quot;: [&quot;str&quot;]}
 }
 </code></pre>
-<h2>Common edge cases</h2>
-<ul>
-<li><strong>The over-fitted rule scores perfectly.</strong> Zero false positives and zero
-  future value. Test for a literal identifier in the rule body.</li>
-<li><strong>The benign corpus is too easy.</strong> If it contains no legitimate refunds, the
-  naive rule looks shippable.</li>
-<li><strong>The incident is the only positive.</strong> One true positive cannot establish
-  recall; the rule's recall is unknown until it runs.</li>
-</ul>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Selecting on "does it catch the incident".</strong> Every candidate does.</li>
-<li><strong>Shipping without a false-positive number.</strong> That is a guess with syntax.</li>
-<li><strong>Never writing the bad candidates.</strong> Then nothing shows the good one is good.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>incident: 3 steps · benign corpus: 84 runs
+<li><strong>Relying on a generic anomaly detector.</strong> The sequence is quiet by
+  construction.</li>
+<li><strong>Rules whose inputs nobody collects.</strong> Check the pipeline, not the rule.</li>
+<li><strong>One rule for "escape".</strong> Escape is several mechanisms with different
+  evidence.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>  t  rule                                process
+  3  ptrace attach to a non-child        solve.py
+  4  LD_PRELOAD on a spawned process     solve.py
+  5  non-harness write to the RPC path   x.so
+  5  process outside the baseline tree   x.so
+  7  process outside the baseline tree   sidecar
 
-candidate rule                          fires on   FP  FP rate  verdict
-any refund                                  True   18     21%  REJECT — buries the queue
-refund with no approval in the run          True    0      0%  ship
-refund on BK-772                            True    0      0%  REJECT — matches this incident only
+generic anomaly score for this run: 0.07  (seven syscalls is unremarkable)
+named rules fired: 5
 
-All three rules catch the incident. That is the trap: catching the thing
-that already happened is the one property every candidate has, so it
-cannot be the property you select on.
+The escape is four ordinary-looking events. Volume scoring cannot see it
+because nothing about the volume is unusual.
+processes surviving the tool call that spawned them:
+   call 2: sidecar
 
-&#x27;any refund&#x27; fires on 18 legitimate refunds - a 21% false-positive
-rate, and refunds are the business. &#x27;refund on BK-772&#x27; is perfect on this
-corpus and worthless tomorrow, because the booking id will be different.
-Only the sequence rule generalises AND stays quiet.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>All three candidates catch the incident; only the sequence rule ships. The naive rule fires on 18 legitimate refunds — a 21% false-positive rate on a business that runs on refunds.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Add a benign run that the shipped rule fires on. If you cannot construct one, your corpus is too easy.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Detection engineering <em>for</em> agents</a></strong></p>
+A background process that outlives its tool call is how a substituted
+command stays in place for the next one. This single rule is the cheapest
+detection in the set and it is specific enough to page on.
+cache integrity diff (C5.4)
+   extra-0.1.jar         UNEXPECTED - not in the manifest
+   fixtures-9.zip        MISSING - expected artifact removed
+   libtarget-1.4.jar     MODIFIED - hash mismatch
+
+credential exposure to revocation (C4.1)
+   human in the loop   hf_liveToken    public dataset card    240 min
+   automated           hf_liveToken    public dataset card      2 min
+   reported interval from discovery to redistribution: minutes
+
+exemption-state reconciliation (C6.3), day 44
+   cyber-classifier    disabled  P1 - exemption expired on day 30, auto re-enable
+   egress-allowlist    disabled  P1 - disabled with no approved exemption</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Pick the orphaned-process rule and write it for your own platform. It is one query, it has a low false-positive rate, and on most agent platforms nobody has ever run it.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Agent-assisted detection engineering — written by a loop, shipped by a human</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.2.ipynb</code></p></div><div class="pager"><a href="D2.1.html"><span class="k">← Previous</span><span class="t">D2.1 · Agent-assisted detection engineering</span></a><a class="next" href="D2.3.html"><span class="k">Next →</span><span class="t">D2.3 · Detection engineering *for* agents</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Falco</span><span>Gitleaks</span><span>Sigstore</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.2.ipynb</code></p></div><div class="pager"><a href="D2.1.html"><span class="k">← Previous</span><span class="t">D2.1 · Detections whose subject is the agent</span></a><a class="next" href="D2.3.html"><span class="k">Next →</span><span class="t">D2.3 · Agent-assisted detection engineering — written by a loop, shipped by a human</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -1,6 +1,6 @@
 """A3 — Controls: runtime, and the gateway.
 
-Chapter 2 answered "who is calling" and "where did this text come from". This
+Chapter A2 answered "who is calling" and "where did this text come from". This
 chapter assumes both have already been defeated and asks what still holds.
 
 Every control here binds below the model, where a persuaded agent cannot argue
@@ -529,7 +529,7 @@ scepticism they would apply to a colleague.
  "concept": """
 **Mitigates: every threat in this chapter, at one enforcement point.**
 
-Everything in Chapters 2 and 3 works. The problem is where it lives.
+Everything in Chapters A2 and A3 works. The problem is where it lives.
 
 At one agent, the controls sit in the agent, and that is fine. At fifty, it
 stops being fine for reasons that have nothing to do with security engineering:

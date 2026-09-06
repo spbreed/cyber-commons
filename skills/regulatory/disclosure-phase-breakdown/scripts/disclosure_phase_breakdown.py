@@ -37,7 +37,7 @@ PHASES = [
  ("alert fires → analyst picks it up",        3,  "queue depth"),
  ("confirm an incident",                      6,  "is this real?"),
  ("establish WHO acted",                     48,  "logs name the human; agents hidden"),
- ("scope what was touched",                  24,  "must walk the delegation chain (D3.8)"),
+ ("scope what was touched",                  24,  "must walk the delegation chain (D3.7)"),
  ("legal determines reportability",            8,  "needs the scope"),
  ("draft and send",                            3,  ""),
 ]

@@ -1,15 +1,15 @@
-# Track D4 — The Agentic SOC — Respond
+# Track D4 — Respond — From a Conclusion to the Actor Stopped
 
 **Function D · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Job titles:** 
+**Job titles:** Incident Responder, SOAR Engineer, Platform Security Engineer
 
-**What changes:** 
+**What changes:** A response whose blast radius is known before it fires: actions classified on reversibility and radius, tiers derived from that rather than from their author, containment timed against the attacker, and a fleet stop that revokes as well as terminates. 5 lessons.
 
-**Autonomy focus:** 
+**Autonomy focus:** Automated revocation of a non-human identity is pre-authorised; the same action against a human is not, and that asymmetry is what makes machine-speed containment safe.
 
-**Deliverable:** 
+**Deliverable:** A remediation policy and three runbooks, one per tier, each timed end to end against a measured breakout time.
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
@@ -34,7 +34,7 @@ python3 scripts/run_notebooks.py --session D4.1   # run it headless and check it
 
 ---
 
-### D4.2 — Runbook tiers: fully automated, human in the loop, manual
+### D4.2 — Runbook tiers — fully automated, human in the loop, manual
 
 - **Risk** — Everything is written as fully automated because that is the impressive demo, and the first wrong action is unrecoverable.
 - **Control** — Tier assigned from the remediation policy, with the human-in-the-loop tier carrying a real decision point rather than a confirmation dialog.
@@ -78,7 +78,7 @@ cd labs/d2-ir
 
 ---
 
-### D4.4 — Stop authority
+### D4.4 — Stop authority — who halts a fleet, and how long it takes
 
 - **Risk** — Nobody has rehearsed halting an autonomous workflow.
 - **Control** — Named holder, measured time-to-stop, tested.

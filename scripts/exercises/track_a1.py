@@ -5,7 +5,7 @@ mapped to the OWASP Agentic Security Initiative threat taxonomy. Every risk
 names the component of A1.1 that it attacks, and every lesson carries exactly
 one block of code: the risk, realised.
 
-The controls are Chapters 2 and 3. Nothing here is fixed in this chapter, on
+The controls are Chapters A2 and A3. Nothing here is fixed in this chapter, on
 purpose — you cannot choose a control for a risk you cannot yet describe.
 """
 

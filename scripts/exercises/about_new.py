@@ -20,7 +20,7 @@ ABOUT: dict[str, str] = {
 **Why a security engineer needs it.** Detections encode behaviour somebody already understood. Everything outside them is invisible, and the agent behaviour worth catching is usually behaviour nobody had thought to write a rule for. The discipline is in the scoring: the hypothesis that feels most obviously right is often a description of normal work, and shipping it costs a quarter of everyone's attention.
 """,
 
-"D2.2": """
+"D2.4": """
 **What it covers.** Generating a detection rule from a reconstructed incident, and measuring it against benign traffic before it ships.
 
 **Why a security engineer needs it.** An incident is the richest source of a good rule and the easiest source of a bad one, because every candidate you write from it catches it. The property that decides deployability is the false-positive rate on traffic that is not the incident — which means a benign corpus containing the hard cases, not unrelated noise.
@@ -32,7 +32,7 @@ ABOUT: dict[str, str] = {
 **Why a security engineer needs it.** Incident response grants the broadest read access in the organisation, at the moment of least supervision, often to an agent. That grant is frequently larger than the incident being investigated. Bounding it per investigation class, in advance, is the difference between a response and a second breach — and the refusal log is the evidence you were on the right side of that.
 """,
 
-"D3.3": """
+"D3.6": """
 **What it covers.** Investigations that abandon a hypothesis when the evidence refutes it, and keep the abandoned branch visible in the trace.
 
 **Why a security engineer needs it.** Agents score evidence on support, so evidence that supports nothing reads as noise — and refutation is precisely what should force a replan. The result is an investigator that spends the whole incident confirming step one. A conclusion with no visible alternatives also cannot be audited: a reviewer needs to see what was considered and dropped.
@@ -56,7 +56,7 @@ ABOUT: dict[str, str] = {
 **Why a security engineer needs it.** Incidents that close with a narrative recur, because nothing in a narrative can be built or measured. Naming the control makes the finding actionable and gives the next stage something to verify. The test is mechanical on purpose — "the engineer missed the alert" is true, and it is not a root cause.
 """,
 
-"D5.3": """
+"D5.4": """
 **What it covers.** Re-measuring the key control indicators an incident moved, after the fix, and reporting which were actually restored.
 
 **Why a security engineer needs it.** A closed ticket is not evidence that a control came back. Automating the re-measurement is what makes it happen on every fix rather than the memorable ones — and it routinely finds that an indicator improved without reaching target, which reads as "done" in every system that does not check.
@@ -90,7 +90,7 @@ CYBERTRAVELS: dict[str, str] = {
         "reconciliation, which is exactly the kind of legitimate oddity that "
         "makes an obvious hunt useless in a real estate.",
 
-"D2.2": "The incident is CyberTravels': the Workflow Agent issued a refund "
+"D2.4": "The incident is CyberTravels': the Workflow Agent issued a refund "
         "against a booking nobody asked it to touch. The benign corpus is the "
         "hard one on purpose — CyberTravels processes eighteen legitimate "
         "refunds in the same window, and a rule that cannot tell them apart "
@@ -102,7 +102,7 @@ CYBERTRAVELS: dict[str, str] = {
         "matters is the one asking for ninety thousand rows of a source that "
         "IS admitted — CyberTravels' whole gateway log, which is a copy.",
 
-"D3.3": "The investigation is CyberTravels' refund incident, and the branch "
+"D3.6": "The investigation is CyberTravels' refund incident, and the branch "
         "that gets abandoned is the one everybody starts with: the Workflow "
         "Agent issued the refund, so the Workflow Agent is the problem. The "
         "evidence that kills it is that the agent's own plan for that run "
@@ -129,7 +129,7 @@ CYBERTRAVELS: dict[str, str] = {
         "cause; the stop lever nobody pulled is evidence about the detection "
         "in front of it.",
 
-"D5.3": "The six indicators are CyberTravels' own, and two of them do not "
+"D5.4": "The six indicators are CyberTravels' own, and two of them do not "
         "come back: refunds carrying an approval, and the time to detect a "
         "scope breach. CyberTravels' detection went from 194 minutes to 118 "
         "against a fifteen-minute target — a real improvement that would "

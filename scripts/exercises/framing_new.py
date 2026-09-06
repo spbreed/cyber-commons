@@ -20,7 +20,7 @@ HOOKS: dict[str, str] = {
  "hypothesis that feels most obviously right is usually a description of "
  "the overnight batch doing its job.",
 
-"D2.2":
+"D2.4":
  "You have just reconstructed an incident and the rule almost writes itself. "
  "That is the problem: every rule you could write catches the incident, "
  "because you wrote it from the incident. What decides whether it ships is "
@@ -32,7 +32,7 @@ HOOKS: dict[str, str] = {
  "problem was. Admission rules are how the response avoids becoming the "
  "second incident.",
 
-"D3.3":
+"D3.6":
  "An agent forms a hypothesis at step one and spends the rest of the "
  "incident finding evidence for it. The evidence that should have stopped it "
  "supports nothing at all — which is exactly why an agent scoring only "
@@ -54,7 +54,7 @@ HOOKS: dict[str, str] = {
  "is useless, and it will be true again next quarter about somebody else. A "
  "root cause names a control, or it names nothing that can be built.",
 
-"D5.3":
+"D5.4":
  "The ticket is closed and the incident is marked remediated. Re-measure the "
  "indicators it moved and two of them never came back — including the "
  "detection time, which improved from 194 minutes to 118 and is still eight "
@@ -112,7 +112,7 @@ DIAGRAMS: dict[str, str] = {
    fourteen runs to find two, because twelve are the nightly batch
 """,
 
-"D2.2": """
+"D2.4": """
    incident trace
         |
         v
@@ -152,7 +152,7 @@ DIAGRAMS: dict[str, str] = {
    400 rows is an investigation and 90,000 is a copy
 """,
 
-"D3.3": """
+"D3.6": """
    evidence        supports?        the plan
 
    1 refund at 03:14   misuse|theft   agent-misuse
@@ -191,7 +191,7 @@ DIAGRAMS: dict[str, str] = {
    A2.6  provenance at ingress           absent   <- first absent = ROOT
    A3.1  default-deny on the tool call   wrong scope
    D2.1  detection: refund w/o approval  absent   <- contributing
-   D1.3  drift on vendor tool descs      absent   <- contributing
+   D1.4  drift on vendor tool descs      absent   <- contributing
    D4.4  stop authority in the window    PRESENT  <- and never reached
 
    a control that exists but is never reached is not a mitigating factor.
@@ -201,7 +201,7 @@ DIAGRAMS: dict[str, str] = {
                     names a person  -> rejected, however true
 """,
 
-"D5.3": """
+"D5.4": """
    kci        healthy   during     after fix    verdict
 
    KCI-01      1.00      0.41       1.00        restored
@@ -275,64 +275,77 @@ DIAGRAMS["D5.5"] = """
 
 BRIDGES: dict[str, dict[str, str]] = {
 
+# Each one closes on the interval the chapter shortened and names the next one.
+
 "D1": {
- "gained": "You can collect agent telemetry, tell an agent's tempo from a "
-           "human's, watch for behavioural drift, and run a hypothesis-first "
-           "hunt that reports precision rather than anecdotes.",
- "gap": "Everything you found is a finding in a notebook. Nothing you have "
-        "built fires on its own tomorrow, and a hunt that is not promoted to "
-        "a detection is a quarter spent proving something once.",
- "next": "Chapter D2 is detection engineering: turning what the hunt found "
-         "into rules, generating them from incidents, and measuring the "
-         "false-positive rate before any of them ship.",
+ "gained": "You can shorten discover: agent telemetry onboarded as a real log "
+           "source, agents told apart from the humans whose authority they "
+           "hold, intel that has to become a rule to count, drift caught "
+           "without a code change, and a hunt that reports precision rather "
+           "than anecdotes.",
+ "gap": "Everything you found is a finding in a notebook. Nothing built here "
+        "fires on its own tomorrow, so the detect interval is exactly where it "
+        "was — and a hunt that is never promoted is a quarter spent proving "
+        "something once.",
+ "next": "Chapter D2 shortens detect: detections for the two subjects that "
+         "matter, the loop that writes them, and the benign corpus that "
+         "decides whether any of them ship.",
 },
 
 "D2": {
- "gained": "You can write detections for agent behaviour, generate them from "
-           "a reconstructed incident, score them against benign traffic, and "
-           "cover the agent platform itself rather than only its output.",
- "gap": "A detection fires. It does not investigate. You have no way yet to "
-        "let an agent pull the evidence together without granting it the "
-        "access the incident was about.",
- "next": "Chapter D3 is investigation: admission rules on what the "
-         "investigating agent may touch, plans that survive contradiction, "
-         "and correlation across a fleet.",
+ "gained": "You can shorten detect for both subjects — what an agent does to "
+           "your estate and what happens to the platform running it — write "
+           "rules with a loop, score them against traffic that is not the "
+           "incident, and run the one detector that needs no threshold at all.",
+ "gap": "A detection fires. It does not investigate. Understanding still costs "
+        "an analyst's reading speed, and the obvious fix — hand an agent broad "
+        "read across the estate — is frequently what the incident was.",
+ "next": "Chapter D3 shortens understand, and spends part of it deliberately: "
+         "admission rules before anything runs, plans that survive "
+         "contradiction, and scope that follows the delegation graph.",
 },
 
 "D3": {
- "gained": "You can scope an agentic incident, bound what the investigating "
-           "agent may read, correlate across a fleet, and read a trace where "
-           "the investigation changed its mind and said so.",
+ "gained": "You can end the understand interval honestly: the investigator "
+           "bounded before it starts, an alert carrying the fields agent triage "
+           "needs, a trace where the first theory was abandoned in the open, "
+           "scope walked along the delegation graph, and coordination that only "
+           "exists in the population.",
  "gap": "You know what happened and you have not stopped it. Every lever you "
-        "might pull is still chosen in the moment by whoever is awake.",
- "next": "Chapter D4 is response: the remediation policy that decides what "
-         "may happen without asking, and the three runbook tiers that policy "
-         "produces.",
+        "might pull is still chosen in the moment by whoever is awake, so the "
+        "contain interval is whatever that person's night is like.",
+ "next": "Chapter D4 makes contain a number you set in advance: the remediation "
+         "policy that decides what may happen without asking, and the three "
+         "runbook tiers that policy produces.",
 },
 
 "D4": {
- "gained": "You can classify a remediation action on reversibility and blast "
-           "radius, derive its runbook tier from policy rather than "
-           "confidence, contain at machine speed and stop a fleet.",
- "gap": "The incident is contained and nothing has been learned. No control "
-        "has been named, no indicator re-measured, and the policy that "
-        "allowed it is exactly as it was.",
- "next": "Chapter D5 closes the loop: the root cause record, validating the "
-         "fix against the KCIs, and proposing the policy change with the "
-         "incident attached as evidence.",
+ "gained": "You can fix the contain interval before the incident — actions "
+           "classified on reversibility and radius, tiers derived from that "
+           "rather than from their author, containment timed against a measured "
+           "breakout, and a fleet stop that revokes as well as terminates.",
+ "gap": "The incident is contained and nothing has been learned. No control has "
+        "been named, no measurement re-read, and the policy that permitted it "
+        "is exactly as it was — so the next occurrence starts every interval "
+        "again from the top.",
+ "next": "Chapter D5 is the last interval, recover: the root cause record, the "
+         "layer the fix belongs in, the re-measurement that decides whether it "
+         "worked, and the policy change with the incident attached.",
 },
 
 "D5": {
- "gained": "You can close an incident with a root cause that names a control, "
-           "prove the fix by re-measuring the indicators it claimed to "
-           "restore, and propose the policy change as a reviewable diff.",
- "gap": "All of it runs inside your own organisation. Nothing here tells you "
-        "which of these controls a regulator will ask for, on what date, or "
-        "what evidence they will accept.",
- "next": "Function E is governance, and it is told in the unit D5.3 already "
-         "used: the key control indicator. E1.1 defines it, the rest of the "
-         "function builds, evidences and runs it. Next → E1.0, what AI "
-         "governance means.",
+ "gained": "You can close an incident properly: a run you can reproduce, a root "
+           "cause naming a control rather than a person, the fix at the right "
+           "layer, the indicators re-read to see which actually came back, and "
+           "the policy change as a reviewable diff.",
+ "gap": "All five intervals are now yours to measure — and one is not. The "
+        "regulatory clock started at awareness, and nothing here tells you "
+        "which controls a supervisor will ask for, on what date, or what "
+        "evidence they will accept.",
+ "next": "Function E is governance, and it is told in the unit D5.4 already "
+         "used: the key control indicator. E1.1 defines it, and the rest of the "
+         "function builds it, evidences it and runs it as a programme. "
+         "Next → E1.0, what AI governance means.",
 },
 
 }

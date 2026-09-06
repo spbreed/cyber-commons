@@ -390,39 +390,39 @@ HOOKS: dict[str, str] = {
  "a different quality bar and a much worse failure mode: confident, fast, and "
  "wrong at volume.",
 
-"D3.6":
+"D3.3":
  "Most bad triage is not a bad model. It is an agent asked to decide without the "
  "identity, asset and history context a human analyst would have pulled without "
  "noticing they pulled it.",
 
-"D2.1":
+"D2.3":
  "An agent can write and tune a detection far faster than you can, which means "
  "it can also ship a confident, wrong rule into production far faster than you "
  "can. The validation discipline is the whole of the value.",
 
-"D2.3":
+"D2.1":
  "Writing a detection for an agent means writing one where machine-speed "
  "behaviour is normal and the baseline has no human rhythm in it at all. Every "
  "heuristic that relies on tiredness, working hours or typing speed is gone.",
 
-"D1.2":
+"D1.1":
  "You cannot detect on telemetry that was never emitted. Prompts, tool calls, "
  "decisions and identities are the four things an agent has to emit to be "
  "observable at all — and none of them appear in a standard application log.",
 
-"D1.4":
+"D1.2":
  "The agent holds a human's authority and acts under a human's name. "
  "Conventional UEBA reads that as the human behaving strangely, and the entire "
  "attribution question — was this a person or their agent — has no field to "
  "answer it.",
 
-"D1.3":
+"D1.4":
  "Nothing was attacked. The model was upgraded, a prompt was edited, a tool "
  "changed its output format — and the behaviour of the system moved. Drift is "
  "the failure mode with no adversary, and it is far more common than the ones "
  "with one.",
 
-"D1.1":
+"D1.3":
  "Two intel questions, not one: how adversaries are using AI, and who is coming "
  "for the AI you run. Most programmes track the first because it is written "
  "about, and the second is the one that reaches your estate.",
@@ -432,12 +432,12 @@ HOOKS: dict[str, str] = {
  "the failure mode: a timeline that is 95% right and completely confident is "
  "worse than no timeline, because somebody will make decisions on it.",
 
-"D3.7":
+"D3.4":
  "The internal actor was autonomous. Was it instructed, was it compromised, or "
  "did it simply do what it was allowed to do? None of your existing playbooks "
  "have a branch for that question, and the answer changes everything downstream.",
 
-"D3.8":
+"D3.7":
  "The agent acted for eleven minutes on delegated credentials at machine speed. "
  "Scoping that means reconstructing blast radius from identity and egress logs, "
  "because asking what it touched is not a question anyone can answer from "
@@ -453,7 +453,7 @@ HOOKS: dict[str, str] = {
  "never had to: not just what it did, but what it saw and what it decided. If "
  "the context was not recorded, the decision cannot be reconstructed at all.",
 
-"D5.4":
+"D5.3":
  "After an agentic incident the change surface is not the code. It is prompts, "
  "tool scopes, model versions and policy — four things with no release process, "
  "no review and, usually, no version history.",
@@ -661,13 +661,13 @@ HOOKS: dict[str, str] = {
  "finding can be cited alone, type every control, and give each one an owner "
  "who will test it.",
 
-"D2.4":
+"D2.2":
  "The escape, the poisoned cache entry and the silently expired exemption all "
  "look like normal operation from inside the workload. These are detections "
  "whose subject is the platform running the agent, and not one of them reads "
  "the agent's own logs.",
 
-"D3.4":
+"D3.8":
  "Every run in the source incident, examined alone, was an agent doing "
  "plausible work on its assigned task. The swarm existed only in the "
  "population — which is why per-run monitoring missed it by construction rather "
@@ -1589,7 +1589,7 @@ DIAGRAMS: dict[str, str] = {
    new failure mode: confident, fast, and wrong at volume
 """,
 
-"D3.6": """
+"D3.3": """
    the alert                what a human would have pulled without thinking
    +----------------+       +-----------------------------------+
    | user: dana     |  -->  | is dana on call?                  |
@@ -1600,7 +1600,7 @@ DIAGRAMS: dict[str, str] = {
    most bad triage is missing context, not a weak model
 """,
 
-"D2.1": """
+"D2.3": """
    agent writes rule --> test corpus --> tuned rule --> production
                               ^
                        +------+-------+
@@ -1612,7 +1612,7 @@ DIAGRAMS: dict[str, str] = {
    the speed is real. so is the speed of shipping a wrong rule.
 """,
 
-"D2.3": """
+"D2.1": """
    human baseline                agent baseline
    +-------------------+         +----------------------+
    | works 9-6         |         | works always         |
@@ -1624,7 +1624,7 @@ DIAGRAMS: dict[str, str] = {
    sequences, a spike in distinct destinations
 """,
 
-"D1.2": """
+"D1.1": """
    what an agent must emit to be observable at all
 
    +------------+  +-------------+  +-----------+  +------------+
@@ -1637,7 +1637,7 @@ DIAGRAMS: dict[str, str] = {
                    retention is expensive and the cost is real
 """,
 
-"D1.4": """
+"D1.2": """
    the log says                    the truth is
    +--------------------+          +---------------------------+
    | user: dana@corp    |          | dana's agent, acting for  |
@@ -1648,7 +1648,7 @@ DIAGRAMS: dict[str, str] = {
    the missing field is not "suspicious" - it is "actor_type"
 """,
 
-"D1.3": """
+"D1.4": """
    nothing was attacked
 
    model upgraded ----+
@@ -1659,7 +1659,7 @@ DIAGRAMS: dict[str, str] = {
    the control: a fixed probe suite, run on every change
 """,
 
-"D1.1": """
+"D1.3": """
    two intel questions, only one of which is well covered
 
    how adversaries use AI        who is coming for the AI you run
@@ -1681,7 +1681,7 @@ DIAGRAMS: dict[str, str] = {
                               unsourced claim -> not in the timeline
 """,
 
-"D3.7": """
+"D3.4": """
    the internal actor was autonomous. which branch?
 
    instructed      someone told it to        -> who, and through what channel
@@ -1691,7 +1691,7 @@ DIAGRAMS: dict[str, str] = {
    no existing playbook has this branch, and it changes everything after it
 """,
 
-"D3.8": """
+"D3.7": """
    11 minutes at machine speed
 
    identity log ---+                    +--> resources touched
@@ -1724,7 +1724,7 @@ DIAGRAMS: dict[str, str] = {
    if the context was not recorded, the decision cannot be reconstructed
 """,
 
-"D5.4": """
+"D5.3": """
    the change surface after an agentic incident
 
    +---------+ +--------+ +----------+ +---------+
@@ -2203,7 +2203,7 @@ DIAGRAMS: dict[str, str] = {
    filed apart, three teams each fix a third and the surface remains
 """,
 
-"D2.4": """
+"D2.2": """
    subject of the detection = the platform, not the workload
 
    escape primitives      ptrace non-child . LD_PRELOAD . /proc/self/mem
@@ -2219,7 +2219,7 @@ DIAGRAMS: dict[str, str] = {
    exemption drift        live control state vs the approved register
 """,
 
-"D3.4": """
+"D3.8": """
    per-run view                    fleet view
 
    run-01  on task, in policy      obj-A written by run-01
@@ -2321,7 +2321,7 @@ BRIDGES: dict[str, dict[str, str]] = {
  "gap": "You have run a procedure and you cannot yet say what it is for. The "
         "preflight proved the machinery works; it proved nothing about "
         "agentic systems, which is the only reason any of this exists.",
- "next": "Chapter 1 draws the system everything else in the commons names — "
+ "next": "Chapter A1 draws the system everything else in the commons names — "
          "CyberTravels, its components, and the fifteen risks that "
          "architecture makes possible. Next → A1.0, what securing an AI "
          "architecture means.",
@@ -2336,7 +2336,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "precisely how a system fails and you have no control to point at — "
         "which is deliberate, because a control chosen before the risk is named "
         "is a control chosen by whoever sold it to you.",
- "next": "Chapter 2 starts closing them, and it starts with the two that close "
+ "next": "Chapter A2 starts closing them, and it starts with the two that close "
          "the most: knowing who is calling, and marking what came in from "
          "outside. Next → A2.1, agent identity.",
 },
@@ -2351,7 +2351,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "is stolen, a delegation chain is forged, or an injection arrives "
         "through a channel you marked as principal — and A1.2 through A1.8 are "
         "all still reachable that way.",
- "next": "Chapter 3 is what holds after identity has already failed: the tool "
+ "next": "Chapter A3 is what holds after identity has already failed: the tool "
          "call, the sandbox, the network boundary, and the ceiling on the run. "
          "Next → A3.1, default-deny on the tool call.",
 },
@@ -2370,21 +2370,8 @@ BRIDGES: dict[str, dict[str, str]] = {
          "in this chapter. Next → B2.0, what an AI SDLC means.",
 },
 
-"B1": {
- "gained": "A harness you can name the parts of, a verifier you can rank "
-           "against the three weaker kinds, and a decision you can defend for "
-           "every stage you are about to build — whether you draw the path, the "
-           "model picks it, or a server you do not operate decides what is even "
-           "callable.",
- "gap": "You have the machinery and no pipeline. Pointed at CyberTravels' "
-        "repository it would review whatever it happened to open first, which "
-        "for a four-million-line estate is the same as reviewing nothing — and "
-        "nothing so far says which techniques belong before a deploy and which "
-        "only work after one.",
- "next": "Chapter 5 is the pipeline that decides: fifteen stages, in order, "
-         "from git history to a severity somebody acts on. Next → B2.0, what "
-         "an AI SDLC means, and what applies where.",
-},
+# B1 was folded into B2 when the SDLC track was rebuilt. Its bridge outlived
+# the track and pointed forward to a chapter that is now B2 itself.
 
 "B2": {
  "gained": "A harness you can name the eight parts of, evaluate on a corpus "
@@ -2407,7 +2394,7 @@ BRIDGES: dict[str, dict[str, str]] = {
  "gap": "Every number in this chapter came out of one harness, on one day, run "
         "by you. Nothing in it separates what the model did from what your "
         "scaffolding did, and nothing survives you leaving.",
- "next": "Chapter 7 is the discipline that fixes both: reproducibility, "
+ "next": "Chapter C2 is the discipline that fixes both: reproducibility, "
          "benchmark critique, and the handover that turns a finding into "
          "somebody else's control. Next → C2.1, what research means in a CISO "
          "org.",
@@ -2426,37 +2413,13 @@ BRIDGES: dict[str, dict[str, str]] = {
         "and the register you just built assigned twelve controls to a function "
         "you have not read yet.",
  "next": "Function D is the operational half — detecting an actor that acts a "
-         "thousand times an hour, and stopping it. Next → D1.0, what AI for "
-         "security operations means.",
+         "thousand times an hour, and stopping it — five chapters, one per "
+         "phase. Next → D1.0, what an agentic SOC means.",
 },
 
-"D1": {
- "gained": "Triage as a loop you supervise, detections written for machine-tempo "
-           "actors, agent telemetry as a real data source, agent-versus-human "
-           "attribution, drift monitoring — and the two the incident register "
-           "adds: detections whose subject is the platform, and analytics that "
-           "read across runs rather than within them.",
- "gap": "Detection ends at the alert. Every lesson here stops one step before "
-        "the hard part — a fleet that is acting right now, on delegated "
-        "credentials, faster than the person reading the alert can type.",
- "next": "Chapter 9 is that step: scope it, contain it, replay it, and decide in "
-         "advance who is allowed to stop it. Next → D3.5, agent-assisted "
-         "reconstruction.",
-},
-
-"D2": {
- "gained": "An incident practice for an autonomous actor: reconstruct the "
-           "timeline with every claim sourced, scope the blast radius from "
-           "identity and egress logs, contain in seconds rather than hours, a "
-           "named person with stop authority at 3am, and one tested switch that "
-           "stops a whole fleet and revokes what it was holding.",
- "gap": "All of it is one incident at a time. Nothing here tells you whether the "
-        "estate as a whole is governed — how many agents exist, who owns them, "
-        "which controls apply, and what you would tell a regulator on the "
-        "Monday.",
- "next": "Function E is the estate view, and it starts by being precise about a "
-         "phrase everyone uses loosely. Next → E1.0, what AI governance means.",
-},
+# Function D's five chapter bridges live in framing_new.py. The two that used to
+# sit here described a two-chapter Function D and were already dead —
+# BRIDGES.update() overrode both — so they are gone rather than stale.
 
 "E1": {
  "gained": "A key control indicator you can compute, and everything it needs to "
@@ -2467,7 +2430,7 @@ BRIDGES: dict[str, dict[str, str]] = {
  "gap": "Every one of those indicators answers to you. A regulator does not ask "
         "what you measured; they ask which obligation it discharges, on what "
         "evidence, and whether the reading predates the incident.",
- "next": "Chapter 11 points the same indicators outward — one measured control "
+ "next": "Chapter E2 points the same indicators outward — one measured control "
          "set quoted to several regimes, and documentation that is a series of "
          "readings rather than a description. Next → E2.1, the regulatory map.",
 },
@@ -2482,7 +2445,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "cannot say which one to fix first, who is funded to fix it, or what "
         "happens when the board is shown a number nobody in the room can "
         "re-compute.",
- "next": "Chapter 12 runs the indicators as a programme, from the CISO office. "
+ "next": "Chapter E3 runs the indicators as a programme, from the CISO office. "
          "Next → E3.1, translating agentic risk upward.",
 },
 

@@ -185,14 +185,14 @@ REGISTER = [
   "resource manager — all reachable through interconnected workflows.",
   "Segment agents by trust zone, identity-aware policy per agent, per-agent "
   "circuit breakers, and behavioural baselines with throttling.",
-  "A3.3, A3.7, D3.8"),
+  "A3.3, A3.7, D3.7"),
  ("R10", "Privacy information in logs",
   "Names, passport numbers and payment details are written to logs in "
   "plaintext, to help debug bookings, and the bucket has no access control.",
   "Field-level masking at ingestion, redaction in memory before storage, "
   "auto-expiry of anything holding PII, and encrypted access-controlled "
   "storage.",
-  "D1.2, E2.5, A2.7"),
+  "D1.1, E2.5, A2.7"),
  ("R11", "No identity lineage",
   "Six people on Alex's team invoke CyberTravels daily. Every log line says "
   "“CyberTravels”. When the refunds are questioned, nobody can say who "
@@ -480,30 +480,30 @@ GROUNDING: dict[str, str] = {
 "D3.1": "The analyst on CyberTravels' alerts stops triaging and starts supervising "
         "something that triages — which is a different skill, with a worse "
         "failure mode: confident, fast, and wrong at volume.",
-"D3.6": "An alert saying `cybertravels-svc listed all customer records` is "
+"D3.3": "An alert saying `cybertravels-svc listed all customer records` is "
         "untriageable without knowing whether that is its job. Most bad triage "
         "at CyberTravels is missing context, not a weak model.",
-"D2.1": "An agent can write and tune a detection for CyberTravels' behaviour far "
+"D2.3": "An agent can write and tune a detection for CyberTravels' behaviour far "
         "faster than the detection engineer can — including a confident, wrong "
         "one, shipped to production.",
-"D2.3": "Writing a detection where the subject is CyberTravels means writing one "
+"D2.1": "Writing a detection where the subject is CyberTravels means writing one "
         "where 1,400 actions an hour is normal and every heuristic that relies "
         "on human rhythm is gone.",
-"D1.2": "You cannot detect on what CyberTravels never emitted. Prompts, tool calls, "
+"D1.1": "You cannot detect on what CyberTravels never emitted. Prompts, tool calls, "
         "decisions and identities are the four things missing from every "
         "application log CyberTravels has. R10, R11.",
-"D1.4": "CyberTravels acts under Alex's authority and in Alex's name. Conventional "
+"D1.2": "CyberTravels acts under Alex's authority and in Alex's name. Conventional "
         "UEBA reads that as Alex behaving strangely at 3am. R11.",
-"D1.3": "Nothing was attacked. The model provider upgraded, Alex edited a "
+"D1.4": "Nothing was attacked. The model provider upgraded, Alex edited a "
         "prompt, the tool manifest changed — and CyberTravels' baseline moved "
         "underneath every detection built on it.",
-"D1.1": "Two intel questions for CyberTravels: how adversaries use agents, and "
+"D1.3": "Two intel questions for CyberTravels: how adversaries use agents, and "
         "who is coming for CyberTravels. The second is the one that reaches the "
         "booking API.",
-"D2.4": "Detections whose subject is the platform CyberTravels runs on, not the "
+"D2.2": "Detections whose subject is the platform CyberTravels runs on, not the "
         "agents themselves — the escape, the poisoned package cache, the credential loose "
         "on the internet, the guardrail still switched off after the demo.",
-"D3.4": "Four agents, thousands of runs. Coordination between runs that should "
+"D3.8": "Four agents, thousands of runs. Coordination between runs that should "
          "be independent is invisible to per-run monitoring by construction — "
          "and the shared package cache in R4 is exactly the surface it would use.",
 
@@ -511,10 +511,10 @@ GROUNDING: dict[str, str] = {
 "D3.5": "Reconstructing what CyberTravels did across six log sources is reading, and "
         "agents read fast. A timeline that is 95% right and fully confident is "
         "worse than none.",
-"D3.7": "The internal actor was the Workflow Agent. Was it instructed, injected, "
+"D3.4": "The internal actor was the Workflow Agent. Was it instructed, injected, "
         "or simply permitted? CyberTravels' existing playbook has no branch for "
         "that question, and every step of it assumes a person.",
-"D3.8": "Eleven minutes of CyberTravels on delegated credentials. What it touched is "
+"D3.7": "Eleven minutes of CyberTravels on delegated credentials. What it touched is "
         "not answerable from memory — it comes out of the identity and egress "
         "logs, if they exist. R9.",
 "D4.3": "You have to stop CyberTravels faster than it issues refunds. The containment "
@@ -523,7 +523,7 @@ GROUNDING: dict[str, str] = {
 "D5.1": "Not just what the agent did, but what it saw and what it decided. If "
         "the booking note that triggered the refund was not recorded, the "
         "decision cannot be reconstructed at all. R11.",
-"D5.4": "After the incident CyberTravels changes prompts, tool scopes, model "
+"D5.3": "After the incident CyberTravels changes prompts, tool scopes, model "
         "versions and policy — four things with no release process and no "
         "version history.",
 "D4.4": "At three in the morning, who is allowed to stop all four agents without "

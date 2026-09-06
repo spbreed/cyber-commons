@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.4 — Distinguishing agent from human | Cyber Commons</title><meta name="description" content="Behavioural signatures separating agent from inherited human."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Discover</div><div class="sid">D1.4</div><h1>Distinguishing agent from human</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Your earliest Shadow Autonomy signal is invisible.</p></div><div class="ctrl"><div class="lab">Control</div><p>Behavioural signatures separating agent from inherited human.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build the classifier on timing, sequencing and volume features.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/agent-versus-human-scoring/scripts/agent_versus_human_scoring.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.4 · Distinguishing agent from human</h1>
-<p><strong>Function D — The Agentic SOC → The Agentic SOC — Discover</strong></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Drift monitoring</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.4 — Drift monitoring — behaviour that changes without a code change | Cyber Commons</title><meta name="description" content="Watch model updates, prompt changes, index refreshes, tool versions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › Discover — Making the Actor Visible</div><div class="sid">D1.4</div><h1>Drift monitoring — behaviour that changes without a code change</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.4.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A detection that worked last month is silently degraded.</p></div><div class="ctrl"><div class="lab">Control</div><p>Watch model updates, prompt changes, index refreshes, tool versions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Change the model underneath and catch the detection regression.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/behavioural-drift-monitor/scripts/behavioural_drift_monitor.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.4 · Drift monitoring — behaviour that changes without a code change</h1>
+<p><strong>Function D — The Agentic SOC → Discover — Making the Actor Visible</strong></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Threat intelligence that becomes a detection</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,142 +11,121 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>OpenSearch, Llama 3.3, Claude Haiku 4.5</td>
+<td>promptfoo, GLM-4.6, Claude Haiku 4.5</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Build the classifier on timing, sequencing and volume features.</p>
-<p><strong>Why a security engineer needs it.</strong> Your earliest Shadow Autonomy signal is invisible. The control it builds is: behavioural signatures separating agent from inherited human.</p>
+<p><strong>What it covers.</strong> Change the model underneath and catch the detection regression.</p>
+<p><strong>Why a security engineer needs it.</strong> A detection that worked last month is silently degraded. The control it builds is: watch model updates, prompt changes, index refreshes, tool versions.</p>
 <p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>The agent holds a human's authority and acts under a human's name. Conventional UEBA reads that as the human behaving strangely, and the entire attribution question — was this a person or their agent — has no field to answer it.</p>
+<p>Nothing was attacked. The model was upgraded, a prompt was edited, a tool changed its output format — and the behaviour of the system moved. Drift is the failure mode with no adversary, and it is far more common than the ones with one.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> CyberTravels acts under Alex's authority and in Alex's name. Conventional UEBA reads that as Alex behaving strangely at 3am. R11.</p>
+<p><strong>At CyberTravels.</strong> Nothing was attacked. The model provider upgraded, Alex edited a prompt, the tool manifest changed — and CyberTravels' baseline moved underneath every detection built on it.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   the log says                    the truth is
-   +--------------------+          +---------------------------+
-   | user: dana@corp    |          | dana's agent, acting for  |
-   | action: deploy     |          | dana, at 03:14            |
-   +--------------------+          +---------------------------+
+<pre><code>   nothing was attacked
 
-   UEBA reads this as dana behaving strangely.
-   the missing field is not &quot;suspicious&quot; - it is &quot;actor_type&quot;
+   model upgraded ----+
+   prompt edited  ----+---&gt; behaviour moves ---&gt; baselines stale
+   tool changed   ----+                          detections silent
+
+   drift is the failure mode with no adversary, and the common one
+   the control: a fixed probe suite, run on every change
 </code></pre>
-<p>Distinguishing agent from human in telemetry matters because the ones you most
-need to find are the ones not in any registry (A3.7).</p>
-<p>Three signals, none sufficient alone:</p>
-<ul>
-<li><strong>Regularity</strong> — the coefficient of variation of inter-arrival times. Humans
-  are irregular; loops are metronomic.</li>
-<li><strong>Rate</strong> — sustained multi-action-per-second activity is not typing.</li>
-<li><strong>Continuity</strong> — software has no evenings.</li>
-</ul>
-<p>The honest part of this lesson is the error analysis, because the two error
-directions are not symmetric:</p>
-<ul>
-<li>A <strong>human misclassified as an agent</strong> triggers an investigation. Mild cost,
-  self-correcting.</li>
-<li>An <strong>agent misclassified as human</strong> stays invisible, which is the entire risk
-  you were trying to address.</li>
-</ul>
-<p>That asymmetry decides the threshold, and it argues for a lower one than
-accuracy-maximisation would give you.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>The skill scores five actors on behaviour rather than on what they claim to be, sweeps the threshold, and then picks it by expected cost — because a flagged human costs half an analyst-hour and a missed agent costs forty.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-versus-human-scoring/SKILL.md"><code>skills/detection/agent-versus-human-scoring/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: agent-versus-human-scoring
+<p>Drift monitoring exists because an agent's behaviour changes <strong>without a code
+change</strong>. A new model version, an edited prompt, an added tool — none of these
+pass through the change management process built for code, and all of them
+invalidate the testing your controls were signed off against.</p>
+<p>That is the precise claim: the control was tested against a behaviour that no
+longer exists. It has not failed; it is <em>unevidenced</em>, which is a different and
+more honest state.</p>
+<p>Two things are needed:</p>
+<ol>
+<li>A <strong>signed-off baseline</strong> — what normal looked like when the control passed.</li>
+<li>A <strong>freshness window</strong> on the control test, derived from how fast the thing
+   it tests actually drifts.</li>
+</ol>
+<p>E1.7 turns the second into a compliance posture. This lesson produces the signal.</p>
+<blockquote>
+<p><strong>Anchor → D1.0.</strong> Drift lengthens every interval at once, silently. The model was upgraded, a prompt was edited, and the control is now unevidenced against behaviour that no longer exists — so the discover clock restarts without anybody starting it.</p>
+</blockquote></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">change surface</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">in change management?</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">what happens today</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">application code</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">pull request, review, CI</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">agent prompt</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">edited in a console</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">tool manifest</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a config change, with no threat-model diff</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">model version</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">provider-side; you may not be told</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">policy</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">yes</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">if it is in git — often it is not</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">approval settings</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>no</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">a toggle in an admin UI</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">Four of six surfaces bypass change management entirely. Drift is the failure mode with no adversary, and this table is why it is also the failure mode with no ticket.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Four of six things that change an agent's behaviour never reach change management. The skill counts them, then tracks drift across a quarter and attributes the rise that coincides with the model upgrade — and the one that does not.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/behavioural-drift-monitor/SKILL.md"><code>skills/detection/behavioural-drift-monitor/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: behavioural-drift-monitor
 description: &gt;-
-  Score actors on behavioural signals to separate agents from people, sweep the
-  threshold, and pick it by expected cost rather than by accuracy. Use when
-  deciding whether a session is automated, or when unregistered automation needs
-  finding.
+  Track an agent's drift from its signed-off baseline across a quarter and count
+  how many of the surfaces that change its behaviour bypass change management.
+  Use when an agent behaves differently than it was approved to, with no code
+  change to point at.
 allowed-tools: Read, Grep, Glob
 </code></pre>
-<h1>Pick the threshold by what each mistake costs</h1>
-<p>Separating agent from human is a scoring problem with two asymmetric errors: a
-flagged human costs an analyst half an hour, and a missed agent costs whatever
-an unmonitored automation does. Choosing the threshold by accuracy weights those
-equally, which is the one thing you know is wrong.</p>
+<h1>Four of six things that change an agent are not code changes</h1>
+<p>The model version, the prompt, the tool manifest and the approval settings all
+change what an agent does, and none of them generates a change record. So drift
+is the only signal that the approved system and the running system have diverged,
+and it has to be measured rather than inferred from a changelog.</p>
 <h2>When to use this</h2>
-<p>Finding unregistered automation, deciding whether a session is a person, and
-before any control that treats agents differently from users.</p>
+<p>Continuously, for any agent under governance — and specifically after a provider
+announces a model update.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Score on behaviour, not on the user agent string.</strong> Inter-action variance,
-rate, breadth, and the share of actions with no preceding read. Anything
-self-declared is a claim.</p>
-<p><strong>2 — Score a spread of real actors.</strong> A service indexer, an unknown token, a
-person, a person driving an IDE assistant, and an agent deliberately jittered to
-look human. The last two are the interesting middle.</p>
-<p><strong>3 — Sweep the threshold and record both errors.</strong> Humans flagged and agents
-missed, at each setting. They move in opposite directions and the crossing point
-is not the answer.</p>
-<p><strong>4 — Attach a cost to each error and minimise the total.</strong> Analyst hours for a
-false positive, expected hours of an unmonitored agent for a false negative. The
-chosen threshold now has a justification somebody can argue with.</p>
-<p><strong>5 — Join to the registry.</strong> An actor scoring as an agent and absent from the
-registry is the finding worth routing; a registered agent scoring as an agent is
-working correctly.</p>
+<p><strong>1 — Enumerate the change surfaces.</strong> Code, model version, system prompt, tool
+manifest, approval settings, retrieval corpus. For each, record whether a change
+produces a record anybody reviews.</p>
+<p><strong>2 — Count the ones that bypass change management.</strong> Four of six is typical.
+That count is the argument for measuring drift at all.</p>
+<p><strong>3 — Fix a baseline at sign-off.</strong> Tools, resources, rate, refusal rate — and
+the model version and prompt hash alongside, so a later drift can be attributed.</p>
+<p><strong>4 — Compute drift per period and attribute each rise.</strong> A jump that coincides
+with a model upgrade is a different conversation from a jump with no
+corresponding event, and the second is the one to escalate.</p>
+<p><strong>5 — Set a tolerance and a consequence.</strong> Beyond tolerance: re-attest, or
+revert. A drift figure with no consequence is a chart.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_versus_human_scoring.py"><code>scripts/agent_versus_human_scoring.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/behavioural_drift_monitor.py"><code>scripts/behavioural_drift_monitor.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>actor                   score     cv   rate/s   span_h  truth
---------------------------------------------------------------
-svc-indexer             0.800    0.0    20.04     0.01  agent
-dana@corp               0.028   1.55      0.0     1.11  human
-unknown-token-7f3c      0.563    0.0      1.0     0.11  agent
-sam@corp-ide            0.533    0.0      0.5      0.1  human
-polite-agent            0.021   1.26      0.0     0.83  agent
- threshold  humans flagged   agents MISSED
+<pre><code>    when  event                       drift  new tools
+------------------------------------------------------------------
+    90d  control signed off          0.000  []
+    60d  prompt edited               0.100  []
+    30d  tool added (no PR)          0.330  ['run_shell']
+     5d  model upgraded by vendor    0.550  ['run_shell']
+observed drift rate  0.00647 TVD/day
+tolerance            0.25
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;actors&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;score&quot;: 0.0, &quot;truth&quot;: &quot;agent|human|unknown&quot;}],
-  &quot;sweep&quot;: [{&quot;threshold&quot;: 0.0, &quot;humans_flagged&quot;: 0, &quot;agents_missed&quot;: 0, &quot;expected_cost&quot;: 0.0}],
-  &quot;costs&quot;: {&quot;false_positive_hours&quot;: 0.0, &quot;false_negative_hours&quot;: 0.0},
-  &quot;chosen&quot;: {&quot;threshold&quot;: 0.0, &quot;why&quot;: &quot;str&quot;},
-  &quot;registry&quot;: {&quot;scored_agent_unregistered&quot;: [&quot;str&quot;]}
+  &quot;surfaces&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;produces_change_record&quot;: false}],
+  &quot;bypass_count&quot;: 0,
+  &quot;baseline&quot;: {&quot;at&quot;: &quot;str&quot;, &quot;tools&quot;: [&quot;str&quot;], &quot;model_version&quot;: &quot;str&quot;, &quot;prompt_hash&quot;: &quot;str&quot;},
+  &quot;timeline&quot;: [{&quot;period&quot;: &quot;str&quot;, &quot;drift&quot;: 0.0, &quot;new&quot;: [&quot;str&quot;], &quot;attributed_to&quot;: &quot;str|null&quot;}],
+  &quot;tolerance&quot;: 0.0,
+  &quot;consequence&quot;: &quot;str&quot;
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Scoring the user agent string.</strong> It is self-declared.</li>
-<li><strong>Optimising accuracy.</strong> It assumes the two errors cost the same.</li>
-<li><strong>Flagging registered agents.</strong> They are supposed to look like agents.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>actor                   score     cv   rate/s   span_h  truth
---------------------------------------------------------------
-svc-indexer             0.800    0.0    20.04     0.01  agent
-dana@corp               0.028   1.55      0.0     1.11  human
-unknown-token-7f3c      0.563    0.0      1.0     0.11  agent
-sam@corp-ide            0.533    0.0      0.5      0.1  human
-polite-agent            0.021   1.26      0.0     0.83  agent
- threshold  humans flagged   agents MISSED
---------------------------------------------
-       0.3               1               1   ← invisible agents
-       0.4               1               1   ← invisible agents
-       0.5               1               1   ← invisible agents
-       0.6               0               2   ← invisible agents
-       0.7               0               2   ← invisible agents
-       0.8               0               2   ← invisible agents
+<li><strong>Trusting the changelog.</strong> Most of what changes an agent is not in it.</li>
+<li><strong>Drift with no attribution.</strong> A number nobody can act on.</li>
+<li><strong>No consequence at the tolerance.</strong> The line stops being a line.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>    when  event                       drift  new tools
+------------------------------------------------------------------
+    90d  control signed off          0.000  []
+    60d  prompt edited               0.100  []
+    30d  tool added (no PR)          0.330  [&#x27;run_shell&#x27;]
+     5d  model upgraded by vendor    0.550  [&#x27;run_shell&#x27;]
+observed drift rate  0.00647 TVD/day
+tolerance            0.25
+→ freshness window   38 days (a control test older than this is unevidenced, not passing)
 
-The two errors cost differently:
-   human flagged as agent  → one investigation, ~30 min, self-correcting
-   agent flagged as human  → it stays out of your NHI inventory entirely
- threshold   FP   FN   expected cost (hrs)
---------------------------------------------
-      0.20    1    1                  40.5
-      0.30    1    1                  40.5
-      0.40    1    1                  40.5
-      0.50    1    1                  40.5
-      0.60    0    2                  80.0
-      0.70    0    2                  80.0
-      0.80    0    2                  80.0
-      0.90    0    3                 120.0
+control     age (d)     state
+------------------------------
+SB-1             90     STALE
+SB-2             10      PASS
+DR-1              0      FAIL
 
-cost-minimising threshold: 0.55 (expected 40.0 hrs)
-Accuracy-maximising would sit higher and let the polite agent through.
-at that threshold: 0 humans investigated, 1 agents missed
-shadow agents (behaves like software, not in the inventory):
-   unknown-token-7f3c     score=0.563</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The service indexer and unknown token score highest, the human lowest, with the IDE user and the politely-jittered agent in between. The threshold sweep shows humans flagged rising and agents missed falling as the threshold drops. Cost-weighting selects a low threshold, and joining against the registry identifies the unregistered actors as shadow agents.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Set COST_FN honestly for your organisation — it is the expected cost of an unmanaged agent operating undetected for a quarter. That number, not model accuracy, is what should set your threshold.</p></div><div class="nbmd"><hr />
+currently evidenced: 1/3</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Drift rises across the quarter from 0.0 at sign-off to roughly 0.35 after the model upgrade, with <code>run_shell</code> appearing as a new tool. Four of six change surfaces bypass change management. The observed drift rate yields a freshness window, and the 90-day-old control test is reported STALE rather than passing.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Compute the drift rate for one production agent from three months of telemetry, and set its control freshness window from that number rather than from the audit calendar.</p></div><div class="nbmd"><hr />
 <p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.5.html">D1.5 · Hunting in agent telemetry</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.4.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.4.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A working classifier — your earliest Shadow Autonomy signal.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenSearch</span><span>Llama 3.3</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.4.ipynb</code></p></div><div class="pager"><a href="D1.3.html"><span class="k">← Previous</span><span class="t">D1.3 · Drift monitoring</span></a><a class="next" href="D1.5.html"><span class="k">Next →</span><span class="t">D1.5 · Hunting in agent telemetry</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>A rule that passed last month fails now. Nothing in your code changed.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>promptfoo</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.4.ipynb</code></p></div><div class="pager"><a href="D1.3.html"><span class="k">← Previous</span><span class="t">D1.3 · Threat intelligence that becomes a detection</span></a><a class="next" href="D1.5.html"><span class="k">Next →</span><span class="t">D1.5 · Hunting in agent telemetry</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

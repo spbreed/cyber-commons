@@ -1,4 +1,4 @@
-# Track B2 — The AI SDLC: an Agentic AppSec Pipeline, Before and After Deploy
+# Track B2 — The AI SDLC — an Agentic AppSec Pipeline, Before and After Deploy
 
 **Function B · Application Security with an AI SDLC**  
 *The secure development lifecycle rebuilt around agents — and the harnesses that test CyberTravels' own agentic platform: SAST, DAST, triage, code fix, skills and harness evaluation.*

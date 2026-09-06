@@ -120,7 +120,7 @@ in the seams.
 
 > **Spine:** A0.1 → A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 →
 > A2.3 → A2.4 → A3.1 → A3.2 → A3.5 → **B2.0** → **B2.1** → B2.3 → **D1.0** →
-> D1.2 → **E1.0** → E1.10
+> D1.1 → **E1.0** → E1.10
 
 Two chapters carry a single artefact end to end:
 
@@ -128,8 +128,8 @@ Two chapters carry a single artefact end to end:
   reference architecture — drawn rather than coded — then one risk per lesson
   grounded in the OWASP Agentic Top 10, each naming the component of CyberTravels it
   attacks. It closes on the **CyberTravels risk register**: twelve risks, each
-  with a scene, a component, a control and the lesson that owns it. Chapters 2
-  and 3 are those controls.
+  with a scene, a component, a control and the lesson that owns it. Chapters A2
+  and A3 are those controls.
 - **[B2](curriculum/track-b2.md)** is the AI SDLC itself — a five-phase,
   fifteen-stage agentic AppSec pipeline built over seventeen sessions, attested in
   [B2.13](labs/notebooks/B2.13.ipynb) and closed in

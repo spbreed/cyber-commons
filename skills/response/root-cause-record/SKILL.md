@@ -38,7 +38,7 @@ Later absences are contributing.
 team, or a state of mind, it is rejected. This is mechanical and should be.
 
 **5 — Carry the named control forward as a KCI.** That is the handover to
-D5.3 and to the policy change proposal.
+D5.4 and to the policy change proposal.
 
 ## Example
 
