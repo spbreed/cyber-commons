@@ -2459,36 +2459,39 @@ BRIDGES: dict[str, dict[str, str]] = {
 },
 
 "E1": {
- "gained": "An inventory that stays true, a risk tiering that makes control sets "
-           "proportionate, a control map that finds the genuine gaps rather than "
-           "restating the overlap, evidence auditors accept, and verification "
-           "that runs continuously instead of annually.",
- "gap": "Everything you have built is internally coherent and answers to nobody "
-        "outside the organisation. A regulator does not ask about your register; "
-        "they ask which obligation it satisfies, and on what evidence.",
- "next": "Chapter 11 maps the register outward — one control set, many regimes, "
-         "documentation that survives supervision. Next → E2.1, the regulatory "
-         "map.",
+ "gained": "A key control indicator you can compute, and everything it needs to "
+           "be one: an inventory for its denominator, a risk tier for its "
+           "target, a control map for its subject, an owner against its name, "
+           "and verification that re-reads it instead of citing last year. E1.13 "
+           "runs six of them over CyberTravels and returns five gaps.",
+ "gap": "Every one of those indicators answers to you. A regulator does not ask "
+        "what you measured; they ask which obligation it discharges, on what "
+        "evidence, and whether the reading predates the incident.",
+ "next": "Chapter 11 points the same indicators outward — one measured control "
+         "set quoted to several regimes, and documentation that is a series of "
+         "readings rather than a description. Next → E2.1, the regulatory map.",
 },
 
 "E2": {
- "gained": "One control set mapped to a horizontal regime, a sector overlay and "
-           "a privacy position; trigger criteria for disclosure written before "
-           "they are needed; documentation and logs designed backwards from what "
-           "a supervisor will ask.",
- "gap": "Compliance tells you what you owe. It does not tell you what to build "
-        "first, who owns it, how to say no to the business without losing the "
-        "next conversation, or what to do when the programme is judged on a "
-        "failure it was never going to prevent.",
- "next": "Chapter 12 is the programme itself, run from the CISO office. "
+ "gained": "The same indicator set read as evidence: mapped to a horizontal "
+           "regime, a sector overlay and a privacy position; a disclosure clock "
+           "that runs on readings taken before the incident; and documentation "
+           "that survives supervision because it is dated measurements rather "
+           "than narrative.",
+ "gap": "You can now say what each indicator proves and to whom. You still "
+        "cannot say which one to fix first, who is funded to fix it, or what "
+        "happens when the board is shown a number nobody in the room can "
+        "re-compute.",
+ "next": "Chapter 12 runs the indicators as a programme, from the CISO office. "
          "Next → E3.1, translating agentic risk upward.",
 },
 
 "E3": {
- "gained": "A programme you can sequence, staff and defend: autonomy governed by "
-           "level rather than by product list, one owner per thing, metrics that "
-           "show control rather than activity, conditional approvals that are "
-           "actually tracked, and a design that assumes failure and recovers.",
+ "gained": "A programme sequenced on which indicators sit furthest from target, "
+           "staffed by people who can turn a control into something computable, "
+           "governed by autonomy level rather than product list, with promotion "
+           "as an earned event and a maturity model measured on containment, "
+           "detection and recovery rather than on prevention.",
  "gap": "Nothing here is finished, because none of it holds still. The models "
         "change, the patterns change, and the risks in A1 will not be the last "
         "fifteen. What you have is a method for the next set, not a solution to "

@@ -17,8 +17,6 @@
 
 ### E2.1 — The regulatory map
 
-`Security of AI`
-
 - **Risk** — One programme per regime; four times the work, none of it joined up.
 - **Control** — One control set that satisfies several regimes. Verify current status before relying on any date.
 - **Lab** — Build the crosswalk for your own sector.
@@ -43,8 +41,6 @@ python3 crosswalk.py --show-orphans   # obligations no control answers
 
 ### E2.2 — Horizontal AI regulation
 
-`Security of AI`
-
 - **Risk** — "We only deployed it, we didn't build it" — sometimes true, often not.
 - **Control** — Risk classification, GPAI obligations, transparency duties, and how agentic deployment changes classification.
 - **Lab** — Classify three workflows and defend the boundary cases.
@@ -67,8 +63,6 @@ python3 classify_risk.py --deployer-vs-provider
 ---
 
 ### E2.3 — Voluntary frameworks as your spine
-
-`Security of AI`
 
 - **Risk** — Regime-specific mappings with nothing to hang off.
 - **Control** — AI RMF / management-system standards as the structure; regulator mappings as overlays.
@@ -94,8 +88,6 @@ oscal-cli validate oscal/system-security-plan.json
 
 ### E2.4 — Sector overlays
 
-`Security of AI`
-
 - **Risk** — An agent is already a "model" under model-risk rules you already comply with.
 - **Control** — Find the regime you're already in before inventing a new one.
 - **Lab** — Map one agent to existing model-risk obligations.
@@ -117,8 +109,6 @@ python3 sector_overlay.py --agent patch-agent --sector financial-services --chec
 ---
 
 ### E2.5 — Privacy and data protection
-
-`Security of AI`
 
 - **Risk** — Deletion when the data is in weights, not a database.
 - **Control** — Lawful basis, ADM rights, residency in inference and retrieval paths, retention of traces.
@@ -145,8 +135,6 @@ curl -s localhost:8088/v1/chat/completions -d @with-pii.json | jq
 
 ### E2.6 — Incident and disclosure obligations
 
-`Security of AI`
-
 - **Risk** — Materiality assessed for an autonomous actor with a human-actor playbook.
 - **Control** — Coordinate with D2 in hour one.
 - **Lab** — Draft the notification for an agentic incident.
@@ -169,8 +157,6 @@ python3 notify.py --incident ../d2-ir/case-01 --materiality-worksheet
 ---
 
 ### E2.7 — Documentation that survives supervision
-
-`Security of AI`
 
 - **Risk** — "Explainability" for a system with no deterministic reasoning.
 - **Control** — System documentation, data lineage, eval records, oversight evidence, decision logs.
@@ -197,8 +183,6 @@ python3 evidence_pack.py --audit-self pack/   # what a supervisor would find mis
 
 ### E2.8 — Auditability of autonomous action
 
-`Security of AI`
-
 - **Risk** — No trail showing under whose authority the agent acted.
 - **Control** — The delegation chain *is* the audit trail.
 - **Lab** — Produce an audit trail from the A2 chain that names authority at every hop.
@@ -221,8 +205,6 @@ python3 audit_trail.py --from-keycloak --workflow patch-agent --out trail.json
 ---
 
 ### E2.9 — Regulator and auditor conversations
-
-`Security of AI`
 
 - **Risk** — Overclaiming control, or triggering a moratorium.
 - **Control** — Explain bounded autonomy with evidence, and anticipate the real questions.

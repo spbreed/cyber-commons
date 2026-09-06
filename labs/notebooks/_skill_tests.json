@@ -36,7 +36,7 @@
    "contract": true,
    "script": true,
    "lines": 82,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "appsec/coding-agent-hardening",
@@ -148,7 +148,7 @@
    "contract": true,
    "script": true,
    "lines": 59,
-   "seconds": 0.03
+   "seconds": 0.02
   },
   {
    "skill": "appsec/threat-model-stride",
@@ -292,7 +292,7 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "detection/agent-tempo-baseline",
@@ -308,7 +308,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "detection/behavioural-drift-monitor",
@@ -332,7 +332,7 @@
    "contract": true,
    "script": true,
    "lines": 55,
-   "seconds": 0.06
+   "seconds": 0.08
   },
   {
    "skill": "detection/detection-rule-synthesis",
@@ -340,7 +340,7 @@
    "contract": true,
    "script": true,
    "lines": 15,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/fleet-correlation-analysis",
@@ -348,7 +348,7 @@
    "contract": true,
    "script": true,
    "lines": 45,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "detection/threat-intel-to-rules",
@@ -364,7 +364,7 @@
    "contract": true,
    "script": true,
    "lines": 76,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "grc/agent-lifecycle-governance",
@@ -388,7 +388,7 @@
    "contract": true,
    "script": true,
    "lines": 35,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "grc/control-to-framework-mapping",
@@ -420,7 +420,7 @@
    "contract": true,
    "script": true,
    "lines": 54,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "grc/policy-change-proposal",
@@ -468,7 +468,7 @@
    "contract": true,
    "script": true,
    "lines": 31,
-   "seconds": 0.02
+   "seconds": 0.01
   },
   {
    "skill": "identity/workload-attestation-check",
@@ -516,7 +516,7 @@
    "contract": true,
    "script": true,
    "lines": 33,
-   "seconds": 0.09
+   "seconds": 0.08
   },
   {
    "skill": "programme/ownership-seam-audit",
@@ -636,7 +636,7 @@
    "contract": true,
    "script": true,
    "lines": 37,
-   "seconds": 0.01
+   "seconds": 0.02
   },
   {
    "skill": "regulatory/horizontal-requirement-to-control",
@@ -692,7 +692,7 @@
    "contract": true,
    "script": true,
    "lines": 48,
-   "seconds": 0.03
+   "seconds": 0.04
   },
   {
    "skill": "research/finding-to-control-handover",
@@ -908,7 +908,7 @@
    "contract": true,
    "script": true,
    "lines": 49,
-   "seconds": 0.06
+   "seconds": 0.07
   },
   {
    "skill": "secops/incident-scoping",
@@ -916,7 +916,7 @@
    "contract": true,
    "script": true,
    "lines": 46,
-   "seconds": 0.05
+   "seconds": 0.06
   },
   {
    "skill": "secops/investigation-admission-rules",

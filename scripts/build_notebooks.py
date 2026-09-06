@@ -63,6 +63,7 @@ SITE = "https://spbreed.github.io/cyber-commons"
 
 from exercises import EXERCISES  # noqa: E402
 from exercises.about import ABOUT
+from exercises.anchors import ANCHORS  # noqa: E402
 from exercises.cybertravels import GROUNDING  # noqa: E402
 from exercises.framing import BRIDGES  # noqa: E402
 from exercises.models import LIVE_MD, MODEL_RUNTIME, live_cell  # noqa: E402
@@ -254,8 +255,15 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
 
     # ---- 2. the framework: the picture first, then the idea it names ------
     diagram = ex["diagram"].strip("\n")
-    cells.append(md(f"## 2 · The framework\n\n```\n{diagram}\n```\n\n"
-                    f"{ex['concept'].strip()}"))
+    framework = (f"## 2 · The framework\n\n```\n{diagram}\n```\n\n"
+                 f"{ex['concept'].strip()}")
+    # Function E is one argument told over thirty-one lessons, and the unit it
+    # is told in — a key control indicator — is defined in E1.1. Each lesson
+    # states its relationship to that unit here, under the concept it belongs
+    # to rather than in a footer nobody reaches.
+    if anchor := ANCHORS.get(sid):
+        framework += f"\n\n> {anchor.strip()}"
+    cells.append(md(framework))
 
     # ---- 3..n the practical application, renumbered from here -------------
     # A markdown step that ends on a bare "## N · Title" was written to

@@ -43,7 +43,15 @@ invalidate the conditions the control was tested under.
 
 The honest consequence is that a control tested six months ago is not passing —
 it is **unevidenced**, which is a third state most GRC tooling cannot represent.
-Introducing that third state is the whole of this lesson.
+Introducing that third state is the first half of this lesson.
+
+The second half is what you use instead, and it is the unit the rest of Function
+E is written in: a **key control indicator**. A number computed from the estate,
+with a denominator, and a target set before the measurement is taken. Section 5
+below builds them from the framework controls in A0.2; every other lesson in
+this function either produces an indicator, supplies its denominator, sets its
+target, decides who owns it, or presents it as evidence to somebody outside the
+organisation. Each of them says which, in a line under its own concept.
 """,
  "steps": [
   ("md", "## 2 · Demo — the same evidence, two ways of reading it"),

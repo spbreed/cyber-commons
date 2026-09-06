@@ -455,18 +455,30 @@ them belongs to a single team:
 | fair, harmful bias managed | it does not quietly serve some travellers worse |
 
 Security owns one of the seven outright. That ratio is the whole reason this
-function exists as more than a security document, and three chapters follow
-from it:
+function exists as more than a security document.
 
-- **Chapter 10 — risk and control.** The register of every agent CyberTravels
-  runs, risk-tiered by autonomy, data and blast radius, mapped to controls, with
-  evidence that can be re-checked rather than asserted once.
-- **Chapter 11 — regulatory and compliance.** What CyberTravels owes and to
-  whom. A travel company holds passports, payment data and health information;
-  layer 2 and 3 obligations were in force before CyberTravels existed.
-- **Chapter 12 — the CISO office.** Sequencing, org design, metrics, and how to
-  tell the board what the exposure is without either alarming them or misleading
-  them.
+Contributing evidence to six properties you do not own only works if the
+evidence is in a form the other six owners can use, which is why the whole of
+Function E is written in one unit: a **key control indicator**. E1.1 defines it
+— a number computed from the estate, with a denominator, and a target set before
+the measurement is taken — and the three chapters are that one unit built,
+evidenced and run:
+
+- **Chapter 10 — risk and control.** Where the indicators come from. The
+  register supplies the denominator, risk tiering supplies the target, control
+  mapping supplies the subject, and E1.13 computes six of them against the
+  CyberTravels repository and reports the gaps.
+- **Chapter 11 — regulatory and compliance.** The same indicators read as
+  evidence. A travel company holds passports, payment data and health
+  information, and each regime asks for a reading rather than a description —
+  quotable to several of them because it was computed once.
+- **Chapter 12 — the CISO office.** The indicators run as a programme:
+  sequenced by distance from target, owned by name, and reported to a board in
+  numbers somebody in the room can re-compute.
+
+Every lesson in this function carries a line under its concept saying what it
+contributes to that indicator or takes from it. Where a lesson looks like it
+belongs to a different argument, that line is the place to check.
 
 Two rows of the register belong to this function outright: **R2**, where a
 guardrail was disabled for a demo and nobody had to approve it, and **R12**,

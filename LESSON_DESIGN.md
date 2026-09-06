@@ -134,6 +134,27 @@ moves and only three:
 A chapter that ends without this reads as though the subject is closed. Almost
 none of them are.
 
+## 6 · Function E states its unit on every lesson
+
+Function E is one argument told over thirty-one lessons — a control framework, a
+regulatory map and a programme — and the unit it is told in is defined in
+**E1.1**: a key control indicator, computed from the estate, with a denominator
+and a target written before the measurement. Every other lesson in E carries one
+line in `ANCHORS` (`scripts/exercises/anchors.py`) saying what it contributes to
+that indicator or takes from it, rendered under its concept:
+
+```python
+"E1.2":
+ "**Anchor → E1.1.** The inventory is the **denominator**. ..."
+```
+
+`check_lessons.py` fails on a Function E lesson with no anchor, and on an anchor
+naming a lesson that is not in E. The rule is enforced rather than reported
+because the failure it prevents is silent: a governance lesson can be internally
+coherent, read perfectly well on its own page, and belong to no argument at all.
+Three anchors, written honestly, immediately showed the lesson beneath them was
+doing something else — which is the point of making a spine explicit.
+
 ---
 
 ## Writing a new lesson

@@ -17,8 +17,6 @@
 
 ### E1.0 — Start here — what AI governance means
 
-`both directions`
-
 - **Risk** — A trustworthy-AI statement with no owner per property, so every property is somebody else's job.
 - **Control** — One register, risk-tiered, with each property mapped to a control, an owner and evidence that can be re-checked.
 - **Lab** — Take the seven properties and assign each an owner in your own organisation. The gaps are the programme.
@@ -36,8 +34,6 @@ python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it
 ---
 
 ### E1.1 — From framework control to key control indicator
-
-`Security of AI`
 
 - **Risk** — An annual review certifies nothing about a system that changed on Tuesday.
 - **Control** — Continuous assurance; control effectiveness redefined for probabilistic systems.
@@ -64,8 +60,6 @@ python3 assert_control.py --control AI-GUARD-02 --evidence-date today   # now FA
 
 ### E1.2 — Building the AI and agent inventory
 
-`Security of AI`
-
 - **Risk** — Shadow AI and shadow agents — the inventory is the control most orgs still lack.
 - **Control** — Discovery, registration, ownership, risk tiering.
 - **Lab** — Discover agents from gateway and identity telemetry; build the register.
@@ -90,8 +84,6 @@ python3 register.py --out agent-register.csv
 
 ### E1.3 — Risk tiering agentic use cases
 
-`Security of AI`
-
 - **Risk** — Tiering by model name instead of by what the thing can do.
 - **Control** — Autonomy level × action class × data sensitivity.
 - **Lab** — Tier ten real workflows and assign approval authority.
@@ -115,8 +107,6 @@ python3 tier.py --show-approvers
 
 ### E1.4 — Control mapping for agents
 
-`Security of AI`
-
 - **Risk** — Inventing new controls where an existing one applied to a new principal type.
 - **Control** — Map identity, secrets, sandbox, eval and telemetry onto the existing library.
 - **Lab** — Map the A2/A3 controls onto your control library.
@@ -139,8 +129,6 @@ python3 map_controls.py --new agent-controls.yaml --existing control-library.yam
 ---
 
 ### E1.5 — Evaluation output as audit evidence
-
-`Security of AI`
 
 - **Risk** — Accepting a vendor's best-of-k demo as assurance; mistaking schema conformance for accuracy.
 - **Control** — Read an eval report properly: execution-verified results, reliability across all attempts, trajectory scoring, judge independence.
@@ -166,8 +154,6 @@ python3 ../e1-grc/challenge.py --pack evidence/AI-EVAL-01.json   # the three way
 ---
 
 ### E1.6 — Operating vs outcome guardrails
-
-`Security of AI`
 
 - **Risk** — Frameworks specify how the system works; regulators care what it produced.
 - **Control** — Constrain both, and know which evidence answers which question.
@@ -195,8 +181,6 @@ python3 classify_guardrails.py --gap-analysis   # which regulator question is un
 
 ### E1.7 — Continuous control verification
 
-`Security of AI`
-
 - **Risk** — Automating judgment instead of evidence collection.
 - **Control** — Agent-assisted evidence collection, drift detection, exception tracking.
 - **Lab** — Automate one evidence package on a schedule.
@@ -223,8 +207,6 @@ python3 drift.py --baseline evidence/2026-08-01 --current evidence/today
 
 ### E1.8 — Third-party and model supply chain risk
 
-`Security of AI`
-
 - **Risk** — Vendor AI features enabled by default; sub-processor chains you never mapped.
 - **Control** — Questions that actually discriminate between vendors.
 - **Lab** — Run a real AIBOM against a vendor model artefact.
@@ -249,8 +231,6 @@ cosign verify-blob --bundle model.sig model.gguf   # provenance where signed
 
 ### E1.9 — Model and agent lifecycle governance
 
-`Security of AI`
-
 - **Risk** — Re-indexing treated as maintenance, not change.
 - **Control** — Retraining, fine-tuning and re-indexing as change-management events.
 - **Lab** — Write the gate that a re-index has to pass.
@@ -274,8 +254,6 @@ python3 lifecycle_gate.py --simulate reindex --without rollback-plan   # blocked
 
 ### E1.10 — The stakeholder map: who owns what
 
-`Security of AI`
-
 - **Risk** — Legal, compliance, privacy, cyber and model risk each hold part of the AI control estate and none holds all of it. The programme fails at the seams between them, not inside any one.
 - **Control** — A stakeholder operating model naming who decides, who tests, who signs — and where the handoffs leave gaps nobody is watching.
 - **Lab** — Map five stakeholders to the controls each operates, then locate the four classic seam failures in your own estate.
@@ -294,8 +272,6 @@ python3 scripts/run_notebooks.py --session E1.10   # run it headless and check i
 ---
 
 ### E1.11 — Model risk management for AI systems
-
-`Security of AI`
 
 - **Risk** — The classical model-risk playbook silently breaks once the model can act: conceptual soundness was validated, and then the agent was granted write access nobody validated.
 - **Control** — Extend the SR 11-7 lineage — conceptual soundness, ongoing monitoring, independent validation — to non-deterministic, tool-using systems, and name where it still holds.
@@ -316,8 +292,6 @@ python3 scripts/run_notebooks.py --session E1.11   # run it headless and check i
 
 ### E1.12 — Working the seams
 
-`Security of AI`
-
 - **Risk** — The handoffs fail, not the functions: privacy assessment into control design, legal position into system prompt, MRM validation into security evidence.
 - **Control** — Joint runbooks for the seams — one artefact, many consumers, one owner.
 - **Lab** — Trace one artefact across three functions and find the consumer who never received it.
@@ -332,6 +306,24 @@ python3 scripts/run_notebooks.py --session E1.12   # run it headless and check i
 ```
 
 *Expect:* Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero.
+
+---
+
+### E1.13 — Measuring the controls on CyberTravels — gaps and mitigations
+
+- **Risk** — Controls are asserted in a register and never measured, so the first evidence that one was missing is the incident.
+- **Control** — Key control indicators computed from source on every change, each gap carrying a named mitigation.
+- **Lab** — Measure six indicators against the CyberTravels tree and read the five gaps it reports.
+
+**Run it** — Measure six indicators against the CyberTravels tree and read the five gaps it reports.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/E1.13.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session E1.13   # run it headless and check it
+```
+
+*Expect:* Measure six indicators against the CyberTravels tree and read the five gaps it reports.
 
 ---
 

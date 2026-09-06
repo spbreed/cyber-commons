@@ -42,7 +42,10 @@ its freshness window.</p>
 <li><strong>STALE</strong> — tested, was passing, out of window. <strong>Not a pass.</strong></li>
 </ul>
 <p>Plus the absence state: no evidence at all, which is different from failing and
-is often the largest category in a first assessment.</p></div><div class="nbmd"><h2>3 · Collecting the runtime evidence, as a skill</h2>
+is often the largest category in a first assessment.</p>
+<blockquote>
+<p><strong>Anchor → E1.1.</strong> This is the machinery that re-measures. E1.1 argues that a control tested six months ago is unevidenced rather than passing; continuous verification is what shortens that window, and the freshness window per control is itself an indicator.</p>
+</blockquote></div><div class="nbmd"><h2>3 · Collecting the runtime evidence, as a skill</h2>
 <p>Automating a control means something has to go and look. For the network and logging controls that underwrite every default-deny claim CyberTravels makes, that is a posture collector: egress rules, private endpoints, route tables, key policies, and whether the audit trail is not merely enabled but <strong>delivering</strong>. It collects; it does not conclude. This is the file in this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/aws-runtime-posture-collector/SKILL.md"><code>skills/attestation/aws-runtime-posture-collector/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: aws-runtime-posture-collector
 description: &gt;-

@@ -46,7 +46,10 @@ them prevention:</p>
 </ul>
 <p>A programme with all three survives a failure it did not predict, which is the
 only kind that actually happens. Perfection would mean containment never fails.
-Resilience means the other five steps work when it does.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+Resilience means the other five steps work when it does.</p>
+<blockquote>
+<p><strong>Anchor → E1.1.</strong> Resilience is measured by the containment, detection and recovery indicators — the same ones D5.3 re-reads after a fix. Prevention has no honest indicator on a system that changes weekly, which is why the maturity model does not use one.</p>
+</blockquote></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
 <p>Three properties for the day a control fails: drift detected, stop tested, run replayable. The skill checks each with its evidence — a measured twelve-second stop, tested 41 days ago — and reports three verdicts rather than one score.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/programme/resilience-readiness-check/SKILL.md"><code>skills/programme/resilience-readiness-check/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: resilience-readiness-check
 description: &gt;-
@@ -152,7 +155,7 @@ budget. That was the point: shared defense is stronger defense, and a
 commons only works if everyone can actually run it.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
 <p>Drift is detected with <code>run_shell</code> as a new tool, the stop mechanism is ready at 12 seconds tested 41 days ago, and the run is replayable with a four-resource scope. All three programmes show a 0% containment ASR yet resolve a failure in 720, 96 and 6 hours respectively. The game day identifies the weakest capability for each, and the resilient programme has none.</p></div><div class="nbmd"><h2>Your turn</h2>
 <p>Run a game day that assumes containment failed. Measure notice, stop and recover as three separate numbers. The weakest one is next quarter's plan — and unlike a prevention target, you can actually reach it.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
-<p><strong>What you can do now.</strong> A programme you can sequence, staff and defend: autonomy governed by level rather than by product list, one owner per thing, metrics that show control rather than activity, conditional approvals that are actually tracked, and a design that assumes failure and recovers.</p>
+<p><strong>What you can do now.</strong> A programme sequenced on which indicators sit furthest from target, staffed by people who can turn a control into something computable, governed by autonomy level rather than product list, with promotion as an earned event and a maturity model measured on containment, detection and recovery rather than on prevention.</p>
 <p><strong>What you still cannot do.</strong> Nothing here is finished, because none of it holds still. The models change, the patterns change, and the risks in A1 will not be the last fifteen. What you have is a method for the next set, not a solution to this one.</p>
 <p><strong>Go back to A1.1 and draw your own system again. It will be a different picture from the one you drew before Function B, and the components you left off the first time are the ones worth your next quarter.</strong></p></div><div class="nbmd"><hr />
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E3.8.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E3.8.ipynb">Source</a></p>

@@ -46,7 +46,10 @@ other agents.</p>
 <li><strong>egress logs to model-provider domains</strong> — what is actually being used.</li>
 </ol>
 <p>Source 3 is the one that discovers the department using a frontier API on a
-personal card, and the SaaS product that quietly added an AI feature.</p></div><div class="nbmd"><h2>3 · Resolving one row into a deployment, as a skill</h2>
+personal card, and the SaaS product that quietly added an AI feature.</p>
+<blockquote>
+<p><strong>Anchor → E1.1.</strong> The inventory is the <strong>denominator</strong>. Every indicator is a share — of agents, of tool calls, of handlers — and a share whose denominator is unknown is a count wearing a percentage sign. An incomplete inventory does not make your indicators wrong; it makes them unfalsifiable.</p>
+</blockquote></div><div class="nbmd"><h2>3 · Resolving one row into a deployment, as a skill</h2>
 <p>Discovery finds that a thing exists. Governing it needs the row resolved into artefacts: which repository at which commit, which image <strong>digest</strong> rather than which tag, which IAM role and SPIFFE ID, which gateway and guardrail, and every downstream its tools call. Every other attestation skill consumes this graph, which is why it runs first. This is the file in this repository:</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/attestation/deployment-inventory-resolver/SKILL.md"><code>skills/attestation/deployment-inventory-resolver/SKILL.md</code></a></h3>
 <pre><code class="language-yaml">name: deployment-inventory-resolver
 description: &gt;-
