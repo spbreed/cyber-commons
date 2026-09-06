@@ -45,10 +45,11 @@ ANCHORS: dict[str, str] = {
  "render it green.",
 
 "E1.5":
- "**Anchor → E1.1.** An eval result **is** an indicator reading — with a "
- "denominator (how many attempts), a target (the pass bar), and a timestamp. "
- "Read it as one and the reliability-across-attempts column stops being a "
- "detail and becomes the measurement.",
+ "**Anchor → E1.1.** An eval result **is** an indicator reading — the sample "
+ "size is its denominator, the pass bar is its target, and the expiry is what "
+ "stops it aging into a claim. Read it that way and the conformance/accuracy "
+ "split stops being a presentation choice: conformance has no denominator "
+ "worth quoting, so it is not an indicator at all.",
 
 "E1.6":
  "**Anchor → E1.1.** Operating and outcome guardrails need different "
@@ -75,9 +76,11 @@ ANCHORS: dict[str, str] = {
  "assurance and a dashboard showing last quarter.",
 
 "E1.10":
- "**Anchor → E1.1.** Every indicator needs a name against it: who computes it, "
- "who is accountable when it misses target, and who may accept the miss. An "
- "indicator with no owner is reported, discussed, and never actioned.",
+ "**Anchor → E1.1.** One indicator, five readers, five different questions. "
+ "Legal reads a containment number as liability, model risk reads it as "
+ "fitness, privacy reads it as exposure. Publishing the reading is not the "
+ "same as it being consumed, and the question nobody asked is the one no "
+ "indicator was built for.",
 
 "E1.11":
  "**Anchor → E1.1.** Model risk management arrived at the same answer decades "
@@ -114,10 +117,10 @@ ANCHORS: dict[str, str] = {
  "jurisdiction.",
 
 "E2.4":
- "**Anchor → E1.1.** A sector overlay usually adds targets rather than "
- "indicators. Finding the regime you are already in tells you which "
- "thresholds move, which is a much smaller job than inventing a measurement "
- "programme.",
+ "**Anchor → E1.1.** A sector overlay mostly re-targets indicators you "
+ "already compute — the same containment number against a stricter threshold. "
+ "The exception is exit strategy, which no horizontal regime asks for and "
+ "which almost nobody can currently measure at all.",
 
 "E2.5":
  "**Anchor → E1.1.** Privacy indicators measure paths rather than outcomes — "
@@ -159,10 +162,11 @@ ANCHORS: dict[str, str] = {
  "function of measured containment, not of which vendor supplied it.",
 
 "E3.3":
- "**Anchor → E1.1.** Sequence the programme by which indicators are furthest "
- "from target, weighted by the authority of what they measure. That is a "
- "defensible order, and it is the one argument that survives a budget "
- "conversation.",
+ "**Anchor → E1.1.** The order is a dependency order, not a gap-size order, "
+ "and the indicators are why. Inventory first because it is every other "
+ "indicator's denominator; evaluation late because a measured system nobody "
+ "can switch off scores well and cannot be stopped. Sequencing on whichever "
+ "number looks worst inverts it.",
 
 "E3.4":
  "**Anchor → E1.1.** Org design decides who can actually compute each "
@@ -171,9 +175,10 @@ ANCHORS: dict[str, str] = {
 
 "E3.5":
  "**Anchor → E1.1.** These **are** the indicators, at the level a CISO "
- "reports. Inventory coverage, attested-identity share, standing-access "
- "reduction, MTT-revoke — each has a denominator and a target, which is what "
- "separates them from the metrics that get reported because they are easy.",
+ "reports — exposure, likelihood, assurance, coverage, speed. The property "
+ "that qualifies each of them is E1.1's: it is computed rather than assessed, "
+ "so it degrades on its own. A number that stays flat under neglect is "
+ "measuring activity.",
 
 "E3.6":
  "**Anchor → E1.1.** Autonomy promotion as an earned event needs named "
@@ -181,9 +186,10 @@ ANCHORS: dict[str, str] = {
  "one, 'yes with conditions' becomes 'yes' at the next review.",
 
 "E3.7":
- "**Anchor → E1.1.** The capability you are hiring for is the ability to turn "
- "a control into something computable. That is the interview question, and it "
- "separates people who can operate a GRC tool from people who can measure an "
+ "**Anchor → E1.1.** The build curve is unglamorous early precisely because "
+ "indicators are: quarter one produces the denominator and nothing to demo. "
+ "The capability being hired for is turning a control into something "
+ "computable, which is what separates operating a GRC tool from measuring an "
  "estate.",
 
 "E3.8":
