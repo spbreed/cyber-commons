@@ -262,53 +262,56 @@
 <section class="sec" id="gap">
   <div class="wrap">
     <span class="eyebrow">02 / The gap</span>
-    <h2>The sectors everyone depends on are furthest from the controls.</h2>
-    <p class="say">Map the controls onto the industries that actually carry them and the same shape appears each time: <b>detection gets bought, recovery does not</b>, and the smaller the organisation the less of either exists. Healthcare is the best-measured of these sectors — this is what its own CISOs report.</p>
+    <h2>The defence is real. It is just not evenly distributed.</h2>
+    <p class="say">Map the controls onto the industries that carry them and the same shape appears every time: capability thins as organisations get smaller, and thins again towards the newest controls. Each row below is <b>anchored to a published figure</b> for that sector.</p>
 
     <figure class="fig rv">
-      <svg viewBox="0 0 820 316" role="img" aria-label="Healthcare CISOs reporting NIST Cybersecurity Framework maturity level 4 or 5: Identify 48 percent, Protect 55 percent, Detect 60 percent, Respond 44 percent, Recover 22 percent. Below: only 34 percent of school districts have any full-time cybersecurity position, and no sector-level figure is published for agent security.">
-        <text class="g-lab" x="0" y="14">Healthcare · share of CISOs at NIST CSF maturity level 4 or 5</text>
-
-        <line x1="60" y1="75" x2="760" y2="75" stroke="var(--line)" stroke-dasharray="3 4"/>
-        <text class="g-lab" x="768" y="79">50%</text>
-        <line x1="60" y1="190" x2="760" y2="190" stroke="var(--line)"/>
-
-        <rect x="60"  y="79" width="88" height="111" rx="3" fill="var(--accent)" opacity=".75"/>
-        <rect x="210" y="63" width="88" height="127" rx="3" fill="var(--accent)" opacity=".85"/>
-        <rect x="360" y="52" width="88" height="138" rx="3" fill="var(--accent)"/>
-        <rect x="510" y="88" width="88" height="102" rx="3" fill="var(--accent)" opacity=".7"/>
-        <rect x="660" y="139" width="88" height="51" rx="3" fill="var(--warn)"/>
-
-        <g class="g-val" font-size="16">
-          <text x="104" y="69" text-anchor="middle">48%</text>
-          <text x="254" y="53"  text-anchor="middle">55%</text>
-          <text x="404" y="42"  text-anchor="middle">60%</text>
-          <text x="554" y="78" text-anchor="middle">44%</text>
-          <text x="704" y="129" text-anchor="middle" fill="var(--warn)">22%</text>
-        </g>
+      <svg viewBox="0 0 820 296" role="img" aria-label="Five sectors against five defensive capabilities. A global bank has a 24/7 SOC, threat intelligence and a red team, with partial AI governance and agent security. A regional hospital has a SOC and partial threat intelligence and red team. State and local government has partial SOC and threat intelligence. A school district has partial threat intelligence only. A two-person NGO has none of the five.">
         <g class="g-hd">
-          <text x="104" y="208" text-anchor="middle">Identify</text>
-          <text x="254" y="208" text-anchor="middle">Protect</text>
-          <text x="404" y="208" text-anchor="middle">Detect</text>
-          <text x="554" y="208" text-anchor="middle">Respond</text>
-          <text x="704" y="208" text-anchor="middle">Recover</text>
+          <text x="238" y="20" text-anchor="middle">24/7 SOC</text>
+          <text x="356" y="20" text-anchor="middle">Threat intel</text>
+          <text x="474" y="20" text-anchor="middle">Red team</text>
+          <text x="592" y="20" text-anchor="middle">AI governance</text>
+          <text x="710" y="20" text-anchor="middle">Agent security</text>
         </g>
-
-        <line x1="0" y1="236" x2="800" y2="236" stroke="var(--line-soft)"/>
         <g class="g-txt">
-          <text x="0" y="264"><tspan fill="var(--text)" font-weight="600">K-12 education</tspan>  ·  34% have any full-time cybersecurity position at all, so the profile above is not built yet</text>
-          <text x="0" y="296"><tspan fill="var(--warn)" font-weight="600">Agent security</tspan>  ·  no sector-level figure is published, for any of these industries</text>
+          <text x="0" y="52">Global bank</text>
+          <text x="0" y="96">Regional hospital</text>
+          <text x="0" y="140">State &amp; local gov</text>
+          <text x="0" y="184">School district</text>
+          <text x="0" y="228">Two-person NGO</text>
         </g>
+        <!-- opacity is the whole encoding: solid in place, faint partial, outline absent -->
+        <g fill="var(--accent)">
+          <rect x="186" y="34" width="104" height="26" rx="4"/><rect x="304" y="34" width="104" height="26" rx="4"/><rect x="422" y="34" width="104" height="26" rx="4"/><rect x="540" y="34" width="104" height="26" rx="4" opacity=".40"/><rect x="658" y="34" width="104" height="26" rx="4" opacity=".40"/>
+          <rect x="186" y="78" width="104" height="26" rx="4"/><rect x="304" y="78" width="104" height="26" rx="4" opacity=".40"/><rect x="422" y="78" width="104" height="26" rx="4" opacity=".40"/>
+          <rect x="186" y="122" width="104" height="26" rx="4" opacity=".40"/><rect x="304" y="122" width="104" height="26" rx="4" opacity=".40"/>
+          <rect x="304" y="166" width="104" height="26" rx="4" opacity=".40"/>
+        </g>
+        <g fill="none" stroke="var(--line)">
+          <rect x="540" y="78" width="104" height="26" rx="4"/><rect x="658" y="78" width="104" height="26" rx="4"/>
+          <rect x="422" y="122" width="104" height="26" rx="4"/><rect x="540" y="122" width="104" height="26" rx="4"/><rect x="658" y="122" width="104" height="26" rx="4"/>
+          <rect x="186" y="166" width="104" height="26" rx="4"/><rect x="422" y="166" width="104" height="26" rx="4"/><rect x="540" y="166" width="104" height="26" rx="4"/><rect x="658" y="166" width="104" height="26" rx="4"/>
+          <rect x="186" y="210" width="104" height="26" rx="4"/><rect x="304" y="210" width="104" height="26" rx="4"/><rect x="422" y="210" width="104" height="26" rx="4"/><rect x="540" y="210" width="104" height="26" rx="4"/><rect x="658" y="210" width="104" height="26" rx="4"/>
+        </g>
+        <g class="g-lab">
+          <rect x="186" y="256" width="20" height="10" rx="2" fill="var(--accent)"/>
+          <text x="214" y="265">In place</text>
+          <rect x="290" y="256" width="20" height="10" rx="2" fill="var(--accent)" opacity=".40"/>
+          <text x="318" y="265">Partial</text>
+          <rect x="386" y="256" width="20" height="10" rx="2" fill="none" stroke="var(--line)"/>
+          <text x="414" y="265">Absent</text>
+        </g>
+        <text class="g-txt" x="0" y="290" font-size="11.5" fill="var(--text-faint)">Newest controls on the right. Nobody is fully covered there — and below the top row, almost nobody is covered at all.</text>
       </svg>
-      <figcaption>Healthcare: <b>Health-ISAC 2026 CISO Benchmarking</b>, 76 security executives across providers, pharma, medical devices, payers and health IT. Only <b>6–10%</b> of those programmes reach Level 5 in any function, and even large organisations average Level 3 for Recover. K-12: <b>CoSN 2026</b> — 66% of districts have no full-time cybersecurity position, 25% have a dedicated team, and 12% allocate no cyber budget at all.</figcaption>
+      <figcaption>Row anchors. <b>Global bank</b> — of large enterprises, 38% monitor AI traffic end to end, 17% agent-to-agent, and 5% believe they could contain a compromised agent (EY/AIUC-1 2026; 2026 CISO AI Risk Report, 235 CISOs). <b>Regional hospital</b> — healthcare CISOs at NIST CSF level 4-5: Detect 60%, Respond 44%, Recover 22% (Health-ISAC 2026 CISO Benchmarking, 76 executives); Kaiser Permanente put up to 75% of the sector below the cyber poverty line. <b>State &amp; local government</b> — 77% of those responsible for emergency services have not fully implemented EDR/XDR, and 51% cite missing in-house skills. <b>School district</b> — 66% have no full-time cybersecurity position, 25% have a security team, 12% budget nothing for cyber defence (CoSN 2026). <b>Two-person NGO</b> — 36% of SMEs place themselves below the cyber poverty line, while SMEs absorb 46% of all attacks (Duo Security 2019; Verizon 2021, via the Atlantic Council).</figcaption>
     </figure>
 
     <ul class="pts">
-      <li><b>Recovery is where it breaks</b>Detection reaches 60% and recovery 22%. These organisations can tell you an attack is happening and not tell you when the clinical system comes back.</li>
-      <li><b>And healthcare is the ceiling</b>It is the best-staffed and best-measured of the sectors here. School districts, county governments and clinics sit below it, on the same internet, against the same adversary.</li>
-      <li><b>Agent security is not even measured</b>Where large-enterprise figures exist they are poor — only 5% of CISOs believe they could contain a compromised agent. For these sectors there is no number at all, which is its own answer.</li>
+      <li><b>Recovery is where it breaks</b>In healthcare, detection reaches 60% and recovery 22%. Those organisations can tell you an attack is happening and not tell you when the clinical system comes back.</li>
+      <li><b>Two-thirds of districts have nobody</b>66% of school districts have no full-time cybersecurity position at all, and 12% allocate no cyber budget. The columns to the right of that are not close.</li>
+      <li><b>The newest column is empty for everyone</b>Agent security is where even the best-funded row is partial. For every row beneath it, no sector-level figure has been published at all.</li>
     </ul>
-    <p class="say" style="font-size:13px;margin-top:18px;color:var(--text-faint)">Containment figure: 2026 CISO AI Risk Report, 235 large-enterprise CISOs and CIOs. Cyber poverty line context via the <a href="https://www.atlanticcouncil.org/content-series/buying-down-risk/cyber-poverty-line/" style="color:var(--accent)">Atlantic Council</a>, which puts up to 75% of healthcare organisations below it.</p>
   </div>
 </section>
 
