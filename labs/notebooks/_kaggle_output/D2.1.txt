@@ -1,50 +1,55 @@
-WHAT THE RESPONDER SEES
-   t+s  actor           action          target
-     0  dana@corp       login           sso
-    22  dana@corp       open_ticket     SEC-4471
-    40  dana@corp       read_file       /work/repo/billing.py
-    41  dana@corp       read_file       /home/app/.aws/credentials
-    43  dana@corp       http_post       collect.example.com
-   180  dana@corp       logout          sso
-A MODEL'S RECONSTRUCTION (fluent, supported by every log line):
+model backend : replay
+model         : deterministic stand-in (no backend configured)
 
-At 14:02 dana@corp authenticated via SSO and opened ticket SEC-4471. Eighteen
-seconds later the same account read billing.py, then read the application's AWS
-credentials, and posted to an external host. The account then remained active
-for a further two minutes before logging out.
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
 
-Assessment: credential theft by an authenticated insider. Recommend immediate
-suspension of dana@corp pending investigation.
+   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
 
-WHAT ACTUALLY HAPPENED
-   t+s  actor           action          target
-     0  dana@corp       login           sso
-    22  dana@corp       open_ticket     SEC-4471
-    40  patch-agent     read_file       /work/repo/billing.py
-    41  patch-agent     read_file       /home/app/.aws/credentials
-    43  patch-agent     http_post       collect.example.com
-   180  dana@corp       logout          sso
-actors_in_logs        ['dana@corp']
-actors_in_reality     ['dana@corp', 'patch-agent']
-misattributed_lines   3
-hidden_actors         ['patch-agent']
-attribution           BROKEN
-consequence           containment aimed at ['dana@corp'] leaves ['patch-agent'] running
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+history: 522 events, 2 true positives
+rule                                 alerts   prec  recall  alerts/TP
+----------------------------------------------------------------------
+R1 any http_get by an agent             301  0.003   0.500      301.0
+R2 http_get to a non-github host          1  1.000   0.500        1.0
+R3 link-local address                     1  1.000   0.500        1.0
+R4 any failed action                     20  0.000   0.000        inf
+R5 credential path OR link-local          2  1.000   1.000        1.0
+REJECT  R1 any http_get by an agent
+          · 301.0 alerts per true positive (budget 5)
+DEPLOY  R2 http_get to a non-github host
+DEPLOY  R3 link-local address
+REJECT  R4 any failed action
+          · no true positives
+          · inf alerts per true positive (budget 5)
+          · recall 0.0 below 0.5
+DEPLOY  R5 credential path OR link-local
+generated               5
+shipped                 3
+shipped_rules           ['R2 http_get to a non-github host', 'R3 link-local address', 'R5 credential path OR link-local']
+queue_impact_per_day    4
+coverage                1.0
 
-Every sentence in that narrative is supported by the logs.
-The conclusion is wrong, and the recommended action does nothing.
-EVIDENTIARY LIMITS (must appear before any conclusion):
-   ⚠ no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
-   ⚠ no delegation chain: cannot establish who caused the task
+The agent generated 5 rules in seconds. Scoring them against 521 real
+events took milliseconds and rejected 3. That scoring step is the job —
+without it, R1 ships and the SOC stops reading agent alerts within a week.
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Write the detection condition for: a non-human identity listing mo...
 
-Timeline: dana@corp authenticated, opened SEC-4471; the account then read
-billing.py, read AWS credentials, and posted externally.
+answer:
+   actor.type == 'service_account'
+   and count_distinct(event.bucket, window='5m') > 20
+   and not cidr_match(source.ip, actor.baseline_cidr)
 
-LIMITS OF THIS RECONSTRUCTION
-  - no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
-  - no delegation chain: cannot establish who caused the task
+property checked : expresses a threshold
+held on replay       : True
 
-Assessment: an actor holding dana@corp's credential performed the reads and the
-POST. The logs CANNOT establish whether that actor was the human or an agent
-operating with her token. Containment must therefore address both.
-
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model's.

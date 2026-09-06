@@ -1,0 +1,76 @@
+model backend : replay
+model         : deterministic stand-in (no backend configured)
+
+This lesson runs offline against a deterministic replay, which is why
+it works on a Kaggle kernel with the internet switched off. To run the
+identical code against a real model, serve an open-weight model from
+Kaggle Models and point the adapter at it:
+
+   python3 -m llama_cpp.server --model <the .gguf from Kaggle> \
+           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
+   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
+          MODEL=qwen2.5-7b-instruct
+
+   MODELS.md has the exact Kaggle download. There is no paid backend:
+   every model result in this repository was produced this way.
+queue: 8 alerts, 4 true positives
+   A-01 medium   impossible travel        dana@corp
+   A-02 critical metadata service access  patch-agent
+   A-03 medium   failed logins x40        svc-etl
+   A-04 high     secret path read         patch-agent
+   A-05 high     new admin group member   sam@corp
+   A-06 low      port scan detected       scanner-01
+   A-07 high     egress to unlisted host  triage-agent
+   A-08 low      expired certificate      www
+alert  verdict     conf  truth  reasoning
+--------------------------------------------------------------------------------------------
+A-01   close       0.88     fp  corporate VPN egress in Frankfurt; matches t
+A-02   escalate    0.97     tp  link-local metadata endpoint from a non-huma
+A-03   close       0.71     fp  service account retry storm after a credenti
+A-04   escalate    0.93     tp  agent read a cloud credential path outside i
+A-05   escalate    0.64     tp  privileged group change; needs the change ti
+A-06   close       0.90     fp  authorised internal scanner, scheduled windo
+A-07   escalate    0.95     tp  egress to a host not on the allowlist
+A-08   close       0.99     fp  hygiene finding, not a security event
+escalated_correctly       4
+false_escalations         0
+closed_correctly          4
+CLOSED_TRUE_POSITIVES     0
+missed                    []
+analyst_minutes_saved     40
+incidents_missed          0
+
+Now lower the escalation bar and watch the trade:
+   close only above conf 0.50 → missed 0, analyst minutes saved 40
+   close only above conf 0.70 → missed 0, analyst minutes saved 40
+   close only above conf 0.90 → missed 0, analyst minutes saved 20
+   close only above conf 0.99 → missed 0, analyst minutes saved 10
+1. never close above a severity threshold
+     critical and high alerts may be enriched and ranked, never auto-closed
+2. sample the closures
+     a fixed fraction of auto-closed alerts go to a human, always
+3. measure closures against ground truth
+     when an incident is found later, check whether the loop closed a related alert
+
+   A-01 medium   close     → close     
+   A-02 critical escalate  → escalate  
+   A-03 medium   close     → sample    rule 2: routine closure sample for quality measurement
+   A-04 high     escalate  → escalate  
+   A-05 high     escalate  → escalate  
+   A-06 low      close     → close     
+   A-07 high     escalate  → escalate  
+   A-08 low      close     → close     
+
+before: missed 0   after: missed 0
+backend used : replay
+model        : deterministic stand-in (no backend configured)
+prompt       : Triage this alert to one of: escalate, close-benign, needs-context...
+
+answer:
+   escalate - the source range and the breadth of the list call are both outside this account's established pattern.
+
+property checked : returned one of the three dispositions
+held on replay       : True
+
+Same code, same assertions, two possible backends. Offline the answer is
+the replay and is labelled as one; with a served model it is the model's.

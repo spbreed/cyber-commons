@@ -1,8 +1,8 @@
 {
  "generated_by": "scripts/kaggle_verify.py",
  "account": "cybercommons",
- "verified": 120,
- "checked": 120,
+ "verified": 130,
+ "checked": 130,
  "empty_output": [],
  "line_count_mismatch": [],
  "note": "A kernel status of 'complete' only means Kaggle finished running it \u2014 a notebook printing nothing also completes. Each row here compares the kernel's remote stdout against a fresh local run of the same notebook, after identical normalisation. 'identical: true' means both machines printed exactly the same thing.",
@@ -642,57 +642,12 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 67,
-   "local_lines": 67,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.10",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 37,
-   "local_lines": 37,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.11",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 35,
-   "local_lines": 35,
+   "remote_lines": 27,
+   "local_lines": 27,
    "first_differing_line": null
   },
   {
    "session": "D1.2",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 42,
-   "local_lines": 42,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.3",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 48,
-   "local_lines": 48,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.4",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 20,
-   "local_lines": 20,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.5",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -701,16 +656,7 @@
    "first_differing_line": null
   },
   {
-   "session": "D1.6",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 33,
-   "local_lines": 33,
-   "first_differing_line": null
-  },
-  {
-   "session": "D1.7",
+   "session": "D1.3",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -719,21 +665,21 @@
    "first_differing_line": null
   },
   {
-   "session": "D1.8",
+   "session": "D1.4",
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 27,
-   "local_lines": 27,
+   "remote_lines": 33,
+   "local_lines": 33,
    "first_differing_line": null
   },
   {
-   "session": "D1.9",
+   "session": "D1.5",
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 26,
-   "local_lines": 26,
+   "remote_lines": 17,
+   "local_lines": 17,
    "first_differing_line": null
   },
   {
@@ -741,8 +687,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 42,
-   "local_lines": 42,
+   "remote_lines": 48,
+   "local_lines": 48,
    "first_differing_line": null
   },
   {
@@ -750,8 +696,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 28,
-   "local_lines": 28,
+   "remote_lines": 12,
+   "local_lines": 12,
    "first_differing_line": null
   },
   {
@@ -759,8 +705,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 40,
-   "local_lines": 40,
+   "remote_lines": 20,
+   "local_lines": 20,
    "first_differing_line": null
   },
   {
@@ -768,8 +714,8 @@
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 29,
-   "local_lines": 29,
+   "remote_lines": 26,
+   "local_lines": 26,
    "first_differing_line": null
   },
   {
@@ -782,16 +728,106 @@
    "first_differing_line": null
   },
   {
-   "session": "D2.6",
+   "session": "D3.1",
    "ok": true,
    "identical": true,
    "runs_code": true,
-   "remote_lines": 6,
-   "local_lines": 6,
+   "remote_lines": 67,
+   "local_lines": 67,
    "first_differing_line": null
   },
   {
-   "session": "D2.7",
+   "session": "D3.2",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 19,
+   "local_lines": 19,
+   "first_differing_line": null
+  },
+  {
+   "session": "D3.3",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 18,
+   "local_lines": 18,
+   "first_differing_line": null
+  },
+  {
+   "session": "D3.4",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 37,
+   "local_lines": 37,
+   "first_differing_line": null
+  },
+  {
+   "session": "D3.5",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 42,
+   "local_lines": 42,
+   "first_differing_line": null
+  },
+  {
+   "session": "D3.6",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 42,
+   "local_lines": 42,
+   "first_differing_line": null
+  },
+  {
+   "session": "D3.7",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 28,
+   "local_lines": 28,
+   "first_differing_line": null
+  },
+  {
+   "session": "D3.8",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 40,
+   "local_lines": 40,
+   "first_differing_line": null
+  },
+  {
+   "session": "D4.1",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 20,
+   "local_lines": 20,
+   "first_differing_line": null
+  },
+  {
+   "session": "D4.2",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 24,
+   "local_lines": 24,
+   "first_differing_line": null
+  },
+  {
+   "session": "D4.3",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 29,
+   "local_lines": 29,
+   "first_differing_line": null
+  },
+  {
+   "session": "D4.4",
    "ok": true,
    "identical": true,
    "runs_code": true,
@@ -800,21 +836,66 @@
    "first_differing_line": null
   },
   {
-   "session": "D2.8",
-   "ok": true,
-   "identical": true,
-   "runs_code": true,
-   "remote_lines": 31,
-   "local_lines": 31,
-   "first_differing_line": null
-  },
-  {
-   "session": "D2.9",
+   "session": "D4.5",
    "ok": true,
    "identical": true,
    "runs_code": true,
    "remote_lines": 20,
    "local_lines": 20,
+   "first_differing_line": null
+  },
+  {
+   "session": "D5.1",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 35,
+   "local_lines": 35,
+   "first_differing_line": null
+  },
+  {
+   "session": "D5.2",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 23,
+   "local_lines": 23,
+   "first_differing_line": null
+  },
+  {
+   "session": "D5.3",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 18,
+   "local_lines": 18,
+   "first_differing_line": null
+  },
+  {
+   "session": "D5.4",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 6,
+   "local_lines": 6,
+   "first_differing_line": null
+  },
+  {
+   "session": "D5.5",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 27,
+   "local_lines": 27,
+   "first_differing_line": null
+  },
+  {
+   "session": "D5.6",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 31,
+   "local_lines": 31,
    "first_differing_line": null
   },
   {
@@ -860,6 +941,15 @@
    "runs_code": true,
    "remote_lines": 43,
    "local_lines": 43,
+   "first_differing_line": null
+  },
+  {
+   "session": "E1.13",
+   "ok": true,
+   "identical": true,
+   "runs_code": true,
+   "remote_lines": 26,
+   "local_lines": 26,
    "first_differing_line": null
   },
   {

@@ -1,0 +1,33 @@
+policy change proposal · evidence: INC-2026-114
+root cause: no control compared the vendor tool description against the version approved at onboarding
+
+  mcp.vendor.tool_descriptions
+  - trusted on fetch
+  + pinned at onboarding; a change requires review
+    why: the altered description is what issued the refund
+
+  tool.call.provenance
+  - recorded when present
+  + required; a call without it is refused
+    why: 41% of calls carried provenance during the incident, so it was optional
+
+  payments.refund.approval
+  - required for amounts over 500
+  + required for every amount
+    why: KCI-03 did not return to target after the fix
+
+3 clause(s) changed
+NOT addressed by this proposal: KCI-04
+   KCI-04 is the detection SLA. No policy change fixes it, because the
+   policy already says 15 minutes — the control was never built to meet
+   what the policy already required. That is an engineering item, and
+   saying so here stops it being lost between the two.
+
+Every line has an incident behind it. A policy diff whose 'why' column is
+an opinion gets argued on opinions; one whose 'why' column is a measured
+number from last week's incident gets argued on the number.
+
+The refusal in the second change is the expensive one and is stated as a
+diff on purpose: 'provenance required, calls without it refused' will
+break integrations, and the review that follows is exactly the review
+that should happen before it ships rather than after.

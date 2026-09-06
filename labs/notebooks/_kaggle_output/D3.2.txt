@@ -1,0 +1,23 @@
+investigation class: agent-misuse
+   sources admitted : agent.traces, gateway.logs, tool.audit
+   fields denied    : message_body, passport_no, payment_card
+   row cap          : 5000
+
+source          fields                               rows  outcome
+agent.traces    agent,tool,ts                         400  allow
+gateway.logs    src,route,ts                         1200  allow
+tool.audit      tool,arg,ts                           300  allow
+bookings.db     owner_id,payment_card                8000  REFUSE — source not admitted for this class
+agent.traces    agent,message_body                    900  REFUSE — denied field: message_body
+gateway.logs    src,route                           90000  REFUSE — 90000 rows exceeds the 5000 cap
+
+3 allowed · 3 refused
+
+Every refusal is a record, not a silent drop. That matters twice: the
+investigator can ask a human for a grant with the exact query attached,
+and the refusals are themselves evidence that the investigation did not
+become the second incident.
+
+Note the third refusal. Nothing about it is sensitive - it is the same
+source and the same fields as an allowed query. It is refused on volume,
+because 90,000 rows is not an investigation, it is a copy.

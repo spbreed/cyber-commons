@@ -1,7 +1,7 @@
 the tree this host fetched
   areas            : 14
-  skills           : 121
-  with a script    : 121
+  skills           : 132
+  with a script    : 132
   shared runtime   : present
   resolved from    : the running file, not the working directory
 

@@ -1,33 +1,21 @@
-full record (everything the harness saw):
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
-    {'n': 2, 'tool': 'search_code', 'target': 'charge(', 'verifier': 'n/a', 'ok': True, 'prompt': 'find callers of charge()', 'result': 'api/checkout.py:88 charge(user.card, total)'}
-    {'n': 3, 'tool': 'write_file', 'target': '/work/repo/billing.py', 'verifier': 'tests pass', 'ok': True, 'prompt': 'apply the fix', 'result': 'patch applied'}
-sensitive content found in the trace:
-   step 1  result   payment card
+corpus: 40 agent runs, 6 of them labelled anomalous
 
-Nobody put a card number in the trace deliberately. The agent read a
-source file, and the file contained a test fixture with a real-shaped PAN.
-The trace is now in scope for PCI, and it is in your SIEM for 400 days.
-field       days  sensitivity  rationale
---------------------------------------------------------------------------
-n            400          low  cheap, high forensic value
-tool         400          low  cheap, high forensic value
-target       400          low  path only, no contents
-verifier     400          low  what the harness believed — the key forensic field
-ok           400          low  
-prompt        30         high  may contain anything the task included
-result         7         high  tool output — the highest-risk field
+hypothesis                       matched  tp  fp  precision  recall
+tool outside declared scope            3   3   0       1.00    0.50
+run outside working hours             14   2  12       0.14    0.33
+volume above task ceiling              2   2   0       1.00    0.33
 
-after 1 days — step 1 record:
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
+   tool outside declared scope     -> promote
+   run outside working hours       -> tune
+   volume above task ceiling       -> promote
 
-after 14 days — step 1 record:
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result_sha256': 'b0e3ecafa7e7a9a0'}
+The working-hours hypothesis is the one to stop on. It matched 14 runs
+to find 2, because 12 of the matches are the overnight batch doing
+exactly its job. Precision 0.14. That is a tune, not a finding, and
+shipping it would add 12 alerts a night to a queue for 2 real events.
 
-after 90 days — step 1 record:
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt_sha256': '60d7bceb0de1a7bd', 'result_sha256': 'b0e3ecafa7e7a9a0'}
-sensitive content after 90 days: none
-can still answer 'what did it do and what did the harness believe?': True
-
-The hash is retained, so if the original is recovered from a backup you
-can still prove it is the same content the agent saw.
+Note what recall is NOT saying here. No hypothesis reaches 1.00 and none
+should: a hunt is one hypothesis about one behaviour, and these six
+anomalies are not one behaviour. Recall against every anomaly in the corpus
+is the wrong denominator - recall against the behaviour the hypothesis
+describes is the right one, and that is why each hypothesis is scored alone.

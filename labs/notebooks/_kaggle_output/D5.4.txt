@@ -1,0 +1,8 @@
+blast before 44  after 4
+the manifest diff records the change even though no PR was raised.
+
+OK   gate http_post behind approval            type=preventive  owner=platform-sec   verify_by=2026-09-30
+OK   alert on credential-path reads            type=detective   owner=soc            verify_by=2026-09-15
+WEAK update the prompt to warn the model       type=guidance    owner=—              verify_by=—
+
+1 action(s) are guidance rather than controls: ['update the prompt to warn the model']

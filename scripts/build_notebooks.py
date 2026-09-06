@@ -115,10 +115,12 @@ if _root is None:
             "needs a phone-verified account. Without one, attach the dataset "
             "cybercommons/cyber-commons-skills instead — it holds the same tree.")
     # `skills` is the procedures; `cybertravels` is the sample repository they
-    # scan. Both, or the scanning skills clone successfully and then find
-    # nothing to look at.
+    # scan; `curriculum` and `site/data` hold the framework mapping and the
+    # session list that the reference-lookup skill reads. Miss any of them and
+    # the skill clones successfully and then fails on a path that is not there,
+    # which is how A0.2 failed its first Kaggle run.
     subprocess.run(["git", "-C", CLONE, "sparse-checkout", "set",
-                    "skills", "cybertravels"],
+                    "skills", "cybertravels", "curriculum", "site/data"],
                    capture_output=True, text=True)
     _root = CLONE
 

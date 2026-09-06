@@ -1,0 +1,22 @@
+opening hypothesis: agent-misuse
+
+1. gateway  refund issued for BK-772 at 03:14
+2. traces   the refund came from the workflow agent's session
+3. iam      that session was opened by SPIFFE id, not a human login
+4. traces   the agent's plan for that run contains no refund step
+   (neutral — refutes nothing, so nothing changes)
+5. mcp      the vendor MCP server returned a tool description naming a refund
+   REPLAN agent-misuse -> indirect-injection
+6. corpus   that description changed 40 minutes before the run
+
+1 replan(s) · final hypothesis: indirect-injection
+
+Step 4 is the one that matters and the one an eager investigator skips.
+'the agent's plan contains no refund step' supports nothing - it is not
+evidence FOR another hypothesis, it is evidence AGAINST the current one.
+An agent scoring only support will read it as noise and carry on.
+
+Step 5 is what actually moves the investigation, and it moves it away from
+the agent entirely: the instruction came from a vendor's tool description.
+The abandoned branch stays in the trace. A reviewer needs to see that
+agent-misuse was considered and dropped, not that it was never thought of.
