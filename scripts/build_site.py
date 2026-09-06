@@ -476,19 +476,46 @@ def home_numbers() -> dict[str, int]:
     }
 
 
+# The homepage names the five functions in the language a reader arrives with,
+# which is not the language the curriculum stores. curriculum.json's titles are
+# embedded in 39 notebooks and in every lesson page's breadcrumb, so renaming
+# them there would mean rebuilding and re-verifying all 120 notebooks for a
+# copy change. The mapping lives here instead, and a function missing from it
+# fails the build rather than quietly falling back to the stored title.
+TRACKS = {
+    "A": ("Agent architecture &amp; risks",
+          "One reference architecture for agentic systems, and every risk that "
+          "attaches to a component of it."),
+    "B": ("AI SDLC &amp; harness",
+          "An AppSec pipeline that runs before and after deploy, and the harness "
+          "that measures whether it works."),
+    "C": ("AI red teaming",
+          "Authorised, scoped offensive capability against your own estate — plus "
+          "security research with AI."),
+    "D": ("Agentic SOC",
+          "Detection and response when the analyst is directing agents rather "
+          "than reading alerts one at a time."),
+    "E": ("AI GRC",
+          "Risk, control, regulatory mapping and the CISO office, for systems "
+          "that take actions on their own."),
+}
+
+
 def curriculum_block() -> str:
-    """The chapter grid: one row per track, linking to that track's first lesson."""
-    out = ['<div class="chapters rv">']
-    for fn in CUR["functions"]:
-        out.append(f'<div class="fnrow"><span class="fk">Function {html.escape(fn["id"])}</span>'
-                   f'<span class="fn">{html.escape(fn["title"])}</span></div>')
-        for tr in fn["tracks"]:
-            first = tr["sessions"][0]["id"]
-            n = len(tr["sessions"])
-            out.append(f'<a class="chrow" href="lessons/{first}.html">'
-                       f'<span class="cid">{html.escape(tr["id"])}</span>'
-                       f'<span class="ct">{html.escape(tr["title"])}</span>'
-                       f'<span class="cn">{n} lesson{"s" if n != 1 else ""}</span></a>')
+    """Five track cards, one per function, linking to that track's first lesson."""
+    missing = [f["id"] for f in CUR["functions"] if f["id"] not in TRACKS]
+    if missing:
+        raise SystemExit(f"scripts/build_site.py: no homepage name for function(s) "
+                         f"{missing} — add them to TRACKS")
+    out = ['<div class="tracks rv">']
+    for i, fn in enumerate(CUR["functions"], 1):
+        name, blurb = TRACKS[fn["id"]]
+        first = fn["tracks"][0]["sessions"][0]["id"]
+        n = sum(len(t["sessions"]) for t in fn["tracks"])
+        out.append(f'<a class="trk" href="lessons/{first}.html">'
+                   f'<div class="k">{i:02d}</div>'
+                   f'<h3>{name}</h3><p>{blurb}</p>'
+                   f'<div class="n">{n} lessons</div></a>')
     out.append("</div>")
     return "\n".join(out)
 
