@@ -6,9 +6,13 @@ not have was a unit. E1.1 supplies one: a **key control indicator**, computed
 from the estate, with a denominator and a target written before it is measured.
 
 So every other lesson in E states its relationship to that unit in one line,
-rendered right under the concept. The line is not decoration. Three of these
-were written and immediately showed that the lesson beneath them was doing
-something else entirely — which is the point of making a spine explicit.
+rendered right under the concept. The line is not decoration: reading the first
+draft of each anchor against its own lesson body found five of twenty-nine
+describing something the lesson does not contain — a column that is not there,
+a sequencing rule the lesson argues against, four metrics in place of the
+lesson's five. That is the point of making a spine explicit, and it is also the
+warning: the gate below checks that an anchor exists and renders, and cannot
+check that it is true.
 
 E1.0 and E1.1 are the two exceptions, and they are exceptions for the same
 reason: E1.1 defines the unit and E1.0 introduces the function that is told in

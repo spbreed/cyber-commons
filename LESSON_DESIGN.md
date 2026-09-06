@@ -152,8 +152,12 @@ that indicator or takes from it, rendered under its concept:
 naming a lesson that is not in E. The rule is enforced rather than reported
 because the failure it prevents is silent: a governance lesson can be internally
 coherent, read perfectly well on its own page, and belong to no argument at all.
-Three anchors, written honestly, immediately showed the lesson beneath them was
-doing something else — which is the point of making a spine explicit.
+
+What the gate cannot check is whether an anchor is **true**. Reading the first
+draft of each one against its own lesson found five of twenty-nine describing
+something the lesson does not contain. Write the anchor, then read it against
+the concept it will sit under — that pass is the review, and the gate is only
+the reminder to do it.
 
 ---
 
