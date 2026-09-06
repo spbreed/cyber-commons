@@ -1,0 +1,143 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D3.3 — Plan, then replan — an investigation that changes its mind | Cyber Commons</title><meta name="description" content="An explicit plan record with a replan trigger, so an abandoned branch is visible in the trace rather than silently dropped."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Investigate</div><div class="sid">D3.3</div><h1>Plan, then replan — an investigation that changes its mind</h1><div class="badges"><span class="badge t">D3</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T10</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D3.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The agent anchors on its first hypothesis and spends the whole incident gathering evidence for it.</p></div><div class="ctrl"><div class="lab">Control</div><p>An explicit plan record with a replan trigger, so an abandoned branch is visible in the trace rather than silently dropped.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Feed contradicting evidence mid-investigation and check the plan actually changes, and that the abandoned branch is recorded.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/secops/investigation-replan-trace/scripts/investigation_replan_trace.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D3.3 · Plan, then replan — an investigation that changes its mind</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Investigate</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D3.2.html">D3.2 · Admission rules — what the investigating agent may touch</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>OpenTelemetry</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Investigations that abandon a hypothesis when the evidence refutes it, and keep the abandoned branch visible in the trace.</p>
+<p><strong>Why a security engineer needs it.</strong> Agents score evidence on support, so evidence that supports nothing reads as noise — and refutation is precisely what should force a replan. The result is an investigator that spends the whole incident confirming step one. A conclusion with no visible alternatives also cannot be audited: a reviewer needs to see what was considered and dropped.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>An agent forms a hypothesis at step one and spends the rest of the incident finding evidence for it. The evidence that should have stopped it supports nothing at all — which is exactly why an agent scoring only support reads it as noise and carries on.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The investigation is CyberTravels' refund incident, and the branch that gets abandoned is the one everybody starts with: the Workflow Agent issued the refund, so the Workflow Agent is the problem. The evidence that kills it is that the agent's own plan for that run contains no refund step — the instruction came from a vendor MCP server's tool description, which is A1.13's risk arriving as an incident.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   evidence        supports?        the plan
+
+   1 refund at 03:14   misuse|theft   agent-misuse
+   2 agent's session   misuse         agent-misuse
+   3 SPIFFE, no human  misuse         agent-misuse
+   4 plan has no       --- nothing -- agent-misuse   &lt;- refutes, supports
+     refund step                                        nothing, and an
+                                                        agent scoring only
+                                                        support skips it
+   5 vendor tool desc  injection      REPLAN -------&gt; indirect-injection
+   6 desc changed      injection      indirect-injection
+
+   the abandoned branch stays in the trace: a reviewer must see that
+   agent-misuse was considered and dropped, not that it was never raised
+</code></pre>
+<p>Every investigator is wrong at step one. What separates an investigator from an
+expensive autocomplete is what happens when the evidence stops fitting.</p>
+<p>The way agents fail here is specific. They score evidence on whether it
+<strong>supports</strong> a hypothesis — so evidence that supports nothing reads as noise,
+when refutation is exactly what should force the replan. The agent keeps
+gathering support for a theory the evidence already killed.</p></div><div class="nbmd"><h2>3 · The abandoned branch stays in the trace</h2>
+<p>A reviewer needs to see that a hypothesis was considered and dropped, not that
+it was never raised. A conclusion with no visible alternatives looks inevitable,
+and an investigation that looks inevitable is one nobody can audit.</p>
+<p>In CyberTravels the branch that gets abandoned is the obvious one: the workflow
+agent issued the refund, so the workflow agent did it. The evidence that kills
+that theory supports nothing at all — the agent's own plan for that run contains
+no refund step.</p></div><div class="nbmd"><h2>4 · An investigation that changes its mind</h2>
+<p>Six pieces of evidence, three hypotheses, one replan. Step 4 is the one an eager investigator skips.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/secops/investigation-replan-trace/SKILL.md"><code>skills/secops/investigation-replan-trace/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: investigation-replan-trace
+description: &gt;-
+  Run an investigation that must abandon its opening hypothesis, and check the
+  replan is visible in the trace. Use when an investigating agent keeps
+  confirming its first theory, when evidence that refutes rather than supports
+  is being ignored, or when a reviewer needs to see which branches were dropped.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>The failure is not being wrong at step one. It is staying wrong.</h1>
+<p>Every investigator is wrong at step one. What separates an investigator from an
+expensive autocomplete is what happens when the evidence stops fitting: a real
+one abandons the branch, and the abandoned branch stays in the record.</p>
+<p>The specific way agents fail here is subtle. They score evidence on whether it
+<strong>supports</strong> a hypothesis, so evidence that supports nothing reads as noise —
+when refutation is exactly what should force the replan.</p>
+<h2>When to use this</h2>
+<p>On any investigation an agent drives end to end, and in review of one that
+reached a confident conclusion quickly. A trace with no replan on a complex
+incident is a warning, not a success.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Record the opening hypothesis explicitly.</strong> An unstated hypothesis cannot
+be abandoned, only drifted from.</p>
+<p><strong>2 — Score each piece of evidence for and against, separately.</strong> Support and
+refutation are not one axis.</p>
+<p><strong>3 — Trigger a replan on refutation, not on absence of support.</strong> Evidence that
+supports nothing is the signal; treat it as a trigger, not as noise.</p>
+<p><strong>4 — Keep the abandoned branch in the trace.</strong> A reviewer must see that a
+hypothesis was considered and dropped, not that it was never raised.</p>
+<p><strong>5 — Stop when a hypothesis survives evidence that could have refuted it.</strong>
+Not when one accumulates the most support.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — six pieces of evidence and three competing hypotheses, in
+<a href="scripts/investigation_replan_trace.py"><code>scripts/investigation_replan_trace.py</code></a>.</p>
+<p><strong>Output</strong> — the turn of a real run:</p>
+<pre><code>4. traces   the agent's plan for that run contains no refund step
+   (neutral — refutes nothing, so nothing changes)
+5. mcp      the vendor MCP server returned a tool description naming a refund
+   REPLAN agent-misuse -&gt; indirect-injection
+</code></pre>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;steps&quot;: [{&quot;n&quot;: 0, &quot;source&quot;: &quot;str&quot;, &quot;fact&quot;: &quot;str&quot;,
+             &quot;hypothesis_before&quot;: &quot;str&quot;, &quot;hypothesis_after&quot;: &quot;str&quot;,
+             &quot;replanned&quot;: true}],
+  &quot;replans&quot;: 0,
+  &quot;final&quot;: &quot;str&quot;
+}
+</code></pre>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>Evidence supports two hypotheses equally.</strong> It is not a discriminator;
+  keep both alive rather than picking the first.</li>
+<li><strong>The refuting evidence arrives first.</strong> Then the opening hypothesis was
+  wrong before it was formed, which is fine and should still be recorded.</li>
+<li><strong>No hypothesis survives.</strong> That is a result. It means the list was
+  incomplete, not that the investigation failed.</li>
+</ul>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Anchoring.</strong> Every subsequent query is designed to confirm step one.</li>
+<li><strong>Silent branch pruning.</strong> The conclusion looks inevitable because the
+  alternatives were never written down.</li>
+<li><strong>Treating "supports nothing" as noise.</strong> It is the strongest signal in the
+  trace.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>opening hypothesis: agent-misuse
+
+1. gateway  refund issued for BK-772 at 03:14
+2. traces   the refund came from the workflow agent&#x27;s session
+3. iam      that session was opened by SPIFFE id, not a human login
+4. traces   the agent&#x27;s plan for that run contains no refund step
+   (neutral — refutes nothing, so nothing changes)
+5. mcp      the vendor MCP server returned a tool description naming a refund
+   REPLAN agent-misuse -&gt; indirect-injection
+6. corpus   that description changed 40 minutes before the run
+
+1 replan(s) · final hypothesis: indirect-injection
+
+Step 4 is the one that matters and the one an eager investigator skips.
+&#x27;the agent&#x27;s plan contains no refund step&#x27; supports nothing - it is not
+evidence FOR another hypothesis, it is evidence AGAINST the current one.
+An agent scoring only support will read it as noise and carry on.
+
+Step 5 is what actually moves the investigation, and it moves it away from
+the agent entirely: the instruction came from a vendor&#x27;s tool description.
+The abandoned branch stays in the trace. A reviewer needs to see that
+agent-misuse was considered and dropped, not that it was never thought of.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>One replan, from agent-misuse to indirect-injection, with the neutral evidence at step 4 marked as refuting nothing — and the abandoned branch still visible in the trace.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Add evidence that refutes the final hypothesis too. An investigation that cannot end undecided is not investigating.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D3.4.html">D3.4 · Fleet-level correlation: seeing a swarm</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D3.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.3.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Feed contradicting evidence mid-investigation and check the plan actually changes, and that the abandoned branch is recorded.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.3.ipynb</code></p></div><div class="pager"><a href="D3.2.html"><span class="k">← Previous</span><span class="t">D3.2 · Admission rules — what the investigating agent may touch</span></a><a class="next" href="D3.4.html"><span class="k">Next →</span><span class="t">D3.4 · Fleet-level correlation: seeing a swarm</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

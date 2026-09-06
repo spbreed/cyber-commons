@@ -1,0 +1,158 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>E1.13 — Measuring the controls on CyberTravels — gaps and mitigations | Cyber Commons</title><meta name="description" content="Key control indicators computed from source on every change, each gap carrying a named mitigation."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function E — AI Governance for Agentic Systems › Building the Governance Framework — Risk and Control</div><div class="sid">E1.13</div><h1>Measuring the controls on CyberTravels — gaps and mitigations</h1><div class="badges"><span class="badge t">E1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T7</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/9/" title="Risk management system" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 9</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/E1.13.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Controls are asserted in a register and never measured, so the first evidence that one was missing is the incident.</p></div><div class="ctrl"><div class="lab">Control</div><p>Key control indicators computed from source on every change, each gap carrying a named mitigation.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Measure six indicators against the CyberTravels tree and read the five gaps it reports.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.13.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.13.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/grc/kci-control-measurement/scripts/kci_control_measurement.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>E1.13 · Measuring the controls on CyberTravels — gaps and mitigations</h1>
+<p><strong>Function E — AI Governance for Agentic Systems → Building the Governance Framework — Risk and Control</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/E1.12.html">E1.12 · Working the seams</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>standard library only</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Turning mapped controls into indicators that can be computed from the repository, running them against CyberTravels, and reporting each gap with the lesson that closes it.</p>
+<p><strong>Why a security engineer needs it.</strong> A control asserted in a register and never measured has no evidence behind it until an incident supplies some. The test for a real indicator is mechanical — can this be computed from the estate today, without asking anyone — and the output has to be a gap list rather than a score, because nobody can action 72%.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>The register says the control is in place. Nobody has computed it from the estate, so the first evidence either way will be an incident. An indicator you cannot calculate today is a sentence in a policy wearing a number's clothes.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The indicators are computed from the CyberTravels repository itself — the same tree B2.3 scans and A1.1 draws. Five of six report gaps, and KCI-05 is the honest one: it measures an egress control that CyberTravels has never built, so it reads zero and will keep reading zero until A3.7's gateway exists. That is the backlog in the same units as everything else.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   cybertravels/  (read at run time, not from a register)
+        |
+        v
+   +--------------------------------------------------------+
+   | KCI-01  handlers comparing an owner    == 1.00   0.29 X |
+   | KCI-02  HTTP calls verifying TLS       == 1.00   0.00 X |
+   | KCI-03  no eval of caller text            == 0   1.00 X |
+   | KCI-04  no shell w/ model argument        == 0   1.00 X |
+   | KCI-05  egress control present            == 1   0.00 X |
+   | KCI-06  no credential literal             == 0   0.00 v |
+   +--------------------------------------------------------+
+        |                                              |
+        v                                              v
+   gap  -&gt; the lesson that closes it        one PASSING indicator,
+           (A2.4, B2.7, A3.4, A3.7)         so the set can be seen
+                                            to discriminate
+</code></pre>
+<p>A control indicator is only an indicator if something measures it. Otherwise it
+is a sentence in a policy, and the first evidence that a control was missing is
+the incident.</p>
+<p>The test is mechanical: can you compute this number from the estate, today,
+without asking anyone? "Object handlers that compare an owner" passes.
+"Is authorisation adequate" does not.</p>
+<p>So these are computed from <code>cybertravels/</code> — the same tree B2.3 scans and A1.1
+draws — and the output is a <strong>gap list</strong>, not a maturity score. A governance
+report whose only artefact is a percentage changes nothing, because nobody can
+action 72%.</p></div><div class="nbmd"><h2>3 · Every gap names where the fix is taught</h2>
+<p>A gap with no next step is a complaint. Each one here carries the lesson that
+closes it — the ownership check, the rule that names your own HTTP wrapper,
+default-deny on the tool call, the gateway.</p>
+<p>One indicator in the set is deliberately one CyberTravels passes. A set that
+always reports GAP cannot be shown to discriminate, and a reader has no way to
+tell the instrument works.</p></div><div class="nbmd"><h2>4 · Six indicators, measured now</h2>
+<p>KCI-05 is the one worth arguing about: it measures a component that does not exist, so it reads zero and always will until somebody builds a gateway.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/grc/kci-control-measurement/SKILL.md"><code>skills/grc/kci-control-measurement/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: kci-control-measurement
+description: &gt;-
+  Measure key control indicators against a real repository and report each gap
+  with the lesson that closes it. Use when turning framework controls into
+  something measurable, when a control is asserted but never verified, or when a
+  governance report needs an artefact other than a score.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>A control indicator is only an indicator if something measures it</h1>
+<p>Otherwise it is a sentence in a policy. The test is mechanical: can you compute
+this number from the estate, today, without asking anyone?</p>
+<p>So these are computed from <code>cybertravels/</code> — the same tree B2.3 scans and A1.1
+draws — and the output is a list of gaps each naming the lesson that closes it,
+not a maturity score. A governance report whose only artefact is a number
+changes nothing.</p>
+<h2>When to use this</h2>
+<p>After control mapping (E1.4) and before any assurance claim. Re-run it after
+every change to the estate: an indicator measured once is a snapshot, and the
+whole argument for KCIs is that point-in-time testing fails for systems that
+change weekly.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Write the indicator as a computation, not a question.</strong> "Object handlers
+that compare an owner" is measurable; "is authorisation adequate" is not.</p>
+<p><strong>2 — State the target beside it.</strong> An indicator with no target cannot be met
+or missed.</p>
+<p><strong>3 — Compute it from source, not from a register.</strong> A register records what
+somebody believed at the time.</p>
+<p><strong>4 — Include at least one indicator the estate passes.</strong> A set that always
+reports GAP cannot be shown to discriminate.</p>
+<p><strong>5 — Attach a mitigation to every gap, naming where the fix is taught.</strong> A gap
+with no next step is a complaint.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the <code>cybertravels/</code> tree, read at run time.</p>
+<p><strong>Output</strong> — a real run:</p>
+<pre><code>KCI-01  object handlers that compare an owner       == 1.00      0.29  GAP
+KCI-05  egress control present                         == 1      0.00  GAP
+KCI-06  no credential literal in the source            == 0      0.00  ok
+</code></pre>
+<p>KCI-05 measures a component that does not exist. That is the backlog, stated in
+the same units as everything else.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;kcis&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;indicator&quot;: &quot;str&quot;, &quot;target&quot;: &quot;str&quot;,
+            &quot;measured&quot;: 0.0, &quot;met&quot;: true}],
+  &quot;gaps&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;gap&quot;: &quot;str&quot;, &quot;mitigation&quot;: &quot;str&quot;}]
+}
+</code></pre>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>The indicator measures a control you have not built.</strong> It reads zero and
+  always will. That is a backlog item, not an estate failure.</li>
+<li><strong>A denominator of zero.</strong> No object handlers means the indicator is
+  undefined, not perfect.</li>
+<li><strong>The measurement is gameable.</strong> If renaming a function moves the number, it
+  measures naming.</li>
+</ul>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Scoring instead of listing gaps.</strong> "72% compliant" is not actionable by
+  anyone.</li>
+<li><strong>Measuring from the register.</strong> It records intent, not state.</li>
+<li><strong>Indicators that all fail.</strong> Nothing shows the instrument works.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>cybertravels/ · 20 modules · 7 object handlers
+
+kci     indicator                                    target  measured  status
+KCI-01  object handlers that compare an owner       == 1.00      0.29  GAP
+KCI-02  outbound HTTP calls verifying TLS           == 1.00      0.00  GAP
+KCI-03  no evaluation of caller-supplied text          == 0      1.00  GAP
+KCI-04  no shell carrying a model-supplied argument     == 0      1.00  GAP
+KCI-05  egress control present                         == 1      0.00  GAP
+KCI-06  no credential literal in the source            == 0      0.00  ok
+
+1 met · 5 gaps
+
+   KCI-01  5 of 7 handlers do not
+           -&gt; A2.4 and B2.3 — the ownership check, and finding the ones that lack it
+   KCI-02  1 of 1 disable verification
+           -&gt; B2.7 — a rule that names your own HTTP wrapper, not requests
+   KCI-03  1 function(s) call eval or exec
+           -&gt; A3.4 — default-deny on the tool call
+   KCI-04  1 function(s) reach a shell
+           -&gt; A3.4 and B2.3 — CWE-78 is expressible; a rule catches it
+   KCI-05  no egress component exists in the architecture
+           -&gt; A3.7 — the agent gateway as one choke point
+
+Every number above was computed from the tree just now, which is the only
+property that makes these control INDICATORS rather than control claims.
+Re-run it after a change and the same five numbers move or they do not.
+
+KCI-05 is the one worth arguing about. It measures a component that does
+not exist, so it reads 0.00 and always will until somebody builds a
+gateway. An indicator for a control you have not built is not a failure
+of the estate - it is the backlog, stated in the same units as the rest.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>One indicator met and five gaps, each with a named mitigation — and every number computed from the tree at run time rather than read from a register.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Write a seventh indicator for a control CyberTravels does have, and check it reads as met. An instrument that only ever says GAP is not measuring.</p></div><div class="nbmd"><h2>Where this leaves you</h2>
+<p><strong>What you can do now.</strong> An inventory that stays true, a risk tiering that makes control sets proportionate, a control map that finds the genuine gaps rather than restating the overlap, evidence auditors accept, and verification that runs continuously instead of annually.</p>
+<p><strong>What you still cannot do.</strong> Everything you have built is internally coherent and answers to nobody outside the organisation. A regulator does not ask about your register; they ask which obligation it satisfies, and on what evidence.</p>
+<p><strong>Chapter 11 maps the register outward — one control set, many regimes, documentation that survives supervision. Next → E2.1, the regulatory map.</strong></p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/E2.1.html">E2.1 · The regulatory map</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/E1.13.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/E1.13.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Measure six indicators against the CyberTravels tree and read the five gaps it reports.</div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/E1.13.ipynb</code></p></div><div class="pager"><a href="E1.12.html"><span class="k">← Previous</span><span class="t">E1.12 · Working the seams</span></a><a class="next" href="E2.1.html"><span class="k">Next →</span><span class="t">E2.1 · The regulatory map</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -48,6 +48,17 @@
               "lab": "Run the preflight on both routes and compare the output checksum.",
               "tools": [],
               "models": []
+            },
+            {
+              "id": "A0.2",
+              "title": "The four frameworks, and when each one is the right lens",
+              "track": "secure",
+              "summary": "OWASP's two Top 10s, MITRE ATLAS, the NIST AI RMF and the EU AI Act. What each one is for, which question each answers, and a reference table for each — so a finding gets filed under the vocabulary its audience uses rather than the one the writer happens to know.",
+              "risk": "Four vocabularies get used interchangeably, so a threat id lands in a risk register and a NIST function lands in an incident write-up, and neither audience can act on it.",
+              "control": "One lookup, both directions, read from the same mapping file every lesson page is labelled from.",
+              "lab": "Look up what a lesson maps to, then the harder direction: which lessons address a given EU AI Act article.",
+              "tools": [],
+              "models": []
             }
           ]
         },
@@ -1961,6 +1972,17 @@
               "tools": [
                 "ISO 42001"
               ],
+              "models": []
+            },
+            {
+              "id": "E1.13",
+              "title": "Measuring the controls on CyberTravels — gaps and mitigations",
+              "track": "secure",
+              "summary": "Turn the mapped controls into indicators that can be computed from the repository, run them against CyberTravels, and report each gap with the lesson that closes it. The output is a gap list, not a maturity score.",
+              "risk": "Controls are asserted in a register and never measured, so the first evidence that one was missing is the incident.",
+              "control": "Key control indicators computed from source on every change, each gap carrying a named mitigation.",
+              "lab": "Measure six indicators against the CyberTravels tree and read the five gaps it reports.",
+              "tools": [],
               "models": []
             }
           ]

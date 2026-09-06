@@ -625,3 +625,12 @@ GROUNDING: dict[str, str] = {
         "that promised otherwise will be judged on that promise; one designed to "
         "detect fast, contain small and recover cheaply will not.",
 }
+
+
+# The lessons added with the five-phase Function D restructure — see
+# about_new.py, kept separate for the same reason framing_new.py is.
+from .about_new import CYBERTRAVELS as _NEW      # noqa: E402
+for _k, _v in _NEW.items():
+    assert _k not in GROUNDING, f"{_k} already has an entry"
+    GROUNDING[_k] = _v
+

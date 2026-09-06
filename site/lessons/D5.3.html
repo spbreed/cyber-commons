@@ -1,0 +1,137 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D5.3 — Validating the fix against the KCIs | Cyber Commons</title><meta name="description" content="Automatic re-measurement of the affected KCIs after a fix, with the before-and-after attached to the incident record."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Recover and Root Cause</div><div class="sid">D5.3</div><h1>Validating the fix against the KCIs</h1><div class="badges"><span class="badge t">D5</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T7</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Impact</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/9/" title="Risk management system" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 9</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D5.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The remediation is marked done because the ticket closed, not because the control it restored was measured.</p></div><div class="ctrl"><div class="lab">Control</div><p>Automatic re-measurement of the affected KCIs after a fix, with the before-and-after attached to the incident record.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Re-run the KCI measurement against a fixed estate and show which indicators recovered and which did not.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D5.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D5.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/response/kci-fix-validation/scripts/kci_fix_validation.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D5.3 · Validating the fix against the KCIs</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Recover and Root Cause</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D5.2.html">D5.2 · The root cause record</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>OPA</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Re-measuring the key control indicators an incident moved, after the fix, and reporting which were actually restored.</p>
+<p><strong>Why a security engineer needs it.</strong> A closed ticket is not evidence that a control came back. Automating the re-measurement is what makes it happen on every fix rather than the memorable ones — and it routinely finds that an indicator improved without reaching target, which reads as "done" in every system that does not check.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>The ticket is closed and the incident is marked remediated. Re-measure the indicators it moved and two of them never came back — including the detection time, which improved from 194 minutes to 118 and is still eight times its target.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The six indicators are CyberTravels' own, and two of them do not come back: refunds carrying an approval, and the time to detect a scope breach. CyberTravels' detection went from 194 minutes to 118 against a fifteen-minute target — a real improvement that would still let the same incident run for two hours.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   kci        healthy   during     after fix    verdict
+
+   KCI-01      1.00      0.41       1.00        restored
+   KCI-02      1.00      0.00       1.00        restored
+   KCI-03      1.00      0.86       0.94        NOT restored
+   KCI-04      9 min     194 min    118 min     NOT restored
+   KCI-05      1.00      0.97       1.00        restored
+
+                                    ^
+                                    |
+              the incident record would have said &quot;remediated&quot;
+              for all five. improvement is not restoration.
+</code></pre>
+<p>A fix is a claim. The key control indicators built in E1.1 are how the claim
+gets checked: re-measure the indicators the incident moved, and see which came
+back to target.</p>
+<p>Doing it automatically is the point. Done by hand, it happens for the incidents
+somebody remembers — which are not the ones where it matters.</p></div><div class="nbmd"><h2>3 · Improvement is not restoration</h2>
+<p>The uncomfortable row in this run is detection time. It improved from 194
+minutes to 118 and is still eight times its target, so the control the root
+cause record named has been <em>partially</em> built.</p>
+<p>Partially built is not built. Without the re-measurement it reads as done, and
+the incident record would have said "remediated" for every indicator the
+incident touched.</p></div><div class="nbmd"><h2>4 · Six indicators, three readings each</h2>
+<p>Healthy, during the incident, and after the fix. Restored and not-restored are reported separately, and untouched indicators are kept out of the report entirely.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/kci-fix-validation/SKILL.md"><code>skills/response/kci-fix-validation/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: kci-fix-validation
+description: &gt;-
+  Re-measure the key control indicators an incident moved and report which the
+  fix actually restored. Use when closing a remediation, when a ticket is marked
+  done without evidence, or when a control was rebuilt and nobody has checked
+  whether it now meets its target.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>Closing a ticket is not evidence that a control came back</h1>
+<p>A fix is a claim. The KCIs are how the claim is checked: re-measure the
+indicators the incident moved and see which returned to target.</p>
+<p>Doing it automatically is the point. Done by hand, it happens for the incidents
+somebody remembers, which are not the ones where it matters.</p>
+<h2>When to use this</h2>
+<p>On every remediation that claims to restore a control, before the incident is
+closed — and again at the next measurement cycle, because a fix that holds for a
+week and then regresses is common.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Take the KCIs from the root cause record.</strong> Not all of them; the ones the
+incident actually moved.</p>
+<p><strong>2 — Read the healthy baseline, not just the target.</strong> A control that was
+never at target before the incident did not regress.</p>
+<p><strong>3 — Re-measure after the fix, the same way.</strong> A different measurement is a
+different indicator.</p>
+<p><strong>4 — Report restored, not restored, and untouched separately.</strong> Untouched
+indicators are noise in the report and belong out of it.</p>
+<p><strong>5 — Attach before/during/after to the incident record.</strong> That is the artefact
+an auditor asks for, and it is worth more than the postmortem.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — six indicators with three readings each, in
+<a href="scripts/kci_fix_validation.py"><code>scripts/kci_fix_validation.py</code></a>.</p>
+<p><strong>Output</strong> — the part that changes the outcome:</p>
+<pre><code>   KCI-03  refunds with a matching approval
+          target &gt;= 0.99, measured 0.94 — the fix did not reach this one
+   KCI-04  mean minutes to detect a scope breach
+          target &lt;= 15, measured 118.0 — the fix did not reach this one
+</code></pre>
+<p>Detection improved from 194 minutes to 118 and is still eight times target.
+Without the re-measurement, that reads as done.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;restored&quot;: [&quot;str&quot;],
+  &quot;not_restored&quot;: [&quot;str&quot;],
+  &quot;regressed&quot;: [&quot;str&quot;]
+}
+</code></pre>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>Partially restored.</strong> Improvement is not restoration; the target is the
+  test, not the direction of travel.</li>
+<li><strong>The indicator was already failing before the incident.</strong> Then it is a
+  standing gap, not incident damage.</li>
+<li><strong>The measurement changed with the fix.</strong> A new instrument reading better is
+  not a control reading better.</li>
+</ul>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Marking remediated on ticket closure.</strong> The most common way a control gap
+  survives its own incident.</li>
+<li><strong>Reporting an average across indicators.</strong> Two restored and two not is not
+  "50% recovered", it is two open gaps.</li>
+<li><strong>Measuring once.</strong> Regression at the next cycle is the normal case.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>kci     measures                                 target  before  incident   after  verdict
+KCI-01  tool calls carrying provenance          &gt;= 0.99    1.00      0.41    1.00  restored
+KCI-02  vendor tool descriptions pinned         == 1.00    1.00      0.00    1.00  restored
+KCI-03  refunds with a matching approval        &gt;= 0.99    1.00      0.86    0.94  NOT RESTORED
+KCI-04  mean minutes to detect a scope breach     &lt;= 15    9.00    194.00  118.00  NOT RESTORED
+KCI-05  agents inside declared scope            == 1.00    1.00      0.97    1.00  restored
+
+3 restored · 2 not restored
+
+   KCI-03  refunds with a matching approval
+          target &gt;= 0.99, measured 0.94 — the fix did not reach this one
+   KCI-04  mean minutes to detect a scope breach
+          target &lt;= 15, measured 118.0 — the fix did not reach this one
+
+This is the whole point of measuring rather than closing. 3 indicators came
+back to target and 2 did not, and the incident record would have said
+&#x27;remediated&#x27; for all 5.
+
+KCI-04 is the uncomfortable one. Detection time improved from 194 minutes
+to 118 and is still eight times the target, so the control the root cause
+record named has been partially built. Partially built is not built, and
+without the re-measurement it reads as done.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Three indicators restored and two not, against an incident record that would have called all five remediated.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Add a sixth indicator that regressed — better than target before, worse after. The report has nowhere to put it yet.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D5.4.html">D5.4 · Post-incident change surface</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D5.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D5.3.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Re-run the KCI measurement against a fixed estate and show which indicators recovered and which did not.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OPA</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D5.3.ipynb</code></p></div><div class="pager"><a href="D5.2.html"><span class="k">← Previous</span><span class="t">D5.2 · The root cause record</span></a><a class="next" href="D5.4.html"><span class="k">Next →</span><span class="t">D5.4 · Post-incident change surface</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

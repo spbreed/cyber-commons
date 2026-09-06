@@ -1,0 +1,50 @@
+WHAT THE RESPONDER SEES
+   t+s  actor           action          target
+     0  dana@corp       login           sso
+    22  dana@corp       open_ticket     SEC-4471
+    40  dana@corp       read_file       /work/repo/billing.py
+    41  dana@corp       read_file       /home/app/.aws/credentials
+    43  dana@corp       http_post       collect.example.com
+   180  dana@corp       logout          sso
+A MODEL'S RECONSTRUCTION (fluent, supported by every log line):
+
+At 14:02 dana@corp authenticated via SSO and opened ticket SEC-4471. Eighteen
+seconds later the same account read billing.py, then read the application's AWS
+credentials, and posted to an external host. The account then remained active
+for a further two minutes before logging out.
+
+Assessment: credential theft by an authenticated insider. Recommend immediate
+suspension of dana@corp pending investigation.
+
+WHAT ACTUALLY HAPPENED
+   t+s  actor           action          target
+     0  dana@corp       login           sso
+    22  dana@corp       open_ticket     SEC-4471
+    40  patch-agent     read_file       /work/repo/billing.py
+    41  patch-agent     read_file       /home/app/.aws/credentials
+    43  patch-agent     http_post       collect.example.com
+   180  dana@corp       logout          sso
+actors_in_logs        ['dana@corp']
+actors_in_reality     ['dana@corp', 'patch-agent']
+misattributed_lines   3
+hidden_actors         ['patch-agent']
+attribution           BROKEN
+consequence           containment aimed at ['dana@corp'] leaves ['patch-agent'] running
+
+Every sentence in that narrative is supported by the logs.
+The conclusion is wrong, and the recommended action does nothing.
+EVIDENTIARY LIMITS (must appear before any conclusion):
+   ⚠ no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
+   ⚠ no delegation chain: cannot establish who caused the task
+
+Timeline: dana@corp authenticated, opened SEC-4471; the account then read
+billing.py, read AWS credentials, and posted externally.
+
+LIMITS OF THIS RECONSTRUCTION
+  - no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
+  - no delegation chain: cannot establish who caused the task
+
+Assessment: an actor holding dana@corp's credential performed the reads and the
+POST. The logs CANNOT establish whether that actor was the human or an agent
+operating with her token. Containment must therefore address both.
+

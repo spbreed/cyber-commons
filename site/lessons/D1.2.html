@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.2 — Context that makes triage work | Cyber Commons</title><meta name="description" content="Feed the baseline, known FPs, crown-jewel map and prior decisions."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.2</div><h1>Context that makes triage work</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Generic triage agents underperform your worst analyst.</p></div><div class="ctrl"><div class="lab">Control</div><p>Feed the baseline, known FPs, crown-jewel map and prior decisions.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">A/B a generic prompt vs a context-loaded one on the same alert set.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/secops/detection-triage/scripts/detection_triage.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.2 · Context that makes triage work</h1>
-<p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>AI for Security</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · From alert queue to loop operator</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.2 — Agent telemetry as a data source | Cyber Commons</title><meta name="description" content="Onboard agent telemetry deliberately; decide retention."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Discover</div><div class="sid">D1.2</div><h1>Agent telemetry as a data source</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Prompts, traces, tool calls and approvals never reach the SIEM.</p></div><div class="ctrl"><div class="lab">Control</div><p>Onboard agent telemetry deliberately; decide retention.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Ship OTEL agent traces into OpenSearch and query them.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/agent-telemetry-retention/scripts/agent_telemetry_retention.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.2 · Agent telemetry as a data source</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Discover</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">D1.1 · Threat intel sub-lane</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,172 +11,168 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Wazuh, GLM-4.6, Llama 3.3, Claude Haiku 4.5</td>
+<td>OpenTelemetry, OpenSearch</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> A/B a generic prompt vs a context-loaded one on the same alert set.</p>
-<p><strong>Why a security engineer needs it.</strong> Generic triage agents underperform your worst analyst. The control it builds is: feed the baseline, known FPs, crown-jewel map and prior decisions.</p>
+<p><strong>What it covers.</strong> Ship OTEL agent traces into OpenSearch and query them.</p>
+<p><strong>Why a security engineer needs it.</strong> Prompts, traces, tool calls and approvals never reach the SIEM. The control it builds is: onboard agent telemetry deliberately; decide retention.</p>
 <p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>Most bad triage is not a bad model. It is an agent asked to decide without the identity, asset and history context a human analyst would have pulled without noticing they pulled it.</p>
+<p>You cannot detect on telemetry that was never emitted. Prompts, tool calls, decisions and identities are the four things an agent has to emit to be observable at all — and none of them appear in a standard application log.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> An alert saying <code>cybertravels-svc listed all customer records</code> is untriageable without knowing whether that is its job. Most bad triage at CyberTravels is missing context, not a weak model.</p>
+<p><strong>At CyberTravels.</strong> You cannot detect on what CyberTravels never emitted. Prompts, tool calls, decisions and identities are the four things missing from every application log CyberTravels has. R10, R11.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   the alert                what a human would have pulled without thinking
-   +----------------+       +-----------------------------------+
-   | user: dana     |  --&gt;  | is dana on call?                  |
-   | host: build-07 |       | is build-07 a build agent?        |
-   | 03:14          |       | has this fired for dana before?   |
-   +----------------+       +-----------------------------------+
+<pre><code>   what an agent must emit to be observable at all
 
-   most bad triage is missing context, not a weak model
+   +------------+  +-------------+  +-----------+  +------------+
+   |  prompts   |  | tool calls  |  | decisions |  | identities |
+   +------------+  +-------------+  +-----------+  +------------+
+        |               |                |              |
+        +---------------+----------------+--------------+
+                                v
+                   none of this is in an application log
+                   retention is expensive and the cost is real
 </code></pre>
-<p>An alert about a human is triageable with three facts: who, what, when. An alert
-about an agent needs three more, and without them every analyst has to guess.</p>
-<ul>
-<li><strong>The acting identity</strong> and the principal it acted for (A2.1).</li>
-<li><strong>The scopes it held</strong> at the time. This is the decisive field: reading
-  <code>.env</code> is alarming for an agent scoped <code>repo:read</code> and routine for a
-  secrets-rotation agent.</li>
-<li><strong>The delegation chain</strong>, so the analyst can see who caused the task.</li>
-</ul>
-<p>Without scope in the alert, the analyst's only options are to escalate
-everything or to develop a habit of closing agent alerts. Both happen, and the
-second one happens quietly.</p></div><div class="nbmd"><h2>3 · Triage as a skill — and the sample that keeps it honest</h2>
-<p>Context turns a guess into a verdict. Automating the verdict without automating the audit of it is how a closing rule quietly starts closing real incidents.</p>
-<p>The skill therefore requires a sampling rule over anything auto-closed, and requires its seed to come from something <strong>stable</strong>. Sampling seeded from <code>hash()</code> picks a different subset on every run, so you can never tell whether a change in findings came from the rule or from the dice.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/secops/detection-triage/SKILL.md"><code>skills/secops/detection-triage/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: detection-triage
+<p>Agent telemetry has a property no other log source has: it contains the
+<strong>reasoning</strong>, not just the action. The trace records what the agent was trying
+to do, what it considered, and what the verifier said.</p>
+<p>That is enormously useful for investigation and it is a retention and privacy
+problem, because reasoning traces contain whatever was in the context window —
+which routinely includes customer data, source code and secrets that were read
+legitimately.</p>
+<p>So retention has to be decided <strong>per field</strong>, not per record:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Forensic value</th>
+<th>Sensitivity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>timestamps, tool, target</td>
+<td>high</td>
+<td>low</td>
+</tr>
+<tr>
+<td>verifier detail</td>
+<td>high</td>
+<td>low</td>
+</tr>
+<tr>
+<td>acting identity + chain</td>
+<td>high</td>
+<td>low</td>
+</tr>
+<tr>
+<td>model prompts</td>
+<td>medium</td>
+<td><strong>high</strong></td>
+</tr>
+<tr>
+<td>tool results</td>
+<td>high</td>
+<td><strong>high</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The first three are cheap and should be kept long. The last two are where the
+retention conversation actually is.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>The run record contains a payment-card pattern, in a source file the agent read legitimately. The skill scans every field, then sets retention per field so timestamps and verdicts survive for 400 days and prompts do not survive 30.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/agent-telemetry-retention/SKILL.md"><code>skills/detection/agent-telemetry-retention/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: agent-telemetry-retention
 description: &gt;-
-  Triage security alerts with the context needed to reach a defensible verdict,
-  and sample what is auto-closed so the closing rule stays honest. Use when
-  working an alert queue, deciding whether an alert is a true positive, tuning
-  a noisy detection, or designing automated alert handling.
-allowed-tools: Read, Grep, Bash
+  Scan an agent's run record for sensitive content it read legitimately, then
+  set retention per field rather than per record so the investigable parts
+  survive and the prompts do not. Use when agent telemetry is being kept,
+  discarded, or argued about with privacy.
+allowed-tools: Read, Grep, Glob
 </code></pre>
-<h1>Alert triage with context</h1>
-<p>An analyst reading an alert in isolation is guessing. The verdict comes from
-the alert <strong>plus</strong> the context that makes it normal or abnormal, and most
-triage automation fails because it automated the guess instead of the context.</p>
+<h1>The agent read a card number because you asked it to</h1>
+<p>An agent run record is the richest telemetry in the estate and the most
+dangerous to keep whole. The content it read — source files, tickets, documents
+— lands in the record, so the record inherits every classification the source
+had. Per-record retention forces a choice between losing the investigation and
+keeping the data; per-field does not.</p>
 <h2>When to use this</h2>
-<p>Working an alert queue, building an auto-close rule, or reviewing why a
-detection produces verdicts nobody trusts.</p>
+<p>Before agent telemetry is retained at scale, and whenever a retention policy is
+being written by someone who has not read a run record.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Gather the context before judging.</strong> For every alert, assemble:</p>
-<ul>
-<li><strong>asset</strong> — what it is, who owns it, how exposed it is</li>
-<li><strong>identity</strong> — human or workload, and its normal behaviour</li>
-<li><strong>history</strong> — has this fired before on this asset, and how was it resolved</li>
-<li><strong>change</strong> — was there a deploy, a migration, a new agent, in the window</li>
-<li><strong>peers</strong> — did the same thing fire elsewhere at the same time</li>
-</ul>
-<p>A verdict issued without <code>history</code> will re-litigate a decision the team already
-made, which is the most common way triage automation loses trust.</p>
-<p><strong>2 — Reach a verdict, with the reason.</strong> One of <code>true_positive</code>,
-<code>false_positive</code>, <code>benign_true_positive</code> (it really happened and it is fine),
-or <code>needs_human</code>. Record which context field decided it. "Benign true positive"
-is a distinct category and collapsing it into false-positive corrupts every
-tuning decision made from the data afterwards.</p>
-<p><strong>3 — Attach confidence, and let it gate automation.</strong> Only high-confidence
-verdicts may auto-close. Everything else queues.</p>
-<p><strong>4 — Sample the auto-closed.</strong> Automation that closes alerts must be audited
-by re-opening a fraction of them for human review. This is the control that
-catches a closing rule that has quietly started closing real incidents.</p>
-<p>Seed the sampler from something <strong>stable</strong> — a checksum of the alert id, never
-<code>hash()</code>, which Python randomises per process. A sampling rule that picks a
-different subset every run cannot be audited, because you cannot tell whether a
-change in findings came from the rule or from the dice.</p>
-<p><strong>5 — Feed tuning from verdicts, not volume.</strong> A detection is noisy if its
-false-positive rate is high, not if it fires often. Rank tuning candidates by
-<code>false_positive_rate × volume</code>, with a full tiebreak so the list is stable
-between runs.</p>
+<p><strong>1 — Read one full record.</strong> Every step, every field. This is the step people
+skip, and it is where the payment-card pattern in a legitimately-read source
+file turns up.</p>
+<p><strong>2 — Scan for sensitive patterns across all fields.</strong> Card numbers, keys,
+personal data, health terms. Record which field carried each hit — prompts and
+tool results are the usual answer.</p>
+<p><strong>3 — Classify fields by investigative value.</strong> Timestamps, tool name, target
+and verifier verdict answer most investigation questions. Prompts and raw tool
+output answer few and carry most of the risk.</p>
+<p><strong>4 — Set retention per field.</strong> Long for the structural fields, short for the
+content ones. Then age a record and check what an investigation could still do
+with it — that check is what makes the policy defensible.</p>
+<p><strong>5 — State what is lost.</strong> A short prompt retention means you cannot re-derive
+motivation after that window. Say so, rather than discovering it in an incident.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/detection_triage.py"><code>scripts/detection_triage.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_telemetry_retention.py"><code>scripts/agent_telemetry_retention.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>BARE ALERT (what most SOCs receive):
-   patch-agent read /vault/.env
-   rotator-agent read /vault/.env
-   → identical. An analyst cannot tell these apart.
+<pre><code>full record (everything the harness saw):
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
+    {'n': 2, 'tool': 'search_code', 'target': 'charge(', 'verifier': 'n/a', 'ok': True, 'prompt': 'find callers of charge()', 'result': 'api/checkout.py:88 charge(user.card, total)'}
+    {'n': 3, 'tool': 'write_file', 'target': '/work/repo/billing.py', 'verifier': 'tests pass', 'ok': True, 'prompt': 'apply the fix', 'result': 'patch applied'}
+sensitive content found in the trace:
+   step 1  result   payment card
 
-ENRICHED ALERT:
-   actor        patch-agent
-   on behalf of dana@corp
+Nobody put a card number in the trace deliberately. The agent read a
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;triaged&quot;: [
-    {&quot;alert_id&quot;: &quot;str&quot;, &quot;verdict&quot;: &quot;true_positive|false_positive|benign_true_positive|needs_human&quot;,
-     &quot;deciding_context&quot;: &quot;asset|identity|history|change|peers&quot;,
-     &quot;reason&quot;: &quot;str&quot;, &quot;confidence&quot;: 0.0,
-     &quot;auto_closed&quot;: false, &quot;sampled_for_review&quot;: false}
-  ],
-  &quot;sampling&quot;: {&quot;rate&quot;: 0.0, &quot;seed_source&quot;: &quot;str&quot;, &quot;reviewed&quot;: 0, &quot;disagreements&quot;: 0},
-  &quot;tuning&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;fp_rate&quot;: 0.0, &quot;volume&quot;: 0, &quot;priority&quot;: 0.0}]
+  &quot;record&quot;: {&quot;steps&quot;: 0, &quot;fields&quot;: [&quot;str&quot;]},
+  &quot;scan&quot;: [{&quot;pattern&quot;: &quot;str&quot;, &quot;field&quot;: &quot;str&quot;, &quot;legitimate_source&quot;: &quot;str&quot;}],
+  &quot;retention&quot;: [{&quot;field&quot;: &quot;str&quot;, &quot;days&quot;: 0, &quot;investigative_value&quot;: &quot;high|low&quot;}],
+  &quot;aged_record&quot;: {&quot;age_days&quot;: 0, &quot;questions_still_answerable&quot;: [&quot;str&quot;], &quot;lost&quot;: [&quot;str&quot;]}
 }
 </code></pre>
-<p><code>disagreements</code> is the number that matters: it is the measured error rate of
-the automation, and it belongs in every report about it.</p>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Auto-closing without sampling.</strong> The rule then has no error bar and no way
-  to acquire one.</li>
-<li><strong>Seeding the sampler from <code>hash()</code>.</strong> Non-reproducible sampling is not a
-  control.</li>
-<li><strong>Folding benign-true-positive into false-positive.</strong> It teaches the tuner to
-  suppress a working detection.</li>
-<li><strong>Removing <code>needs_human</code>.</strong> Forced verdicts under uncertainty are how a queue
-  becomes an incident.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>BARE ALERT (what most SOCs receive):
-   patch-agent read /vault/.env
-   rotator-agent read /vault/.env
-   → identical. An analyst cannot tell these apart.
+<li><strong>Retaining or discarding whole records.</strong> Both answers are wrong.</li>
+<li><strong>Scanning prompts only.</strong> Tool results carry the same content.</li>
+<li><strong>Not stating what the short windows lose.</strong> That is the trade being made.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>full record (everything the harness saw):
+    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result&#x27;: &#x27;def charge(card_number, amount):  # card_number = 4111111111111111&#x27;}
+    {&#x27;n&#x27;: 2, &#x27;tool&#x27;: &#x27;search_code&#x27;, &#x27;target&#x27;: &#x27;charge(&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;find callers of charge()&#x27;, &#x27;result&#x27;: &#x27;api/checkout.py:88 charge(user.card, total)&#x27;}
+    {&#x27;n&#x27;: 3, &#x27;tool&#x27;: &#x27;write_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;tests pass&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;apply the fix&#x27;, &#x27;result&#x27;: &#x27;patch applied&#x27;}
+sensitive content found in the trace:
+   step 1  result   payment card
 
-ENRICHED ALERT:
-   actor        patch-agent
-   on behalf of dana@corp
-   chain        dana@corp → orchestrator → patch-agent
-   scopes held  [&#x27;repo:read&#x27;, &#x27;repo:write&#x27;]
-   verdict      ANOMALY — no secrets scope
+Nobody put a card number in the trace deliberately. The agent read a
+source file, and the file contained a test fixture with a real-shaped PAN.
+The trace is now in scope for PCI, and it is in your SIEM for 400 days.
+field       days  sensitivity  rationale
+--------------------------------------------------------------------------
+n            400          low  cheap, high forensic value
+tool         400          low  cheap, high forensic value
+target       400          low  path only, no contents
+verifier     400          low  what the harness believed — the key forensic field
+ok           400          low  
+prompt        30         high  may contain anything the task included
+result         7         high  tool output — the highest-risk field
 
-   actor        rotator-agent
-   on behalf of ops@corp
-   chain        ops@corp → scheduler → rotator-agent
-   scopes held  [&#x27;secrets:read&#x27;, &#x27;secrets:write&#x27;]
-   verdict      EXPECTED — this agent rotates secrets
+after 1 days — step 1 record:
+    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result&#x27;: &#x27;def charge(card_number, amount):  # card_number = 4111111111111111&#x27;}
 
-agent           no context    with context      truth
---------------------------------------------------------
-patch-agent     escalate      escalate             tp
-rotator-agent   escalate      close                fp
+after 14 days — step 1 record:
+    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt&#x27;: &#x27;Investigate finding SEC-4471 in billing.py&#x27;, &#x27;result_sha256&#x27;: &#x27;b0e3ecafa7e7a9a0&#x27;}
 
-Without scopes, both escalate → the rotator generates a false positive
-every single night, and within a month the rule is tuned off.
-acting identity     which agent — not the human whose token it borrowed
-principal           who the action was for
-delegation chain    who caused the task; where to look for the trigger
-scopes held         THE decisive field — is this action within its remit?
-tool + target       what it did
-session/trace id    so the analyst can pull the whole run (D1.5)
+after 90 days — step 1 record:
+    {&#x27;n&#x27;: 1, &#x27;tool&#x27;: &#x27;read_file&#x27;, &#x27;target&#x27;: &#x27;/work/repo/billing.py&#x27;, &#x27;verifier&#x27;: &#x27;n/a&#x27;, &#x27;ok&#x27;: True, &#x27;prompt_sha256&#x27;: &#x27;60d7bceb0de1a7bd&#x27;, &#x27;result_sha256&#x27;: &#x27;b0e3ecafa7e7a9a0&#x27;}
+sensitive content after 90 days: none
+can still answer &#x27;what did it do and what did the harness believe?&#x27;: True
 
-patch-agent     ESCALATE (outside remit)
-                dana@corp → orchestrator → patch-agent  scopes=[&#x27;repo:read&#x27;, &#x27;repo:write&#x27;]
-rotator-agent   close (within remit)
-                ops@corp → scheduler → rotator-agent  scopes=[&#x27;secrets:read&#x27;, &#x27;secrets:write&#x27;]
-conformance: 0 problem(s)
-   A-1  true_positive        auto_closed=False sampled=False
-   A-2  benign_true_positive auto_closed=True  sampled=False
-   A-3  true_positive        auto_closed=False sampled=False
-   A-4  benign_true_positive auto_closed=True  sampled=True
-   A-5  true_positive        auto_closed=False sampled=False
-   A-6  benign_true_positive auto_closed=True  sampled=True
-
-auto-closed 3, of which 2 sampled back for human review
-
-`benign_true_positive` is its own verdict. Folding it into false-positive
-would teach the tuner to suppress a detection that is working exactly as
-designed - the read really happened, it was simply within remit.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The bare alert is identical for both agents. Enriched, the secrets-rotation agent is within remit and the patch agent is not. Context-free triage escalates both — generating a nightly false positive — while scope-aware triage matches ground truth on both.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Check which of the six fields your agent telemetry carries today. Scopes-held is the one almost nobody logs, and it is the one that decides the alert.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Agent-assisted detection engineering</a></strong></p>
+The hash is retained, so if the original is recovered from a backup you
+can still prove it is the same content the agent saw.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The full record contains a payment-card pattern found in a source file the agent read legitimately. Per-field retention keeps timestamps, tool, target and verifier for 400 days while dropping prompts at 30 days and tool results at 7, replacing them with hashes. After 90 days no sensitive content remains and the record can still answer what the agent did and what the harness believed.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Check the retention period on your agent traces. If it is the same as your firewall logs, one of those two numbers was chosen without anyone looking at what the traces contain.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.3.html">D1.3 · Drift monitoring</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.2.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The generic loop underperforms your worst analyst; the loaded one does not. Same model both times.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Wazuh</span><span>GLM-4.6</span><span>Llama 3.3</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.2.ipynb</code></p></div><div class="pager"><a href="D1.1.html"><span class="k">← Previous</span><span class="t">D1.1 · From alert queue to loop operator</span></a><a class="next" href="D1.3.html"><span class="k">Next →</span><span class="t">D1.3 · Agent-assisted detection engineering</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Prompts, tool calls, decisions and spend queryable alongside your other log sources.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.2.ipynb</code></p></div><div class="pager"><a href="D1.1.html"><span class="k">← Previous</span><span class="t">D1.1 · Threat intel sub-lane</span></a><a class="next" href="D1.3.html"><span class="k">Next →</span><span class="t">D1.3 · Drift monitoring</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

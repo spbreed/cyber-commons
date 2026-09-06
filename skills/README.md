@@ -1,28 +1,28 @@
 # Agent skills
 
-121 skills the curriculum teaches you to write, and then uses. Each one is a
+132 skills the curriculum teaches you to write, and then uses. Each one is a
 real `SKILL.md` — markdown with YAML frontmatter, the format a coding agent
-actually loads — not an illustration of one. 121 of them carry a script
+actually loads — not an illustration of one. 132 of them carry a script
 the lesson executes, and `test_skills.py` runs every one of those on every
 build.
 
 | area | skills |
 |---|---|
-| [`appsec/`](appsec) | 20 |
+| [`appsec/`](appsec) | 19 |
 | [`architecture/`](architecture) | 2 |
 | [`attestation/`](attestation) | 11 |
-| [`detection/`](detection) | 11 |
-| [`grc/`](grc) | 7 |
+| [`detection/`](detection) | 13 |
+| [`grc/`](grc) | 9 |
 | [`identity/`](identity) | 5 |
 | [`programme/`](programme) | 11 |
 | [`redteam/`](redteam) | 4 |
-| [`regulatory/`](regulatory) | 9 |
+| [`regulatory/`](regulatory) | 10 |
 | [`research/`](research) | 10 |
-| [`response/`](response) | 8 |
+| [`response/`](response) | 12 |
 | [`runtime/`](runtime) | 6 |
-| [`secops/`](secops) | 2 |
+| [`secops/`](secops) | 4 |
 | [`threats/`](threats) | 16 |
-| | **121** |
+| | **132** |
 
 ## How an agent loads these, and why the shape matters
 

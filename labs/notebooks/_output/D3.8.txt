@@ -1,0 +1,46 @@
+chain                     dana@corp → orchestrator → patch-agent → deploy-agent
+scoped_last_actor_only    ['cluster-prod']
+scoped_whole_chain        ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+missed_by_naive_scoping   ['queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+undercount_factor         6.0
+
+Scoping the last actor finds one cluster. The chain reached six
+resources, including a payments repository and a dev vault.
+ depth   last-actor scope   chain scope  undercount
+----------------------------------------------------
+     1                  3             3         1.0
+     2                  2             4         2.0
+     3                  2             5         2.5
+     4                  1             6         6.0
+
+Each hop adds resources the last actor never touched. This is why B2.0
+bounds delegation depth: depth is an incident-scope multiplier.
+resources_direct      ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+actors_in_scope       ['build-agent', 'dana@corp', 'deploy-agent', 'finance-agent', 'monitor-agent', 'orchestrator', 'patch-agent', 'test-agent']
+second_order_actors   ['build-agent', 'finance-agent', 'monitor-agent', 'test-agent']
+
+Five more identities shared a resource with the compromised chain.
+They are not confirmed compromised — they are IN SCOPE, which is different
+and is the distinction an incident record has to make explicitly.
+SCOPE
+  chain              dana@corp → orchestrator → patch-agent → deploy-agent
+  confirmed touched  ['cluster-prod', 'queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+  would have been missed by scoping the acting agent alone:
+                     ['queue-tasks', 'repo-core', 'repo-infra', 'repo-payments', 'vault-dev']
+  undercount factor  6.0×
+  in scope, not confirmed (shared a resource):
+                     ['build-agent', 'finance-agent', 'monitor-agent', 'test-agent']
+conformance: 0 problem(s)
+
+authorised but wrong : 3
+exceeded authority   : 0
+reach                : 6 resources
+confirmed exfil      : 0
+revoking one credential does NOT stop: ['build-agent', 'finance-agent', 'monitor-agent', 'test-agent']
+
+Zero actions exceeded authority, and the incident still happened. That
+combination says the grant was too broad - a different fix from a
+control that failed, which is why the contract counts them separately.
+
+Reach is 4 resources; confirmed exfiltration is 0. Reporting the second
+as the scope is how a notification decision gets made on the wrong number.

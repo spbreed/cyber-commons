@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.1 — From alert queue to loop operator | Cyber Commons</title><meta name="description" content="Know what the loop must escalate and sample the rest."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detection</div><div class="sid">D1.1</div><h1>From alert queue to loop operator</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Supervising by re-reading everything the loop did.</p></div><div class="ctrl"><div class="lab">Control</div><p>Know what the loop must escalate and sample the rest.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run a triage loop over Wazuh alerts and supervise by exception.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/triage-loop-with-floor/scripts/triage_loop_with_floor.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.1 · From alert queue to loop operator</h1>
-<p><strong>Function D — The Agentic SOC → The Agentic SOC — Detection</strong>  ·  <em>AI for Security</em></p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D1.1 — Threat intel sub-lane | Cyber Commons</title><meta name="description" content="Provenance discipline; refuse claims without a source."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Discover</div><div class="sid">D1.1</div><h1>Threat intel sub-lane</h1><div class="badges"><span class="badge t">D1</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Reconnaissance</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D1.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Unsourced confidence in synthesis loops.</p></div><div class="ctrl"><div class="lab">Control</div><p>Provenance discipline; refuse claims without a source.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Build a synthesis loop that must cite or abstain.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/threat-intel-to-rules/scripts/threat_intel_to_rules.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D1.1 · Threat intel sub-lane</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Discover</strong>  ·  <em>AI for Security</em></p>
 <p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D1.0.html">D1.0 · Start here — what AI for security operations means</a></strong>.</p>
 <table>
 <thead>
@@ -11,179 +11,132 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Wazuh, OpenSearch, GLM-4.6, Claude Haiku 4.5</td>
+<td>MISP, OpenCTI, GLM-4.6, Claude Haiku 4.5</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Run a triage loop over Wazuh alerts and supervise by exception.</p>
-<p><strong>Why a security engineer needs it.</strong> Supervising by re-reading everything the loop did. The control it builds is: know what the loop must escalate and sample the rest.</p>
+<p><strong>What it covers.</strong> Build a synthesis loop that must cite or abstain.</p>
+<p><strong>Why a security engineer needs it.</strong> Unsourced confidence in synthesis loops. The control it builds is: provenance discipline; refuse claims without a source.</p>
 <p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>The queue does not go away; it changes shape. Instead of triaging alerts you are supervising something that triages alerts, which is a different skill with a different quality bar and a much worse failure mode: confident, fast, and wrong at volume.</p>
+<p>Two intel questions, not one: how adversaries are using AI, and who is coming for the AI you run. Most programmes track the first because it is written about, and the second is the one that reaches your estate.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The analyst on CyberTravels' alerts stops triaging and starts supervising something that triages — which is a different skill, with a worse failure mode: confident, fast, and wrong at volume.</p>
+<p><strong>At CyberTravels.</strong> Two intel questions for CyberTravels: how adversaries use agents, and who is coming for CyberTravels. The second is the one that reaches the booking API.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   before                          after
-   +------------------+            +---------------------------+
-   | alert -&gt; analyst |            | alert -&gt; loop -&gt; analyst  |
-   |          decides |            |          proposes  reviews|
-   +------------------+            +---------------------------+
-      100 alerts/day                  1000 alerts/day, 40 reviewed
+<pre><code>   two intel questions, only one of which is well covered
 
-   new failure mode: confident, fast, and wrong at volume
+   how adversaries use AI        who is coming for the AI you run
+   +---------------------+       +-----------------------------+
+   | written about a lot |       | your models, agents, MCP    |
+   | mostly capability   |       | servers, eval corpora       |
+   +---------------------+       +-----------------------------+
+                                       the one that reaches you
 </code></pre>
-<p>The classic SOC job is a queue: alerts arrive, an analyst reads each one,
-decides, and moves on. The constraint is human attention, and it does not scale
-— which is why tier-1 burnout and alert fatigue are structural rather than
-cultural problems.</p>
-<p>The agentic version replaces "read every alert" with "operate a loop that reads
-every alert". The analyst's job becomes:</p>
+<p>Threat intel is judged by exactly one thing: <strong>how many detections came out of
+it.</strong> Everything else — feed volume, report quality, briefing frequency — is
+input, not outcome.</p>
+<p>An indicator is actionable when two things are true:</p>
 <ul>
-<li>deciding <strong>what the loop is allowed to conclude</strong> (the verifier, B2.0),</li>
-<li>deciding <strong>what it may do about it</strong> (the tool policy, A3.5),</li>
-<li>and handling the cases it escalates.</li>
+<li>it is a <strong>type you can match on</strong> (a host, a hash, a specific technique with a
+  concrete precondition), and</li>
+<li>its <strong>confidence justifies the false-positive cost</strong> of the rule it becomes.</li>
 </ul>
-<p>The skill that transfers is not triage speed. It is knowing which signals the
-loop may believe — because a triage loop with a weak verifier closes true
-positives at machine speed, and closing a true positive is silent.</p></div><div class="nbmd"><h2>3 · Where it breaks — closing a true positive is silent</h2>
-<p>Every triage decision has two error directions and they are not symmetric. Escalating a false positive costs an analyst ten minutes. <strong>Closing a true positive costs you the incident</strong>, and nothing tells you it happened.</p></div><div class="nbmd"><h2>4 · The control — the loop may close, but not silently</h2>
-<p>Three rules make an agentic triage loop safe to run, and none of them is about model quality.</p></div><div class="nbmd"><h2>5 · The procedure, as a skill</h2>
-<p>The skill scores a triage loop against ground truth, sweeps the confidence bar so the trade between analyst minutes and missed incidents is made explicitly, and adds the severity floor that no automatic closure may cross whatever its confidence.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/triage-loop-with-floor/SKILL.md"><code>skills/detection/triage-loop-with-floor/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: triage-loop-with-floor
+<p>A narrative about adversary trends is not intelligence you can operate. It may
+be genuinely useful for planning and it should not be counted as detection
+coverage, because counting it that way makes a programme look covered when it is
+not.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">intel source</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">converts to a detection</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">why</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your own incidents</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>100%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">the technique that worked against you</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your red team (C1)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>90%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">attack-suite results become detections directly</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">your drift monitor (D1.3)</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600"><b>80%</b></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">baseline changes are leading indicators</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">vendor advisories</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">50%</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">useful for the supply chain (C2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">commercial feed</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">30%</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">generic indicators; little agent-specific content yet</td></tr></tbody></table>
+<div style="font-size:12px;color:#8A93A6;margin-top:6px">The highest-converting sources are all internal. For agentic threats the intel programme is mostly a feedback loop out of C1 and D1.3, not a purchase.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Four of seven indicators convert; the two narratives and the low-confidence host are dropped with reasons. The skill then reports the three numbers a renewal conversation needs: converted, alerted, actioned.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/threat-intel-to-rules/SKILL.md"><code>skills/detection/threat-intel-to-rules/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: threat-intel-to-rules
 description: &gt;-
-  Run an alert triage loop against ground truth, measure the confusion matrix,
-  and bound it with a confidence bar and a severity floor no automatic closure
-  may cross. Use when automating triage, or when deciding what an agent may
-  close on its own.
+  Convert a threat-intel feed into detection rules, drop the indicators that
+  cannot be matched or scored, and report the three numbers that say whether the
+  feed earns its price. Use when subscribing to intel, or when a feed produces
+  alerts nobody actions.
 allowed-tools: Read, Grep, Glob
 </code></pre>
-<h1>The floor is the part that makes the loop deployable</h1>
-<p>A triage loop that matches ground truth on a sample is a promising loop. What
-makes it something you can run is the pair of bounds around it: a confidence bar
-that decides when it defers, and a severity floor it may never close through,
-whatever its confidence.</p>
+<h1>Most of a feed is not matchable, and that is fine if you say so</h1>
+<p>An intel feed contains indicators, narratives and low-confidence guesses. Only
+some of it converts into something a detection can match on. The useful output
+is a small number of rules plus an explicit list of what was dropped and why —
+and three numbers that tell you whether to renew.</p>
 <h2>When to use this</h2>
-<p>Before an agent closes anything, and when tuning how much of a queue is
-automated.</p>
+<p>On any intel feed, at subscription and at renewal, and when an intel-derived
+rule fires and nobody knows what to do.</p>
 <h2>Procedure</h2>
-<p><strong>1 — Score against ground truth, as a confusion matrix.</strong> Escalated and closed,
-against true and false. Accuracy alone hides the direction of the errors, and
-only one direction matters here.</p>
-<p><strong>2 — Sweep the confidence bar.</strong> For each setting, record analyst minutes saved
-and incidents missed. This is the trade being made, and it should be made
-explicitly by whoever owns the queue rather than implicitly by a default.</p>
-<p><strong>3 — Set the severity floor separately.</strong> Any alert above it is escalated
-regardless of confidence. A confident wrong closure on a critical alert is the
-failure this exists to prevent, and no confidence threshold protects against it.</p>
-<p><strong>4 — Check what the floor costs.</strong> How many alerts it forces to a human per
-day. If that number is above the reading budget, the floor is theatre and the
-queue needs a different cut.</p>
-<p><strong>5 — Record every automatic closure with its reason and confidence.</strong> The loop
-will be wrong sometimes; the question at review is whether you can find out how.</p>
+<p><strong>1 — Set a confidence floor and a matchable-type list.</strong> Hosts, hashes,
+techniques. Narratives are context, not indicators; write the floor down before
+reading the feed.</p>
+<p><strong>2 — Convert what qualifies.</strong> One rule per indicator, with the response
+attached. An indicator with no response is not ready — the analyst will get the
+alert and ask what to do.</p>
+<p><strong>3 — Drop the rest with reasons.</strong> "Narrative, not matchable" and "confidence
+0.4, below floor" are both fine. An undocumented drop is indistinguishable from
+an oversight.</p>
+<p><strong>4 — Run the rules against real events.</strong> Record which fired and what the
+response was. A rule that has never fired is not automatically bad; a rule that
+fires and produces no action is.</p>
+<p><strong>5 — Report the three numbers.</strong> Indicators converted, alerts produced, alerts
+actioned. The ratio of the third to the second is what the feed is worth, and it
+is the number to take to a renewal conversation.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/triage_loop_with_floor.py"><code>scripts/triage_loop_with_floor.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/threat_intel_to_rules.py"><code>scripts/threat_intel_to_rules.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
 <p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>queue: 8 alerts, 4 true positives
-   A-01 medium   impossible travel        dana@corp
-   A-02 critical metadata service access  patch-agent
-   A-03 medium   failed logins x40        svc-etl
-   A-04 high     secret path read         patch-agent
-   A-05 high     new admin group member   sam@corp
-   A-06 low      port scan detected       scanner-01
-   A-07 high     egress to unlisted host  triage-agent
+<pre><code>indicator                                     kind         conf  verdict
+----------------------------------------------------------------------------------------
+collect.example.com                           host         0.95  RULE — convertible to a rule
+169.254.169.254                               host         0.99  RULE — convertible to a rule
+a1b2c3d4e5f6                                  hash         0.72  RULE — convertible to a rule
+pastebin.example                              host         0.55  drop — confidence 0.55 below floor 0.7
+adversaries increasingly use agentic tooling  narrative    0.40  drop — narrative is not matchable in telemetry
+agents reading ~/.aws/credentials             technique    0.88  RULE — convertible to a rule
 </code></pre>
 <p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;confusion&quot;: {&quot;tp&quot;: 0, &quot;fp&quot;: 0, &quot;tn&quot;: 0, &quot;fn&quot;: 0},
-  &quot;confidence_sweep&quot;: [{&quot;bar&quot;: 0.0, &quot;analyst_minutes_saved&quot;: 0, &quot;incidents_missed&quot;: 0}],
-  &quot;floor&quot;: {&quot;severity&quot;: &quot;str&quot;, &quot;escalated_regardless&quot;: 0, &quot;per_day&quot;: 0},
-  &quot;audit&quot;: {&quot;closures_logged&quot;: true, &quot;fields&quot;: [&quot;reason&quot;, &quot;confidence&quot;, &quot;rule&quot;]}
+  &quot;feed&quot;: {&quot;indicators&quot;: 0, &quot;confidence_floor&quot;: 0.0, &quot;matchable_types&quot;: [&quot;str&quot;]},
+  &quot;rules&quot;: [{&quot;indicator&quot;: &quot;str&quot;, &quot;type&quot;: &quot;str&quot;, &quot;response&quot;: &quot;str&quot;}],
+  &quot;dropped&quot;: [{&quot;indicator&quot;: &quot;str&quot;, &quot;reason&quot;: &quot;str&quot;}],
+  &quot;firings&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;events&quot;: 0}],
+  &quot;value&quot;: {&quot;converted&quot;: 0, &quot;alerts&quot;: 0, &quot;actioned&quot;: 0}
 }
 </code></pre>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Reporting accuracy.</strong> The direction of the error is the whole question.</li>
-<li><strong>A floor set above the reading budget.</strong> It routes to a person who will not
-  read it.</li>
-<li><strong>Unlogged closures.</strong> You cannot review what the loop decided.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>model backend : replay
-model         : deterministic stand-in (no backend configured)
+<li><strong>Converting narratives.</strong> They do not match on anything.</li>
+<li><strong>Rules with no response.</strong> The alert lands and stops.</li>
+<li><strong>Reporting alerts rather than actions.</strong> Alerts are cheap to produce.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>indicator                                     kind         conf  verdict
+----------------------------------------------------------------------------------------
+collect.example.com                           host         0.95  RULE — convertible to a rule
+169.254.169.254                               host         0.99  RULE — convertible to a rule
+a1b2c3d4e5f6                                  hash         0.72  RULE — convertible to a rule
+pastebin.example                              host         0.55  drop — confidence 0.55 below floor 0.7
+adversaries increasingly use agentic tooling  narrative    0.40  drop — narrative is not matchable in telemetry
+agents reading ~/.aws/credentials             technique    0.88  RULE — convertible to a rule
+threat actor GOLDEN-OTTER is targeting finte  narrative    0.60  drop — narrative is not matchable in telemetry
+7 indicators → 4 deployable rules (57% conversion)
 
-This lesson runs offline against a deterministic replay, which is why
-it works on a Kaggle kernel with the internet switched off. To run the
-identical code against a real model, serve an open-weight model from
-Kaggle Models and point the adapter at it:
+   [critical] intel:host:collect.example.com
+   [critical] intel:host:169.254.169.254
+   [high    ] intel:hash:a1b2c3d4e5f6
+   [high    ] intel:technique:agents reading ~/.aws/cred
+alerts generated from the feed:
+   [critical] intel:host:collect.example.com
+        actor=patch-agent  → block egress, revoke the agent&#x27;s token, hunt back 30d (vendor-a)
+   [high] intel:hash:a1b2c3d4e5f6
+        actor=build-agent  → quarantine the artefact, check the supply chain (vendor-b)
+   [high] intel:technique:agents reading ~/.aws/cred
+        actor=patch-agent  → revoke, rotate the cloud role, audit reads (internal-ir)
 
-   python3 -m llama_cpp.server --model &lt;the .gguf from Kaggle&gt; \
-           --model_alias qwen2.5-7b-instruct --port 11434 --chat_format qwen
-   export OPENAI_BASE_URL=http://127.0.0.1:11434/v1 \
-          MODEL=qwen2.5-7b-instruct
+the three numbers that matter:
+   indicators received : 7
+   rules deployed      : 4  (57% of the feed)
+   alerts fired        : 3
+   alerts actioned     : 2  (67%)
 
-   MODELS.md has the exact Kaggle download. There is no paid backend:
-   every model result in this repository was produced this way.
-queue: 8 alerts, 4 true positives
-   A-01 medium   impossible travel        dana@corp
-   A-02 critical metadata service access  patch-agent
-   A-03 medium   failed logins x40        svc-etl
-   A-04 high     secret path read         patch-agent
-   A-05 high     new admin group member   sam@corp
-   A-06 low      port scan detected       scanner-01
-   A-07 high     egress to unlisted host  triage-agent
-   A-08 low      expired certificate      www
-alert  verdict     conf  truth  reasoning
---------------------------------------------------------------------------------------------
-A-01   close       0.88     fp  corporate VPN egress in Frankfurt; matches t
-A-02   escalate    0.97     tp  link-local metadata endpoint from a non-huma
-A-03   close       0.71     fp  service account retry storm after a credenti
-A-04   escalate    0.93     tp  agent read a cloud credential path outside i
-A-05   escalate    0.64     tp  privileged group change; needs the change ti
-A-06   close       0.90     fp  authorised internal scanner, scheduled windo
-A-07   escalate    0.95     tp  egress to a host not on the allowlist
-A-08   close       0.99     fp  hygiene finding, not a security event
-escalated_correctly       4
-false_escalations         0
-closed_correctly          4
-CLOSED_TRUE_POSITIVES     0
-missed                    []
-analyst_minutes_saved     40
-incidents_missed          0
-
-Now lower the escalation bar and watch the trade:
-   close only above conf 0.50 → missed 0, analyst minutes saved 40
-   close only above conf 0.70 → missed 0, analyst minutes saved 40
-   close only above conf 0.90 → missed 0, analyst minutes saved 20
-   close only above conf 0.99 → missed 0, analyst minutes saved 10
-1. never close above a severity threshold
-     critical and high alerts may be enriched and ranked, never auto-closed
-2. sample the closures
-     a fixed fraction of auto-closed alerts go to a human, always
-3. measure closures against ground truth
-     when an incident is found later, check whether the loop closed a related alert
-
-   A-01 medium   close     → close     
-   A-02 critical escalate  → escalate  
-   A-03 medium   close     → sample    rule 2: routine closure sample for quality measurement
-   A-04 high     escalate  → escalate  
-   A-05 high     escalate  → escalate  
-   A-06 low      close     → close     
-   A-07 high     escalate  → escalate  
-   A-08 low      close     → close     
-
-before: missed 0   after: missed 0
-backend used : replay
-model        : deterministic stand-in (no backend configured)
-prompt       : Triage this alert to one of: escalate, close-benign, needs-context...
-
-answer:
-   escalate - the source range and the breadth of the list call are both outside this account&#x27;s established pattern.
-
-property checked : returned one of the three dispositions
-held on replay       : True
-
-Same code, same assertions, two possible backends. Offline the answer is
-the replay and is labelled as one; with a served model it is the model&#x27;s.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>The triage loop escalates 4 alerts and closes 4, matching ground truth on all 8. Lowering the confidence bar trades analyst minutes against missed incidents. The severity floor converts any high or critical closure into an escalation, and the closure sampling routes a fraction of routine closures to a human for quality measurement.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Ask your SOC one question: when an incident is confirmed, does anyone check whether an earlier alert about it was closed? If nobody does, you have no measurement of your false-negative rate — with or without an agent.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">D1.2 · Context that makes triage work</a></strong></p>
+The third number is the one that decides whether the subscription renews.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Four of seven indicators convert to rules — the two narratives and the low-confidence host are dropped with reasons. The rules fire on three of five events with concrete responses. The three-number summary shows a 57% conversion rate and 67% of alerts actioned, and the source table ranks internal sources highest.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Compute your own three numbers for last quarter: indicators received, rules deployed, alerts actioned. The ratio between the first and third is the honest value of the programme.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D1.2.html">D1.2 · Agent telemetry as a data source</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D1.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D1.1.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The loop clears the known-benign and escalates the rest with its reasoning attached.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Wazuh</span><span>OpenSearch</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.1.ipynb</code></p></div><div class="pager"><a href="D1.0.html"><span class="k">← Previous</span><span class="t">D1.0 · Start here — what AI for security operations means</span></a><a class="next" href="D1.2.html"><span class="k">Next →</span><span class="t">D1.2 · Context that makes triage work</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>With provenance enforced the loop abstains where it has nothing; without it, it confabulates fluently.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>MISP</span><span>OpenCTI</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D1.1.ipynb</code></p></div><div class="pager"><a href="D1.0.html"><span class="k">← Previous</span><span class="t">D1.0 · Start here — what AI for security operations means</span></a><a class="next" href="D1.2.html"><span class="k">Next →</span><span class="t">D1.2 · Agent telemetry as a data source</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

@@ -1,6 +1,6 @@
 # How a Cyber Commons lesson is built
 
-Every one of the 120 lessons has the same shape. Not for tidiness — each rule
+Every one of the 131 lessons has the same shape. Not for tidiness — each rule
 below is here because breaking it made a lesson worse in a specific,
 reproducible way.
 

@@ -1,0 +1,163 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D3.5 — Agent-assisted reconstruction | Cyber Commons</title><meta name="description" content="Pre-load logs, telemetry, segmentation model and playbooks."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Investigate</div><div class="sid">D3.5</div><h1>Agent-assisted reconstruction</h1><div class="badges"><span class="badge t">D3</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T10</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D3.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Reaching for the agent once you&#x27;re already behind.</p></div><div class="ctrl"><div class="lab">Control</div><p>Pre-load logs, telemetry, segmentation model and playbooks.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Reconstruct a timeline from raw logs with a context-loaded agent.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/response/incident-reconstruction-check/scripts/incident_reconstruction_check.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D3.5 · Agent-assisted reconstruction</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Investigate</strong>  ·  <em>AI for Security</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D3.4.html">D3.4 · Fleet-level correlation: seeing a swarm</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>Velociraptor, OpenSearch, GLM-4.6, Claude Haiku 4.5</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Reconstruct a timeline from raw logs with a context-loaded agent.</p>
+<p><strong>Why a security engineer needs it.</strong> Reaching for the agent once you're already behind. The control it builds is: pre-load logs, telemetry, segmentation model and playbooks.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Reconstruction is reading, and agents read fast. The speed is real and so is the failure mode: a timeline that is 95% right and completely confident is worse than no timeline, because somebody will make decisions on it.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> Reconstructing what CyberTravels did across six log sources is reading, and agents read fast. A timeline that is 95% right and fully confident is worse than none.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   scattered evidence            reconstructed timeline
+   +------------------+          +---------------------+
+   | 6 log sources    |   --&gt;    | ordered, attributed |
+   | 900k lines       |          | 40 events           |
+   +------------------+          +---------------------+
+                                          |
+                              every claim carries its source line
+                              unsourced claim -&gt; not in the timeline
+</code></pre>
+<p>Reconstruction is the first phase of any incident: build the timeline, establish
+what happened, decide what to contain.</p>
+<p>An agent makes this faster and more dangerous at the same time. Faster, because
+a model can correlate thousands of log lines in seconds. More dangerous, because
+it will produce a fluent, confident narrative from logs that were never
+sufficient to support one — and a fluent narrative is much harder to challenge
+than an obviously incomplete one.</p>
+<p>So the discipline is to separate two questions that feel like one:</p>
+<ol>
+<li><strong>What do the logs say?</strong></li>
+<li><strong>What can the logs support?</strong></li>
+</ol>
+<p>The gap between them is where reconstruction goes wrong, and it is the responder's
+job to state that gap explicitly in the incident record.</p></div><div class="nbmd"><h2>3 · The control — state what the evidence can support</h2>
+<p>The fix is not a better model. It is a reconstruction step that reports its own evidentiary limits before it reports a conclusion.</p></div><div class="nbmd"><h2>4 · The procedure, as a skill</h2>
+<p>The timeline attributes every action to <code>dana@corp</code> and the fluent narrative recommends suspending her. The skill renders that view first, produces the truth view from an independent source, and then gates every claim on a field that supports it.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/incident-reconstruction-check/SKILL.md"><code>skills/response/incident-reconstruction-check/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: incident-reconstruction-check
+description: &gt;-
+  Reconstruct an incident from logs that attribute every action to a human,
+  check what the evidence actually supports, and refuse to publish a narrative
+  it does not carry. Use during response, when the timeline names a person and
+  an agent did the work.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>The fluent narrative recommends suspending the wrong person</h1>
+<p>Agent logs that record only the delegated principal produce a timeline in which
+a human did everything. A model asked to summarise it writes something fluent
+and confident that recommends suspending her. The reconstruction is not wrong
+about the events; it is wrong about the actor, and nothing in the log says so.</p>
+<h2>When to use this</h2>
+<p>Every incident involving an agent, and before any narrative reaches a person who
+will act on it.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Render the timeline as the logs have it.</strong> Do not correct it yet. This is
+what an investigator would see, and seeing it is the point.</p>
+<p><strong>2 — Ask which field carries the acting identity.</strong> Not the delegated
+principal — the identity that performed the action. If no field carries it, stop:
+every attribution below is inherited from the request, not observed.</p>
+<p><strong>3 — Produce the truth view from an independent source</strong> where one exists — host
+accounting, the gateway, the downstream's own log. Diff it against the timeline
+and record what changes. Usually one or two actions move from the human to the
+agent, and they are the important ones.</p>
+<p><strong>4 — Gate the narrative on evidence.</strong> A summary may assert only what a field
+supports. Attach the field to each claim; a claim with no field is removed, not
+softened.</p>
+<p><strong>5 — Publish the safe version and the gap.</strong> State plainly which questions the
+record cannot answer. An investigation that says so is more useful than one that
+fills the gap fluently.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/incident_reconstruction_check.py"><code>scripts/incident_reconstruction_check.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>WHAT THE RESPONDER SEES
+   t+s  actor           action          target
+     0  dana@corp       login           sso
+    22  dana@corp       open_ticket     SEC-4471
+    40  dana@corp       read_file       /work/repo/billing.py
+    41  dana@corp       read_file       /home/app/.aws/credentials
+    43  dana@corp       http_post       collect.example.com
+   180  dana@corp       logout          sso
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;timeline&quot;: [{&quot;at&quot;: &quot;str&quot;, &quot;attributed_to&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;}],
+  &quot;acting_identity_field&quot;: &quot;str|null&quot;,
+  &quot;truth_view&quot;: [{&quot;at&quot;: &quot;str&quot;, &quot;actual_actor&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;, &quot;source&quot;: &quot;str&quot;}],
+  &quot;narrative&quot;: {&quot;claims&quot;: [{&quot;text&quot;: &quot;str&quot;, &quot;supported_by&quot;: &quot;str|null&quot;}], &quot;removed&quot;: 0},
+  &quot;gaps&quot;: [&quot;str&quot;]
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Publishing the fluent version.</strong> It is confident and it names a person.</li>
+<li><strong>Correcting the timeline before showing it.</strong> The uncorrected view is what
+  everyone else is looking at.</li>
+<li><strong>Softening unsupported claims.</strong> Remove them.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>WHAT THE RESPONDER SEES
+   t+s  actor           action          target
+     0  dana@corp       login           sso
+    22  dana@corp       open_ticket     SEC-4471
+    40  dana@corp       read_file       /work/repo/billing.py
+    41  dana@corp       read_file       /home/app/.aws/credentials
+    43  dana@corp       http_post       collect.example.com
+   180  dana@corp       logout          sso
+A MODEL&#x27;S RECONSTRUCTION (fluent, supported by every log line):
+
+At 14:02 dana@corp authenticated via SSO and opened ticket SEC-4471. Eighteen
+seconds later the same account read billing.py, then read the application&#x27;s AWS
+credentials, and posted to an external host. The account then remained active
+for a further two minutes before logging out.
+
+Assessment: credential theft by an authenticated insider. Recommend immediate
+suspension of dana@corp pending investigation.
+
+WHAT ACTUALLY HAPPENED
+   t+s  actor           action          target
+     0  dana@corp       login           sso
+    22  dana@corp       open_ticket     SEC-4471
+    40  patch-agent     read_file       /work/repo/billing.py
+    41  patch-agent     read_file       /home/app/.aws/credentials
+    43  patch-agent     http_post       collect.example.com
+   180  dana@corp       logout          sso
+actors_in_logs        [&#x27;dana@corp&#x27;]
+actors_in_reality     [&#x27;dana@corp&#x27;, &#x27;patch-agent&#x27;]
+misattributed_lines   3
+hidden_actors         [&#x27;patch-agent&#x27;]
+attribution           BROKEN
+consequence           containment aimed at [&#x27;dana@corp&#x27;] leaves [&#x27;patch-agent&#x27;] running
+
+Every sentence in that narrative is supported by the logs.
+The conclusion is wrong, and the recommended action does nothing.
+EVIDENTIARY LIMITS (must appear before any conclusion):
+   ⚠ no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
+   ⚠ no delegation chain: cannot establish who caused the task
+
+Timeline: dana@corp authenticated, opened SEC-4471; the account then read
+billing.py, read AWS credentials, and posted externally.
+
+LIMITS OF THIS RECONSTRUCTION
+  - no acting-identity field: every line attributes to the principal, so agent actions are indistinguishable from human ones
+  - no delegation chain: cannot establish who caused the task
+
+Assessment: an actor holding dana@corp&#x27;s credential performed the reads and the
+POST. The logs CANNOT establish whether that actor was the human or an agent
+operating with her token. Containment must therefore address both.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The timeline attributes every action to <code>dana@corp</code>. The fluent narrative recommends suspending her. The truth view shows <code>patch-agent</code> performed the credential read and the external POST; reconstruction reports BROKEN attribution with 3 misattributed lines. The evidence check flags the missing acting-identity field, the missing chain, and a non-human action rate.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Take a real incident timeline from your own history and ask what it would look like if an agent had been operating on the user's credential. If you cannot tell from the logs, your reconstructions already carry this risk.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D3.6.html">D3.6 · Context that makes triage work</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D3.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.5.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Velociraptor</span><span>OpenSearch</span><span>GLM-4.6</span><span>Claude Haiku 4.5</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.5.ipynb</code></p></div><div class="pager"><a href="D3.4.html"><span class="k">← Previous</span><span class="t">D3.4 · Fleet-level correlation: seeing a swarm</span></a><a class="next" href="D3.6.html"><span class="k">Next →</span><span class="t">D3.6 · Context that makes triage work</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

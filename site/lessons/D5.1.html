@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D5.1 — Replay and forensics | Cyber Commons</title><meta name="description" content="Log at design time what replay will need."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Recover and Root Cause</div><div class="sid">D5.1</div><h1>Replay and forensics</h1><div class="badges"><span class="badge t">D5</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T7</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Impact</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/9/" title="Risk management system" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 9</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D5.1.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Non-determinism as an evidentiary problem.</p></div><div class="ctrl"><div class="lab">Control</div><p>Log at design time what replay will need.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Replay an agent run for a regulator-grade record.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D5.1.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D5.1.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/response/run-replayability-audit/scripts/run_replayability_audit.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D5.1 · Replay and forensics</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Recover and Root Cause</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D4.5.html">D4.5 · The fleet kill switch</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>OpenTelemetry</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Replay an agent run for a regulator-grade record.</p>
+<p><strong>Why a security engineer needs it.</strong> Non-determinism as an evidentiary problem. The control it builds is: log at design time what replay will need.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Forensics on a non-deterministic actor asks a question classical forensics never had to: not just what it did, but what it saw and what it decided. If the context was not recorded, the decision cannot be reconstructed at all.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> Not just what the agent did, but what it saw and what it decided. If the booking note that triggered the refund was not recorded, the decision cannot be reconstructed at all. R11.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   classical forensics        agentic forensics
+   +------------------+       +----------------------------+
+   | what did it do   |       | what did it do             |
+   |                  |       | what did it SEE            |
+   |                  |       | what did it DECIDE, and why|
+   +------------------+       +----------------------------+
+
+   if the context was not recorded, the decision cannot be reconstructed
+</code></pre>
+<p>Forensics for an agent means answering: <em>why did it do that?</em></p>
+<p>For ordinary software the answer is in the code. For an agent the answer is in
+the run — the prompts, the tool results it saw, the model version, the sampling.
+Reproduce those four and the run is deterministic. Miss one and you can describe
+what happened but never demonstrate it, which matters the moment anyone
+disputes your conclusion.</p>
+<p>The field teams miss most often is the <strong>model version</strong>, and it is the one that
+silently invalidates everything else: a provider-side upgrade changes the
+behaviour with no change on your side, so a reconstruction performed after the
+upgrade does not reproduce the incident that happened before it.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Replay needs five inputs and the typical production run records three. The skill checks each against a real record, then replays under two later model versions — where a different action means the original decision cannot be reproduced at all.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/run-replayability-audit/SKILL.md"><code>skills/response/run-replayability-audit/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: run-replayability-audit
+description: &gt;-
+  Check whether an incident run can be replayed at all — model version, seed,
+  prompt, tool results, retrieved context — and what a later model version does
+  to the replay. Use when forensics needs to know why the agent did what it did.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>Replay needs five things and production records three</h1>
+<p>"Why did the agent do that" is answerable only if the run can be re-run under the
+conditions it ran in. That needs the model version, the sampling parameters and
+seed, the exact prompt, every tool result and the retrieved context. A typical
+production run records enough to see what happened and not enough to reproduce
+it.</p>
+<h2>When to use this</h2>
+<p>Before an incident, as a readiness check, and during one, to establish honestly
+whether the reconstruction is possible.</p>
+<h2>Procedure</h2>
+<p><strong>1 — List the five inputs and check each against a real run record.</strong> Model
+version and seed are the two usually missing, and their absence is decisive
+rather than inconvenient.</p>
+<p><strong>2 — Attempt the replay.</strong> If any input is missing, say what the replay can and
+cannot establish. A partial replay is still useful for the tool path and useless
+for the reasoning.</p>
+<p><strong>3 — Replay under later model versions.</strong> The provider has probably upgraded.
+Record whether the action changes: if it does, the original decision cannot be
+reproduced at all, and that is a finding about the estate rather than about the
+incident.</p>
+<p><strong>4 — Cost full instrumentation.</strong> Storage and latency for recording everything,
+against the incidents where you needed it. Present both; the answer is usually to
+instrument the high-tier agents only, and that is a defensible decision when the
+numbers are attached.</p>
+<p><strong>5 — Record what the estate has chosen.</strong> Which agents are replayable and which
+are not, so nobody assumes during an incident.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/run_replayability_audit.py"><code>scripts/run_replayability_audit.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>fully instrumented     replayable=True
+typical production     replayable=False
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+prompts only           replayable=False
+      ✗ tool results — the agent saw a world you cannot rebuild
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;inputs&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;recorded&quot;: false}],
+  &quot;replay&quot;: {&quot;possible&quot;: false, &quot;establishes&quot;: [&quot;str&quot;], &quot;cannot_establish&quot;: [&quot;str&quot;]},
+  &quot;version_drift&quot;: [{&quot;version&quot;: &quot;str&quot;, &quot;action&quot;: &quot;str&quot;, &quot;same_as_original&quot;: false}],
+  &quot;cost&quot;: {&quot;storage_per_run&quot;: &quot;str&quot;, &quot;latency_ms&quot;: 0},
+  &quot;policy&quot;: [{&quot;tier&quot;: &quot;str&quot;, &quot;fully_instrumented&quot;: true}]
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Assuming replay is possible.</strong> Check the record before promising it.</li>
+<li><strong>Replaying on the current model.</strong> It is not the one that acted.</li>
+<li><strong>Instrumenting everything or nothing.</strong> Tier it and write the choice down.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>fully instrumented     replayable=True
+typical production     replayable=False
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+prompts only           replayable=False
+      ✗ tool results — the agent saw a world you cannot rebuild
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+actions only           replayable=False
+      ✗ prompts — cannot reconstruct what it was asked
+      ✗ tool results — the agent saw a world you cannot rebuild
+      ✗ model version — a silent upgrade changes the output
+      ✗ seed — sampling makes the run unrepeatable
+reproduce the incident under the ORIGINAL model version:
+   → read_source
+
+reproduce it AFTER the provider upgraded (same prompts, same tool results):
+   glm-4.6@2026-08-01     → read_source        reproduces
+   glm-4.7@2026-08-01     → read_source        reproduces
+
+Without a pinned version you cannot tell &#x27;the agent did not do this&#x27;
+from &#x27;the model that did it no longer exists&#x27;.
+field             cost  what it costs                         why it matters
+----------------------------------------------------------------------------------------------------
+model version        1  one string per run                    invalidates everything else if missing
+seed                 1  one integer per run                   makes the run repeatable
+prompts              3  storage + privacy review (D1.2)       what it was asked
+tool results         5  largest volume, highest sensitivity   what it saw
+
+recording order, by value per unit cost:
+   1. model version
+   2. seed
+   3. prompts
+   4. tool results
+
+after adding model version    replayable=False  still missing=1
+
+after adding seed             replayable=True  still missing=0
+
+after adding prompts          replayable=True  still missing=0
+
+after adding tool results     replayable=True  still missing=0</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Only the fully instrumented run is replayable; the typical production run is missing the model version and seed. Replaying the incident under two later model versions produces a different action, so the original run does not reproduce. Adding the two cheapest fields (model version and seed) makes the typical production run replayable.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Add model version and seed to your agent's run records this week. Both are one field each, and together they are the difference between forensics and storytelling.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D5.2.html">D5.2 · The root cause record</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D5.1.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D5.1.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>The run reproduces, or the tool tells you exactly which field was never logged to make replay possible.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OpenTelemetry</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D5.1.ipynb</code></p></div><div class="pager"><a href="D4.5.html"><span class="k">← Previous</span><span class="t">D4.5 · The fleet kill switch</span></a><a class="next" href="D5.2.html"><span class="k">Next →</span><span class="t">D5.2 · The root cause record</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

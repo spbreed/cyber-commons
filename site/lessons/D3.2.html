@@ -1,0 +1,142 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D3.2 — Admission rules — what the investigating agent may touch | Cyber Commons</title><meta name="description" content="A declared admission set per investigation class, enforced at the tool boundary and logged, with anything outside it requiring a human grant."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Investigate</div><div class="sid">D3.2</div><h1>Admission rules — what the investigating agent may touch</h1><div class="badges"><span class="badge t">D3</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T10</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D3.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The investigation is itself the breach: an agent granted broad read to &#x27;find the problem&#x27; exfiltrates more than the incident did.</p></div><div class="ctrl"><div class="lab">Control</div><p>A declared admission set per investigation class, enforced at the tool boundary and logged, with anything outside it requiring a human grant.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Run an investigation against an admission set and watch the out-of-scope queries get refused and recorded.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/secops/investigation-admission-rules/scripts/investigation_admission_rules.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D3.2 · Admission rules — what the investigating agent may touch</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Investigate</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D3.1.html">D3.1 · From alert queue to loop operator</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>OPA</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Admission rules for an investigating agent: which sources it may reach, which fields it may never see, how much it may pull, and why every refusal is recorded with its query.</p>
+<p><strong>Why a security engineer needs it.</strong> Incident response grants the broadest read access in the organisation, at the moment of least supervision, often to an agent. That grant is frequently larger than the incident being investigated. Bounding it per investigation class, in advance, is the difference between a response and a second breach — and the refusal log is the evidence you were on the right side of that.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>The investigating agent is granted broad read across production so it can find the problem. Broad read across production is frequently what the problem was. Admission rules are how the response avoids becoming the second incident.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The admission set is written for CyberTravels' agent-misuse class: agent traces, gateway logs and the tool audit are in; the bookings database, with its payment cards, is not. The refused query that matters is the one asking for ninety thousand rows of a source that IS admitted — CyberTravels' whole gateway log, which is a copy.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   investigation class: agent-misuse
+   +--------------------------------------------------+
+   |  sources   agent.traces  gateway.logs  tool.audit |   allowlist
+   |  fields    NOT payment_card, passport_no,         |   denied
+   |            message_body                           |
+   |  volume    &lt;= 5000 rows                           |   cap
+   +--------------------------------------------------+
+              |
+      query --+--&gt; admitted   -&gt; runs, logged
+              |
+              +--&gt; refused    -&gt; logged WITH the query text
+                               -&gt; a human can grant it deliberately
+
+   the volume cap is the one people leave out: same source, same fields,
+   400 rows is an investigation and 90,000 is a copy
+</code></pre>
+<p>An investigating agent is handed broad read across the estate so it can find the
+problem. Broad read across the estate is frequently what the problem <em>was</em>.</p>
+<p>Admission rules decide, per investigation class and <strong>before anything runs</strong>,
+which sources the agent may reach, which fields it may never see, and how much
+it may pull. The volume cap is the one people leave out: the same query over the
+same fields is an investigation at four hundred rows and a copy at ninety
+thousand.</p></div><div class="nbmd"><h2>3 · Refusals are evidence, not errors</h2>
+<p>A refused query carries the exact query text, so a human can grant it
+deliberately and the grant is on the record.</p>
+<p>That matters twice. The investigator can escalate precisely rather than asking
+for "more access", and the refusal log is what shows afterwards that the
+response did not become the second incident — which is a question a regulator
+will ask about an agent that read production during an outage.</p></div><div class="nbmd"><h2>4 · One admission set, six queries</h2>
+<p>Three are refused. Look at the third: same source and same fields as an allowed query, refused on volume alone.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/secops/investigation-admission-rules/SKILL.md"><code>skills/secops/investigation-admission-rules/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: investigation-admission-rules
+description: &gt;-
+  Decide and enforce which sources, fields and volumes an investigating agent
+  may reach, before the investigation starts, and record every refusal. Use when
+  granting an agent read access for incident response, when investigation
+  queries touch personal data, or when an investigation's own access needs to be
+  auditable.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>The investigation is the second-largest access grant in the incident</h1>
+<p>An investigating agent is handed broad read across the estate so it can find
+the problem. Broad read across the estate is frequently what the problem <em>was</em>.</p>
+<p>Admission rules decide, per investigation class and before anything runs, which
+sources it may reach, which fields it may never see, and how much it may pull.</p>
+<h2>When to use this</h2>
+<p>Before an agent-driven investigation touches production data, and whenever an
+investigation class is defined. Also after the fact: the refusal log is the
+evidence that the response did not become its own incident.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Classify the investigation first.</strong> "Agent misuse" and "data exfiltration"
+need different sources. One admission set for everything is no admission set.</p>
+<p><strong>2 — Name the sources positively.</strong> An allowlist. A denylist of sources is a
+list of the ones somebody thought of.</p>
+<p><strong>3 — Deny fields, not just sources.</strong> The trace table is admissible; the
+message body inside it usually is not.</p>
+<p><strong>4 — Cap the volume.</strong> The same query over the same fields is an investigation
+at 400 rows and a copy at 90,000.</p>
+<p><strong>5 — Record refusals as evidence, not errors.</strong> A refusal carries the exact
+query, so a human can grant it deliberately.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — one admission set and six queries, in
+<a href="scripts/investigation_admission_rules.py"><code>scripts/investigation_admission_rules.py</code></a>.</p>
+<p><strong>Output</strong> — the refusals from a real run:</p>
+<pre><code>bookings.db     owner_id,payment_card                8000  REFUSE — source not admitted for this class
+agent.traces    agent,message_body                    900  REFUSE — denied field: message_body
+gateway.logs    src,route                           90000  REFUSE — 90000 rows exceeds the 5000 cap
+</code></pre>
+<p>The third is refused on volume alone — same source, same fields as an allowed
+query.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;allowed&quot;: [{&quot;source&quot;: &quot;str&quot;, &quot;fields&quot;: [&quot;str&quot;], &quot;rows&quot;: 0, &quot;why&quot;: null}],
+  &quot;refused&quot;: [{&quot;source&quot;: &quot;str&quot;, &quot;fields&quot;: [&quot;str&quot;], &quot;rows&quot;: 0, &quot;why&quot;: &quot;str&quot;}]
+}
+</code></pre>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>The agent needs the denied field to answer.</strong> Then a human grants it, on
+  the record — which is the outcome, not a failure of the rule.</li>
+<li><strong>Volume caps break a legitimate sweep.</strong> Raise the cap for that class
+  explicitly rather than removing it.</li>
+<li><strong>A source is admitted but joins to one that is not.</strong> Enforce at the tool
+  boundary, not on the query text.</li>
+</ul>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Granting once, broadly, "for the duration".</strong> The duration is when the
+  access is least supervised.</li>
+<li><strong>Silent drops.</strong> A refusal nobody sees is indistinguishable from no data.</li>
+<li><strong>Rules written after the first investigation.</strong> They will be written to
+  permit whatever that one did.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>investigation class: agent-misuse
+   sources admitted : agent.traces, gateway.logs, tool.audit
+   fields denied    : message_body, passport_no, payment_card
+   row cap          : 5000
+
+source          fields                               rows  outcome
+agent.traces    agent,tool,ts                         400  allow
+gateway.logs    src,route,ts                         1200  allow
+tool.audit      tool,arg,ts                           300  allow
+bookings.db     owner_id,payment_card                8000  REFUSE — source not admitted for this class
+agent.traces    agent,message_body                    900  REFUSE — denied field: message_body
+gateway.logs    src,route                           90000  REFUSE — 90000 rows exceeds the 5000 cap
+
+3 allowed · 3 refused
+
+Every refusal is a record, not a silent drop. That matters twice: the
+investigator can ask a human for a grant with the exact query attached,
+and the refusals are themselves evidence that the investigation did not
+become the second incident.
+
+Note the third refusal. Nothing about it is sensitive - it is the same
+source and the same fields as an allowed query. It is refused on volume,
+because 90,000 rows is not an investigation, it is a copy.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Three queries allowed and three refused — one on an inadmissible source, one on a denied field, and one on volume alone.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Write the admission set for a data-exfiltration investigation. It is not the same set, and working out why is the exercise.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D3.3.html">D3.3 · Plan, then replan — an investigation that changes its mind</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D3.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D3.2.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Run an investigation against an admission set and watch the out-of-scope queries get refused and recorded.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OPA</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D3.2.ipynb</code></p></div><div class="pager"><a href="D3.1.html"><span class="k">← Previous</span><span class="t">D3.1 · From alert queue to loop operator</span></a><a class="next" href="D3.3.html"><span class="k">Next →</span><span class="t">D3.3 · Plan, then replan — an investigation that changes its mind</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

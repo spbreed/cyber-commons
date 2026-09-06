@@ -1,0 +1,31 @@
+cybertravels/ · 20 modules · 7 object handlers
+
+kci     indicator                                    target  measured  status
+KCI-01  object handlers that compare an owner       == 1.00      0.29  GAP
+KCI-02  outbound HTTP calls verifying TLS           == 1.00      0.00  GAP
+KCI-03  no evaluation of caller-supplied text          == 0      1.00  GAP
+KCI-04  no shell carrying a model-supplied argument     == 0      1.00  GAP
+KCI-05  egress control present                         == 1      0.00  GAP
+KCI-06  no credential literal in the source            == 0      0.00  ok
+
+1 met · 5 gaps
+
+   KCI-01  5 of 7 handlers do not
+           -> A2.4 and B2.3 — the ownership check, and finding the ones that lack it
+   KCI-02  1 of 1 disable verification
+           -> B2.7 — a rule that names your own HTTP wrapper, not requests
+   KCI-03  1 function(s) call eval or exec
+           -> A3.4 — default-deny on the tool call
+   KCI-04  1 function(s) reach a shell
+           -> A3.4 and B2.3 — CWE-78 is expressible; a rule catches it
+   KCI-05  no egress component exists in the architecture
+           -> A3.7 — the agent gateway as one choke point
+
+Every number above was computed from the tree just now, which is the only
+property that makes these control INDICATORS rather than control claims.
+Re-run it after a change and the same five numbers move or they do not.
+
+KCI-05 is the one worth arguing about. It measures a component that does
+not exist, so it reads 0.00 and always will until somebody builds a
+gateway. An indicator for a control you have not built is not a failure
+of the estate - it is the backlog, stated in the same units as the rest.

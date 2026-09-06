@@ -1,0 +1,41 @@
+the four vocabularies this curriculum labels against
+
+  OWASP LLM Top 10          10 risks, LLM01-LLM10
+  OWASP Agentic Top 10      15 threats, T1-T15
+  MITRE ATLAS               adversary tactics against AI systems
+  NIST AI RMF 1.0           4 functions: GOVERN, MAP, MEASURE, MANAGE
+  EU AI Act                 11 articles referenced here
+
+EU AI Act articles this curriculum touches
+   Art. 6   Classification of high-risk AI systems                2 lessons
+   Art. 9   Risk management system                               26 lessons
+   Art. 10  Data and data governance                              1 lesson
+   Art. 11  Technical documentation                               3 lessons
+   Art. 12  Record-keeping                                       27 lessons
+   Art. 13  Transparency and provision of information to deployers  1 lesson
+   Art. 14  Human oversight                                      17 lessons
+   Art. 15  Accuracy, robustness and cybersecurity               59 lessons
+   Art. 26  Obligations of deployers                             10 lessons
+   Art. 50  Transparency obligations for certain AI systems       1 lesson
+   Art. 55  Obligations for GPAI models with systemic risk        1 lesson
+
+coverage: how many lessons carry each label
+   NIST AI RMF   GOVERN:37  MANAGE:43  MAP:15  MEASURE:43
+   OWASP         LLM01:11  LLM04:1  LLM05:25  LLM06:2  LLM09:1  LLM10:1  T1:1  T10:14  T11:1  T12:1  T13:1  T14:1  T15:1  T2:13  T3:10  T4:12  T5:1  T6:2  T7:21  T8:20  T9:9
+
+lookup, both directions
+   A1.2    OWASP LLM01 · OWASP T6 · ATLAS AML.T0051 · ATLAS Initial Access · NIST MAP · EUAI Art. 15
+   B2.3    OWASP LLM05 · ATLAS ML Attack Staging · NIST MEASURE · EUAI Art. 15
+   D5.3    OWASP T7 · ATLAS Impact · NIST MANAGE · NIST GOVERN · EUAI Art. 9 · EUAI Art. 12
+
+   Art. 14 (Human oversight)
+      17 lessons: A1.15, A1.16, A1.17, D3.1, D3.2, D3.3, D3.4, D3.5 ...
+
+Reading it the second way is the one that matters in an audit. Nobody
+asks 'what does lesson A1.2 map to'. They ask 'show me where human
+oversight is addressed', and the answer has to be a list of things that
+exist, not a paragraph saying it is covered.
+
+Every label links to the published source, and those links are fetched in
+CI - so a framework that renumbers its pages breaks the build rather than
+quietly leaving a lesson pointing at a 404.

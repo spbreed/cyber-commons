@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D4.2 — Runbook tiers: fully automated, human in the loop, manual | Cyber Commons</title><meta name="description" content="Tier assigned from the remediation policy, with the human-in-the-loop tier carrying a real decision point rather than a confirmation dialog."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Respond</div><div class="sid">D4.2</div><h1>Runbook tiers: fully automated, human in the loop, manual</h1><div class="badges"><span class="badge t">D4</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T10</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Impact</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D4.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Everything is written as fully automated because that is the impressive demo, and the first wrong action is unrecoverable.</p></div><div class="ctrl"><div class="lab">Control</div><p>Tier assigned from the remediation policy, with the human-in-the-loop tier carrying a real decision point rather than a confirmation dialog.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Take one incident and run its response at all three tiers, comparing what each costs and what each risks.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D4.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D4.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/response/runbook-tier-assignment/scripts/runbook_tier_assignment.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D4.2 · Runbook tiers: fully automated, human in the loop, manual</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Respond</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D4.1.html">D4.1 · Remediation policy — what may be done without asking</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>kagent</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> The three runbook tiers — fully automated, human in the loop, manual — timed against one incident, with the cost of acting on a bad signal beside the time to contain.</p>
+<p><strong>Why a security engineer needs it.</strong> "Automate everything" and "keep a human in it" are both asserted constantly and neither is a position. The tiers trade time against the cost of being wrong, and the right trade depends on the detection's measured false-positive rate. Against a 29-minute breakout time, a manual tier that contains in 34 minutes is a risk decision — just an unstated one.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>Fully automated contains in fourteen seconds and is wrong eight times in a hundred. Manual is almost never wrong and takes thirty-four minutes, against a breakout time of twenty-nine. Neither of those is the safe option; they fail differently.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The incident is CyberTravels' runaway Workflow Agent, and the numbers are its containment ladder from A3.9 timed three ways. Manual takes thirty-four minutes against a breakout time of twenty-nine, which for CyberTravels means the refunds have already moved before anybody has decided anything.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   one incident, three tiers
+
+   tier                 decide      contain      wrong / 100
+   automated                1s          14s              8.0
+   human in the loop      240s         253s              1.2
+   manual                1800s        2072s              0.2
+                                        ^
+                        breakout time is 29 min = 1740s
+                        manual contains AFTER the attacker finished
+
+   deliberately no fourth column ranking these: seconds of exposure and
+   wrongly-contained agents are different units, and any single score
+   has an exchange rate hidden in it that somebody chose
+</code></pre>
+<p>The three tiers are not levels of ambition. They are three different trades
+between <strong>time to contain</strong> and <strong>the cost of acting on a bad signal</strong> — and
+which trade is right depends on the detection's measured false-positive rate,
+not on taste.</p>
+<p>There is no single score that ranks them, and this lesson refuses to print one.
+Seconds of exposure and wrongly-contained agents are in different units. Any
+number that ranks them has an exchange rate hidden inside it, chosen by whoever
+wrote the formula.</p></div><div class="nbmd"><h2>3 · Both tiers fail; they fail differently</h2>
+<p>Fully automated contains in fourteen seconds and is wrong eight times in a
+hundred, with nobody between the mistake and the estate.</p>
+<p>Manual is wrong far less often and takes thirty-four minutes — which, against a
+29-minute breakout time, means containment lands after the attacker has
+finished. "Keep a human in it" is a risk decision too. It is just usually an
+unstated one.</p></div><div class="nbmd"><h2>4 · One incident, three tiers</h2>
+<p>Two columns, deliberately unranked. Choose the exchange rate openly, per incident class, or do not choose it.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/runbook-tier-assignment/SKILL.md"><code>skills/response/runbook-tier-assignment/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: runbook-tier-assignment
+description: &gt;-
+  Run one incident's response at fully automated, human-in-the-loop and manual
+  tiers, and compare time to contain against wrong actions. Use when choosing a
+  runbook's tier, when justifying automation to a risk function, or when
+  &quot;automate everything&quot; and &quot;keep a human in it&quot; are both being asserted.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>Three tiers, three ways of being wrong</h1>
+<p>The tiers are not levels of ambition. They are three different trades between
+<strong>time to contain</strong> and <strong>the cost of acting on a bad signal</strong> — and which trade
+is right depends on the detection's false-positive rate, not on taste.</p>
+<p>There is no single score that ranks them. Seconds of exposure and wrongly
+contained agents are in different units; any number that ranks them has an
+exchange rate hidden inside it. Choose that rate openly, per incident class, or
+do not choose it.</p>
+<h2>When to use this</h2>
+<p>When assigning a tier to a new runbook, and when reviewing an existing one after
+its detection's false-positive rate has been measured. The tier should move when
+the rate moves.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Take the tier from <code>remediation-policy-check</code> as the ceiling.</strong> This skill
+chooses within what policy permits, never above it.</p>
+<p><strong>2 — Time each step at each tier honestly.</strong> The decide step is where the tiers
+actually differ; the mechanical steps barely move.</p>
+<p><strong>3 — Bring the detection's measured false-positive rate.</strong> Without it this is
+an argument about feelings.</p>
+<p><strong>4 — Report both costs side by side, unranked.</strong> Resist the composite score.</p>
+<p><strong>5 — Choose, and write down the exchange rate you used.</strong> The next person needs
+to know what you traded, not just what you picked.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — one incident, five steps, three tiers, in
+<a href="scripts/runbook_tier_assignment.py"><code>scripts/runbook_tier_assignment.py</code></a>.</p>
+<p><strong>Output</strong> — a real run:</p>
+<pre><code>tier                   contain   reaches the estate wrongly / 100
+automated                  14s                                8.0
+human-in-the-loop         253s                                1.2
+manual                   2072s                                0.2
+</code></pre>
+<p>Manual contains after 34 minutes, against a 29-minute breakout time.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;tiers&quot;: [{&quot;tier&quot;: &quot;str&quot;, &quot;seconds_to_contain&quot;: 0, &quot;wrong_actions_per_100&quot;: 0.0}]
+}
+</code></pre>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>The detection has no measured rate.</strong> Then no tier can be justified; measure
+  first.</li>
+<li><strong>The human is not actually available.</strong> A human-in-the-loop tier with a
+  four-hour on-call response is a manual tier wearing a badge.</li>
+<li><strong>The confirmation dialog.</strong> A HITL step nobody can meaningfully refuse is an
+  automated step with extra latency.</li>
+</ul>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Composite scores.</strong> They always favour whichever axis the author weighted.</li>
+<li><strong>Automating on an unmeasured detection.</strong> The fastest possible way to break
+  production on a false positive.</li>
+<li><strong>Manual as the safe default.</strong> On a 29-minute breakout time, slow is a risk
+  decision too — just an unstated one.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>step                           automated   human-in-the-loop              manual
+detect                               2s                  2s                  2s 
+decide                               1s                240s               1800s 
+throttle agent                       3s                  3s                 60s 
+revoke token                         3s                  3s                 90s 
+confirm contained                    5s                  5s                120s 
+time to contain                     14s                253s               2072s 
+
+tier                   contain  reaches the estate wrongly / 100
+automated                  14s                               8.0
+human-in-the-loop         253s                               1.2
+manual                   2072s                               0.2
+
+There is deliberately no third column ranking these. Seconds of exposure
+and wrongly-contained agents are not in the same unit, and any single
+score that ranks them has smuggled in an exchange rate somebody chose.
+Choose it openly, per incident class, or do not choose it at all.
+
+The automated tier contains in a quarter of a minute and is wrong eight
+times in a hundred, with nobody between the mistake and the estate. The
+manual tier is wrong far less often and takes over half an hour, which on
+a 29-minute breakout time means containment lands after the attacker has
+finished. Neither is &#x27;safe&#x27;. They fail differently.
+
+This is why the tier comes from the remediation policy and not from the
+runbook author&#x27;s confidence: the trade is a property of the ACTION, and
+the false-positive rate is a property of the DETECTION. Neither of them
+is a property of how bold the person writing the runbook was feeling.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>14s / 253s / 2072s to contain, against 8.0 / 1.2 / 0.2 wrong actions per hundred — and no third column ranking them.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Put your own detection's false-positive rate in and see whether the tier you already ship still looks right.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D4.3.html">D4.3 · Containment at machine speed</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D4.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D4.2.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Take one incident and run its response at all three tiers, comparing what each costs and what each risks.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>kagent</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D4.2.ipynb</code></p></div><div class="pager"><a href="D4.1.html"><span class="k">← Previous</span><span class="t">D4.1 · Remediation policy — what may be done without asking</span></a><a class="next" href="D4.3.html"><span class="k">Next →</span><span class="t">D4.3 · Containment at machine speed</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

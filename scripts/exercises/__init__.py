@@ -37,6 +37,7 @@ from .track_d2 import EXERCISES as _d2
 from .track_e1 import EXERCISES as _e1
 from .track_e2 import EXERCISES as _e2
 from .track_e3 import EXERCISES as _e3
+from .track_new import EXERCISES as _new   # the five-phase D lessons, A0.2, E1.13
 
 EXERCISES: dict[str, dict] = {
     **_intro,
@@ -44,7 +45,7 @@ EXERCISES: dict[str, dict] = {
     **_cases,
     **_register,
     **_a0, **_a1, **_a2, **_a3, **_b2a, **_b2b,
-    **_c1, **_c2, **_d1, **_d2, **_e1, **_e2, **_e3,
+    **_c1, **_c2, **_d1, **_d2, **_e1, **_e2, **_e3, **_new,
 }
 
 # The hook and the diagram live in framing.py rather than beside the lesson

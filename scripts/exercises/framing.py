@@ -2499,3 +2499,20 @@ BRIDGES: dict[str, dict[str, str]] = {
 },
 
 }
+
+
+# --------------------------------------------------------------------------
+# The lessons added with the five-phase Function D restructure live in
+# framing_new.py — this file was already long, and those eleven arrived as one
+# set. Merged here so the build still sees a single HOOKS / DIAGRAMS / BRIDGES.
+from .framing_new import HOOKS as _NEW_HOOKS          # noqa: E402
+from .framing_new import DIAGRAMS as _NEW_DIAGRAMS    # noqa: E402
+from .framing_new import BRIDGES as _NEW_BRIDGES      # noqa: E402
+
+for _k, _v in _NEW_HOOKS.items():
+    assert _k not in HOOKS, f"{_k} already has a hook"
+    HOOKS[_k] = _v
+for _k, _v in _NEW_DIAGRAMS.items():
+    assert _k not in DIAGRAMS, f"{_k} already has a diagram"
+    DIAGRAMS[_k] = _v
+BRIDGES.update(_NEW_BRIDGES)

@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D5.5 — Proposing the policy change | Cyber Commons</title><meta name="description" content="A policy change proposal generated from the root cause record, as a diff with the incident as its evidence."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Recover and Root Cause</div><div class="sid">D5.5</div><h1>Proposing the policy change</h1><div class="badges"><span class="badge t">D5</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T7</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Impact</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>GOVERN</a><a class="fw" href="https://artificialintelligenceact.eu/article/9/" title="Risk management system" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 9</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D5.5.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>The lesson from the incident lives in a postmortem document nobody reads, and the policy that permitted it is unchanged.</p></div><div class="ctrl"><div class="lab">Control</div><p>A policy change proposal generated from the root cause record, as a diff with the incident as its evidence.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Generate a policy diff from a root cause record and review what it would have prevented.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D5.5.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D5.5.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/grc/policy-change-proposal/scripts/policy_change_proposal.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D5.5 · Proposing the policy change</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Recover and Root Cause</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D5.4.html">D5.4 · Post-incident change surface</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>OPA</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Turning a root cause record into a policy diff, with the incident's measured numbers as the reason, and naming what the diff does not fix.</p>
+<p><strong>Why a security engineer needs it.</strong> Most incidents change what is deployed and leave what is <em>allowed</em> untouched, so the next system built under the same policy reproduces the conditions. A diff can be argued with; a postmortem paragraph cannot. And an indicator that no policy change can fix is an engineering item — saying so in the proposal is what stops it falling between two functions.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>The incident produced a fix to what is deployed and no change at all to what is allowed. So the next system built under the same policy reproduces the same conditions, and the postmortem sits in a folder being correct.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> The diff is against CyberTravels' policy, and the expensive line is the one that says a tool call without provenance is refused rather than recorded. That will break CyberTravels' vendor integrations, which is precisely the review that should happen before it ships.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   root cause record
+        |
+        v
+   +--------------------------------------------------------------+
+   | clause                          from -&gt; to            why     |
+   | mcp.vendor.tool_descriptions    trusted -&gt; pinned     the     |
+   | tool.call.provenance            when present -&gt;       altered |
+   |                                 required, else refuse desc    |
+   | payments.refund.approval        &gt;500 -&gt; every amount  KCI-03  |
+   +--------------------------------------------------------------+
+        |
+        v
+   NOT addressed: KCI-04
+   the policy already required 15 minutes. the control was never built
+   to meet it -&gt; engineering item, named here so it is not lost between
+   the two functions
+</code></pre>
+<p>Most incidents end with a change to what is <strong>deployed</strong>. The policy that
+permitted the incident is usually untouched — so the next system built under it
+reproduces the conditions.</p>
+<p>Stated as a diff, with the clause as it stands, the new text, and the incident
+as the reason, the change can be argued with. Stated as a postmortem paragraph,
+it cannot.</p></div><div class="nbmd"><h2>3 · Name what the diff does not fix</h2>
+<p>The proposal here changes three clauses and explicitly fails to address one
+indicator — because no policy change can. The policy already required detection
+within fifteen minutes; the control was simply never built to meet it.</p>
+<p>That is an engineering item, not a policy item, and saying so in the proposal is
+what stops it falling between the two functions forever.</p></div><div class="nbmd"><h2>4 · A root cause record becomes a diff</h2>
+<p>Every 'why' column is a measured number from the incident. A proposal argued on opinions gets decided by whoever is loudest.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/grc/policy-change-proposal/SKILL.md"><code>skills/grc/policy-change-proposal/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: policy-change-proposal
+description: &gt;-
+  Turn a root cause record into a reviewable policy diff with the incident
+  attached as evidence, and name what the diff does not fix. Use at the end of an
+  incident, when a postmortem's lessons never reach the policy, or when a
+  proposed control change needs to be argued on evidence rather than opinion.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>The last step of an incident is a change to what is allowed</h1>
+<p>Most incidents end with a change to what is <em>deployed</em>. The policy that
+permitted the incident is usually untouched, so the next system built under it
+reproduces the conditions.</p>
+<p>Stated as a diff — clause, old value, new value, and the incident as the reason
+— the change can be argued with. Stated as a postmortem paragraph, it cannot.</p>
+<h2>When to use this</h2>
+<p>After <code>root-cause-record</code> and <code>kci-fix-validation</code>, with both in hand. Before
+the incident is closed, because the appetite for a policy change decays fast.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Quote the clause as it stands.</strong> A proposal that paraphrases the current
+policy is arguing with something nobody wrote.</p>
+<p><strong>2 — Write the new value as text that could be adopted.</strong> Not a direction of
+travel — the words.</p>
+<p><strong>3 — Put the measured number in the "why".</strong> "41% of calls carried provenance
+during the incident" ends an argument that "we should tighten provenance"
+starts.</p>
+<p><strong>4 — Name what the diff does NOT address.</strong> A KCI that no policy change fixes
+is an engineering item, and saying so stops it falling between the two.</p>
+<p><strong>5 — Expect the expensive clause to be refused, and say so.</strong> A proposal whose
+every line is easy did not come from a real incident.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — a root cause record and four policy clauses, in
+<a href="scripts/policy_change_proposal.py"><code>scripts/policy_change_proposal.py</code></a>.</p>
+<p><strong>Output</strong> — one change from a real run:</p>
+<pre><code>  tool.call.provenance
+  - recorded when present
+  + required; a call without it is refused
+    why: 41% of calls carried provenance during the incident, so it was optional
+</code></pre>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;incident&quot;: &quot;str&quot;,
+  &quot;changes&quot;: [{&quot;clause&quot;: &quot;str&quot;, &quot;from&quot;: &quot;str&quot;, &quot;to&quot;: &quot;str&quot;, &quot;why&quot;: &quot;str&quot;}],
+  &quot;unaddressed&quot;: [&quot;str&quot;]
+}
+</code></pre>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>The policy already required it.</strong> Then the gap is engineering, not policy —
+  and that is the finding.</li>
+<li><strong>The change breaks integrations.</strong> State it in the diff. That review is the
+  one that should happen before it ships.</li>
+<li><strong>No clause covers the behaviour.</strong> A new clause is a bigger ask than an
+  amendment; say which you are making.</li>
+</ul>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Proposals with an opinion in the "why" column.</strong> They get argued on
+  opinions, and the loudest person wins.</li>
+<li><strong>Silence on what is not fixed.</strong> The unaddressed KCI is the one that recurs.</li>
+<li><strong>Deferring to "the next policy review".</strong> By then the evidence is cold.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>policy change proposal · evidence: INC-2026-114
+root cause: no control compared the vendor tool description against the version approved at onboarding
+
+  mcp.vendor.tool_descriptions
+  - trusted on fetch
+  + pinned at onboarding; a change requires review
+    why: the altered description is what issued the refund
+
+  tool.call.provenance
+  - recorded when present
+  + required; a call without it is refused
+    why: 41% of calls carried provenance during the incident, so it was optional
+
+  payments.refund.approval
+  - required for amounts over 500
+  + required for every amount
+    why: KCI-03 did not return to target after the fix
+
+3 clause(s) changed
+NOT addressed by this proposal: KCI-04
+   KCI-04 is the detection SLA. No policy change fixes it, because the
+   policy already says 15 minutes — the control was never built to meet
+   what the policy already required. That is an engineering item, and
+   saying so here stops it being lost between the two.
+
+Every line has an incident behind it. A policy diff whose &#x27;why&#x27; column is
+an opinion gets argued on opinions; one whose &#x27;why&#x27; column is a measured
+number from last week&#x27;s incident gets argued on the number.
+
+The refusal in the second change is the expensive one and is stated as a
+diff on purpose: &#x27;provenance required, calls without it refused&#x27; will
+break integrations, and the review that follows is exactly the review
+that should happen before it ships rather than after.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>Three clauses changed with the incident as evidence, and KCI-04 named as unaddressed because it is an engineering gap rather than a policy one.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Write the fourth clause — the one your organisation would refuse. A proposal whose every line is easy did not come from a real incident.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D5.6.html">D5.6 · Regulatory clock</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D5.5.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D5.5.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Generate a policy diff from a root cause record and review what it would have prevented.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>OPA</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D5.5.ipynb</code></p></div><div class="pager"><a href="D5.4.html"><span class="k">← Previous</span><span class="t">D5.4 · Post-incident change surface</span></a><a class="next" href="D5.6.html"><span class="k">Next →</span><span class="t">D5.6 · Regulatory clock</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

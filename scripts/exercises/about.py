@@ -1004,3 +1004,12 @@ This is a **control** lesson: it builds the mechanism, then breaks it, so you ca
 """,
 
 }
+
+
+# The lessons added with the five-phase Function D restructure — see
+# about_new.py, kept separate for the same reason framing_new.py is.
+from .about_new import ABOUT as _NEW      # noqa: E402
+for _k, _v in _NEW.items():
+    assert _k not in ABOUT, f"{_k} already has an entry"
+    ABOUT[_k] = _v
+

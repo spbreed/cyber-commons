@@ -1,0 +1,28 @@
+step                           automated   human-in-the-loop              manual
+detect                               2s                  2s                  2s 
+decide                               1s                240s               1800s 
+throttle agent                       3s                  3s                 60s 
+revoke token                         3s                  3s                 90s 
+confirm contained                    5s                  5s                120s 
+time to contain                     14s                253s               2072s 
+
+tier                   contain  reaches the estate wrongly / 100
+automated                  14s                               8.0
+human-in-the-loop         253s                               1.2
+manual                   2072s                               0.2
+
+There is deliberately no third column ranking these. Seconds of exposure
+and wrongly-contained agents are not in the same unit, and any single
+score that ranks them has smuggled in an exchange rate somebody chose.
+Choose it openly, per incident class, or do not choose it at all.
+
+The automated tier contains in a quarter of a minute and is wrong eight
+times in a hundred, with nobody between the mistake and the estate. The
+manual tier is wrong far less often and takes over half an hour, which on
+a 29-minute breakout time means containment lands after the attacker has
+finished. Neither is 'safe'. They fail differently.
+
+This is why the tier comes from the remediation policy and not from the
+runbook author's confidence: the trade is a property of the ACTION, and
+the false-positive rate is a property of the DETECTION. Neither of them
+is a property of how bold the person writing the runbook was feeling.

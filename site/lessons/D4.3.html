@@ -1,0 +1,146 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D4.3 — Containment at machine speed | Cyber Commons</title><meta name="description" content="Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Respond</div><div class="sid">D4.3</div><h1>Containment at machine speed</h1><div class="badges"><span class="badge t">D4</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T10</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Impact</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D4.3.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>Mass revocation takes down the business.</p></div><div class="ctrl"><div class="lab">Control</div><p>Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Exercise the ladder against a live misbehaving agent.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D4.3.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D4.3.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/response/machine-speed-containment/scripts/machine_speed_containment.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D4.3 · Containment at machine speed</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Respond</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D4.2.html">D4.2 · Runbook tiers: fully automated, human in the loop, manual</a></strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools used</td>
+<td>agentgateway, Keycloak</td>
+</tr>
+</tbody>
+</table></div><div class="nbmd"><h2>What this lesson is</h2>
+<p><strong>What it covers.</strong> Exercise the ladder against a live misbehaving agent.</p>
+<p><strong>Why a security engineer needs it.</strong> Mass revocation takes down the business. The control it builds is: throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.</p>
+<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>You have to stop it faster than it acts. That means the containment path — revoke, cut the gateway, kill the loop — is a thing built in advance, because improvising it takes longer than the incident does.</p>
+<blockquote>
+<p><strong>At CyberTravels.</strong> You have to stop CyberTravels faster than it issues refunds. The containment path is something CyberTravels builds in advance, because improvising it takes longer than the incident.</p>
+</blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
+<pre><code>   containment paths, in order of how fast they actually work
+
+   1  revoke the credential      seconds, if it is short-lived
+   2  cut it at the gateway      seconds, if there is a gateway
+   3  kill the loop              minutes, if you know where it runs
+   4  disable the integration    hours
+
+   built in advance. improvised, path 1 takes longer than the incident.
+</code></pre>
+<p>Containment has always been a race. With an agent, the other runner got much
+faster and you did not.</p>
+<p>The numbers decide the design. An agent operating at 300 actions per minute
+completes 2,400 further actions during an eight-minute approval cycle, against
+about 60 under automated containment. That ratio is the argument for
+pre-authorised, automated revocation of non-human identities.</p>
+<p>The asymmetry that makes it safe: revoking a <strong>human's</strong> access needs care,
+because a false positive locks a person out mid-shift. Revoking a <strong>non-human</strong>
+identity is cheap to get wrong — the agent re-requests, or an on-call re-enables
+it in a minute. So the two should have different policies, and almost nowhere do.</p></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
+<p>Eight minutes of approval is 2,400 actions. The skill races the rate against the delay, times the whole containment path — of which the revocation itself is twelve seconds — and classifies which signals may auto-revoke against a non-human subject.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/machine-speed-containment/SKILL.md"><code>skills/response/machine-speed-containment/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: machine-speed-containment
+description: &gt;-
+  Race an agent's action rate against the approval delay in front of
+  containment, time the whole containment path end to end, and decide which
+  signals may auto-revoke. Use when containment requires a human and the subject
+  acts hundreds of times a minute.
+allowed-tools: Read, Grep, Glob
+</code></pre>
+<h1>Eight minutes of approval is 2,400 actions</h1>
+<p>Containment that waits for a person is measured against a subject that does not
+wait. The arithmetic is not close, and it is the argument for pre-authorising
+revocation for a named set of signals — with the false-revocation cost stated,
+because that is the objection.</p>
+<h2>When to use this</h2>
+<p>Designing containment for agent workloads, and after any incident where the
+containment step was correct and late.</p>
+<h2>Procedure</h2>
+<p><strong>1 — Measure the subject's rate.</strong> Actions per minute, observed rather than
+designed. Multiply by the approval delay to get the actions taken while
+somebody decides.</p>
+<p><strong>2 — Time the whole path, not the revocation.</strong> Detection, triage, decision,
+approval, execution, propagation. The revocation itself is usually seconds and
+the path is usually minutes; reporting only the last step makes the problem
+invisible.</p>
+<p><strong>3 — Find the dominant term.</strong> It is almost always human approval or
+propagation delay, and it is almost never the API call. Optimise the dominant
+term or nothing changes.</p>
+<p><strong>4 — Classify signals for auto-revocation.</strong> For each, its precision and what a
+false revocation costs. High-precision signals against a non-human subject are
+the candidates: revoking an agent's token wrongly costs a restarted run.</p>
+<p><strong>5 — Set the policy asymmetrically.</strong> Auto-revoke agent credentials on
+high-precision signals; keep a human in front of anything that affects a person's
+access. State both halves so the policy survives review.</p>
+<h2>Example</h2>
+<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/machine_speed_containment.py"><code>scripts/machine_speed_containment.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
+<p><strong>Output</strong> — the opening lines of a real run:</p>
+<pre><code>   agent rate   human 8min   auto 12s   ratio
+----------------------------------------------
+       30/min          240          6    40.0×
+      120/min          960         24    40.0×
+      300/min         2400         60    40.0×
+     1200/min         9600        240    40.0×
+
+At 300/min an 8-minute approval costs 2,400 further actions.
+</code></pre>
+<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<h2>Output contract</h2>
+<pre><code class="language-json">{
+  &quot;race&quot;: {&quot;actions_per_min&quot;: 0, &quot;approval_minutes&quot;: 0, &quot;actions_during_approval&quot;: 0},
+  &quot;path&quot;: [{&quot;step&quot;: &quot;str&quot;, &quot;seconds&quot;: 0}],
+  &quot;total_seconds&quot;: 0,
+  &quot;dominant_step&quot;: &quot;str&quot;,
+  &quot;signals&quot;: [{&quot;name&quot;: &quot;str&quot;, &quot;precision&quot;: 0.0, &quot;subject&quot;: &quot;agent|human&quot;,
+               &quot;auto_revoke&quot;: false, &quot;false_revocation_cost&quot;: &quot;str&quot;}]
+}
+</code></pre>
+<h2>Failure modes</h2>
+<ul>
+<li><strong>Timing the revocation.</strong> It is the fast part.</li>
+<li><strong>One policy for agents and people.</strong> The costs differ by orders of
+  magnitude.</li>
+<li><strong>Auto-revoking on a low-precision signal.</strong> Precision is the entry
+  requirement.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>   agent rate   human 8min   auto 12s   ratio
+----------------------------------------------
+       30/min          240          6    40.0×
+      120/min          960         24    40.0×
+      300/min         2400         60    40.0×
+     1200/min         9600        240    40.0×
+
+At 300/min an 8-minute approval costs 2,400 further actions.
+step                            seconds  why
+--------------------------------------------------------------------------
+detection fires                       8  rule evaluation + SIEM ingestion lag
+analyst picks it up                 240  queue depth at 02:00
+analyst decides to contain          180  confirming it is not a false positive
+approval requested                  480  on-call manager, out of hours
+revocation executed                  12  the only step anyone measures
+TOTAL                               920  = 15 minutes
+
+at 300 actions/min that is 4,600 further actions.
+The 12-second revocation is 1.3% of the elapsed time. Optimising it
+is not where the win is.
+reached the cloud metadata service          AUTO-REVOKE (confidence 0.99) — no approval in the path
+read a path matching */.ssh/* or */.aws/*   AUTO-REVOKE (confidence 0.97) — no approval in the path
+egress to a host not on the allowlist       AUTO-REVOKE (confidence 0.90) — no approval in the path
+tool-call rate 20× its own baseline         AUTO-REVOKE (confidence 0.75) — no approval in the path
+activity outside usual hours                alert only (confidence 0.30 &lt; 0.7)
+
+same signal, human subject                  page on-call (confidence 0.99) — human lockout needs a person
+
+automated path: 21s vs manual 920s (44× faster)
+actions prevented at 300/min: 4,495
+human subject         high      person locked out mid-shift
+non-human identity    low       task fails, agent re-requests with a reason (A2.4)
+
+That asymmetry is the entire justification for two different policies.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>The race table shows 2,400 versus 60 actions at 300/min for an eight-minute approval. The full containment path totals about 920 seconds, of which the revocation itself is 12. Four of five signals auto-revoke for non-human identities and none do for a human subject, cutting the path to 21 seconds and preventing roughly 4,500 actions.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Time your own containment path end to end, step by step. The revocation is almost never the slow part — queue depth and approval are, and both are policy choices rather than technical limits.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D4.4.html">D4.4 · Stop authority</a></strong></p>
+<p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D4.3.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D4.3.ipynb">Source</a></p>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Each lever is timed; revocation hits one agent without collateral (the A2.4 deliverable, proven here).</div><p class="sub toolslab">Tools used</p><div class="chips"><span>agentgateway</span><span>Keycloak</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D4.3.ipynb</code></p></div><div class="pager"><a href="D4.2.html"><span class="k">← Previous</span><span class="t">D4.2 · Runbook tiers: fully automated, human in the loop, manual</span></a><a class="next" href="D4.4.html"><span class="k">Next →</span><span class="t">D4.4 · Stop authority</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

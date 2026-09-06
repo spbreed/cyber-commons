@@ -10,7 +10,7 @@ phase                                   hours  cumulative  note
 alert fires → analyst picks it up           3           3  queue depth
 confirm an incident                         6           9  is this real?
 establish WHO acted                        48          57  logs name the human; agents hidden
-scope what was touched                     24          81  ← DEADLINE PASSED  must walk the delegation chain (D2.3)
+scope what was touched                     24          81  ← DEADLINE PASSED  must walk the delegation chain (D3.8)
 legal determines reportability              8          89  ← DEADLINE PASSED  needs the scope
 draft and send                              3          92  ← DEADLINE PASSED  
 

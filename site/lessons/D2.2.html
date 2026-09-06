@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.2 — When the actor is an agent | Cyber Commons</title><meta name="description" content="Attribute to agent, authority, delegation chain and prompt."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Response</div><div class="sid">D2.2</div><h1>When the actor is an agent</h1><div class="badges"><span class="badge t">D2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T10</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Impact</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MANAGE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a><a class="fw" href="https://artificialintelligenceact.eu/article/14/" title="Human oversight" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 14</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>&quot;Which user&quot; is now the wrong first question.</p></div><div class="ctrl"><div class="lab">Control</div><p>Attribute to agent, authority, delegation chain and prompt.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Attribute an incident through the A2 `act` chain.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/response/agent-actor-containment/scripts/agent_actor_containment.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.2 · When the actor is an agent</h1>
-<p><strong>Function D — The Agentic SOC → The Agentic SOC — Response</strong>  ·  <em>Security of AI</em></p>
-<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.1.html">D2.1 · Agent-assisted reconstruction</a></strong>.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>D2.2 — Generating detection rules from an incident | Cyber Commons</title><meta name="description" content="Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess."><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="../assets/lesson.css"></head><body><header class="nav"><div class="nav-in"><a class="brand" href="../index.html"><img src="../assets/logo-mark.png" alt="Cyber Commons"><span>Cyber <b>Commons</b><small>Navigating Cyber Singularity</small></span></a><nav class="nav-links"><a href="index.html">All lessons</a><a href="../index.html#curriculum">Curriculum</a><a href="https://github.com/spbreed/cyber-commons">GitHub</a></nav></div></header><div class="wrap"><div class="lhead"><div class="crumb"><a href="index.html">All lessons</a> › Function D — The Agentic SOC › The Agentic SOC — Detect</div><div class="sid">D2.2</div><h1>Generating detection rules from an incident</h1><div class="badges"><span class="badge t">D2</span></div><div class="fws"><span class="fwl">Maps to</span><a class="fw" href="https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/" target="_blank" rel="noopener"><i>OWASP Agentic</i>T8</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Discovery</a><a class="fw" href="https://atlas.mitre.org/" target="_blank" rel="noopener"><i>MITRE ATLAS</i>Collection</a><a class="fw" href="https://airc.nist.gov/AI_RMF_Knowledge_Base/AI_RMF" target="_blank" rel="noopener"><i>NIST AI RMF</i>MEASURE</a><a class="fw" href="https://artificialintelligenceact.eu/article/12/" title="Record-keeping" target="_blank" rel="noopener"><i>EU AI Act</i>Art. 12</a></div></div><div class="video empty"><div class="frame"><div class="ph"><div class="icon">▶</div><div class="lab">Lightboard recording</div><p>Not recorded yet. The lesson below is complete and runnable today — the video is added later without touching this page.</p></div></div><div class="cap"><span>Video placeholder</span><span>publishes automatically from <code>recordings/D2.2.mp4</code></span></div></div><div class="rc"><div class="risk"><div class="lab">Risk</div><p>A rule generated from one incident matches that incident and nothing else, or matches everything and buries the queue.</p></div><div class="ctrl"><div class="lab">Control</div><p>Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess.</p></div></div><div class="sec"><h2>The lab</h2><p class="sub">Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.</p><div class="cta-row"><a class="btn k" href="https://www.kaggle.com/kernels/welcome?src=https://raw.githubusercontent.com/spbreed/cyber-commons/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">▶ Run on Kaggle</a><a class="btn p" href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb" target="_blank" rel="noopener">↗ Open the notebook on GitHub</a></div><details class="kagnote"><summary>What “Run on Kaggle” does, and what it needs</summary><div class="kagbody"><p>“Run on Kaggle” opens the notebook in <b>your own</b> Kaggle account as a new kernel. The notebook carries no procedure: it clones this repository — shallow and sparse, the skills directory only, about three seconds — and runs <code>skills/detection/detection-rule-synthesis/scripts/detection_rule_synthesis.py</code> out of it. Switch <b>Internet</b> on in the notebook settings first; Kaggle gates that on a verified phone number, and without one you can attach the dataset <code>cybercommons/cyber-commons-skills</code> instead. The copy is yours to edit and re-run, and nothing is written back here.</p><p>New here? <a href="A0.1.html">A0.1</a> walks the whole mechanism and runs it on itself.</p></div></details><h3 class="nbh">The notebook</h3><div class="nb"><div class="nbmd"><h1>D2.2 · Generating detection rules from an incident</h1>
+<p><strong>Function D — The Agentic SOC → The Agentic SOC — Detect</strong>  ·  <em>Security of AI</em></p>
+<p>Builds on <strong><a href="https://spbreed.github.io/cyber-commons/lessons/D2.1.html">D2.1 · Agent-assisted detection engineering</a></strong>.</p>
 <table>
 <thead>
 <tr>
@@ -11,137 +11,131 @@
 <tbody>
 <tr>
 <td>Tools used</td>
-<td>Keycloak, OpenSearch</td>
+<td>Sigma</td>
 </tr>
 </tbody>
 </table></div><div class="nbmd"><h2>What this lesson is</h2>
-<p><strong>What it covers.</strong> Attribute an incident through the A2 <code>act</code> chain.</p>
-<p><strong>Why a security engineer needs it.</strong> "Which user" is now the wrong first question. The control it builds is: attribute to agent, authority, delegation chain and prompt.</p>
-<p>This is a <strong>control</strong> lesson: it builds the mechanism, then breaks it, so you can see what the control is actually load-bearing for rather than taking the claim on trust.</p></div><div class="nbmd"><h2>1 · The hook</h2>
-<p>The internal actor was autonomous. Was it instructed, was it compromised, or did it simply do what it was allowed to do? None of your existing playbooks have a branch for that question, and the answer changes everything downstream.</p>
+<p><strong>What it covers.</strong> Generating a detection rule from a reconstructed incident, and measuring it against benign traffic before it ships.</p>
+<p><strong>Why a security engineer needs it.</strong> An incident is the richest source of a good rule and the easiest source of a bad one, because every candidate you write from it catches it. The property that decides deployability is the false-positive rate on traffic that is not the incident — which means a benign corpus containing the hard cases, not unrelated noise.</p></div><div class="nbmd"><h2>1 · The hook</h2>
+<p>You have just reconstructed an incident and the rule almost writes itself. That is the problem: every rule you could write catches the incident, because you wrote it from the incident. What decides whether it ships is the traffic it fires on when nothing is wrong.</p>
 <blockquote>
-<p><strong>At CyberTravels.</strong> The internal actor was the Workflow Agent. Was it instructed, injected, or simply permitted? CyberTravels' existing playbook has no branch for that question, and every step of it assumes a person.</p>
+<p><strong>At CyberTravels.</strong> The incident is CyberTravels': the Workflow Agent issued a refund against a booking nobody asked it to touch. The benign corpus is the hard one on purpose — CyberTravels processes eighteen legitimate refunds in the same window, and a rule that cannot tell them apart is a rule that alerts on the business.</p>
 </blockquote></div><div class="nbmd"><h2>2 · The framework</h2>
-<pre><code>   the internal actor was autonomous. which branch?
-
-   instructed      someone told it to        -&gt; who, and through what channel
-   injected        content told it to        -&gt; which corpus, written by whom
-   permitted       it was allowed to         -&gt; a control gap, not an intrusion
-
-   no existing playbook has this branch, and it changes everything after it
+<pre><code>   incident trace
+        |
+        v
+   +----------------------+     every candidate catches the incident,
+   | candidate rules      |     so that cannot be the selection test
+   |   any refund         |
+   |   refund w/o approval|
+   |   refund on BK-772   |
+   +----------+-----------+
+              |
+              v
+       benign corpus  (must contain LEGITIMATE refunds)
+              |
+      +-------+--------+---------------+
+      v                v               v
+   21% FP           0% FP           0% FP
+   buries the       generalises     matches this
+   queue            AND quiet       incident only
+   REJECT           SHIP            REJECT
 </code></pre>
-<p>Three responder instincts are correct for human incidents and misfire when the
-actor is an agent.</p>
-<ol>
-<li><strong>Disable the account.</strong> For a human this stops them. For an agent holding an
-   already-issued bearer token, it may not — the token remains valid until it
-   expires.</li>
-<li><strong>Interview the user.</strong> They were asleep. They authorised a task; a model
-   chose the actions. They cannot tell you what happened.</li>
-<li><strong>Assume one actor.</strong> There were three, in a chain, and only the last one
-   touched the resource.</li>
-</ol>
-<p>The correct first action is to <strong>revoke the agent identity</strong>, which is only
-possible if A2 was done. This lesson is where the identity track's value becomes
-operational rather than architectural.</p></div><div class="nbmd"><table style="border-collapse:collapse;margin:4px 0 2px;width:100%"><thead><tr><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook you have</th><th style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600;border-bottom:2px solid rgba(138,147,166,.7)">the runbook this incident needs</th></tr></thead><tbody><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">1. disable the user account</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">1. identify the &lt;b&gt;acting&lt;/b&gt; identity from the act chain (A2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">2. interview the user</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">2. revoke that identity — no approval needed for a non-human (A3.6)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px">3. review the user&#x27;s recent activity</td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">3. scope by walking the delegation chain, not the host list (D2.3)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">4. preserve the run trace before anything restarts (D2.5)</td></tr><tr><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px"></td><td style="padding:6px 11px;border-bottom:1px solid rgba(138,147,166,.35);text-align:left;vertical-align:top;font-size:13px;font-weight:600">5. only then consider the human&#x27;s account, and say why</td></tr></tbody></table>
-<div style="font-size:12px;color:#8A93A6;margin-top:6px">Every step on the left is correct for a human actor and wrong here. The human authorised a task; the actions were chosen by a model.</div></div><div class="nbmd"><h2>3 · The procedure, as a skill</h2>
-<p>Disabling the human's account leaves both agents acting on tokens already issued. The skill enumerates the live sessions, simulates the reflex containment step, and separates the task the user authorised from the actions taken under it.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/response/agent-actor-containment/SKILL.md"><code>skills/response/agent-actor-containment/SKILL.md</code></a></h3>
-<pre><code class="language-yaml">name: agent-actor-containment
+<p>The fastest source of a good detection is an incident you have just had. The
+trap is that <strong>every candidate rule catches the incident</strong> — that is how it was
+generated — so catching it cannot be the property you select on.</p>
+<p>What separates a rule worth deploying is what it does to traffic that is not the
+incident. That means a benign corpus containing the hard cases: for a refund
+rule, legitimate refunds. A corpus of unrelated traffic proves nothing, because
+the naive rule looks clean against it.</p></div><div class="nbmd"><h2>3 · Write the bad candidates on purpose</h2>
+<p>Two rules are worth writing precisely because they will be rejected.</p>
+<p>The <strong>naive generalisation</strong> takes the tool that appeared in the incident:
+<code>any refund</code>. The <strong>over-fitted</strong> one takes the identifier: <code>refund on BK-772</code>.
+Both catch the incident. One buries the queue and the other is worthless
+tomorrow, and seeing them scored beside the good rule is what makes the good
+rule a choice rather than an assumption.</p></div><div class="nbmd"><h2>4 · Generate, then measure before shipping</h2>
+<p>Three candidates, one benign corpus, one number each. A rule with no measured false-positive rate is a guess with syntax.</p></div><div class="nbmd"><h3>The skill — <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/skills/detection/detection-rule-synthesis/SKILL.md"><code>skills/detection/detection-rule-synthesis/SKILL.md</code></a></h3>
+<pre><code class="language-yaml">name: detection-rule-synthesis
 description: &gt;-
-  Establish what disabling a human's account does not stop when agents hold
-  issued tokens, and separate the task a user authorised from the actions taken
-  under it. Use during an incident where the actor is an agent and the account
-  is a person's.
+  Generate a detection rule from an incident trace and score it against benign
+  traffic before it ships. Use after an incident is reconstructed, when turning
+  a hunt finding into a standing detection, or when a proposed rule has no
+  measured false-positive rate.
 allowed-tools: Read, Grep, Glob
 </code></pre>
-<h1>Disabling her account stops her, not them</h1>
-<p>The reflex containment step is to disable the account the logs name. When the
-actor is an agent holding an already-issued token, that step changes nothing:
-the token is valid until it expires, and the agent keeps acting. Containment has
-to name the credential and the workload, not the person.</p>
+<h1>The incident tells you what to write; the benign corpus tells you whether to ship it</h1>
+<p>The fastest source of a good detection is an incident you have just had. The
+trap is that <strong>every candidate rule catches the incident</strong> — that is how it was
+generated — so catching it cannot be the property you select on.</p>
+<p>What separates a rule worth deploying is what it does to traffic that is <em>not</em>
+the incident.</p>
 <h2>When to use this</h2>
-<p>Any incident where an agent acted on a user's behalf, and before any containment
-decision that starts by disabling an account.</p>
-<h2>Procedure</h2>
-<p><strong>1 — Enumerate live sessions and issued tokens per actor.</strong> Human sessions,
-agent sessions, and the tokens each holds with their expiry. This list is the
-containment surface and it is usually longer than expected.</p>
-<p><strong>2 — Simulate disabling the human's account.</strong> Record what stops and what does
-not. Already-issued tokens continuing to work is the finding, and it needs to be
-stated before the containment call is made.</p>
-<p><strong>3 — Interview to separate authorisation from action.</strong> The user authorised a
-<em>task</em>. Which of the actions taken under it did they know about, ask for, or
-see? The answer is usually "the first one", and it changes the incident's
-character entirely.</p>
-<p><strong>4 — Draw the actor chain.</strong> User, orchestrator, worker agent, downstream. The
-logs show one actor; the chain shows three. Name each and what each can still
-do.</p>
-<p><strong>5 — Choose levers by what they actually stop.</strong> Account disable, token
-revocation, workload termination, downstream block. Record the effect and the
-collateral of each, and pick from that table rather than from habit.</p>
+<p>Immediately after reconstruction, while the trace is still loaded, and again
+whenever a hunt hypothesis is promoted. Do not use it to write coverage from
+scratch: a rule generated from no incident has nothing to generalise from.</p>
+<h2>Step-by-step</h2>
+<p><strong>1 — Take the reconstructed trace, not the alert.</strong> The alert is one event;
+the rule needs the sequence around it.</p>
+<p><strong>2 — Write more than one candidate, deliberately including a bad one.</strong> The
+naive generalisation ("the tool that appeared") and the over-fitted one ("this
+booking id") are both worth writing, because seeing them scored is the lesson.</p>
+<p><strong>3 — Assemble a benign corpus that contains the hard cases.</strong> Legitimate
+refunds, not just unrelated traffic. A corpus with no near-misses proves
+nothing.</p>
+<p><strong>4 — Score every candidate on the benign corpus and record the rate.</strong> Not a
+verdict, a number.</p>
+<p><strong>5 — Ship the one that generalises and stays quiet, and say why the others
+were rejected.</strong> The rejected candidates are the evidence that the shipped one
+was chosen rather than assumed.</p>
 <h2>Example</h2>
-<p><strong>Input</strong> — the fixture committed at the top of <a href="scripts/agent_actor_containment.py"><code>scripts/agent_actor_containment.py</code></a>. Edit it and re-run: the buckets, counts and verdicts below are derived from it, not hard-coded.</p>
-<p><strong>Output</strong> — the opening lines of a real run:</p>
-<pre><code>INSTINCT 1 — disable dana@corp's account
-   dana@corp (human)      can act: True   account disabled, but the issued token is still valid
-   patch-agent            can act: True   active
-   deploy-agent           can act: True   active
-   → the agents were never using her account interactively; they hold
-     their own issued tokens, and one of them is acting AS her.
-
-INSTINCT 2 — interview the user
+<p><strong>Input</strong> — a three-step incident and an 84-run benign corpus, in
+<a href="scripts/detection_rule_synthesis.py"><code>scripts/detection_rule_synthesis.py</code></a>.</p>
+<p><strong>Output</strong> — a real run:</p>
+<pre><code>candidate rule                          fires on   FP  FP rate  verdict
+any refund                                  True   18     21%  REJECT — buries the queue
+refund with no approval in the run          True    0      0%  ship
+refund on BK-772                            True    0      0%  REJECT — matches this incident only
 </code></pre>
-<p>The run continues past this. The script is the example: <code>test_skills.py</code> executes it on every build, so this block cannot drift from what the skill actually prints.</p>
+<p>All three catch the incident. Only one is a detection.</p>
 <h2>Output contract</h2>
 <pre><code class="language-json">{
-  &quot;sessions&quot;: [{&quot;actor&quot;: &quot;str&quot;, &quot;kind&quot;: &quot;human|agent&quot;, &quot;tokens&quot;: [{&quot;id&quot;: &quot;str&quot;, &quot;expires_in_s&quot;: 0}]}],
-  &quot;disable_human&quot;: {&quot;stops&quot;: [&quot;str&quot;], &quot;does_not_stop&quot;: [&quot;str&quot;]},
-  &quot;interview&quot;: {&quot;authorised&quot;: &quot;str&quot;, &quot;aware_of&quot;: [&quot;str&quot;], &quot;unaware_of&quot;: [&quot;str&quot;]},
-  &quot;chain&quot;: [&quot;str&quot;],
-  &quot;levers&quot;: [{&quot;lever&quot;: &quot;str&quot;, &quot;stops&quot;: [&quot;str&quot;], &quot;collateral&quot;: [&quot;str&quot;]}]
+  &quot;benign_runs&quot;: 0,
+  &quot;candidates&quot;: [{&quot;rule&quot;: &quot;str&quot;, &quot;catches_incident&quot;: true,
+                  &quot;false_positives&quot;: 0, &quot;fp_rate&quot;: 0.0,
+                  &quot;verdict&quot;: &quot;ship|REJECT&quot;}]
 }
 </code></pre>
+<h2>Common edge cases</h2>
+<ul>
+<li><strong>The over-fitted rule scores perfectly.</strong> Zero false positives and zero
+  future value. Test for a literal identifier in the rule body.</li>
+<li><strong>The benign corpus is too easy.</strong> If it contains no legitimate refunds, the
+  naive rule looks shippable.</li>
+<li><strong>The incident is the only positive.</strong> One true positive cannot establish
+  recall; the rule's recall is unknown until it runs.</li>
+</ul>
 <h2>Failure modes</h2>
 <ul>
-<li><strong>Starting with the account.</strong> It is the one lever that does not touch the
-  actor.</li>
-<li><strong>Recording the user as having authorised the actions.</strong> They authorised a
-  task.</li>
-<li><strong>Containing the worker and not the orchestrator.</strong> It will start another.</li>
-</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>INSTINCT 1 — disable dana@corp&#x27;s account
-   dana@corp (human)      can act: True   account disabled, but the issued token is still valid
-   patch-agent            can act: True   active
-   deploy-agent           can act: True   active
-   → the agents were never using her account interactively; they hold
-     their own issued tokens, and one of them is acting AS her.
+<li><strong>Selecting on "does it catch the incident".</strong> Every candidate does.</li>
+<li><strong>Shipping without a false-positive number.</strong> That is a guess with syntax.</li>
+<li><strong>Never writing the bad candidates.</strong> Then nothing shows the good one is good.</li>
+</ul></div><div class="nbcode"><span class="nbtag">Out</span><pre><code>incident: 3 steps · benign corpus: 84 runs
 
-INSTINCT 2 — interview the user
-   Q: did you read the AWS credentials?
-   A: No. I opened a ticket and went to lunch.
-   Q: what did you ask the agent to do?
-   A: Fix the finding in billing.py.
-   Q: did you approve the external POST?
-   A: I didn&#x27;t know it made external calls.
-   → she authorised a TASK. The actions were chosen by a model. She is
-     not withholding information; she does not have it.
+candidate rule                          fires on   FP  FP rate  verdict
+any refund                                  True   18     21%  REJECT — buries the queue
+refund with no approval in the run          True    0      0%  ship
+refund on BK-772                            True    0      0%  REJECT — matches this incident only
 
-INSTINCT 3 — assume one actor
-   actual chain: dana@corp → orchestrator → patch-agent
-   actors involved: 3; actors in the logs: 1
-correct first action — revoke patch-agent&#x27;s identity:
-   dana@corp (human)      can act: True   active
-   patch-agent            can act: False  identity revoked
-   deploy-agent           can act: True   active
+All three rules catch the incident. That is the trap: catching the thing
+that already happened is the one property every candidate has, so it
+cannot be the property you select on.
 
-   dana keeps working. deploy-agent keeps working. The actor stopped.
-
-TIME TO EFFECT, measured:
-   disable the human&#x27;s account         5s  agent unaffected
-   kill the agent process              2s  supervisor restarts it; token still valid
-   revoke the agent identity          12s  agent cannot act, even after restart
-   rotate the shared credential      420s  works, and breaks every other consumer</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
-<p>Disabling the human's account leaves both agents able to act on already-issued tokens. The interview establishes the user authorised a task, not the actions. The chain shows three actors where the logs show one. Revoking <code>patch-agent</code>'s identity stops it in 12 seconds while dana and <code>deploy-agent</code> continue working.</p></div><div class="nbmd"><h2>Your turn</h2>
-<p>Write your agentic incident runbook's first three steps. If step one is "disable the user account", rewrite it — and check whether you can currently revoke a single agent identity at all.</p></div><div class="nbmd"><hr />
-<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Scoping an agentic incident</a></strong></p>
+&#x27;any refund&#x27; fires on 18 legitimate refunds - a 21% false-positive
+rate, and refunds are the business. &#x27;refund on BK-772&#x27; is perfect on this
+corpus and worthless tomorrow, because the booking id will be different.
+Only the sequence rule generalises AND stays quiet.</code></pre></div><div class="nbmd"><h2>What you just proved</h2>
+<p>All three candidates catch the incident; only the sequence rule ships. The naive rule fires on 18 legitimate refunds — a 21% false-positive rate on a business that runs on refunds.</p></div><div class="nbmd"><h2>Your turn</h2>
+<p>Add a benign run that the shipped rule fires on. If you cannot construct one, your corpus is too easy.</p></div><div class="nbmd"><hr />
+<p><strong>Next → <a href="https://spbreed.github.io/cyber-commons/lessons/D2.3.html">D2.3 · Detection engineering <em>for</em> agents</a></strong></p>
 <p><a href="https://spbreed.github.io/cyber-commons/lessons/">All lessons</a> · <a href="https://spbreed.github.io/cyber-commons/lessons/D2.2.html">This lesson's page</a> · <a href="https://github.com/spbreed/cyber-commons/blob/claude/vulnbench-setup-scheduling-81aqov/labs/notebooks/D2.2.ipynb">Source</a></p>
-<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Keycloak</span><span>OpenSearch</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.2.ipynb</code></p></div><div class="pager"><a href="D2.1.html"><span class="k">← Previous</span><span class="t">D2.1 · Agent-assisted reconstruction</span></a><a class="next" href="D2.3.html"><span class="k">Next →</span><span class="t">D2.3 · Scoping an agentic incident</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>
+<p><em>Cyber Commons — a free, open commons for Cyber AI.</em></p></div></div><div class="expect"><b>Expect</b>Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.</div><p class="sub toolslab">Tools used</p><div class="chips"><span>Sigma</span></div><p class="sub" style="margin-top:10px">Notebook source: <code>labs/notebooks/D2.2.ipynb</code></p></div><div class="pager"><a href="D2.1.html"><span class="k">← Previous</span><span class="t">D2.1 · Agent-assisted detection engineering</span></a><a class="next" href="D2.3.html"><span class="k">Next →</span><span class="t">D2.3 · Detection engineering *for* agents</span></a></div></div><footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singularity</span><span><a href="../index.html">Home</a> · <a href="index.html">All lessons</a> · <a href="https://github.com/spbreed/cyber-commons">Source</a></span></div></footer></body></html>

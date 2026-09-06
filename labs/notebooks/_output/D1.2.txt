@@ -1,49 +1,33 @@
-BARE ALERT (what most SOCs receive):
-   patch-agent read /vault/.env
-   rotator-agent read /vault/.env
-   → identical. An analyst cannot tell these apart.
+full record (everything the harness saw):
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
+    {'n': 2, 'tool': 'search_code', 'target': 'charge(', 'verifier': 'n/a', 'ok': True, 'prompt': 'find callers of charge()', 'result': 'api/checkout.py:88 charge(user.card, total)'}
+    {'n': 3, 'tool': 'write_file', 'target': '/work/repo/billing.py', 'verifier': 'tests pass', 'ok': True, 'prompt': 'apply the fix', 'result': 'patch applied'}
+sensitive content found in the trace:
+   step 1  result   payment card
 
-ENRICHED ALERT:
-   actor        patch-agent
-   on behalf of dana@corp
-   chain        dana@corp → orchestrator → patch-agent
-   scopes held  ['repo:read', 'repo:write']
-   verdict      ANOMALY — no secrets scope
+Nobody put a card number in the trace deliberately. The agent read a
+source file, and the file contained a test fixture with a real-shaped PAN.
+The trace is now in scope for PCI, and it is in your SIEM for 400 days.
+field       days  sensitivity  rationale
+--------------------------------------------------------------------------
+n            400          low  cheap, high forensic value
+tool         400          low  cheap, high forensic value
+target       400          low  path only, no contents
+verifier     400          low  what the harness believed — the key forensic field
+ok           400          low  
+prompt        30         high  may contain anything the task included
+result         7         high  tool output — the highest-risk field
 
-   actor        rotator-agent
-   on behalf of ops@corp
-   chain        ops@corp → scheduler → rotator-agent
-   scopes held  ['secrets:read', 'secrets:write']
-   verdict      EXPECTED — this agent rotates secrets
+after 1 days — step 1 record:
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
 
-agent           no context    with context      truth
---------------------------------------------------------
-patch-agent     escalate      escalate             tp
-rotator-agent   escalate      close                fp
+after 14 days — step 1 record:
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result_sha256': 'b0e3ecafa7e7a9a0'}
 
-Without scopes, both escalate → the rotator generates a false positive
-every single night, and within a month the rule is tuned off.
-acting identity     which agent — not the human whose token it borrowed
-principal           who the action was for
-delegation chain    who caused the task; where to look for the trigger
-scopes held         THE decisive field — is this action within its remit?
-tool + target       what it did
-session/trace id    so the analyst can pull the whole run (D1.5)
+after 90 days — step 1 record:
+    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt_sha256': '60d7bceb0de1a7bd', 'result_sha256': 'b0e3ecafa7e7a9a0'}
+sensitive content after 90 days: none
+can still answer 'what did it do and what did the harness believe?': True
 
-patch-agent     ESCALATE (outside remit)
-                dana@corp → orchestrator → patch-agent  scopes=['repo:read', 'repo:write']
-rotator-agent   close (within remit)
-                ops@corp → scheduler → rotator-agent  scopes=['secrets:read', 'secrets:write']
-conformance: 0 problem(s)
-   A-1  true_positive        auto_closed=False sampled=False
-   A-2  benign_true_positive auto_closed=True  sampled=False
-   A-3  true_positive        auto_closed=False sampled=False
-   A-4  benign_true_positive auto_closed=True  sampled=True
-   A-5  true_positive        auto_closed=False sampled=False
-   A-6  benign_true_positive auto_closed=True  sampled=True
-
-auto-closed 3, of which 2 sampled back for human review
-
-`benign_true_positive` is its own verdict. Folding it into false-positive
-would teach the tuner to suppress a detection that is working exactly as
-designed - the read really happened, it was simply within remit.
+The hash is retained, so if the original is recovered from a backup you
+can still prove it is the same content the agent saw.

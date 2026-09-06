@@ -1,0 +1,29 @@
+INC-2026-114 · detected by customer complaint after 194 minutes
+
+control what it would have caught                 status
+A2.6    provenance marking at ingress             absent
+A3.1    default-deny on the tool call             present-but-scoped-wrong
+D2.1    detection on refund without approval      absent
+D1.3    drift monitor on vendor tool descriptions absent
+D4.4    stop authority within the refund window   present
+
+first absent control in the chain: A2.6 — provenance marking at ingress
+contributing: D2.1, D1.3
+
+candidate root cause statements
+   REJECT  the on-call engineer missed the alert
+           -> names no control
+   REJECT  we should have been more careful with vendor MCP servers
+           -> names no control
+   ACCEPT  no control compared the vendor tool description against the version approved at onboarding
+
+1 of 3 statements are usable as a root cause
+
+The first two are true and useless. An engineer missing an alert is a
+thing that will happen again next quarter to a different engineer, and
+'be more careful' is not a change anybody can make. Only the third names
+something that can be built, tested, and checked in D5.3.
+
+Note that stop authority was PRESENT and the incident still ran 194
+minutes. A control that exists but is never reached is not a mitigating
+factor - it is evidence that the detection in front of it was the gap.

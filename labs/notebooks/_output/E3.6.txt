@@ -19,7 +19,7 @@ refund cap of GBP 500 enforced in the tool, not the promptpayments-eng    SB-2  
 approval gate above the cap                         payments-eng    SB-2        2026-09-30
    why: L2 for the tail, L2.5 for the body
 act chain on every refund                           platform-sec    AC-1/EV-1   2026-09-15
-   why: attribution survives an incident (D2.1)
+   why: attribution survives an incident (D3.5)
 tested stop, measured in seconds                    SRE             ST-1        2026-10-12
    why: you can halt it without the vendor
 re-tier automatically if the tool list changes      platform-sec    DR-1        2026-10-31

@@ -21,6 +21,14 @@
       ],
       "expect": "The tree inventoried from disk — 14 areas, 120 skills, 119 with a script at the time of writing, and the count moves as the commons grows — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file."
     },
+    "A0.2": {
+      "run": [
+        "# --- the notebook: runs anywhere, stdlib only, no install ---",
+        "jupyter notebook labs/notebooks/A0.2.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session A0.2   # run it headless and check it"
+      ],
+      "expect": "Look up what a lesson maps to, then the harder direction: which lessons address a given EU AI Act article."
+    },
     "A1.0": {
       "run": [
         "# --- the notebook: runs anywhere, stdlib only, no install ---",
@@ -1091,6 +1099,14 @@
         "python3 scripts/run_notebooks.py --session E1.12   # run it headless and check it"
       ],
       "expect": "Three joint runbooks are traced from owner to consumer, and three handoffs turn out never to have been delivered — model risk never receives the privacy assessment, and neither security nor internal audit receives the validation report. Each undelivered handoff is a control that was built, works, and is invisible to the function whose decision depends on it. A four-property check runs over the seams and goes from several problems to zero."
+    },
+    "E1.13": {
+      "run": [
+        "# --- the notebook: runs anywhere, stdlib only, no install ---",
+        "jupyter notebook labs/notebooks/E1.13.ipynb    # or open it on the lesson page",
+        "python3 scripts/run_notebooks.py --session E1.13   # run it headless and check it"
+      ],
+      "expect": "Measure six indicators against the CyberTravels tree and read the five gaps it reports."
     },
     "E1.2": {
       "run": [
