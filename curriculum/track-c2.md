@@ -17,8 +17,6 @@
 
 ### C2.1 — What research means in a CISO org
 
-`both directions`
-
 - **Risk** — Research with a publication outcome and no control outcome.
 - **Control** — Choose problems that end in a deployable control; get funded.
 - **Lab** — Write a one-page research charter with a named consuming track.
@@ -40,8 +38,6 @@ $EDITOR charter.md   # problem, control outcome, consuming track, funding ask
 ---
 
 ### C2.2 — Model-layer research
-
-`Security of AI`
 
 - **Risk** — Model cards read credulously.
 - **Control** — Adversarial robustness, jailbreak taxonomy, refusal analysis, capability elicitation.
@@ -69,8 +65,6 @@ python3 compare_reports.py
 
 ### C2.3 — Weight-level techniques
 
-`Security of AI`
-
 - **Risk** — Claiming a capability was removed when it was only hidden.
 - **Control** — Concept erasure and orthogonalisation on open weights — with honest claims.
 - **Lab** — Attempt targeted unlearning on an open-weight model and try to elicit the capability back.
@@ -97,8 +91,6 @@ python3 elicit.py --model ./erased --strategies paraphrase,encoding,few-shot
 
 ### C2.4 — Data-layer research
 
-`Security of AI`
-
 - **Risk** — Memorisation, extraction, embedding inversion, index poisoning.
 - **Control** — Measure extraction rates rather than assert privacy.
 - **Lab** — Invert embeddings from a local vector store and recover source text.
@@ -122,8 +114,6 @@ python3 invert.py --store qdrant --top-k 20 --report inversion.md
 ---
 
 ### C2.5 — Supply-chain research
-
-`Security of AI`
 
 - **Risk** — Adapter and LoRA provenance, registry tampering, dependency confusion in agent ecosystems.
 - **Control** — Verify provenance; sign and attest artefacts.
@@ -149,8 +139,6 @@ cosign verify-blob --bundle model.sig adapter.safetensors   # fails
 ---
 
 ### C2.6 — Benchmarks, reproducibility and the research harness
-
-`AI for Security`
 
 - **Risk** — Model effects and harness effects confounded, and published benchmarks overstating real-world capability.
 - **Control** — Multi-backbone runs on fixed seeds and corpora, plus contamination and construct-validity checks before any number is trusted.
@@ -178,8 +166,6 @@ python3 contamination.py --benchmark ../b2.10-eval-harness/ground-truth --report
 
 ### C2.7 — From finding to control, and to institutional capital
 
-`both directions`
-
 - **Risk** — Research output the platform team cannot deploy, and a function whose work stays invisible and uncredited.
 - **Control** — Hand over something deployable and evidenceable, handle disclosure, and leave a defensible public record.
 - **Lab** — Convert one finding into a policy another track adopts, and release it with a reproducibility README.
@@ -203,8 +189,6 @@ cd release && ./reproduce.sh   # must work on a clean machine
 ---
 
 ### C2.8 — Case study — the Hugging Face / OpenAI agent-swarm incident
-
-`both directions`
 
 - **Risk** — Ten classes of control failure, from a forged audit trail to a missing escalation path — and an incident report that gets read once and cited forever without any of them becoming testable.
 - **Control** — T/E/C indexing so each item can be cited alone, control types and NIST anchors so the register is comparable to the one you already have, and a named owning lesson for every control.
@@ -231,8 +215,6 @@ python3 scripts/check_register.py    # register vs the curriculum
 
 ### C2.9 — Case study — Moltbook: 770,000 agents behind one missing policy
 
-`both directions`
-
 - **Risk** — The blast radius was not the platform's. What leaked were credentials in five other providers' accounts, and the platform could revoke none of them.
 - **Control** — Row-level policies, credentials out of client-readable tables, and an admin plane the client cannot reach — the controls of A3.8, arriving at a database.
 - **Lab** — Run the same query with and without a row policy, then work out which of the leaked things the platform could actually revoke.
@@ -255,8 +237,6 @@ curl -s "$SUPABASE_URL/rest/v1/agents?select=*" -H "apikey: $ANON_KEY" | head
 ---
 
 ### C2.10 — Case study — the Supabase pattern: open until closed
-
-`both directions`
 
 - **Risk** — A failure that is invisible in testing, because nothing about the application's behaviour is wrong. One write-up puts it at 73% of generated applications carrying at least one issue.
 - **Control** — A schema check in CI rather than an application test — and, better, a default that does not expose a table until something opts it in.

@@ -1,252 +1,135 @@
-# Track D2 — The Agentic SOC — Response
+# Track D2 — The Agentic SOC — Detect
 
 **Function D · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Job titles:** Incident Responder, DFIR Analyst, CSIRT Lead
+**Job titles:** 
 
-**What changes:** Responding at machine speed when the actor is one of CyberTravels' agents. 9 lessons.
+**What changes:** 
 
-**Autonomy focus:** Response tooling at L2.5; containment authority never leaves human hands.
+**Autonomy focus:** 
 
-**Deliverable:** A tabletop exercise for an agentic incident, with a replayed trace and a named stop-authority holder.
+**Deliverable:** 
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
-### D3.5 — Agent-assisted reconstruction
+### D2.1 — Agent-assisted detection engineering
 
-`AI for Security`
-
-- **Risk** — Reaching for the agent once you're already behind.
-- **Control** — Pre-load logs, telemetry, segmentation model and playbooks.
-- **Lab** — Reconstruct a timeline from raw logs with a context-loaded agent.
-- **Tools** — `Velociraptor`, `OpenSearch`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Reconstruct a timeline from raw logs with a context-loaded agent.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.5   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-python3 reconstruct.py --case case-01 --preload logs,telemetry,segmentation,playbooks --model $MODEL
-python3 reconstruct.py --case case-01 --preload none --model $MODEL
-diff <(jq -r .timeline[] preloaded.json) <(jq -r .timeline[] cold.json)
-```
-
-*Expect:* The pre-loaded run produces a usable timeline; the cold one asks you questions you needed answered.
-
----
-
-### D3.7 — When the actor is an agent
-
-`Security of AI`
-
-- **Risk** — "Which user" is now the wrong first question.
-- **Control** — Attribute to agent, authority, delegation chain and prompt.
-- **Lab** — Attribute an incident through the A2 `act` chain.
-- **Tools** — `Keycloak`, `OpenSearch`
-
-**Run it** — Attribute an incident through the A2 `act` chain.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.7   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-./replay-incident.sh case-01
-python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
-```
-
-*Expect:* Names the agent, the delegated authority, the hop where scope widened, and the prompt that started it.
-
----
-
-### D3.8 — Scoping an agentic incident
-
-`Security of AI`
-
-- **Risk** — The initiating agent is not the acting one.
-- **Control** — Reconstruct the action chain across all three planes.
-- **Lab** — Scope a multi-agent incident end to end.
-- **Tools** — `OpenTelemetry`
+- **Risk** — Coverage gaps nobody mapped.
+- **Control** — Detection-as-code with agents inside the CI loop.
+- **Lab** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
+- **Tools** — `Sigma`, `Wazuh`
 - **Open-weight models** — `Kimi K2`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Scope a multi-agent incident end to end.
+**Run it** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.8   # run it headless and check it
+jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.1   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-./replay-incident.sh case-02   # multi-agent
-python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action
+pip install sigma-cli && cd labs/d1-soc/detections
+python3 gen_rule.py --technique T1059 --model $MODEL --out rules/t1059.yml
+sigma check rules/t1059.yml && python3 test_rule.py --rule rules/t1059.yml --positives pos/ --negatives neg/
+python3 coverage.py --map-to attack
 ```
 
-*Expect:* The action-plane actor is a sub-agent two hops from the prompt that started it.
+*Expect:* Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have.
 
 ---
 
-### D4.3 — Containment at machine speed
+### D2.2 — Generating detection rules from an incident
 
-`Security of AI`
+- **Risk** — A rule generated from one incident matches that incident and nothing else, or matches everything and buries the queue.
+- **Control** — Generate, then measure against a benign corpus. A rule with no measured false-positive rate is not a rule, it is a guess.
+- **Lab** — Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
+- **Tools** — `Sigma`
 
-- **Risk** — Mass revocation takes down the business.
-- **Control** — Throttle → scope-reduce → reroute → force HITL → revoke → hard stop, in order.
-- **Lab** — Exercise the ladder against a live misbehaving agent.
-- **Tools** — `agentgateway`, `Keycloak`
-
-**Run it** — Exercise the ladder against a live misbehaving agent.
+**Run it** — Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D4.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D4.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-./misbehave.sh &                    # start the runaway agent
-./contain.sh --lever throttle && ./contain.sh --lever scope-reduce
-./contain.sh --lever revoke --agent reviewer   # one agent only
+jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.2   # run it headless and check it
 ```
 
-*Expect:* Each lever is timed; revocation hits one agent without collateral (the A2.4 deliverable, proven here).
+*Expect:* Generate a rule from a trace, then score it against benign traffic and report the false-positive rate before deployment.
 
 ---
 
-### D5.1 — Replay and forensics
+### D2.3 — Detection engineering *for* agents
 
-`Security of AI`
+- **Risk** — Scope drift, unusual tool sequencing, off-hours autonomous action.
+- **Control** — Detections whose subject is a non-human principal.
+- **Lab** — Write five detections for agent misbehaviour and fire each one.
+- **Tools** — `Falco`, `Sigma`
 
-- **Risk** — Non-determinism as an evidentiary problem.
-- **Control** — Log at design time what replay will need.
-- **Lab** — Replay an agent run for a regulator-grade record.
-- **Tools** — `OpenTelemetry`
-
-**Run it** — Replay an agent run for a regulator-grade record.
+**Run it** — Write five detections for agent misbehaviour and fire each one.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D5.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D5.1   # run it headless and check it
+jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
+cd labs/d1-soc/detections
+./install-sigma.sh   # scope drift, tool-sequence anomaly, off-hours autonomy, retrieval anomaly, NHI-at-human-time
+./fire-each.sh       # deliberately trigger all five
 ```
 
-*Expect:* The run reproduces, or the tool tells you exactly which field was never logged to make replay possible.
+*Expect:* All five fire on synthetic-but-real agent telemetry from the A3/B2 labs.
 
 ---
 
-### D5.4 — Post-incident change surface
+### D2.4 — Detections whose subject is the agent platform
 
-`Security of AI`
+- **Risk** — Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.
+- **Control** — Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).
+- **Lab** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
+- **Tools** — `Falco`, `Gitleaks`, `Sigstore`
 
-- **Risk** — Fixing the prompt when the bug is in the control plane.
-- **Control** — Choose among model, prompt, tool, policy, sandbox, identity, eval.
-- **Lab** — Pick the right layer for five real incidents.
-
-**Run it** — Pick the right layer for five real incidents.
+**Run it** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D5.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D5.4   # run it headless and check it
+jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir/postmortem
-for c in case-*/; do echo -n "$c "; python3 ../choose_layer.py --case $c; done
+falco --rules agent-escape.yaml --validate
+python3 cache_diff.py --manifest build-manifest.json --repo artifactory
+gitleaks detect --redact --report-format sarif
 ```
 
-*Expect:* Most land on the control plane — identity, policy, sandbox — not the prompt.
+*Expect:* Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.
 
 ---
 
-### D4.4 — Stop authority
+### D2.5 — Honeypots, canaries and deception in the agent's environment
 
-`Security of AI`
+- **Risk** — Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.
+- **Control** — Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).
+- **Lab** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
+- **Tools** — `Canarytokens`, `Inspect`
+- **Open-weight models** — `GLM-4.6`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-- **Risk** — Nobody has rehearsed halting an autonomous workflow.
-- **Control** — Named holder, measured time-to-stop, tested.
-- **Lab** — Time your own stop authority end to end.
-- **Tools** — `kagent`
-
-**Run it** — Time your own stop authority end to end.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D4.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D4.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-./misbehave.sh & echo $! > runaway.pid
-time ./stop.sh --workflow patch-agent --authority oncall
-python3 assert_stopped.py --within 60s
-```
-
-*Expect:* A number in seconds, and a named holder. Untested stop authority is a diagram.
-
----
-
-### D5.6 — Regulatory clock
-
-`Security of AI`
-
-- **Risk** — Notification obligations discovered in week two.
-- **Control** — Feed Track E2 in hour one.
-- **Lab** — Run the first-hour checklist in a tabletop.
-
-**Run it** — Run the first-hour checklist in a tabletop.
+**Run it** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D5.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D5.6   # run it headless and check it
+jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d2-ir
-python3 first_hour.py --case case-01 --checklist ../e2-compliance/notification.yaml
-python3 first_hour.py --case case-01 --materiality
+python3 canary.py --place worker-env,docs,artifact-metadata
+python3 honeypot.py --salt benchmark/ --ratio 0.15 --rotate-days 21
 ```
 
-*Expect:* A materiality call and a notification clock started in hour one, feeding Track E2.
-
----
-
-### D4.5 — The fleet kill switch
-
-`AI for Security`
-
-- **Risk** — Terminating agents while their tokens stay valid leaves the persistence in place. In the incident, third-party access ended when the third party revoked keys — not when the agents stopped.
-- **Control** — A tested kill path independent of the agent execution path, snapshot before terminate, revocation in the same action, a measured activation target and named authority to pull it (C8.3).
-- **Lab** — Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.
-- **Tools** — `Vault`, `Kubernetes`
-
-**Run it** — Kill a fleet, then check what the revoked-credential step changes about what an attacker still holds afterwards.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D4.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D4.5   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-./killswitch --selector experiment=exploitgym --snapshot --revoke
-./killswitch --test --partial-failure revocation-api
-```
-
-*Expect:* Terminating eight agents without revoking leaves all eight tokens valid for up to 72 hours; terminating and revoking together leaves none. Preserving before terminating keeps the incident reconstructable and terminating first does not. Only one of three plausible activation paths survives the fleet being compromised, and of four quarterly tests one was never run and one ran 6.8 minutes against a five-minute target, with the revocation step the part that slowed.
+*Expect:* Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.
 
 ---

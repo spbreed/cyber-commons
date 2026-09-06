@@ -17,8 +17,6 @@
 
 ### B2.0 — The AI SDLC — what runs before a deploy, and what runs after
 
-`both directions`
-
 - **Risk** — A security pipeline built as if it were exempt from the risks it exists to find.
 - **Control** — Build the pipeline and the harness as one system, and hold both to the same evidence standard.
 - **Lab** — Run a real LLM loop against a CyberTravels finding, then add the verifier and watch the same loop refuse what it just accepted.
@@ -38,8 +36,6 @@ python3 scripts/run_notebooks.py --session B2.0   # run it headless and check it
 
 ### B2.1 — What building a harness means in security engineering
 
-`both directions`
-
 - **Risk** — A harness whose verifier is the model agreeing with itself does not fail loudly. It succeeds incorrectly, files a clean trace, and the bug is found by whoever merged the patch.
 - **Control** — An independent verifier, and a budget that stops the loop when it cannot pass.
 - **Lab** — Run the same loop twice — once with no verifier, once with one.
@@ -57,8 +53,6 @@ python3 scripts/run_notebooks.py --session B2.1   # run it headless and check it
 ---
 
 ### B2.2 — Threat modelling from what the estate already knows
-
-`Security of AI`
 
 - **Risk** — Threat models are written once, by hand, against a system that has since changed.
 - **Control** — Stage 5: derive assets, entry points and attack vectors mechanically from the synthesised map.
@@ -80,8 +74,6 @@ python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it
 ---
 
 ### B2.3 — SAST for agentic code — deterministic Semgrep, then the model pass
-
-`AI for Security`
 
 - **Risk** — Pattern matching floods the queue; the false-positive rate is what actually changed.
 - **Control** — Stage 7: deterministic rules for what rules do well, model reasoning for what rules cannot express.
@@ -110,8 +102,6 @@ python3 triage.py --candidates candidates.json --model $MODEL --tag-untrusted   
 
 ### B2.4 — Deduplication and contextual verification
 
-`AI for Security`
-
 - **Risk** — Parallel analysis tracks report the same bug three times, and some of those bugs do not exist.
 - **Control** — Stages 8–9: consolidate overlapping findings, then cross-reference each one against syntax and imports to weed out hallucinations.
 - **Lab** — Deduplicate findings across three analysis tracks, then verify each against the AST and drop the ones that reference code that is not there.
@@ -139,8 +129,6 @@ python3 ../shared/spend_report.py --by-run
 
 ### B2.5 — Feasibility filtering, reachability and dead code
 
-`AI for Security`
-
 - **Risk** — A finding in dead code costs the same to triage as one on the login path.
 - **Control** — Stage 10: decide whether an external caller can actually reach the sink before anyone is paged.
 - **Lab** — Build a call graph from entry points and partition findings into reachable, unreachable and unknown.
@@ -166,8 +154,6 @@ python3 subagent.py --depth 3 --parent-scope repo:read --attempt-escalate
 ---
 
 ### B2.6 — Sandbox replication
-
-`Security of AI`
 
 - **Risk** — Dynamic testing is run against staging, so a destructive probe becomes an incident.
 - **Control** — Stage 11: replicate the application in an isolated, disposable runtime with no path to production.
@@ -195,8 +181,6 @@ for t in *.jsonl; do echo -n "$t: "; python3 ../classify_failure.py --trace $t -
 
 ### B2.7 — Supply chain — SBOM, dependency vulnerabilities, and decompiling the libraries
 
-`both directions`
-
 - **Risk** — A clean dependency scan on an estate carrying an undeclared third-party binary reads as evidence of safety, and is evidence of nothing but the manifest's contents.
 - **Control** — Reconcile the SBOM against what is on disk, then recover strings, imports and egress from the compiled artefact that no SBOM entry covers.
 - **Lab** — Scan an SBOM, then decompile the closed-source library it never mentions.
@@ -217,8 +201,6 @@ javac -d /tmp/vt skills/appsec/supply-chain-decompile/evidence/provenance/Vendor
 ---
 
 ### B2.8 — Dynamic exploitation (DAST)
-
-`AI for Security`
 
 - **Risk** — A SAST finding is a hypothesis, and hypotheses get argued about instead of fixed.
 - **Control** — Stage 12: generate and run an actual exploit against the sandbox, so the finding is confirmed or dropped.
@@ -246,8 +228,6 @@ python3 evolve.py --show-lineage   # what changed, what was kept, what was rever
 
 ### B2.9 — Exploit chaining
 
-`AI for Security`
-
 - **Risk** — Three medium findings are triaged as three mediums, and nobody notices they compose.
 - **Control** — Stage 13: combine validated findings into multi-step sequences and score the chain, not the links.
 - **Lab** — Chain individually-medium findings into a critical path and show the severity the chain earns.
@@ -274,8 +254,6 @@ python3 replay.py --trace run.json --assert-identical
 
 ### B2.10 — Severity calibration, triaging and reporting
 
-`AI for Security`
-
 - **Risk** — Severity is a label copied from the rule, so the queue is ordered by something that predicts nothing.
 - **Control** — Stage 15: calibrate severity from sandbox evidence, then report per-stage economics rather than a finding count.
 - **Lab** — Recalculate severity from confirmed exploitation and reachability, then produce the per-stage escape economics.
@@ -296,8 +274,6 @@ python3 scripts/run_notebooks.py --session B2.10   # run it headless and check i
 ---
 
 ### B2.11 — Remediation engineering — proven in a sandbox before the merge request
-
-`AI for Security`
 
 - **Risk** — A patch that silences the scanner is indistinguishable from a patch that fixes the bug.
 - **Control** — Stage 14: generate the fix, re-run the exploit against the patched build, and require a regression test.
@@ -325,8 +301,6 @@ python3 domain_harness.py --domain pentest --require-signed-scope
 
 ### B2.12 — Context engineering — cutting the false positives
 
-`AI for Security`
-
 - **Risk** — The model is given the repository and asked to be thorough, so the relevant line falls out of the window.
 - **Control** — Slice on the source-sink path, not on distance: the smallest context that still supports a severity decision.
 - **Lab** — Compare four context strategies against one bug and measure which are decidable and at what size.
@@ -347,8 +321,6 @@ python3 scripts/run_notebooks.py --session B2.12   # run it headless and check i
 ---
 
 ### B2.13 — Agentic AI in the pipeline — attesting control intent for agents and MCP servers
-
-`Security of AI`
 
 - **Risk** — Control claims are asserted in a spreadsheet and never bound to a deployment. Nobody can say which repo, image, role, identity, gateway and guardrail the claim was about, so it cannot be re-checked when any of them change.
 - **Control** — Eleven skills scoped to one deployment_id, emitting an in-toto/DSSE attestation whose predicate carries per-control verdicts, evidence URIs, framework mappings and drift — with sandbox-egress and injection-screening capped at PARTIAL because their claims are not provable.
@@ -373,8 +345,6 @@ python3 labs/attestation/control_intent.py --corpus /path/to/clones --out result
 ---
 
 ### B2.14 — Bonus — Google Mantis, the pipeline in production
-
-`AI for Security`
 
 - **Risk** — A reference implementation is adopted as a product, and its outputs are trusted without an eval.
 - **Control** — Map Mantis's stages onto the pipeline you built, then score it with your own held-out key before trusting it.

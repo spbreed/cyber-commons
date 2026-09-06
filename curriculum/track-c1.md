@@ -17,8 +17,6 @@
 
 ### C1.0 — Start here — what red teaming and research with AI means
 
-`both directions`
-
 - **Risk** — Offensive work that produces anecdotes: a result that worked once, on one target, with no rate and no reproduction.
 - **Control** — A campaign with a stated criterion, a harness that separates the model effect from the harness effect, and a handoff that ends in a control.
 - **Lab** — Take one published agentic attack and list what you would need to reproduce it.
@@ -36,8 +34,6 @@ python3 scripts/run_notebooks.py --session C1.0   # run it headless and check it
 ---
 
 ### C1.1 — The agentic offensive workflow, and containing it
-
-`both directions`
 
 - **Risk** — Payload suggestions instead of attack chains — and an offensive loop with no hard scope enforcement, which is an incident with a project plan.
 - **Control** — Full target context before it swings, and scope enforced at the network layer rather than by a politeness clause in the prompt.
@@ -65,8 +61,6 @@ cd labs/c1-redteam
 
 ### C1.2 — Red-teaming an agent: designing the campaign
 
-`Security of AI`
-
 - **Risk** — A red-team result nobody can act on, because "it worked once" is not a rate.
 - **Control** — Systematic campaigns across all three surfaces, with measured success rates and a criterion agreed before the first payload.
 - **Lab** — Run a campaign across the three surfaces and report a rate with its sample size, not an anecdote.
@@ -92,8 +86,6 @@ python3 campaign.py --report --include-benign-controls
 ---
 
 ### C1.3 — Attacking evaluation itself
-
-`Security of AI`
 
 - **Risk** — If the eval can be fooled, the assurance is theatre.
 - **Control** — Eval gaming, sandbagging, contamination and judge manipulation as test cases.
@@ -121,8 +113,6 @@ python3 ../c1-redteam/game_eval.py --strategy judge-manipulation
 ---
 
 ### C1.4 — Reporting agentic findings
-
-`both directions`
 
 - **Risk** — The vulnerability is emergent behaviour, not a line of code.
 - **Control** — Reproducibility requirements for probabilistic systems.

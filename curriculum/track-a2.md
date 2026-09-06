@@ -17,8 +17,6 @@
 
 ### A2.1 — Agent identity: user, workload, agent
 
-`Security of AI`
-
 - **Risk** — A shared service account answers 'what ran' and destroys 'for whom' — so no later control can be conditioned on the caller.
 - **Control** — A distinct identity per workload, carrying the human principal alongside it, asserted on every call.
 - **Lab** — Separate the three identities and show a downstream service authorising on the agent while attributing to the human.
@@ -37,8 +35,6 @@ python3 scripts/run_notebooks.py --session A2.1   # run it headless and check it
 ---
 
 ### A2.2 — Bootstrapping the first credential
-
-`Security of AI`
 
 - **Risk** — A pre-shared secret in an image or an environment variable is copyable, so possession stops being proof of identity.
 - **Control** — Platform attestation exchanged for a short-lived, workload-bound credential.
@@ -59,8 +55,6 @@ python3 scripts/run_notebooks.py --session A2.2   # run it headless and check it
 
 ### A2.3 — Delegation that narrows, and survives audit
 
-`Security of AI`
-
 - **Risk** — Subset-only lets a privileged user hand an agent authority it must never hold; ceiling-only lets the agent exceed the person who asked.
 - **Control** — Token exchange that intersects presented scope with the actor's ceiling, and records the chain.
 - **Lab** — Run both narrowing rules against a request that passes one and fails the other.
@@ -79,8 +73,6 @@ python3 scripts/run_notebooks.py --session A2.3   # run it headless and check it
 ---
 
 ### A2.4 — Just-in-time authority
-
-`Security of AI`
 
 - **Risk** — Permanent scope makes every injection a successful one, because the authority is always there when the attacker arrives.
 - **Control** — Short-lived, purpose-bound grants issued per task and expiring with it.
@@ -101,8 +93,6 @@ python3 scripts/run_notebooks.py --session A2.4   # run it headless and check it
 
 ### A2.5 — The non-human identity lifecycle
 
-`Security of AI`
-
 - **Risk** — Agents accumulate with no owner and no expiry, and an unregistered agent joins a topology as a peer.
 - **Control** — A registry with a named owner, an expiry, and admission bound to a registered identity.
 - **Lab** — Admit agents against a registry and show an unregistered one refused at the door.
@@ -121,8 +111,6 @@ python3 scripts/run_notebooks.py --session A2.5   # run it headless and check it
 ---
 
 ### A2.6 — Ingress: marking untrusted content at the door
-
-`Security of AI`
 
 - **Risk** — Concatenation destroys the one fact that separates an operator instruction from an attacker's: where it came from.
 - **Control** — Provenance tagging at every ingress point, and a rule that only trusted origins may select a tool.
@@ -145,8 +133,6 @@ python3 scripts/run_notebooks.py --session A2.6   # run it headless and check it
 
 ### A2.7 — Attribution: an audit trail that answers "who"
 
-`Security of AI`
-
 - **Risk** — Without the motivating input, root cause cannot be established at all; without the principal, nothing can be attributed.
 - **Control** — Per-hop attribution written to an append-only store outside the agent's reach.
 - **Lab** — Answer 'which user caused this deletion' from the trace, then try the same on a trace missing one field.
@@ -165,8 +151,6 @@ python3 scripts/run_notebooks.py --session A2.7   # run it headless and check it
 ---
 
 ### A2.8 — An audit trail the workload cannot forge
-
-`Security of AI`
 
 - **Risk** — An agent that escapes its container can rewrite the record of what it did — and every detective control downstream is then reporting on data the subject controls.
 - **Control** — Out-of-band capture (C1.1), a hash-chained WORM transcript store (C1.2) and logging-plane isolation (C1.3). Reconcile the two streams; divergence is the signal.

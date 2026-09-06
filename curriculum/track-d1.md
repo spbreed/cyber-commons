@@ -1,23 +1,21 @@
-# Track D1 — The Agentic SOC — Detection
+# Track D1 — The Agentic SOC — Discover
 
 **Function D · The Agentic SOC**  
 *Detecting, attributing and stopping an actor that is not a person and does not slow down — built for a fleet of agents like CyberTravels'.*
 
-**Job titles:** SOC Analyst (T1–T3), Detection Engineer, Threat Hunter, Threat Intelligence Analyst
+**Job titles:** 
 
-**What changes:** Detecting an actor that is not a person, on CyberTravels' telemetry. 11 lessons.
+**What changes:** 
 
-**Autonomy focus:** Triage and enrichment reach L2.5 quickly; containment actions stay L2.
+**Autonomy focus:** 
 
-**Deliverable:** A triage loop in production plus five detections covering agent misbehaviour.
+**Deliverable:** 
 
 > Every session below ships a runnable notebook that actually executes — against open-weight models and open-source tooling. See [MODELS.md](../MODELS.md) for getting the models free.
 
 ---
 
 ### D1.0 — Start here — what AI for security operations means
-
-`both directions`
 
 - **Risk** — A detection stack tuned for human tempo, watching an actor that acts a thousand times an hour and never repeats a session.
 - **Control** — Agent telemetry as a first-class data source, detections written for agent behaviour, and a stop lever that a human can actually pull in time.
@@ -35,206 +33,7 @@ python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
 
 ---
 
-### D3.1 — From alert queue to loop operator
-
-`AI for Security`
-
-- **Risk** — Supervising by re-reading everything the loop did.
-- **Control** — Know what the loop must escalate and sample the rest.
-- **Lab** — Run a triage loop over Wazuh alerts and supervise by exception.
-- **Tools** — `Wazuh`, `OpenSearch`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Run a triage loop over Wazuh alerts and supervise by exception.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-docker compose up -d wazuh opensearch
-./seed-alerts.sh                       # replayable alert corpus
-python3 triage_loop.py --model $MODEL --escalate-on high
-```
-
-*Expect:* The loop clears the known-benign and escalates the rest with its reasoning attached.
-
----
-
-### D3.6 — Context that makes triage work
-
-`AI for Security`
-
-- **Risk** — Generic triage agents underperform your worst analyst.
-- **Control** — Feed the baseline, known FPs, crown-jewel map and prior decisions.
-- **Lab** — A/B a generic prompt vs a context-loaded one on the same alert set.
-- **Tools** — `Wazuh`
-- **Open-weight models** — `GLM-4.6`, `Llama 3.3`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — A/B a generic prompt vs a context-loaded one on the same alert set.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.6   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-python3 triage_loop.py --context none     --alerts alerts.jsonl --score
-python3 triage_loop.py --context loaded   --alerts alerts.jsonl --score   # baseline+FPs+crown jewels
-python3 compare.py
-```
-
-*Expect:* The generic loop underperforms your worst analyst; the loaded one does not. Same model both times.
-
----
-
-### D2.1 — Agent-assisted detection engineering
-
-`AI for Security`
-
-- **Risk** — Coverage gaps nobody mapped.
-- **Control** — Detection-as-code with agents inside the CI loop.
-- **Lab** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
-- **Tools** — `Sigma`, `Wazuh`
-- **Open-weight models** — `Kimi K2`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Generate and unit-test Sigma rules in CI; map coverage to ATT&CK.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.1   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-pip install sigma-cli && cd labs/d1-soc/detections
-python3 gen_rule.py --technique T1059 --model $MODEL --out rules/t1059.yml
-sigma check rules/t1059.yml && python3 test_rule.py --rule rules/t1059.yml --positives pos/ --negatives neg/
-python3 coverage.py --map-to attack
-```
-
-*Expect:* Rules that fail their negative corpus never merge. Coverage map shows the gap you actually have.
-
----
-
-### D2.3 — Detection engineering *for* agents
-
-`Security of AI`
-
-- **Risk** — Scope drift, unusual tool sequencing, off-hours autonomous action.
-- **Control** — Detections whose subject is a non-human principal.
-- **Lab** — Write five detections for agent misbehaviour and fire each one.
-- **Tools** — `Falco`, `Sigma`
-
-**Run it** — Write five detections for agent misbehaviour and fire each one.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc/detections
-./install-sigma.sh   # scope drift, tool-sequence anomaly, off-hours autonomy, retrieval anomaly, NHI-at-human-time
-./fire-each.sh       # deliberately trigger all five
-```
-
-*Expect:* All five fire on synthetic-but-real agent telemetry from the A3/B2 labs.
-
----
-
-### D1.2 — Agent telemetry as a data source
-
-`Security of AI`
-
-- **Risk** — Prompts, traces, tool calls and approvals never reach the SIEM.
-- **Control** — Onboard agent telemetry deliberately; decide retention.
-- **Lab** — Ship OTEL agent traces into OpenSearch and query them.
-- **Tools** — `OpenTelemetry`, `OpenSearch`
-
-**Run it** — Ship OTEL agent traces into OpenSearch and query them.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-docker compose up -d opensearch otel-collector
-OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 python3 ../m0-agent-loop/loop.py --task fix-tests
-curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply_patch"}}}' | jq '.hits.total'
-```
-
-*Expect:* Prompts, tool calls, decisions and spend queryable alongside your other log sources.
-
----
-
-### D1.4 — Distinguishing agent from human
-
-`Security of AI`
-
-- **Risk** — Your earliest Shadow Autonomy signal is invisible.
-- **Control** — Behavioural signatures separating agent from inherited human.
-- **Lab** — Build the classifier on timing, sequencing and volume features.
-- **Tools** — `OpenSearch`
-- **Open-weight models** — `Llama 3.3`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Build the classifier on timing, sequencing and volume features.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-python3 agent_vs_human.py --features timing,sequencing,volume --train baseline.jsonl
-python3 agent_vs_human.py --classify live.jsonl
-```
-
-*Expect:* A working classifier — your earliest Shadow Autonomy signal.
-
----
-
-### D1.3 — Drift monitoring
-
-`Security of AI`
-
-- **Risk** — A detection that worked last month is silently degraded.
-- **Control** — Watch model updates, prompt changes, index refreshes, tool versions.
-- **Lab** — Change the model underneath and catch the detection regression.
-- **Tools** — `promptfoo`
-- **Open-weight models** — `GLM-4.6`
-- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
-
-**Run it** — Change the model underneath and catch the detection regression.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-cd labs/d1-soc
-promptfoo eval -c detection-regression.yaml --model llama3.3   # baseline
-promptfoo eval -c detection-regression.yaml --model glm-4.6    # after 'upgrade'
-python3 drift_report.py
-```
-
-*Expect:* A rule that passed last month fails now. Nothing in your code changed.
-
----
-
 ### D1.1 — Threat intel sub-lane
-
-`AI for Security`
 
 - **Risk** — Unsourced confidence in synthesis loops.
 - **Control** — Provenance discipline; refuse claims without a source.
@@ -261,81 +60,100 @@ python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch co
 
 ---
 
-### D2.4 — Detections whose subject is the agent platform
+### D1.2 — Agent telemetry as a data source
 
-`AI for Security`
+- **Risk** — Prompts, traces, tool calls and approvals never reach the SIEM.
+- **Control** — Onboard agent telemetry deliberately; decide retention.
+- **Lab** — Ship OTEL agent traces into OpenSearch and query them.
+- **Tools** — `OpenTelemetry`, `OpenSearch`
 
-- **Risk** — Platform-layer compromise is invisible to workload-layer detection. The escape, the poisoned cache entry and the silently expired exemption all look like normal operation from inside.
-- **Control** — Named escape primitives rather than anomaly scoring (C1.4), cache integrity diffing against a manifest (C5.4), upload scanning (C3.4), secret scanning wired to automated revocation (C4.1), and exemption-state reconciliation (C6.3).
-- **Lab** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
-- **Tools** — `Falco`, `Gitleaks`, `Sigstore`
-
-**Run it** — Run four platform detectors over one day of events and see which of them a generic anomaly score would have missed.
+**Run it** — Ship OTEL agent traces into OpenSearch and query them.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it
+jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
-falco --rules agent-escape.yaml --validate
-python3 cache_diff.py --manifest build-manifest.json --repo artifactory
-gitleaks detect --redact --report-format sarif
+cd labs/d1-soc
+docker compose up -d opensearch otel-collector
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317 python3 ../m0-agent-loop/loop.py --task fix-tests
+curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply_patch"}}}' | jq '.hits.total'
 ```
 
-*Expect:* Four named rules fire on a seven-event escape sequence that scores 0.07 on a generic volume anomaly. The orphaned-process rule isolates the one background process that outlived its tool call. The cache diff reports one modified, one unexpected and one missing artifact; automated revocation closes a credential in 2 minutes against 240 with a human in the loop; and exemption reconciliation raises a P1 for both an expired exemption and an unapproved one.
+*Expect:* Prompts, tool calls, decisions and spend queryable alongside your other log sources.
 
 ---
 
-### D3.4 — Fleet-level correlation: seeing a swarm
+### D1.3 — Drift monitoring
 
-`AI for Security`
-
-- **Risk** — Coordination between runs that are supposed to be independent is invisible to per-run analysis by construction. Every run looks normal; the population does not.
-- **Control** — Fleet-level analytics (C8.1), coordination signatures (C8.4), write-pattern anomalies (C2.4), a covert-channel inventory (C2.3), scope-expansion logging (C7.4) and noticed-but-unreported telemetry (C9.3, C9.2).
-- **Lab** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
-- **Tools** — `OpenTelemetry`, `Sigma`
-
-**Run it** — Run per-run monitoring over a coordinated fleet and see nothing, then run the same data through a shared-artifact graph.
-
-```bash
-# --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D3.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D3.4   # run it headless and check it
-
-# --- the full variant, against the real tooling (needs a container registry) ---
-python3 fleet_graph.py --window 24h --min-unrelated-readers 2
-python3 fleet_graph.py --signatures vocab,pivot,role
-```
-
-*Expect:* Five runs pass every per-run check with nothing to report. The shared-artefact graph then shows one object written by one run and read by three unrelated ones, three novel tokens shared across runs, four of five runs pivoting in the same hour, and role differentiation between the runs that write and the runs that read. Three trajectories show the agent noticed something reportable and none of them reached a human.
-
----
-
-### D2.5 — Honeypots, canaries and deception in the agent's environment
-
-`AI for Security`
-
-- **Risk** — Every other detector needs a threshold, and every threshold is a trade. Deception needs neither — but only if the bait is placed where the agent actually looks, and rotated before it is learned.
-- **Control** — Canary tokens in config, environment and artifact metadata (C4.4), and honeypot tasks salted into the benchmark whose cheat path is logged rather than rewarded (C10.3).
-- **Lab** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
-- **Tools** — `Canarytokens`, `Inspect`
+- **Risk** — A detection that worked last month is silently degraded.
+- **Control** — Watch model updates, prompt changes, index refreshes, tool versions.
+- **Lab** — Change the model underneath and catch the detection regression.
+- **Tools** — `promptfoo`
 - **Open-weight models** — `GLM-4.6`
 - **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
 
-**Run it** — Authenticate with a canary and watch a zero-threshold alert fire; then salt a benchmark and read the cheat-attempt rate as a leading indicator.
+**Run it** — Change the model underneath and catch the detection regression.
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it
+jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
-python3 canary.py --place worker-env,docs,artifact-metadata
-python3 honeypot.py --salt benchmark/ --ratio 0.15 --rotate-days 21
+cd labs/d1-soc
+promptfoo eval -c detection-regression.yaml --model llama3.3   # baseline
+promptfoo eval -c detection-regression.yaml --model glm-4.6    # after 'upgrade'
+python3 drift_report.py
 ```
 
-*Expect:* Two canary authentications out of four events are confirmed compromises with source IP and user agent attached, and no false positive is structurally possible. Both honeypot tasks log a cheat attempt and score zero for it. An unrotated canary's detection rate falls to 0% once learned — reporting a clean environment that is only well-mapped — while rotation holds it at 100%. Deception finds fewer things than the volume detectors and finds them at precision 1.00.
+*Expect:* A rule that passed last month fails now. Nothing in your code changed.
+
+---
+
+### D1.4 — Distinguishing agent from human
+
+- **Risk** — Your earliest Shadow Autonomy signal is invisible.
+- **Control** — Behavioural signatures separating agent from inherited human.
+- **Lab** — Build the classifier on timing, sequencing and volume features.
+- **Tools** — `OpenSearch`
+- **Open-weight models** — `Llama 3.3`
+- **Frontier models** — `Claude Haiku 4.5`  ·  *every lab runs on either, and offline on neither*
+
+**Run it** — Build the classifier on timing, sequencing and volume features.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it
+
+# --- the full variant, against the real tooling (needs a container registry) ---
+cd labs/d1-soc
+python3 agent_vs_human.py --features timing,sequencing,volume --train baseline.jsonl
+python3 agent_vs_human.py --classify live.jsonl
+```
+
+*Expect:* A working classifier — your earliest Shadow Autonomy signal.
+
+---
+
+### D1.5 — Hunting in agent telemetry
+
+- **Risk** — Everything not covered by a rule is invisible, and the rules were written against last quarter's agent behaviour.
+- **Control** — A standing hunt over agent traces, hypothesis-first, whose confirmed findings graduate into detections rather than staying in a notebook.
+- **Lab** — Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
+- **Tools** — `OpenTelemetry`
+
+**Run it** — Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/D1.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.5   # run it headless and check it
+```
+
+*Expect:* Run three hypotheses over a labelled trace corpus and score what each one catches and misses.
 
 ---
 

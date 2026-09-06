@@ -17,8 +17,6 @@
 
 ### A0.1 — Run your first lesson — GitHub, Kaggle, and what you need first
 
-`both directions`
-
 - **Risk** — A reader opens the first code cell, finds twenty lines of subprocess and no procedure, and concludes the lessons are stubs — or runs one on a hosted kernel with no network and reports a broken lesson when the fetch is what failed.
 - **Control** — A preflight that inventories the tree from disk and reproduces both failure conditions before reporting the host ready.
 - **Lab** — Run the preflight on both routes and compare the output checksum.
@@ -40,5 +38,23 @@ PYTHONPATH=skills/_runtime python3 \
 ```
 
 *Expect:* The tree inventoried from disk — 14 areas, 120 skills, 119 with a script at the time of writing, and the count moves as the commons grows — then the same procedure run three times: exit 2 with [Errno 2] when nothing was fetched, exit 1 with ModuleNotFoundError when the shared runtime is off the import path, and exit 0 with twelve lines and a CRC when both conditions hold. The CRC is the same on both routes, because it is the same file.
+
+---
+
+### A0.2 — The four frameworks, and when each one is the right lens
+
+- **Risk** — Four vocabularies get used interchangeably, so a threat id lands in a risk register and a NIST function lands in an incident write-up, and neither audience can act on it.
+- **Control** — One lookup, both directions, read from the same mapping file every lesson page is labelled from.
+- **Lab** — Look up what a lesson maps to, then the harder direction: which lessons address a given EU AI Act article.
+
+**Run it** — Look up what a lesson maps to, then the harder direction: which lessons address a given EU AI Act article.
+
+```bash
+# --- the notebook: runs anywhere, stdlib only, no install ---
+jupyter notebook labs/notebooks/A0.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session A0.2   # run it headless and check it
+```
+
+*Expect:* Look up what a lesson maps to, then the harder direction: which lessons address a given EU AI Act article.
 
 ---

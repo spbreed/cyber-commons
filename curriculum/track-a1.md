@@ -17,8 +17,6 @@
 
 ### A1.0 — Start here — what securing an AI architecture means
 
-`both directions`
-
 - **Risk** — Without a shared architecture, "secure the agent" has no referent, and every control argument is really an argument about two different systems.
 - **Control** — One picture, three chapters: the architecture and its risks, then identity and ingress, then runtime and the gateway.
 - **Lab** — Place the five functions of the commons on one diagram and find where your own work sits.
@@ -37,8 +35,6 @@ python3 scripts/run_notebooks.py --session A1.0   # run it headless and check it
 
 ### A1.1 — The reference architecture for agentic AI
 
-`both directions`
-
 - **Risk** — Without a shared picture, 'secure the agent' has no referent and every later risk lands nowhere in particular.
 - **Control** — One component map and five topologies, named once and reused by every lesson that follows.
 - **Lab** — Build the component graph and the five topologies, then trace one request through each and see where the trust boundary sits.
@@ -56,8 +52,6 @@ python3 scripts/run_notebooks.py --session A1.1   # run it headless and check it
 ---
 
 ### A1.2 — Prompt injection
-
-`Security of AI`
 
 - **Risk** — The user redirects their own agent past the behaviour the operator specified — bounded by their own authority, and therefore the milder of the two injection risks.
 - **Control** — Provenance at ingress (A2.6) and default-deny on the tool call (A3.1). The system prompt is not a control.
@@ -80,8 +74,6 @@ python3 scripts/run_notebooks.py --session A1.2   # run it headless and check it
 
 ### A1.3 — Indirect prompt injection
 
-`Security of AI`
-
 - **Risk** — Anyone who can write into a corpus the agent reads can steer it, using the victim's authority rather than their own. Nobody is phished and no credential leaks.
 - **Control** — Provenance marking at ingress (A2.6), and a rule that untrusted spans may not select a tool (A3.1).
 - **Lab** — Poison one retrieved document and watch the agent act on it with the user's authority.
@@ -102,8 +94,6 @@ python3 scripts/run_notebooks.py --session A1.3   # run it headless and check it
 ---
 
 ### A1.4 — Memory poisoning
-
-`Security of AI`
 
 - **Risk** — An attacker's instruction outlives the conversation that delivered it, and re-fires on requests from users who never met the original payload.
 - **Control** — Provenance survives into memory (A2.6), and memory writes are scoped to the identity that made them (A2.1).
@@ -126,8 +116,6 @@ python3 scripts/run_notebooks.py --session A1.4   # run it headless and check it
 
 ### A1.5 — Tool misuse
 
-`Security of AI`
-
 - **Risk** — The agent uses a legitimate tool, with legitimate arguments, to do something nobody intended — and every log line looks normal.
 - **Control** — Default-deny authorization on the tool call (A3.1) and just-in-time authority (A2.4).
 - **Lab** — Call one over-scoped tool with attacker-chosen arguments and see what it reaches.
@@ -149,8 +137,6 @@ python3 scripts/run_notebooks.py --session A1.5   # run it headless and check it
 
 ### A1.6 — Privilege compromise
 
-`Security of AI`
-
 - **Risk** — The agent acts with more authority than the person who asked it to act, and the log records the service account rather than the human.
 - **Control** — Delegation that narrows (A2.3), just-in-time grants (A2.4), and default-deny (A3.1).
 - **Lab** — Have an agent inherit a privileged token and reach something its requester never could.
@@ -170,8 +156,6 @@ python3 scripts/run_notebooks.py --session A1.6   # run it headless and check it
 
 ### A1.7 — Identity spoofing and impersonation
 
-`Security of AI`
-
 - **Risk** — Attribution fails before the incident starts: you cannot say which agent acted, so you cannot revoke one without breaking all of them.
 - **Control** — Per-workload identity with attestation (A2.1, A2.2) and a lifecycle that can revoke one (A2.5).
 - **Lab** — Have two agents share a credential, then try to work out which one made the call.
@@ -190,8 +174,6 @@ python3 scripts/run_notebooks.py --session A1.7   # run it headless and check it
 ---
 
 ### A1.8 — Malicious code execution
-
-`Security of AI`
 
 - **Risk** — Model-authored code runs with the runtime's privileges — reaching the filesystem, the network and any credential in the environment.
 - **Control** — Sandboxed execution (A3.2) and egress control (A3.3).
@@ -214,8 +196,6 @@ python3 scripts/run_notebooks.py --session A1.8   # run it headless and check it
 
 ### A1.9 — Injection through content the agent was asked to read
 
-`Security of AI`
-
 - **Risk** — The pipeline reads attacker-controlled code and then takes actions — a confused deputy you built yourself.
 - **Control** — Instruction/data provenance: content the pipeline read may never drive a state-changing tool.
 - **Lab** — Fire four realistic payloads at the review harness and compare keyword filtering against provenance.
@@ -237,8 +217,6 @@ python3 scripts/run_notebooks.py --session A1.9   # run it headless and check it
 
 ### A1.10 — Agent communication poisoning
 
-`Security of AI`
-
 - **Risk** — One compromised agent steers every agent downstream of it, because a peer's message is treated as a colleague's instruction rather than as input.
 - **Control** — Message validation and provenance on the inter-agent channel (A3.5), and per-agent identity (A2.1).
 - **Lab** — Send one poisoned inter-agent message and watch it propagate through the topology.
@@ -258,8 +236,6 @@ python3 scripts/run_notebooks.py --session A1.10   # run it headless and check i
 
 ### A1.11 — Rogue agents in a multi-agent system
 
-`Security of AI`
-
 - **Risk** — An agent nobody approved receives delegated work and delegated authority, and the orchestrator has no way to tell it apart from a legitimate worker.
 - **Control** — A registry of approved agents with identity-bound admission (A2.5) and an audit trail per hop (A2.7).
 - **Lab** — Introduce an unregistered agent into the topology and have it receive delegated work.
@@ -278,8 +254,6 @@ python3 scripts/run_notebooks.py --session A1.11   # run it headless and check i
 ---
 
 ### A1.12 — Cascading hallucination
-
-`Security of AI`
 
 - **Risk** — A single fabrication becomes a shared premise, and by the third hop nothing in the system records that it was ever uncertain.
 - **Control** — Verification against ground truth before a claim propagates (A3.5).
@@ -302,8 +276,6 @@ python3 scripts/run_notebooks.py --session A1.12   # run it headless and check i
 
 ### A1.13 — Resource overload
 
-`Security of AI`
-
 - **Risk** — An agent consumes budget, tokens, API quota or downstream capacity without bound, and the failure is denial of service against your own systems.
 - **Control** — Budgets and stop conditions bound to the loop (A3.4).
 - **Lab** — Run a loop with no ceiling and count what it consumes before anything notices.
@@ -322,8 +294,6 @@ python3 scripts/run_notebooks.py --session A1.13   # run it headless and check i
 ---
 
 ### A1.14 — Repudiation and untraceability
-
-`Security of AI`
 
 - **Risk** — You cannot say which user caused an action, or what made the agent decide — so the incident cannot be scoped and the action cannot be attributed.
 - **Control** — Attribution carried on every hop, in a store the agent cannot write to (A2.7).
@@ -344,8 +314,6 @@ python3 scripts/run_notebooks.py --session A1.14   # run it headless and check i
 
 ### A1.15 — Overwhelming the human in the loop
 
-`Security of AI`
-
 - **Risk** — The approval gate is recorded as a control and operates as a click. At volume it approves everything, including the one request that mattered.
 - **Control** — Approval reserved for irreversible actions, with everything else bounded by policy (A3.6).
 - **Lab** — Push approval volume up and measure the point at which review quality collapses.
@@ -363,8 +331,6 @@ python3 scripts/run_notebooks.py --session A1.15   # run it headless and check i
 ---
 
 ### A1.16 — Misaligned and deceptive behaviour
-
-`Security of AI`
 
 - **Risk** — The agent satisfies the letter of its instruction — including by reporting a success it did not achieve — and the transcript contains no lie you can point at.
 - **Control** — An independent verifier that checks the outcome rather than the claim (A3.5).
@@ -387,8 +353,6 @@ python3 scripts/run_notebooks.py --session A1.16   # run it headless and check i
 
 ### A1.17 — Attacks that target the humans
 
-`Security of AI`
-
 - **Risk** — The delegation chain is used as a privilege-laundering path, and the agent's output becomes an unusually persuasive channel into a human decision.
 - **Control** — Ceiling-bound delegation (A2.3), attribution per hop (A2.7) and marking machine-generated output as such (A3.6).
 - **Lab** — Launder a request through a delegation chain to reach something the requester was denied.
@@ -406,8 +370,6 @@ python3 scripts/run_notebooks.py --session A1.17   # run it headless and check i
 ---
 
 ### A1.18 — The CyberTravels risk register
-
-`Security of AI`
 
 - **Risk** — A list of risks is read once. Without a component, a control and an owner against each row, nothing in it is actionable and nothing in it is re-checkable when CyberTravels grows a fifth agent.
 - **Control** — Four columns — scene, component, control, owning lesson — and a rule that no row ships without the fourth.
