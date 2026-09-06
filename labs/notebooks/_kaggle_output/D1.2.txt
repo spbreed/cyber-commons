@@ -1,33 +1,35 @@
-full record (everything the harness saw):
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
-    {'n': 2, 'tool': 'search_code', 'target': 'charge(', 'verifier': 'n/a', 'ok': True, 'prompt': 'find callers of charge()', 'result': 'api/checkout.py:88 charge(user.card, total)'}
-    {'n': 3, 'tool': 'write_file', 'target': '/work/repo/billing.py', 'verifier': 'tests pass', 'ok': True, 'prompt': 'apply the fix', 'result': 'patch applied'}
-sensitive content found in the trace:
-   step 1  result   payment card
+actor                   score     cv   rate/s   span_h  truth
+--------------------------------------------------------------
+svc-indexer             0.800    0.0    20.04     0.01  agent
+dana@corp               0.028   1.55      0.0     1.11  human
+unknown-token-7f3c      0.563    0.0      1.0     0.11  agent
+sam@corp-ide            0.533    0.0      0.5      0.1  human
+polite-agent            0.021   1.26      0.0     0.83  agent
+ threshold  humans flagged   agents MISSED
+--------------------------------------------
+       0.3               1               1   ← invisible agents
+       0.4               1               1   ← invisible agents
+       0.5               1               1   ← invisible agents
+       0.6               0               2   ← invisible agents
+       0.7               0               2   ← invisible agents
+       0.8               0               2   ← invisible agents
 
-Nobody put a card number in the trace deliberately. The agent read a
-source file, and the file contained a test fixture with a real-shaped PAN.
-The trace is now in scope for PCI, and it is in your SIEM for 400 days.
-field       days  sensitivity  rationale
---------------------------------------------------------------------------
-n            400          low  cheap, high forensic value
-tool         400          low  cheap, high forensic value
-target       400          low  path only, no contents
-verifier     400          low  what the harness believed — the key forensic field
-ok           400          low  
-prompt        30         high  may contain anything the task included
-result         7         high  tool output — the highest-risk field
+The two errors cost differently:
+   human flagged as agent  → one investigation, ~30 min, self-correcting
+   agent flagged as human  → it stays out of your NHI inventory entirely
+ threshold   FP   FN   expected cost (hrs)
+--------------------------------------------
+      0.20    1    1                  40.5
+      0.30    1    1                  40.5
+      0.40    1    1                  40.5
+      0.50    1    1                  40.5
+      0.60    0    2                  80.0
+      0.70    0    2                  80.0
+      0.80    0    2                  80.0
+      0.90    0    3                 120.0
 
-after 1 days — step 1 record:
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result': 'def charge(card_number, amount):  # card_number = 4111111111111111'}
-
-after 14 days — step 1 record:
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt': 'Investigate finding SEC-4471 in billing.py', 'result_sha256': 'b0e3ecafa7e7a9a0'}
-
-after 90 days — step 1 record:
-    {'n': 1, 'tool': 'read_file', 'target': '/work/repo/billing.py', 'verifier': 'n/a', 'ok': True, 'prompt_sha256': '60d7bceb0de1a7bd', 'result_sha256': 'b0e3ecafa7e7a9a0'}
-sensitive content after 90 days: none
-can still answer 'what did it do and what did the harness believe?': True
-
-The hash is retained, so if the original is recovered from a backup you
-can still prove it is the same content the agent saw.
+cost-minimising threshold: 0.55 (expected 40.0 hrs)
+Accuracy-maximising would sit higher and let the polite agent through.
+at that threshold: 0 humans investigated, 1 agents missed
+shadow agents (behaves like software, not in the inventory):
+   unknown-token-7f3c     score=0.563
