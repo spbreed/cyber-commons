@@ -120,7 +120,7 @@ in the seams.
 
 > **Spine:** A0.1 → A1.0 → A1.1 → A1.2 → A1.5 → **A1.10** → **A1.12** → A2.1 →
 > A2.3 → A2.4 → A3.1 → A3.2 → A3.5 → **B2.0** → **B2.1** → B2.3 → **D1.0** →
-> D1.5 → **E1.0** → E1.10
+> D1.2 → **E1.0** → E1.10
 
 Two chapters carry a single artefact end to end:
 

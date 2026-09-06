@@ -13,9 +13,9 @@ SEAMS = [
  ("AppSec", "Platform",     "who owns the agent's sandbox?",              "A3.1"),
  ("Identity", "SecOps",     "who revokes a non-human identity at 03:00?", "A3.6"),
  ("GRC", "Engineering",     "who decides an autonomy rung?",              "E3.2"),
- ("SOC", "Data",            "who retains agent traces, and for how long?","D1.5"),
+ ("SOC", "Data",            "who retains agent traces, and for how long?","D1.2"),
  ("CISO office", "Legal",   "who starts the regulatory clock?",           "E2.6"),
- ("AppSec", "SOC",          "who owns detections FOR agents?",            "D1.4"),
+ ("AppSec", "SOC",          "who owns detections FOR agents?",            "D2.3"),
 ]
 ANSWERS = {
  "who owns the agent's sandbox?": "platform-security",

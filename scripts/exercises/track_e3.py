@@ -307,15 +307,15 @@ The last lesson, and the one that reframes everything before it.
 
 You will not prevent every agentic failure. The systems are non-deterministic,
 the attack surface is novel, and the change surface bypasses your change process
-(D1.7). A programme judged on prevention is judged on something it cannot
+(D1.3). A programme judged on prevention is judged on something it cannot
 deliver, and it will report success right up until the first real incident.
 
 Judge it on three capabilities instead, each independently testable, none of
 them prevention:
 
-- **Notice** — drift and detections fire when behaviour changes (D1.4, D1.7).
-- **Stop** — a tested mechanism halts it, measured in seconds (D2.7).
-- **Recover** — the run is replayable and the scope is knowable (D2.3, D2.5).
+- **Notice** — drift and detections fire when behaviour changes (D2.3, D1.3).
+- **Stop** — a tested mechanism halts it, measured in seconds (D4.4).
+- **Recover** — the run is replayable and the scope is knowable (D3.8, D5.1).
 
 A programme with all three survives a failure it did not predict, which is the
 only kind that actually happens. Perfection would mean containment never fails.

@@ -26,7 +26,7 @@ SCENARIOS = {
  "fast containment, slow scoping": (t0 + 1*H,  t0 + 80*H),
  "slow containment, fast reporting": (t0 + 40*H, t0 + 60*H),
  "both fast":                      (t0 + 2*H,  t0 + 20*H),
- "attribution broken (D2.1)":      (t0 + 6*H,  t0 + 92*H),
+ "attribution broken (D3.5)":      (t0 + 6*H,  t0 + 92*H),
 }
 print(f"{'scenario':34s}{'contain':>9}{'report':>9}{'met':>6}{'margin':>9}")
 print("-" * 68)

@@ -402,11 +402,11 @@ told you.
   ("md", "## 4 · What CyberTravels has to emit before any of this works"),
   ("html", D.table(
     ["what the SOC needs", "is it in an application log?", "which lesson gets it"],
-    [["the prompt that motivated the action", "<b>no</b>", "D1.5"],
-     ["the tool call, with arguments", "<b>no</b>", "D1.5"],
-     ["the decision, and what it was based on", "<b>no</b>", "D2.5"],
-     ["which agent acted", "<b>no</b>", "D1.6"],
-     ["which human it acted for", "<b>no</b>", "A2.7 · D1.6"],
+    [["the prompt that motivated the action", "<b>no</b>", "D1.2"],
+     ["the tool call, with arguments", "<b>no</b>", "D1.2"],
+     ["the decision, and what it was based on", "<b>no</b>", "D5.1"],
+     ["which agent acted", "<b>no</b>", "D1.4"],
+     ["which human it acted for", "<b>no</b>", "A2.7 · D1.4"],
      ["the HTTP request the tool made", "yes", "already there"]],
     emphasise=1,
     caption="Five of six do not exist yet. R10 in the register is the sixth "

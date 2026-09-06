@@ -31,42 +31,42 @@ REGISTER = '''REGISTER = [
  ("C1.1",  "out-of-band telemetry capture",         "P/D", "AU-9",  "A2.8"),
  ("C1.2",  "hash-chained WORM transcript store",    "P",   "AU-10", "A2.8"),
  ("C1.3",  "logging-plane isolation",               "P",   "SC-39", "A2.8"),
- ("C1.4",  "escape detection",                      "D",   "SI-7",  "D1.9"),
+ ("C1.4",  "escape detection",                      "D",   "SI-7",  "D2.4"),
  ("C2.1",  "per-run namespace isolation",           "P",   "SC-4",  "A3.8"),
  ("C2.2",  "immutable / write-once artifact cache", "P",   "AC-4",  "A3.8"),
- ("C2.3",  "covert channel analysis",               "D",   "SC-31", "D1.10"),
- ("C2.4",  "write-pattern anomaly detection",       "D",   "SI-4",  "D1.10"),
+ ("C2.3",  "covert channel analysis",               "D",   "SC-31", "D3.4"),
+ ("C2.4",  "write-pattern anomaly detection",       "D",   "SI-4",  "D3.4"),
  ("C3.1",  "parser sandboxing",                     "P",   "SI-3",  "A3.2"),
  ("C3.2",  "credential removal from workers",       "P",   "AC-6",  "A2.4"),
  ("C3.3",  "micro-segmentation, default-deny egress","P",  "SC-7",  "A3.3"),
- ("C3.4",  "dataset and upload content scanning",   "D",   "SI-10", "D1.9"),
- ("C4.1",  "secret scanning, automated revocation", "D/C", "IA-5",  "D1.9"),
+ ("C3.4",  "dataset and upload content scanning",   "D",   "SI-10", "D2.4"),
+ ("C4.1",  "secret scanning, automated revocation", "D/C", "IA-5",  "D2.4"),
  ("C4.2",  "short-lived workload credentials",      "P",   "IA-5",  "A2.4"),
  ("C4.3",  "scope minimisation",                    "P",   "AC-6",  "A2.3"),
- ("C4.4",  "credential canaries",                   "D",   "SI-4",  "D1.11"),
+ ("C4.4",  "credential canaries",                   "D",   "SI-4",  "D2.5"),
  ("C5.1",  "artifact signing verified at pull",     "P",   "SR-11", "A3.8"),
  ("C5.2",  "provenance attestation",                "P",   "SR-4",  "A3.8"),
  ("C5.3",  "admin-plane separation, JIT elevation", "P/D", "AC-6",  "A3.8"),
- ("C5.4",  "cache integrity diffing",               "D",   "SI-7",  "D1.9"),
+ ("C5.4",  "cache integrity diffing",               "D",   "SI-7",  "D2.4"),
  ("C6.1",  "control-exemption gate",                "P",   "CM-3",  "A3.9"),
  ("C6.2",  "mandatory blast-radius caps",           "P",   "RA-3",  "A3.9"),
- ("C6.3",  "continuous exemption-state monitoring", "D/C", "CA-7",  "D1.9"),
+ ("C6.3",  "continuous exemption-state monitoring", "D/C", "CA-7",  "D2.4"),
  ("C6.4",  "exemption register at launch approval", "P",   "PM-9",  "A3.9"),
  ("C7.1",  "authenticated principal hierarchy",     "P",   "IA-9",  "A2.6"),
  ("C7.2",  "channel separation",                    "P",   "AC-3",  "A2.6"),
  ("C7.3",  "prompt-injection filtering",            "P/D", "SI-10", "A2.6"),
- ("C7.4",  "authorisation-decision logging",        "D",   "AU-2",  "D1.10"),
- ("C8.1",  "cross-trajectory correlation analytics","D",   "SI-4",  "D1.10"),
+ ("C7.4",  "authorisation-decision logging",        "D",   "AU-2",  "D3.4"),
+ ("C8.1",  "cross-trajectory correlation analytics","D",   "SI-4",  "D3.4"),
  ("C8.2",  "population and lifetime quotas",        "P",   "SC-6",  "A3.9"),
- ("C8.3",  "fleet kill switch",                     "C",   "IR-4",  "D2.9"),
- ("C8.4",  "coordination-signature detection",      "D",   "SI-4",  "D1.10"),
+ ("C8.3",  "fleet kill switch",                     "C",   "IR-4",  "D4.5"),
+ ("C8.4",  "coordination-signature detection",      "D",   "SI-4",  "D3.4"),
  ("C9.1",  "first-class report-to-human tool",      "P",   "IR-6",  "A3.10"),
- ("C9.2",  "escalation-path testing",               "D",   "IR-3",  "D1.10"),
- ("C9.3",  "non-use telemetry",                     "D",   "SI-4",  "D1.10"),
+ ("C9.2",  "escalation-path testing",               "D",   "IR-3",  "D3.4"),
+ ("C9.3",  "non-use telemetry",                     "D",   "SI-4",  "D3.4"),
  ("C9.4",  "mandatory HITL checkpoint on discovery","P",   "AC-3",  "A3.10"),
  ("C10.1", "cheat-surface red team",                "P",   "SA-11", "C1.2"),
  ("C10.2", "explicit abstain affordance",           "P",   "SA-8",  "A3.10"),
- ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "D1.11"),
+ ("C10.3", "honeypot and canary tasks",             "D",   "RA-5",  "D2.5"),
  ("C10.4", "scorer integrity separation",           "P",   "SC-7",  "A3.8"),
 ]
 '''
@@ -479,7 +479,7 @@ as well as a failed attempt, or you have priced honesty out of the run.
 },
 
 # ---------------------------------------------------------------- Function B
-"D1.11": {
+"D2.5": {
  "concept": """
 Every detector in this chapter has needed a threshold, and every threshold is a
 trade between missing things and crying wolf. Deception is the exception:
@@ -534,9 +534,9 @@ tells you the environment is clean when it is only well-mapped.
 },
 
 # ---------------------------------------------------------------- Function D
-"D1.9": {
+"D2.4": {
  "concept": """
-D1.4 wrote detections for what an agent does to your estate. These are
+D2.3 wrote detections for what an agent does to your estate. These are
 detections for what happens to **the platform running it** — and they are
 different rules, on different data, with different owners.
 
@@ -600,7 +600,7 @@ period.
               "on most agent platforms nobody has ever run it.",
 },
 
-"D1.10": {
+"D3.4": {
  "concept": """
 This is the single most important structural change in the whole register, and
 it is not a rule — it is where the monitoring sits.
@@ -661,9 +661,9 @@ reports actually submitted. In the incident that gap was the entire failure.
               "finding, not an anomaly score.",
 },
 
-"D2.9": {
+"D4.5": {
  "concept": """
-D2.4 contained one agent. This is the control for the case where the unit of
+D4.3 contained one agent. This is the control for the case where the unit of
 containment is the fleet.
 
 The source incident makes the requirement concrete in one detail: third-party

@@ -161,17 +161,48 @@
         "T8"
       ],
       "atlas": [
-        "Discovery",
-        "Collection"
+        "Reconnaissance",
+        "Discovery"
       ],
       "nist": [
-        "MANAGE"
+        "MEASURE"
       ],
       "euai": [
         "Art. 12"
       ]
     },
     "D2": {
+      "owasp": [
+        "T8"
+      ],
+      "atlas": [
+        "Discovery",
+        "Collection"
+      ],
+      "nist": [
+        "MEASURE"
+      ],
+      "euai": [
+        "Art. 12"
+      ]
+    },
+    "D3": {
+      "owasp": [
+        "T8",
+        "T10"
+      ],
+      "atlas": [
+        "Collection"
+      ],
+      "nist": [
+        "MANAGE"
+      ],
+      "euai": [
+        "Art. 12",
+        "Art. 14"
+      ]
+    },
+    "D4": {
       "owasp": [
         "T10"
       ],
@@ -182,8 +213,23 @@
         "MANAGE"
       ],
       "euai": [
-        "Art. 12",
         "Art. 14"
+      ]
+    },
+    "D5": {
+      "owasp": [
+        "T7"
+      ],
+      "atlas": [
+        "Impact"
+      ],
+      "nist": [
+        "MANAGE",
+        "GOVERN"
+      ],
+      "euai": [
+        "Art. 9",
+        "Art. 12"
       ]
     },
     "E1": {

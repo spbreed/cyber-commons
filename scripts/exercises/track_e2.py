@@ -191,7 +191,7 @@ window is a disclosure, and the trace is a record.**
 
 When an agent reads a customer record to do its job, that record enters the
 model's context. If the trace is retained — and it usually is, for forensics
-(D1.5) — then personal data now exists in a system that was never in the privacy
+(D1.2) — then personal data now exists in a system that was never in the privacy
 review, with a retention period nobody set, in a place the erasure process does
 not reach.
 
@@ -232,7 +232,7 @@ specific reason: **broken attribution consumes the clock.**
 
 The clock starts at *awareness* — when you know a reportable event may have
 occurred. It does not pause while you work out who did it. So if your logs
-attribute an agent's actions to the human whose credential it borrowed (D2.1),
+attribute an agent's actions to the human whose credential it borrowed (D3.5),
 the days you spend establishing what actually happened are deadline days.
 
 Two consequences worth internalising:
@@ -321,7 +321,7 @@ action happens, because neither can be reconstructed afterwards:
 - **Attribution** — the acting identity, the principal, and the chain between
   them (A2.5, EV-1).
 - **Replay** — the prompts, the tool results, the pinned model version and the
-  seed (D2.5).
+  seed (D5.1).
 
 Attribution without replay tells you who acted but not why. Replay without
 attribution tells you what happened but not on whose authority. Regulators and

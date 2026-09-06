@@ -189,7 +189,7 @@
    "name": "Escape detection",
    "type": "D",
    "nist": "SI-7",
-   "lesson": "D1.9"
+   "lesson": "D2.4"
   },
   {
    "id": "C2.1",
@@ -210,14 +210,14 @@
    "name": "Covert channel analysis",
    "type": "D",
    "nist": "SC-31",
-   "lesson": "D1.10"
+   "lesson": "D3.4"
   },
   {
    "id": "C2.4",
    "name": "Write-pattern anomaly detection",
    "type": "D",
    "nist": "SI-4",
-   "lesson": "D1.10"
+   "lesson": "D3.4"
   },
   {
    "id": "C3.1",
@@ -245,14 +245,14 @@
    "name": "Dataset and upload content scanning",
    "type": "D",
    "nist": "SI-10",
-   "lesson": "D1.9"
+   "lesson": "D2.4"
   },
   {
    "id": "C4.1",
    "name": "Secret scanning with automated revocation",
    "type": "D/C",
    "nist": "IA-5",
-   "lesson": "D1.9"
+   "lesson": "D2.4"
   },
   {
    "id": "C4.2",
@@ -273,7 +273,7 @@
    "name": "Credential canaries",
    "type": "D",
    "nist": "SI-4",
-   "lesson": "D1.11"
+   "lesson": "D2.5"
   },
   {
    "id": "C5.1",
@@ -301,7 +301,7 @@
    "name": "Cache integrity diffing",
    "type": "D",
    "nist": "SI-7",
-   "lesson": "D1.9"
+   "lesson": "D2.4"
   },
   {
    "id": "C6.1",
@@ -322,7 +322,7 @@
    "name": "Continuous exemption-state monitoring",
    "type": "D/C",
    "nist": "CA-7",
-   "lesson": "D1.9"
+   "lesson": "D2.4"
   },
   {
    "id": "C6.4",
@@ -357,14 +357,14 @@
    "name": "Authorisation-decision logging",
    "type": "D",
    "nist": "AU-2",
-   "lesson": "D1.10"
+   "lesson": "D3.4"
   },
   {
    "id": "C8.1",
    "name": "Cross-trajectory correlation analytics",
    "type": "D",
    "nist": "SI-4",
-   "lesson": "D1.10"
+   "lesson": "D3.4"
   },
   {
    "id": "C8.2",
@@ -378,14 +378,14 @@
    "name": "Fleet kill switch",
    "type": "C",
    "nist": "IR-4",
-   "lesson": "D2.9"
+   "lesson": "D4.5"
   },
   {
    "id": "C8.4",
    "name": "Coordination-signature detection",
    "type": "D",
    "nist": "SI-4",
-   "lesson": "D1.10"
+   "lesson": "D3.4"
   },
   {
    "id": "C9.1",
@@ -399,14 +399,14 @@
    "name": "Escalation-path testing",
    "type": "D",
    "nist": "IR-3",
-   "lesson": "D1.10"
+   "lesson": "D3.4"
   },
   {
    "id": "C9.3",
    "name": "Non-use telemetry",
    "type": "D",
    "nist": "SI-4",
-   "lesson": "D1.10"
+   "lesson": "D3.4"
   },
   {
    "id": "C9.4",
@@ -434,7 +434,7 @@
    "name": "Honeypot and canary tasks",
    "type": "D",
    "nist": "RA-5",
-   "lesson": "D1.11"
+   "lesson": "D2.5"
   },
   {
    "id": "C10.4",

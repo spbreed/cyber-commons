@@ -52,9 +52,9 @@ seam                        owner                           lesson
 AppSec ↔ Platform           platform-security               A3.1
 Identity ↔ SecOps           on-call SRE, pre-authorised     A3.6
 GRC ↔ Engineering           ⚠ NOBODY                        E3.2
-SOC ↔ Data                  ⚠ NOBODY                        D1.5
+SOC ↔ Data                  ⚠ NOBODY                        D1.2
 CISO office ↔ Legal         legal, on IR notification       E2.6
-AppSec ↔ SOC                detection engineering           D1.4
+AppSec ↔ SOC                detection engineering           D2.3
 ```
 
 The run continues past this. The script is the example: `test_skills.py` executes it on every build, so this block cannot drift from what the skill actually prints.

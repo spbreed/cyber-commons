@@ -66,7 +66,7 @@ print("from 'the model that did it no longer exists'.")
 COST = {
  "model version": (1,  "one string per run", "invalidates everything else if missing"),
  "seed":          (1,  "one integer per run", "makes the run repeatable"),
- "prompts":       (3,  "storage + privacy review (D1.5)", "what it was asked"),
+ "prompts":       (3,  "storage + privacy review (D1.2)", "what it was asked"),
  "tool results":  (5,  "largest volume, highest sensitivity", "what it saw"),
 }
 print(f"{'field':16s}{'cost':>6}  {'what it costs':38s}why it matters")

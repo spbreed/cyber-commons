@@ -15,7 +15,7 @@
 
 ---
 
-### D2.1 — Agent-assisted reconstruction
+### D3.5 — Agent-assisted reconstruction
 
 `AI for Security`
 
@@ -30,8 +30,8 @@
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.1   # run it headless and check it
+jupyter notebook labs/notebooks/D3.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D3.5   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
@@ -44,7 +44,7 @@ diff <(jq -r .timeline[] preloaded.json) <(jq -r .timeline[] cold.json)
 
 ---
 
-### D2.2 — When the actor is an agent
+### D3.7 — When the actor is an agent
 
 `Security of AI`
 
@@ -57,8 +57,8 @@ diff <(jq -r .timeline[] preloaded.json) <(jq -r .timeline[] cold.json)
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.2   # run it headless and check it
+jupyter notebook labs/notebooks/D3.7.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D3.7   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
@@ -70,7 +70,7 @@ python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
 
 ---
 
-### D2.3 — Scoping an agentic incident
+### D3.8 — Scoping an agentic incident
 
 `Security of AI`
 
@@ -85,8 +85,8 @@ python3 attribute.py --trace case-01/trace.jsonl --chain-from keycloak
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it
+jupyter notebook labs/notebooks/D3.8.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D3.8   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
@@ -98,7 +98,7 @@ python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action
 
 ---
 
-### D2.4 — Containment at machine speed
+### D4.3 — Containment at machine speed
 
 `Security of AI`
 
@@ -111,8 +111,8 @@ python3 scope.py --trace case-02/trace.jsonl --planes decision,control,action
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it
+jupyter notebook labs/notebooks/D4.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D4.3   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
@@ -125,7 +125,7 @@ cd labs/d2-ir
 
 ---
 
-### D2.5 — Replay and forensics
+### D5.1 — Replay and forensics
 
 `Security of AI`
 
@@ -138,8 +138,8 @@ cd labs/d2-ir
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it
+jupyter notebook labs/notebooks/D5.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D5.1   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
@@ -150,7 +150,7 @@ python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
 
 ---
 
-### D2.6 — Post-incident change surface
+### D5.4 — Post-incident change surface
 
 `Security of AI`
 
@@ -162,8 +162,8 @@ python3 replay.py --trace case-01/trace.jsonl --assert-deterministic
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.6   # run it headless and check it
+jupyter notebook labs/notebooks/D5.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D5.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir/postmortem
@@ -174,7 +174,7 @@ for c in case-*/; do echo -n "$c "; python3 ../choose_layer.py --case $c; done
 
 ---
 
-### D2.7 — Stop authority
+### D4.4 — Stop authority
 
 `Security of AI`
 
@@ -187,8 +187,8 @@ for c in case-*/; do echo -n "$c "; python3 ../choose_layer.py --case $c; done
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.7   # run it headless and check it
+jupyter notebook labs/notebooks/D4.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D4.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
@@ -201,7 +201,7 @@ python3 assert_stopped.py --within 60s
 
 ---
 
-### D2.8 — Regulatory clock
+### D5.6 — Regulatory clock
 
 `Security of AI`
 
@@ -213,8 +213,8 @@ python3 assert_stopped.py --within 60s
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.8   # run it headless and check it
+jupyter notebook labs/notebooks/D5.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D5.6   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d2-ir
@@ -226,7 +226,7 @@ python3 first_hour.py --case case-01 --materiality
 
 ---
 
-### D2.9 — The fleet kill switch
+### D4.5 — The fleet kill switch
 
 `AI for Security`
 
@@ -239,8 +239,8 @@ python3 first_hour.py --case case-01 --materiality
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D2.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D2.9   # run it headless and check it
+jupyter notebook labs/notebooks/D4.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D4.5   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 ./killswitch --selector experiment=exploitgym --snapshot --revoke

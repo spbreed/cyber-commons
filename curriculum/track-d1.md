@@ -35,7 +35,7 @@ python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
 
 ---
 
-### D1.1 — From alert queue to loop operator
+### D3.1 — From alert queue to loop operator
 
 `AI for Security`
 
@@ -50,8 +50,8 @@ python3 scripts/run_notebooks.py --session D1.0   # run it headless and check it
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.1   # run it headless and check it
+jupyter notebook labs/notebooks/D3.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D3.1   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
@@ -64,7 +64,7 @@ python3 triage_loop.py --model $MODEL --escalate-on high
 
 ---
 
-### D1.2 — Context that makes triage work
+### D3.6 — Context that makes triage work
 
 `AI for Security`
 
@@ -79,8 +79,8 @@ python3 triage_loop.py --model $MODEL --escalate-on high
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
+jupyter notebook labs/notebooks/D3.6.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D3.6   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
@@ -93,7 +93,7 @@ python3 compare.py
 
 ---
 
-### D1.3 — Agent-assisted detection engineering
+### D2.1 — Agent-assisted detection engineering
 
 `AI for Security`
 
@@ -108,8 +108,8 @@ python3 compare.py
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
+jupyter notebook labs/notebooks/D2.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.1   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 pip install sigma-cli && cd labs/d1-soc/detections
@@ -122,7 +122,7 @@ python3 coverage.py --map-to attack
 
 ---
 
-### D1.4 — Detection engineering *for* agents
+### D2.3 — Detection engineering *for* agents
 
 `Security of AI`
 
@@ -135,8 +135,8 @@ python3 coverage.py --map-to attack
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it
+jupyter notebook labs/notebooks/D2.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.3   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc/detections
@@ -148,7 +148,7 @@ cd labs/d1-soc/detections
 
 ---
 
-### D1.5 — Agent telemetry as a data source
+### D1.2 — Agent telemetry as a data source
 
 `Security of AI`
 
@@ -161,8 +161,8 @@ cd labs/d1-soc/detections
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.5.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.5   # run it headless and check it
+jupyter notebook labs/notebooks/D1.2.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.2   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
@@ -175,7 +175,7 @@ curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply
 
 ---
 
-### D1.6 — Distinguishing agent from human
+### D1.4 — Distinguishing agent from human
 
 `Security of AI`
 
@@ -190,8 +190,8 @@ curl -s localhost:9200/agent-traces/_search -d '{"query":{"match":{"tool":"apply
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.6.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.6   # run it headless and check it
+jupyter notebook labs/notebooks/D1.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
@@ -203,7 +203,7 @@ python3 agent_vs_human.py --classify live.jsonl
 
 ---
 
-### D1.7 — Drift monitoring
+### D1.3 — Drift monitoring
 
 `Security of AI`
 
@@ -218,8 +218,8 @@ python3 agent_vs_human.py --classify live.jsonl
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.7.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.7   # run it headless and check it
+jupyter notebook labs/notebooks/D1.3.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.3   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc
@@ -232,7 +232,7 @@ python3 drift_report.py
 
 ---
 
-### D1.8 — Threat intel sub-lane
+### D1.1 — Threat intel sub-lane
 
 `AI for Security`
 
@@ -247,8 +247,8 @@ python3 drift_report.py
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.8.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.8   # run it headless and check it
+jupyter notebook labs/notebooks/D1.1.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D1.1   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 cd labs/d1-soc/intel
@@ -261,7 +261,7 @@ python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch co
 
 ---
 
-### D1.9 — Detections whose subject is the agent platform
+### D2.4 — Detections whose subject is the agent platform
 
 `AI for Security`
 
@@ -274,8 +274,8 @@ python3 synthesise.py --topic 'agentic malware' --no-require-source   # watch co
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.9.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.9   # run it headless and check it
+jupyter notebook labs/notebooks/D2.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 falco --rules agent-escape.yaml --validate
@@ -287,7 +287,7 @@ gitleaks detect --redact --report-format sarif
 
 ---
 
-### D1.10 — Fleet-level correlation: seeing a swarm
+### D3.4 — Fleet-level correlation: seeing a swarm
 
 `AI for Security`
 
@@ -300,8 +300,8 @@ gitleaks detect --redact --report-format sarif
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.10.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.10   # run it headless and check it
+jupyter notebook labs/notebooks/D3.4.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D3.4   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 python3 fleet_graph.py --window 24h --min-unrelated-readers 2
@@ -312,7 +312,7 @@ python3 fleet_graph.py --signatures vocab,pivot,role
 
 ---
 
-### D1.11 — Honeypots, canaries and deception in the agent's environment
+### D2.5 — Honeypots, canaries and deception in the agent's environment
 
 `AI for Security`
 
@@ -327,8 +327,8 @@ python3 fleet_graph.py --signatures vocab,pivot,role
 
 ```bash
 # --- the notebook: runs anywhere, stdlib only, no install ---
-jupyter notebook labs/notebooks/D1.11.ipynb    # or open it on the lesson page
-python3 scripts/run_notebooks.py --session D1.11   # run it headless and check it
+jupyter notebook labs/notebooks/D2.5.ipynb    # or open it on the lesson page
+python3 scripts/run_notebooks.py --session D2.5   # run it headless and check it
 
 # --- the full variant, against the real tooling (needs a container registry) ---
 python3 canary.py --place worker-env,docs,artifact-metadata

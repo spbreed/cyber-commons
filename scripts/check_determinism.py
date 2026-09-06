@@ -7,7 +7,7 @@ local pass runs every notebook under one interpreter with one hash seed:
 
   * B2.2 iterated a set difference into a stable sort. With tied scores the
     sort preserved set-iteration order, which PYTHONHASHSEED randomises.
-  * D1.1 seeded a sampling RNG from hash(str), which PYTHONHASHSEED also
+  * D3.1 seeded a sampling RNG from hash(str), which PYTHONHASHSEED also
     randomises.
 
 Both surfaced only when Kaggle ran them on a different machine. This script

@@ -92,7 +92,7 @@ FIELDS = {
  "delegation chain": "who caused the task; where to look for the trigger",
  "scopes held":      "THE decisive field — is this action within its remit?",
  "tool + target":    "what it did",
- "session/trace id": "so the analyst can pull the whole run (D1.5)",
+ "session/trace id": "so the analyst can pull the whole run (D1.2)",
 }
 for k, v in FIELDS.items(): print(f"{k:20s}{v}")
 

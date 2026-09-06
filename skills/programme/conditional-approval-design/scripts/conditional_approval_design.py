@@ -55,7 +55,7 @@ CONDITIONS = [
  ("approval gate above the cap",
   "L2 for the tail, L2.5 for the body", "payments-eng", "SB-2", "2026-09-30"),
  ("act chain on every refund",
-  "attribution survives an incident (D2.1)", "platform-sec", "AC-1/EV-1", "2026-09-15"),
+  "attribution survives an incident (D3.5)", "platform-sec", "AC-1/EV-1", "2026-09-15"),
  ("tested stop, measured in seconds",
   "you can halt it without the vendor", "SRE", "ST-1", "2026-10-12"),
  ("re-tier automatically if the tool list changes",

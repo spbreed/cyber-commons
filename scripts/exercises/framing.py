@@ -384,86 +384,86 @@ HOOKS: dict[str, str] = {
  "hour of a person is twelve actions. Every detection, baseline and playbook you "
  "own was tuned against the second number.",
 
-"D1.1":
+"D3.1":
  "The queue does not go away; it changes shape. Instead of triaging alerts you "
  "are supervising something that triages alerts, which is a different skill with "
  "a different quality bar and a much worse failure mode: confident, fast, and "
  "wrong at volume.",
 
-"D1.2":
+"D3.6":
  "Most bad triage is not a bad model. It is an agent asked to decide without the "
  "identity, asset and history context a human analyst would have pulled without "
  "noticing they pulled it.",
 
-"D1.3":
+"D2.1":
  "An agent can write and tune a detection far faster than you can, which means "
  "it can also ship a confident, wrong rule into production far faster than you "
  "can. The validation discipline is the whole of the value.",
 
-"D1.4":
+"D2.3":
  "Writing a detection for an agent means writing one where machine-speed "
  "behaviour is normal and the baseline has no human rhythm in it at all. Every "
  "heuristic that relies on tiredness, working hours or typing speed is gone.",
 
-"D1.5":
+"D1.2":
  "You cannot detect on telemetry that was never emitted. Prompts, tool calls, "
  "decisions and identities are the four things an agent has to emit to be "
  "observable at all — and none of them appear in a standard application log.",
 
-"D1.6":
+"D1.4":
  "The agent holds a human's authority and acts under a human's name. "
  "Conventional UEBA reads that as the human behaving strangely, and the entire "
  "attribution question — was this a person or their agent — has no field to "
  "answer it.",
 
-"D1.7":
+"D1.3":
  "Nothing was attacked. The model was upgraded, a prompt was edited, a tool "
  "changed its output format — and the behaviour of the system moved. Drift is "
  "the failure mode with no adversary, and it is far more common than the ones "
  "with one.",
 
-"D1.8":
+"D1.1":
  "Two intel questions, not one: how adversaries are using AI, and who is coming "
  "for the AI you run. Most programmes track the first because it is written "
  "about, and the second is the one that reaches your estate.",
 
-"D2.1":
+"D3.5":
  "Reconstruction is reading, and agents read fast. The speed is real and so is "
  "the failure mode: a timeline that is 95% right and completely confident is "
  "worse than no timeline, because somebody will make decisions on it.",
 
-"D2.2":
+"D3.7":
  "The internal actor was autonomous. Was it instructed, was it compromised, or "
  "did it simply do what it was allowed to do? None of your existing playbooks "
  "have a branch for that question, and the answer changes everything downstream.",
 
-"D2.3":
+"D3.8":
  "The agent acted for eleven minutes on delegated credentials at machine speed. "
  "Scoping that means reconstructing blast radius from identity and egress logs, "
  "because asking what it touched is not a question anyone can answer from "
  "memory.",
 
-"D2.4":
+"D4.3":
  "You have to stop it faster than it acts. That means the containment path — "
  "revoke, cut the gateway, kill the loop — is a thing built in advance, because "
  "improvising it takes longer than the incident does.",
 
-"D2.5":
+"D5.1":
  "Forensics on a non-deterministic actor asks a question classical forensics "
  "never had to: not just what it did, but what it saw and what it decided. If "
  "the context was not recorded, the decision cannot be reconstructed at all.",
 
-"D2.6":
+"D5.4":
  "After an agentic incident the change surface is not the code. It is prompts, "
  "tool scopes, model versions and policy — four things with no release process, "
  "no review and, usually, no version history.",
 
-"D2.7":
+"D4.4":
  "At three in the morning, the question is not what went wrong. It is who is "
  "allowed to stop it, on what evidence, without waiting for a forty-person "
  "bridge call to reach consensus.",
 
-"D2.8":
+"D5.6":
  "The disclosure clock starts on the incident, not on your understanding of it. "
  "Materiality for a probabilistic actor is genuinely hard, and the hard part "
  "does not pause the clock.",
@@ -650,7 +650,7 @@ HOOKS: dict[str, str] = {
  "to six of them reasoned about telling a human; none did. One wrote \"we can "
  "notify? no user\". The gap was not alignment — it was that no tool existed.",
 
-"D1.11":
+"D2.5":
  "Every detector in this chapter needs a threshold, and every threshold is a "
  "trade. A canary needs neither: nothing legitimate has any reason to touch it, "
  "so its false-positive rate is zero by construction rather than by tuning.",
@@ -661,19 +661,19 @@ HOOKS: dict[str, str] = {
  "finding can be cited alone, type every control, and give each one an owner "
  "who will test it.",
 
-"D1.9":
+"D2.4":
  "The escape, the poisoned cache entry and the silently expired exemption all "
  "look like normal operation from inside the workload. These are detections "
  "whose subject is the platform running the agent, and not one of them reads "
  "the agent's own logs.",
 
-"D1.10":
+"D3.4":
  "Every run in the source incident, examined alone, was an agent doing "
  "plausible work on its assigned task. The swarm existed only in the "
  "population — which is why per-run monitoring missed it by construction rather "
  "than by being tuned badly.",
 
-"D2.9":
+"D4.5":
  "The third party's exposure ended when the third party revoked its keys, not "
  "when the agents were stopped. Terminating a fleet whose credentials stay "
  "valid moves the incident rather than ending it.",
@@ -1578,7 +1578,7 @@ DIAGRAMS: dict[str, str] = {
    +----------------------+  +-------------------------+
 """,
 
-"D1.1": """
+"D3.1": """
    before                          after
    +------------------+            +---------------------------+
    | alert -> analyst |            | alert -> loop -> analyst  |
@@ -1589,7 +1589,7 @@ DIAGRAMS: dict[str, str] = {
    new failure mode: confident, fast, and wrong at volume
 """,
 
-"D1.2": """
+"D3.6": """
    the alert                what a human would have pulled without thinking
    +----------------+       +-----------------------------------+
    | user: dana     |  -->  | is dana on call?                  |
@@ -1600,7 +1600,7 @@ DIAGRAMS: dict[str, str] = {
    most bad triage is missing context, not a weak model
 """,
 
-"D1.3": """
+"D2.1": """
    agent writes rule --> test corpus --> tuned rule --> production
                               ^
                        +------+-------+
@@ -1612,7 +1612,7 @@ DIAGRAMS: dict[str, str] = {
    the speed is real. so is the speed of shipping a wrong rule.
 """,
 
-"D1.4": """
+"D2.3": """
    human baseline                agent baseline
    +-------------------+         +----------------------+
    | works 9-6         |         | works always         |
@@ -1624,7 +1624,7 @@ DIAGRAMS: dict[str, str] = {
    sequences, a spike in distinct destinations
 """,
 
-"D1.5": """
+"D1.2": """
    what an agent must emit to be observable at all
 
    +------------+  +-------------+  +-----------+  +------------+
@@ -1637,7 +1637,7 @@ DIAGRAMS: dict[str, str] = {
                    retention is expensive and the cost is real
 """,
 
-"D1.6": """
+"D1.4": """
    the log says                    the truth is
    +--------------------+          +---------------------------+
    | user: dana@corp    |          | dana's agent, acting for  |
@@ -1648,7 +1648,7 @@ DIAGRAMS: dict[str, str] = {
    the missing field is not "suspicious" - it is "actor_type"
 """,
 
-"D1.7": """
+"D1.3": """
    nothing was attacked
 
    model upgraded ----+
@@ -1659,7 +1659,7 @@ DIAGRAMS: dict[str, str] = {
    the control: a fixed probe suite, run on every change
 """,
 
-"D1.8": """
+"D1.1": """
    two intel questions, only one of which is well covered
 
    how adversaries use AI        who is coming for the AI you run
@@ -1670,7 +1670,7 @@ DIAGRAMS: dict[str, str] = {
                                        the one that reaches you
 """,
 
-"D2.1": """
+"D3.5": """
    scattered evidence            reconstructed timeline
    +------------------+          +---------------------+
    | 6 log sources    |   -->    | ordered, attributed |
@@ -1681,7 +1681,7 @@ DIAGRAMS: dict[str, str] = {
                               unsourced claim -> not in the timeline
 """,
 
-"D2.2": """
+"D3.7": """
    the internal actor was autonomous. which branch?
 
    instructed      someone told it to        -> who, and through what channel
@@ -1691,7 +1691,7 @@ DIAGRAMS: dict[str, str] = {
    no existing playbook has this branch, and it changes everything after it
 """,
 
-"D2.3": """
+"D3.8": """
    11 minutes at machine speed
 
    identity log ---+                    +--> resources touched
@@ -1702,7 +1702,7 @@ DIAGRAMS: dict[str, str] = {
    the question "what did it touch" is not answerable from memory
 """,
 
-"D2.4": """
+"D4.3": """
    containment paths, in order of how fast they actually work
 
    1  revoke the credential      seconds, if it is short-lived
@@ -1713,7 +1713,7 @@ DIAGRAMS: dict[str, str] = {
    built in advance. improvised, path 1 takes longer than the incident.
 """,
 
-"D2.5": """
+"D5.1": """
    classical forensics        agentic forensics
    +------------------+       +----------------------------+
    | what did it do   |       | what did it do             |
@@ -1724,7 +1724,7 @@ DIAGRAMS: dict[str, str] = {
    if the context was not recorded, the decision cannot be reconstructed
 """,
 
-"D2.6": """
+"D5.4": """
    the change surface after an agentic incident
 
    +---------+ +--------+ +----------+ +---------+
@@ -1735,7 +1735,7 @@ DIAGRAMS: dict[str, str] = {
    a fix in any of the four is invisible unless it is versioned
 """,
 
-"D2.7": """
+"D4.4": """
    03:00, the agent is acting, the evidence is partial
 
    who may say stop?          +-----------------------------+
@@ -1748,7 +1748,7 @@ DIAGRAMS: dict[str, str] = {
    pre-agreed authority beats a forty-person bridge call
 """,
 
-"D2.8": """
+"D5.6": """
    incident starts -------------------------------> deadline
         |                |                |
      detected        understood        reportable?
@@ -2173,7 +2173,7 @@ DIAGRAMS: dict[str, str] = {
    without it:     notice -> post to the peer channel -> nobody reads it
 """,
 
-"D1.11": """
+"D2.5": """
    tuned detector                     deception
 
    threshold ---> TP and FP           canary ---> any touch is a hit
@@ -2203,7 +2203,7 @@ DIAGRAMS: dict[str, str] = {
    filed apart, three teams each fix a third and the surface remains
 """,
 
-"D1.9": """
+"D2.4": """
    subject of the detection = the platform, not the workload
 
    escape primitives      ptrace non-child . LD_PRELOAD . /proc/self/mem
@@ -2219,7 +2219,7 @@ DIAGRAMS: dict[str, str] = {
    exemption drift        live control state vs the approved register
 """,
 
-"D1.10": """
+"D3.4": """
    per-run view                    fleet view
 
    run-01  on task, in policy      obj-A written by run-01
@@ -2233,7 +2233,7 @@ DIAGRAMS: dict[str, str] = {
    plus the gap: noticed something reportable N, reached a human 0
 """,
 
-"D2.9": """
+"D4.5": """
    one selector, one action, in this order
 
       snapshot state + transcripts     <- or the incident is unreconstructable
@@ -2440,7 +2440,7 @@ BRIDGES: dict[str, dict[str, str]] = {
         "the hard part — a fleet that is acting right now, on delegated "
         "credentials, faster than the person reading the alert can type.",
  "next": "Chapter 9 is that step: scope it, contain it, replay it, and decide in "
-         "advance who is allowed to stop it. Next → D2.1, agent-assisted "
+         "advance who is allowed to stop it. Next → D3.5, agent-assisted "
          "reconstruction.",
 },
 

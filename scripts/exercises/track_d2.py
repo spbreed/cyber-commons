@@ -6,14 +6,14 @@ Three things change when the actor is an agent, and each has a lesson:
     containment must beat the loop      — a human in the path arrives too late
     attribution is a design property    — you cannot recover it afterwards
 
-    D2.1  agent-assisted reconstruction
-    D2.2  when the actor is an agent
-    D2.3  scoping an agentic incident
-    D2.4  containment at machine speed
-    D2.5  replay and forensics
-    D2.6  the post-incident change surface
-    D2.7  stop authority
-    D2.8  the regulatory clock
+    D3.5  agent-assisted reconstruction
+    D3.7  when the actor is an agent
+    D3.8  scoping an agentic incident
+    D4.3  containment at machine speed
+    D5.1  replay and forensics
+    D5.4  the post-incident change surface
+    D4.4  stop authority
+    D5.6  the regulatory clock
 """
 
 from .skills import SKILL_RUNTIME
@@ -24,7 +24,7 @@ from .skills import skill_steps
 
 EXERCISES: dict[str, dict] = {
 
-"D2.1": {
+"D3.5": {
  "concept": """
 Reconstruction is the first phase of any incident: build the timeline, establish
 what happened, decide what to contain.
@@ -64,7 +64,7 @@ job to state that gap explicitly in the incident record.
               "already carry this risk.",
 },
 
-"D2.2": {
+"D3.7": {
  "concept": """
 Three responder instincts are correct for human incidents and misfire when the
 actor is an agent.
@@ -91,8 +91,8 @@ operational rather than architectural.
      ["2. interview the user",
       "2. revoke that identity — no approval needed for a non-human (A3.6)"],
      ["3. review the user's recent activity",
-      "3. scope by walking the delegation chain, not the host list (D2.3)"],
-     ["", "4. preserve the run trace before anything restarts (D2.5)"],
+      "3. scope by walking the delegation chain, not the host list (D3.8)"],
+     ["", "4. preserve the run trace before anything restarts (D5.1)"],
      ["", "5. only then consider the human's account, and say why"]],
     emphasise=1,
     caption="Every step on the left is correct for a human actor and wrong here. "
@@ -110,7 +110,7 @@ operational rather than architectural.
               "whether you can currently revoke a single agent identity at all.",
 },
 
-"D2.3": {
+"D3.8": {
  "concept": """
 Scoping answers "what was touched?" For a host-based incident you enumerate
 hosts. For an agentic incident, **scope follows the delegation graph**.
@@ -151,7 +151,7 @@ operational reason B2.0 bounds delegation depth in the first place.
               "almost always larger than what was written in the report.",
 },
 
-"D2.4": {
+"D4.3": {
  "concept": """
 Containment has always been a race. With an agent, the other runner got much
 faster and you did not.
@@ -184,7 +184,7 @@ it in a minute. So the two should have different policies, and almost nowhere do
               "limits.",
 },
 
-"D2.5": {
+"D5.1": {
  "concept": """
 Forensics for an agent means answering: *why did it do that?*
 
@@ -216,7 +216,7 @@ upgrade does not reproduce the incident that happened before it.
               "between forensics and storytelling.",
 },
 
-"D2.6": {
+"D5.4": {
  "concept": """
 After an incident you change something. For ordinary software that change goes
 through code review, CI and a deploy — a process that records what changed and
@@ -243,7 +243,7 @@ as done six weeks later.
      ["approval settings", "<b>no</b>", "a toggle in an admin UI"],
      ["egress allowlist", "sometimes", "depends whether it is IaC or a console"]],
     emphasise=1,
-    caption="The same surfaces D1.7 watches for drift. There they were the "
+    caption="The same surfaces D1.3 watches for drift. There they were the "
             "things that change without anyone deciding; here they are the "
             "things you change on purpose, after an incident — and four of "
             "seven still leave no record that you did.")),
@@ -276,7 +276,7 @@ as done six weeks later.
               "verification path — move those into git before the next one.",
 },
 
-"D2.7": {
+"D4.4": {
  "concept": """
 Stop authority is the control everyone assumes exists and almost nobody has
 timed.
@@ -313,7 +313,7 @@ a board will each ask for in different words.
               "E3.5. An untested stop button is a belief.",
 },
 
-"D2.8": {
+"D5.6": {
  "concept": """
 Regulatory clocks start at **awareness** — the point at which you know a
 reportable event may have occurred. Not at confirmation, not at containment.
@@ -323,7 +323,7 @@ Two consequences that teams discover on day three:
 1. **Containing fast does not buy reporting time.** You can contain in an hour
    and still miss a 72-hour deadline, because the clock never paused.
 2. **Broken attribution consumes the clock.** If you cannot say who acted
-   (D2.1), scoping takes days, and those days are deadline days.
+   (D3.5), scoping takes days, and those days are deadline days.
 
 Containment and disclosure are separate workstreams competing for the same
 people. If your runbook has one owner for both, one of them is being done badly

@@ -51,7 +51,7 @@ scenario                            contain   report   met   margin
 fast containment, slow scoping          1.0     80.0 False     -8.0
 slow containment, fast reporting       40.0     60.0  True     12.0
 both fast                               2.0     20.0  True     52.0
-attribution broken (D2.1)               6.0     92.0 False    -20.0
+attribution broken (D3.5)               6.0     92.0 False    -20.0
 
 The first row contained in ONE HOUR and still missed the deadline.
 ```
