@@ -83,14 +83,14 @@ So this function is one picture and its consequences, in three chapters:
   ("md", "## 4 · Where the five functions sit\\n\\n"
          "Each one takes the same system and asks a different question of it."),
   ("html", D.table(
-    ["function", "the question it asks of CyberTravels", "direction"],
-    [["A", "what can go wrong here, and what closes it", "mostly Security of AI"],
-     ["B", "how do we review its code, at its speed", "both directions at once"],
-     ["C", "can we break it before somebody else does", "both directions at once"],
+    ["function", "the question it asks of CyberTravels", "what it produces"],
+    [["A", "what can go wrong here, and what closes it", "an architecture and its controls"],
+     ["B", "how do we review its code, at its speed", "a pipeline, and a harness that scores it"],
+     ["C", "can we break it before somebody else does", "findings you generated yourself"],
      ["D", "would we see it happening, and could we stop it",
-      "both directions at once"],
+      "detections, runbooks and a root cause"],
      ["E", "who signed off, and can they still evidence it",
-      "governs both directions"]],
+      "indicators an auditor can re-compute"]],
     caption="Nobody takes all five. Everyone takes the common spine first, then "
             "the chapters for the chair they sit in, then one adjacent chapter.")),
 

@@ -723,13 +723,13 @@ DIAGRAMS: dict[str, str] = {
 """,
 
 "A1.0": """
-   AI FOR SECURITY                        SECURITY OF AI
-   the agent is your instrument           the agent is what you protect
+   THE AGENT AS YOUR INSTRUMENT           THE AGENT AS WHAT YOU PROTECT
 
         you ---> agent ---> the                the ---> agent <--- attacker
                             business
 
-   Function A sits almost entirely on the right, at the architecture layer:
+   the same system, two directions of concern - and Function A works at
+   the architecture layer, where both of them land on one component map:
 
         [ chapter 1 ]        [ chapter 2 ]        [ chapter 3 ]
         the picture   -->    securing it:   -->   securing it:

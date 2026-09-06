@@ -144,10 +144,6 @@ def run_skill_cell(script: str) -> str:
             f"{RUN_SKILL}")
 
 
-DIRECTION = {"defend": "AI for Security", "secure": "Security of AI",
-             "both": "Both directions"}
-
-
 # ------------------------------------------------------------------ ipynb bits
 def md(source: str) -> dict:
     # Several exercises were authored with "\\n" inside a normal (non-raw) string,
@@ -225,8 +221,7 @@ def notebook(entry: dict, prev: dict | None, nxt: dict | None) -> dict:
     tools_used = ", ".join(used) or "standard library only"
 
     # ---- header ----------------------------------------------------------
-    where = f"**{entry['fn']} → {entry['track']}**  ·  " \
-            f"*{DIRECTION.get(s.get('track', 'both'), 'Both directions')}*"
+    where = f"**{entry['fn']} → {entry['track']}**"
     if prev:
         where += (f"\n\nBuilds on **[{prev['s']['id']} · {prev['s']['title']}]"
                   f"({SITE}/lessons/{prev['s']['id']}.html)**.")

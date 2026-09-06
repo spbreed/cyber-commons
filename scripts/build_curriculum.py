@@ -15,7 +15,6 @@ CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 LABS = json.loads((ROOT / "curriculum" / "labs.json").read_text())["labs"]
 OUT = ROOT / "curriculum"
 
-DIRECTION = {"defend": "AI for Security", "secure": "Security of AI", "both": "both directions"}
 
 
 def lab_block(sid: str, goal: str = "") -> str:
@@ -31,8 +30,9 @@ def lab_block(sid: str, goal: str = "") -> str:
 
 def session_md(s: dict) -> str:
     out = [f"### {s['id']} — {s['title']}", ""]
-    out.append(f"`{DIRECTION.get(s.get('track','both'))}`" + ("  ·  **flagship lab**" if s.get("featured") else ""))
-    out.append("")
+    if s.get("featured"):
+        out.append("**flagship lab**")
+        out.append("")
     if s.get("risk"):
         out.append(f"- **Risk** — {s['risk']}")
     if s.get("control"):

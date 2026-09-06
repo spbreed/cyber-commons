@@ -48,8 +48,8 @@ RAW = f"https://raw.githubusercontent.com/spbreed/cyber-commons/{BRANCH}"
 
 # Framework labels, resolved per lesson: a lesson takes its track's row from
 # curriculum/frameworks.json unless it names itself in `lessons`, which
-# replaces the row outright. The "Security of AI / AI for Security" badge that
-# used to sit here went with the paradigm it belonged to.
+# replaces the row outright. The per-lesson direction badge that used to sit
+# here went with the two-direction framing it belonged to.
 FRAMEWORKS = json.loads((ROOT / "curriculum" / "frameworks.json").read_text())
 
 

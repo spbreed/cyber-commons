@@ -28,8 +28,8 @@ import html as _html
 INK = "currentColor"
 DIM = "#8A93A6"
 LINE = "#8A93A6"
-DEFEND = "#4D9BFF"      # AI for security
-SECURE = "#E0912F"      # security of AI
+DEFEND = "#4D9BFF"      # what you build and run
+SECURE = "#E0912F"      # what an adversary reaches for
 BAD = "#E05C4B"
 GOOD = "#3FA06B"
 
