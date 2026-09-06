@@ -79,7 +79,7 @@ python3 scripts/run_notebooks.py --session B2.2   # run it headless and check it
 
 ---
 
-### B2.3 — Vulnerability auditing — deterministic Semgrep, then the model pass
+### B2.3 — SAST for agentic code — deterministic Semgrep, then the model pass
 
 `AI for Security`
 

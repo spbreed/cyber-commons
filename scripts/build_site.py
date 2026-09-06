@@ -58,22 +58,44 @@ def frameworks_for(sid: str, track_id: str) -> dict:
     return {k: row.get(k, []) for k in ("owasp", "atlas", "nist", "euai")}
 
 
+def framework_url(kind: str, code: str) -> str:
+    """Where a label points. Verified by scripts/check_framework_links.py."""
+    u = FRAMEWORKS["urls"]
+    if kind == "owasp":
+        return (u["owasp_llm"].get(code, "") if code.startswith("LLM")
+                else u["owasp_agentic"])
+    if kind == "atlas":
+        return u["atlas"]
+    if kind == "nist":
+        return u["nist"]
+    if kind == "euai":
+        return u["euai"].replace("{n}", code.replace("Art.", "").strip())
+    return ""
+
+
 def framework_chips(sid: str, track_id: str) -> str:
-    """A row of labels under the lesson title, one group per framework."""
+    """A row of labels under the lesson title, each linking to its source."""
     f = frameworks_for(sid, track_id)
     titles = FRAMEWORKS["euai_titles"]
     out = []
+
+    def chip(kind, label, code, tip=""):
+        url = framework_url(kind, code)
+        t = f' title="{html.escape(tip)}"' if tip else ""
+        return (f'<a class="fw" href="{html.escape(url)}"{t} '
+                f'target="_blank" rel="noopener">'
+                f'<i>{label}</i>{html.escape(code)}</a>')
+
     for code in f["owasp"]:
-        kind = "OWASP LLM" if code.startswith("LLM") else "OWASP Agentic"
-        out.append(f'<span class="fw"><i>{kind}</i>{html.escape(code)}</span>')
+        out.append(chip("owasp",
+                        "OWASP LLM" if code.startswith("LLM") else "OWASP Agentic",
+                        code))
     for code in f["atlas"]:
-        out.append(f'<span class="fw"><i>MITRE ATLAS</i>{html.escape(code)}</span>')
+        out.append(chip("atlas", "MITRE ATLAS", code))
     for code in f["nist"]:
-        out.append(f'<span class="fw"><i>NIST AI RMF</i>{html.escape(code)}</span>')
+        out.append(chip("nist", "NIST AI RMF", code))
     for code in f["euai"]:
-        t = titles.get(code, "")
-        tip = f' title="{html.escape(t)}"' if t else ""
-        out.append(f'<span class="fw"{tip}><i>EU AI Act</i>{html.escape(code)}</span>')
+        out.append(chip("euai", "EU AI Act", code, titles.get(code, "")))
     if not out:
         return ""
     return ('<div class="fws"><span class="fwl">Maps to</span>'

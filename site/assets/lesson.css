@@ -65,8 +65,11 @@ header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
 .fwl{font-family:"IBM Plex Mono";font-size:10px;letter-spacing:.14em;
   text-transform:uppercase;color:var(--text-faint);margin-right:2px}
 .fw{display:inline-flex;align-items:baseline;gap:6px;border:1px solid var(--line-soft);
-  border-radius:5px;padding:3px 8px;background:var(--ink-2);
-  font-family:"IBM Plex Mono";font-size:11px;color:var(--text)}
+  border-radius:5px;padding:3px 8px;background:var(--ink-2);text-decoration:none;
+  font-family:"IBM Plex Mono";font-size:11px;color:var(--text);
+  transition:border-color .18s,color .18s}
+.fw:hover{border-color:var(--defend);color:var(--defend)}
+.fw:hover i{color:var(--defend)}
 .fw i{font-style:normal;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
   color:var(--text-faint)}
 

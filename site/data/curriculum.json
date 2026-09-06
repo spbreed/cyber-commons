@@ -779,7 +779,7 @@
       },
       {
        "id": "B2.3",
-       "title": "Vulnerability auditing — deterministic Semgrep, then the model pass",
+       "title": "SAST for agentic code — deterministic Semgrep, then the model pass",
        "track": "defend",
        "summary": "Pattern matching, dataflow analysis and LLM-driven reasoning compared honestly. What each generation finds, and what each one structurally cannot.",
        "risk": "Pattern matching floods the queue; the false-positive rate is what actually changed.",
