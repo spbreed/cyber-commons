@@ -52,6 +52,55 @@ Introducing that third state is the whole of this lesson.
          "The window is not an audit-calendar choice. It comes from **how fast "
          "the thing the control tests actually changes.**"),
 
+  ("md", """## 5 · From a framework control to something you can compute
+
+A control in a framework is written to be *general*, which is exactly what makes
+it untestable. "Accuracy, robustness and cybersecurity" (EU AI Act Art. 15) is
+an obligation, not a measurement. The work is turning it into a number the
+estate can produce on demand.
+
+The test for whether you have finished is mechanical: **can this be computed
+from the estate today, without asking anyone?**
+
+| framework control | the question it asks | a KCI that answers it |
+|---|---|---|
+| EU AI Act Art. 15 | is it robust and secure? | share of tool calls carrying provenance |
+| EU AI Act Art. 12 | can you reconstruct it? | share of agent runs with a complete trace |
+| EU AI Act Art. 14 | is there human oversight? | share of irreversible actions behind an approval |
+| NIST AI RMF MEASURE | do you know how it performs? | detections with a measured false-positive rate |
+| OWASP Agentic T2 | can a tool be misused? | object handlers that compare an owner |
+| OWASP Agentic T3 | can privilege be escalated? | agents operating inside declared scope |
+
+Three rules make the difference between a KCI and a metric somebody reports.
+
+**It names a denominator.** "Twelve tool calls carried provenance" is a number;
+"41% of tool calls carried provenance" is an indicator. Without the
+denominator you cannot tell improvement from reduced traffic.
+
+**It has a target, written before it is measured.** An indicator with no target
+cannot be met or missed, so it can only be discussed.
+
+**It is computed from the estate, not read from a register.** A register
+records what somebody believed when they filled it in, which is the state the
+freshness window above says you cannot trust."""),
+
+  ("md", """## 6 · The three ways a KCI goes wrong
+
+**It measures the instrument.** If renaming a function moves the number, the
+indicator measures naming. This is the most common failure and the hardest to
+see, because the number looks responsive.
+
+**It has no denominator, so it drops when traffic drops.** An indicator that
+improves during an outage is measuring the outage.
+
+**Every indicator in the set fails.** A set that always reports a gap cannot be
+shown to discriminate, and a reader has no way to tell the instrument works
+from the estate being uniformly broken. Keep at least one the estate passes.
+
+E1.13 computes six of these against the CyberTravels repository, and D5.3
+re-measures them after a fix to decide whether the remediation actually
+restored anything — which is the whole reason for defining them here."""),
+
   ("md", "## 5 · What replaces the annual test, as a skill\n\n"
          "If the window is short, something has to re-run inside it, and that "
          "something is an attestation: collect each control's verdict, resolve "

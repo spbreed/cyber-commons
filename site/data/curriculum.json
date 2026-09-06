@@ -1808,7 +1808,7 @@
             },
             {
               "id": "E1.1",
-              "title": "Why point-in-time control testing fails for AI",
+              "title": "From framework control to key control indicator",
               "track": "secure",
               "summary": "Annual testing cannot assure a system whose behaviour changes between tests. The structural case for continuous evidence.",
               "risk": "An annual review certifies nothing about a system that changed on Tuesday.",

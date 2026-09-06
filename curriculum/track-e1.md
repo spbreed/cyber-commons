@@ -35,7 +35,7 @@ python3 scripts/run_notebooks.py --session E1.0   # run it headless and check it
 
 ---
 
-### E1.1 — Why point-in-time control testing fails for AI
+### E1.1 — From framework control to key control indicator
 
 `Security of AI`
 
