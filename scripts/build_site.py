@@ -46,8 +46,38 @@ RAW = f"https://raw.githubusercontent.com/spbreed/cyber-commons/{BRANCH}"
 # page. A badge on every lesson saying the notebook ran is a claim the reader
 # cannot check and stops reading after the third time.
 
-DIRECTION = {"defend": ("d", "AI for Security"), "secure": ("s", "Security of AI"),
-             "both": ("b", "Both directions")}
+# Framework labels, resolved per lesson: a lesson takes its track's row from
+# curriculum/frameworks.json unless it names itself in `lessons`, which
+# replaces the row outright. The "Security of AI / AI for Security" badge that
+# used to sit here went with the paradigm it belonged to.
+FRAMEWORKS = json.loads((ROOT / "curriculum" / "frameworks.json").read_text())
+
+
+def frameworks_for(sid: str, track_id: str) -> dict:
+    row = FRAMEWORKS["lessons"].get(sid) or FRAMEWORKS["tracks"].get(track_id, {})
+    return {k: row.get(k, []) for k in ("owasp", "atlas", "nist", "euai")}
+
+
+def framework_chips(sid: str, track_id: str) -> str:
+    """A row of labels under the lesson title, one group per framework."""
+    f = frameworks_for(sid, track_id)
+    titles = FRAMEWORKS["euai_titles"]
+    out = []
+    for code in f["owasp"]:
+        kind = "OWASP LLM" if code.startswith("LLM") else "OWASP Agentic"
+        out.append(f'<span class="fw"><i>{kind}</i>{html.escape(code)}</span>')
+    for code in f["atlas"]:
+        out.append(f'<span class="fw"><i>MITRE ATLAS</i>{html.escape(code)}</span>')
+    for code in f["nist"]:
+        out.append(f'<span class="fw"><i>NIST AI RMF</i>{html.escape(code)}</span>')
+    for code in f["euai"]:
+        t = titles.get(code, "")
+        tip = f' title="{html.escape(t)}"' if t else ""
+        out.append(f'<span class="fw"{tip}><i>EU AI Act</i>{html.escape(code)}</span>')
+    if not out:
+        return ""
+    return ('<div class="fws"><span class="fwl">Maps to</span>'
+            + "".join(out) + "</div>")
 
 
 # ----------------------------------------------------------------- markdown
@@ -315,7 +345,6 @@ FOOT = ('<footer><div class="fin"><span>Cyber Commons · Navigating Cyber Singul
 def lesson_page(entry, prev, nxt) -> str:
     s, sid = entry["s"], entry["s"]["id"]
     lab = LABS.get(sid, {})
-    dcls, dlabel = DIRECTION.get(s.get("track", "both"), DIRECTION["both"])
     ex_url, ex_label = exercise_link(sid)
     title = f"{sid} — {s['title']} | Cyber Commons"
 
@@ -326,11 +355,12 @@ def lesson_page(entry, prev, nxt) -> str:
                  f'{html.escape(entry["fn"])} › {html.escape(entry["track"])}</div>')
     parts.append(f'<div class="sid">{html.escape(sid)}</div>')
     parts.append(f'<h1>{html.escape(s["title"])}</h1>')
-    badges = [f'<span class="badge {dcls}">{dlabel}</span>']
+    badges = []
     if s.get("featured"):
         badges.append('<span class="badge s">Flagship lab</span>')
     badges.append(f'<span class="badge t">{html.escape(entry["track_id"])}</span>')
-    parts.append('<div class="badges">' + "".join(badges) + '</div></div>')
+    parts.append('<div class="badges">' + "".join(badges) + '</div>')
+    parts.append(framework_chips(sid, entry["track_id"]) + '</div>')
 
     parts.append(video_block(sid, f"{sid} — {s['title']}"))
 

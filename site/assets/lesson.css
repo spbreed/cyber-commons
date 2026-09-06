@@ -59,6 +59,17 @@ header.nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);
 .badge.b{color:var(--text-dim);border:1px solid var(--line)}
 .badge.t{color:var(--text-dim);border:1px solid var(--line-soft)}
 
+/* framework labels — which control vocabularies this lesson speaks to.
+   Indicative mappings from curriculum/frameworks.json, not a certification. */
+.fws{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0 4px}
+.fwl{font-family:"IBM Plex Mono";font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-faint);margin-right:2px}
+.fw{display:inline-flex;align-items:baseline;gap:6px;border:1px solid var(--line-soft);
+  border-radius:5px;padding:3px 8px;background:var(--ink-2);
+  font-family:"IBM Plex Mono";font-size:11px;color:var(--text)}
+.fw i{font-style:normal;font-size:9.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text-faint)}
+
 /* video */
 .video{margin:26px 0 30px;border:1px solid var(--line);border-radius:14px;overflow:hidden;
   background:var(--ink-2)}

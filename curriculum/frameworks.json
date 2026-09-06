@@ -1,0 +1,135 @@
+{
+  "_readme": [
+    "Framework labels for every lesson. Resolved at build time by",
+    "scripts/build_site.py: a lesson takes its track's labels unless it appears",
+    "in `lessons`, which replaces them entirely.",
+    "",
+    "These are INDICATIVE mappings, kept in one reviewable file so they can be",
+    "argued with by pull request. They are the frameworks a lesson's risk and",
+    "control speak to — not a certification, and not a claim that studying a",
+    "lesson discharges an obligation.",
+    "",
+    "Vocabulary, deliberately narrow so nothing here is invented:",
+    "  owasp  OWASP Agentic AI Top 10 threat ids (T1-T15) and OWASP Top 10 for",
+    "         LLM Applications ids (LLM01-LLM10).",
+    "  atlas  MITRE ATLAS. Tactic names are used rather than technique ids,",
+    "         except AML.T0051 (LLM Prompt Injection), which is unambiguous.",
+    "  nist   NIST AI RMF 1.0 core functions: GOVERN, MAP, MEASURE, MANAGE.",
+    "  euai   EU AI Act (Regulation 2024/1689) article numbers.",
+    "",
+    "An empty list is a valid, explicit answer: A0 is a setup track and maps to",
+    "no control. scripts/check_frameworks.py fails the build if any lesson",
+    "resolves to nothing at all without its track declaring that on purpose."
+  ],
+
+  "euai_titles": {
+    "Art. 6": "Classification of high-risk AI systems",
+    "Art. 9": "Risk management system",
+    "Art. 10": "Data and data governance",
+    "Art. 11": "Technical documentation",
+    "Art. 12": "Record-keeping",
+    "Art. 13": "Transparency and provision of information to deployers",
+    "Art. 14": "Human oversight",
+    "Art. 15": "Accuracy, robustness and cybersecurity",
+    "Art. 26": "Obligations of deployers",
+    "Art. 50": "Transparency obligations for certain AI systems",
+    "Art. 55": "Obligations for GPAI models with systemic risk"
+  },
+
+  "tracks": {
+    "A0": {"owasp": [], "atlas": [], "nist": [], "euai": [],
+           "why_empty": "Setup only — how to run a lesson. No control maps to it."},
+
+    "A1": {"owasp": ["LLM01"], "atlas": ["Initial Access"],
+           "nist": ["MAP"], "euai": ["Art. 9"]},
+
+    "A2": {"owasp": ["T3", "T9"], "atlas": ["Credential Access"],
+           "nist": ["MANAGE"], "euai": ["Art. 15"]},
+
+    "A3": {"owasp": ["T2", "T4"], "atlas": ["Execution", "Defense Evasion"],
+           "nist": ["MANAGE"], "euai": ["Art. 15"]},
+
+    "B2": {"owasp": ["LLM05"], "atlas": ["ML Attack Staging"],
+           "nist": ["MEASURE"], "euai": ["Art. 15"]},
+
+    "C1": {"owasp": ["LLM01"], "atlas": ["ML Model Access"],
+           "nist": ["MEASURE"], "euai": ["Art. 15"]},
+
+    "C2": {"owasp": ["LLM05"], "atlas": ["Reconnaissance", "ML Attack Staging"],
+           "nist": ["MEASURE"], "euai": ["Art. 15"]},
+
+    "D1": {"owasp": ["T8"], "atlas": ["Discovery", "Collection"],
+           "nist": ["MANAGE"], "euai": ["Art. 12"]},
+
+    "D2": {"owasp": ["T10"], "atlas": ["Impact"],
+           "nist": ["MANAGE"], "euai": ["Art. 12", "Art. 14"]},
+
+    "E1": {"owasp": ["T7"], "atlas": [],
+           "nist": ["GOVERN"], "euai": ["Art. 9"]},
+
+    "E2": {"owasp": [], "atlas": [],
+           "nist": ["GOVERN"], "euai": ["Art. 6", "Art. 11"]},
+
+    "E3": {"owasp": [], "atlas": [],
+           "nist": ["GOVERN"], "euai": ["Art. 26"]}
+  },
+
+  "lessons": {
+    "A1.2":  {"owasp": ["LLM01", "T6"], "atlas": ["AML.T0051", "Initial Access"],
+              "nist": ["MAP"], "euai": ["Art. 15"]},
+    "A1.3":  {"owasp": ["LLM01", "T6"], "atlas": ["AML.T0051"],
+              "nist": ["MAP"], "euai": ["Art. 15"]},
+    "A1.4":  {"owasp": ["LLM06", "T2"], "atlas": ["Execution"],
+              "nist": ["MAP"], "euai": ["Art. 15"]},
+    "A1.5":  {"owasp": ["LLM06", "T3"], "atlas": ["Privilege Escalation"],
+              "nist": ["MAP"], "euai": ["Art. 15"]},
+    "A1.6":  {"owasp": ["LLM04", "T1"], "atlas": ["Persistence"],
+              "nist": ["MAP"], "euai": ["Art. 10"]},
+    "A1.7":  {"owasp": ["LLM09", "T5"], "atlas": ["Impact"],
+              "nist": ["MEASURE"], "euai": ["Art. 15"]},
+    "A1.8":  {"owasp": ["LLM10", "T4"], "atlas": ["Impact"],
+              "nist": ["MANAGE"], "euai": ["Art. 15"]},
+    "A1.10": {"owasp": ["T9"], "atlas": ["Credential Access"],
+              "nist": ["MAP"], "euai": ["Art. 15"]},
+    "A1.11": {"owasp": ["T8"], "atlas": ["Defense Evasion"],
+              "nist": ["MANAGE"], "euai": ["Art. 12"]},
+    "A1.12": {"owasp": ["LLM05", "T11"], "atlas": ["Execution"],
+              "nist": ["MAP"], "euai": ["Art. 15"]},
+    "A1.13": {"owasp": ["T12"], "atlas": ["Collection"],
+              "nist": ["MAP"], "euai": ["Art. 15"]},
+    "A1.14": {"owasp": ["T13"], "atlas": ["Persistence"],
+              "nist": ["MAP"], "euai": ["Art. 15"]},
+    "A1.15": {"owasp": ["T7"], "atlas": ["Defense Evasion"],
+              "nist": ["MEASURE"], "euai": ["Art. 14"]},
+    "A1.16": {"owasp": ["T10"], "atlas": ["Defense Evasion"],
+              "nist": ["MANAGE"], "euai": ["Art. 14"]},
+    "A1.17": {"owasp": ["T14", "T15"], "atlas": ["Initial Access"],
+              "nist": ["MAP"], "euai": ["Art. 14"]},
+
+    "B2.6":  {"owasp": ["LLM05"], "atlas": ["Resource Development"],
+              "nist": ["MEASURE"], "euai": ["Art. 15"]},
+    "B2.7":  {"owasp": ["LLM05"], "atlas": ["Resource Development"],
+              "nist": ["MEASURE"], "euai": ["Art. 15"]},
+    "B2.13": {"owasp": ["T2", "T3"], "atlas": ["Execution"],
+              "nist": ["MEASURE", "MANAGE"], "euai": ["Art. 15"]},
+
+    "E2.1":  {"owasp": [], "atlas": [],
+              "nist": ["GOVERN"], "euai": ["Art. 6", "Art. 9", "Art. 11"]},
+    "E2.2":  {"owasp": [], "atlas": [],
+              "nist": ["GOVERN"], "euai": ["Art. 6"]},
+    "E2.3":  {"owasp": [], "atlas": [],
+              "nist": ["GOVERN", "MAP"], "euai": ["Art. 9"]},
+    "E2.4":  {"owasp": [], "atlas": [],
+              "nist": ["GOVERN"], "euai": ["Art. 11", "Art. 12"]},
+    "E2.5":  {"owasp": [], "atlas": [],
+              "nist": ["GOVERN"], "euai": ["Art. 13", "Art. 50"]},
+    "E2.6":  {"owasp": [], "atlas": [],
+              "nist": ["GOVERN", "MANAGE"], "euai": ["Art. 14"]},
+    "E2.7":  {"owasp": [], "atlas": [],
+              "nist": ["GOVERN"], "euai": ["Art. 55"]},
+    "E2.8":  {"owasp": [], "atlas": [],
+              "nist": ["GOVERN"], "euai": ["Art. 26"]},
+    "E2.9":  {"owasp": [], "atlas": [],
+              "nist": ["GOVERN"], "euai": ["Art. 11", "Art. 26"]}
+  }
+}

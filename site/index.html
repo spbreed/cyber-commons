@@ -107,13 +107,6 @@
   .btn.p:hover{transform:translateY(-2px);box-shadow:0 12px 30px -12px var(--warn)}
   .btn.g{border:1px solid var(--line);color:var(--text)}
   .btn.g:hover{border-color:var(--accent);color:var(--accent)}
-  .hero-stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
-  .stat{border:1px solid var(--line-soft);background:var(--ink-2);border-radius:10px;
-    padding:14px 18px;flex:1;min-width:150px}
-  .stat .n{font-family:"Space Grotesk";font-size:26px;font-weight:600;letter-spacing:-.02em;
-    color:var(--accent)}
-  .stat .l{font-family:"IBM Plex Mono";font-size:11.5px;letter-spacing:.14em;
-    text-transform:uppercase;color:var(--text-faint);margin-top:3px}
 
   /* ---------- SECTIONS ----------------------------------------------------
      Five of them, built the same way: eyebrow, headline, one line, a
@@ -137,6 +130,7 @@
     padding-left:14px;line-height:1.55}
   .pts li b{display:block;color:var(--text);font-weight:600;margin-bottom:4px;
     font-family:"Space Grotesk";letter-spacing:-.01em}
+  .pts li strong{color:var(--text);font-weight:600}
   .sec.warn .pts li{border-left-color:var(--warn-soft)}
 
   /* type inside the SVGs, so the graphics match the page rather than
@@ -228,11 +222,6 @@
       <a class="btn p" href="lessons/index.html">Start the first lesson →</a>
       <a class="btn g" href="lessons/index.html">Browse all <span data-n="sessions">120</span> lessons</a>
     </div>
-    <div class="hero-stats">
-      <div class="stat"><div class="n">5</div><div class="l">Tracks</div></div>
-      <div class="stat"><div class="n"><span data-n="sessions">120</span></div><div class="l">Lessons, all runnable</div></div>
-      <div class="stat"><div class="n"><span data-n="skills">121</span></div><div class="l">Agent skills you can read</div></div>
-    </div>
   </div>
 </div>
 
@@ -273,55 +262,49 @@
 <section class="sec" id="gap">
   <div class="wrap">
     <span class="eyebrow">02 / The gap</span>
-    <h2>The defence is real. It is just not evenly distributed.</h2>
-    <p class="say">The controls that answer machine-speed attack exist and work. They are concentrated in the organisations that can staff and buy them, while the hospital, the school district and the two-person NGO face the same adversary with almost none of it.</p>
+    <h2>Nearly everyone is worried. Almost nobody has the controls.</h2>
+    <p class="say">The gap is not awareness. <b>92%</b> of security leaders say they are concerned about agent security; depending on which control you ask about, between <b>5% and 38%</b> actually have it. And that is the large-enterprise average — below the cyber poverty line it is worse again.</p>
 
     <figure class="fig rv">
-      <svg viewBox="0 0 820 272" role="img" aria-label="A matrix of five organisation types against five defensive capabilities. Capability thins towards smaller organisations and towards the newest AI-specific controls, with the two-person NGO having none.">
-        <g class="g-hd">
-          <text x="238" y="20" text-anchor="middle">24/7 SOC</text>
-          <text x="356" y="20" text-anchor="middle">Threat intel</text>
-          <text x="474" y="20" text-anchor="middle">Red team</text>
-          <text x="592" y="20" text-anchor="middle">AI governance</text>
-          <text x="710" y="20" text-anchor="middle">Agent security</text>
-        </g>
+      <svg viewBox="0 0 820 300" role="img" aria-label="92 percent of security leaders are concerned about AI agent security, but only 38 percent monitor AI traffic end to end, 17 percent monitor agent-to-agent traffic, 16 percent govern AI access to core platforms, 14 percent enforce access policies for AI identities, 8 percent have full visibility of agent identities, and 5 percent are confident they could contain a compromised agent.">
         <g class="g-txt">
-          <text x="0" y="52">Global bank</text>
-          <text x="0" y="96">National telco</text>
-          <text x="0" y="140">Regional hospital</text>
-          <text x="0" y="184">School district</text>
-          <text x="0" y="228">Two-person NGO</text>
+          <text x="0" y="30">Concerned about AI agent security</text>
+          <text x="0" y="76">Monitor AI traffic end to end</text>
+          <text x="0" y="114">Monitor agent-to-agent traffic</text>
+          <text x="0" y="152">Govern AI access to core platforms</text>
+          <text x="0" y="190">Enforce access policy for AI identities</text>
+          <text x="0" y="228">Full visibility of AI agent identities</text>
+          <text x="0" y="266">Could contain a compromised agent</text>
         </g>
-        <!-- opacity is the whole encoding: solid in place, faint partial, outline absent -->
-        <g fill="var(--accent)">
-          <rect x="186" y="34" width="104" height="26" rx="4"/><rect x="304" y="34" width="104" height="26" rx="4"/><rect x="422" y="34" width="104" height="26" rx="4"/><rect x="540" y="34" width="104" height="26" rx="4" opacity=".40"/><rect x="658" y="34" width="104" height="26" rx="4" opacity=".40"/>
-          <rect x="186" y="78" width="104" height="26" rx="4"/><rect x="304" y="78" width="104" height="26" rx="4"/><rect x="422" y="78" width="104" height="26" rx="4" opacity=".40"/><rect x="540" y="78" width="104" height="26" rx="4" opacity=".40"/>
-          <rect x="186" y="122" width="104" height="26" rx="4" opacity=".40"/><rect x="304" y="122" width="104" height="26" rx="4" opacity=".40"/>
-          <rect x="304" y="166" width="104" height="26" rx="4" opacity=".40"/>
+        <!-- one scale throughout: 100% is 520px, so every bar compares directly -->
+        <rect x="270" y="14"  width="478" height="22" rx="4" fill="var(--warn)" opacity=".9"/>
+        <rect x="270" y="60"  width="198" height="22" rx="4" fill="var(--accent)"/>
+        <rect x="270" y="98"  width="88"  height="22" rx="4" fill="var(--accent)"/>
+        <rect x="270" y="136" width="83"  height="22" rx="4" fill="var(--accent)"/>
+        <rect x="270" y="174" width="73"  height="22" rx="4" fill="var(--accent)"/>
+        <rect x="270" y="212" width="42"  height="22" rx="4" fill="var(--accent)"/>
+        <rect x="270" y="250" width="26"  height="22" rx="4" fill="var(--accent)"/>
+        <g class="g-val" font-size="15">
+          <text x="760" y="31" fill="var(--warn)">92%</text>
+          <text x="480" y="77">38%</text>
+          <text x="370" y="115">17%</text>
+          <text x="365" y="153">16%</text>
+          <text x="355" y="191">14%</text>
+          <text x="324" y="229">8%</text>
+          <text x="308" y="267">5%</text>
         </g>
-        <g fill="none" stroke="var(--line)">
-          <rect x="658" y="78" width="104" height="26" rx="4"/>
-          <rect x="422" y="122" width="104" height="26" rx="4"/><rect x="540" y="122" width="104" height="26" rx="4"/><rect x="658" y="122" width="104" height="26" rx="4"/>
-          <rect x="186" y="166" width="104" height="26" rx="4"/><rect x="422" y="166" width="104" height="26" rx="4"/><rect x="540" y="166" width="104" height="26" rx="4"/><rect x="658" y="166" width="104" height="26" rx="4"/>
-          <rect x="186" y="210" width="104" height="26" rx="4"/><rect x="304" y="210" width="104" height="26" rx="4"/><rect x="422" y="210" width="104" height="26" rx="4"/><rect x="540" y="210" width="104" height="26" rx="4"/><rect x="658" y="210" width="104" height="26" rx="4"/>
-        </g>
-        <g class="g-lab">
-          <rect x="186" y="254" width="20" height="10" rx="2" fill="var(--accent)"/>
-          <text x="214" y="263">In place</text>
-          <rect x="290" y="254" width="20" height="10" rx="2" fill="var(--accent)" opacity=".40"/>
-          <text x="318" y="263">Partial</text>
-          <rect x="386" y="254" width="20" height="10" rx="2" fill="none" stroke="var(--line)"/>
-          <text x="414" y="263">Absent</text>
-        </g>
+        <line x1="0" y1="46" x2="800" y2="46" stroke="var(--line)"/>
+        <text class="g-lab" x="270" y="292">What is actually in place</text>
       </svg>
-      <figcaption><b>Illustrative, not a survey.</b> No dataset is claimed here — the point is the shape. Capability thins towards smaller organisations, and thins again towards the newest controls, which is exactly where agentic AI has landed. The same asymmetry runs across countries and sectors.</figcaption>
+      <figcaption>Concern: <b>CSA State of AI Cybersecurity 2026</b>, 1,500+ security leaders. End-to-end and agent-to-agent monitoring: <b>EY / AIUC-1 Consortium</b>, March 2026. The other four: <b>2026 CISO AI Risk Report</b>, 235 large-enterprise CISOs and CIOs — three of those are the complement of how that report states them (86% do not enforce access policies for AI identities, 92% lack full visibility of agent identities, 95% doubt they could detect or contain a compromised agent).</figcaption>
     </figure>
 
     <ul class="pts">
-      <li><b>One path is enough</b>An attacker needs a single way in; a defender needs every one of them closed. That is a staffing problem before it is a technology problem.</li>
-      <li><b>Newest controls, thinnest coverage</b>Agent security is where nearly everyone starts from zero — including organisations that are strong everywhere else.</li>
-      <li><b>The softest target is shared</b>An underdefended clinic or supplier is a route into the network everyone else depends on.</li>
+      <li><b>Concern is not coverage</b>92% are worried; 5% believe they could contain a compromised agent. The distance between those two numbers is the whole problem.</li>
+      <li><b>Below the poverty line, worse</b>Kaiser Permanente put up to <strong>75%</strong> of healthcare organisations below the cyber poverty line, and 36% of UK SMEs place themselves there.</li>
+      <li><b>Same adversary, smaller budget</b>Small and medium organisations absorbed <strong>46%</strong> of all attacks in 2021 — on a fraction of the staffing, and none of the controls above.</li>
     </ul>
+    <p class="say" style="font-size:13px;margin-top:18px;color:var(--text-faint)">Cyber poverty line figures via the <a href="https://www.atlanticcouncil.org/content-series/buying-down-risk/cyber-poverty-line/" style="color:var(--accent)">Atlantic Council</a>, citing Kaiser Permanente (2017), Duo Security (2019) and Verizon (2021).</p>
   </div>
 </section>
 

@@ -95,6 +95,9 @@ jobs:
       - name: Check the documentation's counted claims against the tree
         run: python3 scripts/check_claims.py --check
 
+      - name: Every lesson's framework labels must resolve, and be real
+        run: python3 scripts/check_frameworks.py
+
       - name: Build lesson pages
         run: |
           pip install --quiet markdown
@@ -141,18 +144,15 @@ jobs:
       #                          Clearing it means emptying that field in the
       #                          web UI, or PATCH /repos/{o}/{r}/pages.
       #
-      # It is absent on purpose right now. cybercommons.ai resolves to
-      # GoDaddy's domain-forwarding addresses (3.33.130.190, 15.197.148.33)
-      # rather than to GitHub Pages (185.199.108-111.153), so the apex serves
-      # GoDaddy's parking stub and every visitor lands on /lander. Pointing
-      # the site at a domain that cannot reach it makes the site unreachable
-      # from both URLs, so the custom domain is off until the A records move.
+      # It is present. cybercommons.ai resolves to 185.199.108-111.153 with
+      # nothing else in the apex A record, www is a CNAME to spbreed.github.io,
+      # the certificate issued on 2026-09-05 and Enforce HTTPS is on.
       #
-      # TO TURN IT BACK ON, once cybercommons.ai resolves to 185.199.108-111.153:
-      #   echo cybercommons.ai > site/CNAME && git add site/CNAME && commit
-      #   then Settings -> Pages -> tick Enforce HTTPS.
-      # Shipping the file (rather than only setting the domain in the web form)
-      # is what stops a later deploy quietly clearing it.
+      # The zone must stay at exactly those four addresses. A GoDaddy
+      # forwarding or parking record added back does two things at once: it
+      # round-robins a share of visitors onto a parking page, and it fails the
+      # Let's Encrypt validation that renews the certificate every ~60 days —
+      # so HTTPS would break weeks later, for a change nobody connects to it.
       - name: Say which URL this deploy will serve
         run: |
           if [ -f site/CNAME ]; then
