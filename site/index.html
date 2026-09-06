@@ -262,49 +262,53 @@
 <section class="sec" id="gap">
   <div class="wrap">
     <span class="eyebrow">02 / The gap</span>
-    <h2>Nearly everyone is worried. Almost nobody has the controls.</h2>
-    <p class="say">The gap is not awareness. <b>92%</b> of security leaders say they are concerned about agent security; depending on which control you ask about, between <b>5% and 38%</b> actually have it. And that is the large-enterprise average — below the cyber poverty line it is worse again.</p>
+    <h2>The sectors everyone depends on are furthest from the controls.</h2>
+    <p class="say">Map the controls onto the industries that actually carry them and the same shape appears each time: <b>detection gets bought, recovery does not</b>, and the smaller the organisation the less of either exists. Healthcare is the best-measured of these sectors — this is what its own CISOs report.</p>
 
     <figure class="fig rv">
-      <svg viewBox="0 0 820 300" role="img" aria-label="92 percent of security leaders are concerned about AI agent security, but only 38 percent monitor AI traffic end to end, 17 percent monitor agent-to-agent traffic, 16 percent govern AI access to core platforms, 14 percent enforce access policies for AI identities, 8 percent have full visibility of agent identities, and 5 percent are confident they could contain a compromised agent.">
+      <svg viewBox="0 0 820 316" role="img" aria-label="Healthcare CISOs reporting NIST Cybersecurity Framework maturity level 4 or 5: Identify 48 percent, Protect 55 percent, Detect 60 percent, Respond 44 percent, Recover 22 percent. Below: only 34 percent of school districts have any full-time cybersecurity position, and no sector-level figure is published for agent security.">
+        <text class="g-lab" x="0" y="14">Healthcare · share of CISOs at NIST CSF maturity level 4 or 5</text>
+
+        <line x1="60" y1="75" x2="760" y2="75" stroke="var(--line)" stroke-dasharray="3 4"/>
+        <text class="g-lab" x="768" y="79">50%</text>
+        <line x1="60" y1="190" x2="760" y2="190" stroke="var(--line)"/>
+
+        <rect x="60"  y="79" width="88" height="111" rx="3" fill="var(--accent)" opacity=".75"/>
+        <rect x="210" y="63" width="88" height="127" rx="3" fill="var(--accent)" opacity=".85"/>
+        <rect x="360" y="52" width="88" height="138" rx="3" fill="var(--accent)"/>
+        <rect x="510" y="88" width="88" height="102" rx="3" fill="var(--accent)" opacity=".7"/>
+        <rect x="660" y="139" width="88" height="51" rx="3" fill="var(--warn)"/>
+
+        <g class="g-val" font-size="16">
+          <text x="104" y="69" text-anchor="middle">48%</text>
+          <text x="254" y="53"  text-anchor="middle">55%</text>
+          <text x="404" y="42"  text-anchor="middle">60%</text>
+          <text x="554" y="78" text-anchor="middle">44%</text>
+          <text x="704" y="129" text-anchor="middle" fill="var(--warn)">22%</text>
+        </g>
+        <g class="g-hd">
+          <text x="104" y="208" text-anchor="middle">Identify</text>
+          <text x="254" y="208" text-anchor="middle">Protect</text>
+          <text x="404" y="208" text-anchor="middle">Detect</text>
+          <text x="554" y="208" text-anchor="middle">Respond</text>
+          <text x="704" y="208" text-anchor="middle">Recover</text>
+        </g>
+
+        <line x1="0" y1="236" x2="800" y2="236" stroke="var(--line-soft)"/>
         <g class="g-txt">
-          <text x="0" y="30">Concerned about AI agent security</text>
-          <text x="0" y="76">Monitor AI traffic end to end</text>
-          <text x="0" y="114">Monitor agent-to-agent traffic</text>
-          <text x="0" y="152">Govern AI access to core platforms</text>
-          <text x="0" y="190">Enforce access policy for AI identities</text>
-          <text x="0" y="228">Full visibility of AI agent identities</text>
-          <text x="0" y="266">Could contain a compromised agent</text>
+          <text x="0" y="264"><tspan fill="var(--text)" font-weight="600">K-12 education</tspan>  ·  34% have any full-time cybersecurity position at all, so the profile above is not built yet</text>
+          <text x="0" y="296"><tspan fill="var(--warn)" font-weight="600">Agent security</tspan>  ·  no sector-level figure is published, for any of these industries</text>
         </g>
-        <!-- one scale throughout: 100% is 520px, so every bar compares directly -->
-        <rect x="270" y="14"  width="478" height="22" rx="4" fill="var(--warn)" opacity=".9"/>
-        <rect x="270" y="60"  width="198" height="22" rx="4" fill="var(--accent)"/>
-        <rect x="270" y="98"  width="88"  height="22" rx="4" fill="var(--accent)"/>
-        <rect x="270" y="136" width="83"  height="22" rx="4" fill="var(--accent)"/>
-        <rect x="270" y="174" width="73"  height="22" rx="4" fill="var(--accent)"/>
-        <rect x="270" y="212" width="42"  height="22" rx="4" fill="var(--accent)"/>
-        <rect x="270" y="250" width="26"  height="22" rx="4" fill="var(--accent)"/>
-        <g class="g-val" font-size="15">
-          <text x="760" y="31" fill="var(--warn)">92%</text>
-          <text x="480" y="77">38%</text>
-          <text x="370" y="115">17%</text>
-          <text x="365" y="153">16%</text>
-          <text x="355" y="191">14%</text>
-          <text x="324" y="229">8%</text>
-          <text x="308" y="267">5%</text>
-        </g>
-        <line x1="0" y1="46" x2="800" y2="46" stroke="var(--line)"/>
-        <text class="g-lab" x="270" y="292">What is actually in place</text>
       </svg>
-      <figcaption>Concern: <b>CSA State of AI Cybersecurity 2026</b>, 1,500+ security leaders. End-to-end and agent-to-agent monitoring: <b>EY / AIUC-1 Consortium</b>, March 2026. The other four: <b>2026 CISO AI Risk Report</b>, 235 large-enterprise CISOs and CIOs — three of those are the complement of how that report states them (86% do not enforce access policies for AI identities, 92% lack full visibility of agent identities, 95% doubt they could detect or contain a compromised agent).</figcaption>
+      <figcaption>Healthcare: <b>Health-ISAC 2026 CISO Benchmarking</b>, 76 security executives across providers, pharma, medical devices, payers and health IT. Only <b>6–10%</b> of those programmes reach Level 5 in any function, and even large organisations average Level 3 for Recover. K-12: <b>CoSN 2026</b> — 66% of districts have no full-time cybersecurity position, 25% have a dedicated team, and 12% allocate no cyber budget at all.</figcaption>
     </figure>
 
     <ul class="pts">
-      <li><b>Concern is not coverage</b>92% are worried; 5% believe they could contain a compromised agent. The distance between those two numbers is the whole problem.</li>
-      <li><b>Below the poverty line, worse</b>Kaiser Permanente put up to <strong>75%</strong> of healthcare organisations below the cyber poverty line, and 36% of UK SMEs place themselves there.</li>
-      <li><b>Same adversary, smaller budget</b>Small and medium organisations absorbed <strong>46%</strong> of all attacks in 2021 — on a fraction of the staffing, and none of the controls above.</li>
+      <li><b>Recovery is where it breaks</b>Detection reaches 60% and recovery 22%. These organisations can tell you an attack is happening and not tell you when the clinical system comes back.</li>
+      <li><b>And healthcare is the ceiling</b>It is the best-staffed and best-measured of the sectors here. School districts, county governments and clinics sit below it, on the same internet, against the same adversary.</li>
+      <li><b>Agent security is not even measured</b>Where large-enterprise figures exist they are poor — only 5% of CISOs believe they could contain a compromised agent. For these sectors there is no number at all, which is its own answer.</li>
     </ul>
-    <p class="say" style="font-size:13px;margin-top:18px;color:var(--text-faint)">Cyber poverty line figures via the <a href="https://www.atlanticcouncil.org/content-series/buying-down-risk/cyber-poverty-line/" style="color:var(--accent)">Atlantic Council</a>, citing Kaiser Permanente (2017), Duo Security (2019) and Verizon (2021).</p>
+    <p class="say" style="font-size:13px;margin-top:18px;color:var(--text-faint)">Containment figure: 2026 CISO AI Risk Report, 235 large-enterprise CISOs and CIOs. Cyber poverty line context via the <a href="https://www.atlanticcouncil.org/content-series/buying-down-risk/cyber-poverty-line/" style="color:var(--accent)">Atlantic Council</a>, which puts up to 75% of healthcare organisations below it.</p>
   </div>
 </section>
 
