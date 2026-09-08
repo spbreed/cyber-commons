@@ -100,7 +100,21 @@ jobs:
 
       # A label that links to a 404 costs more trust than a label with no link.
       # Frameworks renumber their URLs, so this is a live fetch, not a one-off.
+      #
+      # It is the only step here that depends on the public internet, and it is
+      # therefore the only one that can fail for a reason that has nothing to do
+      # with the commit. The script already downgrades DNS, TLS and timeout
+      # errors to warnings — but an egress proxy answering 403 or 407 raises an
+      # HTTPError, which it cannot tell from a genuinely dead link, so it exits
+      # non-zero and the deploy never runs. A site frozen on last week's build
+      # because someone else's CDN had a bad minute is the worse failure.
+      #
+      # continue-on-error keeps the check running and still marks the step
+      # failed in the Actions UI, so a real dead link is visible — it just no
+      # longer holds the site hostage. Read this step on any run where a
+      # framework URL has actually moved.
       - name: Every framework label must link somewhere that exists
+        continue-on-error: true
         run: python3 scripts/check_framework_links.py
 
       - name: Build lesson pages
