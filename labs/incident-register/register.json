@@ -164,7 +164,7 @@
  ],
  "controls": [
   {
-   "id": "B2.10",
+   "id": "C1.1",
    "name": "Out-of-band telemetry capture",
    "type": "P/D",
    "nist": "AU-9",

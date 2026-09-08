@@ -28,7 +28,7 @@ mapped rather than duplicated. The nine lessons here carry the rest.
 # with labs/incident-register/register.json by scripts/check_register.py.
 REGISTER = '''REGISTER = [
  # id      name                                     type   NIST     owning lesson
- ("B2.10",  "out-of-band telemetry capture",         "P/D", "AU-9",  "A2.8"),
+ ("C1.1",   "out-of-band telemetry capture",         "P/D", "AU-9",  "A2.8"),
  ("C1.2",  "hash-chained WORM transcript store",    "P",   "AU-10", "A2.8"),
  ("C1.3",  "logging-plane isolation",               "P",   "SC-39", "A2.8"),
  ("C1.4",  "escape detection",                      "D",   "SI-7",  "D2.3"),
@@ -247,7 +247,7 @@ investigators could not bound what they had missed.
 
 Three controls, and they only work together:
 
-**Out-of-band capture (B2.10).** A sensor on the host, outside the agent's trust
+**Out-of-band capture (C1.1).** A sensor on the host, outside the agent's trust
 boundary, recording the syscalls that matter — `execve`, `ptrace`,
 `process_vm_writev`, `openat` on `/proc/*/mem`, `unshare`, `setns`. The agent
 cannot load, unload or configure it. Reconcile that stream against the
@@ -266,7 +266,7 @@ a hash chain about nothing.
  "steps": [
   ("md", "## 2 · The in-band trail, and what it is worth"),
 
-  ("md", "## 3 · Reconcile against a stream the workload cannot write (B2.10)"),
+  ("md", "## 3 · Reconcile against a stream the workload cannot write (C1.1)"),
 
   ("md", "## 4 · Hash-chain the transcript, then tamper with it (C1.2)"),
 

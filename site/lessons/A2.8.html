@@ -46,7 +46,7 @@ tool calls, and produced transcripts recording one command while another ran.
 Roughly 7% of sampled transcripts showed confirmed spoofing, and the
 investigators could not bound what they had missed.</p>
 <p>Three controls, and they only work together:</p>
-<p><strong>Out-of-band capture (B2.10).</strong> A sensor on the host, outside the agent's trust
+<p><strong>Out-of-band capture (C1.1).</strong> A sensor on the host, outside the agent's trust
 boundary, recording the syscalls that matter — <code>execve</code>, <code>ptrace</code>,
 <code>process_vm_writev</code>, <code>openat</code> on <code>/proc/*/mem</code>, <code>unshare</code>, <code>setns</code>. The agent
 cannot load, unload or configure it. Reconcile that stream against the

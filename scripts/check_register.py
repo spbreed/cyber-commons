@@ -9,8 +9,9 @@ controls to a lesson. Three ways that can rot, and this catches all three:
    sentence in a document.
 2. **An owner that does not exist.** Lessons get renumbered; a register that
    still points at the old id is worse than no register.
-3. **The register and the lesson disagreeing.** C2.8 embeds its own copy so the
-   notebook stays self-contained, and a copy is a thing that drifts.
+3. **The register and the lesson disagreeing.** `incident.py` embeds its own
+   copy so the notebooks that render it stay self-contained, and a copy is a
+   thing that drifts.
 
     python3 scripts/check_register.py            # report
     python3 scripts/check_register.py --check    # CI: non-zero on any problem
@@ -32,6 +33,7 @@ CUR = json.loads((ROOT / "site" / "data" / "curriculum.json").read_text())
 
 from exercises.incident import REGISTER as EMBEDDED  # noqa: E402
 
+CONTROL_ID = re.compile(r"C\d+\.\d+")
 ROW = re.compile(r'\("(C\d+\.\d+)",\s*"([^"]*)",\s*"([^"]*)",\s*"([^"]*)",\s*"([^"]*)"\)')
 
 
@@ -46,19 +48,32 @@ def main() -> int:
     problems = []
 
     controls = REG["controls"]
+
+    # Control ids live in the source report's own C<n>.<m> namespace, which is
+    # syntactically identical to a lesson id. A repo-wide lesson renumber will
+    # therefore rewrite them, and the damage is silent: ROW below only matches
+    # C-prefixed ids, so a corrupted row simply vanishes from the embedded set
+    # and the mismatch surfaces as a confusing "only in the file" line. Say it
+    # plainly instead — this is exactly how control C1.1 became "B2.10".
+    for c in controls:
+        if not CONTROL_ID.fullmatch(c["id"]):
+            problems.append(f"{c['id']}: not a control id — control ids are "
+                            f"C<n>.<m> from the source report, and a lesson "
+                            f"renumber has almost certainly rewritten this one")
+
     for c in controls:
         if not c.get("lesson"):
             problems.append(f"{c['id']}: no owning lesson")
         elif c["lesson"] not in lessons:
             problems.append(f"{c['id']}: owner {c['lesson']} is not a session id")
 
-    # the copy embedded in C2.8, which is what a reader actually runs
+    # the copy embedded in incident.py, which is what a reader actually runs
     embedded = {m.group(1): (m.group(3), m.group(4), m.group(5))
                 for m in ROW.finditer(EMBEDDED)}
     if set(embedded) != {c["id"] for c in controls}:
         only_file = sorted({c["id"] for c in controls} - set(embedded))
         only_nb = sorted(set(embedded) - {c["id"] for c in controls})
-        problems.append(f"register.json and the C2.8 copy differ: "
+        problems.append(f"register.json and the embedded copy differ: "
                         f"only in the file {only_file}, only in the notebook {only_nb}")
     for c in controls:
         got = embedded.get(c["id"])

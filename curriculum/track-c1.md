@@ -1,4 +1,4 @@
-# Track C1 — Agentic Evaluation and Red Teaming
+# Track C1 — One Red-Team Lifecycle, End to End
 
 **Function C · Agentic Evaluation and Red Teaming**  
 *Red-team CyberTravels as a non-deterministic actor: one lifecycle from the ingestion and elicitation surfaces an attacker reaches first, through emergent multi-agent behaviour, to the telemetry, containment and forensic governance every finding must end in.*

@@ -1041,7 +1041,7 @@
         {
           "id": "C1",
           "chapter": 5,
-          "title": "Agentic Evaluation and Red Teaming",
+          "title": "One Red-Team Lifecycle, End to End",
           "titles": "Red Team Operator, AI Security Researcher, Offensive ML Engineer",
           "changes": "A single lifecycle: from the ingestion and elicitation surfaces an attacker reaches first, through emergent multi-agent behaviour, into the telemetry, detection, triage, containment and forensic replay a researcher hands the defender, and out to institutional governance. 12 lessons.",
           "autonomy": "You red-team at L3 the systems deployed at L2.5, and every finding leaves as a control the SOC can run.",
